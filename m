@@ -2,111 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1FD5809AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC06F5809B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbiGZCxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 22:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        id S231658AbiGZC4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 22:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiGZCx3 (ORCPT
+        with ESMTP id S229853AbiGZC4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 22:53:29 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4552A6160;
-        Mon, 25 Jul 2022 19:53:28 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LsLwY3G6tzWfCw;
-        Tue, 26 Jul 2022 10:49:33 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 10:53:26 +0800
-Received: from [10.174.178.247] (10.174.178.247) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 10:53:25 +0800
-Subject: Re: [PATCH -next] ACPI/IORT: Fix build error
- implicit-function-declaration
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        renzhijie <renzhijie2@huawei.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-CC:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lorenzo.pieralisi@linaro.org" <lorenzo.pieralisi@linaro.org>
-References: <20220724115423.212932-1-renzhijie2@huawei.com>
- <d59bc043788e4dc796a445588d667ab7@huawei.com>
-From:   Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <078d74b2-151e-4b4a-55fc-9cd8f6fb910c@huawei.com>
-Date:   Tue, 26 Jul 2022 10:53:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 25 Jul 2022 22:56:24 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8142611441;
+        Mon, 25 Jul 2022 19:56:23 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26Q0oJGH012131;
+        Tue, 26 Jul 2022 02:55:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eh7lwV78QvbkO6UqWgVk7uxqFlg4dBXN/Goh4UfRBYI=;
+ b=k/y7wPYT++cECz42lbSsiSPquF0/DEf6rYO00e/son/i/eKtJWLxWWupK+ZDup9Zka9f
+ PEe0ec90ec587kStHYInG26q7ixTyolJZZQmCC+FazaB3WRMbJfHBlPYMLOnZOSb8kOH
+ gcZ3GqWnUm4vrNNJcmIPOp/jyZxH3hAYtN2bb6h1wq8ecg0v/CUGRyRAflJcVJAZNKw9
+ YlqS7qsrZyKHfluJnM8iX2IEcpSVsPilcTtcJn46llfprQHYjiZPFeU/QbpcBwOcY8AM
+ ShqyDV+SVRIBsGndl6kuJSR053XQeoyPUeF++ok2/gdneYeNpfMQ9d7nuM2o7+b/WYy7 Ow== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hhs84jc3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Jul 2022 02:55:59 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26Q2tw3A019793
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Jul 2022 02:55:58 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Jul 2022 19:55:57 -0700
+Received: from [10.253.34.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Jul
+ 2022 19:55:52 -0700
+Message-ID: <2975315f-f59b-0787-a662-e50766aaf470@quicinc.com>
+Date:   Tue, 26 Jul 2022 10:55:50 +0800
 MIME-Version: 1.0
-In-Reply-To: <d59bc043788e4dc796a445588d667ab7@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.247]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
+Content-Language: en-US
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
+        "quic_ziqichen@quicinc.com" <quic_ziqichen@quicinc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>
+CC:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
+ <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
+ <DM6PR04MB6575048E121B56FDA56DA27DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Can Guo <quic_cang@quicinc.com>
+In-Reply-To: <DM6PR04MB6575048E121B56FDA56DA27DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7aVkLI4sa6HQ-IZBTWliXdILxzYlZQwP
+X-Proofpoint-GUID: 7aVkLI4sa6HQ-IZBTWliXdILxzYlZQwP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-25_13,2022-07-25_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ clxscore=1011 suspectscore=0 phishscore=0 mlxscore=0 spamscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2207260010
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/25 21:50, Shameerali Kolothum Thodi wrote:
-[...]
->>
->> If CONFIG_ACPI_IORT=y and CONFIG_IOMMU_API is not set,
->> make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will be failed, like
->> this:
->>
->> drivers/acpi/arm64/iort.c: In function ‘iort_get_rmr_sids’:
->> drivers/acpi/arm64/iort.c:1406:2: error: implicit declaration of function
->> ‘iort_iommu_rmr_get_resv_regions’; did you mean
->> ‘iort_iommu_get_resv_regions’? [-Werror=implicit-function-declaration]
->>    iort_iommu_rmr_get_resv_regions(iommu_fwnode, NULL, head);
->>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>    iort_iommu_get_resv_regions
->> cc1: some warnings being treated as errors
->> make[3]: *** [drivers/acpi/arm64/iort.o] Error 1
-> 
-> Thanks for spotting this.
-> 
->> The function iort_iommu_rmr_get_resv_regions() is declared at #ifdef
->> CONFIG_IOMMU_API area, and the callers of  iort_get_rmr_sids() and
->> iort_put_rmr_sids() would select IOMMU_API.
->> To fix this error, move the definitions to #ifdef CONFIG_IOMMU_API area.
-> 
-> That makes sense. And the only callers of these are SMMU drivers I think we
-> don't need stub functions under !CONFIG_IOMMU_API(Lorenzo, could you
-> please double check this).
+Hi Avri,
 
-I think so, because SMMU drivers will select IOMMU_API,
-in drivers/iommu/Kconfig, it says:
+On 7/23/2022 10:59 PM, Avri Altman wrote:
+>> +#define MCQ_ROP_OFFSET_n(p, i) \
+>> +       hba->mcq_rop[(p)].offset + hba->mcq_rop[(p)].stride * (i)
+> Can you please explain the 0x100 stride thing?
+> Theoretically, each rop set is 48Bytes long, or did I get it wrong?
 
-# IOMMU_API always gets selected by whoever wants it. 
+In the draft, there are 4 sets of MCQ Operation & Runtime Registers, 
+i.e. SQD_n, SQIS_n, CQD_n and CQIS_n.
 
-config IOMMU_API 
+They may be interleaved or segregated, depends on realistic HW designs.
 
-bool
+For example, either #1 or #2 can be the case, and QCOM uses case #1, in 
+which 'stride' means the size (in bytes)
 
-> 
-> Nit: Please wrap the commit description to a max of 75 chars per line.
+that one register has to hop over to reach the same register on next 
+round (for example, addr of SQHP_n == (addr of SQHP_0) + (stride * n)).
 
-Zhijie, would you mind send a updated version?
+To allow flexibility, SoC vendors, depends on realistic HW designs, (by 
+using vops_config_mcq_rop) can manipulate
 
-Thanks
-Hanjun
+the 'offset' and 'stride' of each MCQ Operation & Runtime Register such 
+that SQDAO_n, SQISAO_n, CQDAO_n and
+
+CQISAO_n are programmed with wanted offsets/values.
+
+#1 -
+
+SQHP_0
+SQTP_0
+SQRTC_0
+SQCTI_0
+SQRTS_0
+SQIS_0
+SQIE_0
+CQHP_0
+CQTP_0
+CQIS_0
+CQIE_0
+CQIACR_0
+SQHP_1
+SQTP_1
+SQRTC_1
+SQCTI_1
+SQRTS_1
+SQIS_1
+SQIE_1
+CQHP_1
+CQTP_1
+CQIS_1
+CQIE_1
+CQIACR_1
+...
+SQHP_n
+SQTP_n
+SQRTC_n
+SQCTI_n
+SQRTS_n
+SQIS_n
+SQIE_n
+CQHP_n
+CQTP_n
+CQIS_n
+CQIE_n
+CQIACR_n
+
+
+#2 -
+
+SQHP_0
+SQTP_0
+SQRTC_0
+SQCTI_0
+SQRTS_0
+SQHP_1
+SQTP_1
+SQRTC_1
+SQCTI_1
+SQRTS_1
+...
+SQHP_n
+SQTP_n
+SQRTC_n
+SQCTI_n
+SQRTS_n
+
+
+SQIS_0
+SQIE_0
+SQIS_1
+SQIE_1
+...
+SQIS_n
+SQIE_n
+
+
+CQHP_0
+CQTP_0
+CQHP_1
+CQTP_1
+...
+CQHP_n
+CQTP_n
+
+
+CQIS_0
+CQIE_0
+CQIACR_0
+CQIS_1
+CQIE_1
+CQIACR_1
+...
+CQIS_n
+CQIE_n
+CQIACR_n
+
+
+Thanks,
+
+Can Guo.
+
+> Thanks,
+> Avri

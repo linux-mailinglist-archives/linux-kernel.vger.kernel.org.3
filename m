@@ -2,108 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81AA581084
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1C8581081
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbiGZJ5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
+        id S237991AbiGZJ5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiGZJ5J (ORCPT
+        with ESMTP id S238652AbiGZJ5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:57:09 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5142F039
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:57:07 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id p11so17052360lfu.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:57:07 -0700 (PDT)
+        Tue, 26 Jul 2022 05:57:45 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8031231DE5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:57:15 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id b26so19432370wrc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=I73BOjVPhMR1wc1m6D3pt9KtMoseeendX/4GKU5hxhU=;
-        b=uEAVBlqVVpEO4CRjG+b8EQKwATuT7yiqOEkQv2ZTiLFyrJ2jiaeYPaMsuRlf6yjGgI
-         ZJMG1YC33LrAUnOLH0nIZwePRnjLOcyXgb5hUEmvl/VN0qoOyXr476hzGEvNh9WAbOgg
-         HOmiqK27ag6K9Va5mWQyMOG4FYVmDG9FefW5OasSubq2C8mu++pER4+2qanR+JG5faBM
-         F6yTP57/+k08+9lUA2BdtAR4Baq509d11FRvQSade9qtzPtSEB/RRK9P8nD3D174hQAC
-         od5Bui/cx6nCgtoU7ZnLVGaHE73DLFShMwVJLzuV1kxlf+ShM1s8kLlPRbt3OymhUCb3
-         xB9A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iUicZLyBaZmjv2lqx7fW4HMBGqk7G7eOOVk/ONJ/4PI=;
+        b=a9jshOAIwiw5ztp0+n80iX49X5uP9g1fIPLWAKA0Oebli99rLSK1JSwbKX/TWSIEKD
+         O8RAu6x1EuYGsc6oXUYHrmfMJXvk5iAAbsgDFp3wtW13E5HsTmbU8dXiDaDJtMrBEKfo
+         BtLocFdB4gelyGOYkHzTosErUmhiDP8/zjswgy3RH2fFxA6Xdh3CA/yI5iTiW9jbWJ9K
+         oN+oMjKZdsMTijOKOP2BcUYtUHprOqVqAeK+KFkaDem1o5Ff7dUDZtyl1X5TpjYEAD8P
+         dBkE0hdxwnSaGXsfATXn6MSzu2tBqE1Ie2s0Wxg+NyX5ban32/phra4XzX8bj2k4iDT4
+         H/tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=I73BOjVPhMR1wc1m6D3pt9KtMoseeendX/4GKU5hxhU=;
-        b=vNCUeeLzR+D3e1ai0INvk9yT091H3WP4KL/7FF0gEi6/cAM2ln8YesD5o745XqNJet
-         /XCC1dVYi+BkIKs19WpMZHifElPrG9U7Hy2o6xHaIukqfclVNYchJNfYKe3rHWUmvV9e
-         SitpQyp83/hS04BhS3YP5rYxNO7PGHBJnLF0SHPBnx42FvGQm/AhO6KLgKbMR3un3usg
-         4TGtK/IPSFul0sCmTfkdREECrFSXeI4auLNr70/Iwq1w+UsWa9avq1aMKEPon96d+40/
-         qPJ1gaa59yVsCh/id5lKIVKNGPsxMv+QGCE85i1Tr9+Gfi6tNVdXnnszhqWZc/AfEKG4
-         G81A==
-X-Gm-Message-State: AJIora/U0/kfjBGYFIGJCTDeu2W/kLyWJxXj5eHcqeBdBv+gI8Zk2bIO
-        XOfTt8JhFxSmlf1n12cuf4V8OA==
-X-Google-Smtp-Source: AGRyM1sK7VXFeDB7oQjs/mToNuKVBnT8UhRL+0xdhS1pEpYSUMMEDkLwMhuiBIzgXwdUH2Gx8I5lRg==
-X-Received: by 2002:a05:6512:1288:b0:48a:aa31:2838 with SMTP id u8-20020a056512128800b0048aaa312838mr424327lfs.683.1658829426372;
-        Tue, 26 Jul 2022 02:57:06 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id c20-20020a056512325400b0048a98b7bad3sm605377lfr.197.2022.07.26.02.57.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 02:57:05 -0700 (PDT)
-Message-ID: <d34ff61c-d9b9-9f34-a00f-34a0304e47ee@linaro.org>
-Date:   Tue, 26 Jul 2022 11:57:04 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iUicZLyBaZmjv2lqx7fW4HMBGqk7G7eOOVk/ONJ/4PI=;
+        b=Rhusy85p9qs8oU/92LAZkl9kfttEVUYWCMGUE5CXDh7mCwRHNhUXFu1jxhwm7eAdm0
+         PVmBPBVMBNM5s7FnB24hybVqamDYqHcXPAK28AnFb3f/oMdMLFRYV0EbHX+PLu1F7Ns4
+         qBdYF5gL4z/otxr02JgCAvR4Kt/nHgC0ik12WqHxAW04RGcQdHjPjNuLxXnCNj4yWKRk
+         zXHfiRIo6IGNl0QDzob6soZiDYr0p96DMFpP8Qbql+/6IzImhpWK4c2w3AxXcXxJLY6U
+         /irhiMX/Epedi0XVnMdOOM6d/O4o4M4IjeU4BRFEgtSgqVLdrK5aEcdjQG9/IJJyZ1Of
+         8Feg==
+X-Gm-Message-State: AJIora/W7c7vdutL5Wgv7+0tZep83bnOKE9ekUKImc4PVeXtePVxeKSn
+        OR0ClqNzktEuw1NzinRyXNAkQg==
+X-Google-Smtp-Source: AGRyM1vaVzTyQ5b+nn+RlJ42faxYO14TpuNlzllTL+nY6z4bb/G0nOBbFTz5DJTxQxp7SwpuN92A3g==
+X-Received: by 2002:adf:e84b:0:b0:21e:61cd:647e with SMTP id d11-20020adfe84b000000b0021e61cd647emr10370152wrn.715.1658829433726;
+        Tue, 26 Jul 2022 02:57:13 -0700 (PDT)
+Received: from localhost.localdomain (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.googlemail.com with ESMTPSA id t3-20020a1c4603000000b003a2d87aea57sm21170873wma.10.2022.07.26.02.57.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 02:57:12 -0700 (PDT)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     fparent@baylibre.com
+Cc:     broonie@kernel.org, chaotian.jing@mediatek.com,
+        chunfeng.yun@mediatek.com, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, jic23@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
+        matthias.bgg@gmail.com, qii.wang@mediatek.com, robh+dt@kernel.org,
+        srinivas.kandagatla@linaro.org, ulf.hansson@linaro.org,
+        vkoul@kernel.org, wim@linux-watchdog.org
+Subject: Re: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
+Date:   Tue, 26 Jul 2022 11:57:11 +0200
+Message-Id: <20220726095711.708310-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220531135026.238475-17-fparent@baylibre.com>
+References: <20220531135026.238475-17-fparent@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/2] dt-binding: spi: npcm-pspi: Add npcm845 compatible
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, Rob Herring <robh@kernel.org>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-spi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-References: <20220722114136.251415-1-tmaimon77@gmail.com>
- <20220722114136.251415-2-tmaimon77@gmail.com>
- <20220725225650.GA2898332-robh@kernel.org>
- <CAP6Zq1j0pKHsX20t4ep9-6B_5pTe5MzkU__245F6tW7wFJESiw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1j0pKHsX20t4ep9-6B_5pTe5MzkU__245F6tW7wFJESiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 11:30, Tomer Maimon wrote:
+Hi Fabien,
 
->> To answer your question on fallback, just put:
->>
->>     "nuvoton,npcm845-pspi", "nuvoton,npcm750-pspi" for NPCM8XX BMC
-> In the document?
-> because I don't remember doing so in other documents that I use fallback.
+Could you please add CPUIDLE support:
 
-If they also you fallbacks, then the other documents have now incorrect
-text.
+diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+index 323c814c10cc..1df4075db58f 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+@@ -59,6 +59,7 @@ cpu0: cpu@0 {
+ 			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+ 				 <&apmixedsys CLK_APMIXED_MAINPLL>;
+ 			clock-names = "cpu", "intermediate";
++			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER &DPIDLE>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 			enable-method = "psci";
+@@ -72,6 +73,7 @@ cpu1: cpu@1 {
+ 			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+ 				 <&apmixedsys CLK_APMIXED_MAINPLL>;
+ 			clock-names = "cpu", "intermediate", "armpll";
++			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER &DPIDLE>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 			enable-method = "psci";
+@@ -85,6 +87,7 @@ cpu2: cpu@2 {
+ 			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+ 				 <&apmixedsys CLK_APMIXED_MAINPLL>;
+ 			clock-names = "cpu", "intermediate", "armpll";
++			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER &DPIDLE>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 			enable-method = "psci";
+@@ -98,10 +101,42 @@ cpu3: cpu@3 {
+ 			clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+ 				 <&apmixedsys CLK_APMIXED_MAINPLL>;
+ 			clock-names = "cpu", "intermediate", "armpll";
++			cpu-idle-states = <&MCDI_CPU &MCDI_CLUSTER &DPIDLE>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 			enable-method = "psci";
+ 		};
++
++		idle-states {
++			entry-method = "psci";
++
++			MCDI_CPU: mcdi-cpu {
++				compatible = "arm,idle-state";
++				local-timer-stop;
++				arm,psci-suspend-param = <0x00010001>;
++				entry-latency-us = <300>;
++				exit-latency-us = <200>;
++				min-residency-us = <1000>;
++			};
++
++			MCDI_CLUSTER: mcdi-cluster {
++				compatible = "arm,idle-state";
++				local-timer-stop;
++				arm,psci-suspend-param = <0x01010001>;
++				entry-latency-us = <350>;
++				exit-latency-us = <250>;
++				min-residency-us = <1200>;
++			};
++
++			DPIDLE: dpidle {
++				compatible = "arm,idle-state";
++				local-timer-stop;
++				arm,psci-suspend-param = <0x01010004>;
++				entry-latency-us = <300>;
++				exit-latency-us = <800>;
++				min-residency-us = <3300>;
++			};
++		};
+ 	};
+ 
+ 	cluster0_opp: opp-table-0 {
 
-> I need to do it in ymal files as well?
+I have tested it on i350 evk and each idle state is used properly.
 
-Depends on what you want to add and what you actually added... Let's be
-specific - point to specific commits or files in linux-next. If they
-were not applied - give lore.kernel.org link.
-
-
-Best regards,
-Krzysztof
+Regards,
+Amjad

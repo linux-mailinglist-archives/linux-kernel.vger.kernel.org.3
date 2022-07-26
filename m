@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B892B581500
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3D2581507
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238868AbiGZOUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S239104AbiGZOWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235886AbiGZOUn (ORCPT
+        with ESMTP id S238935AbiGZOWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:20:43 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7935725C6D;
-        Tue, 26 Jul 2022 07:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658845242; x=1690381242;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GlQ9wisk+Ne/nPJz0ZTYMldQTFRMHyp+0I/clyx38i8=;
-  b=Pr+K625bt3NQ+sJD5Jty0DD4ydeIgO+zjBM625nVadf6aXsqoZL2x/zk
-   /116s47ivrcQoUsrKQLDxSnvsO0/duWDxdPDhwmCgIn7H28mn3ZsvZ2cq
-   9A97IhXkIUXIIZfi1yhPf4LhyU5JMelcF7n8WnAvtzhs7CIesBIGa7f1u
-   mn6fh+5BZe2zxcHPsC0rf7WUwsTR2E2vfW6G9IP1j+7dzuE1RRKjFT+u0
-   RaLDgXLFU07oiyUTvHB9hGP/UneNVPPrytUv2gkoW7H+y4A5Xb6r7PU1t
-   wSz8F03ynTUdX8b++p0eCYjG1afeiazMM0SSxiFvnEu9YcGCDKfWOHJPa
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="267731544"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="267731544"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 07:20:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="742249865"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Jul 2022 07:20:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7651CF1; Tue, 26 Jul 2022 17:20:50 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tomislav Denis <tomislav.denis@avl.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v1 1/1] iio: pressure: dlhl60d: Don't take garbage into consideration when reading data
-Date:   Tue, 26 Jul 2022 17:20:48 +0300
-Message-Id: <20220726142048.4494-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 26 Jul 2022 10:22:10 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21081D32D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:22:09 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4D1FA66017E7;
+        Tue, 26 Jul 2022 15:22:08 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658845328;
+        bh=4zmP1FrOBGWRTxzO5xPnrH9vexzpAmeNeZdmwxjZBQY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=I33YrZIMdevJsy17cxsuWq4ptnwFrYml93lqWkg7Uu/N3xR5hbaAEE0xoVtFNUnDg
+         veh64GYs9lfg6OmryApl6rU7FC45SyB2+yXzrZLWH4/GzFyR0K9lMZH6jGknLuyKxw
+         ZMj4rriRSc5p4q53137JzbeKZAbB/qFzZv8/WB7TOaaQB71LiFlpj4xh7nX6WG7fVP
+         K7INGCKoEq0F20PQ2mVP1HEq7Plq+lhSOfHfkF6XcPgTNGE2upHjXrWqzrmPgaHzAW
+         i3eT5LB4M/BXoQuyZNXodOyFKKs9BIDVQDYqrom0uV0RdOebaXLQqoqJzqcOSRDbkz
+         MyztuzqZuuyqw==
+Message-ID: <c9441276-34ae-19dc-8a19-5e03dc14628e@collabora.com>
+Date:   Tue, 26 Jul 2022 16:22:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/6] soc: mediatek: Cleanups for MediaTek SVS driver
+Content-Language: en-US
+To:     matthias.bgg@gmail.com
+Cc:     roger.lu@mediatek.com, khilman@baylibre.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nfraprado@collabora.com, kernel@collabora.com
+References: <20220726141653.177948-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220726141653.177948-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both pressure and temperature are 24-bit long. Use proper accessors
-instead of overlapping readings.
+Il 26/07/22 16:16, AngeloGioacchino Del Regno ha scritto:
+> This is a cleanup-only series for the mtk-svs driver, enhancing the
+> usage of standard Linux macros for bitfields for better readability
+> and register set/get safety, switches to devm_ functions variants
+> where possible and other general cleanups, getting this driver in a
+> better overall shape.
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/pressure/dlhl60d.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Sorry, I forgot to write in the cover letter that this series depends
+on [1] adding MT8195 and MT8186 support.
 
-diff --git a/drivers/iio/pressure/dlhl60d.c b/drivers/iio/pressure/dlhl60d.c
-index 5f6bb3603a8b..f0b0d198c6d4 100644
---- a/drivers/iio/pressure/dlhl60d.c
-+++ b/drivers/iio/pressure/dlhl60d.c
-@@ -129,9 +129,8 @@ static int dlh_read_direct(struct dlh_state *st,
- 	if (ret)
- 		return ret;
- 
--	*pressure = get_unaligned_be32(&st->rx_buf[1]) >> 8;
--	*temperature = get_unaligned_be32(&st->rx_buf[3]) &
--		GENMASK(DLH_NUM_TEMP_BITS - 1, 0);
-+	*pressure = get_unaligned_be24(&st->rx_buf[1]);
-+	*temperature = get_unaligned_be24(&st->rx_buf[4]);
- 
- 	return 0;
- }
--- 
-2.35.1
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=660955
 
+Regards,
+Angelo
+
+> AngeloGioacchino Del Regno (6):
+>    soc: mediatek: mtk-svs: Commonize t-calibration-data fuse array read
+>    soc: mediatek: mtk-svs: Switch to platform_get_irq()
+>    soc: mediatek: mtk-svs: Remove hardcoded irqflags
+>    soc: mediatek: mtk-svs: Drop of_match_ptr() for of_match_table
+>    soc: mediatek: mtk-svs: Use devm variant for dev_pm_opp_of_add_table()
+>    soc: mediatek: mtk-svs: Use bitfield access macros where possible
+> 
+>   drivers/soc/mediatek/mtk-svs.c | 325 ++++++++++++++++++---------------
+>   1 file changed, 176 insertions(+), 149 deletions(-)
+> 

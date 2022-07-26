@@ -2,47 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169B1581825
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8970858182F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236874AbiGZRLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
+        id S239154AbiGZRMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiGZRLp (ORCPT
+        with ESMTP id S238837AbiGZRMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:11:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE3F13E1D;
-        Tue, 26 Jul 2022 10:11:45 -0700 (PDT)
+        Tue, 26 Jul 2022 13:12:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C1F13F20;
+        Tue, 26 Jul 2022 10:12:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACE9DB81893;
-        Tue, 26 Jul 2022 17:11:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78AFC433D6;
-        Tue, 26 Jul 2022 17:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658855502;
-        bh=oB/9YXDllqHNaPx+0+OoJRyg6nWhXunKlacQATTrCVA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2G3pA4DjMcfYujd4B3AX7B602Rdd3zhyaC9iQ7GgaXEr5kW+nJhEvGMVyt6hZaNhZ
-         +7D8OoWYNOSDLjZyv3aa2UyaqrhLFcPatxkXXvxKtYO9vxb9YLjXJnH//UoYakXv8L
-         6bjHVWagMvR8rRx11oaI1d6QhGzYWu6f7+95xkyk=
-Date:   Tue, 26 Jul 2022 19:11:39 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     balbi@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, cristian.birsan@microchip.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A2516069B;
+        Tue, 26 Jul 2022 17:12:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 025F6C433D6;
+        Tue, 26 Jul 2022 17:12:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658855541;
+        bh=LgzcUoHvC8x5lU5Lcb/CQQ/rFkryEerg2TPSvS6Xq3k=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=aiFBe8LolkN7MZnWRvAkkAx7BmXRyssM2wIXh18sA8fY47ebuszbiu4Siq2cKhMYc
+         ooVNcWRTdTzp3zBM19FljzeA4PMZ8j7ghJgVNZbFiycgWZDYHYTUUznh/aHHMymYb1
+         1VH3mpr4NaHRnqAva0UEqL0mCdq7UWVDoQX5rZvaEXHry8Nou+n5oc1v/CAHRgUJK8
+         cGqsm8tYWpy1EwF5f3MqOG9ET4ijQUYQ/sGaFnBHctJA9YXGehGajcGCSrEgkmBCKt
+         6HDELFLU+LxXuFSTAWWFoa9TZOlCu5Ai4KZci3Q618QrF3rOQjGrZe2VyEMdgmaY9l
+         VmCtby+1o9WOg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E36ACC43140;
+        Tue, 26 Jul 2022 17:12:20 +0000 (UTC)
+Subject: Re: [GIT PULL] s390 updates for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yt/vZo1eY8/C/6DU@tuxmaker.boeblingen.de.ibm.com>
+References: <Yt/vZo1eY8/C/6DU@tuxmaker.boeblingen.de.ibm.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yt/vZo1eY8/C/6DU@tuxmaker.boeblingen.de.ibm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.19-7
+X-PR-Tracked-Commit-Id: 918e75f77af7d2e049bb70469ec0a2c12782d96a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5de64d44968e4ae66ebdb0a2d08b443f189d3651
+Message-Id: <165885554092.22071.13291395142322653451.pr-tracker-bot@kernel.org>
+Date:   Tue, 26 Jul 2022 17:12:20 +0000
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, linux-s390@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: gadget: at91_udc: stop using legacy pm ops
-Message-ID: <YuAgSxsJufJoIfCP@kroah.com>
-References: <20220726095948.1809038-1-claudiu.beznea@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726095948.1809038-1-claudiu.beznea@microchip.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,14 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 12:59:47PM +0300, Claudiu Beznea wrote:
-> Stop using legacy PM ops and switch using dev_pm_ops.
+The pull request you sent on Tue, 26 Jul 2022 15:43:02 +0200:
 
-That says what you did, but not why you are doing this.
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.19-7
 
-Please read the kernel documentation for how to write a good kernel
-changelog and resubmit.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5de64d44968e4ae66ebdb0a2d08b443f189d3651
 
-thanks,
+Thank you!
 
-greg k-h
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

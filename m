@@ -2,79 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D115A5816C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA5B5816C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbiGZPuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S232509AbiGZPvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239215AbiGZPuL (ORCPT
+        with ESMTP id S231887AbiGZPvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:50:11 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CAABD9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:50:09 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id m9-20020a6b7b49000000b0067c0331524cso5481543iop.21
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:50:09 -0700 (PDT)
+        Tue, 26 Jul 2022 11:51:47 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAF127B1A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:51:47 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id m10so10924178qvu.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:51:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JRFcvDZwwt70vwm2Ew63MLuxsxwy4bx0z2jyF9XeZOY=;
+        b=ll3vLnY7Hmee1FfHu5SErZGSwRrDSI5eSgAAqOY3hu9KQpRthO47RtD4II2+22QSDR
+         l9VmglWhHvjGd88mMmk8wV6cXAeTblbcxNs2U3uxd2ORn2TSW2RxFMJJCi5xJZm+riiX
+         l1b/MTzMLJqCjjcN5akHb0UTcGJRk/4GeeZUWAO5qYrbgO2QUhLpFC+/9W1C2sACz2GS
+         BA65w2+GH55qKD6tmvZ9uMUCG2K9YeVtkdU9KV269i0Z09QWKPinglU4am4OgfdggpYm
+         d/Ula0xo3Y9oLon4Ce9t92x4kZF8WyvDZUmupDWi3MFeFXVRrbQGmLFWJVRBGo8j5TwU
+         Hqjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=9GYqC1SZgEt4OU0y/SLneyFSp1BWvBVjECk5yA8DcYM=;
-        b=1KMZSNS5D9wNNp2uts5btKRhnCeUEXGgUwq6KBWFZXX9WaWKd4xpHbkTkYlFPGM5XX
-         O4E93O3EvmChSYEKT5o/PHZKufeLxUYlO+V0kbCPnejjIdfopiCjtOabixOXzgdJZ2lm
-         sgrSG2zsb4QhSqEKk7vo7bolLQw2wI8M1CvXepxHpUYy6xYVudp4C7c4uCWfpos4Yx97
-         EpjmwnraXMByUNQQeFvK8DN190RjOK3qWi5bE0fbnTyyCDnZJX2w3Zzv1QNmLJJh0Pp4
-         q1v9WYdidqGMkS4LcBGBz7tbKuxC29XN0q921twtH7vmmCELrMlDlkeCCv4D16uap2LC
-         DVgA==
-X-Gm-Message-State: AJIora8qNrbTSITuIDo26ty/qe7lijlM86WzMd934sbpCren+K47mNF3
-        9+yrAfy6PFtoTNkweaQPTvWRbR+dh+I4ovR8LEX+dHXbBVC3
-X-Google-Smtp-Source: AGRyM1vBd0kqUwkUfm5c1V+ohC7MFmfH5XMdmZakPq54XdOfuY0OBKqF5lk3fVr3SxlyFz09/GlrCA3SVG/TcLfJN1P1MSUnspC3
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JRFcvDZwwt70vwm2Ew63MLuxsxwy4bx0z2jyF9XeZOY=;
+        b=ufo24C5nHdKcuO6BG95tzDx2Fc/6qbgI9OI0ZzPOxXDVbitnUhIg9YIGI7i1Wf2KYL
+         9VKhvOvqETu1sHfKL2mnl6LlZOaezOGRTR6Vw7Xdr1s1vyKrAmRijbT94BD8vwR6h7DM
+         5yE4KeVSRwx111h7ddlisXL/oyeRzhzw4CwRL1WLyehiMZvecUYt34N5DGOyswn9GwG1
+         rgTx0GFAhkzm1Is46FbQC5sN4jVRxCublQtg4Uz13Sn0t8x8jvUO5m+1/KXidyNsjgUq
+         SNkmsgvTYziyNTlD8I6a0YmaPldYy7cXj62dYqfVCWpGGygQ4l+/fgEQFjX6V5LJpnVO
+         92pw==
+X-Gm-Message-State: AJIora8l+82sq4Nw8gFlvAB9bkNHv9y5M2FoVRXgzsPpLWSSpAEk7GCb
+        aXJdiGSxNnDaqMDcQ1CKrkA=
+X-Google-Smtp-Source: AGRyM1tKDLjnfPB4gpxcdX64LZ4TENA3+O2Y5tWiB16bIxzzFmfNQG7HInh7R/DkNOTSypr4jbfIvg==
+X-Received: by 2002:a05:6214:e68:b0:474:40d6:de28 with SMTP id jz8-20020a0562140e6800b0047440d6de28mr10867924qvb.103.1658850706116;
+        Tue, 26 Jul 2022 08:51:46 -0700 (PDT)
+Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
+        by smtp.gmail.com with ESMTPSA id x2-20020a05620a448200b006a8b6848556sm11126322qkp.7.2022.07.26.08.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 08:51:45 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 08:51:39 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Dennis Zhou <dennis@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 5.19-rc8
+Message-ID: <YuANi8LVsoeqdcPN@yury-laptop>
+References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
+ <20220725161141.GA1306881@roeck-us.net>
+ <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
+ <CAHk-=wgGrewyOqT7Cm-eHKp5W+8rJ=aL8iNtsbhRfc0YD2gbeA@mail.gmail.com>
+ <Yt7+pPyEmYYH8D1K@yury-laptop>
+ <CAHk-=wg6k1oxtEF3M7_icZ_62Je4R0VUaA69jo4xrOTxF_mMoQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:3ec2:0:b0:67c:6baf:a51f with SMTP id
- l185-20020a6b3ec2000000b0067c6bafa51fmr6408311ioa.160.1658850609194; Tue, 26
- Jul 2022 08:50:09 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 08:50:09 -0700
-In-Reply-To: <00000000000026864605c611cc51@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004bee3605e4b74106@google.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in net_tx_action
-From:   syzbot <syzbot+3ba0493d523d007b3819@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, cgroups@vger.kernel.org, fweisbec@gmail.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ming.lei@redhat.com, mingo@kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg6k1oxtEF3M7_icZ_62Je4R0VUaA69jo4xrOTxF_mMoQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Mon, Jul 25, 2022 at 01:40:58PM -0700, Linus Torvalds wrote:
+> On Mon, Jul 25, 2022 at 1:35 PM Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > Here we have 2 ugly options - having pairs of almost identical
+> > functions, or passing dummy variables. I decided that copy-pasting is
+> > worse than abusing branch predictor.
+> 
+> The thing is, we have solutions for this - just use a single inline
+> function, and make it *see* the constant.
+> 
+> That way the compiler can DTRT, either generating two copies (with the
+> constant elided) or depending on the branch predictor.
+> 
+> That's particularly true in a case like this, when there is only *one*
+> case for the normal situation (ie little-endian). Because let's face
+> it, big-endian is completely dead and legacy model.
 
-commit 0a9a25ca78437b39e691bcc3dc8240455b803d8d
-Author: Ming Lei <ming.lei@redhat.com>
-Date:   Fri Mar 18 13:01:43 2022 +0000
-
-    block: let blkcg_gq grab request queue's refcnt
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1004f05a080000
-start commit:   d6765985a42a Revert "be2net: disable bh with spin_lock in ..
-git tree:       net
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7ca96a2d153c74b0
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ba0493d523d007b3819
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14c9edc8300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172463c8300000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: block: let blkcg_gq grab request queue's refcnt
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+OK, I'll do it for 5.20. Thanks for the hint.

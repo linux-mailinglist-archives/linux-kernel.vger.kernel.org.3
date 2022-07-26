@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7863A581841
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBE7581843
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239172AbiGZRT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
+        id S239129AbiGZRU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiGZRTy (ORCPT
+        with ESMTP id S230170AbiGZRU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:19:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347D31A051;
-        Tue, 26 Jul 2022 10:19:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBB04B818BF;
-        Tue, 26 Jul 2022 17:19:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BB0C433D6;
-        Tue, 26 Jul 2022 17:19:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658855990;
-        bh=qfN7sU2QjHcpSBNkLFgxr5Bfn9PXkpjv/gAO3PLESVs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CvUlb6RxAI4iOAnGgODfQ66YkVUIQ5nF7awrlSJiQQJpdsYBOO2+gpZFK7Dg+Ccsk
-         fjXEAwXGOorffZQ7rLmwqqDXsb/pZ91c+VpeXstALHfP+ZBKz6QkMweSO3eTlEhTJI
-         s3vip4BatsRJRsEy075U7oHUnKrCj0OD2qigojzZNW+da3zs9xJUlboQ38aoUHVgM2
-         Y6lCEQxbx/IMXJcULNguUhxqg1yV1oPU+6Np0/ElcVHugy58qvUDsUzHzw+BLW1lNV
-         UgXEr7EfspRIcwlXqw414XIibFx7FVLe3T/vwO3UM7lEu58JfEY5X3tD2OWSVn9/SK
-         su8e44cswuXow==
-Received: by mail-yb1-f173.google.com with SMTP id f73so26389856yba.10;
-        Tue, 26 Jul 2022 10:19:50 -0700 (PDT)
-X-Gm-Message-State: AJIora8nxQnsG2cWgVgmcZ0/M8KA0lsMP94MaRYw7rAQuIO9NkHP4R7Q
-        fOL5JRPezJKgdoxY/p0vE3iCYEPbLLoEcJU7Ngs=
-X-Google-Smtp-Source: AGRyM1vRn6Dkzdxs6g5RlH8xVIFZP5SAXLR9vijHLbKziJSzSPgIesjZvm0q76tJuJdI+tnFsnwVsRS71c8R/GB3XRw=
-X-Received: by 2002:a25:55c5:0:b0:670:96cb:a295 with SMTP id
- j188-20020a2555c5000000b0067096cba295mr13625181ybb.449.1658855989642; Tue, 26
- Jul 2022 10:19:49 -0700 (PDT)
+        Tue, 26 Jul 2022 13:20:56 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC576417
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:20:55 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c6so9846989plc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=7BJ3b6cOn0n3id/+vSQ4pIfWPao0SNwrocTVPEfGssA=;
+        b=QYrs6ggWH/sHV5p0lD+PucMiuKTDxzKntHYgX6WcK2tU5X68whvk/hazYXSE//Nlre
+         Okd71pYw1AIM8RjYonVd4L4cIjiR+FeX9MtIl0hvd0phmzObdr9W9iWKD8KPEK9O/gh1
+         xxf962YmfERF7b+f/0Lk/IE1qh9b1ZfAWGGxM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=7BJ3b6cOn0n3id/+vSQ4pIfWPao0SNwrocTVPEfGssA=;
+        b=kydbAkzAvnutMgoBRs2U2QdZXh/yltAlIVVPx3DP/WYDU7Rj+ThxFWC154Svp3k4z/
+         +XXc8zGF0rCoJCVN0GQdoylDHw3Ev9ywZyQegrWDXbhe1K7YafvTW5zAVC7bI11sS54X
+         X/vUzhwarIQEm2NApBkT1EuhOBppxdC8wHr/nh2L8V0OCiuz6q9p3OvV8ShmAQMQ5B9f
+         b2woA5xfLtWaTzzvOX6F6SltVTr6TFfbFdFnDKA0bG0f49pnP9lvG+YJEnxlLIpsGtVK
+         i8SsTGFd06NV2IU4rH1bMD99VrawPfP0MZi6mVegfhWMAGBN1EHrTuZhZD9pY6nU0CSm
+         AkIw==
+X-Gm-Message-State: AJIora8kX1oJDJW2ygClkKxRBUaNodo/8XLWE4CSOS6jM2CaW0mF4y3V
+        eEfv01WLULF5TjXWwS60n7SOQw==
+X-Google-Smtp-Source: AGRyM1sEoGebriD6xMbegueSGf/Gv3ZsETIB94zeQ1E8SLcf8cb9sIWS0P++FgTME4uVCO4ARbPIzw==
+X-Received: by 2002:a17:903:2c7:b0:16c:ebf6:db22 with SMTP id s7-20020a17090302c700b0016cebf6db22mr17979298plk.16.1658856054891;
+        Tue, 26 Jul 2022 10:20:54 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:8693:e9aa:75c0:5134])
+        by smtp.gmail.com with ESMTPSA id a8-20020a17090a6d8800b001f24c08c3fesm9276019pjk.1.2022.07.26.10.20.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 10:20:53 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()
+Date:   Tue, 26 Jul 2022 10:20:29 -0700
+Message-Id: <20220726102024.1.Icc838fe7bf0ef54a014ab2fee8af311654f5342a@changeid>
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
 MIME-Version: 1.0
-References: <20220721175147.214642-1-song@kernel.org>
-In-Reply-To: <20220721175147.214642-1-song@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 26 Jul 2022 10:19:38 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7PzbtB5Esfjy8b60jM9qqLewKYTc6KADrP=EbbXKUKpg@mail.gmail.com>
-Message-ID: <CAPhsuW7PzbtB5Esfjy8b60jM9qqLewKYTc6KADrP=EbbXKUKpg@mail.gmail.com>
-Subject: Re: [PATCH v3] livepatch: Clear relocation targets on a module removal
-To:     live-patching@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        X86 ML <x86@kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,62 +68,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+Since we don't actually pass the load to the firmware, switch to using
+get_optimum_mode() instead of open-coding it.
 
-Could you please share your comments on this one?
+This is intended to have no effect other than cleanup.
 
-Thanks,
-Song
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-On Thu, Jul 21, 2022 at 10:52 AM Song Liu <song@kernel.org> wrote:
->
-> From: Miroslav Benes <mbenes@suse.cz>
->
-> Josh reported a bug:
->
->   When the object to be patched is a module, and that module is
->   rmmod'ed and reloaded, it fails to load with:
->
->   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
->
->   The livepatch module has a relocation which references a symbol
->   in the _previous_ loading of nfsd. When apply_relocate_add()
->   tries to replace the old relocation with a new one, it sees that
->   the previous one is nonzero and it errors out.
->
->   On ppc64le, we have a similar issue:
->
->   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
->
-> He also proposed three different solutions. We could remove the error
-> check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> ("x86/module: Detect and skip invalid relocations"). However the check
-> is useful for detecting corrupted modules.
->
-> We could also deny the patched modules to be removed. If it proved to be
-> a major drawback for users, we could still implement a different
-> approach. The solution would also complicate the existing code a lot.
->
-> We thus decided to reverse the relocation patching (clear all relocation
-> targets on x86_64). The solution is not
-> universal and is too much arch-specific, but it may prove to be simpler
-> in the end.
->
-> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-> Signed-off-by: Song Liu <song@kernel.org>
->
-> ---
->
-> Changes from v2:
-> 1. Rewrite x86 changes to match current code style.
-> 2. Remove powerpc changes as there is no test coverage in v3.
-> 3. Only keep 1/3 of v2.
->
-> v2: https://lore.kernel.org/all/20190905124514.8944-1-mbenes@suse.cz/T/#u
-> ---
-[...]
+ drivers/regulator/qcom-rpmh-regulator.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
+index 561de6b2e6e3..b2debde79361 100644
+--- a/drivers/regulator/qcom-rpmh-regulator.c
++++ b/drivers/regulator/qcom-rpmh-regulator.c
+@@ -306,9 +306,10 @@ static unsigned int rpmh_regulator_vrm_get_mode(struct regulator_dev *rdev)
+ }
+ 
+ /**
+- * rpmh_regulator_vrm_set_load() - set the regulator mode based upon the load
+- *		current requested
++ * rpmh_regulator_vrm_get_optimum_mode() - get the mode based on the  load
+  * @rdev:		Regulator device pointer for the rpmh-regulator
++ * @input_uV:		Input voltage
++ * @output_uV:		Output voltage
+  * @load_uA:		Aggregated load current in microamps
+  *
+  * This function is used in the regulator_ops for VRM type RPMh regulator
+@@ -316,17 +317,15 @@ static unsigned int rpmh_regulator_vrm_get_mode(struct regulator_dev *rdev)
+  *
+  * Return: 0 on success, errno on failure
+  */
+-static int rpmh_regulator_vrm_set_load(struct regulator_dev *rdev, int load_uA)
++static unsigned int rpmh_regulator_vrm_get_optimum_mode(
++	struct regulator_dev *rdev, int input_uV, int output_uV, int load_uA)
+ {
+ 	struct rpmh_vreg *vreg = rdev_get_drvdata(rdev);
+-	unsigned int mode;
+ 
+ 	if (load_uA >= vreg->hw_data->hpm_min_load_uA)
+-		mode = REGULATOR_MODE_NORMAL;
++		return REGULATOR_MODE_NORMAL;
+ 	else
+-		mode = REGULATOR_MODE_IDLE;
+-
+-	return rpmh_regulator_vrm_set_mode(rdev, mode);
++		return REGULATOR_MODE_IDLE;
+ }
+ 
+ static int rpmh_regulator_vrm_set_bypass(struct regulator_dev *rdev,
+@@ -375,7 +374,7 @@ static const struct regulator_ops rpmh_regulator_vrm_drms_ops = {
+ 	.list_voltage		= regulator_list_voltage_linear_range,
+ 	.set_mode		= rpmh_regulator_vrm_set_mode,
+ 	.get_mode		= rpmh_regulator_vrm_get_mode,
+-	.set_load		= rpmh_regulator_vrm_set_load,
++	.get_optimum_mode	= rpmh_regulator_vrm_get_optimum_mode,
+ };
+ 
+ static const struct regulator_ops rpmh_regulator_vrm_bypass_ops = {
+-- 
+2.37.1.359.gd136c6c3e2-goog
+

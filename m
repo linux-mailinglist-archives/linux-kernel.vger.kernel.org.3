@@ -2,59 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7103A5808E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 03:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7978B5808DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 03:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbiGZBGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 21:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S231342AbiGZBFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 21:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiGZBGO (ORCPT
+        with ESMTP id S229755AbiGZBFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 21:06:14 -0400
-Received: from m1364.mail.163.com (m1364.mail.163.com [220.181.13.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3F8426544;
-        Mon, 25 Jul 2022 18:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=tMZKv
-        nr2S+LpKBN6CdOAA5vEXQTONGrH6lqsAQ5uMb0=; b=buoXR/OwW8IiEHFyqxW9O
-        ZeSuFtQOewz4Rcn6AEWCVmuHl8X6xC+5+vOXBw9uy05+AmaJHM0q5lCvl2ZeR8Iy
-        zlEP+Hk3MpUXLUNCTEt/TILpDCKkHT6lb/gVj3r5gQLnEDK2phDYyVBczYdMiZgw
-        MLyQhf4wXZi1010u33ujdY=
-Received: from slark_xiao$163.com ( [223.104.68.106] ) by
- ajax-webmail-wmsvr64 (Coremail) ; Tue, 26 Jul 2022 09:04:41 +0800 (CST)
-X-Originating-IP: [223.104.68.106]
-Date:   Tue, 26 Jul 2022 09:04:41 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Baoquan He" <bhe@redhat.com>
-Cc:     "David Howells" <dhowells@redhat.com>, corbet@lwn.net,
-        vgoyal@redhat.com, dyoung@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, william.gray@linaro.org, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        boqun.feng@gmail.com, tglx@linutronix.de, bigeasy@linutronix.de,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-cachefs@redhat.com
-Subject: Re:Re: [PATCH v2] docs: Fix typo in comment
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <Yt6bVIoRa0nIvxei@MiWiFi-R3L-srv>
-References: <YtlyDZEsOZHt6tRs@MiWiFi-R3L-srv>
- <20220721015605.20651-1-slark_xiao@163.com>
- <2778505.1658746506@warthog.procyon.org.uk>
- <Yt6bVIoRa0nIvxei@MiWiFi-R3L-srv>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Mon, 25 Jul 2022 21:05:05 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F7727CF9;
+        Mon, 25 Jul 2022 18:05:03 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id w204so15469458oie.7;
+        Mon, 25 Jul 2022 18:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=5fDiK95WVSGHAQWg0sKq28MpBdhlxA9jjHAwB8K8aHs=;
+        b=arsMmeYdNZ2EJuqA0306HWyT5FUDjWgPLQDS/licYhmLdwh0bnRgVYQ+PznMji9+iP
+         7EeyQXc5juYYShrM+8UcwOHSSC6cdXlKeGSXRVRGqTbUhB6gfFfAoC/2xoJZ/jgnQ2jg
+         lI5Y4mYE5N3JdSjB/RMtrae+rgqbM6/VxhjTOwXi/rUIxa9BoUj3Q/r8Vy3oycadF4Qp
+         sA3GOU6ANu9lwsREabxWNtQCIGRlnOlCz6Xsmx8LblujwlCsUuYXSG+996Nf+EpInC4A
+         FVWygwrtVu+a4Nb23kFZZXchv7jIUftceWkOcgkNlT9mm4uOoowlmGnwdo5Sdarza2Tw
+         Lnig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=5fDiK95WVSGHAQWg0sKq28MpBdhlxA9jjHAwB8K8aHs=;
+        b=MqTWHqVRHHxJQ054CTbfwcodMTnfJviAXObQcS9q+A1B/pbJnFUkiTUhKKBrpPH0cr
+         qy2lejgMPdwq7pqDMjhSORZNTXegKz13BoNTn+1KO10ztLLbCKxjNez2QoNdDLHfn2LC
+         kJHps84nwLPZ5D6pX4F3YS2115u71ERDSmFT/Cj7MVYTVqS4GQ73A3cRzeVWbNbhAEIS
+         grCnzvfPLq9x+h9/qgn9Go2NTUipXWDeDXKgkfmFjJS5uleooWjhZ5GdOmYHRAWpS6MI
+         9J6GaZMiAtpwJ4r/Bw5C6HC8bLdZB4PL4xjRZTpiVloiz8EMdDfsEEKwhG0+tn6DTIoB
+         zEyQ==
+X-Gm-Message-State: AJIora8EsMw8C+f0FbaJaNeJ6U+/p3kdyb17KkKxiuQ9bJvLibU1bkdJ
+        dH7PPxt0jViTX90zTxnRC8c=
+X-Google-Smtp-Source: AGRyM1tm8WijvSEGL2/qcESBzvVuU7D87TC4LmpQJXPFgI57bmM9yMWoQG5Z72GJkuFJOIJ90pQu6Q==
+X-Received: by 2002:a05:6808:1885:b0:33a:74ac:8b79 with SMTP id bi5-20020a056808188500b0033a74ac8b79mr14481157oib.237.1658797502755;
+        Mon, 25 Jul 2022 18:05:02 -0700 (PDT)
+Received: from [127.0.0.1] ([187.19.239.32])
+        by smtp.gmail.com with ESMTPSA id l6-20020a05687040c600b0010c5005d427sm6826125oal.33.2022.07.25.18.05.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 18:05:02 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 22:04:58 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Leo Yan <leo.yan@linaro.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Chang Rui <changruinj@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] perf symbol: Correct address for bss symbols
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220726005307.GA36862@leoy-ThinkPad-X240s>
+References: <20220724060013.171050-1-leo.yan@linaro.org> <20220724060013.171050-2-leo.yan@linaro.org> <Yt7hGepLBAJJuvII@kernel.org> <20220726005307.GA36862@leoy-ThinkPad-X240s>
+Message-ID: <2A971E59-21F0-4DD2-9E62-F1E7F481C8AF@gmail.com>
 MIME-Version: 1.0
-Message-ID: <55d366e4.486.1823808de32.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: QMGowAD3Ei+pPd9i1g8sAA--.42687W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdRZJZGBbEenN+gACs4
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -65,21 +81,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDctMjUgMjE6MzI6MDQsICJCYW9xdWFuIEhlIiA8Ymhl
-QHJlZGhhdC5jb20+IHdyb3RlOgo+T24gMDcvMjUvMjIgYXQgMTE6NTVhbSwgRGF2aWQgSG93ZWxs
-cyB3cm90ZToKPj4gQmFvcXVhbiBIZSA8YmhlQHJlZGhhdC5jb20+IHdyb3RlOgo+PiAKPj4gPiBz
-ZWQgLWkgInMvdGhlIHRoZSAvdGhlIC9nIiBgZ2l0IGdyZXAgLWwgInRoZSB0aGUgImAKPj4gCj4+
-IFlvdSBtaWdodCB3YW50IHRvIGNsYXJpZnkgdGhlIGZpcnN0ICJ0aGUiIHdpdGggYSBwcmVjZWRp
-bmcgYm91bmRhcnkgbWFya2VyLgo+PiBUaGVyZSBhcmUgc29tZSBFbmdsaXNoIHdvcmRzIGVuZGlu
-ZyBpbiAidGhlIiB0aGF0IGNhbiBiZSB1c2VkIGFzIHZlcmJzLCB0aG91Z2gKPj4gSSdtIG5vdCBz
-dXJlIHlvdSdkIGZpbmQgYW55IG9mIHRoZW0gaGVyZSAtIGNsb3RoZSBmb3IgZXhhbXBsZS4KPgo+
-UmlnaHQuIEkgcGxhbiB0byBzcGxpdCB0aGlzIGJpZyBvbmUgaW50byBwYXRjaGVzIGNvcnJlc3Bv
-bmRpbmcgdG8KPmRpZmZlcmVudCBjb21wb25lbnQgYXMgSm9uYXRoYW4gc3VnZ2VzdGVkLCBhbmQg
-d2lsbCBjb25zaWRlciBob3cgdG8gbWFyawo+dGhlIGZpcnN0ICd0aGUnIGFzIHlvdSBzdWdnZXN0
-ZWQsIGFuZCB3cmFwIFNsYXJrJ3MgcGF0aGNlcyB3aGljaAo+aW5jbHVkZXMgdHlwbyBmaXggb2Yg
-InRoZW4gdGhlIi4KPgo+VGhhbmtzCj5CYW9xdWFuCgpBY3R1YWxseSBJIGhhdmUgY29tbWl0dGVk
-IGFsbCBjaGFuZ2VzIHdoaWNoIHdlcmUgbGlzdGVkIGluIHlvdXIgcHJldmlvdXMgbGlzdC4KSSBj
-b21taXR0ZWQgaXQgb25lIGJ5IG9uZSBhbmQgY2hlY2tlZCBpZiBhbnkgb3RoZXIgdHlwbyBpcyBp
-bmNsdWRlZC4KSWYgcG9zc2libGUsIHlvdSBjYW4gdHJ5IG90aGVyIGRvdWJsZSB0eXBvIGlzc3Vl
-IGxpa2UgImFuZCBhbmQgIiBvciAib3Igb3IiIG9yIHNvbWV0aGluZyBlbHNlLgoKClRoYW5rcwo=
 
+
+On July 25, 2022 9:53:07 PM GMT-03:00, Leo Yan <leo=2Eyan@linaro=2Eorg> wr=
+ote:
+>Hi Arnaldo,
+>
+>On Mon, Jul 25, 2022 at 03:29:45PM -0300, Arnaldo Carvalho de Melo wrote:
+>
+>[=2E=2E=2E]
+>
+>> > First we used 'perf mem record' to run the test program and then used
+>> > 'perf --debug verbose=3D4 mem report' to observe what's the symbol in=
+fo
+>> > for 'buf1' and 'buf2' structures=2E
+>> >=20
+>> >   # =2E/perf mem record -e ldlat-loads,ldlat-stores -- false_sharing=
+=2Eexe 8
+>>=20
+>> Can you share the source code for your false sharing proggie? We need t=
+o
+>> have something in 'perf test' exercising these routines :-)
+>
+>Sure, I am using the false sharing test case:
+>https://github=2Ecom/joemario/perf-c2c-usage-files/blob/master/false_shar=
+ing_example=2Ec
+>
+>=2E=2E=2E with build command:
+>
+>$ gcc -g false_sharing_example=2Ec -pthread -lnuma -o false_sharing=2Eexe
+>
+>Do want me to proceed for adding test case?=20
+
+Yes, go ahead, that will be really nice of you to add it :)
+
+- Arnaldo=20
+
+> Otherwise, it's fine if
+>you will work on the enabling test case :)
+>
+>Thanks,
+>Leo

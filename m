@@ -2,140 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD970580EB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A88C6580EB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237937AbiGZIMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S238172AbiGZIOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiGZIMl (ORCPT
+        with ESMTP id S238232AbiGZIOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:12:41 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632762DA8D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:12:40 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31f445bd486so15595657b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:12:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nCX2ALCWALFGybcMGwSCyXmdfN3GI/+m4dDqSmPpw10=;
-        b=s0G272QfIh9/l63hjHAAeg/H9EPmVwACwS37tb+LwxjryHa4mlQWqrwvINvSIIEoW/
-         Z5YvAD93ZwX3PpzFcVYHu2JNnjVTJEbu9Utqrz3Y4iFYljnNLzmhkxMNWfU/cW+IHO08
-         BtMqsqCC7Au9eyjhgIOU+Pk7NDXHMOQRmVzOs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nCX2ALCWALFGybcMGwSCyXmdfN3GI/+m4dDqSmPpw10=;
-        b=6PLwfeyrXvC91OV8BSu5TUyt2bxvxSORqeIPK2ZJsFbQpLoUVqghXPLk40WhNrHAOC
-         kLuTl0BMgxzzb1ggQaGioyhuqVjizu2N4JhwGgJq3p0WklW+/iXs/z5lbeV+/KGBRvP5
-         4LMQV1uJf4VZRpz/oSUeZijU8tTjKheWDIIAVVTw303Gp43gdzruhJZMu2O80G4KF+rU
-         hGKnoCH3fUgHaCd2hUhDMkV0qmQymD4694CgLQLB9xbglm+HpHzkeP4CsH5wC4onPaSH
-         py4P1yuF9kN1zYwyH3cj3gEVFGvDjU/As/bolYwHwk60BbzeeqtQ1M5/QKMzYrqMNo3R
-         AzmQ==
-X-Gm-Message-State: AJIora9390FdiGdqMEKtuMS9m/deQCs7ix+IZpoiV7V5tTEAGuncF7Oo
-        WrSN6aUmftnNa0ah8Kx7BSBBSLdwY7dkqiuBXTbh
-X-Google-Smtp-Source: AGRyM1s8Apd3hvFA44J5aJBKOXCo+fbuaspIcsLZraEzhnuLtGz3y8ZMjuWlDz61tH0RApEnIjJf8dPeiNTkr3bt800=
-X-Received: by 2002:a0d:ebc8:0:b0:31f:4f08:63aa with SMTP id
- u191-20020a0debc8000000b0031f4f0863aamr352109ywe.145.1658823159618; Tue, 26
- Jul 2022 01:12:39 -0700 (PDT)
+        Tue, 26 Jul 2022 04:14:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E068D2E69B;
+        Tue, 26 Jul 2022 01:14:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 99EC7373AB;
+        Tue, 26 Jul 2022 08:14:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658823257; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=trGkxrX/FFrvLPx/HmylFNb0Sv28281B3Ea3/JpyVZE=;
+        b=ucRi1YiVSIlC0BwnEOmDabV86UH/gn16P6Ca9eqEHR0wQ2nT8pCHRfBMJyvHL4u39ABRzL
+        e1xBnhbap9VvBJ1fft8DFR+RAAcvLgFOS2kp6JTP50YyIEeECngn/5kOVFRkyJljisQdJP
+        SuPT6i1M7DZA3CBG1FDJZ7IxZuLCg1w=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C39C13322;
+        Tue, 26 Jul 2022 08:14:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UNZ3G1mi32KAAQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 26 Jul 2022 08:14:17 +0000
+Date:   Tue, 26 Jul 2022 10:14:16 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     mm-commits@vger.kernel.org,
+        syzbot+2d2aeadc6ce1e1f11d45@syzkaller.appspotmail.com,
+        shakeelb@google.com, roman.gushchin@linux.dev, hannes@cmpxchg.org,
+        penguin-kernel@i-love.sakura.ne.jp, akpm@linux-foundation.org
+Subject: Re: + mm-memcontrol-fix-potential-oom_lock-recursion-deadlock.patch
+ added to mm-unstable branch
+Message-ID: <Yt+iWGnA06DjsHz9@dhcp22.suse.cz>
+References: <20220725220032.B4C30C341C8@smtp.kernel.org>
 MIME-Version: 1.0
-References: <20220715175155.3567243-1-mail@conchuod.ie> <96972ad8-d146-3bc2-0e49-ffe88580bbee@microchip.com>
- <20220725091346.GA20370@willie-the-truck> <28e38506-8fce-9000-c211-199a7aa69910@microchip.com>
-In-Reply-To: <28e38506-8fce-9000-c211-199a7aa69910@microchip.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 26 Jul 2022 01:12:28 -0700
-Message-ID: <CAOnJCUJh0vU8-tK31-A44h+VNHZA2_R6GayNjFg-7Daa6efbag@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] Fix RISC-V's arch-topology reporting
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     "will@kernel.org" <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daire McNamara <Daire.McNamara@microchip.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zong Li <zong.li@sifive.com>,
-        Emil Renner Berhing <kernel@esmil.dk>,
-        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Brice Goglin <Brice.Goglin@inria.fr>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725220032.B4C30C341C8@smtp.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 2:20 AM <Conor.Dooley@microchip.com> wrote:
->
-> On 25/07/2022 10:13, Will Deacon wrote:
-> > On Sat, Jul 23, 2022 at 11:22:01AM +0000, Conor.Dooley@microchip.com wrote:
-> >> On 15/07/2022 18:51, Conor Dooley wrote:
-> >>
-> >> Hey,
-> >>
-> >> Not got any feedback on the smpboot changes from the RISC-V side.
-> >> I tested it on polarfire, the d1 (with both SMP & !SMP set iirc)
-> >> & on the u540. It all looked good to me.
-> >>
-> >> I'd like to have this fixed for v5.20, but there isn't too much
-> >> time left before the mw. Not too sure about the cross-tree changes,
-> >> does it need an immutable branch or could it go through driver-core?
-> >> Catalin suggested removing the CC stable from patch 1/2 & adding it
-> >> as a dependency for the 2/2 patch - but obviously that's up to the
-> >> committer to sort out.
-> >
-> > I'm finalising the arm64 queue today, so I don't really want to pull in
-> > additional changes beyond critical fixes at this point, I'm afraid. I was
-> > half-expecting a pull request from the riscv side last week but I didn't
-> > see anything.
->
-> Yeah, that's fair. It's late in the game for cross-tree messing.
-> I know Palmer has been p busy recently.
->
-> > FWIW, if there's still no movement by -rc1, then I'm happy to queue all
-> > of this on its own branch in the arm64 tree for 5.21.
->
-> Hopefully someone on the riscv side will have confirmed what I am doing
-> is sane by then.
->
-> >
-> > Let me know.
->
-> I will, thanks!
+As we have concluded there are two issues possible here which would be
+great to have reflected in the changelog.
 
-Sorry for the delayed response here. I was planning to test the series
-last week itself
-but got dragged into something else and a qemu bug for NUMA.
+On Mon 25-07-22 15:00:32, Andrew Morton wrote:
+> From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Subject: mm: memcontrol: fix potential oom_lock recursion deadlock
+> Date: Fri, 22 Jul 2022 19:45:39 +0900
+> 
+> syzbot is reporting GFP_KERNEL allocation with oom_lock held when
+> reporting memcg OOM [1].  Such allocation request might deadlock the
+> system, for __alloc_pages_may_oom() cannot invoke global OOM killer due to
+> oom_lock being already held by the caller.
 
-Thanks for the fixes. I have tested this on Qemu(removing the topology
-node) for the following configurations.
-SMP, !SMP, NUMA (2 sockets)
+I would phrase it like this:
+syzbot is reporting GFP_KERNEL allocation with oom_lock held when
+reporting memcg OOM [1]. This is problematic because this creates a
+dependency between GFP_NOFS and GFP_KERNEL over oom_lock which could
+dead lock the system.
 
-FWIW,
-Tested-by: Atish Patra <atishp@rivosinc.com>
+There is another problem here not reflected by the report though. If
+memcg oom path happens during the global OOM situation then the system
+might livelock as well because the GFP_KERNEL allocation from the
+oom_lock context cannot trigger the global OOM killer because that
+requires the oom_lock as well.
+
+> Fix this problem by removing the allocation from memory_stat_format()
+
+s@this problem@both issues@
+
+> completely, and pass static buffer when calling from memcg OOM path.
+> 
+> Link: https://syzkaller.appspot.com/bug?extid=2d2aeadc6ce1e1f11d45 [1]
+> Link: https://lkml.kernel.org/r/86afb39f-8c65-bec2-6cfc-c5e3cd600c0b@I-love.SAKURA.ne.jp
+> Fixes: c8713d0b23123759 ("mm: memcontrol: dump memory.stat during cgroup OOM")
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Reported-by: syzbot <syzbot+2d2aeadc6ce1e1f11d45@syzkaller.appspotmail.com>
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+> 
+>  mm/memcontrol.c |   22 +++++++++-------------
+>  1 file changed, 9 insertions(+), 13 deletions(-)
+> 
+> --- a/mm/memcontrol.c~mm-memcontrol-fix-potential-oom_lock-recursion-deadlock
+> +++ a/mm/memcontrol.c
+> @@ -1490,14 +1490,12 @@ static const unsigned int memcg_vm_event
+>  #endif
+>  };
+>  
+> -static char *memory_stat_format(struct mem_cgroup *memcg)
+> +static void memory_stat_format(struct mem_cgroup *memcg, char *buf, int bufsize)
+>  {
+>  	struct seq_buf s;
+>  	int i;
+>  
+> -	seq_buf_init(&s, kmalloc(PAGE_SIZE, GFP_KERNEL), PAGE_SIZE);
+> -	if (!s.buffer)
+> -		return NULL;
+> +	seq_buf_init(&s, buf, bufsize);
+>  
+>  	/*
+>  	 * Provide statistics on the state of the memory subsystem as
+> @@ -1539,8 +1537,6 @@ static char *memory_stat_format(struct m
+>  
+>  	/* The above should easily fit into one page */
+>  	WARN_ON_ONCE(seq_buf_has_overflowed(&s));
+> -
+> -	return s.buffer;
+>  }
+>  
+>  #define K(x) ((x) << (PAGE_SHIFT-10))
+> @@ -1576,7 +1572,10 @@ void mem_cgroup_print_oom_context(struct
+>   */
+>  void mem_cgroup_print_oom_meminfo(struct mem_cgroup *memcg)
+>  {
+> -	char *buf;
+> +	/* Use static buffer, for the caller is holding oom_lock. */
+> +	static char buf[PAGE_SIZE];
+> +
+> +	lockdep_assert_held(&oom_lock);
+>  
+>  	pr_info("memory: usage %llukB, limit %llukB, failcnt %lu\n",
+>  		K((u64)page_counter_read(&memcg->memory)),
+> @@ -1597,11 +1596,8 @@ void mem_cgroup_print_oom_meminfo(struct
+>  	pr_info("Memory cgroup stats for ");
+>  	pr_cont_cgroup_path(memcg->css.cgroup);
+>  	pr_cont(":");
+> -	buf = memory_stat_format(memcg);
+> -	if (!buf)
+> -		return;
+> +	memory_stat_format(memcg, buf, sizeof(buf));
+>  	pr_info("%s", buf);
+> -	kfree(buf);
+>  }
+>  
+>  /*
+> @@ -6405,11 +6401,11 @@ static int memory_events_local_show(stru
+>  static int memory_stat_show(struct seq_file *m, void *v)
+>  {
+>  	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
+> -	char *buf;
+> +	char *buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
+>  
+> -	buf = memory_stat_format(memcg);
+>  	if (!buf)
+>  		return -ENOMEM;
+> +	memory_stat_format(memcg, buf, PAGE_SIZE);
+>  	seq_puts(m, buf);
+>  	kfree(buf);
+>  	return 0;
+> _
+> 
+> Patches currently in -mm which might be from penguin-kernel@I-love.SAKURA.ne.jp are
+> 
+> mm-shrinkers-fix-double-kfree-on-shrinker-name.patch
+> mm-memcontrol-fix-potential-oom_lock-recursion-deadlock.patch
 
 -- 
-Regards,
-Atish
+Michal Hocko
+SUSE Labs

@@ -2,90 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EF0580ED9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1E1580EDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238477AbiGZIZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
+        id S238138AbiGZI0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238298AbiGZIZW (ORCPT
+        with ESMTP id S232010AbiGZI0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:25:22 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B3D64D0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:25:16 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id oy13so24822474ejb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xkx90yalUpDf8aSv06wMYT+1OK70L3/9oGj4foZkji4=;
-        b=PL30xppZg3iWeTQBfl/NslL+mcaXclPdlk+1wI7jRhfUpQ2/rkYxew0zX1e8T8Xq1/
-         ielzAEIqp+hl4Ay7ucnestwlEE79+0jLp2ojtxc0OkoEzvsT55g0IlEWW+4iisNUBLmo
-         7L29LStoWdJxteClj1Qy8TxWXNvkUFVgrZFoVsedFrRuxuDhjFkg0+A4l8HY78sEx4VI
-         4IB4r6s9zP960K9aI1fhTcbgTrMtauJYKtjox/9EgWBpu2nbxNmsmtI0juHmEx4SpBrz
-         hgO6A0A30PwLRsBhYJEJR9mWGoUfmpjclgYcaAIgndBHP4bPAieoWukNB0ZR+LD6hnON
-         +xyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xkx90yalUpDf8aSv06wMYT+1OK70L3/9oGj4foZkji4=;
-        b=CCJqwmgP8CMvl5hbK2QWFNSEGKJRqOnsxALZHuSvGtDKfVJB7HuGdH9rgYgJV/1cql
-         /v7eq7UTOJAXAxOerNOyV1Z6xb4uPJX/im5gBsAeucjduNzAwnpuNFNZXx7oVPIeuSN3
-         RxQN9NSB26ME7UR8pS9S9uGxeb/zFN1guSkT57tHiRmQxVGsljnhHw4JxRefNg3Tc8A/
-         9crq4VuNwX4v7wEYCzGZdy1fQvgpjhwgjrCgeWmTgkoRCTp+0BPMn/SyGxjy3xItMYZE
-         FEupPuA3NyOBoXPjcBsgPJikAR+eCoReJu40nyI7n3n7yWmgp1XzXo2hBASllG7wymc8
-         iGaQ==
-X-Gm-Message-State: AJIora9V7TkW6u7IH0L8Nrtx+JGNSNGZaAp3N6cpU+PC00VcGK62j0bB
-        +2QvJuxEuT+shKZ5gSmIemWEpzYVvAANHsQT6oTRqg==
-X-Google-Smtp-Source: AGRyM1u3yOCOtZopLwlF/RFirrjzaTrdWVKOaATw//UrBRVUyQggv2JX7KeYTgtrklwgYzdWDacIkTm1zvszXD/o/TM=
-X-Received: by 2002:a17:906:2ed7:b0:72f:d080:411 with SMTP id
- s23-20020a1709062ed700b0072fd0800411mr8498136eji.203.1658823915420; Tue, 26
- Jul 2022 01:25:15 -0700 (PDT)
+        Tue, 26 Jul 2022 04:26:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18E091A82E;
+        Tue, 26 Jul 2022 01:26:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 759441FB;
+        Tue, 26 Jul 2022 01:26:47 -0700 (PDT)
+Received: from [10.57.13.197] (unknown [10.57.13.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0FA33F73B;
+        Tue, 26 Jul 2022 01:26:45 -0700 (PDT)
+Message-ID: <dade430a-0856-0936-96bd-5010480c48c9@arm.com>
+Date:   Tue, 26 Jul 2022 09:26:44 +0100
 MIME-Version: 1.0
-References: <20220725110702.11362-1-allen-kh.cheng@mediatek.com> <20220725110702.11362-3-allen-kh.cheng@mediatek.com>
-In-Reply-To: <20220725110702.11362-3-allen-kh.cheng@mediatek.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 26 Jul 2022 10:25:04 +0200
-Message-ID: <CACRpkdZjMUqzwqLw0LyPSw-TsYhXvNXr74vwW05LMKaE-n2=og@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: pinctrl: mt8186: Add and use drive-strength-microamp
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+Content-Language: en-US
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <20220711124229.16516-1-lukasz.luba@arm.com>
+ <1198724e-d94f-0b7c-9c4a-90595f8426d2@arm.com>
+ <CAJZ5v0gh78z3tw6simaZ5S6dmGvDc-OE6t02N8vQYk-2eoFQgA@mail.gmail.com>
+ <deddd9cc-f517-cff9-e304-e1f09c6784b7@arm.com>
+ <CAJZ5v0jYzJo2BU-qKkaJog6pYx7SkpgmWGd6vTTkc2T=gx8abw@mail.gmail.com>
+ <837b387a-b29d-2122-efb0-881b24dd2725@arm.com>
+In-Reply-To: <837b387a-b29d-2122-efb0-881b24dd2725@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 1:07 PM Allen-KH Cheng
-<allen-kh.cheng@mediatek.com> wrote:
+Hi Rafael,
 
-> Commit e5fabbe43f3f ("pinctrl: mediatek: paris: Support generic
-> PIN_CONFIG_DRIVE_STRENGTH_UA") added support for using
-> drive-strength-microamp instead of mediatek,drive-strength-adv.
->
-> Similarly to the mt8192 and mt8195, there's no user of property
-> 'mediatek,drive-strength-adv', hence removing it is safe.
->
-> Fixes: 338e953f1bd1 ("dt-bindings: pinctrl: mt8186: add pinctrl file and binding document")
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On 7/25/22 09:07, Lukasz Luba wrote:
+> Hi Rafael,
+> 
+> On 7/15/22 18:29, Rafael J. Wysocki wrote:
+>> On Fri, Jul 15, 2022 at 1:47 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>
+>>>
+>>>
+>>> On 7/15/22 12:44, Rafael J. Wysocki wrote:
+>>>> On Fri, Jul 15, 2022 at 10:47 AM Lukasz Luba <lukasz.luba@arm.com> 
+>>>> wrote:
+>>>>>
+>>>>> Hi Rafael,
+>>>>>
+>>>>> gentle ping.
+>>>>>
+>>>>> On 7/11/22 13:42, Lukasz Luba wrote:
+>>>>>> There is no need to keep the max CPU capacity in the per_cpu 
+>>>>>> instance.
+>>>>>> Furthermore, there is no need to check and update that variable
+>>>>>> (sg_cpu->max) everytime in the frequency change request, which is 
+>>>>>> part
+>>>>>> of hot path. Instead use struct sugov_policy to store that 
+>>>>>> information.
+>>>>>> Initialize the max CPU capacity during the setup and start callback.
+>>>>>> We can do that since all CPUs in the same frequency domain have 
+>>>>>> the same
+>>>>>> max capacity (capacity setup and thermal pressure are based on that).
+>>>>>>
+>>>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>>>> ---
+>>>>>>     kernel/sched/cpufreq_schedutil.c | 30 
+>>>>>> +++++++++++++++---------------
+>>>>>>     1 file changed, 15 insertions(+), 15 deletions(-)
+>>>>>
+>>>>> The patch got Ack from Viresh.
+>>>>> Could you take it?
+>>>>
+>>>> Yes, it's there in my queue.  Same for the EM changes.
+>>>
+>>> Thank you Rafael!
+>>
+>> Well, the patch doesn't apply on top of 5.19-rc6, because
+>> sugov_get_util() is somewhat different.
+>>
+>> Please rebase it and resend.
+> 
+> My apologies for the delay, I was on holidays.
+> 
+> I'll do that today and resend it.
+> 
 
-Patch applied.
+I have found the reason why it doesn't apply
+on your tree. I have used next-20220711
+to base this work on. It contains Peter's
+branch sched/core, where there is this Dietmar's patch:
 
-Yours,
-Linus Walleij
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=sched/core&id=bb4479994945e9170534389a7762eb56149320ac
+
+That causes the issue. I thing it might collide when I re-base my patch
+on top of 5.19-rc6 and you apply it into pm tree...
+
+What do you think about this?

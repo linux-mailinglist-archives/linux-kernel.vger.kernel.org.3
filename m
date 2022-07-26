@@ -2,189 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F06581003
+	by mail.lfdr.de (Postfix) with ESMTP id 47815581002
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238027AbiGZJfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S232533AbiGZJfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbiGZJfB (ORCPT
+        with ESMTP id S231765AbiGZJfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:35:01 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CEB2A26C;
-        Tue, 26 Jul 2022 02:34:54 -0700 (PDT)
-X-UUID: 8e6f523f1a9c478fad94c6db686acf46-20220726
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:605c3ab6-92b7-4209-bf4e-1859abef4c7e,OB:10,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.8,REQID:605c3ab6-92b7-4209-bf4e-1859abef4c7e,OB:10,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:0f94e32,CLOUDID:f4c187b3-06d2-48ef-b2dd-540836705165,C
-        OID:ecc5734edacb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 8e6f523f1a9c478fad94c6db686acf46-20220726
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1950218464; Tue, 26 Jul 2022 17:34:50 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 26 Jul 2022 17:34:48 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Tue, 26 Jul 2022 17:34:47 +0800
-Message-ID: <80f223c8ecf262a62feb047d39b9ea2d8655fd14.camel@mediatek.com>
-Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "mripard@kernel.org" <mripard@kernel.org>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "airlied@linux.ie" <airlied@linux.ie>
-CC:     "msp@baylibre.com" <msp@baylibre.com>,
-        "granquet@baylibre.com" <granquet@baylibre.com>,
-        "Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?=" 
-        <jitao.shi@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?=" 
-        <LiangXu.Xu@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 26 Jul 2022 17:34:47 +0800
-In-Reply-To: <9c5b85034ec77be80d771ce3a17260453f007728.camel@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-         <378f904a445e90d65048ed07a1a55fd8c633f934.camel@mediatek.com>
-         <9c5b85034ec77be80d771ce3a17260453f007728.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 26 Jul 2022 05:35:00 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC66B2F66D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:34:58 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id z13so15478145ljj.6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:34:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UbC9r+lVYb5azPSkNOhFyuGn+Y0LpjW+CB5M3j+9eZ8=;
+        b=FBUEaYcWAzUe37l+rjhvVBRMCaiPTGWKKmthl3kddv4upz5hyqB4+AqD8b/6sEZWu8
+         l+X/6BqpjVxyMR4ho/blG2lM6XWWSI2qd9oL7gBxGpo08sGRDDfT2hOCWu0bkaNACGvd
+         OaynO09MAVQEaaxpOh3QOh6yU6Nd7jFrWjUdix7v836eW1T3vwdrcdrxtKT7FTl7lYC5
+         +qC13pmQPnOAK0S1FPiPsT6xiJZnCm9MzRPPnOLPOGXp8qk1XOVjMM9DWfKKdGmKwLVh
+         EFx2NhostrTagiAkavLVMhXSftfegXQc3swwKIyuCuTp3oPPRkYmbyPcPl2bpvDxUQIk
+         4/Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UbC9r+lVYb5azPSkNOhFyuGn+Y0LpjW+CB5M3j+9eZ8=;
+        b=CQ9dzXLwHWM/zm3U301D0DYnvrGyEDZpPIg0B/TjlKHuIcBrKLJLxq0yKPKZT5Thxh
+         u50yw2OkdX4Exkjvhk8NT7eYLw+S5l8MeHgGDn8KLlOAOAx+Ao2OWow94Th/k+xlyMPR
+         lMzrMD2tB5Zj5+5+VvEVYTOdZ/AF1hj2Y1w05DA0rH/dkBdKA0qdhf2Ad/yb1tgMq/CL
+         4YoleJf4Qz9Sb1ybbIGwct59LrQXqHOoGXt0Ns6AhAqWjZw9t7SrUiPlade4LMyGn1wC
+         l9SIuvz5ByljOvY1Di2d8nmeWF29M1b4X7eVUvynBtPot0UMrF6B4G4gKxS4jiF/mWJI
+         nltQ==
+X-Gm-Message-State: AJIora/Px/r2KRCprIVfpdBsXsKpOR3ZC/UshMstwjsJNKWOaK98Giv3
+        GBFC38GC25uhmJyEMG1HNCS81w==
+X-Google-Smtp-Source: AGRyM1tigmESYBHdCULUbFVd2COUlgERvPSXR/0SNXcbQTe2QhRXSxOA9weeGqnXDiYTXNBG2XhOyg==
+X-Received: by 2002:a2e:6e0d:0:b0:25d:da36:10ad with SMTP id j13-20020a2e6e0d000000b0025dda3610admr5839921ljc.152.1658828097133;
+        Tue, 26 Jul 2022 02:34:57 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id o12-20020ac25e2c000000b0048a77a2c4b2sm2384328lfg.158.2022.07.26.02.34.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 02:34:56 -0700 (PDT)
+Message-ID: <2dffc393-b86c-17e2-8c11-bdd9504366c5@linaro.org>
+Date:   Tue, 26 Jul 2022 11:34:55 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 2/3] Documentation: sysfs: Document Broadcom STB memc
+ sysfs knobs
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20220722201043.2731570-1-f.fainelli@gmail.com>
+ <20220722201043.2731570-3-f.fainelli@gmail.com>
+ <135be705-24f9-13b8-6939-0eaa569434d7@linaro.org>
+ <3d29b8fc-f183-5883-edc0-cde55b76e4fd@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3d29b8fc-f183-5883-edc0-cde55b76e4fd@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-26 at 14:42 +0800, Rex-BC Chen wrote:
-> On Mon, 2022-07-25 at 17:16 +0800, CK Hu wrote:
-> > Hi, Bo-Chen:
-> > 
-> > On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> > > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > 
-> > > This patch adds a embedded displayport driver for the MediaTek
-> > > mt8195
-> > > SoC.
-> > > 
-> > > It supports the MT8195, the embedded DisplayPort units. It offers
-> > > DisplayPort 1.4 with up to 4 lanes.
-> > > 
-> > > The driver creates a child device for the phy. The child device
-> > > will
-> > > never exist without the parent being active. As they are sharing
-> > > a
-> > > register range, the parent passes a regmap pointer to the child
-> > > so
-> > > that
-> > > both can work with the same register range. The phy driver sets
-> > > device
-> > > data that is read by the parent to get the phy device that can be
-> > > used
-> > > to control the phy properties.
-> > > 
-> > > This driver is based on an initial version by
-> > > Jitao shi <jitao.shi@mediatek.com>
-> > > 
-> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > ---
-> > 
-> > [snip]
-> > 
-> > > +
-> > > +static int mtk_dp_training(struct mtk_dp *mtk_dp)
-> > > +{
-> > > +	short max_retry = 50;
-> > > +	int ret;
-> > > +
-> > > +	do {
-> > > +		ret = mtk_dp_train_start(mtk_dp);
-> > > +		if (!ret)
-> > > +			break;
-> > > +		else if (ret != -EAGAIN)
-> > > +			return ret;
-> > > +	} while (--max_retry);
-> > 
-> > mtk_dp_train_start() would never return -EAGAIN, so drop this while
-> > loop.
-> > 
-> > Regards,
-> > CK
-> > 
+On 25/07/2022 18:07, Florian Fainelli wrote:
+> On 7/23/22 10:59, Krzysztof Kozlowski wrote:
+>> On 22/07/2022 22:10, Florian Fainelli wrote:
+>>> Document the "srpd" and "frequency" sysfs attributes exposed by
+>>> the brcmstb_memc driver.
+>>>
+>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>> ---
+>>>  .../ABI/testing/sysfs-platform-brcmstb-memc       | 15 +++++++++++++++
+>>>  1 file changed, 15 insertions(+)
+>>>  create mode 100644 Documentation/ABI/testing/sysfs-platform-brcmstb-memc
+>>>
+>>> diff --git a/Documentation/ABI/testing/sysfs-platform-brcmstb-memc b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
+>>> new file mode 100644
+>>> index 000000000000..2bf0f58e412c
+>>> --- /dev/null
+>>> +++ b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
+>>> @@ -0,0 +1,15 @@
+>>> +What:		/sys/devices/platform/*/*/*/*/srpd
+>>
+>> That's a lot of */. Are you sure it is correct path? Didn't you include
+>> here some driver-related path components? Can you paste in email full
+>> path as an example?
 > 
-> Hello CK,
+> Yes this is the correct path:
 > 
-> the function will not return -EAGAIN, but we still want to retry 50
-> times if mtk_dp_train_start() is failed. If we retry 50 times and it
-> is
-> still failed. We can confirm there are some issues for the device.
+> /sys/devices/platform/rdb/rdb:memory_controllers/rdb:memory_controllers:memc@0/9902000.memc-ddr/
 > 
-> I will remove the else if of -EAGAIN and keep th while loop.
+> the 'rdb' node is our top level bus node, the 'rdb:memory_controllers' is an encapsulating node that groups all of the possible memory controllers in a system (there can be between 1 and 3), the rdb:memory_controllers@0 is the first of those memory controller and finally the 9902000.memc-ddr is the sub-node that contains the register controls of interest, since the memory controller aggregates different functions (arbitration, configuration, statistics, DDR PHY SHIM layer, etc.). Maybe I should provide a more complete binding while I am it.
 
-In this version, it never retry. And I believe you've tested this no-
-retry version. If this no-retry version works fine, why do you insist
-on retry? If you really need retry, merge this retry into
-mtk_dp_train_start() because mtk_dp_train_start() have already retry.
+The path should be much more specific so include at least:
+rdb/rdb:memory_controllers/rdb:memory_controllers:memc@*/
+(or some variations of it if pieces of name change)
 
-Regards,
-CK
+However looking at the driver, this is regular platform driver, thus  it
+will appear as:
+/sys/bus/platform/9902000.memc-ddr
 
-> 
-> BRs,
-> Bo-Chen
-> > > 
-> > > +	if (!max_retry)
-> > > +		return -ETIMEDOUT;
-> > > +
-> > > +	ret = mtk_dp_video_config(mtk_dp);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +	mtk_dp_video_enable(mtk_dp, true);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > 
-> > 
-> 
-> 
 
+Best regards,
+Krzysztof

@@ -2,111 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AFE580F9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0767D580F9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiGZJMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S231346AbiGZJMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiGZJMa (ORCPT
+        with ESMTP id S230093AbiGZJMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:12:30 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFCA2AC64
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nqCjJ8kaHKzTLbqQdlUfZDxdXr9VqNvKjOu3J0+NLh0=; b=h12PMr8iUOzEoNmQfmqzjSQ0fJ
-        vBoM4A+cD5Mrlah5ydibxZadnAzIcbNduv1kzgmD82A3eVm95RqueKLoZHsIGukYZq7Z17OpNbKRd
-        ZjvwP5xRlqOSGtr4jYUWTALlWRMu4wxLOlDKBKwWqR/QxnJu5fJpNKIak0anE5ivOCl6Wwo2mK/b3
-        eLgE9Sz6anrcFvzWqh6LMD/NMhcofbgYpqhT8dkpHp0q4UjriTvnXEYSDX0/yWg7DT8ty0L/DRJv/
-        KLYBnc/5BlQ3Cp7RyLuvtqdLXcPbcNzZG5SGFBuKIz5yu8H1exGZd5Y4XR0yDkQfqjZrn0bWGkAkd
-        CekRWtKg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33564)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oGGc3-0003tK-OZ; Tue, 26 Jul 2022 10:12:23 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oGGc1-00016W-Df; Tue, 26 Jul 2022 10:12:21 +0100
-Date:   Tue, 26 Jul 2022 10:12:21 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Yury Norov <yury.norov@gmail.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 5.19-rc8
-Message-ID: <Yt+v9brPqxun0nhA@shell.armlinux.org.uk>
-References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
- <20220725161141.GA1306881@roeck-us.net>
- <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
+        Tue, 26 Jul 2022 05:12:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8522CDD2;
+        Tue, 26 Jul 2022 02:12:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD07A6157C;
+        Tue, 26 Jul 2022 09:12:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14844C341C0;
+        Tue, 26 Jul 2022 09:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658826759;
+        bh=I7oFMsDd+NqwunPLpzOEtgV7hXHXjObjS4RaSddRgOc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZOP9tWOq4LDCmmIBNWcloFwr55JWunqasmdmS3tq9iNoEAa4aMv1daGm0sJL/OMWw
+         uzjF2A+irxJEAkjDX7tv2YMLcWkngcDzN7uGKlCr08PvHYMlKZYOSQgbdzJQXihIJH
+         MuJ77X0UHUhFxpVf/5VZhDyjOK6w2QhON4V84kCIXCjNRaIh3z1hXsmbDtJhtkbhRW
+         AoPvO5l4B5qAxKYN/nuLb3w5/SwmQ8HpMKjE1IzjpvcTREah0Y+D7zNwZ2gKlcpx3n
+         ZiH7C725c39tGt5QeSoEfrk6JLwV4UM9VNQuOVjgT9Brhii8uKEp9yK3KQaadcmmyu
+         eUjRRCcJiY3TA==
+Received: by pali.im (Postfix)
+        id 2AE4482D; Tue, 26 Jul 2022 11:12:36 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] serial: mvebu-uart: uart2 error bits clearing
+Date:   Tue, 26 Jul 2022 11:12:21 +0200
+Message-Id: <20220726091221.12358-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 10:55:18AM -0700, Linus Torvalds wrote:
-> On Mon, Jul 25, 2022 at 9:11 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > BUG: KFENCE: out-of-bounds read in _find_next_bit_le+0x10/0x48
-> 
-> Ok, I was hoping somebody more ARMy would look at this, particularly
-> since there is no call trace beyond the actual fault.
+From: Narendra Hadke <nhadke@marvell.com>
 
-First I'm aware of it. Was it reported to linux-arm-kernel? I'm guessing
-the report wasn't Cc'd to me - I can't find anything in my mailbox about
-it.
+For mvebu uart2, error bits are not cleared on buffer read.
+This causes interrupt loop and system hang.
 
-> I think the fix might be something like this:
-> 
->   diff --git a/arch/arm/lib/findbit.S b/arch/arm/lib/findbit.S
->   index b5e8b9ae4c7d..b36ca301892e 100644
->   --- a/arch/arm/lib/findbit.S
->   +++ b/arch/arm/lib/findbit.S
->   @@ -83,6 +83,8 @@ ENDPROC(_find_first_bit_le)
->    ENTRY(_find_next_bit_le)
->                 teq     r1, #0
->                 beq     3b
->   +             cmp     r2, r1
->   +             bhs     3b
->                 ands    ip, r2, #7
->                 beq     1b                      @ If new byte, goto old routine
->     ARM(                ldrb    r3, [r0, r2, lsr #3]    )
-> 
-> but my ARM asm is so broken that the above is just really random noise
-> that may or may not build - much less work.
-> 
-> I'll leave it to Russell &co to have a tested and working patch.
+Signed-off-by: Narendra Hadke <nhadke@marvell.com>
+Reviewed-by: Yi Guo <yi.guo@cavium.com>
+Reviewed-by: Nadav Haklai <nadavh@marvell.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Cc: stable@vger.kernel.org
+---
+ drivers/tty/serial/mvebu-uart.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-I think it needs a bit more than that, but as you point out in later
-emails, the compiler may do a better job for this.
-
-One of the reasons for using byte loads was to avoid problems in the
-early days of Linux where these took void pointers and thus could be
-misaligned - and using word accesses would have resulted in much
-pain. However, that was changed to unsigned long pointers back in
-2017, so in theory that should no longer be a concern.
-
-I don't remember why we used void pointers there originally - that's
-something which dates back to the 1990s.
-
+diff --git a/drivers/tty/serial/mvebu-uart.c b/drivers/tty/serial/mvebu-uart.c
+index 0429c2a54290..ff61a8d00014 100644
+--- a/drivers/tty/serial/mvebu-uart.c
++++ b/drivers/tty/serial/mvebu-uart.c
+@@ -265,6 +265,7 @@ static void mvebu_uart_rx_chars(struct uart_port *port, unsigned int status)
+ 	struct tty_port *tport = &port->state->port;
+ 	unsigned char ch = 0;
+ 	char flag = 0;
++	int ret;
+ 
+ 	do {
+ 		if (status & STAT_RX_RDY(port)) {
+@@ -277,6 +278,16 @@ static void mvebu_uart_rx_chars(struct uart_port *port, unsigned int status)
+ 				port->icount.parity++;
+ 		}
+ 
++		/*
++		 * For UART2, error bits are not cleared on buffer read.
++		 * This causes interrupt loop and system hang.
++		 */
++		if (IS_EXTENDED(port) && (status & STAT_BRK_ERR)) {
++			ret = readl(port->membase + UART_STAT);
++			ret |= STAT_BRK_ERR;
++			writel(ret, port->membase + UART_STAT);
++		}
++
+ 		if (status & STAT_BRK_DET) {
+ 			port->icount.brk++;
+ 			status &= ~(STAT_FRM_ERR | STAT_PAR_ERR);
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.20.1
+

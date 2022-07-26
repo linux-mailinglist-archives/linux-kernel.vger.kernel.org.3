@@ -2,196 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D881581643
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8A6581648
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234695AbiGZPRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
+        id S234220AbiGZPT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbiGZPRX (ORCPT
+        with ESMTP id S231896AbiGZPTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:17:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D842C24F0C
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:17:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A56AB80113
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 15:17:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 747C0C433C1;
-        Tue, 26 Jul 2022 15:17:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658848637;
-        bh=5SRJ7lsxlITGrYKHbZ9YUt6+dWju5QmVs/XVvuktXxk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E4VX6Ra0PR1scrB2m6YK8pRJJgnkNUBgbwi6MnzpVO0vc8QnrGnsbx57ZsFolXbsN
-         ODfmSIkAzY9oZNT93iF33wBR4ynVNapMa/evuh+9eAIPdxyPSs/CvK6a6Etn2PlKeI
-         wqoDeGVJGlDLG6y3tvRVeeSSCLqiuNLvXDDGhC56E8t5xI6yWQKxTL2Zv9uMx9f02i
-         /MHaujuXgSyCsGdi/DKQp0CusbsEFB4VszgtdvCPjXNQudBKuU9N4i3oQb+PXIhJl1
-         hWYyBfu8v+0UE+C/19lW+p5wx4PS6uMChVyZmuwxOiXNSDRX2rIplqpZoNEWp4hOms
-         sTowwG4I2Z9qQ==
-Date:   Tue, 26 Jul 2022 08:17:15 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
+        Tue, 26 Jul 2022 11:19:25 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE6824BDC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:19:16 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id c24so11169668qkm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oU/PFM076uQxVNOZcY0Zccr8pXxC8l8aoZK0KtggnV0=;
+        b=G3K1g/yFwuaU8qm6hN080k/NOsnbTDalKmxaoQZxHy0uwGW3EO23D/QO5vfWXNOBSY
+         2Ua82Lrys/l3itci7BrIm9y1Ktc3VjTcJ2fTsb3kX583UaTYzRFMgyYygJLK14l1hjId
+         bzwjsLqS9piEuDFTyeeORGOJJk2aHASWXLqGHBawC77mdo+c3AueS1dxDvicH6Jnor0a
+         DSJOtjsV9kS3hq092jpDTNmQlAVa7BNUgog8EGhe9j+5L3a4VnlHBwszgdsI9is7pEa7
+         wDOpzy9LDFFAc6O45S2vDMJIIi4oHcEFn48pBBWBvhEoB142+tkzftYuAWUQieYMBfss
+         qh4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oU/PFM076uQxVNOZcY0Zccr8pXxC8l8aoZK0KtggnV0=;
+        b=tj/fgilOjIvfeNZTI/+PokmAJDv0t7RG6fEikKxk6DR9gkwbJz9Rc5JUodGbFwZKCn
+         J6mwRFUUlGtpzwV/k0YBUmostzQ7wq0N4sZfE430AA1pWnwsXEVJuh5BcHU1tXVn2RaO
+         kwCoGKKqoxU/YawaEGyqLFnY0dbIw/Mt41S4Qxxn9HcFTbtU75nRI2wBaJ+Jn2Fwj5BC
+         +j6evwZVLGuQleTk0Spm7pqEoC4sqezjVCeoxpZrFcBiJPxt40sePUfQowyCTgvMAVd3
+         imH49kFwHJIpYBha81pgfMUcxQwQ3XxOeNn5Ag+kBr11f62cD2Kd94u6fkdiW5kNcKS6
+         fCcQ==
+X-Gm-Message-State: AJIora8oM4CcYNmREFDJxrklYwb+zMj5587XclH4LD9ZvogeUdu/kfwI
+        JBLFW87XOnF8Yx9XXOFEVVmXgJWm2g4=
+X-Google-Smtp-Source: AGRyM1u3LM6n0ZHE1JaFrgS+gI2RKjPyiDakaF7wBubPavR1Lo9pw7bdraLDdnmDkZ/HgCUX95FYHA==
+X-Received: by 2002:a05:620a:370b:b0:6b6:d59:fcab with SMTP id de11-20020a05620a370b00b006b60d59fcabmr13593141qkb.564.1658848755222;
+        Tue, 26 Jul 2022 08:19:15 -0700 (PDT)
+Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
+        by smtp.gmail.com with ESMTPSA id w5-20020ac86b05000000b00304bc2acc25sm9223681qts.6.2022.07.26.08.19.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 08:19:12 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 08:19:09 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
- packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
- an unaligned pointer value
-Message-ID: <YuAFeyKirrneGPSB@dev-arch.thelio-3990X>
-References: <202207251140.M7YAqoLC-lkp@intel.com>
- <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH 1/2] powerpc: drop dependency on <asm/machdep.h> in
+ archrandom.h
+Message-ID: <YuAF7ahr58HjMqXs@yury-laptop>
+References: <20220723214537.2054208-1-yury.norov@gmail.com>
+ <20220723214537.2054208-2-yury.norov@gmail.com>
+ <CAHp75VfOmN=cTEs7gbwxZ7W3hXjBo67N4AmHHiDfcVfFzHkMLA@mail.gmail.com>
+ <Yt7CJj8r3eo05pKd@yury-laptop>
+ <87edy8bbtp.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87edy8bbtp.fsf@mpe.ellerman.id.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 10:07:09AM +0200, Andy Shevchenko wrote:
-> Seems yet another false positive from Clang.
-
-This warning should not show up because it is disabled in the main
-Makefile. Unfortunately, a recent change in clang made '-mtune' warn
-when it is not supported in the backend, which is the case for ARM:
-
-https://github.com/ClangBuiltLinux/linux/issues/1674
-
-As a result, all subsequent cc-option calls fail, which was the root
-cause of this warning last time, just with MIPS:
-
-https://lore.kernel.org/YenXz+RznXBuJMSR@dev-arch.archlinux-ax161/
-
-Intel folks, could you update your version of clang or add this
-particular warning to your blocklist? It should be resolved with
-https://github.com/llvm/llvm-project/commit/1d23f6c5a4f6ebb101c282f8f506588fe4d9e92f.
-
-Cheers,
-Nathan
-
-> On Mon, Jul 25, 2022 at 5:55 AM kernel test robot <lkp@intel.com> wrote:
+On Tue, Jul 26, 2022 at 04:57:38PM +1000, Michael Ellerman wrote:
+> Yury Norov <yury.norov@gmail.com> writes:
+> > On Mon, Jul 25, 2022 at 09:28:12AM +0200, Andy Shevchenko wrote:
+> >> On Sun, Jul 24, 2022 at 12:19 AM Yury Norov <yury.norov@gmail.com> wrote:
+> >> >
+> >> > archrandom.h includes <asm/machdep.h> to refer ppc_md. This causes
+> >> > circular header dependency, if generic nodemask.h  includes random.h:
+> >> >
+> >> > In file included from include/linux/cred.h:16,
+> >> >                  from include/linux/seq_file.h:13,
+> >> >                  from arch/powerpc/include/asm/machdep.h:6,
+> >> >                  from arch/powerpc/include/asm/archrandom.h:5,
+> >> >                  from include/linux/random.h:109,
+> >> >                  from include/linux/nodemask.h:97,
+> >> >                  from include/linux/list_lru.h:12,
+> >> >                  from include/linux/fs.h:13,
+> >> >                  from include/linux/compat.h:17,
+> >> >                  from arch/powerpc/kernel/asm-offsets.c:12:
+> >> > include/linux/sched.h:1203:9: error: unknown type name 'nodemask_t'
+> >> >  1203 |         nodemask_t                      mems_allowed;
+> >> >       |         ^~~~~~~~~~
+> >> >
+> >> > Fix it by removing <asm/machdep.h> dependency from archrandom.h
+> >> 
+> >> ...
+> >> 
+> >> >  EXPORT_SYMBOL_GPL(pm_power_off);
+> >> 
+> >> ^^^ (Note this and read below)
+> >> 
+> >> ...
+> >> 
+> >> > +EXPORT_SYMBOL(arch_get_random_seed_long);
+> >> 
+> >> It can't be like this. Brief browsing of the callees shows that.
 > >
-> > Hi Oleksij,
+> > Is my understanding correct that you're suggesting to make it GPL?
 > >
-> > FYI, the error/warning still remains.
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-> > commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
-> > date:   1 year, 2 months ago
-> > config: arm-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251140.M7YAqoLC-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm cross compiling tool for clang build
-> >         # apt-get install binutils-arm-linux-gnueabi
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/ drivers/staging/ fs/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+> > ppc_md is exported with EXPORT_SYMBOL(), and the function is in header,
+> > so it's available for non-GPL code now. I don't want to change it.
 > 
-> What the heck? The get_unaligned_*() is exactly to get unaligned data.
+> That's true, your change maintains the status quo.
 > 
-> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >                                                                        ^~~~~~~~~
-> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-> >                                            ^~~~
-> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-> >                                                       ^~~~
-> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >                                                             ^~~~
-> >    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-> >    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
-> >                    if (!(condition))                                       \
-> >                          ^~~~~~~~~
-> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
-> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-> >                                                  ^~~~
-> >    include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-> >                                                       ^~~~
-> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >                                                                        ^~~~~~~~~
-> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-> >                                            ^~~~
-> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-> >                                                       ^~~~
-> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >                                                             ^~~~
-> >    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-> >    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
-> >                    if (!(condition))                                       \
-> >                          ^~~~~~~~~
-> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
-> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-> >                                                  ^~~~
-> >    include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-> >                                                                ^~~~
-> > >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
-> >            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >                                                                        ^~~~~~~~~
-> >    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
-> >                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-> >                                            ^~~~
-> >    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
-> >                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
-> >                                                       ^~~~
-> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >                                                             ^~~~
-> >    note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-> >    include/linux/compiler.h:56:47: note: expanded from macro 'if'
-> >    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-> >                                                  ^~~~
-> >    include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-> >    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-> >                                                                                         ^~~~
-> >    include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-> >            (cond) ?                                        \
-> >             ^~~~
-> >    3 warnings generated.
-> >
-> >
-> > vim +242 drivers/iio/adc/ti-tsc2046.c
-> >
-> >    239
-> >    240  static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
-> >    241  {
-> >  > 242          return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
-> >    243  }
+> But I think we actually don't need it exported to modules, I think it's
+> a private detail of the RNG <-> architecture interface, not something
+> that modules should be calling.
 > 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+> So I think it's OK to drop the EXPORT_SYMBOL, either in this patch or a
+> subsequent one if you don't want to rebase.
+
+OK, changed.

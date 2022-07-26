@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EB6581B0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95F1581B25
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239952AbiGZU2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 16:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S239632AbiGZUf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 16:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239940AbiGZU2B (ORCPT
+        with ESMTP id S231529AbiGZUfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 16:28:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F248832EEA;
-        Tue, 26 Jul 2022 13:28:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEB94B8191D;
-        Tue, 26 Jul 2022 20:27:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC58FC433D6;
-        Tue, 26 Jul 2022 20:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658867278;
-        bh=KnueVrE+igYsfkQX3nJiPPysZTJsSWq9qcOK5teA/7Q=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Fe3cv0Jycq1X0+CLJN0jTG7V1cgt+LjIpWDcXg/WEqiUqyB9sV0afXJn9fdRtrKSG
-         NBC78v4LWv1JwcVTMdZC7a8pz9B0GKlLjDqp4gfmK+26fMj2IExPaHNc185sCOz73p
-         4VIDNUUk/Q1j8CATvScAj3CIwH7Xvtt+gCyh88iB3EiRQZbMAYW2srcR6osj2ocjGQ
-         P0UZDg53WvOMpphMTCwv261XceNWZulBdWj0yUYRsWe1aQNZXYRWkIegJk5Tt4iEXE
-         4GwLOG4zm0BEzdlc/65YevxuTmXQCW5zbSa9cpVluqd31jpgivzqVmnoiBqTxI6vod
-         e849adF8NZDZQ==
-Message-ID: <8e4d498a3e8ed80ada2d3da01e7503e082be31a3.camel@kernel.org>
-Subject: Re: [RFC PATCH] vfs: don't check may_create_in_sticky if the file
- is already open/created
-From:   Jeff Layton <jlayton@kernel.org>
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        Yongchen Yang <yoyang@redhat.com>
-Date:   Tue, 26 Jul 2022 16:27:56 -0400
-In-Reply-To: <20220726202333.165490-1-jlayton@kernel.org>
-References: <20220726202333.165490-1-jlayton@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Tue, 26 Jul 2022 16:35:54 -0400
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D173910CB;
+        Tue, 26 Jul 2022 13:35:53 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so66518wme.0;
+        Tue, 26 Jul 2022 13:35:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rzfldDnwiZ1L6vukyYNiW1lGtHYIp/Q69JeDkFAi97M=;
+        b=NrBKrq5r54CNRqCiHqc+b0XCUq+6TNDZRGDtHsxLbYGlx7g2URPcV3bKsqigURnhDk
+         xLN9L/OSOiI/ApnuRADRiey8zBDOAl16OsZwMWxB1hqQRRG4YiaBpMPfqKa7RxArAB9C
+         1iLMkphn+eyY77ecHJ50QhdbGN3LdA0aBrjJ24Ll8FjNbs+o+aswEBenYfCoXpK/9hgM
+         wAo5uts4yAa8FDtmUNPMEGS9A9WUE+mdXgAXgwHKYFqFd0LufUcOScwhdX4TotHCdNkW
+         51xMUhp8Pu8RBrQrx0Q1LnBpWIBOo4sMe043enOzzBITyUBbqa2K6+QgJOeOQiIDWhGy
+         6vyw==
+X-Gm-Message-State: AJIora8G2l+MeNPHMiNgOxDa/BBLsbbykbEu3UxotVVNZ65Io3v2eAnA
+        bQC60pfwV0LSJj6sVy3q1foilSrtg5ohocCOJhw=
+X-Google-Smtp-Source: AGRyM1tmpHDUGYkF3Pa0LuFMVPwSUfzWWt+oKsCfgWxV9rShxvWw0PrOPEUryVbTGeQlSFOd0x7JI+YXckH6bcc0s5E=
+X-Received: by 2002:a05:600c:2d4c:b0:3a3:22c0:c3dd with SMTP id
+ a12-20020a05600c2d4c00b003a322c0c3ddmr618767wmg.107.1658867752308; Tue, 26
+ Jul 2022 13:35:52 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725104220.1106663-1-leo.yan@linaro.org> <Yt68AZA2VV9d02xZ@kernel.org>
+ <CA+_WhHyZZC=3gtzetEAQQrjtGujHmY5azwtQNZEc90gyOAwUDg@mail.gmail.com>
+ <CAP-5=fWiNdnEawdj_3ExCrcwRSnRxeV8=8RhA6pwbw_bJdPJFg@mail.gmail.com> <YuBDw/+7McESS05X@kernel.org>
+In-Reply-To: <YuBDw/+7McESS05X@kernel.org>
+From:   Akemi Yagi <toracat@elrepo.org>
+Date:   Tue, 26 Jul 2022 13:35:40 -0700
+Message-ID: <CABA31DoEJEyVeUgzROzzj_OA2exmj69WamaavQWi=7nWq52dxw@mail.gmail.com>
+Subject: Re: [PATCH] perf scripts python: Let script to be python2 compliant
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>, Alan Bartlett <ajb@elrepo.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, ElRepo <contact@elrepo.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-26 at 16:23 -0400, Jeff Layton wrote:
-> NFS server is exporting a sticky directory (mode 01777) with root
-> squashing enabled. Client has protect_regular enabled and then tries to
-> open a file as root in that directory. File is created (with ownership
-> set to nobody:nobody) but the open syscall returns an error.
->=20
-> The problem is may_create_in_sticky, which rejects the open even though
-> the file has already been created/opened. Only call may_create_in_sticky
-> if the file hasn't already been opened or created.
->=20
-> Cc: Christian Brauner <brauner@kernel.org>
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D1976829
-> Reported-by: Yongchen Yang <yoyang@redhat.com>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/namei.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->=20
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 1f28d3f463c3..7480b6dc8d27 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -3495,10 +3495,15 @@ static int do_open(struct nameidata *nd,
->  			return -EEXIST;
->  		if (d_is_dir(nd->path.dentry))
->  			return -EISDIR;
-> -		error =3D may_create_in_sticky(mnt_userns, nd,
-> -					     d_backing_inode(nd->path.dentry));
-> -		if (unlikely(error))
-> -			return error;
-> +		if (!(file->f_mode & (FMODE_OPENED | FMODE_CREATED))) {
-> +			error =3D may_create_in_sticky(mnt_userns, nd,
-> +						d_backing_inode(nd->path.dentry));
-> +			if (unlikely(error)) {
-> +				printk("%s: f_mode=3D0x%x oflag=3D0x%x\n",
-> +					__func__, file->f_mode, open_flag);
-> +				return error;
-> +			}
-> +		}
->  	}
->  	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
->  		return -ENOTDIR;
+On Tue, Jul 26, 2022 at 12:43 PM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Tue, Jul 26, 2022 at 10:52:31AM -0700, Ian Rogers escreveu:
 
-I'm pretty sure this patch is the wrong approach, actually, since it
-doesn't fix the regular (non-atomic) open codepath. Any thoughts on what
-the right fix might be?
---=20
-Jeff Layton <jlayton@kernel.org>
+> > So I'm somewhat concerned about perf supporting unsupported
+> > distributions and this holding the code base back. RHEL7 was launched
+> > 8 years ago (June 10, 2014) and full support ended 3 years ago (August
+> > 6, 2019) [1]. Currently RHEL7 is in "Maintenance Support or
+> > Maintenance Support 2" phase which is defined to mean [2]:
+[...]
+
+> In this specific supporting things that people report using, like was
+> done in this case, isn't such a big problem.
+>
+> Someone reported a problem in a system they used, the author of the code
+> in question posted a patch allowing perf to be used in such old systems,
+> doesn't get in the way of newer systems, small patch, merged, life goes
+> on.
+>
+> Sometimes some organizations are stuck with some distro till they can go
+> thru re-certifications, bidding for new hardware, whatever, and then
+> they want to continue using the latest perf on those systems because
+> they want to benefit from new features we're working on that work on
+> such systems. If the cost is small, like in this case, I see no problems
+> to have perf working on such older systems.
+>
+> - Arnaldo
+
+Just wanted to make a note about the "old" systems.
+
+While RHEL 7 might be regarded as "old" in general, it may not be so
+in the world of Enterprise Linux. A graph of EPEL mirror stats [1],
+while it is from about a year ago, shows EL 7 (RHEL 7 and its
+rebuilds) has a huge user base and was still growing quite fast.
+
+By the way, my main workstation runs RHEL 7. ;-)
+
+Akemi
+
+[1] https://twitter.com/mattdm/status/1447224008831811588

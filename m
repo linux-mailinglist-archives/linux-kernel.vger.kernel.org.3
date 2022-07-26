@@ -2,114 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D28580EFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5678E580EF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238472AbiGZI25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S238312AbiGZI2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238323AbiGZI2u (ORCPT
+        with ESMTP id S232775AbiGZI2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:28:50 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D3030551;
-        Tue, 26 Jul 2022 01:28:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1658824097;
-        bh=3RSP2yx7K3NGv3aWWQj5WbiKUEF0R+QuwyU5XYA0lUQ=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=FZIClfp0A6gDrpjYXvMXdJF1dM4XQ6/hzxaqkzy2/9p2tPkLBXw5zeCbcPigkVy2L
-         9a5fXGTE+ETaRSWT8xYYmod5nIaSDKVNnrbpXQRiLMVheXMZojrvjhhDwevoBc/nsx
-         q14gcXlyqUzIPczzYcCU8ngPymNsYIQFCn0jPB7Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.186.181]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mirng-1nbQvt1lBs-00ey03; Tue, 26
- Jul 2022 10:28:17 +0200
-Message-ID: <70afefa0-2f18-c8c0-33cd-f6abd4010535@gmx.de>
-Date:   Tue, 26 Jul 2022 10:27:30 +0200
+        Tue, 26 Jul 2022 04:28:08 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562432FFDC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:28:07 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id h8so19089273wrw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qAKHknFtsvT1+469TMaGtV4FNnDqf7wnEERMTyMAfco=;
+        b=FUUrWzuDishjz9cWOzadM6Gl14xPV+esI8ec68cYC8L7HNGTMZO71Vz0SsxSvz/d/M
+         qRyNp9YUPMSZGVuqzZ6UD0rqiJw/qW+gV6aDzdqByjID17FYpJDMFkICUnmAEE0vu10t
+         H5b6bqv3WvhstO48+JQ5pMzSWALXBv0YWf6q4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qAKHknFtsvT1+469TMaGtV4FNnDqf7wnEERMTyMAfco=;
+        b=IEaiZtHax130uLno5L6PRFTvma6WkmL+lBAHC3aHOxd+vD+5w9jM87XbawYJaRWp4n
+         uc+q+6WhF7vn2Jvyv5Gy+5uau1wN5cNWppG/+vMRD1pAcLmUt8vPJWKxDEv7o8c3MLTl
+         JohxeszpAndEt+6bbpFSwoW7AILzTLhANb2TgT6Fv8KWXa7fZ1C0dwMuiLgSiGtxQ/VD
+         dkrVMj/+yGfB1+0EY7vZ9kMsRV88CQacBKnaZhrE8x4sDSRzhOUUW1Uq0BUQNgd0CwBR
+         Q2VuZ1ZSLZLexCP9mZTcbK8YEFaaptgz0+UOZEpjQDyuQmFogQFbo/R6VD9TQwKCPJAk
+         ku3Q==
+X-Gm-Message-State: AJIora8Hdxm/cw0dlj0FglXzbeJNY4CrXOihkIAnWxJ+e6TrQmrMp9FB
+        N+8TSPYcO9H8X8K05aDYCwUHbszrPIfhCxt1vi2tMA==
+X-Google-Smtp-Source: AGRyM1t/lZNz8m3urqK9JXJr8NpFEnVRSKywvR7SNPRuB0E8haJrZ/ZUTHOWy4RG+PM3vnOlQFpwUR8D2fNwB3WOo5s=
+X-Received: by 2002:a5d:59a9:0:b0:21e:5e6a:6a8e with SMTP id
+ p9-20020a5d59a9000000b0021e5e6a6a8emr10795876wrr.190.1658824085827; Tue, 26
+ Jul 2022 01:28:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] parisc: check the return value of ioremap() in
- lba_driver_probe()
-Content-Language: en-US
-To:     williamsukatube@163.com, James.Bottomley@HansenPartnership.com,
-        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     William Dean <williamsukatube@gmail.com>,
-        Hacash Robot <hacashRobot@santino.com>
-References: <20220722025709.2924616-1-williamsukatube@163.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220722025709.2924616-1-williamsukatube@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:u3lbQyxSlwgZR4uGgGbLerNKFvAO9zBJMtW2I/xOystHTZU2Dq9
- A1RpqVXYlLWi6Nr2yYM6ypc8dJ+s5newIk6hN6NaSDNpotsmAknZZp1LSyAxCpPOur9FBGI
- awF3RtMbRyU66qvm/ogPg/f6YOvbH0vuYMKmOqB76ypuvBV/vJ0+JcqNCfGaZxStcVcRW1Z
- eJZbWpYP4sriFM/Gx5lmg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UelfYpVGDxQ=:EMXQzo4e6WvwZbHYqb9Abt
- 7wPcX2/jGLJVTVQYRbjgI/kudpHTeHgiSlSH/h5sREgKbkvVjxjErmw7Jl+BjGiIsWQS2Wqjt
- RCplNTp7UA6fcSA4Y+VZT0CJoNtlpIS7IVy8ZAXjBF4O9xqNGiV/HkRpyGXlKN4RgOPuxzoc/
- mhYKjEon549Mt16AICOTEE3I6QKshib7+NSz6l4HJtb4L7zfPe5Hdyay4VYeHHsl0SS91Y4sj
- fJ3NuBWq4DHdsXtgwa64/WyHSxr0ImCv/5lMD60K6hElaSnCrGwC8QUV0ipZNsuIXcCKhaBjV
- Wkua2KGbW6Z/Y/XDWQJqN+x6U+tvIqVaBJgZFpNa/O/h7mQ0m8uNxd7ST6GmXOzQ06JJaMhhe
- HOadky/AO8iw2XNEEKk/qCkF7qX01CPk6eDskEU+EwQoDt2bGXAYjoJ6SMFc47ce/BpkQmmDW
- GCD81pZq+UHPgzv42GDlwRb79MGAWxGq801jBKjhqimRrTCPQzABDb4Y8vXldulnGJZ0TSrzV
- Uj5NHB7L1X5CfeLZ38sI0kl3jqRm49dM2C1f1Hocfn9S2a9XC/9ykDMFNn+zBxSa/5gy3LArk
- cNQzhDaa/k8P4pilmLK89wSD8/YpJPAlAIaeJFHBvtKouS7lN3cI8+/B2uKVcZGwBhAtwcF6Q
- deo1zM5uQQGIXzaBsuQSFzMevIuPju4G78ctbm+P1zaRHW7l7eJXCqTYC6i7wukUt7p2uawtC
- CEyIrJsSxjo513grqu6ZD8Jf+MXnDPeCrk8Bj4KtMuM2CuEZZljXs0km1CoLwrnFxYzSGUtaj
- K2VPTmLLMvWF6Q96msyAe/3OtRHJwEaw4h+eeUopUroKuyqhyoRD+kjqyH3aJUvPtgTJMYeec
- kKkpNtr1Zmotwp7T7Af73ZCMVMcaEZQG/7VkVgyDPXlN1N0MF5K6iYaIWVg4TkI4YgmP/WW5U
- p5bMfm5eso5u0dBFVkDqs8Vqk+Lg6IDnEB24xElBWcTt66Z7pV4Zj8b8j1xY11GcKWL/xz2gH
- IfdrwKdT57KK7c2UZZznP6eevPnSljgEcXd+u5hx1UaJkOfRowcgO0xaL5u3PEut9eTdTtWyF
- X1lAqZ4rOUbSyoS8ag2HqHXnC7uN75nsTaxeOHUJIM024B9p2I0b8yfbw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220725082447.2613231-1-treapking@chromium.org>
+ <5856610d-510f-46dc-63b2-79e571956a7c@collabora.com> <CAEXTbpeHy6-WjLOyWFkncoHzBPM+6qq4w-kUoZj7=05gf8YBjw@mail.gmail.com>
+ <bcb8c2b4-a1ab-8646-9fcb-034a70f5a329@collabora.com> <CAEXTbpeEkpgFjQfONM030k8drcfYzOoWnB_FUqFptd-27YRqNg@mail.gmail.com>
+ <a91e09c8-377f-7143-2c66-11ef09552d8e@collabora.com>
+In-Reply-To: <a91e09c8-377f-7143-2c66-11ef09552d8e@collabora.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Tue, 26 Jul 2022 16:27:54 +0800
+Message-ID: <CAEXTbpeddwN1vqsmRvgvqmWhtKqkKeKhvtKHAzTneZBrkhSa0A@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: mt8173-oak: Switch to SMC watchdog
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 04:57, williamsukatube@163.com wrote:
-> From: William Dean <williamsukatube@gmail.com>
+On Tue, Jul 26, 2022 at 4:19 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> The function ioremap() in lba_driver_probe() can fail, so
-> its return value should be checked.
+> Il 26/07/22 07:55, Pin-yen Lin ha scritto:
+> > On Mon, Jul 25, 2022 at 6:31 PM AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> >>
+> >> Il 25/07/22 12:19, Pin-yen Lin ha scritto:
+> >>> On Mon, Jul 25, 2022 at 4:39 PM AngeloGioacchino Del Regno
+> >>> <angelogioacchino.delregno@collabora.com> wrote:
+> >>>>
+> >>>> Il 25/07/22 10:24, Pin-yen Lin ha scritto:
+> >>>>> Switch to SMC watchdog because we need direct control of HW watchdog
+> >>>>> registers from kernel. The corresponding firmware was uploaded in
+> >>>>> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405.
+> >>>>>
+> >>>>
+> >>>> There's a fundamental issue with this change, I think.
+> >>>>
+> >>>> What happens if we run this devicetree on a device that does *not* have
+> >>>> the new(er) firmware?
+> >>>
+> >>> I haven't tried this patch with an older firmware. I'll manage to
+> >>> build one for this.
+> >>>>
+> >>>> The kernel *shall not* get broken when running on devices that are running
+> >>>> on older firmware, especially because that's what was initially supported
+> >>>> and what is working right now.
+> >>>
+> >>> Actually the current approach does not work *right*. The device boots,
+> >>> but the watchdog does not work properly.
+> >>>
+> >>
+> >> Is this a Chromebook firmware specific issue?
+> >
+> > I'm not sure if this is a Chromebook-specific issue. The internal
+> > issue thread only discussed this for the Chromebook firmware.
+> >>
+> >>> Also, all MT8173 ChromeOS devices have this firmware updated, and we
+> >>> don't have other upstream users apart from mt8173-evb. Do we want to
+> >>> support the developers that are running upstream linux with their
+> >>> MT8173 boards?
+> >>>
+> >>
+> >> Upstream shall not be just about one machine: if we add support for a SoC there,
+> >> we shall support the SoC-generic things in the SoC-specific DTSI, and the machine
+> >> specific things in the machine-specific devicetrees.
+> >>
+> >> Chromebooks are not the only machines using the MT8173 SoC (Chuwi, Amazon also do
+> >> have products using MT8173), so we shall not make the main mt8173.dtsi incompatible
+> >> with these machines.
+> >
+> > I don't see their DTS files uploaded to the upstream kernel. So we
+> > still want to support them even if they didn't upstream their changes?
+> >
 >
-> Fixes: 4bdc0d676a643 ("remove ioremap_nocache and devm_ioremap_nocache")
-> Reported-by: Hacash Robot <hacashRobot@santino.com>
-> Signed-off-by: William Dean <williamsukatube@gmail.com>
+> The point is not about having to support them, but about not making things
+> harder for them, in case any community person wants to add support for these
+> upstream.
+>
+> By rule, everything SoC-generic goes to soc.dtsi; everything board-specific
+> goes to board.dts(i).
+>
+> > Does it make sense if we move the modification to mt8173-elm.dtsi? The
+> > device should be running ChromeOS AP firmware if it uses or references
+> > mt8173-elm.dtsi. Also, all the MT8173 Chromebooks were shipped with
+> > the "new" firmware from the very beginning. We just somehow didn't
+> > upstream this around the time.
+>
+> Moving this to mt8173-elm.dtsi is the only sensible option, as this is something
+> that was addressed in Chromebooks' firmwares and it's not a SoC hardware spec.
+>
+> So yes, please.
+>
+> The disablement of the MMIO watchdog should also be done in mt8173-elm.dtsi, and
+> please please please, make sure to add a comment in the devicetree saying that
+> we're disabling that one because the SMC wdog operates on the same MMIO.
+>
+> Regards,
+> Angelo
 
-applied.
+Thanks for your detailed explanation. I'll move the modifications to
+mt8173-elm.dtsi and add comments in v2.
 
-Thanks!
-Helge
-
-> ---
->  drivers/parisc/lba_pci.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+Regards,
+Pin-yen
 >
-> diff --git a/drivers/parisc/lba_pci.c b/drivers/parisc/lba_pci.c
-> index 732b516c7bf8..afc6e66ddc31 100644
-> --- a/drivers/parisc/lba_pci.c
-> +++ b/drivers/parisc/lba_pci.c
-> @@ -1476,9 +1476,13 @@ lba_driver_probe(struct parisc_device *dev)
->  	u32 func_class;
->  	void *tmp_obj;
->  	char *version;
-> -	void __iomem *addr =3D ioremap(dev->hpa.start, 4096);
-> +	void __iomem *addr;
->  	int max;
+> >>
+> >>>>
+> >>>> For this reason, I think that we should get some code around that checks
+> >>>> if the SMC watchdog is supported and, if not, resort to MMIO wdog.
+> >>>
+> >>> What is the expected way to support this backward compatibility? Do we
+> >>> put the old compatible strings ("mediatek,mt8173-wdt" and
+> >>> "mediatek,mt6589-wdt") after "arm,smc-wdt" and reject it in the
+> >>> drivers if the firmware does not support it?
+> >>
+> >> I don't know what's the best option to support both cases... Perhaps a good one
+> >> would be to check (in mtk_wdt? or in arm_smc_wdt?) if the arm_smc_wdt is actually
+> >> supported in firmware, so if the SMC one is registered, we skip the other.
+> >>
+> >>>>
+> >>>> Regards,
+> >>>> Angelo
+> >>>>
+> >>>>
+> >>>>> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> >>>>> ---
+> >>>>>
+> >>>>>     arch/arm64/boot/dts/mediatek/mt8173.dtsi | 6 ++----
+> >>>>>     1 file changed, 2 insertions(+), 4 deletions(-)
+> >>>>>
+> >>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> >>>>> index a2aef5aa67c1..2d1c776740a5 100644
+> >>>>> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> >>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> >>>>> @@ -528,10 +528,8 @@ power-domain@MT8173_POWER_DOMAIN_MFG {
+> >>>>>                         };
+> >>>>>                 };
+> >>>>>
+> >>>>> -             watchdog: watchdog@10007000 {
+> >>>>> -                     compatible = "mediatek,mt8173-wdt",
+> >>>>> -                                  "mediatek,mt6589-wdt";
+> >>>>> -                     reg = <0 0x10007000 0 0x100>;
+> >>>>> +             watchdog {
+> >>>>> +                     compatible = "arm,smc-wdt";
+> >>>>>                 };
+> >>>>>
+> >>>>>                 timer: timer@10008000 {
+> >>>>>
+> >>>>
+> >>>>
+> >>
+> >>
 >
-> +	addr =3D ioremap(dev->hpa.start, 4096);
-> +	if (addr =3D=3D NULL)
-> +		return -ENOMEM;
-> +
->  	/* Read HW Rev First */
->  	func_class =3D READ_REG32(addr + LBA_FCLASS);
->
-

@@ -2,100 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F54580E28
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7C0580E26
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237720AbiGZHqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
+        id S238178AbiGZHqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238183AbiGZHqL (ORCPT
+        with ESMTP id S237720AbiGZHqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:46:11 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B782113CEC
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:46:10 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id p5so5726441edi.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JUefKepMA4Fy/oLWSpA/v35+KqbL3LG9IL6Z/MRcNyI=;
-        b=s5cO5DOdLQJ2f+Qhspm+W1Qm+6bxZHfZOEiD6aUEKJ2P+XcoV8n8KNMzrnWJgLO88y
-         40lj1TxRYC0CbdrOBPIpqpTG/P8AxEJxkTXF01K9jcb0gwP96DJXOi9f1fYxYigtz8bQ
-         aWXjzYo5mLLds3yIW424fHsnqQoBbgFQ547mQuHIUPBScRVUN3S/Cvfek39SK00HDK2w
-         CTijgSRzUUpg7RdnnR2aRuQJTw/fyyu3jsKHEDraIdf0EQMQXyc1DEiUOOc1hsitp0CS
-         8FVT8jpC5L1TrEH1EbnYbdw6E55YKek0U/r3Vg3WXeSV/a+dLuOgPcXbruCnM6YuHdo8
-         o3iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JUefKepMA4Fy/oLWSpA/v35+KqbL3LG9IL6Z/MRcNyI=;
-        b=GVJmlZYmh4blE+KKahB9UdBSHS5ePmizrt5uHBTdCIFa0obk2haoNbI9V6L8XO34VD
-         4II5X8b0tGtDujr6JQK0AnUyUpOKn5UpNLe0uTk/fsOGbCXd3QAE9yx7D9DbLrluN1tm
-         M/nmPBBbtF2MfkaOOiOtX0Hi46t0dujwgIIBQVjqKoGvWpqRObLXCDrles1zRZTdmMmW
-         8ToJXhoVP1ZjyIbTNrYNWmgX+qa/ZtRtO9X54U+6afk8XaEd1BvxeDKZEMQ49PsNi7p5
-         fAU2zFOSFwzNUe1B9NVclWQ9AOgUjHxgtQU0pzPTy+75ZVCJlqyUAY2blJkEh03aIh0A
-         XF1A==
-X-Gm-Message-State: AJIora9s5jzku7SsKd58tfpvglosMo+X7hQ00lh1IUzg6Z7HfLFe/IPP
-        u4TYv8e/awxfcl3mGhGpEJvZSUn5zdQBJLyZl5KZgg==
-X-Google-Smtp-Source: AGRyM1sz/+OOd8N7sT6k1OxUs1K05iuTLR3DYEH+NY9045o8G0tCwocooYtLocXsRjt1SA0TmlcK1z9W803oRJ2QMJE=
-X-Received: by 2002:a05:6402:3685:b0:43b:dfd3:9487 with SMTP id
- ej5-20020a056402368500b0043bdfd39487mr15382138edb.32.1658821569323; Tue, 26
- Jul 2022 00:46:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1657187536.git.oleksii_moisieiev@epam.com> <20220720213221.GA3987398-robh@kernel.org>
-In-Reply-To: <20220720213221.GA3987398-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 26 Jul 2022 09:45:58 +0200
-Message-ID: <CACRpkdaOT=CzyZ5UOXS-CGQJLBeyiE9VrSPy-tZH-1f9NmORqg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] dt-bindings: Intorduce domain-controller
-To:     Rob Herring <robh@kernel.org>
-Cc:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@st.com" <alexandre.torgue@st.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "tomase@xilinx.com" <tomase@xilinx.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "fabio.estevam@nxp.com" <fabio.estevam@nxp.com>,
-        "loic.pallardy@st.com" <loic.pallardy@st.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 03:46:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26718DEB4;
+        Tue, 26 Jul 2022 00:46:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DCAC234DAD;
+        Tue, 26 Jul 2022 07:46:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658821563; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vZH4jjl9hEczVGTLrSclPcz/CNDj3oRXL2GKSqr/f3w=;
+        b=TmAISVPoxl0qgnHOoRIOpQMSbHUntCPFfwVCYv6pqm7R9yh7GANqMB6r1F4i1GL4NP5OH4
+        iNiPxMYa+0E5PM42WPgudNmvnO1b7twZvBZBnsEfxSEdJtTLwo6ftbybtUR08Sg92c0hZ1
+        OcSpgKEWeUO7NqiJe2cLYC54HcfPSjk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658821563;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vZH4jjl9hEczVGTLrSclPcz/CNDj3oRXL2GKSqr/f3w=;
+        b=ahDBgmTLf2zM8fQzwRHzEN2vrTerxWAC9BL8nEsbtm18n6EFZGgAvJBtl1AWtsNcFM1ASs
+        RbrWHuvox7vFYPAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A828813322;
+        Tue, 26 Jul 2022 07:46:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WGRAKLub32JxcgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 26 Jul 2022 07:46:03 +0000
+Date:   Tue, 26 Jul 2022 09:46:03 +0200
+Message-ID: <871qu8tiys.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, Joe Perches <joe@perches.com>,
+        linux-fsdevel@vger.kernel.org,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] exfat: Expand exfat_err() and co directly to pr_*() macro
+In-Reply-To: <CAKYAXd_tohLszyrThNLE5tPHt=2Z8Xtt=hzzEQe3iqf0t549EQ@mail.gmail.com>
+References: <20220722142916.29435-1-tiwai@suse.de>
+        <20220722142916.29435-4-tiwai@suse.de>
+        <0350c21bcfdc896f2b912363f221958d41ebf1e1.camel@perches.com>
+        <87edyc2r2e.wl-tiwai@suse.de>
+        <CAKYAXd_tohLszyrThNLE5tPHt=2Z8Xtt=hzzEQe3iqf0t549EQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 11:32 PM Rob Herring <robh@kernel.org> wrote:
-> On Thu, Jul 07, 2022 at 10:25:08AM +0000, Oleksii Moisieiev wrote:
-> > Introducing the domain controller provider/consumenr bindngs which allow to
-> > divided system on chip into multiple domains that can be used to select
-> > by who hardware blocks could be accessed.
-> > A domain could be a cluster of CPUs, a group of hardware blocks or the
-> > set of devices, passed-through to the Guest in the virtualized systems.
->
-> 'domain' is entirely to ambiguous. We have clock domains, power domains,
-> interrupt domains, etc. already. This needs to be specific about what is
-> controlled/provided.
+On Tue, 26 Jul 2022 09:02:40 +0200,
+Namjae Jeon wrote:
+> 
+> 2022-07-23 17:04 GMT+09:00, Takashi Iwai <tiwai@suse.de>:
+> > On Sat, 23 Jul 2022 09:42:12 +0200,
+> > Joe Perches wrote:
+> >>
+> >> On Fri, 2022-07-22 at 16:29 +0200, Takashi Iwai wrote:
+> >> > Currently the error and info messages handled by exfat_err() and co
+> >> > are tossed to exfat_msg() function that does nothing but passes the
+> >> > strings with printk() invocation.  Not only that this is more overhead
+> >> > by the indirect calls, but also this makes harder to extend for the
+> >> > debug print usage; because of the direct printk() call, you cannot
+> >> > make it for dynamic debug or without debug like the standard helpers
+> >> > such as pr_debug() or dev_dbg().
+> >> >
+> >> > For addressing the problem, this patch replaces exfat_msg() function
+> >> > with a macro to expand to pr_*() directly.  This allows us to create
+> >> > exfat_debug() macro that is expanded to pr_debug() (which output can
+> >> > gracefully suppressed via dyndbg).
+> >> []
+> >> > diff --git a/fs/exfat/exfat_fs.h b/fs/exfat/exfat_fs.h
+> >> []
+> >> > @@ -508,14 +508,19 @@ void __exfat_fs_error(struct super_block *sb, int
+> >> > report, const char *fmt, ...)
+> >> >  #define exfat_fs_error_ratelimit(sb, fmt, args...) \
+> >> >  		__exfat_fs_error(sb, __ratelimit(&EXFAT_SB(sb)->ratelimit), \
+> >> >  		fmt, ## args)
+> >> > -void exfat_msg(struct super_block *sb, const char *lv, const char *fmt,
+> >> > ...)
+> >> > -		__printf(3, 4) __cold;
+> >> > +
+> >> > +/* expand to pr_xxx() with prefix */
+> >> > +#define exfat_msg(sb, lv, fmt, ...) \
+> >> > +	pr_##lv("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+> >> > +
+> >> >  #define exfat_err(sb, fmt, ...)						\
+> >> > -	exfat_msg(sb, KERN_ERR, fmt, ##__VA_ARGS__)
+> >> > +	exfat_msg(sb, err, fmt, ##__VA_ARGS__)
+> >> >  #define exfat_warn(sb, fmt, ...)					\
+> >> > -	exfat_msg(sb, KERN_WARNING, fmt, ##__VA_ARGS__)
+> >> > +	exfat_msg(sb, warn, fmt, ##__VA_ARGS__)
+> >> >  #define exfat_info(sb, fmt, ...)					\
+> >> > -	exfat_msg(sb, KERN_INFO, fmt, ##__VA_ARGS__)
+> >> > +	exfat_msg(sb, info, fmt, ##__VA_ARGS__)
+> >> > +#define exfat_debug(sb, fmt, ...)					\
+> >> > +	exfat_msg(sb, debug, fmt, ##__VA_ARGS__)
+> >>
+> >> I think this would be clearer using pr_<level> directly instead
+> >> of an indirecting macro that uses concatenation of <level> that
+> >> obscures the actual use of pr_<level>
+> >>
+> >> Either: (and this first option would be my preference)
+> >>
+> >> #define exfat_err(sb, fmt, ...) \
+> >> 	pr_err("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+> >> #define exfat_warn(sb, fmt, ...) \
+> >> 	pr_warn("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+> >> etc...
+> >
+> > IMO, it's a matter of taste, and I don't mind either way.
+> > Just let me know.
+> Joe has already said that he prefers the first.
 
-Good point.
+My question was about the preference of the exfat maintainers :)
 
-This should be something like bus-domain, as it controls what the bus
-can access.
+> Will you send v2 patch-set ?
 
-Yours,
-Linus Walleij
+Sure.
+
+
+Takashi

@@ -2,215 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7509580A33
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 06:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697CF580A35
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 06:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237563AbiGZEEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 00:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S237580AbiGZEEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 00:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237556AbiGZEEH (ORCPT
+        with ESMTP id S237320AbiGZEE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 00:04:07 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C302E2A27E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:04:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658808246; x=1690344246;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=oVa3FHsyt3TXJj0D7uZDaBI94swmdsKGF+L8lychpBU=;
-  b=cqiBVEtrM21gcwPcxhTsz848PuaSWhs94FNGh3Hi0w4WF0jw3MKB6gSl
-   4KXoKszKfAGxpGfjqmbARYneV1U4eyfUY69Ek/gm6CPTaJ8VTM/9rZuMS
-   78UTsRelDdEBfdyT+wCmhtv6W2ROgoTJ8Rcd/b5Amp/1hkCUg6q8t4o1F
-   lfLbXOmDh5PcbGAZhGgvwFtROq96QAA0aYCK0o9FNjGpR4aJBPqiG28lM
-   6bX5bALAdHxn8GoQ5qDq45Gxwnzv4SrD5R2xm5JNT/jE/145WUR/xfoPa
-   an4+ID6JyxRzei6VnohlMHFzr64fxnXiLPutwgWtAsoZYpnPm1Ks37nwu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="268244298"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="268244298"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 21:04:06 -0700
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="575326791"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 21:04:02 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v10 3/8] mm/demotion: Add hotplug callbacks to handle
- new numa node onlined
-References: <20220720025920.1373558-1-aneesh.kumar@linux.ibm.com>
-        <20220720025920.1373558-4-aneesh.kumar@linux.ibm.com>
-Date:   Tue, 26 Jul 2022 12:03:58 +0800
-In-Reply-To: <20220720025920.1373558-4-aneesh.kumar@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Wed, 20 Jul 2022 08:29:15 +0530")
-Message-ID: <87fsiowmdt.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 26 Jul 2022 00:04:29 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A092A402
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:04:28 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id n8so3947607yba.2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8X0WA+kebRC6mPq3dqdjSQFAk2sYowHyB2qCeMP7O6M=;
+        b=S9w8M90liuvaIw1ZfTS+HP0fbRUfVP4FKs1zYR2wsbdAc/LIYKZEwDSZRJ3PVd9niI
+         WOdYSAmVJ3kokTsI95tUVlk1qcJzfnOASGSbc3G0Xz+L/nePrU3c9daZKj7ePg8JOmMa
+         mZA376is49CSoCqeSYkJuacoE8AQu6QvZkhB8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8X0WA+kebRC6mPq3dqdjSQFAk2sYowHyB2qCeMP7O6M=;
+        b=ZLFiLkq01eQy5+LIyWN0lRe+BsTPj0JmMdRP1I7MA0I5o0q+4ZjK6qDwJg0BNTTAA9
+         miPwVbwvYsFvSfXnu+4995Klzar0LQezl3ZdDUlOEecM09Fh6giNfZ3yW1yT2Eg7vwog
+         EIG8HsGjVpAHluc4dIENHmJxObC2aKYsMY3K62Q9/UrZjpz2QE+UdoW0vHD+/2MCeYk1
+         rIl3yvyYzuK8k3KmEqWZi7+ioVFOD13qKJn1QNH76fTY4D4LbYrbIZb8DRx1mla016TG
+         QsxNAQIEfXbeVEJfOsKtgsQquQ8IMOg38bMRHXpU9MtmqNM47dFdLLSNpQuduHTbF76V
+         O/cQ==
+X-Gm-Message-State: AJIora/kVVfznFWjFLeg9LBTCfB5KWEU91LspmW3KWcLjgsq+ldtYNdf
+        wEhXp4AV6wmVN7BToVJOWR+C66+aGOFGtJWSz+cujw==
+X-Google-Smtp-Source: AGRyM1uP48hjj3jsBDjgKChjyZ2zuY+tmqTb7maY9L6QDMxw3VUhyT+58wQYtUAL2USTYtbhj0Z0phTWRZL5gh5ClF0=
+X-Received: by 2002:a25:6a43:0:b0:66f:d259:7918 with SMTP id
+ f64-20020a256a43000000b0066fd2597918mr12011506ybc.486.1658808267687; Mon, 25
+ Jul 2022 21:04:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220721145017.918102-1-angelogioacchino.delregno@collabora.com>
+ <20220721145017.918102-5-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5FutJb_MRwSVgjV7tByBvfq3AFsSxs6ETUZaNzrfpywgg@mail.gmail.com> <781f6d3e-412e-1553-c2c2-23c9a897626b@collabora.com>
+In-Reply-To: <781f6d3e-412e-1553-c2c2-23c9a897626b@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 26 Jul 2022 12:04:16 +0800
+Message-ID: <CAGXv+5Gdwcj1n0q8e8ReoUOZX18pbtbxV7oof06Q2_nJMNY-cw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] arm64: dts: mediatek: cherry: Enable secondary
+ SD/MMC controller
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
-
-> If the new NUMA node onlined doesn't have a performance level assigned,
-> the kernel adds the NUMA node to default memory tier.
+On Mon, Jul 25, 2022 at 6:20 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> ---
->  include/linux/memory-tiers.h |  1 +
->  mm/memory-tiers.c            | 75 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 76 insertions(+)
+> Il 25/07/22 10:54, Chen-Yu Tsai ha scritto:
+> > On Thu, Jul 21, 2022 at 10:51 PM AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> >>
+> >> As of now, all of the boards based on the cherry platform have a
+> >> usable secondary SD/MMC controller, usually for SD cards: enable
+> >> it to allow both booting from it and generally accessing external
+> >> storage.
+> >>
+> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> >> ---
+> >>   .../boot/dts/mediatek/mt8195-cherry.dtsi      | 62 +++++++++++++++++++
+> >>   1 file changed, 62 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> >> index 2853f7f76c90..8859957c7b27 100644
+> >> --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> >> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> >> @@ -17,6 +17,7 @@ aliases {
+> >>                  i2c5 = &i2c5;
+> >>                  i2c7 = &i2c7;
+> >>                  mmc0 = &mmc0;
+> >> +               mmc1 = &mmc1;
+> >>                  serial0 = &uart0;
+> >>          };
+> >>
+> >> @@ -227,6 +228,24 @@ &mmc0 {
+> >>          vqmmc-supply = <&mt6359_vufs_ldo_reg>;
+> >>   };
+> >>
+> >> +&mmc1 {
+> >> +       status = "okay";
+> >> +
+> >> +       bus-width = <4>;
+> >> +       cap-sd-highspeed;
+> >> +       cd-gpios = <&pio 54 GPIO_ACTIVE_LOW>;
+> >> +       max-frequency = <200000000>;
+> >> +       no-mmc;
+> >> +       no-sdio;
+> >> +       pinctrl-names = "default", "state_uhs";
+> >> +       pinctrl-0 = <&mmc1_pins_default>;
+> >> +       pinctrl-1 = <&mmc1_pins_uhs>;
+> >> +       sd-uhs-sdr50;
+> >> +       sd-uhs-sdr104;
+> >> +       vmmc-supply = <&mt_pmic_vmch_ldo_reg>;
+> >> +       vqmmc-supply = <&mt_pmic_vmc_ldo_reg>;
+> >> +};
+> >> +
+> >>   /* for CPU-L */
+> >>   &mt6359_vcore_buck_reg {
+> >>          regulator-always-on;
+> >> @@ -575,6 +594,49 @@ pins-rst {
+> >>                  };
+> >>          };
+> >>
+> >> +       mmc1_pins_default: mmc1-default-pins {
+> >> +               pins-cmd-dat {
+> >> +                       pinmux = <PINMUX_GPIO110__FUNC_MSDC1_CMD>,
+> >> +                                <PINMUX_GPIO112__FUNC_MSDC1_DAT0>,
+> >> +                                <PINMUX_GPIO113__FUNC_MSDC1_DAT1>,
+> >> +                                <PINMUX_GPIO114__FUNC_MSDC1_DAT2>,
+> >> +                                <PINMUX_GPIO115__FUNC_MSDC1_DAT3>;
+> >> +                       input-enable;
+> >> +                       drive-strength = <8>;
+> >> +                       bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+> >> +               };
+> >> +
+> >> +               pins-clk {
+> >> +                       pinmux = <PINMUX_GPIO111__FUNC_MSDC1_CLK>;
+> >> +                       drive-strength = <8>;
+> >> +                       bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
+> >> +               };
+> >> +
+> >> +               pins-insert {
+> >> +                       pinmux = <PINMUX_GPIO54__FUNC_GPIO54>;
+> >> +                       bias-pull-up;
+> >> +               };
+> >> +       };
+> >> +
+> >> +       mmc1_pins_uhs: mmc1-uhs-pins {
+> >> +               pins-cmd-dat {
+> >> +                       pinmux = <PINMUX_GPIO110__FUNC_MSDC1_CMD>,
+> >> +                                <PINMUX_GPIO112__FUNC_MSDC1_DAT0>,
+> >> +                                <PINMUX_GPIO113__FUNC_MSDC1_DAT1>,
+> >> +                                <PINMUX_GPIO114__FUNC_MSDC1_DAT2>,
+> >> +                                <PINMUX_GPIO115__FUNC_MSDC1_DAT3>;
+> >> +                       input-enable;
+> >> +                       drive-strength = <8>;
+> >> +                       bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+> >> +               };
+> >> +
+> >> +               pins-clk {
+> >> +                       pinmux = <PINMUX_GPIO111__FUNC_MSDC1_CLK>;
+> >> +                       drive-strength = <8>;
+> >> +                       bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
+> >> +               };
+> >
+> > I wonder if pins-insert should be duplicated here. And there's no
+> > difference between the standard and UHS pinconfigs. One would expect
+> > higher drive strength on the UHS set, if two sets were required.
+> > So maybe we should just have one set, and use that one for both
+> > the default and uhs states.
+> >
 >
-> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-> index ef380a39db3a..3d5f14d57ae6 100644
-> --- a/include/linux/memory-tiers.h
-> +++ b/include/linux/memory-tiers.h
-> @@ -14,6 +14,7 @@
->  #define MEMTIER_PERF_LEVEL_DRAM	(1 << (MEMTIER_CHUNK_BITS + 2))
->  /* leave one tier below this slow pmem */
->  #define MEMTIER_PERF_LEVEL_PMEM	(1 << MEMTIER_CHUNK_BITS)
-> +#define MEMTIER_HOTPLUG_PRIO	100
->  
->  extern bool numa_demotion_enabled;
->  
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> index 41a21cc5ae55..cc3a47ec18e4 100644
-> --- a/mm/memory-tiers.c
-> +++ b/mm/memory-tiers.c
-> @@ -5,6 +5,7 @@
->  #include <linux/lockdep.h>
->  #include <linux/moduleparam.h>
->  #include <linux/node.h>
-> +#include <linux/memory.h>
->  #include <linux/memory-tiers.h>
->  
->  struct memory_tier {
-> @@ -64,6 +65,78 @@ static struct memory_tier *find_create_memory_tier(unsigned int perf_level)
->  	return new_memtier;
->  }
->  
-> +static struct memory_tier *__node_get_memory_tier(int node)
-> +{
-> +	struct memory_tier *memtier;
-> +
-> +	list_for_each_entry(memtier, &memory_tiers, list) {
-> +		if (node_isset(node, memtier->nodelist))
-> +			return memtier;
-> +	}
-> +	return NULL;
-> +}
-> +
-> +static void init_node_memory_tier(int node)
+> I don't think that it would really make a lot of sense to duplicate the
+> insertion pin setup in the UHS-specific pinctrl set...
+>
+> Whenever you remove the uSD card, the controller goes back to default,
+> as the first steps in card initialization are always happening at low
+> speed and only after that we can switch to UHS speeds... so we do expect
+> that the first-ever state is always `default` (by spec!), which means
+> that we are also ensuring that the insertion pin setup is always done.
 
-set_node_memory_tier()?
+Right. What I wanted to say was that, besides the insertion pin, there's
+no difference between the default and uhs states here. So why have two
+copies instead of one that is referenced twice? (the uhs state is required
+by the binding).
 
-> +{
-> +	int perf_level;
-> +	struct memory_tier *memtier;
-> +
-> +	mutex_lock(&memory_tier_lock);
-> +
-> +	memtier = __node_get_memory_tier(node);
-> +	if (!memtier) {
-> +		perf_level = node_devices[node]->perf_level;
-> +		memtier = find_create_memory_tier(perf_level);
-> +		node_set(node, memtier->nodelist);
-> +	}
-> +	mutex_unlock(&memory_tier_lock);
-> +}
-> +
-> +static void clear_node_memory_tier(int node)
-> +{
-> +	struct memory_tier *memtier;
-> +
-> +	mutex_lock(&memory_tier_lock);
-> +	memtier = __node_get_memory_tier(node);
-> +	if (memtier)
-> +		node_clear(node, memtier->nodelist);
+ChenYu
 
-When memtier->nodelist becomes empty, we need to free memtier?
-
-> +	mutex_unlock(&memory_tier_lock);
-> +}
-> +
-> +/*
-> + * This runs whether reclaim-based migration is enabled or not,
-> + * which ensures that the user can turn reclaim-based migration
-> + * at any time without needing to recalculate migration targets.
-> + */
-
-The comments doesn't apply here.
-
-> +static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
-> +						 unsigned long action, void *_arg)
-
-Now we are building memory tiers instead of working on demotion.  So I
-think we should rename the function to memtier_hotplug_callback().
-
-> +{
-> +	struct memory_notify *arg = _arg;
-> +
-> +	/*
-> +	 * Only update the node migration order when a node is
-> +	 * changing status, like online->offline.
-> +	 */
-> +	if (arg->status_change_nid < 0)
-> +		return notifier_from_errno(0);
-> +
-> +	switch (action) {
-> +	case MEM_OFFLINE:
-> +		clear_node_memory_tier(arg->status_change_nid);
-> +		break;
-> +	case MEM_ONLINE:
-> +		init_node_memory_tier(arg->status_change_nid);
-> +		break;
-> +	}
-> +
-> +	return notifier_from_errno(0);
-> +}
-> +
-> +static void __init migrate_on_reclaim_init(void)
-> +{
-> +	hotplug_memory_notifier(migrate_on_reclaim_callback, MEMTIER_HOTPLUG_PRIO);
-> +}
-
-I suggest to call hotplug_memory_notifier() in memory_tier_init()
-directly.  We are not working on demotion here.
-
-> +
->  static int __init memory_tier_init(void)
->  {
->  	int node;
-> @@ -96,6 +169,8 @@ static int __init memory_tier_init(void)
->  			node_property->perf_level = default_memtier_perf_level;
->  	}
->  	mutex_unlock(&memory_tier_lock);
-> +
-> +	migrate_on_reclaim_init();
->  	return 0;
->  }
->  subsys_initcall(memory_tier_init);
-
-Best Regards,
-Huang, Ying
+> Cheers,
+> Angelo
+>
+> > Otherwise,
+> >
+> > Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> >
+> >> +       };
+> >> +
+> >>          nor_pins_default: nor-default-pins {
+> >>                  pins-ck-io {
+> >>                          pinmux = <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
+> >> --
+> >> 2.35.1
+> >>
+> >>
+>

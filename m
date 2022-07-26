@@ -2,122 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F176B580ADC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 07:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BBB580AE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 07:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237612AbiGZFh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 01:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        id S230441AbiGZFnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 01:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237603AbiGZFhY (ORCPT
+        with ESMTP id S229952AbiGZFns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 01:37:24 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CAB27CE8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:37:23 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id t3-20020a17090a3b4300b001f21eb7e8b0so15724765pjf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cSJ2gSZEB95hQy+fBPJ2b6XGNWJqJmog2/ljhs0mKjk=;
-        b=Tni2yj0/pL2Jpa8ecAowM1kwFjFqP1gjp4Pwvvksw8y6+kamiIiCbiK8LMkZy7tv3l
-         eCz53si26zG3SIFgWxMoLX1OWgY3g92VLYPoz06MadIQFIM6U+QGv2n925Diti5NOn7K
-         2gDDCp419O+bMCh6SplghILz6okQcoBGnApd5QXxL62BmRimZ6mhqUcCfvzH4JT1aIVA
-         IwmvKKLyIWfgqMJ3J3AeWRyYKJhqTuC8Y2/5XY+EdgTeDMUsxO0cQudUwkWSzQvmtNBW
-         j2SBzu5/z4zrjac5sUzfrrQQYuFyyjYJrQeB4k0ZcZIGAH3NRoPQRyCh/VBwTHrX4fv+
-         U3Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cSJ2gSZEB95hQy+fBPJ2b6XGNWJqJmog2/ljhs0mKjk=;
-        b=c3Fog3HNqzEriXrk6zR4SGjRtrjZIFjE4PGnPSyzvicnN/zC6uksEa8UeOUqrPA7vg
-         OY3EYXylLnzez0krSOc7emF/8rwdGp8Pd0m6/DyCn/0eS8J8jNTlJmM3DfZCtXXJn+nc
-         rKGbSd3NzJ1w3PhelofiR3QNzEgir+ol/Nkf2Vfe3GqqRu/QGAx9B2L1BA1nkawYy5Pl
-         vGqvhSz1E2rF2NkuVC15AaOsMD/HFPOUocaIWrbo7RFyGUvj2fSakw8IMc2w7Qrtq1sh
-         tZ1dkDmVB5LuXU58xXTjTbMuFJQUlexw07C6wrX0/S2x/gxD5V+xtMzQlQgqZWSAuMeT
-         +urw==
-X-Gm-Message-State: AJIora8YTsjiAUL4mNRjP8hfDoI55FlXjChXXwOjsSMKdl3pJmUSC79C
-        y7uVCxeneoHlqHWApEw30BoK9A==
-X-Google-Smtp-Source: AGRyM1tW8LiEDIBONgwUmkjln3quZm/8MKljtCsacOKwijdmvK0Yjxw2u6ulUGjMINFD4v5vRms0Og==
-X-Received: by 2002:a17:902:d64a:b0:16c:2755:428d with SMTP id y10-20020a170902d64a00b0016c2755428dmr15805492plh.79.1658813843096;
-        Mon, 25 Jul 2022 22:37:23 -0700 (PDT)
-Received: from google.com (59.39.145.34.bc.googleusercontent.com. [34.145.39.59])
-        by smtp.gmail.com with ESMTPSA id h13-20020a170902680d00b00168c52319c3sm10429459plk.149.2022.07.25.22.37.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 22:37:22 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 05:37:18 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2 0/6] KVM: x86: Apply NX mitigation more precisely
-Message-ID: <Yt99jpf5l/cInivs@google.com>
-References: <20220723012325.1715714-1-seanjc@google.com>
+        Tue, 26 Jul 2022 01:43:48 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6831327B02
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:43:46 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 2003F1E80D89;
+        Tue, 26 Jul 2022 13:38:37 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id MqCSzBJAsCa7; Tue, 26 Jul 2022 13:38:34 +0800 (CST)
+Received: from [172.30.24.122] (unknown [180.167.10.98])
+        (Authenticated sender: renyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 287861E80D49;
+        Tue, 26 Jul 2022 13:38:34 +0800 (CST)
+Subject: Re: [PATCH 2/3] lkdtm/perms: Check possible NULL pointer returned by
+ kmalloc(),vmalloc()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     keescook@chromium.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, yuzhe@nfschina.com
+References: <20220725081153.20228-1-renyu@nfschina.com>
+ <Yt5XZN3CdTprfjwk@kroah.com>
+ <bd13881e-6a78-8831-18a8-5b022e8648ce@nfschina.com>
+ <Yt6OcTErVYiGYRXq@kroah.com>
+From:   tury <renyu@nfschina.com>
+Message-ID: <496e6d21-f4fc-2167-6315-c0335c452a00@nfschina.com>
+Date:   Tue, 26 Jul 2022 13:43:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723012325.1715714-1-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yt6OcTErVYiGYRXq@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022, Sean Christopherson wrote:
-> Patch 6 from Mingwei is the end goal of the series.  KVM incorrectly
-> assumes that the NX huge page mitigation is the only scenario where KVM
-> will create a non-leaf page instead of a huge page.   Precisely track
-> (via kvm_mmu_page) if a non-huge page is being forced and use that info
-> to avoid unnecessarily forcing smaller page sizes in
-> disallowed_hugepage_adjust().
-> 
-> v2: Rebase, tweak a changelog accordingly.
+在 2022年07月25日 20:37, Greg KH 写道:
+> A: http://en.wikipedia.org/wiki/Top_post
+> Q: Were do I find info about this thing called top-posting?
+> A: Because it messes up the order in which people normally read text.
+> Q: Why is top-posting such a bad thing?
+> A: Top-posting.
+> Q: What is the most annoying thing in e-mail?
+>
+> A: No.
+> Q: Should I include quotations after my reply?
+>
+> http://daringfireball.net/2007/07/on_top
+>
+> On Mon, Jul 25, 2022 at 05:54:15PM +0800, tury wrote:
+>> When there is insufficient memory, the allocation will fail.
+> And have you ever seen that happen here?  The issue is for small
+> allocations, they never will fail.
+>
+>> the return value is void,so i think it is ok .
+> Why?
+Because the function lkdtm_EXEC_KMALLOC()   declaration is void,and The 
+return value is not checked elsewhere.
+Should I add some warning messages?
+>
+>> should i have changed comment to something like this ?
+>>
+>> As the possible alloc failure of the kmalloc() and vmalloc(),
+>> the return pointer could be NULL.therefore it should be better to check it.
+> Please wrap your lines properly, and use '.' correctly.
+>
+> thanks,
+>
+> greg k-h
+Thank you for your help and patience,
+>
 
-hmm, I applied this patch set (v2) on top of kvm/queue (HEAD:
-1a4d88a361af) and it seems kvm-unit-tests/vmx failed on both ept=1 and
-ept=0. And it did not work on our internel kernel either (kernel
-crashed).
-
-Maybe there is still minor issues?
-
-> 
-> v1: https://lore.kernel.org/all/20220409003847.819686-1-seanjc@google.com
-> 
-> Mingwei Zhang (1):
->   KVM: x86/mmu: explicitly check nx_hugepage in
->     disallowed_hugepage_adjust()
-> 
-> Sean Christopherson (5):
->   KVM: x86/mmu: Tag disallowed NX huge pages even if they're not tracked
->   KVM: x86/mmu: Properly account NX huge page workaround for nonpaging
->     MMUs
->   KVM: x86/mmu: Set disallowed_nx_huge_page in TDP MMU before setting
->     SPTE
->   KVM: x86/mmu: Track the number of TDP MMU pages, but not the actual
->     pages
->   KVM: x86/mmu: Add helper to convert SPTE value to its shadow page
-> 
->  arch/x86/include/asm/kvm_host.h |  17 ++---
->  arch/x86/kvm/mmu/mmu.c          | 107 ++++++++++++++++++++++----------
->  arch/x86/kvm/mmu/mmu_internal.h |  41 +++++++-----
->  arch/x86/kvm/mmu/paging_tmpl.h  |   6 +-
->  arch/x86/kvm/mmu/spte.c         |  11 ++++
->  arch/x86/kvm/mmu/spte.h         |  17 +++++
->  arch/x86/kvm/mmu/tdp_mmu.c      |  49 +++++++++------
->  arch/x86/kvm/mmu/tdp_mmu.h      |   2 +
->  8 files changed, 167 insertions(+), 83 deletions(-)
-> 
-> 
-> base-commit: 1a4d88a361af4f2e91861d632c6a1fe87a9665c2
-> -- 
-> 2.37.1.359.gd136c6c3e2-goog
-> 

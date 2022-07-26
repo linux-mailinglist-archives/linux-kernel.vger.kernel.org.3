@@ -2,129 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7A0581B2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD47581B28
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239663AbiGZUgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 16:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
+        id S239954AbiGZUgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 16:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239950AbiGZUgN (ORCPT
+        with ESMTP id S239439AbiGZUgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 16:36:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F02E5FF8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658867771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u6lCMOJBxFXFYmVcVNt/zc0jKT+n1PEiVlC/ff/AZGk=;
-        b=gA661EJuxGw6qRJUrUxiL7QpmAKRhw4vHOHlcEjn7fp2g/FtkUXCsZUN4uzr9bpeKUyzU2
-        l05fcIA5KgPBhLuB72IHiEifpiSw7tj0o5DznjG7vIutZGlsA40Deu9FO/xVPpBpT7KJtX
-        iH5RDUFGcKznJZa3q1iXgU0LQzePvbw=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-483-HQZTz32qPjKAgOrSi5m_vw-1; Tue, 26 Jul 2022 16:36:09 -0400
-X-MC-Unique: HQZTz32qPjKAgOrSi5m_vw-1
-Received: by mail-wr1-f71.google.com with SMTP id o8-20020adfa108000000b0021e903fb612so1085535wro.0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:36:09 -0700 (PDT)
+        Tue, 26 Jul 2022 16:36:37 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BB013EA1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:36:36 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id z18so11611890qki.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IcZsy9YU2wor9FTm49pTcQx1YMax9xpx8t5nNjMHHvw=;
+        b=mD5ODojS4ERooCgfJfZmIl+iGCoclYcJG6w6PAjhe+Tpd0JS6uSObfXtV4s4uKyR/F
+         poIhJU7SVMBqfYuuTFJPcaIMGTRMXTKuGDoQMr5NjM15hZp9fz3ugncOnLc0zVSRGK/8
+         tclhki/AYGpS5WTbT74GpcVTlKxkdAGMO6Fb9sYuh7RiqM71Tq6dD/97s89feM5TrQyy
+         GVSECQK6bxyGcWk1EjEE/Hpwgr6eJ6IYd13m25lo/qWCZLPO3GJqaZhgiheFcoMsN3/p
+         ehzKa0UWQr2ps82g9gYq5AVGF998MCJV/I5iDcs8zM3usFJHhJfKhoe+REraGV/Qkh44
+         iXPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=u6lCMOJBxFXFYmVcVNt/zc0jKT+n1PEiVlC/ff/AZGk=;
-        b=XOZV/lhW8crjIi2G//J0V6nl8I3PrGQKCITs4QcF/gz/h9SIKkgL3MuwrC3YHly+VN
-         0rwCzppXYHceR09aiwp+9jtEkfO2F/3s6nmib0UvhM4hpEh4ZjTf7hcY1px/ZeGsjC+C
-         Dge9+pMj8EWEYXtKLrYMFjvvtiNMI1ybBwBAgXV4F+1g0hFobF2wUAhhZJ5+uuKGWwpR
-         SWgoIkNG6kWX/HJoCf1M1RN5SGRI6m5n9bFIXBzgGWh8EIBTvoVTRXRA7wDyYXfjI/H5
-         4KmynJm74mIWV+RfkpVHKeWuph5hPURAV1EJIwDupjkMnJm90HSYRyiHHACGlnZc7EQO
-         xR2g==
-X-Gm-Message-State: AJIora/nRcr7zBT0ukHy1KWR1iszqQzSHD+V9zql3WVCGOEBIL2uKX5/
-        v3hTSyL3dDSVax35rQ+pCYXAamQfNX5NEBC4SDglwXlPISfGzqcBN4gcb7Qw04WxSpZkzxKRy/F
-        MDJsrjX6BviM78OUB4T6ulTft
-X-Received: by 2002:a5d:6b89:0:b0:21e:b591:2b80 with SMTP id n9-20020a5d6b89000000b0021eb5912b80mr2143817wrx.33.1658867768661;
-        Tue, 26 Jul 2022 13:36:08 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vAc4fJua9Ro/vxC/7kJgMBamDKNST3wUAXyOWoBgnK5RIuARyr3qU0uXWQIteyzohsPdnhWA==
-X-Received: by 2002:a5d:6b89:0:b0:21e:b591:2b80 with SMTP id n9-20020a5d6b89000000b0021eb5912b80mr2143804wrx.33.1658867768400;
-        Tue, 26 Jul 2022 13:36:08 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b003a17ab4e7c8sm27632453wmp.39.2022.07.26.13.36.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 13:36:07 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [RFC PATCH] workqueue: Unbind workers before sending them to
- exit()
-In-Reply-To: <YuAkroXHF+Zg45KU@slm.duckdns.org>
-References: <20220719165743.3409313-1-vschneid@redhat.com>
- <YthDjPq3CtWc+o0/@slm.duckdns.org>
- <CAJhGHyAso+JH+QMXcfKTyOqq4yBD9Vc19sBbebEXohHe5znL8Q@mail.gmail.com>
- <xhsmhv8rqfu6w.mognet@vschneid.remote.csb>
- <YtuEJLDkO/lATYeb@slm.duckdns.org>
- <xhsmh8rohfq6m.mognet@vschneid.remote.csb>
- <YuAkroXHF+Zg45KU@slm.duckdns.org>
-Date:   Tue, 26 Jul 2022 21:36:06 +0100
-Message-ID: <xhsmhmtcvehmx.mognet@vschneid.remote.csb>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IcZsy9YU2wor9FTm49pTcQx1YMax9xpx8t5nNjMHHvw=;
+        b=rqmA31bAYOptn0Qro/Y4dELfk7l37QoHZfRPTIKCxk2SCLBSZnmNH1Z5k6Ii5IgDlP
+         T+SGbPGbRzt6MU54mQh4hfSTZH7Y+iHFAGtRKQNJeEXP/ptJYjuyRgrYTEFFLwOd7Ajc
+         OKExYZXROx15DkgDFqFVuljbJlSug5XpOr2QE4iuBtbVm3efDLJ+Ai2Rm7rCpEJKFn88
+         7zBk/MNfoWacneGc3AA8XsiuBw65WHJOWSpNKzz8BqH2v/zCiG6tm4cRG1M6jBUl/Iot
+         eysT+1162NdkqZbZkx+G2vkqBSgUYdMifzNOH1oLKrQ9Sv1NhczFAPHvNdw+ARpF2ZLc
+         4C5g==
+X-Gm-Message-State: AJIora+AjrtOpLP/PcSYRQ1HJPit3gMz5sfS+XsgnxphQe/EtqtKHwqv
+        5V02n/QKYHjOlXRVcx1LqTQA00h09MW0dTZ3UbpLZo351dA=
+X-Google-Smtp-Source: AGRyM1tNx6kBPvBXmc3Kyq5jl3sNmdQSJwzJHB6zd3N2gvoT/PMYLLh0EmnZYTV1tO11UGjaUq2wMn3j2xYiMQvBKl8=
+X-Received: by 2002:a05:620a:4305:b0:6a9:3829:c03 with SMTP id
+ u5-20020a05620a430500b006a938290c03mr13508906qko.363.1658867795165; Tue, 26
+ Jul 2022 13:36:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726181133.3262695-1-iskren.chernev@gmail.com> <20220726181133.3262695-2-iskren.chernev@gmail.com>
+In-Reply-To: <20220726181133.3262695-2-iskren.chernev@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 26 Jul 2022 23:36:24 +0300
+Message-ID: <CAA8EJpoLMioMy61np6Y8Gn+Uhb8EvgU6bwuUyouuNcDz0XwByg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: regulator: Document the PM6125 SPMI PMIC
+To:     Iskren Chernev <iskren.chernev@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/22 07:30, Tejun Heo wrote:
-> Hello,
+On Tue, 26 Jul 2022 at 21:11, Iskren Chernev <iskren.chernev@gmail.com> wrote:
 >
-> On Mon, Jul 25, 2022 at 11:21:37AM +0100, Valentin Schneider wrote:
->> Hm so my choice of words in the changelog wasn't great - "initial setup"
->> can be kernel init, but *also* setup of whatever workload is being deployed
->> onto the system.
->>
->> So you can be having "normal" background activity (I've seen some IRQs end
->> up with schedule_work() on isolated CPUs, they're not moved away at boot
->> time but rather shortly before launching the latency-sensitive app), some
->> preliminary stats collection / setup to make sure the CPU will be quiet
->> (e.g. refresh_vm_stats()), and *then* the application starts with
->> fresh-but-no-longer-required extra pcpu kworkers assigned to its CPU.
+> Add support for pm6125 compatible string and add relevant supplies in QCom SPMI
+> regulator documentation.
 >
-> Ah, I see. I guess we'll need to figure out how to unbind the workers then.
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+
+The order of sign-offs seems incorrect. The sender's signature should
+be the last one.
+
+> ---
+>  .../regulator/qcom,spmi-regulator.yaml        | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
 >
-
-I've been playing with different ways to unbind & wake the workers in a
-sleepable context, but so far I haven't been happy with any of my
-experiments.
-
-What hasn't changed much between my attempts is transferring to-be-destroyed
-kworkers from their pool->idle_list to a reaper_list which is walked by
-*something* that does unbind+wakeup. AFAIA as long as the kworker is off
-the pool->idle_list we can play with it (i.e. unbind+wake) off the
-pool->lock.
-
-It's the *something* that's annoying to get right, I don't want it to be
-overly complicated given most users are probably not impacted by what I'm
-trying to fix, but I'm getting the feeling it should still be a per-pool
-kthread. I toyed with a single reaper kthread but a central synchronization
-for all the pools feels like a stupid overhead.
-
-If any of that sounds ludicrous please shout, otherwise I'm going to keep
-tinkering :)
-
-> Thanks.
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> index 8b7c4af4b551..d8f18b441484 100644
+> --- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> @@ -12,6 +12,7 @@ maintainers:
+>  properties:
+>    compatible:
+>      enum:
+> +      - qcom,pm6125-regulators
+>        - qcom,pm660-regulators
+>        - qcom,pm660l-regulators
+>        - qcom,pm8004-regulators
+> @@ -106,6 +107,24 @@ required:
+>    - compatible
 >
+>  allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,pm6125-regulators
+> +    then:
+> +      properties:
+> +        vdd_l1_l7_l17_l18-supply: true
+> +        vdd_l2_l3_l4-supply: true
+> +        vdd_l5_l15_l19_l20_l21_l22-supply: true
+> +        vdd_l6_l8-supply: true
+> +        vdd_l9_l11-supply: true
+> +        vdd_l10_l13_l14-supply: true
+> +        vdd_l12_l16-supply: true
+> +        vdd_l23_l24-supply: true
+> +      patternProperties:
+> +        "^vdd_s[1-8]-supply$": true
+
+Add an empty line please.
+
+>    - if:
+>        properties:
+>          compatible:
 > --
-> tejun
+> 2.37.1
+>
 
+
+-- 
+With best wishes
+Dmitry

@@ -2,414 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392CE5810F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502325810F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbiGZKQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S238373AbiGZKRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232523AbiGZKQY (ORCPT
+        with ESMTP id S232849AbiGZKRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:16:24 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1948921251;
-        Tue, 26 Jul 2022 03:16:22 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso12779289pjk.5;
-        Tue, 26 Jul 2022 03:16:22 -0700 (PDT)
+        Tue, 26 Jul 2022 06:17:06 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFEC25EA6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:17:04 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id p22so6178417lji.10
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:17:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=etCt9LpoLIlQPOP6Jvaqe1+7m8WSiZUh3fpnSxEhW0A=;
-        b=jsK5CLODrq6j6ULl3qttZQPTIfPMew/Mc1sLO08gYI/RCqZMZGvYOHGmb5itSAnRRi
-         1T6IMv8F4th3U1cw1H/oz71BWppBbE+pLVAVlOsIu+CGdldK0JXzP0z0XmZhmt4o4mZ+
-         zqbgtB8ZzOA7BQbI0In7/44NUoRFFDCZxs6hEvNxYpqLOskpzNIVrmTzCPLASvEpbWUl
-         XgYpICjEoXfEU7FOZl+lQ1BY+eEWuvUeMQzYxigrD9X5jHYkPTJU6/AguCvC/vcOm99q
-         hxTSvwgstHAgPCz2oAwaG0XbIDAkPGIgmKRI2PgoHEkCjD2Q+i5uKq68dJKpRFnJHfS/
-         2gsQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=k5O4EHVtxr88sGikNEClrHBrRMv6Wt5HYjbVbFJmD00=;
+        b=vJpAIwYZMErEj5rbGqQ350mc3DCwuGHIizHIV5HmshxNf4Nft1JqUJibbEaQ4UGP3g
+         vw39nBSZJfIqI/XG3vZZaz2dTrpo6uIZi9xYNSTeRGR/DQif/KbWGwtkq388iwShp0gv
+         mP9rVynS6uo9w6P5Jl9Rb1x2SwhDE32s8qhojzZvMBIhdENmCL9rroS/hIDTgtD+zf6z
+         r2ASk5SDwigvx5mC2rkitjtqoKrBzHLSxEzgpL4MnvXE6QduyDQwm115Paei4jBS1Sw0
+         pP/XZdNcsEpxhoxulbvaCJVg7WbhwAwRscys4wzpeIRejNy2KTiv0BM4aZLWBqUsLC5v
+         0ijQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=etCt9LpoLIlQPOP6Jvaqe1+7m8WSiZUh3fpnSxEhW0A=;
-        b=GCKFUS2d7Lw7HS4xlCAlvcEKilqp3aYWz/acapxMgCHAFji+8HtUbdedE9PuQ5B+3F
-         fq2uYu1/CdvaIysV3OargCZ1GgHH6o60383MGBcw5/RyHv5WIJ/XSGkP1KqylZm8/gYr
-         8vv7HZzqRmkMWsWZCt3FzCkxEze7nr/hjUBnl7ThAu3YNUQXKnF94obp6ibOd6DbIlqO
-         e4x5vMfvkr6T4aXSqy3QI4TFx8SZTiknuPvuPMVez5tSfSOW3pJbIJWLZUKjbVDCOp9F
-         f6PyQPL9koQrlOXbe3rN5csOwlU9gtoa7+VZI6+fIFERCPZ9H5fqkAkc5f1WTW1UivdX
-         2rvw==
-X-Gm-Message-State: AJIora8fmszuG7+5UvunzSuYfkaRaOhhQfUjTnVTmD21JBLOBbJZ0kiY
-        wr5VelzJmHEOJXalFcgJH1k=
-X-Google-Smtp-Source: AGRyM1sVBB9x5PnYdtE1G/qEv2m+hSv6jbvskTPC54ZflRXcV9uNuJwDHnqWFb3fHEcdZw6VnSrF7A==
-X-Received: by 2002:a17:90b:1b0b:b0:1f2:bc36:f8bd with SMTP id nu11-20020a17090b1b0b00b001f2bc36f8bdmr9070674pjb.234.1658830581518;
-        Tue, 26 Jul 2022 03:16:21 -0700 (PDT)
-Received: from localhost.localdomain ([112.0.190.94])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b0016d303f266dsm5515106plg.276.2022.07.26.03.16.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 03:16:20 -0700 (PDT)
-From:   Molly Sophia <mollysophia379@gmail.com>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=k5O4EHVtxr88sGikNEClrHBrRMv6Wt5HYjbVbFJmD00=;
+        b=bnu0VHkSe2sM/bU1EdpC6wFIgW106K7FgwtE1DcW1H7dy/iPBNJd5dY7byw760CddY
+         m6gnVfhvdtyITvNtLQKon8Q4kABimSIUuEVl9wdIOdAFfNCKKUygUUYyppT9DPUK/klY
+         qn4A/2IpWqdrvsRBtJLBCJ8J3I8MRVQ9gu8Fp0SnhjOj/AuWIOeUR6SR3CuICIyTm7wu
+         tONn2o2ruaRF0TPiLpPbq4YEGIwCOwrnSpRK0cEDLQN4T50I3GINXV9F2eu4T+z+Rw6+
+         Uy3TUwkJAYSfyp3oIHi7EoVh40aPH6ARhq82UM7HOAmS/da0P4EKMJPbXVgcYKwvN0RT
+         Yc2A==
+X-Gm-Message-State: AJIora/RGb/A5kQpaTDT9FCyfj8/h0PEUu9y/p26pqD4/vuAZlG2bzwa
+        EfWyLhyUiggFYt6t7EFSwh2mEw==
+X-Google-Smtp-Source: AGRyM1uViFn/KmVHqLUDrlNUpPnN4K9sCA2Pesn1Ztt99me1kjgo9CTQ9ebdIYigb0qTu1yG/I46ZQ==
+X-Received: by 2002:a2e:9d02:0:b0:25d:d6b9:b753 with SMTP id t2-20020a2e9d02000000b0025dd6b9b753mr5387184lji.344.1658830622608;
+        Tue, 26 Jul 2022 03:17:02 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id q21-20020ac24a75000000b00484e9e254c4sm3142760lfp.100.2022.07.26.03.17.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 03:17:02 -0700 (PDT)
+Message-ID: <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
+Date:   Tue, 26 Jul 2022 12:17:00 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+Content-Language: en-US
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Molly Sophia <mollysophia379@gmail.com>
-Subject: [PATCH v3 2/2] drm: panel: Add novatek nt35596s panel driver
-Date:   Tue, 26 Jul 2022 18:15:13 +0800
-Message-Id: <20220726101513.66988-3-mollysophia379@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220726101513.66988-1-mollysophia379@gmail.com>
-References: <20220726101513.66988-1-mollysophia379@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220723224949.1089973-5-luzmaximilian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Novatek NT35596s is a generic DSI IC that drives command and video mode
-panels. Add the driver for it. Currently add support for the LCD panel
-from JDI connected with this IC, as found on Xiaomi Mi Mix2s phones.
+On 24/07/2022 00:49, Maximilian Luz wrote:
+> Add bindings for the Qualcomm Trusted Execution Environment (TrEE) UEFI
+> Secure application (uefisecapp) client.
+> 
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+> ---
+>  .../firmware/qcom,tee-uefisecapp.yaml         | 38 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml b/Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
+> new file mode 100644
+> index 000000000000..9e5de1005d5c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/qcom/qcom,rpmh-rsc.yaml#
 
-Changes in v3:
-- Embed the support into existing driver (panel-novatek-nt36672a), as
-  these two IC are similar with different initialization commands.
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-Signed-off-by: Molly Sophia <mollysophia379@gmail.com>
----
- drivers/gpu/drm/panel/Kconfig                 |   7 +-
- .../gpu/drm/panel/panel-novatek-nt36672a.c    | 246 ++++++++++++++++--
- 2 files changed, 234 insertions(+), 19 deletions(-)
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Trusted Execution Environment UEFI Secure Application
+> +
+> +maintainers:
+> +  - Maximilian Luz <luzmaximilian@gmail.com>
+> +
+> +description: |
+> +  Various Qualcomm SoCs do not allow direct access to UEFI variables. Instead,
+> +  these need to be accessed via the UEFI Secure Application (uefisecapp),
+> +  residing in the Trusted Execution Environment (TrEE). These bindings mark the
+> +  presence of uefisecapp and allow the respective client driver to load and
+> +  install efivar operations, providing the kernel with access to UEFI
+> +  variables.
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,tee-uefisecapp
 
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 38799effd00a..ecc1b9aa6a1c 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -328,14 +328,15 @@ config DRM_PANEL_NOVATEK_NT35950
- 	  mobile phones.
- 
- config DRM_PANEL_NOVATEK_NT36672A
--	tristate "Novatek NT36672A DSI panel"
-+	tristate "Novatek NT36672A/NT35596S DSI panel"
- 	depends on OF
- 	depends on DRM_MIPI_DSI
- 	depends on BACKLIGHT_CLASS_DEVICE
- 	help
- 	  Say Y here if you want to enable support for the panels built
--	  around the Novatek NT36672A display controller, such as some
--	  Tianma panels used in a few Xiaomi Poco F1 mobile phones.
-+	  around the Novatek NT36672A or NT35596S display controller, such
-+	  as some Tianma panels used in a few Xiaomi Poco F1 mobile phones
-+	  or the JDI panels used in Xiaomi Mi Mix2S mobile phones.
- 
- config DRM_PANEL_NOVATEK_NT39016
- 	tristate "Novatek NT39016 RGB/SPI panel"
-diff --git a/drivers/gpu/drm/panel/panel-novatek-nt36672a.c b/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
-index 231f371901e8..fcdde538d847 100644
---- a/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
-+++ b/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
-@@ -3,13 +3,15 @@
-  * Copyright (C) 2020 Linaro Ltd
-  * Author: Sumit Semwal <sumit.semwal@linaro.org>
-  *
-- * This driver is for the DSI interface to panels using the NT36672A display driver IC
-+ * Copyright (C) 2022 Molly Sophia <mollysophia379@gmail.com>
-+ *
-+ * This driver is for the DSI interface to panels using the NT36672A/NT35596S display driver IC
-  * from Novatek.
-  * Currently supported are the Tianma FHD+ panels found in some Xiaomi phones, including
-- * some variants of the Poco F1 phone.
-+ * some variants of the Poco F1 phone, and the JDI FHD+ panels found in Xiaomi Mi Mix2S phones.
-  *
-- * Panels using the Novatek NT37762A IC should add appropriate configuration per-panel and
-- * use this driver.
-+ * Panels using the Novatek NT37762A or NT35596S IC should add appropriate configuration
-+ * per-panel and use this driver.
-  */
- 
- #include <linux/delay.h>
-@@ -123,12 +125,14 @@ static int nt36672a_panel_unprepare(struct drm_panel *panel)
- 	if (!pinfo->prepared)
- 		return 0;
- 
--	/* send off cmds */
--	ret = nt36672a_send_cmds(panel, pinfo->desc->off_cmds,
--				 pinfo->desc->num_off_cmds);
-+	if (pinfo->desc->num_off_cmds != 0) {
-+		/* send off cmds if present */
-+		ret = nt36672a_send_cmds(panel, pinfo->desc->off_cmds,
-+					pinfo->desc->num_off_cmds);
- 
--	if (ret < 0)
--		dev_err(panel->dev, "failed to send DCS off cmds: %d\n", ret);
-+		if (ret < 0)
-+			dev_err(panel->dev, "failed to send DCS off cmds: %d\n", ret);
-+	}
- 
- 	ret = mipi_dsi_dcs_set_display_off(pinfo->link);
- 	if (ret < 0)
-@@ -211,13 +215,15 @@ static int nt36672a_panel_prepare(struct drm_panel *panel)
- 		goto poweroff;
- 	}
- 
--	/* Send rest of the init cmds */
--	err = nt36672a_send_cmds(panel, pinfo->desc->on_cmds_2,
--				 pinfo->desc->num_on_cmds_2);
-+	if (pinfo->desc->num_on_cmds_2 != 0) {
-+		/* Send rest of the init cmds if present */
-+		err = nt36672a_send_cmds(panel, pinfo->desc->on_cmds_2,
-+					pinfo->desc->num_on_cmds_2);
- 
--	if (err < 0) {
--		dev_err(panel->dev, "failed to send DCS Init 2nd Code: %d\n", err);
--		goto poweroff;
-+		if (err < 0) {
-+			dev_err(panel->dev, "failed to send DCS Init 2nd Code: %d\n", err);
-+			goto poweroff;
-+		}
- 	}
- 
- 	msleep(120);
-@@ -601,6 +607,212 @@ static const struct nt36672a_panel_desc tianma_fhd_video_panel_desc = {
- 	.num_off_cmds = ARRAY_SIZE(tianma_fhd_video_off_cmds),
- };
- 
-+static const struct nt36672a_panel_cmd jdi_nt35596s_video_on_cmds[] = {
-+	{ .data = { 0xff, 0x24 } },
-+	{ .data = { 0x9d, 0x34 } },
-+	{ .data = { 0xfb, 0x01 } },
-+	{ .data = { 0xc4, 0x25 } },
-+	{ .data = { 0xd1, 0x08 } },
-+	{ .data = { 0xd2, 0x84 } },
-+	{ .data = { 0xff, 0x26 } },
-+	{ .data = { 0xfb, 0x01 } },
-+	{ .data = { 0x03, 0x1c } },
-+	{ .data = { 0x3b, 0x08 } },
-+	{ .data = { 0x6b, 0x08 } },
-+	{ .data = { 0x97, 0x08 } },
-+	{ .data = { 0xc5, 0x08 } },
-+	{ .data = { 0xfb, 0x01 } },
-+	{ .data = { 0xff, 0x23 } },
-+	{ .data = { 0xfb, 0x01 } },
-+	{ .data = { 0x01, 0x84 } },
-+	{ .data = { 0x05, 0x2d } },
-+	{ .data = { 0x06, 0x00 } },
-+	{ .data = { 0x33, 0x07 } },
-+	{ .data = { 0x21, 0xee } },
-+	{ .data = { 0x22, 0xed } },
-+	{ .data = { 0x23, 0xea } },
-+	{ .data = { 0x24, 0xe8 } },
-+	{ .data = { 0x25, 0xe5 } },
-+	{ .data = { 0x26, 0xe2 } },
-+	{ .data = { 0x27, 0xde } },
-+	{ .data = { 0x28, 0xbb } },
-+	{ .data = { 0x29, 0x87 } },
-+	{ .data = { 0x2a, 0x77 } },
-+	{ .data = { 0x32, 0x0c } },
-+	{ .data = { 0x13, 0x3f } },
-+	{ .data = { 0x14, 0x34 } },
-+	{ .data = { 0x15, 0x2a } },
-+	{ .data = { 0x16, 0x25 } },
-+	{ .data = { 0x17, 0x9d } },
-+	{ .data = { 0x18, 0x9a } },
-+	{ .data = { 0x19, 0x97 } },
-+	{ .data = { 0x1a, 0x94 } },
-+	{ .data = { 0x1b, 0x91 } },
-+	{ .data = { 0x1c, 0x8e } },
-+	{ .data = { 0x1d, 0x8b } },
-+	{ .data = { 0x1e, 0x89 } },
-+	{ .data = { 0x1f, 0x86 } },
-+	{ .data = { 0x20, 0x83 } },
-+	{ .data = { 0xff, 0x22 } },
-+	{ .data = { 0x00, 0x0a } },
-+	{ .data = { 0x01, 0x43 } },
-+	{ .data = { 0x02, 0x5b } },
-+	{ .data = { 0x03, 0x6a } },
-+	{ .data = { 0x04, 0x7a } },
-+	{ .data = { 0x05, 0x82 } },
-+	{ .data = { 0x06, 0x85 } },
-+	{ .data = { 0x07, 0x80 } },
-+	{ .data = { 0x08, 0x7c } },
-+	{ .data = { 0x09, 0x7c } },
-+	{ .data = { 0x0a, 0x74 } },
-+	{ .data = { 0x0b, 0x71 } },
-+	{ .data = { 0x0c, 0x6e } },
-+	{ .data = { 0x0d, 0x68 } },
-+	{ .data = { 0x0e, 0x65 } },
-+	{ .data = { 0x0f, 0x5c } },
-+	{ .data = { 0x10, 0x32 } },
-+	{ .data = { 0x11, 0x18 } },
-+	{ .data = { 0x12, 0x00 } },
-+	{ .data = { 0x13, 0x00 } },
-+	{ .data = { 0x1a, 0x00 } },
-+	{ .data = { 0x1b, 0x00 } },
-+	{ .data = { 0x1c, 0x00 } },
-+	{ .data = { 0x1d, 0x00 } },
-+	{ .data = { 0x1e, 0x00 } },
-+	{ .data = { 0x1f, 0x00 } },
-+	{ .data = { 0x20, 0x00 } },
-+	{ .data = { 0x21, 0x00 } },
-+	{ .data = { 0x22, 0x00 } },
-+	{ .data = { 0x23, 0x00 } },
-+	{ .data = { 0x24, 0x00 } },
-+	{ .data = { 0x25, 0x00 } },
-+	{ .data = { 0x26, 0x00 } },
-+	{ .data = { 0x27, 0x00 } },
-+	{ .data = { 0x28, 0x00 } },
-+	{ .data = { 0x29, 0x00 } },
-+	{ .data = { 0x2a, 0x00 } },
-+	{ .data = { 0x2b, 0x00 } },
-+	{ .data = { 0x2f, 0x00 } },
-+	{ .data = { 0x30, 0x00 } },
-+	{ .data = { 0x31, 0x00 } },
-+	{ .data = { 0x32, 0x0c } },
-+	{ .data = { 0x33, 0x0c } },
-+	{ .data = { 0x34, 0x0c } },
-+	{ .data = { 0x35, 0x0b } },
-+	{ .data = { 0x36, 0x09 } },
-+	{ .data = { 0x37, 0x09 } },
-+	{ .data = { 0x38, 0x08 } },
-+	{ .data = { 0x39, 0x05 } },
-+	{ .data = { 0x3a, 0x03 } },
-+	{ .data = { 0x3b, 0x00 } },
-+	{ .data = { 0x3f, 0x00 } },
-+	{ .data = { 0x40, 0x00 } },
-+	{ .data = { 0x41, 0x00 } },
-+	{ .data = { 0x42, 0x00 } },
-+	{ .data = { 0x43, 0x00 } },
-+	{ .data = { 0x44, 0x00 } },
-+	{ .data = { 0x45, 0x00 } },
-+	{ .data = { 0x46, 0x00 } },
-+	{ .data = { 0x47, 0x00 } },
-+	{ .data = { 0x48, 0x00 } },
-+	{ .data = { 0x49, 0x03 } },
-+	{ .data = { 0x4a, 0x06 } },
-+	{ .data = { 0x4b, 0x07 } },
-+	{ .data = { 0x4c, 0x07 } },
-+	{ .data = { 0x53, 0x01 } },
-+	{ .data = { 0x54, 0x01 } },
-+	{ .data = { 0x55, 0x89 } },
-+	{ .data = { 0x56, 0x00 } },
-+	{ .data = { 0x58, 0x00 } },
-+	{ .data = { 0x68, 0x00 } },
-+	{ .data = { 0x84, 0xff } },
-+	{ .data = { 0x85, 0xff } },
-+	{ .data = { 0x86, 0x03 } },
-+	{ .data = { 0x87, 0x00 } },
-+	{ .data = { 0x88, 0x00 } },
-+	{ .data = { 0xa2, 0x20 } },
-+	{ .data = { 0xa9, 0x01 } },
-+	{ .data = { 0xaa, 0x12 } },
-+	{ .data = { 0xab, 0x13 } },
-+	{ .data = { 0xac, 0x0a } },
-+	{ .data = { 0xad, 0x74 } },
-+	{ .data = { 0xaf, 0x33 } },
-+	{ .data = { 0xb0, 0x03 } },
-+	{ .data = { 0xb1, 0x14 } },
-+	{ .data = { 0xb2, 0x42 } },
-+	{ .data = { 0xb3, 0x40 } },
-+	{ .data = { 0xb4, 0xa5 } },
-+	{ .data = { 0xb6, 0x44 } },
-+	{ .data = { 0xb7, 0x04 } },
-+	{ .data = { 0xb8, 0x14 } },
-+	{ .data = { 0xb9, 0x42 } },
-+	{ .data = { 0xba, 0x40 } },
-+	{ .data = { 0xbb, 0xa5 } },
-+	{ .data = { 0xbd, 0x44 } },
-+	{ .data = { 0xbe, 0x04 } },
-+	{ .data = { 0xbf, 0x00 } },
-+	{ .data = { 0xc0, 0x75 } },
-+	{ .data = { 0xc1, 0x6a } },
-+	{ .data = { 0xc2, 0xa5 } },
-+	{ .data = { 0xc4, 0x22 } },
-+	{ .data = { 0xc5, 0x02 } },
-+	{ .data = { 0xc6, 0x00 } },
-+	{ .data = { 0xc7, 0x95 } },
-+	{ .data = { 0xc8, 0x8a } },
-+	{ .data = { 0xc9, 0xa5 } },
-+	{ .data = { 0xcb, 0x22 } },
-+	{ .data = { 0xcc, 0x02 } },
-+	{ .data = { 0xcd, 0x00 } },
-+	{ .data = { 0xce, 0xb5 } },
-+	{ .data = { 0xcf, 0xaa } },
-+	{ .data = { 0xd0, 0xa5 } },
-+	{ .data = { 0xd2, 0x22 } },
-+	{ .data = { 0xd3, 0x02 } },
-+	{ .data = { 0xfb, 0x01 } },
-+	{ .data = { 0xff, 0x10 } },
-+	{ .data = { 0x26, 0x02 } },
-+	{ .data = { 0x35, 0x00 } },
-+	{ .data = { 0x51, 0xff } },
-+	{ .data = { 0x53, 0x24 } },
-+	{ .data = { 0x55, 0x00 } },
-+	{ .data = { 0xb0, 0x00 } },
-+};
-+
-+static const struct drm_display_mode jdi_nt35596s_video_panel_mode = {
-+	.clock = (1080 + 16 + 28 + 40) * (2160 + 7 + 4 + 24) * 60 / 1000,
-+
-+	.hdisplay = 1080,
-+	.hsync_start = 1080 + 16,
-+	.hsync_end = 1080 + 16 + 28,
-+	.htotal = 1080 + 16 + 28 + 40,
-+
-+	.vdisplay = 2160,
-+	.vsync_start = 2160 + 7,
-+	.vsync_end = 2160 + 7 + 4,
-+	.vtotal = 2160 + 7 + 4 + 24,
-+
-+	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
-+};
-+
-+static const struct nt36672a_panel_desc jdi_nt35596s_video_panel_desc = {
-+	.display_mode = &jdi_nt35596s_video_panel_mode,
-+
-+	.width_mm = 68,
-+	.height_mm = 136,
-+
-+	.mode_flags = MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_VIDEO |
-+		      MIPI_DSI_MODE_VIDEO_HSE | MIPI_DSI_CLOCK_NON_CONTINUOUS |
-+		      MIPI_DSI_MODE_VIDEO_BURST,
-+	.format = MIPI_DSI_FMT_RGB888,
-+	.lanes = 4,
-+	.on_cmds_1 = jdi_nt35596s_video_on_cmds,
-+	.num_on_cmds_1 = ARRAY_SIZE(jdi_nt35596s_video_on_cmds),
-+	.on_cmds_2 = NULL,
-+	.num_on_cmds_2 = 0,
-+	.off_cmds = NULL,
-+	.num_off_cmds = 0,
-+};
-+
- static int nt36672a_panel_add(struct nt36672a_panel *pinfo)
- {
- 	struct device *dev = &pinfo->link->dev;
-@@ -697,6 +909,7 @@ static void nt36672a_panel_shutdown(struct mipi_dsi_device *dsi)
- 
- static const struct of_device_id tianma_fhd_video_of_match[] = {
- 	{ .compatible = "tianma,fhd-video", .data = &tianma_fhd_video_panel_desc },
-+	{ .compatible = "jdi,fhd-nt35596s", .data = &jdi_nt35596s_video_panel_desc },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, tianma_fhd_video_of_match);
-@@ -713,5 +926,6 @@ static struct mipi_dsi_driver nt36672a_panel_driver = {
- module_mipi_dsi_driver(nt36672a_panel_driver);
- 
- MODULE_AUTHOR("Sumit Semwal <sumit.semwal@linaro.org>");
--MODULE_DESCRIPTION("NOVATEK NT36672A based MIPI-DSI LCD panel driver");
-+MODULE_AUTHOR("Molly Sophia <mollysophia379@gmail.com>");
-+MODULE_DESCRIPTION("NOVATEK NT36672A/NT35596S based MIPI-DSI LCD panel driver");
- MODULE_LICENSE("GPL");
--- 
-2.37.1
+Isn't this SoC-specific device? Generic compatibles are usually not
+expected.
 
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    firmware {
+> +        scm {
+> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
+> +        };
+> +        tee-uefisecapp {
+> +            compatible = "qcom,tee-uefisecapp";
+
+You did not model here any dependency on SCM. This is not full
+description of the firmware/hardware.
+
+
+
+Best regards,
+Krzysztof

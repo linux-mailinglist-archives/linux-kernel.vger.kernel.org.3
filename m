@@ -2,297 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29D8581661
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DFC581662
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbiGZP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
+        id S235899AbiGZP3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiGZP2K (ORCPT
+        with ESMTP id S229500AbiGZP3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:28:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBED8F6E
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658849288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7IwJu9zeDryP4BccrbhHg2EWDecf7ZatiCMfG/ucuCE=;
-        b=cUPF2CIXzvRWSNUc0E1zwmu4UjBERNlef1HcvNiMg/gMO5lnrc55Be08qFWkN5aUEcgtgj
-        m39YGkX5QUfFK592PrubytAYTeufnyaB9jitmOA8DRi2W/Pi3124H9KPSfPklhwIg1pOvd
-        RybB9KvQ13K4fYLKRkdw+2+Cgk+Zun4=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-9zMhZVYoMoapJYBZsr-ALA-1; Tue, 26 Jul 2022 11:28:07 -0400
-X-MC-Unique: 9zMhZVYoMoapJYBZsr-ALA-1
-Received: by mail-qk1-f198.google.com with SMTP id y17-20020a05620a25d100b006b66293d75aso3740336qko.17
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:28:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7IwJu9zeDryP4BccrbhHg2EWDecf7ZatiCMfG/ucuCE=;
-        b=w2CYNW3QA9UuGR8BByQ87ceWnP5+TGhhZF8rr77zT8PlX5U5iA4Yl7a5CQ/g9D3rwv
-         9c5YtEOpLMKS++2JZC8r9+/lPbMb9Aux3nj4+59UMlH32diM9/+46O2b8vvMbzIe99Yd
-         fpSLqV6jrBCw8PKirn1cD7atepSvvsK6epv6m2y9QF02TYc5MedTOfX0aKjYSpSsheZW
-         T0WnHRWUkeVHRSGq5ivSqJ+wbYOGJfMZSmuiVsHGyZQb2NZODm8HD+0bn8HdTqWABaap
-         m3dYmdDi3mTX7BKw17VuhVqVjWHnt8arUe6ixunYiLBMcj3eCPrAeVwWLxJThFmD2Jwd
-         Ngxg==
-X-Gm-Message-State: AJIora95NTaVTc5lPHuAtINPOR6jyxAjIKbhdq8wyMpXvUR0ImkmKHxz
-        tzrdQ0x7W55BKE65XJryHNklfizkBwvqhGdb/+wga9lLK8s3ALnjsnwnMAjymKeQdlhHwH0FdOM
-        RZV868qk6+KkLdZcmpRcwfogW
-X-Received: by 2002:ae9:e90f:0:b0:6b5:f2a1:ab68 with SMTP id x15-20020ae9e90f000000b006b5f2a1ab68mr13100772qkf.571.1658849286609;
-        Tue, 26 Jul 2022 08:28:06 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sbXyzUz+jTMorGVwmY9bp3egaXhd5zRTOJh5sVM2Q/Qyt8yz2yl9RT+S9N4DeL59fS0K3XqA==
-X-Received: by 2002:ae9:e90f:0:b0:6b5:f2a1:ab68 with SMTP id x15-20020ae9e90f000000b006b5f2a1ab68mr13100749qkf.571.1658849286316;
-        Tue, 26 Jul 2022 08:28:06 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id l12-20020a05620a28cc00b006b655aebc9asm5363746qkp.125.2022.07.26.08.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 08:28:06 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 08:28:04 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        joro@8bytes.org, will@kernel.org, vasant.hegde@amd.com,
-        jon.grimm@amd.com, Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH 1/2] iommu/amd: Simplify and Consolidate Virtual APIC
- (AVIC) Enablement
-Message-ID: <20220726152804.trkzhxhsw3zp45wl@cantor>
-References: <20220726134348.6438-1-suravee.suthikulpanit@amd.com>
- <20220726134348.6438-2-suravee.suthikulpanit@amd.com>
+        Tue, 26 Jul 2022 11:29:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB3FDFCF;
+        Tue, 26 Jul 2022 08:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658849345; x=1690385345;
+  h=to:cc:subject:references:date:mime-version:
+   content-transfer-encoding:from:message-id:in-reply-to;
+  bh=/PrORd58ALKhiuN1jepHSSL1AFYlYZW+6m1cjPphYV4=;
+  b=ebFjznKkVXP1lmcLG0yIt4Essxz05N1hiO3USrePFAyCJOW9Z7S6DTbX
+   xOnpzybzWJ9DbCF7NcWGzhNqdpzgr9rxgtcLqC0QDATCYcxwYxtuNBGeO
+   JWmSEANlbO5qjZkOwBT853GNjLrn4TbQo/+jFsug/9frmdZlk8bIXe2A/
+   RofRUOQ8rfzb+fHby7HD/qDVh4Y4iHsW7rRnlSEPdKWR9wcxOEvpexDaW
+   KaGSy+s4wA8IkZOWb4cGMpAWiRymzNTkQzqJac2lAv48EenFHNuiM9lzS
+   DsL7EeM1Dv80owKcneQVNVTDYDAN27cKxUy52zBOaQ73r+B6ibBiNxPqU
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="286738891"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="286738891"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 08:29:05 -0700
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="575534287"
+Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.212.15.50])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 26 Jul 2022 08:29:03 -0700
+Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
+To:     "Dave Hansen" <dave.hansen@intel.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Kai Huang" <kai.huang@intel.com>
+Cc:     "Jarkko Sakkinen" <jarkko@kernel.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Sean Christopherson" <seanjc@google.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
+ Notification
+References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
+ <ab467244dd03b5f94bafe9068b1c02790033c18c.camel@intel.com>
+ <a82e840f-2030-7ab3-7160-f1b900ecdb7d@intel.com>
+ <06a9fef8579e880b9b031f03911739d4d902dbe0.camel@intel.com>
+ <op.1pwcs8btwjvjmi@hhuan26-mobl1.mshome.net>
+ <4c614defad8e9ce2bccce8a062600212e4978113.camel@intel.com>
+Date:   Tue, 26 Jul 2022 10:28:19 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726134348.6438-2-suravee.suthikulpanit@amd.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+From:   "Haitao Huang" <haitao.huang@linux.intel.com>
+Organization: Intel Corp
+Message-ID: <op.1pw6lhz8wjvjmi@hhuan26-mobl1.mshome.net>
+In-Reply-To: <4c614defad8e9ce2bccce8a062600212e4978113.camel@intel.com>
+User-Agent: Opera Mail/1.0 (Win32)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 08:43:47AM -0500, Suravee Suthikulpanit wrote:
-> Currently, enabling AVIC requires individually detect and enable GAM and
-> GALOG features on each IOMMU, which is difficult to keep track on
-> multi-IOMMU system, where the features needs to be enabled system-wide.
-> 
-> In addition, these features do not need to be enabled in early stage. 
-> It can be delayed until after amd_iommu_init_pci().
-> 
-> Therefore, consolidate logic for detecting and enabling IOMMU GAM and
-> GALOG features into a helper function, enable_iommus_vapic(), which uses
-> the check_feature_on_all_iommus() helper function to ensure system-wide
-> support of the features before enabling them, and postpone until after
-> amd_iommu_init_pci().
-> 
-> The new function also check and clean up feature enablement residue from
-> previous boot (e.g. in case of booting into kdump kernel), which triggers
-> a WARN_ON (shown below) introduced by the commit a8d4a37d1bb9 ("iommu/amd:
-> Restore GA log/tail pointer on host resume") in iommu_ga_log_enable().
-> 
-> [    7.731955] ------------[ cut here ]------------
-> [    7.736575] WARNING: CPU: 0 PID: 1 at drivers/iommu/amd/init.c:829 iommu_ga_log_enable.isra.0+0x16f/0x190
-> [    7.746135] Modules linked in:
-> [    7.749193] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W        --------  ---  5.19.0-0.rc7.53.eln120.x86_64 #1
-> [    7.759706] Hardware name: Dell Inc. PowerEdge R7525/04D5GJ, BIOS 2.1.6 03/09/2021
-> [    7.767274] RIP: 0010:iommu_ga_log_enable.isra.0+0x16f/0x190
-> [    7.772931] Code: 20 20 00 00 8b 00 f6 c4 01 74 da 48 8b 44 24 08 65 48 2b 04 25 28 00 00 00 75 13 48 83 c4 10 5b 5d e9 f5 00 72 00 0f 0b eb e1 <0f> 0b eb dd e8 f8 66 42 00 48 8b 15 f1 85 53 01 e9 29 ff ff ff 48
-> [    7.791679] RSP: 0018:ffffc90000107d20 EFLAGS: 00010206
-> [    7.796905] RAX: ffffc90000780000 RBX: 0000000000000100 RCX: ffffc90000780000
-> [    7.804038] RDX: 0000000000000001 RSI: ffffc90000780000 RDI: ffff8880451f9800
-> [    7.811170] RBP: ffff8880451f9800 R08: ffffffffffffffff R09: 0000000000000000
-> [    7.818303] R10: 0000000000000000 R11: 0000000000000000 R12: 0008000000000000
-> [    7.825435] R13: ffff8880462ea900 R14: 0000000000000021 R15: 0000000000000000
-> [    7.832572] FS:  0000000000000000(0000) GS:ffff888054a00000(0000) knlGS:0000000000000000
-> [    7.840657] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    7.846400] CR2: ffff888054dff000 CR3: 0000000053210000 CR4: 0000000000350eb0
-> [    7.853533] Call Trace:
-> [    7.855979]  <TASK>
-> [    7.858085]  amd_iommu_enable_interrupts+0x180/0x270
-> [    7.863051]  ? iommu_setup+0x271/0x271
-> [    7.866803]  state_next+0x197/0x2c0
-> [    7.870295]  ? iommu_setup+0x271/0x271
-> [    7.874049]  iommu_go_to_state+0x24/0x2c
-> [    7.877976]  amd_iommu_init+0xf/0x29
-> [    7.881554]  pci_iommu_init+0xe/0x36
-> [    7.885133]  do_one_initcall+0x44/0x200
-> [    7.888975]  do_initcalls+0xc8/0xe1
-> [    7.892466]  kernel_init_freeable+0x14c/0x199
-> [    7.896826]  ? rest_init+0xd0/0xd0
-> [    7.900231]  kernel_init+0x16/0x130
-> [    7.903723]  ret_from_fork+0x22/0x30
-> [    7.907306]  </TASK>
-> [    7.909497] ---[ end trace 0000000000000000 ]---
-> 
-> Fixes: commit a8d4a37d1bb9 ("iommu/amd: Restore GA log/tail pointer on host resume")
-> Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> Cc: Will Deacon <will@kernel.org> (maintainer:IOMMU DRIVERS)
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+On Tue, 26 Jul 2022 05:47:14 -0500, Kai Huang <kai.huang@intel.com> wrote:
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> On Tue, 2022-07-26 at 00:10 -0500, Haitao Huang wrote:
+>> On Mon, 25 Jul 2022 05:36:17 -0500, Kai Huang <kai.huang@intel.com>  
+>> wrote:
+>>
+>> > On Fri, 2022-07-22 at 08:21 -0700, Dave Hansen wrote:
+>> > > On 7/22/22 06:26, Kai Huang wrote:
+>> > > > Did a quick look at the spec.  It appears ENCLU[EDECCSSA] should  
+>> be
+>> > > used
+>> > > > together with AEX-notify.  So besides advertising the new
+>> > > > SGX_ATTR_ASYNC_EXIT_NOTIFY bit to the KVM guest, I think we should
+>> > > also
+>> > > > advertise the ENCLU[EDECCSSA] support in guest's CPUID, like below
+>> > > (untested)?
+>> > >
+>> > > Sounds like a great follow-on patch!  It doesn't seem truly  
+>> functionally
+>> > > required from the spec:
+>> > >
+>> > > > EDECCSSA is a new Intel SGX user leaf function
+>> > > > (ENCLU[EDECCSSA]) that can facilitate AEX notification handling...
+>> > >
+>> > > If that's wrong or imprecise, I'd love to hear more about it and  
+>> also
+>> > > about how the spec will be updated.
+>> > >
+>> >
+>> > They are enumerated separately, but looks in practice the notify  
+>> handler
+>> > will
+>> > use it to switch back to the correct/targeted CSSA to continue to run
+>> > normally
+>> > after handling the exit notify.  This is my understanding of the
+>> > "facilitate"
+>> > mean in the spec.
+>> >
+>> > Btw, in real hardware I think the two should come together, meaning no
+>> > real
+>> > hardware will only support one.
+>> >
+>> > Haitao, could you give us more information?
+>> >
+>> You are right. They are enumerated separately and HW should come with  
+>> both
+>> or neither.
+>> My understanding it is also possible for enclaves choose not to receive
+>> AEX notify
+>> but still use EDECCSSA.
+>>
+>
+> What is the use case of using EDECCSSA w/o using AEX notify?  
+> If I understand correctly EDECCSSA effectively switches to another  
+> thread (using
+> the previous SSA, which is the context of another TCS thread if I  
+> understand
+> correctly).  Won't this cause problem?
 
-> ---
->  drivers/iommu/amd/init.c | 85 ++++++++++++++++++++++++++--------------
->  1 file changed, 55 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-> index d86496114ca5..4cd94d716122 100644
-> --- a/drivers/iommu/amd/init.c
-> +++ b/drivers/iommu/amd/init.c
-> @@ -908,11 +908,6 @@ static int iommu_ga_log_enable(struct amd_iommu *iommu)
->  	if (!iommu->ga_log)
->  		return -EINVAL;
->  
-> -	/* Check if already running */
-> -	status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
-> -	if (WARN_ON(status & (MMIO_STATUS_GALOG_RUN_MASK)))
-> -		return 0;
-> -
->  	entry = iommu_virt_to_phys(iommu->ga_log) | GA_LOG_SIZE_512;
->  	memcpy_toio(iommu->mmio_base + MMIO_GA_LOG_BASE_OFFSET,
->  		    &entry, sizeof(entry));
-> @@ -2068,10 +2063,6 @@ static int __init iommu_init_pci(struct amd_iommu *iommu)
->  	if (iommu_feature(iommu, FEATURE_PPR) && alloc_ppr_log(iommu))
->  		return -ENOMEM;
->  
-> -	ret = iommu_init_ga_log(iommu);
-> -	if (ret)
-> -		return ret;
-> -
->  	if (iommu->cap & (1UL << IOMMU_CAP_NPCACHE)) {
->  		pr_info("Using strict mode due to virtualization\n");
->  		iommu_set_dma_strict();
-> @@ -2155,8 +2146,6 @@ static void print_iommu_info(void)
->  	}
->  	if (irq_remapping_enabled) {
->  		pr_info("Interrupt remapping enabled\n");
-> -		if (AMD_IOMMU_GUEST_IR_VAPIC(amd_iommu_guest_ir))
-> -			pr_info("Virtual APIC enabled\n");
->  		if (amd_iommu_xt_mode == IRQ_REMAP_X2APIC_MODE)
->  			pr_info("X2APIC enabled\n");
->  	}
-> @@ -2446,9 +2435,6 @@ static int iommu_init_irq(struct amd_iommu *iommu)
->  
->  	if (iommu->ppr_log != NULL)
->  		iommu_feature_enable(iommu, CONTROL_PPRINT_EN);
-> -
-> -	iommu_ga_log_enable(iommu);
-> -
->  	return 0;
->  }
->  
-> @@ -2678,8 +2664,6 @@ static void iommu_enable_ga(struct amd_iommu *iommu)
->  #ifdef CONFIG_IRQ_REMAP
->  	switch (amd_iommu_guest_ir) {
->  	case AMD_IOMMU_GUEST_IR_VAPIC:
-> -		iommu_feature_enable(iommu, CONTROL_GAM_EN);
-> -		fallthrough;
->  	case AMD_IOMMU_GUEST_IR_LEGACY_GA:
->  		iommu_feature_enable(iommu, CONTROL_GA_EN);
->  		iommu->irte_ops = &irte_128_ops;
-> @@ -2759,19 +2743,6 @@ static void early_enable_iommus(void)
->  			iommu_flush_all_caches(iommu);
->  		}
->  	}
-> -
-> -#ifdef CONFIG_IRQ_REMAP
-> -	/*
-> -	 * Note: We have already checked GASup from IVRS table.
-> -	 *       Now, we need to make sure that GAMSup is set.
-> -	 */
-> -	if (AMD_IOMMU_GUEST_IR_VAPIC(amd_iommu_guest_ir) &&
-> -	    !check_feature_on_all_iommus(FEATURE_GAM_VAPIC))
-> -		amd_iommu_guest_ir = AMD_IOMMU_GUEST_IR_LEGACY_GA;
-> -
-> -	if (AMD_IOMMU_GUEST_IR_VAPIC(amd_iommu_guest_ir))
-> -		amd_iommu_irq_ops.capability |= (1 << IRQ_POSTING_CAP);
-> -#endif
->  }
->  
->  static void enable_iommus_v2(void)
-> @@ -2784,10 +2755,63 @@ static void enable_iommus_v2(void)
->  	}
->  }
->  
-> +static void enable_iommus_vapic(void)
-> +{
-> +#ifdef CONFIG_IRQ_REMAP
-> +	u32 status, i;
-> +	struct amd_iommu *iommu;
-> +
-> +	for_each_iommu(iommu) {
-> +		/*
-> +		 * Disable GALog if already running. It could have been enabled
-> +		 * in the previous boot before kdump.
-> +		 */
-> +		status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
-> +		if (!(status & MMIO_STATUS_GALOG_RUN_MASK))
-> +			continue;
-> +
-> +		iommu_feature_disable(iommu, CONTROL_GALOG_EN);
-> +		iommu_feature_disable(iommu, CONTROL_GAINT_EN);
-> +
-> +		/*
-> +		 * Need to set and poll check the GALOGRun bit to zero before
-> +		 * we can set/ modify GA Log registers safely.
-> +		 */
-> +		for (i = 0; i < LOOP_TIMEOUT; ++i) {
-> +			status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
-> +			if (!(status & MMIO_STATUS_GALOG_RUN_MASK))
-> +				break;
-> +			udelay(10);
-> +		}
-> +
-> +		if (WARN_ON(i >= LOOP_TIMEOUT))
-> +			return;
-> +	}
-> +
-> +	if (AMD_IOMMU_GUEST_IR_VAPIC(amd_iommu_guest_ir) &&
-> +	    !check_feature_on_all_iommus(FEATURE_GAM_VAPIC)) {
-> +		amd_iommu_guest_ir = AMD_IOMMU_GUEST_IR_LEGACY_GA;
-> +		return;
-> +	}
-> +
-> +	/* Enabling GAM support */
-> +	for_each_iommu(iommu) {
-> +		if (iommu_init_ga_log(iommu) ||
-> +		    iommu_ga_log_enable(iommu))
-> +			return;
-> +
-> +		iommu_feature_enable(iommu, CONTROL_GAM_EN);
-> +	}
-> +
-> +	amd_iommu_irq_ops.capability |= (1 << IRQ_POSTING_CAP);
-> +	pr_info("Virtual APIC enabled\n");
-> +#endif
-> +}
-> +
->  static void enable_iommus(void)
->  {
->  	early_enable_iommus();
-> -
-> +	enable_iommus_vapic();
->  	enable_iommus_v2();
->  }
->  
-> @@ -3126,6 +3150,7 @@ static int __init state_next(void)
->  		register_syscore_ops(&amd_iommu_syscore_ops);
->  		ret = amd_iommu_init_pci();
->  		init_state = ret ? IOMMU_INIT_ERROR : IOMMU_PCI_INIT;
-> +		enable_iommus_vapic();
->  		enable_iommus_v2();
->  		break;
->  	case IOMMU_PCI_INIT:
-> -- 
-> 2.34.1
-> 
+No. Decrementing CSSA is equivalent to popping stack frames, not switching  
+threads.
+In some cases such as so-called "first stage" exception handling, one  
+could pop CSSA back to the previous after resetting CPU context and stack  
+frame appropriate to the "second stage" or "real" exception handling  
+routine, then jump to the handler directly. This could improve exception  
+handling performance by saving an EEXIT/ERESUME trip.
 
+>
+> It probably makes sense to use only AEX notify w/o using EDECCSSA  
+> though, but
+> this should be the case that the enclave detects serious attack and  
+> don't want
+> to continue to run normally.  In another words, it is enclave's choice,  
+> but
+> hardware should always support both AEX notify and EDECCSSA.

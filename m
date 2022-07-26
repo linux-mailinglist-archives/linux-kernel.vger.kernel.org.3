@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA01F581C6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE06C581C70
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbiGZXdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 19:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S239976AbiGZXe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 19:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiGZXdH (ORCPT
+        with ESMTP id S229493AbiGZXe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 19:33:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C3E286CB;
-        Tue, 26 Jul 2022 16:33:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 26 Jul 2022 19:34:26 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409C437199;
+        Tue, 26 Jul 2022 16:34:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC1A56170E;
-        Tue, 26 Jul 2022 23:33:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE97C433C1;
-        Tue, 26 Jul 2022 23:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658878385;
-        bh=I/rSDH27s22aS09yPNSQ0IWerMS4lsIiHugHoIGthYw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=msdF+gbfhutRiXqSjMj29VZXd6pPQvph7mflQ/fFoxio19nyEhvVFjvAx75z21xys
-         qXdAdKaAnhZiMGXNnM6Tg1oRH6ux/Xzn0k7vFjJInlQ2fPE/bQfGADidF5iB4vrK13
-         lxy1h2TjzrSeOTztNrwJwcutod+07eYLvfDiEsp4cULC3feNwC/D8LSASbsBH4kF4M
-         QT3VRti+eQQITHiogxHUUP7ok/pVaBKQHovewSMl/OlIoMkJpWYdn+QQxzfslphKqQ
-         RetvkjvczXXyZrHhZK8jfQW+AQRp2J8d9fHks8VQKxpPX9slYQGPhTaXl4ZMzAps7s
-         mXatNHGKk69aw==
-Date:   Tue, 26 Jul 2022 16:33:02 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-        joe.lawrence@redhat.com, x86@kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v3] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <20220726233302.zwloxsammnu7clu4@treble>
-References: <20220721175147.214642-1-song@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LstXv6CYhz4x1b;
+        Wed, 27 Jul 2022 09:34:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658878464;
+        bh=3ftdO6M8zn0EKg12EZzHz9s0Ryl+xR9HzLM4f5CJJ90=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XuvAFQjYIXxn8Ib0ABy9HEUOG+OwU8S+KsbGJdkZd/ssQM3L/lhzwsynf4qhIlt08
+         KMcJZwMkJ0bGBrdxcMS5wrqKcsyUlm/Kpy1K7BAefdRUBHlb/Iag3E3z/qtRw8/z0a
+         B2MXcypIgXDdzOze3AAhQahRJX/+zXLfjrfdEZNGMcviZSb+BEYDMohfny5PXgyISa
+         gS4a6W+LXDJf+NpuW6752INDcWZVecWEKpHoRkeYCEg5t+tGjN2+0fxkXgZWyvdUIP
+         tzcrZAmv144rpoMpvgXGMWOsOQ/bHvfb3suvqLGHPcB+oFEQC3yj7InENn3mvApUM7
+         IfGYs/YagNCnQ==
+Date:   Wed, 27 Jul 2022 09:34:22 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linux-kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>
+Subject: linux-next: taking a break
+Message-ID: <20220727093422.78d6142b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220721175147.214642-1-song@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/U/dJ48i2d0jpfS_ciOKuAWB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 10:51:47AM -0700, Song Liu wrote:
-> From: Miroslav Benes <mbenes@suse.cz>
-> 
-> Josh reported a bug:
-> 
->   When the object to be patched is a module, and that module is
->   rmmod'ed and reloaded, it fails to load with:
-> 
->   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> 
->   The livepatch module has a relocation which references a symbol
->   in the _previous_ loading of nfsd. When apply_relocate_add()
->   tries to replace the old relocation with a new one, it sees that
->   the previous one is nonzero and it errors out.
-> 
->   On ppc64le, we have a similar issue:
-> 
->   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> 
-> He also proposed three different solutions. We could remove the error
-> check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> ("x86/module: Detect and skip invalid relocations"). However the check
-> is useful for detecting corrupted modules.
-> 
-> We could also deny the patched modules to be removed. If it proved to be
-> a major drawback for users, we could still implement a different
-> approach. The solution would also complicate the existing code a lot.
-> 
-> We thus decided to reverse the relocation patching (clear all relocation
-> targets on x86_64). The solution is not
-> universal and is too much arch-specific, but it may prove to be simpler
-> in the end.
-> 
-> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-> Signed-off-by: Song Liu <song@kernel.org>
-> 
-> ---
-> 
-> Changes from v2:
-> 1. Rewrite x86 changes to match current code style.
-> 2. Remove powerpc changes as there is no test coverage in v3.
-> 3. Only keep 1/3 of v2.
+--Sig_/U/dJ48i2d0jpfS_ciOKuAWB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-1) All the copy/paste is ugly and IMO guaranteed to eventually introduce
-   bugs when somebody forgets to update the copy.  Wouldn't it be more
-   robust to reuse the existing apply_relocate_add() code by making it
-   more generic somehow, like with a new 'clear' bool arg which sets
-   'val' to zero?
+Hi all,
 
-2) We can't only fix x86, powerpc also needs a fix.
+There will be no linux-next releases this Friday or next week.  It was
+supposed to be the second week of the merge window, but the best laid
+plans ... :-)
 
-3) A selftest would be a good idea.
+Presumably everyone is already prepared for the merge window anyway
+(since we have an extra week).  ;-)
 
--- 
-Josh
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/U/dJ48i2d0jpfS_ciOKuAWB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLgef4ACgkQAVBC80lX
+0Gydswf+KrYkz4APO3NZXDpuWNK0GiuswTJf98CBMN7Sk/d96izXAOLiSa5VRCMm
+q2/HUYL/1L9podb3LtRQR2C3CSQxFT73B2RXHA5ygGlg7RoYpfA7HOek1wl/WDSe
+F44N1sGMA4SN1lbcyaBLAjFEmknGSls5b13KAqxj8aFtZibWOvYK8pkYy+kTfM//
+JA7JNsuv1cChFxjGCsE27Og1q18xEJsqLUmqfUs44/QlsBbys3M9PkzyfSOY/K+3
+d/ExLFrCj3ACNei9Dr0DvymP115UWHN1CAM6wUfOH3vfUhNjSGVQ8bsMR5J0GOGx
+6rW/wneX5O+0+bim6+Kd94WaCoUlCw==
+=vDT0
+-----END PGP SIGNATURE-----
+
+--Sig_/U/dJ48i2d0jpfS_ciOKuAWB--

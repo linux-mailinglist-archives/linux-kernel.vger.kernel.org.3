@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4460F580AD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 07:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F07B580ADA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 07:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237595AbiGZF1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 01:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        id S237584AbiGZFg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 01:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbiGZF1c (ORCPT
+        with ESMTP id S230094AbiGZFg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 01:27:32 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C841326AD1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:27:27 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id l23so24212895ejr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=1lqv5pxOonTNYCwK72aL+prgPMrbwRYc3I/dFCFgTYI=;
-        b=mUdm7K/6pF3SsrJeOS6n/qjTr9aaiFG0qZUH8Cxcp1A1gp9B7s2L3yQWjkYwJDl6vM
-         +/sLYOedziBEOQ3vGYofM9j1sQ0LoMqnHyJQwsDV1MWFXPq/PPcmA9XmRu2/qGWxWUCC
-         SZ/HUukPWhveLbizRwK3Ii3poo/fG0DeYwTVOGnGd2dl4mxS867zIy1JfyZCgfnNy1ea
-         NuZrDyB2MC/FVH80CAyv5L6jQeClYsX8DCizSMn2EJ36AgXWO9kodaCwADeOr2iF1bAR
-         G/ZbtMQkAxI9vGlUYuq21YJxhGYrrZuxLYXMk/RqiK51/QOGcbTnEpSOUeOKdi+4Drw6
-         VTAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=1lqv5pxOonTNYCwK72aL+prgPMrbwRYc3I/dFCFgTYI=;
-        b=HSiX6gchARtYUmjBA+mbDw4ek7p0Til0W3ieRWIbP0YgaU7gI/NfOv8zHV2OUbgJEK
-         Zs8IcjLJl8byrsvuoVYLKakivrxzBJcTuM6EUE58YCJ5nCQ6ejW5vu78E3a7B4jPBVpM
-         nyQB33DL8deUAi0OPwEAcphkD5bFeGDsw527TZ2P2euAkju1H6bDnpx8GpwA80GladC4
-         Uz1W2g/eno8XChSA1Y9Ura6Jgm76E/h5c4BYyf5ERgfVF3R29r+JuX0bVmQCtAjb/rGg
-         hKemXi9qZTVbBj/mTRPvmeaRsseAC+B+d3c1CFVtfzXxsN/b4mO76Wr4V6apelA4+BOV
-         QYXQ==
-X-Gm-Message-State: AJIora9N7Cn8hrCYCKPrbRUbHb72tqXhar6QPyLISY5/cTAZuVmvJQF0
-        nKNguysvcmubMYd+Or0XLomwpKiWMur8MrHODkxd4WnKfnonzg==
-X-Google-Smtp-Source: AGRyM1tKheD0gYF1kFqg8ml2RAWRcyAfy5otPkV6uCVPltfbeDkQ4ypOV2oLIfzbcfjj3QWORE1oGqkyWIhhWBlX35Q=
-X-Received: by 2002:a17:907:2c61:b0:72b:3a12:5121 with SMTP id
- ib1-20020a1709072c6100b0072b3a125121mr12659486ejc.52.1658813246120; Mon, 25
- Jul 2022 22:27:26 -0700 (PDT)
+        Tue, 26 Jul 2022 01:36:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193B724BC1;
+        Mon, 25 Jul 2022 22:36:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0872B811C3;
+        Tue, 26 Jul 2022 05:36:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6285C341C0;
+        Tue, 26 Jul 2022 05:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658813813;
+        bh=swMWmdHL2Ht/begBedL2i8axCFmjIsGE43WtSM3VEwc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UFQoBr1ZlYmecGiK08zByV8yHS1PrBIFvHrLq3eaE6ZcIvCrdQshW8q60qhf0ND6A
+         5GmUgHLcPaX01nMT8soeeS2qoIQpwXJ2CPw/p45NwN3XrYud2OuBQYfuxVDCVZm0C7
+         m6vlnp0yseYGE+GAplwq3wNgwz/hp3edrmuRqooqjsBN4p77LbokNk3XhCx+uNdw1v
+         ffsFYXTGYcHjETLEwsapuH20gHCi26g96eiVacrzPwT+XOX1NXUdKi2kfv0wyTXHyL
+         +FcIunqL7h6hWyEsaaEphZjzYGmaB3JZJxAKwPBTkTINb48/zDiPXftOwhB1v9trL3
+         yNpMCDLt551yg==
+Date:   Tue, 26 Jul 2022 08:36:48 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Ajit Khaparde <ajit.khaparde@broadcom.com>
+Cc:     Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org, jgg@ziepe.ca,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        linux-rdma@vger.kernel.org,
+        Andrew Gospodarek <andrew.gospodarek@broadcom.com>
+Subject: Re: [PATCH 2/2] RDMA/bnxt_re: Use auxiliary driver interface
+Message-ID: <Yt99cG7ZMGe1XhlL@unreal>
+References: <20220724231458.93830-1-ajit.khaparde@broadcom.com>
+ <20220724231458.93830-3-ajit.khaparde@broadcom.com>
+ <Yt6JV0Vs7nSnI8KB@unreal>
+ <CACZ4nhvkTtPjrtKnFuxo+m0TJdBB6S3Tdu1sx+UDS2bT3Y2XZg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220720185719.273630-1-mairacanal@riseup.net>
-In-Reply-To: <20220720185719.273630-1-mairacanal@riseup.net>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 26 Jul 2022 01:27:14 -0400
-Message-ID: <CAFd5g45ur97hajOqLctnRNQkaYfRXfacdUpRY9mw8X6ot8OPjA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2] Documentation: KUnit: Fix example with
- compilation error
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     Jonathan Corbet <corbet@lwn.net>, davidgow@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACZ4nhvkTtPjrtKnFuxo+m0TJdBB6S3Tdu1sx+UDS2bT3Y2XZg@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 2:57 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wr=
-ote:
->
-> The Parameterized Testing example contains a compilation error, as the
-> signature for the description helper function is void(*)(const struct
-> sha1_test_case *, char *), and the struct is non-const. This is
-> warned by Clang:
->
-> error: initialization of =E2=80=98void (*)(struct sha1_test_case *, char =
-*)=E2=80=99
-> from incompatible pointer type =E2=80=98void (*)(const struct sha1_test_c=
-ase *,
-> char *)=E2=80=99 [-Werror=3Dincompatible-pointer-types]
-> 33 | KUNIT_ARRAY_PARAM(sha1, cases, case_to_desc);
->    |                                ^~~~~~~~~~~~
-> ../include/kunit/test.h:1339:70: note: in definition of macro
-> =E2=80=98KUNIT_ARRAY_PARAM=E2=80=99
-> 1339 |                         void
->    (*__get_desc)(typeof(__next), char *) =3D get_desc; \
->
-> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+On Mon, Jul 25, 2022 at 09:58:30PM -0700, Ajit Khaparde wrote:
+> On Mon, Jul 25, 2022 at 5:15 AM Leon Romanovsky <leon@kernel.org> wrote:
+> >
+> > On Sun, Jul 24, 2022 at 04:14:58PM -0700, Ajit Khaparde wrote:
+> > > Use auxiliary driver interface for driver load, unload ROCE driver.
+> > > The driver does not need to register the interface using the netdev
+> > > notifier anymore. Removed the bnxt_re_dev_list which is not needed.
+> > > Currently probe, remove and shutdown ops have been implemented for
+> > > the auxiliary device.
+> > >
+> > > BUG: DCSG01157556
+> > > Change-Id: Ice54f076c1c4fc26d4ee7e77a5dcd1ca21cf4cd0
+> >
+> > Please remove the lines above.
+> Apologies for missing that.
+> 
+> >
+> > > Signed-off-by: Ajit Khaparde <ajit.khaparde@broadcom.com>
+> > > ---
+> > >  drivers/infiniband/hw/bnxt_re/bnxt_re.h       |   9 +-
+> > >  drivers/infiniband/hw/bnxt_re/main.c          | 405 +++++++-----------
+> > >  drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  64 ---
+> > >  drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c |  65 +++
+> > >  drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h |   3 +
+> > >  5 files changed, 232 insertions(+), 314 deletions(-)
+> >
+> > <...>
+> >
+> > > +static DEFINE_IDA(bnxt_aux_dev_ids);
+> > > +
+> > >  static int bnxt_register_dev(struct bnxt_en_dev *edev, unsigned int ulp_id,
+> > >                            struct bnxt_ulp_ops *ulp_ops, void *handle)
+> >
+> > I would expect that almost all code in bnxt_ulp.c will go after this change.
+> I agree. My plan was to get these QA tested, initial Aux Bus changes
+> in this release with a follow on series to clean this up further.
+> Does that sound reasonable?
 
-Thanks!
+No, please prepare complete series and we will review it.
+There is much harder to do it when the change is partial.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Thanks
+
+> Thanks for the feedback.
+> 
+> Thanks
+> Ajit
+> 
+> >
+> > Thanks
+
+

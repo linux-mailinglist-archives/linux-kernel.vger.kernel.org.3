@@ -2,43 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B3C5818C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE02581908
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbiGZRpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
+        id S239824AbiGZRvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239232AbiGZRpl (ORCPT
+        with ESMTP id S239721AbiGZRur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:45:41 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC14BDE1;
-        Tue, 26 Jul 2022 10:45:39 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,194,1654527600"; 
-   d="scan'208";a="129201531"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 27 Jul 2022 02:45:38 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 71DCE40BF9E8;
-        Wed, 27 Jul 2022 02:45:35 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: clock: renesas,rzg2l: Document RZ/Five SoC
-Date:   Tue, 26 Jul 2022 18:45:25 +0100
-Message-Id: <20220726174525.620-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Tue, 26 Jul 2022 13:50:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96DF3057A;
+        Tue, 26 Jul 2022 10:50:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 877551FD3A;
+        Tue, 26 Jul 2022 17:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1658857836;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gm3qnLAYsQBIJg426MOfCKsmEjrCPUPylpVnraWZmIk=;
+        b=LDBU8gKgoo1l96qIbktk1EUfEiOplxBi8RV2e7Z3+1YKXJv/7pCbHCD9SRRbohZy/x/wcA
+        ArDeymHiF7sZYafmErRqNys1oObbrts2B7WLaPBDRNE5wixznl7tW1oPeY/EavHQ/aW8yJ
+        yt4N6UYFtk35HTJaPxX3zGb9Xi4Jz1I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1658857836;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gm3qnLAYsQBIJg426MOfCKsmEjrCPUPylpVnraWZmIk=;
+        b=BEv2XYQ854Yzij2xKUKWIEW4EH/0gSle8nB3lrXt2iAE6R933kxRwF7nqzwy9EOWiWFuxk
+        glCc6/XiVx22obBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3945813A7C;
+        Tue, 26 Jul 2022 17:50:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gTftDGwp4GIVDgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 26 Jul 2022 17:50:36 +0000
+Date:   Tue, 26 Jul 2022 19:45:38 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, osandov@osandov.com,
+        kernel-team@fb.com
+Subject: Re: [PATCH RFC 4/4] fscrypt: Add new encryption policy for btrfs.
+Message-ID: <20220726174538.GG13489@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        osandov@osandov.com, kernel-team@fb.com
+References: <cover.1658623235.git.sweettea-kernel@dorminy.me>
+ <675dd03f1a4498b09925fbf93cc38b8430cb7a59.1658623235.git.sweettea-kernel@dorminy.me>
+ <Yt8oEiN6AkglKfIc@sol.localdomain>
+ <7130dd3f-202c-2e70-c37f-57be9b85548b@dorminy.me>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7130dd3f-202c-2e70-c37f-57be9b85548b@dorminy.me>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,34 +85,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CPG block on the RZ/Five SoC is almost identical to one found on the
-RZ/G2UL SoC. "renesas,r9a07g043-cpg" compatible string will be used on
-the RZ/Five SoC so to make this clear, update the comment to include
-RZ/Five SoC.
+On Mon, Jul 25, 2022 at 10:16:07PM -0400, Sweet Tea Dorminy wrote:
+> On 7/25/22 19:32, Eric Biggers wrote:
+> > On Sat, Jul 23, 2022 at 08:52:28PM -0400, Sweet Tea Dorminy wrote:
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-Note the driver changes [0] have been already queued for v5.20.
+> > Given that this new proposal uses per-block metadata, has
+> > support for authenticated encryption been considered? Has space been reserved
+> > in the per-block metadata for authentication tags so that authenticated
+> > encryption support could be added later even if it's not in the initial version?
+> 
+> I don't know sufficiently much about authenticated encryption to have 
+> considered it. As currently drafted, btrfs encrypts before checksumming 
+> if checksums are enabled, and checks against checksums before 
+> decrypting. Although at present we haven't discussed authentication 
+> tags, btrfs could store them in a separate itemtype which could be added 
+> at any time, much as we currently store fsverity data. We do have 
+> sufficient room saved for adding other encryption types, if necessary; 
+> we could use some of that to indicate the existence of authentication 
+> tags for the extents' data.
 
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/
-20220622181723.13033-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
----
- Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml b/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
-index d036675e0779..487f74cdc749 100644
---- a/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
-+++ b/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
-@@ -24,7 +24,7 @@ description: |
- properties:
-   compatible:
-     enum:
--      - renesas,r9a07g043-cpg # RZ/G2UL{Type-1,Type-2}
-+      - renesas,r9a07g043-cpg # RZ/G2UL{Type-1,Type-2} and RZ/Five
-       - renesas,r9a07g044-cpg # RZ/G2{L,LC}
-       - renesas,r9a07g054-cpg # RZ/V2L
-       - renesas,r9a09g011-cpg # RZ/V2M
--- 
-2.17.1
-
+The AEAD tag can be used in place of checksum (also stored in the
+checksum item).

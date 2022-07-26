@@ -2,94 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E945814D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453835814D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239051AbiGZOKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S239164AbiGZOLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiGZOKl (ORCPT
+        with ESMTP id S238631AbiGZOK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:10:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C310A3;
-        Tue, 26 Jul 2022 07:10:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9785B81670;
-        Tue, 26 Jul 2022 14:10:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A90C433C1;
-        Tue, 26 Jul 2022 14:10:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658844638;
-        bh=1d7qbWDQuZYAD2sGVg+HmWM5hj2n/J9MkNAK0ie+JsI=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=ZY+ik8K7+ds9Bc6ALidqN6eBYk4ekWWqvNqhozyoYPuMyoMEw5aThMTn/aA/xZpAv
-         uVhIyD62nyt65WHeftNaR3WoTk4FCLwjeFoqA0uTx/CqccQLxRZW8zpEea1mXYEmBG
-         CTgwY16GLXM3RUZuAuMfZczsVfS4RzmglBTo5eDzZJBeDptdBicXJlVZdkaSMtGrP/
-         swTng4fUny+UtoTtdudmc6AQQO1SuUqdhFdL1IGix3KnJUCm+r9jm5moT3gf1//Tgl
-         JiPHzPrj9lnr8GYoH5AGfb4okgkpzraeWjJU3AoqN9KX8PZYPE88eSpo3FSqKKy5Lx
-         QtpZaVVa9ly+w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        alsa-devel@alsa-project.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20220726115917.101371-1-krzysztof.kozlowski@linaro.org>
-References: <20220726115917.101371-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] ASoC: dt-bindings: qcom,wcd934x: use absolute path to other schema
-Message-Id: <165884463590.37334.6138510290775984808.b4-ty@kernel.org>
-Date:   Tue, 26 Jul 2022 15:10:35 +0100
+        Tue, 26 Jul 2022 10:10:59 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5D210A3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:10:58 -0700 (PDT)
+Received: from [192.168.16.236] (helo=vzdev.sw.ru)
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1oGLGB-00C6W6-At;
+        Tue, 26 Jul 2022 16:10:30 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 2/2] Unify how inflated memory is accounted in virtio balloon driver
+Date:   Tue, 26 Jul 2022 14:10:47 +0000
+Message-Id: <20220726141047.72913-1-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220726140831.72816-1-alexander.atanasov@virtuozzo.com>
+References: <20220726140831.72816-1-alexander.atanasov@virtuozzo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-c7731
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 13:59:17 +0200, Krzysztof Kozlowski wrote:
-> Absolute path to other DT schema is preferred over relative one.
-> 
-> 
+Always account inflated memory as used for both cases - with and
+without deflate on oom. Do not change total ram which can confuse
+userspace and users.
 
-Applied to
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+---
+ drivers/virtio/virtio_balloon.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+index 97d3b29cb9f1..fa6ddec45fc4 100644
+--- a/drivers/virtio/virtio_balloon.c
++++ b/drivers/virtio/virtio_balloon.c
+@@ -244,9 +244,6 @@ static unsigned fill_balloon(struct virtio_balloon *vb, size_t num)
+ 
+ 		set_page_pfns(vb, vb->pfns + vb->num_pfns, page);
+ 		vb->num_pages += VIRTIO_BALLOON_PAGES_PER_PAGE;
+-		if (!virtio_has_feature(vb->vdev,
+-					VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+-			adjust_managed_page_count(page, -1);
+ 		vb->num_pfns += VIRTIO_BALLOON_PAGES_PER_PAGE;
+ 	}
+ 
+@@ -265,9 +262,6 @@ static void release_pages_balloon(struct virtio_balloon *vb,
+ 	struct page *page, *next;
+ 
+ 	list_for_each_entry_safe(page, next, pages, lru) {
+-		if (!virtio_has_feature(vb->vdev,
+-					VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+-			adjust_managed_page_count(page, 1);
+ 		list_del(&page->lru);
+ 		put_page(page); /* balloon reference */
+ 	}
+@@ -750,12 +744,9 @@ static void report_free_page_func(struct work_struct *work)
+ static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
+ {
+ 	struct virtio_balloon *vb = f->private;
+-	s64 num_pages = vb->num_pages << (VIRTIO_BALLOON_PFN_SHIFT - 10);
++	u64 num_pages = vb->num_pages << (VIRTIO_BALLOON_PFN_SHIFT - 10);
+ 
+-	if (!virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+-		num_pages = -num_pages;
+-
+-	seq_printf(f, "inflated: %lld kB\n", num_pages);
++	seq_printf(f, "inflated: %llu kB\n", num_pages);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
 
-Thanks!
-
-[1/1] ASoC: dt-bindings: qcom,wcd934x: use absolute path to other schema
-      commit: ffe71829574a4848e9a376010a2ea74ae6d2d211
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

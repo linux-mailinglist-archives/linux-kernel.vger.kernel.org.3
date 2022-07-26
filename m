@@ -2,205 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202195808A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 02:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F1F5808A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 02:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiGZABI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 20:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S231875AbiGZABZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 20:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237108AbiGYX7L (ORCPT
+        with ESMTP id S231316AbiGZABJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 19:59:11 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0567727FD9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=O2ubfH2wQgxmJZWUP8M1vkKi6rTyTW4C61EL27uDGLI=; b=FdDGoOYDIjVUe17qJdSxcppF/6
-        BgyYILkT7FztFKmP5+K0qCFLxZJWgrWhYxWMSilPQ4diZCLP3Se96eLLn4WPnI6lY6ITlMj6DAPQy
-        VhK13AaOvQEp+JM6mzrrAjFHoNgvCfFnIecAQWxnBDbLf/CfOiQWjd7I/V6rMW2ANaWfyI1THxdfJ
-        2RRlR/Yi0CZ/dCebV1OhcjrSLd08zWg6GCAaPZSivHXCg/pYcRO1jjChs9qJFJNdIwNDcvmD+M9oP
-        X/Ye4KdN1/p09or297EABop8W2NJ0cxKaB0HTzJ5EL18QHUWC8KRSokCcfX598Lc1yTlEhUU7Dwck
-        hIqTgYGw==;
-Received: from [165.90.126.25] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oG7yX-006bNf-8M; Tue, 26 Jul 2022 01:59:01 +0200
-Date:   Mon, 25 Jul 2022 22:58:48 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Magali Lemes <magalilemes00@gmail.com>
-Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, mairacanal@riseup.net, isabbasso@riseup.net,
-        siqueirajordao@riseup.net, andrealmeid@riseup.net,
-        tales.aparecida@gmail.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] drm/amd/display: include missing headers
-Message-ID: <20220725235848.372aapiwvmxiiowt@mail.igalia.com>
-References: <20220725181559.250030-1-magalilemes00@gmail.com>
- <20220725181559.250030-2-magalilemes00@gmail.com>
+        Mon, 25 Jul 2022 20:01:09 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1249D6437
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 17:01:09 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so11701455pjf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 17:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0dYvPu1lOmSURZ4u1yzsn5bYOoklceFkBHw6I6SfqqE=;
+        b=sz3gGFksK1BfrO8x90Bhjlv/p0tPPvagwonKdWEQuRJeX5nF0oNoekwXs9h2vRXUqd
+         PaYqu87ZDCZo540HyoopZk6LTHa3e5m1R+A2RQUQ9RMqx2/hsmMWl3PZsIutmjZlhfkf
+         a5Gx2f3c3+Q5iPyJMTASG/4OXGocWp2qgTZ+OMIujwYuKYLZ5FmMlmDPNpX0oeWSGgbC
+         af7gVPTPcQ2h9Bljguy1e2qOZvSygHOWWqFZKnaPWw70SXSDXmyOz3Bap+gzlrTyYnVi
+         rKm6sjJfmWSgyvuhjC+u8sfNspeiDkpNLp7kt2nmwWimuEj0F+1Gv4ZlcimP9nvl0PNh
+         5bVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0dYvPu1lOmSURZ4u1yzsn5bYOoklceFkBHw6I6SfqqE=;
+        b=hbnGEK87Cw+o+adEb50jSKG7TdLwb0IHx4+MQJYd5j67+XHTg0nwcrBXWek3aeplre
+         XAAzVVzgRm0oL+RmNvorHw+sD22/aiFg0f0oLt0szf4MJ+2pwV4zDNYQh7yr8QAf8ASw
+         smr5A2gcQEuK3f9LjRoybn+T5c7fQL/KDKoaICU3tlk+bCJKNlBoxKtoCCozh/KfVhdd
+         F9s/F/WkBcbRys2K7vXLYLie1RWQyKhJYMU5562UpVxxe0jSxTJA3dZM4UjTY249bc9l
+         vmhb2HaMl5BI5TrBrh9eb4tmjPk4tu5XPfxTXLIPMDzSbfNbYMejb6ls5VareY9UmTTn
+         jfSw==
+X-Gm-Message-State: AJIora+A6a2wtWakDftRyhyXVozavcg74hLwe3EwAQooDyleB94Zi/oY
+        uwV8JfCZ6yirT1uDjLyAL7PoyQ==
+X-Google-Smtp-Source: AGRyM1v3fX8z27lVE4u/pIWm/nIz9V+jtafbKCMd4teZyXoH+xJj3ZjgT6zzJsvERtFbk+h+yNi+hQ==
+X-Received: by 2002:a17:90b:4f87:b0:1f2:8a32:ca06 with SMTP id qe7-20020a17090b4f8700b001f28a32ca06mr12286134pjb.242.1658793668453;
+        Mon, 25 Jul 2022 17:01:08 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s27-20020a63525b000000b00419b02043e1sm8906139pgl.38.2022.07.25.17.01.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 17:01:07 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 00:01:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Tag disallowed NX huge pages even
+ if they're not tracked
+Message-ID: <Yt8uwMt/3JPrSWM9@google.com>
+References: <20220723012325.1715714-1-seanjc@google.com>
+ <20220723012325.1715714-2-seanjc@google.com>
+ <Yt8eC2OyolG9QE3g@google.com>
+ <Yt8mo6XbT/60UcpS@google.com>
+ <CALzav=esXG1yekYk1zCtLt3VGsuGJKYycBhUgtgwiU8w1Anucw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fydmeijpi4u4gmq5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220725181559.250030-2-magalilemes00@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALzav=esXG1yekYk1zCtLt3VGsuGJKYycBhUgtgwiU8w1Anucw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 25, 2022, David Matlack wrote:
+> On Mon, Jul 25, 2022 at 4:26 PM Sean Christopherson <seanjc@google.com> wrote:
+> > The only scenario that jumps to mind is the non-coherent DMA with funky MTRRs
+> > case.  There might be others, but it's been a while since I wrote this...
+> >
+> > The MTRRs are per-vCPU (KVM really should just track them as per-VM, but whatever),
+> > so it's possible that KVM could encounter a fault with a lower fault->req_level
+> > than a previous fault that set nx_huge_page_disallowed=true (and added the page
+> > to the possible_nx_huge_pages list because it had a higher req_level).
+> 
+> But in that case the lower level SP would already have been installed,
+> so we wouldn't end up calling account_nx_huge_page() and getting to
+> this point. (account_nx_huge_page() is only called when linking in an
+> SP.)
 
---fydmeijpi4u4gmq5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hrm, true.  I'm 99% certain past me was just maintaining the existing logic in
+account_huge_nx_page()
 
-On 07/25, Magali Lemes wrote:
-> Add missing headers to solve the following warnings from sparse:
->=20
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:656:17: wa=
-rning: symbol 'ddr4_wm_table_gs' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:693:17: wa=
-rning: symbol 'lpddr4_wm_table_gs' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:730:17: wa=
-rning: symbol 'lpddr4_wm_table_with_disabled_ppt' was not declared. Should =
-it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:767:17: wa=
-rning: symbol 'ddr4_wm_table_rn' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:804:17: wa=
-rning: symbol 'ddr4_1R_wm_table_rn' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:841:17: wa=
-rning: symbol 'lpddr4_wm_table_rn' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn301/dcn301_fpu.c:217:17: =
-warning: symbol 'ddr4_wm_table' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn301/dcn301_fpu.c:254:17: =
-warning: symbol 'lpddr5_wm_table' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:53:30: war=
-ning: symbol 'dcn3_1_ip' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:117:37: wa=
-rning: symbol 'dcn3_1_soc' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:197:30: wa=
-rning: symbol 'dcn3_15_ip' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:262:37: wa=
-rning: symbol 'dcn3_15_soc' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:293:30: wa=
-rning: symbol 'dcn3_16_ip' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:358:37: wa=
-rning: symbol 'dcn3_16_soc' was not declared. Should it be static?
->=20
-Hi Magali,
+	if (sp->lpage_disallowed)
+		return;
 
-Nice catch! See some comments below:
+Best thing might be to turn that into a WARN as the first patch?
 
-> Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h | 1 +
->  drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c      | 1 +
->  drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c    | 1 +
->  drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c      | 3 +++
->  4 files changed, 6 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h b/=
-drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h
-> index 2e088c5171b2..f1319957e400 100644
-> --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h
-> +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h
-> @@ -28,6 +28,7 @@
-> =20
->  #include "clk_mgr.h"
->  #include "dm_pp_smu.h"
-> +#include "clk_mgr_internal.h"
+> Maybe account_nx_huge_page() needs to be pulled out and called for
+> every SP on the walk during a fault?
 
-I see that this fix (right above) comes from another warning not listed
-in the commit message. Can you explicit it there or split it in
-another commit if possible?
-
-Also, clk_mgr/dcn21/rn_clk_mgr.c includes clk_mgr_internal.h and
-rn_clk_mgr.h; I wonder if a cleaner solution is to remove the
-`#include clk_mgr_internal.h` from rn_clk_mgr.c too.
-
-The remaining changes seems correct to me.
-
-Thanks,
-
-Melissa
-
-> =20
->  extern struct wm_table ddr4_wm_table_gs;
->  extern struct wm_table lpddr4_wm_table_gs;
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c b/drive=
-rs/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
-> index eeeae52fe6fc..45e9f4663abe 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
-> @@ -30,6 +30,7 @@
->  #include "dchubbub.h"
->  #include "dcn20/dcn20_resource.h"
->  #include "dcn21/dcn21_resource.h"
-> +#include "clk_mgr/dcn21/rn_clk_mgr.h"
-> =20
->  #include "dcn20_fpu.h"
-> =20
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c b/dri=
-vers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
-> index 7ef66e511ec8..d211cf6d234c 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
-> @@ -26,6 +26,7 @@
->  #include "clk_mgr.h"
->  #include "dcn20/dcn20_resource.h"
->  #include "dcn301/dcn301_resource.h"
-> +#include "clk_mgr/dcn301/vg_clk_mgr.h"
-> =20
->  #include "dml/dcn20/dcn20_fpu.h"
->  #include "dcn301_fpu.h"
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c b/drive=
-rs/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
-> index e36cfa5985ea..2d11a2c13345 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
-> @@ -25,6 +25,9 @@
-> =20
->  #include "resource.h"
->  #include "clk_mgr.h"
-> +#include "dcn31/dcn31_resource.h"
-> +#include "dcn315/dcn315_resource.h"
-> +#include "dcn316/dcn316_resource.h"
-> =20
->  #include "dml/dcn20/dcn20_fpu.h"
->  #include "dcn31_fpu.h"
-> --=20
-> 2.37.1
->=20
-
---fydmeijpi4u4gmq5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmLfLhYACgkQwqF3j0dL
-ehxzPBAAlERN6pDxUTfpiujfTDPJOWpVtWnC1Masl4psyPTOojPrar7khCz7lyZL
-BVRSXjIGV7seRAe765s8oEb9D5GQUqMU3Jlpro1EBWF7AQ77qV3/hPlyhYCDr4tM
-am9En8V4PynUgos/ayu+ALEmgPNlBAlJd46fY2rln/4VlPAAyJosp1ipVMzMe4vL
-6QPonpOvTVcVoc3LjNGc2sDGfu1Ktmmou6fRKiHAXk4Wfk8ak55yzH5AoWG+X881
-SiiDdT+kt7U8c0cIdVvdt9T7aksOgPtAixDe22pZon2FaMfqjvOWrobRwOg2qAUG
-UXxHXxWUs1+2+y1J+AYx91WWdJ9A9S/po+Qaw/pdKNmGMwRQljcVTwrk4J46ib78
-F71NSi+39+cvyNOmnZoYpCy0A+YXJWoLsXv6bw225ntqA7Jyqf3LstklMaJYeTgh
-m0gGwQ4eJXZqcnfY29S7W+O4jo6gQXJJBC6Di/bJO1MBUQmPgmFWjaKJdpt7Peax
-SHrzyQwz2GZr1g3hq8MM+9KezYp5BpcjJEdNyC22Tu4+5mEmvs8aR+ZlY4VEEfXE
-+UeILM57PyFFeYoqvL9wcyzPDCZwp+aHtl3Y7H7zxHZLcUmlpx9uAmipI3hobiKF
-k1a5jmi5Y3ez0FP14YsQPtyIE1EaEs+vSHbAXlPsn7tLIqpm16g=
-=MbwT
------END PGP SIGNATURE-----
-
---fydmeijpi4u4gmq5--
+Eh, not worth it, the MTRR thing is bogus anyways, e.g. if vCPUs have different
+MTRR settings and one vCPU allows a huge page but the other does not, KVM will
+may or may not install a huge page depending on which vCPU faults in the page.

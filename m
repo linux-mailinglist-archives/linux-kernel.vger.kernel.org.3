@@ -2,158 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502325810F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD2C5810FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238373AbiGZKRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
+        id S238294AbiGZKSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbiGZKRG (ORCPT
+        with ESMTP id S232493AbiGZKS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:17:06 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFEC25EA6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:17:04 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id p22so6178417lji.10
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=k5O4EHVtxr88sGikNEClrHBrRMv6Wt5HYjbVbFJmD00=;
-        b=vJpAIwYZMErEj5rbGqQ350mc3DCwuGHIizHIV5HmshxNf4Nft1JqUJibbEaQ4UGP3g
-         vw39nBSZJfIqI/XG3vZZaz2dTrpo6uIZi9xYNSTeRGR/DQif/KbWGwtkq388iwShp0gv
-         mP9rVynS6uo9w6P5Jl9Rb1x2SwhDE32s8qhojzZvMBIhdENmCL9rroS/hIDTgtD+zf6z
-         r2ASk5SDwigvx5mC2rkitjtqoKrBzHLSxEzgpL4MnvXE6QduyDQwm115Paei4jBS1Sw0
-         pP/XZdNcsEpxhoxulbvaCJVg7WbhwAwRscys4wzpeIRejNy2KTiv0BM4aZLWBqUsLC5v
-         0ijQ==
+        Tue, 26 Jul 2022 06:18:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D74B252AF
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658830705;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5lnSTLtfpiMG3nHTtX3jKFzE3hNNSSLXlSNWKqDtSbM=;
+        b=a+j/zzrpAHJIJkvfcWAdaY4VL/E5ZHl17fomZXZU31r5JGdxYhclY6Z3IwPMbUWaJK/Zx7
+        JW/4Zqcm2qy5pbyWh9EIgx7AyKtBu2TZ5d+/F/sDEskOfCsisccgZLRyvNXIGJFROpt0/y
+        jjxzaFA87D03D9g0+8cnvnPAZsnxaTg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-277-RA-bByWDOvKUDlfN8EamxQ-1; Tue, 26 Jul 2022 06:18:23 -0400
+X-MC-Unique: RA-bByWDOvKUDlfN8EamxQ-1
+Received: by mail-wm1-f71.google.com with SMTP id a18-20020a05600c225200b003a30355c0feso5203573wmm.6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:18:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=k5O4EHVtxr88sGikNEClrHBrRMv6Wt5HYjbVbFJmD00=;
-        b=bnu0VHkSe2sM/bU1EdpC6wFIgW106K7FgwtE1DcW1H7dy/iPBNJd5dY7byw760CddY
-         m6gnVfhvdtyITvNtLQKon8Q4kABimSIUuEVl9wdIOdAFfNCKKUygUUYyppT9DPUK/klY
-         qn4A/2IpWqdrvsRBtJLBCJ8J3I8MRVQ9gu8Fp0SnhjOj/AuWIOeUR6SR3CuICIyTm7wu
-         tONn2o2ruaRF0TPiLpPbq4YEGIwCOwrnSpRK0cEDLQN4T50I3GINXV9F2eu4T+z+Rw6+
-         Uy3TUwkJAYSfyp3oIHi7EoVh40aPH6ARhq82UM7HOAmS/da0P4EKMJPbXVgcYKwvN0RT
-         Yc2A==
-X-Gm-Message-State: AJIora/RGb/A5kQpaTDT9FCyfj8/h0PEUu9y/p26pqD4/vuAZlG2bzwa
-        EfWyLhyUiggFYt6t7EFSwh2mEw==
-X-Google-Smtp-Source: AGRyM1uViFn/KmVHqLUDrlNUpPnN4K9sCA2Pesn1Ztt99me1kjgo9CTQ9ebdIYigb0qTu1yG/I46ZQ==
-X-Received: by 2002:a2e:9d02:0:b0:25d:d6b9:b753 with SMTP id t2-20020a2e9d02000000b0025dd6b9b753mr5387184lji.344.1658830622608;
-        Tue, 26 Jul 2022 03:17:02 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id q21-20020ac24a75000000b00484e9e254c4sm3142760lfp.100.2022.07.26.03.17.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 03:17:02 -0700 (PDT)
-Message-ID: <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
-Date:   Tue, 26 Jul 2022 12:17:00 +0200
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=5lnSTLtfpiMG3nHTtX3jKFzE3hNNSSLXlSNWKqDtSbM=;
+        b=pA4Ey55drLgdPFMkHapUEJKV8AbE/tICEZSLaRaTxxDNoelgz0N/O9Y8b6u2qF4iek
+         v6i0sXeWbAuPs9aOVw0xWiCSeStIXPXh42u2qvhTdvZbwzOUvFf2rnRWwF2gDnJJ89Kl
+         QB30+iGe6BpPp3Ia5mSUlE+ogWjfKQ9iIgxXQA9hnoJVVulwHYANIh8+HLpfpedWNdCp
+         RE8gb+WfIMgpg5uSFRfBPPIB43+LrnsBxm4g2JfKjSIqV+RH6k3Lyh2f9LfBXSCxuUlt
+         wzbaluIjst9bT2HZWGCrJPduVoYXB722Pxl7Z1PxyfI0vExCFwCMXnTqMGqCO00+3jfF
+         upMA==
+X-Gm-Message-State: AJIora93MR1vownNtvxEM7QqlX+mRH3Tm+V/UVOkJankpBeWpKBghDIa
+        3qrCZqUJc6WcdoZjTQ1fe5BIgbK2qaZSBSLZ+QuAKfzKle7SA7Ut06Lt0erCujEUI1KMh37n0vE
+        xaVCzUJVaLuX2xneEelsx3ZPS
+X-Received: by 2002:a7b:cbce:0:b0:3a3:2d78:f066 with SMTP id n14-20020a7bcbce000000b003a32d78f066mr11827326wmi.66.1658830702612;
+        Tue, 26 Jul 2022 03:18:22 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v8kydM3js1Qil6SAxeNCdOc4EVpN3aiOG2Sa/CTbqYiQy1OSiHZETtGoU4toS9G3LOObJOnA==
+X-Received: by 2002:a7b:cbce:0:b0:3a3:2d78:f066 with SMTP id n14-20020a7bcbce000000b003a32d78f066mr11827305wmi.66.1658830702343;
+        Tue, 26 Jul 2022 03:18:22 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id o8-20020a05600c378800b003a2e7c13a3asm16726137wmr.42.2022.07.26.03.18.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 03:18:21 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>, Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH 2/2] sched: Consider task_struct::saved_state in
+ wait_task_inactive().
+In-Reply-To: <Yt+G/somh8qcKc/R@linutronix.de>
+References: <20220720154435.232749-1-bigeasy@linutronix.de>
+ <20220720154435.232749-3-bigeasy@linutronix.de>
+ <xhsmhy1whdqy9.mognet@vschneid.remote.csb>
+ <Yt+G/somh8qcKc/R@linutronix.de>
+Date:   Tue, 26 Jul 2022 11:18:20 +0100
+Message-ID: <xhsmhsfmodvo3.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220723224949.1089973-5-luzmaximilian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/07/2022 00:49, Maximilian Luz wrote:
-> Add bindings for the Qualcomm Trusted Execution Environment (TrEE) UEFI
-> Secure application (uefisecapp) client.
-> 
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-> ---
->  .../firmware/qcom,tee-uefisecapp.yaml         | 38 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml b/Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
-> new file mode 100644
-> index 000000000000..9e5de1005d5c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/qcom/qcom,rpmh-rsc.yaml#
+On 26/07/22 08:17, Sebastian Andrzej Siewior wrote:
+> On 2022-07-25 18:47:58 [+0100], Valentin Schneider wrote:
+>> > --- a/kernel/sched/core.c
+>> > +++ b/kernel/sched/core.c
+>> > @@ -3257,6 +3257,40 @@ int migrate_swap(struct task_struct *cur
+>> >  }
+>> >  #endif /* CONFIG_NUMA_BALANCING */
+>> >
+>> > +#ifdef CONFIG_PREEMPT_RT
+>>
+>> Would something like the below be useful?
+>>
+>> /*
+>>  * If p->saved_state is anything else than TASK_RUNNING, then p blocked on an
+>>  * rtlock *before* voluntarily calling into schedule() after setting its state
+>>  * to X. For things like ptrace (X=TASK_TRACED), the task could have more work
+>>  * to do upon acquiring the lock before whoever called wait_task_inactive()
+>>  * should return. IOW, we have to wait for:
+>>  *
+>>  *   p.saved_state = TASK_RUNNING
+>>  *   p.__state     = X
+>>  *
+>>  * which implies the task isn't blocked on an RT lock and got to schedule() by
+>>  * itself.
+>>  *
+>>  * Also see comments in ttwu_state_match().
+>>  */
+>
+> This sums up the code. I would s/schedule/schedule_rtlock/ since there
+> are two entrypoints.
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Right, this any better?
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Trusted Execution Environment UEFI Secure Application
-> +
-> +maintainers:
-> +  - Maximilian Luz <luzmaximilian@gmail.com>
-> +
-> +description: |
-> +  Various Qualcomm SoCs do not allow direct access to UEFI variables. Instead,
-> +  these need to be accessed via the UEFI Secure Application (uefisecapp),
-> +  residing in the Trusted Execution Environment (TrEE). These bindings mark the
-> +  presence of uefisecapp and allow the respective client driver to load and
-> +  install efivar operations, providing the kernel with access to UEFI
-> +  variables.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,tee-uefisecapp
+/*
+ * Consider:
+ *
+ *  set_special_state(X);
+ *
+ *  do_things()
+ *    // Somewhere in there is an rtlock that can be contended:
+ *    current_save_and_set_rtlock_wait_state();
+ *    [...]
+ *    schedule_rtlock(); (A)
+ *    [...]
+ *    current_restore_rtlock_saved_state();
+ *
+ *  schedule(); (B)
+ *
+ * If p->saved_state is anything else than TASK_RUNNING, then p blocked on an
+ * rtlock (A) *before* voluntarily calling into schedule() (B) after setting its
+ * state to X. For things like ptrace (X=TASK_TRACED), the task could have more
+ * work to do upon acquiring the lock in do_things() before whoever called
+ * wait_task_inactive() should return. IOW, we have to wait for:
+ *
+ *   p.saved_state = TASK_RUNNING
+ *   p.__state     = X
+ *
+ * which implies the task isn't blocked on an RT lock and got to schedule() (B).
+ *
+ * Also see comments in ttwu_state_match().
+ */
 
-Isn't this SoC-specific device? Generic compatibles are usually not
-expected.
-
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    firmware {
-> +        scm {
-> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
-> +        };
-> +        tee-uefisecapp {
-> +            compatible = "qcom,tee-uefisecapp";
-
-You did not model here any dependency on SCM. This is not full
-description of the firmware/hardware.
-
-
-
-Best regards,
-Krzysztof

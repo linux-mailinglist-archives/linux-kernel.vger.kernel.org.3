@@ -2,137 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29384581726
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4809B581733
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239215AbiGZQSX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Jul 2022 12:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        id S239257AbiGZQUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiGZQSV (ORCPT
+        with ESMTP id S229831AbiGZQUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:18:21 -0400
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A012255A5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:18:20 -0700 (PDT)
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id B17811C63C5;
-        Tue, 26 Jul 2022 16:18:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 3D0AA20024;
-        Tue, 26 Jul 2022 16:18:16 +0000 (UTC)
-Message-ID: <1c536f8e9666725ce9f3eb97acc34d08f38d2095.camel@perches.com>
-Subject: Re: [PATCH] VMCI: Update maintainers for VMCI
-From:   Joe Perches <joe@perches.com>
-To:     Vishnu Dasa <vdasa@vmware.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "rajeshjalisatgi@gmail.com" <rajeshjalisatgi@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Pv-drivers <Pv-drivers@vmware.com>,
-        Bryan Tan <bryantan@vmware.com>
-Date:   Tue, 26 Jul 2022 09:18:15 -0700
-In-Reply-To: <47D07B41-C327-4908-A383-683FC6C67040@vmware.com>
-References: <20220725163246.38486-1-vdasa@vmware.com>
-         <Yt7bfyANrfdPxdS8@kroah.com>
-         <FD326388-D2BB-42B4-B217-89DB9C134866@vmware.com>
-         <YuAD90UfLnf1Ojso@kroah.com>
-         <47D07B41-C327-4908-A383-683FC6C67040@vmware.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Tue, 26 Jul 2022 12:20:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231121CB39;
+        Tue, 26 Jul 2022 09:20:45 -0700 (PDT)
+Received: from localhost.localdomain (unknown [203.135.47.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 93E386601AA5;
+        Tue, 26 Jul 2022 17:20:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658852443;
+        bh=Q8yKS/CE9WeaVU/KjkLDiu1+P/03f/c90M8YsCixowU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cgN22QmV02XkyYXSex/PVpjIAgeSTJ3OarhCz60EXZZSIFtH4Ry66m5tQhPibiNlx
+         ejgKdT6EuGerVmVtrcDtxz065YEw9n4vz/5f3G9wrhBym7pKH4ZrPC5hXxzrpdS0pD
+         Y1+Vx0AtG6jvdTF6VVfdadQR7EtGSZILqK0V8oACG7CF3mgz8xIOtBNM/lDziTLvNw
+         E2FHA8881Ts8ak3YP5z5ZQ9lUe1hCTA0nD7zL0NiTzkQF93DaE+LH7271nX/Vt45Ro
+         BW5l2/BzT/sJwUwaL4wlymWvcrdPd3yhj65fBxc2bnIgd0LIBoQZGDjVsTEDnPsr+q
+         M4e19wsh2sZ3g==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list),
+        linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM),
+        linux-api@vger.kernel.org (open list:ABI/API),
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES),
+        linux-mm@kvack.org (open list:MEMORY MANAGEMENT),
+        linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS
+        SUBSYSTEM),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        krisman@collabora.com
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH 0/5] Add process_memwatch syscall
+Date:   Tue, 26 Jul 2022 21:18:49 +0500
+Message-Id: <20220726161854.276359-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Stat-Signature: 4ogh8f9z7ycintqz6pitj7rkzrkyccbw
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 3D0AA20024
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19NAXR081PqcA4zDQC4b0ZscieEdEbqVDI=
-X-HE-Tag: 1658852296-201436
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-26 at 15:55 +0000, Vishnu Dasa wrote:
-> > On Jul 26, 2022, at 8:10 AM, Greg KH <gregkh@linuxfoundation.org wrote:
-> > On Mon, Jul 25, 2022 at 06:29:25PM +0000, Vishnu Dasa wrote:
-> > > > On Jul 25, 2022, at 11:05 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > On Mon, Jul 25, 2022 at 09:32:46AM -0700, vdasa@vmware.com wrote:
-> > > > > From: Vishnu Dasa <vdasa@vmware.com>
-> > > > > Remove Rajesh as a maintainer for the VMCI driver.
-> > > > Why?
-> > > Rajesh is no longer with VMware and won't be working on VMCI.
-> > 
-> > But employment does not matter for maintainership and has nothing to do
-> > with it.  Maintainership follows the person, not the company, you all
-> > know this.
-> > 
-> > So for obvious reasons, I can't take this type of change without
-> > Rajesh acking it.
-> 
-> I understand.  After getting in touch with Rajesh, cc'ing him via his
-> personal email ID.
-> 
-> Rajesh, could you please provide your ack if you agree with this patch to
-> remove you as the maintainer for VMCI?
+Hello,
 
-If being an employee of a company is a criteria for maintainership
-of this subsystem, likely the subsystem entry should be:
+This patch series implements a new syscall, process_memwatch. Currently,
+only the support to watch soft-dirty PTE bit is added. This syscall is
+generic to watch the memory of the process. There is enough room to add
+more operations like this to watch memory in the future.
 
-"S:	Supported" not "S:	Maintained"
+Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
+procfs file. The soft-dirty PTE bit for the memory in a process can be
+cleared by writing to the clear_refs file. This series adds features that
+weren't possible through the Proc FS interface.
+- There is no atomic get soft-dirty PTE bit status and clear operation
+  possible.
+- The soft-dirty PTE bit of only a part of memory cannot be cleared.
 
-MAINTAINERS:VMWARE VMCI DRIVER
-MAINTAINERS-M:  Bryan Tan <bryantan@vmware.com>
-MAINTAINERS-M:  Rajesh Jalisatgi <rjalisatgi@vmware.com>
-MAINTAINERS-M:  Vishnu Dasa <vdasa@vmware.com>
-MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-MAINTAINERS-L:  linux-kernel@vger.kernel.org
-MAINTAINERS-S:  Maintained
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The Proc FS interface is enough for that as I think the process
+is frozen. We have the use case where we need to track the soft-dirty
+PTE bit for running processes. We need this tracking and clear mechanism
+of a region of memory while the process is running to emulate the
+getWriteWatch() syscall of Windows. This syscall is used by games to keep
+track of dirty pages and keep processing only the dirty pages. This
+syscall can be used by the CRIU project and other applications which
+require soft-dirty PTE bit information.
 
-Likely that's true for every VMware entry.
+As in the current kernel there is no way to clear a part of memory (instead
+of clearing the Soft-Dirty bits for the entire processi) and get+clear
+operation cannot be performed atomically, there are other methods to mimic
+this information entirely in userspace with poor performance:
+- The mprotect syscall and SIGSEGV handler for bookkeeping
+- The userfaultfd syscall with the handler for bookkeeping
 
-MAINTAINERS:VMWARE BALLOON DRIVER
-MAINTAINERS-M:  Nadav Amit <namit@vmware.com>
-MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-MAINTAINERS-L:  linux-kernel@vger.kernel.org
-MAINTAINERS-S:  Maintained
-MAINTAINERS-F:  drivers/misc/vmw_balloon.c
-MAINTAINERS-
-MAINTAINERS:VMWARE PVRDMA DRIVER
-MAINTAINERS-M:  Bryan Tan <bryantan@vmware.com>
-MAINTAINERS-M:  Vishnu Dasa <vdasa@vmware.com>
-MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-MAINTAINERS-L:  linux-rdma@vger.kernel.org
-MAINTAINERS-S:  Maintained
-MAINTAINERS-F:  drivers/infiniband/hw/vmw_pvrdma/
-MAINTAINERS-
-MAINTAINERS-VMware PVSCSI driver
-MAINTAINERS-M:  Vishal Bhakta <vbhakta@vmware.com>
-MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-MAINTAINERS-L:  linux-scsi@vger.kernel.org
-MAINTAINERS-S:  Maintained
-MAINTAINERS-F:  drivers/scsi/vmw_pvscsi.c
-MAINTAINERS-F:  drivers/scsi/vmw_pvscsi.h
-MAINTAINERS-
-MAINTAINERS:VMWARE VMMOUSE SUBDRIVER
-MAINTAINERS-M:  Zack Rusin <zackr@vmware.com>
-MAINTAINERS-R:  VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>
-MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-MAINTAINERS-L:  linux-input@vger.kernel.org
-MAINTAINERS-S:  Maintained
-MAINTAINERS-F:  drivers/input/mouse/vmmouse.c
-MAINTAINERS-F:  drivers/input/mouse/vmmouse.h
-MAINTAINERS-
-MAINTAINERS:VMWARE VMXNET3 ETHERNET DRIVER
-MAINTAINERS-M:  Ronak Doshi <doshir@vmware.com>
-MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-MAINTAINERS-L:  netdev@vger.kernel.org
-MAINTAINERS-S:  Maintained
-MAINTAINERS-F:  drivers/net/vmxnet3/
-MAINTAINERS-
+        long process_memwatch(int pidfd, unsigned long start, int len,
+                              unsigned int flags, void *vec, int vec_len);
+
+This syscall can be used by the CRIU project and other applications which
+require soft-dirty PTE bit information. The following operations are
+supported in this syscall:
+- Get the pages that are soft-dirty.
+- Clear the pages which are soft-dirty.
+- The optional flag to ignore the VM_SOFTDIRTY and only track per page
+soft-dirty PTE bit
+
+There are two decisions which have been taken about how to get the output
+from the syscall.
+- Return offsets of the pages from the start in the vec
+- Stop execution when vec is filled with dirty pages
+These two arguments doesn't follow the mincore() philosophy where the
+output array corresponds to the address range in one to one fashion, hence
+the output buffer length isn't passed and only a flag is set if the page
+is present. This makes mincore() easy to use with less control. We are
+passing the size of the output array and putting return data consecutively
+which is offset of dirty pages from the start. The user can convert these
+offsets back into the dirty page addresses easily. Suppose, the user want
+to get first 10 dirty pages from a total memory of 100 pages. He'll
+allocate output buffer of size 10 and process_memwatch() syscall will
+abort after finding the 10 pages. This behaviour is needed to support
+Windows' getWriteWatch(). The behaviour like mincore() can be achieved by
+passing output buffer of 100 size. This interface can be used for any
+desired behaviour.
+
+Regards,
+Muhammad Usama Anjum
+
+Muhammad Usama Anjum (5):
+  fs/proc/task_mmu: make functions global to be used in other files
+  mm: Implement process_memwatch syscall
+  mm: wire up process_memwatch syscall for x86
+  selftests: vm: add process_memwatch syscall tests
+  mm: add process_memwatch syscall documentation
+
+ Documentation/admin-guide/mm/soft-dirty.rst   |  48 +-
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ fs/proc/task_mmu.c                            |  84 +--
+ include/linux/mm_inline.h                     |  99 +++
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/memwatch.h                 |  12 +
+ kernel/sys_ni.c                               |   1 +
+ mm/Makefile                                   |   2 +-
+ mm/memwatch.c                                 | 285 ++++++++
+ tools/include/uapi/asm-generic/unistd.h       |   5 +-
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+ tools/testing/selftests/vm/.gitignore         |   1 +
+ tools/testing/selftests/vm/Makefile           |   2 +
+ tools/testing/selftests/vm/memwatch_test.c    | 635 ++++++++++++++++++
+ 16 files changed, 1098 insertions(+), 87 deletions(-)
+ create mode 100644 include/uapi/linux/memwatch.h
+ create mode 100644 mm/memwatch.c
+ create mode 100644 tools/testing/selftests/vm/memwatch_test.c
+
+-- 
+2.30.2
 

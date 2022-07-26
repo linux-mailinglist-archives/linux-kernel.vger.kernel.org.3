@@ -2,135 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879EF58093D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407C6580940
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbiGZCD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 22:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S236574AbiGZCFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 22:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiGZCD1 (ORCPT
+        with ESMTP id S230418AbiGZCFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 22:03:27 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DD02529E;
-        Mon, 25 Jul 2022 19:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658801006; x=1690337006;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nGXce4BEiuO3MY3YTJ0jEz9ehzkLTWYcY9aS9F+R5ec=;
-  b=YO3jem2z7TU34aPIeZSr1IiLlHdDYgj23rbfy76sCEj7fZyRwl0fJDFI
-   EGN/2TfJIGL1jQoijdT6Jnk4zKmsxgFuqHndzA6qlNi4wzgdXcAJZxfJM
-   mdEzZug0jv1ej1M8rLL75IqiV3lmKmw8ZP4RMEvjqA3OplvN/LMlWnpG/
-   gbCo+NZQxiwGndR8+fFIXCpNsc7UN7l0riBPdBuKk4ebcrY2kbKXxfSqM
-   2hkmlcAnoPS+qEkA0GJ2DTFE26g7zYzFLWsEfxrmgqc4owKyyKmbBJkcS
-   miksatyIn1KvkghX04HG+nPmJ4prIHt/zRN+mXSTDi6gm2E4khai0YZvo
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="374139248"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="374139248"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 19:03:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="627698116"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jul 2022 19:03:25 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oG9uu-0005qC-1G;
-        Tue, 26 Jul 2022 02:03:24 +0000
-Date:   Tue, 26 Jul 2022 10:02:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     SeongJae Park <sjpark@amazon.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [sj:damon/next 22/25] htmldocs: Documentation/PCI/index.rst:
- WARNING: document isn't included in any toctree
-Message-ID: <202207261047.AMrNATOY-lkp@intel.com>
+        Mon, 25 Jul 2022 22:05:40 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DB1764D
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 19:05:39 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id e16so11988306pfm.11
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 19:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PcLN0/0rRk3ozwmqISVR6hRqPCsf6L35JebQehRi1LA=;
+        b=nTioK+/s3DBU4jhK/bp6W9HoNaLbn9VTPFlcs/nnOeaSY3yYsAwlorbKuiVR7waFli
+         AxujWyUJgbFWM1RSWzgWAot6NAd4pZCKLsDvc0HoF7s+VR5bgVgLdNXLJPLxIyzHIRK4
+         dZTAKNdgCB93tMvwtYmp03T0eThljIHTh6fSfcaZulw0c/dHrvS+dfJJOU2Vek4SJ9P9
+         RIm02AJVXfyvtCeoZx6qBZIxr8dWPSUmMt8ey9XYpzEl4vsh4ETs7Jwhzi3CAIH58g4Z
+         je5gG6n2jX+D76groH6t8w6Ym4ZwYL7z4ZhI/ZxwWmin5anmjrCyI5e1VsfJpb2RWXti
+         1jiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PcLN0/0rRk3ozwmqISVR6hRqPCsf6L35JebQehRi1LA=;
+        b=M3AvwXEbRbjan+CXWgeS+dEeNv4kObrpzRL+1pmiS+x+tkzXOK2L0AMXwTlEzCpcUs
+         rYtCcQe4RxH2+exBvbSvQ9ShgoaXtUjCP9Po0koGLjzLWaCJVFON4Zpnf+/3MTOFFWcq
+         hyTJ4v2YErROMBZpsFIJ8XnKJngDtmxRbOiVd/FLVufQ7j5KGSpRhT9sxgnwiU4P78uj
+         UARiec8WqMv3rHaZOgAaOtHn7B7KFMyec1nos1FJ9bdHm1zVb7dQszkow9Xmiq1ziOkT
+         50YHtAW6EPuKCy38d5/6MCkbxMK/2CEiJ6aeGENOMkfk2AR3s1CGiskD5sA03SYdCRii
+         HoMQ==
+X-Gm-Message-State: AJIora99QJL+0/fgkTTTdUu+C1DT+fnfGx+pX0ZV+t3i+cCO0/unOXNl
+        YCuWm+vQtgJtb8kC40UZ+WMtKQ==
+X-Google-Smtp-Source: AGRyM1tN5cI8PLb9GQMnAmTK897rbjPgqmQUBbRdtqBmGzc3THxBtOvtBkrHDhPlskpkikFyhQ/6Lw==
+X-Received: by 2002:a62:7bd7:0:b0:52b:1d57:e098 with SMTP id w206-20020a627bd7000000b0052b1d57e098mr15017966pfc.19.1658801138825;
+        Mon, 25 Jul 2022 19:05:38 -0700 (PDT)
+Received: from C02F63J9MD6R.bytedance.net ([61.120.150.78])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902684400b0016bdf0032b9sm9834200pln.110.2022.07.25.19.05.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 25 Jul 2022 19:05:38 -0700 (PDT)
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+To:     ruscur@russell.cc, oohall@gmail.com, bhelgaas@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Cc:     chenzhuo.1@bytedance.com, lukas@wunner.de, jan.kiszka@siemens.com,
+        stuart.w.hayes@gmail.com, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] PCI/ERR: Use pcie_aer_is_native() to judge whether OS owns AER
+Date:   Tue, 26 Jul 2022 10:05:27 +0800
+Message-Id: <20220726020527.99816-1-chenzhuo.1@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-head:   7b095128a1a8d7cd001d16012bd33216b7c89b6c
-commit: 5e8617bff7f858577368516ec457f51d18ea940f [22/25] Docs: Modify for DAMON only
-reproduce: make htmldocs
+The AER status of the device that reported the error rather than
+the first downstream port is cleared after commit 7d7cbeaba5b7
+("PCI/ERR: Clear status of the reporting device"). So "a bridge
+may not exist" which commit aa344bc8b727 ("PCI/ERR: Clear AER
+status only when we control AER") referring to is no longer
+existent, and we just use pcie_aer_is_native() in stead of
+"host->native_aer || pcie_ports_native".
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+pci_aer_clear_nonfatal_status() already has pcie_aer_is_native(),
+so we move pci_aer_clear_nonfatal_status() out of
+pcie_aer_is_native().
 
-All warnings (new ones prefixed by >>):
+Replace statements that judge whether OS owns AER in
+get_port_device_capability() with pcie_aer_is_native(), which has
+no functional changes.
 
->> Documentation/PCI/index.rst: WARNING: document isn't included in any toctree
->> Documentation/accounting/index.rst: WARNING: document isn't included in any toctree
->> Documentation/admin-guide/index.rst: WARNING: document isn't included in any toctree
->> Documentation/arch.rst: WARNING: document isn't included in any toctree
->> Documentation/asm-annotations.rst: WARNING: document isn't included in any toctree
->> Documentation/block/index.rst: WARNING: document isn't included in any toctree
->> Documentation/bpf/index.rst: WARNING: document isn't included in any toctree
->> Documentation/cdrom/index.rst: WARNING: document isn't included in any toctree
->> Documentation/core-api/index.rst: WARNING: document isn't included in any toctree
->> Documentation/cpu-freq/index.rst: WARNING: document isn't included in any toctree
->> Documentation/crypto/index.rst: WARNING: document isn't included in any toctree
->> Documentation/dev-tools/index.rst: WARNING: document isn't included in any toctree
->> Documentation/devicetree/index.rst: WARNING: document isn't included in any toctree
->> Documentation/doc-guide/index.rst: WARNING: document isn't included in any toctree
->> Documentation/driver-api/index.rst: WARNING: document isn't included in any toctree
->> Documentation/fault-injection/index.rst: WARNING: document isn't included in any toctree
->> Documentation/fb/index.rst: WARNING: document isn't included in any toctree
->> Documentation/filesystems/index.rst: WARNING: document isn't included in any toctree
->> Documentation/firmware-guide/index.rst: WARNING: document isn't included in any toctree
->> Documentation/fpga/index.rst: WARNING: document isn't included in any toctree
->> Documentation/gpu/index.rst: WARNING: document isn't included in any toctree
->> Documentation/hid/index.rst: WARNING: document isn't included in any toctree
->> Documentation/hwmon/index.rst: WARNING: document isn't included in any toctree
->> Documentation/i2c/index.rst: WARNING: document isn't included in any toctree
->> Documentation/iio/index.rst: WARNING: document isn't included in any toctree
->> Documentation/infiniband/index.rst: WARNING: document isn't included in any toctree
->> Documentation/input/index.rst: WARNING: document isn't included in any toctree
->> Documentation/isdn/index.rst: WARNING: document isn't included in any toctree
->> Documentation/kbuild/index.rst: WARNING: document isn't included in any toctree
->> Documentation/kernel-hacking/index.rst: WARNING: document isn't included in any toctree
->> Documentation/leds/index.rst: WARNING: document isn't included in any toctree
->> Documentation/livepatch/index.rst: WARNING: document isn't included in any toctree
->> Documentation/locking/index.rst: WARNING: document isn't included in any toctree
->> Documentation/maintainer/index.rst: WARNING: document isn't included in any toctree
->> Documentation/mhi/index.rst: WARNING: document isn't included in any toctree
->> Documentation/misc-devices/index.rst: WARNING: document isn't included in any toctree
->> Documentation/mm/index.rst: WARNING: document isn't included in any toctree
->> Documentation/netlabel/index.rst: WARNING: document isn't included in any toctree
->> Documentation/networking/index.rst: WARNING: document isn't included in any toctree
->> Documentation/pcmcia/index.rst: WARNING: document isn't included in any toctree
->> Documentation/peci/index.rst: WARNING: document isn't included in any toctree
->> Documentation/power/index.rst: WARNING: document isn't included in any toctree
->> Documentation/process/index.rst: WARNING: document isn't included in any toctree
->> Documentation/scheduler/index.rst: WARNING: document isn't included in any toctree
->> Documentation/scsi/index.rst: WARNING: document isn't included in any toctree
->> Documentation/security/index.rst: WARNING: document isn't included in any toctree
->> Documentation/sound/index.rst: WARNING: document isn't included in any toctree
->> Documentation/spi/index.rst: WARNING: document isn't included in any toctree
->> Documentation/staging/index.rst: WARNING: document isn't included in any toctree
->> Documentation/target/index.rst: WARNING: document isn't included in any toctree
->> Documentation/timers/index.rst: WARNING: document isn't included in any toctree
->> Documentation/tools/index.rst: WARNING: document isn't included in any toctree
->> Documentation/trace/index.rst: WARNING: document isn't included in any toctree
->> Documentation/translations/index.rst: WARNING: document isn't included in any toctree
->> Documentation/usb/index.rst: WARNING: document isn't included in any toctree
->> Documentation/userspace-api/index.rst: WARNING: document isn't included in any toctree
->> Documentation/virt/index.rst: WARNING: document isn't included in any toctree
->> Documentation/w1/index.rst: WARNING: document isn't included in any toctree
->> Documentation/watchdog/index.rst: WARNING: document isn't included in any toctree
+Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+---
+v2:
+- Add details and note in commit log
+---
+ drivers/pci/pcie/err.c          | 12 ++----------
+ drivers/pci/pcie/portdrv_core.c |  3 +--
+ 2 files changed, 3 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+index 0c5a143025af..28339c741555 100644
+--- a/drivers/pci/pcie/err.c
++++ b/drivers/pci/pcie/err.c
+@@ -184,7 +184,6 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+ 	int type = pci_pcie_type(dev);
+ 	struct pci_dev *bridge;
+ 	pci_ers_result_t status = PCI_ERS_RESULT_CAN_RECOVER;
+-	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
+ 
+ 	/*
+ 	 * If the error was detected by a Root Port, Downstream Port, RCEC,
+@@ -237,16 +236,9 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+ 	pci_dbg(bridge, "broadcast resume message\n");
+ 	pci_walk_bridge(bridge, report_resume, &status);
+ 
+-	/*
+-	 * If we have native control of AER, clear error status in the device
+-	 * that detected the error.  If the platform retained control of AER,
+-	 * it is responsible for clearing this status.  In that case, the
+-	 * signaling device may not even be visible to the OS.
+-	 */
+-	if (host->native_aer || pcie_ports_native) {
++	if (pcie_aer_is_native(dev))
+ 		pcie_clear_device_status(dev);
+-		pci_aer_clear_nonfatal_status(dev);
+-	}
++	pci_aer_clear_nonfatal_status(dev);
+ 	pci_info(bridge, "device recovery successful\n");
+ 	return status;
+ 
+diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+index 604feeb84ee4..98c18f4a01b2 100644
+--- a/drivers/pci/pcie/portdrv_core.c
++++ b/drivers/pci/pcie/portdrv_core.c
+@@ -221,8 +221,7 @@ static int get_port_device_capability(struct pci_dev *dev)
+ 	}
+ 
+ #ifdef CONFIG_PCIEAER
+-	if (dev->aer_cap && pci_aer_available() &&
+-	    (pcie_ports_native || host->native_aer)) {
++	if (pcie_aer_is_native(dev) && pci_aer_available()) {
+ 		services |= PCIE_PORT_SERVICE_AER;
+ 
+ 		/*
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.1 (Apple Git-130)
+

@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65BF581AB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A930581ABA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239828AbiGZUHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 16:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
+        id S239859AbiGZUJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 16:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239708AbiGZUHp (ORCPT
+        with ESMTP id S239833AbiGZUJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 16:07:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF0532469;
-        Tue, 26 Jul 2022 13:07:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F55BB80919;
-        Tue, 26 Jul 2022 20:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDA2C433C1;
-        Tue, 26 Jul 2022 20:07:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658866061;
-        bh=y5wfcocVA31wNAT1AzwXJsrzMI45+ZN+MdMwmwEEHlA=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=JgWGgmzyl3SKYdp9DW27KLVN9dJyVSdu1dgw4HHmpM11CzFXuYhtinp0oUVPAibdI
-         B7OYo75rbIEpGXPOJ8q7sT0UMtr5jC2n9ctbz9a1RZ44zY7rQM0RaKpud2gpanljeX
-         phB1II7HBWwZuGvYCsKNGLmtdaQQamYjTOEnRj07D0DLFt0KU3Drrl5/R+0cAA9aRG
-         4BZkylF8KoxQiuv2qNRk1PWwzcYjAsY9cJLw7L1QbVjw86MTZSZ3GK6Pc8IE2FF1bs
-         DsVHv92JI7yw9ezHPoeunxpXQHXQgAvC9WS4HVM8u66Tvz022POYCb0ATXLxynOpvc
-         ufbIGURnMSCjg==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CABVgOS=bm5TmEBd8jxuTPJy426OgC14ryqn4FLQR1pHNf5uhsw@mail.gmail.com>
-References: <20220711162713.2467476-1-dlatypov@google.com> <20220711204859.3DDD5C34115@smtp.kernel.org> <CAGS_qxqxGfQ5tA063XoRbL1ktimyfmt+CuucJ_rsYVnoi4i7gw@mail.gmail.com> <CABVgOS=bm5TmEBd8jxuTPJy426OgC14ryqn4FLQR1pHNf5uhsw@mail.gmail.com>
-Subject: Re: [PATCH] clk: explicitly disable CONFIG_UML_PCI_OVER_VIRTIO in .kunitconfig
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
-To:     Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>
-Date:   Tue, 26 Jul 2022 13:07:39 -0700
-User-Agent: alot/0.10
-Message-Id: <20220726200741.2DDA2C433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 16:09:07 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C4F357FD;
+        Tue, 26 Jul 2022 13:09:06 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id e12so1040712ilu.7;
+        Tue, 26 Jul 2022 13:09:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=nrDG32o/nF0+drBL5HQUQubPYkcsSpm90fWevm2EMus=;
+        b=Ma24HiauyBbRCkblMqVysmo6QVrvXjvH2TuS1ys5daUeGrGEgwFt5djgiaI1Kem8I0
+         UR3WQBNz1YFDWmDrpS88fmP5kv1fH5Y1OicnX/gaouuMdjf3QeHHR3RIu3gL2j13UwOz
+         g69UtxIqv5jfjdy7Fp7E1vxtLHFzmtGyih8PrbQnNWmu9SUkYMhKUhiAW5I+0fBMYTrG
+         rK84yXT2aj45rSMEnLIPO+7EaIO/kMcJKnPiC5x0VF2if6D0mKJMVAqbv1GjGKeiLT4h
+         TVFnspCFNZeNzI3uLGzT9kA01iNQmndANak4xuuu93Vt4OvNqD4zUpRUXS7XOEnuipWF
+         ELZA==
+X-Gm-Message-State: AJIora95cQRCMMM5VlFYOc/Ndwkp9O9z+3SL6xbr0O5j6iUFyk+YkYro
+        ndxUWs1uqxe5aYMzWvx+Wg==
+X-Google-Smtp-Source: AGRyM1uhqlxORuUmIgfm9uGaklPD+6R+WsuRI46aW6jH891vImtrJFDsBDRJwFUBPN+Qa2GUfxDIYA==
+X-Received: by 2002:a05:6e02:180d:b0:2dd:6150:58b0 with SMTP id a13-20020a056e02180d00b002dd615058b0mr3659262ilv.265.1658866145360;
+        Tue, 26 Jul 2022 13:09:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id k4-20020a0566022d8400b0067be568081fsm7588026iow.43.2022.07.26.13.09.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 13:09:05 -0700 (PDT)
+Received: (nullmailer pid 782233 invoked by uid 1000);
+        Tue, 26 Jul 2022 20:09:02 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Balsam CHIHI <bchihi@baylibre.com>
+Cc:     rui.zhang@intel.com, rex-bc.chen@mediatek.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org, mka@chromium.org,
+        linux-kernel@vger.kernel.org, abailon@baylibre.com,
+        robh+dt@kernel.org, p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+        linux-pm@vger.kernel.org, rafael@kernel.org, khilman@baylibre.com,
+        fan.chen@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, louis.yu@mediatek.com,
+        james.lo@mediatek.com
+In-Reply-To: <20220726135506.485108-3-bchihi@baylibre.com>
+References: <20220726135506.485108-1-bchihi@baylibre.com> <20220726135506.485108-3-bchihi@baylibre.com>
+Subject: Re: [PATCH v8 2/6] dt-bindings: thermal: Add binding document for LVTS thermal controllers
+Date:   Tue, 26 Jul 2022 14:09:02 -0600
+Message-Id: <1658866142.328871.782232.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting David Gow (2022-07-11 23:44:08)
->=20
-> So, as I understand it, casting a regular pointer to an __iomem
-> pointer (as the clk test does) isn't technically correct, though it
-> does work on almost every architecture out there. If we want some way
-> of intercepting I/O access, then then that'll need to be handled by
-> the various read()/write() functions.
+On Tue, 26 Jul 2022 15:55:02 +0200, Balsam CHIHI wrote:
+> This patch adds dt-binding documents for mt8192 and mt8195 thermal controllers.
+> 
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> ---
+>  .../thermal/mediatek,mt8192-lvts.yaml         | 73 ++++++++++++++++++
+>  .../thermal/mediatek,mt8195-lvts.yaml         | 75 +++++++++++++++++++
+>  2 files changed, 148 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8195-lvts.yaml
+> 
 
-Yep. It's test code though so it seemed ok at the time.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
->=20
-> UML doesn't support iomem at all out of the box, and logic_iomem is a
-> way of implementing it which allow us to attach handler functions to
-> blocks of memory, albeit with more constraints about what addresses
-> get used. Brendan started implementing a "fake hardware" interface on
-> top of this here, though it's still in-progress:
-> https://kunit-review.googlesource.com/c/linux/+/5272/4
+yamllint warnings/errors:
 
-Cool.
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/thermal/mediatek,mt8195-lvts.example.dts:32.36-37 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:383: Documentation/devicetree/bindings/thermal/mediatek,mt8195-lvts.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1404: dt_binding_check] Error 2
 
->=20
-> Ultimately, I think the 'correct' solution here will be
-> logic_iomem-based, but doing that nicely will probably require one of
-> two things:
-> - logic_iomem to support non-UML architectures as well (becoming a
-> generic "insert a 'fake' device here" system)
-> - logic_iomem to have some way of "passing through" access to an io
-> memory region through to the normal underlying memory.
->=20
-> Ideally, we'll have both, and maybe even defaults which will allow
-> hacks like this to continue working (perhaps with a warning?). That'll
-> require some significant (and probably not uncontroversial) work on
-> how iomem accesses work in general, though, possibly with performance
-> impact.
+doc reference errors (make refcheckdocs):
 
-Does it matter to pass through to real iomem? I'd think we wouldn't want
-to actually affect real hardware in test code. Instead we'd like to fake
-it and then look at the result, like how the clk test works.
+See https://patchwork.ozlabs.org/patch/
 
->=20
-> The other option of using function redirection on the io read()
-> write() functions exists, and would be a bit simpler in the
-> short-term, but would probably result in a lot of tests reimplementing
-> this, and also would have some performance impacts, as the I/O
-> accesses wouldn't be able to be inlined if KUNIT is enabled.
->=20
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-That sounds OK to me because nobody is enabling KUNIT in production,
-right?
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

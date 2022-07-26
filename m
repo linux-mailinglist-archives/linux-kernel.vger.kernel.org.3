@@ -2,155 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DD1581621
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4F2581622
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiGZPKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S233005AbiGZPK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiGZPKk (ORCPT
+        with ESMTP id S232059AbiGZPK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:10:40 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD626657C
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:10:39 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d7so13585961plr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nEq1IaNhdkodBDzozbLgFdlJtMKKyeEDpgF5SJMm+Y8=;
-        b=OWEnJwcMRH6J/QXCuwh5ay2U50ZpDhtt9UbnMucbCaA8Hn/Gf1tn7OIPJZvJJlYZph
-         LW8ZsOCCLqtJX6LzYMwSle6gPv8wQUpMXg/MKvdNr6Jw/YVHewJywz77TGt6RYKsrv7s
-         SaYVVhrt32cGZ4Vqk4SVa2I7QE52NbeI2bAhNurJ2VvJc9eEaSBJ74CCOhEq5pj6Lfjc
-         GH7pedy/4PRnTzw3rnxOmJYwi3M2qip3MhP3oY2TjKi1A/z/1XkDjDb80k1rsXKkYTKQ
-         1rS339PAXGkNqzjwoqOFEuEedlCoeFDrxQRsqQt1kR5gbNkNRVUSH9SwC4ovtagB6bu7
-         dNxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nEq1IaNhdkodBDzozbLgFdlJtMKKyeEDpgF5SJMm+Y8=;
-        b=dhoJCQZdNJ04Gwk0btfunlSPYcjsLVlL6NQPCHEGoyePD7E7DYSzmNvoUEcnnq9pI/
-         2EJWmObq+BQD3TCH9okI2gh9i0Hh+PEHZ1l+d0bKN8d+vdoiWrrQbWtHoi+vUGOeQPEd
-         BWun0/dDJpP6oaJmQ2nZpWupJggk8AMbw+IEzpM4BRdixCC1/5Dy/8vFKVMIe4MSiWeF
-         mD6sZnenRqCzoScRzYPVqoPQh6EneJ38QDvA/WDEuxHek4azXqSQWLuf6zWkzJRdj3da
-         8EKd0TmDxMxe/0grxrx/Gsu+UwbDU9k/iXXFT84C+CO21MOEKORDrfp6pNGso1+0OObn
-         P8rQ==
-X-Gm-Message-State: AJIora+ebP5BRZNGbtAqY6bV1+n1oPFI0SenyQzSWoktYhpVORUbV3Vb
-        S2Cu7FY4dD3Er0SmSUBOl3R6CctQsb1wRw==
-X-Google-Smtp-Source: AGRyM1tbthc+9spb5S+wWJFbOwwDqsIQ0p+TbIcXSswRVvW+f3FRIUOzzHyQP2Y909DPGDD80G8XRA==
-X-Received: by 2002:a17:902:d2d1:b0:16c:223e:a3db with SMTP id n17-20020a170902d2d100b0016c223ea3dbmr17861909plc.37.1658848238620;
-        Tue, 26 Jul 2022 08:10:38 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j1-20020a654d41000000b003fadd680908sm10389894pgt.83.2022.07.26.08.10.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 08:10:37 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 15:10:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andrei Vagin <avagin@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jianfeng Tan <henry.tjf@antfin.com>,
-        Adin Scannell <ascannell@google.com>,
-        Konstantin Bogomolov <bogomolov@google.com>,
-        Etienne Perot <eperot@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 0/5] KVM/x86: add a new hypercall to execute host system
-Message-ID: <YuAD6qY+F2nuGm62@google.com>
-References: <20220722230241.1944655-1-avagin@google.com>
- <Yts1tUfPxdPH5XGs@google.com>
- <CAEWA0a4hrRb5HYLqa1Q47=guY6TLsWSJ_zxNjOXXV2jCjUekUA@mail.gmail.com>
+        Tue, 26 Jul 2022 11:10:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CBE655D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:10:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B5819CE19E9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 15:10:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F9AC433C1;
+        Tue, 26 Jul 2022 15:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658848251;
+        bh=Ve3kJopSs2GE0hsDcrtwFJkWj6Nvx21L402wTn5aSw0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ey0DAijPvLnK4bfKUSDWiyI4CdD2YLHtQNKvPqxonvaip1mmJEFPnDWamjrQq6xDQ
+         BnUtc50uPchU5gwsEweasVZ3R3SKzt5Uu7tROvEcbDXl+cMENbyzCNCAaMM6xMubPK
+         igWAR4lKo3tuZEODfPM07jwesz730pTTUK1cEFE4=
+Date:   Tue, 26 Jul 2022 17:10:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vishnu Dasa <vdasa@vmware.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Pv-drivers <Pv-drivers@vmware.com>,
+        Bryan Tan <bryantan@vmware.com>
+Subject: Re: [PATCH] VMCI: Update maintainers for VMCI
+Message-ID: <YuAD90UfLnf1Ojso@kroah.com>
+References: <20220725163246.38486-1-vdasa@vmware.com>
+ <Yt7bfyANrfdPxdS8@kroah.com>
+ <FD326388-D2BB-42B4-B217-89DB9C134866@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEWA0a4hrRb5HYLqa1Q47=guY6TLsWSJ_zxNjOXXV2jCjUekUA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <FD326388-D2BB-42B4-B217-89DB9C134866@vmware.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022, Andrei Vagin wrote:
-> On Fri, Jul 22, 2022 at 4:41 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > +x86 maintainers, patch 1 most definitely needs acceptance from folks beyond KVM.
-> >
-> > On Fri, Jul 22, 2022, Andrei Vagin wrote:
-> > > Another option is the KVM platform. In this case, the Sentry (gVisor
-> > > kernel) can run in a guest ring0 and create/manage multiple address
-> > > spaces. Its performance is much better than the ptrace one, but it is
-> > > still not great compared with the native performance. This change
-> > > optimizes the most critical part, which is the syscall overhead.
-> >
-> > What exactly is the source of the syscall overhead,
+On Mon, Jul 25, 2022 at 06:29:25PM +0000, Vishnu Dasa wrote:
 > 
-> Here are perf traces for two cases: when "guest" syscalls are executed via
-> hypercalls and when syscalls are executed by the user-space VMM:
-> https://gist.github.com/avagin/f50a6d569440c9ae382281448c187f4e
+> > On Jul 25, 2022, at 11:05 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > 
+> > On Mon, Jul 25, 2022 at 09:32:46AM -0700, vdasa@vmware.com wrote:
+> >> From: Vishnu Dasa <vdasa@vmware.com>
+> >> 
+> >> Remove Rajesh as a maintainer for the VMCI driver.
+> > 
+> > Why?
 > 
-> And here are two tests that I use to collect these traces:
-> https://github.com/avagin/linux-task-diag/commit/4e19c7007bec6a15645025c337f2e85689b81f99
-> 
-> If we compare these traces, we can find that in the second case, we spend extra
-> time in vmx_prepare_switch_to_guest, fpu_swap_kvm_fpstate, vcpu_put,
-> syscall_exit_to_user_mode.
+> Rajesh is no longer with VMware and won't be working on VMCI.
 
-So of those, I think the only path a robust implementation can actually avoid,
-without significantly whittling down the allowed set of syscalls, is
-syscall_exit_to_user_mode().
+But employment does not matter for maintainership and has nothing to do
+with it.  Maintainership follows the person, not the company, you all
+know this.
 
-The bulk of vcpu_put() is vmx_prepare_switch_to_host(), and KVM needs to run
-through that before calling out of KVM.  E.g. prctrl(ARCH_GET_GS) will read the
-wrong GS.base if MSR_KERNEL_GS_BASE isn't restored.  And that necessitates
-calling vmx_prepare_switch_to_guest() when resuming the vCPU.
+So for obvious reasons, I can't take this type of change without Rajesh
+acking it.
 
-FPU state, i.e. fpu_swap_kvm_fpstate() is likely a similar story, there's bound
-to be a syscall that accesses user FPU state and will do the wrong thing if guest
-state is loaded.
+thanks,
 
-For gVisor, that's all presumably a non-issue because it uses a small set of
-syscalls (or has guest==host state?), but for a common KVM feature it's problematic.
-
-> > and what alternatives have been explored?  Making arbitrary syscalls from
-> > within KVM is mildly terrifying.
-> 
-> "mildly terrifying" is a good sentence in this case:). If I were in your place,
-> I would think about it similarly.
-> 
-> I understand these concerns about calling syscalls from the KVM code, and this
-> is why I hide this feature under a separate capability that can be enabled
-> explicitly.
-> 
-> We can think about restricting the list of system calls that this hypercall can
-> execute. In the user-space changes for gVisor, we have a list of system calls
-> that are not executed via this hypercall.
-
-Can you provide that list?
-
-> But it has downsides:
-> * Each sentry system call trigger the full exit to hr3.
-> * Each vmenter/vmexit requires to trigger a signal but it is expensive.
-
-Can you explain this one?  I didn't quite follow what this is referring to.
-
-> * It doesn't allow to support Confidential Computing (SEV-ES/SGX). The Sentry
->   has to be fully enclosed in a VM to be able to support these technologies.
-
-Speaking of SGX, this reminds me a lot of Graphene, SCONEs, etc..., which IIRC
-tackled the "syscalls are crazy expensive" problem by using a message queue and
-a dedicated task outside of the enclave to handle syscalls.  Would something like
-that work, or is having to burn a pCPU (or more) to handle syscalls in the host a
-non-starter?
+greg k-h

@@ -2,279 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671BE5814AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 15:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7165814A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 15:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239165AbiGZN5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 09:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S239274AbiGZN4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 09:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239193AbiGZNz7 (ORCPT
+        with ESMTP id S239271AbiGZN4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 09:55:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97D728E2E;
-        Tue, 26 Jul 2022 06:55:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 562F8B8164E;
-        Tue, 26 Jul 2022 13:55:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E885C433D7;
-        Tue, 26 Jul 2022 13:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658843733;
-        bh=duMR/lU6RYk5Sl/UEoofxjcGntKnOf+Mgv7nNGc1OEE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=F+u4LeMncsXp7hVo2SUB2QrlE4E/iHUEgVuxbixqjkZrsNSPBoivEa0ZmyWhq7McR
-         EOjnmgWiPRAq6mzsgQSTGr1DkdkxyIH23ZdfdsJrb9X4Rk4WAmSwe9DHAtRs1hDow3
-         xqXxzauLHutov9n1ww3nTldZBxPp8byLNeoKJWCOxn43STEl4bhDSsFbxrxm425XJu
-         og+8KBS6+YiNlLzBVRnt5HgacFF0tZHqgsddRJ/H25J9bY65Qtrd2LV6syiGl8wnti
-         cJL5Jq4+gj63UJIOO6ArJCLaWJBjXIOLuhQ2OXdxlCBa73W7t3LR81loTTCkfkutq9
-         MykjFxFfkgA8Q==
-Message-ID: <7614df1720c5cd5b35fc18d14114d1aba2144f98.camel@kernel.org>
-Subject: Re: [fs/lock]  0064b3d9f9:
- BUG:kernel_NULL_pointer_dereference,address
-From:   Jeff Layton <jlayton@kernel.org>
-To:     kernel test robot <oliver.sang@intel.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-fsdevel@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Date:   Tue, 26 Jul 2022 09:55:31 -0400
-In-Reply-To: <Yt/oonNim732exkh@xsang-OptiPlex-9020>
-References: <Yt/oonNim732exkh@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Tue, 26 Jul 2022 09:56:17 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80222CE17
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 06:56:02 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 70so13320691pfx.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 06:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tIOWG9s1e92ioNrCIhQiWnhjfykkKqEOovZ30+o7rsY=;
+        b=z34578kv4QOUyL7TvZFzZpPA4AYzA6Gu2O5I8HXV4tntB7q/NM4+Bv8UgrT0NoxnCi
+         Wk7E+VLDegKGumqa7x9ETTh7OoqaEcwJIOsnkabVesBS94Z9AqePzXmoiZb/lZt4d8vo
+         lctw/epQkSukMGXL4Qd1pHG5fSyR5/r8OO34EoZPfnRpF9iGCstcJQnnoF3ZrzLrzv8/
+         ytgE508NcxPz4KF8OigDa5QfQtbqDeKPPSxkjw/hw2wvxTERH+6blZaunmuEKHxboZfZ
+         8Gkcu2YvLz2iMglP3GD70i0sS/lAeJ5paWVpcUl7+BDFUZOHJ6ZXs30Dw04tvvyWF1Ik
+         6WUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tIOWG9s1e92ioNrCIhQiWnhjfykkKqEOovZ30+o7rsY=;
+        b=EB2mHyjjZRXppIDgQ2DidiV8UUyz2C/TipVpTU5k0s7FRakv0ksZVTQAuEY+TvIBYL
+         EV5HTg8LyIqRcZ8RIm3h3Ise/vN4L4eGR9iZztbJiSyDbdq6l1/IvczvT8BPlXgbIIuk
+         60heGFsl4ZgxK/lH+FjxdsxROJ8ry584S5jrqRoRC0hNrLjZ89XHpIp00ne44jIWBBrL
+         vCPwJjwicvmSwRrUjsMciZB2Mq1lt3Qj0s2JDsiXWrxeusEclATb7+0cX1ag74TM3WEb
+         IrQbgJNq2sbVfjhR693U7QP4hM3+K6/OBwqjDlC7Kd1YTe0IIEytVHl57xrIafobjIkw
+         tuRQ==
+X-Gm-Message-State: AJIora+ARyPS7UQLl6BPg6t6+Gzqi4zYyc48WfN73uK3C6uChOXhU6dT
+        7BzgvEd4UwmEH0TXEXe1Km16aA==
+X-Google-Smtp-Source: AGRyM1sBXRO7j/x5DpcNw7dXgW8+Gm81Vjs+8Eg5faqajmzonhpy6coS/ETEip6y6NCCPHqYhS6rQw==
+X-Received: by 2002:a63:4e11:0:b0:419:e9dd:a867 with SMTP id c17-20020a634e11000000b00419e9dda867mr14614522pgb.481.1658843761290;
+        Tue, 26 Jul 2022 06:56:01 -0700 (PDT)
+Received: from [10.5.61.95] ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id t12-20020aa7946c000000b0052bf678dac6sm4690540pfq.193.2022.07.26.06.55.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 06:56:00 -0700 (PDT)
+Message-ID: <1fa5ebfa-b441-f42c-b721-544458b93cd0@bytedance.com>
+Date:   Tue, 26 Jul 2022 21:55:52 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [External] Re: [PATCH 9/9] sched/psi: add PSI_IRQ to track
+ IRQ/SOFTIRQ pressure
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
+        rdunlap@infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        cgroups@vger.kernel.org
+References: <20220721040439.2651-1-zhouchengming@bytedance.com>
+ <20220721040439.2651-10-zhouchengming@bytedance.com>
+ <Yt7gOhbqYzIKyhfv@cmpxchg.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <Yt7gOhbqYzIKyhfv@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc'ing dri-devel)
+On 2022/7/26 02:26, Johannes Weiner wrote:
+> On Thu, Jul 21, 2022 at 12:04:39PM +0800, Chengming Zhou wrote:
+>> Now PSI already tracked workload pressure stall information for
+>> CPU, memory and IO. Apart from these, IRQ/SOFTIRQ could have
+>> obvious impact on some workload productivity, such as web service
+>> workload.
+>>
+>> When CONFIG_IRQ_TIME_ACCOUNTING, we can get IRQ/SOFTIRQ delta time
+>> from update_rq_clock_task(), in which we can record that delta
+>> to CPU curr task's cgroups as PSI_IRQ_FULL status.
+>>
+>> Note we don't use PSI_IRQ_SOME since IRQ/SOFTIRQ always happen in
+>> the current task on the CPU, make nothing productive could run
+>> even if it were runnable, so we only use PSI_IRQ_FULL.
+> 
+> That sounds reasonable.
+> 
+>> For performance impact consideration, this is enabled by default when
+>> CONFIG_IRQ_TIME_ACCOUNTING, but can be disabled by kernel cmdline
+>> parameter "psi_irq=".
+> 
+> If there isn't a concrete usecase already, let's not add another
+> commandline parameter for now.
 
-This looks like it died down in the DRM code. It seems doubtful that the
-flock code would be affecting this, but let me know if I'm incorrect
-here.
+Ok, will remove it.
 
-Thanks,
-Jeff
+> 
+>> @@ -63,9 +64,11 @@ enum psi_states {
+>>  	PSI_MEM_FULL,
+>>  	PSI_CPU_SOME,
+>>  	PSI_CPU_FULL,
+>> +	PSI_IRQ_SOME,
+>> +	PSI_IRQ_FULL,
+>>  	/* Only per-CPU, to weigh the CPU in the global average: */
+>>  	PSI_NONIDLE,
+>> -	NR_PSI_STATES = 7,
+>> +	NR_PSI_STATES = 9,
+>>  };
+> 
+> Unfortunately, this grows the psi state touched by the scheduler into
+> a second cacheline. :( Please reclaim space first.
 
-On Tue, 2022-07-26 at 21:14 +0800, kernel test robot wrote:
-> Greeting,
->=20
-> FYI, we noticed the following commit (built with clang-15):
->=20
-> commit: 0064b3d9f96f3dc466e44a6fc716910cea56dbbf ("fs/lock: Rearrange ops=
- in flock syscall.")
-> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
->=20
-> in testcase: boot
->=20
-> on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m =
-4G
->=20
-> caused below changes (please refer to attached dmesg/kmsg for entire log/=
-backtrace):
->=20
->=20
->=20
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->=20
->=20
-> [    3.564403][    T1] BUG: kernel NULL pointer dereference, address: 000=
-00b2c
-> [    3.565351][    T1] #PF: supervisor read access in kernel mode
-> [    3.565351][    T1] #PF: error_code(0x0000) - not-present page
-> [    3.565351][    T1] *pde =3D 00000000
-> [    3.565351][    T1] Oops: 0000 [#1]
-> [    3.565351][    T1] CPU: 0 PID: 1 Comm: swapper Tainted: G            =
-    T 5.19.0-rc6-00004-g0064b3d9f96f #1
-> [    3.565351][    T1] Hardware name: QEMU Standard PC (i440FX + PIIX, 19=
-96), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> [ 3.565351][ T1] EIP: drm_atomic_helper_setup_commit (??:?)=20
-> [ 3.565351][ T1] Code: 45 ec eb b5 89 d8 83 c4 0c 5e 5f 5b 5d 31 c9 31 d2=
- c3 90 90 90 90 90 90 90 55 89 e5 53 57 56 83 ec 38 89 55 d4 89 c2 8b 40 04=
- <8b> 88 2c 07 00 00 89 4d c4 83 b8 30 05 00 00 00 89 55 ec 0f 8e fa
-> All code
-> =3D=3D=3D=3D=3D=3D=3D=3D
->    0:	45 ec                	rex.RB in (%dx),%al
->    2:	eb b5                	jmp    0xffffffffffffffb9
->    4:	89 d8                	mov    %ebx,%eax
->    6:	83 c4 0c             	add    $0xc,%esp
->    9:	5e                   	pop    %rsi
->    a:	5f                   	pop    %rdi
->    b:	5b                   	pop    %rbx
->    c:	5d                   	pop    %rbp
->    d:	31 c9                	xor    %ecx,%ecx
->    f:	31 d2                	xor    %edx,%edx
->   11:	c3                   	retq  =20
->   12:	90                   	nop
->   13:	90                   	nop
->   14:	90                   	nop
->   15:	90                   	nop
->   16:	90                   	nop
->   17:	90                   	nop
->   18:	90                   	nop
->   19:	55                   	push   %rbp
->   1a:	89 e5                	mov    %esp,%ebp
->   1c:	53                   	push   %rbx
->   1d:	57                   	push   %rdi
->   1e:	56                   	push   %rsi
->   1f:	83 ec 38             	sub    $0x38,%esp
->   22:	89 55 d4             	mov    %edx,-0x2c(%rbp)
->   25:	89 c2                	mov    %eax,%edx
->   27:	8b 40 04             	mov    0x4(%rax),%eax
->   2a:*	8b 88 2c 07 00 00    	mov    0x72c(%rax),%ecx		<-- trapping instru=
-ction
->   30:	89 4d c4             	mov    %ecx,-0x3c(%rbp)
->   33:	83 b8 30 05 00 00 00 	cmpl   $0x0,0x530(%rax)
->   3a:	89 55 ec             	mov    %edx,-0x14(%rbp)
->   3d:	0f                   	.byte 0xf
->   3e:	8e fa                	mov    %edx,%?
->=20
-> Code starting with the faulting instruction
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->    0:	8b 88 2c 07 00 00    	mov    0x72c(%rax),%ecx
->    6:	89 4d c4             	mov    %ecx,-0x3c(%rbp)
->    9:	83 b8 30 05 00 00 00 	cmpl   $0x0,0x530(%rax)
->   10:	89 55 ec             	mov    %edx,-0x14(%rbp)
->   13:	0f                   	.byte 0xf
->   14:	8e fa                	mov    %edx,%?
-> [    3.565351][    T1] EAX: 00000400 EBX: 401ebc64 ECX: 414f8750 EDX: 401=
-ebc64
-> [    3.565351][    T1] ESI: 401ebc64 EDI: 414f8750 EBP: 401ebbc8 ESP: 401=
-ebb84
-> [    3.565351][    T1] DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAG=
-S: 00010206
-> [    3.565351][    T1] CR0: 80050033 CR2: 00000b2c CR3: 02e5b000 CR4: 000=
-406d0
-> [    3.565351][    T1] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 000=
-00000
-> [    3.565351][    T1] DR6: fffe0ff0 DR7: 00000400
-> [    3.565351][    T1] Call Trace:
-> [ 3.565351][ T1] ? __lock_acquire (lockdep.c:?)=20
-> [ 3.565351][ T1] ? drm_atomic_helper_async_commit (??:?)=20
-> [ 3.565351][ T1] ? drm_atomic_helper_commit (??:?)=20
-> [ 3.565351][ T1] ? drm_get_format_info (??:?)=20
-> [ 3.565351][ T1] ? drm_internal_framebuffer_create (??:?)=20
-> [ 3.565351][ T1] ? lock_is_held_type (??:?)=20
-> [ 3.565351][ T1] ? drm_mode_addfb2 (??:?)=20
-> [ 3.565351][ T1] ? sched_clock (??:?)=20
-> [ 3.565351][ T1] ? drm_mode_addfb (??:?)=20
-> [ 3.565351][ T1] ? drm_client_framebuffer_create (??:?)=20
-> [ 3.565351][ T1] ? drm_fb_helper_generic_probe (drm_fb_helper.c:?)=20
-> [ 3.565351][ T1] ? __drm_fb_helper_initial_config_and_unlock (drm_fb_help=
-er.c:?)=20
-> [ 3.565351][ T1] ? drm_fbdev_client_hotplug (drm_fb_helper.c:?)=20
-> [ 3.565351][ T1] ? drm_fbdev_generic_setup (??:?)=20
-> [ 3.565351][ T1] ? vkms_init (vkms_drv.c:?)=20
-> [ 3.565351][ T1] ? drm_sched_fence_slab_init (vkms_drv.c:?)=20
-> [ 3.565351][ T1] ? do_one_initcall (??:?)=20
-> [ 3.565351][ T1] ? drm_sched_fence_slab_init (vkms_drv.c:?)=20
-> [ 3.565351][ T1] ? tick_program_event (??:?)=20
-> [ 3.565351][ T1] ? error_context (??:?)=20
-> [ 3.565351][ T1] ? trace_hardirqs_on (??:?)=20
-> [ 3.565351][ T1] ? irqentry_exit (??:?)=20
-> [ 3.565351][ T1] ? sysvec_apic_timer_interrupt (??:?)=20
-> [ 3.565351][ T1] ? handle_exception (init_task.c:?)=20
-> [ 3.565351][ T1] ? parse_args (??:?)=20
-> [ 3.565351][ T1] ? error_context (??:?)=20
-> [ 3.565351][ T1] ? parse_args (??:?)=20
-> [ 3.565351][ T1] ? do_initcall_level (main.c:?)=20
-> [ 3.565351][ T1] ? rest_init (main.c:?)=20
-> [ 3.565351][ T1] ? do_initcalls (main.c:?)=20
-> [ 3.565351][ T1] ? do_basic_setup (main.c:?)=20
-> [ 3.565351][ T1] ? kernel_init_freeable (main.c:?)=20
-> [ 3.565351][ T1] ? kernel_init (main.c:?)=20
-> [ 3.565351][ T1] ? ret_from_fork (??:?)=20
-> [    3.565351][    T1] Modules linked in:
-> [    3.565351][    T1] CR2: 0000000000000b2c
-> [    3.565351][    T1] ---[ end trace 0000000000000000 ]---
-> [ 3.565351][ T1] EIP: drm_atomic_helper_setup_commit (??:?)=20
-> [ 3.565351][ T1] Code: 45 ec eb b5 89 d8 83 c4 0c 5e 5f 5b 5d 31 c9 31 d2=
- c3 90 90 90 90 90 90 90 55 89 e5 53 57 56 83 ec 38 89 55 d4 89 c2 8b 40 04=
- <8b> 88 2c 07 00 00 89 4d c4 83 b8 30 05 00 00 00 89 55 ec 0f 8e fa
-> All code
-> =3D=3D=3D=3D=3D=3D=3D=3D
->    0:	45 ec                	rex.RB in (%dx),%al
->    2:	eb b5                	jmp    0xffffffffffffffb9
->    4:	89 d8                	mov    %ebx,%eax
->    6:	83 c4 0c             	add    $0xc,%esp
->    9:	5e                   	pop    %rsi
->    a:	5f                   	pop    %rdi
->    b:	5b                   	pop    %rbx
->    c:	5d                   	pop    %rbp
->    d:	31 c9                	xor    %ecx,%ecx
->    f:	31 d2                	xor    %edx,%edx
->   11:	c3                   	retq  =20
->   12:	90                   	nop
->   13:	90                   	nop
->   14:	90                   	nop
->   15:	90                   	nop
->   16:	90                   	nop
->   17:	90                   	nop
->   18:	90                   	nop
->   19:	55                   	push   %rbp
->   1a:	89 e5                	mov    %esp,%ebp
->   1c:	53                   	push   %rbx
->   1d:	57                   	push   %rdi
->   1e:	56                   	push   %rsi
->   1f:	83 ec 38             	sub    $0x38,%esp
->   22:	89 55 d4             	mov    %edx,-0x2c(%rbp)
->   25:	89 c2                	mov    %eax,%edx
->   27:	8b 40 04             	mov    0x4(%rax),%eax
->   2a:*	8b 88 2c 07 00 00    	mov    0x72c(%rax),%ecx		<-- trapping instru=
-ction
->   30:	89 4d c4             	mov    %ecx,-0x3c(%rbp)
->   33:	83 b8 30 05 00 00 00 	cmpl   $0x0,0x530(%rax)
->   3a:	89 55 ec             	mov    %edx,-0x14(%rbp)
->   3d:	0f                   	.byte 0xf
->   3e:	8e fa                	mov    %edx,%?
->=20
-> Code starting with the faulting instruction
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->    0:	8b 88 2c 07 00 00    	mov    0x72c(%rax),%ecx
->    6:	89 4d c4             	mov    %ecx,-0x3c(%rbp)
->    9:	83 b8 30 05 00 00 00 	cmpl   $0x0,0x530(%rax)
->   10:	89 55 ec             	mov    %edx,-0x14(%rbp)
->   13:	0f                   	.byte 0xf
->   14:	8e fa                	mov    %edx,%?
->=20
->=20
-> To reproduce:
->=20
->         # build kernel
-> 	cd linux
-> 	cp config-5.19.0-rc6-00004-g0064b3d9f96f .config
-> 	make HOSTCC=3Dclang-15 CC=3Dclang-15 ARCH=3Di386 olddefconfig prepare mo=
-dules_prepare bzImage modules
-> 	make HOSTCC=3Dclang-15 CC=3Dclang-15 ARCH=3Di386 INSTALL_MOD_PATH=3D<mod=
--install-dir> modules_install
-> 	cd <mod-install-dir>
-> 	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
->=20
->=20
->         git clone https://github.com/intel/lkp-tests.git
->         cd lkp-tests
->         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script =
-is attached in this email
->=20
->         # if come across any failure that blocks the test,
->         # please remove ~/.lkp and /lkp dir to run from a clean state.
->=20
->=20
->=20
+Thank you for pointing this out!
 
---=20
-Jeff Layton <jlayton@kernel.org>
+> 
+> I think we can remove the NR_CPU task count, which frees up one
+> u32. Something like the below diff should work (untested!)
+> 
+> And you should be able to remove PSI_IRQ_SOME, since it's not used
+> anyway. Then we'd be good to go.
+
+Very good solution for this, I will test it later.
+
+Thanks!
+
+> 
+> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> index c7fe7c089718..31dc76e2d8ea 100644
+> --- a/include/linux/psi_types.h
+> +++ b/include/linux/psi_types.h
+> @@ -15,13 +15,6 @@ enum psi_task_count {
+>  	NR_IOWAIT,
+>  	NR_MEMSTALL,
+>  	NR_RUNNING,
+> -	/*
+> -	 * This can't have values other than 0 or 1 and could be
+> -	 * implemented as a bit flag. But for now we still have room
+> -	 * in the first cacheline of psi_group_cpu, and this way we
+> -	 * don't have to special case any state tracking for it.
+> -	 */
+> -	NR_ONCPU,
+>  	/*
+>  	 * For IO and CPU stalls the presence of running/oncpu tasks
+>  	 * in the domain means a partial rather than a full stall.
+> @@ -39,9 +32,11 @@ enum psi_task_count {
+>  #define TSK_IOWAIT	(1 << NR_IOWAIT)
+>  #define TSK_MEMSTALL	(1 << NR_MEMSTALL)
+>  #define TSK_RUNNING	(1 << NR_RUNNING)
+> -#define TSK_ONCPU	(1 << NR_ONCPU)
+>  #define TSK_MEMSTALL_RUNNING	(1 << NR_MEMSTALL_RUNNING)
+>  
+> +/* Only one task can be scheduled, no corresponding task count */
+> +#define TSK_ONCPU	(1 << NR_PSI_TASK_COUNTS)
+> +
+>  /* Resources that workloads could be stalled on */
+>  enum psi_res {
+>  	PSI_IO,
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index a4fa3aadfcba..232e1dbfad46 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -215,7 +215,7 @@ void __init psi_init(void)
+>  	group_init(&psi_system);
+>  }
+>  
+> -static bool test_state(unsigned int *tasks, enum psi_states state)
+> +static bool test_state(unsigned int *tasks, enum psi_states state, bool oncpu)
+>  {
+>  	switch (state) {
+>  	case PSI_IO_SOME:
+> @@ -228,9 +228,9 @@ static bool test_state(unsigned int *tasks, enum psi_states state)
+>  		return unlikely(tasks[NR_MEMSTALL] &&
+>  			tasks[NR_RUNNING] == tasks[NR_MEMSTALL_RUNNING]);
+>  	case PSI_CPU_SOME:
+> -		return unlikely(tasks[NR_RUNNING] > tasks[NR_ONCPU]);
+> +		return unlikely(tasks[NR_RUNNING] > oncpu);
+>  	case PSI_CPU_FULL:
+> -		return unlikely(tasks[NR_RUNNING] && !tasks[NR_ONCPU]);
+> +		return unlikely(tasks[NR_RUNNING] && !oncpu);
+>  	case PSI_NONIDLE:
+>  		return tasks[NR_IOWAIT] || tasks[NR_MEMSTALL] ||
+>  			tasks[NR_RUNNING];
+> @@ -692,9 +692,9 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>  			     bool wake_clock)
+>  {
+>  	struct psi_group_cpu *groupc;
+> -	u32 state_mask = 0;
+>  	unsigned int t, m;
+>  	enum psi_states s;
+> +	u32 state_mask;
+>  
+>  	groupc = per_cpu_ptr(group->pcpu, cpu);
+>  
+> @@ -710,6 +710,26 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>  
+>  	record_times(groupc, now);
+>  
+> +	/*
+> +	 * Start with TSK_ONCPU, which doesn't have a corresponding
+> +	 * task count - it's just a boolean flag directly encoded in
+> +	 * the state mask. Clear, set, or carry the current state if
+> +	 * no changes are requested.
+> +	 */
+> +	if (clear & TSK_ONCPU) {
+> +		state_mask = 0;
+> +		clear &= ~TSK_ONCPU;
+> +	} else if (set & TSK_ONCPU) {
+> +		state_mask = TSK_ONCPU;
+> +		set &= ~TSK_ONCPU;
+> +	} else {
+> +		state_mask = groupc->state_mask & TSK_ONCPU;
+> +	}
+> +
+> +	/*
+> +	 * The rest of the state mask is calculated based on the task
+> +	 * counts. Update those first, then construct the mask.
+> +	 */
+>  	for (t = 0, m = clear; m; m &= ~(1 << t), t++) {
+>  		if (!(m & (1 << t)))
+>  			continue;
+> @@ -729,9 +749,8 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>  		if (set & (1 << t))
+>  			groupc->tasks[t]++;
+>  
+> -	/* Calculate state mask representing active states */
+>  	for (s = 0; s < NR_PSI_STATES; s++) {
+> -		if (test_state(groupc->tasks, s))
+> +		if (test_state(groupc->tasks, s, state_mask & TSK_ONCPU))
+>  			state_mask |= (1 << s);
+>  	}
+>  
+> @@ -743,7 +762,7 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>  	 * task in a cgroup is in_memstall, the corresponding groupc
+>  	 * on that cpu is in PSI_MEM_FULL state.
+>  	 */
+> -	if (unlikely(groupc->tasks[NR_ONCPU] && cpu_curr(cpu)->in_memstall))
+> +	if (unlikely((state_mask & TSK_ONCPU) && cpu_curr(cpu)->in_memstall))
+>  		state_mask |= (1 << PSI_MEM_FULL);
+>  
+>  	groupc->state_mask = state_mask;
+> @@ -847,7 +866,8 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
+>  		iter = NULL;
+>  		while ((group = iterate_groups(next, &iter))) {
+>  			if (identical_state &&
+> -			    per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
+> +			    (per_cpu_ptr(group->pcpu, cpu)->state_mask &
+> +			     TSK_ONCPU)) {
+>  				common = group;
+>  				break;
+>  			}

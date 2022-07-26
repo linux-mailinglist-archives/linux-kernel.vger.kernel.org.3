@@ -2,64 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B759581539
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F44858153F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239212AbiGZO2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        id S239251AbiGZO3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233444AbiGZO2E (ORCPT
+        with ESMTP id S233444AbiGZO3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:28:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6F0B9;
-        Tue, 26 Jul 2022 07:28:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D1D5B81644;
-        Tue, 26 Jul 2022 14:28:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0371CC433D6;
-        Tue, 26 Jul 2022 14:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658845680;
-        bh=tYGaxmOtEWct+hY2SoBnCZGzvOcL/UBUptCOL4UpjVI=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=UE9AOoyfew0LRVvAXnX/z7P9HC5z/3chQoC4Y3lmgaPJCwuGsji/aJoMr8iVnCY6H
-         Ke9phrGkuaIY1ItJOKTkT5QCMPoPOJup8vfq98c6iGA2NjNjcvEWM/n9hPD1isbgD0
-         tUdeZL5JgERnrCU9lPl9xq1sclipC9cUyXJaxWowLkORPBX7LU929UR09F7gcUwS52
-         LkEmBiGr/9qR31PR8nL3EEqsQl4qbvu8aXnBsTP/1btUn2MFrDBVXYLGxIZ7ZvALsO
-         Kycmnr5E/RXL2MNzC8CEkGg+DcZKufVAFTM5Xv1k+R21EJTNk/CXqc/Bg+AclmEchj
-         2AlSfSXxwH3hg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Gregory Greenman <gregory.greenman@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Avraham Stern <avraham.stern@intel.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] iwlwifi: mvm: fix clang -Wformat warnings
-References: <20220711222919.2043613-1-justinstitt@google.com>
-        <CAFhGd8qRfhQg2k8E7pUm5EYSLp+vmtSd5tZuqtpZUyKud6_Zag@mail.gmail.com>
-Date:   Tue, 26 Jul 2022 17:27:53 +0300
-In-Reply-To: <CAFhGd8qRfhQg2k8E7pUm5EYSLp+vmtSd5tZuqtpZUyKud6_Zag@mail.gmail.com>
-        (Justin Stitt's message of "Mon, 18 Jul 2022 10:37:05 -0700")
-Message-ID: <87sfmoq786.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 26 Jul 2022 10:29:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5810DB9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:29:34 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LsfQ73cphzgY8Q;
+        Tue, 26 Jul 2022 22:27:43 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Jul
+ 2022 22:29:31 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
+        <songmuchun@bytedance.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH v2 0/5] A few cleanup and fixup patches for hugetlbfs
+Date:   Tue, 26 Jul 2022 22:29:13 +0800
+Message-ID: <20220726142918.51693-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,17 +46,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Justin Stitt <justinstitt@google.com> writes:
+Hi everyone,
+This series contains a few cleaup patches to remove unneeded forward
+declaration, use helper macro and so on. More details can be found in
+the respective changelogs.
+Thanks!
+---
+v2:
+  collect Reviewed-by tag per Mike.
+  reshape the comment of 4/5 per Mike.
+  drop code change in 5/5 and change to correct the comment per Mike.
+  Many thanks Mike for review.
+---
+Miaohe Lin (5):
+  hugetlbfs: use helper macro SZ_1{K,M}
+  hugetlbfs: remove unneeded hugetlbfs_ops forward declaration
+  hugetlbfs: remove unneeded header file
+  hugetlbfs: cleanup some comments in inode.c
+  hugetlbfs: fix inaccurate comment in hugetlbfs_statfs()
 
-> Any chance a maintainer could take a look at this patch? I am trying
-> to get it through this cycle and we are so close to enabling the
-> -Wformat option for Clang. There's only a handful of patches remaining
-> until the patch enabling this warning can be sent!
-
-Gregory, can I take this directly to wireless-next? I assigned it to me
-in patchwork.
+ fs/hugetlbfs/inode.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.23.0
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

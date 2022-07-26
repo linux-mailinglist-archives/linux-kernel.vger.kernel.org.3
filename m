@@ -2,76 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42574581051
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77704581056
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238539AbiGZJta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S238543AbiGZJul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiGZJt1 (ORCPT
+        with ESMTP id S238332AbiGZJuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:49:27 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B9B31DD7;
-        Tue, 26 Jul 2022 02:49:24 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 0C8E95FD04;
-        Tue, 26 Jul 2022 12:49:22 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1658828962;
-        bh=K22w9hfJS/evEUDwB3F4Dmwu3c9LbepbkOhWPVhSDek=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=eJcVk9fvnApIOVjcBfKtwFz2dgd43sRaYr3MwXFoaGgSg60+AK4LcFV7UQIYo5EaJ
-         x071z4GKx60KKh23vj2TuTfsoJDPpf94TbKoiPJPrCcrJmr1ODMAH7ajDd7iBhhSwJ
-         +oqeABT1+MmD7zJz75pdqXVKCQzaE48NxjPUdZoxeS3UyvGOrbGmrgI47QRfly9AwL
-         ayCJ6q+MN5P1N7ho3eaYHwcjzrZRydfWMrmRfhRebdVB1Lg1FzRML9b/yfqe78GQ1S
-         PEM4ch1QYw39AGP1eMD/lSj9ecSw+FAFW2khctCxQNzChMtivvxZo5OzY+3HxQmEp1
-         R6Ctr1scpBxzA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 26 Jul 2022 12:49:19 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
-        "jbhayana@google.com" <jbhayana@google.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/3] units: complement the set of Hz units
-Thread-Topic: [PATCH v1 1/3] units: complement the set of Hz units
-Thread-Index: AQHYoFaQAQbyP6ttz02qWm6Ywvl4Ba2PaEmAgADOrYA=
-Date:   Tue, 26 Jul 2022 09:49:15 +0000
-Message-ID: <20220726094915.grn33xjqgkm52yja@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220725184439.7618-1-ddrokosov@sberdevices.ru>
- <20220725184439.7618-2-ddrokosov@sberdevices.ru>
- <CAHp75VcpY1vwHCOaJNb-qw+3gsMyv9mJe+QaWrjiTKOdj1xfYg@mail.gmail.com>
-In-Reply-To: <CAHp75VcpY1vwHCOaJNb-qw+3gsMyv9mJe+QaWrjiTKOdj1xfYg@mail.gmail.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <E6F6CFDC59DAB14FB5D4A4DE390163A6@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 26 Jul 2022 05:50:37 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4DC1ADA6;
+        Tue, 26 Jul 2022 02:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=plrt28d2jmNTXoMbxu+vZ/2uLGRkrgD3ZIbANkDKEvw=; b=j7V/dY/QBbYtUTiMt9KviWnJ6U
+        71oODiVdS9SpAKvMWFSNQiJRIs7fIDW1QwjbyGd9gL40JoYFIm8DjYoOKrtjwTSJ82X42oh9GmPbm
+        XVR7tMPrLSflxNBaCPMNYGZ1dd1A6VajuSij4MDVDQlprSoDSBYlNeyiZ+9Gj0h0kbZKqA0CNFqIV
+        n2HNltEjO/+rravhaSCr6vIAiPb0CfZc7R34sbQMC8zZx4FetCOJs3+Tlocir5KKtOmMDZ+FX5Yq8
+        uPsG+Z++gj/Fv4TTyAXCAJ+AhRRI58ZJyhLuUK6Dk5qbcOfwl/gplYRfIsWsy6/ttd3DEYjIxrQlN
+        zPI2LMMw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33566)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oGHCA-0003wb-DY; Tue, 26 Jul 2022 10:49:42 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oGHBx-00017g-HI; Tue, 26 Jul 2022 10:49:29 +0100
+Date:   Tue, 26 Jul 2022 10:49:29 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Li Huafei <lihuafei1@huawei.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, ardb@kernel.org,
+        will@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
+        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, arnd@arndb.de, rostedt@goodmis.org,
+        nick.hawkins@hpe.com, john@phrozen.org, mhiramat@kernel.org,
+        ast@kernel.org, linyujun809@huawei.com, ndesaulniers@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 3/5] ARM: stacktrace: Allow stack trace saving for
+ non-current tasks
+Message-ID: <Yt+4qSeIM0WbjcJj@shell.armlinux.org.uk>
+References: <20220712021527.109921-1-lihuafei1@huawei.com>
+ <20220712021527.109921-4-lihuafei1@huawei.com>
+ <CACRpkdYvOjfmf=Z3pGfD-UPxfTc9PXtOyw2x+ptYiSy=gmGnpQ@mail.gmail.com>
+ <1288c73b-cf29-707d-47cb-4e2737300a29@huawei.com>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/26 06:45:00 #19969454
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1288c73b-cf29-707d-47cb-4e2737300a29@huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,31 +68,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
+On Tue, Jul 26, 2022 at 05:12:39PM +0800, Li Huafei wrote:
+> 
+> 
+> On 2022/7/18 17:07, Linus Walleij wrote:
+> > On Tue, Jul 12, 2022 at 4:18 AM Li Huafei <lihuafei1@huawei.com> wrote:
+> > 
+> >> The current ARM implementation of save_stack_trace_tsk() does not allow
+> >> saving stack trace for non-current tasks, which may limit the scenarios
+> >> in which stack_trace_save_tsk() can be used. Like other architectures,
+> >> or like ARM's unwind_backtrace(), we can leave it up to the caller to
+> >> ensure that the task that needs to be unwound is not running.
+> >>
+> >> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> > 
+> > That sounds good, but:
+> > 
+> >>         if (tsk != current) {
+> >> -#ifdef CONFIG_SMP
+> >> -               /*
+> >> -                * What guarantees do we have here that 'tsk' is not
+> >> -                * running on another CPU?  For now, ignore it as we
+> >> -                * can't guarantee we won't explode.
+> >> -                */
+> >> -               return;
+> >> -#else
+> >> +               /* task blocked in __switch_to */
+> > 
+> > The commit text is not consistent with the comment you are removing.
+> > 
+> > The commit is talking about "non-current" tasks which is one thing,
+> > but the code is avoiding any tasks under SMP because they may be
+> > running on another CPU. So you need to update the commit
+> > message to say something like "non-current or running on another CPU".
+> > 
+> > If this condition will be checked at call sites in following patches,
+> > then mention
+> > that in the commit as well, so we know the end result is that we do
+> > not break it,
+> 
+> The generic code stack_trace_save_tsk() does not have this check, and by
+> 'caller' I mean the caller of stack_trace_save_tsk(), expecting the
+> 'caller' to ensure that the task is not running. So in effect this check
+> has been dropped and there is no more guarantee. Sorry for not
+> clarifying the change here.
 
-Thank you for quick review.
+Can you prove in every case that the thread we're being asked to unwind
+is not running? I don't think you can.
 
-On Mon, Jul 25, 2022 at 11:29:31PM +0200, Andy Shevchenko wrote:
-> On Mon, Jul 25, 2022 at 8:44 PM Dmitry Rokosov <DDRokosov@sberdevices.ru>=
- wrote:
-> >
-> > Currently, Hz units do not have milli, micro and nano Hz coefficients.
-> > Some drivers (IIO especially) use their analogues to calculate
-> > appropriate Hz values. This patch includes them to units.h definitions,
-> > so they can be used from different kernel places.
->=20
-> ...
->=20
-> > +#define NHZ_PER_HZ             1000000000UL
-> > +#define UHZ_PER_HZ             1000000UL
-> > +#define MHZ_PER_HZ             1000UL
->=20
-> mHZ perhaps?
->=20
+There are things like proc_pid_stack() in procfs and the stack traces
+in sysrq-t which have attempted to unwind everything whether it's
+running or not.
 
-I'm afraid it will not have the same view as other HZ units.
-Maybe it's better to call mHZ as MILLIHZ? What do you think?
+So no, there is no guarantee that the thread is blocked in
+__switch_to().
 
---=20
-Thank you,
-Dmitry=
+> But can we assume that the user should know that the stacktrace is
+> unreliable for a task that is running on another CPU? If not, I should
+> remove this patch and keep the check.
+
+It's not about "unreliable" stack traces, it's about the unwinder
+killing the kernel.
+
+The hint is this:
+
+                frame.fp = thread_saved_fp(tsk);
+                frame.sp = thread_saved_sp(tsk);
+                frame.lr = 0;           /* recovered from the stack */
+                frame.pc = thread_saved_pc(tsk);
+
+These access the context saved by the scheduler when the task is
+sleeping. When the thread is running, these saved values will be
+the state when the thread last slept. However, with the thread
+running, the stack could now contain any data what so ever, and
+could change at any moment.
+
+Whether the unwind-table unwinder is truely safe in such a
+situation is unknown - we try to ensure that it won't do anything
+stupid, but proving that is a hard task, and we've recently had
+issues with the unwinder even without that.
+
+So, allowing this feels like we're opening the door to DoS attacks
+from userspace, where userspace sits there reading /proc/*/stack of
+some thread running on a different CPU waiting for the kernel to
+oops itself, possibly holding a lock, resulting in the system
+dying.
+
+These decisions need to be made by architecture code not generic
+code, particularly where the method of unwinding is architecture
+specific and thus may have criteria defining when its safe to do so.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

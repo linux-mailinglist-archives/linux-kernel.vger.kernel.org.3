@@ -2,92 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E96580FD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69C0580FDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238088AbiGZJZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S237935AbiGZJ1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238080AbiGZJZr (ORCPT
+        with ESMTP id S229749AbiGZJ1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:25:47 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1265C2F3AE
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:25:46 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id p11so16947503lfu.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=G979p6J3upzKXuhEp2GoJSICZMchF50k7d+9wNNaYqs=;
-        b=dkx+YtCkGjq3xUPdQFkIaxaLSwwI2sTUB8A9ZVPPp61SEhbfSXWa9UEzjMpdzJLze4
-         SoHW9hAq+ABlZ184Zwix5m5RtLD5vpRYhxZr76g0pJluxnefYFcfk/LBnBOFWDeqXLuR
-         xUtZQK94Tc+uVrNBoQZCGBxnPb2BbqtrvjJHzKM2gjYcYkqqvl9aL5KbWvuJwb6mHOgT
-         6hCW0Fn7I03v3gfRLx6TVRJFD4MRRJwxMKxrhmBmUIMCH1ZoNS7xHJ224G1u9eSMrBDL
-         fA/L5unMC46lLOmsIt4xcrUROpwrWgci8+/OcQDI1Qi0HZX+vpsETrsA8UDFzVGV4VMm
-         bPTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G979p6J3upzKXuhEp2GoJSICZMchF50k7d+9wNNaYqs=;
-        b=A8vkeGpJ3zsmBMa6lyJwoiCICDPaZWcf1zDHqoICAgMoeXIPI/fIRKaMEh4ud2/agJ
-         hIjnJ+n7u8dIcM5yq2hXNJdjg5ByyBWMUxudM1utUzggTxdBVeZgyChBCQiYrC3CECEB
-         9p75KeH1HiAvHb+WKb+wJR507MyxfAeoc2U8KvUvOqw0nasc0swLVYlrFQFgAJbws/8X
-         F0aIspw4rx92oMe03Pl/L+7dlaa/TKu+DQEPSnCcu8qwuZJSwuVouFpmIjCcBcp5JPk2
-         F591Mp9K+yOKxguShgYCpVXJbcL1ydtzWn85limHpFdI/a7tSuCSRIlpWJ63f9s3Q/4H
-         Fleg==
-X-Gm-Message-State: AJIora9bpVut2qLZfHM1xVTuqL3TL8QvBDQ2pjlVi+CFiFjH64gRSwgI
-        yKG5wBJ9vUB66/XAv6KTvCLqTg==
-X-Google-Smtp-Source: AGRyM1s6b6zrQNOjDF5dUTsxYs+5vjB/9K8JyZnwbHpkGIj49zBJrSqoE2eeJ4MZk7XgGQue7MXPZw==
-X-Received: by 2002:a05:6512:3e1b:b0:48a:a3c9:a124 with SMTP id i27-20020a0565123e1b00b0048aa3c9a124mr667786lfv.14.1658827545651;
-        Tue, 26 Jul 2022 02:25:45 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id j10-20020a05651231ca00b00489e812f05asm3141999lfe.21.2022.07.26.02.25.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 02:25:45 -0700 (PDT)
-Message-ID: <4682a63d-800d-c713-8bb2-caed99156299@linaro.org>
-Date:   Tue, 26 Jul 2022 11:25:44 +0200
+        Tue, 26 Jul 2022 05:27:20 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117D02E9F6;
+        Tue, 26 Jul 2022 02:27:18 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 26Q9QrdN024374;
+        Tue, 26 Jul 2022 18:26:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 26Q9QrdN024374
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658827614;
+        bh=d6NNJ+nW6fZ2WWBYBA5DCiVLw0ZFlnZQJAM4KipXE4A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jPARB7HAapfEkUCDpves2bids8NaztvHxYcrpmaz30aXBKKCq5Fls6fPm6JMl4NEB
+         A+CXQn86ICJNahuYe+wJUVp4X42qyknJGMTFem8Fg39gyqprHgP6bGqygnGJySLLpY
+         Fi0TJ4n8AGHy1QHghgmYAb6tG67BBglbtafIao4SUkicjwCuxWlMCf234yupSWwONe
+         QXTA/NB4xuFdazVACjtFGA/3J6GXfrlFE7KiQy3L10fGJswdIINwUuYL80GwdwbA/X
+         1oaSD81CRh1UXkmTAspo/hdqn56A4uPd0xGP0lEi/wZspTN5MpNFXg4n7sMAhQFY4U
+         xr5ezJ4ImSfvQ==
+X-Nifty-SrcIP: [209.85.128.41]
+Received: by mail-wm1-f41.google.com with SMTP id w8-20020a05600c014800b003a32e89bc4eso7783829wmm.5;
+        Tue, 26 Jul 2022 02:26:53 -0700 (PDT)
+X-Gm-Message-State: AJIora/2pKak2LpGwKZTl3vd0m6XP8zASBoBMlLp0+mjXsh8PgPb+uHl
+        x6DEomJxckWccPXLwh36ZnUSnHhXNk2KwJ6TOHg=
+X-Google-Smtp-Source: AGRyM1uGeaCDAN8z8yKxHxFJ9V3AepuKKOjXcNTD81j1E/+9R+DcEVLuRRv9FUeLk7HNSkZXBvwGr+EHMfBpPdhcGfg=
+X-Received: by 2002:a05:600c:35ce:b0:3a3:1b7f:bbd8 with SMTP id
+ r14-20020a05600c35ce00b003a31b7fbbd8mr11063089wmq.22.1658827612274; Tue, 26
+ Jul 2022 02:26:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] ARM: dts: lan966x: keep lan966 entries alphabetically
- sorted
-Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, arnd@arndb.de,
-        olof@lixom.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220726084931.1789855-1-claudiu.beznea@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220726084931.1789855-1-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220722022416.137548-1-mfo@canonical.com> <20220722022416.137548-4-mfo@canonical.com>
+In-Reply-To: <20220722022416.137548-4-mfo@canonical.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 26 Jul 2022 18:25:51 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARvJEhEOwg_PHe3WKT9BkSchnGOmeiUaB+7E__NS9qrVw@mail.gmail.com>
+Message-ID: <CAK7LNARvJEhEOwg_PHe3WKT9BkSchnGOmeiUaB+7E__NS9qrVw@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/6] sysctl, mod_devicetable: shadow struct
+ ctl_table.procname for file2alias
+To:     Mauricio Faria de Oliveira <mfo@canonical.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 10:49, Claudiu Beznea wrote:
-> Keep LAN966 entries alphabetically sorted.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+On Fri, Jul 22, 2022 at 11:24 AM Mauricio Faria de Oliveira
+<mfo@canonical.com> wrote:
+>
+> In order to expose a sysctl entry to modpost (file2alias.c, precisely)
+> we have to shadow 'struct ctl_table' in mod_devicetable.h, as scripts
+> should not access kernel headers or its types (see file2alias.c).
+>
+> The required field is '.procname' (basename of '/proc/sys/.../entry').
+>
+> Since 'struct ctl_table' is annotated for structure randomization and
+> we need a known offset for '.procname' (remember, no kernel headers),
+> take it out of the randomized portion (as in, eg, 'struct task_struct').
+>
+> Of course, add build-time checks for struct size and .procname offset
+> between both structs. (This has to be done on kernel side; for headers.)
+>
+> With that in place, use the regular macros in devicetable-offsets.c to
+> define SIZE_... and OFF_... macros for the shadow struct and the field
+> of interest.
+>
+> Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
 > ---
-> 
-> This is based on [1] which is at the moment only in at91-dt branch.
+>  fs/proc/proc_sysctl.c             | 19 +++++++++++++++++++
+>  include/linux/mod_devicetable.h   | 25 +++++++++++++++++++++++++
+>  include/linux/sysctl.h            | 11 ++++++++++-
+>  kernel/sysctl.c                   |  1 +
+>  scripts/mod/devicetable-offsets.c |  3 +++
+>  5 files changed, 58 insertions(+), 1 deletion(-)
+>
+> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+> index 021e83fe831f..ebbf8702387e 100644
+> --- a/fs/proc/proc_sysctl.c
+> +++ b/fs/proc/proc_sysctl.c
+> @@ -19,6 +19,24 @@
+>  #include <linux/kmemleak.h>
+>  #include "internal.h"
+>
+> +#ifdef CONFIG_MODULES
+> +#include <linux/mod_devicetable.h>
+> +
+> +static void check_struct_sysctl_device_id(void)
+> +{
+> +       /*
+> +        * The shadow struct sysctl_device_id for file2alias.c needs
+> +        * the same size of struct ctl_table and offset for procname.
+> +        */
+> +       BUILD_BUG_ON(sizeof(struct sysctl_device_id)
+> +                       != sizeof(struct ctl_table));
+> +       BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
+> +                       != offsetof(struct ctl_table, procname));
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Nit:
+
+If you use static_assert(), you can remove
+ check_struct_sysctl_device_id().
 
 
-Best regards,
-Krzysztof
+You can write static_assert() out of a function.
+
+
+
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index 223376959d29..15073621cfa8 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -2487,6 +2487,7 @@ int __init sysctl_init_bases(void)
+>
+>         return 0;
+>  }
+> +
+
+
+Noise.
+
+
+
+
+>  #endif /* CONFIG_SYSCTL */
+>  /*
+>   * No sense putting this after each symbol definition, twice,
+> diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
+> index c0d3bcb99138..43b2549940d2 100644
+> --- a/scripts/mod/devicetable-offsets.c
+> +++ b/scripts/mod/devicetable-offsets.c
+> @@ -262,5 +262,8 @@ int main(void)
+>         DEVID(ishtp_device_id);
+>         DEVID_FIELD(ishtp_device_id, guid);
+>
+> +       DEVID(sysctl_device_id);
+> +       DEVID_FIELD(sysctl_device_id, procname);
+> +
+>         return 0;
+>  }
+> --
+> 2.25.1
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

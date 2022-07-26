@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC9758090E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 03:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0E8580910
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 03:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237240AbiGZBgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 21:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
+        id S231169AbiGZBht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 21:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiGZBgr (ORCPT
+        with ESMTP id S229628AbiGZBhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 21:36:47 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0CA1F2F8;
-        Mon, 25 Jul 2022 18:36:45 -0700 (PDT)
+        Mon, 25 Jul 2022 21:37:47 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18141F2F7;
+        Mon, 25 Jul 2022 18:37:46 -0700 (PDT)
 Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LsKD30Q7BzWf9r;
-        Tue, 26 Jul 2022 09:32:51 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LsKJN1kkmz9stm;
+        Tue, 26 Jul 2022 09:36:36 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
  dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 09:36:37 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ 15.1.2375.24; Tue, 26 Jul 2022 09:37:45 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 09:36:36 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@redhat.com>,
-        <namhyung@kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>, <stable@vger.kernel.org>
-Subject: [PATCH 4.19] perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
-Date:   Tue, 26 Jul 2022 09:33:56 +0800
-Message-ID: <20220726013356.88395-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+ 15.1.2375.24; Tue, 26 Jul 2022 09:37:44 +0800
+From:   Jie Hai <haijie1@huawei.com>
+To:     <vkoul@kernel.org>, <wangzhou1@hisilicon.com>
+CC:     <haijie1@huawei.com>, <liudongdong3@huawei.com>,
+        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/7] dmaengine: hisilicon: Add support for hisi dma driver
+Date:   Tue, 26 Jul 2022 09:35:18 +0800
+Message-ID: <20220726013525.13059-1-haijie1@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220625074422.3479591-1-haijie1@huawei.com>
+References: <20220625074422.3479591-1-haijie1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,163 +51,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 68e3c69803dada336893640110cb87221bb01dcf upstream.
+The HiSilicon IP08 and HiSilicon IP09 are DMA iEPs, they share the
+same pci device id but different pci revision and register layouts.
 
-Yang Jihing reported a race between perf_event_set_output() and
-perf_mmap_close():
+The original version supports HiSilicon IP08 but not HiSilicon IP09.
+This series support DMA driver for HIP08 and HIP09:
+1. Fix bugs for HIP08 DMA driver
+	- Disable hardware channels when driver detached
+	- Update cq_head whenever accessed it
+	- Support multi-thread for one DMA channel
+2. Use macros instead of magic number
+3. Add support for HIP09 DMA driver
+4. Add debugfs for HIP08 and HIP09 DMA driver
+5. Add myself as maintainer of hisi_dma.c
 
-        CPU1                                    CPU2
+Changes since version 2:
+ - fix unnecessary line breaks
+ - fix register bit with BIT/GENMASK and adjust hisi_dma_update_bit to it
+ - remove "Reported-by" in commit message
+ - use dmaengine root instead of hisi_dma root
+ - ignore errors for creating debugfs
 
-        perf_mmap_close(e2)
-          if (atomic_dec_and_test(&e2->rb->mmap_count)) // 1 - > 0
-            detach_rest = true
+Changes since version 1:
+ - remove error changes casuse compile failure
+ - remove reduldant "*" in comment
+ - remove debugfs-hisi-dma doc and path in MAINTAINERS
 
-                                                ioctl(e1, IOC_SET_OUTPUT, e2)
-                                                  perf_event_set_output(e1, e2)
+Jie Hai (7):
+  dmaengine: hisilicon: Disable channels when unregister hisi_dma
+  dmaengine: hisilicon: Fix CQ head update
+  dmaengine: hisilicon: Add multi-thread support for a DMA channel
+  dmaengine: hisilicon: Use macros instead of magic number
+  dmaengine: hisilicon: Adapt DMA driver to HiSilicon IP09
+  dmaengine: hisilicon: dump regs to debugfs
+  MAINTAINERS: Add myself as maintainer for hisi_dma
 
-          ...
-          list_for_each_entry_rcu(e, &e2->rb->event_list, rb_entry)
-            ring_buffer_attach(e, NULL);
-            // e1 isn't yet added and
-            // therefore not detached
+ MAINTAINERS            |   1 +
+ drivers/dma/hisi_dma.c | 651 +++++++++++++++++++++++++++++++++++------
+ 2 files changed, 556 insertions(+), 96 deletions(-)
 
-                                                    ring_buffer_attach(e1, e2->rb)
-                                                      list_add_rcu(&e1->rb_entry,
-                                                                   &e2->rb->event_list)
-
-After this; e1 is attached to an unmapped rb and a subsequent
-perf_mmap() will loop forever more:
-
-        again:
-                mutex_lock(&e->mmap_mutex);
-                if (event->rb) {
-                        ...
-                        if (!atomic_inc_not_zero(&e->rb->mmap_count)) {
-                                ...
-                                mutex_unlock(&e->mmap_mutex);
-                                goto again;
-                        }
-                }
-
-The loop in perf_mmap_close() holds e2->mmap_mutex, while the attach
-in perf_event_set_output() holds e1->mmap_mutex. As such there is no
-serialization to avoid this race.
-
-Change perf_event_set_output() to take both e1->mmap_mutex and
-e2->mmap_mutex to alleviate that problem. Additionally, have the loop
-in perf_mmap() detach the rb directly, this avoids having to wait for
-the concurrent perf_mmap_close() to get around to doing it to make
-progress.
-
-Fixes: 9bb5d40cd93c ("perf: Fix mmap() accounting hole")
-Reported-by: Yang Jihong <yangjihong1@huawei.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Yang Jihong <yangjihong1@huawei.com>
-Link: https://lkml.kernel.org/r/YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net
-[YJH: backport to 4.19: adjusted context]
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- kernel/events/core.c | 45 ++++++++++++++++++++++++++++++--------------
- 1 file changed, 31 insertions(+), 14 deletions(-)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 88dd1398ae88..ba66ea3ca705 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5719,10 +5719,10 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
- 
- 		if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
- 			/*
--			 * Raced against perf_mmap_close() through
--			 * perf_event_set_output(). Try again, hope for better
--			 * luck.
-+			 * Raced against perf_mmap_close(); remove the
-+			 * event and try again.
- 			 */
-+			ring_buffer_attach(event, NULL);
- 			mutex_unlock(&event->mmap_mutex);
- 			goto again;
- 		}
-@@ -10396,14 +10396,25 @@ static int perf_copy_attr(struct perf_event_attr __user *uattr,
- 	goto out;
- }
- 
-+static void mutex_lock_double(struct mutex *a, struct mutex *b)
-+{
-+	if (b < a)
-+		swap(a, b);
-+
-+	mutex_lock(a);
-+	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
-+}
-+
- static int
- perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- {
- 	struct ring_buffer *rb = NULL;
- 	int ret = -EINVAL;
- 
--	if (!output_event)
-+	if (!output_event) {
-+		mutex_lock(&event->mmap_mutex);
- 		goto set;
-+	}
- 
- 	/* don't allow circular references */
- 	if (event == output_event)
-@@ -10441,8 +10452,15 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- 	    event->pmu != output_event->pmu)
- 		goto out;
- 
-+	/*
-+	 * Hold both mmap_mutex to serialize against perf_mmap_close().  Since
-+	 * output_event is already on rb->event_list, and the list iteration
-+	 * restarts after every removal, it is guaranteed this new event is
-+	 * observed *OR* if output_event is already removed, it's guaranteed we
-+	 * observe !rb->mmap_count.
-+	 */
-+	mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
- set:
--	mutex_lock(&event->mmap_mutex);
- 	/* Can't redirect output if we've got an active mmap() */
- 	if (atomic_read(&event->mmap_count))
- 		goto unlock;
-@@ -10452,6 +10470,12 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- 		rb = ring_buffer_get(output_event);
- 		if (!rb)
- 			goto unlock;
-+
-+		/* did we race against perf_mmap_close() */
-+		if (!atomic_read(&rb->mmap_count)) {
-+			ring_buffer_put(rb);
-+			goto unlock;
-+		}
- 	}
- 
- 	ring_buffer_attach(event, rb);
-@@ -10459,20 +10483,13 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- 	ret = 0;
- unlock:
- 	mutex_unlock(&event->mmap_mutex);
-+	if (output_event)
-+		mutex_unlock(&output_event->mmap_mutex);
- 
- out:
- 	return ret;
- }
- 
--static void mutex_lock_double(struct mutex *a, struct mutex *b)
--{
--	if (b < a)
--		swap(a, b);
--
--	mutex_lock(a);
--	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
--}
--
- static int perf_event_set_clock(struct perf_event *event, clockid_t clk_id)
- {
- 	bool nmi_safe = false;
 -- 
-2.30.GIT
+2.33.0
 

@@ -2,193 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1025815D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D535815D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238581AbiGZPAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S239483AbiGZPAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239184AbiGZPAW (ORCPT
+        with ESMTP id S238739AbiGZPAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:00:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A15B1DEB7;
-        Tue, 26 Jul 2022 08:00:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0768D1FB;
-        Tue, 26 Jul 2022 08:00:21 -0700 (PDT)
-Received: from mammon-tx2.austin.arm.com (mammon-tx2.austin.arm.com [10.118.28.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 49D633F73B;
-        Tue, 26 Jul 2022 08:00:20 -0700 (PDT)
-From:   Jeremy Linton <jeremy.linton@arm.com>
-To:     linux-pm@vger.kernel.org
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeremy Linton <jeremy.linton@arm.com>
-Subject: [PATCH] ACPI: CPPC: Disable FIE if registers in PCC regions
-Date:   Tue, 26 Jul 2022 09:59:48 -0500
-Message-Id: <20220726145948.2194684-1-jeremy.linton@arm.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 26 Jul 2022 11:00:49 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1C222BD2;
+        Tue, 26 Jul 2022 08:00:48 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id oy13so26675569ejb.1;
+        Tue, 26 Jul 2022 08:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KXwks4U0bf08TlIwVOpXBx4c7TuLqBhqZnpO6daZqYo=;
+        b=Sh7qNY+kJv8+cDt+1q4uHQ5Ti3AHrhrhzbfbajKjQp/9vdOO7AIzcSANWRgOw46kCr
+         5ERIz0uklAnNmgUWHvVZhxxTdIIYlEbQn0Z5hLivPWTScSOJGsD8zW95uEzLtKYZhJ/T
+         0LoKATxykYGdnjuCEoa5AO7W8at2ezytfKPaIjbI23k5x8KYQpENvGqt9Ehd9/rH4KUe
+         5r+osbu8EfeZG6LUZDg/29osIvaPKdol21q0+LBEXHqITJ8T1MwGmA8xewDvVfLQn00I
+         iIKfA5bbfA3nYCEVbRW8fF4SNV9huDfzWN2ufI+M5pwyQh9UX61C6RAkobVya1i2tSBO
+         R26g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KXwks4U0bf08TlIwVOpXBx4c7TuLqBhqZnpO6daZqYo=;
+        b=M8ggu2jnnGTW+7lz//U5sYzdf3NDQiqQXwBZ/xGS1sQ5WCFBGFaKeYfM5W2tO7Mxia
+         e0HZ2wl3sf/rRUh/WFZ5SLBlJJqF6AAmwpDQoiw9jsIed5KRyrbRfvc/KnfJ6cL1KlfY
+         xrLOHZY+OrMhxKkwNtoff/aS0nRSMOW487fD1mpSd7u2yRCsfOoLS0L39yTo2SkVpk+h
+         fMR8w0aAR92zKu2k1M3PlXugJEvRfE1KOjyq0GRr6sNtig9fDsUXtOoxDjGDIAaaEBYx
+         DTdR6IYaFBLTY/2XqoXlFS35vvKaNwH5+BOXYbkqHlFpXRIolhBScaQnnGwuI/e41d0P
+         wSug==
+X-Gm-Message-State: AJIora9O1OYEH1LIvurZbA8ZfovyJcV3Klv2sagEXTnYdiFbSzKz/QxD
+        edWi9Oz4n4ePKxcQl1VIj90=
+X-Google-Smtp-Source: AGRyM1vRtocosg8JVRjgrQC/nJP8vPkOTsq97SrpEIEnttjWfPmMtRul49X1rpyuGj0Ao/UiDFEbTA==
+X-Received: by 2002:a17:906:93e8:b0:72b:6923:a0b9 with SMTP id yl8-20020a17090693e800b0072b6923a0b9mr14028141ejb.244.1658847646919;
+        Tue, 26 Jul 2022 08:00:46 -0700 (PDT)
+Received: from [10.30.0.4] ([37.120.217.82])
+        by smtp.gmail.com with ESMTPSA id b20-20020a170906195400b0072aa38d768esm6592234eje.64.2022.07.26.08.00.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 08:00:45 -0700 (PDT)
+Message-ID: <2e522bcd-5d55-e87f-126c-514f5edaa560@gmail.com>
+Date:   Tue, 26 Jul 2022 17:00:43 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
+ <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
+ <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCC regions utilize a mailbox to set/retrieve register values used by
-the CPPC code. This is fine as long as the operations are
-infrequent. With the FIE code enabled though the overhead can range
-from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-based machines.
+On 7/26/22 15:25, Krzysztof Kozlowski wrote:
+> On 26/07/2022 13:15, Maximilian Luz wrote:
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: qcom,tee-uefisecapp
+>>>
+>>> Isn't this SoC-specific device? Generic compatibles are usually not
+>>> expected.
+>>
+>> This is essentially software (kernel driver) talking to software (in the
+>> TrustZone), so I don't expect there to be anything SoC specific about it.
+> 
+> You are documenting here firmware in TZ (not kernel driver). Isn't this
+> a specific piece which might vary from device to device?
+> 
+> IOW, do you expect the same compatible to work for all possible Qualcomm
+> boards (past and future like in 10 years from now)?
 
-So, before enabling FIE assure none of the registers used by
-cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
-enable a module parameter which can also disable it at boot or module
-reload.
+I'm not sure if Qualcomm will still use the "uefisecapp" approach in 10
+years, but I don't expect the interface of uefisecapp to change. The
+interface is modeled after the respective UEFI functions, which are spec
+and thus I don't expect those to change. Also, it seems to have been
+around for a couple of generations and it hasn't changed. The oldest
+tested is sdm850 (Lenovo Yoga C630), and the latest is sc8280xp
+(Thinkpad X13s).
 
-Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
----
- drivers/acpi/cppc_acpi.c       | 31 +++++++++++++++++++++++++++++++
- drivers/cpufreq/cppc_cpufreq.c | 19 +++++++++++++++----
- include/acpi/cppc_acpi.h       |  5 +++++
- 3 files changed, 51 insertions(+), 4 deletions(-)
+Why not make this behave like a "normal" third-party device? If the
+interface ever changes use qcom,tee-uefisecapp-v2 or something like
+that? Again, this does not seem to be directly tied to the SoC.
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index 3c6d4ef87be0..ad84c55b6409 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -1246,6 +1246,37 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
- }
- EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
- 
-+int cppc_perf_ctrs_in_pcc(void)
-+{
-+	int cpu;
-+	struct cpc_desc *cpc_desc;
-+	struct cpc_register_resource *delivered_reg, *reference_reg,
-+		*ref_perf_reg, *ctr_wrap_reg;
-+
-+	for_each_present_cpu(cpu) {
-+		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-+		delivered_reg = &cpc_desc->cpc_regs[DELIVERED_CTR];
-+		reference_reg = &cpc_desc->cpc_regs[REFERENCE_CTR];
-+		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-+		ctr_wrap_reg = &cpc_desc->cpc_regs[CTR_WRAP_TIME];
-+
-+		/*
-+		 * If reference perf register is not supported then we should
-+		 * use the nominal perf value
-+		 */
-+		if (!CPC_SUPPORTED(ref_perf_reg))
-+			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-+
-+		/* Are any of the regs PCC ?*/
-+		if (CPC_IN_PCC(delivered_reg) || CPC_IN_PCC(reference_reg) ||
-+			CPC_IN_PCC(ctr_wrap_reg) || CPC_IN_PCC(ref_perf_reg)) {
-+			return true;
-+		}
-+	}
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-+
- /**
-  * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
-  * @cpunum: CPU from which to read counters.
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 24eaf0ec344d..a66d3013d0f8 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -63,6 +63,10 @@ static struct cppc_workaround_oem_info wa_info[] = {
- 
- static struct cpufreq_driver cppc_cpufreq_driver;
- 
-+static bool fie_disabled;
-+module_param(fie_disabled, bool, 0444);
-+MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
-+
- #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
- 
- /* Frequency invariance support */
-@@ -158,7 +162,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
- 	struct cppc_freq_invariance *cppc_fi;
- 	int cpu, ret;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	for_each_cpu(cpu, policy->cpus) {
-@@ -199,7 +203,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
- 	struct cppc_freq_invariance *cppc_fi;
- 	int cpu;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	/* policy->cpus will be empty here, use related_cpus instead */
-@@ -229,7 +233,12 @@ static void __init cppc_freq_invariance_init(void)
- 	};
- 	int ret;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (cppc_perf_ctrs_in_pcc()) {
-+		pr_debug("FIE not enabled on systems with registers in PCC\n");
-+		fie_disabled = true;
-+	}
-+
-+	if (fie_disabled)
- 		return;
- 
- 	kworker_fie = kthread_create_worker(0, "cppc_fie");
-@@ -247,7 +256,7 @@ static void __init cppc_freq_invariance_init(void)
- 
- static void cppc_freq_invariance_exit(void)
- {
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	kthread_destroy_worker(kworker_fie);
-@@ -940,6 +949,8 @@ static void cppc_check_hisi_workaround(void)
- 		}
- 	}
- 
-+	fie_disabled = true;
-+
- 	acpi_put_table(tbl);
- }
- 
-diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-index d389bab54241..f4ff571fcdcb 100644
---- a/include/acpi/cppc_acpi.h
-+++ b/include/acpi/cppc_acpi.h
-@@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
- extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
- extern int cppc_set_enable(int cpu, bool enable);
- extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-+extern int cppc_perf_ctrs_in_pcc(void);
- extern bool acpi_cpc_valid(void);
- extern bool cppc_allow_fast_switch(void);
- extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-@@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
- {
- 	return -ENOTSUPP;
- }
-+extern int cppc_perf_ctrs_in_pcc(void)
-+{
-+	return false;
-+}
- static inline bool acpi_cpc_valid(void)
- {
- 	return false;
--- 
-2.37.1
+Then again, if you prefer to name everything based on
+"qcom,<device>-<soc>" I don't have any strong arguments against it and
+I'm happy to change that. I just think it will unnecessarily introduce
+a bunch of compatibles and doesn't reflect the interface "versioning"
+situation as I see it.
 
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    firmware {
+>>>> +        scm {
+>>>> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
+>>>> +        };
+>>>> +        tee-uefisecapp {
+>>>> +            compatible = "qcom,tee-uefisecapp";
+>>>
+>>> You did not model here any dependency on SCM. This is not full
+>>> description of the firmware/hardware
+>>
+>> How would I do that? A lot of other stuff also depends on SCM being
+>> present (e.g. qcom_q6v5_pas for loading mdt files) and I don't see them
+>> declare this in the device tree. As far as I can tell, SCM is pretty
+>> much expected to be there at all times (i.e. can't be unloaded) and
+>> drivers check for it when probing via qcom_scm_is_available(),
+>> deferring probe if not.
+> 
+> It seems this will be opening a can of worms...
+
+Indeed.
+
+> The problem with existing approach is:
+> 1. Lack of any probe ordering or probe deferral support.
+> 2. Lack of any other dependencies, e.g. for PM.
+
+I'm not entirely sure what you mean by "lack of probe deferral support".
+We have qcom_scm_is_available() and defer probe if that fails. So
+deferral works, unless I'm misunderstanding something.
+
+But yes, correct on the other points.
+
+> Unloading is "solved" only by disallowing the unload, not by proper
+> device links and module get/put.
+> 
+> I understand that SCM must be there, but the same for several other
+> components and for these others we have ways to pass reference around
+> (e.g. syscon regmap, PHYs handles).
+> 
+>>
+>> Don't take this as an excuse as in "I want to leave that out", it's just
+>> that I don't know how one would declare such a dependency explicitly. If
+>> you can tell me how to fix it, I'll include that for v2.
+> 
+> I think there are no dedicated subsystem helpers for this (like for
+> provider/consumer of resets/power domains/clocks etc), so one way would
+> be something like nvidia,bpmp is doing.
+
+I assume you're referring to tegra_bpmp_get()? Does this correctly
+handle PM dependencies? At least as far as I can tell it doesn't
+explicitly establish a device link, it only gets a reference to the
+device, which doesn't guarantee the presence of a driver. Nor correct PM
+ordering. Please correct me if I'm wrong. As far as I know automatic
+creation of device links only works with certain props defined in
+of_supplier_bindings, right?
+
+So unless I'm wrong there is also a bunch of other stuff that may be
+subtly broken. (Again, not a justification to include these changes,
+just wondering whether there should be a conscious approach to find and
+fix these things... rather than discover them patch-by-patch).
+
+> meson_sm_get is a bit similar - looking by compatible. This is less
+> portable and I would prefer the bpmp way (just like syscon phandles).
+
+I have another example (that could be improved via a phandle in DT): For
+the Surface System Aggregator (in ACPI-land), we have ssam_client_bind().
+This function 1) checks if the controller is available and ready, 2) if
+it is gets a reference to it, and 3) establishes a device link for
+PM-ordering, before 4) returning the reference to that controller to the
+client. This combined with deferring probe ensures that we will always
+have a valid reference. And since we're in DT-land, we could hook that
+up with a phandle reference to SCM and load that instead of having to
+use a global static.
+
+> The qcom_q6v5_pas could be converted later to use similar approach and
+> eventually the "tatic struct qcom_scm *__scm;" can be entirely removed.
+> 
+> Any comments on this approach from Konrad, Bjorn, Dmitry, Vinod and
+> anyone else?
+
+Regards,
+Max

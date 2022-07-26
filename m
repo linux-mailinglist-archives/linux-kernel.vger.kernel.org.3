@@ -2,225 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA48580EB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD970580EB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiGZILw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        id S237937AbiGZIMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiGZILt (ORCPT
+        with ESMTP id S229604AbiGZIMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:11:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE04727150;
-        Tue, 26 Jul 2022 01:11:47 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1CA406601596;
-        Tue, 26 Jul 2022 09:11:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658823106;
-        bh=dAET0aJ9O9CxvAJfCeQORiWmh5LRUFbf9om4jQFdjY4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZjmkO9Cn8oeBIVweESZI6SC07GIY7x7cS4W52UqDgn69x85kP/lIrwfXAYWqiCf5M
-         rn8ZnmU9ODb+8q4TNoSx5fPkPjz7fkiRRFV692mQL9AfTzwdh8bcblyhFUNcCmyOjM
-         WO3jl2RsJxt6ZeNI0ZMHjeYMuRHJCHMrlUI83HkYD07BMwbuGkdaKT3raK1tHdxcH5
-         7PsL7c1ka4DQqoE+d+vQJGK55JiFuVO8HHMFr9qku45vRP1+7rgiKFHnnFcuN5N50x
-         FLN3Tp7ADiAgauA9+kHZlqSqlFP/bA6568qODWXXMtD62+h4c8CzgwrrM6mAzEHLTx
-         jZbOmXia3+ZNw==
-Message-ID: <5d8690e4-a4ec-4ee9-4bed-bc6bf32ae80b@collabora.com>
-Date:   Tue, 26 Jul 2022 10:11:43 +0200
+        Tue, 26 Jul 2022 04:12:41 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632762DA8D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:12:40 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31f445bd486so15595657b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nCX2ALCWALFGybcMGwSCyXmdfN3GI/+m4dDqSmPpw10=;
+        b=s0G272QfIh9/l63hjHAAeg/H9EPmVwACwS37tb+LwxjryHa4mlQWqrwvINvSIIEoW/
+         Z5YvAD93ZwX3PpzFcVYHu2JNnjVTJEbu9Utqrz3Y4iFYljnNLzmhkxMNWfU/cW+IHO08
+         BtMqsqCC7Au9eyjhgIOU+Pk7NDXHMOQRmVzOs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nCX2ALCWALFGybcMGwSCyXmdfN3GI/+m4dDqSmPpw10=;
+        b=6PLwfeyrXvC91OV8BSu5TUyt2bxvxSORqeIPK2ZJsFbQpLoUVqghXPLk40WhNrHAOC
+         kLuTl0BMgxzzb1ggQaGioyhuqVjizu2N4JhwGgJq3p0WklW+/iXs/z5lbeV+/KGBRvP5
+         4LMQV1uJf4VZRpz/oSUeZijU8tTjKheWDIIAVVTw303Gp43gdzruhJZMu2O80G4KF+rU
+         hGKnoCH3fUgHaCd2hUhDMkV0qmQymD4694CgLQLB9xbglm+HpHzkeP4CsH5wC4onPaSH
+         py4P1yuF9kN1zYwyH3cj3gEVFGvDjU/As/bolYwHwk60BbzeeqtQ1M5/QKMzYrqMNo3R
+         AzmQ==
+X-Gm-Message-State: AJIora9390FdiGdqMEKtuMS9m/deQCs7ix+IZpoiV7V5tTEAGuncF7Oo
+        WrSN6aUmftnNa0ah8Kx7BSBBSLdwY7dkqiuBXTbh
+X-Google-Smtp-Source: AGRyM1s8Apd3hvFA44J5aJBKOXCo+fbuaspIcsLZraEzhnuLtGz3y8ZMjuWlDz61tH0RApEnIjJf8dPeiNTkr3bt800=
+X-Received: by 2002:a0d:ebc8:0:b0:31f:4f08:63aa with SMTP id
+ u191-20020a0debc8000000b0031f4f0863aamr352109ywe.145.1658823159618; Tue, 26
+ Jul 2022 01:12:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 4/8] arm64: dts: mediatek: cherry: Enable secondary
- SD/MMC controller
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220721145017.918102-1-angelogioacchino.delregno@collabora.com>
- <20220721145017.918102-5-angelogioacchino.delregno@collabora.com>
- <CAGXv+5FutJb_MRwSVgjV7tByBvfq3AFsSxs6ETUZaNzrfpywgg@mail.gmail.com>
- <781f6d3e-412e-1553-c2c2-23c9a897626b@collabora.com>
- <CAGXv+5Gdwcj1n0q8e8ReoUOZX18pbtbxV7oof06Q2_nJMNY-cw@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5Gdwcj1n0q8e8ReoUOZX18pbtbxV7oof06Q2_nJMNY-cw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220715175155.3567243-1-mail@conchuod.ie> <96972ad8-d146-3bc2-0e49-ffe88580bbee@microchip.com>
+ <20220725091346.GA20370@willie-the-truck> <28e38506-8fce-9000-c211-199a7aa69910@microchip.com>
+In-Reply-To: <28e38506-8fce-9000-c211-199a7aa69910@microchip.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 26 Jul 2022 01:12:28 -0700
+Message-ID: <CAOnJCUJh0vU8-tK31-A44h+VNHZA2_R6GayNjFg-7Daa6efbag@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] Fix RISC-V's arch-topology reporting
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     "will@kernel.org" <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daire McNamara <Daire.McNamara@microchip.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zong Li <zong.li@sifive.com>,
+        Emil Renner Berhing <kernel@esmil.dk>,
+        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Brice Goglin <Brice.Goglin@inria.fr>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/07/22 06:04, Chen-Yu Tsai ha scritto:
-> On Mon, Jul 25, 2022 at 6:20 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 25/07/22 10:54, Chen-Yu Tsai ha scritto:
->>> On Thu, Jul 21, 2022 at 10:51 PM AngeloGioacchino Del Regno
->>> <angelogioacchino.delregno@collabora.com> wrote:
->>>>
->>>> As of now, all of the boards based on the cherry platform have a
->>>> usable secondary SD/MMC controller, usually for SD cards: enable
->>>> it to allow both booting from it and generally accessing external
->>>> storage.
->>>>
->>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>> ---
->>>>    .../boot/dts/mediatek/mt8195-cherry.dtsi      | 62 +++++++++++++++++++
->>>>    1 file changed, 62 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
->>>> index 2853f7f76c90..8859957c7b27 100644
->>>> --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
->>>> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
->>>> @@ -17,6 +17,7 @@ aliases {
->>>>                   i2c5 = &i2c5;
->>>>                   i2c7 = &i2c7;
->>>>                   mmc0 = &mmc0;
->>>> +               mmc1 = &mmc1;
->>>>                   serial0 = &uart0;
->>>>           };
->>>>
->>>> @@ -227,6 +228,24 @@ &mmc0 {
->>>>           vqmmc-supply = <&mt6359_vufs_ldo_reg>;
->>>>    };
->>>>
->>>> +&mmc1 {
->>>> +       status = "okay";
->>>> +
->>>> +       bus-width = <4>;
->>>> +       cap-sd-highspeed;
->>>> +       cd-gpios = <&pio 54 GPIO_ACTIVE_LOW>;
->>>> +       max-frequency = <200000000>;
->>>> +       no-mmc;
->>>> +       no-sdio;
->>>> +       pinctrl-names = "default", "state_uhs";
->>>> +       pinctrl-0 = <&mmc1_pins_default>;
->>>> +       pinctrl-1 = <&mmc1_pins_uhs>;
->>>> +       sd-uhs-sdr50;
->>>> +       sd-uhs-sdr104;
->>>> +       vmmc-supply = <&mt_pmic_vmch_ldo_reg>;
->>>> +       vqmmc-supply = <&mt_pmic_vmc_ldo_reg>;
->>>> +};
->>>> +
->>>>    /* for CPU-L */
->>>>    &mt6359_vcore_buck_reg {
->>>>           regulator-always-on;
->>>> @@ -575,6 +594,49 @@ pins-rst {
->>>>                   };
->>>>           };
->>>>
->>>> +       mmc1_pins_default: mmc1-default-pins {
->>>> +               pins-cmd-dat {
->>>> +                       pinmux = <PINMUX_GPIO110__FUNC_MSDC1_CMD>,
->>>> +                                <PINMUX_GPIO112__FUNC_MSDC1_DAT0>,
->>>> +                                <PINMUX_GPIO113__FUNC_MSDC1_DAT1>,
->>>> +                                <PINMUX_GPIO114__FUNC_MSDC1_DAT2>,
->>>> +                                <PINMUX_GPIO115__FUNC_MSDC1_DAT3>;
->>>> +                       input-enable;
->>>> +                       drive-strength = <8>;
->>>> +                       bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
->>>> +               };
->>>> +
->>>> +               pins-clk {
->>>> +                       pinmux = <PINMUX_GPIO111__FUNC_MSDC1_CLK>;
->>>> +                       drive-strength = <8>;
->>>> +                       bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
->>>> +               };
->>>> +
->>>> +               pins-insert {
->>>> +                       pinmux = <PINMUX_GPIO54__FUNC_GPIO54>;
->>>> +                       bias-pull-up;
->>>> +               };
->>>> +       };
->>>> +
->>>> +       mmc1_pins_uhs: mmc1-uhs-pins {
->>>> +               pins-cmd-dat {
->>>> +                       pinmux = <PINMUX_GPIO110__FUNC_MSDC1_CMD>,
->>>> +                                <PINMUX_GPIO112__FUNC_MSDC1_DAT0>,
->>>> +                                <PINMUX_GPIO113__FUNC_MSDC1_DAT1>,
->>>> +                                <PINMUX_GPIO114__FUNC_MSDC1_DAT2>,
->>>> +                                <PINMUX_GPIO115__FUNC_MSDC1_DAT3>;
->>>> +                       input-enable;
->>>> +                       drive-strength = <8>;
->>>> +                       bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
->>>> +               };
->>>> +
->>>> +               pins-clk {
->>>> +                       pinmux = <PINMUX_GPIO111__FUNC_MSDC1_CLK>;
->>>> +                       drive-strength = <8>;
->>>> +                       bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
->>>> +               };
->>>
->>> I wonder if pins-insert should be duplicated here. And there's no
->>> difference between the standard and UHS pinconfigs. One would expect
->>> higher drive strength on the UHS set, if two sets were required.
->>> So maybe we should just have one set, and use that one for both
->>> the default and uhs states.
->>>
->>
->> I don't think that it would really make a lot of sense to duplicate the
->> insertion pin setup in the UHS-specific pinctrl set...
->>
->> Whenever you remove the uSD card, the controller goes back to default,
->> as the first steps in card initialization are always happening at low
->> speed and only after that we can switch to UHS speeds... so we do expect
->> that the first-ever state is always `default` (by spec!), which means
->> that we are also ensuring that the insertion pin setup is always done.
-> 
-> Right. What I wanted to say was that, besides the insertion pin, there's
-> no difference between the default and uhs states here. So why have two
-> copies instead of one that is referenced twice? (the uhs state is required
-> by the binding).
-> 
+On Mon, Jul 25, 2022 at 2:20 AM <Conor.Dooley@microchip.com> wrote:
+>
+> On 25/07/2022 10:13, Will Deacon wrote:
+> > On Sat, Jul 23, 2022 at 11:22:01AM +0000, Conor.Dooley@microchip.com wrote:
+> >> On 15/07/2022 18:51, Conor Dooley wrote:
+> >>
+> >> Hey,
+> >>
+> >> Not got any feedback on the smpboot changes from the RISC-V side.
+> >> I tested it on polarfire, the d1 (with both SMP & !SMP set iirc)
+> >> & on the u540. It all looked good to me.
+> >>
+> >> I'd like to have this fixed for v5.20, but there isn't too much
+> >> time left before the mw. Not too sure about the cross-tree changes,
+> >> does it need an immutable branch or could it go through driver-core?
+> >> Catalin suggested removing the CC stable from patch 1/2 & adding it
+> >> as a dependency for the 2/2 patch - but obviously that's up to the
+> >> committer to sort out.
+> >
+> > I'm finalising the arm64 queue today, so I don't really want to pull in
+> > additional changes beyond critical fixes at this point, I'm afraid. I was
+> > half-expecting a pull request from the riscv side last week but I didn't
+> > see anything.
+>
+> Yeah, that's fair. It's late in the game for cross-tree messing.
+> I know Palmer has been p busy recently.
+>
+> > FWIW, if there's still no movement by -rc1, then I'm happy to queue all
+> > of this on its own branch in the arm64 tree for 5.21.
+>
+> Hopefully someone on the riscv side will have confirmed what I am doing
+> is sane by then.
+>
+> >
+> > Let me know.
+>
+> I will, thanks!
 
-OH!!!! Right. Yes I definitely agree with you on that one.
+Sorry for the delayed response here. I was planning to test the series
+last week itself
+but got dragged into something else and a qemu bug for NUMA.
 
-Let's split the pins-insert in `mmc1_pins_det: mmc1-detect-pins` and add
-a reference to it in the default pinctrl, that's a sensible option.
+Thanks for the fixes. I have tested this on Qemu(removing the topology
+node) for the following configurations.
+SMP, !SMP, NUMA (2 sockets)
 
-I'll do that for v3!
-
-> ChenYu
-> 
->> Cheers,
->> Angelo
->>
->>> Otherwise,
->>>
->>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
->>> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
->>>
->>>> +       };
->>>> +
->>>>           nor_pins_default: nor-default-pins {
->>>>                   pins-ck-io {
->>>>                           pinmux = <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
->>>> --
->>>> 2.35.1
->>>>
->>>>
->>
-
+FWIW,
+Tested-by: Atish Patra <atishp@rivosinc.com>
 
 -- 
-AngeloGioacchino Del Regno
-Software Engineer
-
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
+Regards,
+Atish

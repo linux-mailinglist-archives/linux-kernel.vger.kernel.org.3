@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B5F58145E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 15:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4634558146D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 15:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238998AbiGZNoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 09:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
+        id S238048AbiGZNqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 09:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiGZNoJ (ORCPT
+        with ESMTP id S233523AbiGZNq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 09:44:09 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D42A1F2EA
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 06:44:08 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id h8so20206286wrw.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 06:44:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oQ8s3zPZY+TFJkH6m+UUXWT+JWabae4Qo2BwG+X/dtA=;
-        b=EqK8sgogR79mEUl/YeNrDUb+Y+dW6RBsh5xIg9wH0CgvvZYyLVjTlNRJGmwxL4Qt4s
-         oS/ENaOx+3r7jBOIFOAIfdQlx46fKBlSTCLJWU1bDpG4zIJKTORp/+HSufNT/Y/j8VK+
-         ZH87Q+MvYZljijN8hSiGm1/CrfjsOK/IUfQf2t0+R4y7abiYDBwxd3tU2ZkaOwfV9uPq
-         TrLBsqYaB/L+lwIl9+M5bZhtBbaD9xXN93M5ShyeuaQBlsh/IZsks6QQLQfkmkJIhKYx
-         GXjFNpIbZ3kZO1B33eOJDV6XX543AKvZvW43VUR985vMQ5a2lOrgk0si1ciUtMw1IzQo
-         Tbhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oQ8s3zPZY+TFJkH6m+UUXWT+JWabae4Qo2BwG+X/dtA=;
-        b=YYuoqm3rZVdB2fhHDwFOULHeBbwaOawduDRm8P4C5TybOTBhP3jXdS9a15TzqKCKX6
-         f1/T2UeYL/yEfR6PKZ9H5g5v27hQXGL2jQzEio3khvsvoexVpsugj5b2U65qhS5ppmCu
-         1MzI7i77S6I5OR1c+vaHki33RlT/A2tGasy5IEqbjeh5hD3m9kfyEqMLwa0aBjvsePke
-         CEs3pzsq+5XitQlh6ee4zING0pqPak9eNuhiAjFJSmz6GZd/gZeHUK7uSeyRFa/fEBwM
-         BG9icOASGliGr7jjd0H97JDs8dz1jrXSBGDlMSdTv+y12QX6hQV5kbyYrgrn/aHj5E2z
-         uRRg==
-X-Gm-Message-State: AJIora9nO0JZKypBbNWAXdXF/uUfQrjdZgioLPa8BgD7LwxLOcwIkbhN
-        mDPDda/9bvLPvoxGXOJfl2HGB3RJn33lDXDPD0ChYLkAoCc=
-X-Google-Smtp-Source: AGRyM1sWnAdjWjvz1F29mMNoTK0f/PXmP4buefrfmWkMl0uYgx1rCpW/MGp5I+wz+UW9+gcrqT8oEK0KQ5TKu590ONA=
-X-Received: by 2002:adf:ee4b:0:b0:21e:8e1a:8f3c with SMTP id
- w11-20020adfee4b000000b0021e8e1a8f3cmr5314211wro.346.1658843046640; Tue, 26
- Jul 2022 06:44:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620115549.1529597-1-apatel@ventanamicro.com>
- <CAAhSdy0mHbxQ3QVP9j1==oTG75Z9_T2bDSif-UGKppG+-hoJng@mail.gmail.com> <659c6aa4-1100-0945-4965-3e106dfd490f@microchip.com>
-In-Reply-To: <659c6aa4-1100-0945-4965-3e106dfd490f@microchip.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 26 Jul 2022 19:13:52 +0530
-Message-ID: <CAAhSdy0XwTsQ+dgYatqf6BvGmcGwz_bzmdV5fNeF8oY3rK6dDg@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: Add mvendorid, marchid, and mimpid to
- /proc/cpuinfo output
-To:     Conor.Dooley@microchip.com
-Cc:     palmer@dabbelt.com, apatel@ventanamicro.com, arnd@arndb.de,
-        paul.walmsley@sifive.com, linux-kernel@vger.kernel.org,
-        heinrich.schuchardt@canonical.com, atishp@atishpatra.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 09:46:28 -0400
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBCD02314D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 06:46:25 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 26QDi6KA001944;
+        Tue, 26 Jul 2022 08:44:06 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 26QDi53k001943;
+        Tue, 26 Jul 2022 08:44:05 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Tue, 26 Jul 2022 08:44:05 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Regression: Linux v5.15+ does not boot on Freescale P2020
+Message-ID: <20220726134405.GX25951@gate.crashing.org>
+References: <20220722090929.mwhmxxdd7yioxqpz@pali> <6b227478-73b8-2a97-1c78-89570d928739@csgroup.eu> <20220723150702.jecerkhxhy65dgww@pali> <875yjld2oe.fsf@mpe.ellerman.id.au> <20220725125256.cg6su4d2ageylvp6@pali> <e2487668-b6d9-9ddb-1bb4-9f4d37fae1a7@csgroup.eu> <20220725201009.gwuchzswcqaxntrk@pali> <20220725215416.GV25951@gate.crashing.org> <20220726083406.tcjvny6d2di6q7ar@pali> <CAK8P3a2iM+RoySWEC2e0==rwBSVrZoRa8c4ADyFNB24JZM=hkw@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8P3a2iM+RoySWEC2e0==rwBSVrZoRa8c4ADyFNB24JZM=hkw@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 7:10 PM <Conor.Dooley@microchip.com> wrote:
->
-> Hey Anup,
->
-> On 26/07/2022 12:57, Anup Patel wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Tue, Jul 26, 2022 at 11:02:59AM +0200, Arnd Bergmann wrote:
+> On Tue, Jul 26, 2022 at 10:34 AM Pali Rohár <pali@kernel.org> wrote:
+> > On Monday 25 July 2022 16:54:16 Segher Boessenkool wrote:
+> > > The EH field in larx insns is new since ISA 2.05, and some ISA 1.x cpu
+> > > implementations actually raise an illegal insn exception on EH=1.  It
+> > > appears P2020 is one of those.
 > >
-> > Hi Palmer,
-> >
-> > On Mon, Jun 20, 2022 at 5:26 PM Anup Patel <apatel@ventanamicro.com> wrote:
-> >>
-> >> Identifying the underlying RISC-V implementation can be important
-> >> for some of the user space applications. For example, the perf tool
-> >> uses arch specific CPU implementation id (i.e. CPUID) to select a
-> >> JSON file describing custom perf events on a CPU.
-> >>
-> >> Currently, there is no way to identify RISC-V implementation so we
-> >> add mvendorid, marchid, and mimpid to /proc/cpuinfo output.
-> >>
-> >> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> >
-> > Can this patch be considered for 5.20 ?
->
-> iirc I mentioned the consistency of using defined() for
-> CONFIG_RISCV_SBI versus IS_ENABLED() elsewhere in arch/riscv/
-> but I don't recall a response.
+> > P2020 has e500 cores. e500 cores uses ISA 2.03. So this may be reason.
+> > But in official Freescale/NXP documentation for e500 is documented that
+> > lwarx supports also eh=1. Maybe it is not really supported.
+> > https://www.nxp.com/files-static/32bit/doc/ref_manual/EREF_RM.pdf (page 562)
 
-Sorry, I missed your comment. I will address and send v2 soon.
+(page 6-186)
 
-Regards,
-Anup
+> > At least there is NOTE:
+> > Some older processors may treat EH=1 as an illegal instruction.
 
->
-> Thanks,
-> Conor.
+And the architecture says
+  Programming Note
+  Warning: On some processors that comply with versions of the
+  architecture that precede Version 2.00, executing a Load And Reserve
+  instruction in which EH = 1 will cause the illegal instruction error
+  handler to be invoked.
+
+> In commit d6ccb1f55ddf ("powerpc/85xx: Make sure lwarx hint isn't set on ppc32")
+> this was clarified to affect (all?) e500v1/v2,
+
+  e500v1/v2 based chips will treat any reserved field being set in an
+  opcode as illegal.
+
+while the architecture says
+
+  Reserved fields in instructions are ignored by the processor.
+
+Whoops :-)  We need fixes for processor implementation bugs all the
+time of course, but this is a massive *design* bug.  I'm surprised this
+CPU still works as well as it does!
+
+Even the venerable PEM (last updated in 1997) shows the EH field as
+reserved, always treated as 0.
+
+> this one apparently
+> fixed it before,
+> but Christophe's commit effectively reverted that change.
+> 
+> I think only the simple_spinlock.h file actually uses EH=1
+
+That's right afaics.
+
+> and this is not
+> included in non-SMP kernels, so presumably the only affected machines were
+> the rare dual-core e500v2 ones (p2020, MPC8572, bsc9132), which would
+> explain why nobody noticed for the past 9 months.
+
+Also people using an SMP kernel on older cores should see the problem,
+no?  Or is that patched out?  Or does this use case never happen :-)
+
+
+Segher

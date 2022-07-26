@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789C85810C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97BA5810CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238052AbiGZKHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S232952AbiGZKHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbiGZKHE (ORCPT
+        with ESMTP id S238211AbiGZKHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:07:04 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5453864F9;
-        Tue, 26 Jul 2022 03:07:00 -0700 (PDT)
-X-UUID: d8449a038d6e4e6797faf78e8f294378-20220726
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:81a6d707-a1c8-4a0a-980b-7b1c2322e53f,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:7ab00fee-db04-4499-9fdf-04ef44b9468c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: d8449a038d6e4e6797faf78e8f294378-20220726
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1403125518; Tue, 26 Jul 2022 18:06:53 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 26 Jul 2022 18:06:51 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Tue, 26 Jul 2022 18:06:51 +0800
-Message-ID: <c70db24fb66f844a2b53c229fff6e943e99398db.camel@mediatek.com>
-Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "mripard@kernel.org" <mripard@kernel.org>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "airlied@linux.ie" <airlied@linux.ie>
-CC:     "msp@baylibre.com" <msp@baylibre.com>,
-        "granquet@baylibre.com" <granquet@baylibre.com>,
-        "Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?=" 
-        <jitao.shi@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?=" 
-        <LiangXu.Xu@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 26 Jul 2022 18:06:50 +0800
-In-Reply-To: <80f223c8ecf262a62feb047d39b9ea2d8655fd14.camel@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-         <378f904a445e90d65048ed07a1a55fd8c633f934.camel@mediatek.com>
-         <9c5b85034ec77be80d771ce3a17260453f007728.camel@mediatek.com>
-         <80f223c8ecf262a62feb047d39b9ea2d8655fd14.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 26 Jul 2022 06:07:30 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473C9CE12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:07:29 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id c131so24482422ybf.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eptp1f76nSR7hEUsePloA5aK8E66pD/xnYvzEDwBNmM=;
+        b=kYYITZtLdjINtcyVlpignWgeGX4iav62tqrI7FVm6/Xt9pZ0dSulgYQK9/aL9XNzeg
+         Dx3KZBuVwHCKvNENqX0oDFJ/KHlBD/ZtkYZOAi8nzAhseZfsPhCffPh1OZMFqtasLVF0
+         GFPP/JDfDjnDFqbw3vcC541SiTSV5CU8bgJkfQhqPhtg31smFhE1Y3BL8Tr+btd4fYj2
+         6FbM+ZzgrNAlhlExwG5J2ha4peQEkbO09NncgIVXY2c8+w+oBwn8ErjjZtRxly0UBuYY
+         H2KSxJIacnKVSEwvvGNJ3MN4iBKMilSa6XPHab2qXegjhCUX20MSPmgEGGRE8bxh/n2w
+         Vcpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eptp1f76nSR7hEUsePloA5aK8E66pD/xnYvzEDwBNmM=;
+        b=Ka2Sql6wb/GzdfFr42VqIK8IzQGqwcycILNcHY/ZtQnbTS9dMZp/zEf3iOH4WUkvya
+         UBZxIcpg3PBTaUl4xIwIJhHO/n+ePUl4fb+O+AxQTytxU3WpFICM8a6XH8Q+8epYj2h6
+         VklDyat+FTZF3U+skSmAv6CPGy10Z9DgpLRKKzBuSDP75hvv2u9tvqaB/POcc1c4UiTv
+         UEz4mgq1Lw/7z4RtwxzI9/iyGiKpp4fmL0IGDUHR4HG/0iog+ovPtQqDVzY2wgpf4zia
+         4ppMaZFF624OSJ372Nab1HtARvCBVdskTg8k+VAiOUyPUPP8poDIfVMovQQp/pJNaooN
+         MfnA==
+X-Gm-Message-State: AJIora8dA6lEAa9lOptNP0tKV6hnVCYMdhYtD0FOHxm/zSGTx/SHRztM
+        221w5++Mj3AmkG830pLhtFRvR5sk+L8UuQKtwZdVKg==
+X-Google-Smtp-Source: AGRyM1tUPgbPgGLtSzX4pvr8Ba22P4rYPqMQlG+L2K39fjjMFw2BowaAtAGTwG1EoVhuNFpFgMoVUB+142tJDEbYb8U=
+X-Received: by 2002:a05:6902:114b:b0:66f:d0:57c7 with SMTP id
+ p11-20020a056902114b00b0066f00d057c7mr12779019ybu.55.1658830048241; Tue, 26
+ Jul 2022 03:07:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+References: <20220701145423.53208-1-code@siddh.me>
+In-Reply-To: <20220701145423.53208-1-code@siddh.me>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 26 Jul 2022 12:07:16 +0200
+Message-ID: <CANn89iLN27NWA7Stkr4ODp6V-Q-3em0dJ2JixDMNcNY7Ap5muA@mail.gmail.com>
+Subject: Re: [PATCH] net: Fix UAF in ieee80211_scan_rx()
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,120 +75,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-26 at 17:34 +0800, CK Hu wrote:
-> On Tue, 2022-07-26 at 14:42 +0800, Rex-BC Chen wrote:
-> > On Mon, 2022-07-25 at 17:16 +0800, CK Hu wrote:
-> > > Hi, Bo-Chen:
-> > > 
-> > > On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> > > > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > 
-> > > > This patch adds a embedded displayport driver for the MediaTek
-> > > > mt8195
-> > > > SoC.
-> > > > 
-> > > > It supports the MT8195, the embedded DisplayPort units. It
-> > > > offers
-> > > > DisplayPort 1.4 with up to 4 lanes.
-> > > > 
-> > > > The driver creates a child device for the phy. The child device
-> > > > will
-> > > > never exist without the parent being active. As they are
-> > > > sharing
-> > > > a
-> > > > register range, the parent passes a regmap pointer to the child
-> > > > so
-> > > > that
-> > > > both can work with the same register range. The phy driver sets
-> > > > device
-> > > > data that is read by the parent to get the phy device that can
-> > > > be
-> > > > used
-> > > > to control the phy properties.
-> > > > 
-> > > > This driver is based on an initial version by
-> > > > Jitao shi <jitao.shi@mediatek.com>
-> > > > 
-> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > > > ---
-> > > 
-> > > [snip]
-> > > 
-> > > > +
-> > > > +static int mtk_dp_training(struct mtk_dp *mtk_dp)
-> > > > +{
-> > > > +	short max_retry = 50;
-> > > > +	int ret;
-> > > > +
-> > > > +	do {
-> > > > +		ret = mtk_dp_train_start(mtk_dp);
-> > > > +		if (!ret)
-> > > > +			break;
-> > > > +		else if (ret != -EAGAIN)
-> > > > +			return ret;
-> > > > +	} while (--max_retry);
-> > > 
-> > > mtk_dp_train_start() would never return -EAGAIN, so drop this
-> > > while
-> > > loop.
-> > > 
-> > > Regards,
-> > > CK
-> > > 
-> > 
-> > Hello CK,
-> > 
-> > the function will not return -EAGAIN, but we still want to retry 50
-> > times if mtk_dp_train_start() is failed. If we retry 50 times and
-> > it
-> > is
-> > still failed. We can confirm there are some issues for the device.
-> > 
-> > I will remove the else if of -EAGAIN and keep th while loop.
-> 
-> In this version, it never retry. And I believe you've tested this no-
-> retry version. If this no-retry version works fine, why do you insist
-> on retry? If you really need retry, merge this retry into
-> mtk_dp_train_start() because mtk_dp_train_start() have already retry.
-> 
-> Regards,
-> CK
-> 
+On Fri, Jul 1, 2022 at 4:55 PM Siddh Raman Pant <code@siddh.me> wrote:
+>
+> ieee80211_scan_rx() tries to access scan_req->flags after a null check
+> (see line 303 of mac80211/scan.c), but ___cfg80211_scan_done() uses
+> kfree() on the scan_req (see line 991 of wireless/scan.c).
+>
+> This results in a UAF.
+>
+> ieee80211_scan_rx() is called inside a RCU read-critical section
+> initiated by ieee80211_rx_napi() (see line 5043 of mac80211/rx.c).
+>
+> Thus, add an rcu_head to the scan_req struct so as to use kfree_rcu()
+> instead of kfree() so that we don't free during the critical section.
+>
+> Bug report (3): https://syzkaller.appspot.com/bug?extid=f9acff9bf08a845f225d
+> Reported-by: syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com
+> Reported-by: syzbot+6cb476b7c69916a0caca@syzkaller.appspotmail.com
+> Reported-by: syzbot+9250865a55539d384347@syzkaller.appspotmail.com
+>
+> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+> ---
+>  include/net/cfg80211.h | 2 ++
+>  net/wireless/scan.c    | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
+> index 6d02e12e4702..ba4a49884de8 100644
+> --- a/include/net/cfg80211.h
+> +++ b/include/net/cfg80211.h
+> @@ -2368,6 +2368,7 @@ struct cfg80211_scan_6ghz_params {
+>   * @n_6ghz_params: number of 6 GHz params
+>   * @scan_6ghz_params: 6 GHz params
+>   * @bssid: BSSID to scan for (most commonly, the wildcard BSSID)
+> + * @rcu_head: (internal) RCU head to use for freeing
+>   */
+>  struct cfg80211_scan_request {
+>         struct cfg80211_ssid *ssids;
+> @@ -2397,6 +2398,7 @@ struct cfg80211_scan_request {
+>         bool scan_6ghz;
+>         u32 n_6ghz_params;
+>         struct cfg80211_scan_6ghz_params *scan_6ghz_params;
+> +       struct rcu_head rcu_head;
+>
+>         /* keep last */
+>         struct ieee80211_channel *channels[];
+> diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+> index 6d82bd9eaf8c..638b2805222c 100644
+> --- a/net/wireless/scan.c
+> +++ b/net/wireless/scan.c
+> @@ -988,7 +988,7 @@ void ___cfg80211_scan_done(struct cfg80211_registered_device *rdev,
+>         kfree(rdev->int_scan_req);
+>         rdev->int_scan_req = NULL;
+>
+> -       kfree(rdev->scan_req);
+> +       kfree_rcu(rdev->scan_req, rcu_head);
+>         rdev->scan_req = NULL;
 
-Hello Ck,
+Note: this is slightly racy.
 
-There are many different devices we are not testing for DP devices.
-I think we need to keep this.
-This retry is for restart with init state.
+You are supposed to follow this order in this situation.
 
-I think it's better to keep it here and it's more clear.
+1) Clear the pointer
 
-I will remain the comments above, and I think it's enough.
+Then:
 
-BRs,
-Bo-Chen
+2) wait an rcu grace period (synchronize_rcu()) or use call_rcu()/kfree_rcu().
 
-> > 
-> > BRs,
-> > Bo-Chen
-> > > > 
-> > > > +	if (!max_retry)
-> > > > +		return -ETIMEDOUT;
-> > > > +
-> > > > +	ret = mtk_dp_video_config(mtk_dp);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +	mtk_dp_video_enable(mtk_dp, true);
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +
-> > > 
-> > > 
-> > 
-> > 
-> 
-> 
 
+
+>
+>         if (!send_message)
+> --
+> 2.35.1
+>
+>

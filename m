@@ -2,184 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA591580FD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3E9580FD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238054AbiGZJYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        id S238071AbiGZJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238069AbiGZJYN (ORCPT
+        with ESMTP id S231492AbiGZJZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:24:13 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24665313B2;
-        Tue, 26 Jul 2022 02:24:11 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 26Q9NY5k018458;
-        Tue, 26 Jul 2022 18:23:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 26Q9NY5k018458
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1658827416;
-        bh=suUWYzVOY7FlQPtXbW2xKgn26g78PFV4KRYYwLKjSVY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Qr8kpyxY8zGQpoJ4/6KdW3z0WglY2sF1dm65NG86Iafc1XuhRdbnP2nhichdJPIFX
-         5lnS7vOwbw0lbFjrn/NiigJXCORpPg4lz05P6mZmgE8mXJhRjpsMMJHOf2ycWcQmd7
-         9djySl6cLeQ/1bnRZCoqx8n88lTsgiAarXkpAGn8iM86grTOOVha9WlE+gmbMt0ck0
-         yGXlKjiWOhOkHMHVsFbJSAuC+bXyxqfcwmRWsyT9qo6TAecS67u69CPRJBitdY43oT
-         XtboHvaR7xiw3gVNnvZv080aFb2keEKJBehfmWLL5/A2Sfjty5r4/bAdH+/AY9jX2d
-         tdU3FOtTWVQVg==
-X-Nifty-SrcIP: [209.85.128.49]
-Received: by mail-wm1-f49.google.com with SMTP id w8-20020a05600c014800b003a32e89bc4eso7778882wmm.5;
-        Tue, 26 Jul 2022 02:23:35 -0700 (PDT)
-X-Gm-Message-State: AJIora8uN/XTy4dIqO+2gCB49c5spDuioJ8fBcBHUnUe1fG9hP2BJt4z
-        5LuRn4ownK+SApIdyLq+kqU00Lg9+n2PwSrX+gM=
-X-Google-Smtp-Source: AGRyM1vdAioWMgMeyjvnhKf6Et3OoTadOF2/0EqoJYDW7HanfxQoQtpASvWPrZaycwTmkbKzEgxDVE2NOKXRVzlG0HM=
-X-Received: by 2002:a05:600c:a18e:b0:3a3:10ef:672a with SMTP id
- id14-20020a05600ca18e00b003a310ef672amr23296583wmb.14.1658827413858; Tue, 26
- Jul 2022 02:23:33 -0700 (PDT)
+        Tue, 26 Jul 2022 05:25:32 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C366A2E6AB
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:25:30 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id w15so13743064lft.11
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:25:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lsAOxbutmAhPHiXKdzM1CNYF68IKrHfpAd9ExEqqgCo=;
+        b=p9vOCPEi6dcCsQvXa6MCvfq6btQ+7B4b4HHhVW1kQ+ugX7L4ao8tb8V+nkF+6+LH40
+         yFhqdwteUvLa04L305mxV+PdByvojCgPne4sTXmMnF5WceoMt8XoM4LLL41+v+qE+VYc
+         3RqVlVQ3tLKTXqSODhioD43P6CIRCHvuspCSprBqJmIULUae7IfHT6RpGqS74CUbo7NZ
+         /6ZqpkgVonuahqVvnhDz7AasAKh6zvhcnBC6RYwvjsd2p1bHADECoTLjdeXPm+F3GvTx
+         8FgxqeB7DYXUadvT4fVXLxblVSX3VQFnr20d2ng+6QVIFMt1IQbIqFRmCQZ19miLLV7V
+         LrNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lsAOxbutmAhPHiXKdzM1CNYF68IKrHfpAd9ExEqqgCo=;
+        b=oLrodgH45yk8Zn4KPKHEVxJZ0iGT9WQQsm5/rHtfrKg+5byA8Z8kbSUu4lt0tajSSh
+         mMlFLBp8XXEq+CcHJGc8fNZfZFdupf9Pxg4160CJybmVVn7wYOMo94Yufih20lUNQVaY
+         095Ll9PLOEQepHOK9a8agkcWENte2DjarmfE1xBZAZDGWX2KOH/JUIPZN2nev4YvI3rM
+         Dta8qu0WtyuNNJW6X3rv+5dy80e2DCXbatraI12v5zGAPs/eZRu0EOJKhsp5KT8AmBQk
+         5EdjYtzB9g0OyKfsKe5fYSv2E9zv4PbDnX8BSgWlPVvVjt+w1w95xu5H01Sw33I00veZ
+         JOJw==
+X-Gm-Message-State: AJIora9+3b9r6tLy9t/0HOsZCNtMOdRI16rEF+O05F/6dEwTWLZulAjK
+        Y6Da8V5HHhF1aqClEIpwXSwRig==
+X-Google-Smtp-Source: AGRyM1sh7SZksbfUM+uxlEwzz1xX/ugHveTOv2X2r/T4amVH3cqbjVSPSsPFF+AIhv7why1/kuMhvA==
+X-Received: by 2002:a05:6512:3e29:b0:48a:7596:b4b5 with SMTP id i41-20020a0565123e2900b0048a7596b4b5mr6113371lfv.486.1658827527657;
+        Tue, 26 Jul 2022 02:25:27 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id t4-20020a192d44000000b0048a751c966dsm2634978lft.224.2022.07.26.02.25.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 02:25:27 -0700 (PDT)
+Message-ID: <445060b9-a94f-396a-991b-48c64ad7a53b@linaro.org>
+Date:   Tue, 26 Jul 2022 11:25:25 +0200
 MIME-Version: 1.0
-References: <20220722022416.137548-1-mfo@canonical.com> <20220722022416.137548-7-mfo@canonical.com>
-In-Reply-To: <20220722022416.137548-7-mfo@canonical.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 26 Jul 2022 18:22:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARbSjmZgp1vg5m2j4oRYHgCUv7Wsj+4-OYdo9Cpe0Xs3A@mail.gmail.com>
-Message-ID: <CAK7LNARbSjmZgp1vg5m2j4oRYHgCUv7Wsj+4-OYdo9Cpe0Xs3A@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/6] sysctl: introduce /proc/sys/kernel/modprobe_sysctl_alias
-To:     Mauricio Faria de Oliveira <mfo@canonical.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/3] dt-bindings: soc: update MT7623A power dt-bindings
+Content-Language: en-US
+To:     Chukun Pan <amadeus@jmu.edu.cn>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220726030621.7555-1-amadeus@jmu.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726030621.7555-1-amadeus@jmu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 11:24 AM Mauricio Faria de Oliveira
-<mfo@canonical.com> wrote:
->
-> The goal of the earlier patches is to let sysctl userspace tools
-> load the kernel module with a sysctl entry that is not available
-> yet in /proc/sys/ when the tool runs (so it can become available).
->
-> Let's expose this file for userspace for two reasons:
->
-> 1) Allow such tools to identify that the running kernel has the
->    code which produces sysctl module aliases, so they could run
->    'modprobe sysctl:<entry>' only when it may actually help.
->
-> 2) Allow an administrator to hint such tools not to do that, if
->    that is desired for some reason (e.g., rather have the tools
->    fail if something is misconfigured in a critical deployment).
-
-This flag is just a hint.
-User-space tools are still able to ignore it.
-
-Perhaps, such administrator's choice might be specified in
-tools' configuration file.
-
-For example,
-
-/etc/modprobe.d/forbid-sysctl-alias.conf
-
-may specify
-
-    blacklist:  sysctl:*
-
-if they want to forbid sysctl aliasing.
-(but I do not know if this works or not).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-> Also add a module parameter for that (proc.modprobe_sysctl_alias),
-> for another method that doesn't depend on sysctl tools to be set
-> (that wouldn't fail them to try and set it if it's not there yet).
->
-> Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
+On 26/07/2022 05:06, Chukun Pan wrote:
+> Add new power domains(VDEC/DISP/ISP/BDP)
+> for MT7623A from MT7623 side.
+> 
+> Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
 > ---
->  fs/proc/proc_sysctl.c  | 8 ++++++++
->  include/linux/module.h | 1 +
->  kernel/sysctl.c        | 9 +++++++++
->  3 files changed, 18 insertions(+)
->
-> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-> index ebbf8702387e..1e63819fcda8 100644
-> --- a/fs/proc/proc_sysctl.c
-> +++ b/fs/proc/proc_sysctl.c
-> @@ -33,6 +33,14 @@ static void check_struct_sysctl_device_id(void)
->         BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
->                         != offsetof(struct ctl_table, procname));
->  }
-> +
-> +/*
-> + * Hint sysctl userspace tools whether or not to run modprobe with sysctl alias
-> + * ('modprobe sysctl:entry') if they cannot find the file '/proc/sys/.../entry'
-> + */
-> +int modprobe_sysctl_alias = 1;
-> +module_param(modprobe_sysctl_alias, int, 0644);
-> +
->  #else
->  static void check_struct_sysctl_device_id(void) {}
->  #endif
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 3010f687df19..5f565491c596 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -304,6 +304,7 @@ struct notifier_block;
->  #ifdef CONFIG_MODULES
->
->  extern int modules_disabled; /* for sysctl */
-> +extern int modprobe_sysctl_alias; /* for proc sysctl */
->  /* Get/put a kernel symbol (calls must be symmetric) */
->  void *__symbol_get(const char *symbol);
->  void *__symbol_get_gpl(const char *symbol);
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index 15073621cfa8..b396cfcb55fc 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -1763,6 +1763,15 @@ static struct ctl_table kern_table[] = {
->                 .mode           = 0644,
->                 .proc_handler   = proc_dostring,
->         },
-> +#ifdef CONFIG_PROC_SYSCTL
-> +       {
-> +               .procname       = "modprobe_sysctl_alias",
-> +               .data           = &modprobe_sysctl_alias,
-> +               .maxlen         = sizeof(modprobe_sysctl_alias),
-> +               .mode           = 0644,
-> +               .proc_handler   = proc_dointvec,
-> +       },
-> +#endif
->         {
->                 .procname       = "modules_disabled",
->                 .data           = &modules_disabled,
-> --
-> 2.25.1
->
+>  include/dt-bindings/power/mt7623a-power.h | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 
---
-Best Regards
-Masahiro Yamada
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

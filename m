@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F5E581C4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33187581C51
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239869AbiGZXJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 19:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
+        id S239947AbiGZXJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 19:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiGZXJ1 (ORCPT
+        with ESMTP id S239844AbiGZXJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 19:09:27 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FBC1AF1A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 16:09:26 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h8so22002867wrw.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 16:09:26 -0700 (PDT)
+        Tue, 26 Jul 2022 19:09:30 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3539D1AF1A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 16:09:29 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id v13so14248247wru.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 16:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YwFmvFCFnxG61X2FguLsSH/7rkf2ag01ypc985KcPmM=;
-        b=WQsGl3Kr3A1qawTQ6Zz8L/BuT36RV9oznguzkv2sbKXOveo6XZdQIAItrn2m1d7zcm
-         yACDU6OcXbJwZyN6HhH7crei0r/Wn/1+5uXU9FihvCG80QZf5Wosg82kTO0YYjQ8A/Av
-         QywOfyEj0yq0JvtOADPC5TmMSrNQT9Q++ltI2+ZrK14y9lKUQCtIURTZY//IS/Yv22Nz
-         dUVAYNAK0e16gwwdaz4tDSL5oQyz7+Xv9lzMeSRTBR2QqKxg1KcN8PufzpS7VBMKpm0p
-         nsbJTJarlnfCchcCHodhaGU2dDD9zcMxqlqbr7dU4FFXYh4Wfcgqf0NdMlCaIpnuFXQC
-         xCcA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+WjHwX17IyVtE8JB1105eRfVv2sAKL5cPl31La/xOQo=;
+        b=VGK4nGWHPp+fpD4KWPsFdVLzQoUwu3AS2ZsPPS1d9SDhBhj4jsgK1a7w4mr+kiRkVk
+         sV7TSqPh4d6SYELXugNc5Mfxum2KHCm8lFD/01gYXW6nAcSDeg0RO8OzNPA5FOOqa05Q
+         uK1doUC+LZxBh2JvADCr/aUKb44C1/HMSu105vww/VzpGa1cG1pE3t2ZGTCL0fpowSL0
+         aDKIa5XiEpnEhMERgglzPkq9wEMMscvQ4UGkllAI4EHWy3cn0d0U9WlT1Ewf+xLAjrh2
+         /5mycI6+I2DWcUo+3+pqTJdBA6s0BnnCdzza9UfjvVdUogQxTqoB3bPIkc+rI3lBg/B+
+         vJkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YwFmvFCFnxG61X2FguLsSH/7rkf2ag01ypc985KcPmM=;
-        b=XtDRMG9BN3PK4OtnxATHpmd7PCTB7p3CeBVGazODG55utG/9Za7+7/Z11eFOzTrVI2
-         LeHVY2/pA6D23GoYXiPc+6MNzuk3I3nJeyWnuz5t8yTHtQaDIL1TyUB7ThFBYNycKuE/
-         OQ2/DKbm9Z+pJNNe8MhPM9nAcppQ3fJAqxxe0m6tolIrNzPBF2hLYJK4DLBl7/6wTVHT
-         PhyL9PDoF1lpq1co+eNcgA3EJjIGu0upLUXmMFTMXhl13t48zB0FM4PVERBHAI5FA/d2
-         Zd3OFuoPqqNesrkPo0y3MIfW6H8AAKrIQX6jeRXpU2YA8rHdelpywnYsmnT2NJbb80iW
-         eeKQ==
-X-Gm-Message-State: AJIora+aXuluzxpLURDbYZs3rdtle8+GPH6kwx6iuv4F9wnR9TBlNks+
-        c+d3BkI2yxsAHnum3kCmv9/uTW2eVlSpHw==
-X-Google-Smtp-Source: AGRyM1tdcxy2N25R+h1wWjdtYIjcptfq6mjGu52yVm2VcIkYmpygzKzkyRTjVyNH47JCA++3lfeAxQ==
-X-Received: by 2002:a5d:4f09:0:b0:21e:cc31:50b6 with SMTP id c9-20020a5d4f09000000b0021ecc3150b6mr245687wru.124.1658876965270;
-        Tue, 26 Jul 2022 16:09:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+WjHwX17IyVtE8JB1105eRfVv2sAKL5cPl31La/xOQo=;
+        b=KYFE9vNPi4QV9L2b72nS5Yli8Jf6kvDevf1BgQBcIjAUiTRvtpeYjEsUqa5JltxevV
+         TyMAqdhIoSd5eu+LvJQs+vtn+wuNQHVfSHF0AZ2lX2+ZEuG4xIGqcm6baE4z6o2EAGxZ
+         qQGJbrcmDEWnrb/ApIEfLKDzoYjwbynDN5s1h5/SNKdru2b0w79tKB+AqxdMAaADA0M5
+         2a0yHJpBcAwXDatNfU001yOM2U3gsF8PJ5PYJ8rLpC/HSlRw3NbjzypedGHQZ8keaIRL
+         chKCuH3JHn1aZEbWq81cqY8dreM+6Q7Qx7Lt+04skCmnN41uxMb+qdvVPP53qUMB8GqJ
+         nrvw==
+X-Gm-Message-State: AJIora91lgX1647JVKy4Tb81zMw2KFyoOCMVCr8q9gVM81z4uTc4hpfl
+        RUnnlakC8wa+04gHmynNxkQ=
+X-Google-Smtp-Source: AGRyM1v/fQQzGFvnnr7oKrY5P9zFJMTTvyjTxfnbA8sJj+wpsxKlBRi5cRJ61oLJ48N2T6oZihddRg==
+X-Received: by 2002:adf:e70e:0:b0:21d:7f90:7501 with SMTP id c14-20020adfe70e000000b0021d7f907501mr11552680wrm.447.1658876967632;
+        Tue, 26 Jul 2022 16:09:27 -0700 (PDT)
 Received: from localhost.localdomain ([94.73.33.57])
-        by smtp.gmail.com with ESMTPSA id bn20-20020a056000061400b0021e86504736sm7278533wrb.16.2022.07.26.16.09.24
+        by smtp.gmail.com with ESMTPSA id bn20-20020a056000061400b0021e86504736sm7278533wrb.16.2022.07.26.16.09.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 16:09:24 -0700 (PDT)
+        Tue, 26 Jul 2022 16:09:27 -0700 (PDT)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     javierm@redhat.com
 Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
@@ -58,10 +58,12 @@ Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
         dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v3 0/4] KUnit tests for RGB565 conversion
-Date:   Wed, 27 Jul 2022 01:09:12 +0200
-Message-Id: <20220726230916.390575-1-jose.exposito89@gmail.com>
+Subject: [PATCH v3 1/4] drm/format-helper: Fix test on big endian architectures
+Date:   Wed, 27 Jul 2022 01:09:13 +0200
+Message-Id: <20220726230916.390575-2-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220726230916.390575-1-jose.exposito89@gmail.com>
+References: <20220726230916.390575-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -75,42 +77,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello everyone,
+The tests fail on big endian architectures, like PowerPC:
 
-This series is a follow up of the XRGB8888 to RGB332 conversion KUnit
-tests.
+ $ ./tools/testing/kunit/kunit.py run \
+   --kunitconfig=drivers/gpu/drm/tests \
+   --arch=powerpc --cross_compile=powerpc64-linux-gnu-
 
-As I mentioned in v2 [1] I suspected that the inconsistency handling
-the endian might need to be fixed.
-Fortunately, Geert Uytterhoeven fixed it in commit 4d9db10576ff
-("drm/format-helper: Fix endianness in drm_fb_*_to_*() conversion
-helpers"), so I updated the tests to reflect his change.
+Transform the XRGB8888 buffer from little endian to the CPU endian
+before calling the conversion function to avoid this error.
 
-Changes since v1:
+Fixes: 8f456104915f ("drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()")
+Reported-by: David Gow <davidgow@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ .../gpu/drm/tests/drm_format_helper_test.c    | 23 +++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
- - Fix a bug reported by David Gow in the XRGB8888 to RGB332 tests
- - Simplify the test structure as suggested by David Gow
- - Add Tested-by Tales L. Aparecida and Acked-by Thomas Zimmermann
- - Fix link in the last patch (Thomas Zimmermann)
-
-Changes since v2:
-
- - Test endian as fixed in commit 4d9db10576ff ("drm/format-helper: Fix
-   endianness in drm_fb_*_to_*() conversion helpers")
- - Fix Sparse warning reported by David Gow
- - Add Reviewed-by David Gow
-
-[1] https://lore.kernel.org/dri-devel/20220709115837.560877-1-jose.exposito89@gmail.com/
-
-José Expósito (4):
-  drm/format-helper: Fix test on big endian architectures
-  drm/format-helper: Rename test cases to make them more generic
-  drm/format-helper: Support multiple target formats results
-  drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb565()
-
- .../gpu/drm/tests/drm_format_helper_test.c    | 169 ++++++++++++++----
- 1 file changed, 139 insertions(+), 30 deletions(-)
-
+diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
+index 98583bf56044..eefaba3aaea2 100644
+--- a/drivers/gpu/drm/tests/drm_format_helper_test.c
++++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
+@@ -111,6 +111,21 @@ static size_t conversion_buf_size(u32 dst_format, unsigned int dst_pitch,
+ 	return dst_pitch * drm_rect_height(clip);
+ }
+ 
++static u32 *le32buf_to_cpu(struct kunit *test, const u32 *buf, size_t buf_size)
++{
++	u32 *dst = NULL;
++	int n;
++
++	dst = kunit_kzalloc(test, sizeof(*dst) * buf_size, GFP_KERNEL);
++	if (!dst)
++		return NULL;
++
++	for (n = 0; n < buf_size; n++)
++		dst[n] = le32_to_cpu((__force __le32)buf[n]);
++
++	return dst;
++}
++
+ static void xrgb8888_to_rgb332_case_desc(struct xrgb8888_to_rgb332_case *t,
+ 					 char *desc)
+ {
+@@ -125,6 +140,7 @@ static void xrgb8888_to_rgb332_test(struct kunit *test)
+ 	const struct xrgb8888_to_rgb332_case *params = test->param_value;
+ 	size_t dst_size;
+ 	__u8 *dst = NULL;
++	__u32 *src = NULL;
+ 
+ 	struct drm_framebuffer fb = {
+ 		.format = drm_format_info(DRM_FORMAT_XRGB8888),
+@@ -138,8 +154,11 @@ static void xrgb8888_to_rgb332_test(struct kunit *test)
+ 	dst = kunit_kzalloc(test, dst_size, GFP_KERNEL);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dst);
+ 
+-	drm_fb_xrgb8888_to_rgb332(dst, params->dst_pitch, params->xrgb8888,
+-				  &fb, &params->clip);
++	src = le32buf_to_cpu(test, params->xrgb8888, TEST_BUF_SIZE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, src);
++
++	drm_fb_xrgb8888_to_rgb332(dst, params->dst_pitch, src, &fb,
++				  &params->clip);
+ 	KUNIT_EXPECT_EQ(test, memcmp(dst, params->expected, dst_size), 0);
+ }
+ 
 -- 
 2.25.1
 

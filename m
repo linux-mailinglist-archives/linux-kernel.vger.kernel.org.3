@@ -2,138 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA6858163D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1CB581639
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235702AbiGZPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
+        id S235300AbiGZPQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiGZPPs (ORCPT
+        with ESMTP id S236499AbiGZPP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:15:48 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D3E17E37;
-        Tue, 26 Jul 2022 08:15:44 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ss3so26638446ejc.11;
-        Tue, 26 Jul 2022 08:15:44 -0700 (PDT)
+        Tue, 26 Jul 2022 11:15:56 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48AA2528C
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:15:53 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-f2a4c51c45so18958295fac.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=kali.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=30GuoeOYEvgEQlnD0yosJbbGlRpqnBP8ZH8v0N+fbbM=;
-        b=WA9cp6J4DMRCi6V/ZUoDCx4Wggz6MkNUhuqxfezjLmF1FgU6HooYR4VlbHI5bN4y/T
-         lRAMp473cFVjMzq94EeSV4cpMBtm1y4if9fWoNBlHo07PQX7DAIXqJbqCoOc3KxxIjFA
-         h7ogDzORqjuCRbY/nmNRbRD7yo1gLtv0MTGRONdv7Q3qGHODXCIcex/kqrgOUyJNqvVd
-         FjglzRRvUN47zp6G1o/8S+y05ziKBuHHbTCaUKaYIVbJ2Og3nxQERpV+KjTjpdXFZ8T6
-         XX6RrTF7agiS4WETWDVOrKzoNdosM1AIsGmIs/noTZmB8+p6fKpc2FAoz/WiHLYijCnS
-         7FMA==
+        bh=qi27YQV2llDIQ9MD4a8mHofES1qIg++Nu2kwK03YD9s=;
+        b=CQAIm7dsoQ67sdv3ZNlQe6NjLz8yY6xJUmn7p6/mRDOJU4AfuiFJiSoeJElIgg+tAG
+         mFMrcjFV63EHW9qUCC6hD/DIPS7bFjLG5uHUNoS1kGMSxsOgyukFtbcOG5hcNandjbup
+         xs4PRGPwsd9nAJw0a02gw1hvB8oQ71GiWPhIS7Sa/gVtWAKHNFvVykm9NRZ++5yJMnUE
+         ty3Y/OtxIaKGQq/omAtGXpNGE6FGbRmEK6T9/LLkQJTuu0yCUC6k3ufqEv16KlMVrlB9
+         grZTXFo08BOg6O46yegyIGx8YZplppu+dB0fP8UW3g+MU2okGzhAnk1YL/4NrYCrdKoY
+         wzKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=30GuoeOYEvgEQlnD0yosJbbGlRpqnBP8ZH8v0N+fbbM=;
-        b=TDgd96YvW+qLdIbESibZZUA/ovaoY9+mhRO6OPNd2GVUOpVrv6KXk0JmLoFC/4Wsfi
-         NE7JRfP1fAyi8d8AueKZIrBvO9IblVyKhRYBBrcBHre+4XWwWwX4Ec+4dW41oba3YAA7
-         Wr/4uNwo9pkZ+94+FfD3ildfRAVxIKMQel188aUECjDqU6t7sn7MaBiboRxF+/6cn6dx
-         eMHWJrgU8vcr8A7WwhZloWvV0v/CNrnfaPf4otUK55WOgA3eg6+2peE6h8C6eVCGsAaY
-         bth0wUkysxIh/z4OXETSQi5PdYJ9sooDNXXYdgBvJNdqJF0kRynzoj+sMkEty6hyPK07
-         31zA==
-X-Gm-Message-State: AJIora/cnG4rT8p6tiGnH2aeAsRuQDOmmcgbeHvIYT/wJZCXprrdeLQy
-        sLjccca+UyvN/Tt3/ovX3P4=
-X-Google-Smtp-Source: AGRyM1t3w6HTBhhoGB8HDsuc1By/1sTlXh3Y1sOyLWo7gXako1oA99HHAoo8isN8KKOguO0yWOgcVA==
-X-Received: by 2002:a17:907:7ba9:b0:72f:2994:74aa with SMTP id ne41-20020a1709077ba900b0072f299474aamr14486870ejc.85.1658848543107;
-        Tue, 26 Jul 2022 08:15:43 -0700 (PDT)
-Received: from [10.30.0.4] ([37.120.217.82])
-        by smtp.gmail.com with ESMTPSA id ca17-20020aa7cd71000000b0043c92c44c53sm193645edb.93.2022.07.26.08.15.42
+        bh=qi27YQV2llDIQ9MD4a8mHofES1qIg++Nu2kwK03YD9s=;
+        b=DyjnVgpqC0HD3fSYo21rh6QGHhEW2GX+xh/6E3rWRRPM8EWAtWxhVsTa6kSC9s5M40
+         2IyP4uQ1qo5MtowmI3MiMzxlfbw3J55G1R8QantU/PFagCHWCNl8IOdR8M6b6GSNUGCe
+         w5Fc0wGqHndCC11zgHi07EXCP1xzAfVLH5o2IdBtMm0RlbuP2rBy4onPPUBK16bY9EKI
+         13DlB+eatx5gZ4x6GUiGqzoH+erTtsdB43lsU5xXQTKsCbEtvDMNrzOZSPwZLVSA1RZF
+         0YdMIgGLDNemmsg3RDyYKtR2kaCdyrXcFkPDR5kKoTR7o8IB3fbPgfnHZ20fr/h1wwvm
+         ZhAA==
+X-Gm-Message-State: AJIora+WtQlvXGUC0EIQJMNajB4qfdrB7cmCHd858ItunKbDJ/TgEg/R
+        X7farkDFux+NSOhEbo2Eh5hMNg==
+X-Google-Smtp-Source: AGRyM1uhgZZGXaCq2SBFY+o1bwUROWuIuAPgjZwj+YCssxLFM98pvrFIosfruR3nTAuuiAaROu1fpw==
+X-Received: by 2002:a05:6870:b021:b0:10d:438:15e2 with SMTP id y33-20020a056870b02100b0010d043815e2mr8713667oae.162.1658848553012;
+        Tue, 26 Jul 2022 08:15:53 -0700 (PDT)
+Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id w4-20020a4aa444000000b0041ba884d42csm6015111ool.42.2022.07.26.08.15.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 08:15:42 -0700 (PDT)
-Message-ID: <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
-Date:   Tue, 26 Jul 2022 17:15:41 +0200
+        Tue, 26 Jul 2022 08:15:52 -0700 (PDT)
+Message-ID: <68600ea4-9f65-f365-382a-444c60b4a25d@kali.org>
+Date:   Tue, 26 Jul 2022 10:15:49 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
 Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Andy Gross <agross@kernel.org>,
+To:     Sibi Sankar <quic_sibis@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <20220726143005.wt4be7yo7sbd3xut@bogus>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20220726143005.wt4be7yo7sbd3xut@bogus>
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+ <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
+ <25673493-4171-62b0-f696-1316d115f388@kali.org>
+ <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
+ <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
+ <d89a540f-672d-83de-d19d-00f10e4370d1@kali.org>
+ <fec6bd98-5efd-fe34-6d75-1765219acd82@linaro.org>
+ <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 16:30, Sudeep Holla wrote:
-> On Sun, Jul 24, 2022 at 12:49:49AM +0200, Maximilian Luz wrote:
->> Add bindings for the Qualcomm Trusted Execution Environment (TrEE) UEFI
->> Secure application (uefisecapp) client.
+
+On 7/26/22 6:31 AM, Sibi Sankar wrote:
+> On 7/23/22 2:06 PM, Krzysztof Kozlowski wrote:
+>> On 23/07/2022 04:37, Steev Klimaszewski wrote:
+>>>>
+>>>> Currently it's 5.19.0-rc7 (torvalds tree at 4ba1329c) with a few extra
+>>>> patches on top, the bwmon set included.  It's possible that secure
+>>>> world uses it, but I do not know enough about that to say one way or
+>>>> the other.
 >>
-
-[...]
-
->> +examples:
->> +  - |
->> +    firmware {
->> +        scm {
->> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
->> +        };
->> +        tee-uefisecapp {
->> +            compatible = "qcom,tee-uefisecapp";
->> +        };
-> 
-> Do you expect some issues using the scm driver APIs without the
-> any additions in the DT ? I mean can't you auto-discover by using the
-> APIs. I haven't looked at the driver or any other patches in the series,
-> but I would like to know if we can avoid adding any new bindings if it
-> can be discovered via those SCM driver APIs.
-
-Not at scale, at least as far as I can tell.
-
-Part of the setup-process of this driver is to query an "application ID"
-from a unique string identifying the application (in this case
-"qcom.tz.uefisecapp"). If that call fails, we know the app is not there.
-
-But: If we'd want to support more than just "uefisecapp" we'd have to
-query each app in some predefined list. As far as I can tell, there's no
-method to enumerate all present/loaded ones. The Windows driver seems to
-use a hard-coded list of apps that are present on some specific SoC.
-
-It might be possible that there exists such a method, but if it does, the
-Windows driver doesn't seem to use it and I don't know about it.
-
-Also, there would need to be at least some type of compatible to
-indicate the presence of that TrEE / Secure Application interface used by
-uefisecapp. Unless you want to send some potentially unsupported SCM
-commands on every platform with qcom,scm and see what comes back.
-
-So ultimately I think it's better to add a DT entry for it. That also
-(hopefully) ensures that someone tested and (at least in some way)
-validated this. Again, It's a reverse engineered driver.
-
-Regards,
-Max
+>> To test patches you should apply them on maintainer's tree or
+>> linux-next. Applying on other trees of course might be useful for
+>> testing some backports, but it is independent process and different 
+>> issue.
+>>
+>>>>
+>>>> -- steev
+>>>>
+>>> I think you may be right; I just applied this patchset to -next
+>>> (20220722) and i do not see the error message there.  On my 5.19-rc7
+>>> tree, i am also testing a patchset that enables qcom devices to access
+>>> efivars, so possibly we are ending up in secure world there?
+>>
+>> Actually mapping of IO space should not touch secure world, so this was
+>> a long shot assuming you test it on the next.
+>>
+>
+> The memory region specified in device tree overlaps with the llcc system
+> cache controller node. Steev probably had the QCOM_LLCC config enabled 
+> when he tested it out on his branch.
+>
+>>
+>> Best regards,
+>> Krzysztof
+>>
+Good catch!  You are correct, my -next config did not have QCOM_LLCC 
+set, and I am using QCOM_LLCC=m on the 5.19.0 release candidate.

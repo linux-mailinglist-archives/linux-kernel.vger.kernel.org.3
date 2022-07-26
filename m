@@ -2,136 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F394E581ABD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F2A581AC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239753AbiGZUJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 16:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S239822AbiGZUMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 16:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiGZUJs (ORCPT
+        with ESMTP id S231731AbiGZUME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 16:09:48 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1343233E27
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=36wpHebUWA+lWUHxAuJLmGhedd5D2vCF+qo7fkkHIZw=; b=po3/K8o0LE+O1LP0BOKdX76MuI
-        aVX7XVON+Drywbs8JbetPnMkOqmdEKM75kXi0jABF2dai8m2FJVWd9gn2+fFEZsmIZ6A0NULB+cID
-        J1mDkNbfosUKiTtILcYPfLnMuC+qSlQZYYMa9WpKHgqm9puaJjb9mN66yMqXpmniS0H8azkifqJq9
-        5dqm4IuBd8qHBEu1ymhcBam8yFAVrh2s2OGLZ6SEjg7zsmC9k7r5tdz5rX1lqyTjW+jcUaVIWbTIy
-        rYxusGLPt8vvnoq6pGu5PJLmY5y0c0eRr41vHCHvuFbwDLhGTNyN1S184X34vtA9aTdXitzHA8jiR
-        l5SGj/Kw==;
-Received: from 201-13-50-220.dsl.telesp.net.br ([201.13.50.220] helo=[192.168.15.109])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oGQs3-007gIM-UV; Tue, 26 Jul 2022 22:09:35 +0200
-Message-ID: <63594d3f-bf14-cf96-ecdb-5e12b4cd4472@igalia.com>
-Date:   Tue, 26 Jul 2022 17:09:15 -0300
+        Tue, 26 Jul 2022 16:12:04 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04B032477
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:12:01 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id o13so4039729edc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aqW2jQ+Akji8N/AJOWkQoEhPnhEDdU8RvQcZ00uEYJo=;
+        b=ZG5zQYj0tD9ykZ3Z3UzFvSYkW1evxRXZfyYL2+l+05i8v5KOUb9pDU+JxPb3YIpNDT
+         sQWPHRM/lA4J508Wa0zqu8qFiq8WUhvP1BPyIwjATYDJMzx6HJtsyWGSKVsW3xJA3QXY
+         neSHF4ZOOHkmVfqA8QtIr6oxkklc4RLZfrvT3zmusJxGS4+gA7u6t15YQEvm/eTB9Nev
+         rtfL/x7+1yuZ9+4o4YDl0bY6TTnCXHrEIrb/L5LCAkrQ6IKl4AQDUXN9IlXRcGbKsMjS
+         S2kNNvCDHai2la0ddMcrPFgqEB6Jep0KyJLJYvHh2PscEY9eJaz8DzCSJr3LGj3k/6Kv
+         4VNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aqW2jQ+Akji8N/AJOWkQoEhPnhEDdU8RvQcZ00uEYJo=;
+        b=ievC2xBHBjBxfW7wt/aF51L6aqWCVZsYAQyIEzVxfuoj6HLRDkYaJB/oPD/8EVhO9N
+         koywrn+Yj6N0b9axbqpFKe/bgQlkWvkCfGftRMDCVdP9b8EaQ6hLJOhjk2rbZAhQ4rJO
+         R3EYulx9+5k7fJFyF2NedxliN6Q6WKs7vHrGeQ9ngU943X6+gKZcjl/5GAc3paDtbpOu
+         ShPEwnyH4ZA2I9HLMD0t4MSiJglLKAJjpKlefEER1eQO24G0oESxc194STrZoVqHEwMh
+         J0z3J/ZAuYadVtL4rpQ+lNkpDbCt4XspTfU6ITsx3ImDGYH+XUJtFSro99l1shch+Ofx
+         Imuw==
+X-Gm-Message-State: AJIora9+ne8bhaeDgRrFnhPruJ15x/8i25gJmMAaLSiXduf2RoZZC7dr
+        jELR7bAwzX3BfdbggSGyObU=
+X-Google-Smtp-Source: AGRyM1vGpFkmv1bsXHo6g9sRYLgWWV7T7/PMkLzh3P4QVXtNc+H+z4ZdLYjvn6IP4DHhIKvqctzVfQ==
+X-Received: by 2002:a05:6402:51d4:b0:43c:1742:430b with SMTP id r20-20020a05640251d400b0043c1742430bmr9621483edd.212.1658866320152;
+        Tue, 26 Jul 2022 13:12:00 -0700 (PDT)
+Received: from bhl6zntu.conti.de ([2a02:908:2525:6ea0:4afb:53d1:2272:b50b])
+        by smtp.gmail.com with ESMTPSA id wj22-20020a170907051600b0072af2460cd6sm6863959ejb.30.2022.07.26.13.11.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 13:11:59 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 22:11:51 +0200
+From:   Wadim Mueller <wafgo01@gmail.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Conor.Dooley@microchip.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:SIFIVE DRIVERS" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH] checkstack: add riscv support for scripts/checkstack.pl
+Message-ID: <20220726201151.GB17701@bhl6zntu.conti.de>
+References: <20220713194112.15557-1-wafgo01@gmail.com>
+ <fa77d640-a18d-ca77-ba57-6735094a224f@microchip.com>
+ <CAK7LNARu4OU_hGQHu8B7F=5jLzU1jp7L=RHVcyo3eLkEyWNcQw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] drm/amd/display: change variables type
-Content-Language: en-US
-To:     Magali Lemes <magalilemes00@gmail.com>
-Cc:     siqueirajordao@riseup.net, sunpeng.li@amd.com,
-        tales.aparecida@gmail.com, airlied@linux.ie, Xinhui.Pan@amd.com,
-        Rodrigo.Siqueira@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, mwen@igalia.com,
-        mairacanal@riseup.net, dri-devel@lists.freedesktop.org,
-        daniel@ffwll.ch, alexander.deucher@amd.com, isabbasso@riseup.net,
-        andrealmeid@riseup.net, harry.wentland@amd.com,
-        christian.koenig@amd.com
-References: <20220725181559.250030-1-magalilemes00@gmail.com>
- <a7589316-2a55-85f2-b665-5fe4bebf7a69@igalia.com>
- <4f359e30-90f8-c8bf-4e07-6856fcfd3506@gmail.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <4f359e30-90f8-c8bf-4e07-6856fcfd3506@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNARu4OU_hGQHu8B7F=5jLzU1jp7L=RHVcyo3eLkEyWNcQw@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Às 17:47 de 25/07/22, Magali Lemes escreveu:
-> 
-> On 7/25/22 16:42, André Almeida wrote:
->> Hi Magali,
->>
->> Às 15:15 de 25/07/22, Magali Lemes escreveu:
->>> As "dcn3_15_soc" and "dcn3_16_soc" are of type "struct
->>> _vcs_dpi_soc_bounding_box_st", change their types accordingly.
->>>
->> I can see that indeed this type change sense for those variables, but
->> isn't a bit strange that the type was wrong in the first place? I wonder
->> if this variable is even used, given that it would very likely throw a
->> compiler error when using the wrong type and trying to access struct
->> members that aren't defined.
-> 
-> 
-> A compilation error would be thrown if either
-> "dc/dcn315/dcn315_resource.h" or "dc/dcn316/dcn316_resource.h" were
-> included in the files where "dcn3_15_soc" and "dcn3_16_soc" are
-> initialized. Since they are not included, the wrong variable type error
-> is not shown.
-> To solve the sparse warning in the second patch of this series, those
-> variables need to be declared first, but they are already declared,
-> we're only missing the headers. If I only add the headers, then those
-> variables will be seen, and I get the expected incompatible variables
-> types error. So, fixing the types here is a preliminary work for the
-> next patch.
-> 
+Hi Conor, Hi Masahiro,
 
-And what happens if you just drop this declaration? It still not clear
-to me why this belongs to this header, giving that AFAIK this var is
-only used at drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
+thank you for your support. Your help is much appreciated.
 
-Note that this kind of information you explained to me would be very
-useful if you had included it in a cover letter to add more context for
-your patches :)
+Best Regards
+Wadim
 
+On Tue, Jul 26, 2022 at 01:47:47PM +0900, Masahiro Yamada wrote:
+> On Tue, Jul 26, 2022 at 2:40 AM <Conor.Dooley@microchip.com> wrote:
+> >
+> > On 13/07/2022 20:41, Wadim Mueller wrote:
+> > > [You don't often get email from wafgo01@gmail.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+> > >
+> >
+> > I feel like you might've been mislead by get_maintainer for this
+> > patch. It looks like the maintainer covering this is Masahiro
+> > Yamada <masahiroy@kernel.org> (at least he's taken the last few
+> > patches for it).
 > 
-> Magali
+> 
+> I can pick this up.
+> 
+> Applied to linux-kbuild. Thanks.
 > 
 > 
->>
->>> Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
->>> ---
->>>   drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h | 2 +-
->>>   drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h | 2 +-
->>>   2 files changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
->>> b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
->>> index 39929fa67a51..45276317c057 100644
->>> --- a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
->>> +++ b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
->>> @@ -32,7 +32,7 @@
->>>       container_of(pool, struct dcn315_resource_pool, base)
->>>     extern struct _vcs_dpi_ip_params_st dcn3_15_ip;
->>> -extern struct _vcs_dpi_ip_params_st dcn3_15_soc;
->>> +extern struct _vcs_dpi_soc_bounding_box_st dcn3_15_soc;
->>>     struct dcn315_resource_pool {
->>>       struct resource_pool base;
->>> diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
->>> b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
->>> index 0dc5a6c13ae7..d2234aac5449 100644
->>> --- a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
->>> +++ b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
->>> @@ -32,7 +32,7 @@
->>>       container_of(pool, struct dcn316_resource_pool, base)
->>>     extern struct _vcs_dpi_ip_params_st dcn3_16_ip;
->>> -extern struct _vcs_dpi_ip_params_st dcn3_16_soc;
->>> +extern struct _vcs_dpi_soc_bounding_box_st dcn3_16_soc;
->>>     struct dcn316_resource_pool {
->>>       struct resource_pool base;
+> >
+> > I'll be honest, I don't know how to verify that the output is
+> > correct - but I did run it & it does output something that looks
+> > sane /shrug
+> >
+> > Thanks,
+> > Conor.
+> >
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > >
+> > > scripts/checkstack.pl lacks support for the riscv architecture. Add
+> > > support to detect "addi sp,sp,-FRAME_SIZE" stack frame generation instruction
+> > >
+> > > Signed-off-by: Wadim Mueller <wafgo01@gmail.com>
+> > > ---
+> > >  scripts/checkstack.pl | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > diff --git a/scripts/checkstack.pl b/scripts/checkstack.pl
+> > > index d2c38584ece6..d48dfed6d3db 100755
+> > > --- a/scripts/checkstack.pl
+> > > +++ b/scripts/checkstack.pl
+> > > @@ -16,6 +16,7 @@
+> > >  #      AArch64, PARISC ports by Kyle McMartin
+> > >  #      sparc port by Martin Habets <errandir_news@mph.eclipse.co.uk>
+> > >  #      ppc64le port by Breno Leitao <leitao@debian.org>
+> > > +#      riscv port by Wadim Mueller <wafgo01@gmail.com>
+> > >  #
+> > >  #      Usage:
+> > >  #      objdump -d vmlinux | scripts/checkstack.pl [arch]
+> > > @@ -108,6 +109,9 @@ my (@stack, $re, $dre, $sub, $x, $xs, $funcre, $min_stack);
+> > >         } elsif ($arch eq 'sparc' || $arch eq 'sparc64') {
+> > >                 # f0019d10:       9d e3 bf 90     save  %sp, -112, %sp
+> > >                 $re = qr/.*save.*%sp, -(([0-9]{2}|[3-9])[0-9]{2}), %sp/o;
+> > > +       } elsif ($arch =~ /^riscv(64)?$/) {
+> > > +               #ffffffff8036e868:      c2010113                addi    sp,sp,-992
+> > > +               $re = qr/.*addi.*sp,sp,-(([0-9]{2}|[3-9])[0-9]{2})/o;
+> > >         } else {
+> > >                 print("wrong or unknown architecture \"$arch\"\n");
+> > >                 exit
+> > > --
+> > > 2.25.1
+> > >
+> > >
+> > > _______________________________________________
+> > > linux-riscv mailing list
+> > > linux-riscv@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada

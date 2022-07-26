@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6CC5815B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C435815B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239459AbiGZOtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S239375AbiGZOtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239447AbiGZOtQ (ORCPT
+        with ESMTP id S232883AbiGZOtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:49:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3B12D1F7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:49:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 46048CE19A1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 14:49:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58FE2C433D6;
-        Tue, 26 Jul 2022 14:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658846950;
-        bh=6qe77S7H9yLJcTguoEah7bWjYEDj8Rr8Be/b5etbPYs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FsYX4Uq4Hm49BLpGwC2L0jCbnphx9BSNKb1oJefNVr103LWLNFo2dJEUpOspPNmR8
-         mo0mnGe6xOSqBAP4hmQWMfHjtB+wulW4SvebGSs6OAo5T+OumbOsHNfeWQWI4BngWz
-         LNJNU5gsiAH5WXPvmVH3jxR2SLAaZgk5HfglW3X9nhxCCpPtFMeRX4tWbM+G960/Bx
-         RQnef+RP5z3YY27ojllPVSKfq/zV8p5KuZ9GS8yQGfEYfP9jtzpb+rfkgOM8QiBwAB
-         en/N94oNvsM6VLT9UaARuZwAcxkPMuRoGfgR03fKl2ediKrsArE8/8fziGoG+kFKm5
-         SCOwm9X/qVK2Q==
-Date:   Tue, 26 Jul 2022 15:49:02 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     maz@kernel.org, mark.rutland@arm.com, madvenka@linux.microsoft.com,
-        tabba@google.com, oliver.upton@linux.dev, will@kernel.org,
-        qperret@google.com, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com,
-        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
-        mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com,
-        elver@google.com, keirf@google.com, yuzenghui@huawei.com,
-        ardb@kernel.org, oupton@google.com,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, android-mm@google.com,
-        kernel-team@android.com
-Subject: Re: [PATCH v6 06/17] arm64: stacktrace: Add description of
- stacktrace/common.h
-Message-ID: <Yt/+3qpSqtntXzpY@sirena.org.uk>
-References: <20220726073750.3219117-1-kaleshsingh@google.com>
- <20220726073750.3219117-7-kaleshsingh@google.com>
+        Tue, 26 Jul 2022 10:49:11 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5407ADFD5;
+        Tue, 26 Jul 2022 07:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658846950; x=1690382950;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Zyxa8AaE+D9EWdSI2SVfiEoyB6sklDmOxEaanIlc9fU=;
+  b=AwhewTZ6FY7OKl2NligZiYiA1Qcj9AAw2AJA4VCmslXLbVRvsJT2cFKC
+   mYLsGFZzkxLCOdmJa0tj1qAZCm67Cra3h611kTIPBKVwP4MORd1CY1yC4
+   CC1cB15ftMOs8xUVX8xeyWwokqmjbfEoodAlEJeRgSTb3F2VaykTjSCr9
+   5G53kr0HxQpgr52ZqQ6cpden8L9Bu0i3fMSNh6YTDGlqWbO5+FTkf+v1v
+   G5ANJk6+oOaZYXjAS6jR3IeVyHHNYs0914gjwpT/n6ucqVrRDBxsTKN+L
+   FvcmGxpEnTpP/WHVycq199R4xKJtFc0jo+lm76yeyE0fPfpeOk6NJJpkn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="374272279"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="374272279"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 07:49:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="550429112"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 26 Jul 2022 07:49:07 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E2D3BF1; Tue, 26 Jul 2022 17:49:16 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH net-next v1 1/1] firewire: net: Make use of get_unaligned_be48(), put_unaligned_be48()
+Date:   Tue, 26 Jul 2022 17:49:06 +0300
+Message-Id: <20220726144906.5217-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VvhY7zJe39DOaRz/"
-Content-Disposition: inline
-In-Reply-To: <20220726073750.3219117-7-kaleshsingh@google.com>
-X-Cookie: All rights reserved.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Since we have a proper endianness converters for BE 48-bit data use
+them.
 
---VvhY7zJe39DOaRz/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/firewire/net.c | 14 ++------------
+ include/net/firewire.h |  3 +--
+ 2 files changed, 3 insertions(+), 14 deletions(-)
 
-On Tue, Jul 26, 2022 at 12:37:39AM -0700, Kalesh Singh wrote:
+diff --git a/drivers/firewire/net.c b/drivers/firewire/net.c
+index dcc141068128..af22be84034b 100644
+--- a/drivers/firewire/net.c
++++ b/drivers/firewire/net.c
+@@ -201,15 +201,6 @@ struct fwnet_packet_task {
+ 	u8 enqueued;
+ };
+ 
+-/*
+- * Get fifo address embedded in hwaddr
+- */
+-static __u64 fwnet_hwaddr_fifo(union fwnet_hwaddr *ha)
+-{
+-	return (u64)get_unaligned_be16(&ha->uc.fifo_hi) << 32
+-	       | get_unaligned_be32(&ha->uc.fifo_lo);
+-}
+-
+ /*
+  * saddr == NULL means use device source address.
+  * daddr == NULL means leave destination address (eg unresolved arp).
+@@ -1306,7 +1297,7 @@ static netdev_tx_t fwnet_tx(struct sk_buff *skb, struct net_device *net)
+ 		max_payload        = peer->max_payload;
+ 		datagram_label_ptr = &peer->datagram_label;
+ 
+-		ptask->fifo_addr   = fwnet_hwaddr_fifo(ha);
++		ptask->fifo_addr   = get_unaligned_be48(ha->uc.fifo);
+ 		ptask->generation  = generation;
+ 		ptask->dest_node   = dest_node;
+ 		ptask->speed       = peer->speed;
+@@ -1494,8 +1485,7 @@ static int fwnet_probe(struct fw_unit *unit,
+ 	ha.uc.uniq_id = cpu_to_be64(card->guid);
+ 	ha.uc.max_rec = dev->card->max_receive;
+ 	ha.uc.sspd = dev->card->link_speed;
+-	ha.uc.fifo_hi = cpu_to_be16(dev->local_fifo >> 32);
+-	ha.uc.fifo_lo = cpu_to_be32(dev->local_fifo & 0xffffffff);
++	put_unaligned_be48(dev->local_fifo, ha.uc.fifo);
+ 	dev_addr_set(net, ha.u);
+ 
+ 	memset(net->broadcast, -1, net->addr_len);
+diff --git a/include/net/firewire.h b/include/net/firewire.h
+index 2442d645e412..8fbff8d77865 100644
+--- a/include/net/firewire.h
++++ b/include/net/firewire.h
+@@ -13,8 +13,7 @@ union fwnet_hwaddr {
+ 		__be64 uniq_id;		/* EUI-64			*/
+ 		u8 max_rec;		/* max packet size		*/
+ 		u8 sspd;		/* max speed			*/
+-		__be16 fifo_hi;		/* hi 16bits of FIFO addr	*/
+-		__be32 fifo_lo;		/* lo 32bits of FIFO addr	*/
++		u8 fifo[6];		/* FIFO addr			*/
+ 	} __packed uc;
+ };
+ 
+-- 
+2.35.1
 
-> Add brief description on how to use stacktrace/common.h to implement
-> a stack unwinder.
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---VvhY7zJe39DOaRz/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLf/t0ACgkQJNaLcl1U
-h9Dq9Qf+M8Vw3uujBFIzWTDAk2o46YySw1X4f/3zirbpelSLiA92qxcFQx6PGkJX
-DEX9sfHtytc3vnSGvG/Xnsp+AKHSq3l6ON9FYvU3wJRTRPRnkuz4UPHydRipyjsm
-eFp3c8+crrbRjcShB8nckslrRtberLCJDMKeVXoN9m0x3dXaBqkaYgiM1NyhCPZa
-3YNRCGE0zGsqVxPW3fRCW0SQY2mrpjBZC/sE4Xg805v8hgXqhNb656/EUhSOUC4P
-YWixP6TJUIf/hqhckzlebKuYc64LpI07KIsv4hmG7S/T8SxqxGATDQ1Rg3y7ySZ7
-Zs/RPpBZPRgr7ZgrOqBKLdMg1QDXLQ==
-=AZ9B
------END PGP SIGNATURE-----
-
---VvhY7zJe39DOaRz/--

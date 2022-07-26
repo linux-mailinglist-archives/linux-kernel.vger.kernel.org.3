@@ -2,120 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E9A5810C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789C85810C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238127AbiGZKGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S238052AbiGZKHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbiGZKF5 (ORCPT
+        with ESMTP id S232909AbiGZKHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:05:57 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7096B32D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:05:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r188-20020a1c44c5000000b003a34ac64bdfso4098303wma.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:05:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=N4WNsjcyfHcAvLPigBZdGUVfOpccpwIBfs6yQsD7gX8=;
-        b=ESZrvxX2WvzdGnsXMu2F+n2o0nF7FohKJLdTCNpgoR7+ROvnDDAn09DaAtBTYqwmT1
-         1SFsj8Ikas4/K6prY75Y/I0rYhILQLxshnC8Zb4v84hLsS9fUwfNGxXPoWUOJ/juPbKp
-         BeY2cE2CF3VmmopES08E6SGTH6wlF58FwnkoSecddp0qyiPqqF0+IF9bxM1TQzZlQNYm
-         5yNUml05RiN0dlX9ggFJpMA+wmKBalq7o+Nd56CQzdm9zffV1aRjMIUClv5b2KunPd9C
-         DYSjabnwvqkYJEDAUCSiz/fWZhf9nJc6QPj7ibnYhtR+4643fbZhPVYwO8Q4gNKtzDyD
-         jwcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N4WNsjcyfHcAvLPigBZdGUVfOpccpwIBfs6yQsD7gX8=;
-        b=ZOxodAqdu1pJUkPsiQDltMLeknVFVSYeAGcCQpUkrioWihU+3ySiPw2HbLbm5O2zJf
-         +RDIGf5E+AlqXj9JD2jxCH0BXuRj0atDYQH9/Y2yJe1TMVpNUI1OQUsPLjf78Zocm0mz
-         UT0dQLWr7AFgHtqiZQ9Q9iKQcbWg0D+B/eAjehvfkzwQW2FULgmKgHbf/TgBEVwELOxw
-         OtK3DmUn0k+N5AGMuh/tVy77nuPYjV6F3DV6tLE2/Yide8XWhgpkReaeVx/a/2+Vbg3v
-         gfw84UIfXjJtz6Hi2I/p6FnPvgHkjhKPuBYJKKv0nyeb4CLjMCf/puvDV4g3nQr/bai6
-         l64w==
-X-Gm-Message-State: AJIora8gD+DL5HDE971m8MKPYLA0g84BgaJY0Fc/j0xFSadXwzc88Vce
-        5vsebT9nb5zvrITkzLL8NU5IXQ==
-X-Google-Smtp-Source: AGRyM1tEVHzIYfFNtMUjUlEvW8Z8DmLV8atur8oUsSnmFFWYJNwuh2Drzt/T5nRAvSURuT2ygdHA/A==
-X-Received: by 2002:a05:600c:4f0e:b0:3a3:3077:e5b3 with SMTP id l14-20020a05600c4f0e00b003a33077e5b3mr11328958wmq.94.1658829954941;
-        Tue, 26 Jul 2022 03:05:54 -0700 (PDT)
-Received: from [192.168.1.5] ([195.24.90.54])
-        by smtp.googlemail.com with ESMTPSA id f8-20020a05600c4e8800b003a31673515bsm23278974wmq.7.2022.07.26.03.05.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 03:05:53 -0700 (PDT)
-Message-ID: <51eb6fd9-928f-bd97-d603-e9096402c799@linaro.org>
-Date:   Tue, 26 Jul 2022 13:05:50 +0300
+        Tue, 26 Jul 2022 06:07:04 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5453864F9;
+        Tue, 26 Jul 2022 03:07:00 -0700 (PDT)
+X-UUID: d8449a038d6e4e6797faf78e8f294378-20220726
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:81a6d707-a1c8-4a0a-980b-7b1c2322e53f,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:7ab00fee-db04-4499-9fdf-04ef44b9468c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: d8449a038d6e4e6797faf78e8f294378-20220726
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1403125518; Tue, 26 Jul 2022 18:06:53 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 26 Jul 2022 18:06:51 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 26 Jul 2022 18:06:51 +0800
+Message-ID: <c70db24fb66f844a2b53c229fff6e943e99398db.camel@mediatek.com>
+Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "msp@baylibre.com" <msp@baylibre.com>,
+        "granquet@baylibre.com" <granquet@baylibre.com>,
+        "Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?=" 
+        <jitao.shi@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "LiangXu Xu =?UTF-8?Q?=28=E5=BE=90=E4=BA=AE=29?=" 
+        <LiangXu.Xu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 26 Jul 2022 18:06:50 +0800
+In-Reply-To: <80f223c8ecf262a62feb047d39b9ea2d8655fd14.camel@mediatek.com>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
+         <378f904a445e90d65048ed07a1a55fd8c633f934.camel@mediatek.com>
+         <9c5b85034ec77be80d771ce3a17260453f007728.camel@mediatek.com>
+         <80f223c8ecf262a62feb047d39b9ea2d8655fd14.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5/7] venus : Addition of support for
- VIDIOC_TRY_ENCODER_CMD
-Content-Language: en-US
-To:     Viswanath Boma <quic_vboma@quicinc.com>,
-        video.upstream.external@qti.qualcomm.com,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Dikshita Agarwal <dikshita@codeaurora.org>
-References: <20220712122347.6781-1-quic_vboma@quicinc.com>
- <20220712122347.6781-5-quic_vboma@quicinc.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-In-Reply-To: <20220712122347.6781-5-quic_vboma@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/12/22 15:23, Viswanath Boma wrote:
-> From: Dikshita Agarwal <dikshita@codeaurora.org>
+On Tue, 2022-07-26 at 17:34 +0800, CK Hu wrote:
+> On Tue, 2022-07-26 at 14:42 +0800, Rex-BC Chen wrote:
+> > On Mon, 2022-07-25 at 17:16 +0800, CK Hu wrote:
+> > > Hi, Bo-Chen:
+> > > 
+> > > On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
+> > > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > 
+> > > > This patch adds a embedded displayport driver for the MediaTek
+> > > > mt8195
+> > > > SoC.
+> > > > 
+> > > > It supports the MT8195, the embedded DisplayPort units. It
+> > > > offers
+> > > > DisplayPort 1.4 with up to 4 lanes.
+> > > > 
+> > > > The driver creates a child device for the phy. The child device
+> > > > will
+> > > > never exist without the parent being active. As they are
+> > > > sharing
+> > > > a
+> > > > register range, the parent passes a regmap pointer to the child
+> > > > so
+> > > > that
+> > > > both can work with the same register range. The phy driver sets
+> > > > device
+> > > > data that is read by the parent to get the phy device that can
+> > > > be
+> > > > used
+> > > > to control the phy properties.
+> > > > 
+> > > > This driver is based on an initial version by
+> > > > Jitao shi <jitao.shi@mediatek.com>
+> > > > 
+> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > > ---
+> > > 
+> > > [snip]
+> > > 
+> > > > +
+> > > > +static int mtk_dp_training(struct mtk_dp *mtk_dp)
+> > > > +{
+> > > > +	short max_retry = 50;
+> > > > +	int ret;
+> > > > +
+> > > > +	do {
+> > > > +		ret = mtk_dp_train_start(mtk_dp);
+> > > > +		if (!ret)
+> > > > +			break;
+> > > > +		else if (ret != -EAGAIN)
+> > > > +			return ret;
+> > > > +	} while (--max_retry);
+> > > 
+> > > mtk_dp_train_start() would never return -EAGAIN, so drop this
+> > > while
+> > > loop.
+> > > 
+> > > Regards,
+> > > CK
+> > > 
+> > 
+> > Hello CK,
+> > 
+> > the function will not return -EAGAIN, but we still want to retry 50
+> > times if mtk_dp_train_start() is failed. If we retry 50 times and
+> > it
+> > is
+> > still failed. We can confirm there are some issues for the device.
+> > 
+> > I will remove the else if of -EAGAIN and keep th while loop.
 > 
->   v4l2 compliance expecting support for vidioc_try_encoder_cmd
->   error details : test VIDIOC_(TRY_)ENCODER_CMD: FAIL
+> In this version, it never retry. And I believe you've tested this no-
+> retry version. If this no-retry version works fine, why do you insist
+> on retry? If you really need retry, merge this retry into
+> mtk_dp_train_start() because mtk_dp_train_start() have already retry.
 > 
-> Change-Id: I87a655dc506f3e713e2c86ab5203ca9c45cc5e1b
-
-Drop Change-Id and add Dikshita's Signed-off tag.
-
-> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-> ---
->  drivers/media/platform/qcom/venus/venc.c | 1 +
->  1 file changed, 1 insertion(+)
-
-With above comments fixed you can add my:
-
-Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-
+> Regards,
+> CK
 > 
-> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-> index 30ddb84c24997..4f10f5de7e3e6 100644
-> --- a/drivers/media/platform/qcom/venus/venc.c
-> +++ b/drivers/media/platform/qcom/venus/venc.c
-> @@ -589,6 +589,7 @@ static const struct v4l2_ioctl_ops venc_ioctl_ops = {
->  	.vidioc_subscribe_event = venc_subscribe_event,
->  	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
->  	.vidioc_encoder_cmd = venc_encoder_cmd,
-> +	.vidioc_try_encoder_cmd = v4l2_m2m_ioctl_try_encoder_cmd,
->  };
->  
->  static int venc_pm_get(struct venus_inst *inst)
 
--- 
-regards,
-Stan
+Hello Ck,
+
+There are many different devices we are not testing for DP devices.
+I think we need to keep this.
+This retry is for restart with init state.
+
+I think it's better to keep it here and it's more clear.
+
+I will remain the comments above, and I think it's enough.
+
+BRs,
+Bo-Chen
+
+> > 
+> > BRs,
+> > Bo-Chen
+> > > > 
+> > > > +	if (!max_retry)
+> > > > +		return -ETIMEDOUT;
+> > > > +
+> > > > +	ret = mtk_dp_video_config(mtk_dp);
+> > > > +	if (ret)
+> > > > +		return ret;
+> > > > +	mtk_dp_video_enable(mtk_dp, true);
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > 
+> > > 
+> > 
+> > 
+> 
+> 
+

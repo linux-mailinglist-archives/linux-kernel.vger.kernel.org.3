@@ -2,179 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489BD58141B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 15:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E123658141F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 15:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238701AbiGZNZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 09:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S238841AbiGZN0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 09:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiGZNZn (ORCPT
+        with ESMTP id S238722AbiGZN0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 09:25:43 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88537FC4;
-        Tue, 26 Jul 2022 06:25:42 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id p132so17030782oif.9;
-        Tue, 26 Jul 2022 06:25:42 -0700 (PDT)
+        Tue, 26 Jul 2022 09:26:04 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF7DBC92
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 06:26:03 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p11so17800475lfu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 06:26:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9W7JF3IrfXSv6HnR9aCy5G+yL4VgTUQ6ChNgjcsQI/8=;
-        b=bZp2M2MhWF4fUgtzDycyJtCGnccS7zhqB/ugkSS8ntWH3CMg9E/LzEu1Jo3kb/MpTZ
-         IgDi2K4VcGD8U/63u5WGcIBBsF3wkEMdw8H8Xc5w+ruI8Ap1Ljm2rorfsO+qlYdu+NFv
-         sE9j1+1PohyJPN69w1+vqO3WsLLg3y6emIxGfwxZ3A5MeaF6bSSY8Z9hx3cAf4HiY2dP
-         UXrcU/gCrrZhfFebtvdSkyROHwkGxKbZmImpBwvFyYmCB+2WtdIrxQSuWT+sEiawQopl
-         zysqx2i6oNELoSZRheokx3eCJdeYAz1M0qouwmbpe+eRtVwu5LkV0Mq5wPW9buXkZG2C
-         THBA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7LFFMwiJHSgt40VzNgnK+p0FFAjdjoeGyTH4E8FwT0E=;
+        b=Aiij4gjIIX693LP3uECqDjhaNEduUYkTznUdozN6Z1X40PUPTHN+vv8FbbmpNUqhrh
+         u2m/nMkW5fh9k5qQ/m5dalcbJSVBVF4lQebPHd1LnVZt5zmiLl9sABtM/Nu+mNud+1Vg
+         b4rBDftjLJu8c52FxG197+ZtQ+wYjpvPhQ32KlQVSTpOQmJso+Z+GluiUqli8oFn6lY/
+         7GGUGe4dLSAXcnncncROK7clRlT4q6+bxv7ffFDN8wTJec+Ngx11lCo8e4Rff2oV+umo
+         CFMFzez31oIvcU/N8+b9gPCbipF/Eb7q55vbQrKAfQBeOjsCijMeKvYwviwS3395i/Tn
+         cQ4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=9W7JF3IrfXSv6HnR9aCy5G+yL4VgTUQ6ChNgjcsQI/8=;
-        b=njFL3X9f3qfzrxIsd6/1OI8g/jZmyEIqND7xX3fG4K/5or9Nd0ufuS0FzZ+6vuJ8Jb
-         S6b1zs0UqlgL6ME3isaIcWvPuSQ6lidJSVRdR9at/xk/7c2iVvvsc+E/aUgrbtbf70vD
-         O3L3wYIglw6Bh0pI0M3fo3ayhG8hyN4xSQTbReYgYz5OuVZPJtxp+bUaWRqhgcC4Sf7n
-         0eiH2DgGU+6knCpth/wgKPTyiBfNGWndzm8JERyo4tXnJEEgPwafeZr+Tp8nDlbS7sMR
-         2qUxZjKmV8x8wftNgNKh00NkSeKLfXMcPtXcKf0XIRNXpcjeMvIE/3EhxjcvqoOjz1VH
-         UoDg==
-X-Gm-Message-State: AJIora8pybm+Lz0ZlEGTFHyvpdjUolf8uDTJznwkajAilzh2nE5LSVkV
-        XDi9wB+jk9hulfRTiu1iFBE=
-X-Google-Smtp-Source: AGRyM1vue6vjDJ0Mb8htpAGM3ajVE5K9yi5DBca3z27whgvhv09UeHHoAibRm/+ZRNKhMLXD0eo8uQ==
-X-Received: by 2002:a05:6808:124a:b0:32c:45f0:5011 with SMTP id o10-20020a056808124a00b0032c45f05011mr7883176oiv.217.1658841940214;
-        Tue, 26 Jul 2022 06:25:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n8-20020a056870240800b0010d7242b623sm7343024oap.21.2022.07.26.06.25.38
+        bh=7LFFMwiJHSgt40VzNgnK+p0FFAjdjoeGyTH4E8FwT0E=;
+        b=kdHXbecw4yKjhyRqKL4AGDmUTh8ZXDE61YmlqK4s4dIgOdecMIno4IIJW0ziPxJp6Z
+         6O4zKQFZ+0tB0bsB6dRx8ek4d7MTbFQzGb8xx5vwQZkr2gQPMz3aiWC5BhqQk1+E/2Cl
+         k6hp2yG+VkymBS6Tz2gKRmVbI6HByWrC1lMdKGTgwaELmr9tx9sn4NUl9G7v44Xn/0dI
+         N3IITd7ZOoCowcmNzN1+DIaDW/cX28AgclolzFF0ULII9eBsuU1n/nPyDR4SCWOdlmta
+         ZR4PS3hSTJvlv0MrFq33y7V+zdMDefME+ia3zP10vHjPUKBpsTIb3NW52VaycmNigkaD
+         UQYw==
+X-Gm-Message-State: AJIora965Pjvjnh47zm6TIX2HRg6mTqf0SY3lihNF0o5UxfX55I7BKBN
+        NhQsd9tAzGRQzsrr11KAYmmQbg==
+X-Google-Smtp-Source: AGRyM1uBaVRREf8/ovTyKCewffls63KLbGfV6IuqcxFgSfDg/bqFevMeoWqywHu+/bDCIz+1i8Cefw==
+X-Received: by 2002:a05:6512:1301:b0:488:c42:5c02 with SMTP id x1-20020a056512130100b004880c425c02mr6106016lfu.61.1658841961437;
+        Tue, 26 Jul 2022 06:26:01 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id p18-20020ac24ed2000000b00489c54859a5sm328145lfr.287.2022.07.26.06.25.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 06:25:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fc64285e-30c7-44b1-e264-839944105185@roeck-us.net>
-Date:   Tue, 26 Jul 2022 06:25:35 -0700
+        Tue, 26 Jul 2022 06:26:00 -0700 (PDT)
+Message-ID: <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
+Date:   Tue, 26 Jul 2022 15:25:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] watchdog: mtk_wdt: Move mt6589-wdt fallback compatible to
- end of list
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220726062057.320342-1-wenst@chromium.org>
- <91613700-3335-7499-1b48-3d88edd9da36@collabora.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <91613700-3335-7499-1b48-3d88edd9da36@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
+ <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 01:37, AngeloGioacchino Del Regno wrote:
-> Il 26/07/22 08:20, Chen-Yu Tsai ha scritto:
->> The watchdog facility in the MediaTek SoCs are all the same, but the
->> hardware block also contains a reset controller, which differs in the
->> number of resets used between different SoCs. This difference is
->> supported with of_device_get_match_data() supplying the number of reset
->> lines for the newer compatible strings. The original mt6589-wdt only
->> covers the watchdog facility.
+On 26/07/2022 13:15, Maximilian Luz wrote:
+>>> +properties:
+>>> +  compatible:
+>>> +    const: qcom,tee-uefisecapp
 >>
->> of_device_is_compatible(), and by extension of_device_get_match_data(),
->> works by going through the given list of compatible strings sequentially,
->> and checks if any of the device node's compatible strings match.
->>
->> To avoid early matching on the "mediatek,mt6589-wdt" fallback compatible,
->> which only provides watchdog functionality and no reset controller, move
->> the fallback entry to the end of the list, so that other, more specific
->> compatible strings have a chance at getting matched.
->>
->> Fixes: c254e103082b ("watchdog: mtk_wdt: mt8183: Add reset controller")
->> Fixes: adc318a34066 ("watchdog: mt8192: add wdt support")
->> Fixes: 8c6b5ea6ac68 ("watchdog: mediatek: mt8195: add wdt support")
->> Fixes: 4dbabc4d9e8c ("watchdog: mediatek: mt8186: add wdt support")
->> Fixes: 711a5b25bac9 ("watchdog: mtk_wdt: mt7986: Add toprgu reset controller support")
->> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>> Isn't this SoC-specific device? Generic compatibles are usually not
+>> expected.
 > 
-> Uhm, I don't think that this is an issue?
-> 
-> Ordering precedence is given to the list that you specify in devicetree, that's why
-> "the second one" is a fallback, meaning: ("impossible" example below)
-> 
-> compatible = "mediatek,mt8195-wdt", "mediatek,mt8183-wdt", "mediatek,mt6589-wdt";
-> 
-> This gets walked as per the order in which you wrote the compatibles, so:
-> * Check match for mt8195-wdt, does not exist?
->   * Check match for mt8183-wdt, exists!
->   * Put everything into dev->of_node (having mediatek,mt8183-wdt only!)
-> 
-> __of_device_is_compatible() gets dev->of_node and compares that to all of the
-> possible matches.
-> 
-> struct device_node for this device hence does *not* contain any of the other
-> compatibles that we specified in devicetree, so it does *not* contain any of
-> "mediatek,mt8195-wdt", or "mediatek,mt6589-wdt", because we have previously
-> successfully matches 8183.
-> 
-> I don't think that I've misinterpreted this flow, but if I have, let's pull
-> in devicetree people and check with them?
-> 
+> This is essentially software (kernel driver) talking to software (in the
+> TrustZone), so I don't expect there to be anything SoC specific about it.
 
-I don't see the problem either. The fallback needs to be listed last in the
-compatible property. If it isn't, having it last in struct of_device_id
-won't help either.
+You are documenting here firmware in TZ (not kernel driver). Isn't this
+a specific piece which might vary from device to device?
 
-> Cheers,
-> Angelo
+IOW, do you expect the same compatible to work for all possible Qualcomm
+boards (past and future like in 10 years from now)?
+
 > 
->> ---
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    firmware {
+>>> +        scm {
+>>> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
+>>> +        };
+>>> +        tee-uefisecapp {
+>>> +            compatible = "qcom,tee-uefisecapp";
 >>
->> This change complements the removal of the fallback compatible from the
->> bindings and DTSI files [1].
->>
-
-If the fallback isn't listed in the dtsi files, it won't match at all,
-no matter where it is located in struct of_device_id.
-
-Guenter
-
->> [1] https://lore.kernel.org/linux-mediatek/20220721014845.19044-1-allen-kh.cheng@mediatek.com/
->>
->>   drivers/watchdog/mtk_wdt.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
->> index e97787536792..3d5a239b93ba 100644
->> --- a/drivers/watchdog/mtk_wdt.c
->> +++ b/drivers/watchdog/mtk_wdt.c
->> @@ -425,12 +425,13 @@ static int mtk_wdt_resume(struct device *dev)
->>   static const struct of_device_id mtk_wdt_dt_ids[] = {
->>       { .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
->> -    { .compatible = "mediatek,mt6589-wdt" },
->>       { .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
->>       { .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
->>       { .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
->>       { .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
->>       { .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
->> +    /* Fallback compatible string must be last entry */
->> +    { .compatible = "mediatek,mt6589-wdt" },
->>       { /* sentinel */ }
->>   };
->>   MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
+>> You did not model here any dependency on SCM. This is not full
+>> description of the firmware/hardware
 > 
-> 
+> How would I do that? A lot of other stuff also depends on SCM being
+> present (e.g. qcom_q6v5_pas for loading mdt files) and I don't see them
+> declare this in the device tree. As far as I can tell, SCM is pretty
+> much expected to be there at all times (i.e. can't be unloaded) and
+> drivers check for it when probing via qcom_scm_is_available(),
+> deferring probe if not.
 
+It seems this will be opening a can of worms...
+
+The problem with existing approach is:
+1. Lack of any probe ordering or probe deferral support.
+2. Lack of any other dependencies, e.g. for PM.
+
+Unloading is "solved" only by disallowing the unload, not by proper
+device links and module get/put.
+
+I understand that SCM must be there, but the same for several other
+components and for these others we have ways to pass reference around
+(e.g. syscon regmap, PHYs handles).
+
+> 
+> Don't take this as an excuse as in "I want to leave that out", it's just
+> that I don't know how one would declare such a dependency explicitly. If
+> you can tell me how to fix it, I'll include that for v2.
+
+I think there are no dedicated subsystem helpers for this (like for
+provider/consumer of resets/power domains/clocks etc), so one way would
+be something like nvidia,bpmp is doing.
+
+meson_sm_get is a bit similar - looking by compatible. This is less
+portable and I would prefer the bpmp way (just like syscon phandles).
+
+The qcom_q6v5_pas could be converted later to use similar approach and
+eventually the "tatic struct qcom_scm *__scm;" can be entirely removed.
+
+Any comments on this approach from Konrad, Bjorn, Dmitry, Vinod and
+anyone else?
+
+
+Best regards,
+Krzysztof

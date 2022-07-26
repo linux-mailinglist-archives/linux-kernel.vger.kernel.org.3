@@ -2,255 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAAE580B8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9F9580B92
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238036AbiGZGXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 02:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
+        id S238015AbiGZGYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 02:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238035AbiGZGXX (ORCPT
+        with ESMTP id S238362AbiGZGYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 02:23:23 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DEA2CDF3;
-        Mon, 25 Jul 2022 23:18:40 -0700 (PDT)
-X-UUID: dae5e8d8001d436c98dacca0315d8827-20220726
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:e0e87a82-bde3-4391-86ab-0a1e30b0da99,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:70
-X-CID-INFO: VERSION:1.1.8,REQID:e0e87a82-bde3-4391-86ab-0a1e30b0da99,OB:0,LOB:
-        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:70
-X-CID-META: VersionHash:0f94e32,CLOUDID:20b481b3-06d2-48ef-b2dd-540836705165,C
-        OID:db9b4cbbdabb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: dae5e8d8001d436c98dacca0315d8827-20220726
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1998765177; Tue, 26 Jul 2022 14:18:36 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 26 Jul 2022 14:18:35 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Tue, 26 Jul 2022 14:18:35 +0800
-Message-ID: <ef407d8767d12d240280f1c9d9fdd8ba9d3e5632.camel@mediatek.com>
-Subject: Re: [PATCH v14 01/10] dt-bindings: mediatek,dp: Add Display Port
- binding
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 26 Jul 2022 14:18:35 +0800
-In-Reply-To: <0e1d4cef6b7e72813300eb9be5650066166ac763.camel@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-2-rex-bc.chen@mediatek.com>
-         <0e1d4cef6b7e72813300eb9be5650066166ac763.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 26 Jul 2022 02:24:33 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D600C65AA
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:20:12 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id u20so7646698ljk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=rb2ySu9Zl15fxW44cCCElhq9r7i1rewTrkcmDvDCTaM=;
+        b=Jvru7a9cQHQg1z3Swh1/i6cXvh1uCzrdqEcaYUFamriLhRu31E8JfCG2tw0VnSFufN
+         OAB78nmv2gqj6ZfGBakm7xqAgk7ftWngPu37XwD0WaukBFkaNfWn9d5+BWOR4Kwz8WaE
+         0wqx1CDqn5Na/advzEgn0KOas7d+2daAkrteIs0WCTxJT8QLW7VXF9tIBbdROze6iSSq
+         PXgUaODqG0+LSP0Ft8lJJn5i4m+u5CQyFDptKjRi+zvrRIiFdNCk1vJGW6+USvEDgrKk
+         7ESVFfcjXXYhGMflJJ28zaJPvr+qAUwKWaxiliRPoHd+4JOzw7nsYVTEtdGxnzAy2DWJ
+         rNdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=rb2ySu9Zl15fxW44cCCElhq9r7i1rewTrkcmDvDCTaM=;
+        b=0Bt+hmxtU1SDNQEUtt+dyma3zaa7V2+lhQmo0/26qjOooHts3yqo3OOgKsj6ZpiO5V
+         81ecY5armMbSvt/e6PoOZWUGELV2llZQ90IIxAr42k2+Xgy5Jd7UkumKQXm1gORL/qri
+         1R9lZAaQtZ9fHk+R8P8knPRSLY0L2DFZiur7rpTqV6aufsFlEJLtWdTMAfHjCFqCuPzG
+         T6o/w+LDUsTp7EPFSZA8ez4NZJd9iS/9TB6On24myuPEvRpmtqOIM9Uj+fPLvhXkb+BK
+         DmG/JVTVFUfdItWfHD5fi1BRbeV+KwpWyog4y5g5Ak23Mj93pOaOQHk6NoaWEw8uY4yp
+         q+0g==
+X-Gm-Message-State: AJIora8hzPcVQwkrvp8PkUPmtllx0zxp1ll9iNmYInRSSVcVggaTzpdm
+        Touj75lZpb2K/oMMyGlKzrIheg==
+X-Google-Smtp-Source: AGRyM1uPiaqoGs0X58ByTAteooNM8/4fhGpT9go52rlHyI421NNxbtpvAL3YGLvlwmdLm8KKSAnQ4A==
+X-Received: by 2002:a2e:9e17:0:b0:25d:78d8:407f with SMTP id e23-20020a2e9e17000000b0025d78d8407fmr5622681ljk.433.1658816410141;
+        Mon, 25 Jul 2022 23:20:10 -0700 (PDT)
+Received: from localhost (h-46-59-88-103.A463.priv.bahnhof.se. [46.59.88.103])
+        by smtp.gmail.com with ESMTPSA id w14-20020a05651234ce00b0048a7ce3ff84sm1979332lfr.285.2022.07.25.23.20.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 23:20:09 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 08:20:08 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
+        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
+        heiko@sntech.de, hayashi.kunihiko@socionext.com,
+        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
+        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
+        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
+        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
+        miquel.raynal@bootlin.com, shawnguo@kernel.org,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v2 17/32] thermal/drivers/rcar: Switch to new of API
+Message-ID: <Yt+HmDK/NX2AUDMr@oden.dyn.berto.se>
+References: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
+ <20220725212637.2818207-18-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220725212637.2818207-18-daniel.lezcano@linexp.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-13 at 15:56 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
+Hi Daniel,
+
+On 2022-07-25 23:26:22 +0200, Daniel Lezcano wrote:
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
 > 
-> On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This controller is present on several mediatek hardware. Currently
-> > mt8195 and mt8395 have this controller without a functional
-> > difference,
-> > so only one compatible field is added.
-> > 
-> > The controller can have two forms, as a normal display port and as
-> > an
-> > embedded display port.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  .../display/mediatek/mediatek,dp.yaml         | 115
-> > ++++++++++++++++++
-> >  1 file changed, 115 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
-> > ml
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
-> > ml
-> > new file mode 100644
-> > index 000000000000..e2d6cb314297
-> > --- /dev/null
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
-> > ml
-> > @@ -0,0 +1,115 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: 
-> > http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek Display Port Controller
-> > +
-> > +maintainers:
-> > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> > +  - Jitao shi <jitao.shi@mediatek.com>
-> > +
-> > +description: |
-> > +  Device tree bindings for the MediaTek display port TX (DP) and
-> > +  embedded display port TX (eDP) controller present on some
-> > MediaTek
-> > SoCs.
-> > +  MediaTek DP and eDP are different hardwares and they have
-> > different
-> > +  base address for registers, so we need two different compatibles
-> > to
-> > +  separate them.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt8195-dp-tx
-> > +      - mediatek,mt8195-edp-tx
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  nvmem-cells:
-> > +    maxItems: 1
-> > +    description: efuse data for display port calibration
-> > +
-> > +  nvmem-cell-names:
-> > +    const: dp_calibration_data
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Input endpoint of the controller, usually
-> > dp_intf
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        unevaluatedProperties: false
-> > +        description: Output endpoint of the controller
-> > +        properties:
-> > +          endpoint:
-> > +            $ref: /schemas/media/video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +            properties:
-> > +              data-lanes:
-> > +                description: |
-> > +                  number of lanes supported by the hardware.
-> > +                  The possible values:
-> > +                  0       - For 1 lane enabled in IP.
-> > +                  0 1     - For 2 lanes enabled in IP.
-> > +                  0 1 2 3 - For 4 lanes enabled in IP.
-> > +                minItems: 1
-> > +                maxItems: 4
-> > +            required:
-> > +              - data-lanes
-> > +
-> > +    required:
-> > +      - port@0
-> > +      - port@1
-> > +
-> > +  max-linkrate-mhz:
-> > +    enum: [ 1620, 2700, 5400, 8100 ]
-> > +    description: maximum link rate supported by the hardware.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - ports
-> > +  - max-linkrate-mhz
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/power/mt8195-power.h>
-> > +    dp_tx@1c600000 {
-> > +        compatible = "mediatek,mt8195-dp-tx";
-> > +        reg = <0x1c600000 0x8000>;
-> > +        power-domains = <&spm MT8195_POWER_DOMAIN_DP_TX>;
-> > +        interrupts = <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +        max-linkrate-mhz = <8100>;
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
 > 
-> Why dp-tx has no clock property? I think this device should work with
-> a
-> clock.
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+
+The series do not apply to the branch in the cover-letter so this is 
+tested with the two series directly from the list on-top of v5.19-rc2.
+
+Tested-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+>  drivers/thermal/rcar_gen3_thermal.c | 16 ++++++++--------
+>  drivers/thermal/rcar_thermal.c      | 13 +++----------
+>  2 files changed, 11 insertions(+), 18 deletions(-)
 > 
-> Regards,
-> CK
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index 43eb25b167bc..29946114a8f9 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -164,9 +164,9 @@ static int rcar_gen3_thermal_round(int temp)
+>  	return result * RCAR3_THERMAL_GRAN;
+>  }
+>  
+> -static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
+> +static int rcar_gen3_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
+> +	struct rcar_gen3_thermal_tsc *tsc = tz->devdata;
+>  	int mcelsius, val;
+>  	int reg;
+>  
+> @@ -203,9 +203,9 @@ static int rcar_gen3_thermal_mcelsius_to_temp(struct rcar_gen3_thermal_tsc *tsc,
+>  	return INT_FIXPT(val);
+>  }
+>  
+> -static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
+> +static int rcar_gen3_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+>  {
+> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
+> +	struct rcar_gen3_thermal_tsc *tsc = tz->devdata;
+
+Hi Daniel,
+
+The series do not apply to the 
+>  	u32 irqmsk = 0;
+>  
+>  	if (low != -INT_MAX) {
+> @@ -225,7 +225,7 @@ static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
+>  	return 0;
+>  }
+>  
+> -static struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops = {
+> +static struct thermal_zone_device_ops rcar_gen3_tz_of_ops = {
+>  	.get_temp	= rcar_gen3_thermal_get_temp,
+>  	.set_trips	= rcar_gen3_thermal_set_trips,
+>  };
+> @@ -504,8 +504,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>  	for (i = 0; i < priv->num_tscs; i++) {
+>  		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
+>  
+> -		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
+> -							    &rcar_gen3_tz_of_ops);
+> +		zone = devm_thermal_of_zone_register(dev, i, tsc,
+> +						     &rcar_gen3_tz_of_ops);
+>  		if (IS_ERR(zone)) {
+>  			dev_err(dev, "Can't register thermal zone\n");
+>  			ret = PTR_ERR(zone);
+> @@ -556,7 +556,7 @@ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
+>  
+>  		priv->thermal_init(tsc);
+>  		if (zone->ops->set_trips)
+> -			rcar_gen3_thermal_set_trips(tsc, zone->prev_low_trip,
+> +			rcar_gen3_thermal_set_trips(zone, zone->prev_low_trip,
+>  						    zone->prev_high_trip);
+>  	}
+>  
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index 1d729ed4d685..4df42d70d867 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -271,13 +271,6 @@ static int rcar_thermal_get_current_temp(struct rcar_thermal_priv *priv,
+>  	return 0;
+>  }
+>  
+> -static int rcar_thermal_of_get_temp(void *data, int *temp)
+> -{
+> -	struct rcar_thermal_priv *priv = data;
+> -
+> -	return rcar_thermal_get_current_temp(priv, temp);
+> -}
+> -
+>  static int rcar_thermal_get_temp(struct thermal_zone_device *zone, int *temp)
+>  {
+>  	struct rcar_thermal_priv *priv = rcar_zone_to_priv(zone);
+> @@ -323,8 +316,8 @@ static int rcar_thermal_get_trip_temp(struct thermal_zone_device *zone,
+>  	return 0;
+>  }
+>  
+> -static const struct thermal_zone_of_device_ops rcar_thermal_zone_of_ops = {
+> -	.get_temp	= rcar_thermal_of_get_temp,
+> +static struct thermal_zone_device_ops rcar_thermal_zone_of_ops = {
+> +	.get_temp	= rcar_thermal_get_temp,
+>  };
+>  
+>  static struct thermal_zone_device_ops rcar_thermal_zone_ops = {
+> @@ -534,7 +527,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  			goto error_unregister;
+>  
+>  		if (chip->use_of_thermal) {
+> -			priv->zone = devm_thermal_zone_of_sensor_register(
+> +			priv->zone = devm_thermal_of_zone_register(
+>  						dev, i, priv,
+>  						&rcar_thermal_zone_of_ops);
+>  		} else {
+> -- 
+> 2.25.1
 > 
 
-Hello CK,
-
-We just need to enable the power domain of dp.
-The clock of dp is generated by itself and we are not using the global
-pll to generate clocks.
-
-BRs,
-Bo-Chen
-
-> > +
-> > +        ports {
-> > +            #address-cells = <1>;
-> > +            #size-cells = <0>;
-> > +
-> > +            port@0 {
-> > +                reg = <0>;
-> > +                dptx_in: endpoint {
-> > +                    remote-endpoint = <&dp_intf0_out>;
-> > +                };
-> > +            };
-> > +            port@1 {
-> > +                reg = <1>;
-> > +                dptx_out: endpoint {
-> > +                    data-lanes = <0 1 2 3>;
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> 
-> 
-
+-- 
+Kind Regards,
+Niklas Söderlund

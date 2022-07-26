@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8429C580DE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0431C580DFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238580AbiGZHhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
+        id S238454AbiGZHi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238582AbiGZHhT (ORCPT
+        with ESMTP id S238270AbiGZHii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:37:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2099B2C657
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658820973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I2X6PqCMeHc1eaWE4k5DTUECIGHthtw+h76LSBegAoc=;
-        b=GizBc+2Lp1Z2dgVA8kY+6obkF3WbYVupqRDej2MN8tmEP2gFe9eyTsJjzhE5n0stUV1ZuO
-        0fyZi2F0iDgBKT8lUDA1kZ2X+xMQyNczagnN9X5IxSTL2Sk2bfU1zExtUJYfQS/qmtzxHL
-        B/BKRK7oLS7d6KRLrtnv3oppCrzYuuE=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-320-g0IW7hPuPUCOpvUwtiLYyw-1; Tue, 26 Jul 2022 03:36:11 -0400
-X-MC-Unique: g0IW7hPuPUCOpvUwtiLYyw-1
-Received: by mail-pl1-f197.google.com with SMTP id o17-20020a170902d4d100b0016d7afee242so2816002plg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:36:11 -0700 (PDT)
+        Tue, 26 Jul 2022 03:38:38 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7E81ADA0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:37:55 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id m11-20020a5b040b000000b0066fcc60d1a0so10506640ybp.19
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Zkvbbd71rFcp/5pkrofzfRbxCdOfkUQrx8t07Ja45VM=;
+        b=BsTFVNclyw0PgiHpJkckONN5sobCiNVeaNkOuXPQh0z/fr3/H/ZpJq229bQB4WI8wH
+         dCpFTOw3hIUtXYetVsnvxEd6YG5AHn3GC9O+CZYb51dySuTzvvd9hatiRjSNtCmolgNA
+         Si3A1LZUVDzfouL+qH+feg/jA921FtBlsSRkAGYovsFM4NxbUv3oMIla0duEjjqxL6r0
+         s7bYgreKYpay29mjBR55y8DGLtNN0dCEyqqM06vSiUb+3azEzwBIIXw9TMPw1KRlEMKk
+         p4pOtC2fNC/gIOzW3GObbQuj0ZXHWwFJ9C8jnjejHVPBGOBuI7Im25Ue5T0JpTeW8OXL
+         GgBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=I2X6PqCMeHc1eaWE4k5DTUECIGHthtw+h76LSBegAoc=;
-        b=EmNu+Qvg9OhbCbp/S6cwNznWstRFXGiPDinfs414Q+snQwGd/IVrX0uhottaS7E1L9
-         J3KBParEjunb9ONB0R4imzYQ139Pd5d+k7zTEo5D/0MdKzdyHvlrCTncgnAV6Bsh8xkC
-         RvmSvKOFxAKFxaWOlgNO7GHOoaV6jm6/Hf0lkQedhn9tsmcxC2n1OvZLB+b7RluModVa
-         BtMT7ACMt3xf+3B+4gF0ByB+Pqia9KjWg69MWUHMn6/kLgSPylU1d5HNodSwwJWHidPy
-         iE39pdL5gbD4gmh6p5QzbrR+Z1+4scRmYv2w0IxQwFxQ6pswS4DEn83BrYdMne8rzPUf
-         9pyw==
-X-Gm-Message-State: AJIora+gxo1Wv9FticV0GCZLnUzL2vDrYbjKokhLmtYpKcxB5F0w8Z2x
-        AVta10MCnnM+qxUy+pMPuh+9OW5DO6+o3cb5lXXvT9ykhwm2uQpKxzb6qVwpGcOOV/l38E4IuS3
-        VKNMz+/GnqwafpmT8jRo0xmf3
-X-Received: by 2002:a17:902:cf4a:b0:16b:d4a8:b92e with SMTP id e10-20020a170902cf4a00b0016bd4a8b92emr7837097plg.16.1658820970474;
-        Tue, 26 Jul 2022 00:36:10 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tdX+kz6MU69RxO0ipZjRMbzb/5fxM+oxpalwEkNhFemmJUH/+vCfJ8sm1F0bb0Jbjv0YZ/yg==
-X-Received: by 2002:a17:902:cf4a:b0:16b:d4a8:b92e with SMTP id e10-20020a170902cf4a00b0016bd4a8b92emr7837079plg.16.1658820970172;
-        Tue, 26 Jul 2022 00:36:10 -0700 (PDT)
-Received: from [10.72.12.201] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id x23-20020a1709027c1700b0016c57657977sm10604451pll.41.2022.07.26.00.36.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 00:36:09 -0700 (PDT)
-Message-ID: <16a232ad-e0a1-fd4c-ae3e-27db168daacb@redhat.com>
-Date:   Tue, 26 Jul 2022 15:36:01 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [RFC 1/5] vhost: reorder used descriptors in a batch
-Content-Language: en-US
-To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>, eperezma@redhat.com,
-        sgarzare@redhat.com, mst@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-References: <20220721084341.24183-1-qtxuning1999@sjtu.edu.cn>
- <20220721084341.24183-2-qtxuning1999@sjtu.edu.cn>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220721084341.24183-2-qtxuning1999@sjtu.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Zkvbbd71rFcp/5pkrofzfRbxCdOfkUQrx8t07Ja45VM=;
+        b=3q0Ik6cR1ZKnCN4MhgZrf2oYXXkZyuQ9iNUMdrO9TvNZdD0gJmkDQU3O9tsnxWsJR8
+         WYYvVenK/zRlssWbXBaJNSAMSZeOsVVB7fqsyShGHAcDLs7FneFq7vBTpT/EcZAPTA5/
+         QVkgKXIZdUVN+rx4y1PVn0zzu4LP7MWI7uh2ge0Iv+zGLoGC0iPw3nv/Jg5vdrhujx0E
+         8imSfm1gVnOL1dhUcMqB9ijUtN8aw3TcMb+HIQs7Icck2wWaVCPSxmFfDVOufBcvvVFH
+         pQbPHB3UqocQTGKh/FqTp1Aaa/RmQ9OdC4iBQPAJyeBC6bE4d37r0miJv0Vmcykiyg4t
+         P4UA==
+X-Gm-Message-State: AJIora/19s6TG9sLMKLTWeOzPWkYg4/mKFGvdAj8xnD7Kk9IsUg+i6dR
+        RbAFK1dt6jglscwGabX+e0HoKaX86mxas1ygQA==
+X-Google-Smtp-Source: AGRyM1uW7EiXw04g/GMZdlvtloDg+5FYArnZQtp3GXa1FArDhRIL+bj0E4vzJyxfIMxiB2DYEOAxlDmRYc2uFTHy1A==
+X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:4f77:3b64:736a:394e])
+ (user=kaleshsingh job=sendgmr) by 2002:a05:6902:706:b0:670:a469:6efb with
+ SMTP id k6-20020a056902070600b00670a4696efbmr13007602ybt.410.1658821075048;
+ Tue, 26 Jul 2022 00:37:55 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 00:37:33 -0700
+Message-Id: <20220726073750.3219117-1-kaleshsingh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v6 00/17] KVM nVHE Hypervisor stack unwinder
+From:   Kalesh Singh <kaleshsingh@google.com>
+To:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, tabba@google.com,
+        oliver.upton@linux.dev
+Cc:     will@kernel.org, qperret@google.com, kaleshsingh@google.com,
+        james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
+        mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com,
+        elver@google.com, keirf@google.com, yuzenghui@huawei.com,
+        ardb@kernel.org, oupton@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, android-mm@google.com,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,160 +74,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
-在 2022/7/21 16:43, Guo Zhi 写道:
-> Device may not use descriptors in order, for example, NIC and SCSI may
-> not call __vhost_add_used_n with buffers in order.  It's the task of
-> __vhost_add_used_n to order them.
+This is v6 of nVHE stacktrace support. The series is based on
+arm64 for-next/stacktrace.
+
+The previous versions were posted at:
+v5: https://lore.kernel.org/r/20220721055728.718573-1-kaleshsingh@google.com/
+v4: https://lore.kernel.org/r/20220715061027.1612149-1-kaleshsingh@google.com/
+v3: https://lore.kernel.org/r/20220607165105.639716-1-kaleshsingh@google.com/
+v2: https://lore.kernel.org/r/20220502191222.4192768-1-kaleshsingh@google.com/
+v1: https://lore.kernel.org/r/20220427184716.1949239-1-kaleshsingh@google.com/
+
+This version mainly reorganizes the order of to patches into more coherent
+groups, along with addressing the other feedback in v5.
+
+Patches 1 to 6 factor out the common unwinding logic into
+into arch/arm64/include/asm/stacktrace/common.h, for reuse by the nVHE
+unwinder. No functional change is introduced by these:
+
+  [01/17] arm64: stacktrace: Add shared header for common stack unwinding code
+  [02/17] arm64: stacktrace: Factor out on_accessible_stack_common()
+  [03/17] arm64: stacktrace: Factor out unwind_next_common()
+  [04/17] arm64: stacktrace: Handle frame pointer from different address spaces
+  [05/17] arm64: stacktrace: Factor out common unwind()
+  [06/17] arm64: stacktrace: Add description of stacktrace/common.h
+
+Patches 7 to 11 implement stacktraces for conventional nVHE (non-protected
+mode):
+
+  [07/17] KVM: arm64: On stack overflow switch to hyp overflow_stack
+  [08/17] KVM: arm64: Stub implementation of non-protected nVHE HYP stack
+    unwinder
+  [09/17] KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
+  [10/17] KVM: arm64: Implement non-protected nVHE hyp stack unwinder
+  [11/17] KVM: arm64: Introduce hyp_dump_backtrace()
+
+Patches 12 to 17 implement stacktraces for protected-nVHE (pKVM):
+
+  [12/17] KVM: arm64: Add PROTECTED_NVHE_STACKTRACE Kconfig
+  [13/17] KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
+  [14/17] KVM: arm64: Stub implementation of pKVM HYP stack unwinder
+  [15/17] KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
+  [16/17] KVM: arm64: Implement protected nVHE hyp stack unwinder
+  [17/17] KVM: arm64: Introduce pkvm_dump_backtrace()
+
+The updated cover letter is copied below for convenience.
+
+Thanks,
+Kalesh
+
+============
+
+KVM nVHE Stack unwinding.
+===
+
+nVHE has two modes of operation: protected (pKVM) and unprotected
+(conventional nVHE). Depending on the mode, a slightly different approach
+is used to dump the hypervisor stacktrace but the core unwinding logic
+remains the same.
+
+Protected nVHE (pKVM) stacktraces
+====
+
+In protected nVHE mode, the host cannot directly access hypervisor memory.
+
+The hypervisor stack unwinding happens in EL2 and is made accessible to
+the host via a shared buffer. Symbolizing and printing the stacktrace
+addresses is delegated to the host and happens in EL1.
+
+Non-protected (Conventional) nVHE stacktraces
+====
+
+In non-protected mode, the host is able to directly access the hypervisor
+stack pages.
+
+The hypervisor stack unwinding and dumping of the stacktrace is performed
+by the host in EL1, as this avoids the memory overhead of setting up
+shared buffers between the host and hypervisor.
+
+Resuing the Core Unwinding Logic
+====
+
+Since the hypervisor cannot link against the kernel code in proteced mode.
+The common stack unwinding code is moved to a shared header to allow reuse
+in the nVHE hypervisor.
+
+Reducing the memory footprint
+====
+
+In this version the below steps were taken to reduce the memory usage of
+nVHE stack unwinding:
+
+    1) The nVHE overflow stack is reduced from PAGE_SIZE to 4KB; benificial
+       for configurations with non 4KB pages (16KB or 64KB pages).
+    2) In protected nVHE mode (pKVM), the shared stacktrace buffers with the
+       host are reduced from PAGE_SIZE to the minimum size required.
+    3) In systems other than Android, conventional nVHE makes up the vast
+       majority of use case. So the pKVM stack tracing is disabled by default
+       (!CONFIG_PROTECTED_NVHE_STACKTRACE), which avoid the memory usage for
+       setting up shared buffers.
+    4) In non-protected nVHE mode (conventional nVHE), the stack unwinding
+       is done directly in EL1 by the host and no shared buffers with the
+       hypervisor are needed.
+
+Sample Output
+====
+
+The below shows an example output from a simple stack overflow test:
+
+[  111.623091] kvm [367]: nVHE call trace:
+[  111.623215] kvm [367]:  [<ffff8000090a6570>] __kvm_nvhe_hyp_panic+0xac/0xf8
+[  111.623448] kvm [367]:  [<ffff8000090a65cc>] __kvm_nvhe_hyp_panic_bad_stack+0x10/0x10
+[  111.623642] kvm [367]:  [<ffff8000090a61e4>] __kvm_nvhe_recursive_death+0x24/0x34
+. . .
+[  111.640366] kvm [367]:  [<ffff8000090a61e4>] __kvm_nvhe_recursive_death+0x24/0x34
+[  111.640467] kvm [367]:  [<ffff8000090a61e4>] __kvm_nvhe_recursive_death+0x24/0x34
+[  111.640574] kvm [367]:  [<ffff8000090a5de4>] __kvm_nvhe___kvm_vcpu_run+0x30/0x40c
+[  111.640676] kvm [367]:  [<ffff8000090a8b64>] __kvm_nvhe_handle___kvm_vcpu_run+0x30/0x48
+[  111.640778] kvm [367]:  [<ffff8000090a88b8>] __kvm_nvhe_handle_trap+0xc4/0x128
+[  111.640880] kvm [367]:  [<ffff8000090a7864>] __kvm_nvhe___host_exit+0x64/0x64
+[  111.640996] kvm [367]: ---[ end nVHE call trace ]---
+
+============
+
+Kalesh Singh (17):
+  arm64: stacktrace: Add shared header for common stack unwinding code
+  arm64: stacktrace: Factor out on_accessible_stack_common()
+  arm64: stacktrace: Factor out unwind_next_common()
+  arm64: stacktrace: Handle frame pointer from different address spaces
+  arm64: stacktrace: Factor out common unwind()
+  arm64: stacktrace: Add description of stacktrace/common.h
+  KVM: arm64: On stack overflow switch to hyp overflow_stack
+  KVM: arm64: Stub implementation of non-protected nVHE HYP stack
+    unwinder
+  KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
+  KVM: arm64: Implement non-protected nVHE hyp stack unwinder
+  KVM: arm64: Introduce hyp_dump_backtrace()
+  KVM: arm64: Add PROTECTED_NVHE_STACKTRACE Kconfig
+  KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
+  KVM: arm64: Stub implementation of pKVM HYP stack unwinder
+  KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
+  KVM: arm64: Implement protected nVHE hyp stack unwinder
+  KVM: arm64: Introduce pkvm_dump_backtrace()
+
+ arch/arm64/include/asm/kvm_asm.h           |  16 ++
+ arch/arm64/include/asm/memory.h            |   8 +
+ arch/arm64/include/asm/stacktrace.h        |  92 +++++----
+ arch/arm64/include/asm/stacktrace/common.h | 230 +++++++++++++++++++++
+ arch/arm64/include/asm/stacktrace/nvhe.h   | 176 ++++++++++++++++
+ arch/arm64/kernel/stacktrace.c             | 157 --------------
+ arch/arm64/kvm/Kconfig                     |  15 ++
+ arch/arm64/kvm/arm.c                       |   2 +-
+ arch/arm64/kvm/handle_exit.c               | 102 +++++++++
+ arch/arm64/kvm/hyp/nvhe/Makefile           |   2 +-
+ arch/arm64/kvm/hyp/nvhe/host.S             |   9 +-
+ arch/arm64/kvm/hyp/nvhe/stacktrace.c       | 109 ++++++++++
+ arch/arm64/kvm/hyp/nvhe/switch.c           |   6 +
+ 13 files changed, 720 insertions(+), 204 deletions(-)
+ create mode 100644 arch/arm64/include/asm/stacktrace/common.h
+ create mode 100644 arch/arm64/include/asm/stacktrace/nvhe.h
+ create mode 100644 arch/arm64/kvm/hyp/nvhe/stacktrace.c
 
 
-I'm not sure this is ture. Having ooo descriptors is probably by design 
-to have better performance.
-
-This might be obvious for device that may have elevator or QOS stuffs.
-
-I suspect the right thing to do here is, for the device that can't 
-perform better in the case of IN_ORDER, let's simply not offer IN_ORDER 
-(zerocopy or scsi). And for the device we know it can perform better, 
-non-zercopy ethernet device we can do that.
-
-
->   This commit reorder the buffers using
-> vq->heads, only the batch is begin from the expected start point and is
-> continuous can the batch be exposed to driver.  And only writing out a
-> single used ring for a batch of descriptors, according to VIRTIO 1.1
-> spec.
-
-
-So this sounds more like a "workaround" of the device that can't consume 
-buffer in order, I suspect it can help in performance.
-
-More below.
-
-
->
-> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
-> ---
->   drivers/vhost/vhost.c | 44 +++++++++++++++++++++++++++++++++++++++++--
->   drivers/vhost/vhost.h |  3 +++
->   2 files changed, 45 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 40097826c..e2e77e29f 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -317,6 +317,7 @@ static void vhost_vq_reset(struct vhost_dev *dev,
->   	vq->used_flags = 0;
->   	vq->log_used = false;
->   	vq->log_addr = -1ull;
-> +	vq->next_used_head_idx = 0;
->   	vq->private_data = NULL;
->   	vq->acked_features = 0;
->   	vq->acked_backend_features = 0;
-> @@ -398,6 +399,8 @@ static long vhost_dev_alloc_iovecs(struct vhost_dev *dev)
->   					  GFP_KERNEL);
->   		if (!vq->indirect || !vq->log || !vq->heads)
->   			goto err_nomem;
-> +
-> +		memset(vq->heads, 0, sizeof(*vq->heads) * dev->iov_limit);
->   	}
->   	return 0;
->   
-> @@ -2374,12 +2377,49 @@ static int __vhost_add_used_n(struct vhost_virtqueue *vq,
->   			    unsigned count)
->   {
->   	vring_used_elem_t __user *used;
-> +	struct vring_desc desc;
->   	u16 old, new;
->   	int start;
-> +	int begin, end, i;
-> +	int copy_n = count;
-> +
-> +	if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
-
-
-How do you guarantee that ids of heads are contiguous?
-
-
-> +		/* calculate descriptor chain length for each used buffer */
-
-
-I'm a little bit confused about this comment, we have heads[i].len for this?
-
-
-> +		for (i = 0; i < count; i++) {
-> +			begin = heads[i].id;
-> +			end = begin;
-> +			vq->heads[begin].len = 0;
-
-
-Does this work for e.g RX virtqueue?
-
-
-> +			do {
-> +				vq->heads[begin].len += 1;
-> +				if (unlikely(vhost_get_desc(vq, &desc, end))) {
-
-
-Let's try hard to avoid more userspace copy here, it's the source of 
-performance regression.
-
-Thanks
-
-
-> +					vq_err(vq, "Failed to get descriptor: idx %d addr %p\n",
-> +					       end, vq->desc + end);
-> +					return -EFAULT;
-> +				}
-> +			} while ((end = next_desc(vq, &desc)) != -1);
-> +		}
-> +
-> +		count = 0;
-> +		/* sort and batch continuous used ring entry */
-> +		while (vq->heads[vq->next_used_head_idx].len != 0) {
-> +			count++;
-> +			i = vq->next_used_head_idx;
-> +			vq->next_used_head_idx = (vq->next_used_head_idx +
-> +						  vq->heads[vq->next_used_head_idx].len)
-> +						  % vq->num;
-> +			vq->heads[i].len = 0;
-> +		}
-> +		/* only write out a single used ring entry with the id corresponding
-> +		 * to the head entry of the descriptor chain describing the last buffer
-> +		 * in the batch.
-> +		 */
-> +		heads[0].id = i;
-> +		copy_n = 1;
-> +	}
->   
->   	start = vq->last_used_idx & (vq->num - 1);
->   	used = vq->used->ring + start;
-> -	if (vhost_put_used(vq, heads, start, count)) {
-> +	if (vhost_put_used(vq, heads, start, copy_n)) {
->   		vq_err(vq, "Failed to write used");
->   		return -EFAULT;
->   	}
-> @@ -2410,7 +2450,7 @@ int vhost_add_used_n(struct vhost_virtqueue *vq, struct vring_used_elem *heads,
->   
->   	start = vq->last_used_idx & (vq->num - 1);
->   	n = vq->num - start;
-> -	if (n < count) {
-> +	if (n < count && !vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
->   		r = __vhost_add_used_n(vq, heads, n);
->   		if (r < 0)
->   			return r;
-> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-> index d9109107a..7b2c0fbb5 100644
-> --- a/drivers/vhost/vhost.h
-> +++ b/drivers/vhost/vhost.h
-> @@ -107,6 +107,9 @@ struct vhost_virtqueue {
->   	bool log_used;
->   	u64 log_addr;
->   
-> +	/* Sort heads in order */
-> +	u16 next_used_head_idx;
-> +
->   	struct iovec iov[UIO_MAXIOV];
->   	struct iovec iotlb_iov[64];
->   	struct iovec *indirect;
+base-commit: 82a592c13b0aeff94d84d54183dae0b26384c95f
+-- 
+2.37.1.359.gd136c6c3e2-goog
 

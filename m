@@ -2,161 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B2E580F53
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA88580F56
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238629AbiGZIov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S238297AbiGZIp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiGZIot (ORCPT
+        with ESMTP id S231477AbiGZIpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:44:49 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD01527CC4;
-        Tue, 26 Jul 2022 01:44:48 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 7EA1CDF985;
-        Tue, 26 Jul 2022 01:44:48 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id sQd45dya_6k8; Tue, 26 Jul 2022 01:44:47 -0700 (PDT)
-Message-ID: <ea2a284abf99c8015024c305c914e54eb1e8d80c.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658825087; bh=VI+Psrn6/lqx/JXqOOuObKZPj/CHv9mceM1I37Xzr90=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uQNT73Q6Sqv3QwdqWqhZ7ljFLJRetQ/z0V/qzrrw2t7twT0DO/Aemf0/IHRATScIj
-         met2zqdcVGzfA4SLyh4tYf8AU71PpS8OhY/3hBgsg46qQsjqgc9+r2W3v03anndbWH
-         TUAMiJWvaOQCTHcO89Q8tXqRKjq7iT2vrMg7HhUVX3DAEhjhOQGMtWGQlK4b71K+2n
-         Yv0GXDzFBeAmYIbuZB5Yn4VHDxq+HMFmNMPgzkI5afw5vi8zt/RH7oJKJGxx5w8Hqa
-         G8jXcECsKxq2j5bFbA2weLAdjLNC/giUfnwzWJ0+3k2EhAZF8OGooSzxAlptIMm+Sv
-         iJsW9BFQ+vrFw==
-Subject: Re: [PATCH v2] usb: typec: tipd: Don't block probing of consumer of
- "connector" nodes
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Saravana Kannan <saravanak@google.com>,
-        Angus Ainslie <angus.ainslie@puri.sm>
-Cc:     grandmaster@al2klimov.de, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com, rjw@rjwysocki.net, kernel@puri.sm,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Android Kernel Team <kernel-team@android.com>
-Date:   Tue, 26 Jul 2022 10:44:49 +0200
-In-Reply-To: <CAGETcx-rfcP9dFSstf7PKmc2W3kWRLCMRGz8uCvJxo-OpFpjgw@mail.gmail.com>
-References: <20210714061807.5737-1-martin.kepplinger@puri.sm>
-         <CAGETcx-rfcP9dFSstf7PKmc2W3kWRLCMRGz8uCvJxo-OpFpjgw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Tue, 26 Jul 2022 04:45:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9077E12AF4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:45:24 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oGGBq-0000eH-SW; Tue, 26 Jul 2022 10:45:18 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oGGBq-0003AC-Et; Tue, 26 Jul 2022 10:45:18 +0200
+Date:   Tue, 26 Jul 2022 10:45:18 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     p.zabel@pengutronix.de, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2 2/2] reset: tps380x: Add TPS380x device driver supprt
+Message-ID: <20220726084518.qmb2wjcazi3djcqr@pengutronix.de>
+References: <20220530092226.748644-1-m.felsch@pengutronix.de>
+ <20220530092226.748644-2-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530092226.748644-2-m.felsch@pengutronix.de>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 21.07.2022 um 16:06 -0700 schrieb Saravana Kannan:
-> On Tue, Jul 13, 2021 at 11:18 PM Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> > 
-> > Similar as with tcpm this patch lets fw_devlink know not to wait on
-> > the
-> > fwnode to be populated as a struct device.
-> > 
-> > Without this patch, USB functionality can be broken on some
-> > previously
-> > supported boards.
-> > 
-> > Fixes: 28ec344bb891 ("usb: typec: tcpm: Don't block probing of
-> > consumers of "connector" nodes")
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> > 
-> > revision history
-> > ----------------
-> > v2: (thank you Saravana)
-> > * add a code-comment why the call is needed.
-> > 
-> > v1:
-> > https://lore.kernel.org/linux-usb/20210713073946.102501-1-martin.kepplinger@puri.sm/
-> > 
-> > 
-> > 
-> >  drivers/usb/typec/tipd/core.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/drivers/usb/typec/tipd/core.c
-> > b/drivers/usb/typec/tipd/core.c
-> > index 938219bc1b4b..21b3ae25c76d 100644
-> > --- a/drivers/usb/typec/tipd/core.c
-> > +++ b/drivers/usb/typec/tipd/core.c
-> > @@ -629,6 +629,15 @@ static int tps6598x_probe(struct i2c_client
-> > *client)
-> >         if (!fwnode)
-> >                 return -ENODEV;
-> > 
-> > +       /*
-> > +        * This fwnode has a "compatible" property, but is never
-> > populated as a
-> > +        * struct device. Instead we simply parse it to read the
-> > properties.
-> > +        * This breaks fw_devlink=on. To maintain backward
-> > compatibility
-> > +        * with existing DT files, we work around this by deleting
-> > any
-> > +        * fwnode_links to/from this fwnode.
-> > +        */
-> > +       fw_devlink_purge_absent_suppliers(fwnode);
-> > +
-> 
-> Hey Martin,
-> 
-> As part of a series I'm working on, I'm looking into deleting
-> fw_devlink_purge_absent_suppliers() and having the driver core figure
-> this out automatically.
-> 
-> So I was making sure all the current uses of
-> fw_devlink_purge_absent_suppliers() would automatically be handled by
-> driver core. But when I looked at this usage of
-> fw_devlink_purge_absent_suppliers(), I didn't see any "compatible"
-> property in the "connector" child node. So, I'm confused how you had
-> a
-> problem without this patch.
-> 
-> fw_devlink would have created fwnode links
-> between typec_pd and usb_dwc3_0, figured out it's a cycle and have
-> stopped enforcing the "remote-endpoint" dependencies.
-> 
-> Can you give me more details please on why you were having a problem
-> without this patch?
-> 
-> I'm looking at arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi as
-> an
-> example because you listed it in your v1 patch.
-> 
-> -Saravana
+Hi Philipp,
 
-It's downstream. I'm very sorry about that. The patch that adds the
-compatible string (
-https://source.puri.sm/martin.kepplinger/linux-next/-/commit/3d887ea76158851ae50f192094d7865cc3f4da9d
-) sits in our tree (
-https://source.puri.sm/martin.kepplinger/linux-next/-/commits/5.19-rc7/librem5__integration
-) and I'll make sure it'll be sent out after I'm back from vacations in
-a few weeks.
+gentle ping.
 
-Sorry for the confusion!
-
-                             martin
-
-
+On 22-05-30, Marco Felsch wrote:
+> The TI TPS380x family [1] is a voltage supervisor with a dedicated
+> manual reset (mr) line input and a reset output. The chip(s) have a
+> build in reset delay, depending on the chip partnumber. This simple
+> driver addresses this so the cosumer don't need to care about it.
 > 
-> >         tps->role_sw = fwnode_usb_role_switch_get(fwnode);
-> >         if (IS_ERR(tps->role_sw)) {
-> >                 ret = PTR_ERR(tps->role_sw);
-> > --
-> > 2.30.2
-> > 
-
-
+> [1] https://www.ti.com/product/TPS3801
+> 
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> ---
+> Changelog:
+> v2:
+> - make reset_tps380x_ops static
+> - fix commit message typo
+> 
+>  drivers/reset/Kconfig         |   8 +++
+>  drivers/reset/Makefile        |   1 +
+>  drivers/reset/reset-tps380x.c | 130 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 139 insertions(+)
+>  create mode 100644 drivers/reset/reset-tps380x.c
+> 
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index e0fc80e041ea..e2eb616af812 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -256,6 +256,14 @@ config RESET_TI_SYSCON
+>  	  you wish to use the reset framework for such memory-mapped devices,
+>  	  say Y here. Otherwise, say N.
+>  
+> +config RESET_TI_TPS380X
+> +	tristate "TI TPS380x Reset Driver"
+> +	select GPIOLIB
+> +	help
+> +	  This enables the reset driver support for TI TPS380x devices. If
+> +	  you wish to use the reset framework for such devices, say Y here.
+> +	  Otherwise, say N.
+> +
+>  config RESET_TN48M_CPLD
+>  	tristate "Delta Networks TN48M switch CPLD reset controller"
+>  	depends on MFD_TN48M_CPLD || COMPILE_TEST
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> index a80a9c4008a7..66399b92b1bb 100644
+> --- a/drivers/reset/Makefile
+> +++ b/drivers/reset/Makefile
+> @@ -33,6 +33,7 @@ obj-$(CONFIG_RESET_STARFIVE_JH7100) += reset-starfive-jh7100.o
+>  obj-$(CONFIG_RESET_SUNXI) += reset-sunxi.o
+>  obj-$(CONFIG_RESET_TI_SCI) += reset-ti-sci.o
+>  obj-$(CONFIG_RESET_TI_SYSCON) += reset-ti-syscon.o
+> +obj-$(CONFIG_RESET_TI_TPS380X) += reset-tps380x.o
+>  obj-$(CONFIG_RESET_TN48M_CPLD) += reset-tn48m.o
+>  obj-$(CONFIG_RESET_UNIPHIER) += reset-uniphier.o
+>  obj-$(CONFIG_RESET_UNIPHIER_GLUE) += reset-uniphier-glue.o
+> diff --git a/drivers/reset/reset-tps380x.c b/drivers/reset/reset-tps380x.c
+> new file mode 100644
+> index 000000000000..088158f54e6f
+> --- /dev/null
+> +++ b/drivers/reset/reset-tps380x.c
+> @@ -0,0 +1,130 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * TI TPS380x Supply Voltage Supervisor and Reset Controller Driver
+> + *
+> + * Copyright (C) 2022 Pengutronix, Marco Felsch <kernel@pengutronix.de>
+> + *
+> + * Based on Simple Reset Controller Driver
+> + *
+> + * Copyright (C) 2017 Pengutronix, Philipp Zabel <kernel@pengutronix.de>
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +#include <linux/reset-controller.h>
+> +
+> +struct tps380x_reset {
+> +	struct reset_controller_dev	rcdev;
+> +	struct gpio_desc		*reset_gpio;
+> +	unsigned int			reset_ms;
+> +};
+> +
+> +struct tps380x_reset_devdata {
+> +	unsigned int min_reset_ms;
+> +	unsigned int typ_reset_ms;
+> +	unsigned int max_reset_ms;
+> +};
+> +
+> +static inline
+> +struct tps380x_reset *to_tps380x_reset(struct reset_controller_dev *rcdev)
+> +{
+> +	return container_of(rcdev, struct tps380x_reset, rcdev);
+> +}
+> +
+> +static int
+> +tps380x_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
+> +{
+> +	struct tps380x_reset *tps380x = to_tps380x_reset(rcdev);
+> +
+> +	gpiod_set_value_cansleep(tps380x->reset_gpio, 1);
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +tps380x_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
+> +{
+> +	struct tps380x_reset *tps380x = to_tps380x_reset(rcdev);
+> +
+> +	gpiod_set_value_cansleep(tps380x->reset_gpio, 0);
+> +	msleep(tps380x->reset_ms);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct reset_control_ops reset_tps380x_ops = {
+> +	.assert		= tps380x_reset_assert,
+> +	.deassert	= tps380x_reset_deassert,
+> +};
+> +
+> +static int tps380x_reset_of_xlate(struct reset_controller_dev *rcdev,
+> +				  const struct of_phandle_args *reset_spec)
+> +{
+> +	/* No special handling needed, we have only one reset line per device */
+> +	return 0;
+> +}
+> +
+> +static int tps380x_reset_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	const struct tps380x_reset_devdata *devdata;
+> +	struct tps380x_reset *tps380x;
+> +
+> +	devdata = device_get_match_data(dev);
+> +	if (!devdata)
+> +		return -EINVAL;
+> +
+> +	tps380x = devm_kzalloc(dev, sizeof(*tps380x), GFP_KERNEL);
+> +	if (!tps380x)
+> +		return -ENOMEM;
+> +
+> +	tps380x->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(tps380x->reset_gpio))
+> +		return dev_err_probe(dev, PTR_ERR(tps380x->reset_gpio),
+> +				     "Failed to get GPIO\n");
+> +
+> +	/*
+> +	 * Todo:
+> +	 * Add firmware handling to switch between min/typ/max reset time
+> +	 */
+> +	tps380x->reset_ms = devdata->max_reset_ms;
+> +
+> +	tps380x->rcdev.ops = &reset_tps380x_ops;
+> +	tps380x->rcdev.owner = THIS_MODULE;
+> +	tps380x->rcdev.dev = dev;
+> +	tps380x->rcdev.of_node = dev->of_node;
+> +	tps380x->rcdev.of_reset_n_cells = 0;
+> +	tps380x->rcdev.of_xlate = tps380x_reset_of_xlate;
+> +	tps380x->rcdev.nr_resets = 1;
+> +
+> +	return devm_reset_controller_register(dev, &tps380x->rcdev);
+> +}
+> +
+> +static const struct tps380x_reset_devdata tps3801_reset_data = {
+> +	.min_reset_ms = 120,
+> +	.typ_reset_ms = 200,
+> +	.max_reset_ms = 280,
+> +};
+> +
+> +static const struct of_device_id tps380x_reset_dt_ids[] = {
+> +	{ .compatible = "ti,tps3801", .data = &tps3801_reset_data },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, tps380x_reset_dt_ids);
+> +
+> +static struct platform_driver tps380x_reset_driver = {
+> +	.probe	= tps380x_reset_probe,
+> +	.driver = {
+> +		.name		= "tps380x-reset",
+> +		.of_match_table	= tps380x_reset_dt_ids,
+> +	},
+> +};
+> +module_platform_driver(tps380x_reset_driver);
+> +
+> +MODULE_AUTHOR("Marco Felsch <kernel@pengutronix.de>");
+> +MODULE_DESCRIPTION("TI TPS380x Supply Voltags Supervisor and Reset Driver");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.30.2
+> 
+> 

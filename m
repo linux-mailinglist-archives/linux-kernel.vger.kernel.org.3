@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560AC5815EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8A65815EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239210AbiGZPEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        id S239185AbiGZPFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiGZPEn (ORCPT
+        with ESMTP id S239496AbiGZPFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:04:43 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2922E6A1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:04:41 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id l15so16509077wro.11
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:04:41 -0700 (PDT)
+        Tue, 26 Jul 2022 11:05:10 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E263BA;
+        Tue, 26 Jul 2022 08:05:10 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-10d845dcf92so18863957fac.12;
+        Tue, 26 Jul 2022 08:05:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=d62iRhJsBE8gihoV8LYMDZuvUneCUypE/tyaJuWYA+4=;
-        b=tU/cyq5nHL5B4HPtfMhT82SrXE8DssFJnICWBAwGcy0SN7KjkG5/zdKCtU3YWNpyZC
-         uLWTJOpa/hHm4JfU1D9lQdp+4RswJ5fGwLBC/drIyXsU55LstDo8WolHF4XMBsErZ0rn
-         K9MspvXiOPNR7+v8XtxoC8fGrHDeZ9mgAy7OuIgq8f8uSyHkwXYuHp7GS68EWEYHoR1c
-         ydeyk6fmegQsLGp+ro1t9HRzda3Q+tpIhfx6Al8CuasOk5g6aR/SthR6kPWnESWtoQbU
-         i13XcoSlNmxKqZ4NY0XBFbe0auZFDjPmzFdAn97zjJCGlSrOkE4Ldx4hbyL46fsH5Q9q
-         McRA==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fAlxGdxp/dvoWgj3QK/dYW1nCDi27HsdXLnCmUB1tnc=;
+        b=h8lUqXYkxNMQbtkXIei1PI6+xwQor4tvNJk62rUZKdUIlLY2S8CUJWZXwIptO+lgjJ
+         T4Q3XTnlQWJuMaihKw5Y7dYVD2zINu9KKQua+jA8N/fA5aLUAgP+TdRBz0OxIM3TlkhL
+         nBhxED6Km22lbpOblPfCj92I+KnMBmtEvVuxdhUy1PObWuqPFqwkgNTBGwka+/vL2h/T
+         VXW2B1vqJqDtj8gtP9NV4sgykGk/9XWHNSHy9BXdFvA5zqGltlwV7bPsAaXFYWSNgnOD
+         aXTVg/dFaJ0oBbC1bi8MDGAU3z2ObFHsJyiYgNhQgsM1n2in6JRJqaSH+syyzzNHG7sl
+         3W3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=d62iRhJsBE8gihoV8LYMDZuvUneCUypE/tyaJuWYA+4=;
-        b=ijUq0WXLuJYUWGEfJ59gGK8VEaZgFUqYAG0ZZ8+q65bkVCmtD6OkAcNEvPvDEJGh2/
-         AZQqhJT7AwLkiw4o+nhORJFpwVIcWgH1cLegoZD6y2FsKWsJyVsrgv1MaLqXNDfzvvUw
-         oQj0O0BWMLmlfjiOCj84jpxeFYqhlyyNsnSB6f++hzYzqoD3MdB2XMgfd2lTAIOaCDxu
-         OHgdfd1Hmpu/CJIMcP4qXB08MSiz3nL32WBluMosL0+9+ZQqaWoWsXrTEf8vCNBwmiym
-         GepVl8439QrbF0xL5T4D2ykZ6+GgiLIYdsyR3fhkHtc6fG9dT1Wfv/LNdv2HzMyzB4SS
-         YMog==
-X-Gm-Message-State: AJIora/4owjQPAnexn+HIyg6FGBK/gY3TnveLgleRaDFrzLcmUFlHOwf
-        FrwHpCZg3Jb+/tMNxJzmljdEamQQu6EHcHHBHFBG1w==
-X-Google-Smtp-Source: AGRyM1tp+/6Hl7fo0jRX6p9QAA2mJOCbZznD5EmfQhXLjda5kyhEkl9FT4cEijP8XdlDqZ2RrdLWFwJ9yr1HKxM7uqI=
-X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
- v13-20020adfe28d000000b0021e4c3bb446mr10875569wri.300.1658847880006; Tue, 26
- Jul 2022 08:04:40 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fAlxGdxp/dvoWgj3QK/dYW1nCDi27HsdXLnCmUB1tnc=;
+        b=psAyVNpfVWd74VVb8yo60m7jlRl/BK2l63aJtFqLpYCnTpRQnXiEV2L5dJvBw0h9ij
+         PL2qFj6YOTglTvGv6if23MX+FIb1gA6Bi5rUR1qGYOE8/SOvM5E6rAMgxt5BrPBWnaDS
+         Dk8S+PtXlcWQEZA9lTZHFBwO6+G/hbivDC2SlnIefgOXsPbr6KDBgT0fYzIWtjV0EEYm
+         8bNPhlHi9SM0jK9CiePiGxLsm9RAF8MrfjO4JDJn+tumNWa1ob6aRkOkxUUwZtl9eOt/
+         hCXZvCbJ+f/amlGgVGJGjccBVrSie9Md2UVdcjC11GhOdreDXHKI1lS8Tj0fwJWFtR/F
+         2JPA==
+X-Gm-Message-State: AJIora8zEIh/242C2JRBUFf5G3yrRYop7rF5k0U5V265vgzEG57lzzGn
+        4vwAG6Sef+fUUfvroTgGvLljj6/n4RU4+A==
+X-Google-Smtp-Source: AGRyM1uQpR0qQSkcAHd4iRJB5ANkMnWa9xPMJaanb6DW2uSV+P+dF4BqKPwp2/c77jqaHObRE+NnZA==
+X-Received: by 2002:a05:6870:e245:b0:de:9321:9ea3 with SMTP id d5-20020a056870e24500b000de93219ea3mr8672741oac.79.1658847909280;
+        Tue, 26 Jul 2022 08:05:09 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q6-20020a4aac46000000b0043571d9c098sm6099515oon.43.2022.07.26.08.05.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 08:05:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <833d605d-0605-9439-6544-885e6f5f75b0@roeck-us.net>
+Date:   Tue, 26 Jul 2022 08:05:07 -0700
 MIME-Version: 1.0
-References: <20220722103728.82854-1-slark_xiao@163.com>
-In-Reply-To: <20220722103728.82854-1-slark_xiao@163.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 26 Jul 2022 08:04:27 -0700
-Message-ID: <CAP-5=fWhJse5xJzCS=zCCXQ_vjJWFKwSmkjfJLe0ArpLWWtjNw@mail.gmail.com>
-Subject: Re: [PATCH] perf: Fix typo 'the the' in comment
-To:     Slark Xiao <slark_xiao@163.com>,
-        "Biggers, Caleb" <caleb.biggers@intel.com>,
-        "Taylor, Perry" <perry.taylor@intel.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        "Alt, Samantha" <samantha.alt@intel.com>
-Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, mike.leach@linaro.org,
-        leo.yan@linaro.org, john.garry@huawei.com, will@kernel.org,
-        james.clark@arm.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 1/1] hwmon: (occ) Replace open-coded variant of %*phN
+ specifier
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>
+References: <20220726143110.4809-1-andriy.shevchenko@linux.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220726143110.4809-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,148 +79,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 3:38 AM Slark Xiao <slark_xiao@163.com> wrote:
->
-> Replace 'the the' with 'the' in the comment.
+On 7/26/22 07:31, Andy Shevchenko wrote:
+> printf()-like functions in the kernel have extensions, such as
+> %*phN to dump small pieces of memory as hex bytes.
+> 
+> Replace custom approach with the direct use of %*phN.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks, these files are generated from files here:
-https://download.01.org/perfmon/
-I've added Intel folks to the e-mail, so they can update those files.
+Applied.
 
 Thanks,
-Ian
+Guenter
 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 > ---
->  tools/perf/Documentation/perf-diff.txt                        | 2 +-
->  tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json | 2 +-
->  tools/perf/pmu-events/arch/x86/silvermont/pipeline.json       | 2 +-
->  tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json     | 2 +-
->  tools/perf/util/cs-etm.c                                      | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/perf/Documentation/perf-diff.txt b/tools/perf/Document=
-ation/perf-diff.txt
-> index be65bd55ab2a..b77957ac288b 100644
-> --- a/tools/perf/Documentation/perf-diff.txt
-> +++ b/tools/perf/Documentation/perf-diff.txt
-> @@ -285,7 +285,7 @@ If specified the 'Weighted diff' column is displayed =
-with value 'd' computed as:
->
->    - period being the hist entry period value
->
-> -  - WEIGHT-A/WEIGHT-B being user supplied weights in the the '-c' option
-> +  - WEIGHT-A/WEIGHT-B being user supplied weights in the '-c' option
->      behind ':' separator like '-c wdiff:1,2'.
->      - WEIGHT-A being the weight of the data file
->      - WEIGHT-B being the weight of the baseline data file
-> diff --git a/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.jso=
-n b/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
-> index aa460d0c4851..59ab88de1b37 100644
-> --- a/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
-> +++ b/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
-> @@ -1923,7 +1923,7 @@
->          "EventCode": "0x25",
->          "EventName": "UNC_UPI_RxL0P_POWER_CYCLES",
->          "PerPkg": "1",
-> -        "PublicDescription": "Counts cycles when the the receive side (R=
-x) of the Intel Ultra Path Interconnect(UPI) is in L0p power mode. L0p is a=
- mode where we disable 60% of the UPI lanes, decreasing our bandwidth in or=
-der to save power.",
-> +        "PublicDescription": "Counts cycles when the receive side (Rx) o=
-f the Intel Ultra Path Interconnect(UPI) is in L0p power mode. L0p is a mod=
-e where we disable 60% of the UPI lanes, decreasing our bandwidth in order =
-to save power.",
->          "Unit": "UPI LL"
->      },
->      {
-> diff --git a/tools/perf/pmu-events/arch/x86/silvermont/pipeline.json b/to=
-ols/perf/pmu-events/arch/x86/silvermont/pipeline.json
-> index 03a4c7f26698..3278c7d1654d 100644
-> --- a/tools/perf/pmu-events/arch/x86/silvermont/pipeline.json
-> +++ b/tools/perf/pmu-events/arch/x86/silvermont/pipeline.json
-> @@ -257,7 +257,7 @@
->          "Counter": "0,1",
->          "EventCode": "0xCA",
->          "EventName": "NO_ALLOC_CYCLES.NOT_DELIVERED",
-> -        "PublicDescription": "The NO_ALLOC_CYCLES.NOT_DELIVERED event is=
- used to measure front-end inefficiencies, i.e. when front-end of the machi=
-ne is not delivering micro-ops to the back-end and the back-end is not stal=
-led. This event can be used to identify if the machine is truly front-end b=
-ound.  When this event occurs, it is an indication that the front-end of th=
-e machine is operating at less than its theoretical peak performance.  Back=
-ground: We can think of the processor pipeline as being divided into 2 broa=
-der parts: Front-end and Back-end. Front-end is responsible for fetching th=
-e instruction, decoding into micro-ops (uops) in machine understandable for=
-mat and putting them into a micro-op queue to be consumed by back end. The =
-back-end then takes these micro-ops, allocates the required resources.  Whe=
-n all resources are ready, micro-ops are executed. If the back-end is not r=
-eady to accept micro-ops from the front-end, then we do not want to count t=
-hese as front-end bottlenecks.  However, whenever we have bottlenecks in th=
-e back-end, we will have allocation unit stalls and eventually forcing the =
-front-end to wait until the back-end is ready to receive more UOPS. This ev=
-ent counts the cycles only when back-end is requesting more uops and front-=
-end is not able to provide them. Some examples of conditions that cause fro=
-nt-end efficiencies are: Icache misses, ITLB misses, and decoder restrictio=
-ns that limit the the front-end bandwidth.",
-> +        "PublicDescription": "The NO_ALLOC_CYCLES.NOT_DELIVERED event is=
- used to measure front-end inefficiencies, i.e. when front-end of the machi=
-ne is not delivering micro-ops to the back-end and the back-end is not stal=
-led. This event can be used to identify if the machine is truly front-end b=
-ound.  When this event occurs, it is an indication that the front-end of th=
-e machine is operating at less than its theoretical peak performance.  Back=
-ground: We can think of the processor pipeline as being divided into 2 broa=
-der parts: Front-end and Back-end. Front-end is responsible for fetching th=
-e instruction, decoding into micro-ops (uops) in machine understandable for=
-mat and putting them into a micro-op queue to be consumed by back end. The =
-back-end then takes these micro-ops, allocates the required resources.  Whe=
-n all resources are ready, micro-ops are executed. If the back-end is not r=
-eady to accept micro-ops from the front-end, then we do not want to count t=
-hese as front-end bottlenecks.  However, whenever we have bottlenecks in th=
-e back-end, we will have allocation unit stalls and eventually forcing the =
-front-end to wait until the back-end is ready to receive more UOPS. This ev=
-ent counts the cycles only when back-end is requesting more uops and front-=
-end is not able to provide them. Some examples of conditions that cause fro=
-nt-end efficiencies are: Icache misses, ITLB misses, and decoder restrictio=
-ns that limit the front-end bandwidth.",
->          "SampleAfterValue": "200003",
->          "UMask": "0x50"
->      },
-> diff --git a/tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json b/=
-tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json
-> index aa0f67613c4a..0c96e6924d62 100644
-> --- a/tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json
-> +++ b/tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json
-> @@ -1852,7 +1852,7 @@
->          "EventCode": "0x25",
->          "EventName": "UNC_UPI_RxL0P_POWER_CYCLES",
->          "PerPkg": "1",
-> -        "PublicDescription": "Counts cycles when the the receive side (R=
-x) of the Intel Ultra Path Interconnect(UPI) is in L0p power mode. L0p is a=
- mode where we disable 60% of the UPI lanes, decreasing our bandwidth in or=
-der to save power.",
-> +        "PublicDescription": "Counts cycles when the receive side (Rx) o=
-f the Intel Ultra Path Interconnect(UPI) is in L0p power mode. L0p is a mod=
-e where we disable 60% of the UPI lanes, decreasing our bandwidth in order =
-to save power.",
->          "Unit": "UPI LL"
->      },
->      {
-> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> index 8b95fb3c4d7b..16db965ac995 100644
-> --- a/tools/perf/util/cs-etm.c
-> +++ b/tools/perf/util/cs-etm.c
-> @@ -1451,7 +1451,7 @@ static int cs_etm__sample(struct cs_etm_queue *etmq=
-,
->                  * tidq->packet->instr_count represents the number of
->                  * instructions in the current etm packet.
->                  *
-> -                * Period instructions (Pi) contains the the number of
-> +                * Period instructions (Pi) contains the number of
->                  * instructions executed after the sample point(n) from t=
-he
->                  * previous etm packet.  This will always be less than
->                  * etm->instructions_sample_period.
-> --
-> 2.25.1
->
+>   drivers/hwmon/occ/common.c | 8 ++------
+>   1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index 157b73a3da29..45407b12db4b 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -729,18 +729,14 @@ static ssize_t occ_show_extended(struct device *dev,
+>   			rc = sysfs_emit(buf, "%u",
+>   					get_unaligned_be32(&extn->sensor_id));
+>   		} else {
+> -			rc = sysfs_emit(buf, "%02x%02x%02x%02x\n",
+> -					extn->name[0], extn->name[1],
+> -					extn->name[2], extn->name[3]);
+> +			rc = sysfs_emit(buf, "%4phN\n", extn->name);
+>   		}
+>   		break;
+>   	case 1:
+>   		rc = sysfs_emit(buf, "%02x\n", extn->flags);
+>   		break;
+>   	case 2:
+> -		rc = sysfs_emit(buf, "%02x%02x%02x%02x%02x%02x\n",
+> -				extn->data[0], extn->data[1], extn->data[2],
+> -				extn->data[3], extn->data[4], extn->data[5]);
+> +		rc = sysfs_emit(buf, "%6phN\n", extn->data);
+>   		break;
+>   	default:
+>   		return -EINVAL;
+

@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2B4581164
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965BD58116D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbiGZKpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
+        id S232402AbiGZKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238764AbiGZKoT (ORCPT
+        with ESMTP id S233341AbiGZKsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:44:19 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2051.outbound.protection.outlook.com [40.107.96.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BD9201AF;
-        Tue, 26 Jul 2022 03:44:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lOcTQF4ETDYEa6X2r7WaSJu71O0epZw2444nuM8oU8do1e+wUJPD0vE9GBRpqJIODxn8WyjEPJnEA4BMWyjAO9Xr6Nlc7NSsD7GFfxpnCsQRbeH6rcLlCwOXi1DknT1L2Cj2+ImZQa/cKBO6RixwZp+OsZiCxxAu7N201lXQWvJcxmKYsfSWCy00jMsWKQX28M9tLwZVXqMqb0Ufn0rLR/8PsaODYl3CenQq7gtfAeOFTF6Eu5SHP7LLnMxm5N30Iwt473k5TCGF8Hmjrd0xNS0qQcwhsFLa4NBb0S1QP2hIyp+IyB4+2v4D5QYEYEbwi+IxxVfpt1DhJEynXnXNxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3jhnAIm6muWH5DCvARe7meGX8lckoygMf9mbdAc0nM8=;
- b=lHgC5vM0FXt2H207U1PNTyFp/1DBWQqYrXBOovDMADvIvZk/c9vtdNrl+xJwRwW6ZNjLXEc9KTlh33Jpw9VMFKv1V1oRpiV3q0qKKk3kW8D2kiblP48j2GxFanXLIlcDaAB1a6JBLU37OSp0KKeedTFeP1wm0jsXedC7xTJsLSYa8J7UWUylyT/95KBQZjOo8Kd/p7rHp0X+6uSzvZDHAqwC4ETfzH8k11AaxAxVwf7sZ+RaW8U51F02LkBvY8AQBcnTRZyD+11xcjY0E+XHT7ds+oUDNeByfbgRIOhBizw5yfDCHzkNZuekt2xvvlDib5gPKMaTa0jE5CjMKbtMHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=tw.synaptics.com; dmarc=pass action=none
- header.from=tw.synaptics.com; dkim=pass header.d=tw.synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3jhnAIm6muWH5DCvARe7meGX8lckoygMf9mbdAc0nM8=;
- b=O3HnEuEFjiPMXBwPutadRLmMI+YsEUmyRN9dsEpAQilHg1eYvNib0jttSro8wl7aLfJTqCcjXQlDK8+eKKfr2RvP56v3wpnt95h8yw/izyWd5REI7aGLMadYjiu9mgOlsvnhQlAVZzL4110UR0/dYCz7msUyrpHuJ9tUedkS05w=
-Received: from PH0PR03MB5848.namprd03.prod.outlook.com (2603:10b6:510:30::19)
- by BLAPR03MB5540.namprd03.prod.outlook.com (2603:10b6:208:296::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Tue, 26 Jul
- 2022 10:44:17 +0000
-Received: from PH0PR03MB5848.namprd03.prod.outlook.com
- ([fe80::60b1:a766:c174:65ca]) by PH0PR03MB5848.namprd03.prod.outlook.com
- ([fe80::60b1:a766:c174:65ca%9]) with mapi id 15.20.5458.025; Tue, 26 Jul 2022
- 10:44:17 +0000
-From:   Marge Yang <Marge.Yang@tw.synaptics.com>
-To:     "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marge Yang <Marge.Yang@tw.synaptics.com>
-CC:     Derek Cheng <derek.cheng@tw.synaptics.com>,
-        Vincent Huang <Vincent.huang@tw.synaptics.com>
-Subject: Recall: Fix Input: synaptics-rmi4 driver issue
-Thread-Topic: Fix Input: synaptics-rmi4 driver issue
-Thread-Index: AQHYoNynNRU/zXhYsU2fA/D4o7cKjw==
-X-CallingTelephoneNumber: IPM.Note
-X-VoiceMessageDuration: 17
-X-FaxNumberOfPages: 0
-Date:   Tue, 26 Jul 2022 10:44:17 +0000
-Message-ID: <PH0PR03MB58486D6681B211064AF134A1A3949@PH0PR03MB5848.namprd03.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=tw.synaptics.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7ba5008d-df81-4df3-a93e-08da6ef3ca52
-x-ms-traffictypediagnostic: BLAPR03MB5540:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IFk/0g1mgZDDaZEDbI9z5fQVPCFi65FkxwwBMSGeSvtuKhet7EyQUmDh3GGVEeGV3/ntpXrMAaFlDpZMJc2OB76iNhXZIlHJ2dtSsgOyxarymnAq+9O5YhBaM1fKC5zugAPYTX9wOw/JHqNZ2AL+3vlB1rMeYAXexwytiv6cmAgG8rUIS+ABFdvZYibMOIvaAAQXbVJ4aqtnmSY8ZVjWnhHLycC4I3RYrdNcsaSRdL2BXFfANlilIs0pqC10LVBw6OMty2mkMcuh/oLO4LSzSRxapreexWddOnTOz+aXm3IDYdPWs+CF0XlA+I2J6BHR37/z5jaEI7nt4q33yXa0LI518Dvq32G0yggygHtFiBXkSEr1WUCZ54qzGFnxu2jmhNMiFIwrpE2qaKP4QSi8dXIqj2ftKSA9dvrAqm/tGnZkiVm0LLD7OZ0HzQY4obPzbrFd1LAl8ZldR/OlJW21TpVr5G2tILspsjIl2psgxZ5iCuA4HUAqkQ+1CZznzPRmji7DWmHLMbNP0hHugQPhJIKVgIWvp2QvWL5mG1IljTRu1Iu4XFu66e2To4QEWyjLj39BcWMwBTJFfDgWCI1IdqjecrjVeeixrKVaneFPi2V+1C7ArTBJL+9gcT3cxyAYsuN0vPbO+3MhJZvhmOfb3PzDPj2KsuSDv+c7yH28g8zEfd1Jk3GpJ6dLtDMJIWXSr91TrREESY7H7btsWgtze4dJXrY3X7/+e60DKlfNzBVIGzVZFMz8VE8N7G6c8jtfEtofZ+ohc0PIDxRhP3j7mqoiKbVvxqSjcyg6KbLrRQx+b6r+7m7qW8CujD9sxrzC
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB5848.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(39850400004)(366004)(376002)(346002)(38070700005)(86362001)(122000001)(5660300002)(558084003)(33656002)(38100700002)(186003)(83380400001)(107886003)(71200400001)(478600001)(55016003)(316002)(54906003)(110136005)(8936002)(2906002)(6506007)(9686003)(7696005)(26005)(41300700001)(66446008)(8676002)(64756008)(66476007)(76116006)(66946007)(66556008)(4326008)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zBO5IyLBH1PEgK0D9vLSsf24Tr3gfY1NOYFc5/AGzc9GIlImt65o7DdSCXbK?=
- =?us-ascii?Q?cmEAtEIsiiFi5w0lNXEY+N8VgrOqXj6lkf73xYs9MNo83QrkM2Wx89kdUhmH?=
- =?us-ascii?Q?LAUqodUb1VZKpSfb1G7wkren9HYuBib1KJEQjwlxgvr/fBf+AkJJUhTaZSN9?=
- =?us-ascii?Q?FS5g3BQq8Mmbfyul1BHKnBVOH7PrbFi0ZHLm7JA8c1KatN99jXjS7vlREyLm?=
- =?us-ascii?Q?YC5vF+DQCbi6ziL6Zuizp2LeFVBJ+mZZ7Z3+Rj9pMdeyScsrPbhUVVyisHWM?=
- =?us-ascii?Q?o9okd7A2aSGqS3oPrB84Cfew02kcUfnJegxm7Wg6ScP4wfCPW/wtYocYRu30?=
- =?us-ascii?Q?DqnDUPrYF5eCJuQzAFSwKqclSHgSE7TIRVTbkGTtDN/vj8joke4x4F1fKDhc?=
- =?us-ascii?Q?QDVA7JpMiO2MNT/HMNnR2RcndjYJ3AdR5kMgQMmqw/bwJgAAsweGmy0sGVCk?=
- =?us-ascii?Q?jTAHUwwHH2Kn58ZbNWVgoOMOUJpyTe0IelPGRfKSvSIrgJN4r1Q6P9VPmL0k?=
- =?us-ascii?Q?b4miAPH0yX3kE3X3Yhs+Bc3JC5zVzrQr5ZSnoK8z4yxbbJjWh963/qnM+JNs?=
- =?us-ascii?Q?ycW/w0WWvJl1h3LdZ3naPkp8Irt7VLVdJD/soESIzKFJXzuHzIWTs3mTocGX?=
- =?us-ascii?Q?IxmmoE20wJu41JoX+uF/p2iUkW22koSIxCzaAea0zQ7zWDuoQocXq9et6J6x?=
- =?us-ascii?Q?TZcTuezp7NYOp5FWsyKKR/nZOASw8W+nG0l24mDQvq3S8rQqXeTKWhp/UsoG?=
- =?us-ascii?Q?p2c0Vw3u3G6pL69vOvNgevi9l8jrB+yMDaqQhRuyYVBzfdS4csV7vmUF29Rc?=
- =?us-ascii?Q?7NloZiLv4yOz0rvBHuo9SVq4o1wOLvDX49l3ecoGJMvA4lLwJoLI6zItBWNH?=
- =?us-ascii?Q?iPtmUtp5b/Oz0GojnZdDnAGLIqACiwjDpytXQFahUy/tSCFpxgVmsEI+uZH0?=
- =?us-ascii?Q?oB4iicGPcawn0dfR7BcnwwG+xW1J0lKcAoYVLgDSrptAVZPVCNAwNMEZ38wk?=
- =?us-ascii?Q?0m1xZvMbnEKamH+oS+apQH0gcwwpCe9VD0sqOrtqhIGv5Qq40g6K1LYigT0j?=
- =?us-ascii?Q?rKXtORlZDyT5wiIUya62BZocHIlxp2ZpcZ2qdG2pd9T3IylfuaZ3ZL/glnKw?=
- =?us-ascii?Q?O/y2zr0Qw1DEhViKBwr9GMQZ4E4ouPDURVHxGeK5sCXua/WStystiffTJIsb?=
- =?us-ascii?Q?SV0SZw223wGjyjTC4Xp90TyJwXxrDkfZtU0cYN2OcRvTxvIRocpyze1sgadA?=
- =?us-ascii?Q?Q7BM4uTSVh3MeiNGJQUSZ6AG7P2psEgfrEdbrMZR1U0b+WaHrn1pGTeddwo5?=
- =?us-ascii?Q?AJFCohopwADpRDhPLjSpFKIQOclG05eoVhkOTxm+qLjfIraENkA1FoFCcGbD?=
- =?us-ascii?Q?mWumwRrSCMTLHR1Or1ZZBsIw2PkFnlDP6x+9T3VjkJBlxSzfmvNYEfXkbfAG?=
- =?us-ascii?Q?ImETmrYguF4WhO+GnurPftNSK7lwULzxlBRo/2U8xMpP178tiOLU6DMUZ6c0?=
- =?us-ascii?Q?w//+CwevxYLlqmcqLV/tnlymBWSuPGV+hgoekE10apd2qlpB6u3k3vj2Dib2?=
- =?us-ascii?Q?fxOJ4s1xdINFYO8mweL7gg0B7Bqi2I9I6QvjpbOi?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 26 Jul 2022 06:48:04 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A297240B4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:47:59 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220726104754epoutp044ffc760078b2e7804f6b4367ec5145f6~FW1immUgg1496914969epoutp04g
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:47:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220726104754epoutp044ffc760078b2e7804f6b4367ec5145f6~FW1immUgg1496914969epoutp04g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1658832474;
+        bh=fQ+Y+QmHnh/EDveNBIvr5sL4r2bOolAvTQu/ym0MQ40=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=QSoSkNSlZ9myZg4vn3DO35QoU/VU+WK4mHamVkqdIYX1IWrdARJ8TSougIzEGJDUp
+         COJFMbamRwwDkvk/SNWv3FUUg/couFDyHa2/h0yoNBMwcuOGL1mR55SA4rN+jo7okl
+         TOem5lY6LBsupe6JpVVguyyUXL2mE4uvdYTEeHVg=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220726104753epcas2p1f4f7ed696f18d7e5b34b7729d114cf1e~FW1iKIoha2666126661epcas2p1U;
+        Tue, 26 Jul 2022 10:47:53 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.99]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4LsYXT28Thz4x9Pq; Tue, 26 Jul
+        2022 10:47:53 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3D.DD.09666.956CFD26; Tue, 26 Jul 2022 19:47:53 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220726104752epcas2p25991dabdb0acb21e25f21277f3198b09~FW1hQlJM61146411464epcas2p29;
+        Tue, 26 Jul 2022 10:47:52 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220726104752epsmtrp19621ddec4fcba5decef904a14c85faf9~FW1hPwgku2764827648epsmtrp1K;
+        Tue, 26 Jul 2022 10:47:52 +0000 (GMT)
+X-AuditID: b6c32a45-45bff700000025c2-ee-62dfc659025c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        40.DD.08802.856CFD26; Tue, 26 Jul 2022 19:47:52 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.55]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220726104752epsmtip26f3ea21891bc998bbdebccc76ea401a5~FW1hETgl02032620326epsmtip2W;
+        Tue, 26 Jul 2022 10:47:52 +0000 (GMT)
+From:   Gyunghoon Kwon <goodjob.kwon@samsung.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gyunghoon Kwon <goodjob.kwon@samsung.com>
+Subject: [PATCH] scsi: ufs: introduce dev_cmd_notify callback
+Date:   Tue, 26 Jul 2022 19:45:17 +0900
+Message-Id: <20220726104516.127032-1-goodjob.kwon@samsung.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-OriginatorOrg: tw.synaptics.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB5848.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ba5008d-df81-4df3-a93e-08da6ef3ca52
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jul 2022 10:44:17.6714
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Lvh4e0CNraoJu3i5ikgpckOGGF+SFnZ9yMXNTlmDLoDBi4uf3EY7b4wJzNHgg9lwtU9uakoel8mr3uNUD9tcpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR03MB5540
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLKsWRmVeSWpSXmKPExsWy7bCmuW7ksftJBmvvcFk8mLeNzeLlz6ts
+        Fj07nS0W3djGZHF51xw2i+7rO9gslh//x+TA7jFh0QFGj49Pb7F49G1ZxejxeZOcR/uBbqYA
+        1qhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygK5QU
+        yhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWleel6eaklVoYGBkamQIUJ
+        2RmPvjawFBwQrPj3YiVrA+M5vi5GTg4JAROJ1xvXMncxcnEICexglDjZcJ0ZJCEk8IlRYtps
+        ZQj7M6PE0k5TmIYHc5czQjTsYpToObWVHcL5yChx6UofG0gVm4C+xNTzL4EmcXCICBhJXFvl
+        CVLDLDCTUeLM1WNMIDXCArYSP06fZQGxWQRUJU79+gK2mVfATqLt9k4miG3yEtdvtkHFBSVO
+        znwCVs8MFG/eOhvsbAmBc+wSex88YYVocJHYv2kvM4QtLPHq+BZ2CFtK4mV/G5RdLHHy/wZG
+        iOYWRonO6+egEsYSs561M4JczSygKbF+lz6IKSGgLHHkFtRePomOw3/ZIcK8Eh1tQhCNahJn
+        Zk6D2iojcX9KAwuE7SHRteM0OyQQYyVmr9zKNoFRfhaSb2Yh+WYWwt4FjMyrGMVSC4pz01OL
+        jQoM4XGanJ+7iRGcDrVcdzBOfvtB7xAjEwfjIUYJDmYlEd6E6PtJQrwpiZVVqUX58UWlOanF
+        hxhNgeE7kVlKNDkfmJDzSuINTSwNTMzMDM2NTA3MlcR5vVI2JAoJpCeWpGanphakFsH0MXFw
+        SjUwLVtsvzy7LeXSgqs/V7Ps/vF7oZ023+bef/JqqRP/vFrY8pXzdfSPC9ZHls5tbuOx0eFa
+        nmBV/n2B9o8vzHscRE/++9uV4c79ynSN/GG7TUdj6zlmZ+oyLO/IDH/oe1L9yaSLoiceKrCp
+        yNkHNb//u9txboLOl2WMp/nTnJwZ5T/L2LFITOt50jg1KcnBNDB7A8vzwqU3NpySy8mJqZLg
+        F9Y+mf/15+K6U4bKS6WPF11bJO2maVX2QNd9+RNdxo/xT2U21G5+7HXusN6TNZdWuU8W2r5n
+        9jqxaTNst50+dDi5TCXu8LUFC9bVz1LyWSxqml82lb9M57e9XP9HN4sGbi4GP/OL+zgluiO9
+        VhxYrsRSnJFoqMVcVJwIAINo7CEQBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHLMWRmVeSWpSXmKPExsWy7bCSvG7EsftJBnffyVs8mLeNzeLlz6ts
+        Fj07nS0W3djGZHF51xw2i+7rO9gslh//x+TA7jFh0QFGj49Pb7F49G1ZxejxeZOcR/uBbqYA
+        1igum5TUnMyy1CJ9uwSujEdfG1gKDghW/HuxkrWB8RxfFyMnh4SAicSDucsZuxi5OIQEdjBK
+        zH72mLWLkQMoISNx74gURI2wxP2WI6wQNe8ZJU6vP8UIkmAT0JeYev4lM4gtAjRoxq13YEXM
+        AnMZJSZs/sEEkhAWsJX4cfosC4jNIqAqcerXF7AGXgE7ibbbO5kgNshLXL/ZBhUXlDg58wlY
+        PTNQvHnrbOYJjHyzkKRmIUktYGRaxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHKRa
+        WjsY96z6oHeIkYmD8RCjBAezkghvQvT9JCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJ
+        pCeWpGanphakFsFkmTg4pRqY1nnO75v4Nc11EYubKP/c/JSt3eqFOnqnv29jyeRhfVB89/ux
+        eu21d59uW5t69VxVE+8j2UgZ6eQ1cXN7V3nlVxc73Df/qCgZqFzH2cUq0LUx8pl3fo79P7Wv
+        k6sUrgX1nnGpdH6X6Wd1a43wXUNG/UK/1kebBB+ufB072+zWQkWHo2VTjv0r1Fz5Wlro0wNu
+        xh1vKuYoLRIx3iK78YGkWee7gPrLXDl+kWvN1sr9XXxgxsYJxzTVQ58sv3crcIrwCVNBlo4L
+        nk160ysl1xiqO59cfe/grWsLLTavmZFRda7DXc6BpymI64JM1fOglHtrC+duPxC8Jdtt7tFq
+        yS++Jj8N18gIB6YZrlnAU7ROiaU4I9FQi7moOBEAfqyhcMECAAA=
+X-CMS-MailID: 20220726104752epcas2p25991dabdb0acb21e25f21277f3198b09
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220726104752epcas2p25991dabdb0acb21e25f21277f3198b09
+References: <CGME20220726104752epcas2p25991dabdb0acb21e25f21277f3198b09@epcas2p2.samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,5 +113,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marge Yang would like to recall the message, "Fix Input: synaptics-rmi4 dri=
-ver issue".=
+Some UFS host controller may need to synchronize dev command among
+UFS host controllers.
+
+Signed-off-by: Gyunghoon Kwon <goodjob.kwon@samsung.com>
+---
+ drivers/scsi/ufs/ufshcd.c |  2 ++
+ drivers/scsi/ufs/ufshcd.h | 10 ++++++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 823ecd99eb2c..02d0350ee1a2 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -2942,8 +2942,10 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
+ 
+ 	ufshcd_add_query_upiu_trace(hba, UFS_QUERY_SEND, lrbp->ucd_req_ptr);
+ 
++	ufshcd_vops_dev_cmd_notify(hba, PRE_CHANGE);
+ 	ufshcd_send_command(hba, tag);
+ 	err = ufshcd_wait_for_dev_cmd(hba, lrbp, timeout);
++	ufshcd_vops_dev_cmd_notify(hba, POST_CHANGE);
+ 	ufshcd_add_query_upiu_trace(hba, err ? UFS_QUERY_ERR : UFS_QUERY_COMP,
+ 				    (struct utp_upiu_req *)lrbp->ucd_rsp_ptr);
+ 
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 34c5db101f14..f13b6cdfbe1d 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -320,6 +320,7 @@ struct ufs_pwr_mode_info {
+  * @device_reset: called to issue a reset pulse on the UFS device
+  * @program_key: program or evict an inline encryption key
+  * @event_notify: called to notify important events
++ * @dev_cmd_notify: called to notify device management request is issued
+  */
+ struct ufs_hba_variant_ops {
+ 	const char *name;
+@@ -357,6 +358,8 @@ struct ufs_hba_variant_ops {
+ 			       const union ufs_crypto_cfg_entry *cfg, int slot);
+ 	void	(*event_notify)(struct ufs_hba *hba,
+ 				enum ufs_event_type evt, void *data);
++	void	(*dev_cmd_notify)(struct ufs_hba *hba,
++			       enum ufs_notify_change_status);
+ };
+ 
+ /* clock gating state  */
+@@ -1354,6 +1357,13 @@ static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
+ 		hba->vops->config_scaling_param(hba, profile, data);
+ }
+ 
++static inline void ufshcd_vops_dev_cmd_notify(struct ufs_hba *hba,
++					enum ufs_notify_change_status status)
++{
++	if (hba->vops && hba->vops->dev_cmd_notify)
++		hba->vops->dev_cmd_notify(hba, status);
++}
++
+ extern struct ufs_pm_lvl_states ufs_pm_lvl_states[];
+ 
+ /*
+-- 
+2.37.1
+

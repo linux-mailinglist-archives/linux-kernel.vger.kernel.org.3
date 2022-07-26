@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A03581C7B
+	by mail.lfdr.de (Postfix) with ESMTP id 531EC581C7A
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239959AbiGZXlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 19:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
+        id S240018AbiGZXlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 19:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233136AbiGZXlN (ORCPT
+        with ESMTP id S239904AbiGZXlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 19:41:13 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BA011C0E;
+        Tue, 26 Jul 2022 19:41:14 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0721262F;
         Tue, 26 Jul 2022 16:41:12 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so1841221pjz.1;
+Received: by mail-pj1-x1036.google.com with SMTP id jw17so2418948pjb.0;
         Tue, 26 Jul 2022 16:41:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=pDvQd6qTx5v5vhMo86TIw3OfQS6b8AVZvUNa/LsQYnY=;
-        b=m3rOWVyipyVVXXWdH6juCG9cNpSzl0P2sZWMtwFT28gtXZ5Zlpq6WaANc48xyMMxc3
-         7Z2fR9yY/6t7GRJoTxV6BqDjLzIO9UHbkz725Is/7TgVsKJxXcIAVkVE0x+SVr23ms6C
-         lB1VyXY+sojJBow2eubVR70iDZ1InSGWj0EY1/9WhBTnEKgYFmwaeeHaG2sKZetYspUN
-         p/bEA+SDUmc0/ocm3lQvN575E7tjWhkGTa0ojFFNqErxlYDY6rkG2e0O3bGC8zHvWUtH
-         Tdjz9/R5blU9352sx/1+NLuBgfMPuneXu/r4cpXGTq9XH+VxrkhReUFdo1XYsGWGn5/C
-         aTAA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PrCjjOFOhMf6B7WrLBgvK9Jo76b6OWWmpIz9dDeyPYI=;
+        b=RoRx4uaHZ9Sl5cWrYWUdnVTYuRdiYfHn/62vISpKjuaJ4BPQ6lQbYO0223GTJcukhU
+         BQhiV9JxInPIswIrKmSwowovHK8zE9gppLVVlehlyWPLtRMczovuUh2zg/QwkPbud5X8
+         qi3JM3M3PtfVLyOng32VIk1xSLzc1o0oRbvr7XSqbKTYlao3d7YDH3wm92lpQI4aBge8
+         8JzilSfeyNcTwfsKiypTl12BgJi3rPKxztIOWRKymujVA0yfYkFrTa82K1ZCMomTv8Jq
+         RY/of9eKZRGilyanIlOvZeMDni3EccUKOKTyRwZw6gzoOl0gOAIiZ8mtPw73wgXFRltP
+         ZNIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=pDvQd6qTx5v5vhMo86TIw3OfQS6b8AVZvUNa/LsQYnY=;
-        b=LYsKAzXWICslij+TfjwR99+VzrCoO0+ZMRsXBSZkNRfQMorJfE6XKsaBta4BFcx8GJ
-         Vht7meuZRSFMpHHZ+6Gbdf96kfrf2/Cqo8Sgn6TaIqv3F6n5fyEyAFgPznaSh3dEeRok
-         hfg0hHiOnOAK9fC16LjKnfJFF1XbPnKv/ErY76TYYcnbJgkBOiLP4+qeOWixx+dqj9L6
-         TeZWIvLUpa6SMLRToYmPq6RFRGLWkSTXzoJH/iGjVRGgVAJ6rZ72HfFMCXOjY6rUXd6w
-         qAAjIrf+7YFem18MNskzTXKm8xF9q5IxIN7bKqH1Iuk3+eCiC9vSTQVO5oNAhR+1VtYI
-         Xa7A==
-X-Gm-Message-State: AJIora+d0kUEveKb5K353xoNUSeXMostUfEh+jMSCYQ0uEJ0oGZixVw2
-        qCtUVW3wGPzkNOcWSahafVY=
-X-Google-Smtp-Source: AGRyM1t1qC8MV9QIF+hA1BfupMp76UR5fyEv0cXD/0pHmg7VpJCth9ZFz9S6Qwc55wWvmD3Y1nlNrg==
-X-Received: by 2002:a17:90a:fd04:b0:1f3:77d:21d8 with SMTP id cv4-20020a17090afd0400b001f3077d21d8mr973055pjb.81.1658878871585;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PrCjjOFOhMf6B7WrLBgvK9Jo76b6OWWmpIz9dDeyPYI=;
+        b=YU8u01fGS7/y6COQMTGSHAOUuoof4eJFqr6yqp7gGKeFgi/rrcSLEp2RwuAP77WsBK
+         pajprJYerdTPuA2Zi5ZSKtcoyDbtupmGXV99Y2KB3xq0pCjKTFXxuoTOhRZXJjRxkEvp
+         jk8V5MUBsSYhCCtnLk6a0LP6LQV8lB+vfXxdKNdksTK+6W4OgUv3xFaBCi0+sLJV40Uv
+         X01zDb2TdtpTH2/94UM6QhkJwdiZTSG9WyXNKrxLNI0CUVJUx2rQZrDx0xJ13eQZe+sv
+         eaP0Sg8i0w447AeIwxi5/6MCQvT5TRzkW7IOKYuCHLGERFrxxzI/f+jGSluUrrZaDGvz
+         nIOQ==
+X-Gm-Message-State: AJIora9qy9Ltz3tFWCU38+QLfB61jaJ5N1NS3ta49TBsiR0j1XqZHz96
+        Mdw0LzXoc0JmSlQluQkWcAk=
+X-Google-Smtp-Source: AGRyM1tw4qn/AMwPrcEBvPTXq/nrt47sQDR1vq02Zhnb0jf8tDbrpMUoKeT//tX5ol+zHvQWin/eCw==
+X-Received: by 2002:a17:90a:b391:b0:1f3:6c3:392c with SMTP id e17-20020a17090ab39100b001f306c3392cmr1131974pjr.166.1658878872033;
+        Tue, 26 Jul 2022 16:41:12 -0700 (PDT)
+Received: from localhost ([192.55.54.49])
+        by smtp.gmail.com with ESMTPSA id m7-20020a62a207000000b0052b36de51cdsm12197953pff.111.2022.07.26.16.41.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 26 Jul 2022 16:41:11 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id co2-20020a17090afe8200b001f1a8c24b5esm168252pjb.6.2022.07.26.16.41.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 16:41:11 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------Wa970GY1Ay1PM7HnGadRSOBg"
-Message-ID: <4af7c132-1100-3d48-2311-e6be3bdf3629@gmail.com>
-Date:   Tue, 26 Jul 2022 16:41:09 -0700
+Date:   Tue, 26 Jul 2022 16:41:10 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v7 046/102] KVM: x86/tdp_mmu: Support TDX private mapping
+ for TDP MMU
+Message-ID: <20220726234110.GD1379820@ls.amr.corp.intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <94524fe1d3ead13019a2b502f37797727296fbd1.1656366338.git.isaku.yamahata@intel.com>
+ <20220711082818.ksm5hxg3zho66oct@yy-desk-7060>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/7] PCI: brcmstb: Re-submit reverted patchset
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        Rob Herring <robh@kernel.org>
-References: <20220726220303.GA109624@bhelgaas>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220726220303.GA109624@bhelgaas>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220711082818.ksm5hxg3zho66oct@yy-desk-7060>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,232 +75,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------Wa970GY1Ay1PM7HnGadRSOBg
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Mon, Jul 11, 2022 at 04:28:18PM +0800,
+Yuan Yao <yuan.yao@linux.intel.com> wrote:
 
-On 7/26/22 15:03, Bjorn Helgaas wrote:
-> On Mon, Jul 25, 2022 at 11:12:49AM -0400, Jim Quinlan wrote:
->> ...
->> Jim Quinlan (7):
->>   PCI: brcmstb: Remove unnecessary forward declarations
->>   PCI: brcmstb: Split brcm_pcie_setup() into two funcs
->>   PCI: brcmstb: Gate config space access on link status
->>   PCI: brcmstb: Add mechanism to turn on subdev regulators
->>   PCI: brcmstb: Add control of subdevice voltage regulators
->>   PCI: brcmstb: Do not turn off WOL regulators on suspend
->>   PCI: brcmstb: Have .map_bus function names end with 'map_bus'
->>
->>  drivers/pci/controller/pcie-brcmstb.c | 476 ++++++++++++++++++--------
->>  1 file changed, 341 insertions(+), 135 deletions(-)
+> On Mon, Jun 27, 2022 at 02:53:38PM -0700, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> >
+> > Allocate mirrored private page table for private page table, and add hooks
+> > to operate on mirrored private page table.  This patch adds only hooks. As
+> > kvm_gfn_shared_mask() returns false always, those hooks aren't called yet.
+> >
+> > Because private guest page is protected, page copy with mmu_notifier to
+> > migrate page doesn't work.  Callback from backing store is needed.
+> >
+> > When the faulting GPA is private, the KVM fault is also called private.
+> > When resolving private KVM, allocate mirrored private page table and call
+> > hooks to operate on mirrored private page table. On the change of the
+> > private PTE entry, invoke kvm_x86_ops hook in __handle_changed_spte() to
+> > propagate the change to mirrored private page table. The following depicts
+> > the relationship.
+> >
+> >   private KVM page fault   |
+> >       |                    |
+> >       V                    |
+> >  private GPA               |
+> >       |                    |
+> >       V                    |
+> >  KVM private PT root       |  CPU private PT root
+> >       |                    |           |
+> >       V                    |           V
+> >    private PT ---hook to mirror--->mirrored private PT
+> >       |                    |           |
+> >       \--------------------+------\    |
+> >                            |      |    |
+> >                            |      V    V
+> >                            |    private guest page
+> >                            |
+> >                            |
+> >      non-encrypted memory  |    encrypted memory
+> >                            |
+> > PT: page table
+> >
+> > The existing KVM TDP MMU code uses atomic update of SPTE.  On populating
+> > the EPT entry, atomically set the entry.  However, it requires TLB
+> > shootdown to zap SPTE.  To address it, the entry is frozen with the special
+> > SPTE value that clears the present bit. After the TLB shootdown, the entry
+> > is set to the eventual value (unfreeze).
+> >
+> > For mirrored private page table, hooks are called to update mirrored
+> > private page table in addition to direct access to the private SPTE. For
+> > the zapping case, it works to freeze the SPTE. It can call hooks in
+> > addition to TLB shootdown.  For populating the private SPTE entry, there
+> > can be a race condition without further protection
+> >
+> >   vcpu 1: populating 2M private SPTE
+> >   vcpu 2: populating 4K private SPTE
+> >   vcpu 2: TDX SEAMCALL to update 4K mirrored private SPTE => error
+> >   vcpu 1: TDX SEAMCALL to update 2M mirrored private SPTE
+> >
+> > To avoid the race, the frozen SPTE is utilized.  Instead of atomic update
+> > of the private entry, freeze the entry, call the hook that update mirrored
+> > private SPTE, set the entry to the final value.
+> >
+> > Support 4K page only at this stage.  2M page support can be done in future
+> > patches.
+> >
+> > Add is_private member to kvm_page_fault to indicate the fault is private.
+> > Also is_private member to struct tdp_inter to propagate it.
+> >
+> > Co-developed-by: Kai Huang <kai.huang@intel.com>
+> > Signed-off-by: Kai Huang <kai.huang@intel.com>
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/include/asm/kvm-x86-ops.h |   2 +
+> >  arch/x86/include/asm/kvm_host.h    |  20 +++
+> >  arch/x86/kvm/mmu/mmu.c             |  86 +++++++++-
+> >  arch/x86/kvm/mmu/mmu_internal.h    |  37 +++++
+> >  arch/x86/kvm/mmu/paging_tmpl.h     |   2 +-
+> >  arch/x86/kvm/mmu/tdp_iter.c        |   1 +
+> >  arch/x86/kvm/mmu/tdp_iter.h        |   5 +-
+> >  arch/x86/kvm/mmu/tdp_mmu.c         | 247 +++++++++++++++++++++++------
+> >  arch/x86/kvm/mmu/tdp_mmu.h         |   7 +-
+> >  virt/kvm/kvm_main.c                |   1 +
+> >  10 files changed, 346 insertions(+), 62 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> > index 32a6df784ea6..6982d57e4518 100644
+> > --- a/arch/x86/include/asm/kvm-x86-ops.h
+> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> > @@ -93,6 +93,8 @@ KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
+> >  KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
+> >  KVM_X86_OP(get_mt_mask)
+> >  KVM_X86_OP(load_mmu_pgd)
+> > +KVM_X86_OP_OPTIONAL(free_private_sp)
+> > +KVM_X86_OP_OPTIONAL(handle_changed_private_spte)
+> >  KVM_X86_OP(has_wbinvd_exit)
+> >  KVM_X86_OP(get_l2_tsc_offset)
+> >  KVM_X86_OP(get_l2_tsc_multiplier)
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index bfc934dc9a33..f2a4d5a18851 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -440,6 +440,7 @@ struct kvm_mmu {
+> >  			 struct kvm_mmu_page *sp);
+> >  	void (*invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa);
+> >  	struct kvm_mmu_root_info root;
+> > +	hpa_t private_root_hpa;
+> >  	union kvm_cpu_role cpu_role;
+> >  	union kvm_mmu_page_role root_role;
+> >
+> > @@ -1435,6 +1436,20 @@ static inline u16 kvm_lapic_irq_dest_mode(bool dest_mode_logical)
+> >  	return dest_mode_logical ? APIC_DEST_LOGICAL : APIC_DEST_PHYSICAL;
+> >  }
+> >
+> > +struct kvm_spte {
+> > +	kvm_pfn_t pfn;
+> > +	bool is_present;
+> > +	bool is_leaf;
+> > +};
+> > +
+> > +struct kvm_spte_change {
+> > +	gfn_t gfn;
+> > +	enum pg_level level;
+> > +	struct kvm_spte old;
+> > +	struct kvm_spte new;
+> > +	void *sept_page;
+> > +};
+> > +
+> >  struct kvm_x86_ops {
+> >  	const char *name;
+> >
+> > @@ -1547,6 +1562,11 @@ struct kvm_x86_ops {
+> >  	void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+> >  			     int root_level);
+> >
+> > +	int (*free_private_sp)(struct kvm *kvm, gfn_t gfn, enum pg_level level,
+> > +			       void *private_sp);
+> > +	void (*handle_changed_private_spte)(
+> > +		struct kvm *kvm, const struct kvm_spte_change *change);
+> > +
+> >  	bool (*has_wbinvd_exit)(void);
+> >
+> >  	u64 (*get_l2_tsc_offset)(struct kvm_vcpu *vcpu);
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index a5bf3e40e209..ef925722ee28 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -1577,7 +1577,11 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> >  		flush = kvm_handle_gfn_range(kvm, range, kvm_unmap_rmapp);
+> >
+> >  	if (is_tdp_mmu_enabled(kvm))
+> > -		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
+> > +		/*
+> > +		 * private page needs to be kept and handle page migration
+> > +		 * on next EPT violation.
+> > +		 */
+> > +		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush, false);
+> >
+> >  	return flush;
+> >  }
+> > @@ -3082,7 +3086,8 @@ static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fau
+> >  		 * SPTE value without #VE suppress bit cleared
+> >  		 * (kvm->arch.shadow_mmio_value = 0).
+> >  		 */
+> > -		if (unlikely(!vcpu->kvm->arch.enable_mmio_caching) ||
+> > +		if (unlikely(!vcpu->kvm->arch.enable_mmio_caching &&
+> > +			     !kvm_gfn_shared_mask(vcpu->kvm)) ||
+> >  		    unlikely(fault->gfn > kvm_mmu_max_gfn()))
+> >  			return RET_PF_EMULATE;
+> >  	}
+> > @@ -3454,7 +3459,12 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
+> >  		goto out_unlock;
+> >
+> >  	if (is_tdp_mmu_enabled(vcpu->kvm)) {
+> > -		root = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu);
+> > +		if (kvm_gfn_shared_mask(vcpu->kvm) &&
+> > +		    !VALID_PAGE(mmu->private_root_hpa)) {
+> > +			root = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu, true);
+> > +			mmu->private_root_hpa = root;
+> > +		}
+> > +		root = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu, false);
+> >  		mmu->root.hpa = root;
+> >  	} else if (shadow_root_level >= PT64_ROOT_4LEVEL) {
+> >  		root = mmu_alloc_root(vcpu, 0, 0, shadow_root_level, true);
+> > @@ -4026,6 +4036,32 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
+> >  	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
+> >  }
+> >
+> > +/*
+> > + * Private page can't be release on mmu_notifier without losing page contents.
+> > + * The help, callback, from backing store is needed to allow page migration.
+> > + * For now, pin the page.
+> > + */
+> > +static int kvm_faultin_pfn_private_mapped(struct kvm_vcpu *vcpu,
+> > +					   struct kvm_page_fault *fault)
+> > +{
+> > +	hva_t hva = gfn_to_hva_memslot(fault->slot, fault->gfn);
+> > +	struct page *page[1];
+> > +
+> > +	fault->map_writable = false;
+> > +	fault->pfn = KVM_PFN_ERR_FAULT;
+> > +	if (hva == KVM_HVA_ERR_RO_BAD || hva == KVM_HVA_ERR_BAD)
+> > +		return RET_PF_CONTINUE;
+> > +
+> > +	/* TDX allows only RWX.  Read-only isn't supported. */
+> > +	WARN_ON_ONCE(!fault->write);
+> > +	if (pin_user_pages_fast(hva, 1, FOLL_WRITE, page) != 1)
+> > +		return RET_PF_INVALID;
+> > +
+> > +	fault->map_writable = true;
+> > +	fault->pfn = page_to_pfn(page[0]);
+> > +	return RET_PF_CONTINUE;
+> > +}
+> > +
+> >  static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> >  {
+> >  	struct kvm_memory_slot *slot = fault->slot;
+> > @@ -4058,6 +4094,9 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> >  			return RET_PF_EMULATE;
+> >  	}
+> >
+> > +	if (fault->is_private)
+> > +		return kvm_faultin_pfn_private_mapped(vcpu, fault);
+> > +
+> >  	async = false;
+> >  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
+> >  					  fault->write, &fault->map_writable,
+> > @@ -4110,6 +4149,17 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+> >  	       mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+> >  }
+> >
+> > +void kvm_mmu_release_fault(struct kvm *kvm, struct kvm_page_fault *fault, int r)
+> > +{
+> > +	if (is_error_noslot_pfn(fault->pfn) || kvm_is_reserved_pfn(fault->pfn))
+> > +		return;
+> > +
+> > +	if (fault->is_private)
+> > +		put_page(pfn_to_page(fault->pfn));
 > 
-> I reworked these and put them on pci/ctrl/brcm for v5.20.  This is a
-> proposal, not something set in stone.  But time is of the essence to
-> figure out how we want to proceed.
-> 
-> I changed a lot of stuff and it's likely I broke something in the
-> process, so please take a look and test this out.  Here's an outline
-> of what I changed:
-> 
->   - Moved the config access "link up" check earlier because it's not
->     related to the power regulator patches.
-> 
->   - Changed config access "link up" checks to use PCIE_ECAM_REG()
->     instead of hard-coding 0xfff masks.  The 32-bit accessors already
->     mask out the low two bits, so we don't need to do that here.
-> 
->   - Squashed pci_subdev_regulators_add_bus() directly into
->     brcm_pcie_add_bus() for readability.  Similarly for
->     pci_subdev_regulators_remove_bus().
-> 
->   - This makes a clear split between:
-> 
->     * A patch that adds get/enable of regulators, and starting the
->       link after enabling regulators, and
-> 
->     * A patch that disables/enables regulators for suspend/resume.
-> 
->   - Since we only support one set of subregulator info (for one Root
->     Port, and brcm_pcie_suspend_noirq() depends on this since it uses
->     the pcie->sr pointer), use pcie->sr always instead of
->     dev->driver_data.
-> 
->   - Squashed wakeup device checking into the suspend/resume patch so
->     there's not a time when suspend might turn off power to a wakeup
->     device.
-> 
->   - Renamed brcm_pcie_map_bus32() to brcm7425_pcie_map_bus() so it
->     ends in "_map_bus()" like other drivers.  Also,
->     brcm7425_pcie_map_bus() doesn't actually depend on the 32-bitness.
+> The pin_user_pages_fast() is used above which has FOLL_PIN set
+> internal, so should we use unpin_user_page() here ? The FOLL_PIN means
+> the unpin should be done by unpin_user_page() but not put_page, please
+> see /Documentation/core-api/pin_user_pages.rst and comments on
+> FOLL_PIN;
 
-Attached is the diff between Jim's and your branch just so it is easier to see what moved around.
+To align with large page support, I'll make it to use get_user_pages_fast() and
+put_page().
 
-Initial testing on an ARCH_BRCMSTB system with PCIe appears to be good, we don't have any regulator on that board so the dummy ones get picked up which is expected. Same thing with a Raspberry Pi 4B system.
-
-I could unbind and bind again and there were no reference count leaks on the regulators, so this looks good to me.
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-
-of course, we should have Jim's test results as well as Cyril's ideally to make sure there are no regressions on the CM4 board.
-
-Thanks Bjorn!
 -- 
-Florian
---------------Wa970GY1Ay1PM7HnGadRSOBg
-Content-Type: text/x-patch; charset=UTF-8; name="jq-vs-bh.diff"
-Content-Disposition: attachment; filename="jq-vs-bh.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIvcGNpZS1icmNtc3RiLmMgYi9k
-cml2ZXJzL3BjaS9jb250cm9sbGVyL3BjaWUtYnJjbXN0Yi5jCmluZGV4IGI0MDczM2RkMjUz
-Yy4uNTIxYWNkNjMyZjFhIDEwMDY0NAotLS0gYS9kcml2ZXJzL3BjaS9jb250cm9sbGVyL3Bj
-aWUtYnJjbXN0Yi5jCisrKyBiL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIvcGNpZS1icmNtc3Ri
-LmMKQEAgLTI2MSw3ICsyNjEsNiBAQCBzdHJ1Y3QgYnJjbV9wY2llIHsKIAl1MzIJCQlod19y
-ZXY7CiAJdm9pZAkJCSgqcGVyc3Rfc2V0KShzdHJ1Y3QgYnJjbV9wY2llICpwY2llLCB1MzIg
-dmFsKTsKIAl2b2lkCQkJKCpicmlkZ2Vfc3dfaW5pdF9zZXQpKHN0cnVjdCBicmNtX3BjaWUg
-KnBjaWUsIHUzMiB2YWwpOwotCWJvb2wJCQlyZWd1bGF0b3Jfb29wczsKIAlzdHJ1Y3Qgc3Vi
-ZGV2X3JlZ3VsYXRvcnMgKnNyOwogCWJvb2wJCQllcF93YWtldXBfY2FwYWJsZTsKIH07CkBA
-IC02ODUsOCArNjg0LDggQEAgc3RhdGljIGJvb2wgYnJjbV9wY2llX2xpbmtfdXAoc3RydWN0
-IGJyY21fcGNpZSAqcGNpZSkKIAlyZXR1cm4gZGxhICYmIHBsdTsKIH0KIAotc3RhdGljIHZv
-aWQgX19pb21lbSAqYnJjbV9wY2llX21hcF9idXMoc3RydWN0IHBjaV9idXMgKmJ1cywgdW5z
-aWduZWQgaW50IGRldmZuLAotCQkJCQlpbnQgd2hlcmUpCitzdGF0aWMgdm9pZCBfX2lvbWVt
-ICpicmNtX3BjaWVfbWFwX2J1cyhzdHJ1Y3QgcGNpX2J1cyAqYnVzLAorCQkJCSAgICAgICB1
-bnNpZ25lZCBpbnQgZGV2Zm4sIGludCB3aGVyZSkKIHsKIAlzdHJ1Y3QgYnJjbV9wY2llICpw
-Y2llID0gYnVzLT5zeXNkYXRhOwogCXZvaWQgX19pb21lbSAqYmFzZSA9IHBjaWUtPmJhc2U7
-CkBAIC02OTQsNyArNjkzLDcgQEAgc3RhdGljIHZvaWQgX19pb21lbSAqYnJjbV9wY2llX21h
-cF9idXMoc3RydWN0IHBjaV9idXMgKmJ1cywgdW5zaWduZWQgaW50IGRldmZuLAogCiAJLyog
-QWNjZXNzZXMgdG8gdGhlIFJDIGdvIHJpZ2h0IHRvIHRoZSBSQyByZWdpc3RlcnMgaWYgIWRl
-dmZuICovCiAJaWYgKHBjaV9pc19yb290X2J1cyhidXMpKQotCQlyZXR1cm4gZGV2Zm4gPyBO
-VUxMIDogYmFzZSArICh3aGVyZSAmIDB4ZmZmKTsKKwkJcmV0dXJuIGRldmZuID8gTlVMTCA6
-IGJhc2UgKyBQQ0lFX0VDQU1fUkVHKHdoZXJlKTsKIAogCS8qIEFuIGFjY2VzcyB0byBvdXIg
-SFcgdy9vIGxpbmstdXAgd2lsbCBjYXVzZSBhIENQVSBBYm9ydCAqLwogCWlmICghYnJjbV9w
-Y2llX2xpbmtfdXAocGNpZSkpCkBAIC03MDMsMTEgKzcwMiwxMSBAQCBzdGF0aWMgdm9pZCBf
-X2lvbWVtICpicmNtX3BjaWVfbWFwX2J1cyhzdHJ1Y3QgcGNpX2J1cyAqYnVzLCB1bnNpZ25l
-ZCBpbnQgZGV2Zm4sCiAJLyogRm9yIGRldmljZXMsIHdyaXRlIHRvIHRoZSBjb25maWcgc3Bh
-Y2UgaW5kZXggcmVnaXN0ZXIgKi8KIAlpZHggPSBQQ0lFX0VDQU1fT0ZGU0VUKGJ1cy0+bnVt
-YmVyLCBkZXZmbiwgMCk7CiAJd3JpdGVsKGlkeCwgcGNpZS0+YmFzZSArIFBDSUVfRVhUX0NG
-R19JTkRFWCk7Ci0JcmV0dXJuIGJhc2UgKyBQQ0lFX0VYVF9DRkdfREFUQSArICh3aGVyZSAm
-IDB4ZmZmKTsKKwlyZXR1cm4gYmFzZSArIFBDSUVfRVhUX0NGR19EQVRBICsgUENJRV9FQ0FN
-X1JFRyh3aGVyZSk7CiB9CiAKLXN0YXRpYyB2b2lkIF9faW9tZW0gKmJyY21fcGNpZV9tYXBf
-YnVzMzIoc3RydWN0IHBjaV9idXMgKmJ1cywgdW5zaWduZWQgaW50IGRldmZuLAotCQkJCQkg
-aW50IHdoZXJlKQorc3RhdGljIHZvaWQgX19pb21lbSAqYnJjbTc0MjVfcGNpZV9tYXBfYnVz
-KHN0cnVjdCBwY2lfYnVzICpidXMsCisJCQkJCSAgIHVuc2lnbmVkIGludCBkZXZmbiwgaW50
-IHdoZXJlKQogewogCXN0cnVjdCBicmNtX3BjaWUgKnBjaWUgPSBidXMtPnN5c2RhdGE7CiAJ
-dm9pZCBfX2lvbWVtICpiYXNlID0gcGNpZS0+YmFzZTsKQEAgLTcxNSwxNCArNzE0LDE0IEBA
-IHN0YXRpYyB2b2lkIF9faW9tZW0gKmJyY21fcGNpZV9tYXBfYnVzMzIoc3RydWN0IHBjaV9i
-dXMgKmJ1cywgdW5zaWduZWQgaW50IGRldmZuCiAKIAkvKiBBY2Nlc3NlcyB0byB0aGUgUkMg
-Z28gcmlnaHQgdG8gdGhlIFJDIHJlZ2lzdGVycyBpZiAhZGV2Zm4gKi8KIAlpZiAocGNpX2lz
-X3Jvb3RfYnVzKGJ1cykpCi0JCXJldHVybiBkZXZmbiA/IE5VTEwgOiBiYXNlICsgKHdoZXJl
-ICYgMHhmZmMpOworCQlyZXR1cm4gZGV2Zm4gPyBOVUxMIDogYmFzZSArIFBDSUVfRUNBTV9S
-RUcod2hlcmUpOwogCiAJLyogQW4gYWNjZXNzIHRvIG91ciBIVyB3L28gbGluay11cCB3aWxs
-IGNhdXNlIGEgQ1BVIEFib3J0ICovCiAJaWYgKCFicmNtX3BjaWVfbGlua191cChwY2llKSkK
-IAkJcmV0dXJuIE5VTEw7CiAKIAkvKiBGb3IgZGV2aWNlcywgd3JpdGUgdG8gdGhlIGNvbmZp
-ZyBzcGFjZSBpbmRleCByZWdpc3RlciAqLwotCWlkeCA9IFBDSUVfRUNBTV9PRkZTRVQoYnVz
-LT5udW1iZXIsIGRldmZuLCAod2hlcmUgJiAweGZmYykpOworCWlkeCA9IFBDSUVfRUNBTV9P
-RkZTRVQoYnVzLT5udW1iZXIsIGRldmZuLCB3aGVyZSk7CiAJd3JpdGVsKGlkeCwgYmFzZSAr
-IElEWF9BRERSKHBjaWUpKTsKIAlyZXR1cm4gYmFzZSArIERBVEFfQUREUihwY2llKTsKIH0K
-QEAgLTEwODIsOCArMTA4MSw4IEBAIHN0YXRpYyBjb25zdCBjaGFyICogY29uc3Qgc3VwcGxp
-ZXNbXSA9IHsKIAogc3RhdGljIHZvaWQgKmFsbG9jX3N1YmRldl9yZWd1bGF0b3JzKHN0cnVj
-dCBkZXZpY2UgKmRldikKIHsKLQljb25zdCBzaXplX3Qgc2l6ZSA9IHNpemVvZihzdHJ1Y3Qg
-c3ViZGV2X3JlZ3VsYXRvcnMpCi0JCSsgc2l6ZW9mKHN0cnVjdCByZWd1bGF0b3JfYnVsa19k
-YXRhKSAqIEFSUkFZX1NJWkUoc3VwcGxpZXMpOworCWNvbnN0IHNpemVfdCBzaXplID0gc2l6
-ZW9mKHN0cnVjdCBzdWJkZXZfcmVndWxhdG9ycykgKworCQlzaXplb2Yoc3RydWN0IHJlZ3Vs
-YXRvcl9idWxrX2RhdGEpICogQVJSQVlfU0laRShzdXBwbGllcyk7CiAJc3RydWN0IHN1YmRl
-dl9yZWd1bGF0b3JzICpzcjsKIAlpbnQgaTsKIApAQCAtMTA5Nyw5NSArMTA5Niw1NyBAQCBz
-dGF0aWMgdm9pZCAqYWxsb2Nfc3ViZGV2X3JlZ3VsYXRvcnMoc3RydWN0IGRldmljZSAqZGV2
-KQogCXJldHVybiBzcjsKIH0KIAotc3RhdGljIGludCBwY2lfc3ViZGV2X3JlZ3VsYXRvcnNf
-YWRkX2J1cyhzdHJ1Y3QgcGNpX2J1cyAqYnVzKQorc3RhdGljIGludCBicmNtX3BjaWVfYWRk
-X2J1cyhzdHJ1Y3QgcGNpX2J1cyAqYnVzKQogeworCXN0cnVjdCBicmNtX3BjaWUgKnBjaWUg
-PSBidXMtPnN5c2RhdGE7CiAJc3RydWN0IGRldmljZSAqZGV2ID0gJmJ1cy0+ZGV2OwogCXN0
-cnVjdCBzdWJkZXZfcmVndWxhdG9ycyAqc3I7CiAJaW50IHJldDsKIAotCXNyID0gYWxsb2Nf
-c3ViZGV2X3JlZ3VsYXRvcnMoZGV2KTsKLQlpZiAoIXNyKQotCQlyZXR1cm4gLUVOT01FTTsK
-LQotCXJldCA9IHJlZ3VsYXRvcl9idWxrX2dldChkZXYsIHNyLT5udW1fc3VwcGxpZXMsIHNy
-LT5zdXBwbGllcyk7Ci0JaWYgKHJldCkgewotCQlkZXZfZXJyKGRldiwgImZhaWxlZCB0byBn
-ZXQgcmVndWxhdG9ycyBmb3IgZG93bnN0cmVhbSBkZXZpY2VcbiIpOwotCQlyZXR1cm4gcmV0
-OwotCX0KLQotCXJldCA9IHJlZ3VsYXRvcl9idWxrX2VuYWJsZShzci0+bnVtX3N1cHBsaWVz
-LCBzci0+c3VwcGxpZXMpOwotCWlmIChyZXQpIHsKLQkJZGV2X2VycihkZXYsICJmYWlsZWQg
-dG8gZW5hYmxlIHJlZ3VsYXRvcnMgZm9yIGRvd25zdHJlYW0gZGV2aWNlXG4iKTsKLQkJcmVn
-dWxhdG9yX2J1bGtfZnJlZShzci0+bnVtX3N1cHBsaWVzLCBzci0+c3VwcGxpZXMpOwotCQly
-ZXR1cm4gcmV0OwotCX0KLQlkZXYtPmRyaXZlcl9kYXRhID0gc3I7Ci0KLQlyZXR1cm4gMDsK
-LX0KKwlpZiAoIWJ1cy0+cGFyZW50IHx8ICFwY2lfaXNfcm9vdF9idXMoYnVzLT5wYXJlbnQp
-KQorCQlyZXR1cm4gMDsKIAotc3RhdGljIGludCBicmNtX3BjaWVfYWRkX2J1cyhzdHJ1Y3Qg
-cGNpX2J1cyAqYnVzKQotewotCXN0cnVjdCBicmNtX3BjaWUgKnBjaWUgPSAoc3RydWN0IGJy
-Y21fcGNpZSAqKSBidXMtPnN5c2RhdGE7Ci0Jc3RydWN0IGRldmljZSAqZGV2ID0gJmJ1cy0+
-ZGV2OwotCWludCByZXQ7CisJaWYgKGRldi0+b2Zfbm9kZSkgeworCQlzciA9IGFsbG9jX3N1
-YmRldl9yZWd1bGF0b3JzKGRldik7CisJCWlmICghc3IpIHsKKwkJCWRldl9pbmZvKGRldiwg
-IkNhbid0IGFsbG9jYXRlIHJlZ3VsYXRvcnMgZm9yIGRvd25zdHJlYW0gZGV2aWNlXG4iKTsK
-KwkJCWdvdG8gbm9fcmVndWxhdG9yczsKKwkJfQogCi0JaWYgKCFidXMtPnBhcmVudCB8fCAh
-cGNpX2lzX3Jvb3RfYnVzKGJ1cy0+cGFyZW50KSB8fCAhcGNpZSkKLQkJcmV0dXJuIDA7CisJ
-CXBjaWUtPnNyID0gc3I7CiAKLQlpZiAoZGV2LT5vZl9ub2RlICYmIGRldi0+ZHJpdmVyX2Rh
-dGEpIHsKLQkJLyoKLQkJICogT29wcywgdGhpcyBpcyB1bmZvcnR1bmF0ZS4gIFdlIGFyZSB1
-c2luZyB0aGUgcG9ydAotCQkgKiBkcml2ZXIncyBkcml2ZXJfZGF0YSBmaWVsZCB0byBzdG9y
-ZSBvdXIgcmVndWxhdG9yIGluZm8KLQkJICogYW5kIGl0IGFwcGVhcnMgdGhhdCBhbm90aGVy
-IGRyaXZlciBzdGFydGVkIHVzaW5nIGl0IGFzCi0JCSAqIHdlbGwuICBJZiBzbywgYmUgYSB0
-ZWFtIHBsYXllciBkbyBub3Qgb3ZlcndyaXRlIGl0LiAgV2UKLQkJICogbWF5IHN0aWxsIGJl
-IG9rYXkgaWYgdGhlcmUgYXJlIG5vIHJlZ3VsYXRvcnMuCi0JCSAqLwotCQlkZXZfZXJyKGRl
-diwgInJvb3QgcG9ydCBkZXYuZHJpdmVyX2RhdGEgbm9uLU5VTEw7IHNvbWV0aGluZyB3cm9u
-Z1xuIik7CisJCXJldCA9IHJlZ3VsYXRvcl9idWxrX2dldChkZXYsIHNyLT5udW1fc3VwcGxp
-ZXMsIHNyLT5zdXBwbGllcyk7CisJCWlmIChyZXQpIHsKKwkJCWRldl9pbmZvKGRldiwgIk5v
-IHJlZ3VsYXRvcnMgZm9yIGRvd25zdHJlYW0gZGV2aWNlXG4iKTsKKwkJCWdvdG8gbm9fcmVn
-dWxhdG9yczsKKwkJfQogCi0JfSBlbHNlIGlmIChkZXYtPm9mX25vZGUpIHsKLQkJcmV0ID0g
-cGNpX3N1YmRldl9yZWd1bGF0b3JzX2FkZF9idXMoYnVzKTsKLQkJLyogR3JhYiB0aGUgcmVn
-dWxhdG9ycyBmb3Igc3VzcGVuZC9yZXN1bWUgKi8KLQkJcGNpZS0+c3IgPSBidXMtPmRldi5k
-cml2ZXJfZGF0YTsKKwkJcmV0ID0gcmVndWxhdG9yX2J1bGtfZW5hYmxlKHNyLT5udW1fc3Vw
-cGxpZXMsIHNyLT5zdXBwbGllcyk7CisJCWlmIChyZXQpIHsKKwkJCWRldl9lcnIoZGV2LCAi
-Q2FuJ3QgZW5hYmxlIHJlZ3VsYXRvcnMgZm9yIGRvd25zdHJlYW0gZGV2aWNlXG4iKTsKKwkJ
-CXJlZ3VsYXRvcl9idWxrX2ZyZWUoc3ItPm51bV9zdXBwbGllcywgc3ItPnN1cHBsaWVzKTsK
-KwkJCXBjaWUtPnNyID0gTlVMTDsKKwkJfQogCX0KIAotCS8qIFRyeSB0byBzdGFydCB0aGUg
-bGluay4gKi8KK25vX3JlZ3VsYXRvcnM6CiAJYnJjbV9wY2llX3N0YXJ0X2xpbmsocGNpZSk7
-Ci0KLQkvKgotCSAqIFRoZXJlIGlzIG5vdCBtdWNoIG9mIGEgcG9pbnQgdG8gcmV0dXJuIGFu
-IGVycm9yIGFzIGN1cnJlbnRseSBpdAotCSAqIHdpbGwgY2F1c2UgYSBXQVJOSU5HKCkgZnJv
-bSBwY2lfYWxsb2NfY2hpbGRfYnVzKCkuICBTbyBvbmx5Ci0JICogcmV0dXJuIHRoZSBlcnJv
-ciBpZiBpdCBpcyAtRU5PTUVNLiAgTm90ZSB0aGF0IHdlIGFyZSBhbHdheXMKLQkgKiBkb2lu
-ZyBhIGRldl9lcnIoKSBmb3Igb3RoZXIgZXJyb3MuCi0JICovCi0JcmV0dXJuIHJldCA9PSAt
-RU5PTUVNID8gcmV0IDogMDsKLX0KLQotc3RhdGljIHZvaWQgcGNpX3N1YmRldl9yZWd1bGF0
-b3JzX3JlbW92ZV9idXMoc3RydWN0IHBjaV9idXMgKmJ1cykKLXsKLQlzdHJ1Y3QgZGV2aWNl
-ICpkZXYgPSAmYnVzLT5kZXY7Ci0Jc3RydWN0IHN1YmRldl9yZWd1bGF0b3JzICpzciA9IGRl
-di0+ZHJpdmVyX2RhdGE7Ci0KLQlpZiAocmVndWxhdG9yX2J1bGtfZGlzYWJsZShzci0+bnVt
-X3N1cHBsaWVzLCBzci0+c3VwcGxpZXMpKQotCQlkZXZfZXJyKGRldiwgImZhaWxlZCB0byBk
-aXNhYmxlIHJlZ3VsYXRvcnMgZm9yIGRvd25zdHJlYW0gZGV2aWNlXG4iKTsKLQlyZWd1bGF0
-b3JfYnVsa19mcmVlKHNyLT5udW1fc3VwcGxpZXMsIHNyLT5zdXBwbGllcyk7Ci0JZGV2LT5k
-cml2ZXJfZGF0YSA9IE5VTEw7CisJcmV0dXJuIDA7CiB9CiAKIHN0YXRpYyB2b2lkIGJyY21f
-cGNpZV9yZW1vdmVfYnVzKHN0cnVjdCBwY2lfYnVzICpidXMpCiB7CisJc3RydWN0IGJyY21f
-cGNpZSAqcGNpZSA9IGJ1cy0+c3lzZGF0YTsKKwlzdHJ1Y3Qgc3ViZGV2X3JlZ3VsYXRvcnMg
-KnNyID0gcGNpZS0+c3I7CiAJc3RydWN0IGRldmljZSAqZGV2ID0gJmJ1cy0+ZGV2OwotCXN0
-cnVjdCBicmNtX3BjaWUgKnBjaWU7CiAKLQlpZiAoIWRldi0+b2Zfbm9kZSB8fCAhZGV2LT5k
-cml2ZXJfZGF0YSB8fCAhYnVzLT5wYXJlbnQgfHwKLQkgICAgIXBjaV9pc19yb290X2J1cyhi
-dXMtPnBhcmVudCkpCisJaWYgKCFzcikKIAkJcmV0dXJuOwogCi0JcGNpZSA9IChzdHJ1Y3Qg
-YnJjbV9wY2llICopIGJ1cy0+c3lzZGF0YTsKLQlpZiAocGNpZSAmJiBwY2llLT5zcikgewot
-CQlwY2lfc3ViZGV2X3JlZ3VsYXRvcnNfcmVtb3ZlX2J1cyhidXMpOwotCQlwY2llLT5zciA9
-IE5VTEw7Ci0JfQorCWlmIChyZWd1bGF0b3JfYnVsa19kaXNhYmxlKHNyLT5udW1fc3VwcGxp
-ZXMsIHNyLT5zdXBwbGllcykpCisJCWRldl9lcnIoZGV2LCAiRmFpbGVkIHRvIGRpc2FibGUg
-cmVndWxhdG9ycyBmb3IgZG93bnN0cmVhbSBkZXZpY2VcbiIpOworCXJlZ3VsYXRvcl9idWxr
-X2ZyZWUoc3ItPm51bV9zdXBwbGllcywgc3ItPnN1cHBsaWVzKTsKKwlwY2llLT5zciA9IE5V
-TEw7CiB9CiAKIC8qIEwyMyBpcyBhIGxvdy1wb3dlciBQQ0llIGxpbmsgc3RhdGUgKi8KQEAg
-LTEyOTAsNyArMTI1MSw3IEBAIHN0YXRpYyBpbnQgcGNpX2Rldl9tYXlfd2FrZXVwKHN0cnVj
-dCBwY2lfZGV2ICpkZXYsIHZvaWQgKmRhdGEpCiAKIAlpZiAoZGV2aWNlX21heV93YWtldXAo
-JmRldi0+ZGV2KSkgewogCQkqcmV0ID0gdHJ1ZTsKLQkJZGV2X2luZm8oJmRldi0+ZGV2LCAi
-ZGlzYWJsZSBjYW5jZWxsZWQgZm9yIHdha2UtdXAgZGV2aWNlXG4iKTsKKwkJZGV2X2luZm8o
-JmRldi0+ZGV2LCAiUG9zc2libGUgd2FrZS11cCBkZXZpY2U7IHJlZ3VsYXRvcnMgd2lsbCBu
-b3QgYmUgZGlzYWJsZWRcbiIpOwogCX0KIAlyZXR1cm4gKGludCkgKnJldDsKIH0KQEAgLTE1
-MTMsMTUgKzE0NzQsMTUgQEAgc3RhdGljIHN0cnVjdCBwY2lfb3BzIGJyY21fcGNpZV9vcHMg
-PSB7CiAJLnJlYWQgPSBwY2lfZ2VuZXJpY19jb25maWdfcmVhZCwKIAkud3JpdGUgPSBwY2lf
-Z2VuZXJpY19jb25maWdfd3JpdGUsCiAJLmFkZF9idXMgPSBicmNtX3BjaWVfYWRkX2J1cywK
-LQkucmVtb3ZlX2J1cyA9IGJyY21fcGNpZV9yZW1vdmVfYnVzCisJLnJlbW92ZV9idXMgPSBi
-cmNtX3BjaWVfcmVtb3ZlX2J1cywKIH07CiAKLXN0YXRpYyBzdHJ1Y3QgcGNpX29wcyBicmNt
-X3BjaWVfb3BzMzIgPSB7Ci0JLm1hcF9idXMgPSBicmNtX3BjaWVfbWFwX2J1czMyLAorc3Rh
-dGljIHN0cnVjdCBwY2lfb3BzIGJyY203NDI1X3BjaWVfb3BzID0geworCS5tYXBfYnVzID0g
-YnJjbTc0MjVfcGNpZV9tYXBfYnVzLAogCS5yZWFkID0gcGNpX2dlbmVyaWNfY29uZmlnX3Jl
-YWQzMiwKIAkud3JpdGUgPSBwY2lfZ2VuZXJpY19jb25maWdfd3JpdGUzMiwKIAkuYWRkX2J1
-cyA9IGJyY21fcGNpZV9hZGRfYnVzLAotCS5yZW1vdmVfYnVzID0gYnJjbV9wY2llX3JlbW92
-ZV9idXMKKwkucmVtb3ZlX2J1cyA9IGJyY21fcGNpZV9yZW1vdmVfYnVzLAogfTsKIAogc3Rh
-dGljIGludCBicmNtX3BjaWVfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikK
-QEAgLTE2MTAsNyArMTU3MSw3IEBAIHN0YXRpYyBpbnQgYnJjbV9wY2llX3Byb2JlKHN0cnVj
-dCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpCiAJCX0KIAl9CiAKLQlicmlkZ2UtPm9wcyA9IHBj
-aWUtPnR5cGUgPT0gQkNNNzQyNSA/ICZicmNtX3BjaWVfb3BzMzIgOiAmYnJjbV9wY2llX29w
-czsKKwlicmlkZ2UtPm9wcyA9IHBjaWUtPnR5cGUgPT0gQkNNNzQyNSA/ICZicmNtNzQyNV9w
-Y2llX29wcyA6ICZicmNtX3BjaWVfb3BzOwogCWJyaWRnZS0+c3lzZGF0YSA9IHBjaWU7CiAK
-IAlwbGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBwY2llKTsK
-
---------------Wa970GY1Ay1PM7HnGadRSOBg--
+Isaku Yamahata <isaku.yamahata@gmail.com>

@@ -2,78 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF7F5808D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 02:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718115808D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 02:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbiGZAv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 20:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S234916AbiGZAwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 20:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiGZAvY (ORCPT
+        with ESMTP id S230247AbiGZAwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 20:51:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514F424976;
-        Mon, 25 Jul 2022 17:51:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD2C061349;
-        Tue, 26 Jul 2022 00:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D5E7C341C6;
-        Tue, 26 Jul 2022 00:51:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658796682;
-        bh=NLFzRaZSFroN3x3eXTNUEZ8NB31bA3KC4PRbcNi93mg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rD99RVPaAFYi2cHLkD6Ukf2YBXaHmJ7zF0lpfdoQd/6YMHgqIN3vP7YRn3KNFfIRs
-         JaKyTLLIKlEHPZfIUIhJqa0kcKDxKwDIvgjxImfplNC3iQnfL/EnqkbdX1KT2a4vSt
-         DF8Sh1qpvatH5KHOxrnSpeEaJOm0WOpHr98ttHeRSPumTfd/vpJli7SgP+2Br3EAMQ
-         5DNWzGGJAyomzQF+CpNG+cMUu/dWq4HzEcJvRmAcM2mxLijooFSuUqlcNyC8wAEBqb
-         dJTOVMFMoXgqc9nq0zUD/d3MkoCl5wtTLKmgMAnDSZXiNOPY19i2KTvC30g0QQrbTc
-         B6aTxKz3uDobQ==
-Date:   Mon, 25 Jul 2022 17:51:20 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] crypto: lib - remove __HAVE_ARCH_CRYPTO_MEMNEQ
-Message-ID: <Yt86iHqr8W96wL+8@sol.localdomain>
-References: <20220725183636.97326-1-ebiggers@kernel.org>
- <20220725183636.97326-4-ebiggers@kernel.org>
- <Yt8UCsYkH3O6RnFd@zx2c4.com>
+        Mon, 25 Jul 2022 20:52:22 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C998F26AE8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 17:52:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658796741; x=1690332741;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7MJPprHrWC/22tcVZAr1w0eZz8ntLzaTRRmATdZzq2Q=;
+  b=jwyXAUz5xfD3AHPqCy18wx3TohlKI9OuE8ZVKQfVxis+Hi3Y2mMn9JPk
+   sEdPitINZtO1tDbfuVJtU6g75RJJ5vB8IX5akQHMj4+EeALNpY0r5gbTz
+   jbWpv39rX4Yac+yX68itxFWRKGMAouBIBavym+v2xObwQ+txoDPjDNwmx
+   iYG/qg7tNolYEN6sGanAS2MN1rlU6oG4UbviJkcTTf4OQQxNMxzeHz5l9
+   hLRJrGxdgS51ECSgq4bLTMOZAOalzK33GhY2M59bzfM/Zy+cYqEZ1gZMq
+   AVjOCD3AjzqXlRw8jAa5SUJE9vTqaScF6fG3wj+mU4ZGim+QcJoIx/G/a
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="274694217"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="274694217"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 17:52:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="667690528"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Jul 2022 17:52:19 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oG8o6-0005kF-3B;
+        Tue, 26 Jul 2022 00:52:18 +0000
+Date:   Tue, 26 Jul 2022 08:51:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Yan <andy.yan@rock-chips.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused
+ variable 'vop2_dt_match'
+Message-ID: <202207260823.a2e6HBuO-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yt8UCsYkH3O6RnFd@zx2c4.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 12:07:06AM +0200, Jason A. Donenfeld wrote:
-> On Mon, Jul 25, 2022 at 11:36:36AM -0700, Eric Biggers wrote:
-> > From: Eric Biggers <ebiggers@google.com>
-> > 
-> > No architecture actually defines this, so it's unneeded.
-> > 
-> > Signed-off-by: Eric Biggers <ebiggers@google.com>
->  
-> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> 
-> Aside: out of curiosity, I wonder what was originally intended with
-> this, which magic arch-specific instructions were thought to be
-> potentially of aid.
+Hi Andy,
 
-The original commit (6bf37e5aa90f) says:
+FYI, the error/warning still remains.
 
-	Similarly to kernel library string functions, leave an option for future
-	even further optimized architecture specific assembler implementations.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+commit: 604be85547ce4d61b89292d2f9a78c721b778c16 drm/rockchip: Add VOP2 driver
+date:   3 months ago
+config: arm-randconfig-c002-20220724 (https://download.01.org/0day-ci/archive/20220726/202207260823.a2e6HBuO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=604be85547ce4d61b89292d2f9a78c721b778c16
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 604be85547ce4d61b89292d2f9a78c721b778c16
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/ drivers/gpu/drm/rockchip/ drivers/usb/gadget/ fs/ntfs3/ net/ceph/ net/ipv6/
 
-But so far no one has bothered.  It's already optimized to use 'long' accesses,
-so I wouldn't expect it to get much faster with assembly.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-- Eric
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused variable 'vop2_dt_match' [-Wunused-const-variable]
+   static const struct of_device_id vop2_dt_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/vop2_dt_match +248 drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
+
+   247	
+ > 248	static const struct of_device_id vop2_dt_match[] = {
+   249		{
+   250			.compatible = "rockchip,rk3566-vop",
+   251			.data = &rk3566_vop,
+   252		}, {
+   253			.compatible = "rockchip,rk3568-vop",
+   254			.data = &rk3568_vop,
+   255		}, {
+   256		},
+   257	};
+   258	MODULE_DEVICE_TABLE(of, vop2_dt_match);
+   259	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

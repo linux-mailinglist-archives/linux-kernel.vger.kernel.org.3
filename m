@@ -2,233 +2,402 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F6758174F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71E6581751
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239471AbiGZQWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 12:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S239344AbiGZQWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239467AbiGZQV5 (ORCPT
+        with ESMTP id S239405AbiGZQWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:21:57 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494E32B631
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:21:53 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id fy29so26993120ejc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wccH4xwr05h93IVuQ3GoAwjGPXfqL+WRIMDOQwCF8gM=;
-        b=QwsS4/9rfZJ1e/jTXpFegguoxPntmNbZmXmzEB/kyL6jqGpORB697fFASlBKn+/LUc
-         NTeguu10GJTQdz513oYHfieJpAzJgcvQ+nAC5bFKJlA/DNU8i5sb0j+wu7r1ve/euPny
-         2mJnA6ufG0ni+DMKgLf4FwgCtsdkZ5QE5awAWtmL2B3V3Je1mrlxAF0zMSq8RuobSXru
-         8oHjRSQeHoBkuebiwPCu4T2uhbwZcAImYZtcDdmstiObrr9ZwihWfgEqpNkSQztGwHH+
-         HHTIbwRpxzI9F0aHC1oAgeZD2JWecVItZB2OK1ENjl/AijMefhlokH6x/QxeAhr6yd6d
-         5OpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wccH4xwr05h93IVuQ3GoAwjGPXfqL+WRIMDOQwCF8gM=;
-        b=wrk5gG8PcOYYfFMl6l9dxhHj/ZzNUh5A1BxSE1j6/cC9oiD/iwA94nYqPxn5EktMqx
-         0oWzqeFPdIa91/YTd27jtoEzQnMrfBwgrhv8YVCDoyM8qidlBDLNnTNMAsyTlya6o3/G
-         +pgrd5axoPUtPqKF4tHSr1mjguZY2wqTenYLsQMZEV7bZaZsTNMPQMtNCx4SGATvVnTD
-         JVRbAItAgcMVI2p9rNYmciUPSWG6s1YjcEZYNNjgF8VrY4MdZDlhFhCXLOAAM36I4z5c
-         pCbsnX0lngUsqlxzVJc9BFaBKB4jgVfpozbe+Ggfw2d/dsHZTmuCnL1pLWLA/jngmKbn
-         4Xwg==
-X-Gm-Message-State: AJIora+N0uXKFUUlXDGCGCrnhG8Z8vSOVtrEju7iagD1IVgR+KAvTeyS
-        YyIu0Ilp42ZX/6Yo2ut9Syo=
-X-Google-Smtp-Source: AGRyM1uc5pNTL2QlDDKSjdiIDJBjI9sRl53yqrUC7P0ytlMIbrNWIkuIiNOngYELHwzsmkCAWLf1Lg==
-X-Received: by 2002:a17:906:9b95:b0:72f:c504:45e with SMTP id dd21-20020a1709069b9500b0072fc504045emr13627813ejc.345.1658852511536;
-        Tue, 26 Jul 2022 09:21:51 -0700 (PDT)
-Received: from opensuse.localnet (host-79-56-6-250.retail.telecomitalia.it. [79.56.6.250])
-        by smtp.gmail.com with ESMTPSA id gu7-20020a170906f28700b0072fdb26bd97sm2241980ejb.174.2022.07.26.09.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 09:21:50 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jan Kara <jack@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Pali =?ISO-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [RFC PATCH] fs/isofs: Replace kmap() with kmap_local_page()
-Date:   Tue, 26 Jul 2022 18:21:49 +0200
-Message-ID: <2872796.VdNmn5OnKV@opensuse>
-In-Reply-To: <20220726145024.rryvw7ot7j2c6tqv@quack3>
-References: <20220725162331.9825-1-fmdefrancesco@gmail.com> <20220726145024.rryvw7ot7j2c6tqv@quack3>
+        Tue, 26 Jul 2022 12:22:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D76275E7;
+        Tue, 26 Jul 2022 09:22:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 795C7B81895;
+        Tue, 26 Jul 2022 16:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7824C433D6;
+        Tue, 26 Jul 2022 16:22:38 +0000 (UTC)
+Date:   Tue, 26 Jul 2022 12:22:37 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Tao Zhou <tao.zhou@linux.dev>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [PATCH V7 01/16] rv: Add Runtime Verification (RV) interface
+Message-ID: <20220726122237.44386359@gandalf.local.home>
+In-Reply-To: <2aa3b18239f170ba23263f18d166d08634ed65dd.1658778484.git.bristot@kernel.org>
+References: <cover.1658778484.git.bristot@kernel.org>
+        <2aa3b18239f170ba23263f18d166d08634ed65dd.1658778484.git.bristot@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 26 luglio 2022 16:50:24 CEST Jan Kara wrote:
-> On Mon 25-07-22 18:23:31, Fabio M. De Francesco wrote:
-> > The use of kmap() is being deprecated in favor of kmap_local_page().
-> >=20
-> > There are two main problems with kmap(): (1) It comes with an overhead=
-=20
-as
-> > mapping space is restricted and protected by a global lock for
-> > synchronization and (2) it also requires global TLB invalidation when=20
-the
-> > kmap=E2=80=99s pool wraps and it might block when the mapping space is =
-fully
-> > utilized until a slot becomes available.
-> >=20
-> > With kmap_local_page() the mappings are per thread, CPU local, can take
-> > page faults, and can be called from any context (including interrupts).
-> > Tasks can be preempted and, when scheduled to run again, the kernel
-> > virtual addresses are restored and still valid. It is faster than=20
-kmap()
-> > in kernels with HIGHMEM enabled.
-> >=20
-> > Since kmap_local_page() can be safely used in compress.c, it should be
-> > called everywhere instead of kmap().
-> >=20
-> > Therefore, replace kmap() with kmap_local_page() in compress.c. Where=20
-it
-> > is needed, use memzero_page() instead of open coding kmap_local_page()
-> > plus memset() to fill the pages with zeros. Delete the redundant
-> > flush_dcache_page() in the two call sites of memzero_page().
-> >=20
-> > This is an RFC because these changes have not been tested (tests are
-> > welcome!), therefore I'm not entirely sure whether these conversions=20
-work
-> > properly. I'd like to hear comments from more experienced developers
-> > before sending a real patch. Suggestions about how to run tests would
-> > also be much appreciated.
-> >=20
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
->=20
-> What you propose makes sense to me. But the lack of testing is=20
-troublesome.
-> You can always at least test your patch without highmem on isofs image=20
-with
-> compression (mkisofs seems to support creating such filesystems).
-
-I understand your concerns about the lack of testing. I'll find a way to do=
-=20
-those tests on a QEMU/KVM x86_32 VM with a kernel with HIGHMEM64GB enabled.=
-=20
-(this is what I did for other filesystem, Btrfs to start with).
-
-I have no experience with this particular fs and saw that xfstests have no=
-=20
-special tests for isofs. However, you are talking about using mkisofs and I=
-=20
-suppose it will be enough for this purpose.
-
-> Even that
-> would detect a bug in your patch ;) - see below.
->=20
-> > diff --git a/fs/isofs/compress.c b/fs/isofs/compress.c
-> > index 95a19f25d61c..a1562124bb91 100644
-> > --- a/fs/isofs/compress.c
-> > +++ b/fs/isofs/compress.c
-> > @@ -120,8 +119,7 @@ static loff_t zisofs_uncompress_block(struct inode=
-=20
-*inode, loff_t block_start,
-> >  	       zerr !=3D Z_STREAM_END) {
-> >  		if (!stream.avail_out) {
-> >  			if (pages[curpage]) {
-> > -				stream.next_out =3D=20
-page_address(pages[curpage])
-> > -						+ poffset;
-> > +				stream.next_out =3D=20
-kmap_local_page(pages[curpage] + poffset);
->=20
-> This is wrong. Most importantly because you need to add 'poffset' to the
-> final address provided by kmap_local_page(), not to the struct page=20
-pointer.
-
-Sorry, this is only a typo.
-
-I've already made dozens of conversions to kmap_local_page(), so I know=20
-that I should add the offset to the kernel virtual address:=20
-
-stream.next_out =3D kmap_local_page(pages[curpage]) + poffset;
-
->=20
-> Secondly please wrap the line to fit into 80 chars.
->=20
-> >  				stream.avail_out =3D PAGE_SIZE -=20
-poffset;
-> >  				poffset =3D 0;
-> >  			} else {
-> > @@ -170,6 +168,12 @@ static loff_t zisofs_uncompress_block(struct inode=
-=20
-*inode, loff_t block_start,
-> >  			}
-> >  		}
-> > =20
-> > +		if (stream.next_out)
-> > +			if (stream.next_out !=3D (char=20
-*)zisofs_sink_page) {
-> > +				kunmap_local(stream.next_out);
-> > +				stream.next_out =3D NULL;
-> > +			}
-> > +
->=20
-> This looks buggy as well. If we mapped page above, we'll unmap it here=20
-even
-> if stream.avail_out > 0 and we want to still write to it. I think you
-> should unmap the page here only if stream.avail_out =3D=3D 0 and we are g=
-oing
-> to switch to the next page...
-
-I need to look carefully at this because I'm not 100% sure of what you are=
-=20
-talking about. At this moment I cannot look at the code, however I suppose=
-=20
-that when I can, I'll have no problems to figure out what I missed.=20
-
-> >  		if (!stream.avail_out) {
-> >  			/* This page completed */
-> >  			if (pages[curpage]) {
-> > @@ -183,6 +187,9 @@ static loff_t zisofs_uncompress_block(struct inode=
-=20
-*inode, loff_t block_start,
-> >  	}
-> >  inflate_out:
-> >  	zlib_inflateEnd(&stream);
-> > +	if (stream.next_out)
-> > +		if (stream.next_out !=3D (char *)zisofs_sink_page)
-> > +			kunmap_local(stream.next_out);
->=20
-> This is correct but I'd simplify it to:
->=20
-> 	if (stream.next_out && stream.next_out !=3D (char=20
-*)zisofs_sink_page)
-> 		kunmap_local(stream.next_out);
-
-It's shorter and more readable. I'll rewrite the code as you suggest.
-
-Thanks,
-
-=46abio
-
-> 							=09
-Honza
-> --=20
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
->=20
+On Mon, 25 Jul 2022 22:11:13 +0200
+Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 
 
+> +/**
+> + * rv_disable_monitor - disable a given runtime monitor
+> + *
+> + * Returns 0 on success.
+> + */
+> +int rv_disable_monitor(struct rv_monitor_def *mdef)
+> +{
+> +	int enabled;
+> +
+> +	enabled = __rv_disable_monitor(mdef);
+> +
+
+Does this function need to be holding any locks when called?
+
+Because it is not static, and that means something can call it without
+locks. If needed, you need to add a lockdep_assert() helper.
+
+> +	if (enabled) {
+> +		/*
+> +		 * Wait for the execution of all previous events.
+> +		 */
+> +		tracepoint_synchronize_unregister();
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * rv_enable_monitor - enable a given runtime monitor
+> + *
+> + * Returns 0 on success, error otherwise.
+> + */
+> +int rv_enable_monitor(struct rv_monitor_def *mdef)
+> +{
+> +	int retval;
+> +
+> +	if (mdef->monitor->enabled)
+> +		return 0;
+> +
+> +	retval = mdef->monitor->enable();
+> +
+> +	if (!retval)
+> +		mdef->monitor->enabled = 1;
+> +
+> +	return retval;
+> +}
+> +
+> +/*
+> + * interface for enabling/disabling a monitor.
+> + */
+> +static ssize_t monitor_enable_write_data(struct file *filp, const char __user *user_buf,
+> +					 size_t count, loff_t *ppos)
+> +{
+> +	struct rv_monitor_def *mdef = filp->private_data;
+> +	int retval;
+> +	bool val;
+> +
+> +	retval = kstrtobool_from_user(user_buf, count, &val);
+> +	if (retval)
+> +		return retval;
+> +
+> +	retval = count;
+> +
+> +	mutex_lock(&rv_interface_lock);
+> +
+> +	if (val)
+> +		retval = rv_enable_monitor(mdef);
+> +	else
+> +		retval = rv_disable_monitor(mdef);
+> +
+> +	mutex_unlock(&rv_interface_lock);
+> +
+> +	return retval ? : count;
+> +}
+> +
+
+[..]
+
+> +
+> +/*
+> + * enabled_monitors interface.
+> + */
+> +static void disable_all_monitors(void)
+> +{
+> +	struct rv_monitor_def *mdef;
+> +	int enabled = 0;
+> +
+> +	mutex_lock(&rv_interface_lock);
+> +
+> +	list_for_each_entry(mdef, &rv_monitors_list, list)
+> +		enabled += __rv_disable_monitor(mdef);
+> +
+> +	if (enabled) {
+> +		/*
+> +		 * Wait for the execution of all current events.
+> +		 */
+
+And do we really need to hold the locks when calling the synchronization?
+
+I think we only care if the caller sees a synchronized view of changes, the
+locks will help synchronize the internal code.
+
+> +		tracepoint_synchronize_unregister();
+> +	}
+> +
+> +	mutex_unlock(&rv_interface_lock);
+> +}
+> +
+
+[..]
+
+> +/**
+> + * rv_monitoring_on - checks if monitoring is on
+> + *
+> + * Returns 1 if on, 0 otherwise.
+> + */
+> +bool rv_monitoring_on(void)
+> +{
+> +	/* monitoring_on */
+
+You need a better comment than that.
+
+What is this synchronizing?
+
+> +	smp_rmb();
+> +	return READ_ONCE(monitoring_on);
+> +}
+> +
+> +/*
+> + * monitoring_on general switcher.
+> + */
+> +static ssize_t monitoring_on_read_data(struct file *filp, char __user *user_buf,
+> +				       size_t count, loff_t *ppos)
+> +{
+> +	const char *buff;
+> +
+> +	buff = rv_monitoring_on() ? "1\n" : "0\n";
+> +
+> +	return simple_read_from_buffer(user_buf, count, ppos, buff, strlen(buff) + 1);
+> +}
+> +
+> +static void turn_monitoring_off(void)
+> +{
+> +	WRITE_ONCE(monitoring_on, false);
+> +	/* monitoring_on */
+
+Same here.
+
+> +	smp_wmb();
+> +}
+> +
+> +static void reset_all_monitors(void)
+> +{
+> +	struct rv_monitor_def *mdef;
+> +
+> +	list_for_each_entry(mdef, &rv_monitors_list, list) {
+> +		if (mdef->monitor->enabled)
+> +			mdef->monitor->reset();
+> +	}
+> +}
+> +
+> +static void turn_monitoring_on(void)
+> +{
+> +	reset_all_monitors();
+
+Why does this reset all monitors but turn_monitoring_off() does not?
+
+You should keep that out.
+
+> +	WRITE_ONCE(monitoring_on, true);
+> +	/* monitoring_on */
+> +	smp_wmb();
+> +}
+> +
+> +static ssize_t monitoring_on_write_data(struct file *filp, const char __user *user_buf,
+> +					size_t count, loff_t *ppos)
+> +{
+> +	int retval;
+> +	bool val;
+> +
+> +	retval = kstrtobool_from_user(user_buf, count, &val);
+> +	if (retval)
+> +		return retval;
+> +
+> +	mutex_lock(&rv_interface_lock);
+> +
+> +	if (val)
+> +		turn_monitoring_on();
+> +	else
+> +		turn_monitoring_off();
+> +
+> +	/*
+> +	 * Wait for the execution of all current events to notice
+> +	 * the change before returning to user-space.
+> +	 */
+> +	tracepoint_synchronize_unregister();
+
+Again, I think we want this outside the lock.
+
+> +
+> +	mutex_unlock(&rv_interface_lock);
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations monitoring_on_fops = {
+> +	.open   = simple_open,
+> +	.llseek = no_llseek,
+> +	.write  = monitoring_on_write_data,
+> +	.read   = monitoring_on_read_data,
+> +};
+> +
+> +static void destroy_monitor_dir(struct rv_monitor_def *mdef)
+> +{
+> +	rv_remove(mdef->root_d);
+> +}
+> +
+> +/**
+> + * rv_register_monitor - register a rv monitor.
+> + * @monitor:    The rv_monitor to be registered.
+> + *
+> + * Returns 0 if successful, error otherwise.
+> + */
+> +int rv_register_monitor(struct rv_monitor *monitor)
+> +{
+> +	struct rv_monitor_def *r;
+> +	int retval = 0;
+> +
+> +	if (strlen(monitor->name) >= MAX_RV_MONITOR_NAME_SIZE) {
+> +		pr_info("Monitor %s has a name longer than %d\n", monitor->name,
+> +			MAX_RV_MONITOR_NAME_SIZE);
+> +		return -1;
+> +	}
+> +
+> +	mutex_lock(&rv_interface_lock);
+> +
+> +	list_for_each_entry(r, &rv_monitors_list, list) {
+> +		if (strcmp(monitor->name, r->monitor->name) == 0) {
+> +			pr_info("Monitor %s is already registered\n", monitor->name);
+> +			retval = -1;
+> +			goto out_unlock;
+> +		}
+> +	}
+> +
+> +	r = kzalloc(sizeof(struct rv_monitor_def), GFP_KERNEL);
+> +	if (!r) {
+> +		retval = -ENOMEM;
+> +		goto out_unlock;
+> +	}
+> +
+> +	r->monitor = monitor;
+> +
+> +	retval = create_monitor_dir(r);
+> +	if (retval) {
+> +		kfree(r);
+> +		goto out_unlock;
+> +	}
+> +
+> +	list_add_tail(&r->list, &rv_monitors_list);
+> +
+> +out_unlock:
+> +	mutex_unlock(&rv_interface_lock);
+> +	return retval;
+> +}
+> +
+> +/**
+> + * rv_unregister_monitor - unregister a rv monitor.
+> + * @monitor:    The rv_monitor to be unregistered.
+> + *
+> + * Returns 0 if successful, error otherwise.
+> + */
+> +int rv_unregister_monitor(struct rv_monitor *monitor)
+> +{
+> +	struct rv_monitor_def *ptr, *next;
+> +
+> +	mutex_lock(&rv_interface_lock);
+> +
+> +	list_for_each_entry_safe(ptr, next, &rv_monitors_list, list) {
+> +		if (strcmp(monitor->name, ptr->monitor->name) == 0) {
+> +			rv_disable_monitor(ptr);
+> +			list_del(&ptr->list);
+> +			destroy_monitor_dir(ptr);
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&rv_interface_lock);
+> +	return 0;
+> +}
+> +
+> +int __init rv_init_interface(void)
+> +{
+> +	struct dentry *tmp;
+> +
+> +	rv_root.root_dir = rv_create_dir("rv", NULL);
+> +	if (!rv_root.root_dir)
+> +		goto out_err;
+> +
+> +	rv_root.monitors_dir = rv_create_dir("monitors", rv_root.root_dir);
+> +	if (!rv_root.monitors_dir)
+> +		goto out_err;
+> +
+> +	tmp = rv_create_file("available_monitors", RV_MODE_READ, rv_root.root_dir, NULL,
+> +			     &available_monitors_ops);
+> +	if (!tmp)
+> +		goto out_err;
+> +
+> +	tmp = rv_create_file("enabled_monitors", RV_MODE_WRITE, rv_root.root_dir, NULL,
+> +			     &enabled_monitors_ops);
+> +	if (!tmp)
+> +		goto out_err;
+> +
+> +	tmp = rv_create_file("monitoring_on", RV_MODE_WRITE, rv_root.root_dir, NULL,
+> +			     &monitoring_on_fops);
+> +	if (!tmp)
+> +		goto out_err;
+> +
+
+This should call "turn_monitoriing_on()" instead of open coding it,
+especially since it includes a memory barrier (another reason to not
+reset the monitors in that function.
+
+-- Steve
 
 
+> +	WRITE_ONCE(monitoring_on, true);
+> +	/* monitoring_on */
+> +	smp_wmb();
+> +
+> +	return 0;
+> +
+> +out_err:
+> +	rv_remove(rv_root.root_dir);
+> +	printk(KERN_ERR "RV: Error while creating the RV interface\n");
+> +	return 1;
+> +}

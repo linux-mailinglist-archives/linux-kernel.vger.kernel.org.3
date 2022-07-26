@@ -2,187 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184D3581361
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1881B581366
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238836AbiGZMs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 08:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S238566AbiGZMuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 08:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238750AbiGZMs1 (ORCPT
+        with ESMTP id S233786AbiGZMuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:48:27 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0599A1AF3F
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 05:48:24 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id li4so2010869pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 05:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/jH03fCyEN/z2zkCr25VJ3Tkpq031LGWvxOe04lyWII=;
-        b=xha5OVcbcz5jOXIJyloCYnyqszkJsYvljiV15e0g9Sov6vZnDxi1SRrfQ1KNTGOmsq
-         rcqImOGHQQIDD5D8/wcxpEzEBOSX8so8LkT120yuShhXV/1OUgvu27wPZHwJAn8sgtH4
-         FBeYlCsq2SHU8l/+wLX7gPAce1b9G5bkbJAvL/MLgYLoErurIY0hjAcvQn6pF33FcyiQ
-         uptC5PDV725sKgG9C51wIoQZ9jA/yAYiyBO5hcTXafPg5N3BQ/KCApzJYBKXtwEW67Ws
-         7r0hnQv653D8+pzE5o5lr/RNlO7eCWb37VKa2LmhfVnU0gYwwUWThLAUU1FjnPBU5dPs
-         lhFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/jH03fCyEN/z2zkCr25VJ3Tkpq031LGWvxOe04lyWII=;
-        b=f5V+oR0/dTqQw5ekVSdGXGE/VrL/e1KBb9hqDq5m7iF5AznmSSi7GX9zKj+ghhlR7A
-         jvQmx0pVgBGsaAHzcIDXZOy8fq5Ax13Ix1qWxboplQ5Ib416LLYQE5vqjDwQ+7U4C1ic
-         NSjYcwrDeBbKlChDhAZpMV7LE4x0ikGWXVVc0E409AWd3IOBAXYE8cFLaatSr1nPCpbP
-         4ZuxoDmaquhSf/nxtLplkCWSwayM3zupYgpKQPwTaC3/kZxuAoiHjvwD4F+EAp8MgGdX
-         mBjnBSVcv1d0aWi5sUsbAUEmEWkR7LTss4nup0iPVgGJqWjb2SmcwX8c+er1TrDuPUwT
-         whfg==
-X-Gm-Message-State: AJIora/gqTrlFZTgX23KykjZfHVJGzAt4VGe38qKNX52EgGAqHgS0N2U
-        7cSWym7hTvJmgHhiVNCUCb8b
-X-Google-Smtp-Source: AGRyM1uZ7seD4df7QKOD60xa4LCiuzQdQhkiYQJgFZXt7s37rCfl25zFTF9HmKeGQTQPtudLFq7Y7g==
-X-Received: by 2002:a17:90a:17ea:b0:1f2:9166:731c with SMTP id q97-20020a17090a17ea00b001f29166731cmr14114165pja.184.1658839703450;
-        Tue, 26 Jul 2022 05:48:23 -0700 (PDT)
-Received: from workstation ([59.92.103.238])
-        by smtp.gmail.com with ESMTPSA id q9-20020a17090a7a8900b001f219c5ae7dsm11034658pjf.31.2022.07.26.05.48.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 26 Jul 2022 05:48:23 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 18:18:14 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     kishon@ti.com, bhelgaas@google.com, robh@kernel.org,
-        lorenzo.pieralisi@arm.com, kw@linux.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Om Prakash Singh <omp@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>
-Subject: Re: [PATCH] PCI: designware-ep: Move DBI access to init_complete if
- notifier is used
-Message-ID: <20220726124814.GH5522@workstation>
-References: <20220721083845.GA36189@thinkpad>
- <20220721153055.GA1720178@bhelgaas>
+        Tue, 26 Jul 2022 08:50:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5291DDCF;
+        Tue, 26 Jul 2022 05:50:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5DF61FB;
+        Tue, 26 Jul 2022 05:50:11 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.87.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23D0B3F70D;
+        Tue, 26 Jul 2022 05:50:10 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 13:50:06 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [-next] Lockdep warnings
+Message-ID: <Yt/i/o3Sb+niH2e+@FVFF77S0Q05N>
+References: <20220726104134.3b3awfphvafljdgp@bogus>
+ <Yt/gyEMOtGafQX4z@FVFF77S0Q05N>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721153055.GA1720178@bhelgaas>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yt/gyEMOtGafQX4z@FVFF77S0Q05N>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 10:30:55AM -0500, Bjorn Helgaas wrote:
-> On Thu, Jul 21, 2022 at 02:08:45PM +0530, Manivannan Sadhasivam wrote:
-> > On Tue, Jul 19, 2022 at 05:38:14PM -0500, Bjorn Helgaas wrote:
-> > > On Tue, Jul 19, 2022 at 09:13:58AM +0530, Manivannan Sadhasivam wrote:
-> > > > On Fri, Jul 15, 2022 at 04:39:58PM -0500, Bjorn Helgaas wrote:
-> > > > > On Wed, Mar 30, 2022 at 11:35:15AM +0530, Manivannan Sadhasivam wrote:
-> > > > > > For controllers supporting the CORE_INIT notifier, the resources are
-> > > > > > supposed to be enabled in the init_complete function. Currently,
-> > > > > > these controllers are enabling the resources during probe time due to
-> > > > > > the DBI access happens in dw_pcie_ep_init().
-> > > > > > 
-> > > > > > This creates the dependency with the host PCIe controller since the
-> > > > > > resource enablement like PHY depends on host PCIe to be up. For the
-> > > > > > standalone endpoint usecase, this would never work. So let's move all DBI
-> > > > > > access to init_complete function if CORE_INIT notifier is used. For the
-> > > > > > controllers those doesn't support this notifier, this change is a NO-OP.
-> > > > > > 
-> > > > > > Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> > > > > > Cc: Om Prakash Singh <omp@nvidia.com>
-> > > > > > Cc: Vidya Sagar <vidyas@nvidia.com>
-> > > > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > > > ---
-> > > > > >  .../pci/controller/dwc/pcie-designware-ep.c   | 138 ++++++++++++------
-> > > > > >  drivers/pci/controller/dwc/pcie-designware.h  |   1 +
-> > > > > >  2 files changed, 94 insertions(+), 45 deletions(-)
-> > > > > 
-> > > > > Sorry this got missed.  Seems like there are two patches to solve the
-> > > > > same problem:
-> > > > > 
-> > > > >   1) This patch, and
-> > > > >   2) Vidya's patch (https://lore.kernel.org/linux-pci/20220622040133.31058-1-vidyas@nvidia.com/)
-> > > > > 
-> > > > > I don't know much about dwc or this issue, but if these patches are
-> > > > > functionally equivalent, I think Vidya's is a little more attractive
-> > > > > because:
-> > > > > 
-> > > > >   - It's smaller (49 insertions(+), 39 deletions(-)).
-> > > > > 
-> > > > >   - "core_init_notifier" looks like sort of a corner-case feature and
-> > > > >     Vidya's patch doesn't depend on it so it seems more maintainable.
-> > > > > 
-> > > > >   - It's more straightforward to read -- it basically just moves
-> > > > >     things from dw_pcie_ep_init() to dw_pcie_ep_init_complete(), which
-> > > > >     is exactly the sort of thing I expect if we're doing something out
-> > > > >     of order.
-> > > > 
-> > > > I agree that Vidya's patch is simple but as per the feedback from
-> > > > Kishon on my previous patch, I had to add some extra logic to make
-> > > > sure the move of DBI access doesn't affect the non
-> > > > core_init_notifier platforms.
-> > > > 
-> > > > So with my patch, the logic added is essentailly a NO-OP on those.
-> > > 
-> > > Can you include the lore URL for Kishon's feedback?  I can't find it.
+On Tue, Jul 26, 2022 at 01:40:40PM +0100, Mark Rutland wrote:
+> [Adding Peter; I suspect this is due to the cpuidle rework]
+
+Looking again I see the cpuidle rework isn't in next, so evidently not...
+
+Sorry for the noise!
+
+Mark.
+
+> 
+> I'll go give next a spin in a VM, but I suspect I might need real HW to see
+> this due to the way PSCI idle states work.
+> 
+> Mark.
+> 
+> On Tue, Jul 26, 2022 at 11:41:34AM +0100, Sudeep Holla wrote:
+> > I was seeing the below lockdep warnings on my arm64 Juno development
+> > platform almost 2 weeks back with -next. I wanted to check for similar
+> > reports before post and forgot.
 > > 
-> > https://patchwork.kernel.org/project/linux-pci/patch/1630473361-27198-3-git-send-email-hayashi.kunihiko@socionext.com/#24633629
-> 
-> Thanks!  (Or the canonical permanent URL:
-> https://lore.kernel.org/r/576457dd-3e66-a3b9-f51c-ea94bc267fdb@ti.com)
-> 
-> > > If we think moving the DBI access is safe on non-core_init_notifier
-> > > platforms, I'd like to do it everywhere so they're all the same.  I
-> > > don't want different behavior just to avoid the risk of theoretical
-> > > problems that we think should not happen.
+> > --->8
 > > 
-> > One more issue Kishon pointed out was that, in the patch the
-> > endpoint controller is configured after pci_epc_create(). So he
-> > raised a concern that if ecp_ops is invoked before the controller
-> > gets configured fully, it could result in aborts.
+> > DEBUG_LOCKS_WARN_ON(lockdep_hardirqs_enabled())
+> >  hardirqs last  enabled at (46157): cpuidle_enter_state+0x174/0x2b4
+> >  WARNING: CPU: 5 PID: 0 at kernel/locking/lockdep.c:5506 check_flags+0x90/0x1e8
+> >  hardirqs last disabled at (46158): el1_interrupt+0x2c/0xc8
+> >  Modules linked in:
+> >  softirqs last  enabled at (46154): __do_softirq+0x2c0/0x388
+> >  softirqs last disabled at (46139): __irq_exit_rcu+0x118/0x18c
+> >  CPU: 5 PID: 0 Comm: swapper/5 Not tainted 5.19.0-rc6-next-20220714 #9
+> >  pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> >  pc : check_flags+0x90/0x1e8
+> >  lr : check_flags+0x90/0x1e8
+> >  Call trace:
+> >   check_flags+0x90/0x1e8
+> >   lock_is_held_type+0x80/0x164
+> >   rcu_read_lock_sched_held+0x40/0x7c
+> >   trace_rcu_dyntick+0x5c/0x140
+> >   ct_kernel_enter+0x78/0xd4
+> >   ct_idle_exit+0x1c/0x44
+> >   cpu_idle_poll+0x74/0xb8
+> >   do_idle+0x90/0x2c4
+> >   cpu_startup_entry+0x30/0x34
+> >   secondary_start_kernel+0x130/0x144
+> >   __secondary_switched+0xb0/0xb4
+> >  irq event stamp: 64229
+> >  hardirqs last  enabled at (64229): cpu_idle_poll+0x40/0xb8
+> >  hardirqs last disabled at (64228): do_idle+0xbc/0x2c4
+> >  softirqs last  enabled at (64190): __do_softirq+0x2c0/0x388
+> >  softirqs last disabled at (64185): __irq_exit_rcu+0x118/0x18c
+> >  ---[ end trace 0000000000000000 ]---
+> >  possible reason: unannotated irqs-off.
+> >  irq event stamp: 64229
+> >  hardirqs last  enabled at (64229): cpu_idle_poll+0x40/0xb8
+> >  hardirqs last disabled at (64228): do_idle+0xbc/0x2c4
+> >  softirqs last  enabled at (64190): __do_softirq+0x2c0/0x388
+> >  softirqs last disabled at (64185): __irq_exit_rcu+0x118/0x18c
 > > 
-> > While the concern may be true for non-core_init_notifier platforms
-> > (I'm not sure though) but I'm certain not for the core_init_notifier
-> > ones as the EFP drivers only access EPC ops after
-> > dw_pcie_ep_init_complete().
-> 
-> I really don't understand what "core_init_notifier" does, but it seems
-> incidental to this issue.
-
-"core_init_notifer" flag was added to let the EPF driver know that the
-endpoint controller has completed its initialization. This is needed for
-platforms that require refclk from the host to be active before accessing
-any controller specific registers. Tegra194 and Qcom are one of those kinds.
-
-> Is there really a connection?  It sounds
-> like the only reason to check for it is to limit the scope of the
-> change, not because DBI access is inherently related to
-> core_init_notifier.
-> 
-
-DBI access requires refclk on the above mentioned platforms, so yes
-there is a strong connection.
-
-This patch (also mine) moves away all of the DBI access to the
-init_complete() notifier callback. Because, without this patch we need
-to bring-up the host first and then power-on the endpoint. Otherwise,
-if the endpoint is powered-on first, it will crash as there would no
-refclk from host.
-
-> Maybe Vidya's patch needs some enhancement to cover other paths where
-> DBI may be accessed before we're ready?
-> 
-
-FWIW, Vidya's patch looks good to me. I pointed out my patch just
-because it covers the theoretical issue mentioned by Kishon.
-
-Thanks,
-Mani
-
-> Bjorn
+> > ----
+> > 
+> > However I don't see the above warning with the latest -next. When I tried
+> > yesterday's -next now, I see a different warning. Not sure if they are
+> > related. I haven't tried to bisect.
+> > 
+> > --->8
+> > =============================
+> > [ BUG: Invalid wait context ]
+> > 5.19.0-rc8-next-20220725 #38 Not tainted
+> > -----------------------------
+> > swapper/0/0 is trying to lock:
+> > (&drvdata->spinlock){....}-{3:3}, at: cti_cpu_pm_notify+0x54/0x114
+> > other info that might help us debug this:
+> > context-{5:5}
+> > 1 lock held by swapper/0/0:
+> >  #0: (cpu_pm_notifier.lock){....}-{2:2}, at: cpu_pm_enter+0x2c/0x80
+> > stack backtrace:
+> > CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc8-next-20220725-00004-g599e6691ed8c #38
+> > Call trace:
+> >  dump_backtrace+0xe8/0x108
+> >  show_stack+0x18/0x4c
+> >  dump_stack_lvl+0x90/0xc8
+> >  dump_stack+0x18/0x54
+> >  __lock_acquire+0xa70/0x32d0
+> >  lock_acquire+0x160/0x308
+> >  _raw_spin_lock+0x60/0xa0
+> >  cti_cpu_pm_notify+0x54/0x114
+> >  raw_notifier_call_chain_robust+0x50/0xd4
+> >  cpu_pm_enter+0x48/0x80
+> >  psci_enter_idle_state+0x34/0x74
+> >  cpuidle_enter_state+0x120/0x2a8
+> >  cpuidle_enter+0x38/0x50
+> >  do_idle+0x1e8/0x2b8
+> >  cpu_startup_entry+0x24/0x28
+> >  kernel_init+0x0/0x1a0
+> >  start_kernel+0x0/0x470
+> >  start_kernel+0x34c/0x470
+> >  __primary_switched+0xbc/0xc4
+> > 
+> > ----
+> > 
+> > --
+> > Regards,
+> > Sudeep

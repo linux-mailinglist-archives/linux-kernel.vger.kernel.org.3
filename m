@@ -2,50 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057EF58185E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788E3581862
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239277AbiGZR2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S239301AbiGZRaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiGZR2j (ORCPT
+        with ESMTP id S230170AbiGZRaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:28:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C592B270
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:28:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4FCD60EFE
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:28:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6B4C433D6;
-        Tue, 26 Jul 2022 17:28:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658856517;
-        bh=DsScutZIz1MNvNNB0Ko1mzB8/LACNL/bmE2DKVLrRSg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IdVXFsR2CIQsANBRRHFcX/QANHnj71RMk7Y/7SZlrGDxDPJ+pOFL17/9NDp5idEZs
-         lgihZVog4u7ar39ouw/Tz8eYl5gOGtBZwVsV0y2EbmGdWR16rqQwVlYps00X8jO0fX
-         Jdyg0hEiJjTzE0jcx3VSJjV4W47Ojcd/qnOpM+TU=
-Date:   Tue, 26 Jul 2022 19:28:34 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     rafael@kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH] component: try_module_get() to prevent unloading while
- in use
-Message-ID: <YuAkQtik4ud6xw8L@kroah.com>
-References: <20220725160859.1274472-1-rf@opensource.cirrus.com>
- <Yt7cT66p0Bn+aXn5@kroah.com>
- <4165774b-2b96-83d1-67eb-f7c49dd8041e@opensource.cirrus.com>
+        Tue, 26 Jul 2022 13:30:18 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60830B4BA
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:30:16 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id u17so7114294lji.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=i5XyBug1h7Oxv4CKlaalFltAR+iBWMVRtKUvuxm3XZw=;
+        b=QODiih/k4aANBRXKxjGqTQnWG3XiMdmVLBda9fbRVehQfCsP/ztSCv1ihizFygFfEC
+         8Jmo2SIxldx4vcJe6pO/7JURkfqa1weVg6uLxHCISPaIH+jmAM1ZpmaNTVpogtGKUw2c
+         FkoynCDiUl+Zk0obDARAAnrwEfyOrkh7i/9NV7sUHyRhge6qcyxF1//npWHDq200PfBA
+         Nlg0AxEMLIv79fyUBAedfyZEop33zrpvwOk2xIT3ovbTcGRFSuQYy9IlVaBqgqsWf8qJ
+         npCCyhYgC13Otb450STiDY2fOZYaeOP0Xkl7KuhnfSOnDK0KhbZHjXzoVjcDYhcCiPOy
+         0n+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=i5XyBug1h7Oxv4CKlaalFltAR+iBWMVRtKUvuxm3XZw=;
+        b=k7T7OovJs5SnMJrm4izpLF9FgmY0reEdQRSDRY+fBEX3x7yfO9/pr9543JRWNp2npU
+         ekNdcJokIdOlAdiWzvo2del/cO2X1/WOW0YTgJuqcy/GE717NfurbXphzLI+CE/+yGFM
+         5fJ+MS3EpLuRdVMB10ch5rek/DV5yr4nQUHyZI1K/vxMe+aluFFNcm2BjcT7b++v73RC
+         xuB3uNyM/ha0WSaTlfYI7j8UwPuD4rdy9sxiJNu2n/gsZCjMYs8Qwfuy42oKpFWUjdUN
+         Nd9bheAZ5NisCs3+fgcpSr6p7qn4h/Q88/n3/3fa2PvA3aXyio1nAxTIERcKiLESVW7R
+         KMnw==
+X-Gm-Message-State: AJIora/y/0VlQZc06esoE7lbQY1h3wcrwcdwopJXHPQ24o+AmwYqIGKx
+        uLrqq3N0KVfx2TcApW6ZJyFiCA==
+X-Google-Smtp-Source: AGRyM1spkPPzWZpgibFcexA+GSxXSnYVEEpyJxs/YstHTsPt7j4hR0szRYGMpCKiAiehG4A6oQzVYQ==
+X-Received: by 2002:a05:651c:b28:b0:25d:6a99:e978 with SMTP id b40-20020a05651c0b2800b0025d6a99e978mr6828855ljr.82.1658856614643;
+        Tue, 26 Jul 2022 10:30:14 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id f10-20020a19dc4a000000b0048a973870a0sm854423lfj.132.2022.07.26.10.30.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 10:30:14 -0700 (PDT)
+Message-ID: <a9356472-0fef-d500-837c-ad6d9ed27b94@linaro.org>
+Date:   Tue, 26 Jul 2022 19:30:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4165774b-2b96-83d1-67eb-f7c49dd8041e@opensource.cirrus.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/5] ARM: qcom_defconfig: enable more Qualcomm drivers
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+References: <20220726150609.140472-1-krzysztof.kozlowski@linaro.org>
+ <20220726150609.140472-2-krzysztof.kozlowski@linaro.org>
+ <CAA8EJppMNUV0eEF7BV6=7RgQK_XUEsqcLpmf_zu0XjSRLTLQ6w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAA8EJppMNUV0eEF7BV6=7RgQK_XUEsqcLpmf_zu0XjSRLTLQ6w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,63 +80,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 11:32:28AM +0100, Richard Fitzgerald wrote:
-> On 25/07/2022 19:09, Greg KH wrote:
-> > On Mon, Jul 25, 2022 at 05:08:59PM +0100, Richard Fitzgerald wrote:
-> > > Call try_module_get() on a component before attempting to call its
-> > > bind() function, to ensure that a loadable module cannot be
-> > > unloaded while we are executing its bind().
-> > 
-> > How can bind be called while the module is unloaded?
-> > 
+On 26/07/2022 18:49, Dmitry Baryshkov wrote:
+> On Tue, 26 Jul 2022 at 18:06, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> Enable Qualcomm drivers:
+>> 1. socinfo driver to provide some basic information about the
+>>    SoC being used.
+>> 2. Remote filesystem memory driver (used in MSM8974).
+>> 3. RPM Power domain (used in MSM8226).
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  arch/arm/configs/qcom_defconfig | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+>> index 5cd935ee148a..f02448187eac 100644
+>> --- a/arch/arm/configs/qcom_defconfig
+>> +++ b/arch/arm/configs/qcom_defconfig
+>> @@ -247,12 +247,15 @@ CONFIG_QCOM_COMMAND_DB=y
+>>  CONFIG_QCOM_GSBI=y
+>>  CONFIG_QCOM_OCMEM=y
+>>  CONFIG_QCOM_PM=y
+>> +CONFIG_QCOM_RMTFS_MEM=y
+>> +CONFIG_QCOM_RPMPD=y
+>>  CONFIG_QCOM_SMEM=y
+>>  CONFIG_QCOM_SMD_RPM=y
+>>  CONFIG_QCOM_SMP2P=y
+>>  CONFIG_QCOM_SMSM=y
+>>  CONFIG_QCOM_RPMH=y
+>>  CONFIG_QCOM_RPMHPD=y
+>> +CONFIG_QCOM_SOCINFO=y
 > 
-> I didn't say it could. What I said is "unloaded while we are executing
-> its bind()". Maybe that's already guaranteed to be safe somehow. It's
-> actually the problem below that I was trying to fix but placing the
-> try_module_get() before the bind() rather than after bind() seemed a
-> trivial extra safety.
+> please add:
+> CONFIG_QCOM_STATS=y
 
-It should be safe, bind() can't race with module remove as the driver
-core locks will handle this.
+I was considering it, but it seems none of ARMv7 DTS use it.
 
-> > > If the bind is successful the module_put() is called only after it
-> > > has been unbound. This ensures that the module cannot be unloaded
-> > > while it is in use as an aggregate device.
-> > 
-> > That's almost never the correct thing to do, what problem is this
-> > solving?
-> > 
-> 
-> What I see is that when a loadable module has been made part of an
-> aggregate it is still possible to rmmod'd it.
-> 
-> An alternative workaround would be for the parent to softdep to every
-> driver that _might_ provide the aggregated components. Softdeps aren't
-> unusual (we use it in some drivers that are directly related but don't
-> directly link into each other). But to me this feels like a hack when
-> used with the component framework - isn't the idea that the parent
-> doesn't know (or doesn't need to know) which drivers will be aggregated?
-> Wouldn't it be better that when a component driver is bound into an
-> aggregate its module is automatically marked in-use?
-> 
-> If there's a better way to mark the module in-use while is it bound
-> into an aggregate, let me know and I'll look at implementing it.
-
-No module references should be incremented if a device is bound to a
-driver, that's the old (1990's) way of thinking.  If a module wants to
-be unloaded, let it, and clean up everything that it was
-controlling/talking to before the module remove is finished.
-
-That's the way all busses should be working, you don't increment a
-module count when a driver binds to a device, otherwise how would you
-unload a module that was being used at all?
-
-So just remove the components controlled by the module properly when it
-is removed and all should be good.
-
-Do you have example code in the kernel tree today that does not properly
-do this?  Why not just fix that instead?
-
-thanks,
-
-greg k-h
+Best regards,
+Krzysztof

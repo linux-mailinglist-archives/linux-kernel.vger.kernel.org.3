@@ -2,215 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506D45810DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09885810DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238200AbiGZKMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S238280AbiGZKLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbiGZKMX (ORCPT
+        with ESMTP id S233069AbiGZKLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:12:23 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FBD13F71
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:12:22 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26Q7EUxi002774;
-        Tue, 26 Jul 2022 05:11:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=J6a4T8pQxftHI75LH/Irjoxs38fV4yY7RSYMSSab9K4=;
- b=MmAJsIDayach9umbmhJxpygRVzvMiS9BP51/7B3oqLpASHXkV4Xu51AowBqnKQfccPuY
- PDt3NndaCfaqeDVQ8LiQXGB6yRzNurOH/l7SHp6gjfViUS/zcTiMkevRHHmeNfUCaIAq
- XlXiG1fgNF69cDQGZkvgfTyXxHgfXZD9W85yU1jrRZoJHOJkyTi8kEVEWWFEmYGD7ITB
- 1yyQ6M5p91h5mwEKOMky8eZ4YDKdhyFw9A5I/R0gD+hdg2VuMNU28p9HeZYO7HV3ioeS
- /YtrIPZiuiy8fBWK+eXRGCD5SZs5d0MmHbc03CJheox7QUbwjmapc/SfY/Rx3aCr68qs YA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3hged1ub6f-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Jul 2022 05:11:38 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Tue, 26 Jul
- 2022 05:11:35 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
- 15.2.1118.9 via Frontend Transport; Tue, 26 Jul 2022 05:11:35 -0500
-Received: from aryzen.ad.cirrus.com (unknown [198.61.65.94])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BFD722C5;
-        Tue, 26 Jul 2022 10:11:35 +0000 (UTC)
-From:   Lucas Tanure <tanureal@opensource.cirrus.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: [PATCH 2/2] ALSA: hda: cs35l41: Support CLSA0101
-Date:   Tue, 26 Jul 2022 11:11:31 +0100
-Message-ID: <20220726101131.68058-3-tanureal@opensource.cirrus.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220726101131.68058-1-tanureal@opensource.cirrus.com>
-References: <20220726101131.68058-1-tanureal@opensource.cirrus.com>
+        Tue, 26 Jul 2022 06:11:48 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6751ADAD
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:11:46 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id b16so9423113lfb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m0G1ouauyWlsMi4tX3T8kDD9m/uUFaFanRq+c7+5U7s=;
+        b=PVvx51OOtlmDQcp+hJ9/QKAgDbD27XSXYiNOQxzShhI3JbRiAGv3AGUfQNpKEX85Ju
+         Y3q+EL6ksrC/5vI4VjNPjznfY5b4hFs+VPQSz22sekFKjTQj3CfuTln588rafXxviWoJ
+         TRamENOpI2kB4vy+4bsL/VIyN8iaKsi+zVLh4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m0G1ouauyWlsMi4tX3T8kDD9m/uUFaFanRq+c7+5U7s=;
+        b=35IrsUwOJgef1lU3HuGsqKKepGWnm41CZL8B5kb70a9/+Jc1hcFQrXRotNYG8GgXU9
+         4yAn8j24R00ikc7uNZiUmRAUERPXCHKWpqw7bx44UheTvQXkj+3GXhf4beIiOTU3ZHDL
+         dbl4prYIA8mLM+MoA7/UKSeG2LzqKx9uMo2AtqZOqdq1arlbiGbEk1FocCcqqdaEUTU/
+         N0AEtKAb6yMVdb7a4qh7+dZRqHD5MCf3hhcjcQm6unMvcfeqrLCjFZc/AqfAVn2joYGr
+         iVLtHAhAwwUlfS2Ssg8A0pUzmmPiRDVz/NMFAoZ3P54w7rYlO8gEBoiqAFt8NyqeLTtY
+         UNSA==
+X-Gm-Message-State: AJIora+/WfBcbZXr3H6a2aSljb4xhBHQxj9ynSOhRjqVCe/9Td2g6A50
+        H1nWHnYoW2dauwVk6SV/AaPZf7M2jQzNnSyHWvJvtQ==
+X-Google-Smtp-Source: AGRyM1uXX45ideOrulD4FMDsqWEePdjfSSh0Leo4vP9vqFrWpyY+WXm0tecZooqyBc1+OvyrSM6L79ae1yhhCM+LF8g=
+X-Received: by 2002:a05:6512:1389:b0:489:d0bb:241e with SMTP id
+ p9-20020a056512138900b00489d0bb241emr6755687lfa.536.1658830305163; Tue, 26
+ Jul 2022 03:11:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: qMB8JG4mIG_t3gyNHuQ7TjYZvBgoSvf9
-X-Proofpoint-ORIG-GUID: qMB8JG4mIG_t3gyNHuQ7TjYZvBgoSvf9
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
+ <20220725065419.3005015-3-dario.binacchi@amarulasolutions.com> <20220725123804.ofqpq4j467qkbtzn@pengutronix.de>
+In-Reply-To: <20220725123804.ofqpq4j467qkbtzn@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Tue, 26 Jul 2022 12:11:33 +0200
+Message-ID: <CABGWkvrBrTqWQPBWKuKzuwQzgvc-iuWJPXt2utb60MOfych09A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] can: slcan: remove legacy infrastructure
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Max Staudt <max@enpas.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Intel version of Legion 7 laptop.
+Hello Marc,
 
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
----
- sound/pci/hda/cs35l41_hda.c   | 66 +++++++++++++++++++++--------------
- sound/pci/hda/patch_realtek.c | 12 +++++++
- 2 files changed, 52 insertions(+), 26 deletions(-)
+On Mon, Jul 25, 2022 at 2:38 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 25.07.2022 08:54:15, Dario Binacchi wrote:
+> > Taking inspiration from the drivers/net/can/can327.c driver and at the
+> > suggestion of its author Max Staudt, I removed legacy stuff like
+> > `SLCAN_MAGIC' and `slcan_devs' resulting in simplification of the code
+> > and its maintainability.
+> >
+> > The use of slcan_devs is derived from a very old kernel, since slip.c
+> > is about 30 years old, so today's kernel allows us to remove it.
+> >
+> > The .hangup() ldisc function, which only called the ldisc .close(), has
+> > been removed since the ldisc layer calls .close() in a good place
+> > anyway.
+> >
+> > The old slcanX name has been dropped in order to use the standard canX
+> > interface naming. It has been assumed that this change does not break
+> > the user space as the slcan driver provides an ioctl to resolve from tty
+> > fd to netdev name.
+>
+> Is there a man page that documents this iotcl? Please add it and/or the
+> IOCTL name.
 
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index 48d94c683b75..6edf95553745 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -1133,6 +1133,45 @@ static int cs35l41_get_speaker_id(struct device *dev, int amp_index,
- 	return speaker_id;
- }
- 
-+/*
-+ * Device CLSA010(0/1) doesn't have _DSD so a gpiod_get by the label reset won't work.
-+ * And devices created by serial-multi-instantiate don't have their device struct
-+ * pointing to the correct fwnode, so acpi_dev must be used here.
-+ * And devm functions expect that the device requesting the resource has the correct
-+ * fwnode.
-+ */
-+static int cs35l41_no_acpi_dsd(struct cs35l41_hda *cs35l41, struct device *physdev, int id,
-+			       const char *hid)
-+{
-+	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
-+
-+	/* check I2C address to assign the index */
-+	cs35l41->index = id == 0x40 ? 0 : 1;
-+	cs35l41->channel_index = 0;
-+	cs35l41->reset_gpio = gpiod_get_index(physdev, NULL, 0, GPIOD_OUT_HIGH);
-+	cs35l41->speaker_id = cs35l41_get_speaker_id(physdev, 0, 0, 2);
-+	hw_cfg->spk_pos = cs35l41->index;
-+	hw_cfg->gpio2.func = CS35L41_INTERRUPT;
-+	hw_cfg->gpio2.valid = true;
-+	hw_cfg->valid = true;
-+	put_device(physdev);
-+
-+	if (strncmp(hid, "CLSA0100", 8) == 0) {
-+		hw_cfg->bst_type = CS35L41_EXT_BOOST_NO_VSPK_SWITCH;
-+	} else if (strncmp(hid, "CLSA0101", 8) == 0) {
-+		hw_cfg->bst_type = CS35L41_EXT_BOOST;
-+		hw_cfg->gpio1.func = CS35l41_VSPK_SWITCH;
-+		hw_cfg->gpio1.valid = true;
-+	} else {
-+		hw_cfg->valid = false;
-+		hw_cfg->gpio1.valid = false;
-+		hw_cfg->gpio2.valid = false;
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, int id)
- {
- 	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
-@@ -1161,7 +1200,7 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
- 	property = "cirrus,dev-index";
- 	ret = device_property_count_u32(physdev, property);
- 	if (ret <= 0)
--		goto no_acpi_dsd;
-+		return cs35l41_no_acpi_dsd(cs35l41, physdev, id, hid);
- 
- 	if (ret > ARRAY_SIZE(values)) {
- 		ret = -EINVAL;
-@@ -1255,31 +1294,6 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
- 	dev_err(cs35l41->dev, "Failed property %s: %d\n", property, ret);
- 
- 	return ret;
--
--no_acpi_dsd:
--	/*
--	 * Device CLSA0100 doesn't have _DSD so a gpiod_get by the label reset won't work.
--	 * And devices created by serial-multi-instantiate don't have their device struct
--	 * pointing to the correct fwnode, so acpi_dev must be used here.
--	 * And devm functions expect that the device requesting the resource has the correct
--	 * fwnode.
--	 */
--	if (strncmp(hid, "CLSA0100", 8) != 0)
--		return -EINVAL;
--
--	/* check I2C address to assign the index */
--	cs35l41->index = id == 0x40 ? 0 : 1;
--	cs35l41->hw_cfg.spk_pos = cs35l41->index;
--	cs35l41->channel_index = 0;
--	cs35l41->reset_gpio = gpiod_get_index(physdev, NULL, 0, GPIOD_OUT_HIGH);
--	cs35l41->hw_cfg.bst_type = CS35L41_EXT_BOOST_NO_VSPK_SWITCH;
--	cs35l41->speaker_id = cs35l41_get_speaker_id(physdev, 0, 0, 2);
--	hw_cfg->gpio2.func = CS35L41_INTERRUPT;
--	hw_cfg->gpio2.valid = true;
--	cs35l41->hw_cfg.valid = true;
--	put_device(physdev);
--
--	return 0;
- }
- 
- int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int irq,
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 0e340c0934db..65fd3e599a83 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6710,6 +6710,12 @@ static void alc287_fixup_legion_16achg6_speakers(struct hda_codec *cdc, const st
- 	cs35l41_generic_fixup(cdc, action, "i2c", "CLSA0100", 2);
- }
- 
-+static void alc287_fixup_legion_16ithg6_speakers(struct hda_codec *cdc, const struct hda_fixup *fix,
-+						 int action)
-+{
-+	cs35l41_generic_fixup(cdc, action, "i2c", "CLSA0101", 2);
-+}
-+
- /* for alc295_fixup_hp_top_speakers */
- #include "hp_x360_helper.c"
- 
-@@ -7047,6 +7053,7 @@ enum {
- 	ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED,
- 	ALC285_FIXUP_HP_SPEAKERS_MICMUTE_LED,
- 	ALC295_FIXUP_FRAMEWORK_LAPTOP_MIC_NO_PRESENCE,
-+	ALC287_FIXUP_LEGION_16ITHG6,
- };
- 
- /* A special fixup for Lenovo C940 and Yoga Duet 7;
-@@ -8889,6 +8896,10 @@ static const struct hda_fixup alc269_fixups[] = {
- 		.chained = true,
- 		.chain_id = ALC269_FIXUP_HEADSET_MODE_NO_HP_MIC
- 	},
-+	[ALC287_FIXUP_LEGION_16ITHG6] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = alc287_fixup_legion_16ithg6_speakers,
-+	},
- };
- 
- static const struct snd_pci_quirk alc269_fixup_tbl[] = {
-@@ -9353,6 +9364,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x17aa, 0x384a, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3852, "Lenovo Yoga 7 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3853, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
-+	SND_PCI_QUIRK(0x17aa, 0x3855, "Legion 7 16ITHG6", ALC287_FIXUP_LEGION_16ITHG6),
- 	SND_PCI_QUIRK(0x17aa, 0x3902, "Lenovo E50-80", ALC269_FIXUP_DMIC_THINKPAD_ACPI),
- 	SND_PCI_QUIRK(0x17aa, 0x3977, "IdeaPad S210", ALC283_FIXUP_INT_MIC),
- 	SND_PCI_QUIRK(0x17aa, 0x3978, "Lenovo B50-70", ALC269_FIXUP_DMIC_THINKPAD_ACPI),
+I have not found documentation of the SIOCGIFNAME ioctl for the line discipline,
+but only for netdev (i. e.
+https://man7.org/linux/man-pages/man7/netdevice.7.html),
+
+Thanks and regards,
+Dario
+
+>
+> > The `maxdev' module parameter has also been removed.
+> >
+> > CC: Max Staudt <max@enpas.org>
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
+> > ---
+> >
+> > Changes in v2:
+>
+> Nitpick:
+> Changes since RFC: https://lore.kernel.org/all/20220716170007.2020037-1-dario.binacchi@amarulasolutions.com
+>
+> > - Update the commit description.
+> > - Drop the old "slcan" name to use the standard canX interface naming.
+> >
+> >  drivers/net/can/slcan/slcan-core.c | 318 ++++++-----------------------
+> >  1 file changed, 63 insertions(+), 255 deletions(-)
+> >
+> > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+> > index c3dd7468a066..2c546f4a7981 100644
+> > --- a/drivers/net/can/slcan/slcan-core.c
+> > +++ b/drivers/net/can/slcan/slcan-core.c
+>
+> [...]
+>
+> > @@ -898,72 +799,49 @@ static int slcan_open(struct tty_struct *tty)
+> >       if (!tty->ops->write)
+> >               return -EOPNOTSUPP;
+> >
+> > -     /* RTnetlink lock is misused here to serialize concurrent
+> > -      * opens of slcan channels. There are better ways, but it is
+> > -      * the simplest one.
+> > -      */
+> > -     rtnl_lock();
+> > +     dev = alloc_candev(sizeof(*sl), 1);
+> > +     if (!dev)
+> > +             return -ENFILE;
+> >
+> > -     /* Collect hanged up channels. */
+> > -     slc_sync();
+> > +     sl = netdev_priv(dev);
+> >
+> > -     sl = tty->disc_data;
+> > +     /* Configure TTY interface */
+> > +     tty->receive_room = 65536; /* We don't flow control */
+> > +     sl->rcount   = 0;
+> > +     sl->xleft    = 0;
+>
+> Nitpick: Please use 1 space in front of the =.
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+
 -- 
-2.37.1
 
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB475808DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 03:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7103A5808E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 03:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbiGZBAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 21:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S234849AbiGZBGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 21:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiGZBAT (ORCPT
+        with ESMTP id S229609AbiGZBGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 21:00:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8C217A92;
-        Mon, 25 Jul 2022 18:00:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01D95B810A4;
-        Tue, 26 Jul 2022 01:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CEFCC341C6;
-        Tue, 26 Jul 2022 01:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658797215;
-        bh=2xklpD9zOkDaPX/6lcoq8t9QAqRhI7D956EnkKkQcPk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PlT//DjOSIFZ94KFBmwxgN/i0oxKfabFQlFwF5CINBZ1C03OWg+ecfUA2FEjHfhPc
-         8ovGhrAq+bq2WU153Ku/jUKaqBDmrRjzsh1H2KsAgL9++JbXDLIuGmn9/RcZLts51q
-         3xQJKDiB1D3yafgHLJeQ+OR5DqE39ujJ8t/RlKk3Ovw2VY02oQnEjK480TpHOtBi2n
-         N4nEECKZN2YHSrInrClTa5HUiC5UnbNgLBUSa61mSee/b2DLB151/jxXMSCndxCIby
-         F1PRUbH1kpIgaGPNXUc5VaF3zyqUEj1YfGtUGPhHeuoPpKEudDb9VNdqEpRDuphWmf
-         x6PwiVroSD/cQ==
-Date:   Mon, 25 Jul 2022 18:00:13 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ardb@kernel.org
-Subject: Re: [PATCH v3 2/3] crypto: lib - move __crypto_xor into utils
-Message-ID: <Yt88nXvui0Q+5MQu@sol.localdomain>
-References: <20220725183636.97326-1-ebiggers@kernel.org>
- <20220725183636.97326-3-ebiggers@kernel.org>
- <Yt8UnWCvoe8dKihc@zx2c4.com>
+        Mon, 25 Jul 2022 21:06:14 -0400
+Received: from m1364.mail.163.com (m1364.mail.163.com [220.181.13.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3F8426544;
+        Mon, 25 Jul 2022 18:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=tMZKv
+        nr2S+LpKBN6CdOAA5vEXQTONGrH6lqsAQ5uMb0=; b=buoXR/OwW8IiEHFyqxW9O
+        ZeSuFtQOewz4Rcn6AEWCVmuHl8X6xC+5+vOXBw9uy05+AmaJHM0q5lCvl2ZeR8Iy
+        zlEP+Hk3MpUXLUNCTEt/TILpDCKkHT6lb/gVj3r5gQLnEDK2phDYyVBczYdMiZgw
+        MLyQhf4wXZi1010u33ujdY=
+Received: from slark_xiao$163.com ( [223.104.68.106] ) by
+ ajax-webmail-wmsvr64 (Coremail) ; Tue, 26 Jul 2022 09:04:41 +0800 (CST)
+X-Originating-IP: [223.104.68.106]
+Date:   Tue, 26 Jul 2022 09:04:41 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Baoquan He" <bhe@redhat.com>
+Cc:     "David Howells" <dhowells@redhat.com>, corbet@lwn.net,
+        vgoyal@redhat.com, dyoung@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, william.gray@linaro.org, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        boqun.feng@gmail.com, tglx@linutronix.de, bigeasy@linutronix.de,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-cachefs@redhat.com
+Subject: Re:Re: [PATCH v2] docs: Fix typo in comment
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <Yt6bVIoRa0nIvxei@MiWiFi-R3L-srv>
+References: <YtlyDZEsOZHt6tRs@MiWiFi-R3L-srv>
+ <20220721015605.20651-1-slark_xiao@163.com>
+ <2778505.1658746506@warthog.procyon.org.uk>
+ <Yt6bVIoRa0nIvxei@MiWiFi-R3L-srv>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yt8UnWCvoe8dKihc@zx2c4.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <55d366e4.486.1823808de32.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: QMGowAD3Ei+pPd9i1g8sAA--.42687W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdRZJZGBbEenN+gACs4
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 12:09:33AM +0200, Jason A. Donenfeld wrote:
-> On Mon, Jul 25, 2022 at 11:36:35AM -0700, Eric Biggers wrote:
-> > From: Eric Biggers <ebiggers@google.com>
-> > 
-> > CRYPTO_LIB_CHACHA depends on CRYPTO for __crypto_xor, defined in
-> > crypto/algapi.c.  This is a layering violation because the dependencies
-> > should only go in the other direction (crypto/ => lib/crypto/).  Also
-> > the correct dependency would be CRYPTO_ALGAPI, not CRYPTO.  Fix this by
-> > moving __crypto_xor into the utils module in lib/crypto/.
-> > 
-> > Note that CRYPTO_LIB_CHACHA_GENERIC selected XOR_BLOCKS, which is
-> > unrelated and unnecessary.  It was perhaps thought that XOR_BLOCKS was
-> > needed for __crypto_xor, but that's not the case.
-> > 
-> > Signed-off-by: Eric Biggers <ebiggers@google.com>
-> 
-> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> 
-> With one small question:
-> 
-> > --- /dev/null
-> > +++ b/lib/crypto/utils.c
-> > @@ -0,0 +1,88 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Crypto library utility functions
-> > + *
-> > + * Copyright (c) 2006 Herbert Xu <herbert@gondor.apana.org.au>
-> 
-> Didn't Ard basically write the crypto_xor function in its current form?
-> I seem to remember some pretty hardcore refactoring he did a while back.
-> 
-> Jason
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDctMjUgMjE6MzI6MDQsICJCYW9xdWFuIEhlIiA8Ymhl
+QHJlZGhhdC5jb20+IHdyb3RlOgo+T24gMDcvMjUvMjIgYXQgMTE6NTVhbSwgRGF2aWQgSG93ZWxs
+cyB3cm90ZToKPj4gQmFvcXVhbiBIZSA8YmhlQHJlZGhhdC5jb20+IHdyb3RlOgo+PiAKPj4gPiBz
+ZWQgLWkgInMvdGhlIHRoZSAvdGhlIC9nIiBgZ2l0IGdyZXAgLWwgInRoZSB0aGUgImAKPj4gCj4+
+IFlvdSBtaWdodCB3YW50IHRvIGNsYXJpZnkgdGhlIGZpcnN0ICJ0aGUiIHdpdGggYSBwcmVjZWRp
+bmcgYm91bmRhcnkgbWFya2VyLgo+PiBUaGVyZSBhcmUgc29tZSBFbmdsaXNoIHdvcmRzIGVuZGlu
+ZyBpbiAidGhlIiB0aGF0IGNhbiBiZSB1c2VkIGFzIHZlcmJzLCB0aG91Z2gKPj4gSSdtIG5vdCBz
+dXJlIHlvdSdkIGZpbmQgYW55IG9mIHRoZW0gaGVyZSAtIGNsb3RoZSBmb3IgZXhhbXBsZS4KPgo+
+UmlnaHQuIEkgcGxhbiB0byBzcGxpdCB0aGlzIGJpZyBvbmUgaW50byBwYXRjaGVzIGNvcnJlc3Bv
+bmRpbmcgdG8KPmRpZmZlcmVudCBjb21wb25lbnQgYXMgSm9uYXRoYW4gc3VnZ2VzdGVkLCBhbmQg
+d2lsbCBjb25zaWRlciBob3cgdG8gbWFyawo+dGhlIGZpcnN0ICd0aGUnIGFzIHlvdSBzdWdnZXN0
+ZWQsIGFuZCB3cmFwIFNsYXJrJ3MgcGF0aGNlcyB3aGljaAo+aW5jbHVkZXMgdHlwbyBmaXggb2Yg
+InRoZW4gdGhlIi4KPgo+VGhhbmtzCj5CYW9xdWFuCgpBY3R1YWxseSBJIGhhdmUgY29tbWl0dGVk
+IGFsbCBjaGFuZ2VzIHdoaWNoIHdlcmUgbGlzdGVkIGluIHlvdXIgcHJldmlvdXMgbGlzdC4KSSBj
+b21taXR0ZWQgaXQgb25lIGJ5IG9uZSBhbmQgY2hlY2tlZCBpZiBhbnkgb3RoZXIgdHlwbyBpcyBp
+bmNsdWRlZC4KSWYgcG9zc2libGUsIHlvdSBjYW4gdHJ5IG90aGVyIGRvdWJsZSB0eXBvIGlzc3Vl
+IGxpa2UgImFuZCBhbmQgIiBvciAib3Igb3IiIG9yIHNvbWV0aGluZyBlbHNlLgoKClRoYW5rcwo=
 
-I think that's fair to say, based on git blame.  I just copied the copyright
-statement from the top of crypto/algapi.c.
-
-- Eric

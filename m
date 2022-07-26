@@ -2,211 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1855581965
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DBF58196B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239228AbiGZSHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 14:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        id S234575AbiGZSJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 14:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239160AbiGZSHK (ORCPT
+        with ESMTP id S229738AbiGZSJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 14:07:10 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C87253134E;
-        Tue, 26 Jul 2022 11:07:06 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,194,1654527600"; 
-   d="scan'208";a="129202711"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 27 Jul 2022 03:07:04 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 3D13F40C58B3;
-        Wed, 27 Jul 2022 03:06:59 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Anup Patel <anup@brainfault.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 6/6] riscv: dts: renesas: Add initial devicetree for Renesas RZ/Five SoC
-Date:   Tue, 26 Jul 2022 19:06:23 +0100
-Message-Id: <20220726180623.1668-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 14:09:17 -0400
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B0C28E1A;
+        Tue, 26 Jul 2022 11:09:15 -0700 (PDT)
+Received: from localhost.localdomain (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id 26QI7oe1026394;
+        Wed, 27 Jul 2022 03:07:50 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 26QI7oe1026394
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658858871;
+        bh=osqk3HZjsVA6bUJ9rRIMAah9RI9UxNCyttv8wgZ8qq4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lBDZipMJw0B56j53MaMX5CeHTG0MyXNweT26goQkNkmfcr5/t8UvxV7g/Q3mLhJ1X
+         9TcCWXIIxKGUKb/FVjRB154rLre8D6RysihBg+5SgU2D1W2HNH9qRYL0vb2vRwFTRN
+         BwZmrfbM88zp2VdNDqWvRq+9s6ddf2467gyaGy9fGKCGrB1oQHinieTRz7jUjswi5s
+         VT+dFmItk6SFM7P8hQ/ImWhmqvsZ1najvlQ8fSUQlWmaL6golYHYa348I1QLwdJGh4
+         H8Z07QkDBy8RCx8qaNaJXh3eY3yx9jYspdCNyDEjtIuk8N40JQFaIbVBh2aZPn4nmm
+         lvj5JXhdeLtVQ==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] modpost: refactor get_secindex()
+Date:   Wed, 27 Jul 2022 03:07:47 +0900
+Message-Id: <20220726180748.4101236-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial device tree for Renesas RZ/Five RISC-V CPU Core (AX45MP
-Single).
+SPECIAL() is only used in get_secindex(). Squash it.
 
-Below is the list of IP blocks added in the initial SoC DTSI which can be
-used to boot via initramfs on RZ/Five SMARC EVK:
-- AX45MP CPU
-- CPG
-- PINCTRL
-- PLIC
-- SCIF0
-- SYSC
+Make the code more readable with more comments.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- arch/riscv/boot/dts/Makefile               |   1 +
- arch/riscv/boot/dts/renesas/r9a07g043.dtsi | 121 +++++++++++++++++++++
- 2 files changed, 122 insertions(+)
- create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043.dtsi
 
-diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-index ff174996cdfd..b0ff5fbabb0c 100644
---- a/arch/riscv/boot/dts/Makefile
-+++ b/arch/riscv/boot/dts/Makefile
-@@ -3,5 +3,6 @@ subdir-y += sifive
- subdir-y += starfive
- subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
- subdir-y += microchip
-+subdir-y += renesas
+ scripts/mod/modpost.h | 30 ++++++++++++++++++------------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
+
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index bd874f906781..33b376d9ba71 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -156,22 +156,28 @@ static inline int is_shndx_special(unsigned int i)
+ 	return i != SHN_XINDEX && i >= SHN_LORESERVE && i <= SHN_HIRESERVE;
+ }
  
- obj-$(CONFIG_BUILTIN_DTB) := $(addsuffix /, $(subdir-y))
-diff --git a/arch/riscv/boot/dts/renesas/r9a07g043.dtsi b/arch/riscv/boot/dts/renesas/r9a07g043.dtsi
-new file mode 100644
-index 000000000000..6e0b640c6c7f
---- /dev/null
-+++ b/arch/riscv/boot/dts/renesas/r9a07g043.dtsi
-@@ -0,0 +1,121 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Device Tree Source for the RZ/Five SoC
-+ *
-+ * Copyright (C) 2022 Renesas Electronics Corp.
-+ */
+-/*
+- * Move reserved section indices SHN_LORESERVE..SHN_HIRESERVE out of
+- * the way to -256..-1, to avoid conflicting with real section
+- * indices.
+- */
+-#define SPECIAL(i) ((i) - (SHN_HIRESERVE + 1))
+-
+ /* Accessor for sym->st_shndx, hides ugliness of "64k sections" */
+ static inline unsigned int get_secindex(const struct elf_info *info,
+ 					const Elf_Sym *sym)
+ {
+-	if (is_shndx_special(sym->st_shndx))
+-		return SPECIAL(sym->st_shndx);
+-	if (sym->st_shndx != SHN_XINDEX)
+-		return sym->st_shndx;
+-	return info->symtab_shndx_start[sym - info->symtab_start];
++	unsigned int index = sym->st_shndx;
 +
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/r9a07g043-cpg.h>
++	/*
++	 * Elf{32,64}_Sym::st_shndx is 2 byte. Big section numbers are available
++	 * in the .symtab_shndx section.
++	 */
++	if (index == SHN_XINDEX)
++		return info->symtab_shndx_start[sym - info->symtab_start];
 +
-+/ {
-+	compatible = "renesas,r9a07g043";
-+	#address-cells = <2>;
-+	#size-cells = <2>;
++	/*
++	 * Move reserved section indices SHN_LORESERVE..SHN_HIRESERVE out of
++	 * the way to UINT_MAX-255..UINT_MAX, to avoid conflicting with real
++	 * section indices.
++	 */
++	if (index >= SHN_LORESERVE)
++		return index - SHN_HIRESERVE - 1;
 +
-+	/* clock can be either from exclk or crystal oscillator (XIN/XOUT) */
-+	extal_clk: extal-clk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		/* This value must be overridden by the board */
-+		clock-frequency = <0>;
-+	};
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		timebase-frequency = <24000000>;
-+
-+		ax45mp: cpu@0 {
-+			compatible = "andestech,ax45mp", "riscv";
-+			device_type = "cpu";
-+			reg = <0x0>;
-+			status = "okay";
-+			riscv,isa = "rv64imafdc";
-+			mmu-type = "riscv,sv39";
-+			i-cache-size = <0x8000>;
-+			i-cache-line-size = <0x40>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <0x40>;
-+			clocks = <&cpg CPG_CORE R9A07G043_AX45MP_CORE0_CLK>,
-+				 <&cpg CPG_CORE R9A07G043_AX45MP_ACLK>;
-+
-+			cpu0_intc: interrupt-controller {
-+				#interrupt-cells = <1>;
-+				compatible = "riscv,cpu-intc";
-+				interrupt-controller;
-+			};
-+		};
-+	};
-+
-+	soc: soc {
-+		compatible = "simple-bus";
-+		interrupt-parent = <&plic>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		scif0: serial@1004b800 {
-+			compatible = "renesas,scif-r9a07g043",
-+				     "renesas,scif-r9a07g044";
-+			reg = <0 0x1004b800 0 0x400>;
-+			interrupts = <412 IRQ_TYPE_LEVEL_HIGH>,
-+				     <414 IRQ_TYPE_LEVEL_HIGH>,
-+				     <415 IRQ_TYPE_LEVEL_HIGH>,
-+				     <413 IRQ_TYPE_LEVEL_HIGH>,
-+				     <416 IRQ_TYPE_LEVEL_HIGH>,
-+				     <416 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "eri", "rxi", "txi",
-+					  "bri", "dri", "tei";
-+			clocks = <&cpg CPG_MOD R9A07G043_SCIF0_CLK_PCK>;
-+			clock-names = "fck";
-+			power-domains = <&cpg>;
-+			resets = <&cpg R9A07G043_SCIF0_RST_SYSTEM_N>;
-+			status = "disabled";
-+		};
-+
-+		cpg: clock-controller@11010000 {
-+			compatible = "renesas,r9a07g043-cpg";
-+			reg = <0 0x11010000 0 0x10000>;
-+			clocks = <&extal_clk>;
-+			clock-names = "extal";
-+			#clock-cells = <2>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <0>;
-+		};
-+
-+		sysc: system-controller@11020000 {
-+			compatible = "renesas,r9a07g043-sysc";
-+			reg = <0 0x11020000 0 0x10000>;
-+			status = "disabled";
-+		};
-+
-+		pinctrl: pinctrl@11030000 {
-+			compatible = "renesas,r9a07g043-pinctrl";
-+			reg = <0 0x11030000 0 0x10000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			gpio-ranges = <&pinctrl 0 0 152>;
-+			clocks = <&cpg CPG_MOD R9A07G043_GPIO_HCLK>;
-+			power-domains = <&cpg>;
-+			resets = <&cpg R9A07G043_GPIO_RSTN>,
-+				 <&cpg R9A07G043_GPIO_PORT_RESETN>,
-+				 <&cpg R9A07G043_GPIO_SPARE_RESETN>;
-+		};
-+
-+		plic: interrupt-controller@12c00000 {
-+			compatible = "renesas,r9a07g043-plic", "andestech,nceplic100";
-+			#interrupt-cells = <2>;
-+			#address-cells = <0>;
-+			riscv,ndev = <543>;
-+			interrupt-controller;
-+			reg = <0x0 0x12c00000 0 0x400000>;
-+			clocks = <&cpg CPG_MOD R9A07G043_NCEPLIC_ACLK>;
-+			power-domains = <&cpg>;
-+			resets = <&cpg R9A07G043_NCEPLIC_ARESETN>;
-+			interrupts-extended = <&cpu0_intc 11 &cpu0_intc 9>;
-+		};
-+	};
-+};
++	return index;
+ }
+ 
+ /* file2alias.c */
 -- 
-2.17.1
+2.34.1
 

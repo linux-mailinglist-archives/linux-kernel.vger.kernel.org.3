@@ -2,98 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E292581BE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 00:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D564B581BEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 00:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239423AbiGZWBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 18:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S239678AbiGZWDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 18:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiGZWBU (ORCPT
+        with ESMTP id S229550AbiGZWDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 18:01:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179B732DAF;
-        Tue, 26 Jul 2022 15:01:19 -0700 (PDT)
+        Tue, 26 Jul 2022 18:03:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47A432DAF;
+        Tue, 26 Jul 2022 15:03:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAD24616E1;
-        Tue, 26 Jul 2022 22:01:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B814C433C1;
-        Tue, 26 Jul 2022 22:01:17 +0000 (UTC)
-Date:   Tue, 26 Jul 2022 18:01:15 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] tracing/user_events: Use bits vs bytes for
- enabled status page data
-Message-ID: <20220726180115.69320865@gandalf.local.home>
-In-Reply-To: <20220425184631.2068-7-beaub@linux.microsoft.com>
-References: <20220425184631.2068-1-beaub@linux.microsoft.com>
-        <20220425184631.2068-7-beaub@linux.microsoft.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78841616D4;
+        Tue, 26 Jul 2022 22:03:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 674ADC433C1;
+        Tue, 26 Jul 2022 22:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658872986;
+        bh=YAlRM5ikZwskDhCxJ6jfhkvNahSdq2ZlIn13XXhrgyE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=bWSUQjxOLmeiTDVyaWQXbxsvaJc0NkZiZCCGTU+s/0G7/hH1eBFUvYeK3UgF7yTZN
+         vPjVY4+Ua9s7K99AtQh85O/4Y3TRGsyjLbl73BSGFv8HA233TmxKgQq6KJwJ6bCQPK
+         auAL2TDnVse4/KCxoyYhQGc93j/phThxMNfPxf4qvYWOcv0R6ZARQYpcqwrLDTqagB
+         EDiFzXmG3KK9BP9m2FRp417wR3iBQtM5t/VvZFZXz7t+M1xz24VgGDgUFcL55c4sb3
+         Mz45Q7LPh37mgXQZICRsD4beuAoNM+UQh94r+FofbJGvf+DV1c1kbP5YIofy8uHNLT
+         uDW2yt1aPEfhw==
+Date:   Tue, 26 Jul 2022 17:03:03 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 0/7] PCI: brcmstb: Re-submit reverted patchset
+Message-ID: <20220726220303.GA109624@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725151258.42574-1-jim2101024@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 11:46:30 -0700
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+On Mon, Jul 25, 2022 at 11:12:49AM -0400, Jim Quinlan wrote:
+> ...
+> Jim Quinlan (7):
+>   PCI: brcmstb: Remove unnecessary forward declarations
+>   PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+>   PCI: brcmstb: Gate config space access on link status
+>   PCI: brcmstb: Add mechanism to turn on subdev regulators
+>   PCI: brcmstb: Add control of subdevice voltage regulators
+>   PCI: brcmstb: Do not turn off WOL regulators on suspend
+>   PCI: brcmstb: Have .map_bus function names end with 'map_bus'
+> 
+>  drivers/pci/controller/pcie-brcmstb.c | 476 ++++++++++++++++++--------
+>  1 file changed, 341 insertions(+), 135 deletions(-)
 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index 2bcae7abfa81..4afc41e321ac 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -40,17 +40,26 @@
->   */
->  #define MAX_PAGE_ORDER 0
->  #define MAX_PAGES (1 << MAX_PAGE_ORDER)
-> -#define MAX_EVENTS (MAX_PAGES * PAGE_SIZE)
-> +#define MAX_BYTES (MAX_PAGES * PAGE_SIZE)
-> +#define MAX_EVENTS (MAX_BYTES * 8)
->  
->  /* Limit how long of an event name plus args within the subsystem. */
->  #define MAX_EVENT_DESC 512
->  #define EVENT_NAME(user_event) ((user_event)->tracepoint.name)
->  #define MAX_FIELD_ARRAY_SIZE 1024
->  
-> +#define STATUS_BYTE(bit) ((bit) >> 3)
-> +#define STATUS_MASK(bit) (1 << ((bit) & 7))
-> +
-> +/* Internal bits to keep track of connected probes */
-> +#define EVENT_STATUS_FTRACE (1 << 0)
-> +#define EVENT_STATUS_PERF (1 << 1)
-> +#define EVENT_STATUS_OTHER (1 << 7)
+I reworked these and put them on pci/ctrl/brcm for v5.20.  This is a
+proposal, not something set in stone.  But time is of the essence to
+figure out how we want to proceed.
 
-Did you mean to shift STATUS_OTHER by 7?
+I changed a lot of stuff and it's likely I broke something in the
+process, so please take a look and test this out.  Here's an outline
+of what I changed:
 
-Is EVENT_STATUS_OTHER suppose to be one of the flags within the 3 bits of
-the 7 in STATUS_MASK?
+  - Moved the config access "link up" check earlier because it's not
+    related to the power regulator patches.
 
--- Steve
+  - Changed config access "link up" checks to use PCIE_ECAM_REG()
+    instead of hard-coding 0xfff masks.  The 32-bit accessors already
+    mask out the low two bits, so we don't need to do that here.
 
-> +
->  static char *register_page_data;
->  
->  static DEFINE_MUTEX(reg_mutex);
-> -static DEFINE_HASHTABLE(register_table, 4);
-> +static DEFINE_HASHTABLE(register_table, 8);
->  static DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
->  
->  /*
-> @@ -72,6 +81,7 @@ struct user_event {
->  	int index;
->  	int flags;
->  	int min_size;
-> +	char status;
->  };
+  - Squashed pci_subdev_regulators_add_bus() directly into
+    brcm_pcie_add_bus() for readability.  Similarly for
+    pci_subdev_regulators_remove_bus().
+
+  - This makes a clear split between:
+
+    * A patch that adds get/enable of regulators, and starting the
+      link after enabling regulators, and
+
+    * A patch that disables/enables regulators for suspend/resume.
+
+  - Since we only support one set of subregulator info (for one Root
+    Port, and brcm_pcie_suspend_noirq() depends on this since it uses
+    the pcie->sr pointer), use pcie->sr always instead of
+    dev->driver_data.
+
+  - Squashed wakeup device checking into the suspend/resume patch so
+    there's not a time when suspend might turn off power to a wakeup
+    device.
+
+  - Renamed brcm_pcie_map_bus32() to brcm7425_pcie_map_bus() so it
+    ends in "_map_bus()" like other drivers.  Also,
+    brcm7425_pcie_map_bus() doesn't actually depend on the 32-bitness.
+
+Bjorn

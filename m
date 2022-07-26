@@ -2,95 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC06F5809B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630DD5809B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiGZC4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 22:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        id S237329AbiGZCz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 22:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiGZC4Y (ORCPT
+        with ESMTP id S229853AbiGZCz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 22:56:24 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8142611441;
-        Mon, 25 Jul 2022 19:56:23 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26Q0oJGH012131;
-        Tue, 26 Jul 2022 02:55:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=eh7lwV78QvbkO6UqWgVk7uxqFlg4dBXN/Goh4UfRBYI=;
- b=k/y7wPYT++cECz42lbSsiSPquF0/DEf6rYO00e/son/i/eKtJWLxWWupK+ZDup9Zka9f
- PEe0ec90ec587kStHYInG26q7ixTyolJZZQmCC+FazaB3WRMbJfHBlPYMLOnZOSb8kOH
- gcZ3GqWnUm4vrNNJcmIPOp/jyZxH3hAYtN2bb6h1wq8ecg0v/CUGRyRAflJcVJAZNKw9
- YlqS7qsrZyKHfluJnM8iX2IEcpSVsPilcTtcJn46llfprQHYjiZPFeU/QbpcBwOcY8AM
- ShqyDV+SVRIBsGndl6kuJSR053XQeoyPUeF++ok2/gdneYeNpfMQ9d7nuM2o7+b/WYy7 Ow== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hhs84jc3u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Jul 2022 02:55:59 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26Q2tw3A019793
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Jul 2022 02:55:58 GMT
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Jul 2022 19:55:57 -0700
-Received: from [10.253.34.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Jul
- 2022 19:55:52 -0700
-Message-ID: <2975315f-f59b-0787-a662-e50766aaf470@quicinc.com>
-Date:   Tue, 26 Jul 2022 10:55:50 +0800
+        Mon, 25 Jul 2022 22:55:58 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEDEBF43;
+        Mon, 25 Jul 2022 19:55:57 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LsM2l41YdzlC3d;
+        Tue, 26 Jul 2022 10:54:55 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgAHamm5V99isC_KBA--.27636S3;
+        Tue, 26 Jul 2022 10:55:55 +0800 (CST)
+Subject: Re: [PATCH] blk-mq: fix io hung due to missing commit_rqs while
+ scheduler is none
+To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     axboe@kernel.dk, osandov@fb.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+References: <20220726023852.3413784-1-yukuai1@huaweicloud.com>
+ <Yt9V6sW66oJRbW/o@T590>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <ac242680-ff9b-da3f-056c-da2d14947959@huaweicloud.com>
+Date:   Tue, 26 Jul 2022 10:55:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
-Content-Language: en-US
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "quic_ziqichen@quicinc.com" <quic_ziqichen@quicinc.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>
-CC:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
- <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
- <DM6PR04MB6575048E121B56FDA56DA27DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
-From:   Can Guo <quic_cang@quicinc.com>
-In-Reply-To: <DM6PR04MB6575048E121B56FDA56DA27DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 7aVkLI4sa6HQ-IZBTWliXdILxzYlZQwP
-X-Proofpoint-GUID: 7aVkLI4sa6HQ-IZBTWliXdILxzYlZQwP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-25_13,2022-07-25_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
- clxscore=1011 suspectscore=0 phishscore=0 mlxscore=0 spamscore=0
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207260010
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <Yt9V6sW66oJRbW/o@T590>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgAHamm5V99isC_KBA--.27636S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw4UKFy3Kw15urWkCF1DGFg_yoW5WF4fpF
+        4fK3WfArs5tF42vrn7Za17AF1IvwsxWrW7Gryak343ZFZ8KrWIqrs3JrnrWFyIyrs5CwsF
+        gF4UXryYqw1kArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+        DUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,127 +64,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Avri,
+Hi, Ming
 
-On 7/23/2022 10:59 PM, Avri Altman wrote:
->> +#define MCQ_ROP_OFFSET_n(p, i) \
->> +       hba->mcq_rop[(p)].offset + hba->mcq_rop[(p)].stride * (i)
-> Can you please explain the 0x100 stride thing?
-> Theoretically, each rop set is 48Bytes long, or did I get it wrong?
+ÔÚ 2022/07/26 10:48, Ming Lei Ð´µÀ:
+> On Tue, Jul 26, 2022 at 10:38:52AM +0800, Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Currently, in virtio_scsi, if 'bd->last' is not set to true while
+>> dispatching request, such io will stay in driver's queue, and driver
+>> will wait for block layer to dispatch more rqs. However, if block
+>> layer failed to dispatch more rq, it should trigger commit_rqs to
+>> inform driver.
+>>
+>> There is a problem in blk_mq_try_issue_list_directly() that commit_rqs
+>> won't be called:
+>>
+>> // assume that queue_depth is set to 1, list contains two rq
+>> blk_mq_try_issue_list_directly
+>>   blk_mq_request_issue_directly
+>>   // dispatch first rq
+>>   // last is false
+>>    __blk_mq_try_issue_directly
+>>     blk_mq_get_dispatch_budget
+>>     // succeed to get first budget
+>>     __blk_mq_issue_directly
+>>      scsi_queue_rq
+>>       cmd->flags |= SCMD_LAST
+>>        virtscsi_queuecommand
+>>         kick = (sc->flags & SCMD_LAST) != 0
+>>         // kick is false, first rq won't issue to disk
+>>   queued++
+>>
+>>   blk_mq_request_issue_directly
+>>   // dispatch second rq
+>>    __blk_mq_try_issue_directly
+>>     blk_mq_get_dispatch_budget
+>>     // failed to get second budget
+>>   ret == BLK_STS_RESOURCE
+>>    blk_mq_request_bypass_insert
+>>   // errors is still 0
+>>
+>>   if (!list_empty(list) || errors && ...)
+>>    // won't pass, commit_rqs won't be called
+>>
+>> In this situation, first rq relied on second rq to dispatch, while
+>> second rq relied on first rq to complete, thus they will both hung.
+>>
+>> Fix the problem by also treat 'BLK_STS_RESOURCE' and
+>> 'BLK_STS_DEV_RESOURCE' as 'errors' in blk_mq_try_issue_list_directly(),
+>> so that 'commit_rqs' will be called when dispatch of last rq failed.
+>>
+>> Fixes: d666ba98f849 ("blk-mq: add mq_ops->commit_rqs()")
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>>   block/blk-mq.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/block/blk-mq.c b/block/blk-mq.c
+>> index 70177ee74295..752b0fe4c128 100644
+>> --- a/block/blk-mq.c
+>> +++ b/block/blk-mq.c
+>> @@ -2680,6 +2680,7 @@ void blk_mq_try_issue_list_directly(struct blk_mq_hw_ctx *hctx,
+>>   		list_del_init(&rq->queuelist);
+>>   		ret = blk_mq_request_issue_directly(rq, list_empty(list));
+>>   		if (ret != BLK_STS_OK) {
+>> +			errors++;
+> 
+> OK, it is because that list becomes empty, but .queue_rq(last_rq_in_list)
+> returns BLK_STS_*RESOURCE, but scsi can't call ->queuecommand() for this
+> real last rq. Then blk_mq_try_issue_list_directly() doesn't call
+> ->commit_rqs() too.
+> 
+> Here errors means that request not queued successfully, so this patch
+> looks fine.
+> 
+> Also I think blk_mq_dispatch_rq_list() needs similar handling too,
+> right?
 
-In the draft, there are 4 sets of MCQ Operation & Runtime Registers, 
-i.e. SQD_n, SQIS_n, CQD_n and CQIS_n.
-
-They may be interleaved or segregated, depends on realistic HW designs.
-
-For example, either #1 or #2 can be the case, and QCOM uses case #1, in 
-which 'stride' means the size (in bytes)
-
-that one register has to hop over to reach the same register on next 
-round (for example, addr of SQHP_n == (addr of SQHP_0) + (stride * n)).
-
-To allow flexibility, SoC vendors, depends on realistic HW designs, (by 
-using vops_config_mcq_rop) can manipulate
-
-the 'offset' and 'stride' of each MCQ Operation & Runtime Register such 
-that SQDAO_n, SQISAO_n, CQDAO_n and
-
-CQISAO_n are programmed with wanted offsets/values.
-
-#1 -
-
-SQHP_0
-SQTP_0
-SQRTC_0
-SQCTI_0
-SQRTS_0
-SQIS_0
-SQIE_0
-CQHP_0
-CQTP_0
-CQIS_0
-CQIE_0
-CQIACR_0
-SQHP_1
-SQTP_1
-SQRTC_1
-SQCTI_1
-SQRTS_1
-SQIS_1
-SQIE_1
-CQHP_1
-CQTP_1
-CQIS_1
-CQIE_1
-CQIACR_1
-...
-SQHP_n
-SQTP_n
-SQRTC_n
-SQCTI_n
-SQRTS_n
-SQIS_n
-SQIE_n
-CQHP_n
-CQTP_n
-CQIS_n
-CQIE_n
-CQIACR_n
-
-
-#2 -
-
-SQHP_0
-SQTP_0
-SQRTC_0
-SQCTI_0
-SQRTS_0
-SQHP_1
-SQTP_1
-SQRTC_1
-SQCTI_1
-SQRTS_1
-...
-SQHP_n
-SQTP_n
-SQRTC_n
-SQCTI_n
-SQRTS_n
-
-
-SQIS_0
-SQIE_0
-SQIS_1
-SQIE_1
-...
-SQIS_n
-SQIE_n
-
-
-CQHP_0
-CQTP_0
-CQHP_1
-CQTP_1
-...
-CQHP_n
-CQTP_n
-
-
-CQIS_0
-CQIE_0
-CQIACR_0
-CQIS_1
-CQIE_1
-CQIACR_1
-...
-CQIS_n
-CQIE_n
-CQIACR_n
-
+Yes, you're right, I'll handle blk_mq_dispatch_rq_list() in v2, and also
+change the title.
 
 Thanks,
+Kuai
 
-Can Guo.
-
-> Thanks,
-> Avri

@@ -2,80 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1B2581C29
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 00:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A86581C2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 00:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbiGZWqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 18:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S233833AbiGZWr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 18:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiGZWqJ (ORCPT
+        with ESMTP id S229766AbiGZWrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 18:46:09 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D64275D3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 15:46:08 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id z11-20020a05660217cb00b0067c63cf0236so5529609iox.13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 15:46:08 -0700 (PDT)
+        Tue, 26 Jul 2022 18:47:55 -0400
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C591326E7;
+        Tue, 26 Jul 2022 15:47:54 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id f65so14356274pgc.12;
+        Tue, 26 Jul 2022 15:47:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=hGbatg4yqsVpW1X9k4zGa9wMwOyJ1zrxlRK2KHH2X1A=;
-        b=Gm5gKQirj/+mjWhNEP4gRsMD7e9AfKaPdlrshlVpHBmF15MfrkF4qTVtb6EVgmPQjo
-         D5DreSBJZ7fki9J5wCiAkCrjKTxJWZNFYh6AUC0J2JfNOTMyLIJCPgRvJxh6pGSBEv32
-         rSLeMQ9+gm7Tgmrhud0EiGnVOp4Y4y0CTOe5y657Fu+Orn6SNN+BIKkugQMlRyH+Zr57
-         0M3FtmZDbctKbVevBZDo9CdwtboqfF7XrW7GywZ82eBVJ45bVgDtluIDuCQ/OOnCkBAQ
-         3vT9CVLFwL7A1JNpUK1+8YevB+LSucYfRvQfFR4v2T+Fqaczw87K9+HLBUp5dP67l1BX
-         dkWQ==
-X-Gm-Message-State: AJIora8Uq1nLV2IBm7akJk2R0q1TiKLhwywJKv07PtNf3lTgcI1t6Kvy
-        HEwg1D4W0SZEjSA1w784vKPd/508AqGmI88XTZTq7NegH9/N
-X-Google-Smtp-Source: AGRyM1t8srvf8CVySeqfuH8ynNmReDFNgETq5OFo9IZwJiEeQICtfVGs0hjjCNsRCtmlxIf50Xhmve3XKjx5Q00gn6F5FZpyevRV
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JzO3IeIuQztvrsRLmkpE46imkHEW5eNh0OyZa8Qe6mc=;
+        b=XweNemqX6PO2mO9uu+ax2woh5HBQI9pakx5bwGiXaBMfG/lMn1LtisyDKBW4ZDrxFS
+         9rAZrAU91/OPxUQEA2B/4V/2Q3UCEdpmgCDyoe0LBi0BcOf+z8MzRiBj/pXVYLJe7fAs
+         uM4rDmuuWzbN6P4P6xEFxj8M7ru2M40p34ZlJggi57B2l07Z3x3gvzeMC5D4xNzpypRW
+         EIh8nRcOtUcRBteHVA/k+83WBWNEb8fm4nrTEo5NwPEZHvA2iNZMBgvGsvcj66R6GhEA
+         jJFnDNbJtB7HPLMfjMIP8ge5o5hBAG3wUOZdrvGDQymsISTuJ1/aID6xE9DZsLTDhsYh
+         xmOA==
+X-Gm-Message-State: AJIora/7tQxlEl0j0EgkDRBJtOtT/ioi91AYWnZUDMMJugKBvfTkjLR9
+        tXJsCKQXNrQBqpZ2K9soNZg=
+X-Google-Smtp-Source: AGRyM1sXVHkFvgipghxDJ1g2uLuoOmJdlIIG8IIXeHwQJHKJ/EyvEqYyD0g4d9gjzcwKN7/rg+sEmg==
+X-Received: by 2002:a05:6a00:796:b0:52c:2d1:3ae0 with SMTP id g22-20020a056a00079600b0052c02d13ae0mr7814087pfu.52.1658875673432;
+        Tue, 26 Jul 2022 15:47:53 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:34f4:7aa8:57:d456? ([2620:15c:211:201:34f4:7aa8:57:d456])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b001641b2d61d4sm9478073plh.30.2022.07.26.15.47.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 15:47:52 -0700 (PDT)
+Message-ID: <47d98e37-d32f-2afa-8272-29f48d066fe7@acm.org>
+Date:   Tue, 26 Jul 2022 15:47:49 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a6b:3f46:0:b0:67b:cd9c:4dc5 with SMTP id
- m67-20020a6b3f46000000b0067bcd9c4dc5mr7010998ioa.213.1658875567524; Tue, 26
- Jul 2022 15:46:07 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 15:46:07 -0700
-In-Reply-To: <000000000000beb14105dd852b6a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000edd28b05e4bd100b@google.com>
-Subject: Re: [syzbot] WARNING: suspicious RCU usage in hsr_node_get_first
-From:   syzbot <syzbot+d4de7030f60c07837e60@syzkaller.appspotmail.com>
-To:     claudiajkang@gmail.com, davem@davemloft.net, edumazet@google.com,
-        ennoerlangen@gmail.com, george.mccollister@gmail.com,
-        hdanton@sina.com, johannes.berg@intel.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, nbd@nbd.name, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com, toke@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
+Content-Language: en-US
+To:     "Asutosh Das (asd)" <quic_asutoshd@quicinc.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        Can Guo <quic_cang@quicinc.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
+        "quic_ziqichen@quicinc.com" <quic_ziqichen@quicinc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
+ <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
+ <DM6PR04MB65756C5A6C5F674B19091F7DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <78495ab6-358d-4d91-e710-140331f37843@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <78495ab6-358d-4d91-e710-140331f37843@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On 7/25/22 09:35, Asutosh Das (asd) wrote:
+> On 7/23/2022 2:23 PM, Avri Altman wrote:
+>> Also maybe we can constify sizeof(struct utp_transfer_req_desc) which 
+>> is used now few times.
+>
+> Ok, agree to make sizeof(struct utp_transfer_req_desc) a constant in the 
+> next version.
 
-commit f856373e2f31ffd340e47e2b00027bd4070f74b3
-Author: Felix Fietkau <nbd@nbd.name>
-Date:   Tue May 31 19:08:24 2022 +0000
+Please don't. I'm concerned that introducing a symbolic name for that 
+sizeof() expression will make code harder to read instead of easier.
 
-    wifi: mac80211: do not wake queues on a vif that is being stopped
+Thanks,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11100172080000
-start commit:   0840a7914caa Merge tag 'char-misc-5.19-rc4' of git://git.k..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=542d3d75f0e6f36f
-dashboard link: https://syzkaller.appspot.com/bug?extid=d4de7030f60c07837e60
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12820318080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f144fff00000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: wifi: mac80211: do not wake queues on a vif that is being stopped
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Bart.

@@ -2,97 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778945819DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862595819E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233893AbiGZSkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 14:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S239539AbiGZSmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 14:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239083AbiGZSkj (ORCPT
+        with ESMTP id S230515AbiGZSmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 14:40:39 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87782DA8C
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:40:37 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-10bd4812c29so19650143fac.11
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=b9+BQ8qqgihfRoMkfRd6ua/4LQsUTbbkzxxG9vujCrE=;
-        b=O/g1ZVBT2ZRypDc1OOhVjX7Wvy0bDwafku96EXJYhZjIUogC/Lla0b7Ybk030zxfRo
-         S1QqE0WMQPiIvFLIJrOBnosA7rsi8SQUKjgiHWdonRHFQkdkABGjKEFuGJQMQoUnziKV
-         yJsgEhk82TU03SWTT/PL4G4d0SQbLGABYlw6UcC8xr/rCtaOZ0HpIkS2M7e4DhjVgyQN
-         tjN0meuWEsRiPKD27YzCsIPqp7kGt3wga733l3JfLG9IVRHv6+wS6UKjWACm/s98+Uyh
-         r21PXw8oMjbuakYmpkMbfmdrP5+y0MkDTq1wkjx5kn9nPB3OuuM0LnyXfvuDe75+0xkf
-         6EuA==
+        Tue, 26 Jul 2022 14:42:08 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7422A2D1DC;
+        Tue, 26 Jul 2022 11:42:07 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31e7055a61dso152177397b3.11;
+        Tue, 26 Jul 2022 11:42:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=b9+BQ8qqgihfRoMkfRd6ua/4LQsUTbbkzxxG9vujCrE=;
-        b=WfV+GdAgtTzW6eNWHmcG2nzRLW110TrFHJDJZ/aoM9srOpIuo0RYpP/70zALUB57HD
-         F26tebN72talgeYM55T55Sc2qLCxzhlsJ5ZyeK7HbCWqD2IhJerO13UCtrpW1OUEUoLq
-         Z9lEygOuYlBG6NdAkyKrz51kzx4fYrLHtZCooRJv4QIpXD7z0sfHzSei6i2IMJ4xYFyb
-         /uvys8Gt1Iv8Wekan30fSdPYsDM//2bttFpsE8KvdxmTyzOv1BezoqXy6R5uxX0v6ExH
-         anffegGs8KG04qak1pTqKRNUSI300/3V/i0oM6p7qQ/3s80tZv/luTHnrAs++YpitsnD
-         k7wQ==
-X-Gm-Message-State: AJIora/w1GQn5ZhjKu8HkSZdC9R/HVdS3owB0eUrW/Cm14sAZVRbEOoV
-        FroaHzPtmC3YF+IYQdFmgZMiXQ==
-X-Google-Smtp-Source: AGRyM1us+cig45gAfxXWkggXYxDvMCUrkqFpz9IG7+U7KbUZjkUwzSgUJJaa9utRE+gcgWJBj18BTw==
-X-Received: by 2002:a05:6870:1601:b0:108:2d92:5494 with SMTP id b1-20020a056870160100b001082d925494mr273866oae.109.1658860836915;
-        Tue, 26 Jul 2022 11:40:36 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1700:42f0:6600:70f5:f079:a10:1915])
-        by smtp.gmail.com with ESMTPSA id n8-20020a0568301e8800b0061c530ec022sm6417204otr.79.2022.07.26.11.40.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 Jul 2022 11:40:36 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] hfsplus: Convert kmap() to kmap_local_page() in bitmap.c
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <Yt7Y6so92vXTOI+Q@casper.infradead.org>
-Date:   Tue, 26 Jul 2022 11:40:29 -0700
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5834FD23-A333-40B7-9678-43E61986512E@dubeyko.com>
-References: <20220724205007.11765-1-fmdefrancesco@gmail.com>
- <A2FB0201-8342-481B-A60C-32A2B0494D33@dubeyko.com>
- <Yt7Y6so92vXTOI+Q@casper.infradead.org>
-To:     Matthew Wilcox <willy@infradead.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3Tjb8+yRHmF5ncvwObM9z3vY00LYdwKMo31sPhGwgxU=;
+        b=ysnLIFR5HFU5ybcv1uTG/RtHy9IfQFoNu/B6j3dzxhcnBEKuJ0zcysaGpaR81JDBo6
+         Ma2EkHSqrVQZg8mYjA7Ad4qgbq7QAWBGP2cLvVvbGdkZALexkJsc8Xc7X4Zr4UI+rVNI
+         O4RDhuSnDzbUtHuykGCjCorLocSKe3+vumGEYpnCXpav+w4Ys5El+amKLhl6zt5GZ2AY
+         W0oyDs0xTelV7Vwc9zGBCS0Lqf0lPGzM7VAhy4KCcX2WGzUhLOT1PpK8V70Gfp1qSjmQ
+         foG+w8LMPecredDj5PydhdqGHPGsxUeOFHiDj8mN91yfGqjFCYBKjesu7XzcWYNgGlyu
+         jceg==
+X-Gm-Message-State: AJIora/X3YwzNgV/B3324uhO7n2AVv+xuPe9MkQuqkW9q/vJmUa/S/Iw
+        mpvXLuiYBMcBn/42HU0G89i1/VRyVyrKPGgsQwE=
+X-Google-Smtp-Source: AGRyM1vq/T8aGKh5BysIsvk3VwI4LkEctMSc6P9Q2W/dyr8+5gt8s9RELvYzu7VGtGuW95qVs9zsjmpsdb3RlXJBvzc=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr15641987ywb.326.1658860926659; Tue, 26
+ Jul 2022 11:42:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <04278747-41fe-3a0a-81bf-2935efaafac0@I-love.SAKURA.ne.jp>
+In-Reply-To: <04278747-41fe-3a0a-81bf-2935efaafac0@I-love.SAKURA.ne.jp>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Jul 2022 20:41:55 +0200
+Message-ID: <CAJZ5v0jzPyTA_Ng_vB1iFR91ThGw9nT2Yzyh6xwTZJajAz+O0g@mail.gmail.com>
+Subject: Re: [PATCH v3] PM: hibernate: defer device probing when resuming from hibernation
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        "Rafael J. Wysocki" <rjw@sisk.pl>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 15, 2022 at 7:51 AM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> syzbot is reporting hung task at misc_open() [1], for there is a race
+> window of AB-BA deadlock which involves probe_count variable. Currently
+> wait_for_device_probe() from snapshot_open() from misc_open() can sleep
+> forever with misc_mtx held if probe_count cannot become 0.
+>
+> When a device is probed by hub_event() work function, probe_count is
+> incremented before the probe function starts, and probe_count is
+> decremented after the probe function completed.
+>
+> There are three cases that can prevent probe_count from dropping to 0.
+>
+>   (a) A device being probed stopped responding (i.e. broken/malicious
+>       hardware).
+>
+>   (b) A process emulating a USB device using /dev/raw-gadget interface
+>       stopped responding for some reason.
+>
+>   (c) New device probe requests keeps coming in before existing device
+>       probe requests complete.
+>
+> The phenomenon syzbot is reporting is (b). A process which is holding
+> system_transition_mutex and misc_mtx is waiting for probe_count to become
+> 0 inside wait_for_device_probe(), but the probe function which is called
+>  from hub_event() work function is waiting for the processes which are
+> blocked at mutex_lock(&misc_mtx) to respond via /dev/raw-gadget interface.
+>
+> This patch mitigates (b) by deferring wait_for_device_probe() from
+> snapshot_open() to snapshot_write() and snapshot_ioctl(). Please note that
+> the possibility of (b) remains as long as any thread which is emulating a
+> USB device via /dev/raw-gadget interface can be blocked by uninterruptible
+> blocking operations (e.g. mutex_lock()).
+>
+> Please also note that (a) and (c) are not addressed. Regarding (c), we
+> should change the code to wait for only one device which contains the
+> image for resuming from hibernation. I don't know how to address (a), for
+> use of timeout for wait_for_device_probe() might result in loss of user
+> data in the image. Maybe we should require the userland to wait for the
+> image device before opening /dev/snapshot interface.
+>
+> Link: https://syzkaller.appspot.com/bug?extid=358c9ab4c93da7b7238c [1]
+> Reported-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Tested-by: syzbot <syzbot+358c9ab4c93da7b7238c@syzkaller.appspotmail.com>
+> Cc: Greg KH <gregkh@linuxfoundation.org>
+> Cc: Oliver Neukum <oneukum@suse.com>
+> Cc: Wedson Almeida Filho <wedsonaf@google.com>
+> Cc: Rafael J. Wysocki <rjw@sisk.pl>
+> Cc: Arjan van de Ven <arjan@linux.intel.com>
+> ---
+> Changes in v3:
+>   Defer wait_for_device_probe() till first write()/ioctl() request.
+>
+> v2 is at https://lkml.kernel.org/r/03096156-3478-db03-c015-28643479116c@I-love.SAKURA.ne.jp .
+>
+> v1 is at https://lkml.kernel.org/r/72e74af9-f1b6-e383-a2c3-6ee8a0aea5e0@I-love.SAKURA.ne.jp .
+>
+>  kernel/power/user.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/power/user.c b/kernel/power/user.c
+> index ad241b4ff64c..d43c2aa583b2 100644
+> --- a/kernel/power/user.c
+> +++ b/kernel/power/user.c
+> @@ -26,6 +26,7 @@
+>
+>  #include "power.h"
+>
+> +static bool need_wait;
+>
+>  static struct snapshot_data {
+>         struct snapshot_handle handle;
+> @@ -78,7 +79,7 @@ static int snapshot_open(struct inode *inode, struct file *filp)
+>                  * Resuming.  We may need to wait for the image device to
+>                  * appear.
+>                  */
+> -               wait_for_device_probe();
+> +               need_wait = true;
+>
+>                 data->swap = -1;
+>                 data->mode = O_WRONLY;
+> @@ -168,6 +169,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+>         ssize_t res;
+>         loff_t pg_offp = *offp & ~PAGE_MASK;
+>
+> +       if (need_wait) {
+> +               wait_for_device_probe();
+> +               need_wait = false;
+> +       }
+> +
+>         lock_system_sleep();
+>
+>         data = filp->private_data;
+> @@ -244,6 +250,11 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+>         loff_t size;
+>         sector_t offset;
+>
+> +       if (need_wait) {
+> +               wait_for_device_probe();
+> +               need_wait = false;
+> +       }
+> +
+>         if (_IOC_TYPE(cmd) != SNAPSHOT_IOC_MAGIC)
+>                 return -ENOTTY;
+>         if (_IOC_NR(cmd) > SNAPSHOT_IOC_MAXNR)
+> --
 
-
-> On Jul 25, 2022, at 10:54 AM, Matthew Wilcox <willy@infradead.org> =
-wrote:
->=20
-> On Mon, Jul 25, 2022 at 10:17:13AM -0700, Viacheslav Dubeyko wrote:
->> Looks good. Maybe, it makes sense to combine all kmap() related =
-modifications in HFS+ into
->> one patchset?
->=20
-> For bisection, I'd think it best to leave them separate?
-
-I am OK with any way. My point that it will be good to have patchset to =
-see all modified places together, from logical point of view. Even if we =
-have some issue with kmap() change on kmap_local_page(), then, as far as =
-I can see, the root of issue should be kmap_local_page() but not HFS+ =
-code. Oppositely, if it=E2=80=99s some undiscovered HFS+ issue, then =
-again kmap_local_page() changes nothing. But I am OK if it is separate =
-patches too.
-
-Thanks,
-Slava.=
+Applied as 5.20 material, thanks!

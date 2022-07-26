@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D955580C1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1D6580C28
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237656AbiGZHHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S237817AbiGZHIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiGZHHJ (ORCPT
+        with ESMTP id S237791AbiGZHIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:07:09 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009E027B06
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:07:04 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id j63so2842785ybb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:07:04 -0700 (PDT)
+        Tue, 26 Jul 2022 03:08:09 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A622A730
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:08:07 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id e11so15543535ljl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:08:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rcgy86h3bKxOBeG//wWyMWAkfwgF/OHgbS5GdJlqF1Q=;
-        b=rP6hiQUSnsCrLEpGMJ284D5gsGAEYG/Np9YNYB6fl6LnUVCfwCvUxh4qD3C5tJTybh
-         XrZCfH6LhMs4TZkLWoBBPpiVAGUmIvCk8Qw3nT9Qu2AQAUNYU3nT4USafHn66aKeMlNJ
-         yCFbhZu+bvyH00Uvz46+xPIRCAbWBd1kLGKgbyH0uCwSeggs64o0leDgdEXUQereCBF6
-         D99PIPkqaJIU/zaeVVso3vdqGKZdN0BiBtol8ZP3c08H4YtCwdienRdabs2P5ikL3k6n
-         yy6nVtKG38EDVLJQE7YMdfQdunpwFQWoc77YXmbOWmbcGUsOEi9FI4mmB+MuGnjZlUtU
-         3AxA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CQeBl6bdxDYeiutOoPw95UwPjf3Fy7w8iw/mWArASvw=;
+        b=zN85OL0I7XcwDr5+NXdtzJE9Fh3X0ESA9e60K/bAmY6lQrfN2CIkjbxud/H/HRN2fw
+         muTda+NOORh3cEyWpi5ozfGxPXzvtigjCWdz4AIk8MUlCHZkp7rNa9RgGg6nAPXnrJ5F
+         4yYZ+IoOWFP2YNiSz9lnmoiafKNxzZ2aCNd3mrgfI70ksFwdRwGRKVf6NmlJ6BzXalX9
+         MBGiQGnySWa8nbgtlLJti+8eFDBXfMPeKJMcwv9TOE7meEDePeDxl7AjeUMzaGUGNoxB
+         vUlxM+fhzkgizMJIEpR4phP1vxNhJdRcAxRCS2kuz1jnutS92Uy5m/6bQSKZazfwBucD
+         zhew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rcgy86h3bKxOBeG//wWyMWAkfwgF/OHgbS5GdJlqF1Q=;
-        b=SUfisMljTsJ1B0beDDUrEApusmt3+mhspYVmHu4gpsdCGcJZxwTRCci15s1zIl2bFZ
-         jK3oiDCseYoGq5MHYRasQg0jkFL9EIQJnr0YZJ68HTiCo+E1Y2FI6YwfqaNdnrVRHE7F
-         +iyHBgeI+kzdU7LkiD1fE3aRdwZ3/rg97ZDaUCFNM9Hd4ok3B9WpKIXTfk72x6UdlEPr
-         7i3V3Qc2OvptCt5GBJxcpIaUMtyeoZdaUkt9WgZMvIoIpWuJ7e3k6LtpiR7xN5L7C7cn
-         3+h7Q9hZJ6bB9T+qcOFWXXBkfhmTO+NH6RTzL6Bb/LV2mT9AAhVOWDWg7FDQ4SEgonMF
-         yZbQ==
-X-Gm-Message-State: AJIora8ArFoLo5CR4TwOZ/pjRlbZHtzPbzvxhtuTpn0Rm5YiqTxnxl7o
-        /+8epo9WhZM9gEPVP7wq9wUKsYiE38yNMxK8N8wNWw==
-X-Google-Smtp-Source: AGRyM1unbv3SV++lnD2fcV87IVw5AbZYyhPNYpke56HhITiX0I4EE/vVweiHu7FW6Bdks5azJOL6VZF4mZCvd2GLMQc=
-X-Received: by 2002:a25:ab84:0:b0:671:748b:ffab with SMTP id
- v4-20020a25ab84000000b00671748bffabmr792029ybi.427.1658819223983; Tue, 26 Jul
- 2022 00:07:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1658815925.git.cdleonard@gmail.com> <ad19d5c8a24054d48e1c35bb0ec92075b9f0dc6a.1658815925.git.cdleonard@gmail.com>
-In-Reply-To: <ad19d5c8a24054d48e1c35bb0ec92075b9f0dc6a.1658815925.git.cdleonard@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 26 Jul 2022 09:06:52 +0200
-Message-ID: <CANn89i+ByJsdKLXi982jq0H3irYg_ANSEdmL2zwZ_7G-E_g2eg@mail.gmail.com>
-Subject: Re: [PATCH v6 21/26] selftests: net/fcnal: Initial tcp_authopt support
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>, Philip Paeps <philip@trouble.is>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CQeBl6bdxDYeiutOoPw95UwPjf3Fy7w8iw/mWArASvw=;
+        b=fo8L7ltsT/Rcc9X+91sHicG76Wn0iy1l9kbt7C6W1hU85V/lH7ujcmFhdvJzFjQD14
+         ACsHsa63cgNFb+dJY1ZEj2Y8WKsfcpJe2maiH8VbkKW/C9vzC8UIhQifoYA0uYAvXOc1
+         Prfz8275gWagzYvNxlT8ozOWue8XEa0GQmp7J7zYvRvGFwEHXn/+F1SDn+2uX8bPHmAd
+         aIQaWx1dofTdj/6gXX44NP2WqpoVTWQuk9jl/Jvmo5OL07dEjhDJ7XOjJByA0mO+7rlE
+         tiMcU9nIVwYKh037jLdnw+LFHNZPrnahDQO2udiJgR/1LJ/yoIN8lGcWSG78EqifyGkc
+         DDEQ==
+X-Gm-Message-State: AJIora/DvXt6Rs5VKXloyVkN+EKecHa+Hu1QU7WBJ2cZUypkx9zB9oGJ
+        B+P79r44vziiV2s6rF4Uce2TP4Kls5I17VuY
+X-Google-Smtp-Source: AGRyM1s9JECEg8k5On7lZDQn848nND8BHmVl/cB0lI4TDayD/8sEB5lu+MN960QDnjoslc2ylg71sA==
+X-Received: by 2002:a05:651c:516:b0:25d:e010:fb97 with SMTP id o22-20020a05651c051600b0025de010fb97mr5315117ljp.445.1658819285763;
+        Tue, 26 Jul 2022 00:08:05 -0700 (PDT)
+Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id q23-20020a05651232b700b0047f6b4a53cdsm3045061lfe.172.2022.07.26.00.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 00:08:05 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Harini Katakam <harini.katakam@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: [PATCH v2 1/2] dt-bindings: net: cdns,macb: use correct xlnx prefix for Xilinx
+Date:   Tue, 26 Jul 2022 09:08:01 +0200
+Message-Id: <20220726070802.26579-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 8:16 AM Leonard Crestez <cdleonard@gmail.com> wrote:
->
-> Tests are mostly copied from tcp_md5 with minor changes.
->
-> It covers VRF support but only based on binding multiple servers: not
-> multiple keys bound to different interfaces.
->
-> Also add a specific -t tcp_authopt to run only these tests specifically.
->
+Use correct vendor for Xilinx versions of Cadence MACB/GEM Ethernet
+controller.  The Versal compatible was not released, so it can be
+changed.  Zynq-7xxx and Ultrascale+ has to be kept in new and deprecated
+form.
 
-Thanks for the test.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Could you amend the existing TCP MD5 test to make sure dual sockets
-mode is working ?
+---
 
-Apparently, if we have a dual stack listener socket (AF_INET6),
-correct incoming IPV4 SYNs are dropped.
+Changes since v1:
+1. Correct deprecated:true.
+2. Add Rb tag.
 
- If this is the case, fixing MD5 should happen first ;)
+Cc: Harini Katakam <harini.katakam@xilinx.com>
+Cc: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+---
+ Documentation/devicetree/bindings/net/cdns,macb.yaml | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-I think that we are very late in the cycle (linux-5.19 should be
-released in 5 days), and your patch set should not be merged so late.
+diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+index 762deccd3640..dfb2860ca771 100644
+--- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
++++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+@@ -20,10 +20,17 @@ properties:
+ 
+       - items:
+           - enum:
+-              - cdns,versal-gem       # Xilinx Versal
+               - cdns,zynq-gem         # Xilinx Zynq-7xxx SoC
+               - cdns,zynqmp-gem       # Xilinx Zynq Ultrascale+ MPSoC
+           - const: cdns,gem           # Generic
++        deprecated: true
++
++      - items:
++          - enum:
++              - xlnx,versal-gem       # Xilinx Versal
++              - xlnx,zynq-gem         # Xilinx Zynq-7xxx SoC
++              - xlnx,zynqmp-gem       # Xilinx Zynq Ultrascale+ MPSoC
++          - const: cdns,gem           # Generic
+ 
+       - items:
+           - enum:
+@@ -183,7 +190,7 @@ examples:
+             #address-cells = <2>;
+             #size-cells = <2>;
+             gem1: ethernet@ff0c0000 {
+-                    compatible = "cdns,zynqmp-gem", "cdns,gem";
++                    compatible = "xlnx,zynqmp-gem", "cdns,gem";
+                     interrupt-parent = <&gic>;
+                     interrupts = <0 59 4>, <0 59 4>;
+                     reg = <0x0 0xff0c0000 0x0 0x1000>;
+-- 
+2.34.1
 
-Thanks.
-
-> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
-> ---
->

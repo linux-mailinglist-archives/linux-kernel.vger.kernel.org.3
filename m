@@ -2,133 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566EA581AE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9ED581AEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbiGZUS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 16:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
+        id S239919AbiGZUUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 16:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239935AbiGZUSM (ORCPT
+        with ESMTP id S239838AbiGZUUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 16:18:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D2F371B6;
-        Tue, 26 Jul 2022 13:17:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 114566160D;
-        Tue, 26 Jul 2022 20:17:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277ACC433B5;
-        Tue, 26 Jul 2022 20:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658866659;
-        bh=GIbzRLMc9lrNfJDLat0Hlv7hVWiWNwlnlBD/YoWm7qk=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=HUgoqY2e9W43NpWGppKfLxqPT6/YHFWqQPaWTnFvfuupCtEEEighHCoWgZkclwHVw
-         8AqhJMfX+te8UwJm4gMUuKSx8n+GXYBzLffSEANnsXLwSol0V+QNQXyx/g6t5kzThs
-         onAwtDCafnKiMzQqr23be8U8Wc+OZApDBGF5KWcE5XWncQTJ8seJxWH7Nx4iFwVPIU
-         OA4kZ/A/sDYa3cr9SrTD06uJ5l1tgypf9VGGppBUF7fiwzgnug8UK9Gt4fuZZvNx3j
-         gT1UYbxAndS/v6xebtRaMF0OHeIYE3sb/dG/el95rgE8BHFreVM4ORt5eQoi5i+hbL
-         dwVDq+WOW3mkA==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id E625C27C0054;
-        Tue, 26 Jul 2022 16:17:36 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Tue, 26 Jul 2022 16:17:36 -0400
-X-ME-Sender: <xms:3kvgYpARSMhj5VmUmkVurT4f9xIAbHMjszDAsk4s7T_ZDEAnZEkIIw>
-    <xme:3kvgYnj2LF_o1PLtJkx6eKicevIJ0clraa1BkE-gW0pLj_FIhm4YY3MSBzxUOKhNc
-    qZdmQ6EZUjiY0lqW_4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddutddgudegkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehnugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqne
-    cuggftrfgrthhtvghrnhepudevffdvgedvfefhgeejjeelgfdtffeukedugfekuddvtedv
-    udeileeugfejgefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudei
-    udekheeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlih
-    hnuhigrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:3kvgYkkZlSnTU32WZ_55gKqv5cIe7D964TqhbVuzL27aabuDTxKoFw>
-    <xmx:3kvgYjzGYouhLPqDLXVDOuV8KE_sgB1ywcMsUliOZTPqL2TCFgGRLw>
-    <xmx:3kvgYuQTvBqwlKuScxo52TwDLjHx0G3L6F5Uc0misveIhuFHKWG6LA>
-    <xmx:4EvgYpk51w0Q1qFeRijHIUCHVuwPtaZDWCkAVAH3NfYUJT4uI259qA>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C5B1A31A0062; Tue, 26 Jul 2022 16:17:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-757-gc3ad9c75d3-fm-20220722.001-gc3ad9c75
-Mime-Version: 1.0
-Message-Id: <7cec93c5-3db4-409b-8c1e-bc1f10dd68fc@www.fastmail.com>
-In-Reply-To: <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
-Date:   Tue, 26 Jul 2022 13:17:13 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Sean Christopherson" <seanjc@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Joerg Roedel" <jroedel@suse.de>,
-        "Ard Biesheuvel" <ardb@kernel.org>
-Cc:     "Andi Kleen" <ak@linux.intel.com>,
-        "Sathyanarayanan Kuppuswamy" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "David Rientjes" <rientjes@google.com>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Tom Lendacky" <thomas.lendacky@amd.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Varad Gautam" <varad.gautam@suse.com>,
-        "Dario Faggioli" <dfaggioli@suse.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Mike Rapoport" <rppt@kernel.org>,
-        "David Hildenbrand" <david@redhat.com>,
-        "Marcelo Henrique Cerri" <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping into
- unaccepted memory
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 16:20:43 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B30727B1C
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:20:42 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id fy29so28021141ejc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4CN7dQvXWwaJGy07n6QHMuaIcTWf0n/HGar+msGxrYk=;
+        b=FGJZe+ZwP3lgA0wU4CgENEV4uAjTArTRwFrNXA7DgfkgNXGLMfVrAiFenpM+aZxYi3
+         oCzqZUMRn0IH1rFc2iDgLG+UKKXNBuUxdaPOqpCCmVa594FKN8Q6xS3xQ5n1poatxD3g
+         x1xRQ4sgvnKIpYMJNA1ZY6TFctKZX6hDMIklw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4CN7dQvXWwaJGy07n6QHMuaIcTWf0n/HGar+msGxrYk=;
+        b=2bxDFnligYhkWxsFkTH5KzgdXIE5CofBo0PEd8k5N5wsrlRAI/+d0+5SKJwj8C7l33
+         HMRi6MPsK+WXOH1nnCL8e0n+uHyQyo2LEY+6P5wHjsGV7qZ3jF96UTmp/HIHipc+sR1E
+         X24M2sC4qV9DO+Z4WkWaAJkF+z+RMO+Hc9D8CBGZBOR54+2sGT3yhA+5+WGZ/DlnP/jQ
+         S8EG8ytfs01+95ZBZbMe7KGStE1wjFc7OcxmqE/sCS5fGaD/Kp3WtuqVeKiaRQ2ao/8e
+         uoowxM+2Z4UTV4s60AsSxYBxqzcSuuK2D1sXbKrYRlFRLwJXBAwBo52gs9EA9qQAnWxF
+         fhFQ==
+X-Gm-Message-State: AJIora8iFQ3cbuUseU4HweLvzL68VRHwkcHrVDAFzOIKa4dvCVrNRNbr
+        i+fNFuYb6UrJWq1krhJLzDoVLtjAMqM7LAwt
+X-Google-Smtp-Source: AGRyM1t7bTupUrfkic0K4ZBS6r+drVMtkpUoP23FckA65OaJbo2a189r7E8Xb5VPHMtRw3VTMwSTrQ==
+X-Received: by 2002:a17:906:58d1:b0:72e:e049:cf00 with SMTP id e17-20020a17090658d100b0072ee049cf00mr14862884ejs.361.1658866840285;
+        Tue, 26 Jul 2022 13:20:40 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id y10-20020a056402358a00b0043a8f5ad272sm9189027edc.49.2022.07.26.13.20.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 13:20:39 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id v13so13846293wru.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:20:39 -0700 (PDT)
+X-Received: by 2002:a05:6000:1a88:b0:21d:aa97:cb16 with SMTP id
+ f8-20020a0560001a8800b0021daa97cb16mr12127299wry.97.1658866839283; Tue, 26
+ Jul 2022 13:20:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
+ <20220725161141.GA1306881@roeck-us.net> <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
+ <YuAm5h1B6bsrR/9q@fedora> <CAHk-=wgYpJTMMxmfbpqc=JVtSK0Zj4b15G=AvEYk6vPNySDSsA@mail.gmail.com>
+ <YuAv+lV324G7pmlk@yury-laptop> <CAHk-=wg2-j8zocUjurAeg_bimNz7C5h5HDEXKK6PxDmR+DaHRg@mail.gmail.com>
+ <YuBEIiLL1xZVyEFl@shell.armlinux.org.uk>
+In-Reply-To: <YuBEIiLL1xZVyEFl@shell.armlinux.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 26 Jul 2022 13:20:23 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjpYLLoi1m0VRfVoyzGgmMiNwBhQ0XXG0VWwjskcz5Cug@mail.gmail.com>
+Message-ID: <CAHk-=wjpYLLoi1m0VRfVoyzGgmMiNwBhQ0XXG0VWwjskcz5Cug@mail.gmail.com>
+Subject: Re: Linux 5.19-rc8
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Yury Norov <yury.norov@gmail.com>, Dennis Zhou <dennis@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Tue, Jun 14, 2022, at 5:02 AM, Kirill A. Shutemov wrote:
-> load_unaligned_zeropad() can lead to unwanted loads across page bounda=
-ries.
-> The unwanted loads are typically harmless. But, they might be made to
-> totally unrelated or even unmapped memory. load_unaligned_zeropad()
-> relies on exception fixup (#PF, #GP and now #VE) to recover from these
-> unwanted loads.
+On Tue, Jul 26, 2022 at 12:44 PM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
 >
-> But, this approach does not work for unaccepted memory. For TDX, a load
-> from unaccepted memory will not lead to a recoverable exception within
-> the guest. The guest will exit to the VMM where the only recourse is to
-> terminate the guest.
+> Overall, I would say it's pretty similar (some generic perform
+> marginally better, some native perform marginally better) with the
+> exception of find_first_bit() being much better with the generic
+> implementation, but find_next_zero_bit() being noticably worse.
 
-Why is unaccepted memory marked present in the direct map in the first p=
-lace?
+The generic _find_first_bit() code is actually sane and simple. It
+loops over words until it finds a non-zero one, and then does trivial
+calculations on that last word.
 
-Having kernel code assume that every valid address is followed by severa=
-l bytes of memory that may be read without side effects other than #PF a=
-lso seems like a mistake, but I probably won=E2=80=99t win that fight. B=
-ut sticking guard pages in front of definitely-not-logically present pag=
-es seems silly to me.  Let=E2=80=99s just not map it.
+That explains why the generic code does so much better than your byte-wise asm.
 
-(What if MMIO memory is mapped next to regular memory?  Doing random una=
-ligned reads that cross into MMIO seems unwise.)
+In contrast, the generic _find_next_bit() I find almost offensively
+silly - which in turn explains why your byte-wide asm does better.
+
+I think the generic _find_next_bit() should actually do what the m68k
+find_next_bit code does: handle the first special word itself, and
+then just call find_first_bit() on the rest of it.
+
+And it should *not* try to handle the dynamic "bswap and/or bit sense
+invert" thing at all. That should be just four different (trivial)
+cases for the first word.
+
+             Linus

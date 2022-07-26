@@ -2,57 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EB35816E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F19565816EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238242AbiGZP74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S230244AbiGZQBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbiGZP7z (ORCPT
+        with ESMTP id S229677AbiGZQBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:59:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61E392F64D;
-        Tue, 26 Jul 2022 08:59:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 830001FB;
-        Tue, 26 Jul 2022 08:59:54 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.72.224])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6ABC93F73B;
-        Tue, 26 Jul 2022 08:59:52 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 16:59:30 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, kajetan.puchalski@arm.com
-Subject: Re: [PATCH] cpuidle: Add cpu_idle_miss trace event
-Message-ID: <YuAPYrAH7jRroZLn@e126311.manchester.arm.com>
-References: <Yt/AxPFi88neW7W5@e126311.manchester.arm.com>
- <20220726100816.3e37ed97@gandalf.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726100816.3e37ed97@gandalf.local.home>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 12:01:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C20A62EC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:01:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 265F0B8188A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 16:01:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD2BC433D6;
+        Tue, 26 Jul 2022 16:01:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658851272;
+        bh=DHUG3G6oDdbExivbTRSmCxGZxYcDFTMMnotqPESDqzc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t9ReExPnzY/gdMw/kXnJlrqdiYV51tB+2NdOr5fIHN6zhEtqWLTU9phWCgOaKw5AQ
+         tRqE2ceotgUs9grXCm6pOLQ8I0zYRJJBFlUmr2OukTnl/JtZ95NQeWyxn4eebjL1cA
+         H97XU93PcxZEn10IkSiYE/vHCSc/dq2muruf9NxYbLUTJuSPC/UrL+rofn7NzG/v3s
+         7gRiUgO+B+bTgaFY7oEVijyyfdpCXHpoTdaNZIiSV+M8FNVJd1m6yRie2xoq4AtEOG
+         zG7GnXz7WEYcfh9+mnxC2BGd9rgG66cCwt+rj5N4jJiUn6p1yFP9vH7AQTAE03QHtl
+         9ASVGc/LiMQ3g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oGMze-00ABgg-I7;
+        Tue, 26 Jul 2022 17:01:10 +0100
+Date:   Tue, 26 Jul 2022 17:01:09 +0100
+Message-ID: <878rofyibe.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, tabba@google.com,
+        oliver.upton@linux.dev, will@kernel.org, qperret@google.com,
+        james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
+        mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com,
+        elver@google.com, keirf@google.com, yuzenghui@huawei.com,
+        ardb@kernel.org, oupton@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, android-mm@google.com,
+        kernel-team@android.com
+Subject: Re: [PATCH v6 02/17] arm64: stacktrace: Factor out on_accessible_stack_common()
+In-Reply-To: <20220726073750.3219117-3-kaleshsingh@google.com>
+References: <20220726073750.3219117-1-kaleshsingh@google.com>
+        <20220726073750.3219117-3-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, madvenka@linux.microsoft.com, tabba@google.com, oliver.upton@linux.dev, will@kernel.org, qperret@google.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, andreyknvl@gmail.com, vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, android-mm@google.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 10:08:16AM -0400, Steven Rostedt wrote:
-> On Tue, 26 Jul 2022 11:24:04 +0100
-> Kajetan Puchalski <kajetan.puchalski@arm.com> wrote:
- 
-> For the tracing POV,
+On Tue, 26 Jul 2022 08:37:35 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Move common on_accessible_stack checks to stacktrace/common.h. This is
+> used in the implementation of the nVHE hypervisor unwinder later in
+> this series.
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> Tested-by: Fuad Tabba <tabba@google.com>
+> ---
+> 
+> Changes in v6:
+>   - Add Fuad's Tested-by tag
+> 
+> Changes in v5:
+>   - Add Reviewed-by tags from Mark Brown and Fuad
+>   - Remove random whitespace change, per Mark Brown
+> 
+>  arch/arm64/include/asm/stacktrace.h        |  6 ++----
+>  arch/arm64/include/asm/stacktrace/common.h | 18 ++++++++++++++++++
+>  2 files changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
+> index 79f455b37c84..43f4b4a6d383 100644
+> --- a/arch/arm64/include/asm/stacktrace.h
+> +++ b/arch/arm64/include/asm/stacktrace.h
+> @@ -65,8 +65,8 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
+>  				       unsigned long sp, unsigned long size,
+>  				       struct stack_info *info)
+>  {
+> -	if (info)
+> -		info->type = STACK_TYPE_UNKNOWN;
+> +	if (on_accessible_stack_common(tsk, sp, size, info))
+> +		return true;
+>  
+>  	if (on_task_stack(tsk, sp, size, info))
+>  		return true;
+> @@ -74,8 +74,6 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
+>  		return false;
+>  	if (on_irq_stack(sp, size, info))
+>  		return true;
+> -	if (on_overflow_stack(sp, size, info))
+> -		return true;
+>  	if (on_sdei_stack(sp, size, info))
+>  		return true;
+>  
+> diff --git a/arch/arm64/include/asm/stacktrace/common.h b/arch/arm64/include/asm/stacktrace/common.h
+> index 64ae4f6b06fe..f58b786460d3 100644
+> --- a/arch/arm64/include/asm/stacktrace/common.h
+> +++ b/arch/arm64/include/asm/stacktrace/common.h
+> @@ -62,6 +62,9 @@ struct unwind_state {
+>  	struct task_struct *task;
+>  };
+>  
+> +static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
+> +				     struct stack_info *info);
+> +
+>  static inline bool on_stack(unsigned long sp, unsigned long size,
+>  			    unsigned long low, unsigned long high,
+>  			    enum stack_type type, struct stack_info *info)
+> @@ -80,6 +83,21 @@ static inline bool on_stack(unsigned long sp, unsigned long size,
+>  	return true;
+>  }
+>  
+> +static inline bool on_accessible_stack_common(const struct task_struct *tsk,
+> +					      unsigned long sp,
+> +					      unsigned long size,
+> +					      struct stack_info *info)
+> +{
+> +	if (info)
+> +		info->type = STACK_TYPE_UNKNOWN;
+> +
+> +	/*
+> +	 * Both the kernel and nvhe hypervisor make use of
+> +	 * an overflow_stack
+> +	 */
+> +	return on_overflow_stack(sp, size, info);
+> +}
 
-Thanks a lot for taking a look!
+on_accessible_stack has the following comment:
 
-> -- Steve
+/*
+ * We can only safely access per-cpu stacks from current in a non-preemptible
+ * context.
+ */
+
+With this change, I don't think we satisfy this requirement anymore,
+as we're checking the overflow stack *before* the preemptible check,
+which is a big change in behaviour.
+
+The hypervisor doesn't have this requirement: the unwinding is either
+done out of context (nVHE, where EL1 unwinds EL2) or in a
+non-preemptible section (pKVM, where the whole thing is
+non-preemptible). But the kernel is usually preemptible, so this patch
+needs fixing.
+
+I'll see if I can address it locally (I'm currently moving things
+around, stay tuned).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

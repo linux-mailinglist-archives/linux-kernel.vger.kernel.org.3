@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA4D581990
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D195819A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239216AbiGZSSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 14:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
+        id S239671AbiGZSXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 14:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239419AbiGZSSj (ORCPT
+        with ESMTP id S239542AbiGZSXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 14:18:39 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34D032D8C
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:18:37 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id e16so11589899qka.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PcIy1IoVeLTA5pN4xjHqrFFTOjRrYaH1roVxozVFMOY=;
-        b=gFaqEJ7fu4l4IvYNN6/B/g21zWrCb0Po5DuLzh4FB2bv8EQkApW3NQtaVWNVbYoDiL
-         mG/lo7cuHAs80ggJwHBf4cXxt5lueFCZ62jFgpUGvfcV8SuK7/3/L0mT22jQprZ6ptlS
-         6mVeIE31mmdnkD03RZ4MfxqqMMQ0Ql6pd5uwrzHgBosNl9QoHxp+cjA7K9zmtuZUfMxv
-         fIoadGHGBXyTYyheNoQ/z8z7JCs8c/FBvBsj8LJDPlIzx09wZeKq1L+wffcM7mMOvQTt
-         vJiZtfQCB3SVie4xZ1bWsm49CMN8vojXf1vzbV/rFwFtEyLzxmjfZNrYG86Lo3OG5It0
-         aRdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PcIy1IoVeLTA5pN4xjHqrFFTOjRrYaH1roVxozVFMOY=;
-        b=vr/smJLu/PwdE1KDL/UZRKO1E9DO8yd95SoglIuHBiwhI9XE+aGP+ljchRmbO1SHdX
-         Nz9QXYfMfN8uxHaJg/T2+Zqp6ASkoxXYlzl9favS+dburo3aoyo+M4ooYPSbmTpjQUcp
-         HYHmrTtp4wlZUi7Q7v3EOm4xA46K7FP9dukzotTiPQhBfJd8SIEkntE7xciSaryJkwJC
-         akPiXBKSx2o7FwHHgUtHrLwC2Y6h5GjcxskH9Kfq3Pe5olDOX/RwAO0xeTVsoGuHqMRa
-         5p8+H2wAhYcvDic8NFGZG6FkAe/n6T+aWIt966OU30GmWpZUs3tyxg/gw+Mrw+QVwchv
-         eM7w==
-X-Gm-Message-State: AJIora+Mi9VL77T3G3MaHvpZKAWVfLeYKzdYHFtiBbxpJU0XTLZcNDyk
-        8MnQ8F8VOHoVP42n/QPOGzs=
-X-Google-Smtp-Source: AGRyM1shIaNZWVK8sA3rDaCMoqXb6+vBPULuR/BA8pNVD+CuraDYlrtLnXxnboyxMZXsFBItME9fSA==
-X-Received: by 2002:a05:620a:488a:b0:6b6:b45:d85c with SMTP id ea10-20020a05620a488a00b006b60b45d85cmr13748258qkb.453.1658859516951;
-        Tue, 26 Jul 2022 11:18:36 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:8203:dece:781e:a773])
-        by smtp.gmail.com with ESMTPSA id u22-20020a05620a431600b006af147d4876sm11881274qko.30.2022.07.26.11.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 11:18:36 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 11:18:34 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org
-Subject: Re: Linux 5.19-rc8
-Message-ID: <YuAv+lV324G7pmlk@yury-laptop>
-References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
- <20220725161141.GA1306881@roeck-us.net>
- <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
- <YuAm5h1B6bsrR/9q@fedora>
- <CAHk-=wgYpJTMMxmfbpqc=JVtSK0Zj4b15G=AvEYk6vPNySDSsA@mail.gmail.com>
+        Tue, 26 Jul 2022 14:23:14 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8937A32B96
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=fufhIgAGmEPr2y0gVTawBxYZsHer/zgSvMgFNkAzwAo=; b=Ioq29zwDPkae9RKQm0zTORcfp3
+        0ZEsHxkp5sJawQ//sCkaOmzL/5+u5dk1o35WMjEIiVqHVuuoglglzRbxHNv/J4L3LCuyQLhey1iR8
+        +GA1c+gocBUbrQxuvz4GUL16kLMFX+HnyqVD4+IuumUycVIetU2WlcV1vjV/fJqjIXuFuMLvlDyG1
+        unw87/ucyfzu2PZ/qvaxx/4tM4ximU0qD1V8kfpjtawZVArwvHMBOdaP9aQvDFi1uu1bxavQ8z2S4
+        L5bmsB30EkLGB+HKJ1+pjwl2eZ+0wvwmYrNrsYbwGjkYPjJLDAuZ0bV9kJYnfaX/FzeOXhcAjrIub
+        7xyqEQuA==;
+Received: from 201-13-50-220.dsl.telesp.net.br ([201.13.50.220] helo=localhost.localdomain)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oGPCZ-007aEh-BE; Tue, 26 Jul 2022 20:22:39 +0200
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?=27Christian=20K=C3=B6nig=27?= <christian.koenig@amd.com>,
+        'Pan Xinhui' <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Tom St Denis <tom.stdenis@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     kernel-dev@igalia.com,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v2 0/4] drm/amd: Add more GFXOFF stats for vangogh
+Date:   Tue, 26 Jul 2022 15:21:48 -0300
+Message-Id: <20220726182152.123649-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgYpJTMMxmfbpqc=JVtSK0Zj4b15G=AvEYk6vPNySDSsA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Geert Uytterhoeven <geert@linux-m68k.org>
-+ linux-m68k@lists.linux-m68k.org
+This series adds new logging features for GFXOFF available for vangogh
+and documentation for it.
 
-On Tue, Jul 26, 2022 at 10:51:01AM -0700, Linus Torvalds wrote:
-> On Tue, Jul 26, 2022 at 10:39 AM Dennis Zhou <dennis@kernel.org> wrote:
-> >
-> > Are we okay with adding the contract find_*_bit() operations must handle
-> > asking for past size properly? FWIW, we'd have to modify most of the
-> > iterators in find.h.
-> 
-> So I think we're ok with it, if only it makes the macros simpler.
-> 
-> I also think we should probably look at the m68k case, because while
-> that one seems to not have the bug that the arm case had, if we remove
-> the arm case the m68k code is now the only non-generic case remaining.
-> 
-> And it just makes me go "maybe we should get rid of the whole
-> 'override the generic code' thing entirely?"
-> 
-> I don't think that inlining the first word (like the m68k code does)
-> is worth it, but it *is* possible that the architecture-specific
-> functions generate better code for some common cases,
+I've created a small userspace program to interact with this new debugfs
+interface and it can be found at: 
 
-We have find_bit_benchmark to check how it works in practice. Would
-be great if someone with access to the hardware can share numbers.
+https://gitlab.freedesktop.org/andrealmeid/gfxoff_tool
 
-> so I think this
-> is a "needs looking at the generated code" and not just a blind
-> removal.
-> 
->               Linus
+Changelog:
+ v2:
+ - Make entrycount uint64_t
+ - Add a note in docs about data types and overflow
+
+André Almeida (4):
+  drm/amd: Add detailed GFXOFF stats to debugfs
+  drm/amd/pm: Implement GFXOFF's entry count and residency for vangogh
+  Documentation/gpu: Document GFXOFF's count and residency
+  drm/amdgpu: Document gfx_off members of struct amdgpu_gfx
+
+ Documentation/gpu/amdgpu/thermal.rst          |  18 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c   | 168 ++++++++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c       |  39 ++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h       |  14 +-
+ drivers/gpu/drm/amd/pm/amdgpu_dpm.c           |  45 +++++
+ drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h       |   3 +
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c     |  35 +++-
+ drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h |  22 +++
+ .../pm/swsmu/inc/pmfw_if/smu_v11_5_ppsmc.h    |   5 +-
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_types.h  |   5 +-
+ .../gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c  |  92 ++++++++++
+ drivers/gpu/drm/amd/pm/swsmu/smu_internal.h   |   3 +
+ 13 files changed, 443 insertions(+), 8 deletions(-)
+
+-- 
+2.37.1
+

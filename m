@@ -2,116 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA77581C50
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC886581C5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240040AbiGZXKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 19:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S239993AbiGZXOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 19:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240011AbiGZXJz (ORCPT
+        with ESMTP id S231734AbiGZXON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 19:09:55 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9073C39BBB
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 16:09:48 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id q23so11513506lfr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 16:09:48 -0700 (PDT)
+        Tue, 26 Jul 2022 19:14:13 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC87B57;
+        Tue, 26 Jul 2022 16:14:12 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id p1so6153485plr.11;
+        Tue, 26 Jul 2022 16:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S8uc04n3AkszIqf2Ejx2rLvr6yxl23UrWq7daIt/QG0=;
-        b=YzSML/jeNU5Hqy5um9hcWCYVw4Z5xJjT66h2gZ/FfYMfUvxnK5AmsrycX2lxiqseev
-         bpNa9p90zIJELeMTnFXmuesGejGYN1NbTJwFHBu67KFEmhslpNL3cHOKHROWXTcBwtXc
-         Tzspcfm2wlS0jxJbBDJQd3PIfpHoub8Z1BUvcTxlDqoAWsdfcB/uVNlEmjg6BlzLf2Vt
-         +x1oNBFwMJGMgOhRxiZIvbQ2mdhjRYchJiCGNo5TDnVVz0ZrK845vgO4N0j8+qOHHc4d
-         m1xUHvTUF3hNXcRlFwJx7lz+1GDqmgJZ0+MYJJsUgs42mc/lqtftcVJjmB5ojuffOMSt
-         HZRQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=dENzbJt1guxesUSDXfqIuUH8HSBp0gL0djmYPEroaFo=;
+        b=T4rpXUuAvUynX4msd8KQnGEVJFSRIl5nzM/D3tRhWXKZc4ZJ5DUwfEC9QgGv/5xjXW
+         E6OAd6kkjYfFhdUM30igCr8XSn8lYDFiONlfDj4/9doWZZTUYYHQEFax0ApOkxFlS65z
+         wqNL2mruoIffrmifwfHPILKEt769Nsp3IR0YSnkklSM9ptR2euVO7k2KtnqRz4cax2I1
+         LTIuhLlQcq3TJ4TeDbr9kEK73CSVnQNNBWpbttRTpZP7j0kMtWJ0iii+mbTiJwSsGp4Z
+         L5iscMqS/X8AZMaWDLqzWPsVAPMNdg4ZXBTwTOe49qOCsiwF9J28bxOMs76GMwM7wn2q
+         IVIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S8uc04n3AkszIqf2Ejx2rLvr6yxl23UrWq7daIt/QG0=;
-        b=WqwXejzfEUA8zeKk4f6zrHrnaaWiD81Ki6U2bKq1LI8tz+hqsnXEwEhwGDprvZUtwv
-         m16llDCB6INkWbGnNtXA8aXRc0fPHxJLJCihqAdOPctqHYeN/xVFQIszGM8FpATFBJ2J
-         co/h4vQfpZb0mrB0MkacKyzCXGS3MTP7Cyr6T3FXNf6xdYXrqNdO06U9Mk+X/rTIP3dn
-         Fm7N3+qpQydjyOuUmdxl6+jJ6tLyZustDbLj/fe4/pjVoHI8hTaXNBr5t057TgKqjx7/
-         WmVAyipkNIv9DE8+4zFbF8qefHv1uPnW61qEHPAphakCrk/LMMZVqmlextMLsSUeAfJC
-         ygPg==
-X-Gm-Message-State: AJIora+OpZB8I/9dWg28x56w4cTRZ1oeuGj4Lzr3G/6GhP+nGdt4T4Ci
-        PvjhsnO6/cIQkFmLE/VEbKVKWkjbV9YPfQ==
-X-Google-Smtp-Source: AGRyM1vuF/2kcOGe+C40rE5t61NjqOydB7Esj/YwQM6KqS2Tnw2KgnTAQOp1x5q1Afub5kf6QkJrXw==
-X-Received: by 2002:ac2:5e84:0:b0:48a:83e0:a501 with SMTP id b4-20020ac25e84000000b0048a83e0a501mr5824524lfq.141.1658876986595;
-        Tue, 26 Jul 2022 16:09:46 -0700 (PDT)
-Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id m20-20020a056512359400b0048a9a4d5c5csm917451lfr.244.2022.07.26.16.09.45
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=dENzbJt1guxesUSDXfqIuUH8HSBp0gL0djmYPEroaFo=;
+        b=xU7G3xSaq8FDKSZSWk2vjUFoL77v3+juLR7EjCoiTdEmxg4JrNI67IVYadtJJ6egBy
+         B2WjB9hFHIPPeJyDXhJ0MMy7jmMOHROpMDDlOGO0pZlzp+RNGN21275VSvAL2tw1q318
+         sKcqTOXG3GoSrxn4xFxMGFx3BKacjOtb3TMnS7SKBLUCXiGq3te5eHIqh2senrW/t7P9
+         ahPrnxkAcLEmjOfaCit/hSBmQA+kA7/qab9+5q9Z16Pen7rS63z8SRPx1O6AdGpm8aMH
+         Q1HrYwrylQSq087zCiTQ2K7i6//gn9TgCcoCamS5Ni+uCZ5eugzlB70aDR1hhVABGZBo
+         4xHg==
+X-Gm-Message-State: AJIora9maKfe8kxVPAn5+7E5mAK9ZGAFEH6pypsMPXM/Xc20IX4ZrGLD
+        yFZwbnuMdnv9QSm+Y0taGdvz+jpZPT4=
+X-Google-Smtp-Source: AGRyM1uVZumR1MdGjIlvcfVvt0XJI3nay5hQLZbnkAoS/55BukXwIgU1kM47aEE55aG+pBhs7v1uyA==
+X-Received: by 2002:a17:902:ea06:b0:16d:5c8c:4167 with SMTP id s6-20020a170902ea0600b0016d5c8c4167mr16273957plg.57.1658877251626;
+        Tue, 26 Jul 2022 16:14:11 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:370d])
+        by smtp.gmail.com with ESMTPSA id j1-20020a654d41000000b003fadd680908sm10769945pgt.83.2022.07.26.16.14.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 16:09:46 -0700 (PDT)
-From:   Marcin Wojtas <mw@semihalf.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        mw@semihalf.com, jaz@semihalf.com, tn@semihalf.com,
-        upstream@semihalf.com
-Subject: [net-next: PATCH v2] net: dsa: mv88e6xxx: fix speed setting for CPU/DSA ports
-Date:   Wed, 27 Jul 2022 01:09:18 +0200
-Message-Id: <20220726230918.2772378-1-mw@semihalf.com>
-X-Mailer: git-send-email 2.29.0
+        Tue, 26 Jul 2022 16:14:10 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 26 Jul 2022 13:14:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Oleg Nesterov <onestero@redhat.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Dmitry Shmidt <dimitrysh@google.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [PATCH RESEND 3/3 cgroup/for-5.20] cgroup: Make !percpu
+ threadgroup_rwsem operations optional
+Message-ID: <YuB1QW6Kce5nkBu6@slm.duckdns.org>
+References: <YtDvN0wJ6CKaEPN8@slm.duckdns.org>
+ <YtDvU4jRPSsarcNp@slm.duckdns.org>
+ <YtDvl7Qjc5zI3e/b@slm.duckdns.org>
+ <YtwFjPnCtw8ySnuv@slm.duckdns.org>
+ <20220725121208.GB28662@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725121208.GB28662@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX setting")
-stopped relying on SPEED_MAX constant and hardcoded speed settings
-for the switch ports and rely on phylink configuration.
+Hello, Oleg.
 
-It turned out, however, that when the relevant code is called,
-the mac_capabilites of CPU/DSA port remain unset.
-mv88e6xxx_setup_port() is called via mv88e6xxx_setup() in
-dsa_tree_setup_switches(), which precedes setting the caps in
-phylink_get_caps down in the chain of dsa_tree_setup_ports().
+On Mon, Jul 25, 2022 at 02:12:09PM +0200, Oleg Nesterov wrote:
+> I see no problems in this patch. But just for record, we do not need
+> synchronize_rcu() in the "favor && !favoring" case, so we cab probably
+> do something like
+> 
+> 	@@ -146,13 +146,20 @@ void rcu_sync_enter(struct rcu_sync *rsp)
+> 			 * See the comment above, this simply does the "synchronous"
+> 			 * call_rcu(rcu_sync_func) which does GP_ENTER -> GP_PASSED.
+> 			 */
+> 	+		if (wait) {
+> 	+			synchronize_rcu();
+> 	+			rcu_sync_func(&rsp->cb_head);
+> 	+		} else {
+> 	+			rcu_sync_call(rsp);
+> 	+		}
+> 	+	} else if (wait) {
+> 	+		wait_event(rsp->gp_wait, READ_ONCE(rsp->gp_state) >= GP_PASSED);
+...
+> later.
+> 
+> __rcu_sync_enter(rsp, false) works just like rcu_sync_enter_start() but it can
+> be safely called at any moment.
 
-As a result the mac_capabilites are 0 and the default speed for CPU/DSA
-port is 10M at the start. To fix that, execute mv88e6xxx_get_caps()
-and obtain the capabilities driectly.
+Yeah, I originally used rcu_sync_enter_start() but quickly found out that it
+can't be reverted reliably. Given how cold the option switching path is, I
+think it's fine to pay an extra synchronize_rcu() there rather than adding
+more complexity to rcu_sync_enter() unless this will be useful somewhere
+else too.
 
-Fixes: 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX setting")
-Signed-off-by: Marcin Wojtas <mw@semihalf.com>
----
-Changelog v1->v2
-* Use an on-stack struct phylink_config pl_config.
-* Use mv88e6xxx_get_caps() directly.
+> And can't resist, off-topic question... Say, cgroup_attach_task_all() does
+> 
+> 	mutex_lock(&cgroup_mutex);
+> 	percpu_down_write(&cgroup_threadgroup_rwsem);
+> 
+> and this means that synchronize_rcu() can be called with cgroup_mutex held.
+> Perhaps it makes sense to change this code to do
+> 
+> 	rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
+> 	mutex_lock(&cgroup_mutex);
+> 	percpu_down_write(&cgroup_threadgroup_rwsem);
+> 	...
+> 	percpu_up_write(&cgroup_threadgroup_rwsem);
+> 	mutex_unlock(&cgroup_mutex);
+> 	rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
+> 
+> ? Just curious.
 
- drivers/net/dsa/mv88e6xxx/chip.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+I'm not quite following. Are you saying that if we switching the rwsem into
+slow mode before grabbing the locks, we can avoid inducing latencies on
+other users? Hmm... assuming that I'm understanding you correctly, one
+problem with that approach is that everyone would be doing synchronize_rcu()
+whether they want to change favoring state. In vast majority of cases, users
+won't care about this flag but most users will end up mounting cgroup and do
+the rcu_sync_enter(), so we'd end up adding a grace period wait in most boot
+scenarios. It's not a lot in itself but seems less desriable than making the
+users who want to change the mode pay at the time of changing.
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 37b649501500..07e9a4da924c 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3293,7 +3293,12 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
- 	 * port and all DSA ports to their maximum bandwidth and full duplex.
- 	 */
- 	if (dsa_is_cpu_port(ds, port) || dsa_is_dsa_port(ds, port)) {
--		unsigned long caps = dp->pl_config.mac_capabilities;
-+		struct phylink_config pl_config = {};
-+		unsigned long caps;
-+
-+		mv88e6xxx_get_caps(ds, port, &pl_config);
-+
-+		caps = pl_config.mac_capabilities;
- 
- 		if (chip->info->ops->port_max_speed_mode)
- 			mode = chip->info->ops->port_max_speed_mode(port);
+> > -	/*
+> > -	 * The latency of the synchronize_rcu() is too high for cgroups,
+> > -	 * avoid it at the cost of forcing all readers into the slow path.
+> > -	 */
+> > -	rcu_sync_enter_start(&cgroup_threadgroup_rwsem.rss);
+> 
+> Note that it doesn't have other users, probably you can kill it.
+
+Ah, nice, will do that.
+
+Thanks.
+
 -- 
-2.29.0
-
+tejun

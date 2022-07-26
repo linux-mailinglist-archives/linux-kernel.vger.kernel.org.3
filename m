@@ -2,119 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286A3581B98
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 23:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2B8581BAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 23:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239239AbiGZVL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 17:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S239232AbiGZV3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 17:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiGZVL2 (ORCPT
+        with ESMTP id S229480AbiGZV3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 17:11:28 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345672A723;
-        Tue, 26 Jul 2022 14:11:27 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id j195so7940049ybj.11;
-        Tue, 26 Jul 2022 14:11:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3t16s+OcKDcEZXENZbwqgCIwk/X+UcCVddI7l2RgCtI=;
-        b=NLlIwrwDW5ocpVXLAcOp1+TDqUcPCxfwIlZYoT416DevuJKD+dUfl9bBi679g2rqK2
-         CIUnAduiKXZV+uuX9vvtefQgXdxUXYyXsEuPfPNgM1dBPFpPcOIBJkPmyIsfPKqSlPvZ
-         cs/NXt5vjastEJs668It7JG7h3U2M1XnFaZoUdfMr98yqbX8+51XzA9qScCCtr/0CPcf
-         UKlseVrk75xrMR4lK0kFjvrou6WhmwoB1FSX4TmmBRPU0s2fcpACCZRIARCrZi4V0YhC
-         R+/cA4lOo/YX9n2B3Mt9qqQ08B8mD20uA8ooW7zBv+hqRY2P5MRhNrqbHt2mKx2geVrI
-         ym4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3t16s+OcKDcEZXENZbwqgCIwk/X+UcCVddI7l2RgCtI=;
-        b=QqkqoyZJNoso85P4Gg1rhUTPeliPe2/gNCD/mjXNtL7XeM0pcfD8h/c1bW5TDz5RAC
-         Zv7gCmFOPdYTae2z2KvZLS8fs3rofN88GR6XPHiYOfR/P8vdMqzSjFa9eMBFSsqWE8yk
-         rH3ZrDH5vJt0jhLkfuBiHfJ5QNr5iqaEbeTP/b02ikmzl6tvsjZmfuzErh4NZIVr1TAO
-         h3s6uCwZh4dI3UTBR41y4GzQAlRSdG2K4IBKIN5ObrPevTfDvKBWcXuF/yquh7oaFrOF
-         m45dmjFpuryoHICJkiDSCvez/mTh8zQYgYtPePfyfOvdQiolHmI8Cf2Y88zp3eGDA3JM
-         Dagg==
-X-Gm-Message-State: AJIora8QBJuvouUmuGjvXCTKoBIoyLIx+g3j178GP8FyCuOCiUPg10OB
-        gZHx+/rB9rgxiDtnacK3g+wfaFzo2BbPpa7J7T0=
-X-Google-Smtp-Source: AGRyM1vRom4tJven8LPA373fu9mUzwWFI/x5WXxjSDmq4hHFo5RlkMbpmY16sruCIKeXcaYVkHJkHeLZd0gOeU0DUKc=
-X-Received: by 2002:a25:e682:0:b0:671:79d9:66c7 with SMTP id
- d124-20020a25e682000000b0067179d966c7mr2977858ybh.5.1658869886200; Tue, 26
- Jul 2022 14:11:26 -0700 (PDT)
+        Tue, 26 Jul 2022 17:29:22 -0400
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 26 Jul 2022 14:29:19 PDT
+Received: from pokefinder.org (pokefinder.org [135.181.139.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABC4C32BA4;
+        Tue, 26 Jul 2022 14:29:19 -0700 (PDT)
+Received: from localhost (dynamic-089-204-139-108.89.204.139.pool.telefonica.de [89.204.139.108])
+        by pokefinder.org (Postfix) with ESMTPSA id C85A9A40D9D;
+        Tue, 26 Jul 2022 23:13:09 +0200 (CEST)
+Date:   Tue, 26 Jul 2022 23:13:08 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Xu Wang <vulab@iscas.ac.cn>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] i2c: Fix a potential use after free
+Message-ID: <YuBY5K9n/mRfeuzz@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Xu Wang <vulab@iscas.ac.cn>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
 MIME-Version: 1.0
-References: <20220726115748.101015-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220726115748.101015-1-krzysztof.kozlowski@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 26 Jul 2022 23:11:15 +0200
-Message-ID: <CAFBinCCOcuHeuXvEe9obBu2qby0bwQLPmaSbginmFh3_gSz4GA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: power: drop quotes when not needed
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sebastian Reichel <sre@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        David Lechner <david@lechnology.com>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        =?UTF-8?Q?Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Michael Klein <michael@fossekall.de>,
-        Dan Murphy <dmurphy@ti.com>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        "Andrew F. Davis" <afd@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        David Heidelberg <david@ixit.cz>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iiUYzZUHPi8reSBH"
+Content-Disposition: inline
+In-Reply-To: <1577439272-10362-1-git-send-email-vulab@iscas.ac.cn>
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_20,RCVD_IN_SORBS_WEB,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 1:57 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Id and schema fields do not need quotes.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml      | 4 ++--
->  .../devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml     | 4 ++--
-For the Amlogic ones:
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+
+--iiUYzZUHPi8reSBH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Dec 27, 2019 at 09:34:32AM +0000, Xu Wang wrote:
+> Free the adap structure only after we are done using it.
+> This patch just moves the put_device() down a bit to avoid the
+> use after free.
+>=20
+> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+
+Applied to for-next, thanks!
 
 
-Thank you!
-Martin
+--iiUYzZUHPi8reSBH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLgWOQACgkQFA3kzBSg
+KbZbtg//ePaYx2QwCxG4EjHTERcnAmpuPHra/o50Mww+g5pS52KhFLDTv+VyMAOy
+Yi+2RA0/mgQ6ZCWtVAOwHdbGJU5JU/fbsPwUfxPl9ZL5gwbWILURRhKFfW6FEWXM
+MEyICRudH74takwQ8wz9ZUdFQ//7OPe8cVMP0CFXVk8ijmM3VN4TGtv7UrOIF4P4
+pDvSIZYR++d66NY9VznFzwnqOrLoQBjbUPc/N85sXhhH53rTuw6fK9Mp0wz/BAX3
+3SB4JOtyw+Sdz1GJCyilVNLcMHwGjvAuHovVEyOtCJUSYMOyBVKcgzzigwTQfWZp
+6YybbZH3KY2xizu1dutj/0VrojsEtGRvLWU5ppjqLZSiWZG44SvNMLdLya7xoB7i
+JLMMPTe8EkIwMOcgyJeKSSSFSkevspXImAbF0sRng7syJO8Z4pSIeJs4CrrO+Wd1
+ur2dgXnWlqeaQs0f56fKhxWC+x6+Q5fCJOVvoQTfOEKmboFt1L1SJF4K7TK7Z8eK
+K+B2gr0uRwcDxfjxIe8VtkdMuqsW7irrPEBHHVVIrDNLZMkcEIXLFLRvAb81lvuY
+qXfoGYrim/QT0tP83iyRqo5+WZPmlVEJ94zWkw8T3TsXabmO0z/5rNEE+Kk/UKwa
+W0K8/eAq03+h6gN63EuElwXY0xjaP+3StgToBCNQgCQO9UgnWRo=
+=rsWM
+-----END PGP SIGNATURE-----
+
+--iiUYzZUHPi8reSBH--

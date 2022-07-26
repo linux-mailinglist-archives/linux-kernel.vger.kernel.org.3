@@ -2,220 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F77581A6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 21:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234C5581A6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 21:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239594AbiGZTnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 15:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S239681AbiGZTnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 15:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiGZTnH (ORCPT
+        with ESMTP id S239283AbiGZTnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 15:43:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F41F2A733
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 12:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658864586; x=1690400586;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TsqcCU3tbkHJ5N96sKgNIfYArCjbbIhyuZdxHy/oKx0=;
-  b=A5xeJy0lejaNs1XUE4zyS3bX+Z/rgZqzBr6I+BakFVuqZ/lEvUYjq/oB
-   8lMW760TaACg0+SH/f7fwMqOq7TZEO371RjhRwXKJo2cEqYJ5lfK9RVYQ
-   UOFbsDNQmH/4dDA9+MC+f1gnaH6vrx1C0Oi/ycfZKOOIwjJlipa/GZDG1
-   oEsjeNw2rgHzH5wEyR0MTL4vnPHeinY/lY8g+b6PTfXItYRQDXvAdAUvq
-   HSWTnI4ZeR7lv8voJ8f4W8iuz/TOmIZlDgv2biSuuTtc1fItNQiAe2qhV
-   MGc0mxexbjPXrZQrV+6o72RnrpY5pkCsYKEmOgJjGXW2Br8q5mfzDxOq8
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="289233053"
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="289233053"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 12:43:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="726650429"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 Jul 2022 12:43:04 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGQSO-0007da-0f;
-        Tue, 26 Jul 2022 19:43:04 +0000
-Date:   Wed, 27 Jul 2022 03:42:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/sgx] BUILD SUCCESS
- 038ef9928e1acb37bbe808c23a421189f1fd96cb
-Message-ID: <62e043b4.A/3QhXOI6A7jOtqE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 26 Jul 2022 15:43:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088F530545;
+        Tue, 26 Jul 2022 12:43:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AAD28CE1B09;
+        Tue, 26 Jul 2022 19:43:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AED5CC433D6;
+        Tue, 26 Jul 2022 19:43:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658864582;
+        bh=XI0jgUmI2iNd1Q+wYXwScLx8biTvp7S+wXgGGnG4Sm8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MTLGKs2s7xrqMgMvJszNIfuYaxjg2/bdh1sS0STkNxPfac5GfJ0bbRYTKQZU2vyMF
+         Z9PlFkixMxKGACA4n01vocJRchjJocDTUUxeqO7TjtLS3DcK9sPomRY6x33KEYaEfW
+         afpKRgdIVixJ4O2034vGCU2hvyjdDFDzkljNoC+Nh9Kdn4yZR2SL8SSpTfQ2P/vGoE
+         mX/r9JcEPh/ISezyjPhwUMjqG382LW9dPeImWoq9gfiF+ACS/RFCiPe919Hu/WOD2y
+         jLPrwiufiaBtF9V8BAXLmrLUslH0L9UMyyI0hmdX+PnwHtKargImVxxGghVXScHVLO
+         ZENWV9jYwbq9A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0CA4240374; Tue, 26 Jul 2022 16:43:00 -0300 (-03)
+Date:   Tue, 26 Jul 2022 16:42:59 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Alan Bartlett <ajb@elrepo.org>, Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, ElRepo <contact@elrepo.org>,
+        Akemi Yagi <toracat@elrepo.org>, Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf scripts python: Let script to be python2 compliant
+Message-ID: <YuBDw/+7McESS05X@kernel.org>
+References: <20220725104220.1106663-1-leo.yan@linaro.org>
+ <Yt68AZA2VV9d02xZ@kernel.org>
+ <CA+_WhHyZZC=3gtzetEAQQrjtGujHmY5azwtQNZEc90gyOAwUDg@mail.gmail.com>
+ <CAP-5=fWiNdnEawdj_3ExCrcwRSnRxeV8=8RhA6pwbw_bJdPJFg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fWiNdnEawdj_3ExCrcwRSnRxeV8=8RhA6pwbw_bJdPJFg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sgx
-branch HEAD: 038ef9928e1acb37bbe808c23a421189f1fd96cb  Merge tag 'v5.19-rc8' into x86/sgx, to resolve conflicts
+Em Tue, Jul 26, 2022 at 10:52:31AM -0700, Ian Rogers escreveu:
+> On Tue, Jul 26, 2022 at 9:57 AM Alan Bartlett <ajb@elrepo.org> wrote:
+> >
+> > On Mon, 25 Jul 2022 at 16:51, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > >
+> > > Em Mon, Jul 25, 2022 at 06:42:20PM +0800, Leo Yan escreveu:
+> > > > The mainline kernel can be used for relative old distros, e.g. RHEL 7.
+> > > > The distro doesn't upgrade from python2 to python3, this causes the
+> > > > building error that the python script is not python2 compliant.
+> > > >
+> > > > To fix the building failure, this patch changes from the python f-string
+> > > > format to traditional string format.
+> > >
+> > > Thanks, applied.
+> > >
+> > > - Arnaldo
+> >
+> > Leo / Arnaldo,
+> >
+> > Applying the patch on top of -5.19-rc8 fixes the problem that we (the
+> > ELRepo Project) experienced when attempting to build on RHEL7.
+> >
+> > So --
+> >
+> > Tested-by: Alan Bartlett <ajb@elrepo.org>
+> >
+> > Hopefully you will get it to Linus in time for -5.19 GA.
+ 
+> So I'm somewhat concerned about perf supporting unsupported
+> distributions and this holding the code base back. RHEL7 was launched
+> 8 years ago (June 10, 2014) and full support ended 3 years ago (August
+> 6, 2019) [1]. Currently RHEL7 is in "Maintenance Support or
+> Maintenance Support 2" phase which is defined to mean [2]:
+> 
+> ```
+> During the Maintenance Support Phase for Red Hat Enterprise Linux
+> Version 8 & 9, and Maintenance Support 2 Phase for Red Hat Enterprise
+> Linux version 7, Red Hat defined Critical and Important impact
+> Security Advisories (RHSAs) and selected (at Red Hat discretion)
+> Urgent Priority Bug Fix Advisories (RHBAs) may be released as they
+> become available. Other errata advisories may be delivered as
+> appropriate.
+> 
+> New functionality and new hardware enablement are not planned for
+> availability in the Maintenance Support (RHEL 8 & 9) Phase and
+> Maintenance Support 2 (RHEL 7) Phase.
+> ```
+> 
+> >From this definition, why would RHEL7 pick up a new perf tool? I don't
+> think they would and as such we don't need to worry about supporting
+> it. RHEL8 defaults to python 3 and full support ends for it next year.
+> Let's set the bar at RHEL8 and not worry about RHEL7 breakages like
+> this in future. I think the bar for caring should be "will the distro
+> pick up our code", if we don't do this then we're signing up to not
+> allowing tools to update for 10 years! If someone is building a kernel
+> and perf tool on RHEL7 then they should be signing up to also deal
+> with tool chain issues, which in this case can mean installing
+> python3.
 
-elapsed time: 724m
+In this specific supporting things that people report using, like was
+done in this case, isn't such a big problem.
 
-configs tested: 138
-configs skipped: 3
+Someone reported a problem in a system they used, the author of the code
+in question posted a patch allowing perf to be used in such old systems,
+doesn't get in the way of newer systems, small patch, merged, life goes
+on.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Sometimes some organizations are stuck with some distro till they can go
+thru re-certifications, bidding for new hardware, whatever, and then
+they want to continue using the latest perf on those systems because
+they want to benefit from new features we're working on that work on
+such systems. If the cost is small, like in this case, I see no problems
+to have perf working on such older systems.
 
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc              randconfig-c003-20220724
-i386                          randconfig-c001
-sh                   sh7724_generic_defconfig
-arm                         s3c6400_defconfig
-m68k                       m5249evb_defconfig
-arm                       multi_v4t_defconfig
-m68k                          multi_defconfig
-xtensa                          iss_defconfig
-arc                      axs103_smp_defconfig
-m68k                            mac_defconfig
-sh                            shmin_defconfig
-powerpc                       eiger_defconfig
-parisc                generic-32bit_defconfig
-mips                         rt305x_defconfig
-powerpc                      makalu_defconfig
-loongarch                 loongson3_defconfig
-alpha                               defconfig
-loongarch                           defconfig
-m68k                        m5272c3_defconfig
-ia64                      gensparse_defconfig
-alpha                            alldefconfig
-arc                     nsimosci_hs_defconfig
-xtensa                         virt_defconfig
-arm                           h5000_defconfig
-arm                           sama5_defconfig
-arm                         vf610m4_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                             ezx_defconfig
-mips                             allmodconfig
-powerpc                     ep8248e_defconfig
-sh                        sh7763rdp_defconfig
-mips                     loongson1b_defconfig
-powerpc                         ps3_defconfig
-arm                        keystone_defconfig
-sh                          rsk7264_defconfig
-powerpc                     rainier_defconfig
-m68k                           virt_defconfig
-sh                             espt_defconfig
-m68k                                defconfig
-mips                           gcw0_defconfig
-mips                         tb0226_defconfig
-sh                     sh7710voipgw_defconfig
-m68k                       m5275evb_defconfig
-arm                        shmobile_defconfig
-mips                         mpc30x_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                    adder875_defconfig
-arm                           sunxi_defconfig
-arm                       aspeed_g5_defconfig
-sh                          sdk7780_defconfig
-arm                         nhk8815_defconfig
-nios2                            allyesconfig
-arc                          axs103_defconfig
-nios2                               defconfig
-m68k                          atari_defconfig
-mips                 decstation_r4k_defconfig
-powerpc                      tqm8xx_defconfig
-powerpc                     tqm8555_defconfig
-mips                      fuloong2e_defconfig
-arm                        oxnas_v6_defconfig
-sparc                               defconfig
-m68k                         amcore_defconfig
-nios2                         10m50_defconfig
-loongarch                         allnoconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-ia64                             allmodconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-s390                 randconfig-r044-20220724
-riscv                randconfig-r042-20220724
-arc                  randconfig-r043-20220724
-s390                 randconfig-r044-20220726
-riscv                randconfig-r042-20220726
-arc                  randconfig-r043-20220726
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-powerpc                      walnut_defconfig
-powerpc                 mpc832x_rdb_defconfig
-arm                          moxart_defconfig
-arm                         shannon_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                      tct_hammer_defconfig
-x86_64                           allyesconfig
-arm                  colibri_pxa300_defconfig
-powerpc                     powernv_defconfig
-powerpc                  mpc885_ads_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r041-20220724
-hexagon              randconfig-r045-20220724
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+- Arnaldo

@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A7C581417
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 15:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489BD58141B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 15:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbiGZNY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 09:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S238701AbiGZNZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 09:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiGZNY4 (ORCPT
+        with ESMTP id S231154AbiGZNZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 09:24:56 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFE92BB31;
-        Tue, 26 Jul 2022 06:24:54 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id w185so13232729pfb.4;
-        Tue, 26 Jul 2022 06:24:54 -0700 (PDT)
+        Tue, 26 Jul 2022 09:25:43 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88537FC4;
+        Tue, 26 Jul 2022 06:25:42 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id p132so17030782oif.9;
+        Tue, 26 Jul 2022 06:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=IrFDtxgAaduvoUdhvGWeyiNBzh8yHroFXXWTqHTAHIQ=;
-        b=fNIxcMiJKW+W5fH5ldVegy7d3gemWlU0e5euW0jxwhZpRDhDbrwMtnYsARATMRh4ZP
-         0I3DwElZaa6Mcw0pbdHsPOazD9Z3esbP2r4ZHp1F263D/aMH9NGnvzSd2XSMol9C6tlB
-         4/C56q/9iw89ZFY0oNmH6pEO8JkqnbR0SvieKDX0+jETd7AjLxIEJYFo9qW/LyEiOipS
-         r4U8kF6rPzw3YATEGcP9Xlcv08NSljuCw8rD098t8TS+yEGn/xSbLAQ3PWnKnz6YYYgv
-         Atnx+hZuyWFsa8IM+ezq+zOx5pJhKicyk+jcworCXMvMVMijSsUnFeZrcQbxL5U8ug02
-         UDxg==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9W7JF3IrfXSv6HnR9aCy5G+yL4VgTUQ6ChNgjcsQI/8=;
+        b=bZp2M2MhWF4fUgtzDycyJtCGnccS7zhqB/ugkSS8ntWH3CMg9E/LzEu1Jo3kb/MpTZ
+         IgDi2K4VcGD8U/63u5WGcIBBsF3wkEMdw8H8Xc5w+ruI8Ap1Ljm2rorfsO+qlYdu+NFv
+         sE9j1+1PohyJPN69w1+vqO3WsLLg3y6emIxGfwxZ3A5MeaF6bSSY8Z9hx3cAf4HiY2dP
+         UXrcU/gCrrZhfFebtvdSkyROHwkGxKbZmImpBwvFyYmCB+2WtdIrxQSuWT+sEiawQopl
+         zysqx2i6oNELoSZRheokx3eCJdeYAz1M0qouwmbpe+eRtVwu5LkV0Mq5wPW9buXkZG2C
+         THBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=IrFDtxgAaduvoUdhvGWeyiNBzh8yHroFXXWTqHTAHIQ=;
-        b=L5wdKzXY6/kI0Tdq+pYXvkMk+00nsyANEYLRAhJLXcq58eNl2JzZk+SAmifmj3wPyY
-         Li4fDuZO87+AAt25WzxplD/8hRwh3EekiBpNg/RJyQRz0OW7WPRdnkQqHaMf3YkkkxsW
-         fHuDPYYIcqaXH7QlrAm2s+zblRHClEHimsnOSSUkG1sQk92NT/0cHmZcgWNrRXo3xDIW
-         ykEw50aDtD5mVUDTd1HikGZlT/g5gqk6hVFLkkK2E+6hXYmwez0oQXIHNwdxoH8BLdgl
-         wOlauoOUYBbvy/ahZc2yy61DIsu+M9UXz1zg9lkREVZk9+6/X5wVCq0fyDs0DEyy7epo
-         HFcA==
-X-Gm-Message-State: AJIora/RIJzYfVubNmNLLotJr4M7/Au7UdhDmJ1j853susY2gZ2C+GCC
-        pJh0S+rlkz2F3QWVUl5XC9w=
-X-Google-Smtp-Source: AGRyM1vzji5IeXYT5V0ZThuSRg6t9bm/F+/+vinugM6yULQlMMLdDqGmt27BgQSivVn1fD3tAi//Rw==
-X-Received: by 2002:a63:43c2:0:b0:41a:9dea:5dac with SMTP id q185-20020a6343c2000000b0041a9dea5dacmr14559542pga.585.1658841894228;
-        Tue, 26 Jul 2022 06:24:54 -0700 (PDT)
-Received: from logan-ThinkPad-T14-Gen-1 ([117.213.133.171])
-        by smtp.gmail.com with ESMTPSA id 23-20020a17090a0b9700b001ece32cbec9sm13256339pjr.24.2022.07.26.06.24.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 26 Jul 2022 06:24:53 -0700 (PDT)
-From:   Logananth Sundararaj <logananth13.hcl@gmail.com>
-X-Google-Original-From: Logananth Sundararaj <logananth_s@hcl.com>
-Date:   Tue, 26 Jul 2022 18:54:45 +0530
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org
-Cc:     garnermic@gmail.com, thangavel.k@hcl.com, naveen.mosess@hcl.com,
-        patrick@stwcx.xyz, velumanit@hcl.com
-Subject: [PATCH v5] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
-Message-ID: <20220726132445.GA22389@logan-ThinkPad-T14-Gen-1>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9W7JF3IrfXSv6HnR9aCy5G+yL4VgTUQ6ChNgjcsQI/8=;
+        b=njFL3X9f3qfzrxIsd6/1OI8g/jZmyEIqND7xX3fG4K/5or9Nd0ufuS0FzZ+6vuJ8Jb
+         S6b1zs0UqlgL6ME3isaIcWvPuSQ6lidJSVRdR9at/xk/7c2iVvvsc+E/aUgrbtbf70vD
+         O3L3wYIglw6Bh0pI0M3fo3ayhG8hyN4xSQTbReYgYz5OuVZPJtxp+bUaWRqhgcC4Sf7n
+         0eiH2DgGU+6knCpth/wgKPTyiBfNGWndzm8JERyo4tXnJEEgPwafeZr+Tp8nDlbS7sMR
+         2qUxZjKmV8x8wftNgNKh00NkSeKLfXMcPtXcKf0XIRNXpcjeMvIE/3EhxjcvqoOjz1VH
+         UoDg==
+X-Gm-Message-State: AJIora8pybm+Lz0ZlEGTFHyvpdjUolf8uDTJznwkajAilzh2nE5LSVkV
+        XDi9wB+jk9hulfRTiu1iFBE=
+X-Google-Smtp-Source: AGRyM1vue6vjDJ0Mb8htpAGM3ajVE5K9yi5DBca3z27whgvhv09UeHHoAibRm/+ZRNKhMLXD0eo8uQ==
+X-Received: by 2002:a05:6808:124a:b0:32c:45f0:5011 with SMTP id o10-20020a056808124a00b0032c45f05011mr7883176oiv.217.1658841940214;
+        Tue, 26 Jul 2022 06:25:40 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n8-20020a056870240800b0010d7242b623sm7343024oap.21.2022.07.26.06.25.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 06:25:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <fc64285e-30c7-44b1-e264-839944105185@roeck-us.net>
+Date:   Tue, 26 Jul 2022 06:25:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] watchdog: mtk_wdt: Move mt6589-wdt fallback compatible to
+ end of list
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220726062057.320342-1-wenst@chromium.org>
+ <91613700-3335-7499-1b48-3d88edd9da36@collabora.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <91613700-3335-7499-1b48-3d88edd9da36@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,305 +85,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Yosemite V3.5 is a facebook multi-node server
-platform that host four OCP server. The BMC
-in the Yosemite V3.5 platform based on AST2600 SoC.
+On 7/26/22 01:37, AngeloGioacchino Del Regno wrote:
+> Il 26/07/22 08:20, Chen-Yu Tsai ha scritto:
+>> The watchdog facility in the MediaTek SoCs are all the same, but the
+>> hardware block also contains a reset controller, which differs in the
+>> number of resets used between different SoCs. This difference is
+>> supported with of_device_get_match_data() supplying the number of reset
+>> lines for the newer compatible strings. The original mt6589-wdt only
+>> covers the watchdog facility.
+>>
+>> of_device_is_compatible(), and by extension of_device_get_match_data(),
+>> works by going through the given list of compatible strings sequentially,
+>> and checks if any of the device node's compatible strings match.
+>>
+>> To avoid early matching on the "mediatek,mt6589-wdt" fallback compatible,
+>> which only provides watchdog functionality and no reset controller, move
+>> the fallback entry to the end of the list, so that other, more specific
+>> compatible strings have a chance at getting matched.
+>>
+>> Fixes: c254e103082b ("watchdog: mtk_wdt: mt8183: Add reset controller")
+>> Fixes: adc318a34066 ("watchdog: mt8192: add wdt support")
+>> Fixes: 8c6b5ea6ac68 ("watchdog: mediatek: mt8195: add wdt support")
+>> Fixes: 4dbabc4d9e8c ("watchdog: mediatek: mt8186: add wdt support")
+>> Fixes: 711a5b25bac9 ("watchdog: mtk_wdt: mt7986: Add toprgu reset controller support")
+>> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> 
+> Uhm, I don't think that this is an issue?
+> 
+> Ordering precedence is given to the list that you specify in devicetree, that's why
+> "the second one" is a fallback, meaning: ("impossible" example below)
+> 
+> compatible = "mediatek,mt8195-wdt", "mediatek,mt8183-wdt", "mediatek,mt6589-wdt";
+> 
+> This gets walked as per the order in which you wrote the compatibles, so:
+> * Check match for mt8195-wdt, does not exist?
+>   * Check match for mt8183-wdt, exists!
+>   * Put everything into dev->of_node (having mediatek,mt8183-wdt only!)
+> 
+> __of_device_is_compatible() gets dev->of_node and compares that to all of the
+> possible matches.
+> 
+> struct device_node for this device hence does *not* contain any of the other
+> compatibles that we specified in devicetree, so it does *not* contain any of
+> "mediatek,mt8195-wdt", or "mediatek,mt6589-wdt", because we have previously
+> successfully matches 8183.
+> 
+> I don't think that I've misinterpreted this flow, but if I have, let's pull
+> in devicetree people and check with them?
+> 
 
-This patch adds linux device tree entry related to
-Yosemite V3.5 specific devices connected to BMC SoC.
+I don't see the problem either. The fallback needs to be listed last in the
+compatible property. If it isn't, having it last in struct of_device_id
+won't help either.
 
-Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+> Cheers,
+> Angelo
+> 
+>> ---
+>>
+>> This change complements the removal of the fallback compatible from the
+>> bindings and DTSI files [1].
+>>
 
----
---- v4 - Bootagrs and memory removed.
---- v3 - Addressed v2 patch comments.
---- v2 - Enabled i2c drivers.
---- v1 - Initial draft.
----
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 260 ++++++++++++++++++
- 2 files changed, 261 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+If the fallback isn't listed in the dtsi files, it won't match at all,
+no matter where it is located in struct of_device_id.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724..58add093e5fb 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-facebook-cloudripper.dtb \
- 	aspeed-bmc-facebook-cmm.dtb \
- 	aspeed-bmc-facebook-elbert.dtb \
-+	aspeed-bmc-facebook-fby35.dtb \
- 	aspeed-bmc-facebook-fuji.dtb \
- 	aspeed-bmc-facebook-galaxy100.dtb \
- 	aspeed-bmc-facebook-minipack.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-new file mode 100644
-index 000000000000..5eeff52f6c08
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-@@ -0,0 +1,260 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright (c) 2020 Facebook Inc.
-+
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/i2c/i2c.h>
-+
-+/ {
-+	model = "Facebook fby35";
-+	compatible = "facebook,fby35", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-+			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-+			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
-+			<&adc1 4>, <&adc1 5>, <&adc1 6>;
-+	};
-+
-+	spi_gpio: spi-gpio {
-+		status = "okay";
-+		compatible = "spi-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-sck = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
-+		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
-+		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
-+		num-chipselects = <1>;
-+		cs-gpios = <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
-+
-+		tpmdev@0 {
-+			compatible = "tcg,tpm_tis-spi";
-+			spi-max-frequency = <33000000>;
-+			reg = <0>;
-+		};
-+	};
-+};
-+
-+&mac3 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii4_default>;
-+	no-hw-checksum;
-+	use-ncsi;
-+	mlx,multi-host;
-+	ncsi-ctrl,start-redo-probe;
-+	ncsi-ctrl,no-channel-monitor;
-+	ncsi-package = <1>;
-+	ncsi-channel = <1>;
-+	ncsi-rexmit = <1>;
-+	ncsi-timeout = <2>;
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+	compatible = "snps,dw-apb-uart";
-+};
-+
-+&wdt1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-+	aspeed,reset-type = "soc";
-+	aspeed,external-signal;
-+	aspeed,ext-push-pull;
-+	aspeed,ext-active-high;
-+	aspeed,ext-pulse-duration = <256>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.0";
-+		spi-max-frequency = <50000000>;
-+		#include "openbmc-flash-layout-128.dtsi"
-+	};
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.1";
-+		spi-max-frequency = <50000000>;
-+	};
-+};
-+
-+&i2c0 {
-+	// Host1 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb0@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c1 {
-+	// Host2 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb1@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c2 {
-+	// Host3 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb2@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c3 {
-+	// Host1 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb3@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	// NIC SENSOR TEMP
-+	status = "okay";
-+	tmp421@1f {
-+		compatible = "ti,tmp421";
-+		reg = <0x1f>;
-+	};
-+};
-+
-+&i2c9 {
-+	// Debug-Card IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb9@30 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	// FRU EEPROM
-+	status = "okay";
-+	eeprom@51 {
-+		compatible = "atmel,24c64";
-+		reg = <0x51>;
-+		pagesize = <32>;
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	// INLET TEMP
-+	tmp75@4e {
-+		compatible = "ti,tmp75";
-+		reg = <0x4e>;
-+	};
-+	// OUTLET TEMP
-+	tmp75@4f {
-+		compatible = "ti,tmp75";
-+		reg = <0x4f>;
-+	};
-+};
-+
-+&i2c13 {
-+	status = "okay";
-+};
-+
-+&adc0 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-+		&pinctrl_adc2_default &pinctrl_adc3_default
-+		&pinctrl_adc4_default &pinctrl_adc5_default
-+		&pinctrl_adc6_default &pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+		&pinctrl_adc10_default &pinctrl_adc11_default
-+		&pinctrl_adc12_default &pinctrl_adc13_default>;
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&uhci {
-+	status = "okay";
-+};
--- 
-2.17.1
+Guenter
+
+>> [1] https://lore.kernel.org/linux-mediatek/20220721014845.19044-1-allen-kh.cheng@mediatek.com/
+>>
+>>   drivers/watchdog/mtk_wdt.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+>> index e97787536792..3d5a239b93ba 100644
+>> --- a/drivers/watchdog/mtk_wdt.c
+>> +++ b/drivers/watchdog/mtk_wdt.c
+>> @@ -425,12 +425,13 @@ static int mtk_wdt_resume(struct device *dev)
+>>   static const struct of_device_id mtk_wdt_dt_ids[] = {
+>>       { .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+>> -    { .compatible = "mediatek,mt6589-wdt" },
+>>       { .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+>>       { .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+>>       { .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
+>>       { .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+>>       { .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+>> +    /* Fallback compatible string must be last entry */
+>> +    { .compatible = "mediatek,mt6589-wdt" },
+>>       { /* sentinel */ }
+>>   };
+>>   MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
+> 
+> 
 

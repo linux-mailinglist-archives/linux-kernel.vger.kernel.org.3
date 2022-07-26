@@ -2,84 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AB0580BE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC17B580BEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238013AbiGZGrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 02:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
+        id S238057AbiGZGs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 02:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237983AbiGZGrv (ORCPT
+        with ESMTP id S237690AbiGZGsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 02:47:51 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0FB21253
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:47:50 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id b16so8768279lfb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:47:50 -0700 (PDT)
+        Tue, 26 Jul 2022 02:48:55 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07C6220FD;
+        Mon, 25 Jul 2022 23:48:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s9ZmYUyCnBVCgn8I0a4gHlUL2QkHakLsoQIE+4rbZIU=;
-        b=VGpYbF8dlaX9HMAQSkAseu3FRNIClR63M+fO6slYmLoTG1/XrAc4OVO6vPaPwU8Cz4
-         jMKYSrZ4mMcPXmgsKZ0aLZCBkVbQLSKSyJz0JqHB/hMhX+MJhvT9r1kAuFDEMEQlt03B
-         wqeqOPwzFIfHTqFV7On6t/vhxbGdpA2255fCzKYTekoXIVPpX6NXG8K8Lgf2M3Jo0Hvy
-         3Ymk2Qaj2mEG6CwkKIqVj7+zG5DnhA1ilLjRQIZrY5bXyQaMRgKLk1AYqEiPbnrdrYSe
-         9hQGy+JRVPHXQg50KbpBmZlk+s2axwmcqBazGYw0wq6TT7IE1EzasLE8EiFXRieT2Iol
-         pPPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s9ZmYUyCnBVCgn8I0a4gHlUL2QkHakLsoQIE+4rbZIU=;
-        b=bcpAM+725Us7A+L3dl/VB/yIfAnwuidWZBnR7iNDh3lbssg9AofcZc9utiHrG7ptbR
-         jxfhfJp7ZffEyYyVCK4vI6uYwo+NJJzWm/s5IcWJi/BcPq97SltHsxuGOjv+ZJV6mzv9
-         nGdm6I5aGrP3F1/C+uLyXJu8XRL2pqliYbrz09RMgBtJJ8dVfS6AUaBqerFWufxMF2yr
-         g6R8Kxiu+SFNgiMGwKUmmDC+DKhjKerKQGPEWl2Xy1O4fkfN6yn0ic5ubY+0haPvcPBW
-         aR+34nSzqgRvO27T2IBqn2aBQa1Za39zBD8xetQW3LDP07Y1envBa1Tv2NPBAiI+d2IZ
-         weNg==
-X-Gm-Message-State: AJIora/15K/Dc9fXInMgiKVvMKp6KqsJrFND/zImiTc/VUNEhwFLwxck
-        awVwpmSl8lkka1zMRXJXoAHSNw==
-X-Google-Smtp-Source: AGRyM1uiEyJ1nP5zh3TphkWCCynKG5URODiPVpMQc+i4JRYaf/DzC3PAuI3BhnUAkzvZF+62ssNM1Q==
-X-Received: by 2002:a05:6512:3501:b0:48a:712b:a99 with SMTP id h1-20020a056512350100b0048a712b0a99mr5735515lfs.608.1658818069063;
-        Mon, 25 Jul 2022 23:47:49 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id k15-20020a0565123d8f00b0048aab0259c0sm28716lfv.107.2022.07.25.23.47.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 23:47:48 -0700 (PDT)
-Message-ID: <13697702-20fc-5fef-e335-b6765f93d1a0@linaro.org>
-Date:   Tue, 26 Jul 2022 08:47:46 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658818133; x=1690354133;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=o0AGuCbDQgQfq9ai86IVzKSjcgci0SSS5ogiey3b7dI=;
+  b=revI4MUwjTvU27oldLQ/mcFULWowGtkAXHma+SW+te5M12hbfA7KrUN6
+   ouHJd+1lIapARchiE5NAz7IZQEYaiATxQtGAOdU+sKfuaOhAZDXVe68j9
+   VFAWVbAQQkwGq+Exp+QXwycAnM0irm9Douq1wbo0CS4om18puUtwgLQVT
+   A=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Jul 2022 23:48:53 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 23:48:53 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Jul 2022 23:48:52 -0700
+Received: from [10.253.34.146] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Jul
+ 2022 23:48:48 -0700
+Message-ID: <fda2811d-8cad-d3e7-3587-3b4448d7dc08@quicinc.com>
+Date:   Tue, 26 Jul 2022 14:48:45 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] firmware: Samsung: Add secure monitor driver
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
 Content-Language: en-US
-To:     dj76.yang@samsung.com,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>
-Cc:     "javierm@redhat.com" <javierm@redhat.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Wangseok Lee <wangseok.lee@samsung.com>
-References: <aec4ffd0-368d-e71a-06e4-a084138fbab9@linaro.org>
- <20220713045516epcms1p86b3f6a8795d767faac65eb947405f911@epcms1p8>
- <CGME20220713045516epcms1p86b3f6a8795d767faac65eb947405f911@epcms1p6>
- <20220726000429epcms1p6c32018733b1cf87c9f138f76f5c1bdd4@epcms1p6>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220726000429epcms1p6c32018733b1cf87c9f138f76f5c1bdd4@epcms1p6>
-Content-Type: text/plain; charset=UTF-8
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
+        "quic_ziqichen@quicinc.com" <quic_ziqichen@quicinc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>
+CC:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
+ <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
+ <DM6PR04MB65750EE12401C4F69B352E5CFC909@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <1de1372e-1c69-611b-0999-c162da8013ac@acm.org>
+From:   Can Guo <quic_cang@quicinc.com>
+In-Reply-To: <1de1372e-1c69-611b-0999-c162da8013ac@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,51 +82,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 02:04, Dongjin Yang wrote:
-> 
-> On 14/07/2022 04:28, Krzysztof Kozlowski wrote:
->> On 13/07/2022 06:55, Dongjin Yang wrote:
->>>  Introduce a driver to provide calls into secure monitor mode.
->>>  This driver is used for SoCs produced by Samsung Foundry to provide
->>>  SMC call. This patch supports register read/write request to secure
->>>  monitor. Also, SMC call request which uses shared memory to exchange
->>>  the data between kernel and secure monitor.
->>>  
->>>  Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
->>>  ---
->>>   MAINTAINERS                              |   2 +
->>>   drivers/firmware/Kconfig                 |  11 +++
->>>   drivers/firmware/Makefile                |   1 +
->>>   drivers/firmware/samsung-smc-svc.c       | 154 +++++++++++++++++++++++++++++++
->>>   include/linux/firmware/samsung-smc-svc.h |  59 ++++++++++++
->>>   5 files changed, 227 insertions(+)
->>>   create mode 100644 drivers/firmware/samsung-smc-svc.c
->>>   create mode 100644 include/linux/firmware/samsung-smc-svc.h
->>>  
->>>  diff --git a/MAINTAINERS b/MAINTAINERS
->>>  index 6763746c349f..d173043ffb46 100644
->>>  --- a/MAINTAINERS
->>>  +++ b/MAINTAINERS
->>>  @@ -1868,8 +1868,10 @@ F:        arch/arm/boot/dts/artpec6*
->>>   F:        arch/arm/mach-artpec
->>>   F:        drivers/clk/axis
->>>   F:        drivers/crypto/axis
->>>  +F:        drivers/firmware/samsung-smc-svc.c
->>>   F:        drivers/mmc/host/usdhi6rol0.c
->>>   F:        drivers/pinctrl/pinctrl-artpec*
->>>  +F:        include/linux/firmware/samsung-smc-svc.h
->>
->> Same as for bindings - not related to Artpec platforms. Either add
->> dedicated entry or put it under Samsung SoC.
->>
-> 
-> This patch is for Artpec8 SoC.
+Hi Bart,
 
-This does not answer my comment at all.
+On 7/23/2022 1:58 AM, Bart Van Assche wrote:
+> On 7/22/22 00:31, Avri Altman wrote:
+>>> +#define UFSHCD_MCQ_IO_QUEUE_OFFSET 1
+>> Maybe add a comment above: "queue 0 is reserved for query commands" 
+>> or something
+>> That is if the query commands don't use the  legacy doorbell
+>
+> Is it essential to reserve a queue for device management commands? 
+> Wouldn't it be better to have one additional queue for submitting I/O 
+> commands rather than reserving a queue for device management commands?
 
 
-> 
+Since this is just RFC change, we are trying to make the whole thing 
+work with minimal efforts.
+
+So we found that having a reserved queue (with only one active command) 
+for device management
+
+requires much less changes in ufshcd.c, because current device 
+management commands anyways come
+
+one by one (we have a mutex lock dev_cmd.lock held in 
+exec_dev_command()) and it is easy to handle/assign
+
+the task tag for device management command by just reading sq_tp_slot. 
+If you think this needs to be improved,
+
+can you please elaborate your idea? Thanks.
 
 
-Best regards,
-Krzysztof
+Regards,
+
+Can Guo.
+
+>
+> Thanks,
+>
+> Bart.
+>

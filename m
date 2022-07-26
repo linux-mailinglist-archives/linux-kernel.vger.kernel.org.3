@@ -2,189 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D10581633
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA6858163D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbiGZPPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S235702AbiGZPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiGZPPi (ORCPT
+        with ESMTP id S230204AbiGZPPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:15:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E957317E37;
-        Tue, 26 Jul 2022 08:15:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86EFE6069B;
-        Tue, 26 Jul 2022 15:15:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B62C433C1;
-        Tue, 26 Jul 2022 15:15:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658848536;
-        bh=JdYLPvm15DCGWDloUpXmxYYLmSi+V/FEw3vBEoaF+Jw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xBokB72rddFLxtHSosxuv3alJqsdn0oyulNn4jSAaE2unHKS0UIM1wLxL2J8T16L0
-         k39NRaycdo4vXVxUP4FOVG+nE53iMehPLaex58j9lRVfL0OQ2uKPiGgF5dJfnEg16i
-         sBHsTSPvke7L3MCKx6Puv+grQDjTJVYq56eH/DFk=
-Date:   Tue, 26 Jul 2022 17:15:30 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     yuji2.ishikawa@toshiba.co.jp
-Cc:     robh+dt@kernel.org, hverkuil@xs4all.nl,
-        nobuhiro1.iwamatsu@toshiba.co.jp, corbet@lwn.net,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2 3/5] soc: visconti: Add Toshiba Visconti DNN image
- processing accelerator
-Message-ID: <YuAFEvKLnavheZMn@kroah.com>
-References: <20220722082858.17880-1-yuji2.ishikawa@toshiba.co.jp>
- <20220722082858.17880-4-yuji2.ishikawa@toshiba.co.jp>
- <Yt6Rryi4SHVc4DR4@kroah.com>
- <TYAPR01MB62013C42CB26FD456929C0D592949@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+        Tue, 26 Jul 2022 11:15:48 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D3E17E37;
+        Tue, 26 Jul 2022 08:15:44 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ss3so26638446ejc.11;
+        Tue, 26 Jul 2022 08:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=30GuoeOYEvgEQlnD0yosJbbGlRpqnBP8ZH8v0N+fbbM=;
+        b=WA9cp6J4DMRCi6V/ZUoDCx4Wggz6MkNUhuqxfezjLmF1FgU6HooYR4VlbHI5bN4y/T
+         lRAMp473cFVjMzq94EeSV4cpMBtm1y4if9fWoNBlHo07PQX7DAIXqJbqCoOc3KxxIjFA
+         h7ogDzORqjuCRbY/nmNRbRD7yo1gLtv0MTGRONdv7Q3qGHODXCIcex/kqrgOUyJNqvVd
+         FjglzRRvUN47zp6G1o/8S+y05ziKBuHHbTCaUKaYIVbJ2Og3nxQERpV+KjTjpdXFZ8T6
+         XX6RrTF7agiS4WETWDVOrKzoNdosM1AIsGmIs/noTZmB8+p6fKpc2FAoz/WiHLYijCnS
+         7FMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=30GuoeOYEvgEQlnD0yosJbbGlRpqnBP8ZH8v0N+fbbM=;
+        b=TDgd96YvW+qLdIbESibZZUA/ovaoY9+mhRO6OPNd2GVUOpVrv6KXk0JmLoFC/4Wsfi
+         NE7JRfP1fAyi8d8AueKZIrBvO9IblVyKhRYBBrcBHre+4XWwWwX4Ec+4dW41oba3YAA7
+         Wr/4uNwo9pkZ+94+FfD3ildfRAVxIKMQel188aUECjDqU6t7sn7MaBiboRxF+/6cn6dx
+         eMHWJrgU8vcr8A7WwhZloWvV0v/CNrnfaPf4otUK55WOgA3eg6+2peE6h8C6eVCGsAaY
+         bth0wUkysxIh/z4OXETSQi5PdYJ9sooDNXXYdgBvJNdqJF0kRynzoj+sMkEty6hyPK07
+         31zA==
+X-Gm-Message-State: AJIora/cnG4rT8p6tiGnH2aeAsRuQDOmmcgbeHvIYT/wJZCXprrdeLQy
+        sLjccca+UyvN/Tt3/ovX3P4=
+X-Google-Smtp-Source: AGRyM1t3w6HTBhhoGB8HDsuc1By/1sTlXh3Y1sOyLWo7gXako1oA99HHAoo8isN8KKOguO0yWOgcVA==
+X-Received: by 2002:a17:907:7ba9:b0:72f:2994:74aa with SMTP id ne41-20020a1709077ba900b0072f299474aamr14486870ejc.85.1658848543107;
+        Tue, 26 Jul 2022 08:15:43 -0700 (PDT)
+Received: from [10.30.0.4] ([37.120.217.82])
+        by smtp.gmail.com with ESMTPSA id ca17-20020aa7cd71000000b0043c92c44c53sm193645edb.93.2022.07.26.08.15.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 08:15:42 -0700 (PDT)
+Message-ID: <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
+Date:   Tue, 26 Jul 2022 17:15:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYAPR01MB62013C42CB26FD456929C0D592949@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <20220726143005.wt4be7yo7sbd3xut@bogus>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20220726143005.wt4be7yo7sbd3xut@bogus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 06:10:37AM +0000, yuji2.ishikawa@toshiba.co.jp wrote:
-> Hi Greg
+On 7/26/22 16:30, Sudeep Holla wrote:
+> On Sun, Jul 24, 2022 at 12:49:49AM +0200, Maximilian Luz wrote:
+>> Add bindings for the Qualcomm Trusted Execution Environment (TrEE) UEFI
+>> Secure application (uefisecapp) client.
+>>
+
+[...]
+
+>> +examples:
+>> +  - |
+>> +    firmware {
+>> +        scm {
+>> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
+>> +        };
+>> +        tee-uefisecapp {
+>> +            compatible = "qcom,tee-uefisecapp";
+>> +        };
 > 
-> Thank you for your comments.
-> 
-> > -----Original Message-----
-> > From: Greg KH <gregkh@linuxfoundation.org>
-> > Sent: Monday, July 25, 2022 9:51 PM
-> > To: ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴＣ○ＥＡ開)
-> > <yuji2.ishikawa@toshiba.co.jp>
-> > Cc: Rob Herring <robh+dt@kernel.org>; Hans Verkuil <hverkuil@xs4all.nl>;
-> > iwamatsu nobuhiro(岩松 信洋 □ＳＷＣ◯ＡＣＴ)
-> > <nobuhiro1.iwamatsu@toshiba.co.jp>; Jonathan Corbet <corbet@lwn.net>;
-> > Sumit Semwal <sumit.semwal@linaro.org>; Christian König
-> > <christian.koenig@amd.com>; linux-arm-kernel@lists.infradead.org;
-> > linux-kernel@vger.kernel.org; linux-media@vger.kernel.org;
-> > dri-devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org
-> > Subject: Re: [PATCH v2 3/5] soc: visconti: Add Toshiba Visconti DNN image
-> > processing accelerator
-> > 
-> > On Fri, Jul 22, 2022 at 05:28:56PM +0900, Yuji Ishikawa wrote:
-> > > --- /dev/null
-> > > +++ b/drivers/soc/visconti/uapi/dnn.h
-> > > @@ -0,0 +1,77 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > > +/* Toshiba Visconti DNN Accelerator Support
-> > > + *
-> > > + * (C) Copyright 2022 TOSHIBA CORPORATION
-> > > + * (C) Copyright 2022 Toshiba Electronic Devices & Storage
-> > > +Corporation  */
-> > > +
-> > > +#ifndef _UAPI_LINUX_DNN_H
-> > > +#define _UAPI_LINUX_DNN_H
-> > > +
-> > > +#include <linux/ioctl.h>
-> > > +#include <linux/types.h>
-> > > +#include "ipa.h"
-> > > +
-> > > +#define DRV_DNN_BIT_CONFIG_DESC_FINAL (0x8000U)
-> > > +#define DRV_DNN_BUFFER_INDEX_MAX      (15)
-> > > +
-> > > +#define DRV_DNN_BASE_ADDR_NUM (8U) /* DNN number of base
-> > address */
-> > > +
-> > > +#define DRV_DNN_BASE_ADDR_PURPOSE_INPUT	    (1U)
-> > > +#define DRV_DNN_BASE_ADDR_PURPOSE_OUTPUT    (2U)
-> > > +#define DRV_DNN_BASE_ADDR_PURPOSE_AWB	    (3U)
-> > > +#define DRV_DNN_BASE_ADDR_PURPOSE_TEMPORARY (4U)
-> > > +
-> > > +/**
-> > > + * struct drv_dnn_status - DNN IPA status for IOC_IPA_GET_STATUS
-> > > + *
-> > > + * @state:     State of driver
-> > > + * @eer_cmd:   Execution error command
-> > > + * @eer:       Execution error
-> > > + * @reserved:  Padding
-> > > + * @eer_flags: Execution error flags
-> > > + */
-> > > +struct drv_dnn_status {
-> > > +	enum drv_ipa_state state;
-> > > +	__u32 eer_cmd;
-> > > +	__u32 eer : 1;
-> > > +	__u32 reserved : 31;
-> > 
-> > bitfields will not work like this for uapi files, sorry.
-> 
-> I'll change the type of the member eer from bitfield to bool.
+> Do you expect some issues using the scm driver APIs without the
+> any additions in the DT ? I mean can't you auto-discover by using the
+> APIs. I haven't looked at the driver or any other patches in the series,
+> but I would like to know if we can avoid adding any new bindings if it
+> can be discovered via those SCM driver APIs.
 
-bool will not work for a user/kernel api structure at all, sorry.
+Not at scale, at least as far as I can tell.
 
-> > > +	__u32 eer_flags[32];
-> > 
-> > What endian is all of these?  Big?  Little?  Unknown?
-> 
-> The processors and accelerators are little endian in Visconti SoC.
-> Do I have to use more specific type such as __le32 ?
+Part of the setup-process of this driver is to query an "application ID"
+from a unique string identifying the application (in this case
+"qcom.tz.uefisecapp"). If that call fails, we know the app is not there.
 
-Of course, this has to be defined as to how the hardware sees it.  Why
-wouldn't you specify this?
+But: If we'd want to support more than just "uefisecapp" we'd have to
+query each app in some predefined list. As far as I can tell, there's no
+method to enumerate all present/loaded ones. The Windows driver seems to
+use a hard-coded list of apps that are present on some specific SoC.
 
-> > > +};
-> > > +
-> > > +struct drv_dnn_base_addr {
-> > > +	__u32 purpose;
-> > > +	union {
-> > > +		struct drv_ipa_addr ipa_addr;
-> > > +		uintptr_t list_addr;
-> > 
-> > You really do not ever want a uintptr_t in a uapi file, that's not going to be
-> > portable at all.  It's also not a valid kernel type :(
-> 
-> I understand. The member list_addr should be typed "struct drv_ipa_addr*".
+It might be possible that there exists such a method, but if it does, the
+Windows driver doesn't seem to use it and I don't know about it.
 
-No, not at all, that too will not work and is not portable.  Please read
-the documentation in the kernel for how to write correct user/kernel
-apis with ioctl structures.  It is all documented there, please do not
-ignore it and create an api that will be broken.
+Also, there would need to be at least some type of compatible to
+indicate the presence of that TrEE / Secure Application interface used by
+uefisecapp. Unless you want to send some potentially unsupported SCM
+commands on every platform with qcom,scm and see what comes back.
 
-> > > + * @config_done:          Flags of called configuration
-> > > + * @buffer_info:          Table of buffer information
-> > > + * @buffer_info_num:      Number of buffer_info
-> > > + */
-> > > +struct drv_dnn_descriptor {
-> > > +	struct drv_ipa_addr configuration;
-> > > +	__u32 configuration_offset;
-> > 
-> > What endian are any of these?
-> 
-> They are little endian as processors and accelerators are LE.
-> Do I have to use specific type such as __le32?
+So ultimately I think it's better to add a DT entry for it. That also
+(hopefully) ensures that someone tested and (at least in some way)
+validated this. Again, It's a reverse engineered driver.
 
-Yes, as that is defined by your hardware, not the processor the kernel
-is running as.
-
-> Do we need special care for endianness	when userland and kernel are sharing data (a drv_dnn_descriptor instance) ?
-
-Yes, why wouldn't you?
-
-> I thought there're no endianness problem when the driver is reading/writing HW's 32bit registers.
-
-Is that what you are doing here?  It's impossible to tell.
-
-For data that only crosses the user/kernel boundry, you can use the
-native processor endian, but when it crosses the kernel/hardware
-boundry, you HAVE to specify it as to what the hardware expects.
-
-thanks,
-
-greg k-h
+Regards,
+Max

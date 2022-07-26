@@ -2,101 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB242580983
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E6A580985
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiGZCed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 22:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
+        id S237188AbiGZCfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 22:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiGZCeb (ORCPT
+        with ESMTP id S230489AbiGZCfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 22:34:31 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481FF28E29;
-        Mon, 25 Jul 2022 19:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658802870; x=1690338870;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oQGLDobYwHi1A02VN+sYCWqkJ5xg453HmlwiMQc6qZQ=;
-  b=Sx6HWrZu6dpUQRlQNpsq+Az7JnokEicO3tr8H8Vjr8sR6h4AGsM8SiZJ
-   Tp4lA6udJONf8pxfKqP+eP2vzwxHbB1WimnPwtyMbEASup/QFWHU3edDN
-   M9kQbeH5FADAl60N0HMMiyYPQavor7Yxgwfb0lVxRrPO71qJ73ujusNPM
-   PIR7Z+WAxmexulWZaCsZekQjZricfhIy78TNcqEYUkzrnfTqCz/nI0oQf
-   h/t+3uTOY+k6KscVL6nrtJAWz5w6//ObzA31Q0q7dx2gbT+NHqpecTIo8
-   0jsdT0B7PJOEPrPMy7JSYynIXeHBsKSXKT0sH5mT3u9huCivev4fuy5m9
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="289030171"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="289030171"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 19:34:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="742050967"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Jul 2022 19:34:27 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGAOw-0005sk-2h;
-        Tue, 26 Jul 2022 02:34:26 +0000
-Date:   Tue, 26 Jul 2022 10:33:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        jikos@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        j.witteveen@gmail.com, stefanberzl@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH v2 6/7] HID: uclogic: Add support for UGEE v2 mouse frames
-Message-ID: <202207261047.hUEFf74G-lkp@intel.com>
-References: <20220717144333.251190-7-jose.exposito89@gmail.com>
+        Mon, 25 Jul 2022 22:35:32 -0400
+X-Greylist: delayed 230 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 19:35:31 PDT
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B32665F4;
+        Mon, 25 Jul 2022 19:35:31 -0700 (PDT)
+Received: from amadeus-VLT-WX0.lan (unknown [113.118.189.34])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id AE788800091;
+        Tue, 26 Jul 2022 10:35:28 +0800 (CST)
+From:   Chukun Pan <amadeus@jmu.edu.cn>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Michael Riesch <michael.riesch@wolfvision.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chukun Pan <amadeus@jmu.edu.cn>
+Subject: [PATCH] arm64: dts: rockchip: Enable PCIe controller on rock3a
+Date:   Tue, 26 Jul 2022 10:35:16 +0800
+Message-Id: <20220726023516.6487-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220717144333.251190-7-jose.exposito89@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTRoaVh1OHUgdQkMfTU4fTFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpKSFVKSkNVSkNCVUhPWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pj46SCo5Gj0#PE4WN05DMAsC
+        KBAKCzVVSlVKTU5DQ0tJQklCT05KVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUpK
+        SFVKSkNVSkNCVUhPWVdZCAFZQUhLQkw3Bg++
+X-HM-Tid: 0a82385bfd6eb03akuuuae788800091
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "José,
+Add the nodes to enable the PCIe controller on the
+Radxa ROCK3 Model A board. Run test with the MT7921
+pcie wireless card.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
+---
+ .../boot/dts/rockchip/rk3568-rock-3a.dts      | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-[auto build test ERROR on 0cb1fc0988e32bda84c2b7218e0c761af1430baf]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
-base:   0cb1fc0988e32bda84c2b7218e0c761af1430baf
-config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220726/202207261047.hUEFf74G-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/10fcf5d5cca4657c53477c392b1fb675d72cfda3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
-        git checkout 10fcf5d5cca4657c53477c392b1fb675d72cfda3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: call to __read_overflow marked "dontcall-error": detected read beyond size of object (1st parameter)
-
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+index 0813c0c5abde..3ce7eb05defc 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+@@ -119,6 +119,18 @@ vcc5v0_usb_otg: vcc5v0-usb-otg-regulator {
+ 		regulator-max-microvolt = <5000000>;
+ 		vin-supply = <&vcc5v0_usb>;
+ 	};
++
++	vcc3v3_pcie: vcc3v3-pcie-regulator {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pcie_enable_h>;
++		regulator-name = "vcc3v3_pcie";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		vin-supply = <&vcc5v0_sys>;
++	};
+ };
+ 
+ &combphy0 {
+@@ -129,6 +141,10 @@ &combphy1 {
+ 	status = "okay";
+ };
+ 
++&combphy2 {
++	status = "okay";
++};
++
+ &cpu0 {
+ 	cpu-supply = <&vdd_cpu>;
+ };
+@@ -423,6 +439,14 @@ rgmii_phy1: ethernet-phy@0 {
+ 	};
+ };
+ 
++&pcie2x1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie_reset_h>;
++	reset-gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_HIGH>;
++	vpcie3v3-supply = <&vcc3v3_pcie>;
++	status = "okay";
++};
++
+ &pinctrl {
+ 	ethernet {
+ 		eth_phy_rst: eth_phy_rst {
+@@ -436,6 +460,16 @@ led_user_en: led_user_en {
+ 		};
+ 	};
+ 
++	pcie {
++		pcie_enable_h: pcie-enable-h {
++			rockchip,pins = <0 RK_PD4 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++		pcie_reset_h: pcie-reset-h {
++			rockchip,pins = <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
+ 	pmic {
+ 		pmic_int: pmic_int {
+ 			rockchip,pins =
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B976580A2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 06:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD37C580A32
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 06:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237531AbiGZECR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 00:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S237518AbiGZEDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 00:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiGZECJ (ORCPT
+        with ESMTP id S231184AbiGZEDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 00:02:09 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD0F29CBA;
-        Mon, 25 Jul 2022 21:02:08 -0700 (PDT)
-X-UUID: 3455a41bee4344459fb6558ebebf64e5-20220726
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:0d8f86be-71cf-47c1-ac77-a1e0c455f366,OB:10,L
-        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:95
-X-CID-INFO: VERSION:1.1.8,REQID:0d8f86be-71cf-47c1-ac77-a1e0c455f366,OB:10,LOB
-        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:95
-X-CID-META: VersionHash:0f94e32,CLOUDID:3c9e05ee-db04-4499-9fdf-04ef44b9468c,C
-        OID:9112b01ff871,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 3455a41bee4344459fb6558ebebf64e5-20220726
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1294232190; Tue, 26 Jul 2022 12:02:03 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 26 Jul 2022 12:02:01 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Jul 2022 12:02:00 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        "Hsin-Yi Wang" <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 4/4] media: mediatek: vcodec: Add mt8188 encoder's chip name
-Date:   Tue, 26 Jul 2022 12:01:55 +0800
-Message-ID: <20220726040155.17206-4-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220726040155.17206-1-yunfei.dong@mediatek.com>
-References: <20220726040155.17206-1-yunfei.dong@mediatek.com>
+        Tue, 26 Jul 2022 00:03:00 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD322A24E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:02:59 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31f1d1c82c8so36930717b3.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B35ZTE2adzguA+KA+PCVmrFGgSP+8khovmRbpkdhlpk=;
+        b=iCdcCg7dM7MrFzki/3KEbQYMzTmQgc9+qWJAZrNU8ELqn0bE3XgMEc1d2okpbiVLZ+
+         6GDIDf1M6474U1hs605YAbEATDzljM+GguLrWnC/0MReW8WUUI/rjOo2uG1R4JD4nwmd
+         dQFWCaW1ru1zC9yXCYQ8og8B/ViW4imjyb9yE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B35ZTE2adzguA+KA+PCVmrFGgSP+8khovmRbpkdhlpk=;
+        b=Q64zexHx+TI54VNRjKHC5UYqiILy3dPG3+G5lNGqX/d/HI7y1AluTFIdfyF/YfZ2C1
+         mFWMnS+mpYDCSg01IzLBVXeMIZBII6+cOda3kaXBZskbatQPN6WEGJ2JpvvEhGL0G5Z/
+         C0kKUIszC6FM1qBz4T/5mUZkDuVTnMS1rqS+GZcmjnoq/Z7Xb3TRWyF19pl8Rq0nORCI
+         7XAsdxWek0sOuo8TB2Obum1+aqTYavP2sIBq/BWfDsSVI7+sCy8P5iy+04a6EoPHjFNT
+         IlV3hNc2k2Wv6rwCfz3/zJYc8/gPuEZb1XOGwkATlSoid3mrGsl8tIQoX3BtViYOFJWV
+         IRWw==
+X-Gm-Message-State: AJIora8zmtfDzQH3e10U65riQIMcILbxuWK1MOxOexFWfXaXI+5z609P
+        95+ik1xUkVNwC4fgdiGgRXAwG68nw5hSUmTnU8uAaA==
+X-Google-Smtp-Source: AGRyM1vmWMY8rCSkbeemY4WorPmrRFiCRux9K2cC6nnBK7+bevjeA5pxMFdDx99a/rivPkSWyE2mHoHOJfMxvnIXARo=
+X-Received: by 2002:a0d:d90f:0:b0:31e:5401:8533 with SMTP id
+ b15-20020a0dd90f000000b0031e54018533mr28793ywe.167.1658808178849; Mon, 25 Jul
+ 2022 21:02:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220721145017.918102-1-angelogioacchino.delregno@collabora.com>
+ <20220721145017.918102-7-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5E+6aCz3dxsfCqZAOkcmqDp0YWngsv-OZ23NDYhuZSfHw@mail.gmail.com> <f3027153-860f-7ffc-b4a0-ff2a43100cf4@collabora.com>
+In-Reply-To: <f3027153-860f-7ffc-b4a0-ff2a43100cf4@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 26 Jul 2022 12:02:48 +0800
+Message-ID: <CAGXv+5EkQ_CmhHGTkJ4DfmRUZnKw3XaJ0qUvQHG8=qxXPUPY9w@mail.gmail.com>
+Subject: Re: [PATCH v2 6/8] arm64: dts: mediatek: cherry: Enable DSP, audio
+ codec and sound card
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Getting mt8188's chip name according to encoder compatible name.
+On Mon, Jul 25, 2022 at 6:49 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 25/07/22 12:44, Chen-Yu Tsai ha scritto:
+> > On Thu, Jul 21, 2022 at 10:53 PM AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> >>
+> >> All machines of the Cherry platform have a working DSP (integrated
+> >> into the MT8195 SoC), and audio support, some with a different audio
+> >> codec: specifically, some using Realtek's RT5682I and some RT5682S.
+> >>
+> >> Write a configuration for all the audio bits to enable functionality.
+> >
+> > I think we're still missing some code for SOF that implements the
+> > machine_select() callback, plus the firmware has to be fetched from
+> > the ChromeOS rootfs.
+> >
+> > It might make sense to have SOF disabled for now. Removing the adsp
+> > reference and the overriding dai-link entry from the sound node
+> > should do the trick.
+> >
+>
+> Uhm... I think that we should either have audio, with DSP, or not have it
+> at all... the userspace configurations will differ, so we'd end up with
+> two different confs of which one will get unused and cluttering the ucm2
+> conf git.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 2 ++
- 1 file changed, 2 insertions(+)
+You're right. I haven't even figured out which ones to pull in.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index 25e816863597..75454b955638 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -225,6 +225,8 @@ static int mtk_vcodec_enc_get_chip_name(void *priv)
- 		return 8192;
- 	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-enc"))
- 		return 8195;
-+	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8188-vcodec-enc"))
-+		return 8188;
- 	else
- 		return 8173;
- }
--- 
-2.25.1
+> At this point, I think that the most sensible option is to either omit
+> this commit, or keep audio disabled until the machine_select() callback
+> gets in...
 
+Agreed.
+
+ChenYu

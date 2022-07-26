@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3660458098B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E27F58098F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiGZCjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 22:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
+        id S237303AbiGZCkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 22:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiGZCjb (ORCPT
+        with ESMTP id S237273AbiGZCkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 22:39:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C8029833;
-        Mon, 25 Jul 2022 19:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=BjeoFUfM5uWLnKpTPLeLk03xCXCAqBH4O+lDfmmC4Vw=; b=E3vItekmUsPIFk39AB1/s0y4vU
-        ff7VQ01j/aPmw0/m7EGtHm8u47N8hsPA60jC2YhHK6hXHReJir/uQfzq7xwc8beKkw3k3ydnGGXPH
-        J5q8A0fB5N3O/Yz4jn2dNaHzZe7lHSJfRA5vlsBYLmDVUcvfpPuvs3xd2T0S8Rv1QbewOzhzj0bPB
-        A2UD4z7A3Ov4rqpMV7uetzyTs4yCXzinB9oL02e7O38BQOU7zsmdTjzzZxRF8dGU68ae8YYqCFNox
-        x55nMieaaCY/aEPhltbFQjguV2PT8Z3aQSaxiNRwv3rINlHV7K9vV2bVcWQshjXMCi0oB7q+zZvyV
-        blg1NIdw==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oGATh-006v7Z-Ub; Tue, 26 Jul 2022 02:39:22 +0000
-Message-ID: <5ea65d3d-745e-0a16-c885-a224a20ee7ce@infradead.org>
-Date:   Mon, 25 Jul 2022 19:39:20 -0700
+        Mon, 25 Jul 2022 22:40:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A92CE03;
+        Mon, 25 Jul 2022 19:40:15 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LsLjk21fwz4x1b;
+        Tue, 26 Jul 2022 12:40:10 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658803210;
+        bh=ffPbgwsAiF6f9gP1BoTJ3ZTtIV+bTqNsS3kxf/UFcWw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=M5UeYee0MWczs8lgpT3Vk8LfoKOOdhOcWp6UMYFbcCHdDxjYwJuBvcYY7ed9S0tZ9
+         uUo9byHDPa62dNhC93lFDoyTs8dCZVSJrbchzbZuVIXCI+KmUyD/5prLb1b+tJque8
+         bfnN2U3tLw/TkMLXl0jj/BOUSFfWEZFhS/Rtx9+QY4dgY26vRvmFbK/FToemLmYdcD
+         ph5qIE4EIcllZ0v/HsCyMGLSlaAgH0GOUAT4U/ZzVHkijhlxKL9IeQ9ptYJYHiyQ4I
+         l4AjEiHokyFc29HLXc82HEyxjZHnJSf+ywDJIhpLFTEm6M+AbOnSbWnfACC2ZC9iVa
+         Y/oQxuobiDNOQ==
+Date:   Tue, 26 Jul 2022 12:39:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the amdgpu tree with the powerpc-fixes
+ tree
+Message-ID: <20220726123949.357cece8@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/1] iommu/hyper-v: Use helper instead of directly
- accessing affinity
-Content-Language: en-US
-To:     Michael Kelley <mikelley@microsoft.com>, sthemmin@microsoft.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, samuel@sholland.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        iommu@lists.linux.dev
-References: <1658796820-2261-1-git-send-email-mikelley@microsoft.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1658796820-2261-1-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/HalYUGpJ3pAUkov+3DQMFHZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/HalYUGpJ3pAUkov+3DQMFHZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the amdgpu tree got a conflict in:
+
+  drivers/gpu/drm/amd/display/Kconfig
+
+between commits:
+
+  c653c591789b ("drm/amdgpu: Re-enable DCN for 64-bit powerpc")
+
+from the powerpc-fixes tree and commit:
+
+  3876a8b5e241 ("drm/amd/display: Enable building new display engine with K=
+COV enabled")
+
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/amd/display/Kconfig
+index ec6771e87e73,96cbc87f7b6b..000000000000
+--- a/drivers/gpu/drm/amd/display/Kconfig
++++ b/drivers/gpu/drm/amd/display/Kconfig
+@@@ -6,7 -6,7 +6,7 @@@ config DRM_AMD_D
+  	bool "AMD DC - Enable new display engine"
+  	default y
+  	select SND_HDA_COMPONENT if SND_HDA_CORE
+- 	select DRM_AMD_DC_DCN if (X86 || PPC_LONG_DOUBLE_128) && !(KCOV_INSTRUME=
+NT_ALL && KCOV_ENABLE_COMPARISONS)
+ -	select DRM_AMD_DC_DCN if (X86 || PPC64)
+++	select DRM_AMD_DC_DCN if (X86 || PPC_LONG_DOUBLE_128)
+  	help
+  	  Choose this option if you want to use the new display engine
+  	  support for AMDGPU. This adds required support for Vega and
 
 
-On 7/25/22 17:53, Michael Kelley wrote:
-> Recent changes to solve inconsistencies in handling IRQ masks #ifdef
-> out the affinity field in irq_common_data for non-SMP configurations.
-> The current code in hyperv_irq_remapping_alloc() gets a compiler error
-> in that case.
-> 
-> Fix this by using the new irq_data_update_affinity() helper, which
-> handles the non-SMP case correctly.
-> 
+--Sig_/HalYUGpJ3pAUkov+3DQMFHZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+-----BEGIN PGP SIGNATURE-----
 
-Thanks.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLfU/YACgkQAVBC80lX
+0GyLLQgAhhY4KdYihV9xUmSYc/ELpAv5uV8zN7OIe0g2DoQbTzfpCKKUcI8iiQrj
+fDF6NO515TQ4f8MdbypFQMsykzX6brlHni/5YNwNZqBzKNafWQ9lCjQsylgn/MZA
+FfqMKH8yxyI10AHNxNIfizy+zAtyMQZbdu9WjAVYSTflnGZYJfmOp5NYrEGoO94r
+gqoi3Wa5XUbiTjTI/X4sDFqfjUOmRfoVk3L+lvs94ZSD4Yk3fpfdvuT2YllhPj7C
+dZBN53KlnlSVw+yMs94aWB2ldwtMzWy8cLYKTBoRqJdZAF8T/g2A2URXaRDvCIJa
+E7mkyFtHESBJEsIUosQf720WjSq+3A==
+=Pv19
+-----END PGP SIGNATURE-----
 
-> ---
->  drivers/iommu/hyperv-iommu.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
-> index 51bd66a..e190bb8 100644
-> --- a/drivers/iommu/hyperv-iommu.c
-> +++ b/drivers/iommu/hyperv-iommu.c
-> @@ -68,7 +68,6 @@ static int hyperv_irq_remapping_alloc(struct irq_domain *domain,
->  {
->  	struct irq_alloc_info *info = arg;
->  	struct irq_data *irq_data;
-> -	struct irq_desc *desc;
->  	int ret = 0;
->  
->  	if (!info || info->type != X86_IRQ_ALLOC_TYPE_IOAPIC || nr_irqs > 1)
-> @@ -90,8 +89,7 @@ static int hyperv_irq_remapping_alloc(struct irq_domain *domain,
->  	 * Hypver-V IO APIC irq affinity should be in the scope of
->  	 * ioapic_max_cpumask because no irq remapping support.
->  	 */
-> -	desc = irq_data_to_desc(irq_data);
-> -	cpumask_copy(desc->irq_common_data.affinity, &ioapic_max_cpumask);
-> +	irq_data_update_affinity(irq_data, &ioapic_max_cpumask);
->  
->  	return 0;
->  }
-
--- 
-~Randy
+--Sig_/HalYUGpJ3pAUkov+3DQMFHZ--

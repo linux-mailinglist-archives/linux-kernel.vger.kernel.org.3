@@ -2,139 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FE35819CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931FD5819D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239513AbiGZSdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 14:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S239280AbiGZSfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 14:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiGZSda (ORCPT
+        with ESMTP id S233382AbiGZSfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 14:33:30 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7528F1FCD7;
-        Tue, 26 Jul 2022 11:33:29 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31f1d1c82c8so59051057b3.8;
-        Tue, 26 Jul 2022 11:33:29 -0700 (PDT)
+        Tue, 26 Jul 2022 14:35:23 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EF5B840
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:35:22 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-10e45b51f77so1473339fac.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HrcryoJh01CTNNs7KDd+YYqptrWAdUJ1tAMZzgvZifA=;
+        b=Sf2BtLdfBv0k8xzCcPauhxidy1XoKP1CfPOXnYo4ibE0V4myHheYEO40OCpSfC0EEe
+         EA3KTbgGn8AZf0CUBESqsYOgpTXmCls+ruhawYpDmsyJdtXYKpPRL6l0NynZFpAI0asG
+         qoTZrg7W4W2B+C+Dq+scv8rVCkwCzaCIJQJpwnmBjg44qWX3Gw9kfgKnRYhyw1Zqb6sV
+         +ZX8250dKzagR0+f45jAryoH5sxBo/wuHYRsZoYLzQwkjKvQ4L1lu8OeY9FBUYai7j2w
+         G67AVqiMaE/m4YKzTimr6viMJ3mZ6+HHNI2atKeaAN9cNhtg3Kr5zCk0kyqinG1l1m6l
+         2hQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5+m7EBDqZU/jW3BuYu28PjO80Us2rcYeVmkBo88WcRQ=;
-        b=T+mwv+9ekmkrYeOZY28nPu71f6I3WE0oVub5EJ9bIXm3a9h52CP5huB1pJvIqfNbPa
-         muDsSytg8X/xbuXnZT1Lf1B93JqDa7HuwnKcXtCmeGUdnH+tayiDiRj3OA+wXfaOaWwD
-         guWUvL/nh4JTgJNLEN6fyUeljl8QlL5PwSS2wZ+siDc5wqX1qZu4nOU8ASfqWMo/TT5w
-         lW/b4dPtnqyHMgWFewy4yiMtj2bgN9/+lnsxvwjffxD8FepcesOJgozRLmUZUCam2Drr
-         UNQjw62TZziDUMIf2JGmSS9GAgWu95rAZet41DfOnJskz+1ehyf2VllaBsV403Ws2rsp
-         pGdg==
-X-Gm-Message-State: AJIora/BYhSc+kcb4bTebkj5ibVuMn4QFy0ynLCu2eHjtUlkAN2HiWG+
-        +t3EEi92DGzZm5VFo0YT85AT8XuEwo/BB3gxRLumuCvy
-X-Google-Smtp-Source: AGRyM1v+eroIuT8BybBIl9+jRpYcBVPNVsJgdQpI7FwfWSz8KlUO5x9QDs65P5xz9wsvnf6SnKWfixXAYLgYtgF4C14=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr15609044ywb.326.1658860408658; Tue, 26
- Jul 2022 11:33:28 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=HrcryoJh01CTNNs7KDd+YYqptrWAdUJ1tAMZzgvZifA=;
+        b=3VpyMTmx7XJFZIdcHQuzijvxp+UtBJ3V/eq+K0B9fNAxxsZNQmNvs9uvZUl+Ic6T2d
+         9YQeAAbn7z7Nbhw/jyywaYF9ES3kzAebzWakwoS0n6QcT13kN2C/fQ3VU915nnNgUHdY
+         2i8qKTcfNAMG/flXk7otu4Hk1KiOVpvDMAueoMIWQ8kCTmIVkYDjfrj4T6LUEn5kBMle
+         P8iXMI/5lF8sQLZTLrftPN3BAtGDbG11QsE1yRTdZ60ecUnTDtCmjiO8d5rlGQQQdyoN
+         pXl62ilXEONrsN05r2YDdoV0aO+UPmZcpc8gADdlrlCd9EgY7eArscw8v1uUxTXKkMiY
+         nkoA==
+X-Gm-Message-State: AJIora8KN/WrgIbhhlACfs8IYNR4raQHrY+OY6+7IinZC58KkoT+G761
+        XMEsTAaqydp1KcQ1O5JVtMw=
+X-Google-Smtp-Source: AGRyM1tluMn/3n5Af3Dc3EitEQFUpZRoYsmt5I/QF0ouM4xjvCdzxcceUMk5g4VrWHc18FjnRCmYOQ==
+X-Received: by 2002:a05:6870:b48c:b0:10d:f6a2:8d9e with SMTP id y12-20020a056870b48c00b0010df6a28d9emr261565oap.227.1658860521371;
+        Tue, 26 Jul 2022 11:35:21 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a6-20020a05680804c600b0033abe5ccfc8sm4901471oie.11.2022.07.26.11.35.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 11:35:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 26 Jul 2022 11:35:19 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm: drop arch implementation for find_bit() functions
+Message-ID: <20220726183519.GA931941@roeck-us.net>
+References: <20220726154407.3464776-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
- <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
-In-Reply-To: <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Jul 2022 20:33:17 +0200
-Message-ID: <CAJZ5v0hG4+z=ypDudiSnhG1SUxfLv+EFsUGOjQEqUi0EKH3+Rw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, kernel@puri.sm,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>, aford173@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726154407.3464776-1-yury.norov@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 5:07 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> >
-> > If for example the power-domains' power-supply node (regulator) needs
-> > interrupts to work, the current setup with noirq callbacks cannot
-> > work; for example a pmic regulator on i2c, when suspending, usually already
-> > times out during suspend_noirq:
-> >
-> > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> >
-> > So fix system suspend and resume for these power-domains by using the
-> > "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5 board,
-> > but by looking at the dts, this will fix imx8mq-evk and possibly many other
-> > boards too.
-> >
-> > This is designed so that genpd providers just say "this genpd needs
-> > interrupts" (by setting the flag) - without implying an implementation.
-> >
-> > Initially system suspend problems had been discussed at
-> > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > which led to discussing the pmic that contains the regulators which
-> > serve as power-domain power-supplies:
-> > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> >
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> >  drivers/base/power/domain.c | 13 +++++++++++--
-> >  include/linux/pm_domain.h   |  5 +++++
-> >  2 files changed, 16 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 5a2e0232862e..58376752a4de 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
-> >  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
-> >  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
-> >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
-> > +#define genpd_irq_on(genpd)            (genpd->flags & GENPD_FLAG_IRQ_ON)
-> >
-> >  static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
-> >                 const struct generic_pm_domain *genpd)
-> > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
-> >         genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
-> >         genpd->domain.ops.runtime_resume = genpd_runtime_resume;
-> >         genpd->domain.ops.prepare = genpd_prepare;
-> > -       genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
-> > -       genpd->domain.ops.resume_noirq = genpd_resume_noirq;
-> > +
-> > +       if (genpd_irq_on(genpd)) {
-> > +               genpd->domain.ops.suspend = genpd_suspend_noirq;
-> > +               genpd->domain.ops.resume = genpd_resume_noirq;
-> > +       } else {
-> > +               genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
-> > +               genpd->domain.ops.resume_noirq = genpd_resume_noirq;
->
-> As we discussed previously, I am thinking that it may be better to
-> move to using genpd->domain.ops.suspend_late and
-> genpd->domain.ops.resume_early instead.
+On Tue, Jul 26, 2022 at 08:44:07AM -0700, Yury Norov wrote:
+> find_next_bit(bitmap, nbits, off) shouldn't touch memory if
+> nbits == 0 or off >= nbits to avoid out-of-boundary access.
+> 
+> Generic implementation has explicit check for this, but arm doesn't,
+> which is spotted by KFENCE when running test_bitmap.
+> 
+...
+> CC: Guenter Roeck <linux@roeck-us.net>
+> CC: Dennis Zhou <dennis@kernel.org>
+> CC: Russell King <linux@armlinux.org.uk>
+> CC: Catalin Marinas <catalin.marinas@arm.com>
+> CC: linux-arm-kernel@lists.infradead.org
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 
-Should I take this as a change request?
+bitmap unit tests succeed, and the KFENCE report is no longer seen
+even after 65 retries (previously it reproduced easily with 5-15
+retries).
 
-> Beside this, I think the $subject patch looks good to me.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Or not?
+Guenter

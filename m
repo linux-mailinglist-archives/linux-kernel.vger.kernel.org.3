@@ -2,154 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC886581C5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06563581C63
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239993AbiGZXOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 19:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S230104AbiGZXX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 19:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbiGZXON (ORCPT
+        with ESMTP id S231734AbiGZXXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 19:14:13 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC87B57;
-        Tue, 26 Jul 2022 16:14:12 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id p1so6153485plr.11;
-        Tue, 26 Jul 2022 16:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=dENzbJt1guxesUSDXfqIuUH8HSBp0gL0djmYPEroaFo=;
-        b=T4rpXUuAvUynX4msd8KQnGEVJFSRIl5nzM/D3tRhWXKZc4ZJ5DUwfEC9QgGv/5xjXW
-         E6OAd6kkjYfFhdUM30igCr8XSn8lYDFiONlfDj4/9doWZZTUYYHQEFax0ApOkxFlS65z
-         wqNL2mruoIffrmifwfHPILKEt769Nsp3IR0YSnkklSM9ptR2euVO7k2KtnqRz4cax2I1
-         LTIuhLlQcq3TJ4TeDbr9kEK73CSVnQNNBWpbttRTpZP7j0kMtWJ0iii+mbTiJwSsGp4Z
-         L5iscMqS/X8AZMaWDLqzWPsVAPMNdg4ZXBTwTOe49qOCsiwF9J28bxOMs76GMwM7wn2q
-         IVIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=dENzbJt1guxesUSDXfqIuUH8HSBp0gL0djmYPEroaFo=;
-        b=xU7G3xSaq8FDKSZSWk2vjUFoL77v3+juLR7EjCoiTdEmxg4JrNI67IVYadtJJ6egBy
-         B2WjB9hFHIPPeJyDXhJ0MMy7jmMOHROpMDDlOGO0pZlzp+RNGN21275VSvAL2tw1q318
-         sKcqTOXG3GoSrxn4xFxMGFx3BKacjOtb3TMnS7SKBLUCXiGq3te5eHIqh2senrW/t7P9
-         ahPrnxkAcLEmjOfaCit/hSBmQA+kA7/qab9+5q9Z16Pen7rS63z8SRPx1O6AdGpm8aMH
-         Q1HrYwrylQSq087zCiTQ2K7i6//gn9TgCcoCamS5Ni+uCZ5eugzlB70aDR1hhVABGZBo
-         4xHg==
-X-Gm-Message-State: AJIora9maKfe8kxVPAn5+7E5mAK9ZGAFEH6pypsMPXM/Xc20IX4ZrGLD
-        yFZwbnuMdnv9QSm+Y0taGdvz+jpZPT4=
-X-Google-Smtp-Source: AGRyM1uVZumR1MdGjIlvcfVvt0XJI3nay5hQLZbnkAoS/55BukXwIgU1kM47aEE55aG+pBhs7v1uyA==
-X-Received: by 2002:a17:902:ea06:b0:16d:5c8c:4167 with SMTP id s6-20020a170902ea0600b0016d5c8c4167mr16273957plg.57.1658877251626;
-        Tue, 26 Jul 2022 16:14:11 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:370d])
-        by smtp.gmail.com with ESMTPSA id j1-20020a654d41000000b003fadd680908sm10769945pgt.83.2022.07.26.16.14.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 16:14:10 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 26 Jul 2022 13:14:09 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Oleg Nesterov <onestero@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Dmitry Shmidt <dimitrysh@google.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [PATCH RESEND 3/3 cgroup/for-5.20] cgroup: Make !percpu
- threadgroup_rwsem operations optional
-Message-ID: <YuB1QW6Kce5nkBu6@slm.duckdns.org>
-References: <YtDvN0wJ6CKaEPN8@slm.duckdns.org>
- <YtDvU4jRPSsarcNp@slm.duckdns.org>
- <YtDvl7Qjc5zI3e/b@slm.duckdns.org>
- <YtwFjPnCtw8ySnuv@slm.duckdns.org>
- <20220725121208.GB28662@redhat.com>
+        Tue, 26 Jul 2022 19:23:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67622127E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 16:23:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658877803; x=1690413803;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8FV2pkOGXJlVvvGq9dFBaKk8h+o74EtM6qshyOqHOXE=;
+  b=e+zo+LNwtUxZk48tJ2/3/iBYFxd0WuG6AQEdRkoJo57Rhautx6ymViCO
+   zYS91TQbZTpBys/o24oyiyxMkhhgCAjnxgQa31cpvkAN5hjRw1ijBv6D2
+   SiAQTfUpeWdBx8+9pSbtYAjusRHEBzXCqA5ng1eDgFTjIOpR8j2YOtuf8
+   ZIDecJ0GwFTp24XW1wGZLnFMbeD4E02ANMyco0Pa0u2FaO8JWaxBq05Lc
+   FezoBxeM33lAWE+JOEViG+FPlzPOTSybU6y5ITPkszm/aeeBHJtZzrPGN
+   01xd6JZgra3PD/d/pl9Ya7CdkgyiqI9IyWwFEbofogf9o1Qeujh3mpPDf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="374396186"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="374396186"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 16:23:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="668106490"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 26 Jul 2022 16:23:22 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGTtZ-0007yE-2O;
+        Tue, 26 Jul 2022 23:23:21 +0000
+Date:   Wed, 27 Jul 2022 07:23:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Faycal Benmlih <faycal.benmlih@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/platform/x86/socwatch/sw_pmt.c:232:8: sparse: sparse: symbol
+ 's_endpoint_index' was not declared. Should it be static?
+Message-ID: <202207270752.rRUYdUH1-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220725121208.GB28662@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Oleg.
+tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_10
+head:   c55df4a2b60fc7c6c4d00fd9f9fb447087833513
+commit: cd0ae8e45c3cc66d1cfb9bfc5046d6a1e9b04d19 SEP/SOCWATCH Update SoCWatch driver after rebasing to linux v5.7
+date:   1 year, 10 months ago
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220727/202207270752.rRUYdUH1-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/mchinth/linux/commit/cd0ae8e45c3cc66d1cfb9bfc5046d6a1e9b04d19
+        git remote add mchinth https://github.com/mchinth/linux
+        git fetch --no-tags mchinth sep_socwatch_linux_5_10
+        git checkout cd0ae8e45c3cc66d1cfb9bfc5046d6a1e9b04d19
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On Mon, Jul 25, 2022 at 02:12:09PM +0200, Oleg Nesterov wrote:
-> I see no problems in this patch. But just for record, we do not need
-> synchronize_rcu() in the "favor && !favoring" case, so we cab probably
-> do something like
-> 
-> 	@@ -146,13 +146,20 @@ void rcu_sync_enter(struct rcu_sync *rsp)
-> 			 * See the comment above, this simply does the "synchronous"
-> 			 * call_rcu(rcu_sync_func) which does GP_ENTER -> GP_PASSED.
-> 			 */
-> 	+		if (wait) {
-> 	+			synchronize_rcu();
-> 	+			rcu_sync_func(&rsp->cb_head);
-> 	+		} else {
-> 	+			rcu_sync_call(rsp);
-> 	+		}
-> 	+	} else if (wait) {
-> 	+		wait_event(rsp->gp_wait, READ_ONCE(rsp->gp_state) >= GP_PASSED);
-...
-> later.
-> 
-> __rcu_sync_enter(rsp, false) works just like rcu_sync_enter_start() but it can
-> be safely called at any moment.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yeah, I originally used rcu_sync_enter_start() but quickly found out that it
-can't be reverted reliably. Given how cold the option switching path is, I
-think it's fine to pay an extra synchronize_rcu() there rather than adding
-more complexity to rcu_sync_enter() unless this will be useful somewhere
-else too.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/x86/socwatch/sw_pmt.c:232:8: sparse: sparse: symbol 's_endpoint_index' was not declared. Should it be static?
+--
+>> drivers/platform/x86/socwatch/sw_pci.c:64:6: sparse: sparse: symbol 'sw_print_pci_devices_i' was not declared. Should it be static?
 
-> And can't resist, off-topic question... Say, cgroup_attach_task_all() does
-> 
-> 	mutex_lock(&cgroup_mutex);
-> 	percpu_down_write(&cgroup_threadgroup_rwsem);
-> 
-> and this means that synchronize_rcu() can be called with cgroup_mutex held.
-> Perhaps it makes sense to change this code to do
-> 
-> 	rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
-> 	mutex_lock(&cgroup_mutex);
-> 	percpu_down_write(&cgroup_threadgroup_rwsem);
-> 	...
-> 	percpu_up_write(&cgroup_threadgroup_rwsem);
-> 	mutex_unlock(&cgroup_mutex);
-> 	rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
-> 
-> ? Just curious.
+vim +/s_endpoint_index +232 drivers/platform/x86/socwatch/sw_pmt.c
 
-I'm not quite following. Are you saying that if we switching the rwsem into
-slow mode before grabbing the locks, we can avoid inducing latencies on
-other users? Hmm... assuming that I'm understanding you correctly, one
-problem with that approach is that everyone would be doing synchronize_rcu()
-whether they want to change favoring state. In vast majority of cases, users
-won't care about this flag but most users will end up mounting cgroup and do
-the rcu_sync_enter(), so we'd end up adding a grace period wait in most boot
-scenarios. It's not a lot in itself but seems less desriable than making the
-users who want to change the mode pay at the time of changing.
+4f5db8d9f7a900 drivers/platform/x86/socwatch/sw_cta.c Faycal Benmlih 2019-10-15  224  
+4f5db8d9f7a900 drivers/platform/x86/socwatch/sw_cta.c Faycal Benmlih 2019-10-15  225  /* *********************************
+cd0ae8e45c3cc6 drivers/platform/x86/socwatch/sw_pmt.c Faycal Benmlih 2020-05-01  226   * End PMT driver import
+4f5db8d9f7a900 drivers/platform/x86/socwatch/sw_cta.c Faycal Benmlih 2019-10-15  227   * *********************************
+4f5db8d9f7a900 drivers/platform/x86/socwatch/sw_cta.c Faycal Benmlih 2019-10-15  228   */
+4f5db8d9f7a900 drivers/platform/x86/socwatch/sw_cta.c Faycal Benmlih 2019-10-15  229  
+cd0ae8e45c3cc6 drivers/platform/x86/socwatch/sw_pmt.c Faycal Benmlih 2020-05-01  230  #define MAX_TELEM_ENDPOINTS MAX_AGGR_TELEM_ENDPOINTS /* For now */
+4f5db8d9f7a900 drivers/platform/x86/socwatch/sw_cta.c Faycal Benmlih 2019-10-15  231  static struct telem_endpoint *s_telem_endpoints[MAX_TELEM_ENDPOINTS]; /* TODO: make this a linked list instead */
+4f5db8d9f7a900 drivers/platform/x86/socwatch/sw_cta.c Faycal Benmlih 2019-10-15 @232  size_t s_endpoint_index = 0;
+4f5db8d9f7a900 drivers/platform/x86/socwatch/sw_cta.c Faycal Benmlih 2019-10-15  233  
 
-> > -	/*
-> > -	 * The latency of the synchronize_rcu() is too high for cgroups,
-> > -	 * avoid it at the cost of forcing all readers into the slow path.
-> > -	 */
-> > -	rcu_sync_enter_start(&cgroup_threadgroup_rwsem.rss);
-> 
-> Note that it doesn't have other users, probably you can kill it.
+:::::: The code at line 232 was first introduced by commit
+:::::: 4f5db8d9f7a900abd8cc574d4852045bca86c31f platform/x86: Update SoCWatch driver for 5.4 pull
 
-Ah, nice, will do that.
-
-Thanks.
+:::::: TO: Faycal Benmlih <faycal.benmlih@intel.com>
+:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://01.org/lkp

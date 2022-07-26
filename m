@@ -2,109 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683D0581575
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A6158157B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239203AbiGZOfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S238166AbiGZOhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239369AbiGZOf2 (ORCPT
+        with ESMTP id S229530AbiGZOhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:35:28 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7C18375
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:35:26 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id j22so26557269ejs.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=Nh6yhuk/aIMnslDUOuPndz9/LdCefExgEmHC2GvZaS074idlrWCFK9IXVr75sC4COi
-         77cqtdopPbdNkT6x5uaheIxm63AZ0QTxIEvCUQElsg9UEWc73kVMg30jbSXbYNGLUV8U
-         RJNAaPZiXc+0D5EVVGweRRqDQtVZN/jrxCIYwzeCR/tHLMU4KWqCrjp3Y3sx4N1morOg
-         3lEpX6f9qn7FXW1b+s459oZ4D6zNytZ5sa3aAiR/+AJ+o21Bh92d+7fp8/Mzg1L1Q6L+
-         z7/QGfNLHNk5t5EwGPdt5jm85ZUZc99wfuq7m9zTpC8ElSPSEQlFW1OU1ttSuPYfZ0uH
-         1OKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=yk4hlV3oYYsSlvuYcF9R6+qAH4msGknD1bQvyQeJ6htl664X1t4gH9xn9aABdKNK6N
-         I5V+179zl4kJ6C9yRSkN0hrHr0F9EEEHilKj6oNPlHuDyGBzLgBMRHWLMkvzW8cs3n/H
-         OOeaODx7pJknwzFM3psBLNOaa2VO8tdgbAz1tR2N6VMSe0qKJ6/QbkLY0czXbQLcLErA
-         jmwdOFThahPOOTD9jiRtIv74Ux2H/4CFLAAGF5vPGxgWw1jZ/2YsXMnEKVixNXHZ5swo
-         RHZAd/3wfQIwZIA5YJVBmNYYYnE5d/32tE2UwS55FLFrUNpNtIdXb0g0ceXObz4XpYFo
-         Z9Xg==
-X-Gm-Message-State: AJIora8HCm9Q4vsdwV/W3zTI6TK7GocjoaOWy0vZCX0/TUTt7glYMHgd
-        C5550IjmkHsCt/zzNooMV3eVEtqwEoTn+xEbFUM=
-X-Google-Smtp-Source: AGRyM1vqfDqPYbhSiZkLjp0yyYCQf2pkn5dqaqNe1JVfehbsMWdhIBxQj4kdS+qEU7x7+1rXX+MFudzpfpTsmnGz0RQ=
-X-Received: by 2002:a17:906:6a1c:b0:72f:2174:13db with SMTP id
- qw28-20020a1709066a1c00b0072f217413dbmr13425982ejc.687.1658846124567; Tue, 26
- Jul 2022 07:35:24 -0700 (PDT)
+        Tue, 26 Jul 2022 10:37:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0599E1166;
+        Tue, 26 Jul 2022 07:37:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 61CBB1FB;
+        Tue, 26 Jul 2022 07:37:35 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1BDB3F70D;
+        Tue, 26 Jul 2022 07:37:33 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 15:37:31 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [-next] Lockdep warnings
+Message-ID: <20220726143731.qe4pdsttv3qwqiuf@bogus>
+References: <20220726104134.3b3awfphvafljdgp@bogus>
+ <Yt/gyEMOtGafQX4z@FVFF77S0Q05N>
+ <Yt/i/o3Sb+niH2e+@FVFF77S0Q05N>
+ <20220726130837.n5734wq5jviocxsc@bogus>
 MIME-Version: 1.0
-Received: by 2002:a17:906:241b:0:0:0:0 with HTTP; Tue, 26 Jul 2022 07:35:23
- -0700 (PDT)
-Reply-To: clmloans9@gmail.com
-From:   MR ANTHONY EDWARD <zayyanusaidu009@gmail.com>
-Date:   Tue, 26 Jul 2022 15:35:23 +0100
-Message-ID: <CADM+8wR9Tg=hsdnNiedSSRWbgV8hrksz2nrTMjTskPnhfi_Qbw@mail.gmail.com>
-Subject: SICHERES KREDITANGEBOT BEI 2%
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:629 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [clmloans9[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [zayyanusaidu009[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [zayyanusaidu009[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726130837.n5734wq5jviocxsc@bogus>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
-rt?
-Wenn ja, kontaktieren Sie uns
+On Tue, Jul 26, 2022 at 02:08:37PM +0100, Sudeep Holla wrote:
+> On Tue, Jul 26, 2022 at 01:50:06PM +0100, Mark Rutland wrote:
+> > On Tue, Jul 26, 2022 at 01:40:40PM +0100, Mark Rutland wrote:
+> > > [Adding Peter; I suspect this is due to the cpuidle rework]
+> > 
+> > Looking again I see the cpuidle rework isn't in next, so evidently not...
+> > 
+> 
+> Yes, that is the first thing I checked and saw it wasn't in next. The first
+> splat I had see 2 weeks ago seem to suggest something around context_tracking
+> patches in the -next but I no longer see that. I haven't spent time digging
+> this, so thought better to post the splat on the list in the meantime.
+> 
 
-*Vollst=C3=A4ndiger Name:
-* Ben=C3=B6tigte Menge:
-*Leihdauer:
-*Mobiltelefon:
-*Land:
+OK, I need to take back that the issue is only on -next. Just tested
+v5.19-rc8 and v5.18, both has the splat with lockdep on. It could be just
+that it has been a while since I booted a kernel with lockdep on.
+
+-- 
+Regards,
+Sudeep

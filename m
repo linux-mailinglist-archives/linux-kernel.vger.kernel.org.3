@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B88580EBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EE6580EC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238327AbiGZIQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
+        id S238321AbiGZIRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238321AbiGZIQX (ORCPT
+        with ESMTP id S237641AbiGZIRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:16:23 -0400
-Received: from out199-14.us.a.mail.aliyun.com (out199-14.us.a.mail.aliyun.com [47.90.199.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DF81D314;
-        Tue, 26 Jul 2022 01:16:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VKUXwnf_1658823370;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VKUXwnf_1658823370)
-          by smtp.aliyun-inc.com;
-          Tue, 26 Jul 2022 16:16:12 +0800
-Subject: Re: [RESEND PATCH V2 0/5] Fixups to work with crash tool
-To:     Conor.Dooley@microchip.com
-Cc:     alexandre.ghiti@canonical.com, heiko@sntech.de, palmer@dabbelt.com,
-        mick@ics.forth.gr, guoren@kernel.org, kexec@lists.infradead.org,
-        bhe@redhat.com, linux-doc@vger.kernel.org, vgoyal@redhat.com,
-        linux-riscv@lists.infradead.org, dyoung@redhat.com,
-        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
-        huanyi.xj@alibaba-inc.com, heinrich.schuchardt@canonical.com,
-        anup@brainfault.org, corbet@lwn.net, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu
-References: <20220725014539.1037627-1-xianting.tian@linux.alibaba.com>
- <51c97da7-422f-1b5b-03d3-dc36c9132c2a@microchip.com>
- <7a395f64-8ec7-e07f-e763-afc1f2611c75@linux.alibaba.com>
- <2301681f-361d-b85b-e255-3bf449ceeaa9@microchip.com>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-Message-ID: <cf00c1f6-b043-a11e-f7a5-bed1e829cb73@linux.alibaba.com>
-Date:   Tue, 26 Jul 2022 16:16:10 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Tue, 26 Jul 2022 04:17:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1EB1CB24
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:17:39 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oGFkx-00055l-Ur; Tue, 26 Jul 2022 10:17:31 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oGFkx-0001JC-33; Tue, 26 Jul 2022 10:17:31 +0200
+Date:   Tue, 26 Jul 2022 10:17:31 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] soc: imx: imx93-blk-ctrl: set priority level
+Message-ID: <20220726081731.laulutjo4h4tizpx@pengutronix.de>
+References: <20220725035931.3988435-1-peng.fan@oss.nxp.com>
+ <20220725085050.izj7kmgeuxxug6rh@pengutronix.de>
+ <DU0PR04MB9417BBDAE35E932F7601F94788959@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <20220725093056.ywr7zo37e4rbrvei@pengutronix.de>
+ <DU0PR04MB9417E452C99EA1C4662A06DA88959@DU0PR04MB9417.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <2301681f-361d-b85b-e255-3bf449ceeaa9@microchip.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU0PR04MB9417E452C99EA1C4662A06DA88959@DU0PR04MB9417.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Peng,
 
-在 2022/7/26 下午4:01, Conor.Dooley@microchip.com 写道:
-> On 26/07/2022 08:54, tianxianting wrote:
->> 在 2022/7/26 上午1:13, Conor.Dooley@microchip.com 写道:
->>> That said, this does not apply to riscv/for-next:
->>> b4 shazam 20220725014539.1037627-1-xianting.tian@linux.alibaba.com
->>> Grabbing thread from lore.kernel.org/all/20220725014539.1037627-1-xianting.tian%40linux.alibaba.com/t.mbox.gz
->>> Checking for newer revisions on https://lore.kernel.org/all/
->>> Analyzing 6 messages in the thread
->>> Checking attestation on all messages, may take a moment...
->>> ---
->>>     [PATCH v2 1/5] RISC-V: use __smp_processor_id() instead of smp_processor_id()
->>>     [PATCH v2 2/5] RISC-V: Add arch_crash_save_vmcoreinfo support
->>>     [PATCH v2 3/5] riscv: Add modules to virtual kernel memory layout dump
->>>     [PATCH v2 4/5] RISC-V: Fixup getting correct current pc
->>>     [PATCH v2 5/5] riscv: crash_core: Export kernel vm layout, phys_ram_base
->>> ---
->>> Total patches: 5
->>> ---
->>> Applying: RISC-V: use __smp_processor_id() instead of smp_processor_id()
->>> Applying: RISC-V: Add arch_crash_save_vmcoreinfo support
->>> Patch failed at 0002 RISC-V: Add arch_crash_save_vmcoreinfo support
->> patch 2 apply is OK for me, I don't know why you failed :(
->> Do you have more detals for this?
->>
-> What did you apply it to? It does not apply for me to riscv/for-next:
-> https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/log/?h=for-next
+On 22-07-25, Peng Fan wrote:
+> > Subject: Re: [PATCH] soc: imx: imx93-blk-ctrl: set priority level
+> > 
+> > On 22-07-25, Peng Fan wrote:
+> > > Hi Marco,
+> > >
+> > > > Subject: Re: [PATCH] soc: imx: imx93-blk-ctrl: set priority level
+> > > >
+> > > > Hi Peng,
+> > > >
+> > > > thanks for the patch.
+> > > >
+> > > > On 22-07-25, Peng Fan (OSS) wrote:
+> > > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > >
+> > > > > i.MX93 mediamix blk ctrl has registers to set QoS(priority) value.
+> > > > > It support default QoS value and cfg QoS value. Set an initial
+> > > > > value from i.MX design team. If LCDIF/ISI/PXP wanna a different
+> > > > > QoS value in future, they could use interconnect to request bandwidth.
+> > > >
+> > > > I need to ask here. Does the iMX93 use the same interconnect as the
+> > > > iMX8M* does?
+> > >
+> > > No. i.MX93 use different interconnect, it has different design, the
+> > > QoS priority register are distributed in blk ctrl.
+> > 
+> > Did just the interface change e.g. how you configure the interconnect or is it
+> > a complete new interconnect?
+> 
+> It is different interconnect IP. The QoS(priority) register is not in a central
+> place, they are spread in the mix blk ctrl register space, most blk ctrl
+> has QoS. By configure the register in BLK CTRL, the QoS value will flow
+> into the interconnect IP.
+> 
+> But compared with i.MX8M, it is simpler.
 
-This 5 patches are based on the master branch of below git:
+Okay, I got both points. Just to be clear (and sorry for my persistency
+here) it is not just a different IP interface for the NOC?
 
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux.git
+So to be on the same page with you: On the i.MX93 we now have the
+BLKCTRL settting the interconnect priority and a interconnect setting
+for advanced traffic shaping like bandwidth reservation?
 
-"git am 0002-RISC-V-Add-arch_crash_save_vmcoreinfo-support.patch" to 
-this git is ok for me.
-
-All is correct?
-
->
-> Thanks,
-> Conor.
->
+Regards,
+  Marco

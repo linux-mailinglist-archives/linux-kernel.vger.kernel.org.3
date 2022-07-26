@@ -2,161 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5C1580E2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C68E580E3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238282AbiGZHqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
+        id S238442AbiGZHtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238184AbiGZHqo (ORCPT
+        with ESMTP id S237783AbiGZHto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:46:44 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726E21EC45;
-        Tue, 26 Jul 2022 00:46:43 -0700 (PDT)
-X-UUID: 9886849c35ce484996f3f0e089e87278-20220726
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:c9437132-4ba2-4ef5-811a-421fe6f21749,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.8,REQID:c9437132-4ba2-4ef5-811a-421fe6f21749,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:0f94e32,CLOUDID:9f5e84b3-06d2-48ef-b2dd-540836705165,C
-        OID:167e827dc092,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9886849c35ce484996f3f0e089e87278-20220726
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 533270541; Tue, 26 Jul 2022 15:46:37 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 26 Jul 2022 15:46:35 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Jul 2022 15:46:34 +0800
-Message-ID: <aface69bc8eeb0a34805428fa36d13f7909f694d.camel@mediatek.com>
-Subject: Re: [PATCH v13 3/3] mmc: mediatek: add support for SDIO eint wakup
- IRQ
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        "Eric Biggers" <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tue, 26 Jul 2022 03:49:44 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002B32A959
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:49:42 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LsTWX36tmz1M87q;
+        Tue, 26 Jul 2022 15:46:48 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Jul 2022 15:49:39 +0800
+From:   Yicong Yang <yangyicong@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
         <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Yong Mao <yong.mao@mediatek.com>
-Date:   Tue, 26 Jul 2022 15:46:34 +0800
-In-Reply-To: <CACRpkdZP-FBP8hsBfeMn1M8=VR_cYG+j9GQc9VdV-HjkvSo73w@mail.gmail.com>
-References: <20220623090445.1401-1-axe.yang@mediatek.com>
-         <20220623090445.1401-4-axe.yang@mediatek.com>
-         <CACRpkdZ5G2fMCqvkXANVEmZjNcF4U4mSDzZk6aXbqFjYVN3hcA@mail.gmail.com>
-         <3747f246650622ef65787159af5271a79401a855.camel@mediatek.com>
-         <CACRpkdZP-FBP8hsBfeMn1M8=VR_cYG+j9GQc9VdV-HjkvSo73w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>,
+        <jonathan.cameron@huawei.com>, <ego@linux.vnet.ibm.com>,
+        <srikar@linux.vnet.ibm.com>, <linuxarm@huawei.com>,
+        <21cnbao@gmail.com>, <guodong.xu@linaro.org>,
+        <hesham.almatary@huawei.com>, <john.garry@huawei.com>,
+        <shenyang39@huawei.com>, <kprateek.nayak@amd.com>,
+        <yu.c.chen@intel.com>, <wuyun.abel@bytedance.com>
+Subject: [PATCH v6 0/2] sched/fair: Scan cluster before scanning LLC in wake-up path
+Date:   Tue, 26 Jul 2022 15:47:56 +0800
+Message-ID: <20220726074758.46686-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-25 at 14:46 +0200, Linus Walleij wrote:
-> On Mon, Jul 25, 2022 at 11:13 AM Axe Yang <axe.yang@mediatek.com>
-> wrote:
-> > On Fri, 2022-07-22 at 13:21 +0200, Linus Walleij wrote:
-> > > On Thu, Jun 23, 2022 at 11:10 AM Axe Yang <axe.yang@mediatek.com>
-> > > wrote:
-> > SDIO DAT1 pin mode is changed to GPIO mode in
-> > dev_pm_set_dedicated_wake_irq_reverse():
-> > 
-> > 
-https://urldefense.com/v3/__https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/mediatek/pinctrl-mtk-common-v2.c*L339__;Iw!!CTRNKA9wMg0ARbw!zE3kmi37pZw4HiBNeRipWbi3gbAqrljLVQc5JVz-WP_NaIWTVhXshkakjFNh478e$
-> >  
-> > 
-> > dev_pm_set_dedicated_wake_irq_reverse() -> ...
-> > ->request_threaded_irq()
-> > -> __setup_irq() -> irq_request_resources() ->
-> > mtk_eint_irq_request_resources()-> mtk_xt_set_gpio_as_eint()
-> 
-> This doesn't seem to have much to do with pin control?
-> No pin control functions are called on this execution path,
-> no pin control state is changed, right?
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-That's right, no pin control state is changed.
+This is the follow-up work to support cluster scheduler. Previously
+we have added cluster level in the scheduler for both ARM64[1] and
+X86[2] to support load balance between clusters to bring more memory
+bandwidth and decrease cache contention. This patchset, on the other
+hand, takes care of wake-up path by giving CPUs within the same cluster
+a try before scanning the whole LLC to benefit those tasks communicating
+with each other.
 
-> 
-> If what you mean is that
-> it happens to poke into the same hardware registers that is
-> mainly a matter of concurrency in the driver, sometimes two
-> abstractions happen to have to poke into the same hardware
-> registers and then it is up to the driver to maintain state for
-> the hardware, this is not a question for the framework.
-> 
-> How is Mediatek developers thinking about this thing in general?
-> You are a few people who developed the driver so certainly
-> you must have some design idea to why irq_request_resources()
-> poke around in these registers? Does it even perform pin
-> control behind the back of the pin control framework?
+[1] 778c558f49a2 ("sched: Add cluster scheduler level in core and related Kconfig for ARM64")
+[2] 66558b730f25 ("sched: Add cluster scheduler level for x86")
 
-I see. It is sensible to reset pin function to GPIO mode when trying to
-register the pin to eint mode, and the operation is out of pinctrl
-framework.
+Change since v5:
+- Improve patch 2 according to Peter's suggestion:
+  - use sched_cluster_active to indicate whether cluster is active
+  - consider SMT case and use wrap iteration when scanning cluster
+- Add Vincent's tag
+Thanks.
+Link: https://lore.kernel.org/lkml/20220720081150.22167-1-yangyicong@hisilicon.com/
 
-Seems like maintain the pin state in driver is the only way to fix the
-pin function conflict.
+Change since v4:
+- rename cpus_share_resources to cpus_share_lowest_cache to be more informative, per Tim
+- return -1 when nr==0 in scan_cluster(), per Abel
+Thanks!
+Link: https://lore.kernel.org/lkml/20220609120622.47724-1-yangyicong@hisilicon.com/
 
-> 
-> > To restore SDIO DAT1 pin to uhs mode. I have to call
-> > pinctrl_select_state() twice(change pinctrl to another state, then
-> > change back to uhs mode). Ulf worried we might be doing something
-> > at
-> > the mmc driver level, which should really be managed at the pinctrl
-> > layer.
-> > 
-> > Do you have any comment or suggestion on this?
-> 
-> The pin control state transitions are really just finite automata.
-> 
-> Your pin control needs to be different when using wakeup from
-> when being used for SDIO and this is perfectly fine, it's no
-> different from the fact that the regulator and clock might need
-> to be in different states, so I don't quite understand the
-> question?
+Change since v3:
+- fix compile error when !CONFIG_SCHED_CLUSTER, reported by lkp test.
+Link: https://lore.kernel.org/lkml/20220608095758.60504-1-yangyicong@hisilicon.com/
 
-I see. At first I thought that pinctrl framework should be aware of
-the hidden modification of pin function. But as you said, it is just
-a finite automata. Driver should correct GPIO settings by itself if pin
-state be changed outside pin control state mechanical.
-Sorry for the noise, and thanks for your comment again.
+Change since v2:
+- leverage SIS_PROP to suspend redundant scanning when LLC is overloaded
+- remove the ping-pong suppression
+- address the comment from Tim, thanks.
+Link: https://lore.kernel.org/lkml/20220126080947.4529-1-yangyicong@hisilicon.com/
 
-> 
-> 
-Regards,
-Axe
+Change since v1:
+- regain the performance data based on v5.17-rc1
+- rename cpus_share_cluster to cpus_share_resources per Vincent and Gautham, thanks!
+Link: https://lore.kernel.org/lkml/20211215041149.73171-1-yangyicong@hisilicon.com/
+
+Barry Song (2):
+  sched: Add per_cpu cluster domain info and cpus_share_lowest_cache API
+  sched/fair: Scan cluster before scanning LLC in wake-up path
+
+ include/linux/sched/sd_flags.h |  7 +++++++
+ include/linux/sched/topology.h |  8 +++++++-
+ kernel/sched/core.c            | 12 ++++++++++++
+ kernel/sched/fair.c            | 31 ++++++++++++++++++++++++++++---
+ kernel/sched/sched.h           |  4 ++++
+ kernel/sched/topology.c        | 25 +++++++++++++++++++++++++
+ 6 files changed, 83 insertions(+), 4 deletions(-)
+
+-- 
+2.24.0
 

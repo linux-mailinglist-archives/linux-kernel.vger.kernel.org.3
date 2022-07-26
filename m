@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B6258114A
+	by mail.lfdr.de (Postfix) with ESMTP id 94BBE58114B
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238799AbiGZKfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
+        id S238833AbiGZKf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238754AbiGZKe6 (ORCPT
+        with ESMTP id S238769AbiGZKfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:34:58 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF596326FD
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:33 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id g2so11484055wru.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:33 -0700 (PDT)
+        Tue, 26 Jul 2022 06:35:00 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A1F32B9C
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:37 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id b26so19561720wrc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=5NOFnzxrwNxKwC6k5V35ydP1rttIzu+0Gy8MgWnHtmE=;
-        b=veLB3bFPgMnFUmsvabv5QNt9s61X2lCegKJ3mxrnWHem/lEmREjTTXgXPtwSjsCfkC
-         yCsTteGhVozGle9kseFg3jWXI9jYLeql1tzwr/gTK5MvdXtLq3LhQNDKLJe0XpCKoJsw
-         oCLRGGmBIEiwEVeESPoZM0KXmV6J8vuw0M77p9git4jAtCAxUQe77CSJZm8jlWQ/fu2o
-         IaClDFzqomuj8OT0F50KxILc+eUQejcX6dSgfW+5CWQxy+xNXBBkQn6X3haQYIJ4hJXW
-         maaeBYj+gpyApQhZv8aMR4RLS1RavbGoBHCyZ/lpECtZnDq6TFfO0Di2bEh0HVL6QjHd
-         ymPA==
+        bh=fwuObdKhl0wLQFLoV4lp8AQBoHjI+xXslw/mDTvI834=;
+        b=2lG15SUXNRpuWTuX61U9J/n+TUnAuUGlfFd/qj8NDMe3lvZ37kPgKJcFensoosksEj
+         GNBQ0KLCk8BCBFjn448HCQekTzyHLd6fPUQGk35310E0Pd7QK1FoaexiV/QZ8Ypd8Ua4
+         f2xEA7nOSC4o+3nrBQVy0IFc3tD8+CXBmMRGo0jv17TKu6O3iaJJdt7U9kDtnb4zA7Pn
+         YLcZ+8Sao8NtfbqcS0I53e7W3MrrYA+kzYIBDe0l4QJy5vpdNmm8GV7uoNKey4/2iQ/D
+         G2mBmRjp1CmDcsR0jz3VZXmCcvYogb4pu0qBBMJgw+4O2lGrkl7X7HjZM7PO/cxqQ1Ra
+         86tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=5NOFnzxrwNxKwC6k5V35ydP1rttIzu+0Gy8MgWnHtmE=;
-        b=NIomCed+QJ55IU6+y08tmqe1HNGWee8IoHvSRZooTHvts6KxqZNSaLJ8KMDXKIWpHv
-         8z6TaiXz7MjqoSszruPfHqgEkOe8ITYr4f6O6s1/iuTEvllMKtOPRwgydGx3+tEiOLlv
-         dACATk7bujWku99zxBcSmXXO7MNLNUaIRxDqoOQp7bg/anB0MvmA2R0WKbzG8E+PHSvM
-         RXuQgTe4Q6lOEPajV0rdxUqBIzFWzrhQ+WzRGBwM6/C9x/EsOWd9x+Q0p86LEj0W+O6I
-         gvIdnCaRO8QKHuMs9fRDCyJb/2KQvZKrZ2hYpQDLlv2IGI/J5cRXMSbdcxbhtenXWUsd
-         A6uQ==
-X-Gm-Message-State: AJIora89zfddgq70BXJi1lWG19DBTuBs9M5lbCZId8eaJuFujjQHSCud
-        y3GftMGPXj/qTKElmM7IMKGxqA==
-X-Google-Smtp-Source: AGRyM1uyrj+NCUcQt3/2TSfhJyynGuxUMoOOcMtbzYFaRNNCYlpqQCBfSfMcixuPMnHaYkQqBb2E4A==
-X-Received: by 2002:a05:6000:178d:b0:21d:a3cc:54c8 with SMTP id e13-20020a056000178d00b0021da3cc54c8mr10080665wrg.602.1658831673194;
-        Tue, 26 Jul 2022 03:34:33 -0700 (PDT)
+        bh=fwuObdKhl0wLQFLoV4lp8AQBoHjI+xXslw/mDTvI834=;
+        b=OXx/JytOr+AoJU99qv2b3eEN3OcKVBvut6xw0Rl3XjAsBaGmfnop0vAHpY0eGr0WlJ
+         lsMNGVWCo5qY/gWqHGaQEkHqtZDH5jZI4k5mQz4dXMzJnV+HfS/gHyTPTTql5MZGSE3z
+         Cgokh9lvg2a6DZvpFJZrOrxmxATt6Cgy+Vsi8QX/SqtIhqU2eUmtKxdXDIn7xCTrnfRF
+         NeiudbPbQnG7pQyyB3tc2tM7vopmE3kN1Pz+M+8Bb8smT6lIvOtw6C65ifIAd9X/x/U0
+         9gbEgAX4TRAknrlfV2rUrUpReV5uakAGlWF9gqj2TEtn9Pkrf502EKJGOxtryoyGc9ki
+         HVSQ==
+X-Gm-Message-State: AJIora+KKPn/yvEdxcjtBbSziIx6mxfUnYY2iHyE7B+9hfU0DRJsdm3c
+        8QFf69W4vHtWsdrCLtQxmN0qXw==
+X-Google-Smtp-Source: AGRyM1uIsrF9Uxh1PqxZGkVpvGYfuw4smy6v7fQMgoay8Zm+u2Ky9KMD3ik7ez8/+xqVCVHbX9QAfA==
+X-Received: by 2002:a5d:6b50:0:b0:21e:298c:caad with SMTP id x16-20020a5d6b50000000b0021e298ccaadmr10180082wrw.509.1658831675918;
+        Tue, 26 Jul 2022 03:34:35 -0700 (PDT)
 Received: from localhost.localdomain (2a02-8440-4641-6f91-91b7-326a-5d27-a1c3.rev.sfr.net. [2a02:8440:4641:6f91:91b7:326a:5d27:a1c3])
-        by smtp.gmail.com with ESMTPSA id ay35-20020a05600c1e2300b003a2e42ae9a4sm20617121wmb.14.2022.07.26.03.34.31
+        by smtp.gmail.com with ESMTPSA id ay35-20020a05600c1e2300b003a2e42ae9a4sm20617121wmb.14.2022.07.26.03.34.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 03:34:32 -0700 (PDT)
+        Tue, 26 Jul 2022 03:34:35 -0700 (PDT)
 From:   Jerome Neanne <jneanne@baylibre.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
         nm@ti.com, kristo@kernel.org
@@ -54,9 +54,9 @@ Cc:     khilman@baylibre.com, narmstrong@baylibre.com, msp@baylibre.com,
         j-keerthy@ti.com, lee.jones@linaro.org, jneanne@baylibre.com,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 09/11] regulator: drivers: Add TI TPS65219 PMIC regulators support
-Date:   Tue, 26 Jul 2022 12:33:53 +0200
-Message-Id: <20220726103355.17684-10-jneanne@baylibre.com>
+Subject: [PATCH v2 10/11] Input: Add tps65219 interrupt driven powerbutton
+Date:   Tue, 26 Jul 2022 12:33:54 +0200
+Message-Id: <20220726103355.17684-11-jneanne@baylibre.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220726103355.17684-1-jneanne@baylibre.com>
 References: <20220726103355.17684-1-jneanne@baylibre.com>
@@ -69,504 +69,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The regulators set consists of 3 bucks DCDCs and 4 LDOs. The output
-voltages are configurable and are meant to supply power to the
-main processor and other components.
+From: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Validation:
-Visual check: cat /sys/kernel/debug/regulator/regulator_summary
-Validation: userspace-consumer and virtual-regulator required
-to test further
+TPS65219 has different interrupts compared to other TPS6521* chips.
+TPS65219 defines two interrupts for the powerbutton one for push and one
+for release.
 
-Enable/Disable:
-cat /sys/devices/platform/userspace-consumer-VDDSHV_SD_IO_PMIC/state
-echo disabled > /sys/devices/platform/
-userspace-consumer-VDDSHV_SD_IO_PMIC/state
-echo enabled > /sys/devices/platform/
-userspace-consumer-VDDSHV_SD_IO_PMIC/state
+This driver is very simple in that it maps the push interrupt to a key
+input and the release interrupt to a key release.
 
-Change voltage:
-cat /sys/devices/platform/regulator-virtual-ldo1/min_microvolts
-echo 1000000 > /sys/devices/platform/regulator-virtual-ldo1/
-min_microvolts
-echo 3000000 > /sys/devices/platform/regulator-virtual-ldo1/
-max_microvolts
-
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
 ---
- MAINTAINERS                            |   1 +
- drivers/regulator/Kconfig              |   9 +
- drivers/regulator/Makefile             |   1 +
- drivers/regulator/tps65219-regulator.c | 416 +++++++++++++++++++++++++
- 4 files changed, 427 insertions(+)
- create mode 100644 drivers/regulator/tps65219-regulator.c
+ MAINTAINERS                             |   1 +
+ drivers/input/misc/Kconfig              |  10 ++
+ drivers/input/misc/Makefile             |   1 +
+ drivers/input/misc/tps65219-pwrbutton.c | 150 ++++++++++++++++++++++++
+ 4 files changed, 162 insertions(+)
+ create mode 100644 drivers/input/misc/tps65219-pwrbutton.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 1331c43fc6ce..c48663a59835 100644
+index c48663a59835..68959f75d607 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -14721,6 +14721,7 @@ F:	drivers/regulator/palmas-regulator*.c
- F:	drivers/regulator/pbias-regulator.c
- F:	drivers/regulator/tps65217-regulator.c
- F:	drivers/regulator/tps65218-regulator.c
-+F:	drivers/regulator/tps65219-regulator.c
- F:	drivers/regulator/tps65910-regulator.c
- F:	drivers/regulator/twl-regulator.c
- F:	drivers/regulator/twl6030-regulator.c
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index cbe0f96ca342..9b46c3465c46 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1356,6 +1356,15 @@ config REGULATOR_TPS65218
- 	  voltage regulators. It supports software based voltage control
- 	  for different voltage domains
+@@ -14705,6 +14705,7 @@ F:	arch/arm/plat-omap/
+ F:	drivers/bus/ti-sysc.c
+ F:	drivers/i2c/busses/i2c-omap.c
+ F:	drivers/input/misc/tps65218-pwrbutton.c
++F:	drivers/input/misc/tps65219-pwrbutton.c
+ F:	drivers/irqchip/irq-omap-intc.c
+ F:	drivers/mfd/*omap*.c
+ F:	drivers/mfd/menelaus.c
+diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+index a18ab7358d8f..18d4a321e7ff 100644
+--- a/drivers/input/misc/Kconfig
++++ b/drivers/input/misc/Kconfig
+@@ -468,6 +468,16 @@ config INPUT_TPS65218_PWRBUTTON
+ 	  To compile this driver as a module, choose M here. The module will
+ 	  be called tps65218-pwrbutton.
  
-+config REGULATOR_TPS65219
-+	tristate "TI TPS65219 Power regulators"
-+	depends on MFD_TPS65219 && OF
++config INPUT_TPS65219_PWRBUTTON
++	tristate "TPS65219 Power button driver"
++	depends on MFD_TPS65219
 +	help
-+	  This driver supports TPS65219 voltage regulator chips.
-+	  TPS65219 series of PMICs have 3 single phase BUCKs & 4 LDOs
-+	  voltage regulators. It supports software based voltage control
-+	  for different voltage domains.
++	  Say Y here if you want to enable power button reporting for
++	  TPS65219 Power Management IC devices.
 +
- config REGULATOR_TPS6524X
- 	tristate "TI TPS6524X Power regulators"
- 	depends on SPI
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 8d3ee8b6d41d..f2e8509a8f89 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -159,6 +159,7 @@ obj-$(CONFIG_REGULATOR_TPS65086) += tps65086-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65090) += tps65090-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65217) += tps65217-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65218) += tps65218-regulator.o
-+obj-$(CONFIG_REGULATOR_TPS65219) += tps65219-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6524X) += tps6524x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
-diff --git a/drivers/regulator/tps65219-regulator.c b/drivers/regulator/tps65219-regulator.c
++	  To compile this driver as a module, choose M here. The module will
++	  be called tps65219-pwrbutton.
++
+ config INPUT_AXP20X_PEK
+ 	tristate "X-Powers AXP20X power button driver"
+ 	depends on MFD_AXP20X
+diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
+index 28dfc444f0a9..fe8f47402d12 100644
+--- a/drivers/input/misc/Makefile
++++ b/drivers/input/misc/Makefile
+@@ -78,6 +78,7 @@ obj-$(CONFIG_INPUT_SOC_BUTTON_ARRAY)	+= soc_button_array.o
+ obj-$(CONFIG_INPUT_SPARCSPKR)		+= sparcspkr.o
+ obj-$(CONFIG_INPUT_STPMIC1_ONKEY)  	+= stpmic1_onkey.o
+ obj-$(CONFIG_INPUT_TPS65218_PWRBUTTON)	+= tps65218-pwrbutton.o
++obj-$(CONFIG_INPUT_TPS65219_PWRBUTTON)	+= tps65219-pwrbutton.o
+ obj-$(CONFIG_INPUT_TWL4030_PWRBUTTON)	+= twl4030-pwrbutton.o
+ obj-$(CONFIG_INPUT_TWL4030_VIBRA)	+= twl4030-vibra.o
+ obj-$(CONFIG_INPUT_TWL6040_VIBRA)	+= twl6040-vibra.o
+diff --git a/drivers/input/misc/tps65219-pwrbutton.c b/drivers/input/misc/tps65219-pwrbutton.c
 new file mode 100644
-index 000000000000..7ba2594e437c
+index 000000000000..48ced7b63ec3
 --- /dev/null
-+++ b/drivers/regulator/tps65219-regulator.c
-@@ -0,0 +1,416 @@
++++ b/drivers/input/misc/tps65219-pwrbutton.c
+@@ -0,0 +1,150 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
-+// tps65219-regulator.c
-+//
-+// Regulator driver for TPS65219 PMIC
++// Driver for TPS65219 Push Button
 +//
 +// Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
 +//
-+// This implementation derived from tps65218 authored by
-+// "J Keerthy <j-keerthy@ti.com>"
-+//
 +
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/device.h>
 +#include <linux/init.h>
-+#include <linux/err.h>
-+#include <linux/platform_device.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/of_regulator.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
++#include <linux/input.h>
++#include <linux/interrupt.h>
++#include <linux/kernel.h>
 +#include <linux/mfd/tps65219.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/slab.h>
 +
-+struct tps65219_regulator_irq_type {
-+	const char *irq_name;
-+	const char *regulator_name;
-+	const char *event_name;
-+	unsigned long event;
-+};
-+
-+struct tps65219_regulator_irq_type tps65219_regulator_irq_types[] = {
-+	{ "LDO3_SCG", "LDO3", "short circuit to ground", REGULATOR_EVENT_REGULATION_OUT },
-+	{ "LDO3_OC", "LDO3", "overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "LDO3_UV", "LDO3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ "LDO4_SCG", "LDO4", "short circuit to ground", REGULATOR_EVENT_REGULATION_OUT },
-+	{ "LDO4_OC", "LDO4", "overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "LDO4_UV", "LDO4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ "LDO1_SCG", "LDO1", "short circuit to ground", REGULATOR_EVENT_REGULATION_OUT },
-+	{ "LDO1_OC", "LDO1", "overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "LDO1_UV", "LDO1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ "LDO2_SCG", "LDO2", "short circuit to ground", REGULATOR_EVENT_REGULATION_OUT },
-+	{ "LDO2_OC", "LDO2", "overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "LDO2_UV", "LDO2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ "BUCK3_SCG", "BUCK3", "short circuit to ground", REGULATOR_EVENT_REGULATION_OUT },
-+	{ "BUCK3_OC", "BUCK3", "overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "BUCK3_NEG_OC", "BUCK3", "negative overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "BUCK3_UV", "BUCK3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ "BUCK1_SCG", "BUCK1", "short circuit to ground", REGULATOR_EVENT_REGULATION_OUT },
-+	{ "BUCK1_OC", "BUCK1", "overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "BUCK1_NEG_OC", "BUCK1", "negative overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "BUCK1_UV", "BUCK1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ "BUCK2_SCG", "BUCK2", "short circuit to ground", REGULATOR_EVENT_REGULATION_OUT },
-+	{ "BUCK2_OC", "BUCK2", "overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "BUCK2_NEG_OC", "BUCK2", "negative overcurrent", REGULATOR_EVENT_OVER_CURRENT },
-+	{ "BUCK2_UV", "BUCK2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ "BUCK1_RV", "BUCK1", "residual voltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "BUCK2_RV", "BUCK2", "residual voltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "BUCK3_RV", "BUCK3", "residual voltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "LDO1_RV", "LDO1", "residual voltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "LDO2_RV", "LDO2", "residual voltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "LDO3_RV", "LDO3", "residual voltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "LDO4_RV", "LDO4", "residual voltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "BUCK1_RV_SD", "BUCK1", "residual voltage on shutdown",
-+	 REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "BUCK2_RV_SD", "BUCK2", "residual voltage on shutdown",
-+	 REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "BUCK3_RV_SD", "BUCK3", "residual voltage on shutdown",
-+	 REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "LDO1_RV_SD", "LDO1", "residual voltage on shutdown", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "LDO2_RV_SD", "LDO2", "residual voltage on shutdown", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "LDO3_RV_SD", "LDO3", "residual voltage on shutdown", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "LDO4_RV_SD", "LDO4", "residual voltage on shutdown", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ "SENSOR_3_WARM", "SENSOR3", "warm temperature", REGULATOR_EVENT_OVER_TEMP_WARN},
-+	{ "SENSOR_2_WARM", "SENSOR2", "warm temperature", REGULATOR_EVENT_OVER_TEMP_WARN },
-+	{ "SENSOR_1_WARM", "SENSOR1", "warm temperature", REGULATOR_EVENT_OVER_TEMP_WARN },
-+	{ "SENSOR_0_WARM", "SENSOR0", "warm temperature", REGULATOR_EVENT_OVER_TEMP_WARN },
-+	{ "SENSOR_3_HOT", "SENSOR3", "hot temperature", REGULATOR_EVENT_OVER_TEMP},
-+	{ "SENSOR_2_HOT", "SENSOR2", "hot temperature", REGULATOR_EVENT_OVER_TEMP },
-+	{ "SENSOR_1_HOT", "SENSOR1", "hot temperature", REGULATOR_EVENT_OVER_TEMP },
-+	{ "SENSOR_0_HOT", "SENSOR0", "hot temperature", REGULATOR_EVENT_OVER_TEMP },
-+	{ "TIMEOUT", "", "", REGULATOR_EVENT_ABORT_VOLTAGE_CHANGE },
-+};
-+
-+struct tps65219_regulator_irq_data {
++struct tps65219_pwrbutton {
 +	struct device *dev;
-+	struct tps65219_regulator_irq_type *type;
-+	struct regulator_dev *rdev;
++	struct input_dev *idev;
++	char phys[32];
 +};
 +
-+#define TPS65219_REGULATOR(_name, _of, _id, _type, _ops, _n, _vr, _vm, _er, \
-+			   _em, _cr, _cm, _lr, _nlr, _delay, _fuv, \
-+			   _ct, _ncl, _bpm) \
-+	{								\
-+		.name			= _name,			\
-+		.of_match		= _of,				\
-+		.regulators_node	= of_match_ptr("regulators"),	\
-+		.supply_name		= _of,				\
-+		.id			= _id,				\
-+		.ops			= &(_ops),			\
-+		.n_voltages		= _n,				\
-+		.type			= _type,			\
-+		.owner			= THIS_MODULE,			\
-+		.vsel_reg		= _vr,				\
-+		.vsel_mask		= _vm,				\
-+		.csel_reg		= _cr,				\
-+		.csel_mask		= _cm,				\
-+		.curr_table		= _ct,				\
-+		.n_current_limits	= _ncl,				\
-+		.enable_reg		= _er,				\
-+		.enable_mask		= _em,				\
-+		.volt_table		= NULL,				\
-+		.linear_ranges		= _lr,				\
-+		.n_linear_ranges	= _nlr,				\
-+		.ramp_delay		= _delay,			\
-+		.fixed_uV		= _fuv,				\
-+		.bypass_reg		= _vr,				\
-+		.bypass_mask		= _bpm,				\
-+		.bypass_val_on		= 1,				\
-+	}								\
-+
-+static const struct linear_range bucks_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(600000, 0x0, 0x1f, 25000),
-+	REGULATOR_LINEAR_RANGE(1400000, 0x20, 0x33, 100000),
-+	REGULATOR_LINEAR_RANGE(3400000, 0x34, 0x3f, 0),
-+};
-+
-+static const struct linear_range ldos_1_2_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(600000, 0x0, 0x37, 50000),
-+	REGULATOR_LINEAR_RANGE(3400000, 0x38, 0x3f, 0),
-+};
-+
-+static const struct linear_range ldos_3_4_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(1200000, 0x0, 0xC, 0),
-+	REGULATOR_LINEAR_RANGE(1250000, 0xD, 0x35, 50000),
-+	REGULATOR_LINEAR_RANGE(3300000, 0x36, 0x3F, 0),
-+};
-+
-+static int tps65219_set_mode(struct regulator_dev *dev, unsigned int mode)
++static irqreturn_t tps65219_pb_push_irq(int irq, void *_pwr)
 +{
-+	struct tps65219 *tps = rdev_get_drvdata(dev);
++	struct tps65219_pwrbutton *pwr = _pwr;
 +
-+	switch (mode) {
-+	case REGULATOR_MODE_NORMAL:
-+		return regmap_set_bits(tps->regmap, TPS65219_REG_STBY_1_CONFIG,
-+				       dev->desc->enable_mask);
++	input_report_key(pwr->idev, KEY_POWER, 1);
++	pm_wakeup_event(pwr->dev, 0);
++	input_sync(pwr->idev);
 +
-+	case REGULATOR_MODE_STANDBY:
-+		return regmap_clear_bits(tps->regmap,
-+					 TPS65219_REG_STBY_1_CONFIG,
-+					 dev->desc->enable_mask);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static unsigned int tps65219_get_mode(struct regulator_dev *dev)
-+{
-+	struct tps65219 *tps = rdev_get_drvdata(dev);
-+	unsigned int rid = rdev_get_id(dev);
-+	int ret, value = 0;
-+
-+	ret = regmap_read(tps->regmap, TPS65219_REG_STBY_1_CONFIG, &value);
-+	if (ret) {
-+		dev_dbg(tps->dev, "%s failed for regulator %s: %d ",
-+			__func__, dev->desc->name, ret);
-+		return ret;
-+	}
-+	value = (value & BIT(rid)) >> rid;
-+	if (value)
-+		return REGULATOR_MODE_STANDBY;
-+	else
-+		return REGULATOR_MODE_NORMAL;
-+}
-+
-+/*
-+ * generic regulator_set_bypass_regmap does not fully match requirements
-+ * TPS65219 Requires explicitly that regulator is disabled before switch
-+ */
-+static int tps65219_set_bypass(struct regulator_dev *dev, bool enable)
-+{
-+	struct tps65219 *tps = rdev_get_drvdata(dev);
-+	unsigned int rid = rdev_get_id(dev);
-+	int ret = 0;
-+
-+	if (dev->desc->ops->enable) {
-+		dev_err(tps->dev,
-+			"%s LDO%d enabled, must be shut down to set bypass ",
-+			__func__, rid);
-+		return -EBUSY;
-+	}
-+	ret =  regulator_set_bypass_regmap(dev, enable);
-+	return ret;
-+}
-+
-+/* Operations permitted on BUCK1/2/3 */
-+static const struct regulator_ops tps65219_bucks_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.set_mode		= tps65219_set_mode,
-+	.get_mode		= tps65219_get_mode,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
-+
-+};
-+
-+/* Operations permitted on LDO1/2 */
-+static const struct regulator_ops tps65219_ldos_1_2_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.set_mode		= tps65219_set_mode,
-+	.get_mode		= tps65219_get_mode,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+	.set_bypass		= tps65219_set_bypass,
-+	.get_bypass		= regulator_get_bypass_regmap,
-+};
-+
-+/* Operations permitted on LDO3/4 */
-+static const struct regulator_ops tps65219_ldos_3_4_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.set_mode		= tps65219_set_mode,
-+	.get_mode		= tps65219_get_mode,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+};
-+
-+static const struct regulator_desc regulators[] = {
-+	TPS65219_REGULATOR("BUCK1", "buck1", TPS65219_BUCK_1,
-+			   REGULATOR_VOLTAGE, tps65219_bucks_ops, 64,
-+			   TPS65219_REG_BUCK1_VOUT,
-+			   TPS65219_BUCKS_LDOS_VOUT_VSET_MASK,
-+			   TPS65219_REG_ENABLE_CTRL,
-+			   TPS65219_ENABLE_BUCK1_EN_MASK, 0, 0, bucks_ranges,
-+			   3, 4000, 0, NULL, 0, 0),
-+	TPS65219_REGULATOR("BUCK2", "buck2", TPS65219_BUCK_2,
-+			   REGULATOR_VOLTAGE, tps65219_bucks_ops, 64,
-+			   TPS65219_REG_BUCK2_VOUT,
-+			   TPS65219_BUCKS_LDOS_VOUT_VSET_MASK,
-+			   TPS65219_REG_ENABLE_CTRL,
-+			   TPS65219_ENABLE_BUCK2_EN_MASK, 0, 0, bucks_ranges,
-+			   3, 4000, 0, NULL, 0, 0),
-+	TPS65219_REGULATOR("BUCK3", "buck3", TPS65219_BUCK_3,
-+			   REGULATOR_VOLTAGE, tps65219_bucks_ops, 64,
-+			   TPS65219_REG_BUCK3_VOUT,
-+			   TPS65219_BUCKS_LDOS_VOUT_VSET_MASK,
-+			   TPS65219_REG_ENABLE_CTRL,
-+			   TPS65219_ENABLE_BUCK3_EN_MASK, 0, 0, bucks_ranges,
-+			   3, 0, 0, NULL, 0, 0),
-+	TPS65219_REGULATOR("LDO1", "ldo1", TPS65219_LDO_1,
-+			   REGULATOR_VOLTAGE, tps65219_ldos_1_2_ops, 64,
-+			   TPS65219_REG_LDO1_VOUT,
-+			   TPS65219_BUCKS_LDOS_VOUT_VSET_MASK,
-+			   TPS65219_REG_ENABLE_CTRL,
-+			   TPS65219_ENABLE_LDO1_EN_MASK, 0, 0, ldos_1_2_ranges,
-+			   2, 0, 0, NULL, 0, TPS65219_LDOS_BYP_CONFIG_MASK),
-+	TPS65219_REGULATOR("LDO2", "ldo2", TPS65219_LDO_2,
-+			   REGULATOR_VOLTAGE, tps65219_ldos_1_2_ops, 64,
-+			   TPS65219_REG_LDO2_VOUT,
-+			   TPS65219_BUCKS_LDOS_VOUT_VSET_MASK,
-+			   TPS65219_REG_ENABLE_CTRL,
-+			   TPS65219_ENABLE_LDO2_EN_MASK, 0, 0, ldos_1_2_ranges,
-+			   2, 0, 0, NULL, 0, TPS65219_LDOS_BYP_CONFIG_MASK),
-+	TPS65219_REGULATOR("LDO3", "ldo3", TPS65219_LDO_3,
-+			   REGULATOR_VOLTAGE, tps65219_ldos_3_4_ops, 64,
-+			   TPS65219_REG_LDO3_VOUT,
-+			   TPS65219_BUCKS_LDOS_VOUT_VSET_MASK,
-+			   TPS65219_REG_ENABLE_CTRL,
-+			   TPS65219_ENABLE_LDO3_EN_MASK, 0, 0, ldos_3_4_ranges,
-+			   3, 0, 0, NULL, 0, 0),
-+	TPS65219_REGULATOR("LDO4", "ldo4", TPS65219_LDO_4,
-+			   REGULATOR_VOLTAGE, tps65219_ldos_3_4_ops, 64,
-+			   TPS65219_REG_LDO4_VOUT,
-+			   TPS65219_BUCKS_LDOS_VOUT_VSET_MASK,
-+			   TPS65219_REG_ENABLE_CTRL,
-+			   TPS65219_ENABLE_LDO4_EN_MASK, 0, 0, ldos_3_4_ranges,
-+			   3, 0, 0, NULL, 0, 0),
-+};
-+
-+static irqreturn_t tps65219_regulator_irq_handler(int irq, void *data)
-+{
-+	struct tps65219_regulator_irq_data *irq_data = data;
-+
-+	if (irq_data->type->event_name[0] == '\0') {
-+		/* This is the timeout interrupt no specific regulator */
-+		dev_err(irq_data->dev,
-+			"System was put in shutdown due to timeout during an active or standby transition.\n");
-+		return IRQ_HANDLED;
-+	}
-+
-+	regulator_notifier_call_chain(irq_data->rdev,
-+				      irq_data->type->event, NULL);
-+
-+	dev_err(irq_data->dev, "Error IRQ trap %s for %s\n",
-+		irq_data->type->event_name, irq_data->type->regulator_name);
 +	return IRQ_HANDLED;
 +}
 +
-+static int tps65219_get_rdev_by_name(const char *regulator_name,
-+				     struct regulator_dev *rdevtbl[7],
-+				     struct regulator_dev *dev)
++static irqreturn_t tps65219_pb_release_irq(int irq, void *_pwr)
 +{
-+	int i;
++	struct tps65219_pwrbutton *pwr = _pwr;
 +
-+	for (i = 0; i < ARRAY_SIZE(regulators); i++) {
-+		if (strcmp(regulator_name, regulators[i].name) == 0) {
-+			dev = rdevtbl[i];
-+			return 0;
-+		}
-+	}
-+	return -EINVAL;
++	input_report_key(pwr->idev, KEY_POWER, 0);
++	input_sync(pwr->idev);
++
++	return IRQ_HANDLED;
 +}
 +
-+static int tps65219_regulator_probe(struct platform_device *pdev)
++static int tps65219_pb_probe(struct platform_device *pdev)
 +{
 +	struct tps65219 *tps = dev_get_drvdata(pdev->dev.parent);
-+	struct regulator_dev *rdev;
-+	struct regulator_config config = { };
-+	int i;
++	struct device *dev = &pdev->dev;
++	struct tps65219_pwrbutton *pwr;
++	struct input_dev *idev;
 +	int error;
-+	int irq;
-+	struct tps65219_regulator_irq_data *irq_data;
-+	struct tps65219_regulator_irq_type *irq_type;
-+	struct regulator_dev *rdevtbl[7];
++	int push_irq;
++	int release_irq;
 +
-+	config.dev = tps->dev;
-+	config.driver_data = tps;
-+	config.regmap = tps->regmap;
-+
-+	for (i = 0; i < ARRAY_SIZE(regulators); i++) {
-+		dev_dbg(tps->dev, "%s regul i= %d START", __func__, i);
-+		rdev = devm_regulator_register(&pdev->dev, &regulators[i],
-+					       &config);
-+		if (IS_ERR(rdev)) {
-+			dev_err(tps->dev, "failed to register %s regulator\n",
-+				pdev->name);
-+			return PTR_ERR(rdev);
-+		}
-+		rdevtbl[i] = rdev;
-+		dev_dbg(tps->dev, "%s regul i= %d COMPLETED", __func__, i);
-+	}
-+
-+	irq_data = devm_kmalloc(tps->dev,
-+				ARRAY_SIZE(tps65219_regulator_irq_types) *
-+				sizeof(struct tps65219_regulator_irq_data),
-+				GFP_KERNEL);
-+	if (!irq_data)
++	pwr = devm_kzalloc(dev, sizeof(*pwr), GFP_KERNEL);
++	if (!pwr)
 +		return -ENOMEM;
 +
-+	for (i = 0; i < ARRAY_SIZE(tps65219_regulator_irq_types); ++i) {
-+		irq_type = &tps65219_regulator_irq_types[i];
++	idev = devm_input_allocate_device(dev);
++	if (!idev)
++		return -ENOMEM;
 +
-+		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-+		if (irq < 0) {
-+			dev_err(tps->dev, "Failed to get IRQ %s: %d\n",
-+				irq_type->irq_name, irq);
-+			return -EINVAL;
-+		}
-+		irq_data[i].dev = tps->dev;
-+		irq_data[i].type = irq_type;
++	idev->name = pdev->name;
++	snprintf(pwr->phys, sizeof(pwr->phys), "%s/input0",
++		 pdev->name);
++	idev->phys = pwr->phys;
++	idev->dev.parent = dev;
++	idev->id.bustype = BUS_I2C;
 +
-+		tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, rdev);
-+		if (rdev < 0) {
-+			dev_err(tps->dev, "Failed to get rdev for %s\n",
-+				irq_type->regulator_name);
-+			return -EINVAL;
-+		}
-+		irq_data[i].rdev = rdev;
++	input_set_capability(idev, EV_KEY, KEY_POWER);
 +
-+		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-+						  tps65219_regulator_irq_handler,
-+						  IRQF_ONESHOT,
-+						  irq_type->irq_name,
-+						  &irq_data[i]);
-+		if (error) {
-+			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
-+				irq_type->irq_name, irq, error);
-+			return error;
-+		}
++	pwr->dev = dev;
++	pwr->idev = idev;
++	device_init_wakeup(dev, true);
++
++	push_irq = platform_get_irq(pdev, 0);
++	if (push_irq < 0)
++		return -EINVAL;
++
++	release_irq = platform_get_irq(pdev, 1);
++	if (release_irq < 0)
++		return -EINVAL;
++
++	error = devm_request_threaded_irq(dev, push_irq, NULL,
++					  tps65219_pb_push_irq,
++					  IRQF_ONESHOT,
++					  dev->init_name, pwr);
++	if (error) {
++		dev_err(dev, "failed to request push IRQ #%d: %d\n", push_irq,
++			error);
++		return error;
 +	}
++
++	error = devm_request_threaded_irq(dev, release_irq, NULL,
++					  tps65219_pb_release_irq,
++					  IRQF_ONESHOT,
++					  dev->init_name, pwr);
++	if (error) {
++		dev_err(dev, "failed to request release IRQ #%d: %d\n",
++			release_irq, error);
++		return error;
++	}
++
++	error = input_register_device(idev);
++	if (error) {
++		dev_err(dev, "Can't register power button: %d\n", error);
++		return error;
++	}
++
++	/* Enable interrupts for the pushbutton */
++	regmap_clear_bits(tps->regmap, TPS65219_REG_MASK_CONFIG,
++			  TPS65219_REG_MASK_INT_FOR_PB_MASK);
++
++	/* Set PB/EN/VSENSE pin to be a pushbutton */
++	regmap_update_bits(tps->regmap, TPS65219_REG_MFP_2_CONFIG,
++			   TPS65219_MFP_2_EN_PB_VSENSE_MASK, TPS65219_MFP_2_PB);
 +
 +	return 0;
 +}
 +
-+static const struct platform_device_id tps65219_regulator_id_table[] = {
-+	{ "tps65219-regulator", },
++static int tps65219_pb_remove(struct platform_device *pdev)
++{
++	struct tps65219 *tps = dev_get_drvdata(pdev->dev.parent);
++
++	/* Disable interrupt for the pushbutton */
++	return regmap_update_bits(tps->regmap, TPS65219_REG_MASK_CONFIG,
++				  TPS65219_REG_MASK_INT_FOR_PB_MASK,
++				  TPS65219_REG_MASK_INT_FOR_PB_MASK);
++}
++
++static const struct platform_device_id tps65219_pwrbtn_id_table[] = {
++	{ "tps65219-pwrbutton", },
 +	{ /* sentinel */ }
 +};
-+MODULE_DEVICE_TABLE(platform, tps65219_regulator_id_table);
++MODULE_DEVICE_TABLE(platform, tps65219_pwrbtn_id_table);
 +
-+static struct platform_driver tps65219_regulator_driver = {
++static struct platform_driver tps65219_pb_driver = {
++	.probe = tps65219_pb_probe,
++	.remove = tps65219_pb_remove,
 +	.driver = {
-+		.name = "tps65219-pmic",
++		.name = "tps65219_pwrbutton",
 +	},
-+	.probe = tps65219_regulator_probe,
-+	.id_table = tps65219_regulator_id_table,
++	.id_table = tps65219_pwrbtn_id_table,
 +};
++module_platform_driver(tps65219_pb_driver);
 +
-+module_platform_driver(tps65219_regulator_driver);
-+
-+MODULE_AUTHOR("Jerome Neanne <j-neanne@baylibre.com>");
-+MODULE_DESCRIPTION("TPS65219 voltage regulator driver");
-+MODULE_ALIAS("platform:tps65219-pmic");
++MODULE_DESCRIPTION("TPS65219 Power Button");
 +MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Markus Schneider-Pargmann <msp@baylibre.com");
 -- 
 2.17.1
 

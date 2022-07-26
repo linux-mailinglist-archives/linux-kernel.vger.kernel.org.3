@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F25F580BFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D1F580BFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbiGZG5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 02:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
+        id S232056AbiGZG5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 02:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiGZG5M (ORCPT
+        with ESMTP id S229952AbiGZG5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 02:57:12 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91105205F7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:57:11 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id m12so20226325lfj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=a/nsJTo76/ZSi4Jb8rP892B+zPLMmhE4PPpI4xGA5Qc=;
-        b=DjlM/06RrYekNQUVoksqzwygMA6OhhU/TSxsYbYxoKU8FvmxkCFh0LevX3PqMZs+AM
-         wVB6xkwOCZz9P8u3XI5lhRklLMcBwP+Wj+MANth4qKLi+KgHYQY5YCcbGKU8XE4awvC3
-         2jhO2aTfKAM0Z3n4OM597FioUwKRvz/qfgZNcKCb2vP6Jz/zn0g5yoXrzMOQICIOQ6kw
-         J/U5g3d0nt99n9/LOOJh33/TVlPI1qyQWLb5gokws2Oe3laWxzRhIeGmnCpf7jBNjwNw
-         72iSQPmAkhT/fK7ZE7IRO/jFove0nXGhpuFd2kpTEk+P3qGPkyYRFx3teQgz60nAHNq2
-         fCBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a/nsJTo76/ZSi4Jb8rP892B+zPLMmhE4PPpI4xGA5Qc=;
-        b=eHyphsSIjsfwSqadOeHVlxARTUmGEppH0knpnEQJhGi5gNrrIEuZGlUuub0X+ZiEVR
-         3gxSdMlppmNQeTgnvBmkVE/9g4LnkWjORnT1z2YJtAuSmi2Mt6cneth3AHG6ct4hYlUR
-         UM48NtqFZwhVb1qSkjfIRGHhbN5h/xjhBaDY8XUPtiI+7zzzTS2Gok06kNah/Q6XTnVf
-         QZnyUhfhd7VMIhd0veanKaTL8y3xkThAq7+K2HnPIE1RyRAHlGIAKqfa4MG1Jy/U4FZv
-         TtkUSAXA93Na1Mk8mA4fiJq0eONnq+p2d95sWHX1mC0FLvafhiSlEAnHODVay9hZKeiP
-         Ju+A==
-X-Gm-Message-State: AJIora93S30L71ghNtRklWqKLVHPO/Alk9HUhBrOks/SsatGnUs/XD3w
-        3OTtNqGR8TFMUBBgcpmEy1aSSg==
-X-Google-Smtp-Source: AGRyM1twE05S+ZYJgkbZAbx/JA6EM7VJunNeFf+2CWhW5hV6yNHi8A991h80iQkX7kR6gYWPYbfYWQ==
-X-Received: by 2002:a05:6512:523:b0:48a:7257:b71c with SMTP id o3-20020a056512052300b0048a7257b71cmr5733057lfc.582.1658818629836;
-        Mon, 25 Jul 2022 23:57:09 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id bd17-20020a05651c169100b0025bda317bdcsm3115725ljb.88.2022.07.25.23.57.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 23:57:09 -0700 (PDT)
-Message-ID: <70255b63-294c-bda6-e7ad-7009f735b336@linaro.org>
-Date:   Tue, 26 Jul 2022 08:57:08 +0200
+        Tue, 26 Jul 2022 02:57:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A033D2715E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:57:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LsSQq2lPSz4x1f;
+        Tue, 26 Jul 2022 16:57:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1658818661;
+        bh=g/ZRqB0p6ohpHeie0cs0FL1sIIleC/KZ3LH0jCnnNXA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=o+F2eptfMZFXVJJw+G1G2BMAZWxeIymUGkiaKj5XwBob0XFsM1igSY1T+PMnumncD
+         2fkZhAbSyQajpxcIhBafQUPy9FoFCDtu5xsg/0dC8WAiLZGHLyjlp3Np4HHw5QW2Ml
+         uINL3YlDsxZdT537dHXbJfp8aa64GkdO8x5ej0U88sNtfTsjrwrHKmHm4hnMKdncOj
+         cqnoCgO8SeDpioGiIvOC+NWwYteGQgW0lGxDm6rD2+eZ80Hvkz09xYyDcvAXYCYi9z
+         t06g0vLq3Jk8QPhpTy5kIsa6+80B0parsxOw+U2AkvzLCkiy+GuwSlmdlOPpb+w6Lm
+         7vtz0SMGAyDyg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH 1/2] powerpc: drop dependency on <asm/machdep.h> in
+ archrandom.h
+In-Reply-To: <Yt7CJj8r3eo05pKd@yury-laptop>
+References: <20220723214537.2054208-1-yury.norov@gmail.com>
+ <20220723214537.2054208-2-yury.norov@gmail.com>
+ <CAHp75VfOmN=cTEs7gbwxZ7W3hXjBo67N4AmHHiDfcVfFzHkMLA@mail.gmail.com>
+ <Yt7CJj8r3eo05pKd@yury-laptop>
+Date:   Tue, 26 Jul 2022 16:57:38 +1000
+Message-ID: <87edy8bbtp.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 0/9] Samsung Trinity NPU device driver
-Content-Language: en-US
-To:     Jiho Chu <jiho.chu@samsung.com>, gregkh@linuxfoundation.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org
-Cc:     yelini.jeong@samsung.com, myungjoo.ham@samsung.com
-References: <CGME20220725065308epcas1p2f6de3d74792854bb312cca4b310badac@epcas1p2.samsung.com>
- <20220725065308.2457024-1-jiho.chu@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220725065308.2457024-1-jiho.chu@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/07/2022 08:52, Jiho Chu wrote:
-> Hello,
-> 
-> My name is Jiho Chu, and working for device driver and system daemon for
-> several years at Samsung Electronics. 
-> 
-> Trinity Neural Processing Unit (NPU) series are hardware accelerators
-> for neural network processing in embedded systems, which are integrated
-> into application processors or SoCs. Trinity NPU is compatible with AMBA
-> bus architecture and first launched in 2018 with its first version for
-> vision processing, Trinity Version1 (TRIV1). Its second version, TRIV2,
-> is released in Dec, 2021. Another Trinity NPU for audio processing is
-> referred as TRIA.
-> 
+Yury Norov <yury.norov@gmail.com> writes:
+> On Mon, Jul 25, 2022 at 09:28:12AM +0200, Andy Shevchenko wrote:
+>> On Sun, Jul 24, 2022 at 12:19 AM Yury Norov <yury.norov@gmail.com> wrote:
+>> >
+>> > archrandom.h includes <asm/machdep.h> to refer ppc_md. This causes
+>> > circular header dependency, if generic nodemask.h  includes random.h:
+>> >
+>> > In file included from include/linux/cred.h:16,
+>> >                  from include/linux/seq_file.h:13,
+>> >                  from arch/powerpc/include/asm/machdep.h:6,
+>> >                  from arch/powerpc/include/asm/archrandom.h:5,
+>> >                  from include/linux/random.h:109,
+>> >                  from include/linux/nodemask.h:97,
+>> >                  from include/linux/list_lru.h:12,
+>> >                  from include/linux/fs.h:13,
+>> >                  from include/linux/compat.h:17,
+>> >                  from arch/powerpc/kernel/asm-offsets.c:12:
+>> > include/linux/sched.h:1203:9: error: unknown type name 'nodemask_t'
+>> >  1203 |         nodemask_t                      mems_allowed;
+>> >       |         ^~~~~~~~~~
+>> >
+>> > Fix it by removing <asm/machdep.h> dependency from archrandom.h
+>> 
+>> ...
+>> 
+>> >  EXPORT_SYMBOL_GPL(pm_power_off);
+>> 
+>> ^^^ (Note this and read below)
+>> 
+>> ...
+>> 
+>> > +EXPORT_SYMBOL(arch_get_random_seed_long);
+>> 
+>> It can't be like this. Brief browsing of the callees shows that.
+>
+> Is my understanding correct that you're suggesting to make it GPL?
+>
+> ppc_md is exported with EXPORT_SYMBOL(), and the function is in header,
+> so it's available for non-GPL code now. I don't want to change it.
 
-Why there are no bindings? How is it supposed to be used on ARM64 platforms?
+That's true, your change maintains the status quo.
 
+But I think we actually don't need it exported to modules, I think it's
+a private detail of the RNG <-> architecture interface, not something
+that modules should be calling.
 
-Best regards,
-Krzysztof
+So I think it's OK to drop the EXPORT_SYMBOL, either in this patch or a
+subsequent one if you don't want to rebase.
+
+cheers

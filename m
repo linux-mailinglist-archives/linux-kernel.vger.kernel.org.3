@@ -2,202 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86785816BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C8D5816C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239271AbiGZPr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
+        id S239298AbiGZPsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiGZPrz (ORCPT
+        with ESMTP id S239215AbiGZPse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:47:55 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D582C119;
-        Tue, 26 Jul 2022 08:47:54 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id d124so8555737ybb.5;
-        Tue, 26 Jul 2022 08:47:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZPNGDns+Qfzu1Eqk10wxuwO/i7doTSEULJR5ChxgVFk=;
-        b=VACnp4WIU93m6phPLntWcqOd7J3Ef5zp9ykFHuc4NBcUK0Fg4Yab3Fj0WS4ci+CVm5
-         HQlJkTthqpsckAgX0wR0VJSWxKEYPUZOsnewkJtjHQZ6wglPPHq7LBk2pmI1NAfToqDx
-         M2/ow/uCC9dxTrtHOHrb1IcaNDl/owNhVtzsCSqdNHv58GTydUIykkvgJeJpEpDj1TIa
-         i1OlVPrBn+o8qgK3QhsmV9VSJSsgrqzmUKxlUYrk+OzPFaM/nfjO/v3Jkqsw60jfDZkC
-         KRQlmsY6/CCM9laTU79RJ6w1sCqLKoekX2JPzkM2dJW1PgeqbL996PrRpmkofeXiy5uD
-         AnBA==
-X-Gm-Message-State: AJIora9efvsD6rsm/qnooOTgcT2OlEDfkh4B1dtlITEwIbD3V1uVQzyI
-        Baki8zzeazrT8qXPXFbDkwyom/ygk4Lvz7U/I17PmIyQ
-X-Google-Smtp-Source: AGRyM1sgjhc1ut1Nex8zszS5zj7Oud9KgjN97RjBFYmpZVwn9GY8LQrkG5JDb3y5kgemn9rMfPcr3TWdgbmfnssno7o=
-X-Received: by 2002:a25:828f:0:b0:670:22f9:f7eb with SMTP id
- r15-20020a25828f000000b0067022f9f7ebmr14480651ybk.137.1658850473683; Tue, 26
- Jul 2022 08:47:53 -0700 (PDT)
+        Tue, 26 Jul 2022 11:48:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5162ED4E;
+        Tue, 26 Jul 2022 08:48:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEAF060D17;
+        Tue, 26 Jul 2022 15:48:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B83FC433D6;
+        Tue, 26 Jul 2022 15:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658850512;
+        bh=Uzd9kHOcKO6VXOdUzTw8gjKqg7nPcNlibSG7TmjBK0I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iJvH1vyglyS5Nxfd4oCmumxkKCRuc0c16/Pr0qckmnosMASH0zaPTvZoOreZ67sgq
+         WwEXbYN0pHqve71NL6F6mEVhmpFnWMJP06jl5krEA0DFiFlVloDW/AElw/giq05Tpx
+         iR+XpsVbslG19Dz+tpkTcK8wRTWyI0CTe4NpiNXXneONWHRwtFYmyovHedPwA02FyW
+         CGfUNv5XGwrA1nZaohcUNY3W9M8fCcW1lVLjtvh5gDilj0FEDJbaYupSgAp+cSWAMu
+         +pjQ5A7zWNtN5F/NNO/sD20Ox5l4A/RQroGjtiYjI2u9wQRugk1hZ2znV7vxaX6fug
+         HfjTumJFSe/qw==
+Date:   Tue, 26 Jul 2022 08:48:29 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        jikos@kernel.org, llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        j.witteveen@gmail.com, stefanberzl@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 6/7] HID: uclogic: Add support for UGEE v2 mouse frames
+Message-ID: <YuAMzSBcfsyGMjNy@dev-arch.thelio-3990X>
+References: <20220717144333.251190-7-jose.exposito89@gmail.com>
+ <202207261047.hUEFf74G-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220713082426.850911-1-dapeng1.mi@intel.com> <CAJZ5v0gsHPav5Ax6+9OMmeApqn7qdJPQmo5MMh=ba6Rtj5NnQA@mail.gmail.com>
- <PH0PR11MB4824DAE06FE50711C3252D93CD889@PH0PR11MB4824.namprd11.prod.outlook.com>
- <PH0PR11MB482497A0CC93F430DA208EDDCD8E9@PH0PR11MB4824.namprd11.prod.outlook.com>
- <CAJZ5v0j57iCNcz8i2P6JtkbiCHB1QS8M6QTngKoiJrm0pnkgUg@mail.gmail.com>
- <PH0PR11MB4824E26602680EED90B7FE2ACD919@PH0PR11MB4824.namprd11.prod.outlook.com>
- <PH0PR11MB482476E499FF0EE4A10F037BCD949@PH0PR11MB4824.namprd11.prod.outlook.com>
-In-Reply-To: <PH0PR11MB482476E499FF0EE4A10F037BCD949@PH0PR11MB4824.namprd11.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Jul 2022 17:47:42 +0200
-Message-ID: <CAJZ5v0hdV=NRwiWj9-=t8jQjBA8f5S6n1pnQoGDDFNrq23p4oA@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi driver
- in Makefile
-To:     "Mi, Dapeng1" <dapeng1.mi@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202207261047.hUEFf74G-lkp@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 3:46 AM Mi, Dapeng1 <dapeng1.mi@intel.com> wrote:
->
-> > From: Mi, Dapeng1
-> > Sent: Thursday, July 21, 2022 11:09 AM
-> > To: Rafael J. Wysocki <rafael@kernel.org>
-> > Cc: Michael S. Tsirkin <mst@redhat.com>; Arnd Bergmann <arnd@arndb.de>;
-> > Bart Van Assche <bvanassche@acm.org>; Linux Kernel Mailing List <linux-
-> > kernel@vger.kernel.org>; Linux PM <linux-pm@vger.kernel.org>; Zhenyu
-> > Wang <zhenyuw@linux.intel.com>
-> > Subject: RE: [PATCH] cpuidle: Move cpuidle driver forward before acpi driver
-> > in Makefile
-> >
-> > > From: Rafael J. Wysocki <rafael@kernel.org>
-> > > Sent: Wednesday, July 20, 2022 6:24 PM
-> > > To: Mi, Dapeng1 <dapeng1.mi@intel.com>
-> > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Michael S. Tsirkin
-> > > <mst@redhat.com>; Arnd Bergmann <arnd@arndb.de>; Bart Van Assche
-> > > <bvanassche@acm.org>; Linux Kernel Mailing List <linux-
-> > > kernel@vger.kernel.org>; Linux PM <linux-pm@vger.kernel.org>; Zhenyu
-> > > Wang <zhenyuw@linux.intel.com>
-> > > Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi
-> > > driver in Makefile
-> > >
-> > > On Wed, Jul 20, 2022 at 5:00 AM Mi, Dapeng1 <dapeng1.mi@intel.com>
-> > > wrote:
-> > > >
-> > > > > > From: Rafael J. Wysocki <rafael@kernel.org>
-> > > > > > Sent: Thursday, July 14, 2022 1:53 AM
-> > > > > > To: Mi, Dapeng1 <dapeng1.mi@intel.com>
-> > > > > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Michael S. Tsirkin
-> > > > > > <mst@redhat.com>; Arnd Bergmann <arnd@arndb.de>; Bart Van
-> > > Assche
-> > > > > > <bvanassche@acm.org>; Linux Kernel Mailing List <linux-
-> > > > > > kernel@vger.kernel.org>; Linux PM <linux-pm@vger.kernel.org>
-> > > > > > Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before
-> > > > > > acpi driver in Makefile
-> > > > > >
-> > > > > > On Wed, Jul 13, 2022 at 10:21 AM Dapeng Mi
-> > > > > > <dapeng1.mi@intel.com>
-> > > > > wrote:
-> > > > > > >
-> > > > > > > As long as Kconfig ACPI_PROCESSOR is enabled, ACPI_PROCESSOR
-> > > > > > > would select ACPI_PROCESSOR_IDLE and acpi_idle driver is
-> > > > > > > enabled. But in current driver loading order acpi_idle driver
-> > > > > > > is always loaded before cpuidle_haltpoll driver. This leads to
-> > > > > > > cpuidle_hatpoll driver has no chance to be loaded when it's enabled.
-> > > > > > >
-> > > > > > > Thus, move cpuidle driver forward before acpi driver and make
-> > > > > > > cpuidle-hatpoll driver has a chance to be run when it's enabled.
-> > > > > > >
-> > > > > > > Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
-> > > > > > > ---
-> > > > > > >  drivers/Makefile | 2 +-
-> > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/Makefile b/drivers/Makefile index
-> > > > > > > 9a30842b22c5..921ed481b520 100644
-> > > > > > > --- a/drivers/Makefile
-> > > > > > > +++ b/drivers/Makefile
-> > > > > > > @@ -26,6 +26,7 @@ obj-y                         += idle/
-> > > > > > >  # IPMI must come before ACPI in order to provide IPMI
-> > > > > > > opregion
-> > > > > support
-> > > > > > >  obj-y                          += char/ipmi/
-> > > > > > >
-> > > > > > > +obj-$(CONFIG_CPU_IDLE)         += cpuidle/
-> > > > > > >  obj-$(CONFIG_ACPI)             += acpi/
-> > > > > > >
-> > > > > > >  # PnP must come after ACPI since it will eventually need to
-> > > > > > > check if
-> > > acpi
-> > > > > > > @@ -126,7 +127,6 @@ obj-$(CONFIG_EDAC)          += edac/
-> > > > > > >  obj-$(CONFIG_EISA)             += eisa/
-> > > > > > >  obj-$(CONFIG_PM_OPP)           += opp/
-> > > > > > >  obj-$(CONFIG_CPU_FREQ)         += cpufreq/
-> > > > > > > -obj-$(CONFIG_CPU_IDLE)         += cpuidle/
-> > > > > > >  obj-y                          += mmc/
-> > > > > > >  obj-y                          += ufs/
-> > > > > > >  obj-$(CONFIG_MEMSTICK)         += memstick/
-> > > > > > > --
-> > > > > >
-> > > > > > Well, this change doesn't guarantee loading haltpoll before ACPI idle.
-> > > > > >
-> > > > > > Also what if haltpoll is enabled, but the user wants ACPI idle?
-> > > > >
-> > > > > Thanks Rafael for reviewing this patch.
-> > > > >
-> > > > > acpi_idle driver and cpuidle_haltpoll driver have same
-> > > > > initialization level and both are initialized on the level
-> > > > > device_initcall. So the building order would decide the loading
-> > > > > sequence. Just like the intel_idle driver which also has same
-> > > > > initialization level (device_initcall), but as it's built before
-> > > > > acpi_idle driver, it would be loaded first before acpi_driver if
-> > > > > intel_idle
-> > > driver is enabled.
-> > > > >
-> > > > > There is another method to make cpuidle_haltpoll driver loaded
-> > > > > first before acpi_driver, it's change the initialization level to
-> > > > > postcore_initcall. I'm not sure which one is better, but it seems
-> > > > > current
-> > > patch is more reasonable.
-> > > > >
-> > > > > There is an parameter "force" to manage the haltpoll enabling. If
-> > > > > user want to use ACPI idle, it can change this parameter to
-> > > > > disable
-> > > haltpolll driver.
-> > >
-> > > That would require things to be appended to the kernel command line in
-> > > cases where that's not necessary today and that's not acceptable.
-> > >
-> > The haltpoll driver's "force" parameter is false by default, we don't need to
-> > add extra command line options in most cases except we want to enable the
-> > haltpolling driver.
-> >
-> > > What you really seem to be wanting to do is to use haltpoll instead of
-> > > ACPI idle.  Is that correct?
-> >
-> > Yes, I'm trying to enable guest halt polling to improve the performance of
-> > some Virtual Machine. But I found the halt poll driver can't be enabled as
-> > long as acpi idle driver is enabled. I tried to disable the acpi idle first, but I
-> > found there is no parameter to enable/disable acpi idle driver except
-> > disabling the Kconfig "CONFIG_ACPI_PROCESSOR_IDLE", and but
-> > unfortunately Kconfig "ACPI_PROCESSOR" would enable
-> > "ACPI_PROCESSOR_IDLE" by default. If I want to disable acpi_idle driver, I
-> > have to disable the "ACPI_PROCESSOR", but this would cause acpi throttling
-> > and acpi thermal are also disabled. That's not what I want. That's why I do this
-> > change to make halt poll driver has a  chance to run without disable the
-> > entire acpi processor functionality .
-> >
->
-> Any feedback? Thanks.
+On Tue, Jul 26, 2022 at 10:33:25AM +0800, kernel test robot wrote:
+> Hi "José,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on 0cb1fc0988e32bda84c2b7218e0c761af1430baf]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
+> base:   0cb1fc0988e32bda84c2b7218e0c761af1430baf
+> config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220726/202207261047.hUEFf74G-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/10fcf5d5cca4657c53477c392b1fb675d72cfda3
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
+>         git checkout 10fcf5d5cca4657c53477c392b1fb675d72cfda3
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: call to __read_overflow marked "dontcall-error": detected read beyond size of object (1st parameter)
 
-I've already said that messing up with Makefiles is not the way to go here.
+Unfortunately, LTO makes this warning kind of cryptic but it seems like
+the wrong template size is being used? This appears to resolve the
+warning for me.
 
-You have to enforce a specific ordering of initialization in the code.
+Cheers,
+Nathan
+
+diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+index 2407e927d1bf..dd4b1ed6fd1e 100644
+--- a/drivers/hid/hid-uclogic-params.c
++++ b/drivers/hid/hid-uclogic-params.c
+@@ -1205,7 +1205,7 @@ static int uclogic_params_ugee_v2_init_frame_mouse(struct uclogic_params *p)
+ 
+ 	rc = uclogic_params_frame_init_with_desc(&p->frame_list[1],
+ 						 uclogic_rdesc_ugee_v2_frame_mouse_template_arr,
+-						 uclogic_rdesc_ugee_v2_frame_dial_template_size,
++						 uclogic_rdesc_ugee_v2_frame_mouse_template_size,
+ 						 UCLOGIC_RDESC_V1_FRAME_ID);
+ 	if (rc)
+ 		return rc;

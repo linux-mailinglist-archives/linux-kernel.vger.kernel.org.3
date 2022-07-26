@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09885810DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AAB5810E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238280AbiGZKLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S232262AbiGZKMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbiGZKLs (ORCPT
+        with ESMTP id S238535AbiGZKMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:11:48 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6751ADAD
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:11:46 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id b16so9423113lfb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:11:46 -0700 (PDT)
+        Tue, 26 Jul 2022 06:12:41 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4220132068
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:12:36 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h9so19509231wrm.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m0G1ouauyWlsMi4tX3T8kDD9m/uUFaFanRq+c7+5U7s=;
-        b=PVvx51OOtlmDQcp+hJ9/QKAgDbD27XSXYiNOQxzShhI3JbRiAGv3AGUfQNpKEX85Ju
-         Y3q+EL6ksrC/5vI4VjNPjznfY5b4hFs+VPQSz22sekFKjTQj3CfuTln588rafXxviWoJ
-         TRamENOpI2kB4vy+4bsL/VIyN8iaKsi+zVLh4=
+        d=sifive.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PiP62aeakYuyq8L6kGatq+E4dCzbXVdVsNF3PpzDUvE=;
+        b=HDFJP03ruCOOZf9lRSteG1d1k6+y7EjZpTDRHNdeijeX3ni7Ha4mWlVjxOs7LahNwV
+         x9sSvgtMElp+Mlb2X2Xbap7LtY62O+iuZ3fdyOJ59GqM5lN17asr4aoEIaoQoHqU2G91
+         +7hUWyZ5Sya2IjS3wTp4eyfsCdVJYAhIK6UbW4N9xIXftWeT9wgLbTUAj6TyXL1Ejf+u
+         VT6oaEHKwujUoCw9wXaGLJb9X4WNcSrf5Q6bBPEI6KE24InHrKQDG6eXowWpkggA0Bqf
+         IEiqrxpDdO7FHfRzorxkEeVGl/W44Bu9hDxRdmcZx8PWf1W7PMytly0B5J9oDxlN+hzN
+         Msig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m0G1ouauyWlsMi4tX3T8kDD9m/uUFaFanRq+c7+5U7s=;
-        b=35IrsUwOJgef1lU3HuGsqKKepGWnm41CZL8B5kb70a9/+Jc1hcFQrXRotNYG8GgXU9
-         4yAn8j24R00ikc7uNZiUmRAUERPXCHKWpqw7bx44UheTvQXkj+3GXhf4beIiOTU3ZHDL
-         dbl4prYIA8mLM+MoA7/UKSeG2LzqKx9uMo2AtqZOqdq1arlbiGbEk1FocCcqqdaEUTU/
-         N0AEtKAb6yMVdb7a4qh7+dZRqHD5MCf3hhcjcQm6unMvcfeqrLCjFZc/AqfAVn2joYGr
-         iVLtHAhAwwUlfS2Ssg8A0pUzmmPiRDVz/NMFAoZ3P54w7rYlO8gEBoiqAFt8NyqeLTtY
-         UNSA==
-X-Gm-Message-State: AJIora+/WfBcbZXr3H6a2aSljb4xhBHQxj9ynSOhRjqVCe/9Td2g6A50
-        H1nWHnYoW2dauwVk6SV/AaPZf7M2jQzNnSyHWvJvtQ==
-X-Google-Smtp-Source: AGRyM1uXX45ideOrulD4FMDsqWEePdjfSSh0Leo4vP9vqFrWpyY+WXm0tecZooqyBc1+OvyrSM6L79ae1yhhCM+LF8g=
-X-Received: by 2002:a05:6512:1389:b0:489:d0bb:241e with SMTP id
- p9-20020a056512138900b00489d0bb241emr6755687lfa.536.1658830305163; Tue, 26
- Jul 2022 03:11:45 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PiP62aeakYuyq8L6kGatq+E4dCzbXVdVsNF3PpzDUvE=;
+        b=b8ZCBCxfUXPzi7shIZCxqzmtu6ItqCFnFHuwtXbMF5eZyL9kViANcynhsH8V5foN2I
+         3KV1CMNj7LY/CeXj2ui8lf5RhSA8pRZ1cXK5Du8HExwdJbvNRkrxQhwQgvqMKFuKkMtq
+         JBcp92Jm/6TzZ3UyDAZGaaOp3ngoa2QeSG3CTv7fDlODD0rTbNOKCNonzPcbE4r5Vy9Q
+         L/t59pgnusziD7O9IcZUnIxCUXPssyTnB4AEPTZyFIqUXw75uesArEthKvQcWiXASh+a
+         FLCkXoKONarHM1fc5l9axu8g1/Q+Qc3TpzNVuTZbfxKmfAplfE9+7xdnZfhKPRsF8YPz
+         tv1g==
+X-Gm-Message-State: AJIora8tq1gsFbDksdo26/elo2/EW2vhM0klDzg4qGXU5aK+1XBOK/Wv
+        eEKVB1XvQzfKuwfGOqoMEYX9YQ==
+X-Google-Smtp-Source: AGRyM1uJ0jtw6fZC6XT/n0g1msSZgpxeMmxOgteemt12FqMczeGXVsAjphGhCS0DmUgwedgixUKx9Q==
+X-Received: by 2002:adf:f94b:0:b0:21e:46fe:bcdb with SMTP id q11-20020adff94b000000b0021e46febcdbmr9751255wrr.143.1658830354497;
+        Tue, 26 Jul 2022 03:12:34 -0700 (PDT)
+Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
+        by smtp.gmail.com with ESMTPSA id a21-20020a05600c349500b003a317ee3036sm18056759wmq.2.2022.07.26.03.12.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 03:12:34 -0700 (PDT)
+Message-ID: <8bb5103d-803e-90d2-fd93-132bb2aac2d6@sifive.com>
+Date:   Tue, 26 Jul 2022 11:12:33 +0100
 MIME-Version: 1.0
-References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
- <20220725065419.3005015-3-dario.binacchi@amarulasolutions.com> <20220725123804.ofqpq4j467qkbtzn@pengutronix.de>
-In-Reply-To: <20220725123804.ofqpq4j467qkbtzn@pengutronix.de>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Tue, 26 Jul 2022 12:11:33 +0200
-Message-ID: <CABGWkvrBrTqWQPBWKuKzuwQzgvc-iuWJPXt2utb60MOfych09A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] can: slcan: remove legacy infrastructure
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Max Staudt <max@enpas.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [[PATCH v2] 1/9] dt-bindings: pwm: Document Synopsys DesignWare
+ snps,pwm
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>
+References: <20220725212140.741644-1-ben.dooks@sifive.com>
+ <922628f6-cbb1-b563-6464-e57959bafbcd@linaro.org>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <922628f6-cbb1-b563-6464-e57959bafbcd@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,116 +81,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marc,
+On 26/07/2022 11:05, Krzysztof Kozlowski wrote:
+> On 25/07/2022 23:21, Ben Dooks wrote:
+>> Add documentation for the bindings for Synopsys' DesignWare PWM block
+>> as we will be adding DT/platform support to the Linux driver soon.
+>>
+>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>> --
+> 
+> This is not proper delimiter and causes the changelog to end up in commit.
+> 
+> Correct also wrong formatting of subject PATCH.
 
-On Mon, Jul 25, 2022 at 2:38 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 25.07.2022 08:54:15, Dario Binacchi wrote:
-> > Taking inspiration from the drivers/net/can/can327.c driver and at the
-> > suggestion of its author Max Staudt, I removed legacy stuff like
-> > `SLCAN_MAGIC' and `slcan_devs' resulting in simplification of the code
-> > and its maintainability.
-> >
-> > The use of slcan_devs is derived from a very old kernel, since slip.c
-> > is about 30 years old, so today's kernel allows us to remove it.
-> >
-> > The .hangup() ldisc function, which only called the ldisc .close(), has
-> > been removed since the ldisc layer calls .close() in a good place
-> > anyway.
-> >
-> > The old slcanX name has been dropped in order to use the standard canX
-> > interface naming. It has been assumed that this change does not break
-> > the user space as the slcan driver provides an ioctl to resolve from tty
-> > fd to netdev name.
->
-> Is there a man page that documents this iotcl? Please add it and/or the
-> IOCTL name.
+I realised that once sent and forgot the cover letter.
+Maybe I'll try some more post covid recovery.
 
-I have not found documentation of the SIOCGIFNAME ioctl for the line discipline,
-but only for netdev (i. e.
-https://man7.org/linux/man-pages/man7/netdevice.7.html),
+>> v2:
+>> - fix #pwm-cells to be 3
+>> - fix indentation and ordering issues
+>> ---
+>>   .../devicetree/bindings/pwm/snps,pwm.yaml     | 40 +++++++++++++++++++
+>>   1 file changed, 40 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/pwm/snps,pwm.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/pwm/snps,pwm.yaml b/Documentation/devicetree/bindings/pwm/snps,pwm.yaml
+>> new file mode 100644
+>> index 000000000000..594085e5e26f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/pwm/snps,pwm.yaml
+>> @@ -0,0 +1,40 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +# Copyright (C) 2022 SiFive, Inc.
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/pwm/snps,pwm.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Synopsys PWM controller
+>> +
+>> +maintainers:
+>> +  - Ben Dooks <ben.dooks@sifive.com>
+>> +
+>> +allOf:
+>> +  - $ref: pwm.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: snps,pwm
+> 
+> This is very generic compatible. I doubt that you cover here all
+> Synopsys PWM designs, past and future. You need a specific compatible.
 
-Thanks and regards,
-Dario
+ From what I can get from the documentation (2.13a) there hasn't been
+a huge external interface change and what has been added is all part
+of synthesis time options.
 
->
-> > The `maxdev' module parameter has also been removed.
-> >
-> > CC: Max Staudt <max@enpas.org>
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> >
-> > ---
-> >
-> > Changes in v2:
->
-> Nitpick:
-> Changes since RFC: https://lore.kernel.org/all/20220716170007.2020037-1-dario.binacchi@amarulasolutions.com
->
-> > - Update the commit description.
-> > - Drop the old "slcan" name to use the standard canX interface naming.
-> >
-> >  drivers/net/can/slcan/slcan-core.c | 318 ++++++-----------------------
-> >  1 file changed, 63 insertions(+), 255 deletions(-)
-> >
-> > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-> > index c3dd7468a066..2c546f4a7981 100644
-> > --- a/drivers/net/can/slcan/slcan-core.c
-> > +++ b/drivers/net/can/slcan/slcan-core.c
->
-> [...]
->
-> > @@ -898,72 +799,49 @@ static int slcan_open(struct tty_struct *tty)
-> >       if (!tty->ops->write)
-> >               return -EOPNOTSUPP;
-> >
-> > -     /* RTnetlink lock is misused here to serialize concurrent
-> > -      * opens of slcan channels. There are better ways, but it is
-> > -      * the simplest one.
-> > -      */
-> > -     rtnl_lock();
-> > +     dev = alloc_candev(sizeof(*sl), 1);
-> > +     if (!dev)
-> > +             return -ENFILE;
-> >
-> > -     /* Collect hanged up channels. */
-> > -     slc_sync();
-> > +     sl = netdev_priv(dev);
-> >
-> > -     sl = tty->disc_data;
-> > +     /* Configure TTY interface */
-> > +     tty->receive_room = 65536; /* We don't flow control */
-> > +     sl->rcount   = 0;
-> > +     sl->xleft    = 0;
->
-> Nitpick: Please use 1 space in front of the =.
->
-> regards,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+>> +
+>> +  "#pwm-cells":
+>> +    const: 3
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: Interface bus clock
+>> +      - description: PWM reference clock
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: bus
+>> +      - const: timer
+>> +
+>> +required:
+>> +  - "#pwm-cells"
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +additionalProperties: false
+> 
+> Missing example.
 
-
-
--- 
-
-Dario Binacchi
-
-Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+ok, thanks.

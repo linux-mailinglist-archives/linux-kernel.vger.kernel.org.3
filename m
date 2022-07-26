@@ -2,398 +2,544 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE40581B68
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3101581B6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239432AbiGZU7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 16:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
+        id S239866AbiGZU7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 16:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239997AbiGZU7K (ORCPT
+        with ESMTP id S231566AbiGZU72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 16:59:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE2F39B82;
-        Tue, 26 Jul 2022 13:59:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61BB9615C9;
-        Tue, 26 Jul 2022 20:59:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8408CC433C1;
-        Tue, 26 Jul 2022 20:59:05 +0000 (UTC)
-Date:   Tue, 26 Jul 2022 16:59:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V7 01/16] rv: Add Runtime Verification (RV) interface
-Message-ID: <20220726165903.262a0a65@gandalf.local.home>
-In-Reply-To: <1e03adf9-2aea-63ab-93ae-a73836a7081a@kernel.org>
-References: <cover.1658778484.git.bristot@kernel.org>
-        <2aa3b18239f170ba23263f18d166d08634ed65dd.1658778484.git.bristot@kernel.org>
-        <20220726122237.44386359@gandalf.local.home>
-        <1e03adf9-2aea-63ab-93ae-a73836a7081a@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 26 Jul 2022 16:59:28 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFE039BB3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:59:26 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id h16so7891153ila.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:59:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=dkcFvHxGduSA25bFEzNCUlK5OMgVJTouea2cFpYUNJw=;
+        b=XM+Xz1WopCE3wbQ0h3UHfYGHD6SHc6jZYx7ab67dRQ5uTC6Ms19jSJLk82A1RKP4OO
+         o5HNMVlMaIcBvnnNo90T3urObupBfiHIJVLtBROjL2rEU3mKOM2tZofVkz+MmGLpBUSL
+         QMig5WOjUQT2fUjvTzytpCWIH8KPpnXIskbNY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dkcFvHxGduSA25bFEzNCUlK5OMgVJTouea2cFpYUNJw=;
+        b=pmykTA+fMrtA8c5UNio8a5xl2cG2lYPKQQnGJ0ej8G3tYdOh38W2UD6WhzmppJQwx4
+         B9CwEQlx+PE7ndiG8/0xPIdmfYTwZ7pLrOd+ZkcenuFAxAbyasUhNpxZpHkjw5SAeIDK
+         1h7QQmH+5+USeev/s+jvcL/njJyu6YdorZ3tmxd+mIf//eSyrmCjh/6HY1fEwNlvguM+
+         tOW+1oy7/D5O94n/F5RMU93ZXSLFEj5HHvy5a4M5AhzXZC3YgxarsxSL+Ad3peM6rOe4
+         pthAGUPXhP6qLtUHZKd9Qmy4tro6cgOFrDgOr2Wr7mFX6PO/4+SBCx9ehic8NPajV6Rk
+         EAng==
+X-Gm-Message-State: AJIora+O9I7IV5txrPDFefaRqJZgIlx6ww5pfu++KqZpf4MwpqUIncyi
+        jfepV/ADbEN/eTiHR6lqaZZU6EtAgqcBPg==
+X-Google-Smtp-Source: AGRyM1sqtaNRI85utQOQkuG8Z8OjrIZeZXASkNM9ObbbPp4zwTlhBNPfKPOQnFAwVwhkbCXLxuMZtA==
+X-Received: by 2002:a05:6e02:1be9:b0:2dc:7fb2:706e with SMTP id y9-20020a056e021be900b002dc7fb2706emr7261156ilv.239.1658869166153;
+        Tue, 26 Jul 2022 13:59:26 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x15-20020a026f0f000000b0033f1953b15esm7107469jab.60.2022.07.26.13.59.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 13:59:25 -0700 (PDT)
+Subject: Re: [PATCH v3] selftests/vm: enable running select groups of tests
+To:     Joel Savitz <jsavitz@redhat.com>, Nico Pache <npache@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220706205451.4133254-1-jsavitz@redhat.com>
+ <CAA1CXcCHp+zt=34wyFrif+7QtAs9TBOLaL3Nqitz8f_tnR7u9g@mail.gmail.com>
+ <CAL1p7m5pLQcvkGajOL8CQiunvye4-8QrDS8oWMShOHmOUFsB-w@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <0469b7fb-a71f-854a-2a9f-3da8c6df27c4@linuxfoundation.org>
+Date:   Tue, 26 Jul 2022 14:59:25 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <CAL1p7m5pLQcvkGajOL8CQiunvye4-8QrDS8oWMShOHmOUFsB-w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 22:00:55 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
-
-> On 7/26/22 1
-> >> +static void disable_all_monitors(void)
-> >> +{
-> >> +	struct rv_monitor_def *mdef;
-> >> +	int enabled = 0;
-> >> +
-> >> +	mutex_lock(&rv_interface_lock);
-> >> +
-> >> +	list_for_each_entry(mdef, &rv_monitors_list, list)
-> >> +		enabled += __rv_disable_monitor(mdef);
-> >> +
-> >> +	if (enabled) {
-> >> +		/*
-> >> +		 * Wait for the execution of all current events.
-
-		"Wait for the execution of all events to finish."
-
-> >> +		 */  
-> > 
-> > And do we really need to hold the locks when calling the synchronization?
-> > 
-> > I think we only care if the caller sees a synchronized view of changes, the
-> > locks will help synchronize the internal code.  
+On 7/19/22 4:27 PM, Joel Savitz wrote:
+> Hello,
 > 
-> I think we need. For instance:
+> Sorry for the late reply.
 > 
-> CPU 0:				CPU 1:
-> disable_monitor(x)              enable_monitor(x)
->    lock()
-> 	disable()
->    unlock()      		lock()
->    wait without the lock  	    enable()
->    	
->         <old preempted events with inconsistent data>
+> Setting TEST_ITEMS="xx yy zz" and invoking the script has the same
+> effect as passing -t "xx yy zz" to the script. VM_TEST_ITEMS may be a
+> better env variable name however.
 > 
-> so by holding the lock we avoid this case...
-
-So you are synchronizing against it being re-enabled and not just to have a
-consistent state by the caller?
-
-If that's the case, then OK.
-
-
-> 
-> no?
-> 
-> >> +		tracepoint_synchronize_unregister();
-> >> +	}
-> >> +
-> >> +	mutex_unlock(&rv_interface_lock);
-> >> +}
-> >> +  
-> > 
-> > [..]
-> >   
-> >> +/**
-> >> + * rv_monitoring_on - checks if monitoring is on
-> >> + *
-> >> + * Returns 1 if on, 0 otherwise.
-> >> + */
-> >> +bool rv_monitoring_on(void)
-> >> +{
-> >> +	/* monitoring_on */  
-> > 
-> > You need a better comment than that.
-> > 
-> > What is this synchronizing?  
-> 
-> 
-> like:
-> 	/* Ensures that concurrent monitors reads a consistent data */
-> 
-> But I wonder if it is needed, given that we now wait for all the events
-> to be processed before switching it back again, e.g., having the
-> monitoring_on as old data is not a problem.
-> 
-> >> +	smp_rmb();
-> >> +	return READ_ONCE(monitoring_on);
-> >> +}
-> >> +
-> >> +/*
-> >> + * monitoring_on general switcher.
-> >> + */
-> >> +static ssize_t monitoring_on_read_data(struct file *filp, char __user *user_buf,
-> >> +				       size_t count, loff_t *ppos)
-> >> +{
-> >> +	const char *buff;
-> >> +
-> >> +	buff = rv_monitoring_on() ? "1\n" : "0\n";
-> >> +
-> >> +	return simple_read_from_buffer(user_buf, count, ppos, buff, strlen(buff) + 1);
-> >> +}
-> >> +
-> >> +static void turn_monitoring_off(void)
-> >> +{
-> >> +	WRITE_ONCE(monitoring_on, false);
-> >> +	/* monitoring_on */  
-> > 
-> > Same here.
-> >   
-> >> +	smp_wmb();
-> >> +}
-> >> +
-> >> +static void reset_all_monitors(void)
-> >> +{
-> >> +	struct rv_monitor_def *mdef;
-> >> +
-> >> +	list_for_each_entry(mdef, &rv_monitors_list, list) {
-> >> +		if (mdef->monitor->enabled)
-> >> +			mdef->monitor->reset();
-> >> +	}
-> >> +}
-> >> +
-> >> +static void turn_monitoring_on(void)
-> >> +{
-> >> +	reset_all_monitors();  
-> > 
-> > Why does this reset all monitors but turn_monitoring_off() does not?  
-> 
-> When we turn monitoring off, the monitors will stop monitoring while yet
-> in sync with the events generated by the system, i.e., all the events after
-> the start were processed.
-> 
-> But if we disabled the monitor, and some events get ignored, the monitors
-> will be out of sync with the system. Thus, resetting the monitor to
-> for a synchronization between the monitors and the system is needed, before
-> enabling monitoring back.
-> 
-> > You should keep that out.  
-> 
-> did not get :-(
-
-I don't like the way the _on() and _off() are different.
-
-Have the _on() just turn in on *without* the reset.
-
-If you need the reset, then make a separate function called:
-
-static void turn_monitoring_on_with_reset(void)
-{
-	reset_all_monitors();
-	turn_monitoring_on();
-}
-
-
-> 
-> >> +	WRITE_ONCE(monitoring_on, true);
-> >> +	/* monitoring_on */
-> >> +	smp_wmb();
-> >> +}
-> >> +
-> >> +static ssize_t monitoring_on_write_data(struct file *filp, const char __user *user_buf,
-> >> +					size_t count, loff_t *ppos)
-> >> +{
-> >> +	int retval;
-> >> +	bool val;
-> >> +
-> >> +	retval = kstrtobool_from_user(user_buf, count, &val);
-> >> +	if (retval)
-> >> +		return retval;
-> >> +
-> >> +	mutex_lock(&rv_interface_lock);
-> >> +
-> >> +	if (val)
-> >> +		turn_monitoring_on();
-> >> +	else
-> >> +		turn_monitoring_off();
-> >> +
-> >> +	/*
-> >> +	 * Wait for the execution of all current events to notice
-> >> +	 * the change before returning to user-space.
-> >> +	 */
-> >> +	tracepoint_synchronize_unregister();  
-> > 
-> > Again, I think we want this outside the lock.  
-> 
-> I fear a problem similar to the one I said before could happen. For
-> instance, turning monitoring off and on could result on monitors with
-> old data being back enable with "reseted" data...
-> 
-> >> +
-> >> +	mutex_unlock(&rv_interface_lock);
-> >> +
-> >> +	return count;
-> >> +}
-> >> +
-> >> +static const struct file_operations monitoring_on_fops = {
-> >> +	.open   = simple_open,
-> >> +	.llseek = no_llseek,
-> >> +	.write  = monitoring_on_write_data,
-> >> +	.read   = monitoring_on_read_data,
-> >> +};
-> >> +
-> >> +static void destroy_monitor_dir(struct rv_monitor_def *mdef)
-> >> +{
-> >> +	rv_remove(mdef->root_d);
-> >> +}
-> >> +
-> >> +/**
-> >> + * rv_register_monitor - register a rv monitor.
-> >> + * @monitor:    The rv_monitor to be registered.
-> >> + *
-> >> + * Returns 0 if successful, error otherwise.
-> >> + */
-> >> +int rv_register_monitor(struct rv_monitor *monitor)
-> >> +{
-> >> +	struct rv_monitor_def *r;
-> >> +	int retval = 0;
-> >> +
-> >> +	if (strlen(monitor->name) >= MAX_RV_MONITOR_NAME_SIZE) {
-> >> +		pr_info("Monitor %s has a name longer than %d\n", monitor->name,
-> >> +			MAX_RV_MONITOR_NAME_SIZE);
-> >> +		return -1;
-> >> +	}
-> >> +
-> >> +	mutex_lock(&rv_interface_lock);
-> >> +
-> >> +	list_for_each_entry(r, &rv_monitors_list, list) {
-> >> +		if (strcmp(monitor->name, r->monitor->name) == 0) {
-> >> +			pr_info("Monitor %s is already registered\n", monitor->name);
-> >> +			retval = -1;
-> >> +			goto out_unlock;
-> >> +		}
-> >> +	}
-> >> +
-> >> +	r = kzalloc(sizeof(struct rv_monitor_def), GFP_KERNEL);
-> >> +	if (!r) {
-> >> +		retval = -ENOMEM;
-> >> +		goto out_unlock;
-> >> +	}
-> >> +
-> >> +	r->monitor = monitor;
-> >> +
-> >> +	retval = create_monitor_dir(r);
-> >> +	if (retval) {
-> >> +		kfree(r);
-> >> +		goto out_unlock;
-> >> +	}
-> >> +
-> >> +	list_add_tail(&r->list, &rv_monitors_list);
-> >> +
-> >> +out_unlock:
-> >> +	mutex_unlock(&rv_interface_lock);
-> >> +	return retval;
-> >> +}
-> >> +
-> >> +/**
-> >> + * rv_unregister_monitor - unregister a rv monitor.
-> >> + * @monitor:    The rv_monitor to be unregistered.
-> >> + *
-> >> + * Returns 0 if successful, error otherwise.
-> >> + */
-> >> +int rv_unregister_monitor(struct rv_monitor *monitor)
-> >> +{
-> >> +	struct rv_monitor_def *ptr, *next;
-> >> +
-> >> +	mutex_lock(&rv_interface_lock);
-> >> +
-> >> +	list_for_each_entry_safe(ptr, next, &rv_monitors_list, list) {
-> >> +		if (strcmp(monitor->name, ptr->monitor->name) == 0) {
-> >> +			rv_disable_monitor(ptr);
-> >> +			list_del(&ptr->list);
-> >> +			destroy_monitor_dir(ptr);
-> >> +		}
-> >> +	}
-> >> +
-> >> +	mutex_unlock(&rv_interface_lock);
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +int __init rv_init_interface(void)
-> >> +{
-> >> +	struct dentry *tmp;
-> >> +
-> >> +	rv_root.root_dir = rv_create_dir("rv", NULL);
-> >> +	if (!rv_root.root_dir)
-> >> +		goto out_err;
-> >> +
-> >> +	rv_root.monitors_dir = rv_create_dir("monitors", rv_root.root_dir);
-> >> +	if (!rv_root.monitors_dir)
-> >> +		goto out_err;
-> >> +
-> >> +	tmp = rv_create_file("available_monitors", RV_MODE_READ, rv_root.root_dir, NULL,
-> >> +			     &available_monitors_ops);
-> >> +	if (!tmp)
-> >> +		goto out_err;
-> >> +
-> >> +	tmp = rv_create_file("enabled_monitors", RV_MODE_WRITE, rv_root.root_dir, NULL,
-> >> +			     &enabled_monitors_ops);
-> >> +	if (!tmp)
-> >> +		goto out_err;
-> >> +
-> >> +	tmp = rv_create_file("monitoring_on", RV_MODE_WRITE, rv_root.root_dir, NULL,
-> >> +			     &monitoring_on_fops);
-> >> +	if (!tmp)
-> >> +		goto out_err;
-> >> +  
-> > 
-> > This should call "turn_monitoriing_on()" instead of open coding it,
-> > especially since it includes a memory barrier (another reason to not
-> > reset the monitors in that function.  
-> 
-> Here we do not need to reset monitors... but monitors would not be enabled anyway as
-
-EXACTLY!!! Which is why the turn_monitoring_on() should only do that. Turn
-it on. No reset involved. You are convoluting implementation with the name.
-
-The reason you open coded turning on the monitor here, is because your
-turn_monitoring_on() function is broken by design.
-
--- Steve
-
-
-> they are not loaded yet.... and so I wonder if we need the barrier here...
+> Best,
+> Joel Savitz
 > 
 
-> > 
-> >   
-> >> +	WRITE_ONCE(monitoring_on, true);
-> >> +	/* monitoring_on */
-> >> +	smp_wmb();
-> >> +
-> >> +	return 0;
-> >> +
-> >> +out_err:
-> >> +	rv_remove(rv_root.root_dir);
-> >> +	printk(KERN_ERR "RV: Error while creating the RV interface\n");
-> >> +	return 1;
-> >> +}  
+When you are respoding on kernel mailing lists, please bottom post.
+Refer to the kernel mailing list communication guidelines.
+
+> On Fri, Jul 15, 2022 at 3:55 PM Nico Pache <npache@redhat.com> wrote:
+>>
+>> Hi Andrew and Joel,
+>>
+>> I noticed a flaw in switching to the cmdline argument over the
+>> environment variable. If you are utilizing the exerciser script (in
+>> tools/testing/selftests/run_kselftest.sh), this is not designed to
+>> pass cmdline variables to the individual TEST_PROGS. On the other hand
+>> if we utilize Env. variables we can still specify which tests we'd
+>> like to run. Our infrastructure is designed to utilize this wrapper,
+>> so we inevitably will not be able to use this the way we thought.
+>>
+>> Would you be ok with switching back to the initial approach? If so I
+>> believe making the name more specific would be ideal, ie)
+>> VM_TEST_ITEMS.
+>>
+>> Cheers,
+>> -- Nico
+>>
+>> On Wed, Jul 6, 2022 at 4:55 PM Joel Savitz <jsavitz@redhat.com> wrote:
+>>>
+>>> Our memory management kernel CI testing at Red Hat uses the VM
+>>> selftests and we have run into two problems:
+>>>
+>>> First, our LTP tests overlap with the VM selftests.
+>>>
+>>> We want to avoid unhelpful redundancy in our testing practices.
+>>>
+>>> Second, we have observed the current run_vmtests.sh to report overall
+>>> failure/ambiguous results in the case that a machine lacks the necessary
+>>> hardware to perform one or more of the tests. E.g. ksm tests that
+>>> require more than one numa node.
+>>>
+>>> We want to be able to run the vm selftests suitable to particular hardware.
+>>>
+>>> Add the ability to run one or more groups of vm tests via run_vmtests.sh
+>>> instead of simply all-or-none in order to solve these problems.
+>>>
+>>> Preserve existing default behavior of running all tests when the script
+>>> is invoked with no arguments.
+>>>
+>>> Documentation of test groups is included in the patch as follows:
+>>>
+>>>      # ./run_vmtests.sh [ -h || --help ]
+>>>
+>>>      usage: ./tools/testing/selftests/vm/run_vmtests.sh [ -h | -t "<categories>"]
+>>>        -t: specify specific categories to tests to run
+>>>        -h: display this message
+>>>
+>>>      The default behavior is to run all tests.
+>>>
+>>>      Alternatively, specific groups tests can be run by passing a string
+>>>      to the -t argument containing one or more of the following categories
+>>>      separated by spaces:
+>>>      - mmap
+>>>              tests for mmap(2)
+>>>      - gup_test
+>>>              tests for gup using gup_test interface
+>>>      - userfaultfd
+>>>              tests for  userfaultfd(2)
+>>>      - compaction
+>>>              a test for the patch "Allow compaction of unevictable pages"
+>>>      - mlock
+>>>              tests for mlock(2)
+>>>      - mremap
+>>>              tests for mremap(2)
+>>>      - hugevm
+>>>              tests for very large virtual address space
+>>>      - vmalloc
+>>>              vmalloc smoke tests
+>>>      - hmm
+>>>              hmm smoke tests
+>>>      - madv_populate
+>>>              test memadvise(2) MADV_POPULATE_{READ,WRITE} options
+>>>      - memfd_secret
+>>>              test memfd_secret(2)
+>>>      - process_mrelease
+>>>              test process_mrelease(2)
+>>>      - ksm
+>>>              ksm tests that do not require >=2 NUMA nodes
+>>>      - ksm_numa
+>>>              ksm tests that require >=2 NUMA nodes
+>>>      - pkey
+>>>              memory protection key tests
+>>>      example: ./run_vmtests.sh -t "hmm mmap ksm"
+>>>
+>>> Changes from v2:
+>>>          - rebase onto the mm-everyting branch in
+>>>          https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+>>>          - integrate this functionality with new the tests
+>>>
+>>> Changes from v1:
+>>>          - use a command line argument to pass the test categories to the
+>>>            script instead of an environmet variable
+>>>          - remove novel prints to avoid messing with extant parsers of this
+>>>            script
+>>>          - update the usage text
+>>>
+>>> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+>>> ---
+>>>   tools/testing/selftests/vm/run_vmtests.sh | 241 +++++++++++++++-------
+>>>   1 file changed, 161 insertions(+), 80 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+>>> index d84fe0fa15e1..fb72a1338d07 100755
+>>> --- a/tools/testing/selftests/vm/run_vmtests.sh
+>>> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+>>> @@ -1,6 +1,6 @@
+>>>   #!/bin/bash
+>>>   # SPDX-License-Identifier: GPL-2.0
+>>> -#please run as root
+>>> +# Please run as root
+>>>
+>>>   # Kselftest framework requirement - SKIP code is 4.
+>>>   ksft_skip=4
+>>> @@ -8,15 +8,75 @@ ksft_skip=4
+>>>   mnt=./huge
+>>>   exitcode=0
+>>>
+>>> -#get huge pagesize and freepages from /proc/meminfo
+>>> -while read -r name size unit; do
+>>> -       if [ "$name" = "HugePages_Free:" ]; then
+>>> -               freepgs="$size"
+>>> -       fi
+>>> -       if [ "$name" = "Hugepagesize:" ]; then
+>>> -               hpgsize_KB="$size"
+>>> +usage() {
+>>> +       cat <<EOF
+>>> +usage: ${BASH_SOURCE[0]:-$0} [ -h | -t "<categories>"]
+>>> +  -t: specify specific categories to tests to run
+>>> +  -h: display this message
+>>> +
+>>> +The default behavior is to run all tests.
+>>> +
+>>> +Alternatively, specific groups tests can be run by passing a string
+>>> +to the -t argument containing one or more of the following categories
+>>> +separated by spaces:
+>>> +- mmap
+>>> +       tests for mmap(2)
+>>> +- gup_test
+>>> +       tests for gup using gup_test interface
+>>> +- userfaultfd
+>>> +       tests for  userfaultfd(2)
+>>> +- compaction
+>>> +       a test for the patch "Allow compaction of unevictable pages"
+>>> +- mlock
+>>> +       tests for mlock(2)
+>>> +- mremap
+>>> +       tests for mremap(2)
+>>> +- hugevm
+>>> +       tests for very large virtual address space
+>>> +- vmalloc
+>>> +       vmalloc smoke tests
+>>> +- hmm
+>>> +       hmm smoke tests
+>>> +- madv_populate
+>>> +       test memadvise(2) MADV_POPULATE_{READ,WRITE} options
+>>> +- memfd_secret
+>>> +       test memfd_secret(2)
+>>> +- process_mrelease
+>>> +       test process_mrelease(2)
+>>> +- ksm
+>>> +       ksm tests that do not require >=2 NUMA nodes
+>>> +- ksm_numa
+>>> +       ksm tests that require >=2 NUMA nodes
+>>> +- pkey
+>>> +       memory protection key tests
+>>> +example: ./run_vmtests.sh -t "hmm mmap ksm"
+>>> +EOF
+>>> +       exit 0
+>>> +}
+>>> +
+>>> +
+>>> +while getopts "ht:" OPT; do
+>>> +       case ${OPT} in
+>>> +               "h") usage ;;
+>>> +               "t") TEST_ITEMS=${OPTARG} ;;
+>>> +       esac
+>>> +done
+>>> +shift $((OPTIND -1))
+>>> +
+>>> +# default behavior: run all tests
+>>> +TEST_ITEMS=${TEST_ITEMS:-default}
+>>> +
+>>> +test_selected() {
+>>> +       if [ "$TEST_ITEMS" == "default" ]; then
+>>> +               # If no TEST_ITEMS are specified, run all tests
+>>> +               return 0
+>>>          fi
+>>> -done < /proc/meminfo
+>>> +       echo ${TEST_ITEMS} | grep ${1} 2>&1 >/dev/null
+>>> +       return ${?}
+>>> +}
+>>> +
+>>> +# Hugepage setup only needed for hugetlb tests
+>>> +if test_selected "hugetlb"; then
+>>>
+>>>   # Simple hugetlbfs tests have a hardcoded minimum requirement of
+>>>   # huge pages totaling 256MB (262144KB) in size.  The userfaultfd
+>>> @@ -28,7 +88,17 @@ hpgsize_MB=$((hpgsize_KB / 1024))
+>>>   half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
+>>>   needmem_KB=$((half_ufd_size_MB * 2 * 1024))
+>>>
+>>> -#set proper nr_hugepages
+>>> +# get huge pagesize and freepages from /proc/meminfo
+>>> +while read -r name size unit; do
+>>> +       if [ "$name" = "HugePages_Free:" ]; then
+>>> +               freepgs="$size"
+>>> +       fi
+>>> +       if [ "$name" = "Hugepagesize:" ]; then
+>>> +               hpgsize_KB="$size"
+>>> +       fi
+>>> +done < /proc/meminfo
+>>> +
+>>> +# set proper nr_hugepages
+>>>   if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+>>>          nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
+>>>          needpgs=$((needmem_KB / hpgsize_KB))
+>>> @@ -57,144 +127,155 @@ else
+>>>          exit 1
+>>>   fi
+>>>
+>>> -#filter 64bit architectures
+>>> +fi # test_selected "hugetlb"
+>>> +
+>>> +# filter 64bit architectures
+>>>   ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
+>>>   if [ -z "$ARCH" ]; then
+>>>          ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
+>>>   fi
+>>>   VADDR64=0
+>>> -echo "$ARCH64STR" | grep "$ARCH" && VADDR64=1
+>>> +echo "$ARCH64STR" | grep "$ARCH" &>/dev/null && VADDR64=1
+>>>
+>>>   # Usage: run_test [test binary] [arbitrary test arguments...]
+>>>   run_test() {
+>>> -       local title="running $*"
+>>> -       local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+>>> -       printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
+>>> -
+>>> -       "$@"
+>>> -       local ret=$?
+>>> -       if [ $ret -eq 0 ]; then
+>>> -               echo "[PASS]"
+>>> -       elif [ $ret -eq $ksft_skip ]; then
+>>> -               echo "[SKIP]"
+>>> -               exitcode=$ksft_skip
+>>> -       else
+>>> -               echo "[FAIL]"
+>>> -               exitcode=1
+>>> -       fi
+>>> +       if test_selected ${CATEGORY}; then
+>>> +               local title="running $*"
+>>> +               local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+>>> +               printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
+>>> +
+>>> +               "$@"
+>>> +               local ret=$?
+>>> +               if [ $ret -eq 0 ]; then
+>>> +                       echo "[PASS]"
+>>> +               elif [ $ret -eq $ksft_skip ]; then
+>>> +                       echo "[SKIP]"
+>>> +                       exitcode=$ksft_skip
+>>> +               else
+>>> +                       echo "[FAIL]"
+>>> +                       exitcode=1
+>>> +               fi
+>>> +       fi # test_selected
+>>>   }
+>>>
+>>> -mkdir "$mnt"
+>>> -mount -t hugetlbfs none "$mnt"
+>>> +# setup only needed for hugetlb tests
+>>> +if test_selected "hugetlb"; then
+>>> +       mkdir "$mnt"
+>>> +       mount -t hugetlbfs none "$mnt"
+>>> +fi
+>>>
+>>> -run_test ./hugepage-mmap
+>>> +CATEGORY="hugetlb" run_test ./hugepage-mmap
+>>>
+>>>   shmmax=$(cat /proc/sys/kernel/shmmax)
+>>>   shmall=$(cat /proc/sys/kernel/shmall)
+>>>   echo 268435456 > /proc/sys/kernel/shmmax
+>>>   echo 4194304 > /proc/sys/kernel/shmall
+>>> -run_test ./hugepage-shm
+>>> +CATEGORY="hugetlb" run_test ./hugepage-shm
+>>>   echo "$shmmax" > /proc/sys/kernel/shmmax
+>>>   echo "$shmall" > /proc/sys/kernel/shmall
+>>>
+>>> -run_test ./map_hugetlb
+>>> +CATEGORY="hugetlb" run_test ./map_hugetlb
+>>>
+>>> -run_test ./hugepage-mremap "$mnt"/huge_mremap
+>>> -rm -f "$mnt"/huge_mremap
+>>> +CATEGORY="hugetlb" run_test ./hugepage-mremap "$mnt"/huge_mremap
+>>> +test_selected "hugetlb" && rm -f "$mnt"/huge_mremap
+>>>
+>>> -run_test ./hugepage-vmemmap
+>>> +CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+>>>
+>>> -run_test ./hugetlb-madvise "$mnt"/madvise-test
+>>> -rm -f "$mnt"/madvise-test
+>>> +CATEGORY="hugetlb" run_test ./hugetlb-madvise "$mnt"/madvise-test
+>>> +test_selected "hugetlb" && rm -f "$mnt"/madvise-test
+>>>
+>>> -echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
+>>> -echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
+>>> -echo "      hugetlb regression testing."
+>>> +if test_selected "hugetlb"; then
+>>> +       echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
+>>> +       echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
+>>> +       echo "      hugetlb regression testing."
+>>> +fi
+>>>
+>>> -run_test ./map_fixed_noreplace
+>>> +CATEGORY="mmap" run_test ./map_fixed_noreplace
+>>>
+>>>   # get_user_pages_fast() benchmark
+>>> -run_test ./gup_test -u
+>>> +CATEGORY="gup_test" run_test ./gup_test -u
+>>>   # pin_user_pages_fast() benchmark
+>>> -run_test ./gup_test -a
+>>> +CATEGORY="gup_test" run_test ./gup_test -a
+>>>   # Dump pages 0, 19, and 4096, using pin_user_pages:
+>>> -run_test ./gup_test -ct -F 0x1 0 19 0x1000
+>>> +CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
+>>>
+>>> -run_test ./userfaultfd anon 20 16
+>>> -run_test ./userfaultfd anon:dev 20 16
+>>> +CATEGORY="userfaultfd" run_test ./userfaultfd anon 20 16
+>>> +CATEGORY="userfaultfd" run_test ./userfaultfd anon:dev 20 16
+>>>   # Hugetlb tests require source and destination huge pages. Pass in half the
+>>>   # size ($half_ufd_size_MB), which is used for *each*.
+>>> -run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
+>>> -run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
+>>> -run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
+>>> +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
+>>> +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
+>>> +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
+>>>   rm -f "$mnt"/uffd-test
+>>> -run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
+>>> +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
+>>>   rm -f "$mnt"/uffd-test
+>>> -run_test ./userfaultfd shmem 20 16
+>>> -run_test ./userfaultfd shmem:dev 20 16
+>>> -
+>>> -#cleanup
+>>> -umount "$mnt"
+>>> -rm -rf "$mnt"
+>>> -echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+>>> +CATEGORY="userfaultfd" run_test ./userfaultfd shmem 20 16
+>>> +CATEGORY="userfaultfd" run_test ./userfaultfd shmem:dev 20 16
+>>> +
+>>> +# cleanup (only needed when running hugetlb tests)
+>>> +if test_selected "hugetlb"; then
+>>> +       umount "$mnt"
+>>> +       rm -rf "$mnt"
+>>> +       echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+>>> +fi
+>>>
+>>> -run_test ./compaction_test
+>>> +CATEGORY="compaction" run_test ./compaction_test
+>>>
+>>> -run_test sudo -u nobody ./on-fault-limit
+>>> +CATEGORY="mlock" run_test sudo -u nobody ./on-fault-limit
+>>>
+>>> -run_test ./map_populate
+>>> +CATEGORY="mmap" run_test ./map_populate
+>>>
+>>> -run_test ./mlock-random-test
+>>> +CATEGORY="mlock" run_test ./mlock-random-test
+>>>
+>>> -run_test ./mlock2-tests
+>>> +CATEGORY="mlock" run_test ./mlock2-tests
+>>>
+>>> -run_test ./mrelease_test
+>>> +CATEGORY="process_mrelease" run_test ./mrelease_test
+>>>
+>>> -run_test ./mremap_test
+>>> +CATEGORY="mremap" run_test ./mremap_test
+>>>
+>>> -run_test ./thuge-gen
+>>> +CATEGORY="hugetlb" run_test ./thuge-gen
+>>>
+>>>   if [ $VADDR64 -ne 0 ]; then
+>>> -       run_test ./virtual_address_range
+>>> +       CATEGORY="hugevm" run_test ./virtual_address_range
+>>>
+>>>          # virtual address 128TB switch test
+>>> -       run_test ./va_128TBswitch.sh
+>>> +       CATEGORY="hugevm" run_test ./va_128TBswitch.sh
+>>>   fi # VADDR64
+>>>
+>>>   # vmalloc stability smoke test
+>>> -run_test ./test_vmalloc.sh smoke
+>>> +CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
+>>>
+>>> -run_test ./mremap_dontunmap
+>>> +CATEGORY="mremap" run_test ./mremap_dontunmap
+>>>
+>>> -run_test ./test_hmm.sh smoke
+>>> +CATEGORY="hmm" run_test ./test_hmm.sh smoke
+>>>
+>>>   # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
+>>> -run_test ./madv_populate
+>>> +CATEGORY="madv_populate" run_test ./madv_populate
+>>>
+>>> -run_test ./memfd_secret
+>>> +CATEGORY="memfd_secret" run_test ./memfd_secret
+>>>
+>>>   # KSM MADV_MERGEABLE test with 10 identical pages
+>>> -run_test ./ksm_tests -M -p 10
+>>> +CATEGORY="ksm" run_test ./ksm_tests -M -p 10
+>>>   # KSM unmerge test
+>>> -run_test ./ksm_tests -U
+>>> +CATEGORY="ksm" run_test ./ksm_tests -U
+>>>   # KSM test with 10 zero pages and use_zero_pages = 0
+>>> -run_test ./ksm_tests -Z -p 10 -z 0
+>>> +CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 0
+>>>   # KSM test with 10 zero pages and use_zero_pages = 1
+>>> -run_test ./ksm_tests -Z -p 10 -z 1
+>>> +CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 1
+>>>   # KSM test with 2 NUMA nodes and merge_across_nodes = 1
+>>> -run_test ./ksm_tests -N -m 1
+>>> +CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
+>>>   # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+>>> -run_test ./ksm_tests -N -m 0
+>>> +CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
+>>>
+>>>   # protection_keys tests
+>>>   if [ -x ./protection_keys_32 ]
+>>>   then
+>>> -       run_test ./protection_keys_32
+>>> +       CATEGORY="pkey" run_test ./protection_keys_32
+>>>   fi
+>>>
+>>>   if [ -x ./protection_keys_64 ]
+>>>   then
+>>> -       run_test ./protection_keys_64
+>>> +       CATEGORY="pkey" run_test ./protection_keys_64
+>>>   fi
+>>>
+>>>   exit $exitcode
+>>> --
+>>> 2.31.1
+>>>
+>>
+> 
+> 
 

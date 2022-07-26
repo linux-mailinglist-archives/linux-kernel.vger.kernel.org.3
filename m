@@ -2,124 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45419580F5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2CA580F5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238637AbiGZIpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S238272AbiGZIqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238053AbiGZIpn (ORCPT
+        with ESMTP id S231187AbiGZIqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:45:43 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE3B2A943
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:45:41 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id li4so1475382pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NyOOkD+eRbzSyetXYFfpw0k4gfFU2yiJ20e/GWk7olk=;
-        b=X7vIiDhSLybQdcdrocjp2PDtEI9FAfSfkt/GXXlm4Zq/NT2ao/naZ1esoCW9iPs4LK
-         SGlmzljGdXxTJjAxwE8hTZYvO3lcpxl/vz51eedoNV3wF7QLgpuk8AxL/mG/0al1EiAf
-         YIACUX/TNOOLxiePT/3J4xQU/fas/m/5SN0cpELonIwUzewB4HMd2AoS5+2URULeUeaP
-         r/4XThUPpUjIqQCm6/vYuLVspxYEWMyU3EvsaDYydWOkEIEhFGwT/RHKrtOFdQZBaGZc
-         9AqERj1aHC/cECI4jGRdcZxd/Q5VCLkxJ81p20pIjVuIOf9SqqVjbeoZO/Ldo7OIWx/e
-         8RAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NyOOkD+eRbzSyetXYFfpw0k4gfFU2yiJ20e/GWk7olk=;
-        b=bK/Dkf83DJAVs0YZ35xGp56AAcnlXK7onDVG2NGiuV2BdP7E+qX7sLQ2wBbYqDvOhu
-         /zJU/8rEyMJcMqQCaCt772naPm5auihxQRHv32YargkgeV3GUmJq6hLPKE9JoLQQVbU3
-         +0ytTy1WliLu+qT5vlF4QIQVHa+wbQ7Fj9AHbLMpH/4oF6h293gQC+gMcjiEa5ASZJXc
-         4ngNyXU2budzxGtHbvGHOKTgolOvZTdx6ECza7OFB1Dkzz0lp4/+O0V1o1tv2qlR+sOi
-         sAuLjQplG6KEUG4U94N9ZACrONu9hjXS5ByLUDI6gmboojoQ2QCBy8JnIGtB1zDdJLjF
-         Lfow==
-X-Gm-Message-State: AJIora+lMXYM2fyilia6R3jl1khmf042cDSJ0Z77hx1XByCfvxOO0FN+
-        qEDo3rfbeWFCXKHRWE/68QGYFw==
-X-Google-Smtp-Source: AGRyM1tImQ0our/59COnOeI0PSnlKWT0efVS/MN9w29JmZjyd9OsYz0Z2+TKak57pzx+1Gq4ZXhjew==
-X-Received: by 2002:a17:90a:4216:b0:1f2:70ed:1116 with SMTP id o22-20020a17090a421600b001f270ed1116mr16168424pjg.89.1658825141232;
-        Tue, 26 Jul 2022 01:45:41 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1f3a:5a45:a9cd:d7dd:fd01:73c0])
-        by smtp.gmail.com with ESMTPSA id d4-20020aa797a4000000b00528c16966casm11450560pfq.174.2022.07.26.01.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 01:45:40 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, ulf.hansson@linaro.org,
-        robh@kernel.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, agross@kernel.org
-Subject: [PATCH v2] dt-bindings: mmc: Set maximum documented operating frequency as 384MHz
-Date:   Tue, 26 Jul 2022 14:15:20 +0530
-Message-Id: <20220726084520.2895454-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.3
+        Tue, 26 Jul 2022 04:46:47 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C862F66C;
+        Tue, 26 Jul 2022 01:46:45 -0700 (PDT)
+X-UUID: 63514b995795457cac9035d883ae8191-20220726
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:c2016e17-6c6a-4d78-baec-69e09740b5c2,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:70
+X-CID-INFO: VERSION:1.1.8,REQID:c2016e17-6c6a-4d78-baec-69e09740b5c2,OB:0,LOB:
+        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:70
+X-CID-META: VersionHash:0f94e32,CLOUDID:ac460dee-db04-4499-9fdf-04ef44b9468c,C
+        OID:cd19d327659d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 63514b995795457cac9035d883ae8191-20220726
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 284345635; Tue, 26 Jul 2022 16:46:41 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 26 Jul 2022 16:46:40 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 26 Jul 2022 16:46:40 +0800
+Message-ID: <38f785af2815e45d175f02d9970e3401e700a645.camel@mediatek.com>
+Subject: Re: [PATCH v14 01/10] dt-bindings: mediatek,dp: Add Display Port
+ binding
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 26 Jul 2022 16:46:40 +0800
+In-Reply-To: <ef407d8767d12d240280f1c9d9fdd8ba9d3e5632.camel@mediatek.com>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+         <20220712111223.13080-2-rex-bc.chen@mediatek.com>
+         <0e1d4cef6b7e72813300eb9be5650066166ac763.camel@mediatek.com>
+         <ef407d8767d12d240280f1c9d9fdd8ba9d3e5632.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Ulf noted in [1], the maximum operating frequency
-documented in the mmc-controller device-tree bindings
-should be updated to the maximum frequency supported
-by the mmc controller(s).
+On Tue, 2022-07-26 at 14:18 +0800, Rex-BC Chen wrote:
+> On Wed, 2022-07-13 at 15:56 +0800, CK Hu wrote:
+> > Hi, Bo-Chen:
+> > 
+> > On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
+> > > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > 
+> > > This controller is present on several mediatek hardware.
+> > > Currently
+> > > mt8195 and mt8395 have this controller without a functional
+> > > difference,
+> > > so only one compatible field is added.
+> > > 
+> > > The controller can have two forms, as a normal display port and
+> > > as
+> > > an
+> > > embedded display port.
+> > > 
+> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > > ---
+> > >  .../display/mediatek/mediatek,dp.yaml         | 115
+> > > ++++++++++++++++++
+> > >  1 file changed, 115 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > > ml
+> > > 
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.
+> > > ya
+> > > ml
+> > > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.
+> > > ya
+> > > ml
+> > > new file mode 100644
+> > > index 000000000000..e2d6cb314297
+> > > --- /dev/null
+> > > +++
+> > > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.
+> > > ya
+> > > ml
+> > > @@ -0,0 +1,115 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: 
+> > > http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: MediaTek Display Port Controller
+> > > +
+> > > +maintainers:
+> > > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> > > +  - Jitao shi <jitao.shi@mediatek.com>
+> > > +
+> > > +description: |
+> > > +  Device tree bindings for the MediaTek display port TX (DP) and
+> > > +  embedded display port TX (eDP) controller present on some
+> > > MediaTek
+> > > SoCs.
+> > > +  MediaTek DP and eDP are different hardwares and they have
+> > > different
+> > > +  base address for registers, so we need two different
+> > > compatibles
+> > > to
+> > > +  separate them.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - mediatek,mt8195-dp-tx
+> > > +      - mediatek,mt8195-edp-tx
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  nvmem-cells:
+> > > +    maxItems: 1
+> > > +    description: efuse data for display port calibration
+> > > +
+> > > +  nvmem-cell-names:
+> > > +    const: dp_calibration_data
+> > > +
+> > > +  power-domains:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: Input endpoint of the controller, usually
+> > > dp_intf
+> > > +
+> > > +      port@1:
+> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > +        unevaluatedProperties: false
+> > > +        description: Output endpoint of the controller
+> > > +        properties:
+> > > +          endpoint:
+> > > +            $ref: /schemas/media/video-interfaces.yaml#
+> > > +            unevaluatedProperties: false
+> > > +            properties:
+> > > +              data-lanes:
+> > > +                description: |
+> > > +                  number of lanes supported by the hardware.
+> > > +                  The possible values:
+> > > +                  0       - For 1 lane enabled in IP.
+> > > +                  0 1     - For 2 lanes enabled in IP.
+> > > +                  0 1 2 3 - For 4 lanes enabled in IP.
+> > > +                minItems: 1
+> > > +                maxItems: 4
+> > > +            required:
+> > > +              - data-lanes
+> > > +
+> > > +    required:
+> > > +      - port@0
+> > > +      - port@1
+> > > +
+> > > +  max-linkrate-mhz:
+> > > +    enum: [ 1620, 2700, 5400, 8100 ]
+> > > +    description: maximum link rate supported by the hardware.
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - interrupts
+> > > +  - ports
+> > > +  - max-linkrate-mhz
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > +    #include <dt-bindings/power/mt8195-power.h>
+> > > +    dp_tx@1c600000 {
+> > > +        compatible = "mediatek,mt8195-dp-tx";
+> > > +        reg = <0x1c600000 0x8000>;
+> > > +        power-domains = <&spm MT8195_POWER_DOMAIN_DP_TX>;
+> > > +        interrupts = <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH 0>;
+> > > +        max-linkrate-mhz = <8100>;
+> > 
+> > Why dp-tx has no clock property? I think this device should work
+> > with
+> > a
+> > clock.
+> > 
+> > Regards,
+> > CK
+> > 
+> 
+> Hello CK,
+> 
+> We just need to enable the power domain of dp.
+> The clock of dp is generated by itself and we are not using the
+> global
+> pll to generate clocks.
 
-Without this fix in place, the 'make dtbs_check' reports
-issues with 'max-frequency' value for ipq8074 sdhci node:
+Add this to description because this is not trivial.
 
-  arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb: mmc@7824900:
-   max-frequency:0:0: 384000000 is greater than the maximum of 200000000
+Regards,
+CK
 
-[1]. https://www.spinics.net/lists/kernel/msg4442049.html
-
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Rob Herring <robh@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220725180916.2850228-1-bhupesh.sharma@linaro.org/
- - Rebased on linux-next/master
-
- .../devicetree/bindings/mmc/mmc-controller.yaml     | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-index ff5ce89e5111..802e3ca8be4d 100644
---- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-+++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
-@@ -88,11 +88,18 @@ properties:
-     default: 1
- 
-   max-frequency:
--    description:
--      Maximum operating frequency of the bus.
-+    description: |
-+      Maximum operating frequency of the bus:
-+        - for eMMC, the maximum supported frequency is 200MHz,
-+        - for SD/SDIO cards the SDR104 mode has a max supported
-+          frequency of 208MHz,
-+        - some mmc host controllers do support a max frequency upto
-+          384MHz.
-+      So, lets keep the maximum supported value here.
-+
-     $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 400000
--    maximum: 200000000
-+    maximum: 384000000
- 
-   disable-wp:
-     $ref: /schemas/types.yaml#/definitions/flag
--- 
-2.35.3
+> 
+> BRs,
+> Bo-Chen
+> 
+> > > +
+> > > +        ports {
+> > > +            #address-cells = <1>;
+> > > +            #size-cells = <0>;
+> > > +
+> > > +            port@0 {
+> > > +                reg = <0>;
+> > > +                dptx_in: endpoint {
+> > > +                    remote-endpoint = <&dp_intf0_out>;
+> > > +                };
+> > > +            };
+> > > +            port@1 {
+> > > +                reg = <1>;
+> > > +                dptx_out: endpoint {
+> > > +                    data-lanes = <0 1 2 3>;
+> > > +                };
+> > > +            };
+> > > +        };
+> > > +    };
+> > 
+> > 
+> 
+> 
 

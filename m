@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EA5581287
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 13:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85D658128B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239028AbiGZL7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 07:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S238976AbiGZMAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 08:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238601AbiGZL7c (ORCPT
+        with ESMTP id S238974AbiGZL7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 07:59:32 -0400
+        Tue, 26 Jul 2022 07:59:49 -0400
 Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB7933419
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 04:59:22 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id a23so19933142lfm.10
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 04:59:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C597C33A21
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 04:59:41 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bf9so22204327lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 04:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nbbLcikMYE+MXnxTE0IyRsnB8YfOQz4wU6j1hL6TVU8=;
-        b=YpYQNziSNDPi/wCGg+oi9mzB1khFmS1f2mCTeoJv0v+/BzUYE7V6QinXkBB2EbTgL2
-         +iuqpbaCJbr7n8q126iTIFdfdWCQGPSYMVVS29YYOJ70C/G+y/Y4TOqG+pKs02DXXJdv
-         frRe28nip5IbgU1wkNVKaAx3ZU7UyVouxxESfuSjnSKg0OpNEiVOBEUoyb1WioxMY/XD
-         vR9/BKAHjQX06WNHLQtBhhokf6sS+VkM3W7IM7+AgnjRJ74ULeDs7cAiMXAXQSmk+0hX
-         cqNYcdjQPqp4Dsx3frEJ46+TaXnhug5COomcA2T65UcW73Ioqzf6feEy88o8nnSg/rKZ
-         0orA==
+        bh=uHwZd9Pa/u5FR2uyBy86asEX1D1p0ApvUQHSWmOJELc=;
+        b=CFgz8CvhxFDwBGTe1xoN/YZRHkIJZewi+lcJD03uHtfKnzuDfQhL088LRcxqb1XyCH
+         I0XimVUkJRlN4FgAp367moM3f28au7hdXiuWfJINMvGLh1O1BbfGbz/0tvtiqfcTLJbx
+         EoRaPiyZuTDIv/jxOrUH8cvUFMk+yGGaGfBTyKJrfoPf5rvEvl9rQ6XGMrw/rZtCy0qw
+         sA8XxSFSYNUE48qQqDhe+6z75ERSiKb/Fsbpj5PMSo2cy51XK7MJRi8HdCpxPROi3nbj
+         B0ekE6EKv1gOZgIC1XO8ocNPdsjEfSHkQw/NDDUIgtusNVvl6ckqHU6qCGdHlgrjMIZe
+         d3eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nbbLcikMYE+MXnxTE0IyRsnB8YfOQz4wU6j1hL6TVU8=;
-        b=bJZQAcNJh8y5xgC8re+s6AJe5tYBaz6TPGHgwGGdWNnn6H87B3c6l4VCoFpSNSb5+C
-         TGTJX7X0+kdIH1c5tJbP3Y5MNah9TUmQI9wY1+AL4T9i8vZs6LkbGZL4fBTUhEpzaRQ+
-         nv8+SyFvYgaqt5xlfjTV5JRR3Z9+nkSlXodF8cGVXAoIUAIhho68pgaTJ3x75QCRBTAu
-         Vd9JnzGCjeq3eBWOitC7MPIQLcqHq35Qvtn6E9CO7/BKI2onmBNRnUJap86AIaBMwMkX
-         aks7q+tRscRew8YGVLIJq+6WtCD5uiHrcK7+QtIr0cS0NjhSsJ+xcCpZPjoylYumsXg5
-         Kf1g==
-X-Gm-Message-State: AJIora/Tajga8QsqECQnq6bVOQu+5eJ1I8klzxBBY2sC3wfge4TlH/pb
-        khfg3aZVC+sFmNvjVlx7x9uuxg==
-X-Google-Smtp-Source: AGRyM1v35pQlIFP8uSIuV2zi3VN9h5Rd7ZWXuyHKdh5pu2MYS3VHcv19oFsTnHfEbYATIMcatndESw==
-X-Received: by 2002:a05:6512:44b:b0:48a:855e:266a with SMTP id y11-20020a056512044b00b0048a855e266amr4488849lfk.23.1658836760485;
-        Tue, 26 Jul 2022 04:59:20 -0700 (PDT)
+        bh=uHwZd9Pa/u5FR2uyBy86asEX1D1p0ApvUQHSWmOJELc=;
+        b=iRyRPy5X+kjY0lyFoRpGx3h7ACNG8QvN8oUbRlFgOTebg/ja/UZlmJ9ZsVRYwZbD3+
+         1BL9GhybKbFSzs3VRDORijSGRJQA2cqOHkab4phEWJBWL7qn1TCGiUpcUqQ+o9bED6B7
+         lNUNLtjlyAYht1MjuVI0bQ/Sl8CzS7wARfGH8eZE2j8WwljQ1pBxtLg4spyqcUmz2gBj
+         QoFb24Lp1nGyH1cyLrGnT6gAyacdr6F2TYA8TM8+jwrrqEUdBvOViSsvGfcd51wYfex9
+         GbD/OpPRQdu86URDqQxmooKHc/nn1AJti4MksmO8K+Z6YjXKHZWkdv9jaex8TU20PPqg
+         lFvA==
+X-Gm-Message-State: AJIora8At6SPBx9E1eRK+BAhqogngTo1BvtaFj+A4kqphRnwW7v6jgoz
+        O9o05x5uhDwIDSY0xX3KJCxV6Sz2P2n8+w==
+X-Google-Smtp-Source: AGRyM1uTeTJKflknwQZFgLgiyeO6V8yL127gHJDQoNP8cfaMBAq1K2MGFBcVEdCqD1oYkhRCQOvYTg==
+X-Received: by 2002:a05:6512:3a90:b0:48a:adce:47f0 with SMTP id q16-20020a0565123a9000b0048aadce47f0mr456238lfu.473.1658836779525;
+        Tue, 26 Jul 2022 04:59:39 -0700 (PDT)
 Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id t4-20020a192d44000000b0048a751c966dsm2697050lft.224.2022.07.26.04.59.19
+        by smtp.gmail.com with ESMTPSA id q6-20020a0565123a8600b00489de206812sm3138967lfu.151.2022.07.26.04.59.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 04:59:20 -0700 (PDT)
+        Tue, 26 Jul 2022 04:59:39 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ASoC: dt-bindings: qcom,wcd934x: use absolute path to other schema
-Date:   Tue, 26 Jul 2022 13:59:17 +0200
-Message-Id: <20220726115917.101371-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: timer: ingenic,tcu: use absolute path to other schema
+Date:   Tue, 26 Jul 2022 13:59:37 +0200
+Message-Id: <20220726115937.101432-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -80,22 +76,31 @@ Absolute path to other DT schema is preferred over relative one.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/timer/ingenic,tcu.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml b/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-index 9b225dbf8b79..8ca19f2b0b3d 100644
---- a/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-@@ -127,7 +127,7 @@ properties:
- 
-   gpio@42:
-     type: object
--    $ref: ../gpio/qcom,wcd934x-gpio.yaml#
-+    $ref: /schemas/gpio/qcom,wcd934x-gpio.yaml#
- 
+diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+index d541cf2067bc..0a01e4f5eddb 100644
+--- a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
++++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+@@ -113,7 +113,7 @@ properties:
  patternProperties:
-   "^.*@[0-9a-f]+$":
+   "^watchdog@[a-f0-9]+$":
+     type: object
+-    $ref: ../watchdog/watchdog.yaml#
++    $ref: /schemas/watchdog/watchdog.yaml#
+     properties:
+       compatible:
+         oneOf:
+@@ -145,7 +145,7 @@ patternProperties:
+ 
+   "^pwm@[a-f0-9]+$":
+     type: object
+-    $ref: ../pwm/pwm.yaml#
++    $ref: /schemas/pwm/pwm.yaml#
+     properties:
+       compatible:
+         oneOf:
 -- 
 2.34.1
 

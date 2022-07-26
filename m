@@ -2,113 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F07B580ADA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 07:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F176B580ADC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 07:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237584AbiGZFg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 01:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S237612AbiGZFh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 01:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiGZFg5 (ORCPT
+        with ESMTP id S237603AbiGZFhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 01:36:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193B724BC1;
-        Mon, 25 Jul 2022 22:36:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0872B811C3;
-        Tue, 26 Jul 2022 05:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6285C341C0;
-        Tue, 26 Jul 2022 05:36:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658813813;
-        bh=swMWmdHL2Ht/begBedL2i8axCFmjIsGE43WtSM3VEwc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UFQoBr1ZlYmecGiK08zByV8yHS1PrBIFvHrLq3eaE6ZcIvCrdQshW8q60qhf0ND6A
-         5GmUgHLcPaX01nMT8soeeS2qoIQpwXJ2CPw/p45NwN3XrYud2OuBQYfuxVDCVZm0C7
-         m6vlnp0yseYGE+GAplwq3wNgwz/hp3edrmuRqooqjsBN4p77LbokNk3XhCx+uNdw1v
-         ffsFYXTGYcHjETLEwsapuH20gHCi26g96eiVacrzPwT+XOX1NXUdKi2kfv0wyTXHyL
-         +FcIunqL7h6hWyEsaaEphZjzYGmaB3JZJxAKwPBTkTINb48/zDiPXftOwhB1v9trL3
-         yNpMCDLt551yg==
-Date:   Tue, 26 Jul 2022 08:36:48 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ajit Khaparde <ajit.khaparde@broadcom.com>
-Cc:     Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org, jgg@ziepe.ca,
-        Selvin Xavier <selvin.xavier@broadcom.com>,
-        linux-rdma@vger.kernel.org,
-        Andrew Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: Re: [PATCH 2/2] RDMA/bnxt_re: Use auxiliary driver interface
-Message-ID: <Yt99cG7ZMGe1XhlL@unreal>
-References: <20220724231458.93830-1-ajit.khaparde@broadcom.com>
- <20220724231458.93830-3-ajit.khaparde@broadcom.com>
- <Yt6JV0Vs7nSnI8KB@unreal>
- <CACZ4nhvkTtPjrtKnFuxo+m0TJdBB6S3Tdu1sx+UDS2bT3Y2XZg@mail.gmail.com>
+        Tue, 26 Jul 2022 01:37:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CAB27CE8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:37:23 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id t3-20020a17090a3b4300b001f21eb7e8b0so15724765pjf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cSJ2gSZEB95hQy+fBPJ2b6XGNWJqJmog2/ljhs0mKjk=;
+        b=Tni2yj0/pL2Jpa8ecAowM1kwFjFqP1gjp4Pwvvksw8y6+kamiIiCbiK8LMkZy7tv3l
+         eCz53si26zG3SIFgWxMoLX1OWgY3g92VLYPoz06MadIQFIM6U+QGv2n925Diti5NOn7K
+         2gDDCp419O+bMCh6SplghILz6okQcoBGnApd5QXxL62BmRimZ6mhqUcCfvzH4JT1aIVA
+         IwmvKKLyIWfgqMJ3J3AeWRyYKJhqTuC8Y2/5XY+EdgTeDMUsxO0cQudUwkWSzQvmtNBW
+         j2SBzu5/z4zrjac5sUzfrrQQYuFyyjYJrQeB4k0ZcZIGAH3NRoPQRyCh/VBwTHrX4fv+
+         U3Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cSJ2gSZEB95hQy+fBPJ2b6XGNWJqJmog2/ljhs0mKjk=;
+        b=c3Fog3HNqzEriXrk6zR4SGjRtrjZIFjE4PGnPSyzvicnN/zC6uksEa8UeOUqrPA7vg
+         OY3EYXylLnzez0krSOc7emF/8rwdGp8Pd0m6/DyCn/0eS8J8jNTlJmM3DfZCtXXJn+nc
+         rKGbSd3NzJ1w3PhelofiR3QNzEgir+ol/Nkf2Vfe3GqqRu/QGAx9B2L1BA1nkawYy5Pl
+         vGqvhSz1E2rF2NkuVC15AaOsMD/HFPOUocaIWrbo7RFyGUvj2fSakw8IMc2w7Qrtq1sh
+         tZ1dkDmVB5LuXU58xXTjTbMuFJQUlexw07C6wrX0/S2x/gxD5V+xtMzQlQgqZWSAuMeT
+         +urw==
+X-Gm-Message-State: AJIora8YTsjiAUL4mNRjP8hfDoI55FlXjChXXwOjsSMKdl3pJmUSC79C
+        y7uVCxeneoHlqHWApEw30BoK9A==
+X-Google-Smtp-Source: AGRyM1tW8LiEDIBONgwUmkjln3quZm/8MKljtCsacOKwijdmvK0Yjxw2u6ulUGjMINFD4v5vRms0Og==
+X-Received: by 2002:a17:902:d64a:b0:16c:2755:428d with SMTP id y10-20020a170902d64a00b0016c2755428dmr15805492plh.79.1658813843096;
+        Mon, 25 Jul 2022 22:37:23 -0700 (PDT)
+Received: from google.com (59.39.145.34.bc.googleusercontent.com. [34.145.39.59])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170902680d00b00168c52319c3sm10429459plk.149.2022.07.25.22.37.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 22:37:22 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 05:37:18 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 0/6] KVM: x86: Apply NX mitigation more precisely
+Message-ID: <Yt99jpf5l/cInivs@google.com>
+References: <20220723012325.1715714-1-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACZ4nhvkTtPjrtKnFuxo+m0TJdBB6S3Tdu1sx+UDS2bT3Y2XZg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220723012325.1715714-1-seanjc@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 09:58:30PM -0700, Ajit Khaparde wrote:
-> On Mon, Jul 25, 2022 at 5:15 AM Leon Romanovsky <leon@kernel.org> wrote:
-> >
-> > On Sun, Jul 24, 2022 at 04:14:58PM -0700, Ajit Khaparde wrote:
-> > > Use auxiliary driver interface for driver load, unload ROCE driver.
-> > > The driver does not need to register the interface using the netdev
-> > > notifier anymore. Removed the bnxt_re_dev_list which is not needed.
-> > > Currently probe, remove and shutdown ops have been implemented for
-> > > the auxiliary device.
-> > >
-> > > BUG: DCSG01157556
-> > > Change-Id: Ice54f076c1c4fc26d4ee7e77a5dcd1ca21cf4cd0
-> >
-> > Please remove the lines above.
-> Apologies for missing that.
+On Sat, Jul 23, 2022, Sean Christopherson wrote:
+> Patch 6 from Mingwei is the end goal of the series.  KVM incorrectly
+> assumes that the NX huge page mitigation is the only scenario where KVM
+> will create a non-leaf page instead of a huge page.   Precisely track
+> (via kvm_mmu_page) if a non-huge page is being forced and use that info
+> to avoid unnecessarily forcing smaller page sizes in
+> disallowed_hugepage_adjust().
 > 
-> >
-> > > Signed-off-by: Ajit Khaparde <ajit.khaparde@broadcom.com>
-> > > ---
-> > >  drivers/infiniband/hw/bnxt_re/bnxt_re.h       |   9 +-
-> > >  drivers/infiniband/hw/bnxt_re/main.c          | 405 +++++++-----------
-> > >  drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  64 ---
-> > >  drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c |  65 +++
-> > >  drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h |   3 +
-> > >  5 files changed, 232 insertions(+), 314 deletions(-)
-> >
-> > <...>
-> >
-> > > +static DEFINE_IDA(bnxt_aux_dev_ids);
-> > > +
-> > >  static int bnxt_register_dev(struct bnxt_en_dev *edev, unsigned int ulp_id,
-> > >                            struct bnxt_ulp_ops *ulp_ops, void *handle)
-> >
-> > I would expect that almost all code in bnxt_ulp.c will go after this change.
-> I agree. My plan was to get these QA tested, initial Aux Bus changes
-> in this release with a follow on series to clean this up further.
-> Does that sound reasonable?
+> v2: Rebase, tweak a changelog accordingly.
 
-No, please prepare complete series and we will review it.
-There is much harder to do it when the change is partial.
+hmm, I applied this patch set (v2) on top of kvm/queue (HEAD:
+1a4d88a361af) and it seems kvm-unit-tests/vmx failed on both ept=1 and
+ept=0. And it did not work on our internel kernel either (kernel
+crashed).
 
-Thanks
+Maybe there is still minor issues?
 
-> Thanks for the feedback.
 > 
-> Thanks
-> Ajit
+> v1: https://lore.kernel.org/all/20220409003847.819686-1-seanjc@google.com
 > 
-> >
-> > Thanks
-
-
+> Mingwei Zhang (1):
+>   KVM: x86/mmu: explicitly check nx_hugepage in
+>     disallowed_hugepage_adjust()
+> 
+> Sean Christopherson (5):
+>   KVM: x86/mmu: Tag disallowed NX huge pages even if they're not tracked
+>   KVM: x86/mmu: Properly account NX huge page workaround for nonpaging
+>     MMUs
+>   KVM: x86/mmu: Set disallowed_nx_huge_page in TDP MMU before setting
+>     SPTE
+>   KVM: x86/mmu: Track the number of TDP MMU pages, but not the actual
+>     pages
+>   KVM: x86/mmu: Add helper to convert SPTE value to its shadow page
+> 
+>  arch/x86/include/asm/kvm_host.h |  17 ++---
+>  arch/x86/kvm/mmu/mmu.c          | 107 ++++++++++++++++++++++----------
+>  arch/x86/kvm/mmu/mmu_internal.h |  41 +++++++-----
+>  arch/x86/kvm/mmu/paging_tmpl.h  |   6 +-
+>  arch/x86/kvm/mmu/spte.c         |  11 ++++
+>  arch/x86/kvm/mmu/spte.h         |  17 +++++
+>  arch/x86/kvm/mmu/tdp_mmu.c      |  49 +++++++++------
+>  arch/x86/kvm/mmu/tdp_mmu.h      |   2 +
+>  8 files changed, 167 insertions(+), 83 deletions(-)
+> 
+> 
+> base-commit: 1a4d88a361af4f2e91861d632c6a1fe87a9665c2
+> -- 
+> 2.37.1.359.gd136c6c3e2-goog
+> 

@@ -2,134 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209315812B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2845812BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238480AbiGZMET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 08:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S238956AbiGZMFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 08:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238949AbiGZMEG (ORCPT
+        with ESMTP id S232953AbiGZMFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:04:06 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E3032ED6;
-        Tue, 26 Jul 2022 05:04:04 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id z23so25501978eju.8;
-        Tue, 26 Jul 2022 05:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=O1Ti0MGUlytygruMrxGo/AxcFFddUNIpSzRkXp5uaKM=;
-        b=ncpP8atAdpRpWKpzIsTpRmvzzAOSS9AR3b5F2asPL1nHQH9IuPRgdSjkQJ5pt31Xsq
-         qt5PsITCmjzuuTuJ8aKGZs2IWDkMqPM/VJyhLE6E1rwyi/yq/1ZpvZVgWqnNdVctMCJ1
-         7YrfR/FneIuPmAATkrTiFkh96jSojMbAaIXE1cYbge5/gM2QiCZuxnzW+au3Smtt/YuZ
-         LyTVqQ5gnyLqMOZi06Pjt79lBdZ7RA78TeKIyQTB3uW6mBXEbileM9hjuv6QKGWsxm2D
-         1LUiRMo4x9gsuhG75crklqUiRDW6jmOnFFT5ZPzicePfdGXDmngYR9y0jbHTceqHAulY
-         JbZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=O1Ti0MGUlytygruMrxGo/AxcFFddUNIpSzRkXp5uaKM=;
-        b=4jgskMmT9OHkhHX2Urcn6KyP5oGKENmOuvRCycSkS7X1H8WwFIuaZFar9c7AEfDQ0G
-         +9DmVmC39sinF8B1KpRY97LwxS0OgXhBCXR4SAXIvQtGGS1EJNwOgqDYEYRe6kuA4zpc
-         /Ek/o6ZfQQ0BcUJ7RNSogAqPmg0YXXgnsIk5IFCrqIleU736Jxh8mMHx3ENBFHtGFTW4
-         t/sfxCFONdZ3ZqqJMksSl1/3S9wiAvacTgfaTVslNPBCoyVLKmgyY20OeITZS8dGB973
-         wMk+A/oU55+Nrf4CU2UXMZZMJaSE4We2gS3ksKNkzg7LTeE5rlxnEXEU3j8tKli+J/E2
-         pceA==
-X-Gm-Message-State: AJIora/87NCP2cSYyP2JmGBK6eh0x3S5H56wKhXpZBsbt3jxgLmslHLy
-        0hf4tyv47/Tr7peCmhyTyHGCDDnv3uE=
-X-Google-Smtp-Source: AGRyM1tTUjSzkin2nzJthOEa96aJ9L+KPCjN9ILcrLW1LZlo6LAH22J+PhI4OkoznXnticPcITEWwA==
-X-Received: by 2002:a17:907:7ea4:b0:72b:6929:4571 with SMTP id qb36-20020a1709077ea400b0072b69294571mr13377689ejc.257.1658837042488;
-        Tue, 26 Jul 2022 05:04:02 -0700 (PDT)
-Received: from opensuse.localnet (host-79-56-6-250.retail.telecomitalia.it. [79.56.6.250])
-        by smtp.gmail.com with ESMTPSA id h12-20020a1709060f4c00b006ff0b457cdasm6335192ejj.53.2022.07.26.05.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 05:04:01 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Viacheslav Dubeyko <slava@dubeyko.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] hfsplus: Convert kmap() to kmap_local_page() in bitmap.c
-Date:   Tue, 26 Jul 2022 14:04:00 +0200
-Message-ID: <2050755.bB369e8A3T@opensuse>
-In-Reply-To: <A2FB0201-8342-481B-A60C-32A2B0494D33@dubeyko.com>
-References: <20220724205007.11765-1-fmdefrancesco@gmail.com> <A2FB0201-8342-481B-A60C-32A2B0494D33@dubeyko.com>
+        Tue, 26 Jul 2022 08:05:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616CA2559B;
+        Tue, 26 Jul 2022 05:04:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1C7C41FCE9;
+        Tue, 26 Jul 2022 12:04:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658837096; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oFxbdUTxOSfpkrpCjQtHF0t41MaySwoFvQqoE727Q9s=;
+        b=ZGY9/QLugeGs5TEHzW25VmqHmJuYByAfJlkb76S3UNSN4HgP+VCyNv6rsIwc0TGYxqityd
+        FpRMqa8MH5sWTBr6YUxTbsYre82gDHy66GSwnYHn79prhInjqCCjAQegLcTZq6WzewNPIH
+        FYTBKcUNgXeCttkiOg+N8dsfIQdtdHw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F140613322;
+        Tue, 26 Jul 2022 12:04:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vudbOGfY32JFdAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 26 Jul 2022 12:04:55 +0000
+Date:   Tue, 26 Jul 2022 14:04:55 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     mm-commits@vger.kernel.org,
+        syzbot+2d2aeadc6ce1e1f11d45@syzkaller.appspotmail.com,
+        shakeelb@google.com, roman.gushchin@linux.dev, hannes@cmpxchg.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: + mm-memcontrol-fix-potential-oom_lock-recursion-deadlock.patch
+ added to mm-unstable branch
+Message-ID: <Yt/YZ8zVabIpJXw4@dhcp22.suse.cz>
+References: <20220725220032.B4C30C341C8@smtp.kernel.org>
+ <Yt+iWGnA06DjsHz9@dhcp22.suse.cz>
+ <ac3a7af1-08c6-e2de-b93c-327ce6839830@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac3a7af1-08c6-e2de-b93c-327ce6839830@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=C3=AC 25 luglio 2022 19:17:13 CEST Viacheslav Dubeyko wrote:
->=20
-> > On Jul 24, 2022, at 1:50 PM, Fabio M. De Francesco=20
-<fmdefrancesco@gmail.com> wrote:
-> >=20
-> > kmap() is being deprecated in favor of kmap_local_page().
-> >=20
-> > There are two main problems with kmap(): (1) It comes with an overhead=
-=20
-as
-> > mapping space is restricted and protected by a global lock for
-> > synchronization and (2) it also requires global TLB invalidation when=20
-the
-> > kmap=E2=80=99s pool wraps and it might block when the mapping space is =
-fully
-> > utilized until a slot becomes available.
-> >=20
-> > With kmap_local_page() the mappings are per thread, CPU local, can take
-> > page faults, and can be called from any context (including interrupts).
-> > It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> > the tasks can be preempted and, when they are scheduled to run again,=20
-the
-> > kernel virtual addresses are restored and are still valid.
-> >=20
-> > Since its use in bitmap.c is safe everywhere, it should be preferred.
-> >=20
-> > Therefore, replace kmap() with kmap_local_page() in bnode.c.
-> >=20
->=20
-> Looks good. Maybe, it makes sense to combine all kmap() related=20
-modifications in HFS+ into
-> one patchset?
->=20
-> Reviewed by: Viacheslav Dubeyko <slava@dubeyko.com>=20
+On Tue 26-07-22 20:31:17, Tetsuo Handa wrote:
+> On 2022/07/26 17:14, Michal Hocko wrote:
+> > As we have concluded there are two issues possible here which would be
+> > great to have reflected in the changelog.
+> > 
+> > On Mon 25-07-22 15:00:32, Andrew Morton wrote:
+> >> From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> >> Subject: mm: memcontrol: fix potential oom_lock recursion deadlock
+> >> Date: Fri, 22 Jul 2022 19:45:39 +0900
+> >>
+> >> syzbot is reporting GFP_KERNEL allocation with oom_lock held when
+> >> reporting memcg OOM [1].  Such allocation request might deadlock the
+> >> system, for __alloc_pages_may_oom() cannot invoke global OOM killer due to
+> >> oom_lock being already held by the caller.
+> > 
+> > I would phrase it like this:
+> 
+> This report is difficult to explain correctly.
+> 
+> > syzbot is reporting GFP_KERNEL allocation with oom_lock held when
+> > reporting memcg OOM [1].
+> 
+> Correct. But
+> 
+> >                          This is problematic because this creates a
+> > dependency between GFP_NOFS and GFP_KERNEL over oom_lock which could
+> > dead lock the system.
+> 
+> oom_lock is irrelevant when trying GFP_KERNEL allocation from GFP_NOFS
+> context. Therefore, something like:
 
-Thanks for your reviews of this and of the other patch to bnode.c.
+I meant to say there is a dependency chain
+	potential_fs_lock
+	GFP_NOFS
+				oom_lock
+				GFP_KERNEL
+				potentiaL_lock
+	oom_lock
+ 
+> ----------
+> syzbot is reporting GFP_KERNEL allocation with oom_lock held when
+> reporting memcg OOM [1]. If this allocation triggers the global OOM
+> situation then the system can livelock because the GFP_KERNEL allocation
+> with oom_lock held cannot trigger the global OOM killer because
+> __alloc_pages_may_oom() fails to hold oom_lock.
+> 
+> Fix this problem by removing the allocation from memory_stat_format()
+> completely, and pass static buffer when calling from memcg OOM path.
+> 
+> Note that the caller holding filesystem lock was the trigger for syzbot
+> to report this locking dependency. Doing GFP_KERNEL allocation with
+> filesystem lock held can deadlock the system even without involving OOM
+> situation.
+> ----------
 
-Actually, I started with the first file I met (bnode.c) because I noticed=20
-that maintainers don't need to care about any special ordering for applying=
-=20
-the patches, since each of them is self-contained.
+But this sounds good as well.
 
-This is why I haven't thought of making a series of them.
+Thanks!
 
-Currently only one file is still left with some kmap() call sites. I'll=20
-work on that within the next days.
-
-Again thanks,
-
-=46abio=20
-
-> Thanks,
-> Slava.
->=20
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > ---
-> > fs/hfsplus/bitmap.c | 18 +++++++++---------
-> > 1 file changed, 9 insertions(+), 9 deletions(-)
-
-[snip]
-
-
+-- 
+Michal Hocko
+SUSE Labs

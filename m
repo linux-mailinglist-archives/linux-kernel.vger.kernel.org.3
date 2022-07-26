@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5B8580C3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937A4580DB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237893AbiGZHSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
+        id S237820AbiGZHb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237687AbiGZHSh (ORCPT
+        with ESMTP id S238447AbiGZHbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:18:37 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A082A97B
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:18:36 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LsSqf5730zjXVM;
-        Tue, 26 Jul 2022 15:15:42 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 15:17:55 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 15:17:54 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Yongqiang Liu <liuyongqiang13@huawei.com>
-Subject: [PATCH] mm: add warning if __vm_enough_memory fails
-Date:   Tue, 26 Jul 2022 15:24:51 +0800
-Message-ID: <20220726072451.142427-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 26 Jul 2022 03:31:03 -0400
+Received: from out199-5.us.a.mail.aliyun.com (out199-5.us.a.mail.aliyun.com [47.90.199.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA0E2DAB6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:27:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VKUBAhD_1658820383;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VKUBAhD_1658820383)
+          by smtp.aliyun-inc.com;
+          Tue, 26 Jul 2022 15:26:25 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH 01/20] drm/amd/display: Clean up some inconsistent indenting
+Date:   Tue, 26 Jul 2022 15:25:36 +0800
+Message-Id: <20220726072555.91323-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a process has no enough memory to allocate a new virtual mapping, we
-may meet kinds of error, eg, fork cannot allocate memory, SIGBUS error
-in shmem, but it is difficult to confirm them, let's add some debug
-information to easy to check this scenario if __vm_enough_memory fails.
+No functional modification involved.
 
-Reported-by: Yongqiang Liu <liuyongqiang13@huawei.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+smatch warning:
+
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_hwseq.c:910 dcn32_init_hw() warn: inconsistent indenting.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- mm/util.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/mm/util.c b/mm/util.c
-index 1266a33a49ea..19bfff8a0ad6 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -1020,6 +1020,8 @@ int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
- 	if (percpu_counter_read_positive(&vm_committed_as) < allowed)
- 		return 0;
- error:
-+	pr_warn("%s: pid: %d, comm: %s, no enough memory for the allocation\n",
-+		__func__, current->pid, current->comm);
- 	vm_unacct_memory(pages);
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
+index b6bada383958..201516a62b4b 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
+@@ -907,10 +907,10 @@ void dcn32_init_hw(struct dc *dc)
+ 		dc->res_pool->hubbub->funcs->init_crb(dc->res_pool->hubbub);
  
- 	return -ENOMEM;
+ 	// Get DMCUB capabilities
+-    if (dc->ctx->dmub_srv) {
+-	dc_dmub_srv_query_caps_cmd(dc->ctx->dmub_srv->dmub);
+-	dc->caps.dmub_caps.psr = dc->ctx->dmub_srv->dmub->feature_caps.psr;
+-    }
++	if (dc->ctx->dmub_srv) {
++		dc_dmub_srv_query_caps_cmd(dc->ctx->dmub_srv->dmub);
++		dc->caps.dmub_caps.psr = dc->ctx->dmub_srv->dmub->feature_caps.psr;
++	}
+ }
+ 
+ static int calc_mpc_flow_ctrl_cnt(const struct dc_stream_state *stream,
 -- 
-2.35.3
+2.20.1.7.g153144c
 

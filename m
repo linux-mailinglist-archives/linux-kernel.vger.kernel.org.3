@@ -2,97 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A22580EA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2C6580E88
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238491AbiGZIIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S237974AbiGZIHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238233AbiGZIIF (ORCPT
+        with ESMTP id S231496AbiGZIHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:08:05 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B322F2F390;
-        Tue, 26 Jul 2022 01:08:02 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26Q6Wn8d006752;
-        Tue, 26 Jul 2022 10:07:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=DxSWau7EA7rpbtVckvWdUL4zS864AWpmRNAojK/nARc=;
- b=m/unKQNZEUZXM+DdwW9CiY7QC2ynGE+RLeNCfs5QiZlGiPXw7PMsKD8Xz4Gf2CfH3Klb
- VWsNtj/Yx0yyoSuw4IwVUwomBhn5sMu/OwPGXfRarfAGnKlO4ty7f11WGEjyuceY7G4K
- SBNKb5NUIGkkxy39rKSfPwm9oFIR/S6uDQS7B9qUBKPL20OQ031gT6WAo7ogB5cXaYtj
- Xj5+Sj3yf8hww115aojdh0WKjD0FtVAqPJBIGP4pA24VvVZNzrkWzVnzcN8+C6lMKfY1
- 2j6bC3GQV8SF9HCypUgkdbbzxjHmGlDle+LiBWRBxD9/zDJQ/CIJ1T0H8aJqjYtRYVY0 oQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hg8b0xank-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Jul 2022 10:07:33 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E9AB9100039;
-        Tue, 26 Jul 2022 10:07:32 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E3E2E2128A3;
-        Tue, 26 Jul 2022 10:07:32 +0200 (CEST)
-Received: from localhost (10.75.127.45) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 26 Jul
- 2022 10:07:32 +0200
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <mka@chromium.org>, <alexandre.torgue@foss.st.com>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <arnd@arndb.de>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <amelie.delaunay@foss.st.com>, <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v2 4/4] ARM: multi_v7_defconfig: enable USB onboard HUB driver
-Date:   Tue, 26 Jul 2022 10:07:08 +0200
-Message-ID: <20220726080708.162547-5-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220726080708.162547-1-fabrice.gasnier@foss.st.com>
-References: <20220726080708.162547-1-fabrice.gasnier@foss.st.com>
+        Tue, 26 Jul 2022 04:07:48 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AAB2B1A8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:07:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id o13so1839307edc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:07:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tPpfPzEfkaH/DAxlv4YpUMCrqo4JJIKHjJP/Tdj1qsc=;
+        b=ZTDShWMSIpO+K5aDdsP3PaORf+TOqh67JQ2rXzK0jh9LoBDfAiELXAfWeBtWdjLlAv
+         UUO9Lq3cAe/0PGrQVj7nKz4GQbSZcJ82lUqMen2NU/9dn7F9ip6UX8oL8zXBrjJoD5Mh
+         fstJDoVK1Wns8OoPmkoooRSoJaRJ2ZqZxGVKy5yl2Rq9sEo5WOsPlUmqNqg147s8M6UG
+         s/eCPigRwpaQw3CYpFVxvMVIfAXtYL4nUeF29ZLMhWnumW/JGYB2tvo6j0o23RzQRlIi
+         382mO0J/d3g+GfzjrvVBUhta4/1p1U2XIJuBuhVhJvYIqeu1cZLnX/K1JDlBNZyVJFpm
+         QSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tPpfPzEfkaH/DAxlv4YpUMCrqo4JJIKHjJP/Tdj1qsc=;
+        b=W8pO57jNWbpw6LOHbvrr92w/zrdxG9m2UPBVLT4KDH8i3xtKCkDBwA7g5Dfp01T2l9
+         n4PhHF429n+CkD/6FpIhgtfo3F/C4sI+NHPqRieIEPRtseqTE47TIm1Rx5r96RpXllki
+         z2+xmgv7/jPEhsWxrwxahGaAXi9cguvr0ICAtUQolnL84lD5do6C4kB7DOtqC/OowPDm
+         ahzzqCCS5De+jBkYjJ3AL2GGDQ0AKXzk2eqAZxIqBn2/BjdeaAjPdfUvyFdF1hAiPDfj
+         EhVxs/Zm0QMCxqQDgK6OEEDRMeODhm6iD4bdT3DFumPtq5eiw/3oeCGHtTnO3Uxu22j5
+         aeRA==
+X-Gm-Message-State: AJIora/sSro9eyAcggEAqo1l4nvZMgdjYMnQAnLms3K7FqhAiG70r/CX
+        oyjV8Llyd+SR8yx+lN6tI/G6FA0s3/icXjD/c7E=
+X-Google-Smtp-Source: AGRyM1va5bJezG2AlV7JDDBBM0PCq1kn7W/ABDMasJ//2+C5ERRcQOFVfGw0sNfXmhwcJb/v8gYhV+jxHi07WE3KWMo=
+X-Received: by 2002:a05:6402:34c5:b0:43a:8f90:e643 with SMTP id
+ w5-20020a05640234c500b0043a8f90e643mr16958490edc.88.1658822865859; Tue, 26
+ Jul 2022 01:07:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-26_02,2022-07-25_03,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <202207251140.M7YAqoLC-lkp@intel.com>
+In-Reply-To: <202207251140.M7YAqoLC-lkp@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 26 Jul 2022 10:07:09 +0200
+Message-ID: <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
+Subject: Re: drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of
+ packed member 'data' of class or structure 'tsc2046_adc_atom' may result in
+ an unaligned pointer value
+To:     kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the USB onboard HUB driver, used on STM32MP1 boards.
+Seems yet another false positive from Clang.
 
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- arch/arm/configs/multi_v7_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Jul 25, 2022 at 5:55 AM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Oleksij,
+>
+> FYI, the error/warning still remains.
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+> commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
+> date:   1 year, 2 months ago
+> config: arm-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251140.M7YAqoLC-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/ drivers/staging/ fs/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index ce9826bce29b3..d0f16b7f682bf 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -861,6 +861,7 @@ CONFIG_USB_CHIPIDEA_UDC=y
- CONFIG_USB_CHIPIDEA_HOST=y
- CONFIG_USB_ISP1760=y
- CONFIG_USB_HSIC_USB3503=y
-+CONFIG_USB_ONBOARD_HUB=m
- CONFIG_AB8500_USB=y
- CONFIG_KEYSTONE_USB_PHY=m
- CONFIG_NOP_USB_XCEIV=y
+What the heck? The get_unaligned_*() is exactly to get unaligned data.
+
+>            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+>                                                                        ^~~~~~~~~
+>    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+>                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+>                                            ^~~~
+>    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+>                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+>                                                       ^~~~
+>    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+>    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>                                                             ^~~~
+>    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+>    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
+>                    if (!(condition))                                       \
+>                          ^~~~~~~~~
+>    include/linux/compiler.h:56:47: note: expanded from macro 'if'
+>    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+>                                                  ^~~~
+>    include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+>    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+>                                                       ^~~~
+> >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+>            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+>                                                                        ^~~~~~~~~
+>    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+>                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+>                                            ^~~~
+>    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+>                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+>                                                       ^~~~
+>    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+>    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>                                                             ^~~~
+>    note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+>    include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
+>                    if (!(condition))                                       \
+>                          ^~~~~~~~~
+>    include/linux/compiler.h:56:47: note: expanded from macro 'if'
+>    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+>                                                  ^~~~
+>    include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+>    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+>                                                                ^~~~
+> >> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
+>            return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+>                                                                        ^~~~~~~~~
+>    include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
+>                    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
+>                                            ^~~~
+>    include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
+>                    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
+>                                                       ^~~~
+>    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+>    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>                                                             ^~~~
+>    note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+>    include/linux/compiler.h:56:47: note: expanded from macro 'if'
+>    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+>                                                  ^~~~
+>    include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+>    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+>                                                                                         ^~~~
+>    include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+>            (cond) ?                                        \
+>             ^~~~
+>    3 warnings generated.
+>
+>
+> vim +242 drivers/iio/adc/ti-tsc2046.c
+>
+>    239
+>    240  static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
+>    241  {
+>  > 242          return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
+>    243  }
+
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko

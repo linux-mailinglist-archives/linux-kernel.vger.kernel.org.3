@@ -2,181 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E4E580F1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA11580F25
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238547AbiGZIey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S238585AbiGZIf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238460AbiGZIet (ORCPT
+        with ESMTP id S238597AbiGZIfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:34:49 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E1E31201;
-        Tue, 26 Jul 2022 01:34:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658824489; x=1690360489;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=0kVSv7eb18AUMY/zN5qGrPteL0lDJMR20khzTd2R8lg=;
-  b=XGrlhpXNAz1/R1UhdpQ9BCTPtibVvBq8uvI+qziDbawh3ouvRTD0NDBx
-   6Rzt2vaZTBPQlstXZXFQ4grDCyr+m5HzQ/9qTdj9q2+hC5Bj32nNvlYPb
-   eaR+ygTEzi6Pruh60nf4fxThvCs2StBS8Xl9fkEnJdOcHRozAyMLTj0v/
-   AS5ph5q4ozf8dmJn+nCtx9uVGqdKpyb/lS6R9C91ByCOKAqmEru9D8oxS
-   9eV4GuAkdrWIHcEkyBaiZKTgjLjPcnpcXzRwMC9gVfbFalAo/flLRznKt
-   JjyG8wph96kPG91+dqDeQ5jgX+1fzbmYsmz9J35F2JZDyz1a17E4UIy1N
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="173642658"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Jul 2022 01:34:48 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 26 Jul 2022 01:34:47 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Tue, 26 Jul 2022 01:34:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dB/jdXRbcfOiLR8kzJqH99H5yywF1twRJzbqAA8C+z6u5K2E+cxkQV9LcYPbX7/3gcA66OWAfXbiQu/Omk3SzsMiOZ+Ajl1yXItPVkd5qERn6VNHkC0hcPcFsddXFqtHznschf/jpGddQWDTv1TDrtQq5gyXBaENwgkMpx2d1YQxOZW0RPuuYaKBm7NbehL74GAtUQbpnu+BjCzSj8MQ1XkdGHqFWljHfn69qe+DTl/29r495vwrEZP4Z5A5koYqDhK/mnhMOcTqS8fhbrHKKc0sT2H/qYB5V4RRsFHVaiITytTlrRqL6wEUhr5sJcTxLEA37sxtiSv0irqKmSmngw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0kVSv7eb18AUMY/zN5qGrPteL0lDJMR20khzTd2R8lg=;
- b=BEABzWAnjI3vf8fyWUfbHATq/wQj/QpMJ7vEkuPKWanVa5+0Ojj/GREzBXKmoAXEc52i+qyzME0FAAGCEQGJ45X4AWBnliNUEy9nhKWQNuLXhTOrySG7Sw7n1io3KeEs7AICp/56CJXw1fK/fAwNY79evTA2pg5BhFm0fkieq1ow0F8z2e7X6ph4K67rNcgswQ5LQozMKiT9zl5u8mixsJyGVqi+579nBe7z1guNIrxizClBv47F04hehbJEBG6gKFyc91XnAhf+zpfCC6V+KU58b/05dMlwH2JX0ayOy2SG8mit4VaW//58T3JLpKMi4xtiTf6WDmJzFvKOqXsf2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0kVSv7eb18AUMY/zN5qGrPteL0lDJMR20khzTd2R8lg=;
- b=DXzQRyLnzsqS3iH5NaG1qryVGMOL2ly919EojVxiqW961GToTX+0/bmHr0JkXc0u7c+eB6AG6CsEkAhX3t5iH3TwZ8UzR78MEZvsRx98ySZbV+2MdpJovKW1vmhJ18O50qqfBHRurSH7Qt3DvgQXjU4HRd7zDD9Xes9jSop8YFU=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by PH0PR11MB4775.namprd11.prod.outlook.com (2603:10b6:510:34::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Tue, 26 Jul
- 2022 08:34:42 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::5c8c:c31f:454d:824c]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::5c8c:c31f:454d:824c%8]) with mapi id 15.20.5458.025; Tue, 26 Jul 2022
- 08:34:42 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Horatiu.Vultur@microchip.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: at91: add lan966 pcb8309 board
-Thread-Topic: [PATCH v2 1/2] dt-bindings: arm: at91: add lan966 pcb8309 board
-Thread-Index: AQHYoMqNW0JGVBf+L0WVaiJVhOHfYw==
-Date:   Tue, 26 Jul 2022 08:34:42 +0000
-Message-ID: <5ca59e67-1af8-76ee-770e-8580495b9781@microchip.com>
-References: <20220722131836.2377720-1-horatiu.vultur@microchip.com>
- <20220722131836.2377720-2-horatiu.vultur@microchip.com>
-In-Reply-To: <20220722131836.2377720-2-horatiu.vultur@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fbddd47f-2d6a-43e2-1cd9-08da6ee1afc0
-x-ms-traffictypediagnostic: PH0PR11MB4775:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1W78JSyBkkvnyo3EDi9s4ulXwpZwLo/D/njgmjMJfHyPFhPfZF15mmBxXqQGoXWOPRD/jaJtfQ328uqFz3oq4QXS1j+YfKmXoL1x5qPQtZWB5ubZwvQb8iYGHbOtOfumEL7ZaPwvSq6WK4e41FgjOY4zrXMOzMMrFeN5SOdK1aj+PhmexaQ4APXLJco4R2HqdblXMYTABzmqfnwteksoaR+GrZNv1B93EppgzGKtRvpNEBqvJ/ttNkZM1RLOsguwKJt2t1AO2U4ohOgMfH3/RliVVKz6wpYoDxtqFqSXZyXIpsm9ecc41zRY77KdzAj7Uq5G2C2AdOFgBjPeLaX4+ahontb7x5ktWMaqbRh9TpWWcnZNhhl7T1vBMNEsPmz1willFaRYyLslJKmbJU/azyRxG1+Y1J7TU9AvoztDP069UZ8/jCVEY+I/JqQXrNBnGJfv8qj2p7PtquethXoZGLCvAM/82MH78oUXePQn4si+Dk6mLq68y6Bv/WkA6PO6BMrKou26MJYu6nH5zu2NmuVdUMT2CWzEUUQJe1ukhgNIPNQ6Yo6doJJ7LRVCFTmUJVLF3UD81Zc30an7WOOlsy/hRd0s5uGTCz1ljJxNXvTWLebfNag0cc5bWSmeuTS2xPU7Q/Sz0cPhUHyovw3OfF3VLehVIHYVTJTRgmQhEy2uSQSVilKteBOhroR1oLBmOtDoCMsni76QJsKze52RAqOUNnfxiaLq745ZhPeRdbPb4GSkWhyCV7NPtm8IhF6i/0hVSjPig6tfsVRtzAR15urzN2UnYa01LpSg+lHk3gt8hNvYLLiLz0GEF+70zkxCUAPmPKQG5jkODtGvu7fUqfssHg450Dpgc9UDTZcJ+TjxJa3vFJHnAB+NgTecAxCs
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(39860400002)(376002)(346002)(396003)(366004)(41300700001)(186003)(53546011)(26005)(2906002)(6506007)(2616005)(6512007)(38100700002)(31696002)(86362001)(38070700005)(83380400001)(76116006)(122000001)(110136005)(54906003)(7416002)(71200400001)(4744005)(66946007)(316002)(4326008)(8936002)(31686004)(91956017)(66556008)(5660300002)(66476007)(66446008)(64756008)(36756003)(8676002)(6486002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WW1FNFpaRENDcjRPVGZkWjNmczMxUmxKWXBycGNDTW5jTDlIQ01vdllKUm1K?=
- =?utf-8?B?SURkSHpiMW9kT3dkNFEySDVhRFltdFV2NURGRUV0dS80ZW5nVGVBSGZTMUN4?=
- =?utf-8?B?b1lOVjlLNEtkVWFwT2Z5RFh0SFBtYjVYckRJbllXTXRSWnZpRU5mcE50RGtE?=
- =?utf-8?B?T3JsbE4zQ2dub2htRDExSnNTaFp2WW4zNzc1dG5PNnA2WmFLV3dXcVhTYjZJ?=
- =?utf-8?B?Z0NteUF3VFdEL0xZMkUycnB0QVBPZ1pIeGUrNDhMNWJTMFB5TnZWaUhGZ1pi?=
- =?utf-8?B?aGlVRklzU1pETzBlbk9VSkFhY3hqMWtta0lGcm9JKzFpQXpaZDRyaDQvQ00y?=
- =?utf-8?B?MWNKT3lYWERYbU5RVVdYU21iWHJjZ2hDSUJBTDRoRitDWXpkZVFRZFBGWFFo?=
- =?utf-8?B?bUlaQ3g5UzdvYVRndVRlMG4yMERiSlVGL2JzVzNISFRxZnlMNTFEQUQxNytS?=
- =?utf-8?B?N21WRjM4SFErOGllVWdTZWJVYkdvY3pOYTdtWmtXZ25YT29QSUhLRDdob3hz?=
- =?utf-8?B?YjhlL3BwYTdpaDBQTHhsV2dLSG5Bc1BxL2tudHlUaU1QSG5kTSthaVBQMTBp?=
- =?utf-8?B?bkVySzRKOUQ3SldmTGlNUkpjVE1NbzA2NDNGMnZrUHBiRzFnenJ6RU1xejF2?=
- =?utf-8?B?YTZ5czNNMmlHVENKT0dLWlRBQThWaWs3N1JrdWNPTnlPeFBIS2NtME1YUkhs?=
- =?utf-8?B?b21hdStDdkd4SGhPR3RoTVd6RlBYakhTYko5Sm9EdndCb3V3WjBycElyK1Q1?=
- =?utf-8?B?S0R2Qm5KVUVNYit6ZzV1Uk54aDlKSkJKL1Mrbk1ISEl5YUEzcnJESVI4K2d3?=
- =?utf-8?B?NW5CaDJaVHFzeGhsbksyQ0N3U1RQSTEyTUZCS0VqY3pBeE1jbXFzZWtUVFhY?=
- =?utf-8?B?K3RxYlpUa3RkbENHNFMvbEMwSjBTNmdzVnREN3IwK3NTSkVVN0JWNlR5bjBE?=
- =?utf-8?B?c2MxZVJyQkxnajAvMUFTY1dNVjRVdGxNUmYxUXppYmhmdzVENzZ0TXhYcXpH?=
- =?utf-8?B?UkJqZkx2cUF4QUZ1ekY2ZjdoK0Z1QmFSblFJaytJTXFTNEFCL2s2WVRyNzJC?=
- =?utf-8?B?YnlxT0dFdXNxNmNBU0RyWFlINnhGZU9ENHMveHlGWUlsa01MSkVtSWxrVHZH?=
- =?utf-8?B?Q2lQVDVBbGp6OUdIQzdKMnRsY1ZPVGltMGp2NVBJSE9NY3MwbDQ2N1ZocUI5?=
- =?utf-8?B?YkdvYVRNSFRvaWtBMGtwUGcwTjBEb3RLZmxackJPWENYWDBwcnlQM01uUm56?=
- =?utf-8?B?alpVSkZpaG9jWFRGRitwQ0t4LzNhY0tGcWFmRkhiWjNQU1hXWkNqZ090U0hk?=
- =?utf-8?B?cFRzU0QwOU5ZNStiSjlObkg2UERGOWVUVDlXTlFTVVUzemljejBHbFh4cDBJ?=
- =?utf-8?B?bUZXTUM5anhVSlpSQnlrWlZhVmVUVjA0VktxZEZYSDZ0VVpTeVZjNXNWd1lm?=
- =?utf-8?B?amVuZnljK1VwM3FHYTFiU20xajNjR1NjSnYzTWZ3U0lMemk5bWxMTE9tdzhk?=
- =?utf-8?B?MHNvVFp0dzdQMTZKdDJJN09idUZweUQ1dnN1c1MrSzBpU1Ixc21tQ2JSQS94?=
- =?utf-8?B?RDhDU2QxTHZDNW9HYlJxVGFsZTlWQUdDZ3FhMHNUYjNJVlJudEhPY0VSd0xj?=
- =?utf-8?B?TG82ekZObnlpTzFkZ0V0Tm96QTdncUVaQndDRjZKNTJHSmNGWUVTK0RERU1V?=
- =?utf-8?B?dTdLQzNwT3AzVmZUNUtjQU5WZlJnbG0vN0tBMGJqU2Vqd0YybVF0Y2lGQjJQ?=
- =?utf-8?B?QzBTRjZrV3JkQ1ZKT0cyaUZqOHUzNkRBSnFGd0ZLY1B5ekF4VzVJajNaWEFr?=
- =?utf-8?B?K3J5YTRDR0oyNnFBWlhpS3ZjVUgyeGNCS1g4a1ZWYW5GVCtKOEpuSUNXZ3R5?=
- =?utf-8?B?Q0w4WnVNMnhPV3F5eHgvMzdvUFZZOThkTnZpMCtlNHpaVlhZZzFXYUF0bkVm?=
- =?utf-8?B?VVJ3WHg0MzhxbkpLZzF4R3lJdklKQWZldDJGaVJVQ3FBSS9scGtGWmgyR1dK?=
- =?utf-8?B?eGdFSmsyOFlSVlVYd3lYSGRhV3ZzN1BNSXNtekdCUW0ydlFpMENKVjY2dXNV?=
- =?utf-8?B?UG1tcEdEK0djUW4zOXJhV3pDdDA5S25PY3JaV3FMRmowT0RKREM5Zmhsb0JX?=
- =?utf-8?B?MEhadEFPRWNTUjVzalEyUW95UFlad0RJN1AyKzg2SmRlZjZHdUFYSE9lZWV5?=
- =?utf-8?B?aWc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6C32E03C965D6B439CA5DB65EC6888CA@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 26 Jul 2022 04:35:18 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8885D63A9;
+        Tue, 26 Jul 2022 01:35:14 -0700 (PDT)
+Received: from zn.tnic (p200300ea970f4ff2329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:4ff2:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 283591EC0742;
+        Tue, 26 Jul 2022 10:35:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658824509;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bbGGwlLz+4u+Zu8n20tu0HQUB8+NXWLykgI1BXt6grw=;
+        b=rju7UCtGhWP7yXchLevSbfjGlUD2yJqzHeO1sy6CAn17oz9P/fyddj8BSC7XSH4kqa2V6n
+        BhButB0IIgBHJkMm4uUND4GmR2jkmZR4bRSCrUHPEKVQzVia1BJNiX6Riw3JLr710WWG8O
+        CjPORjcdEVdRUNKGCJRFaoJcLSwjJFQ=
+Date:   Tue, 26 Jul 2022 10:35:05 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv7 06/14] efi/x86: Implement support for unaccepted memory
+Message-ID: <Yt+nOeLMqRxjObbx@zn.tnic>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-7-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbddd47f-2d6a-43e2-1cd9-08da6ee1afc0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jul 2022 08:34:42.1490
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +NpwIbk/LUMafA44VidIFWObDUL4/RF7nLtVPKQp1PH/tRjTWOq6jg92la/6JZWUpJPsChL2Du4S6YP6Pgy89Qq0qkfM0yzQcFmhELAnQDk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4775
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220614120231.48165-7-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjIuMDcuMjAyMiAxNjoxOCwgSG9yYXRpdSBWdWx0dXIgd3JvdGU6DQo+IEFkZCBkb2N1bWVu
-dGF0aW9uIGZvciBNaWNyb2NoaXAgTEFOOTY2MiBQQ0I4MzA5Lg0KPiANCj4gU2lnbmVkLW9mZi1i
-eTogSG9yYXRpdSBWdWx0dXIgPGhvcmF0aXUudnVsdHVyQG1pY3JvY2hpcC5jb20+DQoNCkFwcGxp
-ZWQgdG8gYXQ5MS1kdCwgdGhhbmtzIQ0KDQo+IC0tLQ0KPiAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0
-cmVlL2JpbmRpbmdzL2FybS9hdG1lbC1hdDkxLnlhbWwgfCA2ICsrKystLQ0KPiAgMSBmaWxlIGNo
-YW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
-YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL2F0bWVsLWF0OTEueWFtbCBi
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXRtZWwtYXQ5MS55YW1sDQo+
-IGluZGV4IDRlNDk1ZTAzMjY0Yi4uMmI3ODQ4YmI3NzY5IDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVu
-dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL2F0bWVsLWF0OTEueWFtbA0KPiArKysgYi9E
-b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL2F0bWVsLWF0OTEueWFtbA0KPiBA
-QCAtMTYzLDkgKzE2MywxMSBAQCBwcm9wZXJ0aWVzOg0KPiAgICAgICAgICAgIC0gY29uc3Q6IG1p
-Y3JvY2hpcCxzYW1hN2c1DQo+ICAgICAgICAgICAgLSBjb25zdDogbWljcm9jaGlwLHNhbWE3DQo+
-ICANCj4gLSAgICAgIC0gZGVzY3JpcHRpb246IE1pY3JvY2hpcCBMQU45NjYyIFBDQjgyOTEgRXZh
-bHVhdGlvbiBCb2FyZC4NCj4gKyAgICAgIC0gZGVzY3JpcHRpb246IE1pY3JvY2hpcCBMQU45NjYy
-IEV2YWx1YXRpb24gQm9hcmRzLg0KPiAgICAgICAgICBpdGVtczoNCj4gLSAgICAgICAgICAtIGNv
-bnN0OiBtaWNyb2NoaXAsbGFuOTY2Mi1wY2I4MjkxDQo+ICsgICAgICAgICAgLSBlbnVtOg0KPiAr
-ICAgICAgICAgICAgICAtIG1pY3JvY2hpcCxsYW45NjYyLXBjYjgyOTENCj4gKyAgICAgICAgICAg
-ICAgLSBtaWNyb2NoaXAsbGFuOTY2Mi1wY2I4MzA5DQo+ICAgICAgICAgICAgLSBjb25zdDogbWlj
-cm9jaGlwLGxhbjk2NjINCj4gICAgICAgICAgICAtIGNvbnN0OiBtaWNyb2NoaXAsbGFuOTY2DQo+
-ICANCg0K
+On Tue, Jun 14, 2022 at 03:02:23PM +0300, Kirill A. Shutemov wrote:
+> diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+> index 7aa4717cdcac..e1270beff4dc 100644
+> --- a/drivers/firmware/efi/Kconfig
+> +++ b/drivers/firmware/efi/Kconfig
+> @@ -305,6 +305,20 @@ config EFI_COCO_SECRET
+>  	  virt/coco/efi_secret module to access the secrets, which in turn
+>  	  allows userspace programs to access the injected secrets.
+>  
+> +config UNACCEPTED_MEMORY
+> +	bool
+> +	depends on EFI_STUB
+> +	help
+> +	   Some Virtual Machine platforms, such as Intel TDX, require
+> +	   some memory to be "accepted" by the guest before it can be used.
+> +	   This mechanism helps prevent malicious hosts from making changes
+> +	   to guest memory.
+> +
+> +	   UEFI specification v2.9 introduced EFI_UNACCEPTED_MEMORY memory type.
+> +
+> +	   This option adds support for unaccepted memory and makes such memory
+> +	   usable by the kernel.
+> +
+
+This looks weird:
+
+$ grep EFI_STUB .config
+CONFIG_EFI_STUB=y
+$ grep UNACCEPTED_MEMORY .config
+$
+
+So the bool needs to have a text string after it so that it is
+selectable or how is UNACCEPTED_MEMORY supposed to be enabled otherwise?
+
+If I add the string and select UNACCEPTED_MEMORY, it won't build:
+
+mm/page_alloc.c: In function ‘accept_page’:
+mm/page_alloc.c:1013:9: error: implicit declaration of function ‘accept_memory’ [-Werror=implicit-function-declaration]
+ 1013 |         accept_memory(start, start + (PAGE_SIZE << order));
+      |         ^~~~~~~~~~~~~
+mm/page_alloc.c: In function ‘page_contains_unaccepted’:
+mm/page_alloc.c:1029:16: error: implicit declaration of function ‘range_contains_unaccepted_memory’; did you mean ‘page_contains_unaccepted’? [-Werror=implicit-function-declaration]
+ 1029 |         return range_contains_unaccepted_memory(start, end);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                page_contains_unaccepted
+mm/memblock.c: In function ‘memblock_alloc_range_nid’:
+mm/memblock.c:1415:9: error: implicit declaration of function ‘accept_memory’ [-Werror=implicit-function-declaration]
+ 1415 |         accept_memory(found, found + size);
+      |         ^~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+make[1]: *** [scripts/Makefile.build:249: mm/memblock.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+cc1: some warnings being treated as errors
+make[1]: *** [scripts/Makefile.build:249: mm/page_alloc.o] Error 1
+make: *** [Makefile:1843: mm] Error 2
+make: *** Waiting for unfinished jobs....
+
+so this is weird.
+
+> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> index 504955368934..b91c89100b2d 100644
+> --- a/drivers/firmware/efi/libstub/x86-stub.c
+> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> @@ -15,6 +15,7 @@
+>  #include <asm/setup.h>
+>  #include <asm/desc.h>
+>  #include <asm/boot.h>
+> +#include <asm/unaccepted_memory.h>
+>  
+>  #include "efistub.h"
+>  
+> @@ -607,6 +608,17 @@ setup_e820(struct boot_params *params, struct setup_data *e820ext, u32 e820ext_s
+>  			e820_type = E820_TYPE_PMEM;
+>  			break;
+>  
+> +		case EFI_UNACCEPTED_MEMORY:
+> +			if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY)) {
+> +				efi_warn_once("The system has unaccepted memory,"
+> +					     " but kernel does not support it\n");
+> +				efi_warn_once("Consider enabling CONFIG_UNACCEPTED_MEMORY\n");
+> +				continue;
+> +			}
+
+So that it can be grepped for:
+
+diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+index b91c89100b2d..8be6b675e08e 100644
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -610,9 +610,8 @@ setup_e820(struct boot_params *params, struct setup_data *e820ext, u32 e820ext_s
+ 
+ 		case EFI_UNACCEPTED_MEMORY:
+ 			if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY)) {
+-				efi_warn_once("The system has unaccepted memory,"
+-					     " but kernel does not support it\n");
+-				efi_warn_once("Consider enabling CONFIG_UNACCEPTED_MEMORY\n");
++				efi_warn_once(
++"The system has unaccepted memory, but kernel does not support it.\nConsider enabling CONFIG_UNACCEPTED_MEMORY\n");
+ 				continue;
+ 			}
+ 			e820_type = E820_TYPE_RAM;
+
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

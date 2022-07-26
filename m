@@ -2,170 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69C0580FDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EC2580FE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237935AbiGZJ1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S238025AbiGZJ2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiGZJ1U (ORCPT
+        with ESMTP id S229746AbiGZJ2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:27:20 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117D02E9F6;
-        Tue, 26 Jul 2022 02:27:18 -0700 (PDT)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 26Q9QrdN024374;
-        Tue, 26 Jul 2022 18:26:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 26Q9QrdN024374
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1658827614;
-        bh=d6NNJ+nW6fZ2WWBYBA5DCiVLw0ZFlnZQJAM4KipXE4A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jPARB7HAapfEkUCDpves2bids8NaztvHxYcrpmaz30aXBKKCq5Fls6fPm6JMl4NEB
-         A+CXQn86ICJNahuYe+wJUVp4X42qyknJGMTFem8Fg39gyqprHgP6bGqygnGJySLLpY
-         Fi0TJ4n8AGHy1QHghgmYAb6tG67BBglbtafIao4SUkicjwCuxWlMCf234yupSWwONe
-         QXTA/NB4xuFdazVACjtFGA/3J6GXfrlFE7KiQy3L10fGJswdIINwUuYL80GwdwbA/X
-         1oaSD81CRh1UXkmTAspo/hdqn56A4uPd0xGP0lEi/wZspTN5MpNFXg4n7sMAhQFY4U
-         xr5ezJ4ImSfvQ==
-X-Nifty-SrcIP: [209.85.128.41]
-Received: by mail-wm1-f41.google.com with SMTP id w8-20020a05600c014800b003a32e89bc4eso7783829wmm.5;
-        Tue, 26 Jul 2022 02:26:53 -0700 (PDT)
-X-Gm-Message-State: AJIora/2pKak2LpGwKZTl3vd0m6XP8zASBoBMlLp0+mjXsh8PgPb+uHl
-        x6DEomJxckWccPXLwh36ZnUSnHhXNk2KwJ6TOHg=
-X-Google-Smtp-Source: AGRyM1uGeaCDAN8z8yKxHxFJ9V3AepuKKOjXcNTD81j1E/+9R+DcEVLuRRv9FUeLk7HNSkZXBvwGr+EHMfBpPdhcGfg=
-X-Received: by 2002:a05:600c:35ce:b0:3a3:1b7f:bbd8 with SMTP id
- r14-20020a05600c35ce00b003a31b7fbbd8mr11063089wmq.22.1658827612274; Tue, 26
- Jul 2022 02:26:52 -0700 (PDT)
+        Tue, 26 Jul 2022 05:28:45 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716FF2ED77;
+        Tue, 26 Jul 2022 02:28:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VKUwbzM_1658827715;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VKUwbzM_1658827715)
+          by smtp.aliyun-inc.com;
+          Tue, 26 Jul 2022 17:28:37 +0800
+Subject: Re: [RESEND PATCH V2 0/5] Fixups to work with crash tool
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     Conor.Dooley@microchip.com
+Cc:     alexandre.ghiti@canonical.com, heiko@sntech.de, palmer@dabbelt.com,
+        mick@ics.forth.gr, guoren@kernel.org, kexec@lists.infradead.org,
+        bhe@redhat.com, linux-doc@vger.kernel.org, vgoyal@redhat.com,
+        linux-riscv@lists.infradead.org, dyoung@redhat.com,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        huanyi.xj@alibaba-inc.com, heinrich.schuchardt@canonical.com,
+        anup@brainfault.org, corbet@lwn.net, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu
+References: <20220725014539.1037627-1-xianting.tian@linux.alibaba.com>
+ <51c97da7-422f-1b5b-03d3-dc36c9132c2a@microchip.com>
+ <7a395f64-8ec7-e07f-e763-afc1f2611c75@linux.alibaba.com>
+ <2301681f-361d-b85b-e255-3bf449ceeaa9@microchip.com>
+ <cf00c1f6-b043-a11e-f7a5-bed1e829cb73@linux.alibaba.com>
+Message-ID: <6320e6dd-ebd9-3575-a85f-c3a2f92e9f54@linux.alibaba.com>
+Date:   Tue, 26 Jul 2022 17:28:35 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220722022416.137548-1-mfo@canonical.com> <20220722022416.137548-4-mfo@canonical.com>
-In-Reply-To: <20220722022416.137548-4-mfo@canonical.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 26 Jul 2022 18:25:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARvJEhEOwg_PHe3WKT9BkSchnGOmeiUaB+7E__NS9qrVw@mail.gmail.com>
-Message-ID: <CAK7LNARvJEhEOwg_PHe3WKT9BkSchnGOmeiUaB+7E__NS9qrVw@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/6] sysctl, mod_devicetable: shadow struct
- ctl_table.procname for file2alias
-To:     Mauricio Faria de Oliveira <mfo@canonical.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cf00c1f6-b043-a11e-f7a5-bed1e829cb73@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 11:24 AM Mauricio Faria de Oliveira
-<mfo@canonical.com> wrote:
+
+在 2022/7/26 下午4:16, Xianting Tian 写道:
 >
-> In order to expose a sysctl entry to modpost (file2alias.c, precisely)
-> we have to shadow 'struct ctl_table' in mod_devicetable.h, as scripts
-> should not access kernel headers or its types (see file2alias.c).
+> 在 2022/7/26 下午4:01, Conor.Dooley@microchip.com 写道:
+>> On 26/07/2022 08:54, tianxianting wrote:
+>>> 在 2022/7/26 上午1:13, Conor.Dooley@microchip.com 写道:
+>>>> That said, this does not apply to riscv/for-next:
+>>>> b4 shazam 20220725014539.1037627-1-xianting.tian@linux.alibaba.com
+>>>> Grabbing thread from 
+>>>> lore.kernel.org/all/20220725014539.1037627-1-xianting.tian%40linux.alibaba.com/t.mbox.gz
+>>>> Checking for newer revisions on https://lore.kernel.org/all/
+>>>> Analyzing 6 messages in the thread
+>>>> Checking attestation on all messages, may take a moment...
+>>>> ---
+>>>>     [PATCH v2 1/5] RISC-V: use __smp_processor_id() instead of 
+>>>> smp_processor_id()
+>>>>     [PATCH v2 2/5] RISC-V: Add arch_crash_save_vmcoreinfo support
+>>>>     [PATCH v2 3/5] riscv: Add modules to virtual kernel memory 
+>>>> layout dump
+>>>>     [PATCH v2 4/5] RISC-V: Fixup getting correct current pc
+>>>>     [PATCH v2 5/5] riscv: crash_core: Export kernel vm layout, 
+>>>> phys_ram_base
+>>>> ---
+>>>> Total patches: 5
+>>>> ---
+>>>> Applying: RISC-V: use __smp_processor_id() instead of 
+>>>> smp_processor_id()
+>>>> Applying: RISC-V: Add arch_crash_save_vmcoreinfo support
+>>>> Patch failed at 0002 RISC-V: Add arch_crash_save_vmcoreinfo support
+>>> patch 2 apply is OK for me, I don't know why you failed :(
+>>> Do you have more detals for this?
+>>>
+>> What did you apply it to? It does not apply for me to riscv/for-next:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/log/?h=for-next 
+>>
 >
-> The required field is '.procname' (basename of '/proc/sys/.../entry').
+> This 5 patches are based on the master branch of below git:
 >
-> Since 'struct ctl_table' is annotated for structure randomization and
-> we need a known offset for '.procname' (remember, no kernel headers),
-> take it out of the randomized portion (as in, eg, 'struct task_struct').
+> https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux.git 
 >
-> Of course, add build-time checks for struct size and .procname offset
-> between both structs. (This has to be done on kernel side; for headers.)
 >
-> With that in place, use the regular macros in devicetable-offsets.c to
-> define SIZE_... and OFF_... macros for the shadow struct and the field
-> of interest.
+> "git am 0002-RISC-V-Add-arch_crash_save_vmcoreinfo-support.patch" to 
+> this git is ok for me.
 >
-> Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
-> ---
->  fs/proc/proc_sysctl.c             | 19 +++++++++++++++++++
->  include/linux/mod_devicetable.h   | 25 +++++++++++++++++++++++++
->  include/linux/sysctl.h            | 11 ++++++++++-
->  kernel/sysctl.c                   |  1 +
->  scripts/mod/devicetable-offsets.c |  3 +++
->  5 files changed, 58 insertions(+), 1 deletion(-)
+> All is correct?
+
+I figured out the reason, there is one difference in 
+arch/riscv/kernel/Makefile between riscv/for-next and torvalds/linux.
+
+For riscv/for-next, in line 81 of arch/riscv/kernel/Makefile, it is:
+
+     obj-$(CONFIG_KEXEC)        += kexec_relocate.o crash_save_regs.o 
+machine_kexec.o
+
+But for torvalds/linux, in line 81 of arch/riscv/kernel/Makefile, it is:
+
+     obj-$(CONFIG_KEXEC_CORE)        += kexec_relocate.o 
+crash_save_regs.o machine_kexec.o
+
+torvalds/linux is newer than riscv/for-next,  commit 3a66a08759 
+("RISC-V: kexec: Fix build error without CONFIG_KEXEC") added 
+"CONFIG_KEXEC_CORE" for torvalds/linux, But riscv/for-next
+
+doesn't contain the commit.
+
+
 >
-> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-> index 021e83fe831f..ebbf8702387e 100644
-> --- a/fs/proc/proc_sysctl.c
-> +++ b/fs/proc/proc_sysctl.c
-> @@ -19,6 +19,24 @@
->  #include <linux/kmemleak.h>
->  #include "internal.h"
->
-> +#ifdef CONFIG_MODULES
-> +#include <linux/mod_devicetable.h>
-> +
-> +static void check_struct_sysctl_device_id(void)
-> +{
-> +       /*
-> +        * The shadow struct sysctl_device_id for file2alias.c needs
-> +        * the same size of struct ctl_table and offset for procname.
-> +        */
-> +       BUILD_BUG_ON(sizeof(struct sysctl_device_id)
-> +                       != sizeof(struct ctl_table));
-> +       BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
-> +                       != offsetof(struct ctl_table, procname));
-
-
-Nit:
-
-If you use static_assert(), you can remove
- check_struct_sysctl_device_id().
-
-
-You can write static_assert() out of a function.
-
-
-
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index 223376959d29..15073621cfa8 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -2487,6 +2487,7 @@ int __init sysctl_init_bases(void)
->
->         return 0;
->  }
-> +
-
-
-Noise.
-
-
-
-
->  #endif /* CONFIG_SYSCTL */
->  /*
->   * No sense putting this after each symbol definition, twice,
-> diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
-> index c0d3bcb99138..43b2549940d2 100644
-> --- a/scripts/mod/devicetable-offsets.c
-> +++ b/scripts/mod/devicetable-offsets.c
-> @@ -262,5 +262,8 @@ int main(void)
->         DEVID(ishtp_device_id);
->         DEVID_FIELD(ishtp_device_id, guid);
->
-> +       DEVID(sysctl_device_id);
-> +       DEVID_FIELD(sysctl_device_id, procname);
-> +
->         return 0;
->  }
-> --
-> 2.25.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+>>
+>> Thanks,
+>> Conor.
+>>

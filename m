@@ -2,179 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150705814CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E945814D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238840AbiGZOK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
+        id S239051AbiGZOKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiGZOK0 (ORCPT
+        with ESMTP id S229651AbiGZOKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:10:26 -0400
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA52C10A3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:10:24 -0700 (PDT)
-Received: from [192.168.16.236] (helo=vzdev.sw.ru)
-        by relay.virtuozzo.com with esmtp (Exim 4.95)
-        (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1oGLFL-00C6Vd-Bj;
-        Tue, 26 Jul 2022 16:09:38 +0200
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     kernel@openvz.org,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 1/2] Create debugfs file with virtio balloon usage information
-Date:   Tue, 26 Jul 2022 14:08:27 +0000
-Message-Id: <20220726140831.72816-1-alexander.atanasov@virtuozzo.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <55016ed9-7b3c-c4eb-f5f4-02cfce2191e4@redhat.com>
-References: <55016ed9-7b3c-c4eb-f5f4-02cfce2191e4@redhat.com>
+        Tue, 26 Jul 2022 10:10:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C310A3;
+        Tue, 26 Jul 2022 07:10:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9785B81670;
+        Tue, 26 Jul 2022 14:10:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A90C433C1;
+        Tue, 26 Jul 2022 14:10:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658844638;
+        bh=1d7qbWDQuZYAD2sGVg+HmWM5hj2n/J9MkNAK0ie+JsI=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=ZY+ik8K7+ds9Bc6ALidqN6eBYk4ekWWqvNqhozyoYPuMyoMEw5aThMTn/aA/xZpAv
+         uVhIyD62nyt65WHeftNaR3WoTk4FCLwjeFoqA0uTx/CqccQLxRZW8zpEea1mXYEmBG
+         CTgwY16GLXM3RUZuAuMfZczsVfS4RzmglBTo5eDzZJBeDptdBicXJlVZdkaSMtGrP/
+         swTng4fUny+UtoTtdudmc6AQQO1SuUqdhFdL1IGix3KnJUCm+r9jm5moT3gf1//Tgl
+         JiPHzPrj9lnr8GYoH5AGfb4okgkpzraeWjJU3AoqN9KX8PZYPE88eSpo3FSqKKy5Lx
+         QtpZaVVa9ly+w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        alsa-devel@alsa-project.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20220726115917.101371-1-krzysztof.kozlowski@linaro.org>
+References: <20220726115917.101371-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: qcom,wcd934x: use absolute path to other schema
+Message-Id: <165884463590.37334.6138510290775984808.b4-ty@kernel.org>
+Date:   Tue, 26 Jul 2022 15:10:35 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-c7731
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow the guest to know how much it is ballooned by the host
-and how that memory is accounted.
+On Tue, 26 Jul 2022 13:59:17 +0200, Krzysztof Kozlowski wrote:
+> Absolute path to other DT schema is preferred over relative one.
+> 
+> 
 
-It is useful when debugging out of memory conditions,
-as well for userspace processes that monitor the memory pressure
-and for nested virtualization.
+Applied to
 
-Depending on the deflate on oom flag memory is accounted in two ways.
-If the flag is set the inflated pages are accounted as used memory.
-If the flag is not set the inflated pages are substracted from totalram.
-To make clear how are inflated pages accounted sign prefix the value.
-Where negative means substracted from totalram and positive means
-they are accounted as used.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
----
- drivers/virtio/virtio_balloon.c | 59 +++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+Thanks!
 
-V2:
-  - fixed coding style
-  - removed pretty print
-V3:
-  - removed dublicate of features
-  - comment about balooned_pages more clear
-  - convert host pages to balloon pages
-V4:
-  - added a define for BALLOON_PAGE_SIZE to make things clear
-V5:
-  - Made the calculatons work properly for both ways of memory accounting
-    with or without deflate_on_oom
-  - dropped comment
-V6:
-  - reduced the file to minimum
-  - unify accounting
+[1/1] ASoC: dt-bindings: qcom,wcd934x: use absolute path to other schema
+      commit: ffe71829574a4848e9a376010a2ea74ae6d2d211
 
-I didn't understand if you agree to change the accounting to be the same
-so following part 2 is about it.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
-index f4c34a2a6b8e..97d3b29cb9f1 100644
---- a/drivers/virtio/virtio_balloon.c
-+++ b/drivers/virtio/virtio_balloon.c
-@@ -10,6 +10,7 @@
- #include <linux/virtio_balloon.h>
- #include <linux/swap.h>
- #include <linux/workqueue.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/slab.h>
- #include <linux/module.h>
-@@ -731,6 +732,59 @@ static void report_free_page_func(struct work_struct *work)
- 	}
- }
- 
-+/*
-+ * DEBUGFS Interface
-+ */
-+#ifdef CONFIG_DEBUG_FS
-+
-+/**
-+ * virtio_balloon_debug_show - shows statistics of balloon operations.
-+ * @f: pointer to the &struct seq_file.
-+ * @offset: ignored.
-+ *
-+ * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
-+ *
-+ * Return: zero on success or an error code.
-+ */
-+
-+static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
-+{
-+	struct virtio_balloon *vb = f->private;
-+	s64 num_pages = vb->num_pages << (VIRTIO_BALLOON_PFN_SHIFT - 10);
-+
-+	if (!virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
-+		num_pages = -num_pages;
-+
-+	seq_printf(f, "inflated: %lld kB\n", num_pages);
-+
-+	return 0;
-+}
-+
-+DEFINE_SHOW_ATTRIBUTE(virtio_balloon_debug);
-+
-+static void  virtio_balloon_debugfs_init(struct virtio_balloon *b)
-+{
-+	debugfs_create_file("virtio-balloon", 0444, NULL, b,
-+			    &virtio_balloon_debug_fops);
-+}
-+
-+static void  virtio_balloon_debugfs_exit(struct virtio_balloon *b)
-+{
-+	debugfs_remove(debugfs_lookup("virtio-balloon", NULL));
-+}
-+
-+#else
-+
-+static inline void virtio_balloon_debugfs_init(struct virtio_balloon *b)
-+{
-+}
-+
-+static inline void virtio_balloon_debugfs_exit(struct virtio_balloon *b)
-+{
-+}
-+
-+#endif	/* CONFIG_DEBUG_FS */
-+
- #ifdef CONFIG_BALLOON_COMPACTION
- /*
-  * virtballoon_migratepage - perform the balloon page migration on behalf of
-@@ -1019,6 +1073,9 @@ static int virtballoon_probe(struct virtio_device *vdev)
- 
- 	if (towards_target(vb))
- 		virtballoon_changed(vdev);
-+
-+	virtio_balloon_debugfs_init(vb);
-+
- 	return 0;
- 
- out_unregister_oom:
-@@ -1065,6 +1122,8 @@ static void virtballoon_remove(struct virtio_device *vdev)
- {
- 	struct virtio_balloon *vb = vdev->priv;
- 
-+	virtio_balloon_debugfs_exit(vb);
-+
- 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
- 		page_reporting_unregister(&vb->pr_dev_info);
- 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
--- 
-2.25.1
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

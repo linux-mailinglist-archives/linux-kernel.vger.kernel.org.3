@@ -2,207 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215F6580A3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 06:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08019580A3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 06:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbiGZENR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 00:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        id S231641AbiGZENr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 00:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiGZENQ (ORCPT
+        with ESMTP id S231607AbiGZENo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 00:13:16 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6298D205D9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:13:13 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id x71-20020a63314a000000b00419699fc9afso5829997pgx.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=VOgQF+G8SNdxv9KXxlnj8cWs1UtKcyFM/CeLPL1cf7A=;
-        b=qLZlSfzMGHj5dcZe2ZQFJyIeQ06FEbm0g27vehG1XYchRmx7b7dFsEJRhLVb8BUQZF
-         0JgQCGyPdVEFFFuhga7lHZebVqdL5fe8YG1dAlgsvgJkgDsmkHNXBtOr4pewYVd331GR
-         BAtr3f9upswaSut4UsqvHYu/To8Slq2GxHDR/Bp8thuQRHXqCniZqli8OqU1PPIXMKu3
-         DweGNS7NoFDDvFSrJTO1egKraeAQ/kM5SE2OuKExQyE2wmO3pVABWgYBIkN5spPdVud9
-         fVyrLBerlex3++Ff0OvH3+Vc7rZU/wzxkTmV3lk2i0IJqhpjNRpUFvkBw8mOa6xt1mNs
-         3e+g==
+        Tue, 26 Jul 2022 00:13:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 272BB20BD6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:13:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658808823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5lntECexEyNpXWdt23OJngoZd0SrPa0OPt4d0XLP3io=;
+        b=MveN5yd+bL36HXwrOrpRVHH9zEicdU+YgFCXzCSCwJKb2doJbAcOrUxnYis1HtyLLcip0a
+        z4uiUhlznLltX9v2yzwQszIMpAixbosVKeFhDB0sD+r8G6iZaI9fzJxfRYxllpOyo+f+KV
+        swW4O4WrvJ5uUx1WOtkLALsFSECO6zs=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-wzxAoYM8MBqkME_FPMpRHw-1; Tue, 26 Jul 2022 00:13:39 -0400
+X-MC-Unique: wzxAoYM8MBqkME_FPMpRHw-1
+Received: by mail-qk1-f200.google.com with SMTP id x22-20020a05620a259600b006b552a69231so11259202qko.18
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:13:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=VOgQF+G8SNdxv9KXxlnj8cWs1UtKcyFM/CeLPL1cf7A=;
-        b=ILBnxCJILAatxo0ZeI1cRWdqCjjvhiEA+DI5le2HlPfaWPgxTP5jRt0otwPc15lwOS
-         AP9lobS9ldkjfpUvlkZ50DxFUiPDNHDOqxEi0EGqREykYI6KfED7Lb9FPdoLXU47WH/E
-         X4sMH+F+rqLF8/Y/2QNAiHB576YHgPwgKRrjAlhhOJqWgq2iB5jzQky5sCcfcyMGHyyW
-         tgag4V8+M8cpKOnWque4HKL4vyj4B9KB99veslf10qKCToNoQbiVBXK8jUgy1I84RI3D
-         +pHuZ2fPFHuSkYweOnViH/CCYcEFR4NPlMJnYjhVodB2Gw+AK7Bp8eyYSIQOXYbPebeD
-         bX1w==
-X-Gm-Message-State: AJIora9dKfoD5IZFM8QBtc58DLIY5my0KRkAU0y+YNEqpHATcZ9QS97i
-        cULFR3yR4bOy8SboOeqOwvW10SbYL4WKhPmZ
-X-Google-Smtp-Source: AGRyM1vg1d/+z8ikDa8GdVjfcnaomA/orA9VGjZIdsqU/f5WKSvEZAKhcNt2ka+zCtEWu5HA4j956NpCVzrAQJai
-X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a17:90b:3509:b0:1f2:dc98:5976 with SMTP
- id ls9-20020a17090b350900b001f2dc985976mr4344862pjb.154.1658808792908; Mon,
- 25 Jul 2022 21:13:12 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 04:12:50 +0000
-Message-Id: <20220726041250.1905521-1-sadiyakazi@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v4] Documentation: kunit: Add CLI args for kunit_tool
-From:   Sadiya Kazi <sadiyakazi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net, mairacanal@riseup.net
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5lntECexEyNpXWdt23OJngoZd0SrPa0OPt4d0XLP3io=;
+        b=TFGmRdJ2VHgI5XOain8tRwzK8UuszYr0Yn5TckRzPXANdBplgmNMXWNpsdEeZEwz5i
+         YzEyJ+f4blQTT1YtRMb5gPfNM2tZ+agmlabUyn4GCX2tjTtIGCIL7Pe10OkMUFTP1b0d
+         uUin0uNU6S16LtULas169+UXxcCQ0gzD9ksDLix3HoRsl//BGlFA73QLbAgIAAd5Zu5e
+         XfCuok2kJuO9Pd27/VKgE/S8tMUf8OgxyGShIO0O+eaxWsEbyXlFtiSeHOwGkwgQ/u25
+         E0OjtsXFDegW8ht8XdPiGr4Sl1v5FITAkdgQLCnRZqvd4DREaGlniLwYH+YjkVWNY3A8
+         rx4g==
+X-Gm-Message-State: AJIora9X2yj5YS76cG72LAYXMOMK1LTYp9n3zqi01PplyO6xF+AS3Kf7
+        SXHWT8px3r/Kvpv0luTcCOaAd08LadIz1cxE+jqGg5VIhf6mg9mqKJiajQ30Fjw+JaCHcM2BQCo
+        znx8It4EZcsnP/NC75lSruwg=
+X-Received: by 2002:a05:620a:2405:b0:6b6:1706:3bcc with SMTP id d5-20020a05620a240500b006b617063bccmr11435717qkn.92.1658808818852;
+        Mon, 25 Jul 2022 21:13:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vt1Wg+374rShiULPVsZdaORIIEaTUiexr2fiXazKlx6twVcTzPKaaHpero0NwP8BXrP+CeSg==
+X-Received: by 2002:a05:620a:2405:b0:6b6:1706:3bcc with SMTP id d5-20020a05620a240500b006b617063bccmr11435711qkn.92.1658808818639;
+        Mon, 25 Jul 2022 21:13:38 -0700 (PDT)
+Received: from localhost (pool-68-160-173-162.bstnma.fios.verizon.net. [68.160.173.162])
+        by smtp.gmail.com with ESMTPSA id i4-20020a05620a248400b006b59ddb4bc5sm10344597qkn.84.2022.07.25.21.13.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 21:13:38 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 00:13:37 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Mike Snitzer <snitzer@kernel.org>, linux-kernel@vger.kernel.org,
+        Nathan Huckleberry <nhuck@google.com>, dm-devel@redhat.com,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH 3/3] dm-verity: Add try_verify_in_tasklet
+Message-ID: <Yt9p8VupWC0ZlFv4@redhat.com>
+References: <20220722093823.4158756-1-nhuck@google.com>
+ <20220722093823.4158756-4-nhuck@google.com>
+ <Yt9KTzXUeA8xAiGv@redhat.com>
+ <Yt9aGRXNNPGZFvld@sol.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yt9aGRXNNPGZFvld@sol.localdomain>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some kunit_tool command line arguments are missing in run_wrapper.rst.
-Document them.
+On Mon, Jul 25 2022 at 11:06P -0400,
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
----
+> On Mon, Jul 25, 2022 at 09:58:39PM -0400, Mike Snitzer wrote:
+> > 
+> > > @@ -1156,7 +1217,7 @@ static int verity_ctr(struct dm_target *ti, unsigned argc, char **argv)
+> > >  		goto bad;
+> > >  	}
+> > >  
+> > > -	v->tfm = crypto_alloc_ahash(v->alg_name, 0, 0);
+> > > +	v->tfm = crypto_alloc_ahash(v->alg_name, 0, CRYPTO_ALG_ASYNC);
+> > >  	if (IS_ERR(v->tfm)) {
+> > >  		ti->error = "Cannot initialize hash function";
+> > >  		r = PTR_ERR(v->tfm);
+> > 
+> > This hunk that adds the CRYPTO_ALG_ASYNC flag _seems_ unrelated.
+> 
+> I believe it's needed to ensure that only a synchronous algorithm is allocated,
+> so that verity_hash_update() doesn't have to sleep during the tasklet.  It
+> should be conditional on v->use_tasklet, though.
 
-Changes since v3:
-https://lore.kernel.org/linux-kselftest/20220724184758.1723925-1-sadiyakazi=
-@google.com/
--Fixed the indention bug in the run_wrapper.rst file. Thanks for
-catching that(Kernel test robot, Bagas).
--Updated the commit message.
+Ah yes, it is a mask, that makes sense.
 
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20220721081026.1247067-1-sadiyakazi=
-@google.com/
--Added a code block for =E2=80=94kconfig_add argument to make the styling c=
-onsistent
--Slightly changed the words for =E2=80=94arch argument
--Changed QEMU to qemu wherever applicable for the cli args
--Changed the style for ``-smp 8``
--Changed "Might be repeated" to "may be repeated=E2=80=9D for kernel_args
+I can now see why it was being set unconditionally given dm-verity's
+optional ctr args aren't processed until after the crypto_alloc_ahash() call. 
+And of course verity_parse_opt_args() depends on non-optional args
+related to the tfm.... gah!
 
-Changes since V1:
-https://lore.kernel.org/linux-kselftest/20220719092214.995965-1-sadiyakazi@=
-google.com/
-- Addressed most of the review comments from Maira and David, except
-  removing the duplicate arguments as I felt its worth keeping them in
-  the reference documentation as well as in context. We can improve them
-  and differentiate their use cases in the future patches.
+Do you have a sense for what the implications are for always setting
+CRYPTO_ALG_ASYNC like Nathan had? Will it disallow certain tfm that
+may already be in use by some users?
 
----
- Documentation/dev-tools/kunit/run_wrapper.rst | 63 ++++++++++++++++++-
- 1 file changed, 62 insertions(+), 1 deletion(-)
+> > @@ -321,14 +320,12 @@ static int verity_verify_level(struct dm_verity *v, struct dm_verity_io *io,
+> >  		if (likely(memcmp(verity_io_real_digest(v, io), want_digest,
+> >  				  v->digest_size) == 0))
+> >  			aux->hash_verified = 1;
+> > -		else if (io->in_tasklet) {
+> > +		else if (io->in_tasklet)
+> >  			/*
+> >  			 * FEC code cannot be run in a tasklet since it may
+> > -			 * sleep.  We need to resume execution in a work-queue
+> > -			 * to handle FEC.
+> > +			 * sleep, so fallback to using a work-queue.
+> >  			 */
+> >  			return -EAGAIN;
+> > -		}
+> 
+> 
+> Doesn't this need to be:
+> 
+> 			r = -EAGAIN;
+> 			goto release_ret_r;
 
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/=
-dev-tools/kunit/run_wrapper.rst
-index 5e560f2c5fca..cce203138fb7 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -233,7 +233,7 @@ Command-Line Arguments
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- kunit_tool has a number of other command-line arguments which can
--be useful for our test environment. Below the most commonly used
-+be useful for our test environment. Below are the most commonly used
- command line arguments:
-=20
- - ``--help``: Lists all available options. To list common options,
-@@ -257,3 +257,64 @@ command line arguments:
-             added or modified. Instead, enable all tests
-             which have satisfied dependencies by adding
-             ``CONFIG_KUNIT_ALL_TESTS=3Dy`` to your ``.kunitconfig``.
-+
-+- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitco=
-nfig``
-+  file. For example:
-+
-+  - ``lib/kunit/.kunitconfig`` can be the path of the file.
-+
-+  - ``lib/kunit`` can be the directory in which the file is located.
-+
-+  This file is used to build and run with a predefined set of tests
-+  and their dependencies. For example, to run tests for a given subsystem.
-+
-+- ``--kconfig_add``: Specifies additional configuration options to be
-+  appended to the ``.kunitconfig`` file. For example:
-+
-+  .. code-block::
-+
-+	./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=3Dy
-+
-+- ``--arch``: Runs tests on the specified architecture. The architecture
-+  argument is same as the Kbuild ARCH environment variable.
-+  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on qe=
-mu.
-+  Default is `um`.
-+
-+- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
-+  same argument as passed to the ``CROSS_COMPILE`` variable used by
-+  Kbuild. This will be the prefix for the toolchain
-+  binaries such as GCC. For example:
-+
-+  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
-+    our system.
-+
-+  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/mi=
-croblaze-linux``
-+    if we have downloaded the microblaze toolchain from the 0-day
-+    website to a specified path in our home directory called toolchains.
-+
-+- ``--qemu_config``: Specifies the path to a file containing a
-+  custom qemu architecture definition. This should be a python file
-+  containing a `QemuArchParams` object.
-+
-+- ``--qemu_args``: Specifies additional qemu arguments, for example, ``-sm=
-p 8``.
-+
-+- ``--jobs``: Specifies the number of jobs (commands) to run simultaneousl=
-y.
-+  By default, this is set to the number of cores on your system.
-+
-+- ``--timeout``: Specifies the maximum number of seconds allowed for all t=
-ests to run.
-+  This does not include the time taken to build the tests.
-+
-+- ``--kernel_args``: Specifies additional kernel command-line arguments. M=
-ay be repeated.
-+
-+- ``--run_isolated``: If set, boots the kernel for each individual suite/t=
-est.
-+  This is useful for debugging a non-hermetic test, one that
-+  might pass/fail based on what ran before it.
-+
-+- ``--raw_output``: If set, generates unformatted output from kernel. Poss=
-ible options are:
-+
-+   - ``all``: To view the full kernel output, use ``--raw_output=3Dall``.
-+
-+   - ``kunit``: This is the default option and filters to KUnit output. Us=
-e ``--raw_output`` or ``--raw_output=3Dkunit``.
-+
-+- ``--json``: If set, stores the test results in a JSON format and prints =
-to `stdout` or
-+  saves to a file if a filename is specified.
---=20
-2.37.1.359.gd136c6c3e2-goog
+Yes, good catch.
+
+Thanks,
+Mike
 

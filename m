@@ -2,237 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC109580AE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 07:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11747580AE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 07:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237603AbiGZFx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 01:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        id S237537AbiGZFzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 01:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiGZFx1 (ORCPT
+        with ESMTP id S229749AbiGZFzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 01:53:27 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B98E275FC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:53:26 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id c185so4822716iof.7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:53:26 -0700 (PDT)
+        Tue, 26 Jul 2022 01:55:17 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EAF5583
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:55:15 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id h9so18715880wrm.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:55:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9NqP8zb13cEgKtZZvdVuc+bb8giuTenSXo8OvwSJLpc=;
-        b=TGYN7fdgHROPKhTokOlKbDXQsF3DrUWRscdFhO4StXlgImpnjc+ST+m5zQ2mDI5JY5
-         oLc0+lzu61o5iTTW6v6CUQERKYP0HeLhXsCOqSWoGidrFECb+qFvWSMhWgtz5zWOJmKN
-         B1Rx9tkp22OEJEhu5ZXANe4PcZkbHFe6jFoqdVA8RFQbx62sZ/LWZafa29FDud4j7YqZ
-         +WEmM93hNeShSdCI5Z3Gvk4jK9jfSHYQhLJe3uZNgFxH0kBUeOnAuj7hqqOkmLrZtAHf
-         QiOMZwOBh+CSVBUYt+CqEuWcL96yoIRySBl0yzvWgRzhMrFiAokfvP+ic8GVPdkxnLs8
-         QpaA==
+         :cc;
+        bh=RdhZW5PB4XAlNBVYHS2ulfdZB41DDyfnqe2FGITwOj8=;
+        b=ebAy1qynsfRjioT0qeT7mC6bR3i+SA8ZxiD7arsJiSf64kyV0AiJRzJM+SqPyLncGn
+         NPAk9ivc3bv46/jkRdbTKMq2el1VK9mCE4uyrIXpZszhlwkHiEP5TUCDVP1qsoRAU/nm
+         E/4sUXYf+ksqGuVcOtrO+HPK/fVHLUDIXRpfc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9NqP8zb13cEgKtZZvdVuc+bb8giuTenSXo8OvwSJLpc=;
-        b=2ywZ723mSPzVe+wmDARu8079AyaBhqX+qj6zT6C58SYzD6EmBAbUcfMw+kvqLPzdj3
-         aDImr/lf7LgguD9zN2lT95KDdPD2/gbHa7z+1UN99wOpWpWrI91G2zT+eZ48wgu/LtZj
-         h6LVJhTOXddNruJP425H7oKEWHZI3v5ir3Prno72V9dr120Hzfbm1i57rBzUBqmtA8+H
-         jeE/0JOL748mUwff3paWkc8uE9xui4KAmFj4BYPMm8nucF1fPIni7LH8mDxeRPG+XtIC
-         R1Q0fWCLBNVhV9sL36EUSloq4bsZXJ1UqBWLm0eKyTw9FgNPumIdJqhv2zFLaPmHwyou
-         peWA==
-X-Gm-Message-State: AJIora8IJ+i87Ad0D8HPySGc0FhrOl3eeOMF0tjODGz0hXWi2oilaj80
-        E8bR0cZEHfh6pErLpfLNR584pch5s4MP66e/x7OOsg==
-X-Google-Smtp-Source: AGRyM1uV3p3HFDDQtbSh8ayK0mb85b+LYxf4LJzrYTfZLwrZCur97v0IGP8j7Jfd7EJ0OiLrkutbcVdgUOweXJ5+oOY=
-X-Received: by 2002:a5e:a618:0:b0:67c:27b4:1f93 with SMTP id
- q24-20020a5ea618000000b0067c27b41f93mr5476177ioi.75.1658814805551; Mon, 25
- Jul 2022 22:53:25 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=RdhZW5PB4XAlNBVYHS2ulfdZB41DDyfnqe2FGITwOj8=;
+        b=qUjQvnH5X+wYlkSwzLlfYfZbzcV8grKu5HvBMxAaeFk27Sm+huHJq0pn5XelqeWALH
+         kbyesZm7/fWt0/RxmfZTdeIHkrG04+77/+CS2i0aDuorRBOpEtW/MT+EPgOxVwUnx3r5
+         H1v+qZLCGwv3PZ/Tw+3nbW/VRkA60FvUZBsGCVzKNDR7/VSt5YU7S3YmruZrb0CqsbTM
+         Z3p+zSPdCttxdhHL/z5lG1yJrzsgVRjpltxRowJ5Oxkuv6jcFVd8ddD66vcBwXC0g0uL
+         7SVH8TAlu/yoyD3s3dJUwFBDtTZPs7/XPQQnTETeIponsJscVNdambFWZ5acWR4L7dVY
+         0WHQ==
+X-Gm-Message-State: AJIora91pojn4aPTrCSrZzRWaDCMZr0bher52/5OIZtjP6SK3GU+2+D3
+        hiIRnwU7QJ2PCsuQxMA8SKllCIvUzcrJU4FXG4yhhw==
+X-Google-Smtp-Source: AGRyM1vxlFKy5hdNJRICmWPYVy3Jo/93WVoJ1W16nlnFSlciWrNlvx5ZVMnY9gBPMNhvK74EJDX+bZ4PRo9hQ5Ebylo=
+X-Received: by 2002:a5d:64a4:0:b0:21e:93c4:f8c6 with SMTP id
+ m4-20020a5d64a4000000b0021e93c4f8c6mr3270065wrp.246.1658814913845; Mon, 25
+ Jul 2022 22:55:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220725083904.56552-1-huangjie.albert@bytedance.com> <8735epf7j5.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <8735epf7j5.fsf@email.froward.int.ebiederm.org>
-From:   =?UTF-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
-Date:   Tue, 26 Jul 2022 13:53:13 +0800
-Message-ID: <CABKxMyOwHC9ZhL9Gxt-MVg-sy3d1kqzPviQOH845rers7inX3Q@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH 0/4] faster kexec reboot
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-kbuild@vger.kernel.org
+References: <20220725082447.2613231-1-treapking@chromium.org>
+ <5856610d-510f-46dc-63b2-79e571956a7c@collabora.com> <CAEXTbpeHy6-WjLOyWFkncoHzBPM+6qq4w-kUoZj7=05gf8YBjw@mail.gmail.com>
+ <bcb8c2b4-a1ab-8646-9fcb-034a70f5a329@collabora.com>
+In-Reply-To: <bcb8c2b4-a1ab-8646-9fcb-034a70f5a329@collabora.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Tue, 26 Jul 2022 13:55:02 +0800
+Message-ID: <CAEXTbpeEkpgFjQfONM030k8drcfYzOoWnB_FUqFptd-27YRqNg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: mt8173-oak: Switch to SMC watchdog
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-Eric W. Biederman
-Thank you for your advice and opinion, I am very honored
-
-Eric W. Biederman <ebiederm@xmission.com> =E4=BA=8E2022=E5=B9=B47=E6=9C=882=
-6=E6=97=A5=E5=91=A8=E4=BA=8C 01:04=E5=86=99=E9=81=93=EF=BC=9A
+On Mon, Jul 25, 2022 at 6:31 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Albert Huang <huangjie.albert@bytedance.com> writes:
->
-> > From: "huangjie.albert" <huangjie.albert@bytedance.com>
+> Il 25/07/22 12:19, Pin-yen Lin ha scritto:
+> > On Mon, Jul 25, 2022 at 4:39 PM AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> >>
+> >> Il 25/07/22 10:24, Pin-yen Lin ha scritto:
+> >>> Switch to SMC watchdog because we need direct control of HW watchdog
+> >>> registers from kernel. The corresponding firmware was uploaded in
+> >>> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405.
+> >>>
+> >>
+> >> There's a fundamental issue with this change, I think.
+> >>
+> >> What happens if we run this devicetree on a device that does *not* have
+> >> the new(er) firmware?
 > >
-> > In many time-sensitive scenarios, we need a shorter time to restart
-> > the kernel. However, in the current kexec fast restart code, there
-> > are many places in the memory copy operation, verification operation
-> > and decompression operation, which take more time than 500ms. Through
-> > the following patch series. machine_kexec-->start_kernel only takes
-> > 15ms
->
-> Is this a tiny embedded device you are taking the timings of?
->
-> How are you handling driver shutdown and restart?  I would expect those
-> to be a larger piece of the puzzle than memory.
-
-There is no way to make the code universal in the time optimization here,
-and various devices need to be customized, but we have some solutions to
-achieve the maintenance and recovery of these devices,
-especially the scanning and initialization of pci devices
-
->
-> My desktop can do something like 128GiB/s.  Which would suggest that
-> copying 128MiB of kernel+initrd would take perhaps 10ms.  The SHA256
-> implementation may not be tuned so that could be part of the performance
-> issue.  The SHA256 hash has a reputation for having fast
-> implementations.  I chose SHA256 originally simply because it has more
-> bits so it makes the odds of detecting an error higher.
->
-
-Yes, sha256 is a better choice, but if there is no memory copy between
-kexec load
-and kexec -e, and this part of the memory is reserved. Don't think
-this part of memory will be changed.
-Especially in virtual machine scenarios
-
->
-> If all you care about is booting a kernel as fast as possible it make
-> make sense to have a large reserved region of memory like we have for
-> the kexec on panic kernel.  If that really makes sense I recommend
-> adding a second kernel command line option and a reserving second region
-> of reserved memory.  That makes telling if the are any conflicts simple.
->
-
-I initially implemented re-adding a parameter and region, but I
-figured out later
-that it doesn't really make sense and would waste extra memory.
-
->
-> I am having a hard time seeing how anyone else would want these options.
-> Losing megabytes of memory simply because you might reboot using kexec
-> seems like the wrong side of a trade-off.
-
-Reuse the memory reserved by the crash kernel? Why does it increase
-memory consumption?
-
->
-> The CONFIG_KEXEC_PURGATORY_SKIP_SIG option is very misnamed.  It is not
-> signature verification that is happening it is a hash verification.
-> There are not encrypted bits at play.  Instead there is a check to
-> ensure that the kernel has not been corrupted by in-flight DMA that some
-> driver forgot to shut down.
->
-Thanks for pointing that out.
-but Even if the data is detected to have been changed, there is
-currently no way to recover it.
-I don't have a good understanding of this place yet. maybe for security rea=
-sons=EF=BC=9F
-
-
-> So you are building a version of kexec that if something goes wrong it
-> could very easily eat your data, or otherwise do some very bad things
-> that are absolutely non-trivial to debug.
->
-> That the decision to skip the sha256 hash that prevents corruption is
-> happening at compile time, instead of at run-time, will guarantee the
-> option is simply not available on any general purpose kernel
-> configuration.  Given how dangerous it is to skip the hash verification
-> it is probably not a bad thing overall, but it is most definitely
-> something that will make maintenance more difficult.
->
-
-Maybe parameters will be a better choice. What do you think ?
-
->
-> If done well I don't see why anyone would mind a uncompressed kernel
-> but I don't see what the advantage of what you are doing is over using
-> vmlinux is the build directory.  It isn't a bzImage but it is the
-> uncompressed kernel.
->
-
-
-> As I proof of concept I think what you are doing goes a way to showing
-> that things can be improved.  My overall sense is that improving things
-> the way you are proposing does not help the general case and simply adds
-> to the maintenance burden.
-
-I don't think so. The kernel startup time of some lightweight virtual
-machines maybe
-100-200ms (start_kernel->init). But this kexec->start_kernel took more
-than 500ms.
-This is still valuable, and the overall code size is also very small.
-
-> Eric
->
+> > I haven't tried this patch with an older firmware. I'll manage to
+> > build one for this.
+> >>
+> >> The kernel *shall not* get broken when running on devices that are running
+> >> on older firmware, especially because that's what was initially supported
+> >> and what is working right now.
 > >
-> > How to measure time:
+> > Actually the current approach does not work *right*. The device boots,
+> > but the watchdog does not work properly.
 > >
-> > c code:
-> > uint64_t current_cycles(void)
-> > {
-> >     uint32_t low, high;
-> >     asm volatile("rdtsc" : "=3Da"(low), "=3Dd"(high));
-> >     return ((uint64_t)low) | ((uint64_t)high << 32);
-> > }
-> > assembly code:
-> >        pushq %rax
-> >        pushq %rdx
-> >        rdtsc
-> >        mov   %eax,%eax
-> >        shl   $0x20,%rdx
-> >        or    %rax,%rdx
-> >        movq  %rdx,0x840(%r14)
-> >        popq  %rdx
-> >        popq  %rax
-> > the timestamp may store in boot_params or kexec control page, so we can
-> > get the all timestamp after kernel boot up.
+>
+> Is this a Chromebook firmware specific issue?
+
+I'm not sure if this is a Chromebook-specific issue. The internal
+issue thread only discussed this for the Chromebook firmware.
+>
+> > Also, all MT8173 ChromeOS devices have this firmware updated, and we
+> > don't have other upstream users apart from mt8173-evb. Do we want to
+> > support the developers that are running upstream linux with their
+> > MT8173 boards?
 > >
-> > huangjie.albert (4):
-> >   kexec: reuse crash kernel reserved memory for normal kexec
-> >   kexec: add CONFING_KEXEC_PURGATORY_SKIP_SIG
-> >   x86: Support the uncompressed kernel to speed up booting
-> >   x86: boot: avoid memory copy if kernel is uncompressed
+>
+> Upstream shall not be just about one machine: if we add support for a SoC there,
+> we shall support the SoC-generic things in the SoC-specific DTSI, and the machine
+> specific things in the machine-specific devicetrees.
+>
+> Chromebooks are not the only machines using the MT8173 SoC (Chuwi, Amazon also do
+> have products using MT8173), so we shall not make the main mt8173.dtsi incompatible
+> with these machines.
+
+I don't see their DTS files uploaded to the upstream kernel. So we
+still want to support them even if they didn't upstream their changes?
+
+Does it make sense if we move the modification to mt8173-elm.dtsi? The
+device should be running ChromeOS AP firmware if it uses or references
+mt8173-elm.dtsi. Also, all the MT8173 Chromebooks were shipped with
+the "new" firmware from the very beginning. We just somehow didn't
+upstream this around the time.
+>
+> >>
+> >> For this reason, I think that we should get some code around that checks
+> >> if the SMC watchdog is supported and, if not, resort to MMIO wdog.
 > >
-> >  arch/x86/Kconfig                   | 10 +++++++++
-> >  arch/x86/boot/compressed/Makefile  |  5 ++++-
-> >  arch/x86/boot/compressed/head_64.S |  8 +++++--
-> >  arch/x86/boot/compressed/misc.c    | 35 +++++++++++++++++++++++++-----
-> >  arch/x86/purgatory/purgatory.c     |  7 ++++++
-> >  include/linux/kexec.h              |  9 ++++----
-> >  include/uapi/linux/kexec.h         |  2 ++
-> >  kernel/kexec.c                     | 19 +++++++++++++++-
-> >  kernel/kexec_core.c                | 16 ++++++++------
-> >  kernel/kexec_file.c                | 20 +++++++++++++++--
-> >  scripts/Makefile.lib               |  5 +++++
-> >  11 files changed, 114 insertions(+), 22 deletions(-)
+> > What is the expected way to support this backward compatibility? Do we
+> > put the old compatible strings ("mediatek,mt8173-wdt" and
+> > "mediatek,mt6589-wdt") after "arm,smc-wdt" and reject it in the
+> > drivers if the firmware does not support it?
+>
+> I don't know what's the best option to support both cases... Perhaps a good one
+> would be to check (in mtk_wdt? or in arm_smc_wdt?) if the arm_smc_wdt is actually
+> supported in firmware, so if the SMC one is registered, we skip the other.
+>
+> >>
+> >> Regards,
+> >> Angelo
+> >>
+> >>
+> >>> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> >>> ---
+> >>>
+> >>>    arch/arm64/boot/dts/mediatek/mt8173.dtsi | 6 ++----
+> >>>    1 file changed, 2 insertions(+), 4 deletions(-)
+> >>>
+> >>> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> >>> index a2aef5aa67c1..2d1c776740a5 100644
+> >>> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> >>> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> >>> @@ -528,10 +528,8 @@ power-domain@MT8173_POWER_DOMAIN_MFG {
+> >>>                        };
+> >>>                };
+> >>>
+> >>> -             watchdog: watchdog@10007000 {
+> >>> -                     compatible = "mediatek,mt8173-wdt",
+> >>> -                                  "mediatek,mt6589-wdt";
+> >>> -                     reg = <0 0x10007000 0 0x100>;
+> >>> +             watchdog {
+> >>> +                     compatible = "arm,smc-wdt";
+> >>>                };
+> >>>
+> >>>                timer: timer@10008000 {
+> >>>
+> >>
+> >>
+>
+>

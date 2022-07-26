@@ -2,145 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDB25818C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DC55818CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiGZRp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S239574AbiGZRqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbiGZRpy (ORCPT
+        with ESMTP id S230473AbiGZRqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:45:54 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDC02DF8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:45:52 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id p11so18892263lfu.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QECYKSzYkuea/3Pfb/dpXBhCrMlp6nrF9yAysWXv3o0=;
-        b=N6l6lfOZzY0B0seKfySNA/0g76EpG/bBRz2ZKQwRKIFjuPns7esbQ+Eet1D1mH6g28
-         2jMZfnTmQMDUW+nO+wT+VCnrSyBydWHQYZ4GV75UoDtuMxe0fwmqgma1z4CGHl5g0pvu
-         ODdlNNECeHFAYpl4QjDhZtgafzNxIo4F+y8z7v/PGWjS3sCPsa2Ys0QP4SD1f1hDUp1U
-         AYc7y4TMNBqptdJzv71jBKnkXeckbtFefjY4LqPxN7NoFbueJ3KxxwDDMjB9qiwo0Cwp
-         EaH5AtOpbyvGAUjSju60F20o/39Aw4BYlDWTNsWKDaJwiYJYa3nfhIoCOtYs/7Pc3+vY
-         qmcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QECYKSzYkuea/3Pfb/dpXBhCrMlp6nrF9yAysWXv3o0=;
-        b=7oBbDC1xqlTBRaJ6sfQ/Ysdp3mLGIJKSd+kgHRSquRORmWPpXRtfE85RLyN/98M7ZL
-         XPsuvtZMkLNNGfxQ/6ZaHxXBrbbLRwPpXdo1B1j/vuIxQlbZZtUQDqxaycmYja4U9SEB
-         TCYI1D59ftDQWRPyZa/lcCJ3A8WJFGOx3Fw4p8UY+5zcjA3SRyywdNoGVT3FqdOznkl+
-         4u4mPDLvBrOV/4JPxGrDYW8TtWhWVeVXAN+6X1XlPoe0r1nLYEQcFFpRD+wQB4zo3ubr
-         P68FUDslMCVmIJFd0W5gSWKJVTzq63cSiTvXGweEZ7gp/FU2nfjH157E5orhgtGNJuP5
-         TK4w==
-X-Gm-Message-State: AJIora8ytpeZZ3jbxq4ThmkSO0mCqxk5z5Kvag3srN9YFY2+IaPhKW+v
-        FMGM32mH3AUF0g65vbCzZKxWhA==
-X-Google-Smtp-Source: AGRyM1uXM92/frn4dVKn0cvI5GHPAohzcV6vr/60+/ssbW+4tHt+/S7KwWmvHPAK4WlmLBf7n726jA==
-X-Received: by 2002:a05:6512:12d5:b0:48a:1cd7:127a with SMTP id p21-20020a05651212d500b0048a1cd7127amr7042951lfg.577.1658857551058;
-        Tue, 26 Jul 2022 10:45:51 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id t17-20020a19dc11000000b00489d7fec4f5sm3314456lfg.122.2022.07.26.10.45.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 10:45:50 -0700 (PDT)
-Message-ID: <63aa88a9-323b-20c0-5349-1b1011c566f8@linaro.org>
-Date:   Tue, 26 Jul 2022 19:45:49 +0200
+        Tue, 26 Jul 2022 13:46:32 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2034ABF67;
+        Tue, 26 Jul 2022 10:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658857590; x=1690393590;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Jfn73eb1NtC5hyzz5MoImvxl+iN6nGyp06TBHbGvRKk=;
+  b=iDQrEtiPrg3Ky0tVG0M1+dPYnE2P7AglgEhrnGNqyztHqw7F9P8GW+Xw
+   /qDH/B/D4sOBj1KoAB/e6Ep8Lv1ZU7ZHSUuiPpI41P7oLCXb/ty2oTHLq
+   9YOI91RtV6Hze206NsSKTyyJlC8WKknqFdYqVg1v9kMYMxWw+k5c9mgp9
+   Z1/qZ/RG47gayRcY4BZDgxENTcmOMHERpG5zVRrevw9bWgyEJlsaM9YnQ
+   c8z8oYHgvsS1/n7eNmTg5VmfXbCZMZ6D8ZwaLz9NWNn1eMUAsMa/cSHqR
+   eWGvHRSr85y8BNUvxM5CHSQ2jBBNhlksKeA5bFs3CEWTx60kDkji6H3UQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="285565496"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="285565496"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 10:46:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="658790289"
+Received: from mcrowelx-mobl.amr.corp.intel.com (HELO [10.255.229.9]) ([10.255.229.9])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 10:46:28 -0700
+Message-ID: <62f37ed4-eac5-250e-3056-dea2d0039b02@intel.com>
+Date:   Tue, 26 Jul 2022 10:46:27 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V6 1/2] dt-bindings: mfd: sprd: Add bindings for ums512
- global registers
+ Thunderbird/91.11.0
+Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping
+ into unaccepted memory
 Content-Language: en-US
-To:     Cixi Geng <gengcixi@gmail.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20220726102404.564498-1-gengcixi@gmail.com>
- <20220726102404.564498-2-gengcixi@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220726102404.564498-2-gengcixi@gmail.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
+ <YuAjdYESLDIYFj8x@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <YuAjdYESLDIYFj8x@zn.tnic>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 12:24, Cixi Geng wrote:
-> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+On 7/26/22 10:25, Borislav Petkov wrote:
+> Why do we need those unicode quotes and backticks in there?
 > 
-> Add bindings for Unisoc system global register which provide register map
-> for clocks.
-> 
-> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/mfd/sprd,ums512-glbreg.yaml      | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml b/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
-> new file mode 100644
-> index 000000000000..416f94a09c27
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright 2022 Unisoc Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/sprd,ums512-glbreg.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Unisoc System Global Register
-> +
-> +maintainers:
-> +  - Orson Zhai <orsonzhai@gmail.com>
-> +  - Baolin Wang <baolin.wang7@gmail.com>
-> +  - Chunyan Zhang <zhang.lyra@gmail.com>
-> +
-> +description:
-> +  Unisoc system global registers provide register map
-> +  for clocks and some multimedia modules of the SoC.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: sprd,ums512-glbregs
-> +      - const: syscon
-> +      - const: simple-mfd
-> +
-> +  "#address-cells": true
-> +  "#size-cells": true
-> +
-> +  ranges:
-> +    maxItems: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^clock-controller@[0-9a-f]+$":
-> +    type: object
-> +    $ref: "../clock/sprd,ums512-clk.yaml"
+> verify_diff: Warning: Unicode char [“] (0x8220 in line: +	 * “guard” page is accepted in addition to the memory that needs to be
+> verify_diff: Warning: Unicode char [‘] (0x8216 in line: +	 *    checks up to end+2M if ‘end’ is aligned on a 2M boundary.
+> verify_diff: Warning: Unicode char [‘] (0x8216 in line: +	 * 2. Implicitly extend accept_memory(start, end) to end+2M if ‘end’ is
+> verify_diff: Warning: Unicode char [‘] (0x8216 in line: +	 *    needs to be done to make ‘page’ usable. That work might include
+> verify_diff: Warning: Unicode char [‘] (0x8216 in line: +	 *    accepting pages in addition to ‘page’ itself.
 
-Absolute path (without quotes):
-/schemas/clock/sprd,ums512-clk.yaml
+I've been encouraging folks to stick their changelogs in a Google Doc
+(or even Word) when they're writing them.  This gives them better
+spelling and grammar checking than is available in most editors and also
+makes it easier for folks to improve it collaboratively.  I find it a
+lot more efficient than sending 10 copies back and forth in email.
 
+The downside is that those fancy programs insert unicode willy nilly for
+stuff like this.  You usually need to catch it with scripts because it's
+hard to spot visually.
 
-Best regards,
-Krzysztof
+It might make a good checkpatch addition, if it's not already there.

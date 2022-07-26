@@ -2,130 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5994558194B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB7A581955
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239692AbiGZSEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 14:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S238782AbiGZSGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 14:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbiGZSED (ORCPT
+        with ESMTP id S234575AbiGZSGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 14:04:03 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1533827CC5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:04:02 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s206so13797856pgs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jhdzRZUAOMTnCV/vW7pBqgsIJIfjNF/pYz/pr69nELI=;
-        b=ptd/st7Qx1CEBd6nXVmofsETHlqEG5YHpXzAHoHWMHaxaLqLQRwhFD8DrqTGh313HP
-         IhmbQkRu0orlHojxKg773kXGBU90oYKT/i2R8RIWnvFI/6XWjOJwk/NLwViv8Eohzc71
-         0u1CxuXzpRO+SKGj4rghNIk24TUgiK6N5EMVsSWyZucFXHEwqrREOemBmRGcO21GlJv+
-         BHPELPoCCxRkiXuj0q4tx3KOjfEFuVK8aaztJ92oE13l2AqbgmCf3A+ZhaLe8cNklHQ/
-         gZtTgJkayqLParwE71HzxpR93H5vfYmTwDBbX/RNcN9pr066yekhsOaOlX87QwoQCIMQ
-         U+yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jhdzRZUAOMTnCV/vW7pBqgsIJIfjNF/pYz/pr69nELI=;
-        b=h0tCvyrB4Dk+UtWHD6r+ED5cP68na0Q9/kX9Xj90Z8CG77aODWnlw8C2cj5IIXySQv
-         1ose7EUUtpj9IrEK5xxIiQr8WNySP++zKle0bFQitCvHC0L21h3kuqkLbd2D3DTvXz39
-         YViPzB88mLgXCFoqBTYleNgfK91mWMCEg0qIlkBqMMj8o3OfxCowwfXj5m3c7vDz/gnV
-         nVJ3XB/QGzzYkkBZlaMYZcRo9fHVGFPqN+8IV5v27tNNjeSu67EK8iCePrU3bm0XX70f
-         ZglqXfAnMpJ8Orfid4U8dslHhgDnaHXlrmzUWteSMEZjnrWfZYUawVQMya+YU8zVwDhD
-         qOMw==
-X-Gm-Message-State: AJIora+Rfh1PfefeJswQsJdDE4tNTFhuyXe4xCCIakT13ru5OlhlLz7y
-        huWHSwmCxO2Dc9z4lRMrQpWGKA==
-X-Google-Smtp-Source: AGRyM1uKR6/hOW723JGGrSJD19noCDp0+vmsYlXYClvLLQpEtHJHtnV8BUou5cQTx2omdbkUrVjS2Q==
-X-Received: by 2002:a05:6a00:1c54:b0:52b:a70e:8207 with SMTP id s20-20020a056a001c5400b0052ba70e8207mr18313321pfw.48.1658858641379;
-        Tue, 26 Jul 2022 11:04:01 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902860400b0016be0d5483asm11848682plo.252.2022.07.26.11.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 11:04:00 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 18:03:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Upton <oupton@google.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v4 3/4] KVM: x86/mmu: count KVM mmu usage in secondary
- pagetable stats.
-Message-ID: <YuAsjZbnCN/PrNKw@google.com>
-References: <20220429201131.3397875-1-yosryahmed@google.com>
- <20220429201131.3397875-4-yosryahmed@google.com>
- <YtsPk5+hZNMEwT0c@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtsPk5+hZNMEwT0c@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 14:06:37 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F00822A714;
+        Tue, 26 Jul 2022 11:06:35 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.93,194,1654527600"; 
+   d="scan'208";a="129202667"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 27 Jul 2022 03:06:35 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 0573D40C58A7;
+        Wed, 27 Jul 2022 03:06:30 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Anup Patel <anup@brainfault.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 0/6] Add support for Renesas RZ/Five SoC
+Date:   Tue, 26 Jul 2022 19:06:17 +0100
+Message-Id: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022, Mingwei Zhang wrote:
-> On Fri, Apr 29, 2022, Yosry Ahmed wrote:
-> > Count the pages used by KVM mmu on x86 for in secondary pagetable stats.
-> > 
-> > For the legacy mmu, accounting pagetable stats is combined KVM's
-> > existing for mmu pages in newly introduced kvm_[un]account_mmu_page()
-> > helpers.
-> > 
-> > For tdp mmu, introduce new tdp_[un]account_mmu_page() helpers. That
-> > combines accounting pagetable stats with the tdp_mmu_pages counter
-> > accounting.
-> > 
-> > tdp_mmu_pages counter introduced in this series [1]. This patch was
-> > rebased on top of the first two patches in that series.
-> > 
-> > [1]https://lore.kernel.org/lkml/20220401063636.2414200-1-mizhang@google.com/
-> > 
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> 
-> It looks like there are two metrics for mmu in x86: one for shadow mmu
-> and the other for TDP mmu. Is there any plan to merge them together?
+Hi All,
 
-There aren't two _separate_ metrics per se, rather that the TDP MMU (intentionally)
-doesn't honor KVM_SET_NR_MMU_PAGES, nor does it play nice the the core mm shrinkers.
-Thus, the TDP MMU doesn't udpate kvm_mod_used_mmu_pages(), which feeds into both of
-those things.
+The RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP Single)
+1.0 GHz, 16-bit DDR3L/DDR4 interface. And it also has many interfaces such
+as Gbit-Ether, CAN, and USB 2.0, making it ideal for applications such as
+entry-class social infrastructure gateway control and industrial gateway
+control.
 
-Long term, I don't think the TDP MMU will ever honor KVM_SET_NR_MMU_PAGES.  That
-particular knob predates proper integration with memcg and probably should be
-deprecated.
+This patch series adds initial SoC DTSi support for Renesas RZ/Five
+(R9A07G043) SoC and updates the bindings for the same. Below is the list
+of IP blocks added in the initial SoC DTSI which can be used to boot via
+initramfs on RZ/Five SMARC EVK:
+- AX45MP CPU
+- CPG
+- PINCTRL
+- PLIC
+- SCIF0
+- SYSC
 
-As for supporting shrinkers in the TDP MMU, it's unclear whether or not that's truly
-necessary.  And until mmu_shrink_scan() is made a _lot_ smarter, it's somewhat of a
-moot point because KVM's shrinker implementation is just too naive for it to be a net
-positive, e.g. it tends to zap upper level entries and wipe out large swaths of KVM's
-page tables.  KVM_SET_NR_MMU_PAGES uses the same naive algorithm, so it's not any better.
+Useful links:
+-------------
+[0] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/
+rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-
+andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
+
+[1] http://www.andestech.com/en/products-solutions/andescore-processors/
+riscv-ax45mp/
+
+Patch series depends on:
+-----------------------
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/
+20220722141506.20171-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+[1] https://patchwork.kernel.org/project/linux-renesas-soc/
+cover/20220630100241.35233-1-samuel@sholland.org/
+
+[2] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
+20220726174525.620-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+[3] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
+20220726174929.950-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+[4] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
+20220726175315.1147-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Below are the logs from Renesas RZ/Five SMARC EVK:
+-------------------------------------------------
+
+/ # cat /proc/cpuinfo
+processor       : 0
+hart            : 0
+isa             : rv64imafdc
+mmu             : sv39
+uarch           : andestech,ax45mp
+mvendorid       : 0x31e
+marchid         : 0x8000000000008a45
+mimpid          : 0x500
+
+/ # cat /proc/meminfo
+MemTotal:         884132 kB
+MemFree:          863292 kB
+MemAvailable:     860880 kB
+Buffers:               0 kB
+Cached:             1796 kB
+SwapCached:            0 kB
+Active:             1412 kB
+Inactive:            456 kB
+Active(anon):       1412 kB
+Inactive(anon):      456 kB
+Active(file):          0 kB
+Inactive(file):        0 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:                 0 kB
+Writeback:             0 kB
+AnonPages:           108 kB
+Mapped:             1136 kB
+Shmem:              1796 kB
+KReclaimable:       6424 kB
+Slab:              12548 kB
+SReclaimable:       6424 kB
+SUnreclaim:         6124 kB
+KernelStack:         844 kB
+PageTables:           32 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:      442064 kB
+Committed_AS:       2388 kB
+VmallocTotal:   67108864 kB
+VmallocUsed:         860 kB
+VmallocChunk:          0 kB
+Percpu:               84 kB
+CmaTotal:              0 kB
+CmaFree:               0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+/ # 
+/ # cat /proc/interrupts 
+           CPU0       
+  1:          0  SiFive PLIC 412 Level     1004b800.serial:rx err
+  2:          1  SiFive PLIC 414 Level     1004b800.serial:rx full
+  3:         72  SiFive PLIC 415 Level     1004b800.serial:tx empty
+  4:          0  SiFive PLIC 413 Level     1004b800.serial:break
+  5:      10193  RISC-V INTC   5 Edge      riscv-timer
+  6:         14  SiFive PLIC 416 Level     1004b800.serial:rx ready
+IPI0:         0  Rescheduling interrupts
+IPI1:         0  Function call interrupts
+IPI2:         0  CPU stop interrupts
+IPI3:         0  IRQ work interrupts
+IPI4:         0  Timer broadcast interrupts
+/ # 
+/ # for i in machine family soc_id revision; do echo -n "$i: ";cat /sys/devices/
+soc0/$i; done
+machine: Renesas SMARC EVK based on r9a07g043
+family: RZ/Five
+soc_id: r9a07g043
+revision: 0
+/ # 
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (6):
+  dt-bindings: arm: renesas: Ignore the schema for RISC-V arch
+  dt-bindings: riscv: Sort the CPU core list alphabetically
+  dt-bindings: riscv: Add Andes AX45MP core to the list
+  dt-bindings: riscv: Add DT binding documentation for Renesas RZ/Five
+    SoC and SMARC EVK
+  RISC-V: Kconfig.socs: Add Renesas RZ/Five SoC kconfig option
+  riscv: dts: renesas: Add initial devicetree for Renesas RZ/Five SoC
+
+ .../devicetree/bindings/arm/renesas.yaml      |   9 ++
+ .../devicetree/bindings/riscv/cpus.yaml       |  11 +-
+ .../devicetree/bindings/riscv/renesas.yaml    |  49 +++++++
+ arch/riscv/Kconfig.socs                       |  14 ++
+ arch/riscv/boot/dts/Makefile                  |   1 +
+ arch/riscv/boot/dts/renesas/r9a07g043.dtsi    | 121 ++++++++++++++++++
+ 6 files changed, 200 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/riscv/renesas.yaml
+ create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043.dtsi
+
+-- 
+2.17.1
+

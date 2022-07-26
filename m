@@ -2,95 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A86581C2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 00:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD10581C2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 00:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbiGZWr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 18:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
+        id S238906AbiGZW67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 18:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiGZWrz (ORCPT
+        with ESMTP id S229642AbiGZW65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 18:47:55 -0400
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C591326E7;
-        Tue, 26 Jul 2022 15:47:54 -0700 (PDT)
-Received: by mail-pg1-f179.google.com with SMTP id f65so14356274pgc.12;
-        Tue, 26 Jul 2022 15:47:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JzO3IeIuQztvrsRLmkpE46imkHEW5eNh0OyZa8Qe6mc=;
-        b=XweNemqX6PO2mO9uu+ax2woh5HBQI9pakx5bwGiXaBMfG/lMn1LtisyDKBW4ZDrxFS
-         9rAZrAU91/OPxUQEA2B/4V/2Q3UCEdpmgCDyoe0LBi0BcOf+z8MzRiBj/pXVYLJe7fAs
-         uM4rDmuuWzbN6P4P6xEFxj8M7ru2M40p34ZlJggi57B2l07Z3x3gvzeMC5D4xNzpypRW
-         EIh8nRcOtUcRBteHVA/k+83WBWNEb8fm4nrTEo5NwPEZHvA2iNZMBgvGsvcj66R6GhEA
-         jJFnDNbJtB7HPLMfjMIP8ge5o5hBAG3wUOZdrvGDQymsISTuJ1/aID6xE9DZsLTDhsYh
-         xmOA==
-X-Gm-Message-State: AJIora/7tQxlEl0j0EgkDRBJtOtT/ioi91AYWnZUDMMJugKBvfTkjLR9
-        tXJsCKQXNrQBqpZ2K9soNZg=
-X-Google-Smtp-Source: AGRyM1sXVHkFvgipghxDJ1g2uLuoOmJdlIIG8IIXeHwQJHKJ/EyvEqYyD0g4d9gjzcwKN7/rg+sEmg==
-X-Received: by 2002:a05:6a00:796:b0:52c:2d1:3ae0 with SMTP id g22-20020a056a00079600b0052c02d13ae0mr7814087pfu.52.1658875673432;
-        Tue, 26 Jul 2022 15:47:53 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:34f4:7aa8:57:d456? ([2620:15c:211:201:34f4:7aa8:57:d456])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b001641b2d61d4sm9478073plh.30.2022.07.26.15.47.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 15:47:52 -0700 (PDT)
-Message-ID: <47d98e37-d32f-2afa-8272-29f48d066fe7@acm.org>
-Date:   Tue, 26 Jul 2022 15:47:49 -0700
+        Tue, 26 Jul 2022 18:58:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA64630559;
+        Tue, 26 Jul 2022 15:58:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ED0A616CB;
+        Tue, 26 Jul 2022 22:58:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 615E1C433D6;
+        Tue, 26 Jul 2022 22:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658876335;
+        bh=95zhTF3RvSPpdIG4fmJ3Qawy4FvFggDDh2yy8qTKelU=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=JB9NLfp2xH0FofRGBLksoua8oV3DsjCIVChSnJpFO1XtWy4f4IoLCP/gShk/y6LqT
+         FAHWIIxyQjul6m5yLpfedt74GPpB+lTKwmJqB76PNk9HeWAqg5R40lJyjxnVooYQjS
+         9ClBvf6YE2QNbtvkA9jhtxxHwX0jY2y4RQstr1PH8AnaUKGKTrI8RTlRwJwuSEqss+
+         1qqxR5IDUfYiCtwnqziueD2qeWnhcFZxbutTu6UDYdrEIX1rwBQPSEj90SxelXi163
+         3ta1foNlveScUW5UGdbpxQUKFlklWAugeKMYhNz88g3HMGtBXGSPSeyqdgstU1kmTY
+         nse+UJATCJVVA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
-Content-Language: en-US
-To:     "Asutosh Das (asd)" <quic_asutoshd@quicinc.com>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        Can Guo <quic_cang@quicinc.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "quic_ziqichen@quicinc.com" <quic_ziqichen@quicinc.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
- <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
- <DM6PR04MB65756C5A6C5F674B19091F7DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
- <78495ab6-358d-4d91-e710-140331f37843@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <78495ab6-358d-4d91-e710-140331f37843@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <2118699.Icojqenx9y@jernej-laptop>
+References: <20220719183725.2605141-1-jernej.skrabec@gmail.com> <a7a253a0-1cc3-61e4-ae59-fc299057974a@sholland.org> <2118699.Icojqenx9y@jernej-laptop>
+Subject: Re: [PATCH] clk: sunxi-ng: Fix H6 RTC clock definition
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com, andre.przywara@arm.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+To:     Jernej =?utf-8?q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>, wens@csie.org
+Date:   Tue, 26 Jul 2022 15:58:53 -0700
+User-Agent: alot/0.10
+Message-Id: <20220726225855.615E1C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/25/22 09:35, Asutosh Das (asd) wrote:
-> On 7/23/2022 2:23 PM, Avri Altman wrote:
->> Also maybe we can constify sizeof(struct utp_transfer_req_desc) which 
->> is used now few times.
->
-> Ok, agree to make sizeof(struct utp_transfer_req_desc) a constant in the 
-> next version.
+Quoting Jernej =C5=A0krabec (2022-07-20 08:16:54)
+> Dne sreda, 20. julij 2022 ob 02:21:29 CEST je Samuel Holland napisal(a):
+> > On 7/19/22 1:37 PM, Jernej Skrabec wrote:
+> > >=20
+> > > Fixes: 38d321b61bda ("clk: sunxi-ng: h6-r: Add RTC gate clock")
+> > > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> >=20
+> > Reviewed-by: Samuel Holland <samuel@sholland.org>
+> >=20
+> > This bug also got fixed in passing by e1c51d31befc ("clk: sunxi-ng:
+> > Deduplicate ccu_clks arrays"), but that won't land until 5.20.
+>=20
+> Argh, good catch. I will send your patch as fix then, otherwise there wil=
+l be=20
+> issues during merging.
 
-Please don't. I'm concerned that introducing a symbolic name for that 
-sizeof() expression will make code harder to read instead of easier.
-
-Thanks,
-
-Bart.
+This is a one line fix. I can just apply this and send this off and deal
+with the merge conflict locally by taking the other side.

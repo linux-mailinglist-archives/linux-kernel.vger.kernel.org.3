@@ -2,111 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22D958161B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DD1581621
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238826AbiGZPIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S231424AbiGZPKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbiGZPIn (ORCPT
+        with ESMTP id S229976AbiGZPKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:08:43 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCE42ED79
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:08:42 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id p21so9181598ljh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:08:41 -0700 (PDT)
+        Tue, 26 Jul 2022 11:10:40 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD626657C
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:10:39 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d7so13585961plr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zYxlO4qUEsJsTyo7qlyDijTEk/pzFLiwn3btcavQ1D0=;
-        b=uuhHrIG6mqSq2NDpyxxWcAyvFfrfVFtOOHZKG2EWZ7K/XYXOltg3ag96J1R6NvFd8H
-         NmrC2x6kfY6Da6UP06qsiBdDcpuhzSirWgF8kyxIV+dlIvV4CL/IB/yGrw5Co3S1AV44
-         otfO7qj75+8vMwnCPysQmfZxIrkNyst0reNkHAIWQURn5GVIbp7QibZ38i0T4LTZwpxj
-         JNHvSIS+FchHzNAV5XYxcBVm58uSOa3UufR6PNfTWmWWxd1KYFKdd5l+2TvfGg2YRl88
-         XE5c1srEsmlMsGXlgrbn6AqIB87URnXhqWpswcu7LqTwgGiBD2DrS/9ef32bhh5XEe0M
-         zUSQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nEq1IaNhdkodBDzozbLgFdlJtMKKyeEDpgF5SJMm+Y8=;
+        b=OWEnJwcMRH6J/QXCuwh5ay2U50ZpDhtt9UbnMucbCaA8Hn/Gf1tn7OIPJZvJJlYZph
+         LW8ZsOCCLqtJX6LzYMwSle6gPv8wQUpMXg/MKvdNr6Jw/YVHewJywz77TGt6RYKsrv7s
+         SaYVVhrt32cGZ4Vqk4SVa2I7QE52NbeI2bAhNurJ2VvJc9eEaSBJ74CCOhEq5pj6Lfjc
+         GH7pedy/4PRnTzw3rnxOmJYwi3M2qip3MhP3oY2TjKi1A/z/1XkDjDb80k1rsXKkYTKQ
+         1rS339PAXGkNqzjwoqOFEuEedlCoeFDrxQRsqQt1kR5gbNkNRVUSH9SwC4ovtagB6bu7
+         dNxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zYxlO4qUEsJsTyo7qlyDijTEk/pzFLiwn3btcavQ1D0=;
-        b=v79fKWnp8QE3oC6TeusTm0r7x1P+VtsBDRKNHooUWxz6RZDi6lmQhObxJNq3Fp3bTA
-         oYKR/02s28SYu3DfIDw901qWsnAKddbldaQGp4TEGpA54p5Zat5jW4argp0eWlFT10yH
-         xmiSqrhDiZiQpABvuPlTToKUk0YGWWbYPPmc7bcShivtLh6nqzal7AIhWaFSH49GktJ5
-         dRXJgDb7ZRPEODe4rAXNukElONo+Fb7gohnS91ZF4vcJ/5Qdyukxn67oLlBNewHKJxKh
-         sZNTwMj7ETUO3doWqK7rQe/J0PHTk63LVeIFXaUy6PK8iM5HxyCjtAqIg/1zcSIWj/Hi
-         TP7g==
-X-Gm-Message-State: AJIora+QhGMWAgbDbwkXCMrLHDiY5RO7SclMXyjlc6hJPW8sRe/28xEX
-        mnVBcJkNF++hA65NtesUbW+EIcjQJUIVPYNq0++OLg==
-X-Google-Smtp-Source: AGRyM1vnhd9AgeMqMzIkST0+/MXJDtwSb3YqzIyqyTqvlFcJcyaQaABNFhj6gPv8lwbSPKqYYTbIGbtjlIYJJDUyOMU=
-X-Received: by 2002:a2e:900e:0:b0:25e:9fe:f8d4 with SMTP id
- h14-20020a2e900e000000b0025e09fef8d4mr3038980ljg.273.1658848120400; Tue, 26
- Jul 2022 08:08:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nEq1IaNhdkodBDzozbLgFdlJtMKKyeEDpgF5SJMm+Y8=;
+        b=dhoJCQZdNJ04Gwk0btfunlSPYcjsLVlL6NQPCHEGoyePD7E7DYSzmNvoUEcnnq9pI/
+         2EJWmObq+BQD3TCH9okI2gh9i0Hh+PEHZ1l+d0bKN8d+vdoiWrrQbWtHoi+vUGOeQPEd
+         BWun0/dDJpP6oaJmQ2nZpWupJggk8AMbw+IEzpM4BRdixCC1/5Dy/8vFKVMIe4MSiWeF
+         mD6sZnenRqCzoScRzYPVqoPQh6EneJ38QDvA/WDEuxHek4azXqSQWLuf6zWkzJRdj3da
+         8EKd0TmDxMxe/0grxrx/Gsu+UwbDU9k/iXXFT84C+CO21MOEKORDrfp6pNGso1+0OObn
+         P8rQ==
+X-Gm-Message-State: AJIora+ebP5BRZNGbtAqY6bV1+n1oPFI0SenyQzSWoktYhpVORUbV3Vb
+        S2Cu7FY4dD3Er0SmSUBOl3R6CctQsb1wRw==
+X-Google-Smtp-Source: AGRyM1tbthc+9spb5S+wWJFbOwwDqsIQ0p+TbIcXSswRVvW+f3FRIUOzzHyQP2Y909DPGDD80G8XRA==
+X-Received: by 2002:a17:902:d2d1:b0:16c:223e:a3db with SMTP id n17-20020a170902d2d100b0016c223ea3dbmr17861909plc.37.1658848238620;
+        Tue, 26 Jul 2022 08:10:38 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id j1-20020a654d41000000b003fadd680908sm10389894pgt.83.2022.07.26.08.10.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 08:10:37 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 15:10:34 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrei Vagin <avagin@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jianfeng Tan <henry.tjf@antfin.com>,
+        Adin Scannell <ascannell@google.com>,
+        Konstantin Bogomolov <bogomolov@google.com>,
+        Etienne Perot <eperot@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 0/5] KVM/x86: add a new hypercall to execute host system
+Message-ID: <YuAD6qY+F2nuGm62@google.com>
+References: <20220722230241.1944655-1-avagin@google.com>
+ <Yts1tUfPxdPH5XGs@google.com>
+ <CAEWA0a4hrRb5HYLqa1Q47=guY6TLsWSJ_zxNjOXXV2jCjUekUA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm> <20220726083257.1730630-3-martin.kepplinger@puri.sm>
-In-Reply-To: <20220726083257.1730630-3-martin.kepplinger@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 26 Jul 2022 17:08:03 +0200
-Message-ID: <CAPDyKFrJjxm3Ljh0-oTGhOHRyg1+8xNkjDKE7+NE7mb_8C9dXQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] soc: imx: gpcv2: fix suspend/resume by setting GENPD_FLAG_IRQ_ON
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEWA0a4hrRb5HYLqa1Q47=guY6TLsWSJ_zxNjOXXV2jCjUekUA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> For boards that use power-domains' power-supplies that need interrupts
-> to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
-> This will tell genpd to adjust accordingly. Currently it "only" sets the
-> correct suspend/resume callbacks.
->
-> This fixes suspend/resume on imx8mq-librem5 boards (tested) and
-> imx8mq-evk (by looking at dts) and possibly more.
->
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+On Tue, Jul 26, 2022, Andrei Vagin wrote:
+> On Fri, Jul 22, 2022 at 4:41 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > +x86 maintainers, patch 1 most definitely needs acceptance from folks beyond KVM.
+> >
+> > On Fri, Jul 22, 2022, Andrei Vagin wrote:
+> > > Another option is the KVM platform. In this case, the Sentry (gVisor
+> > > kernel) can run in a guest ring0 and create/manage multiple address
+> > > spaces. Its performance is much better than the ptrace one, but it is
+> > > still not great compared with the native performance. This change
+> > > optimizes the most critical part, which is the syscall overhead.
+> >
+> > What exactly is the source of the syscall overhead,
+> 
+> Here are perf traces for two cases: when "guest" syscalls are executed via
+> hypercalls and when syscalls are executed by the user-space VMM:
+> https://gist.github.com/avagin/f50a6d569440c9ae382281448c187f4e
+> 
+> And here are two tests that I use to collect these traces:
+> https://github.com/avagin/linux-task-diag/commit/4e19c7007bec6a15645025c337f2e85689b81f99
+> 
+> If we compare these traces, we can find that in the second case, we spend extra
+> time in vmx_prepare_switch_to_guest, fpu_swap_kvm_fpstate, vcpu_put,
+> syscall_exit_to_user_mode.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+So of those, I think the only path a robust implementation can actually avoid,
+without significantly whittling down the allowed set of syscalls, is
+syscall_exit_to_user_mode().
 
-Kind regards
-Uffe
+The bulk of vcpu_put() is vmx_prepare_switch_to_host(), and KVM needs to run
+through that before calling out of KVM.  E.g. prctrl(ARCH_GET_GS) will read the
+wrong GS.base if MSR_KERNEL_GS_BASE isn't restored.  And that necessitates
+calling vmx_prepare_switch_to_guest() when resuming the vCPU.
 
-> ---
->  drivers/soc/imx/gpcv2.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-> index 6383a4edc360..199a621d8186 100644
-> --- a/drivers/soc/imx/gpcv2.c
-> +++ b/drivers/soc/imx/gpcv2.c
-> @@ -1337,6 +1337,9 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
->                 regmap_update_bits(domain->regmap, domain->regs->map,
->                                    domain->bits.map, domain->bits.map);
->
-> +       if (of_property_read_bool(domain->dev->of_node, "power-supply"))
-> +               domain->genpd.flags |= GENPD_FLAG_IRQ_ON;
-> +
->         ret = pm_genpd_init(&domain->genpd, NULL, true);
->         if (ret) {
->                 dev_err(domain->dev, "Failed to init power domain\n");
-> --
-> 2.30.2
->
+FPU state, i.e. fpu_swap_kvm_fpstate() is likely a similar story, there's bound
+to be a syscall that accesses user FPU state and will do the wrong thing if guest
+state is loaded.
+
+For gVisor, that's all presumably a non-issue because it uses a small set of
+syscalls (or has guest==host state?), but for a common KVM feature it's problematic.
+
+> > and what alternatives have been explored?  Making arbitrary syscalls from
+> > within KVM is mildly terrifying.
+> 
+> "mildly terrifying" is a good sentence in this case:). If I were in your place,
+> I would think about it similarly.
+> 
+> I understand these concerns about calling syscalls from the KVM code, and this
+> is why I hide this feature under a separate capability that can be enabled
+> explicitly.
+> 
+> We can think about restricting the list of system calls that this hypercall can
+> execute. In the user-space changes for gVisor, we have a list of system calls
+> that are not executed via this hypercall.
+
+Can you provide that list?
+
+> But it has downsides:
+> * Each sentry system call trigger the full exit to hr3.
+> * Each vmenter/vmexit requires to trigger a signal but it is expensive.
+
+Can you explain this one?  I didn't quite follow what this is referring to.
+
+> * It doesn't allow to support Confidential Computing (SEV-ES/SGX). The Sentry
+>   has to be fully enclosed in a VM to be able to support these technologies.
+
+Speaking of SGX, this reminds me a lot of Graphene, SCONEs, etc..., which IIRC
+tackled the "syscalls are crazy expensive" problem by using a message queue and
+a dedicated task outside of the enclave to handle syscalls.  Would something like
+that work, or is having to burn a pCPU (or more) to handle syscalls in the host a
+non-starter?

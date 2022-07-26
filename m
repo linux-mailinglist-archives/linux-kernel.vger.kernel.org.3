@@ -2,425 +2,463 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E0B580C4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DB2580C51
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238072AbiGZHUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
+        id S238021AbiGZHUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237992AbiGZHUM (ORCPT
+        with ESMTP id S238133AbiGZHUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:20:12 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2047.outbound.protection.outlook.com [40.107.102.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF05C2AC67;
-        Tue, 26 Jul 2022 00:20:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h1y4q8PhH/oirM1Z8lUZ3jXbGGgBl6I3+/34oTULfmlj+tVH7o/3giUkq8MhweYqDSjSClZzkz9fzRZOQHn3YnS6hVqZLcEk29SCiCdwid9FcGbBcK4RsRTHBJJ3b9gWUykzJ5TioGo9A1rNb3/p8s39HpVc8/6oG/3ELrm+uuxyLR1cnEbKAYh9iDzf5LOXrXdmcAuhxEVqNhjdfnwrjpOJo3NC7tMM2Y3cCZNGsvtHEPzAOM/4jljtXlwQ5V/aY9o+N27mJ5/KvVUkcLYZn+pn0OdTNarTasnb6XlfjINQIVcPS9wujDM6uqwxVDhsjnIxTMKIHISyvh9Lt4V+Nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1h/RM+U8dWqlmKglnuFcCperbDOZ3naKWbA2MLGkuF0=;
- b=IFLQYr8HH5iYyplBQMOa2YI6ZcolkiNp7M+TusMIlO5A1/S+oty1JH67SBvSZicuND5GYFkKvV0mEbpVj9sveAE+QMOGV/b99sa5h2EVSvjEsSLyQ9iLvshGFMk4LNZJw8dvsGbmynbtiZWxpmHOmb1UbEoOPPRR8v3gxHTjA3MhvVmtkUabtH7rhvFmk9ixP09ZqL8W/m8ecyL4vjDiExpVyoCIggvkmCwVMkcJUvPFBV81Rc1G76XBjUp8qSYbylI1Ch92teH1JwF7zQ7YcTbVGzyIvc5cjuial7hw2q6nN/NSnDGcPmyd69DyzZmvewljqwkLS3iL/igr1G9OOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1h/RM+U8dWqlmKglnuFcCperbDOZ3naKWbA2MLGkuF0=;
- b=prh1hW3ffTJDDOhLNxotg6XuM8Y3TBqs7SWYfq2gaP2Yne0MUad/Levvf+Xz2BE+ctft68+s2JMzKfk3pZS7gkACAoftikMa4tWNxr+FreT1kYptp3ae0KrEIU8i3QOv48K8fMk871QGMo75qK6J7IyB84SdfSIK1KlOwg6X03YebasOyWxGEFRuWXR3NT9veQlQl8X6TMi9+T5AkwfbI/SgdAXGbi+ZoG1qvfEqEefE1QhL6Rup0AlldDEPRsFbOviJGCipjjfLLOXoZVFW87k+HRpi55JBfB/5ByndAEeLw1cXbOhN0SCIN7IDS+juFKfcZLnxumWRdkhm6SOthw==
-Received: from BN9PR03CA0389.namprd03.prod.outlook.com (2603:10b6:408:f7::34)
- by MN2PR12MB3471.namprd12.prod.outlook.com (2603:10b6:208:c8::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.24; Tue, 26 Jul
- 2022 07:20:00 +0000
-Received: from BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f7:cafe::da) by BN9PR03CA0389.outlook.office365.com
- (2603:10b6:408:f7::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19 via Frontend
- Transport; Tue, 26 Jul 2022 07:20:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT037.mail.protection.outlook.com (10.13.177.182) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5458.17 via Frontend Transport; Tue, 26 Jul 2022 07:20:00 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 26 Jul
- 2022 07:19:59 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 26 Jul
- 2022 00:19:59 -0700
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.986.26 via Frontend Transport; Tue, 26 Jul
- 2022 00:19:56 -0700
-From:   Michael Guralnik <michaelgur@nvidia.com>
-To:     <jgg@nvidia.com>
-CC:     <leonro@nvidia.com>, <maorg@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <saeedm@nvidia.com>,
-        Aharon Landau <aharonl@nvidia.com>
-Subject: [PATCH rdma-next v1 5/5] RDMA/mlx5: Rename the mkey cache variables and functions
-Date:   Tue, 26 Jul 2022 10:19:11 +0300
-Message-ID: <20220726071911.122765-6-michaelgur@nvidia.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220726071911.122765-1-michaelgur@nvidia.com>
-References: <20220726071911.122765-1-michaelgur@nvidia.com>
+        Tue, 26 Jul 2022 03:20:36 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5830B2AE2A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:20:23 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-31f1d1c82c8so40120187b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ex3cBefNhzK2WxzJlEhmrC1YaTBTfqppk+WxO7/BxnA=;
+        b=UouYyrfKz7twQnz7RhYcnQryNqWOZtd6F4Byw9vr5JcNWBpstGjSmFctg3R4hUuq0S
+         DICwkHlNAb1at3C+j58musYX1YXTEdT0Blfa57nD148zz16WC2XyfzYzkW4MVzwPOeym
+         sAVIeP4BlpmYiz2T6+K9RAOz63DQ4RtBLWpBSGqsYYhPj3ppB2xB2ZwKoqVhkfuoJKm7
+         Bf7O1xgFZN73BXMsMgaOi5BionI0gE/QC70RV2WRYP36PZ5sTevZr+FPy5OP6J+wFZks
+         VYh9FsyWnxD54+tADhWXH+ufg9HWPZIRbiGWjRoNP1fcyFdi+WmK2RAD69Q8cznjwyHW
+         IA2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ex3cBefNhzK2WxzJlEhmrC1YaTBTfqppk+WxO7/BxnA=;
+        b=0PAdN2Gf9VjCVgPWrJ1tM/aQDL/3PW/Mzpu7eeRVio7Evbbsq9Ec7JuBrxXvIv7Aa1
+         oMOdDLeU6T71BXy7OpTi69dwK3LLMkJvxiprvjfaBAiqhLH5YqO2d98P27v9oFESYO/M
+         NI/gy6TzQaZzoQDEziUrjKAQxYTEiCLC6uwTs7GI8iN6UtupNF8PRyrCPDvl4LnwIAZk
+         asTV6fSz6/KtZcT6WvtpjE1tLC2SJkIF+yEQ4/VahqPUTN+kDzlnbCxPzJfsn0LzMor6
+         VgPGv0vnjRBddsw9Dhwgp0m8/pr4e550wuWF6LgwOOGI8JX88At8kawUF9GEzIUOwieQ
+         44qQ==
+X-Gm-Message-State: AJIora+DepVHuxwLGFgtSAyswDgewQrddUfMN5qxl5nLMF0j1GGD9O7B
+        sY0j+vzocE3ozIEIPu+XWeJzxiWQTZ9rFnezI6/U/A==
+X-Google-Smtp-Source: AGRyM1uJzO+8OGvrBgksjeWqo4ij3stWEQimNhdaBwLtmIQuE+f13D9yQRZIacTWoSrrsathth7dcQ9ybwP/uzyOViU=
+X-Received: by 2002:a0d:e88d:0:b0:31e:5b0e:c15 with SMTP id
+ r135-20020a0de88d000000b0031e5b0e0c15mr13076987ywe.299.1658820022409; Tue, 26
+ Jul 2022 00:20:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b37967d8-72a5-4630-8b63-08da6ed74064
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3471:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AYjr9LS3y9xrRz+USBjcD7J3UdjVBHf9yJK7XfWdIlkmIhuaOloYVoKCYMQzE8kbzDqsTI7lDXuUggNMoqW0E1DRUagGWQ7gOIkiPS6UY3ubrz58mcRPgqIbkqZyDm71Pnu8vIDBWfgrxd7D8+mKzYgFuG/LQHQZZgbo0ShKJMMWw/PfIs5OKWPFKNBcTrPSMwYysdAw6GXTCkm2EYuzLSjQ+0Ghw6SwiT243SZQsiluuZzf+WMMvxVskkR/aYMeuud4rN1ftM2bBLZZISlDhqIyEmy4Iz4G8VyZM0Ff1dZDeQAGvn3ut8NXh38D0UKJ6Aae573jurOk8rU0regaFCIq00UpLS9pYvj7FiG4IJA/O2UerP3a5VtxIohf5l/0UXrVZEBi2iGGYdnNaF/7yBfqTr+/uKNdejwbE2HyA1zkSKEHUvyzZ6NRC01tP+YirTmHganiTq3f8UvIV4dXCRjtMTB5jDj4nzf06UHE16Kq63DuR7YXYal+zfQHZLGdjiVgBD718A2KREEplhaDOPZ0OJ7SC4ky9XJDOpuxhXcdgFjDjA3jaQGq8tpO0UcMtZqsuBuhF3wqn5+/rI0zEwABN6ujiFD0240rQFR2t64AA5XmPpHgQt+/qoIjVYqVufsCCS8bEh8/4UbenSKBXy5/LHA2X+cEI3mExCrgirq5RnGrCID8Y++3IVczA9c0BC8FFKLketrkqFuqIPrs8dhQHmkVuzZnynSUCdfPcQM8l2VdhWrCMTxndbT5zypp4eCiIox4IxrvXsfUhJhtx3ScAjaAsKyZPIcBoMbeaXVdMi+tWeGaly32MS88htj65vB/IXCLsq3zYQpridjv1g==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(136003)(396003)(46966006)(36840700001)(40470700004)(70586007)(356005)(82740400003)(36860700001)(81166007)(426003)(86362001)(4326008)(8676002)(40460700003)(54906003)(450100002)(70206006)(316002)(37006003)(6636002)(2906002)(8936002)(83380400001)(7696005)(82310400005)(5660300002)(107886003)(2616005)(47076005)(26005)(1076003)(6862004)(30864003)(478600001)(6666004)(36756003)(41300700001)(186003)(40480700001)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2022 07:20:00.2139
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b37967d8-72a5-4630-8b63-08da6ed74064
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3471
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220722174212.GA1911979@bhelgaas> <86522aa5-2855-0f73-ddb2-a2b50b2fd1b7@nvidia.com>
+ <CACK8Z6FSr_ztkZ5+ULjHiDZ5L9qR=Ewtq1ZuDofzvJX=mW5WAQ@mail.gmail.com>
+In-Reply-To: <CACK8Z6FSr_ztkZ5+ULjHiDZ5L9qR=Ewtq1ZuDofzvJX=mW5WAQ@mail.gmail.com>
+From:   Lukasz Majczak <lma@semihalf.com>
+Date:   Tue, 26 Jul 2022 09:20:11 +0200
+Message-ID: <CAFJ_xbpYrtFrt-hEd7M0jqyH7R9pOKA9884sgMvV2RZXycj7hA@mail.gmail.com>
+Subject: Re: [PATCH V2] PCI/ASPM: Save/restore L1SS Capability for suspend/resume
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Vidya Sagar <vidyas@nvidia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ben Chuang <benchuanggli@gmail.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, refactormyself@gmail.com, kw@linux.com,
+        kenny@panix.com, treding@nvidia.com, jonathanh@nvidia.com,
+        abhsahu@nvidia.com, sagupta@nvidia.com, linux-pci@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aharon Landau <aharonl@nvidia.com>
+wt., 26 lip 2022 o 00:51 Rajat Jain <rajatja@google.com> napisa=C5=82(a):
+>
+> Hello,
+>
+> On Sat, Jul 23, 2022 at 10:03 AM Vidya Sagar <vidyas@nvidia.com> wrote:
+> >
+> > Agree with Bjorn's observations.
+> > The fact that the L1SS capability registers themselves disappeared in
+> > the root port post resume indicates that there seems to be something
+> > wrong with the BIOS itself.
+> > Could you please check from that perspective?
+>
+> ChromeOS Intel platforms use S0ix (suspend-to-idle) for suspend. This
+> is a shallower sleep state that preserves more state than, for e.g. S3
+> (suspend-to-RAM). When we use S0ix, then BIOS does not come in picture
+> at all. i.e. after the kernel runs its suspend routines, it just puts
+> the CPU into S0ix state. So I do not think there is a BIOS angle to
+> this.
+>
+>
+> >
+> > Thanks,
+> > Vidya Sagar
+> >
+> >
+> > On 7/22/2022 11:12 PM, Bjorn Helgaas wrote:
+> > > External email: Use caution opening links or attachments
+> > >
+> > >
+> > > On Fri, Jul 22, 2022 at 11:41:14AM +0200, Lukasz Majczak wrote:
+> > >> pt., 22 lip 2022 o 09:31 Kai-Heng Feng <kai.heng.feng@canonical.com>=
+ napisa=C5=82(a):
+> > >>> On Fri, Jul 15, 2022 at 6:38 PM Ben Chuang <benchuanggli@gmail.com>=
+ wrote:
+> > >>>> On Tue, Jul 5, 2022 at 2:00 PM Vidya Sagar <vidyas@nvidia.com> wro=
+te:
+> > >>>>>
+> > >>>>> Previously ASPM L1 Substates control registers (CTL1 and CTL2) we=
+ren't
+> > >>>>> saved and restored during suspend/resume leading to L1 Substates
+> > >>>>> configuration being lost post-resume.
+> > >>>>>
+> > >>>>> Save the L1 Substates control registers so that the configuration=
+ is
+> > >>>>> retained post-resume.
+> > >>>>>
+> > >>>>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> > >>>>> Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
+> > >>>>
+> > >>>> Hi Vidya,
+> > >>>>
+> > >>>> I tested this patch on kernel v5.19-rc6.
+> > >>>> The test device is GL9755 card reader controller on Intel i5-10210=
+U RVP.
+> > >>>> This patch can restore L1SS after suspend/resume.
+> > >>>>
+> > >>>> The test results are as follows:
+> > >>>>
+> > >>>> After Boot:
+> > >>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> > >>>>          Capabilities: [110 v1] L1 PM Substates
+> > >>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+> > >>>> ASPM_L1.1+ L1_PM_Substates+
+> > >>>>                            PortCommonModeRestoreTime=3D255us
+> > >>>> PortTPowerOnTime=3D3100us
+> > >>>>                  L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ A=
+SPM_L1.1+
+> > >>>>                             T_CommonMode=3D0us LTR1.2_Threshold=3D=
+3145728ns
+> > >>>>                  L1SubCtl2: T_PwrOn=3D3100us
+> > >>>>
+> > >>>>
+> > >>>> After suspend/resume without this patch.
+> > >>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> > >>>>          Capabilities: [110 v1] L1 PM Substates
+> > >>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+> > >>>> ASPM_L1.1+ L1_PM_Substates+
+> > >>>>                            PortCommonModeRestoreTime=3D255us
+> > >>>> PortTPowerOnTime=3D3100us
+> > >>>>                  L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- A=
+SPM_L1.1-
+> > >>>>                             T_CommonMode=3D0us LTR1.2_Threshold=3D=
+0ns
+> > >>>>                  L1SubCtl2: T_PwrOn=3D10us
+> > >>>>
+> > >>>>
+> > >>>> After suspend/resume with this patch.
+> > >>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> > >>>>          Capabilities: [110 v1] L1 PM Substates
+> > >>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+> > >>>> ASPM_L1.1+ L1_PM_Substates+
+> > >>>>                            PortCommonModeRestoreTime=3D255us
+> > >>>> PortTPowerOnTime=3D3100us
+> > >>>>                  L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ A=
+SPM_L1.1+
+> > >>>>                             T_CommonMode=3D0us LTR1.2_Threshold=3D=
+3145728ns
+> > >>>>                  L1SubCtl2: T_PwrOn=3D3100us
+> > >>>>
+> > >>>>
+> > >>>> Tested-by: Ben Chuang <benchuanggli@gmail.com>
+> > >>>
+> > >>> Forgot to add mine:
+> > >>> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > >>>
+> > >>>>
+> > >>>> Best regards,
+> > >>>> Ben Chuang
+> > >>>>
+> > >>>>
+> > >>>>> ---
+> > >>>>> Hi,
+> > >>>>> Kenneth R. Crudup <kenny@panix.com>, Could you please verify this=
+ patch
+> > >>>>> on your laptop (Dell XPS 13) one last time?
+> > >>>>> IMHO, the regression observed on your laptop with an old version =
+of the patch
+> > >>>>> could be due to a buggy old version BIOS in the laptop.
+> > >>>>>
+> > >>>>> Thanks,
+> > >>>>> Vidya Sagar
+> > >>>>>
+> > >>>>>   drivers/pci/pci.c       |  7 +++++++
+> > >>>>>   drivers/pci/pci.h       |  4 ++++
+> > >>>>>   drivers/pci/pcie/aspm.c | 44 ++++++++++++++++++++++++++++++++++=
++++++++
+> > >>>>>   3 files changed, 55 insertions(+)
+> > >>>>>
+> > >>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > >>>>> index cfaf40a540a8..aca05880aaa3 100644
+> > >>>>> --- a/drivers/pci/pci.c
+> > >>>>> +++ b/drivers/pci/pci.c
+> > >>>>> @@ -1667,6 +1667,7 @@ int pci_save_state(struct pci_dev *dev)
+> > >>>>>                  return i;
+> > >>>>>
+> > >>>>>          pci_save_ltr_state(dev);
+> > >>>>> +       pci_save_aspm_l1ss_state(dev);
+> > >>>>>          pci_save_dpc_state(dev);
+> > >>>>>          pci_save_aer_state(dev);
+> > >>>>>          pci_save_ptm_state(dev);
+> > >>>>> @@ -1773,6 +1774,7 @@ void pci_restore_state(struct pci_dev *dev)
+> > >>>>>           * LTR itself (in the PCIe capability).
+> > >>>>>           */
+> > >>>>>          pci_restore_ltr_state(dev);
+> > >>>>> +       pci_restore_aspm_l1ss_state(dev);
+> > >>>>>
+> > >>>>>          pci_restore_pcie_state(dev);
+> > >>>>>          pci_restore_pasid_state(dev);
+> > >>>>> @@ -3489,6 +3491,11 @@ void pci_allocate_cap_save_buffers(struct =
+pci_dev *dev)
+> > >>>>>          if (error)
+> > >>>>>                  pci_err(dev, "unable to allocate suspend buffer =
+for LTR\n");
+> > >>>>>
+> > >>>>> +       error =3D pci_add_ext_cap_save_buffer(dev, PCI_EXT_CAP_ID=
+_L1SS,
+> > >>>>> +                                           2 * sizeof(u32));
+> > >>>>> +       if (error)
+> > >>>>> +               pci_err(dev, "unable to allocate suspend buffer f=
+or ASPM-L1SS\n");
+> > >>>>> +
+> > >>>>>          pci_allocate_vc_save_buffers(dev);
+> > >>>>>   }
+> > >>>>>
+> > >>>>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> > >>>>> index e10cdec6c56e..92d8c92662a4 100644
+> > >>>>> --- a/drivers/pci/pci.h
+> > >>>>> +++ b/drivers/pci/pci.h
+> > >>>>> @@ -562,11 +562,15 @@ void pcie_aspm_init_link_state(struct pci_d=
+ev *pdev);
+> > >>>>>   void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+> > >>>>>   void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+> > >>>>>   void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
+> > >>>>> +void pci_save_aspm_l1ss_state(struct pci_dev *dev);
+> > >>>>> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
+> > >>>>>   #else
+> > >>>>>   static inline void pcie_aspm_init_link_state(struct pci_dev *pd=
+ev) { }
+> > >>>>>   static inline void pcie_aspm_exit_link_state(struct pci_dev *pd=
+ev) { }
+> > >>>>>   static inline void pcie_aspm_pm_state_change(struct pci_dev *pd=
+ev) { }
+> > >>>>>   static inline void pcie_aspm_powersave_config_link(struct pci_d=
+ev *pdev) { }
+> > >>>>> +static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev)=
+ { }
+> > >>>>> +static inline void pci_restore_aspm_l1ss_state(struct pci_dev *d=
+ev) { }
+> > >>>>>   #endif
+> > >>>>>
+> > >>>>>   #ifdef CONFIG_PCIE_ECRC
+> > >>>>> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > >>>>> index a96b7424c9bc..2c29fdd20059 100644
+> > >>>>> --- a/drivers/pci/pcie/aspm.c
+> > >>>>> +++ b/drivers/pci/pcie/aspm.c
+> > >>>>> @@ -726,6 +726,50 @@ static void pcie_config_aspm_l1ss(struct pci=
+e_link_state *link, u32 state)
+> > >>>>>                                  PCI_L1SS_CTL1_L1SS_MASK, val);
+> > >>>>>   }
+> > >>>>>
+> > >>>>> +void pci_save_aspm_l1ss_state(struct pci_dev *dev)
+> > >>>>> +{
+> > >>>>> +       int aspm_l1ss;
+> > >>>>> +       struct pci_cap_saved_state *save_state;
+> > >>>>> +       u32 *cap;
+> > >>>>> +
+> > >>>>> +       if (!pci_is_pcie(dev))
+> > >>>>> +               return;
+> > >>>>> +
+> > >>>>> +       aspm_l1ss =3D pci_find_ext_capability(dev, PCI_EXT_CAP_ID=
+_L1SS);
+> > >>>>> +       if (!aspm_l1ss)
+> > >>>>> +               return;
+> > >>>>> +
+> > >>>>> +       save_state =3D pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID=
+_L1SS);
+> > >>>>> +       if (!save_state)
+> > >>>>> +               return;
+> > >>>>> +
+> > >>>>> +       cap =3D (u32 *)&save_state->cap.data[0];
+> > >>>>> +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, cap=
+++);
+> > >>>>> +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, cap=
+++);
+> > >>>>> +}
+> > >>>>> +
+> > >>>>> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
+> > >>>>> +{
+> > >>>>> +       int aspm_l1ss;
+> > >>>>> +       struct pci_cap_saved_state *save_state;
+> > >>>>> +       u32 *cap;
+> > >>>>> +
+> > >>>>> +       if (!pci_is_pcie(dev))
+> > >>>>> +               return;
+> > >>>>> +
+> > >>>>> +       aspm_l1ss =3D pci_find_ext_capability(dev, PCI_EXT_CAP_ID=
+_L1SS);
+> > >>>>> +       if (!aspm_l1ss)
+> > >>>>> +               return;
+> > >>>>> +
+> > >>>>> +       save_state =3D pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID=
+_L1SS);
+> > >>>>> +       if (!save_state)
+> > >>>>> +               return;
+> > >>>>> +
+> > >>>>> +       cap =3D (u32 *)&save_state->cap.data[0];
+> > >>>>> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, *c=
+ap++);
+> > >>>>> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, *c=
+ap++);
+> > >>>>> +}
+> > >>>>> +
+> > >>>>>   static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
+> > >>>>>   {
+> > >>>>>          pcie_capability_clear_and_set_word(pdev, PCI_EXP_LNKCTL,
+> > >>>>> --
+> > >>>>> 2.17.1
+> > >>>>>
+> > >>
+> > >> Hi,
+> > >>
+> > >> With this patch (and also mentioned
+> > >> https://lore.kernel.org/all/20220509073639.2048236-1-kai.heng.feng@c=
+anonical.com/)
+> > >> applied on 5.10 (chromeos-5.10) I am observing problems after
+> > >> suspend/resume with my WiFi card - it looks like whole communication
+> > >> via PCI fails. Attaching logs (dmesg, lspci -vvv before suspend/resu=
+me
+> > >> and after) https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2e=
+ff22911109dfb91ab0fc0e3
+> > >>
+> > >> I played a little bit with this code and it looks like the
+> > >> pci_write_config_dword() to the PCI_L1SS_CTL1 breaks it (don't know
+> > >> why, not a PCI expert).
+> > >
+> > > Thanks a lot for testing this!  I'm not quite sure what to make of th=
+e
+> > > results since v5.10 is fairly old (Dec 2020) and I don't know what
+> > > other changes are in chromeos-5.10.
+>
+> Lukasz: I assume you are running this on Atlas and are seeing this bug
+> when uprev'ving it to 5.10 kernel. Can you please try it on a newer
+> Intel platform that have the latest upstream kernel running already
+> and see if this can be reproduced there too?
+> Note that the wifi PCI device is different on newer Intel platforms,
+> but platform design is similar enough that I suspect we should see
+> similar bug on those too. The other option is to try the latest
+> ustream kernel on Atlas. Perhaps if we just care about wifi (and
+> ignore bringing up the graphics stack and GUI), it may come up
+> sufficiently enough to try this patch?
+>
+> Thanks,
+>
+> Rajat
+>
+>
+> > >
+> > > Random observations, no analysis below.  This from your dmesg
+> > > certainly looks like PCI reads failing and returning ~0:
+> > >
+> > >    Timeout waiting for hardware access (CSR_GP_CNTRL 0xffffffff)
+> > >    iwlwifi 0000:01:00.0: 00000000: ffffffff ffffffff ffffffff fffffff=
+f ffffffff ffffffff ffffffff ffffffff
+> > >    iwlwifi 0000:01:00.0: Device gone - attempting removal
+> > >    Hardware became unavailable upon resume. This could be a software =
+issue prior to suspend or a hardware issue.
+> > >
+> > > And then we re-enumerate 01:00.0 and it looks like it may have been
+> > > reset (BAR is 0):
+> > >
+> > >    pci 0000:01:00.0: [8086:095a] type 00 class 0x028000
+> > >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00001fff 64bit]
+> > >
+> > > lspci diffs from before/after suspend:
+> > >
+> > >     00:14.0 PCI bridge: Intel Corporation Celeron N3350/Pentium N4200=
+/Atom E3900 Series PCI Express Port B #1 (rev fb) (prog-if 00 [Normal decod=
+e])
+> > >       Bus: primary=3D00, secondary=3D01, subordinate=3D01, sec-latenc=
+y=3D64
+> > >    -               DevSta: CorrErr- NonFatalErr+ FatalErr- UnsupReq+ =
+AuxPwr+ TransPend-
+> > >    +               DevSta: CorrErr+ NonFatalErr- FatalErr- UnsupReq- =
+AuxPwr+ TransPend-
+> > >    -               LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- C=
+ommClk+
+> > >    +               LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- Com=
+mClk+
+> > >    -               LnkSta2: Current De-emphasis Level: -6dB, Equaliza=
+tionComplete- EqualizationPhase1-
+> > >    +               LnkSta2: Current De-emphasis Level: -3.5dB, Equali=
+zationComplete- EqualizationPhase1-
+> > >    -       Capabilities: [150 v0] Null
+> > >    -       Capabilities: [200 v1] L1 PM Substates
+> > >    -               L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASP=
+M_L1.1+ L1_PM_Substates+
+> > >    -                         PortCommonModeRestoreTime=3D40us PortTPo=
+werOnTime=3D10us
+> > >    -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ AS=
+PM_L1.1+
+> > >    -                          T_CommonMode=3D40us LTR1.2_Threshold=3D=
+98304ns
+> > >    -               L1SubCtl2: T_PwrOn=3D60us
+> > >
+> > > The DevSta differences might be BIOS bugs, probably not relevant.
+> > > Interesting that ASPM is disabled, maybe didn't get enabled after
+> > > re-enumerating 01:00.0?  Strange that the L1 PM Substates capability
+> > > disappeared.
+> > >
+> > >     01:00.0 Network controller: Intel Corporation Wireless 7265 (rev =
+59)
+> > >                    LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- C=
+ommClk+
+> > >    -                       ExtSynch- ClockPM+ AutWidDis- BWInt- AutBW=
+Int-
+> > >    +                       ExtSynch- ClockPM- AutWidDis- BWInt- AutBW=
+Int-
+> > >            Capabilities: [154 v1] L1 PM Substates
+> > >                    L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASP=
+M_L1.1+ L1_PM_Substates+
+> > >                              PortCommonModeRestoreTime=3D30us PortTPo=
+werOnTime=3D60us
+> > >    -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ AS=
+PM_L1.1+
+> > >    -                          T_CommonMode=3D0us LTR1.2_Threshold=3D9=
+8304ns
+> > >    +               L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- AS=
+PM_L1.1-
+> > >    +                          T_CommonMode=3D0us LTR1.2_Threshold=3D0=
+ns
+> > >
+> > > Dmesg claimed we reconfigured common clock config.  Maybe ASPM didn't
+> > > get reinitialized after re-enumeration?  Looks like we didn't restore
+> > > L1SubCtl1.
+> > >
+> > > Bjorn
+> > >
 
-After replacing the MR cache with an Mkey cache, rename the variables
-and functions to fit the new meaning.
+Hi,
 
-Signed-off-by: Aharon Landau <aharonl@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/infiniband/hw/mlx5/main.c    |  4 +--
- drivers/infiniband/hw/mlx5/mlx5_ib.h | 14 ++++----
- drivers/infiniband/hw/mlx5/mr.c      | 54 ++++++++++++++--------------
- drivers/infiniband/hw/mlx5/odp.c     |  2 +-
- include/linux/mlx5/driver.h          |  6 ++--
- 5 files changed, 40 insertions(+), 40 deletions(-)
+Thank you all for the response and input! As Rajat mentioned I'm using
+chromebook - but not Atlas (Amberlake) - in this case it is Babymega
+(Apollolake)  - I will try to load most recent kernel and give it a
+try once again.
 
-diff --git a/drivers/infiniband/hw/mlx5/main.c b/drivers/infiniband/hw/mlx5/main.c
-index b68fddeac0f1..a174a0eee8dc 100644
---- a/drivers/infiniband/hw/mlx5/main.c
-+++ b/drivers/infiniband/hw/mlx5/main.c
-@@ -4002,7 +4002,7 @@ static void mlx5_ib_stage_pre_ib_reg_umr_cleanup(struct mlx5_ib_dev *dev)
- {
- 	int err;
- 
--	err = mlx5_mr_cache_cleanup(dev);
-+	err = mlx5_mkey_cache_cleanup(dev);
- 	if (err)
- 		mlx5_ib_warn(dev, "mr cache cleanup failed\n");
- 
-@@ -4022,7 +4022,7 @@ static int mlx5_ib_stage_post_ib_reg_umr_init(struct mlx5_ib_dev *dev)
- 	if (ret)
- 		return ret;
- 
--	ret = mlx5_mr_cache_init(dev);
-+	ret = mlx5_mkey_cache_init(dev);
- 	if (ret) {
- 		mlx5_ib_warn(dev, "mr cache init failed %d\n", ret);
- 		mlx5r_umr_resource_cleanup(dev);
-diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-index 91f985cd7d90..2e2ad3918385 100644
---- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
-+++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-@@ -764,9 +764,9 @@ struct mlx5r_async_create_mkey {
- 	u32 mkey;
- };
- 
--struct mlx5_mr_cache {
-+struct mlx5_mkey_cache {
- 	struct workqueue_struct *wq;
--	struct mlx5_cache_ent	ent[MAX_MR_CACHE_ENTRIES];
-+	struct mlx5_cache_ent	ent[MAX_MKEY_CACHE_ENTRIES];
- 	struct dentry		*root;
- 	unsigned long		last_add;
- };
-@@ -1065,7 +1065,7 @@ struct mlx5_ib_dev {
- 	struct mlx5_ib_resources	devr;
- 
- 	atomic_t			mkey_var;
--	struct mlx5_mr_cache		cache;
-+	struct mlx5_mkey_cache		cache;
- 	struct timer_list		delay_timer;
- 	/* Prevents soft lock on massive reg MRs */
- 	struct mutex			slow_path_mutex;
-@@ -1310,8 +1310,8 @@ void mlx5_ib_populate_pas(struct ib_umem *umem, size_t page_size, __be64 *pas,
- 			  u64 access_flags);
- void mlx5_ib_copy_pas(u64 *old, u64 *new, int step, int num);
- int mlx5_ib_get_cqe_size(struct ib_cq *ibcq);
--int mlx5_mr_cache_init(struct mlx5_ib_dev *dev);
--int mlx5_mr_cache_cleanup(struct mlx5_ib_dev *dev);
-+int mlx5_mkey_cache_init(struct mlx5_ib_dev *dev);
-+int mlx5_mkey_cache_cleanup(struct mlx5_ib_dev *dev);
- 
- struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
- 				       struct mlx5_cache_ent *ent,
-@@ -1339,7 +1339,7 @@ int mlx5r_odp_create_eq(struct mlx5_ib_dev *dev, struct mlx5_ib_pf_eq *eq);
- void mlx5_ib_odp_cleanup_one(struct mlx5_ib_dev *ibdev);
- int __init mlx5_ib_odp_init(void);
- void mlx5_ib_odp_cleanup(void);
--void mlx5_odp_init_mr_cache_entry(struct mlx5_cache_ent *ent);
-+void mlx5_odp_init_mkey_cache_entry(struct mlx5_cache_ent *ent);
- void mlx5_odp_populate_xlt(void *xlt, size_t idx, size_t nentries,
- 			   struct mlx5_ib_mr *mr, int flags);
- 
-@@ -1358,7 +1358,7 @@ static inline int mlx5r_odp_create_eq(struct mlx5_ib_dev *dev,
- static inline void mlx5_ib_odp_cleanup_one(struct mlx5_ib_dev *ibdev) {}
- static inline int mlx5_ib_odp_init(void) { return 0; }
- static inline void mlx5_ib_odp_cleanup(void)				    {}
--static inline void mlx5_odp_init_mr_cache_entry(struct mlx5_cache_ent *ent) {}
-+static inline void mlx5_odp_init_mkey_cache_entry(struct mlx5_cache_ent *ent) {}
- static inline void mlx5_odp_populate_xlt(void *xlt, size_t idx, size_t nentries,
- 					 struct mlx5_ib_mr *mr, int flags) {}
- 
-diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
-index edbc2990d151..129d531bd01b 100644
---- a/drivers/infiniband/hw/mlx5/mr.c
-+++ b/drivers/infiniband/hw/mlx5/mr.c
-@@ -119,7 +119,7 @@ static int mlx5_ib_create_mkey_cb(struct mlx5r_async_create_mkey *async_create)
- 				&async_create->cb_work);
- }
- 
--static int mr_cache_max_order(struct mlx5_ib_dev *dev);
-+static int mkey_cache_max_order(struct mlx5_ib_dev *dev);
- static void queue_adjust_cache_locked(struct mlx5_cache_ent *ent);
- 
- static int destroy_mkey(struct mlx5_ib_dev *dev, struct mlx5_ib_mr *mr)
-@@ -515,11 +515,11 @@ static const struct file_operations limit_fops = {
- 	.read	= limit_read,
- };
- 
--static bool someone_adding(struct mlx5_mr_cache *cache)
-+static bool someone_adding(struct mlx5_mkey_cache *cache)
- {
- 	unsigned int i;
- 
--	for (i = 0; i < MAX_MR_CACHE_ENTRIES; i++) {
-+	for (i = 0; i < MAX_MKEY_CACHE_ENTRIES; i++) {
- 		struct mlx5_cache_ent *ent = &cache->ent[i];
- 		bool ret;
- 
-@@ -569,7 +569,7 @@ static void queue_adjust_cache_locked(struct mlx5_cache_ent *ent)
- static void __cache_work_func(struct mlx5_cache_ent *ent)
- {
- 	struct mlx5_ib_dev *dev = ent->dev;
--	struct mlx5_mr_cache *cache = &dev->cache;
-+	struct mlx5_mkey_cache *cache = &dev->cache;
- 	int err;
- 
- 	xa_lock_irq(&ent->mkeys);
-@@ -681,7 +681,7 @@ struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
- 
- static void clean_keys(struct mlx5_ib_dev *dev, int c)
- {
--	struct mlx5_mr_cache *cache = &dev->cache;
-+	struct mlx5_mkey_cache *cache = &dev->cache;
- 	struct mlx5_cache_ent *ent = &cache->ent[c];
- 	u32 mkey;
- 
-@@ -696,7 +696,7 @@ static void clean_keys(struct mlx5_ib_dev *dev, int c)
- 	xa_unlock_irq(&ent->mkeys);
- }
- 
--static void mlx5_mr_cache_debugfs_cleanup(struct mlx5_ib_dev *dev)
-+static void mlx5_mkey_cache_debugfs_cleanup(struct mlx5_ib_dev *dev)
- {
- 	if (!mlx5_debugfs_root || dev->is_rep)
- 		return;
-@@ -705,9 +705,9 @@ static void mlx5_mr_cache_debugfs_cleanup(struct mlx5_ib_dev *dev)
- 	dev->cache.root = NULL;
- }
- 
--static void mlx5_mr_cache_debugfs_init(struct mlx5_ib_dev *dev)
-+static void mlx5_mkey_cache_debugfs_init(struct mlx5_ib_dev *dev)
- {
--	struct mlx5_mr_cache *cache = &dev->cache;
-+	struct mlx5_mkey_cache *cache = &dev->cache;
- 	struct mlx5_cache_ent *ent;
- 	struct dentry *dir;
- 	int i;
-@@ -717,7 +717,7 @@ static void mlx5_mr_cache_debugfs_init(struct mlx5_ib_dev *dev)
- 
- 	cache->root = debugfs_create_dir("mr_cache", mlx5_debugfs_get_dev_root(dev->mdev));
- 
--	for (i = 0; i < MAX_MR_CACHE_ENTRIES; i++) {
-+	for (i = 0; i < MAX_MKEY_CACHE_ENTRIES; i++) {
- 		ent = &cache->ent[i];
- 		sprintf(ent->name, "%d", ent->order);
- 		dir = debugfs_create_dir(ent->name, cache->root);
-@@ -735,9 +735,9 @@ static void delay_time_func(struct timer_list *t)
- 	WRITE_ONCE(dev->fill_delay, 0);
- }
- 
--int mlx5_mr_cache_init(struct mlx5_ib_dev *dev)
-+int mlx5_mkey_cache_init(struct mlx5_ib_dev *dev)
- {
--	struct mlx5_mr_cache *cache = &dev->cache;
-+	struct mlx5_mkey_cache *cache = &dev->cache;
- 	struct mlx5_cache_ent *ent;
- 	int i;
- 
-@@ -750,7 +750,7 @@ int mlx5_mr_cache_init(struct mlx5_ib_dev *dev)
- 
- 	mlx5_cmd_init_async_ctx(dev->mdev, &dev->async_ctx);
- 	timer_setup(&dev->delay_timer, delay_time_func, 0);
--	for (i = 0; i < MAX_MR_CACHE_ENTRIES; i++) {
-+	for (i = 0; i < MAX_MKEY_CACHE_ENTRIES; i++) {
- 		ent = &cache->ent[i];
- 		xa_init_flags(&ent->mkeys, XA_FLAGS_LOCK_IRQ);
- 		ent->order = i + 2;
-@@ -759,12 +759,12 @@ int mlx5_mr_cache_init(struct mlx5_ib_dev *dev)
- 
- 		INIT_DELAYED_WORK(&ent->dwork, delayed_cache_work_func);
- 
--		if (i > MR_CACHE_LAST_STD_ENTRY) {
--			mlx5_odp_init_mr_cache_entry(ent);
-+		if (i > MKEY_CACHE_LAST_STD_ENTRY) {
-+			mlx5_odp_init_mkey_cache_entry(ent);
- 			continue;
- 		}
- 
--		if (ent->order > mr_cache_max_order(dev))
-+		if (ent->order > mkey_cache_max_order(dev))
- 			continue;
- 
- 		ent->page = PAGE_SHIFT;
-@@ -781,19 +781,19 @@ int mlx5_mr_cache_init(struct mlx5_ib_dev *dev)
- 		xa_unlock_irq(&ent->mkeys);
- 	}
- 
--	mlx5_mr_cache_debugfs_init(dev);
-+	mlx5_mkey_cache_debugfs_init(dev);
- 
- 	return 0;
- }
- 
--int mlx5_mr_cache_cleanup(struct mlx5_ib_dev *dev)
-+int mlx5_mkey_cache_cleanup(struct mlx5_ib_dev *dev)
- {
- 	unsigned int i;
- 
- 	if (!dev->cache.wq)
- 		return 0;
- 
--	for (i = 0; i < MAX_MR_CACHE_ENTRIES; i++) {
-+	for (i = 0; i < MAX_MKEY_CACHE_ENTRIES; i++) {
- 		struct mlx5_cache_ent *ent = &dev->cache.ent[i];
- 
- 		xa_lock_irq(&ent->mkeys);
-@@ -802,10 +802,10 @@ int mlx5_mr_cache_cleanup(struct mlx5_ib_dev *dev)
- 		cancel_delayed_work_sync(&ent->dwork);
- 	}
- 
--	mlx5_mr_cache_debugfs_cleanup(dev);
-+	mlx5_mkey_cache_debugfs_cleanup(dev);
- 	mlx5_cmd_cleanup_async_ctx(&dev->async_ctx);
- 
--	for (i = 0; i < MAX_MR_CACHE_ENTRIES; i++)
-+	for (i = 0; i < MAX_MKEY_CACHE_ENTRIES; i++)
- 		clean_keys(dev, i);
- 
- 	destroy_workqueue(dev->cache.wq);
-@@ -872,22 +872,22 @@ static int get_octo_len(u64 addr, u64 len, int page_shift)
- 	return (npages + 1) / 2;
- }
- 
--static int mr_cache_max_order(struct mlx5_ib_dev *dev)
-+static int mkey_cache_max_order(struct mlx5_ib_dev *dev)
- {
- 	if (MLX5_CAP_GEN(dev->mdev, umr_extended_translation_offset))
--		return MR_CACHE_LAST_STD_ENTRY + 2;
-+		return MKEY_CACHE_LAST_STD_ENTRY + 2;
- 	return MLX5_MAX_UMR_SHIFT;
- }
- 
--static struct mlx5_cache_ent *mr_cache_ent_from_order(struct mlx5_ib_dev *dev,
--						      unsigned int order)
-+static struct mlx5_cache_ent *mkey_cache_ent_from_order(struct mlx5_ib_dev *dev,
-+							unsigned int order)
- {
--	struct mlx5_mr_cache *cache = &dev->cache;
-+	struct mlx5_mkey_cache *cache = &dev->cache;
- 
- 	if (order < cache->ent[0].order)
- 		return &cache->ent[0];
- 	order = order - cache->ent[0].order;
--	if (order > MR_CACHE_LAST_STD_ENTRY)
-+	if (order > MKEY_CACHE_LAST_STD_ENTRY)
- 		return NULL;
- 	return &cache->ent[order];
- }
-@@ -930,7 +930,7 @@ static struct mlx5_ib_mr *alloc_cacheable_mr(struct ib_pd *pd,
- 						     0, iova);
- 	if (WARN_ON(!page_size))
- 		return ERR_PTR(-EINVAL);
--	ent = mr_cache_ent_from_order(
-+	ent = mkey_cache_ent_from_order(
- 		dev, order_base_2(ib_umem_num_dma_blocks(umem, page_size)));
- 	/*
- 	 * Matches access in alloc_cache_mr(). If the MR can't come from the
-diff --git a/drivers/infiniband/hw/mlx5/odp.c b/drivers/infiniband/hw/mlx5/odp.c
-index 84da5674e1ab..e305bf1dc6c2 100644
---- a/drivers/infiniband/hw/mlx5/odp.c
-+++ b/drivers/infiniband/hw/mlx5/odp.c
-@@ -1588,7 +1588,7 @@ mlx5_ib_odp_destroy_eq(struct mlx5_ib_dev *dev, struct mlx5_ib_pf_eq *eq)
- 	return err;
- }
- 
--void mlx5_odp_init_mr_cache_entry(struct mlx5_cache_ent *ent)
-+void mlx5_odp_init_mkey_cache_entry(struct mlx5_cache_ent *ent)
- {
- 	if (!(ent->dev->odp_caps.general_caps & IB_ODP_SUPPORT_IMPLICIT))
- 		return;
-diff --git a/include/linux/mlx5/driver.h b/include/linux/mlx5/driver.h
-index 76d7661e3e63..220597c2f436 100644
---- a/include/linux/mlx5/driver.h
-+++ b/include/linux/mlx5/driver.h
-@@ -728,10 +728,10 @@ enum {
- };
- 
- enum {
--	MR_CACHE_LAST_STD_ENTRY = 20,
-+	MKEY_CACHE_LAST_STD_ENTRY = 20,
- 	MLX5_IMR_MTT_CACHE_ENTRY,
- 	MLX5_IMR_KSM_CACHE_ENTRY,
--	MAX_MR_CACHE_ENTRIES
-+	MAX_MKEY_CACHE_ENTRIES
- };
- 
- struct mlx5_profile {
-@@ -740,7 +740,7 @@ struct mlx5_profile {
- 	struct {
- 		int	size;
- 		int	limit;
--	} mr_cache[MAX_MR_CACHE_ENTRIES];
-+	} mr_cache[MAX_MKEY_CACHE_ENTRIES];
- };
- 
- struct mlx5_hca_cap {
--- 
-2.17.2
-
+Best regards,
+Lukasz

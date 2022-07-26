@@ -2,165 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02095812E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CB85812E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239002AbiGZMMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 08:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S239042AbiGZMN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 08:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiGZMMh (ORCPT
+        with ESMTP id S233025AbiGZMNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:12:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433C22B1AD;
-        Tue, 26 Jul 2022 05:12:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EC69B8128D;
-        Tue, 26 Jul 2022 12:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA59C341C0;
-        Tue, 26 Jul 2022 12:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658837553;
-        bh=eUo8C7N2SsgGwW0xNUNPXRjnpsdB6fbEPGxKqx9Hqsk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HrQqa7usqGL/GFMz3lbqv38vuaOVkxCNd8Rr5bj9BzPNMvxghKfEi+jGKV1FZfSmH
-         LIApKCUUmT6Y4rFwo4JBhRB2HdOBsV2I737AyLyuVjgsbks2rb/lmttRvPT8Jiv6F5
-         wir0LXQFNlcIpahLc5Q6qVyE3ffG14+I1CpwI/xJ+SEfC0hN2vOCbgodFDvgC0rXqJ
-         d5oZxKpaqgk8jMnLI6CWkzPnLiTlrY4aNgFIJo+E4LaAAf8V9e1yYqMLC577ZgCkBN
-         AG09zIngdTm/ASHEi3usEm/6BWJs+sAxXaJje0K4OhPFcgtgQGfryNqlW4vt8XDAbH
-         u1iEd31QW5QUQ==
-Date:   Tue, 26 Jul 2022 13:12:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] regulator: core: Allow for a base-load per client to
- come from dts
-Message-ID: <Yt/aLGJqIRxam1G9@sirena.org.uk>
-References: <20220721182622.RFC.1.I8a64b707169cfd73d9309c5eaf5d43b8bc4db988@changeid>
- <Ytrq2rVMHqedv4+3@sirena.org.uk>
- <CAD=FV=U-qZQwRdLA8AVwYdcuj_PQEULTnhm3osFybaFmtvjmHg@mail.gmail.com>
- <YtxHwUe4W7+u3Lk3@sirena.org.uk>
- <CAD=FV=VhPHFB1T_+r1mmtP=r73ggmcWvwPqw3E-_foVTvtTkyw@mail.gmail.com>
+        Tue, 26 Jul 2022 08:13:24 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5568F2CCB5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 05:13:23 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31e47ac84daso140418417b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 05:13:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SYVsTQz5iwpU0rHGKZZgCLqu05YE3tSgDiLqaqsQFZc=;
+        b=I4SIBzqyPiJK44vXYIn9HzlkRiGAuDEjVXWCFZzL9W23tqMIPwDLFsRjQv+hLcH9L8
+         lhkrI58QRuEKQX/3jfxD2Q2EqfObegRdPWkxJr4nBgE5ockTjO3P8M4cuvHxuhTOhzlR
+         P9Z3t31P0nGlz9+v/gGkXr0LD9nhrKj3sKF/OMbYnCHLZJxZzllxwQ3lrBwho2yCZtAU
+         G+hMEJkSvIiZaQgVwnnokGiMBMGISWp45NrZ9n2Ig1bRcfNpNWGXotv1+vpr4midaRNk
+         cJNpehTh8rBj220IzjYZQJYH+UlSQmzEsAOeGPB0fhFKa4TkspP7CggSz+yT11XznJQG
+         d2mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SYVsTQz5iwpU0rHGKZZgCLqu05YE3tSgDiLqaqsQFZc=;
+        b=oE3noGwqOdLJlCnrFYQcgHu+u9BYjJq4IZp+boMzC2P/DrN2ZhCj1ol8++PExpDs0U
+         Tl/7AD0UdzvP92BuM2+Gq+YfTPArpWSAHBXg9LXXJcc7k15h4nqJoRMovsyZmy8TL+pE
+         NlfunvCNIjIWroPKGYVKHlDf1lNmt+vqCRQnHYqwhznVvgYyTa7Yvmpk2mqJd5osewQo
+         sSg4tgduHNivY7Gm5g3LEdeUwsTLSvD7sv3JdfMWTq+4JGHOXVFHSDuEGo4LCir3qu8R
+         dC8Ei36FkxdTxdVzevuy/tUJl3+c207bVQi14uVb92N9pVMrfIkqa2k8kySVkz4ZBX7w
+         ZE4w==
+X-Gm-Message-State: AJIora8giF7IwbKzMVRsxNSSNm3YlnSroSbjTKe1EeGQks5yLjHST7sd
+        G3XYJYjehsMJpeDYmHSmjhxpQCRxZbGlfc/RUQ0HMg==
+X-Google-Smtp-Source: AGRyM1vCoW0at0inCp9kKhtLsvjvyEabqC0bZ7Nq4V5biDVHEhlcOWZwhm/ClzwcqIGZrFugaaV9v6SEZedcNJbGtM4=
+X-Received: by 2002:a0d:f104:0:b0:31f:268a:43da with SMTP id
+ a4-20020a0df104000000b0031f268a43damr5960083ywf.332.1658837602287; Tue, 26
+ Jul 2022 05:13:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TGLVgNG1pqmleHM5"
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=VhPHFB1T_+r1mmtP=r73ggmcWvwPqw3E-_foVTvtTkyw@mail.gmail.com>
-X-Cookie: So this is it.  We're going to die.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726115028.3055296-1-william.xuanziyang@huawei.com>
+In-Reply-To: <20220726115028.3055296-1-william.xuanziyang@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 26 Jul 2022 14:13:10 +0200
+Message-ID: <CANn89iJNHhq9zbmL2DF-up_hBRHuwkPiNUpMS+LHoumy5ohQZA@mail.gmail.com>
+Subject: Re: [PATCH net v2] ipv6/addrconf: fix a null-ptr-deref bug for ip6_ptr
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 26, 2022 at 1:50 PM Ziyang Xuan
+<william.xuanziyang@huawei.com> wrote:
+>
+> Change net device's MTU to smaller than IPV6_MIN_MTU or unregister
+> device while matching route. That may trigger null-ptr-deref bug
+> for ip6_ptr probability as following.
+>
+> =========================================================
+> BUG: KASAN: null-ptr-deref in find_match.part.0+0x70/0x134
+> Read of size 4 at addr 0000000000000308 by task ping6/263
+>
+> CPU: 2 PID: 263 Comm: ping6 Not tainted 5.19.0-rc7+ #14
+> Call trace:
+>  dump_backtrace+0x1a8/0x230
+>  show_stack+0x20/0x70
+>  dump_stack_lvl+0x68/0x84
+>  print_report+0xc4/0x120
+>  kasan_report+0x84/0x120
+>  __asan_load4+0x94/0xd0
+>  find_match.part.0+0x70/0x134
+>  __find_rr_leaf+0x408/0x470
+>  fib6_table_lookup+0x264/0x540
+>  ip6_pol_route+0xf4/0x260
+>  ip6_pol_route_output+0x58/0x70
+>  fib6_rule_lookup+0x1a8/0x330
+>  ip6_route_output_flags_noref+0xd8/0x1a0
+>  ip6_route_output_flags+0x58/0x160
+>  ip6_dst_lookup_tail+0x5b4/0x85c
+>  ip6_dst_lookup_flow+0x98/0x120
+>  rawv6_sendmsg+0x49c/0xc70
+>  inet_sendmsg+0x68/0x94
+>
+> Reproducer as following:
+> Firstly, prepare conditions:
+> $ip netns add ns1
+> $ip netns add ns2
+> $ip link add veth1 type veth peer name veth2
+> $ip link set veth1 netns ns1
+> $ip link set veth2 netns ns2
+> $ip netns exec ns1 ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1
+> $ip netns exec ns2 ip -6 addr add 2001:0db8:0:f101::2/64 dev veth2
+> $ip netns exec ns1 ifconfig veth1 up
+> $ip netns exec ns2 ifconfig veth2 up
+> $ip netns exec ns1 ip -6 route add 2000::/64 dev veth1 metric 1
+> $ip netns exec ns2 ip -6 route add 2001::/64 dev veth2 metric 1
+>
+> Secondly, execute the following two commands in two ssh windows
+> respectively:
+> $ip netns exec ns1 sh
+> $while true; do ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1; ip -6 route add 2000::/64 dev veth1 metric 1; ping6 2000::2; done
+>
+> $ip netns exec ns1 sh
+> $while true; do ip link set veth1 mtu 1000; ip link set veth1 mtu 1500; sleep 5; done
+>
+> It is because ip6_ptr has been assigned to NULL in addrconf_ifdown() firstly,
+> then ip6_ignore_linkdown() accesses ip6_ptr directly without NULL check.
+>
+>         cpu0                    cpu1
+> fib6_table_lookup
+> __find_rr_leaf
+>                         addrconf_notify [ NETDEV_CHANGEMTU ]
+>                         addrconf_ifdown
+>                         RCU_INIT_POINTER(dev->ip6_ptr, NULL)
+> find_match
+> ip6_ignore_linkdown
+>
+> So we can add NULL check for ip6_ptr before using in ip6_ignore_linkdown() to
+> fix the null-ptr-deref bug.
+>
+> Fixes: 6d3d07b45c86 ("ipv6: Refactor fib6_ignore_linkdown")
 
---TGLVgNG1pqmleHM5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+If we need to backport, I guess dcd1f572954f ("net/ipv6: Remove fib6_idev")
+already had the bug.
 
-On Mon, Jul 25, 2022 at 05:31:34PM -0700, Doug Anderson wrote:
-> On Sat, Jul 23, 2022 at 12:11 PM Mark Brown <broonie@kernel.org> wrote:
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+>
+> ---
+> v2:
+>   - Use NULL check in ip6_ignore_linkdown() but synchronize_net() in
+>     addrconf_ifdown()
+>   - Add timing analysis of the problem
+>
+> ---
+>  include/net/addrconf.h | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/include/net/addrconf.h b/include/net/addrconf.h
+> index f7506f08e505..c04f359655b8 100644
+> --- a/include/net/addrconf.h
+> +++ b/include/net/addrconf.h
+> @@ -405,6 +405,9 @@ static inline bool ip6_ignore_linkdown(const struct net_device *dev)
+>  {
+>         const struct inet6_dev *idev = __in6_dev_get(dev);
+>
+> +       if (unlikely(!idev))
+> +               return true;
+> +
 
-> I guess the answer is that if it's a micro-optimization then we should
-> be ripping more of this code out. ;-) That would go contrary to
-> Dmitry's request that all regulators have a load set on them...
+Note that we might read a non NULL pointer here, but read it again
+later in rt6_score_route(),
+since another thread could switch the pointer under us ?
 
-I've not seen this request.
-
-> > To the extent this is needed it does smell a bit like "these
-> > regulators should default to setting their load to 0 when
-> > disabled" or something more along those lines TBH, some of your
-> > previous comments suggested that the per device loads being
-> > specified in a lot of the driver are just random values intended
-> > to trigger a specific behaviour in the regulator but forced to be
-> > done in terms of a load due to the firmware inteface that's
-> > available on these platforms having an interface in those terms.
-
-> It's actually _not_ the firmware interface as far as I can tell, at
-> least for newer Qualcomm chips (those using RPMH). The firmware
-> interface seems to be for modes. See, for instance,
-> rpmh_regulator_vrm_set_load() which translates loads into modes before
-> passing to the firmware. Ironically, my memory tells me that Qualcomm
-> actually said that this turned out to be a problem in the past for
-> them, though, since some rails went to both the main apps processor
-> (AP) and the modem processor. Each could independently decide that low
-> power mode was fine but the total of both usages could bump you into
-> needing high power mode...
-
-Oh, that's just completely broken.  The set_load() support should be
-removed and the drivers should be implementing get_optimum_mode(), it's
-actually got an open coded version of it in there already.  That'll only
-have snuck past due to being hidden behind a layer of abstraction that
-shouldn't be there.
-
-> consumers") but is still instructive of Qualcomm's thinking. Taking a
-> sampling of the loads in the tables in the DSI driver / phy, I see:
-> * Many specify 100 uA.
-> * Some seem to pick based on throwing a dart at a dartboard. 16 uA, 2
-> uA, 4 uA, 32 uA, etc.
-
-The load for a PHY is going to be immaterial when you're driving a
-panel.
-
-> If we happen to be using an LDO that changes over at 30 mA, though,
-> these ones _could_ use LDO. I guess this is where the whole
-> "specifying in uA" makes sense? If you've got a regulator that changes
-> at 30mA and only one ~20mA consumer is active then it can stay in LPM.
-> When two ~20mA consumers are active then it needs to switch to HPM?
-> Having lots of consumers on a given rail is really common w/ Qulaocmm
-> setups. On trogdor, rail "L4A" is all of these:
-
-We specify in uA and uV partly to ensure we never run into the bottom
-limit of resolution and partly because for loads uA is a very relevant
-number, as you've noticed it's where things tend to transition into
-their lowest power modes and it's also commonly a relevant unit for the
-draw from devices in idle modes.  Something like an audio CODEC doing
-jack detection will probably be able to get into a low power mode for
-example.
-
-> I guess the above doesn't really give us a lot of good answers. :(
-
-All the load setting that doesn't get passed to the firmware in the
-regulator drivers should be removed and replaced with get_optimum_mode()
-operations, this has no impact on the client drivers and removes some
-open coding from the regulator drivers.  Load management in client
-drivers that doesn't go below say 100uA is probably noise but it's also
-fairly harmless.
-
-> Perhaps the low hanging fruit is to just accept that the current API
-> of setting the load is here to stay, even if it does seem mostly
-> pointless in many cases. I can submit a patch that adds the load to
-> the "bulk" API and at least it would clean up a bunch of stuff even if
-> it doesn't fundamentally overhaul the system...
-
-Adding loads to the bulk API would also be useful.
-
---TGLVgNG1pqmleHM5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLf2iwACgkQJNaLcl1U
-h9DxSAf+LyrWONzhha2QylN/IYuT7xfNRe9hbsT9qcvzoEOQR8UuUGTODKyF1afZ
-IsmqzM2dC+FhP8v/SxOUpuXEF454qGZBVo3lU5n08oTfc9YXF3phf8dp97h822rt
-OIGlQIVatahkTuB5SfA2KJTwxte5/cHD+s/H4Eo7RVzoXvPjb7h1DuuWwBoUG2bt
-pGqLtiRwTDSejifL6L5IF56EOZw2VlX9Tuiv31nisESEs9u02iDdG4NAAWEikuvz
-zS/WiiU1Zo7+LCG1JzyWSrcTbvNfxZOtD5bGPsHfYfKTG7rX0ghAiApDTLgRh53/
-TfgHgQUnhTyLElQIAViKcOGFWaQNZA==
-=AHFI
------END PGP SIGNATURE-----
-
---TGLVgNG1pqmleHM5--
+>         return !!idev->cnf.ignore_routes_with_linkdown;
+>  }
+>
+> --
+> 2.25.1
+>

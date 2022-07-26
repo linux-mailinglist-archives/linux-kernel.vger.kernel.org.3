@@ -2,186 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209515819E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEB05819DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbiGZSn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 14:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
+        id S231785AbiGZSjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 14:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiGZSnY (ORCPT
+        with ESMTP id S239515AbiGZSi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 14:43:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11752D1DC;
-        Tue, 26 Jul 2022 11:43:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 57C721F9F3;
-        Tue, 26 Jul 2022 18:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1658861002;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TTiR4Rj7a7i+4taUmgliJ6Lzey5oIZm0ImPZfCjUCq4=;
-        b=wR2cHz/QKkCnntnFSMrNYmBy3J2tl3rYKVEMnA2Z+NfeSrnRb0wD2x+D/FZldcu3vE0Kkp
-        JU9U+lSxa8pIkJzJen/lJA8J8bdIrHIfqneBD+6GWORKgwOE85wacfWOYVxCO141VBf6gI
-        4+DMmE3O57MLFhB45hqGTN7trd/Wp5E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1658861002;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TTiR4Rj7a7i+4taUmgliJ6Lzey5oIZm0ImPZfCjUCq4=;
-        b=IkzZPx64FXtCcAad35qXVAYOVlbcZqWYCaSRVvzEoG+BX7uF5FdA4wpuQ/xMkDGfSpoJWE
-        QvXvjPe75ouPeqDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B9E013322;
-        Tue, 26 Jul 2022 18:43:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1x24Bco14GIkIAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 26 Jul 2022 18:43:22 +0000
-Date:   Tue, 26 Jul 2022 20:38:24 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     hmsjwzb <hmsjwzb@zoho.com>
-Cc:     Nikolay Borisov <nborisov@suse.com>, anand.jain@oracle.com,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH]btrfs: Fix fstest case btrfs/219
-Message-ID: <20220726183824.GL13489@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, hmsjwzb <hmsjwzb@zoho.com>,
-        Nikolay Borisov <nborisov@suse.com>, anand.jain@oracle.com,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220721083609.5695-1-hmsjwzb@zoho.com>
- <0c2337c3-2b39-c54c-27e9-dd4f0a99cf71@suse.com>
- <1aaff0ac-436e-7782-081c-3549ff3d8c8f@zoho.com>
+        Tue, 26 Jul 2022 14:38:57 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C54432EFD
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:38:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658860736; x=1690396736;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rAUBIElhLyFX0ka939yot8kphikOrZSl4q2s9kNYA6Y=;
+  b=gb2glYDPxJZmOSAvxM8cUxYga2+pi0mvCZ7LLrnB1XdGgWaEhh+wGxg2
+   Kbl6JMfeFRZ2ZlFsQGY8vCf3axnWV6P+jJHuVI4t/F3ZR2CFNXJ0hKniE
+   WGik+rzjVltvHtcj5Wt2lye1/VGNPE+OGDwvWcyFdmNGDwM5q7jOfprkJ
+   nW5597pVjdY1rJr5bQ+clMwt0a1toAbufE+mYabgUQpT2v/NqQ0RCGvHn
+   x8gamjwzSVpYSVYTNAzgBC/eHRincB/oFHwB1Skgu4Z39Z0puF0htgsyh
+   9XOi1Af1u514DBBPr1zHMGMciieOSThBQQPkkoV7zDeuAvNxo+HfKXfrk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="271067627"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="271067627"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 11:38:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="575607883"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Jul 2022 11:38:54 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGPSI-0007UM-0P;
+        Tue, 26 Jul 2022 18:38:54 +0000
+Date:   Wed, 27 Jul 2022 02:38:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Faycal Benmlih <faycal.benmlih@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/platform/x86/socwatch/sw_counter_list.c:88:25: sparse:
+ sparse: incorrect type in argument 2 (different base types)
+Message-ID: <202207270208.inU91EGZ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1aaff0ac-436e-7782-081c-3549ff3d8c8f@zoho.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 01:34:11AM -0400, hmsjwzb wrote:
-> On 7/21/22 09:37, Nikolay Borisov wrote:
-> > On 21.07.22 г. 11:36 ч., Flint.Wang wrote:
-> >> Hi,
-> >> fstest btrfs/291 failed.
-> >>
-> >> [How to reproduce]
-> >> mkdir -p /mnt/test/219.mnt
-> >> xfs_io -f -c "truncate 256m" /mnt/test/219.img1
-> >> mkfs.btrfs /mnt/test/219.img1
-> >> cp /mnt/test/219.img1 /mnt/test/219.img2
-> >> mount -o loop /mnt/test/219.img1 /mnt/test/219.mnt
-> >> umount /mnt/test/219.mnt
-> >> losetup -f --show /mnt/test/219.img1 dev
-> >> mount /dev/loop0 /mnt/test/219.mnt
-> >> umount /mnt/test/219.mnt
-> >> mount -o loop /mnt/test/219.img2 /mnt/test/219.mnt
-> >>
-> >> [Root cause]
-> >> if (fs_devices->opened && found_transid < device->generation) {
-> >>     /*
-> >>      * That is if the FS is _not_ mounted and if you
-> >>      * are here, that means there is more than one
-> >>      * disk with same uuid and devid.We keep the one
-> >>      * with larger generation number or the last-in if
-> >>      * generation are equal.
-> >>      */
-> >>     mutex_unlock(&fs_devices->device_list_mutex);
-> >>     return ERR_PTR(-EEXIST);
-> >> }
-> >>
-> >> [Personal opinion]
-> >> User might back up a block device to another. I think it is improper
-> >> to forbid user from mounting it.
-> >>
-> >> Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
-> > 
-> > 
-> > This lacks any explanation whatsoever so it's not possible to judge whether the fix is correct or not.
-> > 
-> >> ---
-> >>   fs/btrfs/volumes.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-> >> index 6aa6bc769569a..76af32032ac85 100644
-> >> --- a/fs/btrfs/volumes.c
-> >> +++ b/fs/btrfs/volumes.c
-> >> @@ -900,7 +900,7 @@ static noinline struct btrfs_device *device_list_add(const char *path,
-> >>            * tracking a problem where systems fail mount by subvolume id
-> >>            * when we reject replacement on a mounted FS.
-> >>            */
-> >> -        if (!fs_devices->opened && found_transid < device->generation) {
-> >> +        if (fs_devices->opened && found_transid < device->generation) {
-> >>               /*
-> >>                * That is if the FS is _not_ mounted and if you
-> >>                * are here, that means there is more than one
-> 
-> Hi Nikolay,
-> 
-> It seems the failure of btrfs/219 needs some explanation.
-> 
-> Here is the thing.
->         1. A storage device A with btrfs filesystem is running on a host.
->         2. For example, we backup the device A to an exactly some device B.
->         3. The device A continue to run for a while so the device->generation is getting bigger.
->         4. Then you umount the device A and try to mount device B.
->         5. Kernel find that device A has the same UUID as device B and has bigger device->generation.
->            So the mount request of device B will be rejected.
+tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_10
+head:   c55df4a2b60fc7c6c4d00fd9f9fb447087833513
+commit: 80c46c8183c607e70bcb88e9b04febae6c7775a2 SEP/SOCWATCH Update SoCWatch driver after rebasing to linux v5.6
+date:   1 year, 10 months ago
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220727/202207270208.inU91EGZ-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/mchinth/linux/commit/80c46c8183c607e70bcb88e9b04febae6c7775a2
+        git remote add mchinth https://github.com/mchinth/linux
+        git fetch --no-tags mchinth sep_socwatch_linux_5_10
+        git checkout 80c46c8183c607e70bcb88e9b04febae6c7775a2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-That's on purpose, devices are matched by UUIDs and making block copies
-of the same filesystem is known "don't do that" and discouraged.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If you must store the block copies then you can change the UUID by
-btrfstune, there are two ways (fast metadata_uuid, and slow rewriting
-all metadata uuids in all blocks).
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/x86/socwatch/sw_counter_list.c:88:25: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int flags @@     got restricted gfp_t @@
+   drivers/platform/x86/socwatch/sw_counter_list.c:88:25: sparse:     expected unsigned int flags
+   drivers/platform/x86/socwatch/sw_counter_list.c:88:25: sparse:     got restricted gfp_t
 
-> 
->             if (!fs_devices->opened && found_transid < device->generation) {
->                  /*
->                   * That is if the FS is _not_ mounted and if you
->                   * are here, that means there is more than one
->                   * disk with same uuid and devid.We keep the one
->                   * with larger generation number or the last-in if
->                   * generation are equal.
->                   */
->                   mutex_unlock(&fs_devices->device_list_mutex);
->                   return ERR_PTR(-EEXIST);
->             }
-> 
-> I think it is improper to reject that request. Because device A is not in open state.
+vim +88 drivers/platform/x86/socwatch/sw_counter_list.c
 
-But this would prevent mounting A. There should really be some way to
-distiguish the filesystems, the block device is not a stable identifier,
-the UUID is. Imagine having 10 copies of the same filesystem identified
-by the same UUID and device UUID, but with different generations and
-data. That's asking for problems.
+    74	
+    75		pw_u64_t i = 0, max_msr_value = 0;//, msr_array_size = 0;
+    76		pw_u64_t msr_list_size = sizeof(msr_info_list) / sizeof(msr_info_list[0]);
+    77	
+    78		// TODO: Probably sort msr_info_list rather than assuming it is sorted.
+    79	
+    80		// Since 'msr_info_list' is sorted, the last entry should be the highest MSR
+    81		// address
+    82		max_msr_value = msr_info_list[msr_list_size-1];
+    83		pw_pr_debug("max msr value: %llx\n", max_msr_value);
+    84	
+    85		// TODO: Optimize the memory usage by making msr_search_array a bit vector
+    86		msr_search_array_size = max_msr_value + 1;
+    87		msr_search_array = sw_kmalloc(msr_search_array_size * sizeof(pw_u8_t),
+  > 88				GFP_KERNEL);
+    89	
+    90		if (msr_search_array == NULL) {
+    91			return -PW_ERROR;
+    92		}
+    93	
+    94		memset(msr_search_array, 0, msr_search_array_size);
+    95	
+    96		for (i = 0; i < msr_list_size; ++i) {
+    97			msr_search_array[msr_info_list[i]] = 1;
+    98		}
+    99	
+   100		return PW_SUCCESS;
+   101	}
+   102	
 
-There's not much the filesystem driver can do than to avoid using old
-devices and giving preference to the highest generation device. All
-devices with btrfs signature are registered in memory and this is the
-primary source when mounting the devices, not the block device itself.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

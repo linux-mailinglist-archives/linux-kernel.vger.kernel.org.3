@@ -2,199 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D73580A15
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 05:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91970580A18
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 05:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237424AbiGZDnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 23:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S237475AbiGZDpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 23:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237079AbiGZDnP (ORCPT
+        with ESMTP id S229852AbiGZDpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 23:43:15 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE932A718
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 20:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1658806994; x=1690342994;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vt84amRQOiVRnZk+EYa9ZDlXy2/jQrtxfSttKXecpxM=;
-  b=aLBwt5Dr95/CgInZ7CnRnp2e8hQJ/U76YUpbMAvhjbaEeBJmpAn4KV94
-   L3p9j69RYx6EkoiAIw2RdY12ASOq83Sqh+To30cn11TpH/KXGlGM++yqn
-   KYXxm6bxizHR2K7VUt05pz6jFliwe/2C5SJu8t5IfPcKGukcFPyHUS0QM
-   ax0vJgC98KaZqsSmQ9gpWZc/rLYt0rVkbHpeVf72MYayUMsI8pWLWmpsF
-   /XS4B++yaUDbPhYqf2QJENuEiJo8M9t0HyMyLPH4EtcWarIAVjfovr9rl
-   wKviKHeRvgN5CJI+cPbUjBGayG6DhiI1cKnWz/PdCNZNhyhrarfk8mn7x
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,193,1654531200"; 
-   d="scan'208";a="205452420"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Jul 2022 11:43:13 +0800
-IronPort-SDR: 77hFyrum4h8+j0q4jwOe4KkGWRe1RjW1HyzQpL1XKtPFQFSMAs+6wnOJ29A9YGDW7YJQoT4RdP
- ZdwLNJNiKnTOuTgusIPAIDRhUeU+BXXp81tT3YrZXN/D4LeUbcJ3fZwJ0LPtxexYwR4wPl0QcC
- irzM6frVrxa08z4xa+5Y84jAQicHjzJUdepLV0iXuqCP+4LW44EpjULjqdJbs34DK7Xuavma1f
- UZi12cXRiiBXIVwy5Ey4Bf5fJn8SfhsH9EiggKNlIvzQMq0LG1r7nr/EdTSv6n40VZpZ+TCqT9
- xCh8qD3UqOOu3bjj6LwWiaZr
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jul 2022 19:59:29 -0700
-IronPort-SDR: K4coOjol/4V/L8yOecIxHr2aYytWqj+LMwo8W4138hBbuqRU/DmtWBI68I6RhW3EJKG00vL/v0
- TOHD3cRQoqv/iwDYZ18PrlpKRhwkyoh2cgb3Vor2MTrVtRA7kPr574FRPQPi1mvXY17RM5EKod
- dMnFdFO1d2X1T66l5HWdvOaeYzn27tJcweUTM9fQPPuBzLX8y1E/Ztx+AUxwpCVwTennr9V/Q4
- ocYXi4tWQmbeATA5nDKBxLbN/J/z2MSAmKRqKUqqFjNghBDkhZf1YvYcNz3SrCmpkmDgurjirT
- HGM=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jul 2022 20:43:13 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LsN6S43V2z1Rwnm
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 20:43:12 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1658806990; x=1661398991; bh=vt84amRQOiVRnZk+EYa9ZDlXy2/jQrtxfSt
-        tKXecpxM=; b=NmUQGOfaZyqdbFPdIFJvfhAjQevr30CV+vNmhQE11dOmTR0lT8d
-        s7Sq0miyzoXWAH98SzbpLQu9bVq6Dr52Wguqm6Bwt52WzE3jKCMkiv0voMHlVCEV
-        hRztjEidts5lBpAlL9wwe/NflP8bxFNnghkn+Xy5ITJIAxKEQQvtkIFSnfaBqIt4
-        ydZpz+PJYDKI+iFQkVogU5LF+OJzsoXsi+LYFdbFJ1yPzDAMOe+AVpNlG0lzRbq7
-        sPAOvkP3Tx0lW1uosb7pN34AuiSkGTZ/+a3nH5kJvJdZ3SUxmGrxno8VX0aol2RY
-        AAsqOVq9pGaKQWSBT0ki2JaKL8ma3FR/dOA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1m4LoU9_gtHE for <linux-kernel@vger.kernel.org>;
-        Mon, 25 Jul 2022 20:43:10 -0700 (PDT)
-Received: from [10.225.163.10] (unknown [10.225.163.10])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LsN6J3N7Fz1RtVk;
-        Mon, 25 Jul 2022 20:43:04 -0700 (PDT)
-Message-ID: <8e506701-e934-e9de-1a2f-ee252e514741@opensource.wdc.com>
-Date:   Tue, 26 Jul 2022 12:43:03 +0900
+        Mon, 25 Jul 2022 23:45:16 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADADD265D;
+        Mon, 25 Jul 2022 20:45:14 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id tk8so23919246ejc.7;
+        Mon, 25 Jul 2022 20:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hK9bdKxTQpaVNAf62mZs34iWrOFJN74ACx5fLDVM42o=;
+        b=dQ1lsD0pepwYEFblTk7mpzcFBnxB6tyOgcPOpx/6lHi03xM2x6XoOMsftr0Ahyhnyp
+         YKRNwmbk3S/dLgnWzqNgPvK3hzQRuTVRQls/Mi1FhdzbDczqdn38liHHuEZW47JFLsk1
+         +h8lkfRCPTDjr9YQRU8WmvTdoUuNXQFyhb7IMeTpMpj5T/h8sYR0lb0eox1DrvXaLl90
+         u8PqQ4B47CZB0IIFF6SbpRISJlWaXFWXrxg6Ylkgcn2ynkyqgVjdVxYWOU1X6rvhpy8R
+         pTzJRcOEm6vNKlAm0C7wQxZPfKBpMYuFfOzuVH69iBnapUG9N+QMFhV7yxDIhCFQNAdJ
+         /mtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hK9bdKxTQpaVNAf62mZs34iWrOFJN74ACx5fLDVM42o=;
+        b=y9Thlp2Cm6fVezY/mAlU30Z0KdXXnV48dd5JHwH6pxqYAhBAM4rHy082jQRU5cylQH
+         ZCgNgheuN2XDJFEGTkNZ/ArKCPrl9okpCKeosQxcJ1ReX6UNNf9S2Ggvo1w20lp1weYt
+         n3a955YG5EH1NMvlGUfhL76sYVyeuu98kIm9wcrde10AP1uPTZ/CyZc2Boqc/N/f/xl5
+         9wgV1aAvgT/wIyPd8rRJqsvyvzmQSTZKmQoaWl2djn5aEWjZIaG3nzjOfnX/196kGp/U
+         PYH+EpIUbODrK+y4PLvkqpXI2FiEQ3R7p/bUOz95cnWnPBSO+J5JJHknuOflA57kTNg5
+         PXEQ==
+X-Gm-Message-State: AJIora9GuM8QjTucc0BbrvGUBzIKkWQvROY4QJGfzmu2cyDNw4YqBN5W
+        qmPN9PpY0U8+9erQ8W+92ioDVsJq8tddYfAXqwY=
+X-Google-Smtp-Source: AGRyM1uBh2/Ujp0DRIZAzAQnZ43gbhiJIymwO1u6SGrzdqZ5yaYUGN2qu0sR6xbFs3MVvu26GUSOxwk4olKhadauEMc=
+X-Received: by 2002:a17:906:844f:b0:72b:549e:a654 with SMTP id
+ e15-20020a170906844f00b0072b549ea654mr11954747ejy.535.1658807113081; Mon, 25
+ Jul 2022 20:45:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 25/32] ata/drivers/ahci_imx: Switch to new of thermal
- API
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
-        heiko@sntech.de, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
-        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
-        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
-        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
-        miquel.raynal@bootlin.com, shawnguo@kernel.org,
-        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
-        j-keerthy@ti.com, Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220725212637.2818207-1-daniel.lezcano@linexp.org>
- <20220725212637.2818207-26-daniel.lezcano@linexp.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220725212637.2818207-26-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <1657780937-20891-1-git-send-email-u0084500@gmail.com>
+In-Reply-To: <1657780937-20891-1-git-send-email-u0084500@gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Tue, 26 Jul 2022 11:45:00 +0800
+Message-ID: <CADiBU39x98iyO_OB2sYdAUGUOW9pV4dt+mEdfquhuJVm1HDRHA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Add Richtek RT5120 PMIC support
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 06:26, Daniel Lezcano wrote:
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach. The ops are no longer device
-> tree specific and are the generic ones provided by the core code.
-> 
-> Convert the ops to the thermal_zone_device_ops format and use the new
-> API to register the thermal zone with these generic ops.
-> 
-> sata_ahci_read_temperature() is used by sata_ahci_show_temp() also.
-> 
-> So in order to change the function prototype for the get_temp ops which
-> does not take a void* but a thermal_zone_device* structure, this
-> function wraps the call.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> ---
->  drivers/ata/ahci_imx.c | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/ata/ahci_imx.c b/drivers/ata/ahci_imx.c
-> index 79aa9f285312..b734e069034d 100644
-> --- a/drivers/ata/ahci_imx.c
-> +++ b/drivers/ata/ahci_imx.c
-> @@ -327,7 +327,7 @@ static int read_adc_sum(void *dev, u16 rtune_ctl_reg, void __iomem * mmio)
->  }
->  
->  /* SATA AHCI temperature monitor */
-> -static int sata_ahci_read_temperature(void *dev, int *temp)
-> +static int __sata_ahci_read_temperature(void *dev, int *temp)
->  {
->  	u16 mpll_test_reg, rtune_ctl_reg, dac_ctl_reg, read_sum;
->  	u32 str1, str2, str3, str4;
-> @@ -416,6 +416,11 @@ static int sata_ahci_read_temperature(void *dev, int *temp)
->  	return 0;
->  }
->  
-> +static int sata_ahci_read_temperature(struct thermal_zone_device *tz, int *temp)
-> +{
-> +	return __sata_ahci_read_temperature(tz->devdata, temp);
-> +}
-> +
->  static ssize_t sata_ahci_show_temp(struct device *dev,
->  				   struct device_attribute *da,
->  				   char *buf)
-> @@ -423,14 +428,14 @@ static ssize_t sata_ahci_show_temp(struct device *dev,
->  	unsigned int temp = 0;
->  	int err;
->  
-> -	err = sata_ahci_read_temperature(dev, &temp);
-> +	err = __sata_ahci_read_temperature(dev, &temp);
->  	if (err < 0)
->  		return err;
->  
->  	return sprintf(buf, "%u\n", temp);
->  }
->  
-> -static const struct thermal_zone_of_device_ops fsl_sata_ahci_of_thermal_ops = {
-> +static const struct thermal_zone_device_ops fsl_sata_ahci_of_thermal_ops = {
->  	.get_temp = sata_ahci_read_temperature,
->  };
->  
-> @@ -1131,8 +1136,8 @@ static int imx_ahci_probe(struct platform_device *pdev)
->  			ret = PTR_ERR(hwmon_dev);
->  			goto disable_clk;
->  		}
-> -		devm_thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
-> -					     &fsl_sata_ahci_of_thermal_ops);
-> +		devm_thermal_of_zone_register(hwmon_dev, 0, hwmon_dev,
-> +					      &fsl_sata_ahci_of_thermal_ops);
->  		dev_info(dev, "%s: sensor 'sata_ahci'\n", dev_name(hwmon_dev));
->  	}
->  
-
-
--- 
-Damien Le Moal
-Western Digital Research
+cy_huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=8814=E6=97=A5 =
+=E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=882:42=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> This patch series is to add Richtek RT5120 PMIC support.
+> In RT5120, it integrates four channels of buck converter, one channel of =
+LDO,
+> and one external enable channel to control the external power source.
+ping ......
+>
+> rt5120-regulator can be referred in the below link
+> Link: https://lore.kernel.org/lkml/165599062767.127406.125714869841700832=
+13.b4-ty@kernel.org/
+>
+> Since v3:
+> - Use a 'dev' variable and dev_err_probe to decrease the LOC in mfd.
+> - Simplify the power key irq handler key report
+> - Since press and release irq not needed to keep in private data, change =
+'press',
+>   'release' irq as local variable only.
+> - Fix Kconfig typo for pwrkey.
+>
+> Since v2:
+> - Add 'unevaluatedProperties: false' for regulator buck1~4/ldo/exten.
+> - Fix indention and remove status for powerkey.
+> - Refine powerkey description for more HW details.
+> - For the regulator property parsing, use of_property_read_u32 instead.
+> - Not to overwrite regulator constraint.
+> - Refine regulator desc coding.
+>
+> ChiYuan Huang (3):
+>   dt-binding: mfd: Add Richtek RT5120 PMIC support
+>   mfd: rt5120: Add Richtek PMIC support
+>   input: misc: rt5120: Add power key support
+>
+>  .../devicetree/bindings/mfd/richtek,rt5120.yaml    | 178 +++++++++++++++=
+++++++
+>  drivers/input/misc/Kconfig                         |   9 ++
+>  drivers/input/misc/Makefile                        |   1 +
+>  drivers/input/misc/rt5120-pwrkey.c                 | 105 ++++++++++++
+>  drivers/mfd/Kconfig                                |  12 ++
+>  drivers/mfd/Makefile                               |   1 +
+>  drivers/mfd/rt5120.c                               | 121 ++++++++++++++
+>  7 files changed, 427 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5120.=
+yaml
+>  create mode 100644 drivers/input/misc/rt5120-pwrkey.c
+>  create mode 100644 drivers/mfd/rt5120.c
+>
+> --
+> 2.7.4
+>

@@ -2,132 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6792F580DAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529DF580DCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbiGZHah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        id S238488AbiGZHc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238279AbiGZH3F (ORCPT
+        with ESMTP id S238102AbiGZHbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:29:05 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201522B620
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:26:20 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id n185so8170684wmn.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=21tro8NgQMF0BbQUJgmRVJe8ax8ac1ERKEmdP9EvkKQ=;
-        b=ylwiRXDG+MXgpkQ+8qvtIy/jVkvcV26Aind4vPzrRQKOJsIqUfD91k7A/5VnUY1YTH
-         Srt/ksBKFWb7bRM9Lk027hyLmXlVfVwDJSs1lhsIS+4eiKbG/VL5hlF8uu4ygOxumF/V
-         vfZzT3YRqWFdPi2ruRCpKqAMzQIIspGmfFP78yfVGjnW6htOExG91PY+BHdIG3bQuyP6
-         iBo5emAzGf8UJx1jmi4bgT+QdqsM/IW4z4jYMYPs/pnWhOOhkyXO6Ykb5gRyd3Y8uiNi
-         /nQ0WmMr8qdtX9dzOL34p3SsLg5tRtzNm5ray2j3uQAzSeTsX7ry3xAi/kGsZsp0LshI
-         eJ4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=21tro8NgQMF0BbQUJgmRVJe8ax8ac1ERKEmdP9EvkKQ=;
-        b=bpDTF02sHcubQVVaAD5tVKSD27SQIkI3Qn7f5BuaZtK8Rh7BTQm/jUYyJcJ8qOz+QA
-         aGgKARivfK4oEHJVW1uCmsYch/mvoiH1pzfbtC4XWHiK6SEtmRZjF66JY4wocoOO2T4i
-         iNZMBGj4cQPQ5w7VLg/v8DenVBDoGjQBZVOIaSDrs1xt5QG6wXsPSg/OuaRUUlmhoVc1
-         4YuH/nSkXruj/24kyPm658X4EVt3zK3eYyvldRdlrYDt7O903SdptNyHg2G0kJwWC0cu
-         +/qngG19r4cL1oEbmdwCI4+r4SyDwAjRAmMghAzHzNehTVv4dqFbTOHwfwGdyx1nW9hI
-         e6FA==
-X-Gm-Message-State: AJIora/BeLfkD8KQEUq5MBqazbOXLjoRSRERnVMhAjxM0ahMLkAsVtAC
-        xP19vmVMN4l/4hPl98XgfWN0qQ==
-X-Google-Smtp-Source: AGRyM1sHh5qAWVhfvM7wnsq0GmqaOJu07OuZf96mZZYu1OHSKoTlkATutMus4ZnRsSFeu21FHSt/0A==
-X-Received: by 2002:a05:600c:a4c:b0:39c:6517:1136 with SMTP id c12-20020a05600c0a4c00b0039c65171136mr11181329wmq.12.1658820368647;
-        Tue, 26 Jul 2022 00:26:08 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:cb1d:77d:8cd7:621a:855b:69ac:c34a])
-        by smtp.gmail.com with ESMTPSA id c17-20020a5d5291000000b0021b956da1dcsm9007835wrv.113.2022.07.26.00.26.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 00:26:07 -0700 (PDT)
-From:   Julien Panis <jpanis@baylibre.com>
-To:     jic23@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mranostay@ti.com, Julien Panis <jpanis@baylibre.com>
-Subject: [PATCH v1 0/2] ECAP support on TI AM62x SoC
-Date:   Tue, 26 Jul 2022 09:25:51 +0200
-Message-Id: <20220726072553.5136-1-jpanis@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 26 Jul 2022 03:31:52 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9348DEB5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:27:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VKUIMKR_1658820445;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VKUIMKR_1658820445)
+          by smtp.aliyun-inc.com;
+          Tue, 26 Jul 2022 15:27:28 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH 16/20] drm/amd/display: Clean up some inconsistent indenting
+Date:   Tue, 26 Jul 2022 15:25:51 +0800
+Message-Id: <20220726072555.91323-16-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
+In-Reply-To: <20220726072555.91323-1-jiapeng.chong@linux.alibaba.com>
+References: <20220726072555.91323-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Enhanced Capture (ECAP) module can be used to timestamp events
-detected on signal input pin. It can be used for time measurements
-of pulse train signals.
+No functional modification involved.
 
-ECAP module includes 4 timestamp capture registers. For all 4 sequenced
-timestamp capture events (0->1->2->3->0->...), edge polarity (falling/rising
-edge) can be selected. Moreover, input signal can be prescaled.
+smatch warnings:
 
-This driver leverages IIO subsystem to :
-- select edge polarity for all 4 capture events (event mode)
-- log both event index and timestamp for each capture event
-Event polarity, event indexes, and timestamps give all the information
-about the input pulse train. Further information can easily be computed :
-period and/or duty cycle if frequency is constant, elapsed time between
-pulses, etc...
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_rq_dlg_calc_32.c:51 dml32_rq_dlg_get_rq_reg() warn: inconsistent indenting.
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_rq_dlg_calc_32.c:68 dml32_rq_dlg_get_rq_reg() warn: inconsistent indenting.
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_rq_dlg_calc_32.c:220 dml32_rq_dlg_get_dlg_reg() warn: inconsistent indenting.
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_rq_dlg_calc_32.c:224 dml32_rq_dlg_get_dlg_reg() warn: inconsistent indenting.
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_rq_dlg_calc_32.c:235 dml32_rq_dlg_get_dlg_reg() warn: inconsistent indenting.
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_rq_dlg_calc_32.c:240 dml32_rq_dlg_get_dlg_reg() warn: inconsistent indenting.
 
-Userspace commands :
-	cd /sys/devices/platform/bus@f0000/23120000.capture/iio\:device2/
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ .../dc/dml/dcn32/display_rq_dlg_calc_32.c     | 81 +++++++++----------
+ 1 file changed, 40 insertions(+), 41 deletions(-)
 
-	# Configure/Enable data buffers
-	echo 1 > scan_elements/in_index_en
-	echo 1 > scan_elements/in_timestamp_en
-	echo 100 > buffer/length
-	echo 1 > buffer/enable
-
-	# Set event mode in range [0 ; 15]
-	# One bit for each CAPx register : 1 = falling edge / 0 = rising edge
-	# e.g. mode = 13 = 0xd = 0b1101
-	# -> falling edge for CAP1-3-4 / rising edge for CAP2
-	echo 13 > events/change_falling_value
-
-	# Run ECAP
-	echo 1 > en
-
-	# Get the number of available data
-	cat buffer/data_available
-
-	# Read data
-	hexdump -v /dev/iio\:device2
-
-	# Stop ECAP
-	echo 0 > en
-
-Julien Panis (2):
-  iio: time: capture-tiecap: capture driver support for ECAP
-  dt-binding: iio: time: add capture-tiecap.yaml
-
- .../bindings/iio/time/capture-tiecap.yaml     |  53 ++
- drivers/iio/Kconfig                           |   1 +
- drivers/iio/Makefile                          |   1 +
- drivers/iio/time/Kconfig                      |  22 +
- drivers/iio/time/Makefile                     |   6 +
- drivers/iio/time/capture-tiecap.c             | 532 ++++++++++++++++++
- 6 files changed, 615 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/time/capture-tiecap.yaml
- create mode 100644 drivers/iio/time/Kconfig
- create mode 100644 drivers/iio/time/Makefile
- create mode 100644 drivers/iio/time/capture-tiecap.c
-
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c
+index 269bdfc4bc40..a1276f6b9581 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_rq_dlg_calc_32.c
+@@ -48,9 +48,9 @@ void dml32_rq_dlg_get_rq_reg(display_rq_regs_st *rq_regs,
+ {
+ 	const display_pipe_source_params_st *src = &e2e_pipe_param[pipe_idx].pipe.src;
+ 	bool dual_plane = is_dual_plane((enum source_format_class) (src->source_format));
+-    double stored_swath_l_bytes;
+-    double stored_swath_c_bytes;
+-    bool is_phantom_pipe;
++	double stored_swath_l_bytes;
++	double stored_swath_c_bytes;
++	bool is_phantom_pipe;
+ 	uint32_t pixel_chunk_bytes = 0;
+ 	uint32_t min_pixel_chunk_bytes = 0;
+ 	uint32_t meta_chunk_bytes = 0;
+@@ -65,9 +65,9 @@ void dml32_rq_dlg_get_rq_reg(display_rq_regs_st *rq_regs,
+ 	uint32_t p1_dpte_group_bytes = 0;
+ 	uint32_t p1_mpte_group_bytes = 0;
+ 
+-    unsigned int detile_buf_size_in_bytes;
+-    unsigned int detile_buf_plane1_addr;
+-    unsigned int pte_row_height_linear;
++	unsigned int detile_buf_size_in_bytes;
++	unsigned int detile_buf_plane1_addr;
++	unsigned int pte_row_height_linear;
+ 
+ 	memset(rq_regs, 0, sizeof(*rq_regs));
+ 
+@@ -217,52 +217,51 @@ void dml32_rq_dlg_get_dlg_reg(struct display_mode_lib *mode_lib,
+ 	double refcyc_per_req_delivery_cur0 = 0.;
+ 	double refcyc_per_req_delivery_pre_c = 0.;
+ 	double refcyc_per_req_delivery_c = 0.;
+-    double refcyc_per_req_delivery_pre_l;
+-    double refcyc_per_req_delivery_l;
++	double refcyc_per_req_delivery_pre_l;
++	double refcyc_per_req_delivery_l;
+ 	double refcyc_per_line_delivery_pre_c = 0.;
+ 	double refcyc_per_line_delivery_c = 0.;
+-    double refcyc_per_line_delivery_pre_l;
+-    double refcyc_per_line_delivery_l;
+-    double min_ttu_vblank;
+-    double vratio_pre_l;
+-    double vratio_pre_c;
+-    unsigned int min_dst_y_next_start;
++	double refcyc_per_line_delivery_pre_l;
++	double refcyc_per_line_delivery_l;
++	double min_ttu_vblank;
++	double vratio_pre_l;
++	double vratio_pre_c;
++	unsigned int min_dst_y_next_start;
+ 	unsigned int htotal = dst->htotal;
+ 	unsigned int hblank_end = dst->hblank_end;
+ 	unsigned int vblank_end = dst->vblank_end;
+ 	bool interlaced = dst->interlaced;
+ 	double pclk_freq_in_mhz = dst->pixel_rate_mhz;
+-    unsigned int vready_after_vcount0;
++	unsigned int vready_after_vcount0;
+ 	double refclk_freq_in_mhz = clks->refclk_mhz;
+ 	double ref_freq_to_pix_freq = refclk_freq_in_mhz / pclk_freq_in_mhz;
+ 	bool dual_plane = 0;
+ 	unsigned int pipe_index_in_combine[DC__NUM_PIPES__MAX];
+-    int unsigned dst_x_after_scaler;
+-    int unsigned dst_y_after_scaler;
+-    double dst_y_prefetch;
+-    double dst_y_per_vm_vblank;
+-    double dst_y_per_row_vblank;
+-    double dst_y_per_vm_flip;
+-    double dst_y_per_row_flip;
+-    double max_dst_y_per_vm_vblank = 32.0;
+-    double max_dst_y_per_row_vblank = 16.0;
+-
+-    double dst_y_per_pte_row_nom_l;
+-    double dst_y_per_pte_row_nom_c;
+-    double dst_y_per_meta_row_nom_l;
+-    double dst_y_per_meta_row_nom_c;
+-    double refcyc_per_pte_group_nom_l;
+-    double refcyc_per_pte_group_nom_c;
+-    double refcyc_per_pte_group_vblank_l;
+-    double refcyc_per_pte_group_vblank_c;
+-    double refcyc_per_pte_group_flip_l; 
+-    double refcyc_per_pte_group_flip_c; 
+-    double refcyc_per_meta_chunk_nom_l;
+-    double refcyc_per_meta_chunk_nom_c;
+-    double refcyc_per_meta_chunk_vblank_l;
+-    double refcyc_per_meta_chunk_vblank_c;
+-    double refcyc_per_meta_chunk_flip_l;
+-    double refcyc_per_meta_chunk_flip_c;
++	unsigned int dst_x_after_scaler;
++	unsigned int dst_y_after_scaler;
++	double dst_y_prefetch;
++	double dst_y_per_vm_vblank;
++	double dst_y_per_row_vblank;
++	double dst_y_per_vm_flip;
++	double dst_y_per_row_flip;
++	double max_dst_y_per_vm_vblank = 32.0;
++	double max_dst_y_per_row_vblank = 16.0;
++	double dst_y_per_pte_row_nom_l;
++	double dst_y_per_pte_row_nom_c;
++	double dst_y_per_meta_row_nom_l;
++	double dst_y_per_meta_row_nom_c;
++	double refcyc_per_pte_group_nom_l;
++	double refcyc_per_pte_group_nom_c;
++	double refcyc_per_pte_group_vblank_l;
++	double refcyc_per_pte_group_vblank_c;
++	double refcyc_per_pte_group_flip_l;
++	double refcyc_per_pte_group_flip_c;
++	double refcyc_per_meta_chunk_nom_l;
++	double refcyc_per_meta_chunk_nom_c;
++	double refcyc_per_meta_chunk_vblank_l;
++	double refcyc_per_meta_chunk_vblank_c;
++	double refcyc_per_meta_chunk_flip_l;
++	double refcyc_per_meta_chunk_flip_c;
+ 
+ 	memset(dlg_regs, 0, sizeof(*dlg_regs));
+ 	memset(ttu_regs, 0, sizeof(*ttu_regs));
 -- 
-2.25.1
+2.20.1.7.g153144c
 

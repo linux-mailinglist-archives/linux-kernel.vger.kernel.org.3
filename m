@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0BA5815A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3598558156E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiGZOry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        id S239361AbiGZOfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239445AbiGZOru (ORCPT
+        with ESMTP id S239223AbiGZOfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:47:50 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B22919037
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:47:48 -0700 (PDT)
+        Tue, 26 Jul 2022 10:35:23 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E262925D0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658846868; x=1690382868;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AVdLXZczB78wzjYne0LzeumnXgq283J0Ar7FnM/OkOY=;
-  b=JrJx4XRUU4kj6ryLQZwGweBpZLSRlfU8DQLBtP26mCMRf+MIjaWlMvXW
-   s4dRhjkq9pwMWUwN32hvfS6pRakmxQqZfiwkKOEqud1mpQlMF4bKfVw3E
-   DjZnG/b+Pt4FRkH0eLRe6MjD5RGGQhombq8Ppj7dD9N01JmBJXGieLMmM
-   bbmeStlUUN+FN9kIJabnWt6glnB5zuw8+CGHJhHD/sBCOLCVd9LyZh4hr
-   a+mahSA4pqxcaF0r5L/8+fAcohBme9MQwJ6CTem2DV1VZQlqPbAW6OUkN
-   nT980Jwui+bwKaYcct4WiKOH3WkETD8hDhBT1j1BmbEQP38m99O5vZswM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="286727545"
+  t=1658846121; x=1690382121;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Gb+sg8tX6d1M9RdMwRFdLWI+eSIBAf4IGUSsUVC6yQM=;
+  b=P1ViigmvA3HRAt2Nd82Tj6sGM1QfNEvBdpzlHDVYAU6bElEvFkGjUq5C
+   YbTnZXuYAGQlYBhwJb7O1w3wcnzBRKmJl/Te/VsPjatTuPJBuhB5y+YA4
+   qferm9OTZ+pST1lUEdxZ5nIiXW741NJZh5bWd/be7Qu/dGUkoO4bfPHCS
+   hbFr3rwAOOEcUXiuzkwP0wkNjkCXCYeT6ztL8UEl3164AGExJw4/LdQAx
+   jQ1+ZcwMs/j+NOCQM49Nxes+tg81VzXpyrIq/9m4Mm2fpZV3CjrF/g8tj
+   SCy4ws5KZHqn33JYt67CqSR0beJ65RF3CXtOImcuLpGB3BrKCSAOn9qBs
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="289157763"
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="286727545"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 07:47:47 -0700
+   d="scan'208";a="289157763"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 07:35:17 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="597047566"
-Received: from adamreed-mobl.amr.corp.intel.com (HELO [10.212.70.145]) ([10.212.70.145])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 07:47:46 -0700
-Message-ID: <013c0854-5b8e-6968-1ab2-88f2d0b142a0@linux.intel.com>
-Date:   Tue, 26 Jul 2022 09:34:05 -0500
+   d="scan'208";a="627924138"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 Jul 2022 07:35:16 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGLeV-0006v2-2W;
+        Tue, 26 Jul 2022 14:35:15 +0000
+Date:   Tue, 26 Jul 2022 22:34:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kbusch:dma-prereg-v5 5/6] arch/riscv/include/asm/atomic.h:75:
+ undefined reference to `io_dma_unmap'
+Message-ID: <202207262203.Z4p6l0Zg-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v1] ASoC: Intel: cirrus-common: Use UID to map correct amp
- to prefix
-Content-Language: en-US
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Brent Lu <brent.lu@intel.com>, xliu <xiang.liu@cirrus.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-References: <20220726134634.2842185-1-sbinding@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220726134634.2842185-1-sbinding@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,128 +60,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-prereg-v5
+head:   4f4a93bf02dcf20e9a4a3ac0c9cd39d79e9e540e
+commit: 1b0c9acb050749ce7ad964cc66eef72779835832 [5/6] io_uring: add support for dma pre-mapping
+config: riscv-randconfig-s052-20220726 (https://download.01.org/0day-ci/archive/20220726/202207262203.Z4p6l0Zg-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=1b0c9acb050749ce7ad964cc66eef72779835832
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch dma-prereg-v5
+        git checkout 1b0c9acb050749ce7ad964cc66eef72779835832
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   init/main.o: in function `.L0 ':
+   include/linux/list.h:292:(.text+0x22): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
+   init/main.o: in function `.L0 ':
+   init/main.c:185:(.init.text+0x6): relocation truncated to fit: R_RISCV_HI20 against symbol `reset_devices' defined in .sbss section in init/main.o
+   init/main.c:1419:(.text.unlikely+0x2a): relocation truncated to fit: R_RISCV_HI20 against `.LANCHOR0'
+   init/main.c:685:(.ref.text+0xe): relocation truncated to fit: R_RISCV_HI20 against `kernel_init'
+   init/do_mounts.o: in function `.L0 ':
+   init/do_mounts.c:279:(.text+0x22): relocation truncated to fit: R_RISCV_HI20 against `.LC15'
+   init/do_mounts.c:45:(.init.text+0xa): relocation truncated to fit: R_RISCV_HI20 against `.LC0'
+   init/do_mounts_initrd.o: in function `.L0 ':
+   init/do_mounts_initrd.c:44:(.init.text+0xa): relocation truncated to fit: R_RISCV_HI20 against `.LC0'
+   init/initramfs.o: in function `.L0 ':
+   init/initramfs.c:739:(.text+0x8): relocation truncated to fit: R_RISCV_HI20 against `initramfs_cookie'
+   init/initramfs.c:57:(.init.text+0xa): relocation truncated to fit: R_RISCV_HI20 against `.LC0'
+   init/calibrate.o: in function `.L0 ':
+   arch/riscv/include/asm/timex.h:20:(.text+0x6): relocation truncated to fit: R_RISCV_HI20 against symbol `clint_time_val' defined in .sbss section in drivers/clocksource/timer-clint.o
+   init/calibrate.o: in function `.L0 ':
+   init/calibrate.c:19:(.init.text+0x1c): additional relocation overflows omitted from the output
+   riscv64-linux-ld: io_uring/rsrc.o: in function `.LVL65':
+>> arch/riscv/include/asm/atomic.h:75: undefined reference to `io_dma_unmap'
 
 
-On 7/26/22 08:46, Stefan Binding wrote:
-> Since the order of the amps in the ACPI determines the device name,
-> and the ACPI order may change depending on hardware configuration,
-> use UID to dynamically compute the dai links, allowing dynamic
-> assignment of the name_prefix.
+vim +75 arch/riscv/include/asm/atomic.h
 
-This is interesting, I didn't even know what this _UID thingy could be
-used for. ACPI is the gift that keeps on giving after 30 years, eh?
+fab957c11efe2f Palmer Dabbelt 2017-07-10  73  
+4650d02ad2d9b2 Palmer Dabbelt 2017-11-14  74  ATOMIC_OPS(add, add,  i)
+4650d02ad2d9b2 Palmer Dabbelt 2017-11-14 @75  ATOMIC_OPS(sub, add, -i)
+4650d02ad2d9b2 Palmer Dabbelt 2017-11-14  76  ATOMIC_OPS(and, and,  i)
+4650d02ad2d9b2 Palmer Dabbelt 2017-11-14  77  ATOMIC_OPS( or,  or,  i)
+4650d02ad2d9b2 Palmer Dabbelt 2017-11-14  78  ATOMIC_OPS(xor, xor,  i)
+fab957c11efe2f Palmer Dabbelt 2017-07-10  79  
 
-I think you should add an explanation on what this _UID is, nothing says
-it actually needs to be an integer, I see e.g. this sort of 'id' in
-various DSDT
+:::::: The code at line 75 was first introduced by commit
+:::::: 4650d02ad2d9b2c1c7aa36055166db6aee68f72e RISC-V: Remove unused arguments from ATOMIC_OP
 
-Name (_UID, Zero)  // _UID: Unique ID
-Name (_UID, 0x05)  // _UID: Unique ID
-Name (_UID, "SerialIoUart0")  // _UID: Unique ID
-Name (_UID, "PCHRESV")  // _UID: Unique ID
-Name (_UID, "IoTraps")  // _UID: Unique ID
-Name (_UID, "SADDLESTRING")  // _UID: Unique ID
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@sifive.com>
 
-and my favorite
-
-Name (_UID, "TestDev")  // _UID: Unique ID
-
-
->  /*
->   * Mapping between ACPI instance id and speaker position.
-> - *
-> - * Four speakers:
-> - *         0: Tweeter left, 1: Woofer left
-> - *         2: Tweeter right, 3: Woofer right
->   */
-> -static struct snd_soc_codec_conf cs35l41_codec_conf[] = {
-> -	{
-> -		.dlc = COMP_CODEC_CONF(CS35L41_DEV0_NAME),
-> -		.name_prefix = "TL",
-> -	},
-> -	{
-> -		.dlc = COMP_CODEC_CONF(CS35L41_DEV1_NAME),
-> -		.name_prefix = "WL",
-> -	},
-> -	{
-> -		.dlc = COMP_CODEC_CONF(CS35L41_DEV2_NAME),
-> -		.name_prefix = "TR",
-> -	},
-> -	{
-> -		.dlc = COMP_CODEC_CONF(CS35L41_DEV3_NAME),
-> -		.name_prefix = "WR",
-> -	},
-> -};
-> +static struct snd_soc_codec_conf cs35l41_codec_conf[CS35L41_MAX_AMPS];
->  
->  static int cs35l41_init(struct snd_soc_pcm_runtime *rtd)
->  {
-> @@ -117,10 +82,10 @@ static int cs35l41_init(struct snd_soc_pcm_runtime *rtd)
->  static const struct {
->  	unsigned int rx[2];
->  } cs35l41_channel_map[] = {
-> -	{.rx = {0, 1}}, /* TL */
->  	{.rx = {0, 1}}, /* WL */
-> -	{.rx = {1, 0}}, /* TR */
->  	{.rx = {1, 0}}, /* WR */
-> +	{.rx = {0, 1}}, /* TL */
-> +	{.rx = {1, 0}}, /* TR */
->  };
->  
->  static int cs35l41_hw_params(struct snd_pcm_substream *substream,
-> @@ -175,8 +140,32 @@ static const struct snd_soc_ops cs35l41_ops = {
->  	.hw_params = cs35l41_hw_params,
->  };
->  
-> +static const char * const cs35l41_name_prefixes[] = { "WL", "WR", "TL", "TR" };
-> +
-> +static const char * const cs35l41_uid_strings[] = { "0", "1", "2", "3" };
-
-I must admit not understanding why you changed the order.
-
-I vaguely recall Brent Lu added this on TL, WL, TR, WR order on purpose
-and that it matches the order in the SOF topology. Brent, can you please
-comment on this?
-
-I don't really care about the order selected, just want to make sure we
-don't introduce a channel swap with what the firmware does.
-
-> +static void cs35l41_compute_codec_conf(void)
-> +{
-> +	int uid;
-> +	struct acpi_device *adev;
-> +	struct device *physdev;
-> +
-> +	for (uid = 0; uid < CS35L41_MAX_AMPS; uid++) {
-> +		adev = acpi_dev_get_first_match_dev(CS35L41_HID, cs35l41_uid_strings[uid], -1);
-> +		if (!adev)
-> +			return;
-
-shouldn't you log an error or something telling the user that their DSDT
-configuration is incorrect?
-
-If I understand the code above, is the expectation that the UID expected
-in the DSDT should be:
-
-Name (_UID, "0")  // _UID: Unique ID for WL
-Name (_UID, "1")  // _UID: Unique ID for WR
-Name (_UID, "2")  // _UID: Unique ID for TL
-Name (_UID, "3")  // _UID: Unique ID for TR
-
-Is yes that's worthy of a comment for future generations.
-
-> +		physdev = get_device(acpi_get_first_physical_node(adev));
-> +		cs35l41_components[uid].name = dev_name(physdev);
-> +		cs35l41_components[uid].dai_name = CS35L41_CODEC_DAI;
-> +		cs35l41_codec_conf[uid].dlc.name = dev_name(physdev);
-> +		cs35l41_codec_conf[uid].name_prefix = cs35l41_name_prefixes[uid];
-> +		acpi_dev_put(adev);
-> +	}
-> +}
-> +
->  void cs35l41_set_dai_link(struct snd_soc_dai_link *link)
->  {
-> +	cs35l41_compute_codec_conf();
->  	link->codecs = cs35l41_components;
->  	link->num_codecs = ARRAY_SIZE(cs35l41_components);
->  	link->init = cs35l41_init;
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

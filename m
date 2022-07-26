@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF0C5811F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 13:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79A65811FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 13:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbiGZLbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 07:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
+        id S237807AbiGZLcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 07:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiGZLbU (ORCPT
+        with ESMTP id S230198AbiGZLcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 07:31:20 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C4227CCE
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 04:31:19 -0700 (PDT)
-Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26QBVHaw054373;
-        Tue, 26 Jul 2022 20:31:17 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
- Tue, 26 Jul 2022 20:31:17 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26QBVHmF054370
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 26 Jul 2022 20:31:17 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <ac3a7af1-08c6-e2de-b93c-327ce6839830@I-love.SAKURA.ne.jp>
-Date:   Tue, 26 Jul 2022 20:31:17 +0900
+        Tue, 26 Jul 2022 07:32:07 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1ED127CCE;
+        Tue, 26 Jul 2022 04:32:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658835126; x=1690371126;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=DzB9acxU3JB4UtdY7GBGshAn56Crt8vbSHYd7HbxwEg=;
+  b=kKT3fS5UoKaDpp81xs721WKQ6KIyTDeKhxO81jdmJ8fbwFsBebXVYUlw
+   3NWVS0MZepx03gZzWvFTau0q4mhfSg2lkGL+dNyj6LEqhSmwXEogfU/PZ
+   ZC19DU8VvRihu604oeYITutu23yFV7a/saXhROKtB7g72G3JdK0pypaKs
+   M=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Jul 2022 04:32:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 04:32:06 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Jul 2022 04:32:05 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Jul
+ 2022 04:32:02 -0700
+Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+ <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
+ <25673493-4171-62b0-f696-1316d115f388@kali.org>
+ <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
+ <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
+ <d89a540f-672d-83de-d19d-00f10e4370d1@kali.org>
+ <fec6bd98-5efd-fe34-6d75-1765219acd82@linaro.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
+Date:   Tue, 26 Jul 2022 17:01:59 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: + mm-memcontrol-fix-potential-oom_lock-recursion-deadlock.patch
- added to mm-unstable branch
+In-Reply-To: <fec6bd98-5efd-fe34-6d75-1765219acd82@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     mm-commits@vger.kernel.org,
-        syzbot+2d2aeadc6ce1e1f11d45@syzkaller.appspotmail.com,
-        shakeelb@google.com, roman.gushchin@linux.dev, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20220725220032.B4C30C341C8@smtp.kernel.org>
- <Yt+iWGnA06DjsHz9@dhcp22.suse.cz>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Yt+iWGnA06DjsHz9@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/07/26 17:14, Michal Hocko wrote:
-> As we have concluded there are two issues possible here which would be
-> great to have reflected in the changelog.
+On 7/23/22 2:06 PM, Krzysztof Kozlowski wrote:
+> On 23/07/2022 04:37, Steev Klimaszewski wrote:
+>>>
+>>> Currently it's 5.19.0-rc7 (torvalds tree at 4ba1329c) with a few extra
+>>> patches on top, the bwmon set included.  It's possible that secure
+>>> world uses it, but I do not know enough about that to say one way or
+>>> the other.
 > 
-> On Mon 25-07-22 15:00:32, Andrew Morton wrote:
->> From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
->> Subject: mm: memcontrol: fix potential oom_lock recursion deadlock
->> Date: Fri, 22 Jul 2022 19:45:39 +0900
->>
->> syzbot is reporting GFP_KERNEL allocation with oom_lock held when
->> reporting memcg OOM [1].  Such allocation request might deadlock the
->> system, for __alloc_pages_may_oom() cannot invoke global OOM killer due to
->> oom_lock being already held by the caller.
+> To test patches you should apply them on maintainer's tree or
+> linux-next. Applying on other trees of course might be useful for
+> testing some backports, but it is independent process and different issue.
 > 
-> I would phrase it like this:
+>>>
+>>> -- steev
+>>>
+>> I think you may be right; I just applied this patchset to -next
+>> (20220722) and i do not see the error message there.  On my 5.19-rc7
+>> tree, i am also testing a patchset that enables qcom devices to access
+>> efivars, so possibly we are ending up in secure world there?
+> 
+> Actually mapping of IO space should not touch secure world, so this was
+> a long shot assuming you test it on the next.
+> 
 
-This report is difficult to explain correctly.
+The memory region specified in device tree overlaps with the llcc system
+cache controller node. Steev probably had the QCOM_LLCC config enabled 
+when he tested it out on his branch.
 
-> syzbot is reporting GFP_KERNEL allocation with oom_lock held when
-> reporting memcg OOM [1].
-
-Correct. But
-
->                          This is problematic because this creates a
-> dependency between GFP_NOFS and GFP_KERNEL over oom_lock which could
-> dead lock the system.
-
-oom_lock is irrelevant when trying GFP_KERNEL allocation from GFP_NOFS
-context. Therefore, something like:
-
-----------
-syzbot is reporting GFP_KERNEL allocation with oom_lock held when
-reporting memcg OOM [1]. If this allocation triggers the global OOM
-situation then the system can livelock because the GFP_KERNEL allocation
-with oom_lock held cannot trigger the global OOM killer because
-__alloc_pages_may_oom() fails to hold oom_lock.
-
-Fix this problem by removing the allocation from memory_stat_format()
-completely, and pass static buffer when calling from memcg OOM path.
-
-Note that the caller holding filesystem lock was the trigger for syzbot
-to report this locking dependency. Doing GFP_KERNEL allocation with
-filesystem lock held can deadlock the system even without involving OOM
-situation.
-----------
-
+> 
+> Best regards,
+> Krzysztof
+> 

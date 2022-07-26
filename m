@@ -2,137 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FED580F42
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AD7580F45
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbiGZIjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
+        id S238331AbiGZIkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbiGZIje (ORCPT
+        with ESMTP id S238660AbiGZIj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:39:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBDE2F66D;
-        Tue, 26 Jul 2022 01:39:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 26 Jul 2022 04:39:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6E42FFDD;
+        Tue, 26 Jul 2022 01:39:56 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B5AD3374D3;
-        Tue, 26 Jul 2022 08:39:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658824772; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1LyAIREx3+up4ZrbQ5xgQUckoAU4ZUqQh/qnLXz2wNQ=;
-        b=zPZAnjaFfvk6fptC8TbQvLBz4sqC44gnOqMK6MbdYvbLS4MZRzJQMe/jnNSOI4Q6Qj5WDA
-        eQhzpNQgAZZfYNUPxNqxgRg2muiItbCNrfguPC3ChLIXS1gvA71YzarS2FxFDQHZBIZMFI
-        ieQNOxxQdp2LU0hv40ct/Jq8z16sCTs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658824772;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1LyAIREx3+up4ZrbQ5xgQUckoAU4ZUqQh/qnLXz2wNQ=;
-        b=jKwnj/eVPofYELrkIIvcsZCPOznrGzBTsLiv7xEM0MjA2xjUKqrNfiFhFtKMDGhUHCOHfV
-        kcARGEhmwsQ0Q5CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87B0113ADB;
-        Tue, 26 Jul 2022 08:39:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kBxbIESo32LYDQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 26 Jul 2022 08:39:32 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Petr Vorel <pvorel@suse.cz>, Joe Perches <joe@perches.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] exfat: Drop superfluous new line for error messages
-Date:   Tue, 26 Jul 2022 10:39:29 +0200
-Message-Id: <20220726083929.1684-6-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220726083929.1684-1-tiwai@suse.de>
-References: <20220726083929.1684-1-tiwai@suse.de>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6CD1B6601B15;
+        Tue, 26 Jul 2022 09:39:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658824794;
+        bh=o8COaf1WnhJ6CshvmVXvwffuBdxhwn1zG6mdYwCYbMM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KfouyMIC5PPMPw26mf23O0tIb+iVGaFLkR/kg5SB28fo7Osxl7Accy9z/wZHXYQnk
+         L24vXFgaA/XYKaa3IsxSYyKsnKEgyYL9jTnRyVpsEmVVwA5oULUZF3k2f+dsxmVoow
+         HBzyIv3HeNEtJUR8UjGTME0UWjueCXvKQ8oroEOvbbfZ0PyoX5gm3+Z5dXo/W6lJKE
+         jc5QZ5DOiYEpHd8GC9S77tdmqazQZNWTe4B/UmSfHmwBW7UsgodnHlgD7jQaNzvIT+
+         jQK3EFXz8bj+zPlxYitKVRByCuewBJMP3J8YKoERVUMevT9FBVBhTxotsCXUxbmJ7C
+         K8812Sfxz5JEg==
+Message-ID: <14ddcdb5-cbfc-1215-ffdd-85df8d9d6acb@collabora.com>
+Date:   Tue, 26 Jul 2022 10:39:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v14 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
+ pinctrls properties
+Content-Language: en-US
+To:     Axe Yang <axe.yang@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Rob Herring <robh@kernel.org>
+References: <20220726062842.18846-1-axe.yang@mediatek.com>
+ <20220726062842.18846-2-axe.yang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220726062842.18846-2-axe.yang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-exfat_err() adds the new line at the end of the message by itself,
-hence the passed string shouldn't contain a new line.  Drop the
-superfluous newline letters in the error messages in a few places that
-have been put mistakenly.
+Il 26/07/22 08:28, Axe Yang ha scritto:
+> Extend interrupts and pinctrls for SDIO wakeup interrupt feature.
+> This feature allow SDIO devices alarm asynchronous interrupt to host
+> even when host stop providing clock to SDIO card. An extra wakeup
+> interrupt and pinctrl states for SDIO DAT1 pin state switching are
+> required in this scenario.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
 
-Reported-by: Joe Perches <joe@perches.com>
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- fs/exfat/fatent.c | 2 +-
- fs/exfat/nls.c    | 2 +-
- fs/exfat/super.c  | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-diff --git a/fs/exfat/fatent.c b/fs/exfat/fatent.c
-index 9de6a6b844c9..ee0b7cf51157 100644
---- a/fs/exfat/fatent.c
-+++ b/fs/exfat/fatent.c
-@@ -331,7 +331,7 @@ int exfat_alloc_cluster(struct inode *inode, unsigned int num_alloc,
- 	/* find new cluster */
- 	if (hint_clu == EXFAT_EOF_CLUSTER) {
- 		if (sbi->clu_srch_ptr < EXFAT_FIRST_CLUSTER) {
--			exfat_err(sb, "sbi->clu_srch_ptr is invalid (%u)\n",
-+			exfat_err(sb, "sbi->clu_srch_ptr is invalid (%u)",
- 				  sbi->clu_srch_ptr);
- 			sbi->clu_srch_ptr = EXFAT_FIRST_CLUSTER;
- 		}
-diff --git a/fs/exfat/nls.c b/fs/exfat/nls.c
-index 617aa1272265..705710f93e2d 100644
---- a/fs/exfat/nls.c
-+++ b/fs/exfat/nls.c
-@@ -671,7 +671,7 @@ static int exfat_load_upcase_table(struct super_block *sb,
- 
- 		bh = sb_bread(sb, sector);
- 		if (!bh) {
--			exfat_err(sb, "failed to read sector(0x%llx)\n",
-+			exfat_err(sb, "failed to read sector(0x%llx)",
- 				  (unsigned long long)sector);
- 			ret = -EIO;
- 			goto free_table;
-diff --git a/fs/exfat/super.c b/fs/exfat/super.c
-index 6a4dfe9f31ee..35f0305cd493 100644
---- a/fs/exfat/super.c
-+++ b/fs/exfat/super.c
-@@ -464,7 +464,7 @@ static int exfat_read_boot_sector(struct super_block *sb)
- 	 */
- 	if (p_boot->sect_size_bits < EXFAT_MIN_SECT_SIZE_BITS ||
- 	    p_boot->sect_size_bits > EXFAT_MAX_SECT_SIZE_BITS) {
--		exfat_err(sb, "bogus sector size bits : %u\n",
-+		exfat_err(sb, "bogus sector size bits : %u",
- 				p_boot->sect_size_bits);
- 		return -EINVAL;
- 	}
-@@ -473,7 +473,7 @@ static int exfat_read_boot_sector(struct super_block *sb)
- 	 * sect_per_clus_bits could be at least 0 and at most 25 - sect_size_bits.
- 	 */
- 	if (p_boot->sect_per_clus_bits > EXFAT_MAX_SECT_PER_CLUS_BITS(p_boot)) {
--		exfat_err(sb, "bogus sectors bits per cluster : %u\n",
-+		exfat_err(sb, "bogus sectors bits per cluster : %u",
- 				p_boot->sect_per_clus_bits);
- 		return -EINVAL;
- 	}
--- 
-2.35.3
-
+P.S.: R-b tags go after S-o-b tags!

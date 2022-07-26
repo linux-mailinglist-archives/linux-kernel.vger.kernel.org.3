@@ -2,399 +2,475 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB975814F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD6C5814EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239233AbiGZOSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S231154AbiGZORS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233807AbiGZORn (ORCPT
+        with ESMTP id S230487AbiGZORO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:17:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C104167CD
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:17:40 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 98C926601B22;
-        Tue, 26 Jul 2022 15:17:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658845057;
-        bh=y9CXze4J0CZIFeYvihb3Uv8RB5SpnFtyjk0MFRVdHeg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nMk1L6hmjMj+f7xrTCktLfsr4xmEEpqk9xYo2/uBru9H3JVZoychj3BEBzoJ1r5f8
-         TNRrvnkg94Wz53rFtl0k0bl2UT2sUO4wq+gjQmJsv6ka3mrIj757zFDaPGFlNaUWI6
-         HS7KJ/R/ZDoy2EfWt1sLjAX6i1q5FLheb/MzGnzAP4oGkXpK+RbPGNORCc7XxzYnqd
-         cF6IOKs+ZdKcKB/nBzbJtgCB2t113e6tkH776FvYy3ue8nDwvv1iJ9WCLdEy9yFgbl
-         S08kTVyMcNHDfxDo1yH453nNNccxHUn2uN7fr0QV2zEdbSZh/gE/mQvYtmMTLoYnL/
-         E7UttCQRuT4sQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     matthias.bgg@gmail.com
-Cc:     roger.lu@mediatek.com, khilman@baylibre.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nfraprado@collabora.com, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 6/6] soc: mediatek: mtk-svs: Use bitfield access macros where possible
-Date:   Tue, 26 Jul 2022 16:16:53 +0200
-Message-Id: <20220726141653.177948-7-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220726141653.177948-1-angelogioacchino.delregno@collabora.com>
-References: <20220726141653.177948-1-angelogioacchino.delregno@collabora.com>
+        Tue, 26 Jul 2022 10:17:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 075842BD6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:17:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658845031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DAhZvikrASrN23qyYU3246auG+59bm1upEzCd4n56bQ=;
+        b=UP8n/FJ3j4QjUaOtTKNDqXY6aSvet8A13wS5ClAORxVh/L/QqtQvpkBWAYMmZwwoqV2BD+
+        fP4VjeR40+68rjQXkpe7mgky2E8hYgEuw3ocbnM+wr6lss5lO2qKKPmki87gOoydHiNtzE
+        LJB9PZumzJVZT5SqPy5G6Gle5EJYy7E=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-282-4ev6UH-HMwmhIh5gBDtPpw-1; Tue, 26 Jul 2022 10:17:09 -0400
+X-MC-Unique: 4ev6UH-HMwmhIh5gBDtPpw-1
+Received: by mail-io1-f69.google.com with SMTP id 130-20020a6b0188000000b0067bd829cf29so5268535iob.17
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:17:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=DAhZvikrASrN23qyYU3246auG+59bm1upEzCd4n56bQ=;
+        b=uqboAEs+AXR9GPbLt1TQeIXoPfeyXVIP5cKapsuuxyCb0VGJIyeTsQzb57dUTSPZVr
+         uzgdcNPrxa7DC8T+WnM2scLUrgep/FwH2Wc9LJ03Diq2A0jS69JunY8ZESyGw80hqCrR
+         K83jcwfRuayXYsxxx4VwGgKcEQsXtntzld94AVrUW1GT5pviJaf8u5pgBzX6R35WOZEv
+         Xu825QRiYUuEJR6/V8n3c4m/wHNA1ZFrZHrNqCa7ixFt2VOWVibvIFeEJjLc7FQ9v8R/
+         v7Df5+ql9HiN09pZalVlk1fRUTngXf36KPxpR1Mrl9C5QcMOsD3gk9aksb8OS+UtI19s
+         STCQ==
+X-Gm-Message-State: AJIora/NnoA6HK7o4eXcsgrQclY3EqgaLFghrf1DoaMOJiHClgIzGb++
+        E0EuCT56zME+UFnOgrJReCpRPRqXau+ruZ86xp7he/y5irgj9AWwbn6+D+GduvDBEuPU9Yz2VBD
+        clXrpJ9cWWu1mXD1qwbJwxCYV
+X-Received: by 2002:a05:6e02:1a8c:b0:2dd:9385:11ce with SMTP id k12-20020a056e021a8c00b002dd938511cemr1292036ilv.20.1658845028638;
+        Tue, 26 Jul 2022 07:17:08 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s5/X9dVPD+dyYCJZFjLew2p0jfBUxNQogk3s+NDuyEK0gMxiEpyLK+TCa10p1IL7w2oqiRUg==
+X-Received: by 2002:a05:6e02:1a8c:b0:2dd:9385:11ce with SMTP id k12-20020a056e021a8c00b002dd938511cemr1292011ilv.20.1658845028190;
+        Tue, 26 Jul 2022 07:17:08 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id o3-20020a02b803000000b0033cc22c261fsm6541669jam.111.2022.07.26.07.17.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 07:17:07 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 08:17:06 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v5 1/5] vfio: Add the device features for the low power
+ entry and exit
+Message-ID: <20220726081706.0d3bc6a5.alex.williamson@redhat.com>
+In-Reply-To: <bd7bca18-ae07-c04a-23d3-bf71245da0cc@nvidia.com>
+References: <20220719121523.21396-1-abhsahu@nvidia.com>
+        <20220719121523.21396-2-abhsahu@nvidia.com>
+        <20220721163445.49d15daf.alex.williamson@redhat.com>
+        <aaef2e78-1ed2-fe8b-d167-8ea2dcbe45b6@nvidia.com>
+        <20220725160928.43a17560.alex.williamson@redhat.com>
+        <bd7bca18-ae07-c04a-23d3-bf71245da0cc@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to enhance readability and safety during registers setup
-and value retrieval, redefine a few register related macros and
-convert all open-coded instances of bitfield setting/retrieval
-to use the FIELD_PREP() and FIELD_GET() macros.
-While at it, some macros were renamed to further enhance readability.
+On Tue, 26 Jul 2022 18:17:18 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-This commit brings no functional changes.
+> On 7/26/2022 3:39 AM, Alex Williamson wrote:
+> > On Mon, 25 Jul 2022 20:10:44 +0530
+> > Abhishek Sahu <abhsahu@nvidia.com> wrote:
+> >   
+> >> On 7/22/2022 4:04 AM, Alex Williamson wrote:  
+> >>> On Tue, 19 Jul 2022 17:45:19 +0530
+> >>> Abhishek Sahu <abhsahu@nvidia.com> wrote:
+> >>>     
+> >>>> This patch adds the following new device features for the low
+> >>>> power entry and exit in the header file. The implementation for the
+> >>>> same will be added in the subsequent patches.
+> >>>>
+> >>>> - VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY
+> >>>> - VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+> >>>> - VFIO_DEVICE_FEATURE_LOW_POWER_EXIT
+> >>>>
+> >>>> With the standard registers, all power states cannot be achieved. The    
+> >>>
+> >>> We're talking about standard PCI PM registers here, let's make that
+> >>> clear since we're adding a device agnostic interface here.
+> >>>     
+> >>>> platform-based power management needs to be involved to go into the
+> >>>> lowest power state. For doing low power entry and exit with
+> >>>> platform-based power management, these device features can be used.
+> >>>>
+> >>>> The entry device feature has two variants. These two variants are mainly
+> >>>> to support the different behaviour for the low power entry.
+> >>>> If there is any access for the VFIO device on the host side, then the
+> >>>> device will be moved out of the low power state without the user's
+> >>>> guest driver involvement. Some devices (for example NVIDIA VGA or
+> >>>> 3D controller) require the user's guest driver involvement for
+> >>>> each low-power entry. In the first variant, the host can move the
+> >>>> device into low power without any guest driver involvement while    
+> >>>
+> >>> Perhaps, "In the first variant, the host can return the device to low
+> >>> power automatically.  The device will continue to attempt to reach low
+> >>> power until the low power exit feature is called."
+> >>>     
+> >>>> in the second variant, the host will send a notification to the user
+> >>>> through eventfd and then the users guest driver needs to move
+> >>>> the device into low power.    
+> >>>
+> >>> "In the second variant, if the device exits low power due to an access,
+> >>> the host kernel will signal the user via the provided eventfd and will
+> >>> not return the device to low power without a subsequent call to one of
+> >>> the low power entry features.  A call to the low power exit feature is
+> >>> optional if the user provided eventfd is signaled."
+> >>>      
+> >>>> These device features only support VFIO_DEVICE_FEATURE_SET operation.    
+> >>>
+> >>> And PROBE.
+> >>>     
+> >>
+> >>  Thanks Alex.
+> >>  I will make the above changes in the commit message.
+> >>  
+> >>>> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> >>>> ---
+> >>>>  include/uapi/linux/vfio.h | 55 +++++++++++++++++++++++++++++++++++++++
+> >>>>  1 file changed, 55 insertions(+)
+> >>>>
+> >>>> diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
+> >>>> index 733a1cddde30..08fd3482d22b 100644
+> >>>> --- a/include/uapi/linux/vfio.h
+> >>>> +++ b/include/uapi/linux/vfio.h
+> >>>> @@ -986,6 +986,61 @@ enum vfio_device_mig_state {
+> >>>>  	VFIO_DEVICE_STATE_RUNNING_P2P = 5,
+> >>>>  };
+> >>>>  
+> >>>> +/*
+> >>>> + * Upon VFIO_DEVICE_FEATURE_SET, move the VFIO device into the low power state
+> >>>> + * with the platform-based power management.  This low power state will be    
+> >>>
+> >>> This is really "allow the device to be moved into a low power state"
+> >>> rather than actually "move the device into" such a state though, right?
+> >>>     
+> >>  
+> >>  Yes. It will just allow the device to be moved into a low power state.
+> >>  I have addressed all your suggestions in the uAPI description and
+> >>  added the updated description in the last.
+> >>
+> >>  Can you please check that once and check if it looks okay.
+> >>    
+> >>>> + * internal to the VFIO driver and the user will not come to know which power
+> >>>> + * state is chosen.  If any device access happens (either from the host or
+> >>>> + * the guest) when the device is in the low power state, then the host will
+> >>>> + * move the device out of the low power state first.  Once the access has been
+> >>>> + * finished, then the host will move the device into the low power state again.
+> >>>> + * If the user wants that the device should not go into the low power state
+> >>>> + * again in this case, then the user should use the
+> >>>> + * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP device feature for the    
+> >>>
+> >>> This should probably just read "For single shot low power support with
+> >>> wake-up notification, see
+> >>> VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP below."
+> >>>     
+> >>>> + * low power entry.  The mmap'ed region access is not allowed till the low power
+> >>>> + * exit happens through VFIO_DEVICE_FEATURE_LOW_POWER_EXIT and will
+> >>>> + * generate the access fault.
+> >>>> + */
+> >>>> +#define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY 3    
+> >>>
+> >>> Note that Yishai's DMA logging set is competing for the same feature
+> >>> entries.  We'll need to coordinate.
+> >>>     
+> >>
+> >>  Since this is last week of rc, so will it possible to consider the updated
+> >>  patches for next kernel (I can try to send them after complete testing the
+> >>  by the end of this week). Otherwise, I can wait for next kernel and then
+> >>  I can rebase my patches.  
+> > 
+> > I think we're close, though I would like to solicit uAPI feedback from
+> > others on the list.  We can certainly sort out feature numbers
+> > conflicts at commit time if Yishai's series becomes ready as well.  I'm
+> > on PTO for the rest of the week starting tomorrow afternoon, but I'd
+> > suggest trying to get this re-posted before the end of the week, asking
+> > for more reviews for the uAPI, and we can evaluate early next week if
+> > this is ready.
+> >   
+> 
+>  Sure. I will re-post the updated patch series after the complete testing.
+>  
+> >>>> +
+> >>>> +/*
+> >>>> + * Upon VFIO_DEVICE_FEATURE_SET, move the VFIO device into the low power state
+> >>>> + * with the platform-based power management and provide support for the wake-up
+> >>>> + * notifications through eventfd.  This low power state will be internal to the
+> >>>> + * VFIO driver and the user will not come to know which power state is chosen.
+> >>>> + * If any device access happens (either from the host or the guest) when the
+> >>>> + * device is in the low power state, then the host will move the device out of
+> >>>> + * the low power state first and a notification will be sent to the guest
+> >>>> + * through eventfd.  Once the access is finished, the host will not move back
+> >>>> + * the device into the low power state.  The guest should move the device into
+> >>>> + * the low power state again upon receiving the wakeup notification.  The
+> >>>> + * notification will be generated only if the device physically went into the
+> >>>> + * low power state.  If the low power entry has been disabled from the host
+> >>>> + * side, then the device will not go into the low power state even after
+> >>>> + * calling this device feature and then the device access does not require
+> >>>> + * wake-up.  The mmap'ed region access is not allowed till the low power exit
+> >>>> + * happens.  The low power exit can happen either through
+> >>>> + * VFIO_DEVICE_FEATURE_LOW_POWER_EXIT or through any other access (where the
+> >>>> + * wake-up notification has been generated).    
+> >>>
+> >>> Seems this could leverage a lot more from the previous, simply stating
+> >>> that this has the same behavior as VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY
+> >>> with the exception that the user provides an eventfd for notification
+> >>> when the device resumes from low power and will not try to re-enter a
+> >>> low power state without a subsequent user call to one of the low power
+> >>> entry feature ioctls.  It might also be worth covering the fact that
+> >>> device accesses by the user, including region and ioctl access, will
+> >>> also trigger the eventfd if that access triggers a resume.
+> >>>
+> >>> As I'm thinking about this, that latter clause is somewhat subtle.
+> >>> AIUI a user can call the low power entry with wakeup feature and
+> >>> proceed to do various ioctl and region (not mmap) accesses that could
+> >>> perpetually keep the device awake, or there may be dependent devices
+> >>> such that the device may never go to low power.  It needs to be very
+> >>> clear that only if the wakeup eventfd has the device entered into and
+> >>> exited a low power state making the low power exit ioctl optional.
+> >>>     
+> >>
+> >>  Yes. In my updated description, I have added more details.
+> >>  Can you please check if that helps.
+> >>  
+> >>>> + */
+> >>>> +struct vfio_device_low_power_entry_with_wakeup {
+> >>>> +	__s32 wakeup_eventfd;
+> >>>> +	__u32 reserved;
+> >>>> +};
+> >>>> +
+> >>>> +#define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP 4
+> >>>> +
+> >>>> +/*
+> >>>> + * Upon VFIO_DEVICE_FEATURE_SET, move the VFIO device out of the low power
+> >>>> + * state.    
+> >>>
+> >>> Any ioctl effectively does that, the key here is that the low power
+> >>> state may not be re-entered after this ioctl.
+> >>>     
+> >>>>  This device feature should be called only if the user has previously
+> >>>> + * put the device into the low power state either with
+> >>>> + * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY or
+> >>>> + * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP device feature.  If the    
+> >>>
+> >>> Doesn't really seem worth mentioning, we need to protect against misuse
+> >>> regardless.
+> >>>     
+> >>>> + * device is not in the low power state currently, this device feature will
+> >>>> + * return early with the success status.    
+> >>>
+> >>> This is an implementation detail, it doesn't need to be part of the
+> >>> uAPI.  Thanks,
+> >>>
+> >>> Alex
+> >>>     
+> >>>> + */
+> >>>> +#define VFIO_DEVICE_FEATURE_LOW_POWER_EXIT 5
+> >>>> +
+> >>>>  /* -------- API for Type1 VFIO IOMMU -------- */
+> >>>>  
+> >>>>  /**    
+> >>>     
+> >>
+> >>  /*
+> >>   * Upon VFIO_DEVICE_FEATURE_SET, allow the device to be moved into a low power
+> >>   * state with the platform-based power management.  This low power state will
+> >>   * be internal to the VFIO driver and the user will not come to know which
+> >>   * power state is chosen.  If any device access happens (either from the host  
+> > 
+> > Couldn't the user look in sysfs to determine the power state?  There
+> > might also be external hardware monitors of the power state, so this
+> > statement is a bit overreaching.  Maybe something along the lines of...
+> > 
+> > "Device use of lower power states depend on factors managed by the
+> > runtime power management core, including system level support and
+> > coordinating support among dependent devices.  Enabling device low
+> > power entry does not guarantee lower power usage by the device, nor is
+> > a mechanism provided through this feature to know the current power
+> > state of the device."
+> >   
+> >>   * or the guest) when the device is in the low power state, then the host will  
+> > 
+> > Let's not confine ourselves to a VM use case, "...from the host or
+> > through the vfio uAPI".
+> >   
+> >>   * move the device out of the low power state first.  Once the access has been  
+> > 
+> > "move the device out of the low power state as necessary prior to the
+> > access."
+> >   
+> >>   * finished, then the host will move the device into the low power state  
+> > 
+> > "Once the access is completed, the device may re-enter the low power
+> > state."
+> >   
+> >>   * again.  For single shot low power support with wake-up notification, see
+> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP below.  The mmap'ed region
+> >>   * access is not allowed till the low power exit happens through
+> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_EXIT and will generate the access fault.  
+> > 
+> > "Access to mmap'd device regions is disabled on LOW_POWER_ENTRY and
+> > may only be resumed after calling LOW_POWER_EXIT."
+> >   
+> >>   */
+> >>  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY 3
+> >>
+> >>  /*
+> >>   * This device feature has the same behavior as
+> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY with the exception that the user
+> >>   * provides an eventfd for wake-up notification.  When the device moves out of
+> >>   * the low power state for the wake-up, the host will not try to re-enter a  
+> > 
+> > "...will not allow the device to re-enter a low power state..."
+> >   
+> >>   * low power state without a subsequent user call to one of the low power
+> >>   * entry device feature IOCTLs.  The low power exit can happen either through
+> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_EXIT or through any other access (where the
+> >>   * wake-up notification has been generated).
+> >>   *
+> >>   * The notification through eventfd will be generated only if the device has
+> >>   * gone into the low power state after calling this device feature IOCTL.  
+> > 
+> > "The notification through the provided eventfd will be generated only
+> > when the device has entered and is resumed from a low power state after
+> > calling this device feature IOCTL."
+> > 
+> >   
+> >>   * There are various cases where the device will not go into the low power
+> >>   * state after calling this device feature IOCTL (for example, the low power
+> >>   * entry has been disabled from the host side, the user keeps the device busy
+> >>   * after calling this device feature IOCTL, there are dependent devices which
+> >>   * block the device low power entry, etc.) and in such cases, the device access
+> >>   * does not require wake-up.  Also, the low power exit through  
+> > 
+> > "A device that has not entered low power state, as managed through the
+> > runtime power management core, will not generate a notification through
+> > the provided eventfd on access."
+> >   
+> >>   * VFIO_DEVICE_FEATURE_LOW_POWER_EXIT is mandatory for the cases where the
+> >>   * wake-up notification has not been generated.  
+> > 
+> > "Calling the LOW_POWER_EXIT feature is optional in the case where
+> > notification has been signaled on the provided eventfd that a resume
+> > from low power has occurred."
+> > 
+> > We should also reiterate the statement above about mmap access because
+> > it would be reasonable for a user to assume that if any access wakes
+> > the device, that should include mmap faults and therefore a resume
+> > notification should occur for such an event.  We could implement that
+> > for the one-shot mode, but we're choosing not to.
+> >   
+> >>   */
+> >>  struct vfio_device_low_power_entry_with_wakeup {
+> >> 	 __s32 wakeup_eventfd;
+> >> 	 __u32 reserved;
+> >>  };
+> >>
+> >>  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP 4
+> >>
+> >>  /*
+> >>   * Upon VFIO_DEVICE_FEATURE_SET, prevent the VFIO device low power state entry
+> >>   * which has been previously allowed with VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY
+> >>   * or VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP device features.
+> >>   */  
+> > 
+> > "Upon VFIO_DEVICE_FEATURE_SET, disallow use of device low power states
+> > as previously enabled via VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY or
+> > VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP device features.  This
+> > device feature ioctl may itself generate a wakeup eventfd notification
+> > in the latter case if the device has previously entered a low power
+> > state."
+> > 
+> > Thanks,
+> > Alex
+> >   
+> 
+>  Thanks Alex for your thorough review of uAPI.
+>  I have incorporated all the suggestions.
+>  Following is the updated uAPI.
+>  
+>  /*
+>   * Upon VFIO_DEVICE_FEATURE_SET, allow the device to be moved into a low power
+>   * state with the platform-based power management.  Device use of lower power
+>   * states depends on factors managed by the runtime power management core,
+>   * including system level support and coordinating support among dependent
+>   * devices.  Enabling device low power entry does not guarantee lower power
+>   * usage by the device, nor is a mechanism provided through this feature to
+>   * know the current power state of the device.  If any device access happens
+>   * (either from the host or through the vfio uAPI) when the device is in the
+>   * low power state, then the host will move the device out of the low power
+>   * state as necessary prior to the access.  Once the access is completed, the
+>   * device may re-enter the low power state.  For single shot low power support
+>   * with wake-up notification, see
+>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP below.  Access to mmap'd
+>   * device regions is disabled on LOW_POWER_ENTRY and may only be resumed after
+>   * calling LOW_POWER_EXIT.
+>   */
+>  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY 3
+>  
+>  /*
+>   * This device feature has the same behavior as
+>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY with the exception that the user
+>   * provides an eventfd for wake-up notification.  When the device moves out of
+>   * the low power state for the wake-up, the host will not allow the device to
+>   * re-enter a low power state without a subsequent user call to one of the low
+>   * power entry device feature IOCTLs.  Access to mmap'd device regions is
+>   * disabled on LOW_POWER_ENTRY_WITH_WAKEUP and may only be resumed after the
+>   * low power exit.  The low power exit can happen either through LOW_POWER_EXIT
+>   * or through any other access (where the wake-up notification has been
+>   * generated).  The access to mmap'd device regions will not trigger low power
+>   * exit.
+>   *
+>   * The notification through the provided eventfd will be generated only when
+>   * the device has entered and is resumed from a low power state after
+>   * calling this device feature IOCTL.  A device that has not entered low power
+>   * state, as managed through the runtime power management core, will not
+>   * generate a notification through the provided eventfd on access.  Calling the
+>   * LOW_POWER_EXIT feature is optional in the case where notification has been
+>   * signaled on the provided eventfd that a resume from low power has occurred.
+>   */
+>  struct vfio_device_low_power_entry_with_wakeup {
+>  	__s32 wakeup_eventfd;
+>  	__u32 reserved;
+>  };
+>  
+>  #define VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP 4
+>  
+>  /*
+>   * Upon VFIO_DEVICE_FEATURE_SET, disallow use of device low power states as
+>   * previously enabled via VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY or
+>   * VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP device features.
+>   * This device feature IOCTL may itself generate a wakeup eventfd notification
+>   * in the latter case if the device has previously entered a low power state.
+>   */
+>  #define VFIO_DEVICE_FEATURE_LOW_POWER_EXIT 5
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/soc/mediatek/mtk-svs.c | 191 ++++++++++++++++++++++-----------
- 1 file changed, 128 insertions(+), 63 deletions(-)
+Looks ok to me.  Thanks,
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 25b49d8af59a..f5e6627f7a56 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -53,22 +53,79 @@
- #define SVSB_MON_VOLT_IGNORE		BIT(16)
- #define SVSB_REMOVE_DVTFIXED_VOLT	BIT(24)
- 
--/* svs bank register common configuration */
--#define SVSB_DET_MAX			0xffff
-+/* svs bank register fields and common configuration */
-+#define SVSB_PTPCONFIG_DETMAX		GENMASK(15, 0)
-+#define SVSB_DET_MAX			FIELD_PREP(SVSB_PTPCONFIG_DETMAX, 0xffff)
- #define SVSB_DET_WINDOW			0xa28
--#define SVSB_DTHI			0x1
--#define SVSB_DTLO			0xfe
--#define SVSB_EN_INIT01			0x1
--#define SVSB_EN_INIT02			0x5
--#define SVSB_EN_MON			0x2
--#define SVSB_EN_OFF			0x0
--#define SVSB_INTEN_INIT0x		0x00005f01
--#define SVSB_INTEN_MONVOPEN		0x00ff0000
--#define SVSB_INTSTS_CLEAN		0x00ffffff
--#define SVSB_INTSTS_COMPLETE		0x1
--#define SVSB_INTSTS_MONVOP		0x00ff0000
-+
-+/* DESCHAR */
-+#define SVSB_DESCHAR_FLD_MDES		GENMASK(7, 0)
-+#define SVSB_DESCHAR_FLD_BDES		GENMASK(15, 8)
-+
-+/* TEMPCHAR */
-+#define SVSB_TEMPCHAR_FLD_DVT_FIXED	GENMASK(7, 0)
-+#define SVSB_TEMPCHAR_FLD_MTDES		GENMASK(15, 8)
-+#define SVSB_TEMPCHAR_FLD_VCO		GENMASK(23, 16)
-+
-+/* DETCHAR */
-+#define SVSB_DETCHAR_FLD_DCMDET		GENMASK(7, 0)
-+#define SVSB_DETCHAR_FLD_DCBDET		GENMASK(15, 8)
-+
-+/* SVSEN (PTPEN) */
-+#define SVSB_PTPEN_INIT01		BIT(0)
-+#define SVSB_PTPEN_MON			BIT(1)
-+#define SVSB_PTPEN_INIT02		(SVSB_PTPEN_INIT01 | BIT(2))
-+#define SVSB_PTPEN_OFF			0x0
-+
-+/* FREQPCTS */
-+#define SVSB_FREQPCTS_FLD_PCT0_4	GENMASK(7, 0)
-+#define SVSB_FREQPCTS_FLD_PCT1_5	GENMASK(15, 8)
-+#define SVSB_FREQPCTS_FLD_PCT2_6	GENMASK(23, 16)
-+#define SVSB_FREQPCTS_FLD_PCT3_7	GENMASK(31, 24)
-+
-+/* INTSTS */
-+#define SVSB_INTSTS_VAL_CLEAN		0x00ffffff
-+#define SVSB_INTSTS_F0_COMPLETE		BIT(0)
-+#define SVSB_INTSTS_FLD_MONVOP		GENMASK(23, 16)
- #define SVSB_RUNCONFIG_DEFAULT		0x80000000
- 
-+/* LIMITVALS */
-+#define SVSB_LIMITVALS_FLD_DTLO		GENMASK(7, 0)
-+#define SVSB_LIMITVALS_FLD_DTHI		GENMASK(15, 8)
-+#define SVSB_LIMITVALS_FLD_VMIN		GENMASK(23, 16)
-+#define SVSB_LIMITVALS_FLD_VMAX		GENMASK(31, 24)
-+#define SVSB_VAL_DTHI			0x1
-+#define SVSB_VAL_DTLO			0xfe
-+
-+/* INTEN */
-+#define SVSB_INTEN_F0EN			BIT(0)
-+#define SVSB_INTEN_DACK0UPEN		BIT(8)
-+#define SVSB_INTEN_DC0EN		BIT(9)
-+#define SVSB_INTEN_DC1EN		BIT(10)
-+#define SVSB_INTEN_DACK0LOEN		BIT(11)
-+#define SVSB_INTEN_INITPROD_OVF_EN	BIT(12)
-+#define SVSB_INTEN_INITSUM_OVF_EN	BIT(14)
-+#define SVSB_INTEN_MONVOPEN		GENMASK(23, 16)
-+#define SVSB_INTEN_INIT0x		(SVSB_INTEN_F0EN | SVSB_INTEN_DACK0UPEN |	\
-+					 SVSB_INTEN_DC0EN | SVSB_INTEN_DC1EN |		\
-+					 SVSB_INTEN_DACK0LOEN |				\
-+					 SVSB_INTEN_INITPROD_OVF_EN |			\
-+					 SVSB_INTEN_INITSUM_OVF_EN)
-+
-+/* TSCALCS */
-+#define SVSB_TSCALCS_FLD_MTS		GENMASK(11, 0)
-+#define SVSB_TSCALCS_FLD_BTS		GENMASK(23, 12)
-+
-+/* INIT2VALS */
-+#define SVSB_INIT2VALS_FLD_DCVOFFSETIN	GENMASK(15, 0)
-+#define SVSB_INIT2VALS_FLD_AGEVOFFSETIN	GENMASK(31, 16)
-+
-+/* VOPS */
-+#define SVSB_VOPS_FLD_VOP0_4		GENMASK(7, 0)
-+#define SVSB_VOPS_FLD_VOP1_5		GENMASK(15, 8)
-+#define SVSB_VOPS_FLD_VOP2_6		GENMASK(23, 16)
-+#define SVSB_VOPS_FLD_VOP3_7		GENMASK(31, 24)
-+
- /* svs bank related setting */
- #define BITS8				8
- #define MAX_OPP_ENTRIES			16
-@@ -667,8 +724,8 @@ static ssize_t svs_enable_debug_write(struct file *filp,
- 		svsp->pbank = svsb;
- 		svsb->mode_support = SVSB_MODE_ALL_DISABLE;
- 		svs_switch_bank(svsp);
--		svs_writel_relaxed(svsp, SVSB_EN_OFF, SVSEN);
--		svs_writel_relaxed(svsp, SVSB_INTSTS_CLEAN, INTSTS);
-+		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-+		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
- 		spin_unlock_irqrestore(&svs_lock, flags);
- 
- 		svsb->phase = SVSB_PHASE_ERROR;
-@@ -830,7 +887,7 @@ static void svs_get_bank_volts_v3(struct svs_platform *svsp)
- 		} else if (svsb->type == SVSB_LOW) {
- 			/* volt[turn_pt] + volt[j] ~ volt[opp_count - 1] */
- 			j = svsb->opp_count - 7;
--			svsb->volt[turn_pt] = vop30 & GENMASK(7, 0);
-+			svsb->volt[turn_pt] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
- 			shift_byte++;
- 			for (i = j; i < svsb->opp_count; i++) {
- 				b_sft = BITS8 * (shift_byte % REG_BYTES);
-@@ -852,7 +909,7 @@ static void svs_get_bank_volts_v3(struct svs_platform *svsp)
- 		if (svsb->type == SVSB_HIGH) {
- 			/* volt[0] + volt[j] ~ volt[turn_pt - 1] */
- 			j = turn_pt - 7;
--			svsb->volt[0] = vop30 & GENMASK(7, 0);
-+			svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
- 			shift_byte++;
- 			for (i = j; i < turn_pt; i++) {
- 				b_sft = BITS8 * (shift_byte % REG_BYTES);
-@@ -989,16 +1046,16 @@ static void svs_get_bank_volts_v2(struct svs_platform *svsp)
- 		return;
- 
- 	temp = svs_readl_relaxed(svsp, VOP74);
--	svsb->volt[14] = (temp >> 24) & GENMASK(7, 0);
--	svsb->volt[12] = (temp >> 16) & GENMASK(7, 0);
--	svsb->volt[10] = (temp >> 8)  & GENMASK(7, 0);
--	svsb->volt[8] = (temp & GENMASK(7, 0));
-+	svsb->volt[14] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
-+	svsb->volt[12] = FIELD_GET(SVSB_VOPS_FLD_VOP2_6, temp);
-+	svsb->volt[10] = FIELD_GET(SVSB_VOPS_FLD_VOP1_5, temp);
-+	svsb->volt[8] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, temp);
- 
- 	temp = svs_readl_relaxed(svsp, VOP30);
--	svsb->volt[6] = (temp >> 24) & GENMASK(7, 0);
--	svsb->volt[4] = (temp >> 16) & GENMASK(7, 0);
--	svsb->volt[2] = (temp >> 8)  & GENMASK(7, 0);
--	svsb->volt[0] = (temp & GENMASK(7, 0));
-+	svsb->volt[6] = FIELD_GET(SVSB_VOPS_FLD_VOP3_7, temp);
-+	svsb->volt[4] = FIELD_GET(SVSB_VOPS_FLD_VOP2_6, temp);
-+	svsb->volt[2] = FIELD_GET(SVSB_VOPS_FLD_VOP1_5, temp);
-+	svsb->volt[0] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, temp);
- 
- 	for (i = 0; i <= 12; i += 2)
- 		svsb->volt[i + 1] = interpolate(svsb->freq_pct[i],
-@@ -1046,20 +1103,20 @@ static void svs_get_bank_volts_v2(struct svs_platform *svsp)
- static void svs_set_bank_freq_pct_v2(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb = svsp->pbank;
-+	u32 freqpct74_val, freqpct30_val;
-+
-+	freqpct74_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[8]) |
-+			FIELD_PREP(SVSB_FREQPCTS_FLD_PCT1_5, svsb->freq_pct[10]) |
-+			FIELD_PREP(SVSB_FREQPCTS_FLD_PCT2_6, svsb->freq_pct[12]) |
-+			FIELD_PREP(SVSB_FREQPCTS_FLD_PCT3_7, svsb->freq_pct[14]);
-+
-+	freqpct30_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[0]) |
-+			FIELD_PREP(SVSB_FREQPCTS_FLD_PCT1_5, svsb->freq_pct[2]) |
-+			FIELD_PREP(SVSB_FREQPCTS_FLD_PCT2_6, svsb->freq_pct[4]) |
-+			FIELD_PREP(SVSB_FREQPCTS_FLD_PCT3_7, svsb->freq_pct[6]);
- 
--	svs_writel_relaxed(svsp,
--			   (svsb->freq_pct[14] << 24) |
--			   (svsb->freq_pct[12] << 16) |
--			   (svsb->freq_pct[10] << 8) |
--			   svsb->freq_pct[8],
--			   FREQPCT74);
--
--	svs_writel_relaxed(svsp,
--			   (svsb->freq_pct[6] << 24) |
--			   (svsb->freq_pct[4] << 16) |
--			   (svsb->freq_pct[2] << 8) |
--			   svsb->freq_pct[0],
--			   FREQPCT30);
-+	svs_writel_relaxed(svsp, freqpct74_val, FREQPCT74);
-+	svs_writel_relaxed(svsp, freqpct30_val, FREQPCT30);
- }
- 
- static void svs_set_bank_phase(struct svs_platform *svsp,
-@@ -1070,13 +1127,17 @@ static void svs_set_bank_phase(struct svs_platform *svsp,
- 
- 	svs_switch_bank(svsp);
- 
--	des_char = (svsb->bdes << 8) | svsb->mdes;
-+	des_char = FIELD_PREP(SVSB_DESCHAR_FLD_BDES, svsb->bdes) |
-+		   FIELD_PREP(SVSB_DESCHAR_FLD_MDES, svsb->mdes);
- 	svs_writel_relaxed(svsp, des_char, DESCHAR);
- 
--	temp_char = (svsb->vco << 16) | (svsb->mtdes << 8) | svsb->dvt_fixed;
-+	temp_char = FIELD_PREP(SVSB_TEMPCHAR_FLD_VCO, svsb->vco) |
-+		    FIELD_PREP(SVSB_TEMPCHAR_FLD_MTDES, svsb->mtdes) |
-+		    FIELD_PREP(SVSB_TEMPCHAR_FLD_DVT_FIXED, svsb->dvt_fixed);
- 	svs_writel_relaxed(svsp, temp_char, TEMPCHAR);
- 
--	det_char = (svsb->dcbdet << 8) | svsb->dcmdet;
-+	det_char = FIELD_PREP(SVSB_DETCHAR_FLD_DCBDET, svsb->dcbdet) |
-+		   FIELD_PREP(SVSB_DETCHAR_FLD_DCMDET, svsb->dcmdet);
- 	svs_writel_relaxed(svsp, det_char, DETCHAR);
- 
- 	svs_writel_relaxed(svsp, svsb->dc_config, DCCONFIG);
-@@ -1085,33 +1146,37 @@ static void svs_set_bank_phase(struct svs_platform *svsp,
- 
- 	svsb->set_freq_pct(svsp);
- 
--	limit_vals = (svsb->vmax << 24) | (svsb->vmin << 16) |
--		     (SVSB_DTHI << 8) | SVSB_DTLO;
-+	limit_vals = FIELD_PREP(SVSB_LIMITVALS_FLD_DTLO, SVSB_VAL_DTLO) |
-+		     FIELD_PREP(SVSB_LIMITVALS_FLD_DTHI, SVSB_VAL_DTHI) |
-+		     FIELD_PREP(SVSB_LIMITVALS_FLD_VMIN, svsb->vmin) |
-+		     FIELD_PREP(SVSB_LIMITVALS_FLD_VMAX, svsb->vmax);
- 	svs_writel_relaxed(svsp, limit_vals, LIMITVALS);
- 
- 	svs_writel_relaxed(svsp, SVSB_DET_WINDOW, DETWINDOW);
- 	svs_writel_relaxed(svsp, SVSB_DET_MAX, CONFIG);
- 	svs_writel_relaxed(svsp, svsb->chk_shift, CHKSHIFT);
- 	svs_writel_relaxed(svsp, svsb->ctl0, CTL0);
--	svs_writel_relaxed(svsp, SVSB_INTSTS_CLEAN, INTSTS);
-+	svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
- 
- 	switch (target_phase) {
- 	case SVSB_PHASE_INIT01:
- 		svs_writel_relaxed(svsp, svsb->vboot, VBOOT);
- 		svs_writel_relaxed(svsp, SVSB_INTEN_INIT0x, INTEN);
--		svs_writel_relaxed(svsp, SVSB_EN_INIT01, SVSEN);
-+		svs_writel_relaxed(svsp, SVSB_PTPEN_INIT01, SVSEN);
- 		break;
- 	case SVSB_PHASE_INIT02:
-+		init2vals = FIELD_PREP(SVSB_INIT2VALS_FLD_AGEVOFFSETIN, svsb->age_voffset_in) |
-+			    FIELD_PREP(SVSB_INIT2VALS_FLD_DCVOFFSETIN, svsb->dc_voffset_in);
- 		svs_writel_relaxed(svsp, SVSB_INTEN_INIT0x, INTEN);
--		init2vals = (svsb->age_voffset_in << 16) | svsb->dc_voffset_in;
- 		svs_writel_relaxed(svsp, init2vals, INIT2VALS);
--		svs_writel_relaxed(svsp, SVSB_EN_INIT02, SVSEN);
-+		svs_writel_relaxed(svsp, SVSB_PTPEN_INIT02, SVSEN);
- 		break;
- 	case SVSB_PHASE_MON:
--		ts_calcs = (svsb->bts << 12) | svsb->mts;
-+		ts_calcs = FIELD_PREP(SVSB_TSCALCS_FLD_BTS, svsb->bts) |
-+			   FIELD_PREP(SVSB_TSCALCS_FLD_MTS, svsb->mts);
- 		svs_writel_relaxed(svsp, ts_calcs, TSCALCS);
- 		svs_writel_relaxed(svsp, SVSB_INTEN_MONVOPEN, INTEN);
--		svs_writel_relaxed(svsp, SVSB_EN_MON, SVSEN);
-+		svs_writel_relaxed(svsp, SVSB_PTPEN_MON, SVSEN);
- 		break;
- 	default:
- 		dev_err(svsb->dev, "requested unknown target phase: %u\n",
-@@ -1147,8 +1212,8 @@ static inline void svs_error_isr_handler(struct svs_platform *svsp)
- 	svs_save_bank_register_data(svsp, SVSB_PHASE_ERROR);
- 
- 	svsb->phase = SVSB_PHASE_ERROR;
--	svs_writel_relaxed(svsp, SVSB_EN_OFF, SVSEN);
--	svs_writel_relaxed(svsp, SVSB_INTSTS_CLEAN, INTSTS);
-+	svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-+	svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
- }
- 
- static inline void svs_init01_isr_handler(struct svs_platform *svsp)
-@@ -1173,8 +1238,8 @@ static inline void svs_init01_isr_handler(struct svs_platform *svsp)
- 	svsb->age_voffset_in = svs_readl_relaxed(svsp, AGEVALUES) &
- 			       GENMASK(15, 0);
- 
--	svs_writel_relaxed(svsp, SVSB_EN_OFF, SVSEN);
--	svs_writel_relaxed(svsp, SVSB_INTSTS_COMPLETE, INTSTS);
-+	svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-+	svs_writel_relaxed(svsp, SVSB_INTSTS_F0_COMPLETE, INTSTS);
- 	svsb->core_sel &= ~SVSB_DET_CLK_EN;
- }
- 
-@@ -1192,8 +1257,8 @@ static inline void svs_init02_isr_handler(struct svs_platform *svsp)
- 	svsb->phase = SVSB_PHASE_INIT02;
- 	svsb->get_volts(svsp);
- 
--	svs_writel_relaxed(svsp, SVSB_EN_OFF, SVSEN);
--	svs_writel_relaxed(svsp, SVSB_INTSTS_COMPLETE, INTSTS);
-+	svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-+	svs_writel_relaxed(svsp, SVSB_INTSTS_F0_COMPLETE, INTSTS);
- }
- 
- static inline void svs_mon_mode_isr_handler(struct svs_platform *svsp)
-@@ -1206,7 +1271,7 @@ static inline void svs_mon_mode_isr_handler(struct svs_platform *svsp)
- 	svsb->get_volts(svsp);
- 
- 	svsb->temp = svs_readl_relaxed(svsp, TEMP) & GENMASK(7, 0);
--	svs_writel_relaxed(svsp, SVSB_INTSTS_MONVOP, INTSTS);
-+	svs_writel_relaxed(svsp, SVSB_INTSTS_FLD_MONVOP, INTSTS);
- }
- 
- static irqreturn_t svs_isr(int irq, void *data)
-@@ -1233,13 +1298,13 @@ static irqreturn_t svs_isr(int irq, void *data)
- 		int_sts = svs_readl_relaxed(svsp, INTSTS);
- 		svs_en = svs_readl_relaxed(svsp, SVSEN);
- 
--		if (int_sts == SVSB_INTSTS_COMPLETE &&
--		    svs_en == SVSB_EN_INIT01)
-+		if (int_sts == SVSB_INTSTS_F0_COMPLETE &&
-+		    svs_en == SVSB_PTPEN_INIT01)
- 			svs_init01_isr_handler(svsp);
--		else if (int_sts == SVSB_INTSTS_COMPLETE &&
--			 svs_en == SVSB_EN_INIT02)
-+		else if (int_sts == SVSB_INTSTS_F0_COMPLETE &&
-+			 svs_en == SVSB_PTPEN_INIT02)
- 			svs_init02_isr_handler(svsp);
--		else if (int_sts & SVSB_INTSTS_MONVOP)
-+		else if (int_sts & SVSB_INTSTS_FLD_MONVOP)
- 			svs_mon_mode_isr_handler(svsp);
- 		else
- 			svs_error_isr_handler(svsp);
-@@ -1525,8 +1590,8 @@ static int svs_suspend(struct device *dev)
- 		spin_lock_irqsave(&svs_lock, flags);
- 		svsp->pbank = svsb;
- 		svs_switch_bank(svsp);
--		svs_writel_relaxed(svsp, SVSB_EN_OFF, SVSEN);
--		svs_writel_relaxed(svsp, SVSB_INTSTS_CLEAN, INTSTS);
-+		svs_writel_relaxed(svsp, SVSB_PTPEN_OFF, SVSEN);
-+		svs_writel_relaxed(svsp, SVSB_INTSTS_VAL_CLEAN, INTSTS);
- 		spin_unlock_irqrestore(&svs_lock, flags);
- 
- 		svsb->phase = SVSB_PHASE_ERROR;
--- 
-2.35.1
+Alex
 

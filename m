@@ -2,109 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C8D5816C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D115A5816C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239298AbiGZPsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S239351AbiGZPuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239215AbiGZPse (ORCPT
+        with ESMTP id S239215AbiGZPuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:48:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5162ED4E;
-        Tue, 26 Jul 2022 08:48:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEAF060D17;
-        Tue, 26 Jul 2022 15:48:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B83FC433D6;
-        Tue, 26 Jul 2022 15:48:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658850512;
-        bh=Uzd9kHOcKO6VXOdUzTw8gjKqg7nPcNlibSG7TmjBK0I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iJvH1vyglyS5Nxfd4oCmumxkKCRuc0c16/Pr0qckmnosMASH0zaPTvZoOreZ67sgq
-         WwEXbYN0pHqve71NL6F6mEVhmpFnWMJP06jl5krEA0DFiFlVloDW/AElw/giq05Tpx
-         iR+XpsVbslG19Dz+tpkTcK8wRTWyI0CTe4NpiNXXneONWHRwtFYmyovHedPwA02FyW
-         CGfUNv5XGwrA1nZaohcUNY3W9M8fCcW1lVLjtvh5gDilj0FEDJbaYupSgAp+cSWAMu
-         +pjQ5A7zWNtN5F/NNO/sD20Ox5l4A/RQroGjtiYjI2u9wQRugk1hZ2znV7vxaX6fug
-         HfjTumJFSe/qw==
-Date:   Tue, 26 Jul 2022 08:48:29 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        jikos@kernel.org, llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        j.witteveen@gmail.com, stefanberzl@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 6/7] HID: uclogic: Add support for UGEE v2 mouse frames
-Message-ID: <YuAMzSBcfsyGMjNy@dev-arch.thelio-3990X>
-References: <20220717144333.251190-7-jose.exposito89@gmail.com>
- <202207261047.hUEFf74G-lkp@intel.com>
+        Tue, 26 Jul 2022 11:50:11 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CAABD9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:50:09 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id m9-20020a6b7b49000000b0067c0331524cso5481543iop.21
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:50:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=9GYqC1SZgEt4OU0y/SLneyFSp1BWvBVjECk5yA8DcYM=;
+        b=1KMZSNS5D9wNNp2uts5btKRhnCeUEXGgUwq6KBWFZXX9WaWKd4xpHbkTkYlFPGM5XX
+         O4E93O3EvmChSYEKT5o/PHZKufeLxUYlO+V0kbCPnejjIdfopiCjtOabixOXzgdJZ2lm
+         sgrSG2zsb4QhSqEKk7vo7bolLQw2wI8M1CvXepxHpUYy6xYVudp4C7c4uCWfpos4Yx97
+         EpjmwnraXMByUNQQeFvK8DN190RjOK3qWi5bE0fbnTyyCDnZJX2w3Zzv1QNmLJJh0Pp4
+         q1v9WYdidqGMkS4LcBGBz7tbKuxC29XN0q921twtH7vmmCELrMlDlkeCCv4D16uap2LC
+         DVgA==
+X-Gm-Message-State: AJIora8qNrbTSITuIDo26ty/qe7lijlM86WzMd934sbpCren+K47mNF3
+        9+yrAfy6PFtoTNkweaQPTvWRbR+dh+I4ovR8LEX+dHXbBVC3
+X-Google-Smtp-Source: AGRyM1vBd0kqUwkUfm5c1V+ohC7MFmfH5XMdmZakPq54XdOfuY0OBKqF5lk3fVr3SxlyFz09/GlrCA3SVG/TcLfJN1P1MSUnspC3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202207261047.hUEFf74G-lkp@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:3ec2:0:b0:67c:6baf:a51f with SMTP id
+ l185-20020a6b3ec2000000b0067c6bafa51fmr6408311ioa.160.1658850609194; Tue, 26
+ Jul 2022 08:50:09 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 08:50:09 -0700
+In-Reply-To: <00000000000026864605c611cc51@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004bee3605e4b74106@google.com>
+Subject: Re: [syzbot] INFO: rcu detected stall in net_tx_action
+From:   syzbot <syzbot+3ba0493d523d007b3819@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, cgroups@vger.kernel.org, fweisbec@gmail.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ming.lei@redhat.com, mingo@kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 10:33:25AM +0800, kernel test robot wrote:
-> Hi "José,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on 0cb1fc0988e32bda84c2b7218e0c761af1430baf]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
-> base:   0cb1fc0988e32bda84c2b7218e0c761af1430baf
-> config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220726/202207261047.hUEFf74G-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/10fcf5d5cca4657c53477c392b1fb675d72cfda3
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
->         git checkout 10fcf5d5cca4657c53477c392b1fb675d72cfda3
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: call to __read_overflow marked "dontcall-error": detected read beyond size of object (1st parameter)
+syzbot suspects this issue was fixed by commit:
 
-Unfortunately, LTO makes this warning kind of cryptic but it seems like
-the wrong template size is being used? This appears to resolve the
-warning for me.
+commit 0a9a25ca78437b39e691bcc3dc8240455b803d8d
+Author: Ming Lei <ming.lei@redhat.com>
+Date:   Fri Mar 18 13:01:43 2022 +0000
 
-Cheers,
-Nathan
+    block: let blkcg_gq grab request queue's refcnt
 
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index 2407e927d1bf..dd4b1ed6fd1e 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -1205,7 +1205,7 @@ static int uclogic_params_ugee_v2_init_frame_mouse(struct uclogic_params *p)
- 
- 	rc = uclogic_params_frame_init_with_desc(&p->frame_list[1],
- 						 uclogic_rdesc_ugee_v2_frame_mouse_template_arr,
--						 uclogic_rdesc_ugee_v2_frame_dial_template_size,
-+						 uclogic_rdesc_ugee_v2_frame_mouse_template_size,
- 						 UCLOGIC_RDESC_V1_FRAME_ID);
- 	if (rc)
- 		return rc;
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1004f05a080000
+start commit:   d6765985a42a Revert "be2net: disable bh with spin_lock in ..
+git tree:       net
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7ca96a2d153c74b0
+dashboard link: https://syzkaller.appspot.com/bug?extid=3ba0493d523d007b3819
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14c9edc8300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172463c8300000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: block: let blkcg_gq grab request queue's refcnt
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90395581021
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D230581025
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238141AbiGZJl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
+        id S238316AbiGZJmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbiGZJl6 (ORCPT
+        with ESMTP id S231812AbiGZJmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:41:58 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645DC2B1BA;
-        Tue, 26 Jul 2022 02:41:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LsX4J0bfgz4x1Y;
-        Tue, 26 Jul 2022 19:41:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658828512;
-        bh=ygRCt1IcR9dgCBW8HqFsp65TP2lPDKejFwY2ek3UuD8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gB2ugTuBA+zAYZ/5PIX98Y8JipGaubNUPvB1U7cXQzjHTdKgpGhoOQse7k900Io7A
-         kOY087Xw4pE/0hBm5RAqYLXM/71tIjubZbHXPwVT70uuJWchG7FeWmrB3viyKY+lBm
-         ruaa+vNyFd33FzZpAvw0GMd2QL/S1/8qm7SnYhlxzrQGr66xS4RLUgLKVHK3G3+tzJ
-         pfOYB4iXWShQBPVDhif0StgJ7s2Wa/moVDKZACkVSc6qwu6TVrPKeceBkQlCDhntnH
-         FsXCSQDIPGik+h8ICkNBqiCM+sYjIy6RdWc26OxryLksgSiVw+UQPJ0eGPnHL1lkEQ
-         BxtIvWz4BeqXw==
-Date:   Tue, 26 Jul 2022 19:41:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: linux-next: manual merge of the mm-nonmm-stable tree with the
- bitmap tree
-Message-ID: <20220726194151.71e511e7@canb.auug.org.au>
+        Tue, 26 Jul 2022 05:42:07 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125682FFEE
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:42:05 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id v5so8386837wmj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 02:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AS9H2OdepDISuy0zpfcKWjXYlq3ZJwTXdSc84G0PXjk=;
+        b=UEdP/1caBfZR1vGaxbnA+UoIuwScQbKAKcncBmmq4nqTECUaEDLlNYSomjZPQ+3Edv
+         BzESjJPvCJUl85AD2VwJN8EDsWobDLgwRarLAf9iN9uYiqh2tWnfppB9ebJxHN8Rre/G
+         WUzTe1UZ/zak3NhGsZldKPgIddr49EKjV2cny9NT4ZF150B7A43pkFzKDYiWLC9NJSBF
+         CsB7+a0dhOu59G6sNRbWpTSZ+2Kn+DdnM/p8fF7NkpDMQmFYDCht470BoRRxhRZWDhss
+         7d6u1Qac/xLTKYBtSC4KvqEF3OexaIuCsla6XJByBAqTEAbIOECBf9Y9Axwg3yxb5W1Y
+         8yIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AS9H2OdepDISuy0zpfcKWjXYlq3ZJwTXdSc84G0PXjk=;
+        b=Y2qpyFNAD70uob9PwQo8WX1z5uh8OLNjGhOUPDBkKYtFfq0pYRyBNer3vkM1EK9via
+         MkuB3Hju4i4V5eKM+JK6SZz2+U80I2wNrvOsTTxTj1csazz/y4G+14J6EniAYcb5E7pA
+         i4mypKHtOdYXwKctwx57jYoP9CaJoJPg7dBG41ALzFdGR4PQB3rKJyksj8pdFqtZVYO2
+         KZbQEAR44Z4OsHpjGhhdVA5F29X3sdCzJTJhdp4oEq2Ya1A38c5OtXchJ8aAmVvujxJJ
+         0eDbMn0idkSle6wX5TWeLczWk1U3E725ig2fTCnyN2Yj8hi+yRMHXNX69XoZ0gj7qiuA
+         /UYw==
+X-Gm-Message-State: AJIora865gFc19XtkzsCnIy6PjAxHT0t0lQeqBwZTQ5lG5M1CVBJ/cQA
+        s91fJKbbsSu9YXH2Hy8+sDxU5w==
+X-Google-Smtp-Source: AGRyM1sGgplIS0v67+5+3a3ZiyzGBSgKA7I0u+VqthrWa6RNVsTG1Lkswi8PKUHIKTJvBoPFdUlMeg==
+X-Received: by 2002:a7b:c7d8:0:b0:3a3:1b8a:97a4 with SMTP id z24-20020a7bc7d8000000b003a31b8a97a4mr11816687wmk.160.1658828523550;
+        Tue, 26 Jul 2022 02:42:03 -0700 (PDT)
+Received: from ?IPV6:2a01:cb1d:77d:8cd7:621a:855b:69ac:c34a? ([2a01:cb1d:77d:8cd7:621a:855b:69ac:c34a])
+        by smtp.gmail.com with ESMTPSA id u16-20020a5d4350000000b0021e4b0aac41sm13834639wrr.24.2022.07.26.02.42.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 02:42:03 -0700 (PDT)
+Message-ID: <11118ebb-8731-8e4b-e483-7b9b2cc42d13@baylibre.com>
+Date:   Tue, 26 Jul 2022 11:42:02 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PiSrXluymVVHYF30g8.HKEm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH v1 2/2] dt-binding: iio: time: add capture-tiecap.yaml
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        jic23@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mranostay@ti.com
+References: <20220726072553.5136-1-jpanis@baylibre.com>
+ <20220726072553.5136-3-jpanis@baylibre.com>
+ <c4e8b285-1e77-492e-31d7-8c79328b95dd@linaro.org>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <c4e8b285-1e77-492e-31d7-8c79328b95dd@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,70 +78,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/PiSrXluymVVHYF30g8.HKEm
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 26/07/2022 11:29, Krzysztof Kozlowski wrote:
+> On 26/07/2022 09:25, Julien Panis wrote:
+>> This commit adds a YAML binding for TI ECAP used in capture operating mode.
+>>
+>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+>> ---
+>>   .../bindings/iio/time/capture-tiecap.yaml     | 53 +++++++++++++++++++
+>>   1 file changed, 53 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/iio/time/capture-tiecap.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/iio/time/capture-tiecap.yaml b/Documentation/devicetree/bindings/iio/time/capture-tiecap.yaml
+>> new file mode 100644
+>> index 000000000000..4f08e49a8506
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/iio/time/capture-tiecap.yaml
+> Use filename based on compatible, so:
+> ti,am62-ecap-capture.yaml
+>
+>> @@ -0,0 +1,53 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/iio/capture-tiecap.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Texas Instruments Enhanced Capture (eCAP) Module
+>> +
+>> +maintainers:
+>> +  - Julien Panis <jpanis@baylibre.com>
+>> +
+>> +description: |
+>> +  The eCAP module resources can be used to capture timestamps
+>> +  on input signal events (falling/rising edges).
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: ti,am62-ecap-capture
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  clock-names:
+>> +    const: fck
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    ecap0: capture@23100000 { /* eCAP in capture mode on am62x */
+>> +        compatible = "ti,am62-ecap-capture";
+>> +        reg = <0x00 0x23100000 0x00 0x100>;
+>> +        interrupts = <GIC_SPI 113 IRQ_TYPE_EDGE_RISING>;
+>> +        power-domains = <&k3_pds 51 TI_SCI_PD_EXCLUSIVE>;
+> Does not look like you tested the bindings. Please run `make
+> dt_binding_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-Today's linux-next merge of the mm-nonmm-stable tree got a conflict in:
 
-  lib/Makefile
+I did not indeed, sorry. I thought that checkpath also checked binding.
 
-between commit:
+Thank you for your feedback. I'm going to prepare a new version.
 
-  e0281efe11c9 ("lib/nodemask: inline next_node_in() and node_random()")
 
-from the bitmap tree and commit:
-
-  b81dce77cedc ("cpumask: Fix invalid uniprocessor mask assumption")
-
-from the mm-nonmm-stable tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc lib/Makefile
-index 90d02a0986e9,de3e47453fe8..000000000000
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@@ -33,11 -33,10 +33,10 @@@ lib-y :=3D ctype.o string.o vsprintf.o cm
-  	 flex_proportions.o ratelimit.o show_mem.o \
-  	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
-  	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
- -	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
- +	 nmi_backtrace.o win_minmax.o memcat_p.o \
-- 	 buildid.o
-+ 	 buildid.o cpumask.o
- =20
-  lib-$(CONFIG_PRINTK) +=3D dump_stack.o
-- lib-$(CONFIG_SMP) +=3D cpumask.o
- =20
-  lib-y	+=3D kobject.o klist.o
-  obj-y	+=3D lockref.o
-
---Sig_/PiSrXluymVVHYF30g8.HKEm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLftt8ACgkQAVBC80lX
-0GyiLgf/UTGQVDjVG5pL3te+G7bkYx0qM3da+lxhFURfY4N9Fdsmu5adCLfwsM/K
-7Jj1TqDJx8KFkW/BUBaHyar7jBrHvhtG/lKVNNUx/ANkhzYhVCxLg5Z7dr3U6UUP
-+xrbkIeVFRrzp9Ufn/oQBjUXwG1CJ2YKfZKqcchtQkH7sjQBtd8Dcq08g+/VTGCI
-QLJJ1ebMseEJV7eJPZkB2hKGk/DfvQH0spRfI0doVK9uDp0ADtOeegHn4FkoiLJD
-NkI0MBMAqBu3DlPaqRPpf7nE8aJLcYUaomBViKVxVHyItLidjQOqHG+nUCZuZLmH
-1jpNgNgRs2JhbHZUN6Mvtb5lhL1rHw==
-=BnVo
------END PGP SIGNATURE-----
-
---Sig_/PiSrXluymVVHYF30g8.HKEm--
+>
+>> +        clocks = <&k3_clks 51 0>;
+>> +        clock-names = "fck";
+>> +    };
+>
+> Best regards,
+> Krzysztof

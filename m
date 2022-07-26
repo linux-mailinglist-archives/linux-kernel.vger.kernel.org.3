@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE46D581541
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD3758153D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239189AbiGZO3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
+        id S234029AbiGZO3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239273AbiGZO3j (ORCPT
+        with ESMTP id S239245AbiGZO3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:29:39 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8C2231
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:29:37 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LsfMm1XbFzWfDD;
-        Tue, 26 Jul 2022 22:25:40 +0800 (CST)
+        Tue, 26 Jul 2022 10:29:37 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8D3624E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:29:36 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LsfNy0G3Sz1M89Z;
+        Tue, 26 Jul 2022 22:26:42 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Jul
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
         <songmuchun@bytedance.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH v2 3/5] hugetlbfs: remove unneeded header file
-Date:   Tue, 26 Jul 2022 22:29:16 +0800
-Message-ID: <20220726142918.51693-4-linmiaohe@huawei.com>
+Subject: [PATCH v2 4/5] hugetlbfs: cleanup some comments in inode.c
+Date:   Tue, 26 Jul 2022 22:29:17 +0800
+Message-ID: <20220726142918.51693-5-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220726142918.51693-1-linmiaohe@huawei.com>
 References: <20220726142918.51693-1-linmiaohe@huawei.com>
@@ -48,26 +48,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The header file signal.h is unneeded now. Remove it.
+The function generic_file_buffered_read has been renamed to filemap_read
+since commit 87fa0f3eb267 ("mm/filemap: rename generic_file_buffered_read
+to filemap_read"). Update the corresponding comment. And duplicated taken
+in hugetlbfs_fill_super is removed.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 ---
- fs/hugetlbfs/inode.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/hugetlbfs/inode.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index a10156df5726..aa7a5b8fc724 100644
+index aa7a5b8fc724..96c60aa3ab47 100644
 --- a/fs/hugetlbfs/inode.c
 +++ b/fs/hugetlbfs/inode.c
-@@ -11,7 +11,6 @@
+@@ -313,8 +313,7 @@ hugetlbfs_read_actor(struct page *page, unsigned long offset,
  
- #include <linux/thread_info.h>
- #include <asm/current.h>
--#include <linux/sched/signal.h>		/* remove ASAP */
- #include <linux/falloc.h>
- #include <linux/fs.h>
- #include <linux/mount.h>
+ /*
+  * Support for read() - Find the page attached to f_mapping and copy out the
+- * data. Its *very* similar to generic_file_buffered_read(), we can't use that
+- * since it has PAGE_SIZE assumptions.
++ * data. This provides functionality similar to filemap_read().
+  */
+ static ssize_t hugetlbfs_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ {
+@@ -1383,7 +1382,7 @@ hugetlbfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	/*
+ 	 * Allocate and initialize subpool if maximum or minimum size is
+ 	 * specified.  Any needed reservations (for minimum size) are taken
+-	 * taken when the subpool is created.
++	 * when the subpool is created.
+ 	 */
+ 	if (ctx->max_hpages != -1 || ctx->min_hpages != -1) {
+ 		sbinfo->spool = hugepage_new_subpool(ctx->hstate,
 -- 
 2.23.0
 

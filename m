@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EFF58159F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6CC5815B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239442AbiGZOo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S239459AbiGZOtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiGZOoz (ORCPT
+        with ESMTP id S239447AbiGZOtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:44:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AA9E26AD9;
-        Tue, 26 Jul 2022 07:44:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A83551FB;
-        Tue, 26 Jul 2022 07:44:54 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.87.135])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 32CA43F70D;
-        Tue, 26 Jul 2022 07:44:53 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 15:44:31 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [-next] Lockdep warnings
-Message-ID: <Yt/9z1+X3hDfXkbL@FVFF77S0Q05N>
-References: <20220726104134.3b3awfphvafljdgp@bogus>
+        Tue, 26 Jul 2022 10:49:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3B12D1F7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:49:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 46048CE19A1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 14:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58FE2C433D6;
+        Tue, 26 Jul 2022 14:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658846950;
+        bh=6qe77S7H9yLJcTguoEah7bWjYEDj8Rr8Be/b5etbPYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FsYX4Uq4Hm49BLpGwC2L0jCbnphx9BSNKb1oJefNVr103LWLNFo2dJEUpOspPNmR8
+         mo0mnGe6xOSqBAP4hmQWMfHjtB+wulW4SvebGSs6OAo5T+OumbOsHNfeWQWI4BngWz
+         LNJNU5gsiAH5WXPvmVH3jxR2SLAaZgk5HfglW3X9nhxCCpPtFMeRX4tWbM+G960/Bx
+         RQnef+RP5z3YY27ojllPVSKfq/zV8p5KuZ9GS8yQGfEYfP9jtzpb+rfkgOM8QiBwAB
+         en/N94oNvsM6VLT9UaARuZwAcxkPMuRoGfgR03fKl2ediKrsArE8/8fziGoG+kFKm5
+         SCOwm9X/qVK2Q==
+Date:   Tue, 26 Jul 2022 15:49:02 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     maz@kernel.org, mark.rutland@arm.com, madvenka@linux.microsoft.com,
+        tabba@google.com, oliver.upton@linux.dev, will@kernel.org,
+        qperret@google.com, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
+        mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com,
+        elver@google.com, keirf@google.com, yuzenghui@huawei.com,
+        ardb@kernel.org, oupton@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, android-mm@google.com,
+        kernel-team@android.com
+Subject: Re: [PATCH v6 06/17] arm64: stacktrace: Add description of
+ stacktrace/common.h
+Message-ID: <Yt/+3qpSqtntXzpY@sirena.org.uk>
+References: <20220726073750.3219117-1-kaleshsingh@google.com>
+ <20220726073750.3219117-7-kaleshsingh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VvhY7zJe39DOaRz/"
 Content-Disposition: inline
-In-Reply-To: <20220726104134.3b3awfphvafljdgp@bogus>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220726073750.3219117-7-kaleshsingh@google.com>
+X-Cookie: All rights reserved.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 11:41:34AM +0100, Sudeep Holla wrote:
-> I was seeing the below lockdep warnings on my arm64 Juno development
-> platform almost 2 weeks back with -next. I wanted to check for similar
-> reports before post and forgot.
 
-[...]
+--VvhY7zJe39DOaRz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> However I don't see the above warning with the latest -next. When I tried
-> yesterday's -next now, I see a different warning. Not sure if they are
-> related. I haven't tried to bisect.
-> 
-> --->8
-> =============================
-> [ BUG: Invalid wait context ]
-> 5.19.0-rc8-next-20220725 #38 Not tainted
-> -----------------------------
-> swapper/0/0 is trying to lock:
-> (&drvdata->spinlock){....}-{3:3}, at: cti_cpu_pm_notify+0x54/0x114
+On Tue, Jul 26, 2022 at 12:37:39AM -0700, Kalesh Singh wrote:
 
-Hmmm... do you have CONFIG_PROVE_RAW_LOCK_NESTING enabled?
+> Add brief description on how to use stacktrace/common.h to implement
+> a stack unwinder.
 
-IIUC that should be {2:2} otherwise...
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
-> other info that might help us debug this:
-> context-{5:5}
-> 1 lock held by swapper/0/0:
->  #0: (cpu_pm_notifier.lock){....}-{2:2}, at: cpu_pm_enter+0x2c/0x80
+--VvhY7zJe39DOaRz/
+Content-Type: application/pgp-signature; name="signature.asc"
 
-... and this is telling us that we're trying to take a regular spinlock under a
-raw spinlock, which is not as intended.
+-----BEGIN PGP SIGNATURE-----
 
-The Kconfig text notes:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLf/t0ACgkQJNaLcl1U
+h9Dq9Qf+M8Vw3uujBFIzWTDAk2o46YySw1X4f/3zirbpelSLiA92qxcFQx6PGkJX
+DEX9sfHtytc3vnSGvG/Xnsp+AKHSq3l6ON9FYvU3wJRTRPRnkuz4UPHydRipyjsm
+eFp3c8+crrbRjcShB8nckslrRtberLCJDMKeVXoN9m0x3dXaBqkaYgiM1NyhCPZa
+3YNRCGE0zGsqVxPW3fRCW0SQY2mrpjBZC/sE4Xg805v8hgXqhNb656/EUhSOUC4P
+YWixP6TJUIf/hqhckzlebKuYc64LpI07KIsv4hmG7S/T8SxqxGATDQ1Rg3y7ySZ7
+Zs/RPpBZPRgr7ZgrOqBKLdMg1QDXLQ==
+=AZ9B
+-----END PGP SIGNATURE-----
 
-         NOTE: There are known nesting problems. So if you enable this 
-         option expect lockdep splats until these problems have been fully
-         addressed which is work in progress. This config switch allows to
-         identify and analyze these problems. It will be removed and the
-         check permanently enabled once the main issues have been fixed.
-
-... and I suspect this is one of those latent issues.
-
-Mark.
-
-> stack backtrace:
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc8-next-20220725-00004-g599e6691ed8c #38
-> Call trace:
->  dump_backtrace+0xe8/0x108
->  show_stack+0x18/0x4c
->  dump_stack_lvl+0x90/0xc8
->  dump_stack+0x18/0x54
->  __lock_acquire+0xa70/0x32d0
->  lock_acquire+0x160/0x308
->  _raw_spin_lock+0x60/0xa0
->  cti_cpu_pm_notify+0x54/0x114
->  raw_notifier_call_chain_robust+0x50/0xd4
->  cpu_pm_enter+0x48/0x80
->  psci_enter_idle_state+0x34/0x74
->  cpuidle_enter_state+0x120/0x2a8
->  cpuidle_enter+0x38/0x50
->  do_idle+0x1e8/0x2b8
->  cpu_startup_entry+0x24/0x28
->  kernel_init+0x0/0x1a0
->  start_kernel+0x0/0x470
->  start_kernel+0x34c/0x470
->  __primary_switched+0xbc/0xc4
-> 
-> ----
-> 
-> --
-> Regards,
-> Sudeep
+--VvhY7zJe39DOaRz/--

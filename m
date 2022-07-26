@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E62580DC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D3C580DB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238336AbiGZHcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S237768AbiGZHb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237641AbiGZHbo (ORCPT
+        with ESMTP id S238463AbiGZHbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:31:44 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E6164D7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:27:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VKUOGmU_1658820400;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VKUOGmU_1658820400)
+        Tue, 26 Jul 2022 03:31:04 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7BD2DABC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:27:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VKUBAsS_1658820404;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VKUBAsS_1658820404)
           by smtp.aliyun-inc.com;
-          Tue, 26 Jul 2022 15:26:42 +0800
+          Tue, 26 Jul 2022 15:26:47 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 To:     alexander.deucher@amd.com
 Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
@@ -26,9 +26,9 @@ Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH 05/20] drm/amd/display: Clean up some inconsistent indenting
-Date:   Tue, 26 Jul 2022 15:25:40 +0800
-Message-Id: <20220726072555.91323-5-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH 06/20] drm/amd/display: Clean up some inconsistent indenting
+Date:   Tue, 26 Jul 2022 15:25:41 +0800
+Message-Id: <20220726072555.91323-6-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 In-Reply-To: <20220726072555.91323-1-jiapeng.chong@linux.alibaba.com>
 References: <20220726072555.91323-1-jiapeng.chong@linux.alibaba.com>
@@ -48,24 +48,24 @@ No functional modification involved.
 
 smatch warning:
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c:683 dcn316_clk_mgr_construct() warn: inconsistent indenting.
+drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c:655 dcn315_clk_mgr_construct() warn: inconsistent indenting.
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c | 3 ++-
+ drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
-index e4bb9c6193b5..0cd3d2eb7ac7 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
-@@ -680,7 +680,8 @@ void dcn316_clk_mgr_construct(
- 			dcn316_bw_params.wm_table = ddr4_wm_table;
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
+index 36b0cd47c1c7..cc076621f5e6 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
+@@ -652,7 +652,8 @@ void dcn315_clk_mgr_construct(
+ 			dcn315_bw_params.wm_table = ddr5_wm_table;
  		}
  		/* Saved clocks configured at boot for debug purposes */
--		 dcn316_dump_clk_registers(&clk_mgr->base.base.boot_snapshot, &clk_mgr->base.base, &log_info);
-+		dcn316_dump_clk_registers(&clk_mgr->base.base.boot_snapshot,
+-		 dcn315_dump_clk_registers(&clk_mgr->base.base.boot_snapshot, &clk_mgr->base.base, &log_info);
++		dcn315_dump_clk_registers(&clk_mgr->base.base.boot_snapshot,
 +					  &clk_mgr->base.base, &log_info);
  
  	}

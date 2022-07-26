@@ -2,214 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AD75816B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBEB5816B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239227AbiGZPqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S239236AbiGZPql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiGZPqT (ORCPT
+        with ESMTP id S239239AbiGZPqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:46:19 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586822C10A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:46:16 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220726154610epoutp021bf5a8570f5ab0965e5774fae8b9cd30~Fa5_C3kRE2987029870epoutp02e
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 15:46:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220726154610epoutp021bf5a8570f5ab0965e5774fae8b9cd30~Fa5_C3kRE2987029870epoutp02e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1658850370;
-        bh=bsbhIglKKloE7hZ1DdKwGPVei4I/y5lPhFQOdRu63rg=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=Fk/oa3qMxR9yvggTyn82R1qFh60B/5GLpdNgLARnuYXRduFGXOVOrZuyS5AJL/0zH
-         8hW5WltEbZiG36Y1PcE1LjxIt4E1yzIPK2GxngSWTRrbMwzd90g1QPlPgcCQdyqYKx
-         c9M7pwIy5K0mFzKAj1DBvyeeLan5z8pJTnB/GwKM=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220726154609epcas1p4702cce003fbdbffdc7734c02276f6d0b~Fa59KxES51794117941epcas1p4V;
-        Tue, 26 Jul 2022 15:46:09 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.38.232]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lsh8c4ztyz4x9Pw; Tue, 26 Jul
-        2022 15:46:08 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        91.EB.09661.04C00E26; Wed, 27 Jul 2022 00:46:08 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220726154608epcas1p27b31dc63fe80e6021d9e747be68e4547~Fa57txtoW0714907149epcas1p2D;
-        Tue, 26 Jul 2022 15:46:08 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220726154608epsmtrp1d81d56dd731876dcea351da56032f248~Fa57tF0n91112811128epsmtrp1F;
-        Tue, 26 Jul 2022 15:46:08 +0000 (GMT)
-X-AuditID: b6c32a37-2b9ff700000025bd-c0-62e00c40d45c
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        64.74.08905.F3C00E26; Wed, 27 Jul 2022 00:46:07 +0900 (KST)
-Received: from jihochu04 (unknown [10.113.112.236]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220726154607epsmtip12a39630c2ae87083490008e871e74bae~Fa57iB2i32652526525epsmtip1A;
-        Tue, 26 Jul 2022 15:46:07 +0000 (GMT)
-From:   "Jiho Chu" <jiho.chu@samsung.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <arnd@arndb.de>, <linux-kernel@vger.kernel.org>,
-        <yelini.jeong@samsung.com>, <myungjoo.ham@samsung.com>
-Subject: RE: RE: [PATCH 0/9] Samsung Trinity NPU device driver
-Date:   Wed, 27 Jul 2022 00:46:07 +0900
-Message-ID: <001801d8a106$d26e2860$774a7920$@samsung.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AdihBUm9mEN6PLeoTiiwkHAUdjbCkw==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplk+LIzCtJLcpLzFFi42LZdlhTV9eB50GSQd9NRYu/k46xWzQvXs9m
-        cXnXHDaL240r2CyeT7vO4sDq8fvXJEaP/XPXsHv0bVnF6PF5k1wAS1S2TUZqYkpqkUJqXnJ+
-        SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QXiWFssScUqBQQGJxsZK+nU1R
-        fmlJqkJGfnGJrVJqQUpOgWmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsaVbR/YCn4qVqx5v5up
-        gXGmdBcjJ4eEgInEp/a97F2MXBxCAjsYJWZt/8EC4XxilFhzZSKU841RYuWsicwwLXumrGWE
-        SOxllDi5qIUdJCEk8IJRYvXfeBCbTUBd4sz6r2wgtoiAgsTVn7/BbGaBXIm3N/cygtjCAnYS
-        018tAhvKIqAqMfH0ObAaXgFLib/PIWbyCghKnJz5hAWiV15i+9s5UEcoSPx8uoy1i5EDaL6e
-        xOObERAlIhKzO9uYQW6TEHjJLrG0aTMTSI2EgIvEj0euEK3CEq+Ob2GHsKUkXva3QdnZElM6
-        FrFA2AUS555vZYZoNZa4uCIFxGQW0JRYv0sfokJRYufvuYwQW/kk3n3tYYWo5pXoaBOCKFGS
-        WPLnMNRwCYmpM74xQdgeEvc2rmaawKg4C8mLs5C8OAvJL7MQFi9gZFnFKJZaUJybnlpsWGAM
-        j+nk/NxNjOD0qGW+g3Ha2w96hxiZOBgPMUpwMCuJ8CZE308S4k1JrKxKLcqPLyrNSS0+xGgK
-        DPSJzFKiyfnABJ1XEm9oYmlgYmZkbGJhaGaoJM67atrpRCGB9MSS1OzU1ILUIpg+Jg5OqQam
-        nREyq9+dzp50Olvk1+TFYv/uL1naPn9+BP+hpZO/+S+rmLeC9f39K5fi1tguiHVzkesN1dcy
-        WKIZtDavK+rIwV9q58qEl7avX5tfO+Vac93RztQpVzR37RfJeCY777XwRwfm2zLPDjK65CWI
-        rJA2P5PS3XLh+wOFYJ/ylw36/Dl32p4fNtGV0C1xPH7YMnT+/4P68jp2s8Xv7oz/tiBF90ZF
-        O9u/80Zfuee/XKh+O1TdiWHFyRvripiUb/z5+nVv48LQZRyPb+12tTFo8c8r89R9kB+3lMH5
-        7hY2brP6xhkJ+/SulW70U+BP+2zpXda3YP7vf+LfeNrv7J+VVmDqz1SvGqCTsiCIS091wk8R
-        JZbijERDLeai4kQAsNeQNRgEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBLMWRmVeSWpSXmKPExsWy7bCSnK4Dz4Mkg38hFn8nHWO3aF68ns3i
-        8q45bBa3G1ewWTyfdp3FgdXj969JjB77565h9+jbsorR4/MmuQCWKC6blNSczLLUIn27BK6M
-        K9s+sBX8VKxY8343UwPjTOkuRk4OCQETiT1T1jJ2MXJxCAnsZpR49+IBC0RCQmLTveXMXYwc
-        QLawxOHDxRA1zxglXr45ywpSwyagLnFm/Vc2EFtEQEHi6s/fbCD1zAKFErNeZYCEhQXsJKa/
-        WsQMYrMIqEpMPH0OrJxXwFLi7/MWdghbUOLkzCdga5kFtCWe3nwKZctLbH87hxniHAWJn0+X
-        sYKMFxHQk3h8MwKiRERidmcb8wRGwVlIJs1CMmkWkkmzkLQsYGRZxSiZWlCcm55bbFhgmJda
-        rlecmFtcmpeul5yfu4kRHPhamjsYt6/6oHeIkYmD8RCjBAezkghvQvT9JCHelMTKqtSi/Pii
-        0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqY8gu2WR5//FNoxg/bosMxW6ss
-        T8mdmjHl5alvOcWCK6Jdyx4E/nqrtt7IuPLs308qzZd+ipx4kxR5YJbu36fbVxdZ1Kt3r9pu
-        GL+1ztAt/WjyjqtKIe5F6qXG3/1PHkxQKlPX4BO4w3xtbxGT7fLjibUqm27bCX20u/4m9fmR
-        voRPP1cXZZxzCk/ya1Ldu7cq65DGuh6Bhl/3Dlukn1VgzbVXus99oC0jIlhFcW7vz5SL9xmW
-        JR7IjkngOtFzetcaCbUrnz5qbVvPuGe+/yyGIr97jiWHVZcdPCHiYj/p8Nt/p9Q2Xe02+7Kh
-        qC5xycnT71piPFNVHL6ynXrzcOWvBe4+Z8wuNTpUX8lVdtULUGIpzkg01GIuKk4EAP5thdHr
-        AgAA
-X-CMS-MailID: 20220726154608epcas1p27b31dc63fe80e6021d9e747be68e4547
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220726154608epcas1p27b31dc63fe80e6021d9e747be68e4547
-References: <CGME20220726154608epcas1p27b31dc63fe80e6021d9e747be68e4547@epcas1p2.samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 11:46:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199E32CDE4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:46:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 414D838071;
+        Tue, 26 Jul 2022 15:46:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658850396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aIlQ+lIneOAkAkTafeucoNWIdYRQNPe6TwJPpW9sMbw=;
+        b=xxWc56g+Wrss0jmeyr1T+3QSxScX3ltUgwV6eiRPJV74aof1hcu2NdZ7PnapjrTdUadVAA
+        l2mFawzaRgsv14vbupCusnFL/JFVFZzAggpFY4uNU25UHRybjYwuOaI+5ZH4Wbb2ST0GdT
+        GI8MkN9Bp1M6v+LSgMxAZyPXS7kZWcg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658850396;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aIlQ+lIneOAkAkTafeucoNWIdYRQNPe6TwJPpW9sMbw=;
+        b=bAr20cBQorHLkYXugJoSLlROnVBxIcv0RXKPnLNL9wjS2byYscWY1fdNTDKwVF1NMBuel3
+        byyk0r0dtqT0r/Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 17DA613A7C;
+        Tue, 26 Jul 2022 15:46:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MzgVBVwM4GJbXwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 26 Jul 2022 15:46:36 +0000
+Date:   Tue, 26 Jul 2022 17:46:35 +0200
+Message-ID: <87y1wfq3l0.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Cameron Berkenpas <cam@neo-zeon.de>
+Cc:     Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Add support for CLSA0101
+In-Reply-To: <91e34de4-1c85-073f-9c24-ce3133394fe6@neo-zeon.de>
+References: <20220726101131.68058-1-tanureal@opensource.cirrus.com>
+        <91e34de4-1c85-073f-9c24-ce3133394fe6@neo-zeon.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> --------- Original Message ---------
-> Sender : Greg KH <gregkh@linuxfoundation.org> Date : 2022-07-25 18:02
-> (GMT+9) Title : Re: [PATCH 0/9] Samsung Trinity NPU device driver
+On Tue, 26 Jul 2022 17:35:49 +0200,
+Cameron Berkenpas wrote:
 > 
-> On Mon, Jul 25, 2022 at 03:52:59PM +0900, Jiho Chu wrote:
-> > Hello,
-> >
-> > My name is Jiho Chu, and working for device driver and system daemon
-> >for
-> > several years at Samsung Electronics.
-> >
-> > Trinity Neural Processing Unit (NPU) series are hardware accelerators
-> > for neural network processing in embedded systems, which are
-> >integrated
-> > into application processors or SoCs. Trinity NPU is compatible with
-> >AMBA
-> > bus architecture and first launched in 2018 with its first version for
-> > vision processing, Trinity Version1 (TRIV1). Its second version,
-> >TRIV2,
-> > is released in Dec, 2021. Another Trinity NPU for audio processing is
-> > referred as TRIA.
-> >
-> > TRIV2 is shipped for many models of 2022 Samsung TVs, providing
-> > acceleration for various AI-based applications, which include image
-> > recognition and picture quality improvements for streaming video,
-> >which
-> > can be accessed via GStreamer and its neural network plugins,
-> > NNStreamer.
-> >
-> > In this patch set, it includes Trinity Vision 2 kernel device driver.
-> > Trinity Vision 2 supports accelerating image inference process for
-> > Convolution Neural Network (CNN). The CNN workload is executed by Deep
-> > Learning Accelerator (DLA), and general Neural Network Layers are
-> > executed by Digital Signal Processor (DSP). And there is a Control
-> > Processor (CP) which can control DLA and DSP. These three IPs (DLA,
-> >DSP,
-> > CP) are composing Trinity Vision 2 NPU, and the device driver mainly
-> > supervise the CP to manage entire NPU.
-> >
-> > Controlling DLA and DSP operations is performed with internal command
-> > instructions. and the instructions for the Trinity is similar with
-> > general processor's ISA, but it is specialized for Neural Processing
-> > operations. The virtual ISA (vISA) is designed for calculating
-> >multiple
-> > data with single operation, like modern SIMD processor. The device
-> > driver loads a program to CP at start up, and the program can decode a
-> > binary which is built with the vISA. We calls this decoding program as
-> >a
-> > Instruction Decoding Unit (IDU) program. While running the NPU, the CP
-> > executes IDU program to fetch and decode instructions which made up of
-> > vISA, by the scheduling policy of the device driver.
-> >
-> > These DLA, DSP and CP are loosely coupled using ARM's AMBA, so the
-> > Trinity can easily communicate with most ARM processors. Each IPs
-> > designed to have memory-mapped registers which can be used to control
-> > the IP, and the CP provides Wait-For-Event (WFE) operation to
-> >subscribe
-> > interrupt signals from the DLA and DSP. Also, embedded Direct Memory
-> > Access Controller (DMAC) manages data communications between internal
-> > SRAM and outer main memory, IOMMU module supports unified memory space.
-> >
-> > A user can control the Trinity NPU with IOCTLs provided by driver.
-> >These
-> > controls includes memory management operations to transfer model data
-> > (HWMEM_ALLOC/HWMEM_DEALLOC), NPU workload control operations to submit
-> > workload (RUN/STOP), and statistics operations to check current NPU
-> > status. (STAT)
-> >
-> > The device driver also implemented features for developers. It
-> >provides
-> > sysfs control attributes like stop, suspend, sched_test, and profile.
-> > Also, it provides status attributes like app status, a number of total
-> > requests, a number of active requests and memory usages. For the
-> >tracing
-> > operations, several ftrace events are defined and embedded for several
-> > important points.
+> Hello,
 > 
-> If you have created sysfs files, you need to document them in
-> Documentation/ABI/ which I do not see in your diffstat.  Perhaps add
-> that for your next respin?
+> I can confirm this does _not_ work.
 > 
-> Also, please remove the "tracing" logic you have in the code, use
-> ftrace, don't abuse dev_info() everywhere, that's not needed at all.
+> More specifically, with these patches, the original behavior still occurs:
+> 1. You get left channel audio from the right speaker only.
+> 2. No sound at all after resuming from sleep.
+> 3. You get sound after resuming from hibernate, but only as described in #1.
 > 
-> thanks,
+> If you apply a patch like this: https://paste-bin.xyz/71355
 > 
-> greg k-h
-> 
-> 
+> You  get properly working audio until you put the laptop to sleep or
+> hibernate. Upon resuming from either state, you get no audio at all.
 
-Hi, Greg
-Thanks for your review.
-A documentation for ABI/ is added for user interfaces.
-And, most of unnecessary 'dev_info' removed except initialize information.
+OK, then let's drop them for now.
+Thanks for quick heads up.
 
-Thanks,
 
-Jiho Chu
+Takashi
 
+> 
+> On 7/26/22 03:11, Lucas Tanure wrote:
+> > Add Support for the CLSA0101 laptop, an Intel version of CLSA0100.
+> > This patch has been tested using the CLSA0100, ensuring it
+> > doesn't break the sound for it.
+> > We appreciate it if someone with CLSA0101 could verify that this
+> > the patch works for them.
+> > 
+> > Lucas Tanure (2):
+> >    ALSA: hda: cs35l41: Use the CS35L41 HDA internal define
+> >    ALSA: hda: cs35l41: Support CLSA0101
+> > 
+> >   sound/pci/hda/cs35l41_hda.c   | 67 +++++++++++++++++++++--------------
+> >   sound/pci/hda/patch_realtek.c | 12 +++++++
+> >   2 files changed, 53 insertions(+), 26 deletions(-)
+> > 
+> 

@@ -2,181 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3A65815BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FE75815A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239457AbiGZOve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
+        id S239414AbiGZOro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233523AbiGZOvc (ORCPT
+        with ESMTP id S229757AbiGZOrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 10:51:32 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C3B15802;
-        Tue, 26 Jul 2022 07:51:30 -0700 (PDT)
-Received: from zn.tnic (p200300ea970f4ff2329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:4ff2:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9EC801EC0622;
-        Tue, 26 Jul 2022 16:51:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658847084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=NGpnmZ5jm4nrbHTpdSQDfmfUGgLHgWESSBLxxIVaizU=;
-        b=dHkIi2g4b9g7z5bsQlPX2NowyqkPzJCGlMi4Ufh5hsv5Tfj5YHiwctLroQfN+dGTx85G+h
-        Y92PR06Yd9CQXG5YcmHOCRurUVgl9eoGkpiaLVvTWuZzeuhHEeBgIFSgFWv/jh0Uw+Amz0
-        0zRyMO9OBx+eb+9HGQ3kDZx/AIN1LPA=
-Date:   Tue, 26 Jul 2022 16:51:16 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv7 14/14] x86/tdx: Add unaccepted memory support
-Message-ID: <Yt//ZMrxtTwtKBqu@zn.tnic>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-15-kirill.shutemov@linux.intel.com>
+        Tue, 26 Jul 2022 10:47:42 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D21BDFD5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:47:40 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lsfmb5KchzWfWR;
+        Tue, 26 Jul 2022 22:43:43 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Jul 2022 22:47:37 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Jul 2022 22:47:36 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     David Hildenbrand <david@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Yongqiang Liu <liuyongqiang13@huawei.com>
+Subject: [PATCH v2] mm: add warning if __vm_enough_memory fails
+Date:   Tue, 26 Jul 2022 22:54:28 +0800
+Message-ID: <20220726145428.8030-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220614120231.48165-15-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:02:31PM +0300, Kirill A. Shutemov wrote:
-> +static bool is_tdx_guest(void)
-> +{
-> +	static bool once;
-> +	static bool is_tdx;
-> +
-> +	if (!IS_ENABLED(CONFIG_INTEL_TDX_GUEST))
-> +		return false;
-> +
-> +	if (!once) {
-> +		u32 eax, sig[3];
-> +
-> +		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
-> +			    &sig[0], &sig[2],  &sig[1]);
-> +		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
-> +		once = true;
-> +	}
-> +
-> +	return is_tdx;
-> +}
+If a process has no enough memory to allocate a new virtual mapping, we
+may meet kinds of error, eg, fork cannot allocate memory, SIGBUS error
+in shmem, but it is difficult to confirm them, let's add some debug
+information to easy to check this scenario if __vm_enough_memory fails.
 
-early_tdx_detect() already calls this CPUID function. It assigns
-function pointers too.
+Reported-by: Yongqiang Liu <liuyongqiang13@huawei.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+v2: use pr_warn_ratelimited, suggested by David Hildenbrand
 
-So why can't you assign an accept_memory() function pointer there and
-get rid of this sprinkled if (tdx) everywhere?
+ mm/util.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-> index 918a7606f53c..8518a75e5dd5 100644
-> --- a/arch/x86/boot/compressed/tdx.c
-> +++ b/arch/x86/boot/compressed/tdx.c
-> @@ -3,12 +3,15 @@
->  #include "../cpuflags.h"
->  #include "../string.h"
->  #include "../io.h"
-> +#include "align.h"
->  #include "error.h"
-> +#include "pgtable_types.h"
->  
->  #include <vdso/limits.h>
->  #include <uapi/asm/vmx.h>
->  
->  #include <asm/shared/tdx.h>
-> +#include <asm/page_types.h>
->  
->  /* Called from __tdx_hypercall() for unrecoverable failure */
->  void __tdx_hypercall_failed(void)
-> @@ -75,3 +78,78 @@ void early_tdx_detect(void)
->  	pio_ops.f_outb = tdx_outb;
->  	pio_ops.f_outw = tdx_outw;
->  }
-> +
-> +static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
-> +				    enum pg_level level)
-
-That's pretty much a copy of the same function in arch/x86/coco/tdx/tdx.c.
-
-Yeah, you need a tdx-shared.c which you include in both places just like
-it is done with sev-shared.c
-
-...
-
-> +void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
-
-That one too.
-
-> +{
-> +	/*
-> +	 * Notify the VMM about page mapping conversion. More info about ABI
-> +	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> +	 * section "TDG.VP.VMCALL<MapGPA>"
-> +	 */
-> +	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
-> +		error("Accepting memory failed\n");
-> +
-> +	/*
-> +	 * For shared->private conversion, accept the page using
-> +	 * TDX_ACCEPT_PAGE TDX module call.
-> +	 */
-> +	while (start < end) {
-> +		unsigned long len = end - start;
-> +		unsigned long accept_size;
-> +
-> +		/*
-> +		 * Try larger accepts first. It gives chance to VMM to keep
-> +		 * 1G/2M Secure EPT entries where possible and speeds up
-> +		 * process by cutting number of hypercalls (if successful).
-> +		 */
-> +
-> +		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
-> +		if (!accept_size)
-> +			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
-> +		if (!accept_size)
-> +			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
-> +		if (!accept_size)
-> +			error("Accepting memory failed\n");
-> +		start += accept_size;
-
-This series of calls to try_accept_one() appear in at least three
-places. Please carve them out into a separate function can put it in
-tdx-shared.c.
-
+diff --git a/mm/util.c b/mm/util.c
+index 1266a33a49ea..c786e21c6051 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -1020,6 +1020,8 @@ int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
+ 	if (percpu_counter_read_positive(&vm_committed_as) < allowed)
+ 		return 0;
+ error:
++	pr_warn_ratelimited("%s: pid: %d, comm: %s, no enough memory for the allocation\n",
++			    __func__, current->pid, current->comm);
+ 	vm_unacct_memory(pages);
+ 
+ 	return -ENOMEM;
 -- 
-Regards/Gruss,
-    Boris.
+2.35.3
 
-https://people.kernel.org/tglx/notes-about-netiquette

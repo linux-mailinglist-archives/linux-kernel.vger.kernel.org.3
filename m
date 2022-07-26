@@ -2,146 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A08C580DCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5B3580DD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237832AbiGZHdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S238395AbiGZHd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238259AbiGZHcC (ORCPT
+        with ESMTP id S238512AbiGZHdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:32:02 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E542129C97
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:28:02 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 6so23971535ybc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:28:02 -0700 (PDT)
+        Tue, 26 Jul 2022 03:33:37 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755652B262
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:29:41 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id m8so16664362edd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:29:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VvOrjB34rm7PzOpcu5vN7H48T73Za5L36kUOrTOg6ZU=;
-        b=UYCAqLQdkCe++bxbvoqb8ja13KXFhIBaW0rC+YYqYq4gvHo+TFgKPF/GZuT91VmSB8
-         C1W+AZw4l9ok/cijI6EPFtIFecx9ElKI75nt3EZmXPMl0ME3rxCMtwt6FCqEcqAzlXgc
-         L7pKvLgAUNdI/gsvxXkfFlg5biXeIuPvgjq6OlZZ2cbEWC7jVJ6RmvIswJs0R1wPEInh
-         sNGMWt8YNJtmjzLBgsGVFMhf8MoqqCx0CeHLgs7fbxPF4hIut+LmlvHlIRh5UZesH3nX
-         o77xUb6eSknQa9/tZQ3BGK1QZOpg9ZmseIfEITeaJYNYQSmSvHlSqBbMN8jvoIXgWsY1
-         JjRA==
+        bh=ERYnZjAmqURrPxvuGkteRUMsQNSwpIjr2yYOxhN4v2Q=;
+        b=O7TzWpi0xj6bpvrldwDThB5d/gjYTTMTVTUGLybnaeErIiSnX0YbL+nLFA3jwlYw0E
+         5AIA1897C+CZBfFXRL7et9zqCOFs5ucS+OwtB0RLvx2lC7cXunDzdsY5WkECsmbINc4r
+         jKxBTjBR8iNPnoUX+ms5ucm1QP0JDcZy3RJHx2/+hVdK/1f9JW0oOapO1JOJyowAU0C3
+         C1Tec08uGVo4ESKQHqt/qJFV2FiAvLAN70sMRe4J3tr433DFJIPVKal0iZ/pspuOOJ2H
+         Xk7JWRiqk4Tr4gNm3/nDSk+fXnWs3wYHUErkekewEmko8zPFoeH7Hb/BOWzC+ImylG7m
+         8FIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VvOrjB34rm7PzOpcu5vN7H48T73Za5L36kUOrTOg6ZU=;
-        b=j/h9PaUAMV/wLTXRBQvqoim+MWY3kFgTrmtSokO2kug1ETyl1WCtjv4zOPQESsaPwj
-         95QfQqiIixb14Tmzmwm6byh2QsbWvMHUl6pG8BTaPD90JkiJfco9Ep2bCjI6Yp2v7I4P
-         gt83UDhU4oRKoeJTcL018dUOdp0Aa6s4tFA2oHfE8AF64IMYV4qVD/fR8PBeyaHTLr0Z
-         RasmaBA2uj0+pXAp/5HZAbn5q/Xfga2MNgabL26I0sqJ8bJt1bznRlo9tUP0XioBsMLS
-         pGg9yCcjF5da49wbj0NP0UFC3G3GBppIr31WoXfynhV4nWT6ODSgeSSUSiNhqnUGIL87
-         MQGA==
-X-Gm-Message-State: AJIora+N10FlVgdwjlTANsSpqjUcdjQjbT+Ch3VNTaDfBwzB3QEW44bA
-        xhFhXl1CbwA7iQFUI16BxUGjH+ENkyOW5d2IHOXfNA==
-X-Google-Smtp-Source: AGRyM1uv33zE0Yb5is3EhxTK8li350eCyxt4TvCNmDbhnKmlwtoEaE5nifSRGC+74wymZu7Olm8dTCRPLhrYeL6/L+k=
-X-Received: by 2002:a25:13c8:0:b0:670:6a55:5fad with SMTP id
- 191-20020a2513c8000000b006706a555fadmr12357687ybt.598.1658820477779; Tue, 26
- Jul 2022 00:27:57 -0700 (PDT)
+        bh=ERYnZjAmqURrPxvuGkteRUMsQNSwpIjr2yYOxhN4v2Q=;
+        b=BK29HBovv/Zhcg7p/k+XvKaZWF/63uKDIJae1ZieFpsYD75FpkdYLFKydUJOG6UAoQ
+         M51p4tTZbDCKT263LK1o6nMUdW46dBqpMqhk26SP7WsdYUN5GQuESXdMDrwlwKJ527aI
+         w8ihxYQCcBdUoftHT9doAF55QyNydSELcn8JrbV0uSiMMj4eURUMg/NE+wqH8qc+ajVU
+         rTmn6L2kM8yEOVToJF4jxIY4zTP78Umu0UFmt/MlW0ThCXmqBFTVen0uyQu0Z3cIlkBG
+         4fTZ0pXkZZh8K9Utt568kB4maN4/UQCYIBC3EH4oIR/2Na+aiadp+nTX0RF2hDanBTFS
+         2kUg==
+X-Gm-Message-State: AJIora80coqz7WQG41OliyC5K8INOtFHF+AEAtAamkiX1GZdtSo+X3LX
+        sfqo867NvflD5WKvtVMS2Oor5SJaJtJyZMYy8p3s4Q==
+X-Google-Smtp-Source: AGRyM1vCl0qPyGCMLN1Hg2RlXB0kcD/KLy9QPtNqCBeoiRY0/Db5v7W/iINfCxVqz8rPtKUCoyRf96cvuacwUoXdwZo=
+X-Received: by 2002:aa7:cada:0:b0:43c:4f59:391a with SMTP id
+ l26-20020aa7cada000000b0043c4f59391amr2129348edt.172.1658820579738; Tue, 26
+ Jul 2022 00:29:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1658815925.git.cdleonard@gmail.com> <ad19d5c8a24054d48e1c35bb0ec92075b9f0dc6a.1658815925.git.cdleonard@gmail.com>
- <CANn89i+ByJsdKLXi982jq0H3irYg_ANSEdmL2zwZ_7G-E_g2eg@mail.gmail.com>
-In-Reply-To: <CANn89i+ByJsdKLXi982jq0H3irYg_ANSEdmL2zwZ_7G-E_g2eg@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 26 Jul 2022 09:27:46 +0200
-Message-ID: <CANn89i+=LVDFx_zjDy6uK+QorR+fosdkb8jqNMO6syqOsS7ZqQ@mail.gmail.com>
-Subject: Re: [PATCH v6 21/26] selftests: net/fcnal: Initial tcp_authopt support
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>, Philip Paeps <philip@trouble.is>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220716192900.454653-1-konrad.dybcio@somainline.org>
+In-Reply-To: <20220716192900.454653-1-konrad.dybcio@somainline.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 26 Jul 2022 09:29:28 +0200
+Message-ID: <CACRpkdYv4KGDtbQvW6J=RWuvOWg5wGB-L69_cOkjorzZjqSzAA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: Add DT schema for SM6375 TLMM
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 9:06 AM Eric Dumazet <edumazet@google.com> wrote:
+On Sat, Jul 16, 2022 at 9:29 PM Konrad Dybcio
+<konrad.dybcio@somainline.org> wrote:
+
+> Document the TLMM driver for SM6375.
 >
-> On Tue, Jul 26, 2022 at 8:16 AM Leonard Crestez <cdleonard@gmail.com> wrote:
-> >
-> > Tests are mostly copied from tcp_md5 with minor changes.
-> >
-> > It covers VRF support but only based on binding multiple servers: not
-> > multiple keys bound to different interfaces.
-> >
-> > Also add a specific -t tcp_authopt to run only these tests specifically.
-> >
->
-> Thanks for the test.
->
-> Could you amend the existing TCP MD5 test to make sure dual sockets
-> mode is working ?
->
-> Apparently, if we have a dual stack listener socket (AF_INET6),
-> correct incoming IPV4 SYNs are dropped.
->
->  If this is the case, fixing MD5 should happen first ;)
->
-> I think that we are very late in the cycle (linux-5.19 should be
-> released in 5 days), and your patch set should not be merged so late.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-I suspect bug was added in
+Patch applied!
 
-commit 7bbb765b73496699a165d505ecdce962f903b422
-Author: Dmitry Safonov <0x7f454c46@gmail.com>
-Date:   Wed Feb 23 17:57:40 2022 +0000
-
-    net/tcp: Merge TCP-MD5 inbound callbacks
-
-a possible fix (also removing an indirect call for IPV4) could be:
-
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index ba2bdc81137490bd1748cde95789f8d2bff3ab0f..66b883d1683ddf7de6a8959a2b4e025a74c830b1
-100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4534,8 +4534,14 @@ tcp_inbound_md5_hash(const struct sock *sk,
-const struct sk_buff *skb,
-        }
-
-        /* check the signature */
--       genhash = tp->af_specific->calc_md5_hash(newhash, hash_expected,
--                                                NULL, skb);
-+       if (family == AF_INET)
-+               genhash = tcp_v4_md5_hash_skb(newhash,
-+                                             hash_expected,
-+                                             NULL, skb);
-+       else
-+               genhash = tp->af_specific->calc_md5_hash(newhash,
-+                                                        hash_expected,
-+                                                        NULL, skb);
-
-        if (genhash || memcmp(hash_location, newhash, 16) != 0) {
-                NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5FAILURE);
+Yours,
+Linus Walleij

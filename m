@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC0E58123C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 13:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13D058123E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 13:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238909AbiGZLkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 07:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
+        id S238914AbiGZLmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 07:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238850AbiGZLkL (ORCPT
+        with ESMTP id S232542AbiGZLmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 07:40:11 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8012BD3;
-        Tue, 26 Jul 2022 04:40:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3051CCE1828;
-        Tue, 26 Jul 2022 11:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92010C341C8;
-        Tue, 26 Jul 2022 11:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658835607;
-        bh=yL/84tqi9gVAqhM4QwwAMzi32hAb0stsqpRwvMm7GAM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZHyDADn38pBiojVQRSYLMdqpCW60v82r3p9EwMoz2DEqz0PNDMiW8VJv7/LLzDCxD
-         7rEZhIWSy7QmYv6uVvObGFYHEyO0a44+J4SdqzqZaKQieEQNIyZerarBTf2qvoG3ej
-         bJxHTjhpPU4gYt45/f27KlV6n0MYAOIqyGqjTze0HL89rvJ46LhQOYHw28ZL6O6ceu
-         1g6r5n4Dc37NsgF4odx6rOLuWSwtK4ONpTgSllXMil4Al7m9XuvP24d42nqKk+OhbH
-         t0F2wMXPIjV9cJGyHfu0SJx4K3vMZT+kcLduE5LK327DDLnffIqAq3ou+PY1Wuh3kj
-         UPKJefehBh9xA==
-Date:   Tue, 26 Jul 2022 12:40:00 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     linux-pci@vger.kernel.org, bhelgaas@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lpieralisi@kernel.org,
-        kw@linux.com, mark.rutland@arm.com, sudeep.holla@arm.com,
-        boqun.feng@gmail.com, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org, jonmasters@google.com
-Subject: Re: [PATCH 0/4] PCI SMC conduit, now with DT support
-Message-ID: <20220726114000.GA21450@willie-the-truck>
-References: <20220725163905.2024437-1-jeremy.linton@arm.com>
+        Tue, 26 Jul 2022 07:42:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90533286FE
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 04:42:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658835729; x=1690371729;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1eAMO79FZmXRs+wzcth+Dhmn3RYc+zrDBkKBafUDChk=;
+  b=dUiLr4bFiF9aN+vwl3bQ9kd6pQl5QcuNnTXtUsKsGN+eApHzyB+oPV1s
+   SrLxo1qcwydMB3zqSdoyAd7EICLzZKczBiiGOkNnR0MYL5Qd5uQ2qKkrq
+   FFUeCK1U9cjayoZzP1FL7R6LJhvCo9PxKRhQdhan/DwffnKTy+YFywi3T
+   u/BjOIb1iOUR8piT88yDEc9n8Eq78nTD2z0Wu7AGxKO9CN7WnGfpDcARz
+   1FGDaXAAoStH/ChFJufOrSdOVRbKW6DJjmbnKxp2DwSeD64Y72OSXWMtf
+   JlRpTELkDAPdHkXUy2flixrU+RvL18MLM/VbG/o3ngJvqpeMXsV9HefUz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="286689095"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="286689095"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 04:42:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="627868091"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 Jul 2022 04:42:05 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGIwv-0006km-0L;
+        Tue, 26 Jul 2022 11:42:05 +0000
+Date:   Tue, 26 Jul 2022 19:42:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manisha Chinthapally <manisha.chinthapally@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Faycal Benmlih <faycal.benmlih@intel.com>
+Subject: drivers/platform/x86/socwatch/sw_trace_notifier_provider.c:1405:6:
+ sparse: sparse: symbol 'sw_handle_wakelock_i' was not declared. Should it be
+ static?
+Message-ID: <202207261924.uOL8Ab8K-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220725163905.2024437-1-jeremy.linton@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 11:39:01AM -0500, Jeremy Linton wrote:
-> This is a rebase of the later revisions of [1], but refactored
-> slightly to add a DT method as well. It has all the same advantages of
-> the ACPI method (putting HW quirks in the firmware rather than the
-> kernel) but now applied to a 'pci-host-smc-generic' compatible
-> property which extends the pci-host-generic logic to handle cases
-> where the PCI Config region isn't ECAM compliant. With this in place,
-> and firmware managed clock/phy/etc its possible to run the generic
-> driver on hardware that isn't what one would consider standards
-> compliant PCI root ports.
+Hi Manisha,
 
-I still think that hiding the code in firmware because the hardware is
-broken is absolutely the wrong way to tackle this problem and I thought
-the general idea from last time was that we were going to teach Linux
-about the broken hardware instead [1]. I'd rather have the junk where we
-can see it, reason about it and modify it.
+First bad commit (maybe != root cause):
 
-What's changed?
+tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_10
+head:   c55df4a2b60fc7c6c4d00fd9f9fb447087833513
+commit: 4a8adda8065c4c6944ffedd3025605c845c262a5 SEP/SOCWATCH resolve build errors after rebasing to linux v5.6-rc3
+date:   1 year, 10 months ago
+config: x86_64-randconfig-s021 (https://download.01.org/0day-ci/archive/20220726/202207261924.uOL8Ab8K-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/mchinth/linux/commit/4a8adda8065c4c6944ffedd3025605c845c262a5
+        git remote add mchinth https://github.com/mchinth/linux
+        git fetch --no-tags mchinth sep_socwatch_linux_5_10
+        git checkout 4a8adda8065c4c6944ffedd3025605c845c262a5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-In my mind, the main thing that's happened since we last discussed this
-is that Apple shipped arm64 client hardware with working ECAM. *Apple*
-for goodness sake: a company with basically no incentive to follow
-standards for their vertically integrated devices! Perhaps others need
-to raise their game instead of wasting everybody's time on firmware
-hacks; getting the hardware right obviously isn't as difficult as folks
-would lead us to believe.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Will
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/x86/socwatch/sw_trace_notifier_provider.c:1405:6: sparse: sparse: symbol 'sw_handle_wakelock_i' was not declared. Should it be static?
+   drivers/platform/x86/socwatch/sw_trace_notifier_provider.c:1634:67: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int flags @@     got restricted gfp_t @@
+   drivers/platform/x86/socwatch/sw_trace_notifier_provider.c:1634:67: sparse:     expected unsigned int flags
+   drivers/platform/x86/socwatch/sw_trace_notifier_provider.c:1634:67: sparse:     got restricted gfp_t
 
-[1] https://lore.kernel.org/r/20210325131231.GA18590@e121166-lin.cambridge.arm.com
+vim +/sw_handle_wakelock_i +1405 drivers/platform/x86/socwatch/sw_trace_notifier_provider.c
+
+d605aabab41663c Jon Moeller 2018-11-13 @1405  void sw_handle_wakelock_i(int cpu, struct sw_trace_notifier_data *node,
+
+:::::: The code at line 1405 was first introduced by commit
+:::::: d605aabab41663c9be9e8c549042933189adbf2f platform/x86: add sep and socwatch drivers without socperf.
+
+:::::: TO: Jon Moeller <jon.moeller@intel.com>
+:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

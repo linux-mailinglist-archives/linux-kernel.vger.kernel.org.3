@@ -2,135 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117B6580EAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BA2580E6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237955AbiGZIKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
+        id S231835AbiGZIEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbiGZIKf (ORCPT
+        with ESMTP id S230370AbiGZIEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:10:35 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A52BB1DF;
-        Tue, 26 Jul 2022 01:10:33 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LsTzZ6Nv9zjWxv;
-        Tue, 26 Jul 2022 16:07:38 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+        Tue, 26 Jul 2022 04:04:34 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94E52D1CD
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:04:32 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LsTqR5HS7zWfTL;
+        Tue, 26 Jul 2022 16:00:35 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 16:10:27 +0800
-Received: from [10.67.110.237] (10.67.110.237) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ 15.1.2375.24; Tue, 26 Jul 2022 16:03:56 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 16:10:25 +0800
-Subject: Re: [PATCH 1/5] ARM: stacktrace: Skip frame pointer boundary check
- for call_with_stack()
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux@armlinux.org.uk>, <rmk+kernel@armlinux.org.uk>,
-        <ardb@kernel.org>, <will@kernel.org>, <mark.rutland@arm.com>,
-        <broonie@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <arnd@arndb.de>,
-        <rostedt@goodmis.org>, <nick.hawkins@hpe.com>, <john@phrozen.org>,
-        <mhiramat@kernel.org>, <ast@kernel.org>, <linyujun809@huawei.com>,
-        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        Li Huafei <lihuafei1@huawei.com>
-References: <20220712021527.109921-1-lihuafei1@huawei.com>
- <20220712021527.109921-2-lihuafei1@huawei.com>
- <CACRpkdaXDGHLwqXQsEedRt=CLRUe1hei1vJDGAQ+D4U0OPcv8Q@mail.gmail.com>
-From:   Li Huafei <lihuafei1@huawei.com>
-Message-ID: <ab843b1e-9a4f-7b2c-a9bb-670797f7da34@huawei.com>
-Date:   Tue, 26 Jul 2022 16:10:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+ 15.1.2375.24; Tue, 26 Jul 2022 16:03:56 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] mm: memory-failure: convert to pr_fmt()
+Date:   Tue, 26 Jul 2022 16:10:46 +0800
+Message-ID: <20220726081046.10742-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdaXDGHLwqXQsEedRt=CLRUe1hei1vJDGAQ+D4U0OPcv8Q@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.67.110.237]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600010.china.huawei.com (7.193.23.86)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, sorry for the late reply.
+Use pr_fmt to prefix pr_<level> output.
 
-On 2022/7/18 16:57, Linus Walleij wrote:
-> On Tue, Jul 12, 2022 at 4:18 AM Li Huafei <lihuafei1@huawei.com> wrote:
->
->> When using the frame pointer unwinder, it was found that the stack trace
->> output of stack_trace_save() is incomplete if the stack contains
->> call_with_stack():
->>
->>   [0x7f00002c] dump_stack_task+0x2c/0x90 [hrtimer]
->>   [0x7f0000a0] hrtimer_hander+0x10/0x18 [hrtimer]
->>   [0x801a67f0] __hrtimer_run_queues+0x1b0/0x3b4
->>   [0x801a7350] hrtimer_run_queues+0xc4/0xd8
->>   [0x801a597c] update_process_times+0x3c/0x88
->>   [0x801b5a98] tick_periodic+0x50/0xd8
->>   [0x801b5bf4] tick_handle_periodic+0x24/0x84
->>   [0x8010ffc4] twd_handler+0x38/0x48
->>   [0x8017d220] handle_percpu_devid_irq+0xa8/0x244
->>   [0x80176e9c] generic_handle_domain_irq+0x2c/0x3c
->>   [0x8052e3a8] gic_handle_irq+0x7c/0x90
->>   [0x808ab15c] generic_handle_arch_irq+0x60/0x80
->>   [0x8051191c] call_with_stack+0x1c/0x20
->>
->> For the frame pointer unwinder, unwind_frame() checks stackframe::fp by
->> stackframe::sp. Since call_with_stack() switches the SP from one stack
->> to another, stackframe::fp and stackframe: :sp will point to different
->> stacks, so we can no longer check stackframe::fp by stackframe::sp. Skip
->> checking stackframe::fp at this point to avoid this problem.
->>
->> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> Very nice catch! Took me some time to realize what was
-> going on here.
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+The patch is based on next-20220725.
 
-Yeah, it took me some time to discover the cause of the problem too.
+ mm/memory-failure.c | 56 +++++++++++++++++++++------------------------
+ 1 file changed, 26 insertions(+), 30 deletions(-)
 
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 2bc1a47c3d46..f0e1961d4482 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -33,6 +33,9 @@
+  * are rare we hope to get away with this. This avoids impacting the core 
+  * VM.
+  */
++
++#define pr_fmt(fmt) "Memory failure: " fmt
++
+ #include <linux/kernel.h>
+ #include <linux/mm.h>
+ #include <linux/page-flags.h>
+@@ -258,7 +261,7 @@ static int kill_proc(struct to_kill *tk, unsigned long pfn, int flags)
+ 	short addr_lsb = tk->size_shift;
+ 	int ret = 0;
+ 
+-	pr_err("Memory failure: %#lx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
++	pr_err("%#lx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
+ 			pfn, t->comm, t->pid);
+ 
+ 	if ((flags & MF_ACTION_REQUIRED) && (t == current))
+@@ -276,7 +279,7 @@ static int kill_proc(struct to_kill *tk, unsigned long pfn, int flags)
+ 		ret = send_sig_mceerr(BUS_MCEERR_AO, (void __user *)tk->addr,
+ 				      addr_lsb, t);  /* synchronous? */
+ 	if (ret < 0)
+-		pr_info("Memory failure: Error sending signal to %s:%d: %d\n",
++		pr_info("Error sending signal to %s:%d: %d\n",
+ 			t->comm, t->pid, ret);
+ 	return ret;
+ }
+@@ -358,7 +361,7 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
+ 
+ 	tk = kmalloc(sizeof(struct to_kill), GFP_ATOMIC);
+ 	if (!tk) {
+-		pr_err("Memory failure: Out of memory while machine check handling\n");
++		pr_err("Out of memory while machine check handling\n");
+ 		return;
+ 	}
+ 
+@@ -385,7 +388,7 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
+ 	 * has a mapping for the page.
+ 	 */
+ 	if (tk->addr == -EFAULT) {
+-		pr_info("Memory failure: Unable to find user space address %lx in %s\n",
++		pr_info("Unable to find user space address %lx in %s\n",
+ 			page_to_pfn(p), tsk->comm);
+ 	} else if (tk->size_shift == 0) {
+ 		kfree(tk);
+@@ -418,7 +421,7 @@ static void kill_procs(struct list_head *to_kill, int forcekill, bool fail,
+ 			 * signal and then access the memory. Just kill it.
+ 			 */
+ 			if (fail || tk->addr == -EFAULT) {
+-				pr_err("Memory failure: %#lx: forcibly killing %s:%d because of failure to unmap corrupted page\n",
++				pr_err("%#lx: forcibly killing %s:%d because of failure to unmap corrupted page\n",
+ 				       pfn, tk->tsk->comm, tk->tsk->pid);
+ 				do_send_sig_info(SIGKILL, SEND_SIG_PRIV,
+ 						 tk->tsk, PIDTYPE_PID);
+@@ -431,7 +434,7 @@ static void kill_procs(struct list_head *to_kill, int forcekill, bool fail,
+ 			 * process anyways.
+ 			 */
+ 			else if (kill_proc(tk, pfn, flags) < 0)
+-				pr_err("Memory failure: %#lx: Cannot send advisory machine check signal to %s:%d\n",
++				pr_err("%#lx: Cannot send advisory machine check signal to %s:%d\n",
+ 				       pfn, tk->tsk->comm, tk->tsk->pid);
+ 		}
+ 		put_task_struct(tk->tsk);
+@@ -821,12 +824,10 @@ static int truncate_error_page(struct page *p, unsigned long pfn,
+ 		int err = mapping->a_ops->error_remove_page(mapping, p);
+ 
+ 		if (err != 0) {
+-			pr_info("Memory failure: %#lx: Failed to punch page: %d\n",
+-				pfn, err);
++			pr_info("%#lx: Failed to punch page: %d\n", pfn, err);
+ 		} else if (page_has_private(p) &&
+ 			   !try_to_release_page(p, GFP_NOIO)) {
+-			pr_info("Memory failure: %#lx: failed to release buffers\n",
+-				pfn);
++			pr_info("%#lx: failed to release buffers\n", pfn);
+ 		} else {
+ 			ret = MF_RECOVERED;
+ 		}
+@@ -838,8 +839,7 @@ static int truncate_error_page(struct page *p, unsigned long pfn,
+ 		if (invalidate_inode_page(p))
+ 			ret = MF_RECOVERED;
+ 		else
+-			pr_info("Memory failure: %#lx: Failed to invalidate\n",
+-				pfn);
++			pr_info("%#lx: Failed to invalidate\n",	pfn);
+ 	}
+ 
+ 	return ret;
+@@ -869,7 +869,7 @@ static bool has_extra_refcount(struct page_state *ps, struct page *p,
+ 		count -= 1;
+ 
+ 	if (count > 0) {
+-		pr_err("Memory failure: %#lx: %s still referenced by %d users\n",
++		pr_err("%#lx: %s still referenced by %d users\n",
+ 		       page_to_pfn(p), action_page_types[ps->type], count);
+ 		return true;
+ 	}
+@@ -893,7 +893,7 @@ static int me_kernel(struct page_state *ps, struct page *p)
+  */
+ static int me_unknown(struct page_state *ps, struct page *p)
+ {
+-	pr_err("Memory failure: %#lx: Unknown page state\n", page_to_pfn(p));
++	pr_err("%#lx: Unknown page state\n", page_to_pfn(p));
+ 	unlock_page(p);
+ 	return MF_FAILED;
+ }
+@@ -1179,7 +1179,7 @@ static void action_result(unsigned long pfn, enum mf_action_page_type type,
+ 	trace_memory_failure_event(pfn, type, result);
+ 
+ 	num_poisoned_pages_inc();
+-	pr_err("Memory failure: %#lx: recovery action for %s: %s\n",
++	pr_err("%#lx: recovery action for %s: %s\n",
+ 		pfn, action_page_types[type], action_name[result]);
+ }
+ 
+@@ -1254,8 +1254,7 @@ static int __get_hwpoison_page(struct page *page, unsigned long flags)
+ 		if (head == compound_head(page))
+ 			return 1;
+ 
+-		pr_info("Memory failure: %#lx cannot catch tail\n",
+-			page_to_pfn(page));
++		pr_info("%#lx cannot catch tail\n", page_to_pfn(page));
+ 		put_page(head);
+ 	}
+ 
+@@ -1318,7 +1317,7 @@ static int get_any_page(struct page *p, unsigned long flags)
+ 	}
+ out:
+ 	if (ret == -EIO)
+-		pr_err("Memory failure: %#lx: unhandlable page.\n", page_to_pfn(p));
++		pr_err("%#lx: unhandlable page.\n", page_to_pfn(p));
+ 
+ 	return ret;
+ }
+@@ -1417,13 +1416,12 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
+ 		return true;
+ 
+ 	if (PageKsm(p)) {
+-		pr_err("Memory failure: %#lx: can't handle KSM pages.\n", pfn);
++		pr_err("%#lx: can't handle KSM pages.\n", pfn);
+ 		return false;
+ 	}
+ 
+ 	if (PageSwapCache(p)) {
+-		pr_err("Memory failure: %#lx: keeping poisoned page in swap cache\n",
+-			pfn);
++		pr_err("%#lx: keeping poisoned page in swap cache\n", pfn);
+ 		ttu |= TTU_IGNORE_HWPOISON;
+ 	}
+ 
+@@ -1441,7 +1439,7 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
+ 		} else {
+ 			kill = 0;
+ 			ttu |= TTU_IGNORE_HWPOISON;
+-			pr_info("Memory failure: %#lx: corrupted page was clean: dropped without side effects\n",
++			pr_info("%#lx: corrupted page was clean: dropped without side effects\n",
+ 				pfn);
+ 		}
+ 	}
+@@ -1470,14 +1468,14 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
+ 			try_to_unmap(folio, ttu|TTU_RMAP_LOCKED);
+ 			i_mmap_unlock_write(mapping);
+ 		} else
+-			pr_info("Memory failure: %#lx: could not lock mapping for mapped huge page\n", pfn);
++			pr_info("%#lx: could not lock mapping for mapped huge page\n", pfn);
+ 	} else {
+ 		try_to_unmap(folio, ttu);
+ 	}
+ 
+ 	unmap_success = !page_mapped(hpage);
+ 	if (!unmap_success)
+-		pr_err("Memory failure: %#lx: failed to unmap page (mapcount=%d)\n",
++		pr_err("%#lx: failed to unmap page (mapcount=%d)\n",
+ 		       pfn, page_mapcount(hpage));
+ 
+ 	/*
+@@ -1844,7 +1842,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+ 		*hugetlb = 0;
+ 		return 0;
+ 	} else if (res == -EHWPOISON) {
+-		pr_err("Memory failure: %#lx: already hardware poisoned\n", pfn);
++		pr_err("%#lx: already hardware poisoned\n", pfn);
+ 		if (flags & MF_ACTION_REQUIRED) {
+ 			head = compound_head(p);
+ 			res = kill_accessing_process(current, page_to_pfn(head), flags);
+@@ -2003,8 +2001,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 				goto unlock_mutex;
+ 			}
+ 		}
+-		pr_err("Memory failure: %#lx: memory outside kernel control\n",
+-			pfn);
++		pr_err("%#lx: memory outside kernel control\n", pfn);
+ 		res = -ENXIO;
+ 		goto unlock_mutex;
+ 	}
+@@ -2015,8 +2012,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 		goto unlock_mutex;
+ 
+ 	if (TestSetPageHWPoison(p)) {
+-		pr_err("Memory failure: %#lx: already hardware poisoned\n",
+-			pfn);
++		pr_err("%#lx: already hardware poisoned\n", pfn);
+ 		res = -EHWPOISON;
+ 		if (flags & MF_ACTION_REQUIRED)
+ 			res = kill_accessing_process(current, pfn, flags);
+@@ -2232,7 +2228,7 @@ void memory_failure_queue(unsigned long pfn, int flags)
+ 	if (kfifo_put(&mf_cpu->fifo, entry))
+ 		schedule_work_on(smp_processor_id(), &mf_cpu->work);
+ 	else
+-		pr_err("Memory failure: buffer overflow when queuing memory failure at %#lx\n",
++		pr_err("buffer overflow when queuing memory failure at %#lx\n",
+ 		       pfn);
+ 	spin_unlock_irqrestore(&mf_cpu->lock, proc_flags);
+ 	put_cpu_var(memory_failure_cpu);
+-- 
+2.35.3
 
-Thanks!
-
->
-> Nitpick below:
->
->> +       /*
->> +        * call_with_stack() is the only place we allow SP to jump from one
->> +        * stack to another, with FP and SP pointing to different stacks,
->> +        * skipping the FP boundary check at this point.
->> +        */
->> +       if (pc >= (unsigned long)&call_with_stack &&
->> +                       pc < (unsigned long)&call_with_stack_end)
->> +               return 0;
-> Can we create a local helper macro to do this, if it needs to happen
-> some other time?
-
-Hopefully this won't come up again.:(
-
-Maybe it would be better to define a macro when this happens?
-
-
-Thanks,
-
-Huafei
-
->
-> #define ARM_PC_IN_FUNCTION(pc, func) (pc >=. ...)
->
-> Yours,
-> Linus Walleij
-> .

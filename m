@@ -2,176 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F988580B96
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFCF580AFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiGZGZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 02:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        id S231949AbiGZGOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 02:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238065AbiGZGZP (ORCPT
+        with ESMTP id S229568AbiGZGOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 02:25:15 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 23:20:52 PDT
-Received: from st43p00im-zteg10073401.me.com (st43p00im-zteg10073401.me.com [17.58.63.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BEE2FFE3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1658816001;
-        bh=yRHmeERdlt7oqcGU/fHpnGc2WxHp6d3zjEXgoabUAwk=;
-        h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:To;
-        b=aX+M5MX+VDddd7H88p4TecgeHOpVuobIXQ+gzJ48svYqMd/DyJwJBvhMzz32ryFMr
-         uCuEoksObANKG4RBhNqtAqqDmGNhwJmBF+txMZa72GJpwfDRAF1rUgcbBdKZ/pNfrg
-         6OklwSQwkAvNT+Yf9kdnAcHwDj1gpYp2rcjUhQsgF9J/KQRwMu+9Rfcl5zUtCAiP92
-         vh1PLmSRqkRoUyM1TLk7kFt7xttqmUxU0rDkA4RkzXPagx70Rb5NDg6grg7KqiIyM1
-         pKAQszZOLLg1C+UJjjZaroeIQ7LEytpXS78KFlSqSQ7ZuAbWkIs4TdOW7qoguBjmJS
-         i0hGGOSXKEx7Q==
-Received: from smtpclient.apple (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
-        by st43p00im-zteg10073401.me.com (Postfix) with ESMTPSA id 4172DA80313;
-        Tue, 26 Jul 2022 06:13:20 +0000 (UTC)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Vee Page <takeiteasy27@icloud.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 0/3] Add SFC support for Ingenic SoCs.
-Date:   Tue, 26 Jul 2022 02:13:18 -0400
-Message-Id: <38D8BFA7-21BD-4DC1-8B6E-68FC1766B6A8@icloud.com>
-References: <D7ACE3CD-3189-4988-BB44-F32514C70425@icloud.com>
-Cc:     Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Tudor.Ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        aidanmacdonald.0x0@gmail.com, paul@crapouillou.net,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, jinghui.liu@ingenic.com,
-        sernia.zhou@foxmail.com, reimu@sudomaker.com
-In-Reply-To: <D7ACE3CD-3189-4988-BB44-F32514C70425@icloud.com>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-X-Mailer: iPhone Mail (19B81)
-X-Proofpoint-GUID: Ll-uXQn0_l-BYjG1NU7j_qT7ADjy8jrB
-X-Proofpoint-ORIG-GUID: Ll-uXQn0_l-BYjG1NU7j_qT7ADjy8jrB
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.883,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2020-02-14=5F02,2022-06-21=5F08,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 clxscore=1015
- bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207260023
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,MIME_QP_LONG_LINE,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 26 Jul 2022 02:14:16 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBCE23154
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:14:15 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id m8so16478571edd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GZbiLt6v06YsvfiDARoxK3cxvf7NmvFXziCgf+/LbTk=;
+        b=RpDIX/K5q/Bl7BEGyBwELYytBgXuUGBOrA4Awf+Oe6r3Yc3oR4VHx26WYehcpeQpDZ
+         t+2QevKmkXHCb/uqf1iXzZLxFWr6k1AirceB4FEsvpmsWbaeDtpbqiyk52R35dKLz2zR
+         qz7UTMmRoCEv57SlBTAc+/5rUGiQGIhrDlBOA1Z+q9QEBoPpPrVAs3Fn04dabwCTLxTC
+         FuNa9brZRbapRlPxWaLrSvwkns9nekcOIKR2ilIAGIDc6ElHZgTgGE2dG4F8KJV/MfEb
+         AWv6mGn2+TBFRMzLQZls2LXxkOeRk3IpFj8bbpPWrc6VSuo/fYapaOOxs6Y8nBIpEqE6
+         2P4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GZbiLt6v06YsvfiDARoxK3cxvf7NmvFXziCgf+/LbTk=;
+        b=o80LUVGTvgnV5/3QbHwLLb04iq7HAwuMZalOC7nb7sN9CFpU8FioUDzBwDab5wI096
+         1sUcSqq1QQxr8zKHmLa49tKc2Uoi6ZmAteJ+Wm1QfOWxse973hcRUfpUkpGSdkqEPvav
+         wka1j/dknVac6oqqKW7K1gpABGR1C6CPk+MOMR7Wtd8Wwvi2WPhgZ2Y0e95v4rV1YCST
+         eRRP/n3WAygW1cg9veILpLhBMwiS4sIRgoWq+oyHUoV/OP20crlETLs+AfvedoL/yAcm
+         eav7HXW5Q1LVt1YvQPLESZa6T59YsjGc0HCiwxweQUoIFFkjk0FXPVvKfQGAGJR/WsIw
+         DelA==
+X-Gm-Message-State: AJIora+wWq8NhqOGuAhHzQFzFduHL6egh6fMTYab+t1TpmWSZAe8yDk5
+        oV27zo7U9hUnGO7jfbD43dqCwE8fRDKdrvXLdWI=
+X-Google-Smtp-Source: AGRyM1ulCzLFsef2K56zhTx/LQiZQ8imQKpRFEj5eB0Ji8EAHbSqFNJJK5gwMJ/Z6zyXqEt1tbNoG2FEKWeeRNKDc4E=
+X-Received: by 2002:a05:6402:d53:b0:43b:a0cf:d970 with SMTP id
+ ec19-20020a0564020d5300b0043ba0cfd970mr16197233edb.277.1658816053464; Mon, 25
+ Jul 2022 23:14:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220723214537.2054208-1-yury.norov@gmail.com>
+ <20220723214537.2054208-2-yury.norov@gmail.com> <CAHp75VfOmN=cTEs7gbwxZ7W3hXjBo67N4AmHHiDfcVfFzHkMLA@mail.gmail.com>
+ <Yt7CJj8r3eo05pKd@yury-laptop> <CAHp75VcGPQkY9ApsX2fi6sK5=3U=0vKbrHZZ3x___wUtgrFRSA@mail.gmail.com>
+ <Yt8oK1gUojEbO0WI@yury-laptop>
+In-Reply-To: <Yt8oK1gUojEbO0WI@yury-laptop>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 26 Jul 2022 08:13:37 +0200
+Message-ID: <CAHp75VdJ=FVy6TXTEOci0b2kMrG3z8scDwWTjx8M6+8Y35iSXA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] powerpc: drop dependency on <asm/machdep.h> in archrandom.h
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Y=E2=80=99all stank nasty bitch ass niggas don=E2=80=99t have nothing else t=
-o say?
+On Tue, Jul 26, 2022 at 1:35 AM Yury Norov <yury.norov@gmail.com> wrote:
+> On Mon, Jul 25, 2022 at 11:39:39PM +0200, Andy Shevchenko wrote:
+> > On Mon, Jul 25, 2022 at 6:19 PM Yury Norov <yury.norov@gmail.com> wrote:
+> > > On Mon, Jul 25, 2022 at 09:28:12AM +0200, Andy Shevchenko wrote:
+> > > > On Sun, Jul 24, 2022 at 12:19 AM Yury Norov <yury.norov@gmail.com> wrote:
 
-What now mother fucker is it past your bedtimes?
+...
 
-Go society a favor =E2=80=A6..go to the nearest bridge=E2=80=A6and jump in i=
-t.
+> > > > >  EXPORT_SYMBOL_GPL(pm_power_off);
+> > > >
+> > > > ^^^ (Note this and read below)
+> > > >
+> > > > ...
+> > > >
+> > > > > +EXPORT_SYMBOL(arch_get_random_seed_long);
+> > > >
+> > > > It can't be like this. Brief browsing of the callees shows that.
+> > >
+> > > Is my understanding correct that you're suggesting to make it GPL?
+> > >
+> > > ppc_md is exported with EXPORT_SYMBOL(), and the function is in header,
+> > > so it's available for non-GPL code now. I don't want to change it.
+> >
+> > The symbols your function calls are GPL. As far as I understand (not a
+> > lawyer!) it logically one may not call GPL and pretend to be non-GPL.
+>
+> Can you explain what you mean in details?
+>
+> The function is:
+>         static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
+>         {
+>                if (ppc_md.get_random_seed)
+>                        return ppc_md.get_random_seed(v);
+>
+>                return false;
+>         }
+>
+> ppc_md is non-GPL:
+>  77 /* The main machine-dep calls structure
+>  78  */
+>  79 struct machdep_calls ppc_md;
+>  80 EXPORT_SYMBOL(ppc_md);
 
-Y=E2=80=99all can go continue your conversation six feet under. You sick stu=
-pid fuck.
+What a mess...
 
+> And get_random_seed is initialized in in arch/powerpc/platforms/powernv/rng.c
+> with different functions that are static and not exported at all.
+>
+> I don't understand where arch_get_random_seed_long calls GPL...
 
-> On Jul 23, 2022, at 9:32 PM, Vee Page <takeiteasy27@icloud.com> wrote:
->=20
-> =EF=BB=BFNo problem!!!
-> I forget to tell them. It=E2=80=99s okay though! =F0=9F=91=8C=F0=9F=91=8D
-> =F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=
-=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=9A=F0=9F=98=
-=9A=F0=9F=98=9A=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=
-=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=
-=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=
-=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=
-=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=
-=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=
-=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=EF=B8=8F=E2=98=BA=
-=EF=B8=8F=E2=98=BA=EF=B8=8F
-> I=E2=80=99m blushing! Last night was fun.
->=20
->> On Jul 23, 2022, at 9:30 PM, Vanessa Page <Vebpe@outlook.com> wrote:
->>=20
->> =EF=BB=BF=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=
-=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=A5=B0=F0=9F=
-=A5=B0=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=9A=
-=F0=9F=98=8D=F0=9F=98=9A=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=
-=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=
-=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D=F0=9F=98=8D
->>=20
->> Omg thank you Janika!
->>=20
->> I=E2=80=99m glad to see everything is okay just tell them next time!
->>=20
->> Love ya babes!
->>=20
->>>> On Jul 23, 2022, at 9:27 PM, Zhou Yanjie <zhouyanjie@wanyeetech.com> wr=
-ote:
->>>=20
->>> =EF=BB=BFHi Tomasz,
->>>=20
->>>>> On 2022/7/23 =E4=B8=8B=E5=8D=8810:47, Tomasz Maciej Nowak wrote:
->>>> W dniu 22.07.2022 o 18:48, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) pi=
-sze:
->>>>> 1.Use the spi-mem poll status APIs in SPI-NOR to reduce CPU load.
->>>>> 2.Add SFC support for the X1000 SoC, the X1600 SoC, and the X2000 SoC f=
-rom Ingenic.
->>>>>=20
->>>>> Liu Jinghui and Aidan MacDonald provided a lot of assistance during th=
-e development of this driver.
->>>>>=20
->>>>> =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) (3):
->>>>> mtd: spi-nor: Use the spi-mem poll status APIs.
->>>>> dt-bindings: SPI: Add Ingenic SFC bindings.
->>>>> SPI: Ingenic: Add SFC support for Ingenic SoCs.
->>>>>=20
->>>>> .../devicetree/bindings/spi/ingenic,sfc.yaml       |  64 ++
->>>>> drivers/mtd/spi-nor/core.c                         |  42 +-
->>>>> drivers/spi/Kconfig                                |   9 +
->>>>> drivers/spi/Makefile                               |   1 +
->>>>> drivers/spi/spi-ingenic-sfc.c                      | 662 +++++++++++++=
-++++++++
->>>>> 5 files changed, 768 insertions(+), 10 deletions(-)
->>>>> create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.y=
-aml
->>>>> create mode 100755 drivers/spi/spi-ingenic-sfc.c
->>>>>=20
->>>> Even tough it's still early in revision process, I'll add my
->>>> Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
->>>>=20
->>>> The test was performed with Damai DM6291A SoC which is a Ingenic X1000 I=
-P
->>>> but with 256 MiB RAM. No bugs yet observed on my side.
->>>=20
->>>=20
->>> Thanks for you test!
->>>=20
->>>=20
->>>>=20
->>>=20
->>> ______________________________________________________
->>> Linux MTD discussion mailing list
->>> http://lists.infradead.org/mailman/listinfo/linux-mtd/
+The ->get_random_seed() (aka "callees" in my previous mail) are all
+GPL (maybe I missed one out of five which is non-GPL, but then it's
+even more of a mess).
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,72 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2885818DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5C65818E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239635AbiGZRtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
+        id S239644AbiGZRuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239404AbiGZRtm (ORCPT
+        with ESMTP id S230466AbiGZRuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:49:42 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E461F13E8B;
-        Tue, 26 Jul 2022 10:49:40 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,194,1654527600"; 
-   d="scan'208";a="127423290"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 27 Jul 2022 02:49:40 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 1A45040C0016;
-        Wed, 27 Jul 2022 02:49:36 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: serial: renesas,scif: Document RZ/Five SoC
-Date:   Tue, 26 Jul 2022 18:49:29 +0100
-Message-Id: <20220726174929.950-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 13:50:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726C9B876
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:50:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A7B9B818ED
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85B6C433D6;
+        Tue, 26 Jul 2022 17:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658857811;
+        bh=oR+l1h1MF1vN8m78iopGfwp9crpfWIbUSuis05J8Ap4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=bgl3T8GBdM+1bQh2EuhsjginkSwhpoKnkXfBMHDJ7WbakC98g6fT2A1Xg3exBA+NM
+         ZbOm7HmbPAmyzge/s7C1/89phrvSnyQQCVj3fjc7O81RrOxOtCT2xo7sks/6gbqlnQ
+         fddpTJZ++rYugGepeMBX80j46zd9QRwOSnbKWU7hf/hSy2yNjmSrFEKMEZ5urzYs19
+         cp/E9mUklzuMhz6H4uKI6huGJ/VXHS1IhpT2MPSbRj2LdMghvWPSElkurfjemnWoBD
+         nYozsqj6v0O4dMaEAt43K8LORu9grkwpRhiwC9K4kcjG8rGbXMqIOkiWfAMtOY2TRA
+         eT+GNDerlYfsw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        angelogioacchino.delregno@collabora.com, dan.carpenter@oracle.com
+Cc:     aaronyu@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220726153130.27584-1-jiaxin.yu@mediatek.com>
+References: <20220726153130.27584-1-jiaxin.yu@mediatek.com>
+Subject: Re: [PATCH] ASoC: mediatek: mt8186: set the correct string to strncmp()
+Message-Id: <165885780832.800364.7549018957037633100.b4-ty@kernel.org>
+Date:   Tue, 26 Jul 2022 18:50:08 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-c7731
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SCIF block on the RZ/Five SoC is identical to one found on the RZ/G2UL
-SoC. "renesas,scif-r9a07g043" compatible string will be used on the
-RZ/Five SoC so to make this clear, update the comment to include RZ/Five
-SoC.
+On Tue, 26 Jul 2022 23:31:30 +0800, Jiaxin Yu wrote:
+> Fix Smatch static checker warning. strncmp() here only needs to compare
+> the first seven bytes, so in order to make the code more clear, only the
+> first seven bytes of the string used as the comparison are reserved.
+> 
+> Bug report: https://www.spinics.net/lists/alsa-devel/msg145608.html
+> 
+> sound/soc/mediatek/mt8186/mt8186-dai-adda.c:78 get_adda_priv_by_name()
+> warn: strncmp() with weird length: 17 vs 7
+> 
+> [...]
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- Documentation/devicetree/bindings/serial/renesas,scif.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to
 
-diff --git a/Documentation/devicetree/bindings/serial/renesas,scif.yaml b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
-index 90fe45265fbc..f930e7f1349f 100644
---- a/Documentation/devicetree/bindings/serial/renesas,scif.yaml
-+++ b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
-@@ -76,7 +76,7 @@ properties:
- 
-       - items:
-           - enum:
--              - renesas,scif-r9a07g043      # RZ/G2UL
-+              - renesas,scif-r9a07g043      # RZ/G2UL and RZ/Five
-               - renesas,scif-r9a07g054      # RZ/V2L
-           - const: renesas,scif-r9a07g044   # RZ/G2{L,LC} fallback
- 
--- 
-2.17.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
+Thanks!
+
+[1/1] ASoC: mediatek: mt8186: set the correct string to strncmp()
+      commit: 7df92384c86f36d0452e7abad21c7eaa91aeeef7
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

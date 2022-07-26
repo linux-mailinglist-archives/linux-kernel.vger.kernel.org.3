@@ -2,204 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6895580EAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117B6580EAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbiGZIKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S237955AbiGZIKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbiGZIK0 (ORCPT
+        with ESMTP id S237981AbiGZIKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:10:26 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D015218346
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:10:21 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-31f1d1c82c8so41217807b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:10:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jjVH0LRyKsPLAGZ03a5O8AhToHuTUcLbwfDz1yPqOlk=;
-        b=Q2WlV6127P/FIOpihtg6o0xC4U+5rRSXWqL1vzxx4Drh2clcpSe2yUYqwLu5jvdo5r
-         CETG3PLjA1jE+5G7lhpK14GzuQPMBAnfq2LqywzHSKVXttzxhew1Pd5+UiA/ayY6esYn
-         q0qEeq9x2eDFPN4YybeG+PVedlkDQWHAWuYaY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jjVH0LRyKsPLAGZ03a5O8AhToHuTUcLbwfDz1yPqOlk=;
-        b=beoLhRZWypjeDOQ1Na9kkuOaNezA9v9D63OnZtD54C4kiWb4lE4okISrvV09dC9bFQ
-         A4a8I0Sqmfh3Lb9zq2CX7orqh0zF+4CigwJXkb8sjs40Og08HyNWYzcyQlh82CCd2iXq
-         kfs1LFmVDfzSvB75+8qNksyB93iKeHbPJcgfvHI2s60dLcqIzSTvMcj6h8KPQNuiREzC
-         jjM59gFXljqXLYZ/CpQD8eP635gpYdiAX6KDR7hrVKxdGpCJHdwMqpfJbO7hdHRDrDBK
-         qyNeheUvddWJIY+e5LwmTWlMoMkyljtLPmp2gAVea4GrsW7+WFpeCwbHhQcBQ346LQol
-         MLzQ==
-X-Gm-Message-State: AJIora+p1/fy+pQzSWjGz812re6SYE8cybMZvdtvLWlaYepMpPb7LpgH
-        nSJXKL8mJGRXV4ArgK68ATpFWbadD5DW6796O43h
-X-Google-Smtp-Source: AGRyM1uTheeiEPbmY+0HDoT9HYdyHDQf8+Qa8e9tyMEDk1B07jnrOuaPJSd0uddg9beWSG6SzO+cZHW/2cgBq6oF2rs=
-X-Received: by 2002:a0d:f0c7:0:b0:31e:e814:e7d6 with SMTP id
- z190-20020a0df0c7000000b0031ee814e7d6mr9561147ywe.340.1658823021050; Tue, 26
- Jul 2022 01:10:21 -0700 (PDT)
+        Tue, 26 Jul 2022 04:10:35 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A52BB1DF;
+        Tue, 26 Jul 2022 01:10:33 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LsTzZ6Nv9zjWxv;
+        Tue, 26 Jul 2022 16:07:38 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Jul 2022 16:10:27 +0800
+Received: from [10.67.110.237] (10.67.110.237) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Jul 2022 16:10:25 +0800
+Subject: Re: [PATCH 1/5] ARM: stacktrace: Skip frame pointer boundary check
+ for call_with_stack()
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux@armlinux.org.uk>, <rmk+kernel@armlinux.org.uk>,
+        <ardb@kernel.org>, <will@kernel.org>, <mark.rutland@arm.com>,
+        <broonie@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <arnd@arndb.de>,
+        <rostedt@goodmis.org>, <nick.hawkins@hpe.com>, <john@phrozen.org>,
+        <mhiramat@kernel.org>, <ast@kernel.org>, <linyujun809@huawei.com>,
+        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        Li Huafei <lihuafei1@huawei.com>
+References: <20220712021527.109921-1-lihuafei1@huawei.com>
+ <20220712021527.109921-2-lihuafei1@huawei.com>
+ <CACRpkdaXDGHLwqXQsEedRt=CLRUe1hei1vJDGAQ+D4U0OPcv8Q@mail.gmail.com>
+From:   Li Huafei <lihuafei1@huawei.com>
+Message-ID: <ab843b1e-9a4f-7b2c-a9bb-670797f7da34@huawei.com>
+Date:   Tue, 26 Jul 2022 16:10:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-References: <20220715175155.3567243-1-mail@conchuod.ie> <20220715175155.3567243-2-mail@conchuod.ie>
-In-Reply-To: <20220715175155.3567243-2-mail@conchuod.ie>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 26 Jul 2022 01:10:10 -0700
-Message-ID: <CAOnJCULXZ1DXXsY=s+eMhqvmdwHvnurHT-Ozhq6UDd5AX0hHsA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] arm64: topology: move store_cpu_topology() to
- shared code
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zong Li <zong.li@sifive.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jonas Hahnfeld <hahnjo@hahnjo.de>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Brice Goglin <Brice.Goglin@inria.fr>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACRpkdaXDGHLwqXQsEedRt=CLRUe1hei1vJDGAQ+D4U0OPcv8Q@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.67.110.237]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 10:53 AM Conor Dooley <mail@conchuod.ie> wrote:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> arm64's method of defining a default cpu topology requires only minimal
-> changes to apply to RISC-V also. The current arm64 implementation exits
-> early in a uniprocessor configuration by reading MPIDR & claiming that
-> uniprocessor can rely on the default values.
->
-> This is appears to be a hangover from prior to '3102bc0e6ac7 ("arm64:
-> topology: Stop using MPIDR for topology information")', because the
-> current code just assigns default values for multiprocessor systems.
->
-> With the MPIDR references removed, store_cpu_topolgy() can be moved to
-> the common arch_topology code.
->
-> CC: stable@vger.kernel.org
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  arch/arm64/kernel/topology.c | 40 ------------------------------------
->  drivers/base/arch_topology.c | 19 +++++++++++++++++
->  2 files changed, 19 insertions(+), 40 deletions(-)
->
-> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> index 869ffc4d4484..7889a00f5487 100644
-> --- a/arch/arm64/kernel/topology.c
-> +++ b/arch/arm64/kernel/topology.c
-> @@ -22,46 +22,6 @@
->  #include <asm/cputype.h>
->  #include <asm/topology.h>
->
-> -void store_cpu_topology(unsigned int cpuid)
-> -{
-> -       struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
-> -       u64 mpidr;
-> -
-> -       if (cpuid_topo->package_id != -1)
-> -               goto topology_populated;
-> -
-> -       mpidr = read_cpuid_mpidr();
-> -
-> -       /* Uniprocessor systems can rely on default topology values */
-> -       if (mpidr & MPIDR_UP_BITMASK)
-> -               return;
-> -
-> -       /*
-> -        * This would be the place to create cpu topology based on MPIDR.
-> -        *
-> -        * However, it cannot be trusted to depict the actual topology; some
-> -        * pieces of the architecture enforce an artificial cap on Aff0 values
-> -        * (e.g. GICv3's ICC_SGI1R_EL1 limits it to 15), leading to an
-> -        * artificial cycling of Aff1, Aff2 and Aff3 values. IOW, these end up
-> -        * having absolutely no relationship to the actual underlying system
-> -        * topology, and cannot be reasonably used as core / package ID.
-> -        *
-> -        * If the MT bit is set, Aff0 *could* be used to define a thread ID, but
-> -        * we still wouldn't be able to obtain a sane core ID. This means we
-> -        * need to entirely ignore MPIDR for any topology deduction.
-> -        */
-> -       cpuid_topo->thread_id  = -1;
-> -       cpuid_topo->core_id    = cpuid;
-> -       cpuid_topo->package_id = cpu_to_node(cpuid);
-> -
-> -       pr_debug("CPU%u: cluster %d core %d thread %d mpidr %#016llx\n",
-> -                cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
-> -                cpuid_topo->thread_id, mpidr);
-> -
-> -topology_populated:
-> -       update_siblings_masks(cpuid);
-> -}
-> -
->  #ifdef CONFIG_ACPI
->  static bool __init acpi_cpu_is_threaded(int cpu)
->  {
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 0424b59b695e..0e2c6b30dd69 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -841,4 +841,23 @@ void __init init_cpu_topology(void)
->                 return;
->         }
->  }
-> +
-> +void store_cpu_topology(unsigned int cpuid)
-> +{
-> +       struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
-> +
-> +       if (cpuid_topo->package_id != -1)
-> +               goto topology_populated;
-> +
-> +       cpuid_topo->thread_id = -1;
-> +       cpuid_topo->core_id = cpuid;
-> +       cpuid_topo->package_id = cpu_to_node(cpuid);
-> +
-> +       pr_debug("CPU%u: package %d core %d thread %d\n",
-> +                cpuid, cpuid_topo->package_id, cpuid_topo->core_id,
-> +                cpuid_topo->thread_id);
-> +
-> +topology_populated:
-> +       update_siblings_masks(cpuid);
-> +}
->  #endif
-> --
-> 2.37.1
->
+Hi Linus, sorry for the late reply.
 
-LGTM.
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+On 2022/7/18 16:57, Linus Walleij wrote:
+> On Tue, Jul 12, 2022 at 4:18 AM Li Huafei <lihuafei1@huawei.com> wrote:
+>
+>> When using the frame pointer unwinder, it was found that the stack trace
+>> output of stack_trace_save() is incomplete if the stack contains
+>> call_with_stack():
+>>
+>>   [0x7f00002c] dump_stack_task+0x2c/0x90 [hrtimer]
+>>   [0x7f0000a0] hrtimer_hander+0x10/0x18 [hrtimer]
+>>   [0x801a67f0] __hrtimer_run_queues+0x1b0/0x3b4
+>>   [0x801a7350] hrtimer_run_queues+0xc4/0xd8
+>>   [0x801a597c] update_process_times+0x3c/0x88
+>>   [0x801b5a98] tick_periodic+0x50/0xd8
+>>   [0x801b5bf4] tick_handle_periodic+0x24/0x84
+>>   [0x8010ffc4] twd_handler+0x38/0x48
+>>   [0x8017d220] handle_percpu_devid_irq+0xa8/0x244
+>>   [0x80176e9c] generic_handle_domain_irq+0x2c/0x3c
+>>   [0x8052e3a8] gic_handle_irq+0x7c/0x90
+>>   [0x808ab15c] generic_handle_arch_irq+0x60/0x80
+>>   [0x8051191c] call_with_stack+0x1c/0x20
+>>
+>> For the frame pointer unwinder, unwind_frame() checks stackframe::fp by
+>> stackframe::sp. Since call_with_stack() switches the SP from one stack
+>> to another, stackframe::fp and stackframe: :sp will point to different
+>> stacks, so we can no longer check stackframe::fp by stackframe::sp. Skip
+>> checking stackframe::fp at this point to avoid this problem.
+>>
+>> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> Very nice catch! Took me some time to realize what was
+> going on here.
+
+Yeah, it took me some time to discover the cause of the problem too.
+
+>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Thanks!
+
+>
+> Nitpick below:
+>
+>> +       /*
+>> +        * call_with_stack() is the only place we allow SP to jump from one
+>> +        * stack to another, with FP and SP pointing to different stacks,
+>> +        * skipping the FP boundary check at this point.
+>> +        */
+>> +       if (pc >= (unsigned long)&call_with_stack &&
+>> +                       pc < (unsigned long)&call_with_stack_end)
+>> +               return 0;
+> Can we create a local helper macro to do this, if it needs to happen
+> some other time?
+
+Hopefully this won't come up again.:(
+
+Maybe it would be better to define a macro when this happens?
 
 
+Thanks,
 
---
-Regards,
-Atish
+Huafei
+
+>
+> #define ARM_PC_IN_FUNCTION(pc, func) (pc >=. ...)
+>
+> Yours,
+> Linus Walleij
+> .

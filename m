@@ -2,130 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF4358186B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76222581870
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234198AbiGZRd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S239402AbiGZRfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiGZRd0 (ORCPT
+        with ESMTP id S229677AbiGZRfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:33:26 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A11F1C908;
-        Tue, 26 Jul 2022 10:33:25 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id z3so13977488plb.1;
-        Tue, 26 Jul 2022 10:33:25 -0700 (PDT)
+        Tue, 26 Jul 2022 13:35:30 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89BFBF75
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:35:28 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id q7so1840366ljp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:35:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=csi8DKhXQqGuLjHDX+zKw1RSlMGZo6HFF9ZyuowCuq4=;
-        b=U/SdxptusQuSzFDIruTYLSWMcIba2U5OWiLGu6pkSYGjb1Nx+wNeOoSNQjBOMkxTKz
-         zXq9A7gaHKIYjoND1POiRg2zHsufOsMWHHkUyfhwXmVE2gDM5PI+lb8bJX77ZshlVSQ3
-         BD/GGKqArAy8NjtbJgFpXv+4ypVe67LSLaNtXmXAf4e07P01qocpHVaitOV1Dt74CRmh
-         5iHsteyTsCkZfWuARYvMkM5T0Z9VWKmGwohbrXhhqpaBWb035bzWnKwrHMieeFGdVRWn
-         nRQLftN8+acOuqZpW5qWFezxRsXd+GHg9ojbmsZZUUqBS684vqgS93NXMfDN0V3j1rTM
-         O2SA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JHc7AYlRXZ6aiCtTe+oSlD5N4Ua+N3EzvkXaFf2RC4o=;
+        b=N0deSDI+LiMOpces5+etS+NS14zNCm+md+u9gARDG0ixEpQGvSTtzErTuNz2esW0bT
+         pXkajtBnlcabT+ZLAsxwBTnlCw0OlA5Cnt5/ohO0aXrKf0uwf5hwWi+MviSEd1CBBRjP
+         GARs+6N9PoIAG51nVHvY68XB+6nN5SRbaAn23aBQTdq0DEDKIKgdLAY6y7p2XvQ/XosN
+         Pd37hCg3n0SvCLNIHyOn3l0YWoYBZjVqlvxzuBK6aPAttokOg9VMKY/XelUJ/ZtuLpoj
+         0gVLchzNRRmyDsHubxvRY9zv5ZG+0x3LJCGdwPqzLDj1wQMo8FO3NBAQE4g3UBz085Vd
+         cq5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=csi8DKhXQqGuLjHDX+zKw1RSlMGZo6HFF9ZyuowCuq4=;
-        b=O80qXCDgoBJqMNPN67Tv8Cy1oDgVkIVXOdNxt1XiW7Qi1JBxP5Dg4cooKX81hz0sfD
-         8+iZIPdYbY19giGHAf1LEHhEW46RsQ/j1oTRP1I1F+atJdNHML87zgVvCkD+JkE1jZRf
-         RS3MIH6CdJNaNTQeQQ4og+0p6ZJXrdHhoOyngzaSingrQyodg54VkC3OfxDto4BvkbUb
-         OX1/wncw0KcH2bdQMmgW1xFgx+Ppjunpv1O7vFJG4/5gcHCg/E9ep8NLo0oyMQFGafhS
-         38D2Qez90totwuBi9GSEtlaUayd1otWsNQk4DvoneMf9k+MDvxBA87kJgO5RlJGeg4US
-         pATA==
-X-Gm-Message-State: AJIora+lnFzNOgHg1DsGpU/xCVGPYD1zAllLMIr1mo4iGhgcTZ3lFXWQ
-        iY093F19lSUcVi++b1+r7cU=
-X-Google-Smtp-Source: AGRyM1uBgdQVJl4Bm9xjEtUHzKDAipN4RiFvTrxaA0S/9BoPlUNNz51qEWuZ2WacBAWmp1oZESUjyQ==
-X-Received: by 2002:a17:902:b612:b0:16c:d98d:638 with SMTP id b18-20020a170902b61200b0016cd98d0638mr17312229pls.38.1658856804727;
-        Tue, 26 Jul 2022 10:33:24 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:370d])
-        by smtp.gmail.com with ESMTPSA id qe9-20020a17090b4f8900b001f2ef3c7956sm1904021pjb.25.2022.07.26.10.33.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 10:33:24 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 26 Jul 2022 07:33:22 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Dmitry Shmidt <dimitrysh@google.com>,
-        Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org
-Subject: Re: [PATCH RESEND 3/3 cgroup/for-5.20] cgroup: Make !percpu
- threadgroup_rwsem operations optional
-Message-ID: <YuAlYlPTMbuDjINF@slm.duckdns.org>
-References: <YtDvN0wJ6CKaEPN8@slm.duckdns.org>
- <YtDvU4jRPSsarcNp@slm.duckdns.org>
- <YtDvl7Qjc5zI3e/b@slm.duckdns.org>
- <YtwFjPnCtw8ySnuv@slm.duckdns.org>
- <20220726143257.GA23882@blackbody.suse.cz>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JHc7AYlRXZ6aiCtTe+oSlD5N4Ua+N3EzvkXaFf2RC4o=;
+        b=gtACw2pjfhebyeIJ8hJcyLmnWYWKcoSGnr7EK32/YqiAlml/9O/FxYGnIX4bORrC98
+         LlZaJk5ECxuVSA3pEbyPyEqq510UUVZl51c2rTF5176Sv48O6PH1AEAMOiqC6RV2HCwE
+         RLwDB9ayT2FqVjv8EyuGwafcHxbDjmzmv6kKzg8t09mW04/N2g8yJ+m5OktrZHfGtdZU
+         0LJrsS3e+nBiybZ33Ddx02PZyq8E8dEFLvgLymUpTbxNBWQ5twBG3DgvrEftYq6hdmjP
+         GyEWnuj0EqPLOsAb3FBQAoR+BYXJioisTSUGSV1ZO3Feb1s3u7L9wMsk59seyeyoTYjy
+         chvA==
+X-Gm-Message-State: AJIora9BTZvE7DwuNbAK/kx4oQRI3AKgRD7kgfo3eBhARFlsrFKpDZaM
+        oAauhAiE5xHTK4iqJRmoOOpjTA==
+X-Google-Smtp-Source: AGRyM1tmwXLiYKvaVFxKBF/ccqtJ5bZ4CGr5twneruJ80NjxbDQMnHuz7XCk6ts4YVIGB6Rk6qhsRA==
+X-Received: by 2002:a2e:a16b:0:b0:25e:8fb:a1e1 with SMTP id u11-20020a2ea16b000000b0025e08fba1e1mr3784078ljl.270.1658856927106;
+        Tue, 26 Jul 2022 10:35:27 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id w14-20020a05651234ce00b0048a7ce3ff84sm2246967lfr.285.2022.07.26.10.35.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 10:35:26 -0700 (PDT)
+Message-ID: <246f132a-a23d-7c53-38a7-2bcec50d65e5@linaro.org>
+Date:   Tue, 26 Jul 2022 19:35:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220726143257.GA23882@blackbody.suse.cz>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: sifive: add cache-set value of 2048
+Content-Language: en-US
+To:     Conor Dooley <mail@conchuod.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Atul Khare <atulkhare@rivosinc.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220726170725.3245278-1-mail@conchuod.ie>
+ <20220726170725.3245278-2-mail@conchuod.ie>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726170725.3245278-2-mail@conchuod.ie>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, Jul 26, 2022 at 04:32:57PM +0200, Michal Koutný wrote:
-> On Sat, Jul 23, 2022 at 04:28:28AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> > This makes the hotter paths - fork and exit - slower as they're always
-> > forced into the slow path. There is no reason to force this on everyone
-> > especially given that more common static usage pattern can now completely
-> > avoid write-locking the rwsem. Write-locking is elided when turning on and
-> > off controllers on empty sub-trees and CLONE_INTO_CGROUP enables seeding a
-> > cgroup without grabbing the rwsem.
+On 26/07/2022 19:07, Conor Dooley wrote:
+> From: Atul Khare <atulkhare@rivosinc.com>
 > 
-> Just a practical note that CLONE_INTO_CGROUP may not be so widespread
-> yet [1][2].
-> But generally, the change makes sense to me.
-
-Yeah, I was disappoinetd that it wasn't being used by systemd already. It'd
-be great if the glibc situation can be rectified soon because this is a much
-better interface.
-
-> > +	CGRP_ROOT_FAVOR_DYNMODS = (1 << 4),
-> > +
-> > +	/*
-> >  	 * Enable cpuset controller in v1 cgroup to use v2 behavior.
-> >  	 */
-> > -	CGRP_ROOT_CPUSET_V2_MODE = (1 << 4),
-> > +	CGRP_ROOT_CPUSET_V2_MODE = (1 << 16),
-> >  
-> >  	/*
-> >  	 * Enable legacy local memory.events.
-> >  	 */
-> > -	CGRP_ROOT_MEMORY_LOCAL_EVENTS = (1 << 5),
-> > +	CGRP_ROOT_MEMORY_LOCAL_EVENTS = (1 << 17),
-> >  
-> >  	/*
-> >  	 * Enable recursive subtree protection
-> >  	 */
-> > -	CGRP_ROOT_MEMORY_RECURSIVE_PROT = (1 << 6),
-> > +	CGRP_ROOT_MEMORY_RECURSIVE_PROT = (1 << 18),
+> Fixes Running device tree schema validation error messages like
+> '... cache-sets:0:0: 1024 was expected'.
 > 
-> Why this new gap in flag bits?
+> The existing bindings had a single enumerated value of 1024, which
+> trips up the dt-schema checks. The ISA permits any arbitrary power
+> of two for the cache-sets value, but we decided to add the single
+> additional value of 2048 because we couldn't spot an obvious way
+> to express the constraint in the schema.
 
-To distinguish core and per-controller flags.
+There is no way to express "power of two" but enum for multiple values
+would work. Is there a reason to limit only to 2048?
 
-Thanks.
-
--- 
-tejun
+Best regards,
+Krzysztof

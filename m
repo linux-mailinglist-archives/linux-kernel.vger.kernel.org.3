@@ -2,83 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EFA581316
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82DA581314
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238827AbiGZMVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 08:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S238725AbiGZMVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 08:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238805AbiGZMVW (ORCPT
+        with ESMTP id S238231AbiGZMVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:21:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CF024950;
-        Tue, 26 Jul 2022 05:21:21 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LsbWl4tdjzWfXT;
-        Tue, 26 Jul 2022 20:17:23 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 20:21:13 +0800
-Received: from [10.67.110.237] (10.67.110.237) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 20:21:12 +0800
-Subject: Re: [PATCH 2/5] ARM: stacktrace: Avoid duplicate saving of exception
- PC value
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     <ardb@kernel.org>, <will@kernel.org>, <mark.rutland@arm.com>,
-        <broonie@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <arnd@arndb.de>,
-        <linus.walleij@linaro.org>, <rostedt@goodmis.org>,
-        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>,
-        <ast@kernel.org>, <linyujun809@huawei.com>,
-        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
-References: <20220712021527.109921-1-lihuafei1@huawei.com>
- <20220712021527.109921-3-lihuafei1@huawei.com>
- <Yt/AawOdA8w24toW@shell.armlinux.org.uk>
-From:   Li Huafei <lihuafei1@huawei.com>
-Message-ID: <c16ad370-4157-7315-eaca-efd884359c05@huawei.com>
-Date:   Tue, 26 Jul 2022 20:21:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Tue, 26 Jul 2022 08:21:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E44E089;
+        Tue, 26 Jul 2022 05:21:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 994C7614CD;
+        Tue, 26 Jul 2022 12:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01EDEC341C0;
+        Tue, 26 Jul 2022 12:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658838063;
+        bh=pE5UITYFOJK1aM9zJt47Xv+maxl5YHexBJ/7THKptew=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rQ77mwR+7ZQRz64L1SmKEZUGhwVttDIy7XC5PNZpWiQIHbEp1acQJKRqsTfx9nq0N
+         ZwOK6dCKUSU+zFUL2cs2UemJDzA+Fh01o/sDDlkBW7QbGEWLoYvgmNXSWrI7Re2nBb
+         HFuG81gBfbThGjyYAHW7YNBgIColnDe4l/iENlTMQ2J2vNvNXW3apasRQQ5LTaktE8
+         h/U9sIsS3hfm8UomR6F00rkZc1FG9rzBRS5awO15dM1CrzcMbElLALWNtpcc87ceKy
+         bE1GFI1sQzc5gIOEhb5yhsb/+NJ0rX+g8j1x7FdkWL1pez9cm8+ifGxpKfFmSs3YMl
+         LWhVjt0q+gS6w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oGJYo-0001D3-Tz; Tue, 26 Jul 2022 14:21:14 +0200
+Date:   Tue, 26 Jul 2022 14:21:14 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Selvam Sathappan Periakaruppan <quic_speriaka@quicinc.com>,
+        Baruch Siach <baruch.siach@siklu.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 1/2] PCI: qcom: Drop unnecessary <linux/interrupt.h>
+ include
+Message-ID: <Yt/cOnW6R9ONnFyW@hovoldconsulting.com>
+References: <20220722154919.1826027-1-helgaas@kernel.org>
+ <20220722154919.1826027-2-helgaas@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <Yt/AawOdA8w24toW@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.237]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722154919.1826027-2-helgaas@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/7/26 18:22, Russell King (Oracle) wrote:
-> On Tue, Jul 12, 2022 at 10:15:24AM +0800, Li Huafei wrote:
->> @@ -34,6 +37,9 @@ void arm_get_current_stackframe(struct pt_regs *regs, struct stackframe *frame)
->>  		frame->kr_cur = NULL;
->>  		frame->tsk = current;
->>  #endif
->> +#ifdef CONFIG_UNWINDER_FRAME_POINTER
->> +		frame->ex_frame = in_entry_text(frame->pc) ? true : false;
+On Fri, Jul 22, 2022 at 10:49:18AM -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> in_entry_text() returns a bool, so there's no need for the ternary
-> operator. The same comment applies throughout this patch.
-> 
-OK, I will fix it in v3.
+> pcie-qcom.c uses nothing from <linux/interrupt.h>, so remove the
+> unnecessary include of it.
 
-Thanks,
-Huafei
+Appears to be unused since commit 7c5925afbc58 ("PCI: dwc: Move MSI IRQs
+allocation to IRQ domains hierarchical API") so there may be other
+driver that also no longer need it.
+
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>

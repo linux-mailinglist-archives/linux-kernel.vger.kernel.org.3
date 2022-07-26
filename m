@@ -2,151 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425E3580E4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE47580E50
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiGZHy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
+        id S237851AbiGZHzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiGZHy1 (ORCPT
+        with ESMTP id S229604AbiGZHzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:54:27 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C682D1D5;
-        Tue, 26 Jul 2022 00:54:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VKUPxf0_1658822056;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VKUPxf0_1658822056)
-          by smtp.aliyun-inc.com;
-          Tue, 26 Jul 2022 15:54:17 +0800
-Subject: Re: [RESEND PATCH V2 0/5] Fixups to work with crash tool
-To:     Conor.Dooley@microchip.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, anup@brainfault.org,
-        heiko@sntech.de, guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net
-Cc:     kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, huanyi.xj@alibaba-inc.com,
-        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org
-References: <20220725014539.1037627-1-xianting.tian@linux.alibaba.com>
- <51c97da7-422f-1b5b-03d3-dc36c9132c2a@microchip.com>
-From:   tianxianting <xianting.tian@linux.alibaba.com>
-Message-ID: <7a395f64-8ec7-e07f-e763-afc1f2611c75@linux.alibaba.com>
-Date:   Tue, 26 Jul 2022 15:54:16 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.1
+        Tue, 26 Jul 2022 03:55:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882592D1C3;
+        Tue, 26 Jul 2022 00:55:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BD31B8122C;
+        Tue, 26 Jul 2022 07:55:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC4FEC341C0;
+        Tue, 26 Jul 2022 07:55:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658822101;
+        bh=ac2WrPmEy4oWwjGmJDlp7HjdY4CSvh04Z9eO/4eP5sk=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=YulKCCgdhZCEjOCzOGfiwjUl5q1lSgXWVyFxPXstKsHj3zH7AJVnCbRhklH2WXqHf
+         fdEbJQcAZ48psbNwZHoksJ8LIiVGVVEYLBAFK907X4b0FEksS21M9Scg3wqrC22oBu
+         e1FEjd/0DD8dW+f9qdzZeIFiOAQ3JsscmLEcSUfLbB4SBMelDtMJPd/TlZ9fy+GbZl
+         yWEQtyVq9aWfrPFmrcTe+Y3StVyp7f8FYyzaMmPS77z58hWFlmVQOhPuMvym3vKwWN
+         Bchnl+Ik/52NWoDofhwugmQmGrpztB3BLf7/e/ZRewYsbbp6IR6dvnckbmNEahc6j0
+         F9p97uJyR/gAQ==
+Received: by mail-wr1-f41.google.com with SMTP id d8so18901604wrp.6;
+        Tue, 26 Jul 2022 00:55:01 -0700 (PDT)
+X-Gm-Message-State: AJIora/GVuVuW0fjv0t51g08bVXoO5sueMGxX3nE1tlX0NXKtjcRWmbP
+        T0YPVLsHttvydiEdlJiXZORF6BRfjVOd56jPcLk=
+X-Google-Smtp-Source: AGRyM1tFsabkbMbFAqy5WpNjoJ+eHwS9qaw5ep2ASMUt3FBuvqiRY1Vpeyw0kuUfMQ4YWo4CzXybKNB5+QfTFOhVmhg=
+X-Received: by 2002:adf:de0d:0:b0:21d:66a1:ad4d with SMTP id
+ b13-20020adfde0d000000b0021d66a1ad4dmr10024558wrm.17.1658822100006; Tue, 26
+ Jul 2022 00:55:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <51c97da7-422f-1b5b-03d3-dc36c9132c2a@microchip.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:adf:f7cb:0:0:0:0:0 with HTTP; Tue, 26 Jul 2022 00:54:59
+ -0700 (PDT)
+In-Reply-To: <871qu8tiys.wl-tiwai@suse.de>
+References: <20220722142916.29435-1-tiwai@suse.de> <20220722142916.29435-4-tiwai@suse.de>
+ <0350c21bcfdc896f2b912363f221958d41ebf1e1.camel@perches.com>
+ <87edyc2r2e.wl-tiwai@suse.de> <CAKYAXd_tohLszyrThNLE5tPHt=2Z8Xtt=hzzEQe3iqf0t549EQ@mail.gmail.com>
+ <871qu8tiys.wl-tiwai@suse.de>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Tue, 26 Jul 2022 16:54:59 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd8OAQ91dude9_-rWJ1tDCb4NM4rgdASKbmz4Tiu46cdzg@mail.gmail.com>
+Message-ID: <CAKYAXd8OAQ91dude9_-rWJ1tDCb4NM4rgdASKbmz4Tiu46cdzg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] exfat: Expand exfat_err() and co directly to pr_*() macro
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Joe Perches <joe@perches.com>, linux-fsdevel@vger.kernel.org,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/7/26 上午1:13, Conor.Dooley@microchip.com 写道:
-> On 25/07/2022 02:45, Xianting Tian wrote:
->> [RESEND PATCH V2 0/5] Fixups to work with crash tool
-> FWIW, this is not a "resend" - there's at least a commit message
-> difference here so this should have been v3. Also your cover letter
-> was not the one generated for the patches you actually sent since
-> it still mentions "riscv64" in the subject line for patch 5.
-
-Sorry for this, my modification this time is still not thorough enough, 
-"riscv64" still exist :(
-
-I will use V4 for next fix.
-
+2022-07-26 16:46 GMT+09:00, Takashi Iwai <tiwai@suse.de>:
+> On Tue, 26 Jul 2022 09:02:40 +0200,
+> Namjae Jeon wrote:
+>>
+>> 2022-07-23 17:04 GMT+09:00, Takashi Iwai <tiwai@suse.de>:
+>> > On Sat, 23 Jul 2022 09:42:12 +0200,
+>> > Joe Perches wrote:
+>> >>
+>> >> On Fri, 2022-07-22 at 16:29 +0200, Takashi Iwai wrote:
+>> >> > Currently the error and info messages handled by exfat_err() and co
+>> >> > are tossed to exfat_msg() function that does nothing but passes the
+>> >> > strings with printk() invocation.  Not only that this is more
+>> >> > overhead
+>> >> > by the indirect calls, but also this makes harder to extend for the
+>> >> > debug print usage; because of the direct printk() call, you cannot
+>> >> > make it for dynamic debug or without debug like the standard helpers
+>> >> > such as pr_debug() or dev_dbg().
+>> >> >
+>> >> > For addressing the problem, this patch replaces exfat_msg() function
+>> >> > with a macro to expand to pr_*() directly.  This allows us to create
+>> >> > exfat_debug() macro that is expanded to pr_debug() (which output can
+>> >> > gracefully suppressed via dyndbg).
+>> >> []
+>> >> > diff --git a/fs/exfat/exfat_fs.h b/fs/exfat/exfat_fs.h
+>> >> []
+>> >> > @@ -508,14 +508,19 @@ void __exfat_fs_error(struct super_block *sb,
+>> >> > int
+>> >> > report, const char *fmt, ...)
+>> >> >  #define exfat_fs_error_ratelimit(sb, fmt, args...) \
+>> >> >  		__exfat_fs_error(sb, __ratelimit(&EXFAT_SB(sb)->ratelimit), \
+>> >> >  		fmt, ## args)
+>> >> > -void exfat_msg(struct super_block *sb, const char *lv, const char
+>> >> > *fmt,
+>> >> > ...)
+>> >> > -		__printf(3, 4) __cold;
+>> >> > +
+>> >> > +/* expand to pr_xxx() with prefix */
+>> >> > +#define exfat_msg(sb, lv, fmt, ...) \
+>> >> > +	pr_##lv("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+>> >> > +
+>> >> >  #define exfat_err(sb, fmt, ...)						\
+>> >> > -	exfat_msg(sb, KERN_ERR, fmt, ##__VA_ARGS__)
+>> >> > +	exfat_msg(sb, err, fmt, ##__VA_ARGS__)
+>> >> >  #define exfat_warn(sb, fmt, ...)					\
+>> >> > -	exfat_msg(sb, KERN_WARNING, fmt, ##__VA_ARGS__)
+>> >> > +	exfat_msg(sb, warn, fmt, ##__VA_ARGS__)
+>> >> >  #define exfat_info(sb, fmt, ...)					\
+>> >> > -	exfat_msg(sb, KERN_INFO, fmt, ##__VA_ARGS__)
+>> >> > +	exfat_msg(sb, info, fmt, ##__VA_ARGS__)
+>> >> > +#define exfat_debug(sb, fmt, ...)					\
+>> >> > +	exfat_msg(sb, debug, fmt, ##__VA_ARGS__)
+>> >>
+>> >> I think this would be clearer using pr_<level> directly instead
+>> >> of an indirecting macro that uses concatenation of <level> that
+>> >> obscures the actual use of pr_<level>
+>> >>
+>> >> Either: (and this first option would be my preference)
+>> >>
+>> >> #define exfat_err(sb, fmt, ...) \
+>> >> 	pr_err("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+>> >> #define exfat_warn(sb, fmt, ...) \
+>> >> 	pr_warn("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+>> >> etc...
+>> >
+>> > IMO, it's a matter of taste, and I don't mind either way.
+>> > Just let me know.
+>> Joe has already said that he prefers the first.
 >
-> That said, this does not apply to riscv/for-next:
-> b4 shazam 20220725014539.1037627-1-xianting.tian@linux.alibaba.com
-> Grabbing thread from lore.kernel.org/all/20220725014539.1037627-1-xianting.tian%40linux.alibaba.com/t.mbox.gz
-> Checking for newer revisions on https://lore.kernel.org/all/
-> Analyzing 6 messages in the thread
-> Checking attestation on all messages, may take a moment...
-> ---
->    [PATCH v2 1/5] RISC-V: use __smp_processor_id() instead of smp_processor_id()
->    [PATCH v2 2/5] RISC-V: Add arch_crash_save_vmcoreinfo support
->    [PATCH v2 3/5] riscv: Add modules to virtual kernel memory layout dump
->    [PATCH v2 4/5] RISC-V: Fixup getting correct current pc
->    [PATCH v2 5/5] riscv: crash_core: Export kernel vm layout, phys_ram_base
-> ---
-> Total patches: 5
-> ---
-> Applying: RISC-V: use __smp_processor_id() instead of smp_processor_id()
-> Applying: RISC-V: Add arch_crash_save_vmcoreinfo support
-> Patch failed at 0002 RISC-V: Add arch_crash_save_vmcoreinfo support
-
-patch 2 apply is OK for me, I don't know why you failed :(  Do you have 
-more detals for this?
-
-> When you fix that, could you also pick either "riscv" or "RISC-V" as a
-> prefix the series?
-thanks for the comments, I will fix it in V4.
-> Thanks,
-> Conor.
+> My question was about the preference of the exfat maintainers :)
+I also agree with his opinion.
 >
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> I ever sent the patch 1 in the link:
->> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/
->> And patch 2,3 in the link:
->> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/
->> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/
->>
->> This patch series just put these patches together, and with two new patch 4, 5.
->> these five patches are the fixups for machine_kexec, kernel mode PC for vmcore
->> and improvements for vmcoreinfo and memory layout dump.
->>
->> The main changes in the five patchs as below,
->> Patch 1: use __smp_processor_id() instead of smp_processor_id() to cleanup
->>           the console prints.
->> Patch 2: Add VM layout, va bits, ram base to vmcoreinfo, which can simplify
->>           the development of crash tool as ARM64 already did
->>           (arch/arm64/kernel/crash_core.c).
->> Patch 3: Add modules to virtual kernel memory layout dump.
->> Patch 4: Fixup to get correct kernel mode PC for vmcore.
->> Patch 5: Updates vmcoreinfo.rst.
->>
->> With these 5 patches(patch 2 is must), crash tool can work well to analyze
->> a vmcore. The patches for crash tool for RISCV64 is in the link:
->> https://lore.kernel.org/linux-riscv/20220718025346.411758-1-xianting.tian@linux.alibaba.com/
->>
->> Changes v1 -> v2:
->>   1, remove the patch "Add a fast call path of crash_kexec()" from this series
->>   of patches, as it already applied to riscv git.
->>   https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=for-next&id=3f1901110a89b0e2e13adb2ac8d1a7102879ea98
->>   2, add 'Reviewed-by' based on the comments of v1.
->>
->> Xianting Tian (5):
->>    RISC-V: use __smp_processor_id() instead of smp_processor_id()
->>    RISC-V: Add arch_crash_save_vmcoreinfo support
->>    riscv: Add modules to virtual kernel memory layout dump
->>    RISC-V: Fixup getting correct current pc
->>    riscv64: crash_core: Export kernel vm layout, phys_ram_base
->>
->>   .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
->>   arch/riscv/kernel/Makefile                    |  1 +
->>   arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
->>   arch/riscv/kernel/crash_save_regs.S           |  2 +-
->>   arch/riscv/kernel/machine_kexec.c             |  2 +-
->>   arch/riscv/mm/init.c                          |  4 +++
->>   6 files changed, 67 insertions(+), 2 deletions(-)
->>   create mode 100644 arch/riscv/kernel/crash_core.c
->>
->> --
->> 2.17.1
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>> Will you send v2 patch-set ?
+>
+> Sure.
+Thanks a lot!
+>
+>
+> Takashi
+>

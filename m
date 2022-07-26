@@ -2,111 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A940B58192E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6997B58192F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239713AbiGZRws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S239840AbiGZRy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239789AbiGZRwT (ORCPT
+        with ESMTP id S239906AbiGZRyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:52:19 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B3A30F7D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:51:21 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id c13so7292716pla.6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:51:21 -0700 (PDT)
+        Tue, 26 Jul 2022 13:54:07 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E4732BAB
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:52:46 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id w8-20020a05600c014800b003a32e89bc4eso8571446wmm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:52:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F+HDDqObfng+U02lfgXmn7OnwfgF8WXJW/VqBzOllp0=;
-        b=a6C/xNGkJ/tlLE0z3lbgDiMjtLnG5+Pk8v16J19Ed/b/HkF9kRw3644iZJI3sVXXck
-         K3unqotJOeqeBY1NWvUL99rUbwAEe2NSwXyXfqZneH2ZKVcfSeOjISAgzCC9BNWZ4Vp7
-         kAGl8zXGFWT0O8NqB88HQboq76Vwk5/sZehKLY2wxOUgEVDp7Eo3v2fvf4EgTVQ03c4A
-         WDTxcq7JmkkWldjlEBbX3TdMeuI0HZr/gSl4uCbcXlZ/4CMsSryEleWhwBPADIHZoXyE
-         +rIJe5O4oaHfAFT/JN2b7wz3cJeEiJ1JFIxx3+SMH0oQ4UT9nuXcZF5HDFTICDn8LS7X
-         dIzg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ibbkqOJbjTU7aTrIxfr+vCfiOwdKe1UQiyQ1pP/N5ro=;
+        b=dohbt+jrQSc0W7ReW484YOSWSgYArsM9LgsNPLgXNRmTrbju0mqG5Zq+euDw4p6408
+         8zY+BHyaxs2I/UcMTUqTY/tW7MxmpFukrtuDF5xyLpytIyezXjH0HSuqckhXGM5NULCq
+         zzumtsbSAA0rVVJFVbA0zycP+v8GD+DIG35iIZOeBjBbaCEqAhg/1NZOxukLnttUo6o5
+         kZ/ndeK2SSh7gSUBCkQlBejChHqHoCIb7kVyoPX+7Fvw1b6UWmFwJofFhVn8nTpLCH9r
+         KsaPR1gJ1PpAMxRkz5ighBi6eyS2IiEKJgD/Fq7QkKyiJ0efEwR+4Vi2ma/d0joXpBH6
+         BNlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F+HDDqObfng+U02lfgXmn7OnwfgF8WXJW/VqBzOllp0=;
-        b=TTFghhp4V18gHHAex8L7E5U65c1dyINZqUbAb4Hvh/uobYUSJ9SLw/N056zpqMUzvo
-         36VgEDQ/nJlxdFrJl2n1Vl3ZU0HX5JR5lpDOmpAvLapzJVTpDRp2yZ+qwXigp/efbK/Q
-         iqXw3mI8zsQoR8Zr0gcvq6+jjuh0MJ50p8j6TsfmDtFVc5ZRhMONpvt870gpn9d7CLIZ
-         RP1sjGSwA4vxA7Lqfpi99s977nSQ1GAwBxWAkH96jlhbS8e26LYLV/D7bmNMzoOX99KG
-         Rsf20HfayPRt//bSrmvWlNFHfhC/xQMXuv5nSbjXy/tsqybuS+CxnPbbbiiBZwJrPPYG
-         o4XQ==
-X-Gm-Message-State: AJIora9QSOZNcJlUeg6KHQIBV/OMeZfmvNERgqi9RDIb44OYeMorQc8w
-        fdYlPFWljoz8lmj+EtbY4P+hRQ==
-X-Google-Smtp-Source: AGRyM1vurTC/JCeOvm1bUkvKqz4rp09POmCMcQQSmIeCIse22BpyedlKrRuhQ2C9xQoqLCGZAWCFRw==
-X-Received: by 2002:a17:903:20e:b0:16d:4d0b:5408 with SMTP id r14-20020a170903020e00b0016d4d0b5408mr17552661plh.161.1658857881433;
-        Tue, 26 Jul 2022 10:51:21 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id n1-20020a170902d2c100b0016a565f3f34sm12010223plc.168.2022.07.26.10.51.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 10:51:20 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 11:51:18 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Chris Lew <quic_clew@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] Introduction of rpmsg_rx_done
-Message-ID: <20220726175118.GA113917@p14s>
-References: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ibbkqOJbjTU7aTrIxfr+vCfiOwdKe1UQiyQ1pP/N5ro=;
+        b=ZA1W4Q2lW1wjzBZnFaXSVOgCN+3uTmnDrgZbs6OtTcBOwaZ7hFAlARZLj0A4hqT9dl
+         2dZ9pbN0gvUTIZctLQQDuZDvjGJQaEDui1wMgoUpdzoXM84CGv+ED3SJO7b+6Az29o3C
+         9b0Zonghx3Ix+M3xGiFthXQfAUYdaYep9jQqPngn9yaw9BRAwk3qp7TKKnTH2fvMdP4m
+         eXi6cm/yj1tVglI4EK5vgzjaInbhXLS5+04PHvSEmGrFmxMibKEKTx7WfK7I4X0edSf7
+         jFqYBxBxhS3C0/23KpaSqLCmvYAGHZfft3mV2a/WK3SGMnMeeYzF4YSuhKJCqbvuyVMM
+         VwBw==
+X-Gm-Message-State: AJIora+i3MY8MD6xsBiMA9rffUbGvzmb5x9/EOsEPw/Mg1A8eU2yMGDf
+        I2a2Mc+B/Y9RDv36RhiwP8M3qv7c32i7XJrVfx3luQ==
+X-Google-Smtp-Source: AGRyM1tsogc+fsYOOTWp7L1CLDs8aHyjfw7JB/gRlwH5/BepB5CT+Xme6EUjPeato8Ln+jNu2btDVQo78qBpZd6mEhU=
+X-Received: by 2002:a7b:ce13:0:b0:3a3:102c:23d3 with SMTP id
+ m19-20020a7bce13000000b003a3102c23d3mr231642wmc.67.1658857964350; Tue, 26 Jul
+ 2022 10:52:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725104220.1106663-1-leo.yan@linaro.org> <Yt68AZA2VV9d02xZ@kernel.org>
+ <CA+_WhHyZZC=3gtzetEAQQrjtGujHmY5azwtQNZEc90gyOAwUDg@mail.gmail.com>
+In-Reply-To: <CA+_WhHyZZC=3gtzetEAQQrjtGujHmY5azwtQNZEc90gyOAwUDg@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 26 Jul 2022 10:52:31 -0700
+Message-ID: <CAP-5=fWiNdnEawdj_3ExCrcwRSnRxeV8=8RhA6pwbw_bJdPJFg@mail.gmail.com>
+Subject: Re: [PATCH] perf scripts python: Let script to be python2 compliant
+To:     Alan Bartlett <ajb@elrepo.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, ElRepo <contact@elrepo.org>,
+        Akemi Yagi <toracat@elrepo.org>, Jiri Olsa <jolsa@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 06:16:41PM -0700, Chris Lew wrote:
-> This series proposes an implementation for the rpmsg framework to do
-> deferred cleanup of buffers provided in the rx callback. The current
-> implementation assumes that the client is done with the buffer after
-> returning from the rx callback.
-> 
-> In some cases where the data size is large, the client may want to
-> avoid copying the data in the rx callback for later processing. This
-> series proposes two new facilities for signaling that they want to
-> hold on to a buffer after the rx callback.
-> They are:
->  - New API rpmsg_rx_done() to tell the rpmsg framework the client is
->    done with the buffer
->  - New return codes for the rx callback to signal that the client will
->    hold onto a buffer and later call rpmsg_rx_done()
-> 
-> This series implements the qcom_glink_native backend for these new
-> facilities.
->  
-> Chris Lew (4):
->   rpmsg: core: Add rx done hooks
->   rpmsg: char: Add support to use rpmsg_rx_done
->   rpmsg: glink: Try to send rx done in irq
->   rpmsg: glink: Add support for rpmsg_rx_done
-> 
->  drivers/rpmsg/qcom_glink_native.c | 112 ++++++++++++++++++++++++++++++--------
->  drivers/rpmsg/rpmsg_char.c        |  50 ++++++++++++++++-
->  drivers/rpmsg/rpmsg_core.c        |  20 +++++++
->  drivers/rpmsg/rpmsg_internal.h    |   1 +
->  include/linux/rpmsg.h             |  24 ++++++++
->  5 files changed, 183 insertions(+), 24 deletions(-)
+On Tue, Jul 26, 2022 at 9:57 AM Alan Bartlett <ajb@elrepo.org> wrote:
+>
+> On Mon, 25 Jul 2022 at 16:51, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> >
+> > Em Mon, Jul 25, 2022 at 06:42:20PM +0800, Leo Yan escreveu:
+> > > The mainline kernel can be used for relative old distros, e.g. RHEL 7.
+> > > The distro doesn't upgrade from python2 to python3, this causes the
+> > > building error that the python script is not python2 compliant.
+> > >
+> > > To fix the building failure, this patch changes from the python f-string
+> > > format to traditional string format.
+> >
+> > Thanks, applied.
+> >
+> > - Arnaldo
+>
+> Leo / Arnaldo,
+>
+> Applying the patch on top of -5.19-rc8 fixes the problem that we (the
+> ELRepo Project) experienced when attempting to build on RHEL7.
+>
+> So --
+>
+> Tested-by: Alan Bartlett <ajb@elrepo.org>
+>
+> Hopefully you will get it to Linus in time for -5.19 GA.
+>
+> Thanks,
+> Alan.
 
-I have started reviewing this set.  Comments to come later today or tomorrow.
+So I'm somewhat concerned about perf supporting unsupported
+distributions and this holding the code base back. RHEL7 was launched
+8 years ago (June 10, 2014) and full support ended 3 years ago (August
+6, 2019) [1]. Currently RHEL7 is in "Maintenance Support or
+Maintenance Support 2" phase which is defined to mean [2]:
+
+```
+During the Maintenance Support Phase for Red Hat Enterprise Linux
+Version 8 & 9, and Maintenance Support 2 Phase for Red Hat Enterprise
+Linux version 7, Red Hat defined Critical and Important impact
+Security Advisories (RHSAs) and selected (at Red Hat discretion)
+Urgent Priority Bug Fix Advisories (RHBAs) may be released as they
+become available. Other errata advisories may be delivered as
+appropriate.
+
+New functionality and new hardware enablement are not planned for
+availability in the Maintenance Support (RHEL 8 & 9) Phase and
+Maintenance Support 2 (RHEL 7) Phase.
+```
+
+From this definition, why would RHEL7 pick up a new perf tool? I don't
+think they would and as such we don't need to worry about supporting
+it. RHEL8 defaults to python 3 and full support ends for it next year.
+Let's set the bar at RHEL8 and not worry about RHEL7 breakages like
+this in future. I think the bar for caring should be "will the distro
+pick up our code", if we don't do this then we're signing up to not
+allowing tools to update for 10 years! If someone is building a kernel
+and perf tool on RHEL7 then they should be signing up to also deal
+with tool chain issues, which in this case can mean installing
+python3.
 
 Thanks,
-Mathieu
+Ian
 
-> 
-> -- 
-> 2.7.4
-> 
+[1] https://access.redhat.com/product-life-cycles/
+[2] https://access.redhat.com/support/policy/updates/errata

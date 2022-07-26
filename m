@@ -2,105 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E58580E18
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0747580E1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238376AbiGZHmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
+        id S238263AbiGZHmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238444AbiGZHl7 (ORCPT
+        with ESMTP id S238251AbiGZHm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:41:59 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974421F2FB
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:41:33 -0700 (PDT)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 6256A30119E;
-        Tue, 26 Jul 2022 09:41:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1658821290;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x6mhpRVjeY02y9PKjADFibHQ+QplFQdFMkH4yzixOv8=;
-        b=svLpUGvmOVh7MtkHNWW2Yl0XLrnw1OfUWUmrCq8RRZ5L0BASxUo3AEjuchoc8o/84gbT8X
-        NdtDB7cYaKrNpETyPE/RnAt7tp2j9akhjM5RzfaRWDzw1ammbvJS0Ag8fHp1d5fwPG2SsG
-        fKdhvfkGsC3/morICGPIYkDzZs7+vtYNEuj3GAX8oYOqTbfhWFlDJErexm1apOe23XAbDG
-        XwkqSyt9qStSEf6NDL0H5baQLV8MG+anH+P4K+OWQfYu/18h9h+Rjo9XeS4afFFPBi1AVk
-        +xlh0TsN0tte8XYyO0c7uJPCDRLUHhd5SpTTpMPkQQEnQv4UigwaeMgL9zsbmw==
-Message-ID: <d64b0d239972ed7b42a201d81ee1a7c4be96ece9.camel@svanheule.net>
-Subject: Re: [PATCH v2] gpio: realtek-otto: switch to 32-bit I/O
-From:   Sander Vanheule <sander@svanheule.net>
-To:     linux-gpio@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Jan Hoffmann <jan@3e8.eu>, Paul Cercueil <paul@crapouillou.net>
-Date:   Tue, 26 Jul 2022 09:41:28 +0200
-In-Reply-To: <20220724113141.51646-1-sander@svanheule.net>
-References: <20220724113141.51646-1-sander@svanheule.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Tue, 26 Jul 2022 03:42:27 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FE3BC85
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:42:13 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id w5so4296536edd.13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LSv0zT3hbYY0NoaOFjUySI9LkcnRa5c63eM0DyOgR4Q=;
+        b=v48qZg+gkpnYGsfN7MlYTDVliXJAKPYp6VGdI8Y2dBdBkiObUrhziZXNTpAgxH3jOo
+         kkdHUCnkqGzIqUQ23XEM7iTGoJfF9kNgedtLQ1nHp3UpsTqgdY3GeGP+tfjG9lky37ww
+         vSpFR6IqM2jfALmsXWMXSKXA5UjGw5UhVVKM8Z43M5YoFBGQPvpssVFPa2fekJNU1uzr
+         UWHViRuRA+U1AiWDl4+fsfypztg/fBvvjzg1qjUvtPePxO8eXcYXSNdWxF0KnlgEGjki
+         IFkjqKMXqO/GMnyBHrj0m9A5bF0yItHwbMG8kZqSQky5nXcXdop9b/5RrmLBex0l4hds
+         bazg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LSv0zT3hbYY0NoaOFjUySI9LkcnRa5c63eM0DyOgR4Q=;
+        b=WDM61aHWhmtHrA2ga+knH+S2XtZKtwpImRyv6ErpthpUZhG84cNSN/f+dk/q+BpLGP
+         d0ufGb7F/CZHdCiDrFXBnFx+RioG9P+WmVSwKnR+VfpIjitYLM81v1A7oC7XcnjEYWqO
+         WNmMt7AcXSB86FnZOAT/r3D9zro/WHe4Hs1S89bx4hOSn1tvJfkfw+izol6MwQC42B8x
+         dql7elGZRim/QzZthd808MmW1S+lPte5Kd++pH2hMS1S5w+udPI7jyMe8ctLEt5gkl0m
+         trcbYuHPsQbCsWY+QxcwBMzjHp1SwYQTSX0vhuw/Tt29ZKVeXys3qddYwoII/x4vfxHK
+         zoww==
+X-Gm-Message-State: AJIora/9qYXt9MH+B2Dq5WebQX6z/Zr3rRdrmH4yxaaiBYI7Z3qwPYbJ
+        FfCefr1SiqMth/hFDdfU/AFN/76CfzU63kvyJdxtDQ==
+X-Google-Smtp-Source: AGRyM1tTFSZO4tGo0PCUFIhA8WVv02W9uMHhf8OODiEkjWYbUjWku28ujTzToAsX7ym7ilB5OhgyYpvNchLxnLnsMkM=
+X-Received: by 2002:a05:6402:2696:b0:43b:eb8b:d0da with SMTP id
+ w22-20020a056402269600b0043beb8bd0damr10708934edd.158.1658821332118; Tue, 26
+ Jul 2022 00:42:12 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220720082934.17741-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220720082934.17741-1-lukas.bulwahn@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 26 Jul 2022 09:42:01 +0200
+Message-ID: <CACRpkdbmaf1uLqs=k6yyb0twy0hp1izkWuJN-QYPJy1Gg6wJ2Q@mail.gmail.com>
+Subject: Re: [PATCH] clk: davinci: remove PLL and PSC clocks for DaVinci
+ DM644x and DM646x
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     David Lechner <david@lechnology.com>, Sekhar Nori <nsekhar@ti.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-07-24 at 13:31 +0200, Sander Vanheule wrote:
-> By using 16-bit I/O on the GPIO peripheral, which is apparently not safe
-> on MIPS, the IMR can end up containing garbage. This then results in
-> interrupt triggers for lines that don't have an interrupt source
-> associated. The irq_desc lookup fails, and the ISR will not be cleared,
-> keeping the CPU busy until reboot, or until another IMR operation
-> restores the correct value. This situation appears to happen very
-> rarely, for < 0.5% of IMR writes.
->=20
-> Instead of using 8-bit or 16-bit I/O operations on the 32-bit memory
-> mapped peripheral registers, switch to using 32-bit I/O only, operating
-> on the entire bank for all single bit line settings. For 2-bit line
-> settings, with 16-bit port values, stick to manual (un)packing.
->=20
-> This issue has been seen on RTL8382M (HPE 1920-16G), RTL8391M (Netgear
-> GS728TP v2), and RTL8393M (D-Link DGS-1210-52 F3, Zyxel GS1900-48).
->=20
-> Reported-by: Luiz Angelo Daros de Luca <luizluca@gmail.com> # DGS-1210-52
-> Reported-by: Birger Koblitz <mail@birger-koblitz.de> # GS728TP
-> Reported-by: Jan Hoffmann <jan@3e8.eu> # 1920-16G
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> ---
+On Wed, Jul 20, 2022 at 10:30 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 
-...
+> Commit 7dd33764486d ("ARM: davinci: Delete DM644x board files") and commit
+> b4aed01de486 ("ARM: davinci: Delete DM646x board files") removes the
+> support for DaVinci DM644x and DM646x boards.
+>
+> Hence, remove the PLL and PSC clock descriptions for those boards as well.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-> @@ -307,16 +308,17 @@ static int realtek_gpio_irq_set_affinity(struct irq=
-_data
-> *data,
-> =C2=A0static int realtek_gpio_irq_init(struct gpio_chip *gc)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct realtek_gpio_ctrl =
-*ctrl =3D gpiochip_get_data(gc);
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int port;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 mask_all =3D GENMASK(gc->n=
-gpio, 0);
+Thanks Lukas!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-This should be GENMASK(gc->ngpio - 1, 0).
-
-I'll wait a bit more for other comments before sending a v3.
-
-Best,
-Sander
-
+Yours,
+Linus Walleij

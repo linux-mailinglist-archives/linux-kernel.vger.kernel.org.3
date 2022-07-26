@@ -2,337 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740AD58171C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3709F581720
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239138AbiGZQPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 12:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
+        id S238972AbiGZQQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234824AbiGZQPr (ORCPT
+        with ESMTP id S229768AbiGZQQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:15:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDC26439
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:15:42 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id p6-20020a17090a680600b001f2267a1c84so16058780pjj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RbbJRiZWLE14OI0Iog5V2+USzqv/CchO2MI4brfyHQY=;
-        b=Z0h4uq3lq/pkN9tJP5MUU6WCKlSXK7kvINRztsQuSK/dNMWCWhPgpY4ZXiRTT80Lia
-         MbQYSLCvbpQQP55Aqwx6u9aRYwMk3PxLkpymyfc8MDWlKYbPT63GrGn0MYLw3zEUiVQJ
-         hbvxM001kgSQOmVQunEiVgztdJz1fGgglt21AbbuHYRRcUqAVymay4FvOkLb4Xrrtd0P
-         k4RQHMQOCA/ZCMrHxT+ASHV9bXwNtINeM8nxxHcPWCTW6D6dB0qlIzEqHkgbzbYo3TlF
-         a2fNdeqcRb98t8jqt2OhxTrUsqpZCBHVqe03987MoDS4NJGq+WekMTsn2J8RsGgcrc6q
-         bf5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RbbJRiZWLE14OI0Iog5V2+USzqv/CchO2MI4brfyHQY=;
-        b=uTA3OSSN7crhD4EeyX9e7RJ2kLb4LPhOEXu9Qmm0GGtILwQuWeKHMW0C+SkAD95JVG
-         /yFIfrNM/YwsGUEhXwIxcL5il84thOOKQvaG0IqTOGH094m0ZWfHUB0EDts2uHZ8ky6W
-         cKDP2dcEVmtiBSu++Chre480i5yITl/IMMTu3PILg7qfEmN+I+ZKTXfcDEOzZtF/db2A
-         s4QQ+UPRtKy6walivjW4i9k/HraE0l7dR+rHEoh+Q/qDz0inrOeMFMkuVQ9GF7AbAjn7
-         e7aqb2Zs5ZIgEDcjjz2SfoWR8gbw3ofsOXPXCy+8TILEedajI9L03epdRVGOFtCM2rZn
-         GmFw==
-X-Gm-Message-State: AJIora9mlzJDzDLEtvDVhYkUsrGN5D6VaqYMV8z4jClEl20+aXh979hP
-        HMPgNeSfLL4i6DYKuUKIFxWCBQ==
-X-Google-Smtp-Source: AGRyM1uHPvfpKKKnzKGEaAj85DYimjpGL/QBy03PEyfb111VKQ2dvtwdrN0sLNmkalsx6fCVcMVPbg==
-X-Received: by 2002:a17:902:e945:b0:16b:f802:1660 with SMTP id b5-20020a170902e94500b0016bf8021660mr17772012pll.7.1658852142181;
-        Tue, 26 Jul 2022 09:15:42 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id x21-20020aa79ad5000000b00528a097aeffsm11855385pfp.118.2022.07.26.09.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 09:15:41 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 10:15:38 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Bruce Ashfield <bruce.ashfield@xilinx.com>
-Subject: Re: [PATCH v7 1/4] remoteproc: core: Introduce
- rproc_rvdev_add_device function
-Message-ID: <20220726161538.GA15392@p14s>
-References: <20220713113612.2117279-1-arnaud.pouliquen@foss.st.com>
- <20220713113612.2117279-2-arnaud.pouliquen@foss.st.com>
+        Tue, 26 Jul 2022 12:16:45 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4059D24095
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658852203; x=1690388203;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5hyLSrL4KSUdoWk6zNVtWxQQtR09URwlBAviONiENXs=;
+  b=V/R8d6QLAqQiCvqhhL9N5umv4/8gEa8QoTOqwV6iGsmmjJmKVnQzuaSY
+   8e5ro+82YTuH/mak1idEoHqvNooPrE6wQDI87QSq5UsyHVhATA20oTQSw
+   zefujjYCdj+JzhkkS7rG5LpfvA80J5VXH50+yTLlDBcOd79FJI+iclzwI
+   RHz17/kjP7aRvhrR0XquTSkvU69fTmaTJWfd0HJx15FF4g0hfmG/Nbp+3
+   zaZhZU147t44SnTYTkuXB34jI1uoFc3q9BDNzB6r0zcJJfcEjJD+J9zir
+   vOjlpo64IaYjqSuBkUNirhBmg8P6hFrlDvnMFJJlpyM9V5fTMa3vbsouv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="274865885"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="274865885"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 09:16:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="658755433"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Jul 2022 09:16:41 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGNEe-0007CU-1J;
+        Tue, 26 Jul 2022 16:16:40 +0000
+Date:   Wed, 27 Jul 2022 00:16:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kbusch:dma-prereg-v5 5/6] include/linux/uaccess.h:124: undefined
+ reference to `io_dma_unmap'
+Message-ID: <202207270041.8fQ9kcrB-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220713113612.2117279-2-arnaud.pouliquen@foss.st.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 01:36:09PM +0200, Arnaud Pouliquen wrote:
-> In preparation of the migration of the management of rvdev in
-> remoteproc_virtio.c, this patch spins off a new function to manage the
-> remoteproc virtio device creation.
-> 
-> The rproc_rvdev_add_device will be moved to remoteproc_virtio.c.
-> 
-> The rproc_vdev_data structure is introduced to provide information for
-> the rvdev creation. This structure allows to manage the rvdev and vrings
-> allocation in the rproc_rvdev_add_device function.
-> 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
-> update vs previous revision:
-> The update are based on Mathieu Poirier's comments.
->   - fix typo s/onlyduring/only during
-> ---
->  drivers/remoteproc/remoteproc_core.c     | 145 +++++++++++++----------
->  drivers/remoteproc/remoteproc_internal.h |  15 +++
->  2 files changed, 97 insertions(+), 63 deletions(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-prereg-v5
+head:   4f4a93bf02dcf20e9a4a3ac0c9cd39d79e9e540e
+commit: 1b0c9acb050749ce7ad964cc66eef72779835832 [5/6] io_uring: add support for dma pre-mapping
+config: xtensa-randconfig-r001-20220724 (https://download.01.org/0day-ci/archive/20220727/202207270041.8fQ9kcrB-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=1b0c9acb050749ce7ad964cc66eef72779835832
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch dma-prereg-v5
+        git checkout 1b0c9acb050749ce7ad964cc66eef72779835832
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 02a04ab34a23..f328d45d8376 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -484,74 +484,23 @@ static int copy_dma_range_map(struct device *to, struct device *from)
->  	return 0;
->  }
->  
-> -/**
-> - * rproc_handle_vdev() - handle a vdev fw resource
-> - * @rproc: the remote processor
-> - * @ptr: the vring resource descriptor
-> - * @offset: offset of the resource entry
-> - * @avail: size of available data (for sanity checking the image)
-> - *
-> - * This resource entry requests the host to statically register a virtio
-> - * device (vdev), and setup everything needed to support it. It contains
-> - * everything needed to make it possible: the virtio device id, virtio
-> - * device features, vrings information, virtio config space, etc...
-> - *
-> - * Before registering the vdev, the vrings are allocated from non-cacheable
-> - * physically contiguous memory. Currently we only support two vrings per
-> - * remote processor (temporary limitation). We might also want to consider
-> - * doing the vring allocation only later when ->find_vqs() is invoked, and
-> - * then release them upon ->del_vqs().
-> - *
-> - * Note: @da is currently not really handled correctly: we dynamically
-> - * allocate it using the DMA API, ignoring requested hard coded addresses,
-> - * and we don't take care of any required IOMMU programming. This is all
-> - * going to be taken care of when the generic iommu-based DMA API will be
-> - * merged. Meanwhile, statically-addressed iommu-based firmware images should
-> - * use RSC_DEVMEM resource entries to map their required @da to the physical
-> - * address of their base CMA region (ouch, hacky!).
-> - *
-> - * Return: 0 on success, or an appropriate error code otherwise
-> - */
-> -static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
-> -			     int offset, int avail)
-> +static struct rproc_vdev *
-> +rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
->  {
-> -	struct fw_rsc_vdev *rsc = ptr;
-> -	struct device *dev = &rproc->dev;
->  	struct rproc_vdev *rvdev;
-> -	int i, ret;
-> +	struct fw_rsc_vdev *rsc = rvdev_data->rsc;
->  	char name[16];
-> -
-> -	/* make sure resource isn't truncated */
-> -	if (struct_size(rsc, vring, rsc->num_of_vrings) + rsc->config_len >
-> -			avail) {
-> -		dev_err(dev, "vdev rsc is truncated\n");
-> -		return -EINVAL;
-> -	}
-> -
-> -	/* make sure reserved bytes are zeroes */
-> -	if (rsc->reserved[0] || rsc->reserved[1]) {
-> -		dev_err(dev, "vdev rsc has non zero reserved bytes\n");
-> -		return -EINVAL;
-> -	}
-> -
-> -	dev_dbg(dev, "vdev rsc: id %d, dfeatures 0x%x, cfg len %d, %d vrings\n",
-> -		rsc->id, rsc->dfeatures, rsc->config_len, rsc->num_of_vrings);
-> -
-> -	/* we currently support only two vrings per rvdev */
-> -	if (rsc->num_of_vrings > ARRAY_SIZE(rvdev->vring)) {
-> -		dev_err(dev, "too many vrings: %d\n", rsc->num_of_vrings);
-> -		return -EINVAL;
-> -	}
-> +	int i, ret;
->  
->  	rvdev = kzalloc(sizeof(*rvdev), GFP_KERNEL);
->  	if (!rvdev)
-> -		return -ENOMEM;
-> +		return ERR_PTR(-ENOMEM);
->  
->  	kref_init(&rvdev->refcount);
->  
-> -	rvdev->id = rsc->id;
-> +	rvdev->id = rvdev_data->id;
->  	rvdev->rproc = rproc;
-> -	rvdev->index = rproc->nb_vdev++;
-> +	rvdev->index = rvdev_data->index;
->  
->  	/* Initialise vdev subdevice */
->  	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
-> @@ -563,7 +512,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
->  	ret = device_register(&rvdev->dev);
->  	if (ret) {
->  		put_device(&rvdev->dev);
-> -		return ret;
-> +		return ERR_PTR(ret);
->  	}
->  
->  	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
-> @@ -576,7 +525,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
->  	ret = dma_coerce_mask_and_coherent(&rvdev->dev,
->  					   dma_get_mask(rproc->dev.parent));
->  	if (ret) {
-> -		dev_warn(dev,
-> +		dev_warn(&rvdev->dev,
->  			 "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
->  			 dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
->  	}
-> @@ -589,7 +538,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
->  	}
->  
->  	/* remember the resource offset*/
-> -	rvdev->rsc_offset = offset;
-> +	rvdev->rsc_offset = rvdev_data->rsc_offset;
->  
->  	/* allocate the vring resources */
->  	for (i = 0; i < rsc->num_of_vrings; i++) {
-> @@ -605,14 +554,14 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
->  
->  	rproc_add_subdev(rproc, &rvdev->subdev);
->  
-> -	return 0;
-> +	return rvdev;
->  
->  unwind_vring_allocations:
->  	for (i--; i >= 0; i--)
->  		rproc_free_vring(&rvdev->vring[i]);
->  free_rvdev:
->  	device_unregister(&rvdev->dev);
-> -	return ret;
-> +	return ERR_PTR(ret);
->  }
->  
->  void rproc_vdev_release(struct kref *ref)
-> @@ -632,6 +581,76 @@ void rproc_vdev_release(struct kref *ref)
->  	device_unregister(&rvdev->dev);
->  }
->  
-> +/**
-> + * rproc_handle_vdev() - handle a vdev fw resource
-> + * @rproc: the remote processor
-> + * @ptr: the vring resource descriptor
-> + * @offset: offset of the resource entry
-> + * @avail: size of available data (for sanity checking the image)
-> + *
-> + * This resource entry requests the host to statically register a virtio
-> + * device (vdev), and setup everything needed to support it. It contains
-> + * everything needed to make it possible: the virtio device id, virtio
-> + * device features, vrings information, virtio config space, etc...
-> + *
-> + * Before registering the vdev, the vrings are allocated from non-cacheable
-> + * physically contiguous memory. Currently we only support two vrings per
-> + * remote processor (temporary limitation). We might also want to consider
-> + * doing the vring allocation only later when ->find_vqs() is invoked, and
-> + * then release them upon ->del_vqs().
-> + *
-> + * Note: @da is currently not really handled correctly: we dynamically
-> + * allocate it using the DMA API, ignoring requested hard coded addresses,
-> + * and we don't take care of any required IOMMU programming. This is all
-> + * going to be taken care of when the generic iommu-based DMA API will be
-> + * merged. Meanwhile, statically-addressed iommu-based firmware images should
-> + * use RSC_DEVMEM resource entries to map their required @da to the physical
-> + * address of their base CMA region (ouch, hacky!).
-> + *
-> + * Return: 0 on success, or an appropriate error code otherwise
-> + */
-> +static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
-> +			     int offset, int avail)
-> +{
-> +	struct fw_rsc_vdev *rsc = ptr;
-> +	struct device *dev = &rproc->dev;
-> +	struct rproc_vdev *rvdev;
-> +	struct rproc_vdev_data rvdev_data;
-> +
-> +	/* make sure resource isn't truncated */
-> +	if (struct_size(rsc, vring, rsc->num_of_vrings) + rsc->config_len >
-> +			avail) {
-> +		dev_err(dev, "vdev rsc is truncated\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* make sure reserved bytes are zeroes */
-> +	if (rsc->reserved[0] || rsc->reserved[1]) {
-> +		dev_err(dev, "vdev rsc has non zero reserved bytes\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	dev_dbg(dev, "vdev rsc: id %d, dfeatures 0x%x, cfg len %d, %d vrings\n",
-> +		rsc->id, rsc->dfeatures, rsc->config_len, rsc->num_of_vrings);
-> +
-> +	/* we currently support only two vrings per rvdev */
-> +	if (rsc->num_of_vrings > ARRAY_SIZE(rvdev->vring)) {
-> +		dev_err(dev, "too many vrings: %d\n", rsc->num_of_vrings);
-> +		return -EINVAL;
-> +	}
-> +
-> +	rvdev_data.id = rsc->id;
-> +	rvdev_data.index = rproc->nb_vdev++;
-> +	rvdev_data.rsc_offset = offset;
-> +	rvdev_data.rsc = rsc;
-> +
-> +	rvdev = rproc_rvdev_add_device(rproc, &rvdev_data);
-> +	if (IS_ERR(rvdev))
-> +		return PTR_ERR(rvdev);
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * rproc_handle_trace() - handle a shared trace buffer resource
->   * @rproc: the remote processor
-> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-> index 72d4d3d7d94d..07c503de0f95 100644
-> --- a/drivers/remoteproc/remoteproc_internal.h
-> +++ b/drivers/remoteproc/remoteproc_internal.h
-> @@ -24,6 +24,21 @@ struct rproc_debug_trace {
->  	struct rproc_mem_entry trace_mem;
->  };
->  
-> +/**
-> + * struct rproc_vdev_data - remoteproc virtio device data
-> + * @rsc_offset: offset of the vdev's resource entry
-> + * @id: virtio device id (as in virtio_ids.h)
-> + * @index: vdev position versus other vdev declared in resource table
-> + * @rsc: pointer to the vdev resource entry. Valid only during vdev init as
-> + *       the resource can be cached by rproc.
-> + */
-> +struct rproc_vdev_data {
-> +	u32 rsc_offset;
-> +	unsigned int id;
-> +	u32 index;
-> +	struct fw_rsc_vdev *rsc;
-> +};
-> +
->  /* from remoteproc_core.c */
->  void rproc_release(struct kref *kref);
->  irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
-> -- 
-> 2.24.3
-> 
+All errors (new ones prefixed by >>):
+
+   xtensa-linux-ld: io_uring/rsrc.o: in function `_copy_from_user':
+>> include/linux/uaccess.h:124: undefined reference to `io_dma_unmap'
+   xtensa-linux-ld: io_uring/rsrc.o: in function `io_buffer_unmap':
+   io_uring/rsrc.c:151: undefined reference to `io_dma_unmap'
+
+
+vim +124 include/linux/uaccess.h
+
+d597580d373774 Al Viro              2017-03-20  110  
+d597580d373774 Al Viro              2017-03-20  111  #ifdef INLINE_COPY_FROM_USER
+9dd819a15162f8 Kees Cook            2019-09-25  112  static inline __must_check unsigned long
+d597580d373774 Al Viro              2017-03-20  113  _copy_from_user(void *to, const void __user *from, unsigned long n)
+d597580d373774 Al Viro              2017-03-20  114  {
+d597580d373774 Al Viro              2017-03-20  115  	unsigned long res = n;
+9c5f6908de03a4 Al Viro              2017-06-29  116  	might_fault();
+4d0e9df5e43dba Albert van der Linde 2020-10-15  117  	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
+76d6f06c36a3b5 Marco Elver          2020-01-21  118  		instrument_copy_from_user(to, from, n);
+d597580d373774 Al Viro              2017-03-20  119  		res = raw_copy_from_user(to, from, n);
+9c5f6908de03a4 Al Viro              2017-06-29  120  	}
+d597580d373774 Al Viro              2017-03-20  121  	if (unlikely(res))
+d597580d373774 Al Viro              2017-03-20  122  		memset(to + (n - res), 0, res);
+d597580d373774 Al Viro              2017-03-20  123  	return res;
+d597580d373774 Al Viro              2017-03-20 @124  }
+d597580d373774 Al Viro              2017-03-20  125  #else
+9dd819a15162f8 Kees Cook            2019-09-25  126  extern __must_check unsigned long
+d597580d373774 Al Viro              2017-03-20  127  _copy_from_user(void *, const void __user *, unsigned long);
+d597580d373774 Al Viro              2017-03-20  128  #endif
+d597580d373774 Al Viro              2017-03-20  129  
+
+:::::: The code at line 124 was first introduced by commit
+:::::: d597580d373774b1bdab84b3d26ff0b55162b916 generic ...copy_..._user primitives
+
+:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
+:::::: CC: Al Viro <viro@zeniv.linux.org.uk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

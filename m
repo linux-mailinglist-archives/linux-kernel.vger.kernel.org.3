@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0516E58176B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9506158176F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239359AbiGZQ1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 12:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
+        id S239376AbiGZQ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiGZQ06 (ORCPT
+        with ESMTP id S229804AbiGZQ2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:26:58 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F852124B
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:26:57 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id f15so9901414edc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:26:57 -0700 (PDT)
+        Tue, 26 Jul 2022 12:28:50 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1732625C5D;
+        Tue, 26 Jul 2022 09:28:49 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h9so20939136wrm.0;
+        Tue, 26 Jul 2022 09:28:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ttV5vBFo81neCUa67b9tRifIFb4vLEVioSDpa2+KStc=;
-        b=bQNn/HIEV6bNqMxSkqhpn4F1zuXjz1nAKwJuWwLas4x5rbqspUs4sfKW2IrX9JC/Z8
-         R8wsOZP1GmQxF2GOMGx+JO8TuOmZmJDbMl5Z0bkLy/XRtFz/ZUXZ1rGiV5qZuHHHkQrE
-         +H5bBo55CttlIBNL7fMpNXlGOnttCDBoa1FwE=
+        bh=cIPI5KmDuzcke0XGgrnA7zF01gNNf3RwyHxJZzCv/6M=;
+        b=k8hilhnoU7dbumJaKM2qpgafxXdLLktBG83dcxCI1JKx7n39zUKZxlP+hYZm/5j5C2
+         7YXLb7fuySnGgbnGkpxhvXpl1sRoF7hshwnMXivVt8w4pR79xXoN0Zf/Z7O6i0ZPoqXy
+         h1w3xxojKg6npjOj4gSATpRpP4fc1AKm8exDwY9RtlBiYU/Nfv3DnCgIerclgCrtIiHW
+         4pqdofanwkiLeTMik0j7QL4VI2a6h9rzGwhyNseX/zAvfEyvDIB7CGdodUglNtq//vdd
+         dTGcKL2oeKGfhCJtZP5P5kO4nWtRmbI4NitvhT49eeOqA5wxxNWKTwDOcY0s9DVscfWs
+         8yxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ttV5vBFo81neCUa67b9tRifIFb4vLEVioSDpa2+KStc=;
-        b=OrshPow09kkKTZFfuLlg72GkfRTnMm4zB4vXczXl9nCbSKUMc/6aU4bwhG6sTfk7N6
-         f0NPaSF6Zwuofbr7ZpLEBLgFTEniA/fPQYmrKBY4acExHOvz7BjLufmclOAD89/18Pco
-         RIR7eAN92ABd882kZhQhTjb9ouHUAuPrCFvp4BZVn4pF8JVLQ1S3bLUmMvfTHFePdUJo
-         ERG5v6VQs/sTuBUK6g4bpLVed7pcYd9gcv76hT43SuLwetZUn00VYsAJASFQWHxcfUuk
-         hSV/r+BK2sSmmaHl1Wa0Bd8oWhr6S/ankSyUqHgzLVcA7V3f+43PAvkglLBOe6Fb/td0
-         VfyQ==
-X-Gm-Message-State: AJIora8KWeqtdtMMu1/W/Uuk/IUcS3bZtbTPaV4qiYi/KnjxYsxEfRz6
-        lfXRbo15CDePzeWUTilNYRcnsl6IinjTb9Zv
-X-Google-Smtp-Source: AGRyM1ubAST9mEuFYeXzd+QtDRUl7Rwy02ARRJ7cJnpPzrMWCA8ohdMtCTD5OsrAbTijACQQE0dWTg==
-X-Received: by 2002:a05:6402:524f:b0:43b:ff9b:2cc0 with SMTP id t15-20020a056402524f00b0043bff9b2cc0mr11137654edd.398.1658852815417;
-        Tue, 26 Jul 2022 09:26:55 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id w23-20020a17090649d700b0072b33e91f96sm6649829ejv.190.2022.07.26.09.26.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 09:26:55 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id g2so12837792wru.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:26:54 -0700 (PDT)
-X-Received: by 2002:adf:dd91:0:b0:21e:4e97:c146 with SMTP id
- x17-20020adfdd91000000b0021e4e97c146mr11197493wrl.281.1658852814595; Tue, 26
- Jul 2022 09:26:54 -0700 (PDT)
+        bh=cIPI5KmDuzcke0XGgrnA7zF01gNNf3RwyHxJZzCv/6M=;
+        b=gjPu6bxt45Skbkuql3IN84aEdSgZ7aud8LTW2YaXV1QNoacEQwfP9IDsZz0b5otXUf
+         VF/ahIoPFQvCQ1jE471Edw/cHJBaxTQ55t42lMF2cc5YA0xvRyebxTZRVEV94JpDwuP9
+         i4B2SpnHA3/TeuI+gQafUKPZ6Xne8ymamChswQPyWt3wfzwC1hKljNCoxEtcJ/VV4XE7
+         F77adRYQ4QMRtGHAsd9lky3NnyIcsVmhb7HJgSJNG1zbvm9WqoGPcT0HLY0d2xInhc1s
+         oIQCea+obEtqiRP/4C8ur06f1GgXGwuLWSzOHnjWUyJa2CmUj+JnkYp8IN9qN92gUEYi
+         Fqxg==
+X-Gm-Message-State: AJIora/iZt2/S7VO//2Ki9T6vIKV95sxuxBg5vh32cm9XXsdpZ4Ntp69
+        2MywWMEiNJRRO0cMZgiLjpu23z2Ppf3IZfo7y7Q=
+X-Google-Smtp-Source: AGRyM1vY2aubeKfH02KOuWoMorYDcmWdRSnkyGf3LHvGNaqt/b0DKZ5DoJ31VTcRGRydCQOFcoPshiRi+xhhDc0J+ac=
+X-Received: by 2002:a5d:4889:0:b0:21d:eab7:f798 with SMTP id
+ g9-20020a5d4889000000b0021deab7f798mr11482162wrq.96.1658852927394; Tue, 26
+ Jul 2022 09:28:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220726062436.90290-1-zhengqi.arch@bytedance.com> <621fb975-413d-a6b4-8126-0b78d5b60853@redhat.com>
-In-Reply-To: <621fb975-413d-a6b4-8126-0b78d5b60853@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 26 Jul 2022 09:26:38 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh_TrgNm6vz7=7CgZppr0UrZ9TwLyb3dgPXyG-w=a8kJQ@mail.gmail.com>
-Message-ID: <CAHk-=wh_TrgNm6vz7=7CgZppr0UrZ9TwLyb3dgPXyG-w=a8kJQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: fix NULL pointer dereference in wp_page_reuse()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220725212637.2818207-1-daniel.lezcano@linexp.org> <20220725212637.2818207-9-daniel.lezcano@linexp.org>
+In-Reply-To: <20220725212637.2818207-9-daniel.lezcano@linexp.org>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Tue, 26 Jul 2022 09:28:20 -0700
+Message-ID: <CA+E=qVdrNkx9nXMEFFYQgDcX+gdKJaCh3zoTkBZBY3HhBFDAdQ@mail.gmail.com>
+Subject: Re: [PATCH v2 08/32] thermal/drivers/sun8i: Switch to new of API
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
+        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
+        heiko@sntech.de, hayashi.kunihiko@socionext.com,
+        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
+        digetx@gmail.com, jonathanh@nvidia.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Amit Kucheria <amitk@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,19 +83,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 12:45 AM David Hildenbrand <david@redhat.com> wrote:
+On Mon, Jul 25, 2022 at 2:27 PM Daniel Lezcano
+<daniel.lezcano@linexp.org> wrote:
 >
-> >       VM_BUG_ON(!(vmf->flags & FAULT_FLAG_WRITE));
-> > -     VM_BUG_ON(PageAnon(page) && !PageAnonExclusive(page));
-> > +     VM_BUG_ON(page && PageAnon(page) && !PageAnonExclusive(page));
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
 >
-> Indeed, fortunately, only an issue in the VM_BUG_ON statement
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
+>
 
-Well, at least Fedora ends up enabling CONFIG_DEBUG_VM by default, so
-normal people - not just VM people - can definitely see this.
+Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
 
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-
-Applied.
-
-                    Linus
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> ---
+>  drivers/thermal/sun8i_thermal.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> index d9cd23cbb671..2a4fa4068950 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -108,9 +108,9 @@ static int sun50i_h5_calc_temp(struct ths_device *tmdev,
+>                 return -1590 * reg / 10 + 276000;
+>  }
+>
+> -static int sun8i_ths_get_temp(void *data, int *temp)
+> +static int sun8i_ths_get_temp(struct thermal_zone_device *tz, int *temp)
+>  {
+> -       struct tsensor *s = data;
+> +       struct tsensor *s = tz->devdata;
+>         struct ths_device *tmdev = s->tmdev;
+>         int val = 0;
+>
+> @@ -135,7 +135,7 @@ static int sun8i_ths_get_temp(void *data, int *temp)
+>         return 0;
+>  }
+>
+> -static const struct thermal_zone_of_device_ops ths_ops = {
+> +static const struct thermal_zone_device_ops ths_ops = {
+>         .get_temp = sun8i_ths_get_temp,
+>  };
+>
+> @@ -468,10 +468,10 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+>                 tmdev->sensor[i].tmdev = tmdev;
+>                 tmdev->sensor[i].id = i;
+>                 tmdev->sensor[i].tzd =
+> -                       devm_thermal_zone_of_sensor_register(tmdev->dev,
+> -                                                            i,
+> -                                                            &tmdev->sensor[i],
+> -                                                            &ths_ops);
+> +                       devm_thermal_of_zone_register(tmdev->dev,
+> +                                                     i,
+> +                                                     &tmdev->sensor[i],
+> +                                                     &ths_ops);
+>                 if (IS_ERR(tmdev->sensor[i].tzd))
+>                         return PTR_ERR(tmdev->sensor[i].tzd);
+>
+> --
+> 2.25.1
+>

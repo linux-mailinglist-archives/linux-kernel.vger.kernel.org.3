@@ -2,105 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053DD581867
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF4358186B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 19:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbiGZRb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 13:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S234198AbiGZRd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 13:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239069AbiGZRb4 (ORCPT
+        with ESMTP id S229928AbiGZRd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 13:31:56 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD001BE99
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:31:52 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id p11so18841084lfu.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:31:52 -0700 (PDT)
+        Tue, 26 Jul 2022 13:33:26 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A11F1C908;
+        Tue, 26 Jul 2022 10:33:25 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id z3so13977488plb.1;
+        Tue, 26 Jul 2022 10:33:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=nUsqrIcncbnAblsl66lT/lEZJ2lw+9ku+eiTV2ZWI6Y=;
-        b=OyRS/08wVlN551H9uCmoUeTFl2tMNki5reqZdw3CT81GT8LgTsXqk1jO57wdUodH2g
-         xc0iJX8XCvFuVYwQ/TJofmliTWDifgjexn294tm1ofBY/7Dkr9wcE3a0RHERg68yW0BF
-         9rS2N2dGVl2hPGLGPNDHr4BhG02/Gg1a0TpywMqZI2oScVjP9Q+tPkdGhZgbwHdPPlw+
-         2mRzXFRQhiBmN/gldSjIrf6WnAU3VupQ4N9v0FxN/F02J9FkTy/8S8QqfDQFAnS3T9vT
-         vybmAQ/bonklLF/sgF594c5gQRduNdZpShCNQ4bnixqwS575JB57AADT1wqextDJ1JFc
-         qQqg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=csi8DKhXQqGuLjHDX+zKw1RSlMGZo6HFF9ZyuowCuq4=;
+        b=U/SdxptusQuSzFDIruTYLSWMcIba2U5OWiLGu6pkSYGjb1Nx+wNeOoSNQjBOMkxTKz
+         zXq9A7gaHKIYjoND1POiRg2zHsufOsMWHHkUyfhwXmVE2gDM5PI+lb8bJX77ZshlVSQ3
+         BD/GGKqArAy8NjtbJgFpXv+4ypVe67LSLaNtXmXAf4e07P01qocpHVaitOV1Dt74CRmh
+         5iHsteyTsCkZfWuARYvMkM5T0Z9VWKmGwohbrXhhqpaBWb035bzWnKwrHMieeFGdVRWn
+         nRQLftN8+acOuqZpW5qWFezxRsXd+GHg9ojbmsZZUUqBS684vqgS93NXMfDN0V3j1rTM
+         O2SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nUsqrIcncbnAblsl66lT/lEZJ2lw+9ku+eiTV2ZWI6Y=;
-        b=RVeCsrmBqSk8ArXD0ycCKjt6igei+3ZcHuA166ApkaVEfIR1TBio+EvyIRfG/J0SyE
-         S9jZzdSHd6w6gxh6iGSV+NZxD+ftbTn9LGtgFhqBcWaZrcigHihf5Bm8h6qBIsoFpLQL
-         BHqZAYUqAb8Lh9tvIU9vN4E6RX01B8DjhFoOZoUJj47vBaDuay3/U+cSkMaIBHWLnf40
-         +NJjGWLYc+JARtN9juQBG4tI7OHw/eZ4TXyAJ1HLJkyfAi9qTOn54oXgx70dy7KOp+aM
-         fvebwrrnWAWSvepSDih5JhCSguTwG1oCbIC8g4zcorD4Qrqe4Ro09ltx68zKaJlT+ROq
-         vlhw==
-X-Gm-Message-State: AJIora/gvJeM/8UynbNO2HGyeNh2QG5AQacLbOn50hKrLev9hY1iXYbV
-        PYe4kJ/yZ/YnQqGQbHoHQ5RJMQ==
-X-Google-Smtp-Source: AGRyM1thhHPJv1gCsMqopzoDCU3kSSNaevw3WpkoAl9o10A2PSZBRyQoWCrT5Ve7WL8oKcVOHuWQbg==
-X-Received: by 2002:a05:6512:1092:b0:48a:766e:7e20 with SMTP id j18-20020a056512109200b0048a766e7e20mr7071165lfg.646.1658856711127;
-        Tue, 26 Jul 2022 10:31:51 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id t12-20020a19dc0c000000b0047f9cfa914csm3319933lfg.18.2022.07.26.10.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 10:31:50 -0700 (PDT)
-Message-ID: <d83f7689-303f-cecd-882a-ed6e03a8db5b@linaro.org>
-Date:   Tue, 26 Jul 2022 19:31:49 +0200
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=csi8DKhXQqGuLjHDX+zKw1RSlMGZo6HFF9ZyuowCuq4=;
+        b=O80qXCDgoBJqMNPN67Tv8Cy1oDgVkIVXOdNxt1XiW7Qi1JBxP5Dg4cooKX81hz0sfD
+         8+iZIPdYbY19giGHAf1LEHhEW46RsQ/j1oTRP1I1F+atJdNHML87zgVvCkD+JkE1jZRf
+         RS3MIH6CdJNaNTQeQQ4og+0p6ZJXrdHhoOyngzaSingrQyodg54VkC3OfxDto4BvkbUb
+         OX1/wncw0KcH2bdQMmgW1xFgx+Ppjunpv1O7vFJG4/5gcHCg/E9ep8NLo0oyMQFGafhS
+         38D2Qez90totwuBi9GSEtlaUayd1otWsNQk4DvoneMf9k+MDvxBA87kJgO5RlJGeg4US
+         pATA==
+X-Gm-Message-State: AJIora+lnFzNOgHg1DsGpU/xCVGPYD1zAllLMIr1mo4iGhgcTZ3lFXWQ
+        iY093F19lSUcVi++b1+r7cU=
+X-Google-Smtp-Source: AGRyM1uBgdQVJl4Bm9xjEtUHzKDAipN4RiFvTrxaA0S/9BoPlUNNz51qEWuZ2WacBAWmp1oZESUjyQ==
+X-Received: by 2002:a17:902:b612:b0:16c:d98d:638 with SMTP id b18-20020a170902b61200b0016cd98d0638mr17312229pls.38.1658856804727;
+        Tue, 26 Jul 2022 10:33:24 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:370d])
+        by smtp.gmail.com with ESMTPSA id qe9-20020a17090b4f8900b001f2ef3c7956sm1904021pjb.25.2022.07.26.10.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 10:33:24 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 26 Jul 2022 07:33:22 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Dmitry Shmidt <dimitrysh@google.com>,
+        Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org
+Subject: Re: [PATCH RESEND 3/3 cgroup/for-5.20] cgroup: Make !percpu
+ threadgroup_rwsem operations optional
+Message-ID: <YuAlYlPTMbuDjINF@slm.duckdns.org>
+References: <YtDvN0wJ6CKaEPN8@slm.duckdns.org>
+ <YtDvU4jRPSsarcNp@slm.duckdns.org>
+ <YtDvl7Qjc5zI3e/b@slm.duckdns.org>
+ <YtwFjPnCtw8ySnuv@slm.duckdns.org>
+ <20220726143257.GA23882@blackbody.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] dt-bindings: soc: bcm: use absolute path to other
- schema
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Saenz Julienne <nsaenz@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220726115841.101249-1-krzysztof.kozlowski@linaro.org>
- <20220726115841.101249-2-krzysztof.kozlowski@linaro.org>
- <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220726143257.GA23882@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 17:59, Florian Fainelli wrote:
-> On 7/26/22 04:58, Krzysztof Kozlowski wrote:
->> Absolute path to other DT schema is preferred over relative one.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> Are you applying those patches or do you want the SoC maintainer to do that?
+Hello,
 
-The best if  you (SoC maintainer) would pick them up. If you cannot or
-it is too late for this, maybe arm-soc could grab them (already Cced).
+On Tue, Jul 26, 2022 at 04:32:57PM +0200, Michal Koutný wrote:
+> On Sat, Jul 23, 2022 at 04:28:28AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> > This makes the hotter paths - fork and exit - slower as they're always
+> > forced into the slow path. There is no reason to force this on everyone
+> > especially given that more common static usage pattern can now completely
+> > avoid write-locking the rwsem. Write-locking is elided when turning on and
+> > off controllers on empty sub-trees and CLONE_INTO_CGROUP enables seeding a
+> > cgroup without grabbing the rwsem.
+> 
+> Just a practical note that CLONE_INTO_CGROUP may not be so widespread
+> yet [1][2].
+> But generally, the change makes sense to me.
 
-Best regards,
-Krzysztof
+Yeah, I was disappoinetd that it wasn't being used by systemd already. It'd
+be great if the glibc situation can be rectified soon because this is a much
+better interface.
+
+> > +	CGRP_ROOT_FAVOR_DYNMODS = (1 << 4),
+> > +
+> > +	/*
+> >  	 * Enable cpuset controller in v1 cgroup to use v2 behavior.
+> >  	 */
+> > -	CGRP_ROOT_CPUSET_V2_MODE = (1 << 4),
+> > +	CGRP_ROOT_CPUSET_V2_MODE = (1 << 16),
+> >  
+> >  	/*
+> >  	 * Enable legacy local memory.events.
+> >  	 */
+> > -	CGRP_ROOT_MEMORY_LOCAL_EVENTS = (1 << 5),
+> > +	CGRP_ROOT_MEMORY_LOCAL_EVENTS = (1 << 17),
+> >  
+> >  	/*
+> >  	 * Enable recursive subtree protection
+> >  	 */
+> > -	CGRP_ROOT_MEMORY_RECURSIVE_PROT = (1 << 6),
+> > +	CGRP_ROOT_MEMORY_RECURSIVE_PROT = (1 << 18),
+> 
+> Why this new gap in flag bits?
+
+To distinguish core and per-controller flags.
+
+Thanks.
+
+-- 
+tejun

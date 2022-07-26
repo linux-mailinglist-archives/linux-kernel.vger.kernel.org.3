@@ -2,80 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9506158176F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A4A581772
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239376AbiGZQ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 12:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
+        id S239403AbiGZQaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiGZQ2u (ORCPT
+        with ESMTP id S229804AbiGZQaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:28:50 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1732625C5D;
-        Tue, 26 Jul 2022 09:28:49 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h9so20939136wrm.0;
-        Tue, 26 Jul 2022 09:28:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cIPI5KmDuzcke0XGgrnA7zF01gNNf3RwyHxJZzCv/6M=;
-        b=k8hilhnoU7dbumJaKM2qpgafxXdLLktBG83dcxCI1JKx7n39zUKZxlP+hYZm/5j5C2
-         7YXLb7fuySnGgbnGkpxhvXpl1sRoF7hshwnMXivVt8w4pR79xXoN0Zf/Z7O6i0ZPoqXy
-         h1w3xxojKg6npjOj4gSATpRpP4fc1AKm8exDwY9RtlBiYU/Nfv3DnCgIerclgCrtIiHW
-         4pqdofanwkiLeTMik0j7QL4VI2a6h9rzGwhyNseX/zAvfEyvDIB7CGdodUglNtq//vdd
-         dTGcKL2oeKGfhCJtZP5P5kO4nWtRmbI4NitvhT49eeOqA5wxxNWKTwDOcY0s9DVscfWs
-         8yxg==
+        Tue, 26 Jul 2022 12:30:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CCC02CE21
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658852999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZzAlLINwAEAoAQYtQp+D4ukrI4e7/yR1Da8zdRffjvY=;
+        b=exnCvsX7USMPWWdgkOX3ZDOdXCdvfWJ7nPmfSzzCvLIBsspN28mwfaXAIjhzTIJqbUjI6f
+        H9//VC7arWYN0DZmg6X3k9Sb3yiFVH7MmWa4YnhKjicrqjg+ewM/8FZXC1dm9krRZnPELh
+        GmTFZVW7HRpDJW9ZH1hGHVGFGAxZUNA=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-202-xZMQCvtqMJW4tvl-0IpJTw-1; Tue, 26 Jul 2022 12:29:58 -0400
+X-MC-Unique: xZMQCvtqMJW4tvl-0IpJTw-1
+Received: by mail-ej1-f72.google.com with SMTP id gn10-20020a1709070d0a00b0072fd8bafeffso2086644ejc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:29:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cIPI5KmDuzcke0XGgrnA7zF01gNNf3RwyHxJZzCv/6M=;
-        b=gjPu6bxt45Skbkuql3IN84aEdSgZ7aud8LTW2YaXV1QNoacEQwfP9IDsZz0b5otXUf
-         VF/ahIoPFQvCQ1jE471Edw/cHJBaxTQ55t42lMF2cc5YA0xvRyebxTZRVEV94JpDwuP9
-         i4B2SpnHA3/TeuI+gQafUKPZ6Xne8ymamChswQPyWt3wfzwC1hKljNCoxEtcJ/VV4XE7
-         F77adRYQ4QMRtGHAsd9lky3NnyIcsVmhb7HJgSJNG1zbvm9WqoGPcT0HLY0d2xInhc1s
-         oIQCea+obEtqiRP/4C8ur06f1GgXGwuLWSzOHnjWUyJa2CmUj+JnkYp8IN9qN92gUEYi
-         Fqxg==
-X-Gm-Message-State: AJIora/iZt2/S7VO//2Ki9T6vIKV95sxuxBg5vh32cm9XXsdpZ4Ntp69
-        2MywWMEiNJRRO0cMZgiLjpu23z2Ppf3IZfo7y7Q=
-X-Google-Smtp-Source: AGRyM1vY2aubeKfH02KOuWoMorYDcmWdRSnkyGf3LHvGNaqt/b0DKZ5DoJ31VTcRGRydCQOFcoPshiRi+xhhDc0J+ac=
-X-Received: by 2002:a5d:4889:0:b0:21d:eab7:f798 with SMTP id
- g9-20020a5d4889000000b0021deab7f798mr11482162wrq.96.1658852927394; Tue, 26
- Jul 2022 09:28:47 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZzAlLINwAEAoAQYtQp+D4ukrI4e7/yR1Da8zdRffjvY=;
+        b=O4rQS0WkvwTAQJBLr4WUh7n+iYC1BiSR9vWFQqazMzlbT6Auv4T0t5Zrpi5h1bG83X
+         /3BcpiEvip/aYDhds9lk6IpDLGFBaoP5oLqbrobW1vn2vKFmljGG6cNEN9cLcE1HLYTE
+         dtBUU7Ni46rE9eZYkLnkGp6S44O1fTIKnqivJ/imsYath7yAKXjki+J9QRBwXtbplXvi
+         RpLnD5GvsqjgxSDos+dWRSz4h2e90Uo7MbM20Gdn4liETNBQAaM1dDqhVJ6MGkJP1Ex1
+         KWynXToGg2v4KI/S2ucfDSVPUpM8ITbRtlL+GJPnr1BMQIIqY70r+HPQgdvZw1yC5wqX
+         y+GA==
+X-Gm-Message-State: AJIora/1it4GaZriXt669N4ha0+MqBSLuxKf7KaM58j2b3hNcNezh1rX
+        H7RxZcIpu1rBRfPl9agvPCnLT+rNCZxFQ3gPHLuye7M+O3EvPsP1873oo27qFgCWO+j5Y9aimec
+        yupFZ3SnDrayVHM9no5dOkUnx
+X-Received: by 2002:a05:6402:1b02:b0:43c:915d:c4fb with SMTP id by2-20020a0564021b0200b0043c915dc4fbmr1323575edb.59.1658852995861;
+        Tue, 26 Jul 2022 09:29:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sfocQxac08KlH6P5482QLn9jsqilmmUKkCRGbPhSjGqsud/sqWGD5tgSmzDJSEzgEsmXyt+w==
+X-Received: by 2002:a05:6402:1b02:b0:43c:915d:c4fb with SMTP id by2-20020a0564021b0200b0043c915dc4fbmr1323563edb.59.1658852995623;
+        Tue, 26 Jul 2022 09:29:55 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id i15-20020a50fd0f000000b0043b910de985sm8793724eds.74.2022.07.26.09.29.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 09:29:54 -0700 (PDT)
+Message-ID: <3f2f83a3-e240-a509-38ca-1b88bdc179d4@redhat.com>
+Date:   Tue, 26 Jul 2022 18:29:53 +0200
 MIME-Version: 1.0
-References: <20220725212637.2818207-1-daniel.lezcano@linexp.org> <20220725212637.2818207-9-daniel.lezcano@linexp.org>
-In-Reply-To: <20220725212637.2818207-9-daniel.lezcano@linexp.org>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Tue, 26 Jul 2022 09:28:20 -0700
-Message-ID: <CA+E=qVdrNkx9nXMEFFYQgDcX+gdKJaCh3zoTkBZBY3HhBFDAdQ@mail.gmail.com>
-Subject: Re: [PATCH v2 08/32] thermal/drivers/sun8i: Switch to new of API
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
-        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
-        heiko@sntech.de, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
-        digetx@gmail.com, jonathanh@nvidia.com, tiny.windzz@gmail.com,
-        baolin.wang7@gmail.com, f.fainelli@gmail.com,
-        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
-        glaroque@baylibre.com, miquel.raynal@bootlin.com,
-        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
-        matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Amit Kucheria <amitk@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "moderated list:ARM/Allwinner sunXi SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Allwinner sunXi SoC support" 
-        <linux-sunxi@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH MANUALSEL 5.10 1/2] KVM: x86: lapic: don't touch
+ irr_pending in kvm_apic_update_apicv when inhibiting it
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, kvm@vger.kernel.org
+References: <20220222140532.211620-1-sashal@kernel.org>
+ <e9e3f438-8699-abba-a1f8-d4d8bfbd63ed@redhat.com>
+ <6d900dc3-44c0-5a0d-a545-1a51936e6a80@huawei.com>
+ <Yt8sAWd6qvEtZVji@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yt8sAWd6qvEtZVji@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,64 +88,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 2:27 PM Daniel Lezcano
-<daniel.lezcano@linexp.org> wrote:
->
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach. The ops are no longer device
-> tree specific and are the generic ones provided by the core code.
->
-> Convert the ops to the thermal_zone_device_ops format and use the new
-> API to register the thermal zone with these generic ops.
->
+On 7/26/22 01:49, Sean Christopherson wrote:
+> On Mon, Jul 25, 2022, Zenghui Yu wrote:
+>> Hi,
+>>
+>> On 2022/3/2 1:10, Paolo Bonzini wrote:
+>>> On 2/22/22 15:05, Sasha Levin wrote:
+>>>> From: Maxim Levitsky <mlevitsk@redhat.com>
+>>>>
+>>>> [ Upstream commit 755c2bf878607dbddb1423df9abf16b82205896f ]
+>>>
+>>> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+>>
+>> What prevented it to be accepted into 5.10-stable? It can still be
+>> applied cleanly on top of linux-5.10.y.
+> 
+> KVM opts out of the AUTOSEL logic and instead uses MANUALSEL.  The basic idea is
+> the same, use scripts/magic to determine what commits that _aren't_ tagged with an
+> explicit "Cc: stable@vger.kernel.org" should be backported to stable trees, the
+> difference being that MANUALSEL requires an explicit Acked-by from the maintainer.
 
-Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
+But as far as I understand it was not applied, and neither was "KVM: 
+x86: nSVM: deal with L1 hypervisor that intercepts interrupts but lets 
+L2 control them".
 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->  drivers/thermal/sun8i_thermal.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-> index d9cd23cbb671..2a4fa4068950 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -108,9 +108,9 @@ static int sun50i_h5_calc_temp(struct ths_device *tmdev,
->                 return -1590 * reg / 10 + 276000;
->  }
->
-> -static int sun8i_ths_get_temp(void *data, int *temp)
-> +static int sun8i_ths_get_temp(struct thermal_zone_device *tz, int *temp)
->  {
-> -       struct tsensor *s = data;
-> +       struct tsensor *s = tz->devdata;
->         struct ths_device *tmdev = s->tmdev;
->         int val = 0;
->
-> @@ -135,7 +135,7 @@ static int sun8i_ths_get_temp(void *data, int *temp)
->         return 0;
->  }
->
-> -static const struct thermal_zone_of_device_ops ths_ops = {
-> +static const struct thermal_zone_device_ops ths_ops = {
->         .get_temp = sun8i_ths_get_temp,
->  };
->
-> @@ -468,10 +468,10 @@ static int sun8i_ths_register(struct ths_device *tmdev)
->                 tmdev->sensor[i].tmdev = tmdev;
->                 tmdev->sensor[i].id = i;
->                 tmdev->sensor[i].tzd =
-> -                       devm_thermal_zone_of_sensor_register(tmdev->dev,
-> -                                                            i,
-> -                                                            &tmdev->sensor[i],
-> -                                                            &ths_ops);
-> +                       devm_thermal_of_zone_register(tmdev->dev,
-> +                                                     i,
-> +                                                     &tmdev->sensor[i],
-> +                                                     &ths_ops);
->                 if (IS_ERR(tmdev->sensor[i].tzd))
->                         return PTR_ERR(tmdev->sensor[i].tzd);
->
-> --
-> 2.25.1
->
+Paolo
+

@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D9E58104F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42574581051
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 11:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238508AbiGZJtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 05:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S238539AbiGZJta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 05:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiGZJtC (ORCPT
+        with ESMTP id S232651AbiGZJt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 05:49:02 -0400
-Received: from extserv.mm-sol.com (ns.mm-sol.com [37.157.136.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC2B31362;
-        Tue, 26 Jul 2022 02:49:01 -0700 (PDT)
-Received: from [192.168.1.5] (unknown [195.24.90.54])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: svarbanov@mm-sol.com)
-        by extserv.mm-sol.com (Postfix) with ESMTPSA id 6D45ACF07;
-        Tue, 26 Jul 2022 12:48:57 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mm-sol.com; s=201706;
-        t=1658828938; bh=kuP/AqMl37flBhHYfa+ehxb0nM3e+R5DB7qOmDEcunI=;
-        h=Date:Subject:To:Cc:From:From;
-        b=BFgHQihVipwWP6uJcORqzD/XiviB2hku6DOW5Ns8NQDGdwiHcW0+N8sfE4hfhpYbK
-         7lkp4t9oNu0TZO9J+9DZoHFhE9feRmEjTbWfQSCyTPzI3toqtKCyi/HFOD2W2gS5K9
-         Psk6WrkGalcYH9apfcGKPTad115AKiXIy8M1O+pbyUkfUic0cMjlaCGwoLgIYV9r7J
-         NxZkoHSfSotuLom9Dg0PA5uuarb3uvxvBr+2vFoEvT9t5r9PHw3eOKk0ei//TxQ0v1
-         I74mYx6DoigmljKLlc5+Me4+dexISvmrrQiLx1anHn7Pw3B8nuiahDGoaVOCaDXCE2
-         FewLV0K4kC6lg==
-Message-ID: <8472601e-9ea4-1ebe-dfd9-c193764d1a04@mm-sol.com>
-Date:   Tue, 26 Jul 2022 12:48:54 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] PCI: qcom: Allow L1 and its sub states
+        Tue, 26 Jul 2022 05:49:27 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B9B31DD7;
+        Tue, 26 Jul 2022 02:49:24 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 0C8E95FD04;
+        Tue, 26 Jul 2022 12:49:22 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1658828962;
+        bh=K22w9hfJS/evEUDwB3F4Dmwu3c9LbepbkOhWPVhSDek=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=eJcVk9fvnApIOVjcBfKtwFz2dgd43sRaYr3MwXFoaGgSg60+AK4LcFV7UQIYo5EaJ
+         x071z4GKx60KKh23vj2TuTfsoJDPpf94TbKoiPJPrCcrJmr1ODMAH7ajDd7iBhhSwJ
+         +oqeABT1+MmD7zJz75pdqXVKCQzaE48NxjPUdZoxeS3UyvGOrbGmrgI47QRfly9AwL
+         ayCJ6q+MN5P1N7ho3eaYHwcjzrZRydfWMrmRfhRebdVB1Lg1FzRML9b/yfqe78GQ1S
+         PEM4ch1QYw39AGP1eMD/lSj9ecSw+FAFW2khctCxQNzChMtivvxZo5OzY+3HxQmEp1
+         R6Ctr1scpBxzA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 26 Jul 2022 12:49:19 +0300 (MSK)
+From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "jbhayana@google.com" <jbhayana@google.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/3] units: complement the set of Hz units
+Thread-Topic: [PATCH v1 1/3] units: complement the set of Hz units
+Thread-Index: AQHYoFaQAQbyP6ttz02qWm6Ywvl4Ba2PaEmAgADOrYA=
+Date:   Tue, 26 Jul 2022 09:49:15 +0000
+Message-ID: <20220726094915.grn33xjqgkm52yja@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220725184439.7618-1-ddrokosov@sberdevices.ru>
+ <20220725184439.7618-2-ddrokosov@sberdevices.ru>
+ <CAHp75VcpY1vwHCOaJNb-qw+3gsMyv9mJe+QaWrjiTKOdj1xfYg@mail.gmail.com>
+In-Reply-To: <CAHp75VcpY1vwHCOaJNb-qw+3gsMyv9mJe+QaWrjiTKOdj1xfYg@mail.gmail.com>
+Accept-Language: ru-RU, en-US
 Content-Language: en-US
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <1657886366-32685-1-git-send-email-quic_krichai@quicinc.com>
-From:   Stanimir Varbanov <svarbanov@mm-sol.com>
-In-Reply-To: <1657886366-32685-1-git-send-email-quic_krichai@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E6F6CFDC59DAB14FB5D4A4DE390163A6@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/26 06:45:00 #19969454
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Andy,
 
+Thank you for quick review.
 
-On 7/15/22 14:59, Krishna chaitanya chundru wrote:
-> Allow L1 and its sub-states in the qcom pcie driver.
-> By default this is disabled in the qcom specific hardware.
-> So enabling it explicitly only for controllers belonging to
-> 2_7_0.
-> 
-> This patch will not affect any link capability registers, this
-> will allow the link transitions to L1 and its sub states only
-> if they are already supported.
-> 
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ----
-> 
-> Changes since v1 & v2:
-> 	- Update in the commit text only.
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+On Mon, Jul 25, 2022 at 11:29:31PM +0200, Andy Shevchenko wrote:
+> On Mon, Jul 25, 2022 at 8:44 PM Dmitry Rokosov <DDRokosov@sberdevices.ru>=
+ wrote:
+> >
+> > Currently, Hz units do not have milli, micro and nano Hz coefficients.
+> > Some drivers (IIO especially) use their analogues to calculate
+> > appropriate Hz values. This patch includes them to units.h definitions,
+> > so they can be used from different kernel places.
+>=20
+> ...
+>=20
+> > +#define NHZ_PER_HZ             1000000000UL
+> > +#define UHZ_PER_HZ             1000000UL
+> > +#define MHZ_PER_HZ             1000UL
+>=20
+> mHZ perhaps?
+>=20
 
-Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
+I'm afraid it will not have the same view as other HZ units.
+Maybe it's better to call mHZ as MILLIHZ? What do you think?
 
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index a7202f0..5ef444f 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -41,6 +41,9 @@
->  #define L23_CLK_RMV_DIS				BIT(2)
->  #define L1_CLK_RMV_DIS				BIT(1)
->  
-> +#define PCIE20_PARF_PM_CTRL			0x20
-> +#define REQ_NOT_ENTR_L1				BIT(5)
-> +
->  #define PCIE20_PARF_PHY_CTRL			0x40
->  #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
->  #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
-> @@ -1261,6 +1264,11 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
->  	val |= BIT(4);
->  	writel(val, pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
->  
-> +	/* Enable L1 and L1ss */
-> +	val = readl(pcie->parf + PCIE20_PARF_PM_CTRL);
-> +	val &= ~REQ_NOT_ENTR_L1;
-> +	writel(val, pcie->parf + PCIE20_PARF_PM_CTRL);
-> +
->  	if (IS_ENABLED(CONFIG_PCI_MSI)) {
->  		val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
->  		val |= BIT(31);
-
--- 
-regards,
-Stan
+--=20
+Thank you,
+Dmitry=

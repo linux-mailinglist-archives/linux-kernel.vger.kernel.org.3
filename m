@@ -2,129 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A625580B8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAAE580B8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238022AbiGZGWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 02:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S238036AbiGZGXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 02:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238030AbiGZGWh (ORCPT
+        with ESMTP id S238035AbiGZGXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 02:22:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3073B2C11D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:17:44 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 08:17:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658816256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=seywIrZuJiy/IICwF1J+gxCYNQtkqwoLOV/yyVDVEwE=;
-        b=JGqSPOElTNJ3GTlZY9cWfNylDo5e3o0to5raPlO6oHdOU59nIR3yV3IalscZUBQNEuyv4L
-        +KoUn6AY+pciyM1DdwjSDJ0IrJn6rt1vkr3QtP7tAi/FXNDeUxnxnis7iISQcj4VKQg0b6
-        /l2KmxIiQUgEkEDPSwOrePQ3p1Qo7WMmlyI7AW5ztRl3BY16wyIFGFAbxzcSSVRKMdKwSu
-        GcAnaexKQiqZkV8iwB/MJzgrpmWR7caak9oht6WhZiNq4uwd/HIc7JAV16w2bEN2xWWafm
-        JxnJMni3vTtN+SeNjQiccmRDYMdKp+zvQfiwO+d+60+LchVtWe3GDpzksrBn+g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658816256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=seywIrZuJiy/IICwF1J+gxCYNQtkqwoLOV/yyVDVEwE=;
-        b=A5X7aFMT9UX+XPYRssDIJO3onESHlBEhL5pQRV9zOQSjNR3mV+GsSRlJTF4egEax8fOBly
-        L9EKRrr+n8DxLtCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>, Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH 2/2] sched: Consider task_struct::saved_state in
- wait_task_inactive().
-Message-ID: <Yt+G/somh8qcKc/R@linutronix.de>
-References: <20220720154435.232749-1-bigeasy@linutronix.de>
- <20220720154435.232749-3-bigeasy@linutronix.de>
- <xhsmhy1whdqy9.mognet@vschneid.remote.csb>
+        Tue, 26 Jul 2022 02:23:23 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DEA2CDF3;
+        Mon, 25 Jul 2022 23:18:40 -0700 (PDT)
+X-UUID: dae5e8d8001d436c98dacca0315d8827-20220726
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:e0e87a82-bde3-4391-86ab-0a1e30b0da99,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:70
+X-CID-INFO: VERSION:1.1.8,REQID:e0e87a82-bde3-4391-86ab-0a1e30b0da99,OB:0,LOB:
+        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:70
+X-CID-META: VersionHash:0f94e32,CLOUDID:20b481b3-06d2-48ef-b2dd-540836705165,C
+        OID:db9b4cbbdabb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: dae5e8d8001d436c98dacca0315d8827-20220726
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1998765177; Tue, 26 Jul 2022 14:18:36 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 26 Jul 2022 14:18:35 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 26 Jul 2022 14:18:35 +0800
+Message-ID: <ef407d8767d12d240280f1c9d9fdd8ba9d3e5632.camel@mediatek.com>
+Subject: Re: [PATCH v14 01/10] dt-bindings: mediatek,dp: Add Display Port
+ binding
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 26 Jul 2022 14:18:35 +0800
+In-Reply-To: <0e1d4cef6b7e72813300eb9be5650066166ac763.camel@mediatek.com>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+         <20220712111223.13080-2-rex-bc.chen@mediatek.com>
+         <0e1d4cef6b7e72813300eb9be5650066166ac763.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <xhsmhy1whdqy9.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-25 18:47:58 [+0100], Valentin Schneider wrote:
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -3257,6 +3257,40 @@ int migrate_swap(struct task_struct *cur
-> >  }
-> >  #endif /* CONFIG_NUMA_BALANCING */
-> >
-> > +#ifdef CONFIG_PREEMPT_RT
->=20
-> Would something like the below be useful?
->=20
-> /*
->  * If p->saved_state is anything else than TASK_RUNNING, then p blocked o=
-n an
->  * rtlock *before* voluntarily calling into schedule() after setting its =
-state
->  * to X. For things like ptrace (X=3DTASK_TRACED), the task could have mo=
-re work
->  * to do upon acquiring the lock before whoever called wait_task_inactive=
-()
->  * should return. IOW, we have to wait for:
->  *
->  *   p.saved_state =3D TASK_RUNNING
->  *   p.__state     =3D X
->  *
->  * which implies the task isn't blocked on an RT lock and got to schedule=
-() by
->  * itself.
->  *
->  * Also see comments in ttwu_state_match().
->  */
+On Wed, 2022-07-13 at 15:56 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
+> 
+> On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This controller is present on several mediatek hardware. Currently
+> > mt8195 and mt8395 have this controller without a functional
+> > difference,
+> > so only one compatible field is added.
+> > 
+> > The controller can have two forms, as a normal display port and as
+> > an
+> > embedded display port.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../display/mediatek/mediatek,dp.yaml         | 115
+> > ++++++++++++++++++
+> >  1 file changed, 115 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > new file mode 100644
+> > index 000000000000..e2d6cb314297
+> > --- /dev/null
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > @@ -0,0 +1,115 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MediaTek Display Port Controller
+> > +
+> > +maintainers:
+> > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> > +  - Jitao shi <jitao.shi@mediatek.com>
+> > +
+> > +description: |
+> > +  Device tree bindings for the MediaTek display port TX (DP) and
+> > +  embedded display port TX (eDP) controller present on some
+> > MediaTek
+> > SoCs.
+> > +  MediaTek DP and eDP are different hardwares and they have
+> > different
+> > +  base address for registers, so we need two different compatibles
+> > to
+> > +  separate them.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt8195-dp-tx
+> > +      - mediatek,mt8195-edp-tx
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  nvmem-cells:
+> > +    maxItems: 1
+> > +    description: efuse data for display port calibration
+> > +
+> > +  nvmem-cell-names:
+> > +    const: dp_calibration_data
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: Input endpoint of the controller, usually
+> > dp_intf
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        unevaluatedProperties: false
+> > +        description: Output endpoint of the controller
+> > +        properties:
+> > +          endpoint:
+> > +            $ref: /schemas/media/video-interfaces.yaml#
+> > +            unevaluatedProperties: false
+> > +            properties:
+> > +              data-lanes:
+> > +                description: |
+> > +                  number of lanes supported by the hardware.
+> > +                  The possible values:
+> > +                  0       - For 1 lane enabled in IP.
+> > +                  0 1     - For 2 lanes enabled in IP.
+> > +                  0 1 2 3 - For 4 lanes enabled in IP.
+> > +                minItems: 1
+> > +                maxItems: 4
+> > +            required:
+> > +              - data-lanes
+> > +
+> > +    required:
+> > +      - port@0
+> > +      - port@1
+> > +
+> > +  max-linkrate-mhz:
+> > +    enum: [ 1620, 2700, 5400, 8100 ]
+> > +    description: maximum link rate supported by the hardware.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - ports
+> > +  - max-linkrate-mhz
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/power/mt8195-power.h>
+> > +    dp_tx@1c600000 {
+> > +        compatible = "mediatek,mt8195-dp-tx";
+> > +        reg = <0x1c600000 0x8000>;
+> > +        power-domains = <&spm MT8195_POWER_DOMAIN_DP_TX>;
+> > +        interrupts = <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +        max-linkrate-mhz = <8100>;
+> 
+> Why dp-tx has no clock property? I think this device should work with
+> a
+> clock.
+> 
+> Regards,
+> CK
+> 
 
-This sums up the code. I would s/schedule/schedule_rtlock/ since there
-are two entrypoints.
+Hello CK,
 
-=E2=80=A6
-> > @@ -3346,7 +3382,7 @@ unsigned long wait_task_inactive(struct
-> >                * running right now), it's preempted, and we should
-> >                * yield - it could be a while.
-> >                */
-> > -		if (unlikely(queued)) {
-> > +		if (unlikely(wait)) {
->=20
-> We could be repeatedly doing this for as long as the task is blocked on t=
-he
-> rtlock, but IIUC that's the same story on !PREEMPT_RT if it's just a queu=
-ed
-> task preempted by a higher prio task, it may take a while for it to
-> schedule() and dequeue...
+We just need to enable the power domain of dp.
+The clock of dp is generated by itself and we are not using the global
+pll to generate clocks.
 
-Yes.
+BRs,
+Bo-Chen
 
-> >                       ktime_t to =3D NSEC_PER_SEC / HZ;
-> >
-> >                       set_current_state(TASK_UNINTERRUPTIBLE);
+> > +
+> > +        ports {
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +
+> > +            port@0 {
+> > +                reg = <0>;
+> > +                dptx_in: endpoint {
+> > +                    remote-endpoint = <&dp_intf0_out>;
+> > +                };
+> > +            };
+> > +            port@1 {
+> > +                reg = <1>;
+> > +                dptx_out: endpoint {
+> > +                    data-lanes = <0 1 2 3>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> 
+> 
 
-Sebastian

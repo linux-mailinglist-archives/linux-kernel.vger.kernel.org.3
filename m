@@ -2,88 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B1F581300
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8575581309
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiGZMRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 08:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S232645AbiGZMS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 08:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbiGZMRw (ORCPT
+        with ESMTP id S231981AbiGZMSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:17:52 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C29CAE5F;
-        Tue, 26 Jul 2022 05:17:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1658837831; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=DwvStKCMX7XoSZbjyoswQoy4twyd44xhM49CK5T8sZq0ysHOuMdHO4gEucz21a+caA0AUUfMpjRLtcrLsZRG8h8J/+STMIB5fpYYq0xypc+ki3wyJOf18uTj1zi6G0xZUgjrQE0fXQPIKTdW5P/8XWaHUmDqTVsnYZHzIw5tNwY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1658837831; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=18GXarUQ3jL1O2RMagJvrp6VQJVu7m+DREZ1/MUGIKE=; 
-        b=ZTDAh/jHJfjZlzakiKGVEgaNoU2l59n863+h41BvGV/RSPSEN95p0lAoyrTIRGo9k3PFGX2vls1Fw85SUtFcOYfRWRe3L9oCIHvCdyGM2w6L7J8WLPeMMEHlyAyLqjWO2tH7KuIseNlAgjw91Oz3WJJDmKuzWYFwyYeKaE11NhI=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658837831;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=18GXarUQ3jL1O2RMagJvrp6VQJVu7m+DREZ1/MUGIKE=;
-        b=nUa2GObIJsbmqiwdL3ub9h03vWog6RC7JII2RTx/fKCgQ8v8ELiwY0Ngrgqh8GYR
-        AwGzeXfwiyF9Gpbp7HRRmdSlI+lIwdoSY744F7S6JMSRnnQXiPZ4DWC+JbbLkZAL1lg
-        SZ//HSLlFEaFW/Y6g0NP+HJGgkFgQyXE8dOlQzOE=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 165883781910727.618496178340138; Tue, 26 Jul 2022 17:46:59 +0530 (IST)
-Date:   Tue, 26 Jul 2022 17:46:59 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Eric Dumazet" <edumazet@google.com>
-Cc:     "Johannes Berg" <johannes@sipsolutions.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "linux-wireless" <linux-wireless@vger.kernel.org>,
-        "netdev" <netdev@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Message-ID: <1823a705ed0.2c95d162772051.7830246635749918178@siddh.me>
-In-Reply-To: <CANn89iLN27NWA7Stkr4ODp6V-Q-3em0dJ2JixDMNcNY7Ap5muA@mail.gmail.com>
-References: <20220701145423.53208-1-code@siddh.me> <CANn89iLN27NWA7Stkr4ODp6V-Q-3em0dJ2JixDMNcNY7Ap5muA@mail.gmail.com>
-Subject: Re: [PATCH] net: Fix UAF in ieee80211_scan_rx()
+        Tue, 26 Jul 2022 08:18:25 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D142E13F9E;
+        Tue, 26 Jul 2022 05:18:22 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id i13so8372689edj.11;
+        Tue, 26 Jul 2022 05:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uFNBuksRAUHG8SQKGfIMoqHF0ZeQIQql/Pes//0/1FE=;
+        b=p25ViQRAGjIzoqbyw32XacT85JsM0ATOnc/aJ7f4OQUM+aio/Y993fmTKcDeocHCd9
+         Ip6z+1IDcK1emNmby8GCnHh8nTAZJOit+jilIBMN3MN8BHArbq5Y7jX0AdPoo5PJRGP+
+         qBAvo4C0uBT25Q/8kqgwUa9AThgrYs6OVHHMaOpyea8oHPpg79QNvmgM1Uz/oDBPwnAl
+         AufVZdMZG9DZBf3rhJ84O3aYj5LM94YzLZW6y/dSBdJHdO6Du6+eIPe3NFTEc8T9fHX5
+         OTqmGMZhfJaXrcwzJtTP8MEOT5b0nUwAv/+Z19lTei3pSAbzl6AU10dk5npcBMsgvF/p
+         dQxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uFNBuksRAUHG8SQKGfIMoqHF0ZeQIQql/Pes//0/1FE=;
+        b=cNPpWFqrhdUYHBqsgEaKSBbbCWj+L+Ph7rG5Vg/7tJqlHs9dmJPxGmZAUZLAI3R4Ik
+         LQNHuKIA+fNSCbYisXlsazusZ18iTXASS+Xw0fUFivYKXPm3I5ESHF3u6pVcO+Dqs5DX
+         EzKjBjWvyXHgqqHff8Kqt5vRgEv0s93RtydqdX4/F7wWDygs95G/ytCu2dTC8J8sREI0
+         iWWz1brG+cEbncvzjLJ1Ep5lEVqRdHDDLlgqgiJdRBgxqSO9cB9XmoLOCPCc6NOFIjsJ
+         eRBoOct2RcXQE9Rlb6hZQQt6x03vQpSpYdZWNXIw8wc49M3/zyIGiYbhFsGwcmWK84Ku
+         GnEQ==
+X-Gm-Message-State: AJIora9udDXmKi0XUWumhr7oTYzH83T+bzAVHWjLznKPMo+0lGED8+7i
+        KnuVjbACRyRoSw2A6Eg3XQwXUwwa4f0Au59k6rY=
+X-Google-Smtp-Source: AGRyM1uzT38suKCsbCmFfyzBHLwwuulTdOWUnr3cD4+NYEDfZRxNjDpqwVCvJTRb6rCtiz3um/F+ZSKguXrhc6flE20=
+X-Received: by 2002:a05:6402:50c9:b0:43c:163a:4d5f with SMTP id
+ h9-20020a05640250c900b0043c163a4d5fmr7812854edb.386.1658837901255; Tue, 26
+ Jul 2022 05:18:21 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
+ <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com> <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com>
+In-Reply-To: <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 26 Jul 2022 14:17:44 +0200
+Message-ID: <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
+Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
+ sink type LED Indicator support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 15:37:16 +0530  Eric Dumazet <edumazet@google.com> wrote:
-> Note: this is slightly racy.
-> 
-> You are supposed to follow this order in this situation.
-> 
-> 1) Clear the pointer
-> 
-> Then:
-> 
-> 2) wait an rcu grace period (synchronize_rcu()) or use call_rcu()/kfree_rcu().
->  
+On Tue, Jul 26, 2022 at 1:46 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> On Mon, Jul 25, 2022 at 4:41 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
 
-Noted. Due to rcu_dereference() used to get scan_req, null ptr dereference
-cannot happen. That had completely missed my eyes, sorry for that.
+...
 
-I will send a v2.
+> > > +struct mt6370_led {
+> > > +       union {
+> > > +               struct led_classdev isink;
+> > > +               struct led_classdev_mc mc;
+> > > +       };
+> >
+> > Where is the field that makes union work?
+>
+> Just for saving memory space.
+> Because these led_classdevs do not be used at the same time.
+> Or do you think it would be better to rewrite it as follows?
+> -------------------------------------------------------------------------------------
+> struct mt6370_led {
+>        struct led_classdev isink;
+>        struct led_classdev_mc mc;
+>        struct mt6370_priv *priv;
+>        u32 default_state;
+>        u32 index;
+> };
+> -------------------------------------------------------------------------------------
 
-Thanks,
-Siddh
+You obviously didn't get what I'm talking about...
+Each union to work properly should have an associated variable that
+holds the information of which field of the union is in use. Do you
+have such a variable? If not, how does your code know which one to
+use? If yes, add a proper comment there.
+
+-- 
+With Best Regards,
+Andy Shevchenko

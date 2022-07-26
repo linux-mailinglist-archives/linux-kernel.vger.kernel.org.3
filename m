@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C68E580E3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCEF580E33
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238442AbiGZHtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S238314AbiGZHsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbiGZHto (ORCPT
+        with ESMTP id S237783AbiGZHsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:49:44 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002B32A959
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:49:42 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LsTWX36tmz1M87q;
-        Tue, 26 Jul 2022 15:46:48 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 15:49:39 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <ego@linux.vnet.ibm.com>,
-        <srikar@linux.vnet.ibm.com>, <linuxarm@huawei.com>,
-        <21cnbao@gmail.com>, <guodong.xu@linaro.org>,
-        <hesham.almatary@huawei.com>, <john.garry@huawei.com>,
-        <shenyang39@huawei.com>, <kprateek.nayak@amd.com>,
-        <yu.c.chen@intel.com>, <wuyun.abel@bytedance.com>
-Subject: [PATCH v6 0/2] sched/fair: Scan cluster before scanning LLC in wake-up path
-Date:   Tue, 26 Jul 2022 15:47:56 +0800
-Message-ID: <20220726074758.46686-1-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
+        Tue, 26 Jul 2022 03:48:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DC91DFDA;
+        Tue, 26 Jul 2022 00:48:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CF721FB;
+        Tue, 26 Jul 2022 00:48:02 -0700 (PDT)
+Received: from [10.57.13.197] (unknown [10.57.13.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48D1F3F73B;
+        Tue, 26 Jul 2022 00:48:00 -0700 (PDT)
+Message-ID: <500c8773-12e0-1e3a-fb11-4d7a5da11b71@arm.com>
+Date:   Tue, 26 Jul 2022 08:47:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 00/12] thermal OF rework
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, rafael@kernel.org
+References: <20220722200007.1839356-1-daniel.lezcano@linexp.org>
+ <1aa3ae56-84ae-8a96-7a52-3181c47dcb07@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <1aa3ae56-84ae-8a96-7a52-3181c47dcb07@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+Hi Daniel,
 
-This is the follow-up work to support cluster scheduler. Previously
-we have added cluster level in the scheduler for both ARM64[1] and
-X86[2] to support load balance between clusters to bring more memory
-bandwidth and decrease cache contention. This patchset, on the other
-hand, takes care of wake-up path by giving CPUs within the same cluster
-a try before scanning the whole LLC to benefit those tasks communicating
-with each other.
+On 7/25/22 17:34, Daniel Lezcano wrote:
+> 
+> Hi Rafael,
+> 
+> On 22/07/2022 21:59, Daniel Lezcano wrote:
+>> The thermal framework initialization with the device tree appears to
+>> be complicated and hard to make it to evolve.
+>>
+>> It contains duplication of almost the same thermal generic structures
+>> and has an assymetric initialization making hard any kind of serious
+>> changes for more complex features. One of them is the multiple sensors
+>> support per thermal zone.
+>>
+>> In order to set the scene for the aforementioned feature with generic
+>> code, we need to cleanup and rework the device tree initialization.
+>>
+>> However this rework is not obvious because of the multiple components
+>> entering in the composition of a thermal zone and being initialized at
+>> different moments. For instance, a cooling device can be initialized
+>> before a sensor, so the thermal zones must exist before the cooling
+>> device as well as the sensor. This asynchronous initialization forces
+>> the thermal zone to be created with fake ops because they are
+>> mandotory and build a list of cooling devices which is used to lookup
+>> afterwards when the cooling device driver is registering itself.
+>>
+>> As there could be a large number of changes, this first series provide
+>> some steps forward for a simpler device tree initialization.
+>>
+>> More series for cleanup and code duplication removal will follow.
+>>
+>> Changelog:
+>>
+>>   - v6:
+>>      - Folded patches 8, 9, 10
+>>      - Removed thermal_zone_get_trips() and thermal_zone_get_num_trips()
+>>      - Moved tz->ntrips => tz->num_trips changes into patch 11 to fix the
+>>        git bisecting
+>>
+> 
+> I believe all the comments were addressed, is it fine if I merge this 
+> series ?
+> 
+> 
 
-[1] 778c558f49a2 ("sched: Add cluster scheduler level in core and related Kconfig for ARM64")
-[2] 66558b730f25 ("sched: Add cluster scheduler level for x86")
+My apologies for being quiet, I was on holiday last week.
+Please don't wait for me, I'm still catching up with internal stuff.
+Based on your changelog I can see you've addressed my comments.
 
-Change since v5:
-- Improve patch 2 according to Peter's suggestion:
-  - use sched_cluster_active to indicate whether cluster is active
-  - consider SMT case and use wrap iteration when scanning cluster
-- Add Vincent's tag
-Thanks.
-Link: https://lore.kernel.org/lkml/20220720081150.22167-1-yangyicong@hisilicon.com/
-
-Change since v4:
-- rename cpus_share_resources to cpus_share_lowest_cache to be more informative, per Tim
-- return -1 when nr==0 in scan_cluster(), per Abel
-Thanks!
-Link: https://lore.kernel.org/lkml/20220609120622.47724-1-yangyicong@hisilicon.com/
-
-Change since v3:
-- fix compile error when !CONFIG_SCHED_CLUSTER, reported by lkp test.
-Link: https://lore.kernel.org/lkml/20220608095758.60504-1-yangyicong@hisilicon.com/
-
-Change since v2:
-- leverage SIS_PROP to suspend redundant scanning when LLC is overloaded
-- remove the ping-pong suppression
-- address the comment from Tim, thanks.
-Link: https://lore.kernel.org/lkml/20220126080947.4529-1-yangyicong@hisilicon.com/
-
-Change since v1:
-- regain the performance data based on v5.17-rc1
-- rename cpus_share_cluster to cpus_share_resources per Vincent and Gautham, thanks!
-Link: https://lore.kernel.org/lkml/20211215041149.73171-1-yangyicong@hisilicon.com/
-
-Barry Song (2):
-  sched: Add per_cpu cluster domain info and cpus_share_lowest_cache API
-  sched/fair: Scan cluster before scanning LLC in wake-up path
-
- include/linux/sched/sd_flags.h |  7 +++++++
- include/linux/sched/topology.h |  8 +++++++-
- kernel/sched/core.c            | 12 ++++++++++++
- kernel/sched/fair.c            | 31 ++++++++++++++++++++++++++++---
- kernel/sched/sched.h           |  4 ++++
- kernel/sched/topology.c        | 25 +++++++++++++++++++++++++
- 6 files changed, 83 insertions(+), 4 deletions(-)
-
--- 
-2.24.0
-
+Regards,
+Lukasz

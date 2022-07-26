@@ -2,121 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3709F581720
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F39581723
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238972AbiGZQQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 12:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S239144AbiGZQRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiGZQQp (ORCPT
+        with ESMTP id S239140AbiGZQRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:16:45 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4059D24095
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658852203; x=1690388203;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5hyLSrL4KSUdoWk6zNVtWxQQtR09URwlBAviONiENXs=;
-  b=V/R8d6QLAqQiCvqhhL9N5umv4/8gEa8QoTOqwV6iGsmmjJmKVnQzuaSY
-   8e5ro+82YTuH/mak1idEoHqvNooPrE6wQDI87QSq5UsyHVhATA20oTQSw
-   zefujjYCdj+JzhkkS7rG5LpfvA80J5VXH50+yTLlDBcOd79FJI+iclzwI
-   RHz17/kjP7aRvhrR0XquTSkvU69fTmaTJWfd0HJx15FF4g0hfmG/Nbp+3
-   zaZhZU147t44SnTYTkuXB34jI1uoFc3q9BDNzB6r0zcJJfcEjJD+J9zir
-   vOjlpo64IaYjqSuBkUNirhBmg8P6hFrlDvnMFJJlpyM9V5fTMa3vbsouv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="274865885"
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="274865885"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 09:16:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="658755433"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jul 2022 09:16:41 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGNEe-0007CU-1J;
-        Tue, 26 Jul 2022 16:16:40 +0000
-Date:   Wed, 27 Jul 2022 00:16:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kbusch:dma-prereg-v5 5/6] include/linux/uaccess.h:124: undefined
- reference to `io_dma_unmap'
-Message-ID: <202207270041.8fQ9kcrB-lkp@intel.com>
+        Tue, 26 Jul 2022 12:17:14 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6C9EE00
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:17:13 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id k3so10735506vsr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:17:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=2geObz/qPbQ0zmW0zjdppN56rmNh6IuNe6i2t19UWOo=;
+        b=ofQmKhi/49cqZ5A1rRryuXLezENFS9l4JDZrD2ri8Yk6DRsP18VOtFBHAW45b/UMui
+         TBr8fc1SVa8bnC9+RXA97hPki0bHu4mud9Eldgu/3eObunJTYIDt11xTLSlG2UQ92Yv8
+         QSKMwgoP4zb1R0maTvcscdYJ3As0sKT0QdFkayY9ekiSTbcT9nH/ptHiUxmmls93o0BD
+         4+MbvwKz4G7HV1aRJKtzFIwajmXpjKmi4kqsQWnJINKdYAgnwcrd+8f0AQDx3znN24OX
+         udAVJiwq53I53fbVLwIlvnQOM9EC0dvszcGohD/bhgrqsXHmJp+iLVxaHi2zZx52Rfke
+         yGUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=2geObz/qPbQ0zmW0zjdppN56rmNh6IuNe6i2t19UWOo=;
+        b=SsWdS9ieDJkf3gyQ3mmFKpqizw96K3cLmcnhn6ngM3OpamqjeEProB+bmMOd2jsCbp
+         1/d8vQl7Udhmsw03KgeVDGyVQ2LUdxnr6lOGFVAkEewOevwxn00gsLIIrftfSy+jEcY/
+         FOYqRLO9KGO8O/L7voEvSMwyVlL9dP8CCYtZutZ6RDfQb0C0z6zEFKnpW9UAC7Gjltpw
+         /l5IVwbf4M7oSGfk4c7kgf20suIMxtpAurdtO80Ns+OZc7kn6PJRjp5TbAJUzefLVY5a
+         Qp3Qh66u5bHCLV5F0OU7ZnhBg7dmQrWW4kTyMRpRE2GQHPsPhTyVyosjLRvGOU0m9D84
+         2ndg==
+X-Gm-Message-State: AJIora+WYap+rlG0GfIyVf+TpvRq/snmu+4LEpdB8zKyMLRNwM5t7jIQ
+        foGDtkj24f2k92cprUDxr8Rz36mUjmQnT6ricXA=
+X-Google-Smtp-Source: AGRyM1vsERW5ExbDZ1cfVh9Iq9uCCbPK65wLhBWU9vW/smWA40rNYGQbGWXkTSAs6Ip+dO0b4vYPVswvlwzdU5bgAEo=
+X-Received: by 2002:a67:cb11:0:b0:355:84b2:5c58 with SMTP id
+ b17-20020a67cb11000000b0035584b25c58mr5069497vsl.43.1658852232443; Tue, 26
+ Jul 2022 09:17:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a67:ea88:0:0:0:0:0 with HTTP; Tue, 26 Jul 2022 09:17:11
+ -0700 (PDT)
+Reply-To: cfc.ubagroup09@gmail.com
+From:   Kristalina Georgieva <ubagroup.tgo12@gmail.com>
+Date:   Tue, 26 Jul 2022 09:17:11 -0700
+Message-ID: <CADnAz75BBK3Vrx2Wt8H0_TFunUUpJu6wCMtMnTXUmmptq2ErJw@mail.gmail.com>
+Subject: =?UTF-8?Q?GOWY_T=C3=84ZELIK?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-prereg-v5
-head:   4f4a93bf02dcf20e9a4a3ac0c9cd39d79e9e540e
-commit: 1b0c9acb050749ce7ad964cc66eef72779835832 [5/6] io_uring: add support for dma pre-mapping
-config: xtensa-randconfig-r001-20220724 (https://download.01.org/0day-ci/archive/20220727/202207270041.8fQ9kcrB-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=1b0c9acb050749ce7ad964cc66eef72779835832
-        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
-        git fetch --no-tags kbusch dma-prereg-v5
-        git checkout 1b0c9acb050749ce7ad964cc66eef72779835832
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+Hormatly pe=C3=BDdalanyjy,
+Bu haty size bir a=C3=BD =C3=B6=C5=88 iberipdim, =C3=BD=C3=B6ne sizden e=C5=
+=9Fitmedim, =C3=BDok
+Al=C3=BDandygy=C5=88yza ynan=C3=BDaryn we =C5=9Fonu=C5=88 =C3=BC=C3=A7inem =
+size =C3=BDene iberdim,
+Ilki bilen men dolandyryjy m=C3=BCdir Kristalina Georgi=C3=BDewa we
+Halkara Wal=C3=BDuta Gaznasyny=C5=88 prezidenti.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Aslynda, t=C3=B6weregind=C3=A4ki =C3=A4hli p=C3=A4sgel=C3=A7ilikleri we mes=
+eleleri g=C3=B6zden ge=C3=A7irdik
+doly d=C3=A4l amaly=C5=88yz we t=C3=B6legleri =C3=BDerine =C3=BDetirip bilm=
+ezligi=C5=88iz
+opsi=C3=BDalary =C3=BC=C3=A7in size gar=C5=9Fy t=C3=B6leg t=C3=B6len=C3=BD=
+=C3=A4r
+=C3=B6=C5=88ki ge=C3=A7irimler, tassyklamak =C3=BC=C3=A7in sahypamyza giri=
+=C5=88 38
+=C2=B0 53=E2=80=B256 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 W.
 
-All errors (new ones prefixed by >>):
+Biz direktorlar ge=C5=88e=C5=9Fi, B=C3=BCtind=C3=BCn=C3=BD=C3=A4 banky we P=
+ul gaznasy
+Wa=C5=9Fington, Halkara Halkara Pul Gaznasy, B=C3=B6l=C3=BCm bilen bilelikd=
+e
+Amerikany=C5=88 Birle=C5=9Fen =C5=9Etatlaryny=C5=88 Gazna we k=C3=A4bir be=
+=C3=BDleki der=C5=88ew guramalary
+Amerikany=C5=88 Birle=C5=9Fen =C5=9Etatlarynda degi=C5=9Flidir. sargyt etdi
+Da=C5=9Fary =C3=BDurt t=C3=B6leg t=C3=B6leg b=C3=B6l=C3=BCmimiz, United Ban=
+k
+Afrika Lome Togo, size $ VISA karto=C3=A7kasy bermek =C3=BC=C3=A7in
+Gaznadan has k=C3=B6p pul almak =C3=BC=C3=A7in gaznadan 1,5 million.
 
-   xtensa-linux-ld: io_uring/rsrc.o: in function `_copy_from_user':
->> include/linux/uaccess.h:124: undefined reference to `io_dma_unmap'
-   xtensa-linux-ld: io_uring/rsrc.o: in function `io_buffer_unmap':
-   io_uring/rsrc.c:151: undefined reference to `io_dma_unmap'
+Der=C5=88ewimizi=C5=88 dowamynda g=C3=B6zledik
+t=C3=B6legi=C5=88izi=C5=88 korrumpirlenen i=C5=9Fg=C3=A4rler tarapyndan gij=
+ikdirilendigine alada bildiri=C5=88
+seri=C5=9Fd=C3=A4=C5=88izi hasaby=C5=88yza g=C3=B6n=C3=BCkdirm=C3=A4ge syna=
+ny=C5=9F=C3=BDan Banky=C5=88
+hususy.
 
+Bu g=C3=BCn bolsa gaznany=C5=88yzy=C5=88 Karta berilendigini habar ber=C3=
+=BD=C3=A4ris
+UBA Bank tarapyndan VISA we eltip berm=C3=A4ge ta=C3=BDyn. Indi
+UBA Bank m=C3=BCdiri bilen habarla=C5=9Fy=C5=88, ady jenap Toni
+Elumelu, E-po=C3=A7ta: (cfc.ubagroup09@gmail.com)
+bankomat VISA karty=C5=88yzy n=C3=A4dip almalydygyny a=C3=BDtmak =C3=BC=C3=
+=A7in.
 
-vim +124 include/linux/uaccess.h
+Hormatlamak bilen,
 
-d597580d373774 Al Viro              2017-03-20  110  
-d597580d373774 Al Viro              2017-03-20  111  #ifdef INLINE_COPY_FROM_USER
-9dd819a15162f8 Kees Cook            2019-09-25  112  static inline __must_check unsigned long
-d597580d373774 Al Viro              2017-03-20  113  _copy_from_user(void *to, const void __user *from, unsigned long n)
-d597580d373774 Al Viro              2017-03-20  114  {
-d597580d373774 Al Viro              2017-03-20  115  	unsigned long res = n;
-9c5f6908de03a4 Al Viro              2017-06-29  116  	might_fault();
-4d0e9df5e43dba Albert van der Linde 2020-10-15  117  	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-76d6f06c36a3b5 Marco Elver          2020-01-21  118  		instrument_copy_from_user(to, from, n);
-d597580d373774 Al Viro              2017-03-20  119  		res = raw_copy_from_user(to, from, n);
-9c5f6908de03a4 Al Viro              2017-06-29  120  	}
-d597580d373774 Al Viro              2017-03-20  121  	if (unlikely(res))
-d597580d373774 Al Viro              2017-03-20  122  		memset(to + (n - res), 0, res);
-d597580d373774 Al Viro              2017-03-20  123  	return res;
-d597580d373774 Al Viro              2017-03-20 @124  }
-d597580d373774 Al Viro              2017-03-20  125  #else
-9dd819a15162f8 Kees Cook            2019-09-25  126  extern __must_check unsigned long
-d597580d373774 Al Viro              2017-03-20  127  _copy_from_user(void *, const void __user *, unsigned long);
-d597580d373774 Al Viro              2017-03-20  128  #endif
-d597580d373774 Al Viro              2017-03-20  129  
-
-:::::: The code at line 124 was first introduced by commit
-:::::: d597580d373774b1bdab84b3d26ff0b55162b916 generic ...copy_..._user primitives
-
-:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
-:::::: CC: Al Viro <viro@zeniv.linux.org.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hanym Kristalina Georgi=C3=BDewa

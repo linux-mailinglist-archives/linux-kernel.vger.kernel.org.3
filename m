@@ -2,42 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9B6581693
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2577581697
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237503AbiGZPjS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Jul 2022 11:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S238076AbiGZPkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiGZPjQ (ORCPT
+        with ESMTP id S236755AbiGZPkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:39:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452AF2BB11
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:39:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 26 Jul 2022 11:40:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514B62C102
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:40:00 -0700 (PDT)
+Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 040AEB80A48
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 15:39:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC7F2C433D7;
-        Tue, 26 Jul 2022 15:39:11 +0000 (UTC)
-Date:   Tue, 26 Jul 2022 11:39:10 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     WangJingjin <wangjingjin1@huawei.com>
-Cc:     <mingo@redhat.com>, <daniel@iogearbox.net>, <song@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zhengbin13@huawei.com>,
-        <gaochao49@huawei.com>
-Subject: Re: [PATCH -next] ftrace: Fix build error whithout CONFIG_MODULES
-Message-ID: <20220726113910.5b2cac1c@gandalf.local.home>
-In-Reply-To: <20220726113538.2992790-1-wangjingjin1@huawei.com>
-References: <20220726113538.2992790-1-wangjingjin1@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: bbeckett)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 48F426601AA5;
+        Tue, 26 Jul 2022 16:39:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658849998;
+        bh=MfBRld9DG1AqTcljOtwL7Er7t53qlENKMHmgSJoha7I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X+ZSb3oNoc7vrECQPMkTFG7QIhkz8vVEkEATHdudZWlln1TNys9zgoaWgtBv7DB+C
+         joW3M7hTlvw3q745gXd2crdSmg063NkYETNTlnzxi9EuN9B+0Bnichj6jDykf2l2E/
+         XGt/ArLoOqRm1gQNBPATwAlWqmj6il7ROCkl0sJ1GbtVtCd32nlvRh8jj/sIe88KVk
+         iMqpfXeLprmE2tLKFjr2SNVAmJVUBpLng56ULyehOpB2TgcZ+mcbSz0CcVzmHxlgHy
+         oDe6kanARj9OOGfSixBj5ZzjkFTkC4gXW8Ee1QsI7cmzlADg5uSD6hMDlydSogqX0+
+         9iOjk36xBBlFg==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5] drm/i915: stop using swiotlb
+Date:   Tue, 26 Jul 2022 16:39:35 +0100
+Message-Id: <20220726153935.2272777-1-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,103 +61,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 19:35:38 +0800
-WangJingjin <wangjingjin1@huawei.com> wrote:
+Calling swiotlb functions directly is nowadays considered harmful. See
+https://lore.kernel.org/intel-gfx/20220711082614.GA29487@lst.de/
 
-> Fix build errors on kernel/trace/ftrace.c:
->     ‘ops_references_rec’ defined but not used.
-> 
-> Fixes: 53cd885bc5c3 ("ftrace: Allow IPMODIFY and DIRECT ops on the same function")
-> Signed-off-by: Wang Jingjin <wangjingjin1@huawei.com>
-> ---
->  kernel/trace/ftrace.c | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index bc921a3f7ea8..16d3d3884e17 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -1861,8 +1861,6 @@ static void ftrace_hash_rec_enable_modify(struct ftrace_ops *ops,
->  	ftrace_hash_rec_update_modify(ops, filter_hash, 1);
->  }
-> 
-> -static bool ops_references_ip(struct ftrace_ops *ops, unsigned long ip);
-> -
->  /*
->   * Try to update IPMODIFY flag on each ftrace_rec. Return 0 if it is OK
->   * or no-needed to update, -EBUSY if it detects a conflict of the flag
-> @@ -3108,6 +3106,7 @@ static inline int ops_traces_mod(struct ftrace_ops *ops)
->  		ftrace_hash_empty(ops->func_hash->notrace_hash);
->  }
-> 
-> +#if defined(CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS) || defined(CONFIG_MODULES)
+Replace swiotlb_max_segment() calls with dma_max_mapping_size().
+In i915_gem_object_get_pages_internal() no longer consider max_segment
+only if CONFIG_SWIOTLB is enabled. There can be other (iommu related)
+causes of specific max segment sizes.
 
-Honesly, this block needs to be moved down to closer to where it is
-first used (just above the #ifdef CONFIG_MODULES).
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: Thomas Hellstrom <thomas.hellstrom@intel.com>
+Cc: Matthew Auld <matthew.auld@intel.com>
 
->  /*
->   * Check if the current ops references the given ip.
->   *
-> @@ -3137,19 +3136,7 @@ ops_references_ip(struct ftrace_ops *ops, unsigned long ip)
-> 
->  	return true;
->  }
-> -
-> -/*
-> - * Check if the current ops references the record.
-> - *
-> - * If the ops traces all functions, then it was already accounted for.
-> - * If the ops does not trace the current record function, skip it.
-> - * If the ops ignores the function via notrace filter, skip it.
-> - */
-> -static bool
-> -ops_references_rec(struct ftrace_ops *ops, struct dyn_ftrace *rec)
-> -{
-> -	return ops_references_ip(ops, rec->ip);
-> -}
-> +#endif
-> 
->  static int ftrace_update_code(struct module *mod, struct ftrace_page *new_pgs)
->  {
-> @@ -6818,6 +6805,19 @@ static int ftrace_get_trampoline_kallsym(unsigned int symnum,
-> 
->  static LIST_HEAD(ftrace_mod_maps);
-> 
-> +/*
-> + * Check if the current ops references the record.
-> + *
-> + * If the ops traces all functions, then it was already accounted for.
-> + * If the ops does not trace the current record function, skip it.
-> + * If the ops ignores the function via notrace filter, skip it.
-> + */
-> +static bool
-> +ops_references_rec(struct ftrace_ops *ops, struct dyn_ftrace *rec)
-> +{
-> +	return ops_references_ip(ops, rec->ip);
-> +}
+v2: - restore UINT_MAX clamp in i915_sg_segment_size()
+    - drop PAGE_SIZE check as it will always be >= PAGE_SIZE
+v3: - actually clamp to UINT_MAX in i915_sg_segment_size()
+v4: - round down max segment size to PAGE_SIZE
+v5: - fix checkpatch whitespace issue
 
-And we should just nuke this function, and call the ops_references_ip()
-directly, as it is only used in one location.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+---
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c | 19 ++++---------------
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c    |  2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c      |  4 ++--
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c  |  2 +-
+ drivers/gpu/drm/i915/i915_scatterlist.h      | 16 ++++------------
+ 5 files changed, 12 insertions(+), 31 deletions(-)
 
- static int referenced_filters(struct dyn_ftrace *rec)
- {
-        struct ftrace_ops *ops;
-        int cnt = 0;
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+index c698f95af15f..24f37658f1bb 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+@@ -6,7 +6,6 @@
  
-        for (ops = ftrace_ops_list; ops != &ftrace_list_end; ops = ops->next) {
--               if (ops_references_rec(ops, rec)) {
-+               if (ops_references_ip(ops, rec->ip)) {
-                        if (WARN_ON_ONCE(ops->flags & FTRACE_OPS_FL_DIRECT))
-                                continue;
-                        if (WARN_ON_ONCE(ops->flags & FTRACE_OPS_FL_IPMODIFY))
-
-
--- Steve
-
-> +
->  static int referenced_filters(struct dyn_ftrace *rec)
->  {
->  	struct ftrace_ops *ops;
-> --
-> 2.25.1
+ #include <linux/scatterlist.h>
+ #include <linux/slab.h>
+-#include <linux/swiotlb.h>
+ 
+ #include "i915_drv.h"
+ #include "i915_gem.h"
+@@ -38,22 +37,12 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
+ 	struct scatterlist *sg;
+ 	unsigned int sg_page_sizes;
+ 	unsigned int npages;
+-	int max_order;
++	int max_order = MAX_ORDER;
++	unsigned int max_segment;
+ 	gfp_t gfp;
+ 
+-	max_order = MAX_ORDER;
+-#ifdef CONFIG_SWIOTLB
+-	if (is_swiotlb_active(obj->base.dev->dev)) {
+-		unsigned int max_segment;
+-
+-		max_segment = swiotlb_max_segment();
+-		if (max_segment) {
+-			max_segment = max_t(unsigned int, max_segment,
+-					    PAGE_SIZE) >> PAGE_SHIFT;
+-			max_order = min(max_order, ilog2(max_segment));
+-		}
+-	}
+-#endif
++	max_segment = i915_sg_segment_size(i915->drm.dev) >> PAGE_SHIFT;
++	max_order = min(max_order, ilog2(max_segment));
+ 
+ 	gfp = GFP_KERNEL | __GFP_HIGHMEM | __GFP_RECLAIMABLE;
+ 	if (IS_I965GM(i915) || IS_I965G(i915)) {
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+index 4eed3dd90ba8..34b9c76cd8e6 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+@@ -194,7 +194,7 @@ static int shmem_get_pages(struct drm_i915_gem_object *obj)
+ 	struct intel_memory_region *mem = obj->mm.region;
+ 	struct address_space *mapping = obj->base.filp->f_mapping;
+ 	const unsigned long page_count = obj->base.size / PAGE_SIZE;
+-	unsigned int max_segment = i915_sg_segment_size();
++	unsigned int max_segment = i915_sg_segment_size(i915->drm.dev);
+ 	struct sg_table *st;
+ 	struct sgt_iter sgt_iter;
+ 	struct page *page;
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+index 5a5cf332d8a5..7a828c9c0f6d 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+@@ -189,7 +189,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
+ 	struct drm_i915_private *i915 = container_of(bdev, typeof(*i915), bdev);
+ 	struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
+ 	struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
+-	const unsigned int max_segment = i915_sg_segment_size();
++	const unsigned int max_segment = i915_sg_segment_size(i915->drm.dev);
+ 	const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
+ 	struct file *filp = i915_tt->filp;
+ 	struct sgt_iter sgt_iter;
+@@ -568,7 +568,7 @@ static struct i915_refct_sgt *i915_ttm_tt_get_st(struct ttm_tt *ttm)
+ 	ret = sg_alloc_table_from_pages_segment(st,
+ 			ttm->pages, ttm->num_pages,
+ 			0, (unsigned long)ttm->num_pages << PAGE_SHIFT,
+-			i915_sg_segment_size(), GFP_KERNEL);
++			i915_sg_segment_size(i915_tt->dev), GFP_KERNEL);
+ 	if (ret) {
+ 		st->sgl = NULL;
+ 		return ERR_PTR(ret);
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+index 094f06b4ce33..dfc35905dba2 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+@@ -129,7 +129,7 @@ static void i915_gem_object_userptr_drop_ref(struct drm_i915_gem_object *obj)
+ static int i915_gem_userptr_get_pages(struct drm_i915_gem_object *obj)
+ {
+ 	const unsigned long num_pages = obj->base.size >> PAGE_SHIFT;
+-	unsigned int max_segment = i915_sg_segment_size();
++	unsigned int max_segment = i915_sg_segment_size(obj->base.dev->dev);
+ 	struct sg_table *st;
+ 	unsigned int sg_page_sizes;
+ 	struct page **pvec;
+diff --git a/drivers/gpu/drm/i915/i915_scatterlist.h b/drivers/gpu/drm/i915/i915_scatterlist.h
+index 9ddb3e743a3e..3dd40012e901 100644
+--- a/drivers/gpu/drm/i915/i915_scatterlist.h
++++ b/drivers/gpu/drm/i915/i915_scatterlist.h
+@@ -9,7 +9,7 @@
+ 
+ #include <linux/pfn.h>
+ #include <linux/scatterlist.h>
+-#include <linux/swiotlb.h>
++#include <linux/dma-mapping.h>
+ 
+ #include "i915_gem.h"
+ 
+@@ -127,19 +127,11 @@ static inline unsigned int i915_sg_dma_sizes(struct scatterlist *sg)
+ 	return page_sizes;
+ }
+ 
+-static inline unsigned int i915_sg_segment_size(void)
++static inline unsigned int i915_sg_segment_size(struct device *dev)
+ {
+-	unsigned int size = swiotlb_max_segment();
++	size_t max = min_t(size_t, UINT_MAX, dma_max_mapping_size(dev));
+ 
+-	if (size == 0)
+-		size = UINT_MAX;
+-
+-	size = rounddown(size, PAGE_SIZE);
+-	/* swiotlb_max_segment_size can return 1 byte when it means one page. */
+-	if (size < PAGE_SIZE)
+-		size = PAGE_SIZE;
+-
+-	return size;
++	return round_down(max, PAGE_SIZE);
+ }
+ 
+ bool i915_sg_trim(struct sg_table *orig_st);
+-- 
+2.25.1
 

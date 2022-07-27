@@ -2,57 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E7E582269
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B860358226F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbiG0IuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 04:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S231186AbiG0IvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 04:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiG0IuR (ORCPT
+        with ESMTP id S229812AbiG0IvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 04:50:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB53FB02;
-        Wed, 27 Jul 2022 01:50:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 445B461700;
-        Wed, 27 Jul 2022 08:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7FA58C433D7;
-        Wed, 27 Jul 2022 08:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658911814;
-        bh=9JWubULy2o5aQ0yJzC/crkGrFFocSzrXJfV5jsG8sEY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=E0uumWP7ZdwwMgerf4FivXfFwhR+Oft/B5N8rz+APQmXp2xJhpj8Al93Z/OPdDC3R
-         fkfP1z9AThpAOo6n+D6gT/J1ssbyJgp9hroaHVvjUoGMwb/Gg8xVkJ8hr4sPqvMB90
-         PVDnb9941jTBBZ6v+x9D5nVZXtVxtcZ8gzAikqF487Njn4oetC17aP6g3yOjM0Qeus
-         snKuawj8wyFf+qDQEZDxxRTEc3JQjJH8acR5enSn6FDqITVM5M8uegTcYXKpfuRWe+
-         CY61g1juUf+MBu9VDiPjr8wqCMZe3oLxw0Ahn4dBIcidPcHzHzxAugLzyVmzsEPk9C
-         ELzlq06v9Xxlw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68A92C43143;
-        Wed, 27 Jul 2022 08:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 27 Jul 2022 04:51:05 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1F51A07A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:51:03 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id u17so8917124lji.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1AeHnnhcT69ZrVfPR/zgIWRlaIcZ2YpF+8w0N1pOEoQ=;
+        b=UQXl4JOAj4zgD6Ihx0+LdJYT+f3u0Hj1g8S16SQzNPc4kp2ueYOIOI3Cm7QqPHt8Pw
+         g7uAjrSLRIZQT6bZhii3t7DvlV0kXlkxeNyc+J360ubmjy5/gFLPR6Al9HJqQMCkRMrf
+         QNgfcip4vKmdFOUjZ8glPO+UXeYF1jnimpRQCWpZb+OqOrdpSRzXOc44mH68OPu/wSws
+         X+e3nRT2016M+RZmay/TwhOMXw5URh3CU1HYWHVtvSJ7RX/0RDIaLwbkVuTGj0eWi4hD
+         Zy0Xe2ww2VzQEXHcDlrCcFVG1rR/ExW2p+Q4pK30B9+MmB1uyx/OScDD+18eqlLkwJOo
+         PsUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1AeHnnhcT69ZrVfPR/zgIWRlaIcZ2YpF+8w0N1pOEoQ=;
+        b=wc/l+uzNc0R0Av0P/MebT+iY+ErCrfsy/+QxsfH6SsXLyp/+i3PXnT2KQCQwElbf9J
+         Aqx0ol6x5d6JxPOLHYbHj98tvATTY+bh3M/RzFqQBT2Zs5W9C+X9tMC6hmHIgxbBcWnW
+         Z/sdgmWeHrqmCSN5bQZBu4RVtbIjmDdiaEbt4OuSziXLwz7OiaAeP3ss4HyJD8Y+NKxz
+         E0TqkdngXveZbpu2uIZRD97TMI5WadLXL9diJHU/BqXGhmX+hEH7F5rvVUFsVKj1ebBk
+         2LSkyDExT+97c5JEH/M2GSGw0Gd3WQwbchmpIwyZOFL4r5P/sUb59Gp6s8I/Y5hUHfwo
+         L96Q==
+X-Gm-Message-State: AJIora9JILYPyy433G6Nm5znfnpMoJnCVx8UbF8p/v4UhCSiDP85m9iK
+        +hJv3TC0A8O+EgxUdniJ4AxG3A==
+X-Google-Smtp-Source: AGRyM1uAQEDdTmc0WVn0GQ7HOUPV1XPXnbWhkzm7wPSzMTpaVTeB4B2RlsFGYOin2XkzwgspWV2ayg==
+X-Received: by 2002:a2e:98d5:0:b0:25e:c1b:f262 with SMTP id s21-20020a2e98d5000000b0025e0c1bf262mr3740065ljj.343.1658911861726;
+        Wed, 27 Jul 2022 01:51:01 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id v7-20020a2ea447000000b0025d715bc088sm3754349ljn.0.2022.07.27.01.51.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 01:51:01 -0700 (PDT)
+Message-ID: <7a02225c-5c7b-f342-e29e-995d1ae0f4e3@linaro.org>
+Date:   Wed, 27 Jul 2022 10:50:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [Patch net-next v2 0/9] net: dsa: microchip: add support for phylink
- mac config and link up
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165891181442.26661.18313628308676884768.git-patchwork-notify@kernel.org>
-Date:   Wed, 27 Jul 2022 08:50:14 +0000
-References: <20220724092823.24567-1-arun.ramadoss@microchip.com>
-In-Reply-To: <20220724092823.24567-1-arun.ramadoss@microchip.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/6] dt-bindings: arm: renesas: Ignore the schema for
+ RISC-V arch
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Anup Patel <anup@brainfault.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,46 +85,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 26/07/2022 20:06, Lad Prabhakar wrote:
+> Ignore the ARM renesas.yaml schema if the board is RZ/Five SMARC EVK
+> (RISC-V arch).
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Your commit msg says one, but patch ignores r9a07g043f01 which sounds
+entirely different for non-Renesas people. Be a bit more clear.
 
-On Sun, 24 Jul 2022 14:58:14 +0530 you wrote:
-> This patch series add support common phylink mac config and link up for the ksz
-> series switches. At present, ksz8795 and ksz9477 doesn't implement the phylink
-> mac config and link up. It configures the mac interface in the port setup hook.
-> ksz8830 series switch does not mac link configuration. For lan937x switches, in
-> the part support patch series has support only for MII and RMII configuration.
-> Some group of switches have some register address and bit fields common and
-> others are different. So, this patch aims to have common phylink implementation
-> which configures the register based on the chip id.
 > 
-> [...]
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/arm/renesas.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/arm/renesas.yaml
+> index ff80152f092f..f646df1a23af 100644
+> --- a/Documentation/devicetree/bindings/arm/renesas.yaml
+> +++ b/Documentation/devicetree/bindings/arm/renesas.yaml
+> @@ -9,6 +9,15 @@ title: Renesas SH-Mobile, R-Mobile, and R-Car Platform Device Tree Bindings
+>  maintainers:
+>    - Geert Uytterhoeven <geert+renesas@glider.be>
+>  
+> +# We want to ignore this schema if the board is of RISC-V arch
+> +select:
+> +  not:
+> +    properties:
+> +      compatible:
+> +        contains:
+> +          items:
 
-Here is the summary with links:
-  - [net-next,v2,1/9] net: dsa: microchip: add common gigabit set and get function
-    https://git.kernel.org/netdev/net-next/c/46f80fa8981b
-  - [net-next,v2,2/9] net: dsa: microchip: add common ksz port xmii speed selection function
-    https://git.kernel.org/netdev/net-next/c/aa5b8b73d4bd
-  - [net-next,v2,3/9] net: dsa: microchip: add common duplex and flow control function
-    https://git.kernel.org/netdev/net-next/c/8560664fd32a
-  - [net-next,v2,4/9] net: dsa: microchip: add support for common phylink mac link up
-    https://git.kernel.org/netdev/net-next/c/da8cd08520f3
-  - [net-next,v2,5/9] net: dsa: microchip: lan937x: add support for configuing xMII register
-    https://git.kernel.org/netdev/net-next/c/dc1c596edba5
-  - [net-next,v2,6/9] net: dsa: microchip: apply rgmii tx and rx delay in phylink mac config
-    https://git.kernel.org/netdev/net-next/c/b19ac41faa3f
-  - [net-next,v2,7/9] net: dsa: microchip: ksz9477: use common xmii function
-    https://git.kernel.org/netdev/net-next/c/0ab7f6bf1675
-  - [net-next,v2,8/9] net: dsa: microchip: ksz8795: use common xmii function
-    https://git.kernel.org/netdev/net-next/c/c476bede4b0f
-  - [net-next,v2,9/9] net: dsa: microchip: add support for phylink mac config
-    https://git.kernel.org/netdev/net-next/c/f3d890f5f90e
+It is only one item, so I guess you wanted here enum.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Just like syscon is doing...
+
+> +            - const: renesas,r9a07g043f01
+> +
+>  properties:
+>    $nodename:
+>      const: '/'
 
 
+Best regards,
+Krzysztof

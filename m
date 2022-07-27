@@ -2,100 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7544D582A67
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDCA582C18
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234762AbiG0QK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S239773AbiG0QmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234563AbiG0QK0 (ORCPT
+        with ESMTP id S239650AbiG0Ql0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:10:26 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C44E0DA;
-        Wed, 27 Jul 2022 09:10:25 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 00:10:10 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1658938223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vDTc2P3W0cdpqM6y0cdrKPPqHIzlLdGjU1Vo1e/Da/8=;
-        b=YaH+br3IhFwvw+NOWW8DYs8wG8Ahb3j41ozaHCskwVDzcCFo00PH3xdZfUUcqB/s6k1pet
-        Oc4bbVysDNsEBRsBdAcSvLR4GJ/e3QOXmbkiTD3OX5wF+Rn2QWB10gIde6YX1cLiUF2jNA
-        zI5l//nodSfPHEOaTR2YicOI+a1f0FY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
-Subject: Re: [PATCH V7 01/16] rv: Add Runtime Verification (RV) interface
-Message-ID: <YuFjGK53HH7pjdlv@geo.homenetwork>
-References: <cover.1658778484.git.bristot@kernel.org>
- <2aa3b18239f170ba23263f18d166d08634ed65dd.1658778484.git.bristot@kernel.org>
+        Wed, 27 Jul 2022 12:41:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E4550065;
+        Wed, 27 Jul 2022 09:29:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 543E961A39;
+        Wed, 27 Jul 2022 16:29:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 598A8C433D6;
+        Wed, 27 Jul 2022 16:29:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658939380;
+        bh=zn1DvGNYVtngREh6xi9YBPcN/170vf2Wj6zm10SnjFE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jY6yapUBe4hCSeNrmbAM1uOD+SfehjDMamAEtM3byLOM/urL9xcm9GXJdgpZcCVtV
+         uwnPY/xIu2ekKdQuPSakHEAm1eAZjLtLEvCi7i8eeySCCYkGLWPMcnUUQ0Y1jUCOWX
+         jXljpOBU6TcibeAoPN8wJTjme2chbrNK9ba83umI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 18/87] ip: Fix data-races around sysctl_ip_nonlocal_bind.
+Date:   Wed, 27 Jul 2022 18:10:11 +0200
+Message-Id: <20220727161009.757058892@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2aa3b18239f170ba23263f18d166d08634ed65dd.1658778484.git.bristot@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 10:11:13PM +0200, Daniel Bristot de Oliveira wrote:
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-> +void rv_put_task_monitor_slot(int slot)
-> +{
-> +	lockdep_assert_held(&rv_interface_lock);
-> +
-> +	if (slot < 0 || slot >= RV_PER_TASK_MONITORS) {
-> +		WARN_ONCE(1, "RV releasing an invalid slot!: %d\n", slot);
-> +		return;
-> +	}
-> +
-> +	WARN_ONCE(!task_monitor_slots[slot], "RV releasing unused task_monitor_slots: %d\n",
-> +		  slot);
-> +
-> +	task_monitor_count--;
-> +	task_monitor_slots[slot] = false;
-> +}
+[ Upstream commit 289d3b21fb0bfc94c4e98f10635bba1824e5f83c ]
 
-I would say this can be implemented using bits. Also is an optimization.
-But now here just use bool and seems not that needed.
+While reading sysctl_ip_nonlocal_bind, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-> +static void turn_monitoring_off(void)
-> +{
-> +	WRITE_ONCE(monitoring_on, false);
-> +	/* monitoring_on */
-> +	smp_wmb();
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/net/inet_sock.h | 2 +-
+ net/sctp/protocol.c     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Absolutely the sync I can not see.
-If not store another after smp_wmb(), even you have smp_wmb() pair,
-it is not valid in my poor mind that there is no another load before
-loading of monitoring_on that ensure something like if the another
-load is *what* then the after load is ensured to be *what* statement
-(I am sure I am poor on these, but just some words input yeah).
+diff --git a/include/net/inet_sock.h b/include/net/inet_sock.h
+index 34c4436fd18f..40f92f5a3047 100644
+--- a/include/net/inet_sock.h
++++ b/include/net/inet_sock.h
+@@ -375,7 +375,7 @@ static inline bool inet_get_convert_csum(struct sock *sk)
+ static inline bool inet_can_nonlocal_bind(struct net *net,
+ 					  struct inet_sock *inet)
+ {
+-	return net->ipv4.sysctl_ip_nonlocal_bind ||
++	return READ_ONCE(net->ipv4.sysctl_ip_nonlocal_bind) ||
+ 		inet->freebind || inet->transparent;
+ }
+ 
+diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
+index bb370a7948f4..363a64c12414 100644
+--- a/net/sctp/protocol.c
++++ b/net/sctp/protocol.c
+@@ -358,7 +358,7 @@ static int sctp_v4_available(union sctp_addr *addr, struct sctp_sock *sp)
+ 	if (addr->v4.sin_addr.s_addr != htonl(INADDR_ANY) &&
+ 	   ret != RTN_LOCAL &&
+ 	   !sp->inet.freebind &&
+-	   !net->ipv4.sysctl_ip_nonlocal_bind)
++	    !READ_ONCE(net->ipv4.sysctl_ip_nonlocal_bind))
+ 		return 0;
+ 
+ 	if (ipv6_only_sock(sctp_opt2sk(sp)))
+-- 
+2.35.1
+
+
+

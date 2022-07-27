@@ -2,252 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C203458255B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FFA582562
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiG0LYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 07:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S231374AbiG0L0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 07:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiG0LYq (ORCPT
+        with ESMTP id S229489AbiG0L0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 07:24:46 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2625220EC
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 04:24:44 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id w18so8394730lje.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 04:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QfNI9S8iAQB3LbkapZoXxskcLzEsEgFs5Xu90Ufn+Fo=;
-        b=tLTwBrMrF6ZS8ik80Si/OmDvu2C+ACrn00QzA+SHTgCNnCu24AizmIdW0qfLIZnvqw
-         XOxnokUx1AjBV7+Ln9RIx7ab52h1FhqKU9+O8NYOf//iuE28seLWFh+oY4hECNAOBmLI
-         mP0JF0TP9wjdNJ1YIv8AHv9qst1btVxwMoOuf5pthMgC50260mj8DxzMfSkYpFj//sbv
-         j2GwvZjGkjkjqJDffjqTbwO4ddajYjjbHNMSpoelJ1BZXSw31CT8mPXlEUGDDjHrGa7F
-         sY+IzGh0LwYxuhTm4rpx5IWyBKqdpLOzc+HSZwuG0PVjPySaYGmNulhyUcx+ZD4fPxP/
-         GulA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QfNI9S8iAQB3LbkapZoXxskcLzEsEgFs5Xu90Ufn+Fo=;
-        b=MeQW0V+KQ0s1xbWoO4kWlPxEQsSJFtnm0Rjlgv9KlEm0q4XuyJFqRZ8cKuxRGjY7nJ
-         ltuB+2J1Jh0/IB++9JNkUznJ2yXW0kTNhwXKWjq2iyThGuCpXR99En6ZyzNFFX5BSRJ9
-         lur768crFDu1uMK+u7E6DpQOC/q7rMFkUWWHOob979KQeSSef4nA3j6EcBvl5Qk/s1Ex
-         Zyo9Jp6m7XKpdqr/cJVkOZyAzQwwfv1rs0PdsEGHtuuFFSeLriAHO8eKzF9DINLdI09g
-         OkH1uT5v3z9soMi30EezJnl+N8f1V1s7QclbnykdnJXkzw4zPYivbTyXJvEJDqH3NCDz
-         mnHw==
-X-Gm-Message-State: AJIora+SBhInEQB8/NJmwPR1Ylg01RFBjPXPzFTgKXzPyvck1OyUa+0l
-        5HSi3abqcyMJxib2W4F3w/8B4A==
-X-Google-Smtp-Source: AGRyM1vtcQcNcjpFWkWLGED3KxqGPdePSivwwXGP8h+91ivZTdwqbIZvpu2UwagnsZ6t5n50ypIJBg==
-X-Received: by 2002:a05:651c:897:b0:25d:e574:b64 with SMTP id d23-20020a05651c089700b0025de5740b64mr7547002ljq.203.1658921082750;
-        Wed, 27 Jul 2022 04:24:42 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id be20-20020a05651c171400b0025bf58c5338sm3876300ljb.15.2022.07.27.04.24.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 04:24:42 -0700 (PDT)
-Message-ID: <53a602e2-0590-6c6a-597b-fd55faa3a4ab@linaro.org>
-Date:   Wed, 27 Jul 2022 13:24:40 +0200
+        Wed, 27 Jul 2022 07:26:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A35042ACE
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 04:26:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5454A37643;
+        Wed, 27 Jul 2022 11:26:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658921199; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1fQtbU2xCnCtNAD1uoQcCQ0vKe7X6uYstVN3t9WTs5Q=;
+        b=W20gMLv5MgxHnYrjaIk4GhYWWerWWCJzbWlxbauNNrFh9+sinnpCWncbtnCB/UECrYC/FX
+        FM0QMO7UWiGoSfi/Mp7qfqGU0jini/+MYyDpISz+IoG3CnBYzO6newaW9gN2ZadkHB+bi0
+        +L+ReXGXAX9roAWPIvEnstD/qhED1RY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658921199;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1fQtbU2xCnCtNAD1uoQcCQ0vKe7X6uYstVN3t9WTs5Q=;
+        b=laf3znNtppYHOQxA4xWxUVO1BH46vIUnZ9NZdTGuQXQ7+8ubLKrlLcAhF/0m0XVkHGHTCs
+        AxaMvtH82UVWxBDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1106A13A8E;
+        Wed, 27 Jul 2022 11:26:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yIyJAu8g4WLTfwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 27 Jul 2022 11:26:39 +0000
+Date:   Wed, 27 Jul 2022 13:26:37 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chenglin Xu <chenglin.xu@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Subject: [PATCH RFC] regulator: mt6380: Fix unused array warning
+Message-ID: <20220727132637.76d6073f@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
- <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
- <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
- <2e522bcd-5d55-e87f-126c-514f5edaa560@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2e522bcd-5d55-e87f-126c-514f5edaa560@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 17:00, Maximilian Luz wrote:
-> On 7/26/22 15:25, Krzysztof Kozlowski wrote:
->> On 26/07/2022 13:15, Maximilian Luz wrote:
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    const: qcom,tee-uefisecapp
->>>>
->>>> Isn't this SoC-specific device? Generic compatibles are usually not
->>>> expected.
->>>
->>> This is essentially software (kernel driver) talking to software (in the
->>> TrustZone), so I don't expect there to be anything SoC specific about it.
->>
->> You are documenting here firmware in TZ (not kernel driver). Isn't this
->> a specific piece which might vary from device to device?
->>
->> IOW, do you expect the same compatible to work for all possible Qualcomm
->> boards (past and future like in 10 years from now)?
-> 
-> I'm not sure if Qualcomm will still use the "uefisecapp" approach in 10
-> years, but I don't expect the interface of uefisecapp to change. The
-> interface is modeled after the respective UEFI functions, which are spec
-> and thus I don't expect those to change. Also, it seems to have been
-> around for a couple of generations and it hasn't changed. The oldest
-> tested is sdm850 (Lenovo Yoga C630), and the latest is sc8280xp
-> (Thinkpad X13s).
+With the following configuration options:
+CONFIG_OF is not set
+CONFIG_REGULATOR_MT6380=3Dy
+we get the following build warning:
 
-Expectation is not the same as having a specification saying it will not
-change.
-> 
-> Why not make this behave like a "normal" third-party device? If the
-> interface ever changes use qcom,tee-uefisecapp-v2 or something like
-> that? Again, this does not seem to be directly tied to the SoC.
+  CC      drivers/regulator/mt6380-regulator.o
+drivers/regulator/mt6380-regulator.c:322:34: warning: =E2=80=98mt6380_of_ma=
+tch=E2=80=99 defined but not used [-Wunused-const-variable=3D]
 
-Such approach is not "normal" for third-party devices. Compatible for
-devices has model number. If the block has specification, then v2 would
-have sense, otherwise you would invent own versioning...
+Fix this by annotating that array with __maybe_unused, as done in
+various regulator drivers.
 
-I would say that firmware implementation can easily change. How much of
-your code is tied to it, I don't know, but argument "I don't expect
-Qualcomm to change something in their firmware" is not the correct argument.
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/all/202207240252.ZY5hSCNB-lkp@intel.com/
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Chenglin Xu <chenglin.xu@mediatek.com>
+---
+This assumes that the mt6380 driver can be used without OF support.
+However, I can't find any in-tree piece of code instantiating the
+"mt6380-regulator" platform device by name. So unless there's an
+out-of-tree user, a better fix would be to remove mt6380_platform_ids
+and make the driver depend on OF. Chenglin, would that be OK with
+you?
 
-> 
-> Then again, if you prefer to name everything based on
-> "qcom,<device>-<soc>" I don't have any strong arguments against it and
-> I'm happy to change that. I just think it will unnecessarily introduce
-> a bunch of compatibles and doesn't reflect the interface "versioning"
-> situation as I see it.
+ drivers/regulator/mt6380-regulator.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Why bunch? All devices could bind to one specific compatible, as they
-are compatible.
-
-> 
->>>>> +
->>>>> +required:
->>>>> +  - compatible
->>>>> +
->>>>> +additionalProperties: false
->>>>> +
->>>>> +examples:
->>>>> +  - |
->>>>> +    firmware {
->>>>> +        scm {
->>>>> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
->>>>> +        };
->>>>> +        tee-uefisecapp {
->>>>> +            compatible = "qcom,tee-uefisecapp";
->>>>
->>>> You did not model here any dependency on SCM. This is not full
->>>> description of the firmware/hardware
->>>
->>> How would I do that? A lot of other stuff also depends on SCM being
->>> present (e.g. qcom_q6v5_pas for loading mdt files) and I don't see them
->>> declare this in the device tree. As far as I can tell, SCM is pretty
->>> much expected to be there at all times (i.e. can't be unloaded) and
->>> drivers check for it when probing via qcom_scm_is_available(),
->>> deferring probe if not.
->>
->> It seems this will be opening a can of worms...
-> 
-> Indeed.
-> 
->> The problem with existing approach is:
->> 1. Lack of any probe ordering or probe deferral support.
->> 2. Lack of any other dependencies, e.g. for PM.
-> 
-> I'm not entirely sure what you mean by "lack of probe deferral support".
-> We have qcom_scm_is_available() and defer probe if that fails. So
-> deferral works, unless I'm misunderstanding something.
-
-And how do you differentiate that qcom_scm_is_available() failed because
-it is not yet available (defer probe) or it is broken and will never
-load? All regular consumer-provider interfaces have it sorted out.
-
-> 
-> But yes, correct on the other points.
-> 
->> Unloading is "solved" only by disallowing the unload, not by proper
->> device links and module get/put.
->>
->> I understand that SCM must be there, but the same for several other
->> components and for these others we have ways to pass reference around
->> (e.g. syscon regmap, PHYs handles).
->>
->>>
->>> Don't take this as an excuse as in "I want to leave that out", it's just
->>> that I don't know how one would declare such a dependency explicitly. If
->>> you can tell me how to fix it, I'll include that for v2.
->>
->> I think there are no dedicated subsystem helpers for this (like for
->> provider/consumer of resets/power domains/clocks etc), so one way would
->> be something like nvidia,bpmp is doing.
-> 
-> I assume you're referring to tegra_bpmp_get()? Does this correctly
-> handle PM dependencies? At least as far as I can tell it doesn't
-> explicitly establish a device link, it only gets a reference to the
-> device, which doesn't guarantee the presence of a driver. Nor correct PM
-> ordering. Please correct me if I'm wrong. As far as I know automatic
-> creation of device links only works with certain props defined in
-> of_supplier_bindings, right?
-
-The Tegra choice is not complete, but it implements at least parts of it
-and firmware dependencies are modeled in DTS. Other way would be to add
-your device as child of SMC firmware and then you do not need bindings
-at all...
-
-> 
-> So unless I'm wrong there is also a bunch of other stuff that may be
-> subtly broken. (Again, not a justification to include these changes,
-> just wondering whether there should be a conscious approach to find and
-> fix these things... rather than discover them patch-by-patch).
-> 
->> meson_sm_get is a bit similar - looking by compatible. This is less
->> portable and I would prefer the bpmp way (just like syscon phandles).
-> 
-> I have another example (that could be improved via a phandle in DT): For
-> the Surface System Aggregator (in ACPI-land), we have ssam_client_bind().
-> This function 1) checks if the controller is available and ready, 2) if
-> it is gets a reference to it, and 3) establishes a device link for
-> PM-ordering, before 4) returning the reference to that controller to the
-> client. This combined with deferring probe ensures that we will always
-> have a valid reference. And since we're in DT-land, we could hook that
-> up with a phandle reference to SCM and load that instead of having to
-> use a global static.
-
-Yes, that's better example than Tegra BPMP.
-
->> The qcom_q6v5_pas could be converted later to use similar approach and
->> eventually the "tatic struct qcom_scm *__scm;" can be entirely removed.
->>
->> Any comments on this approach from Konrad, Bjorn, Dmitry, Vinod and
->> anyone else?
-> 
-> Regards,
-> Max
+--- linux-5.18.orig/drivers/regulator/mt6380-regulator.c	2022-07-27 11:55:2=
+1.672421481 +0200
++++ linux-5.18/drivers/regulator/mt6380-regulator.c	2022-07-27 12:01:53.151=
+833378 +0200
+@@ -319,7 +319,7 @@ static const struct platform_device_id m
+ };
+ MODULE_DEVICE_TABLE(platform, mt6380_platform_ids);
+=20
+-static const struct of_device_id mt6380_of_match[] =3D {
++static const struct of_device_id  __maybe_unused mt6380_of_match[] =3D {
+ 	{ .compatible =3D "mediatek,mt6380-regulator", },
+ 	{ /* sentinel */ },
+ };
 
 
-Best regards,
-Krzysztof
+--=20
+Jean Delvare
+SUSE L3 Support

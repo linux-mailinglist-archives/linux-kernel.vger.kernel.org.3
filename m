@@ -2,130 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7985828C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7075828D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiG0Ogd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
+        id S233041AbiG0Omi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiG0Ogb (ORCPT
+        with ESMTP id S229671AbiG0Omg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:36:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1190015A14
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658932590; x=1690468590;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Zx/8PeOwzh15ZBwjFall2o1uB2PfZUxdli+VFXGJ/7I=;
-  b=Ec9JfkmSq84mihAoSldz32sP1pi5NclWCMgLLXXrxbOaP+9+rKTVwFa4
-   K22Fe44Ni85NjT8TK/cihNjXCtBq7BKEBptoP/iQ8CEKjZWgVvDYSZ6I7
-   G1AWM6nn2dGJreRKXBbNU+QT8zuWdJ6s9s4yV+wtfQhXvr5T5Y+Nsoz6y
-   AxggIkSBd6WteSeNw0VNNYb081L/+i7CSwymdUBQV2wFV4lH8PUXmuLVp
-   8M82lrm0MW3fwtw3R1EVD+FmLvXx1CjFjzzy3HWPjNhoxeLMkS7DTyFWu
-   iFyC0ZpanyemgF6SduCPot5aPFI7+Y5jfqmRHvxEUFQWnlHbojKv9f4uq
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="289013241"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="289013241"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:36:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="689887480"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jul 2022 07:36:27 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGi9D-0008mQ-04;
-        Wed, 27 Jul 2022 14:36:27 +0000
-Date:   Wed, 27 Jul 2022 22:36:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Atish Patra <atishp@rivosinc.com>
-Subject: [avpatel:riscv_ipi_imp_v7 8/23] include/linux/stddef.h:8:14:
- warning: initialization of 'unsigned int' from 'void *' makes integer from
- pointer without a cast
-Message-ID: <202207272227.X4sMLaS2-lkp@intel.com>
+        Wed, 27 Jul 2022 10:42:36 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7932AE14
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:42:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QmAFmzdXupzaQ1GnSZChTShBqVIxF26XZ6HimLgY7Jg/CInq9GOSbJ69om39v5U8F9wwHMJHaD/WcSYpUu9hwqHAmGhY9AEzktMLrh3zMV2w7DiWx1Uas3g+kJ9z30nWR1qYw4WCOrcaW9DI8xjDUKuTs1fUFr0DV5m7bvfIJn3o/cc6x9o3+tSgYBPtgnS9upT+VtWljrL8SWqkG3XquzS5Na2ufEJfLfO7B0QyyHvXgDoIfOudykWgRgIpP/h2LZuDQmdxaf10w71B2gGStCpDMJPQKUJZ/3m8zf47NNGinGo+ePRV+usNB5v8AwrJ5L+WmW+aaWwa5rc1QXF6lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T+5XiYM4qOD5y1VLSERXqEiGZySvwG04rj6ed5j6IEU=;
+ b=K8EVJ4o9FXW32W8Hzrftpfvj60jwoLkzdk02mO9SpVwMhdYt1lkLqLp3hNnlDeoA2Fcj6mMs9PUkqRZxEv0Yoi62ioRX6pu+nhkToqVxb8iq7Ob5ikYZNcO9v5/NFuaiFf2Hc0/UL+CrVDdOW2vmDHK2vTPMFKOb+85Qam1ucKZw8p+1R/f6fyDxnjEzcRo2HfCnkJ7xa8aacIFMCe0ecvClZxGgVHzAA9EIrMwFAupSi9No4fBxeiAybi5R1+PJQ8Bc9Kdr95Wz4/jJ/JScG0CrUcXhS0QlaoCeeWavmVTYHWNWJwfr3rQiF5xw1lybldCPxQvDK1LqJYFDRN+GVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T+5XiYM4qOD5y1VLSERXqEiGZySvwG04rj6ed5j6IEU=;
+ b=McVMx4u47T3Du3DlD+Nv/8pe8E0880PYB2ZC2sneMlPW7Ir786auPzMBfaBjs7Qlwh4hmc9Q0fhIkIXH5aEWVvbsLacXoDds6rIGb/EQ1o1OdabCnCWDdqSSGZdhgr48A0+iMBF/a6AqB4FYLAJK1xUrttP7rKvQNk83KeIiGGQ=
+Received: from MW4PR02CA0023.namprd02.prod.outlook.com (2603:10b6:303:16d::16)
+ by DM6PR12MB3548.namprd12.prod.outlook.com (2603:10b6:5:180::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.20; Wed, 27 Jul
+ 2022 14:42:29 +0000
+Received: from CO1NAM11FT011.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:16d:cafe::1a) by MW4PR02CA0023.outlook.office365.com
+ (2603:10b6:303:16d::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.22 via Frontend
+ Transport; Wed, 27 Jul 2022 14:42:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT011.mail.protection.outlook.com (10.13.175.186) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5482.10 via Frontend Transport; Wed, 27 Jul 2022 14:42:29 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 27 Jul
+ 2022 09:42:27 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 27 Jul
+ 2022 09:42:24 -0500
+Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28
+ via Frontend Transport; Wed, 27 Jul 2022 09:42:16 -0500
+From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+To:     <dri-devel@lists.freedesktop.org>, <amd-gfx@lists.freedesktop.org>
+CC:     <Alexander.Deucher@amd.com>, <Sunil-kumar.Dommati@amd.com>,
+        <dan.carpenter@oracle.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amdgpu: fix i2s_pdata out of bound array access
+Date:   Wed, 27 Jul 2022 20:12:48 +0530
+Message-ID: <20220727144249.415228-1-Vijendar.Mukunda@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7540c613-2a08-44b8-352b-08da6fde3b6d
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3548:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c9tE/91OZxP7wmaMNCBsnXjJeBPZEhNa63A/9VTarEhQPw/e7ryHL+t+yqZ1ZhKEw9sQL2hlrGY+9DJz8+hau6IZ0g4FJVjl0xmaPMs7XU+5iClPL56OdBySsWk7xekfH9OnKpP3uaIuXr6+USzh5qLWV3PWRNAfSEM/Ydabe+qk4vajx4g3GJ+aaKlkKWiTZcj/iPyNSRiVcqbm+DKIdMi/m0kU4n3gZMt/Dr4RDiS5d/CbI1t+H4V9I62Z6q91624IdMqoFzLxP/I1TBJqS2vy5hECrXPKn7yN1sTN3jMDlTG15qsWmAN7VHHRVcqfEjKUHuPjFx3pBydrOe0PRmOhW/c2PFh6EPXdOh1MMJdA3wroyieYxNCd2KGonC3jh75HAy74IHm1U85VvOG2jbPFDhMW2ErK7OquzDuxcBNfHtwgJ/WslS9y6x8IDjFoB+xevzAvxdYAdJq70DQKs67CSxcbWwpTv2Ml+Kp7jPOA1Xlr57kGy0LepGBGvP4AQdEfPahvjDGfZKaATqygAP8n+ovZacNnZKVv5yeYfcyYhMAidMYozHwFe/b3dWksvskJKpRfXO8CX2bS3Eaw1h0Fh9yAsHbEtIyktBtdo9ykV9WJ8uZoQIW1pnTd5GyOh8Ac9mavHmJai34L4NiXlGgOmN7FFGdBe2e1zFh9sQqMfI8WSA4Wc3cFiCktR/FZX5GitTcYxKD9Jprq7B//gNEt4+nM9PJvAyGR/Cl2s9DCuL29bx7IdS9/j2Rbdgo5Ly7agSP4kCV4e+bJPoKwIfVWSR9dfQ27zQ95e4DlEqnJn9snxauAmEb8hX2IOiccDzovoataRDGYuhQa9hvG+Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(376002)(136003)(396003)(40470700004)(46966006)(36840700001)(110136005)(26005)(54906003)(6666004)(70586007)(8676002)(40460700003)(86362001)(7696005)(186003)(36860700001)(47076005)(426003)(82740400003)(336012)(81166007)(4326008)(316002)(83380400001)(82310400005)(40480700001)(2616005)(70206006)(1076003)(356005)(8936002)(478600001)(2906002)(5660300002)(41300700001)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2022 14:42:29.5063
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7540c613-2a08-44b8-352b-08da6fde3b6d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT011.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3548
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_ipi_imp_v7
-head:   5dc8676fc21b816e1b107a18f33a49b2acf645b7
-commit: beca2348d03ad05136b6c2fd20d2fde9b5b0239e [8/23] KVM: Add gfp_custom flag in struct kvm_mmu_memory_cache
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220727/202207272227.X4sMLaS2-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/avpatel/linux/commit/beca2348d03ad05136b6c2fd20d2fde9b5b0239e
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_ipi_imp_v7
-        git checkout beca2348d03ad05136b6c2fd20d2fde9b5b0239e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ drivers/clk/keystone/
+Fixed following Smatch static checker warning:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:393 acp_hw_init()
+    error: buffer overflow 'i2s_pdata' 3 <= 3
+    drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:396 acp_hw_init()
+    error: buffer overflow 'i2s_pdata' 3 <= 3
 
-All warnings (new ones prefixed by >>):
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from arch/arm64/include/asm/rwonce.h:71,
-                    from include/linux/compiler.h:248,
-                    from include/asm-generic/bug.h:5,
-                    from arch/arm64/include/asm/bug.h:26,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:6,
-                    from include/linux/mman.h:5,
-                    from arch/arm64/kvm/mmu.c:7:
-   arch/arm64/kvm/mmu.c: In function 'kvm_phys_addr_ioremap':
->> include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-       8 | #define NULL ((void *)0)
-         |              ^
-   arch/arm64/kvm/mmu.c:789:62: note: in expansion of macro 'NULL'
-     789 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-         |                                                              ^~~~
-   include/linux/stddef.h:8:14: note: (near initialization for 'cache.gfp_custom')
-       8 | #define NULL ((void *)0)
-         |              ^
-   arch/arm64/kvm/mmu.c:789:62: note: in expansion of macro 'NULL'
-     789 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-         |                                                              ^~~~
-
-
-vim +8 include/linux/stddef.h
-
-^1da177e4c3f41 Linus Torvalds   2005-04-16  6  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  7  #undef NULL
-^1da177e4c3f41 Linus Torvalds   2005-04-16 @8  #define NULL ((void *)0)
-6e218287432472 Richard Knutsson 2006-09-30  9  
-
-:::::: The code at line 8 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
+index bcc7ee02e0fc..6d72355ac492 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
+@@ -390,14 +390,6 @@ static int acp_hw_init(void *handle)
+ 		i2s_pdata[2].i2s_reg_comp1 = ACP_BT_COMP1_REG_OFFSET;
+ 		i2s_pdata[2].i2s_reg_comp2 = ACP_BT_COMP2_REG_OFFSET;
+ 
+-		i2s_pdata[3].quirks = DW_I2S_QUIRK_COMP_REG_OFFSET;
+-		switch (adev->asic_type) {
+-		case CHIP_STONEY:
+-			i2s_pdata[3].quirks |= DW_I2S_QUIRK_16BIT_IDX_OVERRIDE;
+-			break;
+-		default:
+-			break;
+-		}
+ 		adev->acp.acp_res[0].name = "acp2x_dma";
+ 		adev->acp.acp_res[0].flags = IORESOURCE_MEM;
+ 		adev->acp.acp_res[0].start = acp_base;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

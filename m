@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6E55829DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E862B5829E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbiG0Pn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S233730AbiG0PoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiG0Pnz (ORCPT
+        with ESMTP id S229441AbiG0Pn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:43:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E42481F4;
-        Wed, 27 Jul 2022 08:43:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 827E4B821AA;
-        Wed, 27 Jul 2022 15:43:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171BAC433D6;
-        Wed, 27 Jul 2022 15:43:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658936632;
-        bh=FhzP6EtnAyU3KDS3EJ6iYz+5mn6jLVkjW8YztmcGl4k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LCLB/LIQxfVkquDX3qAy2D0nZdtjV+Ds/HXkxqoMR42lNB7iJRVtmwgx0dTWRKYyz
-         jNUyzWebY2xgaUm1VfU6MbZQzh3ucAhjBHcByhXD9tr0rM6VQR4l7GEGmftdqKZRAI
-         XYVwCXpNA9vBk0nVEjuGpXM7BMjH5R3h7X9tidjj1undBXE690jkwEEwqUEJcw4+21
-         jx6JExl7aaMI7p1gyLpvFjC9dWEuxTt/KLAUVH24JByWuzyQrCfsP5atm6nzzdi3yY
-         Q9tNRwdeRjGz/eghn2vs8Udb9ZU1WEeGsVmMfqeiD+mR/FnSjT/1zBFVuHi+JGsomh
-         CCnDWX/kRNpQw==
-Received: by mail-ot1-f42.google.com with SMTP id by10-20020a056830608a00b0061c1ac80e1dso13110057otb.13;
-        Wed, 27 Jul 2022 08:43:52 -0700 (PDT)
-X-Gm-Message-State: AJIora/IXQGRRtqpuO0oNP+E05xtCAY9GrSibmvtkuNj982pT539lDws
-        B8mBhm/pH+N94bnp3UZy6p2X+4dYtiVNvlEE4JY=
-X-Google-Smtp-Source: AGRyM1s3kCkD6CwNrVCc39W46O1zjkQNs7TTMmOfnDc110tVRPISSko2luED84ZKGorpnBEUF8TJK42jOZZaFgvUvo8=
-X-Received: by 2002:a9d:2f2a:0:b0:61c:cc5a:22b with SMTP id
- h39-20020a9d2f2a000000b0061ccc5a022bmr8656111otb.71.1658936631138; Wed, 27
- Jul 2022 08:43:51 -0700 (PDT)
+        Wed, 27 Jul 2022 11:43:58 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F898481F1;
+        Wed, 27 Jul 2022 08:43:58 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id y10so1270430ili.3;
+        Wed, 27 Jul 2022 08:43:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EBPsyq8xCTUIGHkDPSsIKhxwmfJ6F+duXUDyo4llVo0=;
+        b=Dd4XhgcraxGfeXihvDttIG+3BJg7BPXpZA1zb+K7jHbf+jM4h/hfp1GdjhPONgOU7W
+         sTcBHTgNh398/wuHvboiY5Zw3z+7bfReEeinFdVnOJYDWNPrhs1YjIbKPtSLB0KQgF3v
+         P2xVKp/9laZY4RMNEABJCnhUl7JOkpcvyaxa+3G5aydbcp+eTr8znI7ditlN+1Nta57X
+         aOALgIOe5FjMl/0re01w7VtFvc6MANsI0ejePTdFXBp0kWU3mtSwcMHOfqvYz5f6UCBX
+         uCnkWmWpczUIFc0K5/ZlwnDyTbd9IZiEZVEW8Nf6CFgV+JnCbfDT+tpOc9PoGxC4xCTf
+         TRww==
+X-Gm-Message-State: AJIora9eFpBE3wkG46L7F2BztFPiRxRxK+YEZYKDHs2hWIftoJv5zXR4
+        UykbjHY34a3PsuNGvamJLA==
+X-Google-Smtp-Source: AGRyM1sP6a08WkTCUGcmRvfX3ijrTpt7NEQ6DQj6lTIcMRgPCXMgOcSJmDPAyD1mwUTjZKCujuIgzg==
+X-Received: by 2002:a92:6504:0:b0:2dd:8201:fdeb with SMTP id z4-20020a926504000000b002dd8201fdebmr3968342ilb.98.1658936637261;
+        Wed, 27 Jul 2022 08:43:57 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id a20-20020a027a14000000b0033f5e8dab90sm8092861jac.143.2022.07.27.08.43.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 08:43:56 -0700 (PDT)
+Received: (nullmailer pid 2728328 invoked by uid 1000);
+        Wed, 27 Jul 2022 15:43:55 -0000
+Date:   Wed, 27 Jul 2022 09:43:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 1/6] dt-bindings: arm: renesas: Ignore the schema for
+ RISC-V arch
+Message-ID: <20220727154355.GA2723077-robh@kernel.org>
+References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <20220727140539.10021-1-jprvita@endlessos.org>
-In-Reply-To: <20220727140539.10021-1-jprvita@endlessos.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 27 Jul 2022 08:43:40 -0700
-X-Gmail-Original-Message-ID: <CAMj1kXH4fOqdj4EN8r+=SvRLcn_ky1hKWqHzOG5csAc8P5QVog@mail.gmail.com>
-Message-ID: <CAMj1kXH4fOqdj4EN8r+=SvRLcn_ky1hKWqHzOG5csAc8P5QVog@mail.gmail.com>
-Subject: Re: [PATCH] docs: efi-stub: Fix paths for x86 / arm stubs
-To:     =?UTF-8?Q?Jo=C3=A3o_Paulo_Rechi_Vita?= <jprvita@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux@endlessos.org,
-        =?UTF-8?Q?Jo=C3=A3o_Paulo_Rechi_Vita?= <jprvita@endlessos.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 at 07:06, Jo=C3=A3o Paulo Rechi Vita <jprvita@gmail.com=
-> wrote:
->
-> This fixes the paths of x86 / arm efi-stub source files.
->
-> Signed-off-by: Jo=C3=A3o Paulo Rechi Vita <jprvita@endlessos.org>
-
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-
+On Tue, Jul 26, 2022 at 07:06:18PM +0100, Lad Prabhakar wrote:
+> Ignore the ARM renesas.yaml schema if the board is RZ/Five SMARC EVK
+> (RISC-V arch).
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
->  Documentation/admin-guide/efi-stub.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/admin-guide/efi-stub.rst b/Documentation/admin=
--guide/efi-stub.rst
-> index 833edb0d0bc4..b24e7c40d832 100644
-> --- a/Documentation/admin-guide/efi-stub.rst
-> +++ b/Documentation/admin-guide/efi-stub.rst
-> @@ -7,10 +7,10 @@ as a PE/COFF image, thereby convincing EFI firmware loa=
-ders to load
->  it as an EFI executable. The code that modifies the bzImage header,
->  along with the EFI-specific entry point that the firmware loader
->  jumps to are collectively known as the "EFI boot stub", and live in
-> -arch/x86/boot/header.S and arch/x86/boot/compressed/eboot.c,
-> +arch/x86/boot/header.S and drivers/firmware/efi/libstub/x86-stub.c,
->  respectively. For ARM the EFI stub is implemented in
->  arch/arm/boot/compressed/efi-header.S and
-> -arch/arm/boot/compressed/efi-stub.c. EFI stub code that is shared
-> +drivers/firmware/efi/libstub/arm32-stub.c. EFI stub code that is shared
->  between architectures is in drivers/firmware/efi/libstub.
->
->  For arm64, there is no compressed kernel support, so the Image itself
-> --
-> 2.20.1
->
+>  Documentation/devicetree/bindings/arm/renesas.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/arm/renesas.yaml
+> index ff80152f092f..f646df1a23af 100644
+> --- a/Documentation/devicetree/bindings/arm/renesas.yaml
+> +++ b/Documentation/devicetree/bindings/arm/renesas.yaml
+> @@ -9,6 +9,15 @@ title: Renesas SH-Mobile, R-Mobile, and R-Car Platform Device Tree Bindings
+>  maintainers:
+>    - Geert Uytterhoeven <geert+renesas@glider.be>
+>  
+> +# We want to ignore this schema if the board is of RISC-V arch
+> +select:
+> +  not:
+> +    properties:
+> +      compatible:
+> +        contains:
+> +          items:
+> +            - const: renesas,r9a07g043f01
+
+As I've said, this doesn't work without tool changes I proposed.
+
+Rob

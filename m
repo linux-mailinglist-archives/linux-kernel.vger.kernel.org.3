@@ -2,58 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0982B582C57
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490AF582D54
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240181AbiG0QpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
+        id S241032AbiG0Q4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240152AbiG0QoJ (ORCPT
+        with ESMTP id S240569AbiG0Qx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:44:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47345FCF;
-        Wed, 27 Jul 2022 09:30:44 -0700 (PDT)
+        Wed, 27 Jul 2022 12:53:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07851025;
+        Wed, 27 Jul 2022 09:35:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25558B821BC;
-        Wed, 27 Jul 2022 16:30:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45820C433C1;
-        Wed, 27 Jul 2022 16:30:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D13161A90;
+        Wed, 27 Jul 2022 16:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC1CC433D7;
+        Wed, 27 Jul 2022 16:35:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939440;
-        bh=FOFblN+8rHzafB95Zu3FHcxg7fSjHHCQPRX6hJ/tA2g=;
+        s=korg; t=1658939712;
+        bh=+rV4JY9n8a2iKgQ+TTEEimbDlhhzuyUdhmvcKyKyi1E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iciO1cqRec+JwB7wIfM5q1XWeAaQTgYvktdEb60BN0ENpBneGpWvk8T00xt5iDAZt
-         KDyNlLDJ2cx/6w9tSIsKzpV/sNPjMRk2FZ3ZtgllgZDzqYrQP4bzXEfEzs8Lv5/vE1
-         HKBLffvVBEWGdEWeTi/pTRMyoSdx5/3fbso4A2ys=
+        b=LSAN4j0CPQsLNGuqyMkVj9gtIH7NsXwAwRnxK/fUT6QJHyeKPrpQyUIOapyy5LAQD
+         G2aV4UDj/cFulswAX0jI8zPeBmip1C7E57rWKuwkDdm/U4JDX0LzREifSCt8vwPVj6
+         HQs5jerU03Bt441O9AbX7z6RjLoZAex8YRUEawwA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michel Lespinasse <walken@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Liam Howlett <Liam.Howlett@oracle.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Hugh Dickins <hughd@google.com>, Ying Han <yinghan@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 70/87] mmap locking API: initial implementation as rwsem wrappers
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 077/105] spi: bcm2835: bcm2835_spi_handle_err(): fix NULL pointer deref for non DMA transfers
 Date:   Wed, 27 Jul 2022 18:11:03 +0200
-Message-Id: <20220727161011.904986942@linuxfoundation.org>
+Message-Id: <20220727161015.162983431@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -67,136 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michel Lespinasse <walken@google.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 9740ca4e95b43b91a4a848694a20d01ba6818f7b ]
+commit 4ceaa684459d414992acbefb4e4c31f2dfc50641 upstream.
 
-This patch series adds a new mmap locking API replacing the existing
-mmap_sem lock and unlocks.  Initially the API is just implemente in terms
-of inlined rwsem calls, so it doesn't provide any new functionality.
+In case a IRQ based transfer times out the bcm2835_spi_handle_err()
+function is called. Since commit 1513ceee70f2 ("spi: bcm2835: Drop
+dma_pending flag") the TX and RX DMA transfers are unconditionally
+canceled, leading to NULL pointer derefs if ctlr->dma_tx or
+ctlr->dma_rx are not set.
 
-There are two justifications for the new API:
+Fix the NULL pointer deref by checking that ctlr->dma_tx and
+ctlr->dma_rx are valid pointers before accessing them.
 
-- At first, it provides an easy hooking point to instrument mmap_sem
-  locking latencies independently of any other rwsems.
-
-- In the future, it may be a starting point for replacing the rwsem
-  implementation with a different one, such as range locks.  This is
-  something that is being explored, even though there is no wide concensus
-  about this possible direction yet.  (see
-  https://patchwork.kernel.org/cover/11401483/)
-
-This patch (of 12):
-
-This change wraps the existing mmap_sem related rwsem calls into a new
-mmap locking API.  There are two justifications for the new API:
-
-- At first, it provides an easy hooking point to instrument mmap_sem
-  locking latencies independently of any other rwsems.
-
-- In the future, it may be a starting point for replacing the rwsem
-  implementation with a different one, such as range locks.
-
-Signed-off-by: Michel Lespinasse <walken@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Reviewed-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-Reviewed-by: Davidlohr Bueso <dbueso@suse.de>
-Reviewed-by: Laurent Dufour <ldufour@linux.ibm.com>
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Liam Howlett <Liam.Howlett@oracle.com>
-Cc: Jerome Glisse <jglisse@redhat.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Ying Han <yinghan@google.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Michel Lespinasse <walken@google.com>
-Link: http://lkml.kernel.org/r/20200520052908.204642-1-walken@google.com
-Link: http://lkml.kernel.org/r/20200520052908.204642-2-walken@google.com
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 1513ceee70f2 ("spi: bcm2835: Drop dma_pending flag")
+Cc: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Link: https://lore.kernel.org/r/20220719072234.2782764-1-mkl@pengutronix.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/mm.h        |  1 +
- include/linux/mmap_lock.h | 54 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+)
- create mode 100644 include/linux/mmap_lock.h
+ drivers/spi/spi-bcm2835.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index c125fea49752..d35c29d322d8 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -15,6 +15,7 @@
- #include <linux/atomic.h>
- #include <linux/debug_locks.h>
- #include <linux/mm_types.h>
-+#include <linux/mmap_lock.h>
- #include <linux/range.h>
- #include <linux/pfn.h>
- #include <linux/percpu-refcount.h>
-diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
-new file mode 100644
-index 000000000000..97ac53b66052
---- /dev/null
-+++ b/include/linux/mmap_lock.h
-@@ -0,0 +1,54 @@
-+#ifndef _LINUX_MMAP_LOCK_H
-+#define _LINUX_MMAP_LOCK_H
-+
-+static inline void mmap_init_lock(struct mm_struct *mm)
-+{
-+	init_rwsem(&mm->mmap_sem);
-+}
-+
-+static inline void mmap_write_lock(struct mm_struct *mm)
-+{
-+	down_write(&mm->mmap_sem);
-+}
-+
-+static inline int mmap_write_lock_killable(struct mm_struct *mm)
-+{
-+	return down_write_killable(&mm->mmap_sem);
-+}
-+
-+static inline bool mmap_write_trylock(struct mm_struct *mm)
-+{
-+	return down_write_trylock(&mm->mmap_sem) != 0;
-+}
-+
-+static inline void mmap_write_unlock(struct mm_struct *mm)
-+{
-+	up_write(&mm->mmap_sem);
-+}
-+
-+static inline void mmap_write_downgrade(struct mm_struct *mm)
-+{
-+	downgrade_write(&mm->mmap_sem);
-+}
-+
-+static inline void mmap_read_lock(struct mm_struct *mm)
-+{
-+	down_read(&mm->mmap_sem);
-+}
-+
-+static inline int mmap_read_lock_killable(struct mm_struct *mm)
-+{
-+	return down_read_killable(&mm->mmap_sem);
-+}
-+
-+static inline bool mmap_read_trylock(struct mm_struct *mm)
-+{
-+	return down_read_trylock(&mm->mmap_sem) != 0;
-+}
-+
-+static inline void mmap_read_unlock(struct mm_struct *mm)
-+{
-+	up_read(&mm->mmap_sem);
-+}
-+
-+#endif /* _LINUX_MMAP_LOCK_H */
--- 
-2.35.1
-
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1174,10 +1174,14 @@ static void bcm2835_spi_handle_err(struc
+ 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+ 
+ 	/* if an error occurred and we have an active dma, then terminate */
+-	dmaengine_terminate_sync(ctlr->dma_tx);
+-	bs->tx_dma_active = false;
+-	dmaengine_terminate_sync(ctlr->dma_rx);
+-	bs->rx_dma_active = false;
++	if (ctlr->dma_tx) {
++		dmaengine_terminate_sync(ctlr->dma_tx);
++		bs->tx_dma_active = false;
++	}
++	if (ctlr->dma_rx) {
++		dmaengine_terminate_sync(ctlr->dma_rx);
++		bs->rx_dma_active = false;
++	}
+ 	bcm2835_spi_undo_prologue(bs);
+ 
+ 	/* and reset */
 
 

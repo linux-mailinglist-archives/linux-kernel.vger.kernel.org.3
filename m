@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C769582B06
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C2F582B7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbiG0Q0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
+        id S238122AbiG0Qdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbiG0QZu (ORCPT
+        with ESMTP id S237848AbiG0QdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:25:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80C44F185;
-        Wed, 27 Jul 2022 09:23:36 -0700 (PDT)
+        Wed, 27 Jul 2022 12:33:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0418E54ACE;
+        Wed, 27 Jul 2022 09:26:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 870AAB821BC;
-        Wed, 27 Jul 2022 16:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6FFC433D7;
-        Wed, 27 Jul 2022 16:23:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA2F9619F6;
+        Wed, 27 Jul 2022 16:26:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E302BC433C1;
+        Wed, 27 Jul 2022 16:26:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939015;
-        bh=u4byFlQJsz3ZevS0sUJUuzhJBaAdVaUfUAUmILwEF9k=;
+        s=korg; t=1658939173;
+        bh=J7u/vvB8Zs3W1i9AnlFem8HQrWzcHF81LZifj3tjOak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kuqGzMaElK2yAcmgP1qp/B7nlmv0VAwemKlvKWIUuxAAadqjlgjkdCZ2kNOGnXg0U
-         ShKiTFQCuzBPLkWV94I4n+YRmPcHTGEw39TbNMnlPblfE/K8gPetb5nW+ExcjPNKki
-         JpUfElLzYuZgJhQmXfdduJ5uF5DJYImOLPTr886g=
+        b=OsNYCgOk7O0DLSisfp5DZlFUboRQtTFXBClEDtL+tikR+Y0QgwAQrWvN01jTA88ns
+         B04520Q2/JbD97EtgdAPYkuRZR7c66a9DEwO8LxTHoZBA57TBMX68kWXMWQZSwU0PM
+         h+8hv9ym/NtzQEZGm9a1l/UYbMl9wHqJrUu1WqoI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 4.14 21/37] Bluetooth: Add bt_skb_sendmsg helper
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 38/62] HID: multitouch: simplify the application retrieval
 Date:   Wed, 27 Jul 2022 18:10:47 +0200
-Message-Id: <20220727161001.682182744@linuxfoundation.org>
+Message-Id: <20220727161005.678048255@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +54,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-commit 38f64f650dc0e44c146ff88d15a7339efa325918 upstream.
+[ Upstream commit 7ffa13be4945b2f60dfe6c71acbc1fdcfc4629a0 ]
 
-bt_skb_sendmsg helps takes care of allocation the skb and copying the
-the contents of msg over to the skb while checking for possible errors
-so it should be safe to call it without holding lock_sock.
+Now that the application is simply stored in struct hid_input, we can
+overwrite it in mt_input_mapping() for the faulty egalax and have a
+simpler suffix processing in mt_input_configured()
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/bluetooth/bluetooth.h |   28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/hid/hid-multitouch.c | 72 ++++++++++++++++--------------------
+ 1 file changed, 32 insertions(+), 40 deletions(-)
 
---- a/include/net/bluetooth/bluetooth.h
-+++ b/include/net/bluetooth/bluetooth.h
-@@ -367,6 +367,34 @@ out:
- 	return NULL;
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index e99286258f62..5509b09f8656 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -1332,6 +1332,13 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+ 		return mt_touch_input_mapping(hdev, hi, field, usage, bit, max,
+ 					      application);
+ 
++	/*
++	 * some egalax touchscreens have "application == DG_TOUCHSCREEN"
++	 * for the stylus. Overwrite the hid_input application
++	 */
++	if (field->physical == HID_DG_STYLUS)
++		hi->application = HID_DG_STYLUS;
++
+ 	/* let hid-core decide for the others */
+ 	return 0;
  }
+@@ -1520,14 +1527,12 @@ static int mt_input_configured(struct hid_device *hdev, struct hid_input *hi)
+ 	struct mt_device *td = hid_get_drvdata(hdev);
+ 	char *name;
+ 	const char *suffix = NULL;
+-	unsigned int application = 0;
+ 	struct mt_report_data *rdata;
+ 	struct mt_application *mt_application = NULL;
+ 	struct hid_report *report;
+ 	int ret;
  
-+/* Shall not be called with lock_sock held */
-+static inline struct sk_buff *bt_skb_sendmsg(struct sock *sk,
-+					     struct msghdr *msg,
-+					     size_t len, size_t mtu,
-+					     size_t headroom, size_t tailroom)
-+{
-+	struct sk_buff *skb;
-+	size_t size = min_t(size_t, len, mtu);
-+	int err;
-+
-+	skb = bt_skb_send_alloc(sk, size + headroom + tailroom,
-+				msg->msg_flags & MSG_DONTWAIT, &err);
-+	if (!skb)
-+		return ERR_PTR(err);
-+
-+	skb_reserve(skb, headroom);
-+	skb_tailroom_reserve(skb, mtu, tailroom);
-+
-+	if (!copy_from_iter_full(skb_put(skb, size), size, &msg->msg_iter)) {
-+		kfree_skb(skb);
-+		return ERR_PTR(-EFAULT);
-+	}
-+
-+	skb->priority = sk->sk_priority;
-+
-+	return skb;
-+}
-+
- int bt_to_errno(u16 code);
+ 	list_for_each_entry(report, &hi->reports, hidinput_list) {
+-		application = report->application;
+ 		rdata = mt_find_report_data(td, report);
+ 		if (!rdata) {
+ 			hid_err(hdev, "failed to allocate data for report\n");
+@@ -1542,46 +1547,33 @@ static int mt_input_configured(struct hid_device *hdev, struct hid_input *hi)
+ 			if (ret)
+ 				return ret;
+ 		}
+-
+-		/*
+-		 * some egalax touchscreens have "application == DG_TOUCHSCREEN"
+-		 * for the stylus. Check this first, and then rely on
+-		 * the application field.
+-		 */
+-		if (report->field[0]->physical == HID_DG_STYLUS) {
+-			suffix = "Pen";
+-			/* force BTN_STYLUS to allow tablet matching in udev */
+-			__set_bit(BTN_STYLUS, hi->input->keybit);
+-		}
+ 	}
  
- void hci_sock_set_flag(struct sock *sk, int nr);
+-	if (!suffix) {
+-		switch (application) {
+-		case HID_GD_KEYBOARD:
+-		case HID_GD_KEYPAD:
+-		case HID_GD_MOUSE:
+-		case HID_DG_TOUCHPAD:
+-		case HID_GD_SYSTEM_CONTROL:
+-		case HID_CP_CONSUMER_CONTROL:
+-		case HID_GD_WIRELESS_RADIO_CTLS:
+-		case HID_GD_SYSTEM_MULTIAXIS:
+-			/* already handled by hid core */
+-			break;
+-		case HID_DG_TOUCHSCREEN:
+-			/* we do not set suffix = "Touchscreen" */
+-			hi->input->name = hdev->name;
+-			break;
+-		case HID_DG_STYLUS:
+-			/* force BTN_STYLUS to allow tablet matching in udev */
+-			__set_bit(BTN_STYLUS, hi->input->keybit);
+-			break;
+-		case HID_VD_ASUS_CUSTOM_MEDIA_KEYS:
+-			suffix = "Custom Media Keys";
+-			break;
+-		default:
+-			suffix = "UNKNOWN";
+-			break;
+-		}
++	switch (hi->application) {
++	case HID_GD_KEYBOARD:
++	case HID_GD_KEYPAD:
++	case HID_GD_MOUSE:
++	case HID_DG_TOUCHPAD:
++	case HID_GD_SYSTEM_CONTROL:
++	case HID_CP_CONSUMER_CONTROL:
++	case HID_GD_WIRELESS_RADIO_CTLS:
++	case HID_GD_SYSTEM_MULTIAXIS:
++		/* already handled by hid core */
++		break;
++	case HID_DG_TOUCHSCREEN:
++		/* we do not set suffix = "Touchscreen" */
++		hi->input->name = hdev->name;
++		break;
++	case HID_DG_STYLUS:
++		/* force BTN_STYLUS to allow tablet matching in udev */
++		__set_bit(BTN_STYLUS, hi->input->keybit);
++		break;
++	case HID_VD_ASUS_CUSTOM_MEDIA_KEYS:
++		suffix = "Custom Media Keys";
++		break;
++	default:
++		suffix = "UNKNOWN";
++		break;
+ 	}
+ 
+ 	if (suffix) {
+-- 
+2.35.1
+
 
 

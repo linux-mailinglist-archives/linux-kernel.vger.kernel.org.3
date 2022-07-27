@@ -2,130 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10149583310
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4EF58331F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234798AbiG0TJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
+        id S235880AbiG0TJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236308AbiG0TJL (ORCPT
+        with ESMTP id S236522AbiG0TJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:09:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB074F37
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:50:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 413E43371F;
-        Wed, 27 Jul 2022 18:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658947808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=17kigxGvW4oO2tVOPFkWCos9YzmgV9xkKWZ4CGN+uQ8=;
-        b=SLuQle99oELpYuyDPVS05yBosR0Nna4Bweo+4Gi6Mv/UYoONOi8JumrhPcY3VzENkmxmMq
-        doy/Nrp8jeVoFGb9yZ6VCnlLWx7yjX6OIKQ0bzHbOZNORvfklce/ePSBEtBHQOc+oGpP5W
-        08hD7uffxz4yxpFvuf4Ts8UBtFnzQYM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658947808;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=17kigxGvW4oO2tVOPFkWCos9YzmgV9xkKWZ4CGN+uQ8=;
-        b=xORdcup2W6obmsRjxmakMi+W4NXFxHQuW+qMb1tpttieluQXq52lcVKjnwEAAqfw0WlIVi
-        axgLzh3h0+tWF5Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ED68013ABC;
-        Wed, 27 Jul 2022 18:50:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id d8diON+I4WIVPAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 27 Jul 2022 18:50:07 +0000
-Date:   Wed, 27 Jul 2022 20:50:06 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chenglin Xu <chenglin.xu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Subject: Re: [PATCH RFC] regulator: mt6380: Fix unused array warning
-Message-ID: <20220727205006.0ff42274@endymion.delvare>
-In-Reply-To: <YuEug/OV9H0DKnmZ@sirena.org.uk>
-References: <20220727132637.76d6073f@endymion.delvare>
-        <YuEpGTD/DbC1T9Z0@sirena.org.uk>
-        <20220727140809.0951b72d@endymion.delvare>
-        <YuEug/OV9H0DKnmZ@sirena.org.uk>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Jul 2022 15:09:13 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195635A8A2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:50:19 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id m123-20020a253f81000000b0066ff6484995so14059925yba.22
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=AiBYfR/5OjnWEJ/rzS2SQd7Q9eOeUYczfeAhpI6Y0m8=;
+        b=DsxCrgrKilgc92vowjAYLTpdzdYTBK1W1D1m2Tjbr13ce8793EIKe7Qz8nFTRKeYJo
+         toFSdGPCT84icgP70+tQan50nfrahJfickYYSe/4XK8ES47+9Yiu8EG18wcaPEmKoLPD
+         vel2HggHJm831lwYuRTxqt36EjtsbzgBS4FU7MTySz/NRRViBAUnWNnQmXXaVnknHfwz
+         xi2aZocXFRu+XprlyXuvXECH+uFTkdcRQjtdyNLpj6gCpKjw13KHtA9oY15OHBBvTgSN
+         rERjbC+e8LJYo+0BNSLgZHtapD/AFDd4wfMIhjU66IpBJveQ5SJOku87WAHGi0hazxDt
+         633g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=AiBYfR/5OjnWEJ/rzS2SQd7Q9eOeUYczfeAhpI6Y0m8=;
+        b=K+r+uFrditxIZT0/rrz91AGubeceTLYkIYblLroo92biWd4KUeAaM1RRMT85fpBmE1
+         FIfXPl6bEylabMOB23Gjy0KJVO2HjnH2SD+7igbexDHVT9P28NMcaLMF/PWE/ugYHsb1
+         0/FHH1fe+e8Nlwy0N5k9d1JJZGFCEYgF08L/6x8mt/dpl8hbAdE4a81r47S5dudAgrRC
+         GJAUk+/1QbICUP5/G/aOuWnMSewHhBPioQcoVEqchRlSirHg7qmxQe3F5vfVODfyPYZK
+         P/Q2/3Izd6sPyPxLNhV6qJx1KoEsO8bNZEl3UIBvnh9VfBsRY5RAxwUvf5+dAXxGoh03
+         3o6Q==
+X-Gm-Message-State: AJIora/EVfGESk1hxIiahfnIecnClCmtZjYs5ya//8i9GADzg15HVJSw
+        sO+7oOKp/6eAO6/HpP0Y6zVJVri1L7Wso3c=
+X-Google-Smtp-Source: AGRyM1sKvcEG6HTbwn4Qtdz1tPoxdsbH7tB8Cf4IytjOVrHIzaZjDHCC4u7LfK1zdY8owYb42NvLpKRQcLnTwuo=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:40ee:bae0:a4fd:c75b])
+ (user=saravanak job=sendgmr) by 2002:a25:9d81:0:b0:671:7c94:4f2d with SMTP id
+ v1-20020a259d81000000b006717c944f2dmr6294520ybp.215.1658947818390; Wed, 27
+ Jul 2022 11:50:18 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 11:50:08 -0700
+Message-Id: <20220727185012.3255200-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state() for now
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Saravana Kannan <saravanak@google.com>, naresh.kamboju@linaro.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+More fixes/changes are needed before driver_deferred_probe_check_state()
+can be deleted. So, bring it back for now.
 
-On Wed, 27 Jul 2022 13:24:35 +0100, Mark Brown wrote:
-> On Wed, Jul 27, 2022 at 02:08:09PM +0200, Jean Delvare wrote:
-> > On Wed, 27 Jul 2022 13:01:29 +0100, Mark Brown wrote:  
-> 
-> > > It's helpful to keep the build coverage high.  
-> 
-> > OF does not depend on the architecture, anyone can enable it. So I
-> > can't see any problem of coverage with making drivers depend on OF.  
-> 
-> It still reduces a barrier to entry.
+Greg,
 
-Can't see how that would be a goal. By allowing randomconfig to pick
-configuration option combinations which do not make sense, we are not
-increasing coverage. That's quite the opposite. We are limited by the
-overall power of the build farm, so every test build of such a useless
-combination is a waste of resources. We'd rather use that machine time
-to test a configuration option combination which real people would be
-using, as these are the ones we care about.
+Can we get this into 5.19? If not, it might not be worth picking up this
+series. I could just do the other/more fixes in time for 5.20.
 
-> It's also that it's easier to just
-> prefer the conditional compilation pattern rather than either check to
-> see which cases is needed or have people copy an example that doesn't
-> use it when they should.
+-Saravana
 
-In my experience, there's always a very easy way to silent a warning,
-but in most cases, that easy way is wrong because it hides the warning
-instead of fixing its cause.
+Cc: naresh.kamboju@linaro.org
 
-Very much to the point, the build farm pointed us to a combination of
-options which triggers warnings which developers had apparently never
-noticed before, which is a hint that maybe this combination is not
-something we should support in the first place. We can of course silent
-all such warnings with __maybe_unused, but that should not be our first
-choice (else we might as well stop building with -Wunused).
+Saravana Kannan (3):
+  Revert "driver core: Delete driver_deferred_probe_check_state()"
+  Revert "net: mdio: Delete usage of
+    driver_deferred_probe_check_state()"
+  Revert "PM: domains: Delete usage of
+    driver_deferred_probe_check_state()"
 
-Not only that, but in this case it might also be that we have kernel
-code that can be removed because it isn't needed. Not much, but that
-would still be a gain, methinks.
+ drivers/base/dd.c              | 30 ++++++++++++++++++++++++++++++
+ drivers/base/power/domain.c    |  2 +-
+ drivers/net/mdio/fwnode_mdio.c |  4 +++-
+ include/linux/device/driver.h  |  1 +
+ 4 files changed, 35 insertions(+), 2 deletions(-)
 
-I also don't think that one goal of the kernel code is to be easy to
-copy and paste without understanding what you are doing.
-
-Anyway, this is your subsystem, so the decision is yours. My patch
-removes the warning, if you are happy with it, feel free to apply it.
-
-Thanks,
 -- 
-Jean Delvare
-SUSE L3 Support
+2.37.1.359.gd136c6c3e2-goog
+

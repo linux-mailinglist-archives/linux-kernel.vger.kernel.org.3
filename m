@@ -2,77 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2F05823AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7085823B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbiG0KBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 06:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S231896AbiG0KBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 06:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbiG0KAm (ORCPT
+        with ESMTP id S231776AbiG0KBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 06:00:42 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F49A1A0;
-        Wed, 27 Jul 2022 03:00:32 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DB3FAC0010;
-        Wed, 27 Jul 2022 10:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1658916030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=gWGk3O/39jRyG70XEIs0yy+M6P6aC9SXYdCpOIcWGAc=;
-        b=VzeFWcLZgtQVOgZZTgdNslvBz0tTb4PkXgvzp79bm+WUZwAwxigyk+Gr70ktpMtGBxLBAW
-        wVaKQ3MhJqOO5XWky5ME9x2eVJe4k2FvdpDsJ0W/fXeD0ymDDGzy1K2ojjQZIBtQMIKnK5
-        dZBQnOMWfR7SxX/r+JuidExS6Z/I7gNpcL+5hJS7bPPH3ci2OmYaeNiY+6A0EAbRyM9Q+g
-        p/uvbahz+PoW3R7eSve9Sw81m6nOEXqkf5mdmNLX6G5XygXIzPVTUuNo7LqZUSLNXjdG0s
-        xGvorWSHiM9NKcWKhLZMpChqHnBl+NMGjylDalsOP31rrqDz79CCYwKvb8ltlg==
-From:   alexandre.belloni@bootlin.com
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-rtc@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: zynqmp: initialize fract_tick
-Date:   Wed, 27 Jul 2022 12:00:18 +0200
-Message-Id: <20220727100018.3301470-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 27 Jul 2022 06:01:19 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA87312D1D;
+        Wed, 27 Jul 2022 03:01:03 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bp15so30603311ejb.6;
+        Wed, 27 Jul 2022 03:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hu9vzP64XwhX+ZdLcLcSumH2ekV9zS7ocnz6sZ1vnwc=;
+        b=bfvUk1cETyrb0eQt+9NlKSYqQJeOz7zsMf4O48z/lky2Rr6rg/RqQzZiN9u0yKTfKd
+         T0l/PZYJcETuBPZw18eCrV2TPyQ0x8B/ZJq3aOoE8xEJvdiQwwrig6qClfyFUlATt9eA
+         RFta70XMrVUx5sE5DOTQ08yW1cNM6PUAUpPpCCGOVpOeNnBdWjg0iLcaxMc6DP/jpN6i
+         UuslT6iKN0vwos4S3IZquSWUTK/hSxbwcfGjpiw+w72Sk+1/zIm9wNqqrfQkOhd2htmu
+         0OZ/TPQuWesEFA5HANIIVmZ5osYw0OfHOddihF9b9AHNjVQBdqiHdZfbcualTujNwQXx
+         Z3Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hu9vzP64XwhX+ZdLcLcSumH2ekV9zS7ocnz6sZ1vnwc=;
+        b=HqzGNLWSJweiiuDy4IVHBvgszrpIKubwUGxLvX/v02wF/BkjzYhLsxRSTEs7qFkyIo
+         N3EcZf+T+Z/EQuFojxKYWkkfV/D4Nw2Yxzxdd7MD6ASDe9IwpWs1RE0Ecq9Pcrqj9BQn
+         4cjspkULZuo4FkOs5nTu5o+U5+pWVyWFdkNL/P67tW5nW/MNbR25SPmyheQQPohxqqVD
+         no0AJj3VQVSKypFj36C47cW9MSnMYE2L8zDTtVaUBso3R8wY2+2kgEaya2r7HhNxsStK
+         +m+ve08a3JZG9PDy27GYEsLev/ohhyYmEo7po1ls73uNS85Mw3/OYOI5ff6j6K7qc7cu
+         7/fw==
+X-Gm-Message-State: AJIora+UUMyt33dcd+2PbAUlp0rRsbabQMaFJ5pKSmufGBXTADmYs5Zj
+        pH2EcKJHjW+9BtT5UG7bD18FUl4VCG/EBDlrRjSgt6+V1tE=
+X-Google-Smtp-Source: AGRyM1v/qCqMVlLEC3IVyn9wHHay9PlnlAxtzBecJmNJSzcJWtw/aRp4ZQs44/HkqtKUtUfQ6ybYkkhGm4rFXkkJnsM=
+X-Received: by 2002:a17:907:9706:b0:72b:4b0d:86a2 with SMTP id
+ jg6-20020a170907970600b0072b4b0d86a2mr16368231ejc.242.1658916061452; Wed, 27
+ Jul 2022 03:01:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727064415.940690-1-potin.lai.pt@gmail.com>
+In-Reply-To: <20220727064415.940690-1-potin.lai.pt@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 27 Jul 2022 12:00:22 +0200
+Message-ID: <CAHp75VfNmq12Yv7mqVeijqK0vwRdPsSrH5wMzg9qR15+t7ArSQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] iio: humidity: hdc100x: add manufacturer and
+ device ID cehck
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Wed, Jul 27, 2022 at 8:46 AM Potin Lai <potin.lai.pt@gmail.com> wrote:
+>
+> Add manufacturer and device ID checking during probe, and skip the
+> checking if chip model not supported.
+>
+> Supported:
+> - HDC1000
+> - HDC1010
+> - HDC1050
+> - HDC1080
+>
+> Not supported:
+> - HDC1008
 
-fract_tick is used uninitialized when fract_offset is 0
+Thanks for an update, my comments below.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-zynqmp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index 1dd389b891fe..c9b85c838ebe 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -203,7 +203,7 @@ static int xlnx_rtc_set_offset(struct device *dev, long offset)
- 	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
- 	unsigned long long rtc_ppb = RTC_PPB;
- 	unsigned int tick_mult = do_div(rtc_ppb, xrtcdev->freq);
--	unsigned char fract_tick;
-+	unsigned char fract_tick = 0;
- 	unsigned int calibval;
- 	short int  max_tick;
- 	int fract_offset;
+> +       const struct of_device_id *match;
+
+Don't you have a compiler warning? Always compile your code with `make W=1`
+
+...
+
+> +       data = device_get_match_data(&client->dev);
+
+> +       if (data) {
+
+This check is redundant. Too much protective programming. Just oblige
+that matched ID has to always have an associated data.
+
+> +               if (!data->support_mfr_check)
+> +                       return true;
+> +       }
+
+...
+
+> -       .probe = hdc100x_probe,
+> +       .probe_new = hdc100x_probe,
+
+Make this a separate patch before the presented one.
+
 -- 
-2.36.1
-
+With Best Regards,
+Andy Shevchenko

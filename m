@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490AF582D54
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EE4582C65
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241032AbiG0Q4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S240241AbiG0QpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240569AbiG0Qx7 (ORCPT
+        with ESMTP id S240176AbiG0QoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:53:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07851025;
-        Wed, 27 Jul 2022 09:35:13 -0700 (PDT)
+        Wed, 27 Jul 2022 12:44:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112DEB7C4;
+        Wed, 27 Jul 2022 09:30:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D13161A90;
-        Wed, 27 Jul 2022 16:35:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC1CC433D7;
-        Wed, 27 Jul 2022 16:35:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C31D2B821A6;
+        Wed, 27 Jul 2022 16:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337E2C433D6;
+        Wed, 27 Jul 2022 16:30:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939712;
-        bh=+rV4JY9n8a2iKgQ+TTEEimbDlhhzuyUdhmvcKyKyi1E=;
+        s=korg; t=1658939443;
+        bh=ipqvfurvud+lMyLBk/chtqVr6crzPrl2bGSbppjjn8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LSAN4j0CPQsLNGuqyMkVj9gtIH7NsXwAwRnxK/fUT6QJHyeKPrpQyUIOapyy5LAQD
-         G2aV4UDj/cFulswAX0jI8zPeBmip1C7E57rWKuwkDdm/U4JDX0LzREifSCt8vwPVj6
-         HQs5jerU03Bt441O9AbX7z6RjLoZAex8YRUEawwA=
+        b=UatOLxUva8485giQfU2OwL/uVH7jLDCifO5lmO+3yieiEXhJKpA0YD0s3Sv8qMQsM
+         qNIad5d4YF+DaYVdPtI/vzXwcvqhuC1XXtAa3mkcI78csEZqluuMy3KMZHrPxY2x5H
+         595ewxxPbWg8AanpyahRhdvInj36orsIUrQJJD2I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 077/105] spi: bcm2835: bcm2835_spi_handle_err(): fix NULL pointer deref for non DMA transfers
-Date:   Wed, 27 Jul 2022 18:11:03 +0200
-Message-Id: <20220727161015.162983431@linuxfoundation.org>
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 71/87] x86/mce: Deduplicate exception handling
+Date:   Wed, 27 Jul 2022 18:11:04 +0200
+Message-Id: <20220727161011.945541383@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +53,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-commit 4ceaa684459d414992acbefb4e4c31f2dfc50641 upstream.
+[ Upstream commit e42404afc4ca856c48f1e05752541faa3587c472 ]
 
-In case a IRQ based transfer times out the bcm2835_spi_handle_err()
-function is called. Since commit 1513ceee70f2 ("spi: bcm2835: Drop
-dma_pending flag") the TX and RX DMA transfers are unconditionally
-canceled, leading to NULL pointer derefs if ctlr->dma_tx or
-ctlr->dma_rx are not set.
+Prepare code for further simplification. No functional change.
 
-Fix the NULL pointer deref by checking that ctlr->dma_tx and
-ctlr->dma_rx are valid pointers before accessing them.
-
-Fixes: 1513ceee70f2 ("spi: bcm2835: Drop dma_pending flag")
-Cc: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Link: https://lore.kernel.org/r/20220719072234.2782764-1-mkl@pengutronix.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lkml.kernel.org/r/20210908132525.096452100@linutronix.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-bcm2835.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
---- a/drivers/spi/spi-bcm2835.c
-+++ b/drivers/spi/spi-bcm2835.c
-@@ -1174,10 +1174,14 @@ static void bcm2835_spi_handle_err(struc
- 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 8a2b8e791314..9b98a7d8ac60 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -397,13 +397,16 @@ static int msr_to_offset(u32 msr)
+ 	return -1;
+ }
  
- 	/* if an error occurred and we have an active dma, then terminate */
--	dmaengine_terminate_sync(ctlr->dma_tx);
--	bs->tx_dma_active = false;
--	dmaengine_terminate_sync(ctlr->dma_rx);
--	bs->rx_dma_active = false;
-+	if (ctlr->dma_tx) {
-+		dmaengine_terminate_sync(ctlr->dma_tx);
-+		bs->tx_dma_active = false;
+-__visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
+-				      struct pt_regs *regs, int trapnr,
+-				      unsigned long error_code,
+-				      unsigned long fault_addr)
++static void ex_handler_msr_mce(struct pt_regs *regs, bool wrmsr)
+ {
+-	pr_emerg("MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
+-		 (unsigned int)regs->cx, regs->ip, (void *)regs->ip);
++	if (wrmsr) {
++		pr_emerg("MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
++			 (unsigned int)regs->cx, (unsigned int)regs->dx, (unsigned int)regs->ax,
++			 regs->ip, (void *)regs->ip);
++	} else {
++		pr_emerg("MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
++			 (unsigned int)regs->cx, regs->ip, (void *)regs->ip);
 +	}
-+	if (ctlr->dma_rx) {
-+		dmaengine_terminate_sync(ctlr->dma_rx);
-+		bs->rx_dma_active = false;
-+	}
- 	bcm2835_spi_undo_prologue(bs);
  
- 	/* and reset */
+ 	show_stack_regs(regs);
+ 
+@@ -411,7 +414,14 @@ __visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
+ 
+ 	while (true)
+ 		cpu_relax();
++}
+ 
++__visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
++				      struct pt_regs *regs, int trapnr,
++				      unsigned long error_code,
++				      unsigned long fault_addr)
++{
++	ex_handler_msr_mce(regs, false);
+ 	return true;
+ }
+ 
+@@ -447,17 +457,7 @@ __visible bool ex_handler_wrmsr_fault(const struct exception_table_entry *fixup,
+ 				      unsigned long error_code,
+ 				      unsigned long fault_addr)
+ {
+-	pr_emerg("MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
+-		 (unsigned int)regs->cx, (unsigned int)regs->dx, (unsigned int)regs->ax,
+-		  regs->ip, (void *)regs->ip);
+-
+-	show_stack_regs(regs);
+-
+-	panic("MCA architectural violation!\n");
+-
+-	while (true)
+-		cpu_relax();
+-
++	ex_handler_msr_mce(regs, true);
+ 	return true;
+ }
+ 
+-- 
+2.35.1
+
 
 

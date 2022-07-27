@@ -2,170 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722605820BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9675820BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiG0HJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S229739AbiG0HKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiG0HJj (ORCPT
+        with ESMTP id S229921AbiG0HK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:09:39 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2256F3C8C1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:09:38 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id p10so18309525lfd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sf552mPgsYsMMY77D6I22t6pOm3pYqj+viQ1dNWKK5Y=;
-        b=EfnhCF1HreZcHUhmcuTEdf5fbkyhxucRe3fJfSFtwTZWrOY13nsmnZ+wNMgulF9/Yg
-         ZvAGrjaDWwAroarDr488fTcmkBt9bhxbVdDi4oXgdx/brzjoYGoXFXlzCFyQzm44FVwt
-         FaMhloIL+26SxhgumPbvBuklERDDB3C087quGwBo9fQ+YiXR5XdPgazPeacSV/GORF32
-         4eCNIukD7o3XxCX0j24tll/lsG+h7ZMiJ+jBIYPHvUqf5/jDj6jGF82JPPDpGuigjK4a
-         XN88b60O6GaKttciEsllHHhmPDsCd2Yg1Va+uZpx9jLMD6UDv8cflOkrZtyKMK3Ql4Gj
-         XC6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sf552mPgsYsMMY77D6I22t6pOm3pYqj+viQ1dNWKK5Y=;
-        b=pMxM1amXi+zayLSkE2SmQFuxR7XZMdoc1/eyy+J0ijEMEq053FxLwntP/+XwyZRd0X
-         DeUfTwAGfRKFEfY1WVvmuZSd+s0t+H+fykFkzILqUI4fbPiKaGZ5IiuUM1SB+Wopy2S1
-         gC7QB4ADzFUsj+k83IkzRP6OZmF9ISpnh4HpMl7d2dDW9fa2rp8r93YgdTpwhIce3CyH
-         hHyYgGb3CBjAcS4M9A9rJ4V/w2FZQQPO3yChegP1i5T9vPjc3fTukXC7ZAqe/y0x+580
-         ylVbNrH5IsWQEEII9OXCceMNoZjGnUPaGoPhHapIBOp6hl/7av3LGuD3GEpMfNn149f2
-         ArJA==
-X-Gm-Message-State: AJIora8JSVNc0rd4fChmCyI1BwrS7JjoRdjiBFeZCvaWcBK9yqm9KBlX
-        r2qsauoLFJkKiYuFuGeNKtVgCA==
-X-Google-Smtp-Source: AGRyM1uK9oExglPVaieaOMc4kk1/xZEEBcnjm26EnaG/q9CwC/wwPOx6aSi4/p5zLo9Ml3qvDo2oww==
-X-Received: by 2002:a05:6512:3045:b0:48a:7635:ff22 with SMTP id b5-20020a056512304500b0048a7635ff22mr8141679lfb.314.1658905776265;
-        Wed, 27 Jul 2022 00:09:36 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id e14-20020a2e930e000000b0025e0ca6f6b8sm674048ljh.77.2022.07.27.00.09.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 00:09:35 -0700 (PDT)
-Message-ID: <a45957f9-bb51-8774-8f2f-675fd8314698@linaro.org>
-Date:   Wed, 27 Jul 2022 09:09:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 4/4] dt-binding: perf: Add Amlogic DDR PMU
-Content-Language: en-US
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chris Healy <cphealy@gmail.com>
-References: <20220726230329.2844101-1-jiucheng.xu@amlogic.com>
- <20220726230329.2844101-4-jiucheng.xu@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220726230329.2844101-4-jiucheng.xu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 27 Jul 2022 03:10:29 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB61B3D
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:10:27 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220727071026epoutp04b7775a271917a857aa668c608831eb8b~Fng879ktk2635526355epoutp04i
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:10:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220727071026epoutp04b7775a271917a857aa668c608831eb8b~Fng879ktk2635526355epoutp04i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1658905826;
+        bh=yAjYthTYZ1VyQYto1gO6QWEcENXGTa9Eb2Hnw6HNmz0=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=IATVFzNG57C5SWtHwqD6uoLNgBrR6gOuHyT3y4UNJ+tn4bVknZC1KAFLpx3tNKZKI
+         ebUNs+jmQYh+NSXRvL6yQN5BhZVz0rGozXV5fzFI5I3bLNeavLFmAwIoYXs+TdnPGJ
+         u1YGWj9m6sfrjgTgVKzlFvIjK20IZ6sPAbsDr8NE=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220727071025epcas2p291524394ff894074012c809c4472ef65~Fng8ecihB1321913219epcas2p2R;
+        Wed, 27 Jul 2022 07:10:25 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Lt4g51fryz4x9Pv; Wed, 27 Jul
+        2022 07:10:25 +0000 (GMT)
+X-AuditID: b6c32a48-9e1ff700000025be-ed-62e0e4e1d6e9
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E1.47.09662.1E4E0E26; Wed, 27 Jul 2022 16:10:25 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v4 5/7] scsi: ufs: wb: Add ufshcd_is_wb_buf_flush_allowed()
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220727071024epcms2p70366b54ac8eca3758b7cf4336e0d457c@epcms2p7>
+Date:   Wed, 27 Jul 2022 16:10:24 +0900
+X-CMS-MailID: 20220727071024epcms2p70366b54ac8eca3758b7cf4336e0d457c
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmme7DJw+SDD4fYbM4+WQNm8WDedvY
+        LF7+vMpmcfBhJ4vFtA8/mS1eHtK0WHRjG5PF5V1z2Cy6r+9gs1h+/B+TA5fH5SveHov3vGTy
+        mLDoAKPH9/UdbB4fn95i8ejbsorR4/MmOY/2A91MARxR2TYZqYkpqUUKqXnJ+SmZeem2St7B
+        8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QCcqKZQl5pQChQISi4uV9O1sivJLS1IVMvKL
+        S2yVUgtScgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEKE7Izbt6+wl6wWrji5ffUBsbjAl2MnBwS
+        AiYSs1s+MYPYQgI7GCVWfNXsYuTg4BUQlPi7QxgkLCzgLfHv2WUWiBIliXNrZjGClAgLGEjc
+        6jUHCbMJ6En8XDKDrYuRi0NE4CyzxMKHU5ggxvNKzGh/ygJhS0tsX76VEcTmFPCTeDJzPitE
+        XEPix7JeZghbVOLm6rfsMPb7Y/MZIWwRidZ7Z6FqBCUe/NwNFZeUOHToKxvIPRIC+RIbDgRC
+        hGsk3i4/AFWiL3GtYyMLxFe+EvcmxIOEWQRUJU6svwtV4iLxafk3MJtZQF5i+9s5zCDlzAKa
+        Eut36UMMV5Y4cosF5qeGjb/Z0dnMAnwSHYf/wsV3zHvCBNGqJrGoyQgiLCPx9fB89gmMSrMQ
+        gTwLydpZCGsXMDKvYhRLLSjOTU8tNiowgcdqcn7uJkZwMtXy2ME4++0HvUOMTByMhxglOJiV
+        RHgTou8nCfGmJFZWpRblxxeV5qQWH2I0BXp4IrOUaHI+MJ3nlcQbmlgamJiZGZobmRqYK4nz
+        eqVsSBQSSE8sSc1OTS1ILYLpY+LglGpgckxn+v89mn21VGdx2sFN/yZ9LQ44LvnuP1shT/8u
+        oc7001JKwifP/Y8+Mvmr4+QlHv6fLoTbZDxrfqByX3LHmRXXpz/pMn812f/NkRdKr6cwitxX
+        VkirvtUdHDvTNvDKj8zHEz6JzGH059p1btXV2erLdnuVsPZ07ouO/nJO2WatyVdOJ/aCzpyL
+        5RLLXJnd3Y7vXXiCKc6jUeF63GrbHYuNlJ5Y+V7YZpvKrnonLjFp/bSFFglybd9Un+iETI3p
+        87nwMMWu4q5hrMzx0ms8EbMdT5cVPl98PatdUye+u/jCv8jtT9qZZhXGqmvKn2XqrVfcG+zY
+        fbjd+oNm8xvtdr7bf+aUNlXNn3zX/fp8JZbijERDLeai4kQATm7UfS8EAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d
+References: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
+        <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
+        <20220727070410epcms2p5206785e4d960b32dcbb6729710dab535@epcms2p5>
+        <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
+        <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p7>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/07/2022 01:03, Jiucheng Xu wrote:
-> Add binding documentation for the Amlogic G12 series DDR
-> performance monitor unit.
-> 
-> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-> ---
-> Changes v1 -> v2:
->   - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
->   - Delete "model", "dmc_nr", "chann_nr" new properties
->   - Fix compiling error
-> ---
->  .../bindings/perf/amlogic,g12_ddr_pmu.yaml    | 45 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
+The explicit flushing should check the following.
+	- UFSHCD_CAP_WB_EN
+	- UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Changed to improve readability.
 
-> 
-> diff --git a/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml b/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
-> new file mode 100644
-> index 000000000000..46ef52b61492
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/perf/amlogic,g12-ddr-pmu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic G12 DDR performance monitor
-> +
-> +maintainers:
-> +  - Jiucheng Xu <jiucheng.xu@amlogic.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+---
+ drivers/ufs/core/ufs-sysfs.c | 3 +--
+ drivers/ufs/core/ufshcd.c    | 5 +++--
+ include/ufs/ufshcd.h         | 6 ++++++
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
-That's not oneOf...
-
-> +      - items:
-> +          - enum:
-> +              - amlogic,g12b-ddr-pmu
-> +                amlogic,g12a-ddr-pmu
-> +                amlogic,sm1-ddr-pmu
-> +          - const: amlogic,g12-ddr-pmu
-> +
-> +  reg:
-> +    maxItems: 2
-
-You need to list and describe the items.
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    ddr_pmu: ddr_pmu {
-> +
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-
-Code looks terrible...
-
-> +
-> +        compatible = "amlogic,g12a-ddr-pmu";
-> +        reg = <0x0 0xff638000 0x0 0x100
-> +               0x0 0xff638c00 0x0 0x100>;
-
-That's one item. You need to separate regs.
-
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+index e7800e49998a..63b02b2541c8 100644
+--- a/drivers/ufs/core/ufs-sysfs.c
++++ b/drivers/ufs/core/ufs-sysfs.c
+@@ -271,8 +271,7 @@ static ssize_t wb_buf_flush_en_store(struct device *dev,
+ 	unsigned int wb_buf_flush_en;
+ 	ssize_t res;
+ 
+-	if (ufshcd_is_wb_allowed(hba) &&
+-	   !(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL)) {
++	if (!ufshcd_is_wb_buf_flush_allowed(hba)) {
+ 		dev_warn(dev, "It is not allowed to configure WB buf flush!\n");
+ 		return -EOPNOTSUPP;
+ 	}
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index a8a797e0033d..17a14b046c44 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -294,7 +294,8 @@ static void ufshcd_wb_set_default_flags(struct ufs_hba *hba)
+ 	ufshcd_wb_toggle(hba, true);
+ 
+ 	ufshcd_wb_toggle_buf_flush_during_h8(hba, true);
+-	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
++
++	if (ufshcd_is_wb_buf_flush_allowed(hba))
+ 		ufshcd_wb_toggle_buf_flush(hba, true);
+ }
+ 
+@@ -5816,7 +5817,7 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+ 
+ static void ufshcd_wb_force_disable(struct ufs_hba *hba)
+ {
+-	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
++	if (ufshcd_is_wb_buf_flush_allowed(hba))
+ 		ufshcd_wb_toggle_buf_flush(hba, false);
+ 
+ 	ufshcd_wb_toggle_buf_flush_during_h8(hba, false);
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 94bcfec98fb8..78adc556444a 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -1017,6 +1017,12 @@ static inline bool ufshcd_is_wb_allowed(struct ufs_hba *hba)
+ 	return hba->caps & UFSHCD_CAP_WB_EN;
+ }
+ 
++static inline bool ufshcd_is_wb_buf_flush_allowed(struct ufs_hba *hba)
++{
++	return ufshcd_is_wb_allowed(hba) &&
++		!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL);
++}
++
+ #define ufshcd_writel(hba, val, reg)	\
+ 	writel((val), (hba)->mmio_base + (reg))
+ #define ufshcd_readl(hba, reg)	\
+-- 
+2.25.1

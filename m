@@ -2,136 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F828582755
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D66B582758
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbiG0NDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
+        id S233644AbiG0NE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233490AbiG0NDy (ORCPT
+        with ESMTP id S233385AbiG0NEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:03:54 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4370526AD3;
-        Wed, 27 Jul 2022 06:03:53 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id c22so10460241wmr.2;
-        Wed, 27 Jul 2022 06:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SiHZwpQCYfccD1xnABRjwBNsvXyqatith9sO/0ewvoY=;
-        b=GjHqFnyWpHKA/Jz+vu/FGWShm0+Mz6AW0SDGdFOI7AGOATGcBG61VAAYmAXfpM/5S8
-         zfaZCUthDWABPLd8yycyiWxUqFAAqSBBqVn5Ozz5FuaN2UotHuwEzJXSL2iAFcvxjwfU
-         R5qKl757CyZrfHjDMQXWWAue7iTSIkURZEVM6+kAyZtHTPiKwAIa+/LcjzwcDJgKvdx9
-         MEOEAf6qCqwrwwq3pTOR6r3++yYrUikZo96LGMRvVdtWd10bYBlqTkn5kejJpU/sJoev
-         MF2nPCuTGq7pPvhc8sTgTEKaZyZPFHJXm2VR/ct5DlQtv6nGqiqqWR3FtMeHK30XoGG9
-         wS2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SiHZwpQCYfccD1xnABRjwBNsvXyqatith9sO/0ewvoY=;
-        b=r+sA8f7XYfnddis4dFsZEd4oRk7ZCokEVV/xo2MG/CfnH8KL/NgObuR1dO8ZIfVUgR
-         aW6r8y9fyDgX1xhM77BFSdF9E5GyfwjiLju+S0DVbGLvwzaphLA53gBZpywFi/uLUXKg
-         KPyI1bBTG/94a6UJmtfv6Y53mWakz4qeNsdmT1KqJiHl5Hx8YSIhGViLiD6f2+qvW0rZ
-         Mj9e+vIjPQh+PHd++pTikNxhdTNIuCIZ3nbHeSaJKD2CHT2awQ6CpQoE/lUDd+R4IXJg
-         yUyVcmRBd9Gbz5+o6vCDbIVgOmeXAwfh4VAky6KTv6n5Y9mmHntUMAURNyk5VzZiDT87
-         2x5A==
-X-Gm-Message-State: AJIora8UbjXXD9TsvZ+rGIFwP1RkGBclkpcWL7suuzzPzMwkkMCMLmyT
-        Bkawsuvp6xpWs8I6ur4M85w=
-X-Google-Smtp-Source: AGRyM1tJyqDtyv+DYGgsu8rV4ce7hW8Up+s8gxPMO1orqS/QB3LEo2yn97xQ+7FJzlw3XtUWOzvjYw==
-X-Received: by 2002:a05:600c:3586:b0:3a3:2c03:1088 with SMTP id p6-20020a05600c358600b003a32c031088mr3207007wmq.64.1658927031617;
-        Wed, 27 Jul 2022 06:03:51 -0700 (PDT)
-Received: from [192.168.2.202] (pd9ea3316.dip0.t-ipconnect.de. [217.234.51.22])
-        by smtp.gmail.com with ESMTPSA id f23-20020a1cc917000000b003a31ca9dfb6sm2684519wmb.32.2022.07.27.06.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 06:03:51 -0700 (PDT)
-Message-ID: <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
-Date:   Wed, 27 Jul 2022 15:03:49 +0200
+        Wed, 27 Jul 2022 09:04:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B6222BCB;
+        Wed, 27 Jul 2022 06:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658927065; x=1690463065;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6SwQ9YOIn0PoKIrChETiUz4v21HjnRgy6rGCYq0XXgU=;
+  b=irmfqzC2v/aBWpiqF88sbveXqeWEwh9bWkWsHJ8WFuhAd9SH9/nQt8/V
+   9RohSGVX6dU9OLQ6tdwRDvJzQh4Wm/+Z42JKvNy37N8WOjHhqL/KZ4MEB
+   MHrktjoPfjxSwduWoiYLRiHkXZbVu3JmYB9dN2qmjWS2QCW2tLj0ZUZIX
+   qke674bF4BagRSIH2EhDEPffNhy1TuehSueth3BwGNLvowROy4I2d/kx3
+   QgxT9dC8rgTiq4xlcGqKbhzhzXaN3ij5MXb87y7T8Qn690V1V/7WCX1/+
+   fJCmboWc+4CUcYniRxcs7Bu/D0RqOa3ClYHKNWxn2HfoF82P4wDFxFpVI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="349931419"
+X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
+   d="scan'208";a="349931419"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 06:04:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
+   d="scan'208";a="550839199"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 27 Jul 2022 06:04:23 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGgi5-0008iy-1E;
+        Wed, 27 Jul 2022 13:04:21 +0000
+Date:   Wed, 27 Jul 2022 21:04:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chetan C R <quic_cchinnad@quicinc.com>, jejb@linux.ibm.com
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Chetan C R <quic_cchinnad@quicinc.com>
+Subject: Re: [PATCH V1] scsi: ufs: Get boot device storage type from command
+ line
+Message-ID: <202207272021.6YK4F8UV-lkp@intel.com>
+References: <1658910535-31802-1-git-send-email-quic_cchinnad@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <20220726143005.wt4be7yo7sbd3xut@bogus>
- <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
- <20220726154138.74avqs6iqlzqpzjk@bogus>
- <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
- <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1658910535-31802-1-git-send-email-quic_cchinnad@quicinc.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 13:38, Krzysztof Kozlowski wrote:
-> On 26/07/2022 19:01, Maximilian Luz wrote:
->> On 7/26/22 17:41, Sudeep Holla wrote:
->>> On Tue, Jul 26, 2022 at 05:15:41PM +0200, Maximilian Luz wrote:
->>>>
->>>> So ultimately I think it's better to add a DT entry for it.
->>>
->>> I disagree for the reason that once you discover more apps running on the
->>> secure side, you want to add more entries and update DT on the platform
->>> every time you discover some new firmware entity and you wish to interact
->>> with it from the non-secure side.
->>
->> Just as you'll have to add a driver to the kernel and update whatever is
->> probing the TrEE interface and add those strings to that interface. If
->> you then start doing SoC-specific lists, I think you'd be pretty much
->> re-implementing a DT in the kernel driver...
-> 
-> But you don't have any of these names in the DT either. Your DT node
-> only indicates the presence of your driver, but does not hold any
-> additional information like these IDs.
+Hi Chetan,
 
-Because the compatible implicates the ID-string which implicates the driver
-interface. If the ID-string for uefisecapp would be different we'd very likely
-need a different driver for that as well, meaning a new compatible too. I
-thought it would be superfluous to put that in the DT.
-  
-> Basically we start modelling firmware components in devicetree. :/
+Thank you for the patch! Perhaps something to improve:
 
-Is there really a good way around it? As far as I can see the
-alternative (especially for the apps that need to be loaded manually) is
-hard-coding everything in the driver. Which IMHO just spreads device
-specific information everywhere.
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next linus/master v5.19-rc8 next-20220726]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Also: Let's use the TPM app as example. If that would be a SPI or I2C
-device, you'd model it in the DT. Just because it's a hardware device
-that's accessible via SCM/firmware you now don't?
+url:    https://github.com/intel-lab-lkp/linux/commits/Chetan-C-R/scsi-ufs-Get-boot-device-storage-type-from-command-line/20220727-163016
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220727/202207272021.6YK4F8UV-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/42a08523b91855ba31b0974a32f02c43b163c571
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chetan-C-R/scsi-ufs-Get-boot-device-storage-type-from-command-line/20220727-163016
+        git checkout 42a08523b91855ba31b0974a32f02c43b163c571
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ufs/host/
 
-If I were absolutely certain that there is a reliable mechanism to
-detect these apps, I'd agree with having a driver to instantiate those
-devices. But I am not.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards,
-Max
+All warnings (new ones prefixed by >>):
+
+>> drivers/ufs/host/ufs-cmdline.c:19:13: warning: no previous prototype for 'get_storage_boot_device' [-Wmissing-prototypes]
+      19 | const char *get_storage_boot_device(void)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/get_storage_boot_device +19 drivers/ufs/host/ufs-cmdline.c
+
+    18	
+  > 19	const char *get_storage_boot_device(void)
+    20	{
+    21		if (android_boot_dev_v4 && strlen(android_boot_dev_v4))
+    22			return android_boot_dev_v4;
+    23	
+    24		else if (strlen(android_boot_dev_v3))
+    25			return android_boot_dev_v3;
+    26	
+    27		pr_err("Not able to get Bootconfig or Kernel command line param\n");
+    28		return NULL;
+    29	};
+    30	EXPORT_SYMBOL_GPL(get_storage_boot_device);
+    31	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

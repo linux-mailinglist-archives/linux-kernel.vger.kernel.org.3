@@ -2,95 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEC7582141
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F378F582152
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiG0Hhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
+        id S230391AbiG0HlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiG0Hhh (ORCPT
+        with ESMTP id S229478AbiG0HlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:37:37 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27D63B950;
-        Wed, 27 Jul 2022 00:37:36 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id y9so12106192qtv.5;
-        Wed, 27 Jul 2022 00:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7wBtopi5nrrnF3/tK6d3mUXKRzW2T+DIHWRi/Z/g55U=;
-        b=JrXv07SnypKXIiO9c1hDaO1ve2XFoCQh3YJA9N0xzJ8VKdcy+NOWbVByEfE93yA1bT
-         Tl79vU21bY1Riyh5vdmQjiXNRM6Y+lisVzjlFGA12N5TkfsJVvBTZVM+DXhLMCRLgtAT
-         CWazI0B5gaYgTPfT/LBhBjVu7eM5hrdl/RUhg4FDmsUWR19oAbFy6HoE9edFHPyenD8T
-         Qf2WPKI/e5SPnIeUMPrpopEK3VVMRKkcz81I6LE01vsC+va5BFGobzRlWIltgg+x4gCQ
-         EHVJv70L2zauSaiZEF5yiD6RME26xNIBHXc93G+wfeZxZyIdgW4ZKl6QFkorqrFDfTKD
-         6LhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7wBtopi5nrrnF3/tK6d3mUXKRzW2T+DIHWRi/Z/g55U=;
-        b=6Jat2MyN2X/bCcy4KChsFEgToktjw+TM2nIp1GsWV6ZzmD6Rvuyrj1WVCZLEay7Yy8
-         q74Yij3pzdIaz/b3Dx1814Y7F7SZ4G/HV33u1NUwo1HFCib9KKUGzmTEDTFzeUjfU0Bs
-         QX31Xn8Ix8XeXydaf8AcdSF3TvwfwPs2BaLCmimOEG8poqkdfChiJgGU3sbSMzaEOAPp
-         tjrZy4no79UXKPkp/eBai9E81Hw5Bzcf2HNvuOYOYl0cPXcPSChnTM9IDK5Jn7McZXoP
-         xHO/bCA9YNSGqGzehOVJ5hVsFJnBC1xruUQWUOhNGDVuRflhxLBmPlRaFHVf97VUhQHe
-         GsuA==
-X-Gm-Message-State: AJIora+ycXd0R3vO91GJKaKDVU9HJPaB0TnRR6u89peGwkCT5WgXMS1m
-        XRVpcxeT3Rf2n10XEOj8napxn7O9AWFngkOo0UeP0b2UjH0=
-X-Google-Smtp-Source: AGRyM1sXpKQZrYG0IbOgoxNKanSErlzr5LcY9lrHn4FGhRFmisG96yuJDLZQZGtegCOB6F8ydUZqqM5XWqwFIZtxfFQ=
-X-Received: by 2002:a05:622a:6098:b0:2f0:f0d2:b5f0 with SMTP id
- hf24-20020a05622a609800b002f0f0d2b5f0mr17361865qtb.583.1658907456035; Wed, 27
- Jul 2022 00:37:36 -0700 (PDT)
+        Wed, 27 Jul 2022 03:41:02 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C4220193
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:41:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658907660; x=1690443660;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KPLddpN1iNY999KUGp+HYrhO7p0BswS5UtJ/9mOu0mE=;
+  b=j7n6k0EOSeXlWjv13dcHRnWaSNvAraqqTT91PmGn84e2oukCxF/wLbFk
+   7ezK0i8RcnCbmdAVXZ5RpE3CpxEvjXzdIRVgCfEb1xjzIcs3OeJsKfkyO
+   eTfv0grKS/+KayQgawmcVYY1sAPsQrsoMpPcjDyApQt1xffoXuAnXkJkz
+   3UsQfnjB3v8sAevs+pHpjO4zxzaYDJc1Na3BBV25L10caY/QvlwSoLqXg
+   aXcbu33PkbKhjIAz6EYv3y7sLpgajKO0J5AI/GLtoXoYu7FEmCwXoMwEP
+   Us1WfV8Q9ofhlTN73SLzmm/wrIkjo8D7yULm1hoNlFqxZiqwcVB7RWa+R
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="268554149"
+X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
+   d="scan'208";a="268554149"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 00:41:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
+   d="scan'208";a="628276882"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 27 Jul 2022 00:40:58 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGbf8-0008Tu-0T;
+        Wed, 27 Jul 2022 07:40:58 +0000
+Date:   Wed, 27 Jul 2022 15:40:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:resolution.2022.07.26a] BUILD SUCCESS
+ e5900cd40f657b585872f8e64bced2f4165ed426
+Message-ID: <62e0ebfe.xJ7uoGv1t4dVDiP7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
- <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com>
- <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com> <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
-In-Reply-To: <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Wed, 27 Jul 2022 15:36:59 +0800
-Message-ID: <CABtFH5+bQx5ym5jOzCPJWbZ23WtGYYwS7cMRt2g3ipEEqTb3JA@mail.gmail.com>
-Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
- sink type LED Indicator support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,46 +63,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 8:18 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git resolution.2022.07.26a
+branch HEAD: e5900cd40f657b585872f8e64bced2f4165ed426  Merge remote-tracking branch 'linus/master' into resolution.2022.07.26a
 
-...
+elapsed time: 752m
 
-> > Just for saving memory space.
-> > Because these led_classdevs do not be used at the same time.
-> > Or do you think it would be better to rewrite it as follows?
-> > -------------------------------------------------------------------------------------
-> > struct mt6370_led {
-> >        struct led_classdev isink;
-> >        struct led_classdev_mc mc;
-> >        struct mt6370_priv *priv;
-> >        u32 default_state;
-> >        u32 index;
-> > };
-> > -------------------------------------------------------------------------------------
->
-> You obviously didn't get what I'm talking about...
-> Each union to work properly should have an associated variable that
-> holds the information of which field of the union is in use. Do you
-> have such a variable? If not, how does your code know which one to
-> use? If yes, add a proper comment there.
->
+configs tested: 114
+configs skipped: 2
 
-Ummm... from my understanding,
-if the colors of these four LEDs are set to 'LED_COLOR_ID_RGB' or
-'LED_COLOR_ID_MULTI' in DT,
-their 'led->index' will be set to 'MT6370_VIRTUAL_MULTICOLOR' in
-'mt6370_leds_probe()'.
-If so, these led devices will be set as 'struct led_classdev_mc' and
-use related ops functions in 'mt6370_init_led_properties()'.
-Instead, they whose 'led->index' is not 'MT6370_VIRTUAL_MULTICOLOR'
-will be set as 'struct led_classdev'.
-So, maybe the member 'index' of the 'struct mt6370_led' is what you
-describe the information of which field of the union is in use?
-I will add the proper comment here to describe this thing. I'm so
-sorry for misunderstanding your mean last time.
-Thanks again for your review.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+powerpc              randconfig-c003-20220724
+i386                          randconfig-c001
+arc                        nsimosci_defconfig
+s390                             allmodconfig
+sh                          rsk7264_defconfig
+m68k                        m5272c3_defconfig
+ia64                      gensparse_defconfig
+alpha                            alldefconfig
+arc                     nsimosci_hs_defconfig
+arm64                               defconfig
+arm                        spear6xx_defconfig
+sh                               j2_defconfig
+powerpc                  iss476-smp_defconfig
+mips                       capcella_defconfig
+powerpc                         ps3_defconfig
+arm                        keystone_defconfig
+m68k                       m5275evb_defconfig
+arm                        shmobile_defconfig
+powerpc                 mpc837x_rdb_defconfig
+mips                         mpc30x_defconfig
+nios2                            allyesconfig
+arc                          axs103_defconfig
+nios2                               defconfig
+powerpc                       eiger_defconfig
+sparc64                          alldefconfig
+arm                           sama5_defconfig
+m68k                         apollo_defconfig
+um                                  defconfig
+parisc                           allyesconfig
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+loongarch                           defconfig
+loongarch                         allnoconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220724
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+s390                 randconfig-r044-20220724
+riscv                randconfig-r042-20220724
+arc                  randconfig-r043-20220724
+s390                 randconfig-r044-20220726
+riscv                randconfig-r042-20220726
+arc                  randconfig-r043-20220726
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+mips                 randconfig-c004-20220726
+x86_64                        randconfig-c007
+s390                 randconfig-c005-20220726
+powerpc              randconfig-c003-20220726
+i386                          randconfig-c001
+riscv                randconfig-c006-20220726
+arm                  randconfig-c002-20220726
+mips                   sb1250_swarm_defconfig
+mips                      pic32mzda_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                        multi_v5_defconfig
+powerpc                          allmodconfig
+mips                  cavium_octeon_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                 mpc836x_rdk_defconfig
+mips                           rs90_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220724
+hexagon              randconfig-r045-20220724
 
 -- 
-Best Regards,
-ChiaEn Wu
+0-DAY CI Kernel Test Service
+https://01.org/lkp

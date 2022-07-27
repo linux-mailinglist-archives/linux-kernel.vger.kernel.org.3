@@ -2,133 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97E4582466
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA3358249A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiG0Kcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 06:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S231384AbiG0Kjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 06:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiG0Kcu (ORCPT
+        with ESMTP id S230057AbiG0Kju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 06:32:50 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE6743E4C;
-        Wed, 27 Jul 2022 03:32:49 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ss3so30605017ejc.11;
-        Wed, 27 Jul 2022 03:32:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=E/qzjVJN5WWKHgFz90joUQZKX1gH8+X44tnHcaaleRE=;
-        b=RptdFzJcpvUIKx1+aWtXT+nUxk3D/CeadIyslqlrStwbzgnpeDhIIYo7kMn5RW1RNZ
-         Lss8dmOMV4KPF91dyaHV3FABhVmNY/oSojPyziOhOIIV+qYZv6kV6rXGmJRDxO/VrSTz
-         ripzNTie/9B5pCCfV+LUrnZw3gzCqtVEdd76OuvRZVSMv2Dzv73mabDYzqjNly4c+j99
-         rE1l37B8bbsgScMCwIEWMvxBS5xPkjf0Sv0XOuxs+4nG7OTgCoD5Y3OR30vsQ36Zima3
-         rfztm9WnWz5zp54eu7cfO2DaXCJoy4oZiENv7NwESpIfpUpUg4Hj3nJ5FeJ67BDO1vis
-         SNgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=E/qzjVJN5WWKHgFz90joUQZKX1gH8+X44tnHcaaleRE=;
-        b=mYMM9+t18zg6Uw78jRYeT9G6dUYPPWdgAUl/cxRTZIwttpGHvqrgf26o+BY19EdRKO
-         3O0HrfvqBB8QLaRIJPWnN06Rn9366hrGUFrigg/ipEzN+zTR7LHXGLBqvbkg2v8NtxOt
-         ohdNg9toX+LRD2OI4Oxa0rmg4Nvzd/imSLi2UkeSzE/4y+MLzkmq4d24zazLlUnqW0yp
-         DOh+Ns5bbqHCPVcqQuZwd/hCpPT/sdl133O1EvBRhTyhekDxCfWh9EMhN1vgifwLK5OY
-         dh8OGkSX3iW00c2WA7uwOY0YLrvF0yiG0XqGmV0LkPg5TTnh18bklsQonGgJ99BkkuAe
-         CXbA==
-X-Gm-Message-State: AJIora/Nsy0sQdLXdbx1Dbzq+vyiCK4C2HUWrVzRDNlHXlf92P6AyZ7Y
-        02wmSfQMrJ9Y7Yf0IUVJAIkHSCYDfG1cI8Go
-X-Google-Smtp-Source: AGRyM1vR9quAcWCfkXjA/aLvO1r/ui2cWaTwBIhM8Iv3YIvvoVrH88WzTJ14z7buMJJoNybKZqjb5Q==
-X-Received: by 2002:a17:906:29d:b0:6f0:18d8:7be0 with SMTP id 29-20020a170906029d00b006f018d87be0mr16330478ejf.561.1658917967712;
-        Wed, 27 Jul 2022 03:32:47 -0700 (PDT)
-Received: from [192.168.74.101] ([77.78.38.236])
-        by smtp.gmail.com with ESMTPSA id d12-20020a50fe8c000000b0043a554818afsm9996918edt.42.2022.07.27.03.32.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 03:32:46 -0700 (PDT)
-Message-ID: <73a82790-52c4-b777-b4ff-f8d361f0bd29@gmail.com>
-Date:   Wed, 27 Jul 2022 13:32:45 +0300
+        Wed, 27 Jul 2022 06:39:50 -0400
+Received: from 14.mo582.mail-out.ovh.net (14.mo582.mail-out.ovh.net [46.105.56.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22D2422D8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 03:39:47 -0700 (PDT)
+Received: from player773.ha.ovh.net (unknown [10.110.171.96])
+        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 3632824F6F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:39:46 +0000 (UTC)
+Received: from RCM-web1.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player773.ha.ovh.net (Postfix) with ESMTPSA id D7A9D2D172357;
+        Wed, 27 Jul 2022 10:39:33 +0000 (UTC)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/5] dt-bindings: regulator: Document the PM6125 RPM
- regulators
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Adam Skladowski <a39.skl@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+Date:   Wed, 27 Jul 2022 12:39:33 +0200
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com, f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, krzysztof.kozlowski@linaro.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20220726181133.3262695-1-iskren.chernev@gmail.com>
- <20220726181133.3262695-3-iskren.chernev@gmail.com>
- <7e742415-d93f-83d9-bf01-6f023a4d1a34@linaro.org>
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-In-Reply-To: <7e742415-d93f-83d9-bf01-6f023a4d1a34@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/9] arm64: dts: bcmbca: update BCM4908 board dts files
+In-Reply-To: <1004391f-fb6c-5f84-de28-8f76dc3471e5@broadcom.com>
+References: <20220725055402.6013-1-william.zhang@broadcom.com>
+ <20220725055402.6013-4-william.zhang@broadcom.com>
+ <20220725233238.GA2960972-robh@kernel.org>
+ <1004391f-fb6c-5f84-de28-8f76dc3471e5@broadcom.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <0af44be8f5802e66011b4642de4632d4@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Ovh-Tracer-Id: 1581326421855153115
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduvddgfeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeetgfekfeduveehuedvgeefhffhieevhfejteeggfefieevffdtueeukedugeelieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejfedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-07-26 03:09, William Zhang wrote:
+> On 07/25/2022 04:32 PM, Rob Herring wrote:
+>> On Sun, Jul 24, 2022 at 10:53:56PM -0700, William Zhang wrote:
+>>> Append "brcm,bcmbca" to compatible strings based on the new bcmbca
+>>> binding rule for BCM4908 family based boards. This will break drivers
+>>> that use the old compatible string for binding. Fortunately there is 
+>>> no
+>>> such usage in linux and u-boot.
+>> 
+>> How does adding an additional compatible break things?
+>> In theory when some crazy code tries to match the entire string. But 
+>> not
+> in linux, u-boot code and hopefully not in other bootloader and Os
+> does that. But this does change an existing compatible string so
+> Krzysztof suggested to add comment about the breakage in the commit
+> message. I can remove this and send v3 if you guys think it is
+> necessary.
 
+Krzysztof commented on ABI breakage [1] when you tried removing
+"brcm,bcm4908" from the "compatible" list in your patch
+[RFC PATCH 3/3] arm64: dts: bcmbca: update bcm4808 board dts file [2]
 
-On 7/27/22 10:26, Krzysztof Kozlowski wrote:
-> On 26/07/2022 20:11, Iskren Chernev wrote:
->> Document the pm6125 compatible string and available regulators in the QCom SMD
->> RPM regulator documentation.
->>
->> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
->> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
->
-> Unusual SoB chain here as well.
+In this version of your patch you don't remove "brcm,bcm4908" anymore so
+this change doesn't break anything. Adding a new "compatible" string
+doesn't break things. You can remove that info from the commit message.
 
-Will fix.
-
->> ---
->>  .../devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml
->> index c233461cc980..1122a3a17f56 100644
->> --- a/Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml
->> +++ b/Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml
->> @@ -57,6 +57,9 @@ description:
->>
->>    For pm660l s1, s2, s3, s5, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, bob
->>
->> +  For pm6125 s1, s2, s3, s4, s5, s6, s7, s8, l1, l2, l3, l5, l6, l7, l8, l9,
->> +  l10, l22, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24
->> +
->>    For pma8084, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, l1, l2, l3,
->>    l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19,
->>    l20, l21, l22, l23, l24, l25, l26, l27, lvs1, lvs2, lvs3, lvs4, 5vs1
->> @@ -90,6 +93,7 @@ properties:
->>        - qcom,rpm-pm8998-regulators
->>        - qcom,rpm-pm660-regulators
->>        - qcom,rpm-pm660l-regulators
->> +      - qcom,rpm-pm6125-regulators
->
-> Put new entry in alphabetical order.
-
-Will sort first (they are currently not sorted), then add pm6125. Should I also
-sort the driver code?
-
-> Best regards,
-> Krzysztof
+[1] 
+https://lore.kernel.org/linux-arm-kernel/d93e55fa-3359-2609-aad5-c80eca78f380@linaro.org/
+[2] 
+https://lore.kernel.org/linux-arm-kernel/20220712021144.7068-4-william.zhang@broadcom.com/

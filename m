@@ -2,181 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D62558345D
+	by mail.lfdr.de (Postfix) with ESMTP id B61B158345F
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 23:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbiG0VDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 17:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S232399AbiG0VDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 17:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiG0VC7 (ORCPT
+        with ESMTP id S232605AbiG0VDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 17:02:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB31558D0;
-        Wed, 27 Jul 2022 14:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658955778; x=1690491778;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iGjz6Q1KujnWecsXb+ueart3CwmcROP94oxBajhhL9Q=;
-  b=AUW4DO7Ii6eH1UAeBZmXVzISM+rXVByEhoBxEy2kagDvTxaasts6fMBt
-   D5t4cdxRlKMRTP/jis7NKAQYyJi7Hee4Fp0paLXT8MafzdxIFX0MbWaam
-   2pC0OnnlfIstxv1Bn6GvlARL7OZe4K8SwIr3ux5hpIH2C7BpHWywnqA79
-   iNAj42r3sM+COuY+GhbjE/rR/RGIpb7fajC4UW9S7uL+WdhmhWzA4dKLQ
-   CtdxsRQPZW+imtRxzYcUcv6iKYAANKbhNMTzi314njZsoWoB8WsQa0aTD
-   yvfIoH6Whf7cdB8R86UmHi5r7K4+J132rj661iBX+eh0kRKMTR7Ht63Vk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="288360076"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="288360076"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 14:02:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="776845230"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Jul 2022 14:02:55 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGoBC-00096w-2L;
-        Wed, 27 Jul 2022 21:02:54 +0000
-Date:   Thu, 28 Jul 2022 05:02:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     kah.jing.lee@intel.com, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, arnd@arndb.de
-Cc:     kbuild-all@lists.01.org, rafael.j.wysocki@intel.com,
-        tien.sung.ang@intel.com, dinh.nguyen@intel.com,
-        Kah Jing Lee <kah.jing.lee@intel.com>, Zhou@vger.kernel.org,
-        Furong <furong.zhou@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [PATCH v2 1/3] drivers: misc: intel_sysid: Add sysid from arch
- to drivers
-Message-ID: <202207280422.mCMrDg9E-lkp@intel.com>
-References: <20220721123149.416618-1-kah.jing.lee@intel.com>
+        Wed, 27 Jul 2022 17:03:06 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3D1564E4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 14:03:05 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so117218wmo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 14:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FpbqvLMg6Bjlhza3zNTTUTKxz+iSd6bcmpn4ixx34eY=;
+        b=VNiwfVrm+6AlZGuYkwdI3/uth6zjOKSBihIKnTILHUK9njlNY1kDScq/P7CG2+Km/C
+         VNIyydLkKX67pSDQ5XGoPOpH4iNs4yStPMGgw0sZPsWCQpvBzTSIdAhb+QGLTEHYVyeu
+         Au6KVcp0m1CvvgVbr+/B53PPHDSuzEYvtrGBgRa3rsDTF6Q5jjdEK++uJxqc5YXl77Zh
+         lXf77gDzFk4/PGpjyWC18puCQrYIVqS85DyHgQg06Te9d2JdgMmpj9cJZzgySWZPoOXS
+         aJ7AcApD/wlQi+HK797pFE3E0A5p0g0v9jBBqB1FiuOGn7D/jBIfdY8jRHKxrcTBXZKe
+         4ktQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FpbqvLMg6Bjlhza3zNTTUTKxz+iSd6bcmpn4ixx34eY=;
+        b=CXhKvYSNEvHxO7Vcg6ANcDgEGut3cOZh59xoJz2KJIhHVUAgK0pmdWmsBwMbCwjNUi
+         /0hLcKY6XZzEaV+2wuHz96KuRz4pgCWTGgtpuy+pqGMbPRkAx7FPKluk5fR93YYm+QHO
+         LGLuE44sEvxHyAD6t+c0C0ExrdsCSfS4926A7gacb7N4qBXCTzoWyNwtpCLBe/2SeLzw
+         CNkZx6wvzp24pWFWlbbWnhOQToJVFVt09SWUDmM/VF/6LKfyJWkhCs8+k4Qqyjf2O0VU
+         VmxPvMIU0tYIzxT/YHkCp3cLsiDDklutlcIvZsW9o95f4t3xLUAWs9pbKiF1n6QKuP15
+         r/DQ==
+X-Gm-Message-State: AJIora/J7+oiB6m+/WHJ1lNMGH5r+e2nPu7XtSjScw7+4IMuhLfgPbIc
+        7Xrdm90naj9F1ItNhAtrZu65Qw==
+X-Google-Smtp-Source: AGRyM1une8eyqDx/MSQl6cp9ufsuULNuvBhRGWCkxIL7E+In/9pL61pxejn2zGjVn8MLXUbBfAdmaQ==
+X-Received: by 2002:a05:600c:35c7:b0:3a3:2612:f823 with SMTP id r7-20020a05600c35c700b003a32612f823mr4313993wmq.33.1658955783487;
+        Wed, 27 Jul 2022 14:03:03 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0])
+        by smtp.gmail.com with ESMTPSA id h6-20020a05600c350600b003a38606385esm37908wmq.3.2022.07.27.14.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 14:03:02 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com
+Subject: [PATCH v3 00/32] New thermal OF code
+Date:   Wed, 27 Jul 2022 23:02:21 +0200
+Message-Id: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721123149.416618-1-kah.jing.lee@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following changes are depending on:
 
-Thank you for the patch! Yet something to improve:
+ - 20220722200007.1839356-1-daniel.lezcano@linexp.org
 
-[auto build test ERROR on staging/staging-testing]
-[also build test ERROR on soc/for-next linus/master v5.19-rc8]
-[cannot apply to char-misc/char-misc-testing next-20220727]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+which are present in the thermal/linux-next branch:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/kah-jing-lee-intel-com/drivers-misc-intel_sysid-Add-sysid-from-arch-to-drivers/20220721-213214
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 8af028c2b22bc04f5ab59cd39fa97ccf14aa8f25
-config: s390-randconfig-p001-20220727 (https://download.01.org/0day-ci/archive/20220728/202207280422.mCMrDg9E-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5e0d691312542fbb751afb99bd7b537b9a975750
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review kah-jing-lee-intel-com/drivers-misc-intel_sysid-Add-sysid-from-arch-to-drivers/20220721-213214
-        git checkout 5e0d691312542fbb751afb99bd7b537b9a975750
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout 5e0d691312542fbb751afb99bd7b537b9a975750
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The series introduces a new thermal OF code. The patch description gives
+a detailed explanation of the changes. Basically we write new OF parsing
+functions, we migrate all the users of the old thermal OF API to the new
+one and then we finish by removing the old OF code.
 
-All errors (new ones prefixed by >>):
+That is the second step to rework the thermal OF code. More patches will
+come after that to remove the duplication of the trip definitions in the
+different drivers which will result in more code duplication removed and
+consolidation of the core thermal framework.
 
-   s390-linux-ld: drivers/misc/intel_sysid.o: in function `intel_sysid_probe':
->> drivers/misc/intel_sysid.c:85: undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/net/ethernet/altera/altera_tse_main.o: in function `request_and_map':
->> drivers/net/ethernet/altera/altera_tse_main.c:1339: undefined reference to `devm_ioremap'
-   pahole: .tmp_vmlinux.btf: No such file or directory
-   .btf.vmlinux.bin.o: file not recognized: file format not recognized
+Thanks for those who tested the series on their platform and
+investigated the regression with the disabled by default thermal zones.
 
+Changelog:
+ v3:
+   - Rebased on the right branch as reported by Niklas Söderlund
+   - Collected more tags
+ v2:
+   - Changed the code in the register thermal zone function to prevent
+     the 'const' annotation being removed in the different drivers
+   - Collected the tags and adding Cc for more context
+   - Changed the first line patch description to comply to the 'input'
+     subsystem format
+   - Give a more detailed description in the changelog for the drivers
+   - Remove pointless calls to unregister as the devm version is used
+     instead
+   - Moved dummy functions from one patch to another to prevent git
+     bisecting issue when THERMAL_OF=n
+   - Fixed thermal zone disabled by default
 
-cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+Daniel Lezcano (32):
+  thermal/of: Rework the thermal device tree initialization
+  thermal/of: Make new code and old code co-exist
+  thermal/drivers/rockchip: Switch to new of API
+  thermal/drivers/uniphier: Switch to new of API
+  thermal/drivers/generic-adc: Switch to new of API
+  thermal/drivers/mmio: Switch to new of API
+  thermal/drivers/tegra: Switch to new of API
+  thermal/drivers/sun8i: Switch to new of API
+  thermal/drivers/sprd: Switch to new of API
+  thermal/drivers/broadcom: Switch to new of API
+  thermal/drivers/qcom: Switch to new of API
+  thermal/drivers/st: Switch to new of API
+  thermal/drivers/amlogic: Switch to new of API
+  thermal/drivers/armada: Switch to new of API
+  thermal/drivers/db8500: Switch to new of API
+  thermal/drivers/imx: Switch to new of API
+  thermal/drivers/rcar: Switch to new of API
+  thermal/drivers/rzg2l: Switch to new of API
+  thermal/drivers/qoriq: Switch to new of API
+  thermal/drivers/mtk: Switch to new of API
+  thermal/drivers/banggap: Switch to new of API
+  thermal/drivers/maxim: Switch to new of API
+  thermal/drivers/hisilicon: Switch to new of API
+  thermal/drivers/ti-soc: Switch to new of API
+  ata/drivers/ahci_imx: Switch to new of thermal API
+  hwmon/drivers: Switch to new of thermal API
+  iio/drivers/sun4i_gpadc: Switch to new of thermal API
+  Input: sun4i-ts - switch to new of thermal API
+  regulator/drivers/max8976: Switch to new of thermal API
+  thermal/drivers/samsung: Switch to new of thermal API
+  thermal/core: Move set_trip_temp ops to the sysfs code
+  thermal/of: Remove old OF code
 
->> arch/s390/kernel/perf_cpum_sf.c:805:8: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-     si = cpuhw->qsi;
-          ^
-   arch/s390/kernel/perf_cpum_sf.c:804:11: note: Address of variable taken here.
-     cpuhw = &per_cpu(cpu_hw_sf, event->cpu);
-             ^
-   arch/s390/kernel/perf_cpum_sf.c:804:19: note: Temporary created here.
-     cpuhw = &per_cpu(cpu_hw_sf, event->cpu);
-                     ^
-   arch/s390/kernel/perf_cpum_sf.c:805:8: note: Using pointer that is a temporary.
-     si = cpuhw->qsi;
-          ^
-   arch/s390/kernel/perf_cpum_sf.c:867:27: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      err = allocate_buffers(cpuhw, hwc);
-                             ^
-   arch/s390/kernel/perf_cpum_sf.c:866:12: note: Address of variable taken here.
-      cpuhw = &per_cpu(cpu_hw_sf, cpu);
-              ^
-   arch/s390/kernel/perf_cpum_sf.c:866:20: note: Temporary created here.
-      cpuhw = &per_cpu(cpu_hw_sf, cpu);
-                      ^
-   arch/s390/kernel/perf_cpum_sf.c:867:27: note: Using pointer that is a temporary.
-      err = allocate_buffers(cpuhw, hwc);
-                             ^
-   arch/s390/kernel/perf_cpum_sf.c:1825:8: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-     si = cpuhw->qsi;
-          ^
-   arch/s390/kernel/perf_cpum_sf.c:1823:29: note: Address of variable taken here.
-     struct cpu_hw_sf *cpuhw = &per_cpu(cpu_hw_sf, event->cpu);
-                               ^
-   arch/s390/kernel/perf_cpum_sf.c:1823:37: note: Temporary created here.
-     struct cpu_hw_sf *cpuhw = &per_cpu(cpu_hw_sf, event->cpu);
-                                       ^
-   arch/s390/kernel/perf_cpum_sf.c:1825:8: note: Using pointer that is a temporary.
-     si = cpuhw->qsi;
-          ^
-
-vim +85 drivers/misc/intel_sysid.c
-
-    70	
-    71	static int intel_sysid_probe(struct platform_device *pdev)
-    72	{
-    73		struct intel_sysid *sysid;
-    74		struct resource	*regs;
-    75	
-    76		sysid = devm_kzalloc(&pdev->dev, sizeof(struct intel_sysid),
-    77			GFP_KERNEL);
-    78		if (!sysid)
-    79			return -ENOMEM;
-    80	
-    81		regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-    82		if (!regs)
-    83			return -ENXIO;
-    84	
-  > 85		sysid->regs = devm_ioremap_resource(&pdev->dev, regs);
-    86		if (IS_ERR(sysid->regs))
-    87			return PTR_ERR(sysid->regs);
-    88	
-    89		platform_set_drvdata(pdev, sysid);
-    90	
-    91		return devm_device_add_group(&pdev->dev, &intel_sysid_attr_group);
-    92	}
-    93	
+ drivers/ata/ahci_imx.c                        |   15 +-
+ drivers/hwmon/hwmon.c                         |   14 +-
+ drivers/hwmon/scpi-hwmon.c                    |   14 +-
+ drivers/iio/adc/sun4i-gpadc-iio.c             |   12 +-
+ drivers/input/touchscreen/sun4i-ts.c          |   10 +-
+ drivers/regulator/max8973-regulator.c         |   10 +-
+ drivers/thermal/amlogic_thermal.c             |   16 +-
+ drivers/thermal/armada_thermal.c              |   12 +-
+ drivers/thermal/broadcom/bcm2711_thermal.c    |   14 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c    |   14 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c    |   20 +-
+ drivers/thermal/broadcom/ns-thermal.c         |   50 +-
+ drivers/thermal/broadcom/sr-thermal.c         |   16 +-
+ drivers/thermal/db8500_thermal.c              |    8 +-
+ drivers/thermal/hisi_thermal.c                |   14 +-
+ drivers/thermal/imx8mm_thermal.c              |   14 +-
+ drivers/thermal/imx_sc_thermal.c              |   14 +-
+ drivers/thermal/k3_bandgap.c                  |   12 +-
+ drivers/thermal/k3_j72xx_bandgap.c            |   12 +-
+ drivers/thermal/max77620_thermal.c            |    8 +-
+ drivers/thermal/mtk_thermal.c                 |   10 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |   19 +-
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |   12 +-
+ drivers/thermal/qcom/tsens.c                  |   16 +-
+ drivers/thermal/qoriq_thermal.c               |   12 +-
+ drivers/thermal/rcar_gen3_thermal.c           |   16 +-
+ drivers/thermal/rcar_thermal.c                |   13 +-
+ drivers/thermal/rockchip_thermal.c            |   14 +-
+ drivers/thermal/rzg2l_thermal.c               |   10 +-
+ drivers/thermal/samsung/exynos_tmu.c          |   24 +-
+ drivers/thermal/sprd_thermal.c                |   18 +-
+ drivers/thermal/st/stm_thermal.c              |   16 +-
+ drivers/thermal/sun8i_thermal.c               |   14 +-
+ drivers/thermal/tegra/soctherm.c              |   21 +-
+ drivers/thermal/tegra/tegra-bpmp-thermal.c    |   19 +-
+ drivers/thermal/tegra/tegra30-tsensor.c       |   12 +-
+ drivers/thermal/thermal-generic-adc.c         |   10 +-
+ drivers/thermal/thermal_core.c                |    6 -
+ drivers/thermal/thermal_core.h                |    2 -
+ drivers/thermal/thermal_mmio.c                |   17 +-
+ drivers/thermal/thermal_of.c                  | 1140 ++++++-----------
+ drivers/thermal/thermal_sysfs.c               |    5 +-
+ .../ti-soc-thermal/ti-thermal-common.c        |   16 +-
+ drivers/thermal/uniphier_thermal.c            |   10 +-
+ include/linux/thermal.h                       |   89 +-
+ 45 files changed, 709 insertions(+), 1131 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

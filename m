@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714CE582EA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74472582C17
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238226AbiG0RPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S239762AbiG0QmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241663AbiG0ROK (ORCPT
+        with ESMTP id S239452AbiG0QlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:14:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A5B76EB9;
-        Wed, 27 Jul 2022 09:42:31 -0700 (PDT)
+        Wed, 27 Jul 2022 12:41:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A5E5B068;
+        Wed, 27 Jul 2022 09:29:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18635614EA;
-        Wed, 27 Jul 2022 16:42:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277A3C433D6;
-        Wed, 27 Jul 2022 16:42:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63EF361A1E;
+        Wed, 27 Jul 2022 16:29:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A64C433C1;
+        Wed, 27 Jul 2022 16:29:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940149;
-        bh=z2V8vFHMnhOnE4/gebZpZ4UaFOeyJaDeG+40vnJokD8=;
+        s=korg; t=1658939377;
+        bh=BWlv9WhHqHjZUjHfPVXIuG4fj36+jf4NC1pmkcWguiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P/q7eqcS+cMPv34Oa8SOLqWi5ld6L7CCDJMnp1ryup92LAgPZdZfqQ2iyMphfssVV
-         3XtEGFoxtXoGtutjh0xvdgJYSJQvftHVVtUaW6df18n4kh3Kh+/bjxHHbvWL3llTsd
-         hlcFrBAPy06BYwVH+7TdKYC/MRMuCka7j5beJUXw=
+        b=dfxPRgXb+yYKXf8KMChbaHjcr3OYL1E0vzWvnfsgzv0IjIYS4uS2Eqwwb+3vgI45M
+         +VxUpl07H7eMZLEDx8MzQjT58WOS3QA+p2iKmxf46gA2aVxA8+UdbDXub6X94XykXX
+         qdLhcdf5tV3TQ0M/B1ab9IAjIS1my9HajnNy+rc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 105/201] pinctrl: armada-37xx: use raw spinlocks for regmap to avoid invalid wait context
-Date:   Wed, 27 Jul 2022 18:10:09 +0200
-Message-Id: <20220727161032.096638768@linuxfoundation.org>
+Subject: [PATCH 5.4 17/87] ip: Fix data-races around sysctl_ip_fwd_use_pmtu.
+Date:   Wed, 27 Jul 2022 18:10:10 +0200
+Message-Id: <20220727161009.708989076@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,89 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 4546760619cfa9b718fe2059ceb07101cf9ff61e ]
+[ Upstream commit 60c158dc7b1f0558f6cadd5b50d0386da0000d50 ]
 
-The irqchip->irq_set_type method is called by __irq_set_trigger() under
-the desc->lock raw spinlock.
+While reading sysctl_ip_fwd_use_pmtu, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-The armada-37xx implementation, armada_37xx_irq_set_type(), uses an MMIO
-regmap created by of_syscon_register(), which uses plain spinlocks
-(the kind that are sleepable on RT).
-
-Therefore, this is an invalid locking scheme for which we get a kernel
-splat stating just that ("[ BUG: Invalid wait context ]"), because the
-context in which the plain spinlock may sleep is atomic due to the raw
-spinlock. We need to go raw spinlocks all the way.
-
-Make this driver create its own MMIO regmap, with use_raw_spinlock=true,
-and stop relying on syscon to provide it.
-
-This patch depends on commit 67021f25d952 ("regmap: teach regmap to use
-raw spinlocks if requested in the config").
-
-Cc: <stable@vger.kernel.org> # 5.15+
-Fixes: 2f227605394b ("pinctrl: armada-37xx: Add irqchip support")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/r/20220716233745.1704677-3-vladimir.oltean@nxp.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: f87c10a8aa1e ("ipv4: introduce ip_dst_mtu_maybe_forward and protect forwarding path against pmtu spoofing")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 27 ++++++++++++++++-----
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ include/net/ip.h | 2 +-
+ net/ipv4/route.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-index 7d0d2771a9ac..7338bc353347 100644
---- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-+++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-@@ -1116,25 +1116,40 @@ static const struct of_device_id armada_37xx_pinctrl_of_match[] = {
- 	{ },
- };
+diff --git a/include/net/ip.h b/include/net/ip.h
+index 3f3ea86b2173..21fc0a29a8d4 100644
+--- a/include/net/ip.h
++++ b/include/net/ip.h
+@@ -442,7 +442,7 @@ static inline unsigned int ip_dst_mtu_maybe_forward(const struct dst_entry *dst,
+ 	struct net *net = dev_net(dst->dev);
+ 	unsigned int mtu;
  
-+static const struct regmap_config armada_37xx_pinctrl_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_stride = 4,
-+	.use_raw_spinlock = true,
-+};
-+
- static int __init armada_37xx_pinctrl_probe(struct platform_device *pdev)
- {
- 	struct armada_37xx_pinctrl *info;
- 	struct device *dev = &pdev->dev;
--	struct device_node *np = dev->of_node;
- 	struct regmap *regmap;
-+	void __iomem *base;
- 	int ret;
+-	if (net->ipv4.sysctl_ip_fwd_use_pmtu ||
++	if (READ_ONCE(net->ipv4.sysctl_ip_fwd_use_pmtu) ||
+ 	    ip_mtu_locked(dst) ||
+ 	    !forwarding)
+ 		return dst_mtu(dst);
+diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+index 9280e5087159..7004e379c325 100644
+--- a/net/ipv4/route.c
++++ b/net/ipv4/route.c
+@@ -1423,7 +1423,7 @@ u32 ip_mtu_from_fib_result(struct fib_result *res, __be32 daddr)
+ 	struct fib_info *fi = res->fi;
+ 	u32 mtu = 0;
  
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
-+	if (IS_ERR(base)) {
-+		dev_err(dev, "failed to ioremap base address: %pe\n", base);
-+		return PTR_ERR(base);
-+	}
-+
-+	regmap = devm_regmap_init_mmio(dev, base,
-+				       &armada_37xx_pinctrl_regmap_config);
-+	if (IS_ERR(regmap)) {
-+		dev_err(dev, "failed to create regmap: %pe\n", regmap);
-+		return PTR_ERR(regmap);
-+	}
-+
- 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
- 	if (!info)
- 		return -ENOMEM;
+-	if (dev_net(dev)->ipv4.sysctl_ip_fwd_use_pmtu ||
++	if (READ_ONCE(dev_net(dev)->ipv4.sysctl_ip_fwd_use_pmtu) ||
+ 	    fi->fib_metrics->metrics[RTAX_LOCK - 1] & (1 << RTAX_MTU))
+ 		mtu = fi->fib_mtu;
  
- 	info->dev = dev;
--
--	regmap = syscon_node_to_regmap(np);
--	if (IS_ERR(regmap))
--		return dev_err_probe(dev, PTR_ERR(regmap), "cannot get regmap\n");
- 	info->regmap = regmap;
--
- 	info->data = of_device_get_match_data(dev);
- 
- 	ret = armada_37xx_pinctrl_register(pdev, info);
 -- 
 2.35.1
 

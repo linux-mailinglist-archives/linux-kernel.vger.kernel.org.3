@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863E5582D62
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4718582EC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241012AbiG0Q44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S241738AbiG0RRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241100AbiG0Qzs (ORCPT
+        with ESMTP id S241701AbiG0RQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:55:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA1565599;
-        Wed, 27 Jul 2022 09:36:08 -0700 (PDT)
+        Wed, 27 Jul 2022 13:16:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29CF5C950;
+        Wed, 27 Jul 2022 09:43:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AED49B821A6;
-        Wed, 27 Jul 2022 16:36:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC35C433C1;
-        Wed, 27 Jul 2022 16:35:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DD4E601CE;
+        Wed, 27 Jul 2022 16:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAB9C433D6;
+        Wed, 27 Jul 2022 16:43:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939760;
-        bh=LSVyED/iVxKWML1b/n63x/q/kEobrnsL5ufMj7hyiTM=;
+        s=korg; t=1658940185;
+        bh=SVt23Q0d84gwrhaqA8w8sNWD9r1w9t4co/Eki16M7MI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O3smoya2/vVu2FJSEarK/lEOvlvZIYAj61kTlgsJUdDGdCpD4XrNwGTG+qvL2681A
-         rcjyxkJeEBUkg5zYVKYdYkhKO4c9PNxso7pLto+zJT2MyPPRtSS97L/bE16LDeNSkC
-         zeN2sVG4a2KOpM5Kkh+pM6lr7bzAWzmtEfXxAjb8=
+        b=FlTcmQhNBvC+AHzLzg80H6GbQwxRE7bkhyh9v9jWK3LWdzIYtcJSMsq9uemWxpZRB
+         C4N+ck4MdD/Q6htQ1nz30NN5L02Qtyg+6s3ir6jK6R7oiksN7TSuH9gPrncH71s5jG
+         tQQ98FOQsghUHx44HaX5s2QedkS5yLC7rgf6OuxA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 052/105] tcp: Fix a data-race around sysctl_tcp_notsent_lowat.
+        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>
+Subject: [PATCH 5.15 134/201] KVM: Dont null dereference ops->destroy
 Date:   Wed, 27 Jul 2022 18:10:38 +0200
-Message-Id: <20220727161014.178314636@linuxfoundation.org>
+Message-Id: <20220727161033.348145340@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +53,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
 
-[ Upstream commit 55be873695ed8912eb77ff46d1d1cadf028bd0f3 ]
+commit e8bc2427018826e02add7b0ed0fc625a60390ae5 upstream.
 
-While reading sysctl_tcp_notsent_lowat, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+A KVM device cleanup happens in either of two callbacks:
+1) destroy() which is called when the VM is being destroyed;
+2) release() which is called when a device fd is closed.
 
-Fixes: c9bee3b7fdec ("tcp: TCP_NOTSENT_LOWAT socket option")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Most KVM devices use 1) but Book3s's interrupt controller KVM devices
+(XICS, XIVE, XIVE-native) use 2) as they need to close and reopen during
+the machine execution. The error handling in kvm_ioctl_create_device()
+assumes destroy() is always defined which leads to NULL dereference as
+discovered by Syzkaller.
+
+This adds a checks for destroy!=NULL and adds a missing release().
+
+This is not changing kvm_destroy_devices() as devices with defined
+release() should have been removed from the KVM devices list by then.
+
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/tcp.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ virt/kvm/kvm_main.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index da75513a77d4..aa46f4016245 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1973,7 +1973,7 @@ void __tcp_v4_send_check(struct sk_buff *skb, __be32 saddr, __be32 daddr);
- static inline u32 tcp_notsent_lowat(const struct tcp_sock *tp)
- {
- 	struct net *net = sock_net((struct sock *)tp);
--	return tp->notsent_lowat ?: net->ipv4.sysctl_tcp_notsent_lowat;
-+	return tp->notsent_lowat ?: READ_ONCE(net->ipv4.sysctl_tcp_notsent_lowat);
- }
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -4172,8 +4172,11 @@ static int kvm_ioctl_create_device(struc
+ 		kvm_put_kvm_no_destroy(kvm);
+ 		mutex_lock(&kvm->lock);
+ 		list_del(&dev->vm_node);
++		if (ops->release)
++			ops->release(dev);
+ 		mutex_unlock(&kvm->lock);
+-		ops->destroy(dev);
++		if (ops->destroy)
++			ops->destroy(dev);
+ 		return ret;
+ 	}
  
- /* @wake is one when sk_stream_write_space() calls us.
--- 
-2.35.1
-
 
 

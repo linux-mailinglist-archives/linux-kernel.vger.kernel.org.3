@@ -2,195 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A80582613
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6969B582616
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbiG0MEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
+        id S231553AbiG0MGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbiG0MEk (ORCPT
+        with ESMTP id S232611AbiG0MGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:04:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFBA4B0EC;
-        Wed, 27 Jul 2022 05:04:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CED2DB82035;
-        Wed, 27 Jul 2022 12:04:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEBE7C433D6;
-        Wed, 27 Jul 2022 12:04:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658923476;
-        bh=TJzTGxdWYyNLFJKQVh/pRV3ZHT37AT3Z4uZIdGkD698=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=eQ6uTKhUYFUjMjg0KL087Cv+zVzDugpGH3qyqxp0rIebemgaWCGUWA1OiwJctUNKc
-         WUlIk+GcQ/sWM0WIPQhQp7GFlkpTuUH0sXOm9z3OfOlIJV26hAUK5rvOTKupnVoS9m
-         I4iHF5y2e45LoosqjtIHaBhCHc17NKP9eYoBTibqKSw3iY6lkaZd1mkYiUq8+TajXk
-         OR1UG5TIestAUOM7a4+06rzdl4a+FS1LoeA4jTqoY4ih7j3scCsQXv0102aZmwH29W
-         E4FUPB9o9kTbICWMySoBXI4dQvIpqZGtX5qRije2XHaZNly7P7wHPm+TvwprkpAb5s
-         eVeRbu6iafjNw==
-Message-ID: <b1d3c63ef5a7e8f98966552b4509381aae25afb6.camel@kernel.org>
-Subject: Re: [RFC PATCH] vfs: don't check may_create_in_sticky if the file
- is already open/created
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yongchen Yang <yoyang@redhat.com>
-Date:   Wed, 27 Jul 2022 08:04:34 -0400
-In-Reply-To: <20220727113406.ewu4kzsoo643cf66@wittgenstein>
-References: <20220726202333.165490-1-jlayton@kernel.org>
-         <8e4d498a3e8ed80ada2d3da01e7503e082be31a3.camel@kernel.org>
-         <20220727113406.ewu4kzsoo643cf66@wittgenstein>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Wed, 27 Jul 2022 08:06:39 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31B5F56;
+        Wed, 27 Jul 2022 05:06:36 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4E2E35C01A0;
+        Wed, 27 Jul 2022 08:06:34 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 27 Jul 2022 08:06:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1658923594; x=1659009994; bh=sns5b3/QFe
+        KrteH5LAIPWxoG6sLFqTq3vrWcUhZbXYo=; b=GibnmcNO6wp3WeAyKuTE/nUCLB
+        YW50Ol+91ZDj79Zo5CIskHeaFVR8jAMN0X49kTLFWOa3a9HjROw12SLcp+WTbRWk
+        OAkgmgaftSsl5cwK5scd/mWQIJFxIcXwJ1bcX64UgyDee8EVuuwj44j05ryTguUB
+        p4DCIfXbxijwwku9KDHPm/VhzCK98td11UVKG7pSS/a7NmdUAmozFwQXu3IG1JFW
+        txl5azyk8POfhYSw+3hREMc6nZv9m7rRxqDP8J8Vajz9PGVQLBsC2PlyTMAIwkXm
+        D5yStClLg0CP5ubMKD1whxvJ0Og4wzm6jioIRQ20dGJ6ekEYdHcOyHVe+pFQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1658923594; x=1659009994; bh=sns5b3/QFeKrteH5LAIPWxoG6sLF
+        qTq3vrWcUhZbXYo=; b=CPOvtjMSWfr51w9qpRc0e0LNAed6DSTlNlYhggqfevUC
+        XGfbJ7p3LwPJWqUWCd9A2SMlnM+cLnehqodde9XgZ5q7NJjPW1cPu960mZoIUu+Z
+        MLtHutev6Jg6MRHV7ZuYmcu463JoZ56rC+pIo38UBmuZ91cuktZr3PfECppTuleR
+        WMLUUJaap9ElmMQVnCox/54tVH+0yXXjJJtLkRxteSs55EAxP8C8XnXgsO6TB1WB
+        gWiOY4jExXpp8UFQ7CKeiQWNA90ehzhOO+HibWyvhBUzwZCZuwSwtUA2gssBu4Ig
+        jHUbywnvlinBSmdRzE/t7o4wYzVBt+GLMzcD049NfQ==
+X-ME-Sender: <xms:SSrhYuzCudXQOXDePTu9vd-jnHWA2c0dG9z3DmtX82aSwA_iiHLlVQ>
+    <xme:SSrhYqQivoa7jzWzw_mNC5VX8HsHDGaFeRqg7-0c9M8dAne77B8nWeOZvJglqA2F8
+    13RETjYW95OvqTKwa4>
+X-ME-Received: <xmr:SSrhYgVwpFCYbJHWnIkNSZl2pqClDE01SmH6gCdeKdXa4o7jKmy2gepA-Ejw_cRbcv9nvxuLg3wZ3U5mLd650aRxRfb9Ip_VeJjiaj4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduvddggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:SSrhYkicJ_IGgqz6iexkhVvJotQY9PgHDYu6at83sP86XcN-jbRxig>
+    <xmx:SSrhYgD_6W9SF0CcaX5syZO4GDpQtYW869-2NL9JMz79PzcyP-mG8w>
+    <xmx:SSrhYlIvonbC6Au2J1vGXrnhrB9vVXK9few-aIOgGzwMHy05o0c_Hw>
+    <xmx:SirhYob7ea0CytTonx1V7XsjzDERI7TE34Dj8js15DQ3IuZ1nqkMsQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 27 Jul 2022 08:06:33 -0400 (EDT)
+Date:   Wed, 27 Jul 2022 14:06:31 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH RFC v3 1/8] of: Mark interconnects property supplier as
+ optional
+Message-ID: <20220727120631.iefzititedahdsdt@houat>
+References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
+ <20220302211100.65264-2-paul.kocialkowski@bootlin.com>
+ <YiaTfsMDs7RGob2N@robh.at.kernel.org>
+ <CAGETcx9u9RO_5nSp+=qgwDGY=jL_Q1hAcj+RfVN=q-H_8iuT4w@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5f267h7mxg6wplag"
+Content-Disposition: inline
+In-Reply-To: <CAGETcx9u9RO_5nSp+=qgwDGY=jL_Q1hAcj+RfVN=q-H_8iuT4w@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-27 at 13:34 +0200, Christian Brauner wrote:
-> On Tue, Jul 26, 2022 at 04:27:56PM -0400, Jeff Layton wrote:
-> > On Tue, 2022-07-26 at 16:23 -0400, Jeff Layton wrote:
-> > > NFS server is exporting a sticky directory (mode 01777) with root
-> > > squashing enabled. Client has protect_regular enabled and then tries =
-to
-> > > open a file as root in that directory. File is created (with ownershi=
-p
-> > > set to nobody:nobody) but the open syscall returns an error.
-> > >=20
-> > > The problem is may_create_in_sticky, which rejects the open even thou=
-gh
-> > > the file has already been created/opened. Only call may_create_in_sti=
-cky
-> > > if the file hasn't already been opened or created.
-> > >=20
-> > > Cc: Christian Brauner <brauner@kernel.org>
-> > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D1976829
-> > > Reported-by: Yongchen Yang <yoyang@redhat.com>
-> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > ---
-> > >  fs/namei.c | 13 +++++++++----
-> > >  1 file changed, 9 insertions(+), 4 deletions(-)
-> > >=20
-> > > diff --git a/fs/namei.c b/fs/namei.c
-> > > index 1f28d3f463c3..7480b6dc8d27 100644
-> > > --- a/fs/namei.c
-> > > +++ b/fs/namei.c
-> > > @@ -3495,10 +3495,15 @@ static int do_open(struct nameidata *nd,
-> > >  			return -EEXIST;
-> > >  		if (d_is_dir(nd->path.dentry))
-> > >  			return -EISDIR;
-> > > -		error =3D may_create_in_sticky(mnt_userns, nd,
-> > > -					     d_backing_inode(nd->path.dentry));
-> > > -		if (unlikely(error))
-> > > -			return error;
-> > > +		if (!(file->f_mode & (FMODE_OPENED | FMODE_CREATED))) {
-> > > +			error =3D may_create_in_sticky(mnt_userns, nd,
-> > > +						d_backing_inode(nd->path.dentry));
-> > > +			if (unlikely(error)) {
-> > > +				printk("%s: f_mode=3D0x%x oflag=3D0x%x\n",
-> > > +					__func__, file->f_mode, open_flag);
-> > > +				return error;
-> > > +			}
-> > > +		}
-> > >  	}
-> > >  	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry=
-))
-> > >  		return -ENOTDIR;
-> >=20
-> > I'm pretty sure this patch is the wrong approach, actually, since it
-> > doesn't fix the regular (non-atomic) open codepath. Any thoughts on wha=
-t
->=20
-> Hey Jeff,
->=20
-> I haven't quite understood why that won't work for the regular open
-> codepaths. I'm probably missing something obvious.
->=20
 
-In the normal open codepaths, FMODE_OPENED | FMODE_CREATED are still
-clear. If we're not doing an atomic_open (i.e. the dentry doesn't exist
-yet or is negative), then nothing really happens until you get to the
-vfs_open call.
+--5f267h7mxg6wplag
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > the right fix might be?
->=20
-> When an actual creation has taken place - and not just a lookup - then
-> may_create_in_sticky() assumes that the owner of the inode matches
-> current_fsuid(). That'd would also be problematic on fat or in fact on
-> any fs where the actual inode->i_{g,u}id are based on e.g. uid/gid mount
-> options and not on current_fsuid(), I think?
->=20
-> So in order to improve this we would need to work around that assumption
-> in some way. Either by skipping may_create_in_sticky() if the file got
-> created or by adapting may_create_in_sticky().
->=20
-> I only wonder whether skipping may_create_in_sticky() altogether might
-> be a bit too lax. One possibility that came to my mind might be to relax
-> this assumption when the file has been created and the creator has
-> CAP_FOWNER.
->=20
+Hi,
 
-That may be the best option. I'll tinker around with that and see if I
-can get it to work. Thanks for the suggestion.
-
-> So (not compile tested or in any way) sm like:
+On Mon, Mar 07, 2022 at 07:34:22PM -0800, Saravana Kannan wrote:
+> On Mon, Mar 7, 2022 at 3:21 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > +Saravana
+> >
+> > On Wed, Mar 02, 2022 at 10:10:53PM +0100, Paul Kocialkowski wrote:
+> > > In order to set their correct DMA address offset, some devices rely on
+> > > the device-tree interconnects property which identifies an
+> > > interconnect node that provides a dma-ranges property that can be used
+> > > to set said offset.
+> > >
+> > > Since that logic is all handled by the generic openfirmware and driver
+> > > code, the device-tree description could be enough to properly set
+> > > the offset.
+> > >
+> > > However the interconnects property is currently not marked as
+> > > optional, which implies that a driver for the corresponding node
+> > > must be loaded as a requirement. When no such driver exists, this
+> > > results in an endless EPROBE_DEFER which gets propagated to the
+> > > calling driver. This ends up in the driver never loading.
+> > >
+> > > Marking the interconnects property as optional makes it possible
+> > > to load the driver in that situation, since the EPROBE_DEFER return
+> > > code will no longer be propagated to the driver.
+> > >
+> > > There might however be undesirable consequences with this change,
+> > > which I do not fully grasp at this point.
 >=20
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 1f28d3f463c3..239e9f423346 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -1221,7 +1221,8 @@ int may_linkat(struct user_namespace *mnt_userns, s=
-truct path *link)
->   * Returns 0 if the open is allowed, -ve on error.
->   */
->  static int may_create_in_sticky(struct user_namespace *mnt_userns,
-> -                               struct nameidata *nd, struct inode *const=
- inode)
-> +                               struct nameidata *nd, struct inode *const=
- inode,
-> +                               bool created)
->  {
->         umode_t dir_mode =3D nd->dir_mode;
->         kuid_t dir_uid =3D nd->dir_uid;
-> @@ -1230,7 +1231,9 @@ static int may_create_in_sticky(struct user_namespa=
-ce *mnt_userns,
->             (!sysctl_protected_regular && S_ISREG(inode->i_mode)) ||
->             likely(!(dir_mode & S_ISVTX)) ||
->             uid_eq(i_uid_into_mnt(mnt_userns, inode), dir_uid) ||
-> -           uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)))
-> +           uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)) ||
-> +           (created &&
-> +            capable_wrt_inode_uidgid(mnt_userns, inode, CAP_FOWNER)))
->                 return 0;
+> Temporary NACK till I get a bit more time to take a closer look. I
+> really don't like the idea of making interconnects optional. IOMMUs
+> and DMAs were exceptions. Also, we kinda discuss similar issues in
+> LPC. We had some consensus on how to handle these and I noted them all
+> down with a lot of details -- let me go take a look at those notes
+> again and see if I can send a more generic patch.
 >=20
->         if (likely(dir_mode & 0002) ||
-> @@ -3496,7 +3499,8 @@ static int do_open(struct nameidata *nd,
->                 if (d_is_dir(nd->path.dentry))
->                         return -EISDIR;
->                 error =3D may_create_in_sticky(mnt_userns, nd,
-> -                                            d_backing_inode(nd->path.den=
-try));
-> +                                            d_backing_inode(nd->path.den=
-try),
-> +                                            (file->f_mode & FMODE_CREATE=
-D));
->                 if (unlikely(error))
->                         return error;
->         }
+> Paul,
+>=20
+> Can you point to the DTS (not DTSI) file that corresponds to this?
+> Also, if it's a builtin kernel, I'd recommend setting
+> deferred_probe_timeout=3D1 and that should take care of it too.
 
-I think that still won't fix it in the normal open codepath.
-FMODE_CREATED won't be set, so this will just end up failing again.
+For the record, I also encountered this today on next-20220726 with this
+device:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arc=
+h/arm/boot/dts/sun5i.dtsi#n775
 
---=20
-Jeff Layton <jlayton@kernel.org>
+The driver won't probe without fw_devlink=3Doff
+
+Maxime
+
+--5f267h7mxg6wplag
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYuEqRwAKCRDj7w1vZxhR
+xU7hAPwISO3g/gkHRCgtYcqZGbLJsQTjFn8UlaYIl4MsqUE71AEArjHaL+k43u3L
+IMF27kO1knwUR8duIkDbYBb49e/ZQgs=
+=h3a/
+-----END PGP SIGNATURE-----
+
+--5f267h7mxg6wplag--

@@ -2,162 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A065822AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB1D5822AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbiG0JER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S231315AbiG0JDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiG0JEO (ORCPT
+        with ESMTP id S231233AbiG0JDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:04:14 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC8E474CB
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:04:13 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id r3so29232671ybr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p2f3kh3jqi9yjSQzKeEhCTNVhq9kV2tSI6rer8mhvNI=;
-        b=WjFzxSO2wJzIbJH4XkUpRb5mtLv5lM7tMqrUu61P+vX0mCZ/dxyDFrjHgg+qBFmghP
-         nfGkL9gbS4Vwnuud/OmpQCyB0dChfNXSYl32JihYvnsBaCCarUtHOOga4p4XSzpQttS6
-         tzpx1dwoudB1NWkAiJvbO21luJ/qSTi1mF8Ku8IMdXHKV/5OiSzbGwXEVW0QvM71M8EC
-         SeUocZhlVq/HD29CtUs1jWRlWUZg0UGiSRK1SMN0nL1eB+v5zdZz/2mSy009D7aOwqFW
-         KSeQ/Q7fVmh7VjJga5qADbHbVztwLQMIU30KVKqPo5h4nsiKuHvwDyAZGhzrWlgFzhK3
-         N3AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p2f3kh3jqi9yjSQzKeEhCTNVhq9kV2tSI6rer8mhvNI=;
-        b=dkHQlqOq/6EXahRI5El8+jCW1FhCYkn7kqTAENuhmRfqqbgvJ/rmumggjaIFaMCUHK
-         qHSgPyUd6xJxtMVKBJRJaCxPAznwfXyWbBB8g5aXr/IBkcjJGJC441CPCx9TwigOGbaS
-         e6CPtS9WFQD9sKbHJ21AoiT9yg79rmhrIT4yqBzy4vtrZBBJgl4WWzlTbkJhkMmlAqzI
-         BFiFcwkEctBfsBQ/1nSRU+UY65lZjltIjDzMCJbdI7Gcc9AMUtoXS3XddJ0saB5j2ZgH
-         uBR6uATyLQnEPCGNnvuQQLyafQHI64+ORHo5a7ip85TBFSi6Xjx30slVHsYnrOY2qkuR
-         6DyA==
-X-Gm-Message-State: AJIora9pDn+/F21UkG0MoFePKaOTFtw7QLN5aMr3XvuhZbwQrT6KYf6H
-        7vAkYbTk/AFN+045hqJcovlY8PCP7veXLzU/0wXM8Q==
-X-Google-Smtp-Source: AGRyM1tFqXVl1Wq7EQt3qviY8BvioiYzPA9jdIWLjIYucLUw/m0e/HDPSy2RNp34GiUJ0LE93SKzgQ/kW9FUP7L1iYE=
-X-Received: by 2002:a25:ba02:0:b0:670:8171:3176 with SMTP id
- t2-20020a25ba02000000b0067081713176mr15910761ybg.61.1658912652855; Wed, 27
- Jul 2022 02:04:12 -0700 (PDT)
+        Wed, 27 Jul 2022 05:03:47 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEB1474C4;
+        Wed, 27 Jul 2022 02:03:45 -0700 (PDT)
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 940BF40737D5;
+        Wed, 27 Jul 2022 09:03:38 +0000 (UTC)
+Subject: Re: [ldv-project] [PATCH v2] usb: cdns3: change place of 'priv_ep'
+ assignment in cdns3_gadget_ep_dequeue(), cdns3_gadget_ep_enable()
+To:     Peter Chen <peter.chen@kernel.org>,
+        Andrey Strachuk <strochuk@ispras.ru>
+Cc:     ldv-project@linuxtesting.org, Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>
+References: <20220718160052.4188-1-strochuk@ispras.ru>
+ <20220727083956.GA269370@nchen-desktop>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <370caacd-6e03-8c8c-1ea6-0beef763fee6@ispras.ru>
+Date:   Wed, 27 Jul 2022 12:03:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220726135506.485108-1-bchihi@baylibre.com> <20220726135506.485108-2-bchihi@baylibre.com>
- <3cb97e73-d60a-086d-83c2-1711c70057a2@collabora.com>
-In-Reply-To: <3cb97e73-d60a-086d-83c2-1711c70057a2@collabora.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 27 Jul 2022 11:03:36 +0200
-Message-ID: <CAGuA+orsPVDjKcD=nMoHNKkQd3LNP8FP+TDSCWvabmR9f19TWw@mail.gmail.com>
-Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek folder
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220727083956.GA269370@nchen-desktop>
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru-RU
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 10:24 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 26/07/22 15:55, Balsam CHIHI ha scritto:
-> > Add Mediatek proprietary folder to upstream more thermal zone and cooler
-> > drivers. Relocate the original thermal controller driver to it and rename
-> > as soc_temp.c to show its purpose more clearly.
-> >
-> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> > Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> > ---
-> >   drivers/thermal/Kconfig                       | 14 ++++-------
-> >   drivers/thermal/Makefile                      |  2 +-
-> >   drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
-> >   drivers/thermal/mediatek/Makefile             |  1 +
-> >   .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
-> >   5 files changed, 29 insertions(+), 11 deletions(-)
-> >   create mode 100644 drivers/thermal/mediatek/Kconfig
-> >   create mode 100644 drivers/thermal/mediatek/Makefile
-> >   rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
-> >
-> > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> > index 0e5cc948373c..ecba8d6e313b 100644
-> > --- a/drivers/thermal/Kconfig
-> > +++ b/drivers/thermal/Kconfig
-> > @@ -412,16 +412,10 @@ config DA9062_THERMAL
-> >         zone.
-> >         Compatible with the DA9062 and DA9061 PMICs.
-> >
-> > -config MTK_THERMAL
-> > -     tristate "Temperature sensor driver for mediatek SoCs"
-> > -     depends on ARCH_MEDIATEK || COMPILE_TEST
-> > -     depends on HAS_IOMEM
-> > -     depends on NVMEM || NVMEM=n
-> > -     depends on RESET_CONTROLLER
-> > -     default y
-> > -     help
-> > -       Enable this option if you want to have support for thermal management
-> > -       controller present in Mediatek SoCs
-> > +menu "Mediatek thermal drivers"
-> > +depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +source "drivers/thermal/mediatek/Kconfig"
-> > +endmenu
-> >
-> >   config AMLOGIC_THERMAL
-> >       tristate "Amlogic Thermal Support"
-> > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> > index def8e1a0399c..3c00e864ad55 100644
-> > --- a/drivers/thermal/Makefile
-> > +++ b/drivers/thermal/Makefile
-> > @@ -55,7 +55,7 @@ obj-y                               += st/
-> >   obj-$(CONFIG_QCOM_TSENS)    += qcom/
-> >   obj-y                               += tegra/
-> >   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-> > -obj-$(CONFIG_MTK_THERMAL)    += mtk_thermal.o
-> > +obj-$(CONFIG_MTK_THERMAL)    += mediatek/
-> >   obj-$(CONFIG_GENERIC_ADC_THERMAL)   += thermal-generic-adc.o
-> >   obj-$(CONFIG_UNIPHIER_THERMAL)      += uniphier_thermal.o
-> >   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> > diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
-> > new file mode 100644
-> > index 000000000000..9c41e9079fc3
-> > --- /dev/null
-> > +++ b/drivers/thermal/mediatek/Kconfig
-> > @@ -0,0 +1,23 @@
-> > +config MTK_THERMAL
-> > +     tristate "MediaTek thermal drivers"
-> > +     depends on THERMAL_OF
-> > +     help
-> > +             This is the option for MediaTek thermal software
-> > +             solutions. Please enable corresponding options to
-> > +             get temperature information from thermal sensors or
-> > +             turn on throttle mechaisms for thermal mitigation.
->
-> Sorry, I just noticed that the indentation must be fixed.
->
->         help
->           This is the option .....
->
-> Thanks,
-> Angelo
-OK, It will be fixed ASAP.
+On 27.07.2022 11:39, Peter Chen wrote:
+> On 22-07-18 19:00:52, Andrey Strachuk wrote:
+>> If 'ep' is NULL, result of ep_to_cdns3_ep(ep) is invalid pointer
+>> and its dereference with priv_ep->cdns3_dev may cause panic.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>
+>> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
+>> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+>> ---
+>>  drivers/usb/cdns3/cdns3-gadget.c | 9 ++++++---
+>>  1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+>> index 5c15c48952a6..aea5db0ec72d 100644
+>> --- a/drivers/usb/cdns3/cdns3-gadget.c
+>> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+>> @@ -2285,13 +2285,14 @@ static int cdns3_gadget_ep_enable(struct usb_ep *ep,
+>>  	int val;
+>>
+>>  	priv_ep = ep_to_cdns3_ep(ep);
+>> -	priv_dev = priv_ep->cdns3_dev;
+>> -	comp_desc = priv_ep->endpoint.comp_desc;
+>>  
+>>  	if (!ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT) {
+>>  		dev_dbg(priv_dev->dev, "usbss: invalid parameters\n");
+>>  		return -EINVAL;
+>>  	}
+>> +
+>> +	comp_desc = priv_ep->endpoint.comp_desc;
+>> +	priv_dev = priv_ep->cdns3_dev;
+>>
+>>  	if (!desc->wMaxPacketSize) {
+>>  		dev_err(priv_dev->dev, "usbss: missing wMaxPacketSize\n");
+>> @@ -2600,7 +2601,7 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
+>>  			    struct usb_request *request)
+>>  {
+>>  	struct cdns3_endpoint *priv_ep = ep_to_cdns3_ep(ep);
+>> -	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
+>> +	struct cdns3_device *priv_dev;
+>>  	struct usb_request *req, *req_temp;
+>>  	struct cdns3_request *priv_req;
+>>  	struct cdns3_trb *link_trb;
+>> @@ -2610,6 +2611,8 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
+>>  
+>>  	if (!ep || !request || !ep->desc)
+>>  		return -EINVAL;
+>> +
+>> +	priv_dev = priv_ep->cdns3_dev;
+>>
+>>  	spin_lock_irqsave(&priv_dev->lock, flags);
+>>
+>> -- 
+> 
+> Acked-by: Peter Chen <peter.chen@kernel.org>
+> 
 
-Thanks,
-Balsam.
+Looks good, but I would suggest to move
+
+  priv_ep = ep_to_cdns3_ep(ep);
+
+below the check of 'ep' as well.
+
+--
+Alexey

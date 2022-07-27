@@ -2,148 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C437581CF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFE8581CFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240122AbiG0BQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 21:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S240132AbiG0BRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 21:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbiG0BQW (ORCPT
+        with ESMTP id S229484AbiG0BRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 21:16:22 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481CA2A261
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658884582; x=1690420582;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=iPdXmQ179/RmymAUmqn4R6JR+2WpZ7duivhKTTYWM9A=;
-  b=nMlqwcGXWscMaHmeJmokxyWYjx7WEbPBxG0GikuDB0Aflispen5gf5TZ
-   ebuC0kqt/GXyKqfL8ekssAT+Fn6d9nGrA5U0FDvx1FgFYi6ts5R8wnIqN
-   wc5wytpk16Oc24e079djixZ2O0F+Y6/ChELU4sQgxvkgsunQcTjIflNWh
-   WCEwPfofsvgq6HTyRlDo6W1uFkBl5sRbgmH2mjcIAcKdaQiopilf7ZNTZ
-   2Q49sTnWasB3LzGsbOE0FZ0MUCX6W7Na/NQz9xTbdqYQ2hEoaWhpdiD8Z
-   UqNTfCmJbWXILyA+og07qrz3FbRXCV8IkN7Emz2QRKQ7k+GfkKoB6tUsq
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="267883154"
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="267883154"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 18:16:21 -0700
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="575754964"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 18:16:17 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Wei Xu <weixugc@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jvgediya.oss@gmail.com, Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: Re: [PATCH v10 1/8] mm/demotion: Add support for explicit memory tiers
-References: <20220720025920.1373558-1-aneesh.kumar@linux.ibm.com>
-        <20220720025920.1373558-2-aneesh.kumar@linux.ibm.com>
-        <87k080wmvb.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <9e9ba2e4-3a87-3a79-e336-8849dad4856a@linux.ibm.com>
-Date:   Wed, 27 Jul 2022 09:16:08 +0800
-In-Reply-To: <9e9ba2e4-3a87-3a79-e336-8849dad4856a@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Tue, 26 Jul 2022 17:29:56 +0530")
-Message-ID: <87lesfuzhj.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 26 Jul 2022 21:17:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88132A261;
+        Tue, 26 Jul 2022 18:17:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F5D616D4;
+        Wed, 27 Jul 2022 01:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95DAC433D7;
+        Wed, 27 Jul 2022 01:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658884653;
+        bh=yHdFI7UZExa1GxsmSAJPPFlPx1kKFocZoTBH3mG9NMo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mdshVMdvfzhti6LRuDN6H7FqRhIPEHgJQTuekQbRk/mzcXXE8ynF8tli3utiZLp5O
+         QxJiEvHmZWAdKm0SYEtppBgNd1fXBwwgNxA1xN/58n6z/5G0fZLq1uX8wd9Gu+Ny9s
+         3BZFdmz9bgUxy7tc8D9OXGQTNnxX+AolldBOTMuoHbo/jeOpa7QOB7GpQQczyvNU5w
+         Mb6G9CKihsYC/NAcfU+R9sFAv01z9O5gFdLey2i/K+Dz7mddR0bFAiv8OXIQMYhtc1
+         +saf5fv4mak89IDZ4Wam0A9XfwnyABJR6qN7sfsaT3/bqbqGI+zbkKoRM2ZPP2tLqf
+         rmhz8+MSk3NtQ==
+Message-ID: <40928cfc-150c-8714-bb83-21d325ce93e5@kernel.org>
+Date:   Tue, 26 Jul 2022 19:17:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v6 02/26] tcp: authopt: Remove more unused noops
+Content-Language: en-US
+To:     Leonard Crestez <cdleonard@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Philip Paeps <philip@trouble.is>
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1658815925.git.cdleonard@gmail.com>
+ <2e9007e2f536ef2b8e3dfdaa1dd44dcc6bfc125f.1658815925.git.cdleonard@gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <2e9007e2f536ef2b8e3dfdaa1dd44dcc6bfc125f.1658815925.git.cdleonard@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
-
->>> diff --git a/include/linux/node.h b/include/linux/node.h
->>> index 40d641a8bfb0..a2a16d4104fd 100644
->>> --- a/include/linux/node.h
->>> +++ b/include/linux/node.h
->>> @@ -92,6 +92,12 @@ struct node {
->>>  	struct list_head cache_attrs;
->>>  	struct device *cache_dev;
->>>  #endif
->>> +	/*
->>> +	 * For memory devices, perf_level describes
->>> +	 * the device performance and how it should be used
->>> +	 * while building a memory hierarchy.
->>> +	 */
->>> +	int perf_level;
->> 
->> Think again, I found that "perf_level" may be not the best abstraction
->> of the performance of memory devices.  In concept, it's an abstraction of the memory
->> bandwidth.  But it will not reflect the memory latency.
->> 
->> Instead, the previous proposed "abstract_distance" is an abstraction of
->> the memory latency.  Per my understanding, the memory latency has more
->> direct influence on system performance.  And because the latency of the
->> memory device will increase if the memory accessing throughput nears its
->> max bandwidth, so the memory bandwidth can be reflected in the "abstract
->> distance" too.  That is, the "abstract distance" is an abstraction of
->> the memory latency under the expected memory accessing throughput.  The
->> "offset" to the default "abstract distance" reflects the different
->> expected memory accessing throughput.
->> 
->> So, I think we need some kind of abstraction of the memory latency
->> instead of memory bandwidth, e.g., "abstract distance".
->> 
->
-> I am reworking other parts of the patch set based on your feedback.
-
-Thanks!
-
-> This part I guess we need to reach some consensus.
-
-Yes.  Let's do that.
-
-> IMHO perf_level (performance level) can indicate a combination of both latency
-> and bandwidth.
-
-"abstract distance" is based on latency, and bandwidth is reflected via
-"latency under the expected memory accessing throughput".
-
-How does perf_level indicate the combination?  Per my understanding,
-it's bandwidth based.
-
-> It is an abstract concept that indicates the performance of the
-> device. As we learn more about which device attribute makes more impact in
-> defining hierarchy, performance level will give more weightage to that specific
-> attribute. It could be write latency or bandwidth. For me, distance has a direct
-> linkage to latency because that is how we define numa distance now. Adding
-> abstract to the name is not making it more abstract than perf_level. 
->
-> I am open to suggestions from others.  Wei Xu has also suggested perf_level name.
-> I can rename this to abstract_distance if that indicates the goal better.
-
-I'm open to naming.  But I think that it's good to define it at some
-degree instead of completely opaque stuff.  If it's latency based, then
-low value corresponds to high performance.  If it's bandwidth based,
-then low value corresponds to low performance.
-
-Hi, Wei and Johannes,
-
-What do you think about this?
-
-Best Regards,
-Huang, Ying
+On 7/26/22 12:15 AM, Leonard Crestez wrote:
+> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+> ---
+>  include/net/tcp_authopt.h | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
+> index adf325c260d5..bc2cff82830d 100644
+> --- a/include/net/tcp_authopt.h
+> +++ b/include/net/tcp_authopt.h
+> @@ -60,14 +60,10 @@ DECLARE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
+>  void tcp_authopt_clear(struct sock *sk);
+>  int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen);
+>  int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key);
+>  int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen);
+>  #else
+> -static inline int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key)
+> -{
+> -	return -ENOPROTOOPT;
+> -}
+>  static inline void tcp_authopt_clear(struct sock *sk)
+>  {
+>  }
+>  #endif
+>  
+added in the previous patch, so this one should be folded into patch 1

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F08582C5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D86582F1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240050AbiG0QpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        id S233248AbiG0RU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240121AbiG0QoI (ORCPT
+        with ESMTP id S241899AbiG0RTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:44:08 -0400
+        Wed, 27 Jul 2022 13:19:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9239A51A24;
-        Wed, 27 Jul 2022 09:30:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB1C7A524;
+        Wed, 27 Jul 2022 09:44:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70C56B821C5;
-        Wed, 27 Jul 2022 16:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB8FC433D6;
-        Wed, 27 Jul 2022 16:30:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6402BB8200C;
+        Wed, 27 Jul 2022 16:44:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36566C433D6;
+        Wed, 27 Jul 2022 16:44:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939435;
-        bh=AJqytMV64rUASa1fC+FJDWlVKl+qrP5oT4VUCR05xaY=;
+        s=korg; t=1658940248;
+        bh=wNIplsC///Z+1aLsiUGI7BR3SSo4CPpuOnzTbHZt7Zg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RPyvm3ySCXJqroclLKKHCyK4KsAcDeryglq7EthZiQhTG03kheqU6PTdf3xBKtGc2
-         D1WkrRUiKfAh8gT3w6IZZgr1iZMP+MuUgQysH2DNGe3/U9WAeVQkW38WyxuP/a7SJb
-         0HIDhrYM3LZb/jEpCeypaeBvu8dWaOgaMi40VFOQ=
+        b=YSJrcV21spXwIq9Ks7zoYJnNwXVVvTodcRSZe4PmjZ4X4RUpx7vitFJ9gOJbN+51z
+         rh8EEP5CZ8zruLVUOEKIuv00m5qIvWdIM1rBKauKNDWLkcDwAUxUhB1Uwdn3f3UkEQ
+         sRU+DxEoda/6jHkzU+5PCJmBPvbKXiW+FcGWRBVQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 68/87] x86: get rid of small constant size cases in raw_copy_{to,from}_user()
+Subject: [PATCH 5.15 157/201] iwlwifi: fw: uefi: add missing include guards
 Date:   Wed, 27 Jul 2022 18:11:01 +0200
-Message-Id: <20220727161011.803180178@linuxfoundation.org>
+Message-Id: <20220727161034.339315972@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,206 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 4b842e4e25b12951fa10dedb4bc16bc47e3b850c ]
+[ Upstream commit 91000fdf82195b66350b4f88413c2e8b5f94d994 ]
 
-Very few call sites where that would be triggered remain, and none
-of those is anywhere near hot enough to bother.
+We still don't use #pragma once in the kernel, but even if
+we did it'd be missing. Add the missing include guards.
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Fixes: 84c3c9952afb ("iwlwifi: move UEFI code to a separate file")
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211024181719.7fc9988ed49b.I87e300fab664047581e51fb9b02744c75320d08c@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/uaccess.h    |  12 ----
- arch/x86/include/asm/uaccess_32.h |  27 --------
- arch/x86/include/asm/uaccess_64.h | 108 +-----------------------------
- 3 files changed, 2 insertions(+), 145 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/fw/uefi.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 61d93f062a36..a19effb98fdc 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -378,18 +378,6 @@ do {									\
- 		     : "=r" (err), ltype(x)				\
- 		     : "m" (__m(addr)), "i" (errret), "0" (err))
- 
--#define __get_user_asm_nozero(x, addr, err, itype, rtype, ltype, errret)	\
--	asm volatile("\n"						\
--		     "1:	mov"itype" %2,%"rtype"1\n"		\
--		     "2:\n"						\
--		     ".section .fixup,\"ax\"\n"				\
--		     "3:	mov %3,%0\n"				\
--		     "	jmp 2b\n"					\
--		     ".previous\n"					\
--		     _ASM_EXTABLE_UA(1b, 3b)				\
--		     : "=r" (err), ltype(x)				\
--		     : "m" (__m(addr)), "i" (errret), "0" (err))
--
+diff --git a/drivers/net/wireless/intel/iwlwifi/fw/uefi.h b/drivers/net/wireless/intel/iwlwifi/fw/uefi.h
+index 45d0b36d79b5..d552c656ac9f 100644
+--- a/drivers/net/wireless/intel/iwlwifi/fw/uefi.h
++++ b/drivers/net/wireless/intel/iwlwifi/fw/uefi.h
+@@ -2,7 +2,8 @@
  /*
-  * This doesn't do __uaccess_begin/end - the exception handling
-  * around it must do that.
-diff --git a/arch/x86/include/asm/uaccess_32.h b/arch/x86/include/asm/uaccess_32.h
-index ba2dc1930630..388a40660c7b 100644
---- a/arch/x86/include/asm/uaccess_32.h
-+++ b/arch/x86/include/asm/uaccess_32.h
-@@ -23,33 +23,6 @@ raw_copy_to_user(void __user *to, const void *from, unsigned long n)
- static __always_inline unsigned long
- raw_copy_from_user(void *to, const void __user *from, unsigned long n)
- {
--	if (__builtin_constant_p(n)) {
--		unsigned long ret;
+  * Copyright(c) 2021 Intel Corporation
+  */
 -
--		switch (n) {
--		case 1:
--			ret = 0;
--			__uaccess_begin_nospec();
--			__get_user_asm_nozero(*(u8 *)to, from, ret,
--					      "b", "b", "=q", 1);
--			__uaccess_end();
--			return ret;
--		case 2:
--			ret = 0;
--			__uaccess_begin_nospec();
--			__get_user_asm_nozero(*(u16 *)to, from, ret,
--					      "w", "w", "=r", 2);
--			__uaccess_end();
--			return ret;
--		case 4:
--			ret = 0;
--			__uaccess_begin_nospec();
--			__get_user_asm_nozero(*(u32 *)to, from, ret,
--					      "l", "k", "=r", 4);
--			__uaccess_end();
--			return ret;
--		}
--	}
- 	return __copy_user_ll(to, (__force const void *)from, n);
- }
++#ifndef __iwl_fw_uefi__
++#define __iwl_fw_uefi__
  
-diff --git a/arch/x86/include/asm/uaccess_64.h b/arch/x86/include/asm/uaccess_64.h
-index 5cd1caa8bc65..bc10e3dc64fe 100644
---- a/arch/x86/include/asm/uaccess_64.h
-+++ b/arch/x86/include/asm/uaccess_64.h
-@@ -65,117 +65,13 @@ copy_to_user_mcsafe(void *to, const void *from, unsigned len)
- static __always_inline __must_check unsigned long
- raw_copy_from_user(void *dst, const void __user *src, unsigned long size)
- {
--	int ret = 0;
--
--	if (!__builtin_constant_p(size))
--		return copy_user_generic(dst, (__force void *)src, size);
--	switch (size) {
--	case 1:
--		__uaccess_begin_nospec();
--		__get_user_asm_nozero(*(u8 *)dst, (u8 __user *)src,
--			      ret, "b", "b", "=q", 1);
--		__uaccess_end();
--		return ret;
--	case 2:
--		__uaccess_begin_nospec();
--		__get_user_asm_nozero(*(u16 *)dst, (u16 __user *)src,
--			      ret, "w", "w", "=r", 2);
--		__uaccess_end();
--		return ret;
--	case 4:
--		__uaccess_begin_nospec();
--		__get_user_asm_nozero(*(u32 *)dst, (u32 __user *)src,
--			      ret, "l", "k", "=r", 4);
--		__uaccess_end();
--		return ret;
--	case 8:
--		__uaccess_begin_nospec();
--		__get_user_asm_nozero(*(u64 *)dst, (u64 __user *)src,
--			      ret, "q", "", "=r", 8);
--		__uaccess_end();
--		return ret;
--	case 10:
--		__uaccess_begin_nospec();
--		__get_user_asm_nozero(*(u64 *)dst, (u64 __user *)src,
--			       ret, "q", "", "=r", 10);
--		if (likely(!ret))
--			__get_user_asm_nozero(*(u16 *)(8 + (char *)dst),
--				       (u16 __user *)(8 + (char __user *)src),
--				       ret, "w", "w", "=r", 2);
--		__uaccess_end();
--		return ret;
--	case 16:
--		__uaccess_begin_nospec();
--		__get_user_asm_nozero(*(u64 *)dst, (u64 __user *)src,
--			       ret, "q", "", "=r", 16);
--		if (likely(!ret))
--			__get_user_asm_nozero(*(u64 *)(8 + (char *)dst),
--				       (u64 __user *)(8 + (char __user *)src),
--				       ret, "q", "", "=r", 8);
--		__uaccess_end();
--		return ret;
--	default:
--		return copy_user_generic(dst, (__force void *)src, size);
--	}
-+	return copy_user_generic(dst, (__force void *)src, size);
+ #define IWL_UEFI_OEM_PNVM_NAME		L"UefiCnvWlanOemSignedPnvm"
+ #define IWL_UEFI_REDUCED_POWER_NAME	L"UefiCnvWlanReducedPower"
+@@ -40,3 +41,5 @@ void *iwl_uefi_get_reduced_power(struct iwl_trans *trans, size_t *len)
+ 	return ERR_PTR(-EOPNOTSUPP);
  }
- 
- static __always_inline __must_check unsigned long
- raw_copy_to_user(void __user *dst, const void *src, unsigned long size)
- {
--	int ret = 0;
--
--	if (!__builtin_constant_p(size))
--		return copy_user_generic((__force void *)dst, src, size);
--	switch (size) {
--	case 1:
--		__uaccess_begin();
--		__put_user_asm(*(u8 *)src, (u8 __user *)dst,
--			      ret, "b", "b", "iq", 1);
--		__uaccess_end();
--		return ret;
--	case 2:
--		__uaccess_begin();
--		__put_user_asm(*(u16 *)src, (u16 __user *)dst,
--			      ret, "w", "w", "ir", 2);
--		__uaccess_end();
--		return ret;
--	case 4:
--		__uaccess_begin();
--		__put_user_asm(*(u32 *)src, (u32 __user *)dst,
--			      ret, "l", "k", "ir", 4);
--		__uaccess_end();
--		return ret;
--	case 8:
--		__uaccess_begin();
--		__put_user_asm(*(u64 *)src, (u64 __user *)dst,
--			      ret, "q", "", "er", 8);
--		__uaccess_end();
--		return ret;
--	case 10:
--		__uaccess_begin();
--		__put_user_asm(*(u64 *)src, (u64 __user *)dst,
--			       ret, "q", "", "er", 10);
--		if (likely(!ret)) {
--			asm("":::"memory");
--			__put_user_asm(4[(u16 *)src], 4 + (u16 __user *)dst,
--				       ret, "w", "w", "ir", 2);
--		}
--		__uaccess_end();
--		return ret;
--	case 16:
--		__uaccess_begin();
--		__put_user_asm(*(u64 *)src, (u64 __user *)dst,
--			       ret, "q", "", "er", 16);
--		if (likely(!ret)) {
--			asm("":::"memory");
--			__put_user_asm(1[(u64 *)src], 1 + (u64 __user *)dst,
--				       ret, "q", "", "er", 8);
--		}
--		__uaccess_end();
--		return ret;
--	default:
--		return copy_user_generic((__force void *)dst, src, size);
--	}
-+	return copy_user_generic((__force void *)dst, src, size);
- }
- 
- static __always_inline __must_check
+ #endif /* CONFIG_EFI */
++
++#endif /* __iwl_fw_uefi__ */
 -- 
 2.35.1
 

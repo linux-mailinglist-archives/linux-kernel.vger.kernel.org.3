@@ -2,144 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1904558264D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C65582651
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbiG0MWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
+        id S232887AbiG0MXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiG0MWw (ORCPT
+        with ESMTP id S231355AbiG0MXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:22:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4187D45F47
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658924570;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k2Ka0CTSNUje69lzv8PJ/TPp2RlYweVKt52OqRvsIcU=;
-        b=hCNsxit3sOgekOMXCX8vEkyote23KAqAiukuUs+eZ4Uur2AsQhGq5uzID4UwjiR9q84m1K
-        R3rP6m8isCm2miaFcS9tMxt0aJUKhr2GQyZwGAGD43IuI0+wa03hAtVAG5hdW3PiYxNomM
-        MQX330eS8hk2g1PP9RAUpbJ2AM9sCgU=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-n9iPIs7sMc2R9fpVEU8Wiw-1; Wed, 27 Jul 2022 08:22:49 -0400
-X-MC-Unique: n9iPIs7sMc2R9fpVEU8Wiw-1
-Received: by mail-wr1-f72.google.com with SMTP id k26-20020adfb35a000000b0021d6c3b9363so2770046wrd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:22:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k2Ka0CTSNUje69lzv8PJ/TPp2RlYweVKt52OqRvsIcU=;
-        b=K1jpmQKM/S0X1MQ6kF4i58/HVyB+4yYjQgnBsnXsmj9xQT6AxOEnJYCysytrcf8qe6
-         vLKcuxT6eObWRchxD5+xlZYh8og01ATLLQ66tiCtoSeYS/01X3+bQ9dBX0xt0z+ofbaK
-         QCraOlb5oebdSz4Tvi7wQ7s7Ndmql3fkG0Z66eDXFvWKWY7rx521u4hGiU5K7+MMi3jj
-         FIgECzSi+YKRMFjpj1hRXUU0ryz+ui4vjmrLevfirOpxe0MVuxFDT/1Gw9Bw7dLE4OIF
-         semEUd36mECGSY73xjAa6MmxJ2lpSzbqU2Bq8Ls2g0RQrzCWA0/z+blPx9vMrJbJtGsf
-         1ztg==
-X-Gm-Message-State: AJIora8cWHv95a+t/osT/mcnApVuYeFJgXXMO2aOtkHN/I4wEtaSPyHh
-        npCweiPlYkit3RZupmgooEOBZ7VV9WXvG4dPsKzJRLQxHobNFNsgX46lh2IRcutuepTn1/mbjB/
-        tRV2RuSWCNFMCZbAPpyJxFLrt
-X-Received: by 2002:a7b:ca57:0:b0:3a3:205d:2533 with SMTP id m23-20020a7bca57000000b003a3205d2533mr2850183wml.67.1658924567788;
-        Wed, 27 Jul 2022 05:22:47 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1teiq1UKtrMdPdEkg4fkBnI9UGCnKXnu+86rN3hnX5P6j17GO3+sGhJ6NqbsUNOXvFAHuGSxQ==
-X-Received: by 2002:a7b:ca57:0:b0:3a3:205d:2533 with SMTP id m23-20020a7bca57000000b003a3205d2533mr2850159wml.67.1658924567308;
-        Wed, 27 Jul 2022 05:22:47 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id f5-20020adff445000000b0021e5f32ade7sm13639242wrp.68.2022.07.27.05.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 05:22:46 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 14:22:41 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jorgen Hansen <jhansen@vmware.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v2 3/9] vmci/vsock: use 'target' in notify_poll_in,
- callback
-Message-ID: <20220727122241.mrafnepbelcboo5i@sgarzare-redhat>
-References: <19e25833-5f5c-f9b9-ac0f-1945ea17638d@sberdevices.ru>
- <355f4bb6-82e7-2400-83e9-c704a7ef92f3@sberdevices.ru>
+        Wed, 27 Jul 2022 08:23:37 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1085340BCC;
+        Wed, 27 Jul 2022 05:23:36 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4LtCcR1fjCz9t02;
+        Wed, 27 Jul 2022 12:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1658924615; bh=IMaCWTdqXT8YkmIj6Etf3jBLHcW5BWmhqXKF5qlpBSA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mHuoLyqcZ2xXbY2RELFqf1cY+QgEjEymiCpglmSCHOKc39tzCzijgeYHTa4/tq0tc
+         VmNVAWK1C+u7KeWE4YdvXZBzpHuD8TyPzUXYpPTxKc/DKcMmmHIoApipbjwMERomt3
+         yLx+ezP0lLoAWo9RyjM4rzePTYzdLH2Wjjt6JE/M=
+X-Riseup-User-ID: 73DB5447F23BB85AD30048B0035AAD72E9B41629F89208D7956C15F022DA05B4
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4LtCcJ63s7z1yWm;
+        Wed, 27 Jul 2022 12:23:28 +0000 (UTC)
+Message-ID: <bd1f2c37-fad8-87c5-b5ca-ba56e976c68d@riseup.net>
+Date:   Wed, 27 Jul 2022 09:23:25 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <355f4bb6-82e7-2400-83e9-c704a7ef92f3@sberdevices.ru>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] drm/tests: Split up test cases in
+ igt_check_drm_format_min_pitch
+Content-Language: en-US
+To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com, Guenter Roeck <linux@roeck-us.net>
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <20220717184336.1197723-1-mairacanal@riseup.net>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220717184336.1197723-1-mairacanal@riseup.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@Jorgen can you take a look at this series, especially this patch?
+Hi all,
 
-Maybe we need to update the comments in the else branch, something like
-s/there is nothing/there is not enough data
+Friendly ping: is someone available to take this, please?
 
-Thanks,
-Stefano
+Best Regards,
+- Maíra Canal
 
-On Mon, Jul 25, 2022 at 08:01:01AM +0000, Arseniy Krasnov wrote:
->This callback controls setting of POLLIN,POLLRDNORM output bits of poll()
->syscall,but in some cases,it is incorrectly to set it, when socket has
->at least 1 bytes of available data. Use 'target' which is already exists
->and equal to sk_rcvlowat in this case.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/vmci_transport_notify.c        | 2 +-
-> net/vmw_vsock/vmci_transport_notify_qstate.c | 2 +-
-> 2 files changed, 2 insertions(+), 2 deletions(-)
->
->diff --git a/net/vmw_vsock/vmci_transport_notify.c b/net/vmw_vsock/vmci_transport_notify.c
->index d69fc4b595ad..1684b85b0660 100644
->--- a/net/vmw_vsock/vmci_transport_notify.c
->+++ b/net/vmw_vsock/vmci_transport_notify.c
->@@ -340,7 +340,7 @@ vmci_transport_notify_pkt_poll_in(struct sock *sk,
-> {
-> 	struct vsock_sock *vsk = vsock_sk(sk);
->
->-	if (vsock_stream_has_data(vsk)) {
->+	if (vsock_stream_has_data(vsk) >= target) {
-> 		*data_ready_now = true;
-> 	} else {
-> 		/* We can't read right now because there is nothing in the
->diff --git a/net/vmw_vsock/vmci_transport_notify_qstate.c b/net/vmw_vsock/vmci_transport_notify_qstate.c
->index 0f36d7c45db3..a40407872b53 100644
->--- a/net/vmw_vsock/vmci_transport_notify_qstate.c
->+++ b/net/vmw_vsock/vmci_transport_notify_qstate.c
->@@ -161,7 +161,7 @@ vmci_transport_notify_pkt_poll_in(struct sock *sk,
-> {
-> 	struct vsock_sock *vsk = vsock_sk(sk);
->
->-	if (vsock_stream_has_data(vsk)) {
->+	if (vsock_stream_has_data(vsk) >= target) {
-> 		*data_ready_now = true;
-> 	} else {
-> 		/* We can't read right now because there is nothing in the
->-- 
->2.25.1
-
+On 7/17/22 15:43, Maíra Canal wrote:
+> The igt_check_drm_format_min_pitch() function had a lot of
+> KUNIT_EXPECT_* calls, all of which ended up allocating and initializing
+> various test assertion structures on the stack.
+> 
+> This behavior was producing -Wframe-larger-than warnings on PowerPC, i386,
+> and MIPS architectures, such as:
+> 
+> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
+> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of
+> 3712 bytes is larger than 2048 bytes
+> 
+> So, the igt_check_drm_format_min_pitch() test case was split into three
+> smaller functions: one testing single plane formats, one testing multiple
+> planes formats, and the other testing tiled formats.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+> ---
+>  drivers/gpu/drm/tests/drm_format_test.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_format_test.c b/drivers/gpu/drm/tests/drm_format_test.c
+> index 056cb8599d6d..28f2b8f88818 100644
+> --- a/drivers/gpu/drm/tests/drm_format_test.c
+> +++ b/drivers/gpu/drm/tests/drm_format_test.c
+> @@ -91,7 +91,7 @@ static void igt_check_drm_format_block_height(struct kunit *test)
+>  	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
+>  }
+>  
+> -static void igt_check_drm_format_min_pitch(struct kunit *test)
+> +static void igt_check_drm_format_min_pitch_for_single_plane(struct kunit *test)
+>  {
+>  	const struct drm_format_info *info = NULL;
+>  
+> @@ -175,6 +175,11 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
+>  			(uint64_t)UINT_MAX * 4);
+>  	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
+>  			(uint64_t)(UINT_MAX - 1) * 4);
+> +}
+> +
+> +static void igt_check_drm_format_min_pitch_for_multiple_planes(struct kunit *test)
+> +{
+> +	const struct drm_format_info *info = NULL;
+>  
+>  	/* Test 2 planes format */
+>  	info = drm_format_info(DRM_FORMAT_NV12);
+> @@ -249,6 +254,11 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
+>  			(uint64_t)(UINT_MAX - 1) / 2);
+>  	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2),
+>  			(uint64_t)(UINT_MAX - 1) / 2);
+> +}
+> +
+> +static void igt_check_drm_format_min_pitch_for_tiled_format(struct kunit *test)
+> +{
+> +	const struct drm_format_info *info = NULL;
+>  
+>  	/* Test tiled format */
+>  	info = drm_format_info(DRM_FORMAT_X0L2);
+> @@ -273,7 +283,9 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
+>  static struct kunit_case drm_format_tests[] = {
+>  	KUNIT_CASE(igt_check_drm_format_block_width),
+>  	KUNIT_CASE(igt_check_drm_format_block_height),
+> -	KUNIT_CASE(igt_check_drm_format_min_pitch),
+> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_single_plane),
+> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_multiple_planes),
+> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_tiled_format),
+>  	{ }
+>  };
+>  

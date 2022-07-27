@@ -2,129 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62CD58290E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9014582916
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbiG0Oxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
+        id S233990AbiG0Oyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbiG0Oxe (ORCPT
+        with ESMTP id S231748AbiG0Oyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:53:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328983E758;
-        Wed, 27 Jul 2022 07:53:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A98ED61842;
-        Wed, 27 Jul 2022 14:53:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E513C433D7;
-        Wed, 27 Jul 2022 14:53:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658933613;
-        bh=9yN7/8FPcz9NZnv8pdCtyOeMbgRvggAUjZAmF/EuP+o=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=gKMHmQntmFgl1LwEnSd9Z55mCHfUMj+OzCMAxFcP8d+Dfs4ChtfP+OVSJTaSABFcY
-         PNuYD4b/GEopssPNPm60cpA6e20pu69wyUzOWoGNrmykvYulTKXE4zXbv+bULro6O5
-         i1U0C6uPqVI1tfuUfHfJ8/IOmTutCwOW1IV6ld7i87aM73/jZRHXWW9FwuMjPtXrhC
-         SCD851UVuBV6yj206MfFxbLasEyqPKLvjV+s2keuAPtSueNJTJbhrJDuGp45JVWA1+
-         1rpBLiSPx2StaNj3tfXu8T9Mw05FX3Umk1IT5LXfZCT7tzF3MNOF358J+Br6lQy2iS
-         t/J4jYRJoJ/nQ==
-Message-ID: <70adb25e0e0d8b3e64f7fd40847f6bd096a705ed.camel@kernel.org>
-Subject: Re: [PATCH v2] vfs: bypass may_create_in_sticky check on
- newly-created files if task has CAP_FOWNER
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yongchen Yang <yoyang@redhat.com>,
-        Seth Forshee <sforshee@kernel.org>
-Date:   Wed, 27 Jul 2022 10:53:31 -0400
-In-Reply-To: <20220727143314.to2nx2osnw6zjxrm@wittgenstein>
-References: <20220727140014.69091-1-jlayton@kernel.org>
-         <20220727143314.to2nx2osnw6zjxrm@wittgenstein>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Wed, 27 Jul 2022 10:54:41 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11343E758;
+        Wed, 27 Jul 2022 07:54:40 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z18so9374605edb.10;
+        Wed, 27 Jul 2022 07:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7ER/CQCF1acpD7C4Ckvrw1Md4EUsY85fQW1PKFSkPb8=;
+        b=aGXVFTI+dr06bXYSakS+Xbl3WTK0SbheWluhcpKepsJok2qNvTRC0ByS9iBd/NZGjR
+         mQ7lLcHy9r6bzQnbvFE2jdKwZPWUzaAfnJos7byzPWmeJmwEYuNsHryM2DMN1JuSdF8H
+         xFObj3/YPzICoTMCs7mwn9Owv22XfUGw+80IEa8dfUNbZgelE78m/1lga3PQQdoreCwg
+         CgGoclbJm12P3hMdxlVDvdPQCXv1I08V9HXVez6Yl8lONhFed3G/MlTIwkVIraI0mioY
+         P+WfyMe2nUDWn/qZ/bn2LUE1YdWBRizSq7kEWd6g5FQJ3HwAxvtORl/utMnzjUqfPGFE
+         /g0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7ER/CQCF1acpD7C4Ckvrw1Md4EUsY85fQW1PKFSkPb8=;
+        b=GLFD4DNPqDrEiBaXY8+DW/eQsvd+r/oMMduOsbjaOAlVFxvTgtFKQ+GLBQGCN7sblG
+         +Ku/Xd7BTNyh2HeFrkjOmZaYs32Jhx+g7CZX0CDZABRXMldoMcqeUTnPA+Lp1NI654rn
+         fhSFvhHOMzE76x5vvlDuQhbIp/IvsHXiYqtHYkJDfNDKOiOgXrKkkAP0qQJ3zWvLZoLm
+         F7/dHZ1jsXBqtZ2Spqz8qfZOCkcjaLGOFPOKL9WxcIv47nXBIQtpiQIw0A4hVuVtMVs+
+         GtXQtof2ZH55HQvoLRUQfyLLGMau1s696ETHXMXZWrGG3jYMOWzScMntFbggfL1EAT4k
+         ZjEg==
+X-Gm-Message-State: AJIora9qlzPyBKvF4Jf6rAEqJ0WBp95o0a1vHTSgRnbBPe/OYy7wjUDB
+        C3/sfJ4FqEX8ZaKvewdA0kI=
+X-Google-Smtp-Source: AGRyM1tfopLURxjiqkTrSgishqe4Al0K9sqiMvkF6zcq6QWIrcI++oi3wuKIc+sWb9Bwo72HwS4H0Q==
+X-Received: by 2002:a05:6402:caa:b0:43b:c350:18c7 with SMTP id cn10-20020a0564020caa00b0043bc35018c7mr23620353edb.193.1658933679122;
+        Wed, 27 Jul 2022 07:54:39 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id lb8-20020a170907784800b00722e52d043dsm7728144ejc.114.2022.07.27.07.54.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 07:54:38 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 17:54:36 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v5 10/14] net: dsa: qca8k: move port FDB/MDB
+ function to common code
+Message-ID: <20220727145436.dczf3xr372cxqnd6@skbuf>
+References: <20220727113523.19742-1-ansuelsmth@gmail.com>
+ <20220727113523.19742-1-ansuelsmth@gmail.com>
+ <20220727113523.19742-11-ansuelsmth@gmail.com>
+ <20220727113523.19742-11-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220727113523.19742-11-ansuelsmth@gmail.com>
+ <20220727113523.19742-11-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-27 at 16:33 +0200, Christian Brauner wrote:
-> On Wed, Jul 27, 2022 at 10:00:14AM -0400, Jeff Layton wrote:
-> > From: Christian Brauner <brauner@kernel.org>
-> >=20
-> > NFS server is exporting a sticky directory (mode 01777) with root
-> > squashing enabled. Client has protect_regular enabled and then tries to
-> > open a file as root in that directory. File is created (with ownership
-> > set to nobody:nobody) but the open syscall returns an error. The proble=
-m
-> > is may_create_in_sticky which rejects the open even though the file has
-> > already been created.
-> >=20
-> > Add a new condition to may_create_in_sticky. If the file was just
-> > created, then allow bypassing the ownership check if the task has
-> > CAP_FOWNER. With this change, the initial open of a file by root works,
-> > but later opens of the same file will fail.
-> >=20
-> > Note that we can contrive a similar situation by exporting with
-> > all_squash and opening the file as an unprivileged user. This patch doe=
-s
-> > not fix that case. I suspect that that configuration is likely to be
-> > fundamentally incompatible with the protect_* sysctls enabled on the
-> > clients.
-> >=20
-> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D1976829
-> > Reported-by: Yongchen Yang <yoyang@redhat.com>
-> > Suggested-by: Christian Brauner <brauner@kernel.org>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >  fs/namei.c | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> >=20
-> > Hi Christian,
-> >=20
-> > I left you as author here since this is basically identical to the patc=
-h
-> > you suggested. Let me know if that's an issue.
->=20
-> No, that's fine.
->=20
+On Wed, Jul 27, 2022 at 01:35:19PM +0200, Christian Marangi wrote:
+> The same port FDB/MDB function are used by drivers based on qca8k family
+> switch. Move them to common code to make them accessible also by other
+> drivers.
+> Also drop bulk read/write functions and make them static
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
 
-Thanks.
-
-> It feels pretty strange to be able to create a file and then not being
-> able to open it fwiw. But we have that basically with nodev already. And
-> we implicitly encode this in may_create_in_sticky() for this protected_*
-> stuff. Relaxing this through CAP_FOWNER makes sense as it's explicitly
-> thought to "Bypass permission checks on operations that normally require
-> the filesystem UID of the process to match the UID of the file".
->=20
-> One thing that I'm not sure about is something that Seth pointed out
-> namely whether there's any NFS server side race window that would render
-> FMODE_CREATED provided to may_create_in_sticky() inaccurate.
-
-
-In general, permissions enforcement in NFS is done on the _server_.
-Trying to enforce permissions/ownership on the client is sketchy at best
-and subject to a number of potential race windows.
-
-Practically, it probably depends on the server. With NFSv4 the client
-looks at the change attr on the dir before and after the open, and if
-they are different then it assumes the file was created.
-
-This is usually non-atomic in most general-purpose server
-implementations, but with knfsd I *think* we hold the parent's i_rwsem
-for write when creating files, and maybe that's enough to prevent that
-sort of race. I'm not certain though.
-
---=20
-Jeff Layton <jlayton@kernel.org>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27CA582D7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC76E582F47
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbiG0Q6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+        id S241641AbiG0RWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241168AbiG0Q6F (ORCPT
+        with ESMTP id S241848AbiG0RUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:58:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5A766B9E;
-        Wed, 27 Jul 2022 09:36:43 -0700 (PDT)
+        Wed, 27 Jul 2022 13:20:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BC45F110;
+        Wed, 27 Jul 2022 09:45:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 068DD61A8B;
-        Wed, 27 Jul 2022 16:36:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F8DC433D6;
-        Wed, 27 Jul 2022 16:36:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8A3B821D4;
+        Wed, 27 Jul 2022 16:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9504C433C1;
+        Wed, 27 Jul 2022 16:45:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939777;
-        bh=pRFGnVCoF1bz22D840XqMZ5AYBRZ1C7jhBd+2SOxlYU=;
+        s=korg; t=1658940322;
+        bh=MxIqrIPmkawLpmAgdInOx6a9yL6SrBN/IMRL0oRRGK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gd3yGpIts/BjGVCKlbwpYwRMV8etMfY0z/MvABcXmMEAcf6fu6IO3wX2weSkK/qSQ
-         TlM+wDNwNq1NMDbAhhmkX8hhOBsx7ffLh2+LOIoOVo7PyI75gBuIhpfFtpIA2htez8
-         kRlTIRfLMXo8rId8uMJSOdmWxLSYP9dJmi8EdQ1c=
+        b=UJNMiQE9V9mvm9y0uGs2s8kkY/DBmF7XSbQGPTlzjDv8x04KAWZUEgZFfcVstQFXU
+         yt11ojcdAtTXNb09uwJcUgI8RC8CmSSZxZlgNofJGs/1pmU04DjEnOhekA3oHIsDyV
+         DDdFd3xvv9ig2gopy3L2oxCCeIpSnh21bwN3v1JQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Hillf Danton <hdanton@sina.com>, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 5.10 101/105] tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
-Date:   Wed, 27 Jul 2022 18:11:27 +0200
-Message-Id: <20220727161016.174682232@linuxfoundation.org>
+        stable@vger.kernel.org, Tom St Denis <tom.stdenis@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <Mario.Limonciello@amd.com>
+Subject: [PATCH 5.15 184/201] drm/amd/display: Fix surface optimization regression on Carrizo
+Date:   Wed, 27 Jul 2022 18:11:28 +0200
+Message-Id: <20220727161035.401781717@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,115 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
 
-commit a501ab75e7624d133a5a3c7ec010687c8b961d23 upstream.
+commit 62e5a7e2333a9f5395f6a9db766b7b06c949fe7a upstream.
 
-There is a race in pty_write(). pty_write() can be called in parallel
-with e.g. ioctl(TIOCSTI) or ioctl(TCXONC) which also inserts chars to
-the buffer. Provided, tty_flip_buffer_push() in pty_write() is called
-outside the lock, it can commit inconsistent tail. This can lead to out
-of bounds writes and other issues. See the Link below.
+[Why]
+DCE legacy optimization path isn't well tested under new DC optimization
+flow which can result in underflow occuring when initializing X11 on
+Carrizo.
 
-To fix this, we have to introduce a new helper called
-tty_insert_flip_string_and_push_buffer(). It does both
-tty_insert_flip_string() and tty_flip_buffer_commit() under the port
-lock. It also calls queue_work(), but outside the lock. See
-71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in
-pty_write) for the reasons.
+[How]
+Retain the legacy optimization flow for DCE and keep the new one for DCN
+to satisfy optimizations being correctly applied for ASIC that can
+support it.
 
-Keep the helper internal-only (in drivers' tty.h). It is not intended to
-be used widely.
-
-Link: https://seclists.org/oss-sec/2022/q2/155
-Fixes: 71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in pty_write)
-Cc: 一只狗 <chennbnbnb@gmail.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Suggested-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220707082558.9250-2-jslaby@suse.cz
+Fixes: 34316c1e561db0 ("drm/amd/display: Optimize bandwidth on following fast update")
+Reported-by: Tom St Denis <tom.stdenis@amd.com>
+Tested-by: Tom St Denis <tom.stdenis@amd.com>
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: Mario Limonciello <Mario.Limonciello@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/pty.c        |   14 ++------------
- drivers/tty/tty_buffer.c |   31 +++++++++++++++++++++++++++++++
- include/linux/tty_flip.h |    3 +++
- 3 files changed, 36 insertions(+), 12 deletions(-)
+ drivers/gpu/drm/amd/display/dc/core/dc.c |   15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/pty.c
-+++ b/drivers/tty/pty.c
-@@ -111,21 +111,11 @@ static void pty_unthrottle(struct tty_st
- static int pty_write(struct tty_struct *tty, const unsigned char *buf, int c)
- {
- 	struct tty_struct *to = tty->link;
--	unsigned long flags;
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -2979,8 +2979,13 @@ void dc_commit_updates_for_stream(struct
+ 			if (new_pipe->plane_state && new_pipe->plane_state != old_pipe->plane_state)
+ 				new_pipe->plane_state->force_full_update = true;
+ 		}
+-	} else if (update_type == UPDATE_TYPE_FAST) {
+-		/* Previous frame finished and HW is ready for optimization. */
++	} else if (update_type == UPDATE_TYPE_FAST && dc_ctx->dce_version >= DCE_VERSION_MAX) {
++		/*
++		 * Previous frame finished and HW is ready for optimization.
++		 *
++		 * Only relevant for DCN behavior where we can guarantee the optimization
++		 * is safe to apply - retain the legacy behavior for DCE.
++		 */
+ 		dc_post_update_surfaces_to_stream(dc);
+ 	}
  
--	if (tty->stopped)
-+	if (tty->stopped || !c)
- 		return 0;
+@@ -3039,6 +3044,12 @@ void dc_commit_updates_for_stream(struct
+ 		}
+ 	}
  
--	if (c > 0) {
--		spin_lock_irqsave(&to->port->lock, flags);
--		/* Stuff the data into the input queue of the other end */
--		c = tty_insert_flip_string(to->port, buf, c);
--		spin_unlock_irqrestore(&to->port->lock, flags);
--		/* And shovel */
--		if (c)
--			tty_flip_buffer_push(to->port);
--	}
--	return c;
-+	return tty_insert_flip_string_and_push_buffer(to->port, buf, c);
++	/* Legacy optimization path for DCE. */
++	if (update_type >= UPDATE_TYPE_FULL && dc_ctx->dce_version < DCE_VERSION_MAX) {
++		dc_post_update_surfaces_to_stream(dc);
++		TRACE_DCE_CLOCK_STATE(&context->bw_ctx.bw.dce);
++	}
++
+ 	return;
+ 
  }
- 
- /**
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -553,6 +553,37 @@ void tty_flip_buffer_push(struct tty_por
- EXPORT_SYMBOL(tty_flip_buffer_push);
- 
- /**
-+ * tty_insert_flip_string_and_push_buffer - add characters to the tty buffer and
-+ *	push
-+ * @port: tty port
-+ * @chars: characters
-+ * @size: size
-+ *
-+ * The function combines tty_insert_flip_string() and tty_flip_buffer_push()
-+ * with the exception of properly holding the @port->lock.
-+ *
-+ * To be used only internally (by pty currently).
-+ *
-+ * Returns: the number added.
-+ */
-+int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
-+		const unsigned char *chars, size_t size)
-+{
-+	struct tty_bufhead *buf = &port->buf;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+	size = tty_insert_flip_string(port, chars, size);
-+	if (size)
-+		tty_flip_buffer_commit(buf->tail);
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
-+	queue_work(system_unbound_wq, &buf->work);
-+
-+	return size;
-+}
-+
-+/**
-  *	tty_buffer_init		-	prepare a tty buffer structure
-  *	@port: tty port to initialise
-  *
---- a/include/linux/tty_flip.h
-+++ b/include/linux/tty_flip.h
-@@ -39,4 +39,7 @@ static inline int tty_insert_flip_string
- extern void tty_buffer_lock_exclusive(struct tty_port *port);
- extern void tty_buffer_unlock_exclusive(struct tty_port *port);
- 
-+int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
-+		const unsigned char *chars, size_t cnt);
-+
- #endif /* _LINUX_TTY_FLIP_H */
 
 

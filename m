@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF6F582B78
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A30582AAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237790AbiG0Qdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        id S235373AbiG0QWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237497AbiG0QdI (ORCPT
+        with ESMTP id S234075AbiG0QWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:33:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE7C54AC4;
-        Wed, 27 Jul 2022 09:26:30 -0700 (PDT)
+        Wed, 27 Jul 2022 12:22:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017504BD3F;
+        Wed, 27 Jul 2022 09:22:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF36761A15;
-        Wed, 27 Jul 2022 16:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 057F1C433C1;
-        Wed, 27 Jul 2022 16:26:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A64D619AC;
+        Wed, 27 Jul 2022 16:22:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B05C433D6;
+        Wed, 27 Jul 2022 16:22:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939170;
-        bh=SreVxgwI6lBZVdb5SSYKJ3fcMWrE/33Vzt8CofhLAp4=;
+        s=korg; t=1658938929;
+        bh=XxsZqC5lRPgiVb1BfJ8Az073MMEg2CsJPLRQC8M4CNo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T/k9Zl93fb6IPvyHCi4hwX26/dxdbTysxky/Ikq0L+NKRNvAm34g92nUkPqhUjFyn
-         EoSh4okYXgvlNStdtIcyPwQ/hjYG78cY8lJ7xKicb0FEFL8JzMggpEhFe12kypo8q5
-         78YMxAmAr5djyEWH3JuXovNbJZbexIn5n4be2LNQ=
+        b=s6emZUhjGR2TFX8gXxNZ9jSq4hPCrZAYo+nYGrW5uSSU+E5Qb0NrdDe7aPaY7xd1b
+         6yQ7g16pI0sv+x99Yx2XvDIqMpF9RsWJxAY0p+2Saxx2ZNS4OfAdxymyQO4XiuIxtA
+         5ayUBE5yAai3oy4UHjjwJjrahVLmlKEPiU+Q23/8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 37/62] tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
-Date:   Wed, 27 Jul 2022 18:10:46 +0200
-Message-Id: <20220727161005.641385999@linuxfoundation.org>
+        stable@vger.kernel.org, Wang Cheng <wanngchenng@gmail.com>,
+        syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.9 18/26] mm/mempolicy: fix uninit-value in mpol_rebind_policy()
+Date:   Wed, 27 Jul 2022 18:10:47 +0200
+Message-Id: <20220727160959.847927953@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
+References: <20220727160959.122591422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,57 +56,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Wang Cheng <wanngchenng@gmail.com>
 
-[ Upstream commit 8b917cbe38e9b0d002492477a9fc2bfee2412ce4 ]
+commit 018160ad314d75b1409129b2247b614a9f35894c upstream.
 
-The bug is here:
-	if (!encoder) {
+mpol_set_nodemask()(mm/mempolicy.c) does not set up nodemask when
+pol->mode is MPOL_LOCAL.  Check pol->mode before access
+pol->w.cpuset_mems_allowed in mpol_rebind_policy()(mm/mempolicy.c).
 
-The list iterator value 'encoder' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
+BUG: KMSAN: uninit-value in mpol_rebind_policy mm/mempolicy.c:352 [inline]
+BUG: KMSAN: uninit-value in mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
+ mpol_rebind_policy mm/mempolicy.c:352 [inline]
+ mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
+ cpuset_change_task_nodemask kernel/cgroup/cpuset.c:1711 [inline]
+ cpuset_attach+0x787/0x15e0 kernel/cgroup/cpuset.c:2278
+ cgroup_migrate_execute+0x1023/0x1d20 kernel/cgroup/cgroup.c:2515
+ cgroup_migrate kernel/cgroup/cgroup.c:2771 [inline]
+ cgroup_attach_task+0x540/0x8b0 kernel/cgroup/cgroup.c:2804
+ __cgroup1_procs_write+0x5cc/0x7a0 kernel/cgroup/cgroup-v1.c:520
+ cgroup1_tasks_write+0x94/0xb0 kernel/cgroup/cgroup-v1.c:539
+ cgroup_file_write+0x4c2/0x9e0 kernel/cgroup/cgroup.c:3852
+ kernfs_fop_write_iter+0x66a/0x9f0 fs/kernfs/file.c:296
+ call_write_iter include/linux/fs.h:2162 [inline]
+ new_sync_write fs/read_write.c:503 [inline]
+ vfs_write+0x1318/0x2030 fs/read_write.c:590
+ ksys_write+0x28b/0x510 fs/read_write.c:643
+ __do_sys_write fs/read_write.c:655 [inline]
+ __se_sys_write fs/read_write.c:652 [inline]
+ __x64_sys_write+0xdb/0x120 fs/read_write.c:652
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'encoder' as a dedicated pointer
-to point to the found element.
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ slab_alloc mm/slub.c:3259 [inline]
+ kmem_cache_alloc+0x902/0x11c0 mm/slub.c:3264
+ mpol_new mm/mempolicy.c:293 [inline]
+ do_set_mempolicy+0x421/0xb70 mm/mempolicy.c:853
+ kernel_set_mempolicy mm/mempolicy.c:1504 [inline]
+ __do_sys_set_mempolicy mm/mempolicy.c:1510 [inline]
+ __se_sys_set_mempolicy+0x44c/0xb60 mm/mempolicy.c:1507
+ __x64_sys_set_mempolicy+0xd8/0x110 mm/mempolicy.c:1507
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Cc: stable@vger.kernel.org
-Fixes: ec9eab097a500 ("drm/tilcdc: Add drm bridge support for attaching drm bridge drivers")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Reviewed-by: Jyri Sarha <jyri.sarha@iki.fi>
-Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
-Signed-off-by: Jyri Sarha <jyri.sarha@iki.fi>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327061516.5076-1-xiam0nd.tong@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+KMSAN: uninit-value in mpol_rebind_task (2)
+https://syzkaller.appspot.com/bug?id=d6eb90f952c2a5de9ea718a1b873c55cb13b59dc
+
+This patch seems to fix below bug too.
+KMSAN: uninit-value in mpol_rebind_mm (2)
+https://syzkaller.appspot.com/bug?id=f2fecd0d7013f54ec4162f60743a2b28df40926b
+
+The uninit-value is pol->w.cpuset_mems_allowed in mpol_rebind_policy().
+When syzkaller reproducer runs to the beginning of mpol_new(),
+
+	    mpol_new() mm/mempolicy.c
+	  do_mbind() mm/mempolicy.c
+	kernel_mbind() mm/mempolicy.c
+
+`mode` is 1(MPOL_PREFERRED), nodes_empty(*nodes) is `true` and `flags`
+is 0. Then
+
+	mode = MPOL_LOCAL;
+	...
+	policy->mode = mode;
+	policy->flags = flags;
+
+will be executed. So in mpol_set_nodemask(),
+
+	    mpol_set_nodemask() mm/mempolicy.c
+	  do_mbind()
+	kernel_mbind()
+
+pol->mode is 4 (MPOL_LOCAL), that `nodemask` in `pol` is not initialized,
+which will be accessed in mpol_rebind_policy().
+
+Link: https://lkml.kernel.org/r/20220512123428.fq3wofedp6oiotd4@ppc.localdomain
+Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
+Reported-by: <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com>
+Tested-by: <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/tilcdc/tilcdc_external.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ mm/mempolicy.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/tilcdc/tilcdc_external.c b/drivers/gpu/drm/tilcdc/tilcdc_external.c
-index a2f623550ce3..9c1be0635b53 100644
---- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
-@@ -60,11 +60,13 @@ struct drm_connector *tilcdc_encoder_find_connector(struct drm_device *ddev,
- int tilcdc_add_component_encoder(struct drm_device *ddev)
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -396,7 +396,7 @@ static void mpol_rebind_preferred(struct
+ static void mpol_rebind_policy(struct mempolicy *pol, const nodemask_t *newmask,
+ 				enum mpol_rebind_step step)
  {
- 	struct tilcdc_drm_private *priv = ddev->dev_private;
--	struct drm_encoder *encoder;
-+	struct drm_encoder *encoder = NULL, *iter;
- 
--	list_for_each_entry(encoder, &ddev->mode_config.encoder_list, head)
--		if (encoder->possible_crtcs & (1 << priv->crtc->index))
-+	list_for_each_entry(iter, &ddev->mode_config.encoder_list, head)
-+		if (iter->possible_crtcs & (1 << priv->crtc->index)) {
-+			encoder = iter;
- 			break;
-+		}
- 
- 	if (!encoder) {
- 		dev_err(ddev->dev, "%s: No suitable encoder found\n", __func__);
--- 
-2.35.1
-
+-	if (!pol)
++	if (!pol || pol->mode == MPOL_LOCAL)
+ 		return;
+ 	if (!mpol_store_user_nodemask(pol) && step == MPOL_REBIND_ONCE &&
+ 	    nodes_equal(pol->w.cpuset_mems_allowed, *newmask))
 
 

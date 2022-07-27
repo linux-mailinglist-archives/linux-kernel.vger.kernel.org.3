@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D057E58275F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80098582760
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiG0NJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S233675AbiG0NJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiG0NJ3 (ORCPT
+        with ESMTP id S229565AbiG0NJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:09:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C566F3C
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:09:29 -0700 (PDT)
+        Wed, 27 Jul 2022 09:09:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A01F3C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:09:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEEFD6165E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:09:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0747C433D6;
-        Wed, 27 Jul 2022 13:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658927368;
-        bh=IYDLcAKXv/t7eNqAwBTA6CMf/htt9xYg7+mFITnxwmU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1mvs57IjIqp4Fh7iev+2LO1V+4e1RjgVA+QWd4SvGXfL5pI6p80JJ1/oAsIVhowfE
-         IMvVdA/9Aa5/xHLVf+nH9BocrQVmhcc4AmtIbkY33+uBADHWIDzwWMpHKHZP4mPrg0
-         LZ5aQGXq3FQSKIk9B1zKeK9Ei9wMrA1j56dm5RCI=
-Date:   Wed, 27 Jul 2022 15:09:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiho Chu <jiho.chu@samsung.com>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        yelini.jeong@samsung.com, myungjoo.ham@samsung.com
-Subject: Re: [PATCH 4/9] trinity: Add schduler module
-Message-ID: <YuE5BYqgDrSlw8k7@kroah.com>
-References: <20220725065308.2457024-1-jiho.chu@samsung.com>
- <CGME20220725065309epcas1p42ba84c5241d69192ea73904ed6af17d7@epcas1p4.samsung.com>
- <20220725065308.2457024-5-jiho.chu@samsung.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6EAD616E9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:09:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 185CAC433D7;
+        Wed, 27 Jul 2022 13:09:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658927393;
+        bh=Skc+c+PFQVNtRmbU2XSMvMcVQ+RxCYd9R/8c6RYT5S8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gHFMgmEkQ0uWWT9XPoFxxbtnRelUGqcUB67ch60lL6nhvTa8a0W4sV8VftrLshkRu
+         m/wYosz+8pNi4OLEfV4jn6/47PGTgwVwYJybNRmk9XCMbOR1S3y72vytBoimckNWLu
+         YSv2elPc+9A2jk6jVPl0yexP76y00NHgBx3Aeo+b4avAkakEIxRJVXzxNAi6GNYf8n
+         DNJpRmwjy8Xx5a/wsyQpbvEuCtP4sakSwSjhwLiXYerM4HHzi6/csblQgDwIM4Alz+
+         H2cFkxtXXZfq5SF4u8INxs+Oe26HTHHvqMqoiLRgpRTqW1fabIaZNYR3y7azq/TFnI
+         QNr5PwConiSbg==
+Received: by pali.im (Postfix)
+        id 984697C3; Wed, 27 Jul 2022 15:09:50 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: turris-omnia: Add ethernet aliases
+Date:   Wed, 27 Jul 2022 15:09:26 +0200
+Message-Id: <20220727130926.1874-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725065308.2457024-5-jiho.chu@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,26 +57,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 03:53:03PM +0900, Jiho Chu wrote:
-> This patch includes NPU scheduler interface.
-> 
-> Tasks can be pushed to the NPU in order by the scheduler. The default
-> schduling algorithm is provided using Priority policy.
-> The scheduler waits request from the user. When the requests are
-> invoked, it submits each request to the NPU by the priority, and waits
-> until complete interrupt arrives. The priority is calculated with
-> remained time to requested timeout.
-> 
-> Thus the scheduler algorithm may be added more in the later, it
-> provides an interface which can support various schedulers.
+This allows bootloader to correctly pass MAC addresses used by bootloader
+to individual interfaces into kernel device tree.
 
-Please do not add interfaces that you do not use at all.  Just make it
-simple for the first version and then, if you really need to add new
-types of "schedulers" add them later on.
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ arch/arm/boot/dts/armada-385-turris-omnia.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-As it is, this is a whole layer of abstraction that is not needed and
-can be removed.
+diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+index f4eb6898aa6b..d2afa466e29a 100644
+--- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
++++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+@@ -23,6 +23,12 @@
+ 		stdout-path = &uart0;
+ 	};
+ 
++	aliases {
++		ethernet0 = &eth0;
++		ethernet1 = &eth1;
++		ethernet2 = &eth2;
++	};
++
+ 	memory {
+ 		device_type = "memory";
+ 		reg = <0x00000000 0x40000000>; /* 1024 MB */
+-- 
+2.20.1
 
-thanks,
-
-greg k-h

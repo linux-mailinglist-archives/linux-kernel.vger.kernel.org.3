@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53527582D0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714CE582EA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240895AbiG0QxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S238226AbiG0RPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240822AbiG0QwP (ORCPT
+        with ESMTP id S241663AbiG0ROK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:52:15 -0400
+        Wed, 27 Jul 2022 13:14:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A140F4D16E;
-        Wed, 27 Jul 2022 09:34:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A5B76EB9;
+        Wed, 27 Jul 2022 09:42:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6CC61A7E;
-        Wed, 27 Jul 2022 16:34:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4438AC43470;
-        Wed, 27 Jul 2022 16:34:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18635614EA;
+        Wed, 27 Jul 2022 16:42:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277A3C433D6;
+        Wed, 27 Jul 2022 16:42:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939646;
-        bh=jsF4LpQm777PxNt5/h+cNChfYSEvUrbp0KZNEszQamk=;
+        s=korg; t=1658940149;
+        bh=z2V8vFHMnhOnE4/gebZpZ4UaFOeyJaDeG+40vnJokD8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mkb+EWlh3jL7W/yh8od5O4bCOtytQBtYe41sLTMCuSTIffv+GElVI2ZZBA+y+DaLR
-         JIpTrzSm+7PqJYegGHzi4hj9NU6ZnnSrBpEZ8+R5I6wrBwvkOJ34F+X52fQc16fi30
-         WnVZ+j0crgj3frRt7uXaaXcT+TzRcV2qqhG5Xn2I=
+        b=P/q7eqcS+cMPv34Oa8SOLqWi5ld6L7CCDJMnp1ryup92LAgPZdZfqQ2iyMphfssVV
+         3XtEGFoxtXoGtutjh0xvdgJYSJQvftHVVtUaW6df18n4kh3Kh+/bjxHHbvWL3llTsd
+         hlcFrBAPy06BYwVH+7TdKYC/MRMuCka7j5beJUXw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 023/105] power/reset: arm-versatile: Fix refcount leak in versatile_reboot_probe
+Subject: [PATCH 5.15 105/201] pinctrl: armada-37xx: use raw spinlocks for regmap to avoid invalid wait context
 Date:   Wed, 27 Jul 2022 18:10:09 +0200
-Message-Id: <20220727161013.024294674@linuxfoundation.org>
+Message-Id: <20220727161032.096638768@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 80192eff64eee9b3bc0594a47381937b94b9d65a ]
+[ Upstream commit 4546760619cfa9b718fe2059ceb07101cf9ff61e ]
 
-of_find_matching_node_and_match() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+The irqchip->irq_set_type method is called by __irq_set_trigger() under
+the desc->lock raw spinlock.
 
-Fixes: 0e545f57b708 ("power: reset: driver for the Versatile syscon reboot")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+The armada-37xx implementation, armada_37xx_irq_set_type(), uses an MMIO
+regmap created by of_syscon_register(), which uses plain spinlocks
+(the kind that are sleepable on RT).
+
+Therefore, this is an invalid locking scheme for which we get a kernel
+splat stating just that ("[ BUG: Invalid wait context ]"), because the
+context in which the plain spinlock may sleep is atomic due to the raw
+spinlock. We need to go raw spinlocks all the way.
+
+Make this driver create its own MMIO regmap, with use_raw_spinlock=true,
+and stop relying on syscon to provide it.
+
+This patch depends on commit 67021f25d952 ("regmap: teach regmap to use
+raw spinlocks if requested in the config").
+
+Cc: <stable@vger.kernel.org> # 5.15+
+Fixes: 2f227605394b ("pinctrl: armada-37xx: Add irqchip support")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Link: https://lore.kernel.org/r/20220716233745.1704677-3-vladimir.oltean@nxp.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/reset/arm-versatile-reboot.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 27 ++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/power/reset/arm-versatile-reboot.c b/drivers/power/reset/arm-versatile-reboot.c
-index 08d0a07b58ef..c7624d7611a7 100644
---- a/drivers/power/reset/arm-versatile-reboot.c
-+++ b/drivers/power/reset/arm-versatile-reboot.c
-@@ -146,6 +146,7 @@ static int __init versatile_reboot_probe(void)
- 	versatile_reboot_type = (enum versatile_reboot)reboot_id->data;
+diff --git a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+index 7d0d2771a9ac..7338bc353347 100644
+--- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
++++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+@@ -1116,25 +1116,40 @@ static const struct of_device_id armada_37xx_pinctrl_of_match[] = {
+ 	{ },
+ };
  
- 	syscon_regmap = syscon_node_to_regmap(np);
-+	of_node_put(np);
- 	if (IS_ERR(syscon_regmap))
- 		return PTR_ERR(syscon_regmap);
++static const struct regmap_config armada_37xx_pinctrl_regmap_config = {
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.use_raw_spinlock = true,
++};
++
+ static int __init armada_37xx_pinctrl_probe(struct platform_device *pdev)
+ {
+ 	struct armada_37xx_pinctrl *info;
+ 	struct device *dev = &pdev->dev;
+-	struct device_node *np = dev->of_node;
+ 	struct regmap *regmap;
++	void __iomem *base;
+ 	int ret;
  
++	base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
++	if (IS_ERR(base)) {
++		dev_err(dev, "failed to ioremap base address: %pe\n", base);
++		return PTR_ERR(base);
++	}
++
++	regmap = devm_regmap_init_mmio(dev, base,
++				       &armada_37xx_pinctrl_regmap_config);
++	if (IS_ERR(regmap)) {
++		dev_err(dev, "failed to create regmap: %pe\n", regmap);
++		return PTR_ERR(regmap);
++	}
++
+ 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
+ 
+ 	info->dev = dev;
+-
+-	regmap = syscon_node_to_regmap(np);
+-	if (IS_ERR(regmap))
+-		return dev_err_probe(dev, PTR_ERR(regmap), "cannot get regmap\n");
+ 	info->regmap = regmap;
+-
+ 	info->data = of_device_get_match_data(dev);
+ 
+ 	ret = armada_37xx_pinctrl_register(pdev, info);
 -- 
 2.35.1
 

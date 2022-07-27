@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1945E582B0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76271582F2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236965AbiG0Q1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S241867AbiG0RWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235927AbiG0Q02 (ORCPT
+        with ESMTP id S242133AbiG0RTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:26:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F894D4D4;
-        Wed, 27 Jul 2022 09:23:45 -0700 (PDT)
+        Wed, 27 Jul 2022 13:19:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D99F5244F;
+        Wed, 27 Jul 2022 09:45:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41FDDB821BF;
-        Wed, 27 Jul 2022 16:23:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922D6C433B5;
-        Wed, 27 Jul 2022 16:23:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E94860D3B;
+        Wed, 27 Jul 2022 16:45:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D4AC433C1;
+        Wed, 27 Jul 2022 16:45:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939021;
-        bh=N3tpqyxZB5quSkEhcWuxECivH92hL3svKEE4t/+PPoE=;
+        s=korg; t=1658940302;
+        bh=gKdiTShjdV4qFP0ikFKCW4jh3SAdJPkniJlckYo/GPs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q+a2RJB9lar4qPf9oJO0B4wd1AxJsbBZqbZlwxbzKnMAMbSFw3W1PAW+qpfxyOMqA
-         3gvVg5B77Zj4SF4ujx+Sh7JvcDben4AaAztE5dnYk9qdFqQl4WTVHi/fQlIniwOhbI
-         JzEhO7nL7eTmq2JTCwM4iFqX0JkYsDlS1lDCPoHc=
+        b=vLXBbmnupgUSEeMSOFFFELWDmipgUZwxBe0ej3kvBczLa/7PcyDMMOf0QozCE7L/K
+         XWfs7glOCjFvuLgKMJ4wixQQspL5vEnIcfKp1UODcbLAY2Ax74nDhilFIlWi4NqKuy
+         lUwdaIC7L/cvJvUsNWi5POkx8RAYSylSPaHEHcnM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 4.14 23/37] Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 145/201] x86/extable: Provide EX_TYPE_DEFAULT_MCE_SAFE and EX_TYPE_FAULT_MCE_SAFE
 Date:   Wed, 27 Jul 2022 18:10:49 +0200
-Message-Id: <20220727161001.767891451@linuxfoundation.org>
+Message-Id: <20220727161033.823638585@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,94 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-commit 0771cbb3b97d3c1d68eecd7f00055f599954c34e upstream.
+[ Upstream commit 2cadf5248b9316d3c8af876e795d61c55476f6e9 ]
 
-This makes use of bt_skb_sendmsg instead of allocating a different
-buffer to be used with memcpy_from_msg which cause one extra copy.
+Provide exception fixup types which can be used to identify fixups which
+allow in kernel #MC recovery and make them invoke the existing handlers.
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+These will be used at places where #MC recovery is handled correctly by the
+caller.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lkml.kernel.org/r/20210908132525.269689153@linutronix.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/sco.c |   34 +++++++++++-----------------------
- 1 file changed, 11 insertions(+), 23 deletions(-)
+ arch/x86/include/asm/extable_fixup_types.h | 3 +++
+ arch/x86/kernel/cpu/mce/severity.c         | 2 ++
+ arch/x86/mm/extable.c                      | 2 ++
+ 3 files changed, 7 insertions(+)
 
---- a/net/bluetooth/sco.c
-+++ b/net/bluetooth/sco.c
-@@ -279,27 +279,19 @@ static int sco_connect(struct hci_dev *h
- 	return err;
- }
+diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
+index 0adc117618e6..409524d5d2eb 100644
+--- a/arch/x86/include/asm/extable_fixup_types.h
++++ b/arch/x86/include/asm/extable_fixup_types.h
+@@ -16,4 +16,7 @@
+ #define	EX_TYPE_WRMSR_IN_MCE		10
+ #define	EX_TYPE_RDMSR_IN_MCE		11
  
--static int sco_send_frame(struct sock *sk, void *buf, int len,
--			  unsigned int msg_flags)
-+static int sco_send_frame(struct sock *sk, struct sk_buff *skb)
- {
- 	struct sco_conn *conn = sco_pi(sk)->conn;
--	struct sk_buff *skb;
--	int err;
++#define	EX_TYPE_DEFAULT_MCE_SAFE	12
++#define	EX_TYPE_FAULT_MCE_SAFE		13
++
+ #endif
+diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+index 74fe763bffda..d9b77a74f8d2 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -278,6 +278,8 @@ static int error_context(struct mce *m, struct pt_regs *regs)
+ 		m->kflags |= MCE_IN_KERNEL_COPYIN;
+ 		fallthrough;
+ 	case EX_TYPE_FAULT:
++	case EX_TYPE_FAULT_MCE_SAFE:
++	case EX_TYPE_DEFAULT_MCE_SAFE:
+ 		m->kflags |= MCE_IN_KERNEL_RECOV;
+ 		return IN_KERNEL_RECOV;
+ 	default:
+diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+index 5db46df409b5..f37e290e6d0a 100644
+--- a/arch/x86/mm/extable.c
++++ b/arch/x86/mm/extable.c
+@@ -131,8 +131,10 @@ int fixup_exception(struct pt_regs *regs, int trapnr, unsigned long error_code,
  
- 	/* Check outgoing MTU */
--	if (len > conn->mtu)
-+	if (skb->len > conn->mtu)
- 		return -EINVAL;
- 
--	BT_DBG("sk %p len %d", sk, len);
--
--	skb = bt_skb_send_alloc(sk, len, msg_flags & MSG_DONTWAIT, &err);
--	if (!skb)
--		return err;
-+	BT_DBG("sk %p len %d", sk, skb->len);
- 
--	memcpy(skb_put(skb, len), buf, len);
- 	hci_send_sco(conn->hcon, skb);
- 
--	return len;
-+	return skb->len;
- }
- 
- static void sco_recv_frame(struct sco_conn *conn, struct sk_buff *skb)
-@@ -716,7 +708,7 @@ static int sco_sock_sendmsg(struct socke
- 			    size_t len)
- {
- 	struct sock *sk = sock->sk;
--	void *buf;
-+	struct sk_buff *skb;
- 	int err;
- 
- 	BT_DBG("sock %p, sk %p", sock, sk);
-@@ -728,24 +720,20 @@ static int sco_sock_sendmsg(struct socke
- 	if (msg->msg_flags & MSG_OOB)
- 		return -EOPNOTSUPP;
- 
--	buf = kmalloc(len, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
--
--	if (memcpy_from_msg(buf, msg, len)) {
--		kfree(buf);
--		return -EFAULT;
--	}
-+	skb = bt_skb_sendmsg(sk, msg, len, len, 0, 0);
-+	if (IS_ERR_OR_NULL(skb))
-+		return PTR_ERR(skb);
- 
- 	lock_sock(sk);
- 
- 	if (sk->sk_state == BT_CONNECTED)
--		err = sco_send_frame(sk, buf, len, msg->msg_flags);
-+		err = sco_send_frame(sk, skb);
- 	else
- 		err = -ENOTCONN;
- 
- 	release_sock(sk);
--	kfree(buf);
-+	if (err)
-+		kfree_skb(skb);
- 	return err;
- }
- 
+ 	switch (e->type) {
+ 	case EX_TYPE_DEFAULT:
++	case EX_TYPE_DEFAULT_MCE_SAFE:
+ 		return ex_handler_default(e, regs);
+ 	case EX_TYPE_FAULT:
++	case EX_TYPE_FAULT_MCE_SAFE:
+ 		return ex_handler_fault(e, regs, trapnr);
+ 	case EX_TYPE_UACCESS:
+ 		return ex_handler_uaccess(e, regs, trapnr);
+-- 
+2.35.1
+
 
 

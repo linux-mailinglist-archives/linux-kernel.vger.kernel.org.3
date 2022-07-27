@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97590582229
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F7B58222C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiG0Iah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 04:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S229816AbiG0IbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 04:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiG0Iae (ORCPT
+        with ESMTP id S229507AbiG0IbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 04:30:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427636317;
-        Wed, 27 Jul 2022 01:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1658910610;
-        bh=9LCyI6pIYUtH66u1Xy95hPp/TovOUMts9Axa0H2J7Os=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=XshX5zFLss0iYqq0hMudm20tWOVsIxwhsMtNAIJeXmjs3v4yrv1vyl7vj8MQSZNLJ
-         GTzeQnn/oTIc99jZduN1xIXcr8a2pxjq/8le8OH0YolKhvLfM051LM1mGrHgWYXzzV
-         3gR/kxbGIaE/mpAe7iLWylgHfms5S5fm2HjqaU5g=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N7zFj-1nLzCz16ix-0154un; Wed, 27 Jul 2022 10:30:10 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     pali@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (dell-smm) Improve documentation
-Date:   Wed, 27 Jul 2022 10:30:04 +0200
-Message-Id: <20220727083004.5684-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Wed, 27 Jul 2022 04:31:00 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082DE28A;
+        Wed, 27 Jul 2022 01:31:00 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id z132so10259320yba.3;
+        Wed, 27 Jul 2022 01:30:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lMQ6MzKO4jVrKuo9MQJs2hunXZNbN/6XhlZSMs6O3qQ=;
+        b=PsSNWPTTliI2TkTnuFteKWoRbYUjQOc1fggFhpxgXJGYJvBawQ98/rpfuA2XNqwpO2
+         +Ocz7HBDc+1bU5C4XjZc3Rb4QSkvDQGEtwmBJbJ1eDmV3SvrwIZLm85g3Jjvn31OoD09
+         q3et9y2X/7rHiqPoI3SehR/bGGUWPPEYL8TZbWTCjutGkvFXkaIxpiqOjuF9U1rqBwxS
+         d644Ejz/C1L9bu+uw7j31uKtbRswfGH85/rKX7j5Mbvw2G/9hpCMw5G1JlhlA7CjA6Fj
+         MOLdZF7jNJajYTB7aBhFz2+5mtHeMRmS9x16jby3UjqRoVJiovYxq6kzu8o45HghytWE
+         4zbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lMQ6MzKO4jVrKuo9MQJs2hunXZNbN/6XhlZSMs6O3qQ=;
+        b=kkHOjeBAog/4jmH97S8371qQtQpaJUcB2w6N7jg8kBDqnJoQg16EqqdKnTR8rBBEGZ
+         LZm+RqA5HTqOwWm3Ct6Kd3AzD0zRl6v8TQC0FKOE3u04EytZckkh1Ux1K3Ax+p+TN2bb
+         z17gzOeG5CkfJFheswwdsYFCk0H183pnZtK2CsO4RjStQW+mXsKSYYsYse/i+kDm/J76
+         gJXmLNiQi9FaJ41dyIuj0E0kYCTmTTSdnOeI6fYYQBhL/ORhhNHou0PSXUxOI9qtlvlt
+         aqXGzJL44tkZIgLUK8R4t1RvHwiEeIQfJ7eai5LYoj/I07CyLDDSLtnDkRudHfFZTzh3
+         uzQA==
+X-Gm-Message-State: AJIora+wX4wmxZVfLvCIK48+8Z6kFO6fHPPsOU2P0rGrOiXUfOe+eFwe
+        DbNtVPYO6yMtR3D79YFsd74vzvDE5U8wIQe+s4I=
+X-Google-Smtp-Source: AGRyM1vpUsVjD1ybSSmSGeK4NXqsi3Dx+hXAOInHiOv+cY4eJ1nmeGjIHzJ1YrD2CFZRsw3XBJIKnvSKBHEsvWKm7/E=
+X-Received: by 2002:a5b:508:0:b0:66e:db78:cc3f with SMTP id
+ o8-20020a5b0508000000b0066edb78cc3fmr17203541ybp.299.1658910659135; Wed, 27
+ Jul 2022 01:30:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:on/v+8+79xHGSJTBPMqme4OP2C166EvK8HvrY/oFYxczkg2WlZw
- 58Pi+oOcri/zy2FcXjquG7/HCW+3Maurd4O/+GWxYS3I0M/YmgjLWJOLgw1cZ0Acvqgd35/
- v3y6CR28dzSZbS6MIWTLVNDUyAB7ZSIRSgXNrzIeHM5M1c/3Nze8E1mK1nd68lym/sIcepg
- rct4Yu+MlE/9BkJGxEdaA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mOVS4Y+7jjQ=:Y0qifn1oelq9Dy1u2D85ne
- ZDWhtGSy+XrbtqVJzn7Lgy6J16GRAjTklXPq0IFlXo9ufhL1lDJDz+uxMM79aBU9i6VNSjxuA
- tNHLfhM/1NDj3s6SF82YBccWduEngPCP3OLWWbCcC7xAI1rmFiU8HkFXikjOO6hOVv1XkGBXc
- N6VEQyFPVIyWwhLB8C1DMePqePuA4VQVAEe6ALDRM9UsKZPH9NGZjsMsgEXzrVGyrmPh4Uoyx
- S1chv5O58Vlr5M8KV+Gi/9vTN0HL8PlGlJHYq/2A7S2ZWUM/zLNkkwiXqulmZyvhLaCNqeH5P
- HqM2StFJAN/EmtH+x7zVTMVpAhgnGOJzvZpB6Q7rUE9HZSwzDms463VfRsYYkl1VAnpLHhEBn
- sdLV9fjtPSvhcrSPll7ceIxGNg1Vs6+j9oUQBX4Tk1RsUrvYvbidhT9rK0lEDpUXMcQz9Bk10
- 4UiRL1qUgnVuXYL34qH9IbzkXfsHhwInrJSkidNilqfoHiRoEvyA+oLnnW50qQqbgBbHQ6B0F
- bNjRCpcGE3UBGIC7FliVKeb/GK1Y7LAxubT/dQ95rj4TkvmiImqaly6XbZOV3C1SPh2+ptCdn
- SsGNGnaRC+4ofr/fj7ivBlE+1pB5laF2WXcaheNlJRVs04jlCxB27ewKn2Ah2cRPb7ToURDd8
- qohJyAuqwj5n5GYqSFpWKY1TSfzUtRRHo3dL8ZE0FMWsDF6nF/gTLfF9EfXx9aUdfe6zLxSRV
- njAZV2Jvg9Ws4tPoQcU778g1UClfjMzAsMP8Pf10m7WaejPyK4YvBA0vW4mkQHFNyrme7psAR
- IeJQPb7Kstme03e3gJTZODhb01gXWc6sPn6tUQCA/r+HHCSpR7ZgCW8OyvJkB52Rn1CrTmKVS
- NwZzDRXtEB8gnS6BqzAh2SkJI8NE3L04uQrfSO5aNKakfl3e5lMV5CoyQtg75THBURbsOTiUh
- 9YGm754DPFrTJm5EBJheWUHie2GgqOhTfNeCHdowO07xX3DJ5jU0g+iSOPhWmyKmY8tYuKcM1
- Pt4CJVRB1OGvfpU4D5DIuryj/KsIiudgkvsv5IDX4gCDIhJIAIhcDh6hq1KnTlmqdPTYtQ4gf
- G1uoORgm9kCwZAL4SofVc7r5CQD+nce6CEDvBkHgfGwBffZxWuONi7NbQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220726180623.1668-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <cc6f723a-441e-55fc-5044-890d45fb79b4@microchip.com> <CA+V-a8vwhsa2S2UX+hi0MPnrjpfRYLzo1Ca1vffx-5A9jr6Hpg@mail.gmail.com>
+ <bcc1dbc9-37a2-157a-1da2-7e51d3edb6f7@microchip.com>
+In-Reply-To: <bcc1dbc9-37a2-157a-1da2-7e51d3edb6f7@microchip.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 27 Jul 2022 09:30:32 +0100
+Message-ID: <CA+V-a8urJWn4Ob2Xs0w7f5YHJ1Ak362cM0427e494VqGREkYPw@mail.gmail.com>
+Subject: Re: [PATCH 6/6] riscv: dts: renesas: Add initial devicetree for
+ Renesas RZ/Five SoC
+To:     Conor.Dooley@microchip.com
+Cc:     "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        anup@brainfault.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Notify users of this driver that each pwmX
-attribute controls fan number X, meaning that
-probing of pwm channels is unnecessary.
+Hi Conor,
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/dell-smm-hwmon.rst | 3 +++
- 1 file changed, 3 insertions(+)
+On Wed, Jul 27, 2022 at 9:21 AM <Conor.Dooley@microchip.com> wrote:
+>
+>
+> On 27/07/2022 09:09, Lad, Prabhakar wrote:
+> > Hi Conor,
+> >
+> >>
+> >> Missing files? Where is your Makefile for this directory?
+> >> Or the board dts?
+> >>
+> > My plan was to get the initial minimal SoC DTSi and then later
+> > gradually add the board DTS, but it looks like I'll have to include it
+> > along with this series.
+> >
+>
+> You could still add a minimal dts & add more things to it over time I
+> guess?
+>
+Agreed.
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
-dell-smm-hwmon.rst
-index e5d85e40972c..d8f1d6859b96 100644
-=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -46,6 +46,9 @@ temp[1-10]_input                RO      Temperature read=
-ing in milli-degrees
- temp[1-10]_label                RO      Temperature sensor label.
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-+Due to the nature of the SMM interface, each pwmX attribute controls
-+fan number X.
-+
- Disabling automatic BIOS fan control
- ------------------------------------
-
-=2D-
-2.30.2
-
+Cheers,
+Prabhakar

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF4F5821E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47E25821E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiG0IRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 04:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
+        id S229960AbiG0IR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 04:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiG0IRU (ORCPT
+        with ESMTP id S229755AbiG0IRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 04:17:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C42020BDA;
-        Wed, 27 Jul 2022 01:17:19 -0700 (PDT)
+        Wed, 27 Jul 2022 04:17:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6FF4504C;
+        Wed, 27 Jul 2022 01:17:23 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CC57A6601B12;
-        Wed, 27 Jul 2022 09:17:16 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CFF896601B1A;
+        Wed, 27 Jul 2022 09:17:20 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658909837;
-        bh=LZXLih2SwGeiRylAPXX7UXVKbKZwvUB3TU1jCoiphXk=;
+        s=mail; t=1658909841;
+        bh=fXIJ2hAtpli+W6S1Y8IGI1hYRxklmzSVaDFjnGNKiYE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nn7xtgzhD40NJk6UblOCXp35/hNMeaNnBVBFJg2X+9Oi/tk+Umdf/cGzINlaXcwv9
-         pkuCvEGcOO8LvqrZbfWj8aaeaYuEFk0GOW68TFqVs0jro53FoIJbiWPN82pkhK7GN2
-         PYucvOjkc2J4958CeH1HcyqiWp/DteMeTB8qv992tEJgxHIIT8v95xIaTAe4DEJXHp
-         H556IfchTmZ2fNhnRRtPgSbmia/JHtHP8dUaM3eBL2jtstgOo2sFnx1Wx3Y2eHvzKU
-         HhHRBesUXEieQPWl3oTZW1ViwhMNCw0ETuNJWNbjy3ACS6P05P9Wv5mMzYMSNwO3VD
-         zPY6s6qRDzXtA==
-Message-ID: <35e9db62-4233-1804-0233-f048b149c22c@collabora.com>
-Date:   Wed, 27 Jul 2022 10:17:13 +0200
+        b=HVzr2P0a9UH6kJl2DYJR97d2HxdM8dsRiIvlj5Djxi0fRrCGxPd17mDSXLprr4cHl
+         rBXJ9ladoQn/B6hhQmy7p2JTKdishZmHQjtEvE6mTrrDqVtpoc30TgtBn9BizdDiep
+         LE4ZpOU6H56tOR7kLsvuY1HAZ1+PZFG+E9EBkHYuC8CzUj3fmJRg5m6lohXqQY02mt
+         HTNgagQi/NQtGs7W5GXhimenTLjfhE2uIi5ZDfbySn+L4iS0t8qAGHI1heOisUrEv0
+         YziUA4Ler8HgqLm4DKLxDRsmj5eb4ZAOE22WjiG2hR0907g4zsI/a3oqbzlIGFG4sf
+         EC+/wUhAP65Ow==
+Message-ID: <cad2ac1c-992b-960c-09c7-ba12baa58c93@collabora.com>
+Date:   Wed, 27 Jul 2022 10:17:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v8 2/6] dt-bindings: thermal: Add binding document for
- LVTS thermal controllers
+Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek
+ folder
 Content-Language: en-US
 To:     Balsam CHIHI <bchihi@baylibre.com>, rafael@kernel.org,
         rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
@@ -50,10 +50,10 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         fan.chen@mediatek.com, louis.yu@mediatek.com,
         rex-bc.chen@mediatek.com, abailon@baylibre.com
 References: <20220726135506.485108-1-bchihi@baylibre.com>
- <20220726135506.485108-3-bchihi@baylibre.com>
+ <20220726135506.485108-2-bchihi@baylibre.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220726135506.485108-3-bchihi@baylibre.com>
+In-Reply-To: <20220726135506.485108-2-bchihi@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -66,27 +66,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 26/07/22 15:55, Balsam CHIHI ha scritto:
-> This patch adds dt-binding documents for mt8192 and mt8195 thermal controllers.
+> Add Mediatek proprietary folder to upstream more thermal zone and cooler
+> drivers. Relocate the original thermal controller driver to it and rename
+> as soc_temp.c to show its purpose more clearly.
 > 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> ---
->   .../thermal/mediatek,mt8192-lvts.yaml         | 73 ++++++++++++++++++
->   .../thermal/mediatek,mt8195-lvts.yaml         | 75 +++++++++++++++++++
->   2 files changed, 148 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
->   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8195-lvts.yaml
-> 
 
-Hello Balsam,
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I don't think that having two separated files is necessary (and I don't know if
-that's correct, even).
-
-You're referring to variants of the same hardware (and using the same driver, but
-that's not really relevant here), so my suggestion here is to have only one YAML,
-named like "mediatek,lvts-thermal.yaml", where we list all of the compatibles for
-both MT8192 and MT8195 (and future SoCs).
-
-Regards,
-Angelo

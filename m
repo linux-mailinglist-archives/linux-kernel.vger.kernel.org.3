@@ -2,237 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD23558275D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2C65826B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233575AbiG0NIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S233070AbiG0Mdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiG0NIQ (ORCPT
+        with ESMTP id S232322AbiG0Mdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:08:16 -0400
-X-Greylist: delayed 2126 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Jul 2022 06:08:15 PDT
-Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0795D281
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
-        s=20200302mail; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-        bh=E6+gj7hdT4Zrz9hBQQ/b6zaYk6fh+BZKunB47YG96+k=; b=OCAUvZFu5ee5MYoUnfUBLlXn0o
-        2TC3qv2dP8aUNapSne3agJCSYl1uC90+RCFSpxZZlb5BD5J7s6Fn9Ed3aB0biUnIt4hy+Iv53ZtQD
-        Qq18ySSH64SAAQ2Da6lCkEeHTMdJZ8aQNlQGlVIsaxoAYEVxn58NPsuf9CKLuFYFtbv4=;
-Received: from xenbits.xenproject.org ([104.239.192.120])
-        by mail.xenproject.org with esmtp (Exim 4.92)
-        (envelope-from <julien@xen.org>)
-        id 1oGgDU-0004ih-79; Wed, 27 Jul 2022 12:32:44 +0000
-Received: from [54.239.6.186] (helo=[192.168.6.7])
-        by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <julien@xen.org>)
-        id 1oGgDT-0008Pi-VU; Wed, 27 Jul 2022 12:32:44 +0000
-Message-ID: <51ba135e-a105-036f-b891-e7d9e1bb607d@xen.org>
-Date:   Wed, 27 Jul 2022 13:32:40 +0100
+        Wed, 27 Jul 2022 08:33:40 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AE12A8;
+        Wed, 27 Jul 2022 05:33:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtCqz6Gjgz4x1Y;
+        Wed, 27 Jul 2022 22:33:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1658925217;
+        bh=QAuXrY/FPQVxrLMO9CIU4iIq7ob/dsZ+P55nLBcn+x8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=IaAfhwx1qi/6yfin6Mq71kyaKRFN3i+L4jf4geCBX/RpPANKnQ5KeuBDbrrAN8t4F
+         Tww/GB1ILmM6xYFXbUJGOJNz3EvnRx75k8CmzVHfo8W0GG6yyCcvi3E6fsfiSFLlp7
+         SWvc4Wi6ncdoAVXoan9UVHYvvyUmIj21wKqcOXAlw03uy8YgbZ/j5pBEgs4T5gnAiT
+         QlsV9vl3C2QN19MTzNuCYz4cymt9HUAh2wkZzHLuAG/ljLyrSrD5t42qJZ6faADpbh
+         12L4FBwRJEaniYCGEFJPvdKhAeqoigrLgwArkt937QrsBLQb2WlKwEUXKSTbXqWLb/
+         qqjCKWU/HkRbg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Guowen Shan <gshan@redhat.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] powerpc/pci: Add config option for using OF
+ 'reg' for PCI domain
+In-Reply-To: <20220706102148.5060-1-pali@kernel.org>
+References: <20220706102148.5060-1-pali@kernel.org>
+Date:   Wed, 27 Jul 2022 22:33:32 +1000
+Message-ID: <87pmhqag6b.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [PATCH v2] x86/xen: Add support for
- HVMOP_set_evtchn_upcall_vector
-Content-Language: en-US
-To:     Jane Malalane <jane.malalane@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Maximilian Heyne <mheyne@amazon.de>,
-        Jan Beulich <jbeulich@suse.com>,
-        Colin Ian King <colin.king@intel.com>,
-        xen-devel@lists.xenproject.org
-References: <20220726125657.12151-1-jane.malalane@citrix.com>
-From:   Julien Grall <julien@xen.org>
-In-Reply-To: <20220726125657.12151-1-jane.malalane@citrix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jane,
+Pali Roh=C3=A1r <pali@kernel.org> writes:
+> Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on
+> device-tree properties"), powerpc kernel always fallback to PCI domain
+> assignment from OF / Device Tree 'reg' property of the PCI controller.
+>
+> In most cases 'reg' property is not zero and therefore there it cause that
+> PCI domain zero is not present in system anymore.
+>
+> PCI code for other Linux architectures use increasing assignment of the P=
+CI
+> domain for individual controllers (assign the first free number), like it
+> was also for powerpc prior mentioned commit. Also it starts numbering
+> domains from zero.
+>
+> Upgrading powerpc kernels from LTS 4.4 version (which does not contain
+> mentioned commit) to new LTS versions brings a change in domain assignmen=
+t.
+>
+> It can be problematic for embedded machines with single PCIe controller
+> where it is expected that PCIe card is connected on the domain zero.
+> Also it can be problematic as that commit changes PCIe domains in
+> multi-controller setup with fixed number of controller (without hotplug
+> support).
+>
+> Originally that change was intended for powernv and pservers and specially
+> server machines with more PCI domains or hot plug support.
+>
+> Fix this issue and introduce a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_R=
+EG.
 
-On 26/07/2022 13:56, Jane Malalane wrote:
-> diff --git a/arch/x86/xen/suspend_hvm.c b/arch/x86/xen/suspend_hvm.c
-> index 9d548b0c772f..0c4f7554b7cc 100644
-> --- a/arch/x86/xen/suspend_hvm.c
-> +++ b/arch/x86/xen/suspend_hvm.c
-> @@ -5,6 +5,7 @@
->   #include <xen/hvm.h>
->   #include <xen/features.h>
->   #include <xen/interface/features.h>
-> +#include <xen/events.h>
->   
->   #include "xen-ops.h"
->   
-> @@ -14,6 +15,13 @@ void xen_hvm_post_suspend(int suspend_cancelled)
->   		xen_hvm_init_shared_info();
->   		xen_vcpu_restore();
->   	}
-> -	xen_setup_callback_vector();
-> +	if (xen_percpu_upcall) {
-> +		unsigned int cpu;
-> +
-> +		for_each_online_cpu(cpu)
-> +			BUG_ON(xen_set_upcall_vector(cpu));
-> +	} else {
-> +		xen_setup_callback_vector();
-> +	}
->   	xen_unplug_emulated_devices();
->   }
-> diff --git a/drivers/xen/events/events_base.c b/drivers/xen/events/events_base.c
-> index 46d9295d9a6e..2ad93595d03a 100644
-> --- a/drivers/xen/events/events_base.c
-> +++ b/drivers/xen/events/events_base.c
-> @@ -48,6 +48,7 @@
->   #include <asm/xen/pci.h>
->   #endif
->   #include <asm/sync_bitops.h>
-> +#include <asm/xen/cpuid.h>
+As I said in my previous reply, I don't want a config option for this.
 
-This include doesn't exist on Arm and will result to a build failure:
+Adding an option now would revert the behaviour back to the way it was,
+which has the potential to break things, as you described.
 
-linux/drivers/xen/events/events_base.c:51:10: fatal error: 
-asm/xen/cpuid.h: No such file or directory
-    51 | #include <asm/xen/cpuid.h>
-       |          ^~~~~~~~~~~~~~~~~
+Maybe we shouldn't have changed the numbering to begin with, but it's
+been 6 years, so it's too late to change it back.
 
-
->   #include <asm/xen/hypercall.h>
->   #include <asm/xen/hypervisor.h>
->   #include <xen/page.h>
-> @@ -2195,11 +2196,48 @@ void xen_setup_callback_vector(void)
->   		callback_via = HVM_CALLBACK_VECTOR(HYPERVISOR_CALLBACK_VECTOR);
->   		if (xen_set_callback_via(callback_via)) {
->   			pr_err("Request for Xen HVM callback vector failed\n");
-> -			xen_have_vector_callback = 0;
-> +			xen_have_vector_callback = false;
->   		}
->   	}
->   }
->   
-> +/* Setup per-vCPU vector-type callbacks and trick toolstack to think
-> + * we are enlightened. If this setup is unavailable, fallback to the
-> + * global vector-type callback. */
-> +static __init void xen_init_setup_upcall_vector(void)
-> +{
-> +	unsigned int cpu = 0;
-> +
-> +	if (!xen_have_vector_callback)
-> +		return;
-> +
-> +	if ((cpuid_eax(xen_cpuid_base() + 4) & XEN_HVM_CPUID_UPCALL_VECTOR) &&
-> +	    !xen_set_upcall_vector(cpu) && !xen_set_callback_via(1))
-
-xen_cpuid_base() is an x86-ism. This is going to build because 
-CONFIG_XEN_PVHVM is only set for x86. However, I think this is quite 
-fragile.
-
-You are also using more variable defined only on x86. So it feels to me 
-that these functions should be implemented in x86 code.
-
-> +		xen_percpu_upcall = true;
-> +	else if (xen_feature(XENFEAT_hvm_callback_vector))
-> +		xen_setup_callback_vector();
-> +	else
-> +		xen_have_vector_callback = false;
-> +}
-> +
-> +int xen_set_upcall_vector(unsigned int cpu)
-> +{
-> +	int rc;
-> +	xen_hvm_evtchn_upcall_vector_t op = {
-> +		.vector = HYPERVISOR_CALLBACK_VECTOR,
-> +		.vcpu = per_cpu(xen_vcpu_id, cpu),
-> +	};
-> +
-> +	rc = HYPERVISOR_hvm_op(HVMOP_set_evtchn_upcall_vector, &op);
-> +	if (rc)
-> +		return rc;
-> +
-> +	if (!cpu)
-> +		rc = xen_set_callback_via(1);
-> +
-> +	return rc;
-> +}
-> +
->   static __init void xen_alloc_callback_vector(void)
->   {
->   	if (!xen_have_vector_callback)
-> @@ -2210,6 +2248,8 @@ static __init void xen_alloc_callback_vector(void)
->   }
->   #else
->   void xen_setup_callback_vector(void) {}
-> +static inline void xen_init_setup_upcall_vector(void) {}
-> +int xen_set_upcall_vector(unsigned int cpu) {}
->   static inline void xen_alloc_callback_vector(void) {}
->   #endif
->   
-> @@ -2271,10 +2311,9 @@ void __init xen_init_IRQ(void)
->   		if (xen_initial_domain())
->   			pci_xen_initial_domain();
->   	}
-> -	if (xen_feature(XENFEAT_hvm_callback_vector)) {
-> -		xen_setup_callback_vector();
-> -		xen_alloc_callback_vector();
-> -	}
-> +	xen_init_setup_upcall_vector();
-> +	xen_alloc_callback_vector();
-> +
->   
->   	if (xen_hvm_domain()) {
->   		native_init_IRQ();
-> diff --git a/include/xen/hvm.h b/include/xen/hvm.h
-> index b7fd7fc9ad41..8da7a6747058 100644
-> --- a/include/xen/hvm.h
-> +++ b/include/xen/hvm.h
-> @@ -60,4 +60,6 @@ static inline int hvm_get_parameter(int idx, uint64_t *value)
->   
->   void xen_setup_callback_vector(void);
->   
-> +int xen_set_upcall_vector(unsigned int cpu);
-> +
->   #endif /* XEN_HVM_H__ */
-> diff --git a/include/xen/interface/hvm/hvm_op.h b/include/xen/interface/hvm/hvm_op.h
-> index f3097e79bb03..e714d8b6ef89 100644
-> --- a/include/xen/interface/hvm/hvm_op.h
-> +++ b/include/xen/interface/hvm/hvm_op.h
-> @@ -46,4 +46,19 @@ struct xen_hvm_get_mem_type {
->   };
->   DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_get_mem_type);
->   
-> +/*
-> + * HVMOP_set_evtchn_upcall_vector: Set a <vector> that should be used for event
-> + *                                 channel upcalls on the specified <vcpu>. If set,
-> + *                                 this vector will be used in preference to the
-> + *                                 domain global callback via (see
-> + *                                 HVM_PARAM_CALLBACK_IRQ).
-> + */
-
-Technically this hypercall is x86 specific. IOW, it would be possible 
-for another architecture to define 23 for something different.
-
-If it is not possible (or desired) to surround with an #ifdef, then I 
-think we should at least be mentioned it in the comment.
-
-Cheers,
-
--- 
-Julien Grall
+cheers

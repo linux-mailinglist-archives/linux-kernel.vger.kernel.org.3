@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83899582C69
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8B0582CC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240254AbiG0QpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S238929AbiG0Qt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240193AbiG0QoK (ORCPT
+        with ESMTP id S240640AbiG0QtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:44:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6E75D0FD;
-        Wed, 27 Jul 2022 09:30:48 -0700 (PDT)
+        Wed, 27 Jul 2022 12:49:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDD56172E;
+        Wed, 27 Jul 2022 09:32:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AC89B821BD;
-        Wed, 27 Jul 2022 16:30:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15E5C433C1;
-        Wed, 27 Jul 2022 16:30:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8393B619C0;
+        Wed, 27 Jul 2022 16:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93EB5C433C1;
+        Wed, 27 Jul 2022 16:27:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939446;
-        bh=jmwZE7fZT0yS5jlppOJsyv5VuU2LGt3H7AUTFK/9IZg=;
+        s=korg; t=1658939257;
+        bh=vKTOit1j4oqPUe/wwvhNKAYzkOLY6aMMJK7gUc90wME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZlCSIoUwyBnPKnbBwSHOAJNmqMREvpTQFTMrFy7Ep3tFS+o4gLLcnhfXYewB2Gu6Z
-         3U5NYyTjkkwAPN4dgOfJmZygKOf46GaPQjklNcLFon4CG00TeRee2eYQXbayNe7hn1
-         uj8jFZf5YgPcg9V5/LtFZPPUeV6OZ7OMEQ0z6uoE=
+        b=kKNj9NqnVgOzdkTk724bs/PkD7mCyhvmFYzWCUEQJjupnjHhxKjux84pAyiEHhO3i
+         1VCfLAwELtnNNyHwlGCrckrI4/nEGUd8PEnLtQdIOR5y6/Fm979+W70ObwC0pZdxXp
+         0KW6xfgrHJ6m+pAoLUUGLl2hcXXvU0JkgNMQ1GNk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 72/87] bitfield.h: Fix "type of reg too small for mask" test
+        stable@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
+        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 4.19 56/62] tty: extract tty_flip_buffer_commit() from tty_flip_buffer_push()
 Date:   Wed, 27 Jul 2022 18:11:05 +0200
-Message-Id: <20220727161011.987192720@linuxfoundation.org>
+Message-Id: <20220727161006.333043974@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit bff8c3848e071d387d8b0784dc91fa49cd563774 ]
+commit 716b10580283fda66f2b88140e3964f8a7f9da89 upstream.
 
-The test: 'mask > (typeof(_reg))~0ull' only works correctly when both
-sides are unsigned, consider:
+We will need this new helper in the next patch.
 
- - 0xff000000 vs (int)~0ull
- - 0x000000ff vs (int)~0ull
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20211110101324.950210584@infradead.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Hillf Danton <hdanton@sina.com>
+Cc: 一只狗 <chennbnbnb@gmail.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220707082558.9250-1-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/bitfield.h | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ drivers/tty/tty_buffer.c |   15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-index 4c0224ff0a14..4f1c0f8e1bb0 100644
---- a/include/linux/bitfield.h
-+++ b/include/linux/bitfield.h
-@@ -41,6 +41,22 @@
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -518,6 +518,15 @@ static void flush_to_ldisc(struct work_s
  
- #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+ }
  
-+#define __scalar_type_to_unsigned_cases(type)				\
-+		unsigned type:	(unsigned type)0,			\
-+		signed type:	(unsigned type)0
++static inline void tty_flip_buffer_commit(struct tty_buffer *tail)
++{
++	/*
++	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
++	 * buffer data.
++	 */
++	smp_store_release(&tail->commit, tail->used);
++}
 +
-+#define __unsigned_scalar_typeof(x) typeof(				\
-+		_Generic((x),						\
-+			char:	(unsigned char)0,			\
-+			__scalar_type_to_unsigned_cases(char),		\
-+			__scalar_type_to_unsigned_cases(short),		\
-+			__scalar_type_to_unsigned_cases(int),		\
-+			__scalar_type_to_unsigned_cases(long),		\
-+			__scalar_type_to_unsigned_cases(long long),	\
-+			default: (x)))
-+
-+#define __bf_cast_unsigned(type, x)	((__unsigned_scalar_typeof(type))(x))
-+
- #define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)			\
- 	({								\
- 		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
-@@ -49,7 +65,8 @@
- 		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
- 				 ~((_mask) >> __bf_shf(_mask)) & (_val) : 0, \
- 				 _pfx "value too large for the field"); \
--		BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,		\
-+		BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >	\
-+				 __bf_cast_unsigned(_reg, ~0ull),	\
- 				 _pfx "type of reg too small for mask"); \
- 		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
- 					      (1ULL << __bf_shf(_mask))); \
--- 
-2.35.1
-
+ /**
+  *	tty_flip_buffer_push	-	terminal
+  *	@port: tty port to push
+@@ -533,11 +542,7 @@ void tty_flip_buffer_push(struct tty_por
+ {
+ 	struct tty_bufhead *buf = &port->buf;
+ 
+-	/*
+-	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
+-	 * buffer data.
+-	 */
+-	smp_store_release(&buf->tail->commit, buf->tail->used);
++	tty_flip_buffer_commit(buf->tail);
+ 	queue_work(system_unbound_wq, &buf->work);
+ }
+ EXPORT_SYMBOL(tty_flip_buffer_push);
 
 

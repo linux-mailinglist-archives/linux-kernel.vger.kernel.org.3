@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F378F582152
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F3458215D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiG0HlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S230420AbiG0Hnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiG0HlC (ORCPT
+        with ESMTP id S230397AbiG0Hnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:41:02 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C4220193
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:41:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658907660; x=1690443660;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KPLddpN1iNY999KUGp+HYrhO7p0BswS5UtJ/9mOu0mE=;
-  b=j7n6k0EOSeXlWjv13dcHRnWaSNvAraqqTT91PmGn84e2oukCxF/wLbFk
-   7ezK0i8RcnCbmdAVXZ5RpE3CpxEvjXzdIRVgCfEb1xjzIcs3OeJsKfkyO
-   eTfv0grKS/+KayQgawmcVYY1sAPsQrsoMpPcjDyApQt1xffoXuAnXkJkz
-   3UsQfnjB3v8sAevs+pHpjO4zxzaYDJc1Na3BBV25L10caY/QvlwSoLqXg
-   aXcbu33PkbKhjIAz6EYv3y7sLpgajKO0J5AI/GLtoXoYu7FEmCwXoMwEP
-   Us1WfV8Q9ofhlTN73SLzmm/wrIkjo8D7yULm1hoNlFqxZiqwcVB7RWa+R
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="268554149"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="268554149"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 00:41:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="628276882"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 Jul 2022 00:40:58 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGbf8-0008Tu-0T;
-        Wed, 27 Jul 2022 07:40:58 +0000
-Date:   Wed, 27 Jul 2022 15:40:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:resolution.2022.07.26a] BUILD SUCCESS
- e5900cd40f657b585872f8e64bced2f4165ed426
-Message-ID: <62e0ebfe.xJ7uoGv1t4dVDiP7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 27 Jul 2022 03:43:46 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07E53FA0F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:43:42 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h9so23060525wrm.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:43:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OeZrEzfrBdJ8L6waHhuRMTGFQ5BiSnlrL0yjLoaEY2k=;
+        b=U1cUW5XlqqaK1ishHwceTNUmc5PtLliTCnbBGw1T6fBlZ1+LGugtrUL0DdgXQTLYxh
+         WEqlaOFuOcLqboKvl6Ex0ZRRCmua+LJivlI/5qmStGoM156Sgr+SgY0T/NPYhkHjnlkN
+         ADXto5HiW3TQFYGjXQi3asw9jLPOjIHBkRKvNphMM0st6C3Zj2ePkvco3VanLoF994rb
+         4yYfdq3GDCVt2n56DWZJNVAXTIDB7dzNPIT+T3eEUEJ64kUpoFq/opl0mdKE5uhjQYNA
+         nPnIuKIsL+KwSdko9P137PSf9hbW0vwUhtlmztzuHIMs8DmijRpR+/vXb/CYVyQnwnL2
+         jlhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OeZrEzfrBdJ8L6waHhuRMTGFQ5BiSnlrL0yjLoaEY2k=;
+        b=TRr6WTXyIEqYBFygksHu6fAJetU/LpCp860DpaXUmLUO9NZ03wSUgIcSMRKDq+orim
+         CQb7jVpI6eN9AVmOmce/6CumO4u0nbPb2wOvvc9ELc4G5MyZIqQ9Tbknr4WG0yN3GOGs
+         eamTkTUeqTZWlZNxumz8fRr7LzD3YkVmMdG7+nqpVNNGaLcNUYUy3bq8wItxyiL9WOHK
+         5g/m/WK2Tp5RzN+ZeLZUoiSSzirDirTUd8ZezV7Qz2O/GPbL5AEX3n5ciK6ptBZCtRxA
+         zim1Q3zBDZeO/r3VzqUVfJp0vvHPTlix5z5n0bf6BMp8FYJUpBXBXxeEaIvsq4aaEnPr
+         GkwA==
+X-Gm-Message-State: AJIora82p3Gf8moVFFbrhrMhJ4/zaTIkQtMQwXX7/wAK0WOU9jLjCsD6
+        gRmfZU0/KfzHRQJf/MFBU4s=
+X-Google-Smtp-Source: AGRyM1tA+eHjz8jAcQpI68AJx05rJR5j9es+Cj9EOFIQ8d8RFuf45AAggQRiJxTV0KFj2tjk02HUQg==
+X-Received: by 2002:a05:6000:1284:b0:21e:6526:bef5 with SMTP id f4-20020a056000128400b0021e6526bef5mr12664583wrx.488.1658907821246;
+        Wed, 27 Jul 2022 00:43:41 -0700 (PDT)
+Received: from fedora.. ([2a01:e0a:1d2:1f90:be95:f3a2:4d99:a3b3])
+        by smtp.gmail.com with ESMTPSA id l16-20020a05600c4f1000b003a2e27fc275sm1442444wmq.12.2022.07.27.00.43.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 00:43:40 -0700 (PDT)
+From:   Matthieu CHARETTE <matthieu.charette@gmail.com>
+To:     lkp@intel.com
+Cc:     airlied@linux.ie, andrealmeid@igalia.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, maarten.lankhorst@linux.intel.com,
+        matthieu.charette@gmail.com, mripard@kernel.org,
+        tzimmermann@suse.de
+Subject: [PATCH] drm: Fix EDID firmware load on resume
+Date:   Wed, 27 Jul 2022 09:41:52 +0200
+Message-Id: <20220727074152.43059-1-matthieu.charette@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <202207172035.mtErdlaw-lkp@intel.com>
+References: <202207172035.mtErdlaw-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,137 +73,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git resolution.2022.07.26a
-branch HEAD: e5900cd40f657b585872f8e64bced2f4165ed426  Merge remote-tracking branch 'linus/master' into resolution.2022.07.26a
+Loading an EDID using drm.edid_firmware parameter makes resume to fail
+after firmware cache is being cleaned. This is because edid_load() use a
+temporary device to request the firmware. This cause the EDID firmware
+not to be cached from suspend. And, requesting the EDID firmware return
+an error during resume.
+So the request_firmware() call should use a permanent device for each
+connector. Also, we should cache the EDID even if no monitor is
+connected, in case it's plugged while suspended.
 
-elapsed time: 752m
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2061
+Signed-off-by: Matthieu CHARETTE <matthieu.charette@gmail.com>
+---
+ drivers/gpu/drm/drm_connector.c |  9 ++++
+ drivers/gpu/drm/drm_edid_load.c | 81 ++++++++++++++++++++++++++++-----
+ include/drm/drm_connector.h     | 12 +++++
+ include/drm/drm_edid.h          |  3 ++
+ 4 files changed, 94 insertions(+), 11 deletions(-)
 
-configs tested: 114
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc              randconfig-c003-20220724
-i386                          randconfig-c001
-arc                        nsimosci_defconfig
-s390                             allmodconfig
-sh                          rsk7264_defconfig
-m68k                        m5272c3_defconfig
-ia64                      gensparse_defconfig
-alpha                            alldefconfig
-arc                     nsimosci_hs_defconfig
-arm64                               defconfig
-arm                        spear6xx_defconfig
-sh                               j2_defconfig
-powerpc                  iss476-smp_defconfig
-mips                       capcella_defconfig
-powerpc                         ps3_defconfig
-arm                        keystone_defconfig
-m68k                       m5275evb_defconfig
-arm                        shmobile_defconfig
-powerpc                 mpc837x_rdb_defconfig
-mips                         mpc30x_defconfig
-nios2                            allyesconfig
-arc                          axs103_defconfig
-nios2                               defconfig
-powerpc                       eiger_defconfig
-sparc64                          alldefconfig
-arm                           sama5_defconfig
-m68k                         apollo_defconfig
-um                                  defconfig
-parisc                           allyesconfig
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-loongarch                           defconfig
-loongarch                         allnoconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220724
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-s390                 randconfig-r044-20220724
-riscv                randconfig-r042-20220724
-arc                  randconfig-r043-20220724
-s390                 randconfig-r044-20220726
-riscv                randconfig-r042-20220726
-arc                  randconfig-r043-20220726
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-mips                 randconfig-c004-20220726
-x86_64                        randconfig-c007
-s390                 randconfig-c005-20220726
-powerpc              randconfig-c003-20220726
-i386                          randconfig-c001
-riscv                randconfig-c006-20220726
-arm                  randconfig-c002-20220726
-mips                   sb1250_swarm_defconfig
-mips                      pic32mzda_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                        multi_v5_defconfig
-powerpc                          allmodconfig
-mips                  cavium_octeon_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                 mpc836x_rdk_defconfig
-mips                           rs90_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220724
-hexagon              randconfig-r045-20220724
-
+diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+index 1c48d162c77e..e8819ebf1c4b 100644
+--- a/drivers/gpu/drm/drm_connector.c
++++ b/drivers/gpu/drm/drm_connector.c
+@@ -31,6 +31,7 @@
+ #include <drm/drm_privacy_screen_consumer.h>
+ #include <drm/drm_sysfs.h>
+ 
++#include <linux/platform_device.h>
+ #include <linux/uaccess.h>
+ 
+ #include "drm_crtc_internal.h"
+@@ -289,6 +290,9 @@ int drm_connector_init(struct drm_device *dev,
+ 
+ 	drm_connector_get_cmdline_mode(connector);
+ 
++	connector->edid_load_pdev = NULL;
++	drm_cache_edid_firmware(connector);
++
+ 	/* We should add connectors at the end to avoid upsetting the connector
+ 	 * index too much.
+ 	 */
+@@ -473,6 +477,11 @@ void drm_connector_cleanup(struct drm_connector *connector)
+ 		connector->tile_group = NULL;
+ 	}
+ 
++	if (connector->edid_load_pdev) {
++		platform_device_unregister(connector->edid_load_pdev);
++		connector->edid_load_pdev = NULL;
++	}
++
+ 	list_for_each_entry_safe(mode, t, &connector->probed_modes, head)
+ 		drm_mode_remove(connector, mode);
+ 
+diff --git a/drivers/gpu/drm/drm_edid_load.c b/drivers/gpu/drm/drm_edid_load.c
+index 37d8ba3ddb46..5a82be9917ec 100644
+--- a/drivers/gpu/drm/drm_edid_load.c
++++ b/drivers/gpu/drm/drm_edid_load.c
+@@ -167,6 +167,19 @@ static int edid_size(const u8 *edid, int data_size)
+ 	return (edid[0x7e] + 1) * EDID_LENGTH;
+ }
+ 
++static struct platform_device *edid_pdev(const char *connector_name)
++{
++	struct platform_device *pdev = platform_device_register_simple(connector_name, -1, NULL, 0);
++
++	if (IS_ERR(pdev)) {
++		DRM_ERROR("Failed to register EDID firmware platform device "
++			"for connector \"%s\"\n", connector_name);
++		return ERR_CAST(pdev);
++	}
++
++	return pdev;
++}
++
+ static void *edid_load(struct drm_connector *connector, const char *name,
+ 			const char *connector_name)
+ {
+@@ -182,18 +195,17 @@ static void *edid_load(struct drm_connector *connector, const char *name,
+ 		fwdata = generic_edid[builtin];
+ 		fwsize = sizeof(generic_edid[builtin]);
+ 	} else {
+-		struct platform_device *pdev;
++		struct platform_device *pdev = connector->edid_load_pdev;
+ 		int err;
+ 
+-		pdev = platform_device_register_simple(connector_name, -1, NULL, 0);
+-		if (IS_ERR(pdev)) {
+-			DRM_ERROR("Failed to register EDID firmware platform device "
+-				  "for connector \"%s\"\n", connector_name);
+-			return ERR_CAST(pdev);
++		if (WARN_ON(!pdev)) {
++			pdev = edid_pdev(connector_name);
++			if (IS_ERR(pdev))
++				return ERR_CAST(pdev);
++			connector->edid_load_pdev = pdev;
+ 		}
+ 
+ 		err = request_firmware(&fw, name, &pdev->dev);
+-		platform_device_unregister(pdev);
+ 		if (err) {
+ 			DRM_ERROR("Requesting EDID firmware \"%s\" failed (err=%d)\n",
+ 				  name, err);
+@@ -263,11 +275,9 @@ static void *edid_load(struct drm_connector *connector, const char *name,
+ 	return edid;
+ }
+ 
+-struct edid *drm_load_edid_firmware(struct drm_connector *connector)
++static char *edid_name(const char *connector_name)
+ {
+-	const char *connector_name = connector->name;
+ 	char *edidname, *last, *colon, *fwstr, *edidstr, *fallback = NULL;
+-	struct edid *edid;
+ 
+ 	if (edid_firmware[0] == '\0')
+ 		return ERR_PTR(-ENOENT);
+@@ -310,8 +320,57 @@ struct edid *drm_load_edid_firmware(struct drm_connector *connector)
+ 	if (*last == '\n')
+ 		*last = '\0';
+ 
+-	edid = edid_load(connector, edidname, connector_name);
++	edidname = kstrdup(edidname, GFP_KERNEL);
++	if (!edidname) {
++		kfree(fwstr);
++		return ERR_PTR(-ENOMEM);
++	}
++
+ 	kfree(fwstr);
++	return edidname;
++}
++
++void drm_cache_edid_firmware(struct drm_connector *connector)
++{
++	const char *connector_name = connector->name;
++	const char *edidname = edid_name(connector_name);
++	struct platform_device *pdev;
++	int err;
++
++	if (IS_ERR(edidname))
++		return;
++
++	if (match_string(generic_edid_name, GENERIC_EDIDS, edidname) >= 0) {
++		kfree(edidname);
++		return;
++	}
++
++	pdev = edid_pdev(connector_name);
++	if (IS_ERR(pdev)) {
++		kfree(edidname);
++		return;
++	}
++	connector->edid_load_pdev = pdev;
++
++	err = firmware_request_cache(&pdev->dev, edidname);
++	if (err)
++		DRM_ERROR("Requesting EDID firmware cache \"%s\" failed (err=%d)\n",
++			edidname, err);
++
++	kfree(edidname);
++}
++
++struct edid *drm_load_edid_firmware(struct drm_connector *connector)
++{
++	const char *connector_name = connector->name;
++	const char *edidname = edid_name(connector_name);
++	struct edid *edid;
++
++	if (IS_ERR(edidname))
++		return ERR_CAST(edidname);
++
++	edid = edid_load(connector, edidname, connector_name);
++	kfree(edidname);
+ 
+ 	return edid;
+ }
+diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+index 3ac4bf87f257..47c84741517e 100644
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -1573,6 +1573,18 @@ struct drm_connector {
+ 	 */
+ 	struct i2c_adapter *ddc;
+ 
++	/**
++	 * @edid_load_pdev: Platform device for loading EDID via firmware.
++	 *
++	 * The platform device is registered in drm_connector_init() in case a
++	 * custom EDID firmware is used with `edid_firmware` parameter. Otherwise,
++	 * it is set to NULL.
++	 *
++	 * Platform device is unregistered in drm_connector_cleanup() if it
++	 * is not NULL.
++	 */
++	struct platform_device *edid_load_pdev;
++
+ 	/**
+ 	 * @null_edid_counter: track sinks that give us all zeros for the EDID.
+ 	 * Needed to workaround some HW bugs where we get all 0s
+diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
+index b2756753370b..e907c928a35d 100644
+--- a/include/drm/drm_edid.h
++++ b/include/drm/drm_edid.h
+@@ -378,10 +378,13 @@ int drm_av_sync_delay(struct drm_connector *connector,
+ 		      const struct drm_display_mode *mode);
+ 
+ #ifdef CONFIG_DRM_LOAD_EDID_FIRMWARE
++void drm_cache_edid_firmware(struct drm_connector *connector);
+ struct edid *drm_load_edid_firmware(struct drm_connector *connector);
+ int __drm_set_edid_firmware_path(const char *path);
+ int __drm_get_edid_firmware_path(char *buf, size_t bufsize);
+ #else
++inline void
++drm_cache_edid_firmware(struct drm_connector *connector);
+ static inline struct edid *
+ drm_load_edid_firmware(struct drm_connector *connector)
+ {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

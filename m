@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD50582FE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BC8582F3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242353AbiG0Rbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S242041AbiG0RXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242292AbiG0R3U (ORCPT
+        with ESMTP id S242000AbiG0RWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:29:20 -0400
+        Wed, 27 Jul 2022 13:22:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0E452466;
-        Wed, 27 Jul 2022 09:47:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2A26F7FA;
+        Wed, 27 Jul 2022 09:45:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CA2BB821BE;
-        Wed, 27 Jul 2022 16:47:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DABAC433B5;
-        Wed, 27 Jul 2022 16:47:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A896CB821A6;
+        Wed, 27 Jul 2022 16:45:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF18C433C1;
+        Wed, 27 Jul 2022 16:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940451;
-        bh=lBNpbwAz4MluJai4tIGarwcVNMTQu6FMGiQvNRLpuZs=;
+        s=korg; t=1658940333;
+        bh=STSC/uyrBVz7rV5fTY9o9fyE0PYLOMybtV5+kYBr4eA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OZPJas7Xc6Q1PvAd0fM11cDDCVP0138e0v4HrfAg/UOLgbwbWH1Ew3gAXHjLeiXQg
-         +CqxrDgeY1UMSCC81vl93UUxGxKBbgG089+ilNUxpuLV8jQN1zEdPwrpRomOAVSgdd
-         MMfrFvq/2gnvyEt8ePd/2ujaOaC0CFTbREPsWGmo=
+        b=L/m29RHoOtuWpNtqe253DAMuyvyLoEq52jYrVGqIWwtYq4JnYSpPLvR8yj5rwgiEB
+         EqOJz83uuwx738xiSquFr+F8Ja5//02ImBbCYGDfvJx7rDI6CCENWMIuNluDW5jfUG
+         hM2BWx7iHzR2KWKXxlQpQNsMcc09xwhgLoT2OuGs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hacash Robot <hacashRobot@santino.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 027/158] pinctrl: ralink: Check for null return of devm_kcalloc
-Date:   Wed, 27 Jul 2022 18:11:31 +0200
-Message-Id: <20220727161022.566725196@linuxfoundation.org>
+        stable@vger.kernel.org, Vladimir Zapolskiy <vz@mleia.com>,
+        Johan Hovold <johan@kernel.org>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 5.15 188/201] tty: drivers/tty/, stop using tty_schedule_flip()
+Date:   Wed, 27 Jul 2022 18:11:32 +0200
+Message-Id: <20220727161035.559931107@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +53,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit c3b821e8e406d5650e587b7ac624ac24e9b780a8 ]
+commit 5f6a85158ccacc3f09744b3aafe8b11ab3b6c6f6 upstream.
 
-Because of the possible failure of the allocation, data->domains might
-be NULL pointer and will cause the dereference of the NULL pointer
-later.
-Therefore, it might be better to check it and directly return -ENOMEM
-without releasing data manually if fails, because the comment of the
-devm_kmalloc() says "Memory allocated with this function is
-automatically freed on driver detach.".
+Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
+tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). We are
+going to remove the latter (as it is used less), so call the former in
+drivers/tty/.
 
-Fixes: a86854d0c599b ("treewide: devm_kzalloc() -> devm_kcalloc()")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
-Link: https://lore.kernel.org/r/20220710154922.2610876-1-williamsukatube@163.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Reviewed-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20211122111648.30379-2-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/ralink/pinctrl-ralink.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/goldfish.c          |    2 +-
+ drivers/tty/moxa.c              |    4 ++--
+ drivers/tty/serial/lpc32xx_hs.c |    2 +-
+ drivers/tty/vt/keyboard.c       |    6 +++---
+ drivers/tty/vt/vt.c             |    2 +-
+ 5 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/pinctrl/ralink/pinctrl-ralink.c b/drivers/pinctrl/ralink/pinctrl-ralink.c
-index 841f23f55c95..3a8268a43d74 100644
---- a/drivers/pinctrl/ralink/pinctrl-ralink.c
-+++ b/drivers/pinctrl/ralink/pinctrl-ralink.c
-@@ -266,6 +266,8 @@ static int ralink_pinmux_pins(struct ralink_priv *p)
- 						p->func[i]->pin_count,
- 						sizeof(int),
- 						GFP_KERNEL);
-+		if (!p->func[i]->pins)
-+			return -ENOMEM;
- 		for (j = 0; j < p->func[i]->pin_count; j++)
- 			p->func[i]->pins[j] = p->func[i]->pin_first + j;
+--- a/drivers/tty/goldfish.c
++++ b/drivers/tty/goldfish.c
+@@ -151,7 +151,7 @@ static irqreturn_t goldfish_tty_interrup
+ 	address = (unsigned long)(void *)buf;
+ 	goldfish_tty_rw(qtty, address, count, 0);
  
--- 
-2.35.1
-
+-	tty_schedule_flip(&qtty->port);
++	tty_flip_buffer_push(&qtty->port);
+ 	return IRQ_HANDLED;
+ }
+ 
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -1383,7 +1383,7 @@ static int moxa_poll_port(struct moxa_po
+ 		if (inited && !tty_throttled(tty) &&
+ 				MoxaPortRxQueue(p) > 0) { /* RX */
+ 			MoxaPortReadData(p);
+-			tty_schedule_flip(&p->port);
++			tty_flip_buffer_push(&p->port);
+ 		}
+ 	} else {
+ 		clear_bit(EMPTYWAIT, &p->statusflags);
+@@ -1408,7 +1408,7 @@ static int moxa_poll_port(struct moxa_po
+ 
+ 	if (tty && (intr & IntrBreak) && !I_IGNBRK(tty)) { /* BREAK */
+ 		tty_insert_flip_char(&p->port, 0, TTY_BREAK);
+-		tty_schedule_flip(&p->port);
++		tty_flip_buffer_push(&p->port);
+ 	}
+ 
+ 	if (intr & IntrLine)
+--- a/drivers/tty/serial/lpc32xx_hs.c
++++ b/drivers/tty/serial/lpc32xx_hs.c
+@@ -341,7 +341,7 @@ static irqreturn_t serial_lpc32xx_interr
+ 		       LPC32XX_HSUART_IIR(port->membase));
+ 		port->icount.overrun++;
+ 		tty_insert_flip_char(tport, 0, TTY_OVERRUN);
+-		tty_schedule_flip(tport);
++		tty_flip_buffer_push(tport);
+ 	}
+ 
+ 	/* Data received? */
+--- a/drivers/tty/vt/keyboard.c
++++ b/drivers/tty/vt/keyboard.c
+@@ -324,13 +324,13 @@ int kbd_rate(struct kbd_repeat *rpt)
+ static void put_queue(struct vc_data *vc, int ch)
+ {
+ 	tty_insert_flip_char(&vc->port, ch, 0);
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
+ }
+ 
+ static void puts_queue(struct vc_data *vc, const char *cp)
+ {
+ 	tty_insert_flip_string(&vc->port, cp, strlen(cp));
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
+ }
+ 
+ static void applkey(struct vc_data *vc, int key, char mode)
+@@ -584,7 +584,7 @@ static void fn_inc_console(struct vc_dat
+ static void fn_send_intr(struct vc_data *vc)
+ {
+ 	tty_insert_flip_char(&vc->port, 0, TTY_BREAK);
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
+ }
+ 
+ static void fn_scroll_forw(struct vc_data *vc)
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -1833,7 +1833,7 @@ static void csi_m(struct vc_data *vc)
+ static void respond_string(const char *p, size_t len, struct tty_port *port)
+ {
+ 	tty_insert_flip_string(port, p, len);
+-	tty_schedule_flip(port);
++	tty_flip_buffer_push(port);
+ }
+ 
+ static void cursor_report(struct vc_data *vc, struct tty_struct *tty)
 
 

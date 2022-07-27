@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AFA582BE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A493582EA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239041AbiG0Qjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
+        id S232224AbiG0RO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239043AbiG0Qix (ORCPT
+        with ESMTP id S241583AbiG0RNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:38:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480085A152;
-        Wed, 27 Jul 2022 09:28:38 -0700 (PDT)
+        Wed, 27 Jul 2022 13:13:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1CB5B79F;
+        Wed, 27 Jul 2022 09:42:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B94DB821BC;
-        Wed, 27 Jul 2022 16:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21B6C433C1;
-        Wed, 27 Jul 2022 16:28:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1914601CE;
+        Wed, 27 Jul 2022 16:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A880BC433C1;
+        Wed, 27 Jul 2022 16:42:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939317;
-        bh=HDQlZl209yb3N5mcFkuwfVpZiduu9n6n/X73yCLOr4w=;
+        s=korg; t=1658940133;
+        bh=l1ue5a0jyDSRmPddXPGgCmTdqIau5TtnOYUWQww6OZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xmC5vs6s20mRGIkUt956iE51pb6rKnY+usrHe+T8EiMucYCSK4NSrl9d/YYtI2ot9
-         +YKgVa1FqFFbehCRixyKEfU/Vh8nGKElsJsQZE7vTQfDBGKrrw3J73tuyQG4d6FEuQ
-         6qsJo5pfxuE0dUHuZycIcsW6fQrjT3TsLC7aEkUM=
+        b=Pu33QJ+LBJ1Z6PVTe+RvOZVl8+Dep7Uz+nwWn6HD6yQi0yw9N7I+m738ACwNR/4P0
+         i8ccO6CTlTVeiRSELqmvciQPYUIleuNE16hHffdDxlfcIZ+LtotBc3/N6bf6TAt2gL
+         vUQGTvT/g8YLD7DWnLkt3tRLkPwF8sKdLJqWl3us=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 27/87] i2c: cadence: Change large transfer count reset logic to be unconditional
-Date:   Wed, 27 Jul 2022 18:10:20 +0200
-Message-Id: <20220727161010.128877012@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 117/201] ipv4: Fix data-races around sysctl_fib_multipath_hash_policy.
+Date:   Wed, 27 Jul 2022 18:10:21 +0200
+Message-Id: <20220727161032.626425136@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,108 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 4ca8ca873d454635c20d508261bfc0081af75cf8 ]
+[ Upstream commit 7998c12a08c97cc26660532c9f90a34bd7d8da5a ]
 
-Problems were observed on the Xilinx ZynqMP platform with large I2C reads.
-When a read of 277 bytes was performed, the controller NAKed the transfer
-after only 252 bytes were transferred and returned an ENXIO error on the
-transfer.
+While reading sysctl_fib_multipath_hash_policy, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its readers.
 
-There is some code in cdns_i2c_master_isr to handle this case by resetting
-the transfer count in the controller before it reaches 0, to allow larger
-transfers to work, but it was conditional on the CDNS_I2C_BROKEN_HOLD_BIT
-quirk being set on the controller, and ZynqMP uses the r1p14 version of
-the core where this quirk is not being set. The requirement to do this to
-support larger reads seems like an inherently required workaround due to
-the core only having an 8-bit transfer size register, so it does not
-appear that this should be conditional on the broken HOLD bit quirk which
-is used elsewhere in the driver.
-
-Remove the dependency on the CDNS_I2C_BROKEN_HOLD_BIT for this transfer
-size reset logic to fix this problem.
-
-Fixes: 63cab195bf49 ("i2c: removed work arounds in i2c driver for Zynq Ultrascale+ MPSoC")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Reviewed-by: Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>
-Acked-by: Michal Simek <michal.simek@amd.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: bf4e0a3db97e ("net: ipv4: add support for ECMP hash policy choice")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-cadence.c | 30 +++++-------------------------
- 1 file changed, 5 insertions(+), 25 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 2 +-
+ net/ipv4/route.c                                      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 3a1bdc75275f..8750e444f449 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -198,9 +198,9 @@ static inline bool cdns_is_holdquirk(struct cdns_i2c *id, bool hold_wrkaround)
-  */
- static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
- {
--	unsigned int isr_status, avail_bytes, updatetx;
-+	unsigned int isr_status, avail_bytes;
- 	unsigned int bytes_to_send;
--	bool hold_quirk;
-+	bool updatetx;
- 	struct cdns_i2c *id = ptr;
- 	/* Signal completion only after everything is updated */
- 	int done_flag = 0;
-@@ -219,11 +219,7 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
- 	 * Check if transfer size register needs to be updated again for a
- 	 * large data receive operation.
- 	 */
--	updatetx = 0;
--	if (id->recv_count > id->curr_recv_count)
--		updatetx = 1;
--
--	hold_quirk = (id->quirks & CDNS_I2C_BROKEN_HOLD_BIT) && updatetx;
-+	updatetx = id->recv_count > id->curr_recv_count;
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+index d17156c11ef8..6cdf0e232b1c 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+@@ -9588,7 +9588,7 @@ static void mlxsw_sp_mp4_hash_init(struct mlxsw_sp *mlxsw_sp,
+ 	unsigned long *fields = config->fields;
+ 	u32 hash_fields;
  
- 	/* When receiving, handle data interrupt and completion interrupt */
- 	if (id->p_recv_buf &&
-@@ -246,7 +242,7 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
- 			id->recv_count--;
- 			id->curr_recv_count--;
+-	switch (net->ipv4.sysctl_fib_multipath_hash_policy) {
++	switch (READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_policy)) {
+ 	case 0:
+ 		mlxsw_sp_mp4_hash_outer_addr(config);
+ 		break;
+diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+index 7f08a30256c5..ade6cb309c40 100644
+--- a/net/ipv4/route.c
++++ b/net/ipv4/route.c
+@@ -2048,7 +2048,7 @@ int fib_multipath_hash(const struct net *net, const struct flowi4 *fl4,
+ 	struct flow_keys hash_keys;
+ 	u32 mhash = 0;
  
--			if (cdns_is_holdquirk(id, hold_quirk))
-+			if (cdns_is_holdquirk(id, updatetx))
- 				break;
- 		}
- 
-@@ -257,7 +253,7 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
- 		 * maintain transfer size non-zero while performing a large
- 		 * receive operation.
- 		 */
--		if (cdns_is_holdquirk(id, hold_quirk)) {
-+		if (cdns_is_holdquirk(id, updatetx)) {
- 			/* wait while fifo is full */
- 			while (cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET) !=
- 			       (id->curr_recv_count - CDNS_I2C_FIFO_DEPTH))
-@@ -279,22 +275,6 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
- 						  CDNS_I2C_XFER_SIZE_OFFSET);
- 				id->curr_recv_count = id->recv_count;
- 			}
--		} else if (id->recv_count && !hold_quirk &&
--						!id->curr_recv_count) {
--
--			/* Set the slave address in address register*/
--			cdns_i2c_writereg(id->p_msg->addr & CDNS_I2C_ADDR_MASK,
--						CDNS_I2C_ADDR_OFFSET);
--
--			if (id->recv_count > CDNS_I2C_TRANSFER_SIZE) {
--				cdns_i2c_writereg(CDNS_I2C_TRANSFER_SIZE,
--						CDNS_I2C_XFER_SIZE_OFFSET);
--				id->curr_recv_count = CDNS_I2C_TRANSFER_SIZE;
--			} else {
--				cdns_i2c_writereg(id->recv_count,
--						CDNS_I2C_XFER_SIZE_OFFSET);
--				id->curr_recv_count = id->recv_count;
--			}
- 		}
- 
- 		/* Clear hold (if not repeated start) and signal completion */
+-	switch (net->ipv4.sysctl_fib_multipath_hash_policy) {
++	switch (READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_policy)) {
+ 	case 0:
+ 		memset(&hash_keys, 0, sizeof(hash_keys));
+ 		hash_keys.control.addr_type = FLOW_DISSECTOR_KEY_IPV4_ADDRS;
 -- 
 2.35.1
 

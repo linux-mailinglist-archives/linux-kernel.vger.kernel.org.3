@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E8F582CA1
+	by mail.lfdr.de (Postfix) with ESMTP id 40316582C9F
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbiG0QsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S240534AbiG0Qsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240513AbiG0Qrv (ORCPT
+        with ESMTP id S240353AbiG0QsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:47:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E053B60689;
-        Wed, 27 Jul 2022 09:32:11 -0700 (PDT)
+        Wed, 27 Jul 2022 12:48:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD65D4E857;
+        Wed, 27 Jul 2022 09:32:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3E6E61A69;
-        Wed, 27 Jul 2022 16:32:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC2CC433D6;
-        Wed, 27 Jul 2022 16:32:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B0EDB821BA;
+        Wed, 27 Jul 2022 16:32:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8739CC433D6;
+        Wed, 27 Jul 2022 16:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939530;
-        bh=x62oYt0nv8/6MhmQFrVc/A5UY17q4Wq4XlS+Piv5KXA=;
+        s=korg; t=1658939532;
+        bh=4huGB46LmSsHX4JtpKQZ9/mpKisqQh47RLLpIwT9ZiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b9Yl734/8bJlHDmXkaTcY2URJ6PvLcFb7FLeMpQoNvYVAltdtanSle5w4rAhutmPN
-         jWlZP1Ka9tRDyogBxkOZ33guh4RwbMWIcWaBJfGSkMYMzGdF9Eu9yrWYWqjnLR7WLR
-         +VS2rjupn+JD6JNbwhbTo+gOdcO2lKRlHQ9s0Nx8=
+        b=YemiIuqWC2tws+Jeyqo7Q2/zvypHJPRlQmSlXKSghYpVf4RMc5kQWoNPIYELaWxQj
+         /XbiwIpfaZgSgAYjcPgNQH9+6gQ/z/T214MQROH0kVoPBHr3YWlPFPNuw+JNEFMgpl
+         XEjulldRd1UyRCs3/KKAIajr/TRsZndjPVH6K54o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Edwin Peer <edwin.peer@broadcom.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Fedor Pchelkin <pchelkin@ispras.ru>
-Subject: [PATCH 5.10 014/105] net: move rollback_registered_many()
-Date:   Wed, 27 Jul 2022 18:10:00 +0200
-Message-Id: <20220727161012.635565992@linuxfoundation.org>
+Subject: [PATCH 5.10 015/105] net: inline rollback_registered_many()
+Date:   Wed, 27 Jul 2022 18:10:01 +0200
+Message-Id: <20220727161012.679225466@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
 References: <20220727161012.056867467@linuxfoundation.org>
@@ -58,232 +58,92 @@ From: Fedor Pchelkin <pchelkin@ispras.ru>
 
 From: Jakub Kicinski <kuba@kernel.org>
 
-commit bcfe2f1a3818d9dca945b6aca4ae741cb1f75329 upstream.
+commit 0cbe1e57a7b93517100b0eb63d8e445cfbeb630c upstream.
 
-Move rollback_registered_many() and add a temporary
-forward declaration to make merging the code into
-unregister_netdevice_many() easier to review.
+Similar to the change for rollback_registered() -
+rollback_registered_many() was a part of unregister_netdevice_many()
+minus the net_set_todo(), which is no longer needed.
 
-No functional changes.
+Functionally this patch moves the list_empty() check back after:
+
+	BUG_ON(dev_boot_phase);
+	ASSERT_RTNL();
+
+but I can't find any reason why that would be an issue.
 
 Reviewed-by: Edwin Peer <edwin.peer@broadcom.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/dev.c |  188 ++++++++++++++++++++++++++++-----------------------------
- 1 file changed, 95 insertions(+), 93 deletions(-)
+ net/core/dev.c |   22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -9508,99 +9508,6 @@ static void net_set_todo(struct net_devi
- 	dev_net(dev)->dev_unreg_count++;
- }
+@@ -5750,7 +5750,7 @@ static void flush_all_backlogs(void)
+ 	}
  
--static void rollback_registered_many(struct list_head *head)
--{
--	struct net_device *dev, *tmp;
--	LIST_HEAD(close_head);
--
--	BUG_ON(dev_boot_phase);
--	ASSERT_RTNL();
--
--	list_for_each_entry_safe(dev, tmp, head, unreg_list) {
--		/* Some devices call without registering
--		 * for initialization unwind. Remove those
--		 * devices and proceed with the remaining.
--		 */
--		if (dev->reg_state == NETREG_UNINITIALIZED) {
--			pr_debug("unregister_netdevice: device %s/%p never was registered\n",
--				 dev->name, dev);
--
--			WARN_ON(1);
--			list_del(&dev->unreg_list);
--			continue;
--		}
--		dev->dismantle = true;
--		BUG_ON(dev->reg_state != NETREG_REGISTERED);
--	}
--
--	/* If device is running, close it first. */
--	list_for_each_entry(dev, head, unreg_list)
--		list_add_tail(&dev->close_list, &close_head);
--	dev_close_many(&close_head, true);
--
--	list_for_each_entry(dev, head, unreg_list) {
--		/* And unlink it from device chain. */
--		unlist_netdevice(dev);
--
--		dev->reg_state = NETREG_UNREGISTERING;
--	}
--	flush_all_backlogs();
--
--	synchronize_net();
--
--	list_for_each_entry(dev, head, unreg_list) {
--		struct sk_buff *skb = NULL;
--
--		/* Shutdown queueing discipline. */
--		dev_shutdown(dev);
--
--		dev_xdp_uninstall(dev);
--
--		/* Notify protocols, that we are about to destroy
--		 * this device. They should clean all the things.
--		 */
--		call_netdevice_notifiers(NETDEV_UNREGISTER, dev);
--
--		if (!dev->rtnl_link_ops ||
--		    dev->rtnl_link_state == RTNL_LINK_INITIALIZED)
--			skb = rtmsg_ifinfo_build_skb(RTM_DELLINK, dev, ~0U, 0,
--						     GFP_KERNEL, NULL, 0);
--
--		/*
--		 *	Flush the unicast and multicast chains
--		 */
--		dev_uc_flush(dev);
--		dev_mc_flush(dev);
--
--		netdev_name_node_alt_flush(dev);
--		netdev_name_node_free(dev->name_node);
--
--		if (dev->netdev_ops->ndo_uninit)
--			dev->netdev_ops->ndo_uninit(dev);
--
--		if (skb)
--			rtmsg_ifinfo_send(skb, dev, GFP_KERNEL);
--
--		/* Notifier chain MUST detach us all upper devices. */
--		WARN_ON(netdev_has_any_upper_dev(dev));
--		WARN_ON(netdev_has_any_lower_dev(dev));
--
--		/* Remove entries from kobject tree */
--		netdev_unregister_kobject(dev);
--#ifdef CONFIG_XPS
--		/* Remove XPS queueing entries */
--		netif_reset_xps_queues_gt(dev, 0);
--#endif
--	}
--
--	synchronize_net();
--
--	list_for_each_entry(dev, head, unreg_list) {
--		dev_put(dev);
--		net_set_todo(dev);
--	}
--}
--
- static netdev_features_t netdev_sync_upper_features(struct net_device *lower,
- 	struct net_device *upper, netdev_features_t features)
- {
-@@ -10726,6 +10633,8 @@ void synchronize_net(void)
+ 	/* we can have in flight packet[s] on the cpus we are not flushing,
+-	 * synchronize_net() in rollback_registered_many() will take care of
++	 * synchronize_net() in unregister_netdevice_many() will take care of
+ 	 * them
+ 	 */
+ 	for_each_cpu(cpu, &flush_cpus)
+@@ -10633,8 +10633,6 @@ void synchronize_net(void)
  }
  EXPORT_SYMBOL(synchronize_net);
  
-+static void rollback_registered_many(struct list_head *head);
-+
+-static void rollback_registered_many(struct list_head *head);
+-
  /**
   *	unregister_netdevice_queue - remove device from the kernel
   *	@dev: device
-@@ -10771,6 +10680,99 @@ void unregister_netdevice_many(struct li
- }
- EXPORT_SYMBOL(unregister_netdevice_many);
+@@ -10658,8 +10656,7 @@ void unregister_netdevice_queue(struct n
+ 		LIST_HEAD(single);
  
-+static void rollback_registered_many(struct list_head *head)
-+{
-+	struct net_device *dev, *tmp;
-+	LIST_HEAD(close_head);
+ 		list_add(&dev->unreg_list, &single);
+-		rollback_registered_many(&single);
+-		list_del(&single);
++		unregister_netdevice_many(&single);
+ 	}
+ }
+ EXPORT_SYMBOL(unregister_netdevice_queue);
+@@ -10673,21 +10670,15 @@ EXPORT_SYMBOL(unregister_netdevice_queue
+  */
+ void unregister_netdevice_many(struct list_head *head)
+ {
+-	if (!list_empty(head)) {
+-		rollback_registered_many(head);
+-		list_del(head);
+-	}
+-}
+-EXPORT_SYMBOL(unregister_netdevice_many);
+-
+-static void rollback_registered_many(struct list_head *head)
+-{
+ 	struct net_device *dev, *tmp;
+ 	LIST_HEAD(close_head);
+ 
+ 	BUG_ON(dev_boot_phase);
+ 	ASSERT_RTNL();
+ 
++	if (list_empty(head))
++		return;
 +
-+	BUG_ON(dev_boot_phase);
-+	ASSERT_RTNL();
+ 	list_for_each_entry_safe(dev, tmp, head, unreg_list) {
+ 		/* Some devices call without registering
+ 		 * for initialization unwind. Remove those
+@@ -10771,7 +10762,10 @@ static void rollback_registered_many(str
+ 		dev_put(dev);
+ 		net_set_todo(dev);
+ 	}
 +
-+	list_for_each_entry_safe(dev, tmp, head, unreg_list) {
-+		/* Some devices call without registering
-+		 * for initialization unwind. Remove those
-+		 * devices and proceed with the remaining.
-+		 */
-+		if (dev->reg_state == NETREG_UNINITIALIZED) {
-+			pr_debug("unregister_netdevice: device %s/%p never was registered\n",
-+				 dev->name, dev);
-+
-+			WARN_ON(1);
-+			list_del(&dev->unreg_list);
-+			continue;
-+		}
-+		dev->dismantle = true;
-+		BUG_ON(dev->reg_state != NETREG_REGISTERED);
-+	}
-+
-+	/* If device is running, close it first. */
-+	list_for_each_entry(dev, head, unreg_list)
-+		list_add_tail(&dev->close_list, &close_head);
-+	dev_close_many(&close_head, true);
-+
-+	list_for_each_entry(dev, head, unreg_list) {
-+		/* And unlink it from device chain. */
-+		unlist_netdevice(dev);
-+
-+		dev->reg_state = NETREG_UNREGISTERING;
-+	}
-+	flush_all_backlogs();
-+
-+	synchronize_net();
-+
-+	list_for_each_entry(dev, head, unreg_list) {
-+		struct sk_buff *skb = NULL;
-+
-+		/* Shutdown queueing discipline. */
-+		dev_shutdown(dev);
-+
-+		dev_xdp_uninstall(dev);
-+
-+		/* Notify protocols, that we are about to destroy
-+		 * this device. They should clean all the things.
-+		 */
-+		call_netdevice_notifiers(NETDEV_UNREGISTER, dev);
-+
-+		if (!dev->rtnl_link_ops ||
-+		    dev->rtnl_link_state == RTNL_LINK_INITIALIZED)
-+			skb = rtmsg_ifinfo_build_skb(RTM_DELLINK, dev, ~0U, 0,
-+						     GFP_KERNEL, NULL, 0);
-+
-+		/*
-+		 *	Flush the unicast and multicast chains
-+		 */
-+		dev_uc_flush(dev);
-+		dev_mc_flush(dev);
-+
-+		netdev_name_node_alt_flush(dev);
-+		netdev_name_node_free(dev->name_node);
-+
-+		if (dev->netdev_ops->ndo_uninit)
-+			dev->netdev_ops->ndo_uninit(dev);
-+
-+		if (skb)
-+			rtmsg_ifinfo_send(skb, dev, GFP_KERNEL);
-+
-+		/* Notifier chain MUST detach us all upper devices. */
-+		WARN_ON(netdev_has_any_upper_dev(dev));
-+		WARN_ON(netdev_has_any_lower_dev(dev));
-+
-+		/* Remove entries from kobject tree */
-+		netdev_unregister_kobject(dev);
-+#ifdef CONFIG_XPS
-+		/* Remove XPS queueing entries */
-+		netif_reset_xps_queues_gt(dev, 0);
-+#endif
-+	}
-+
-+	synchronize_net();
-+
-+	list_for_each_entry(dev, head, unreg_list) {
-+		dev_put(dev);
-+		net_set_todo(dev);
-+	}
-+}
-+
++	list_del(head);
+ }
++EXPORT_SYMBOL(unregister_netdevice_many);
+ 
  /**
   *	unregister_netdev - remove device from the kernel
-  *	@dev: device
 
 

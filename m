@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DF8581F91
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 07:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1B0581F93
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 07:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbiG0Fh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 01:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S231483AbiG0FjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 01:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiG0Fhz (ORCPT
+        with ESMTP id S230173AbiG0FjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 01:37:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928402BB0D;
-        Tue, 26 Jul 2022 22:37:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lt2cH20g5z4x1c;
-        Wed, 27 Jul 2022 15:37:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658900273;
-        bh=W3BFpgevI9hLcOGPoOT8iHlLjNtq9ZecOiT6kd2h8bI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eTqkhS89cg8Tb9+To9uVlXiHlFRSHxdacs+912olxZpinxRr9sL3tsFtdqv/hb9lK
-         4Lvz9/70rw1zxzZYYmC9Hq1RfM5ps29xKbjurs2fNKERB4HjuqtAHH+6WIBZZYPbUn
-         sgM/RZF9i9IveeVarGP8IEacABrYiADk/ffOMzYnwVQyLNrvAokyMzB7rm0cGI0Juw
-         EiYKsvl234v42wTnz+Zkumgte/3IwcqZ5EI958muudCOt7As08xVLDXoQOVzCkP/Xt
-         yWs21YdjhPiRJPUyE6MIo5UclYSQY6kb3AJSMMkes+JafAOq1WoPHAS6+zost3/oLo
-         t0U6VuMQmSH1A==
-Date:   Wed, 27 Jul 2022 15:37:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Subject: Re: linux-next: manual merge of the drm tree with the
- drm-misc-fixes tree
-Message-ID: <20220727153750.00b4c033@canb.auug.org.au>
-In-Reply-To: <CAPM=9txm_fZX781zMr0RAS6uBD_FoE63THY-WaiB92xYEUrfTw@mail.gmail.com>
-References: <20220711124742.3b151992@canb.auug.org.au>
-        <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
-        <20220718094453.2f1a1f09@canb.auug.org.au>
-        <20220727125508.1991f1e7@canb.auug.org.au>
-        <CAPM=9txm_fZX781zMr0RAS6uBD_FoE63THY-WaiB92xYEUrfTw@mail.gmail.com>
+        Wed, 27 Jul 2022 01:39:04 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2073B95B
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 22:39:03 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so449129wmo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 22:39:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HMameTnBAoiarUgSLVWyT4MKNj8tsJRNE7nQMvYzCBM=;
+        b=SFXy23Rf+rLEeDnruHAsTdl4Jh/zlg6QJfcdGhSUQk/AKIsHuHBpUPlByPTjyNxfJL
+         AEQB6WKOteYpWeA+awAy3xX2nJfrazfT9wEqrn1vyPf5oHXSh+J8vLuI4OGjSNTl4eb7
+         46wY/RU3z3y30ZQBqDP/hrOo4lgoFDAlCd8v6e/ihbtKtzFp8Rz5W30m/1aBepODvth4
+         brSgvJvnvUheCwFj43+d6aN4PdBO9QGZcXITMG80BH56M13mtjwdFf0rOuT1jhNHJ9i6
+         +IvwdsO82VoVD0nZnteatM1K1nLUKjBziD944NNCulUvtCelqfcqXLtax4GYfFewZdcB
+         TnvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HMameTnBAoiarUgSLVWyT4MKNj8tsJRNE7nQMvYzCBM=;
+        b=ViP00sEhazGNpUJSwPkv36E/L4uIG9vwLika3ZyjebyogO4BhjiOQ9qf3x9ucFC1e+
+         7UCdMDrjIcvveAYpnNpkoMen9o1PB2x6plJA6U4WO3Ine5a4A405Ud8VxaZvftGtxPLB
+         fElNeS+jbs5+8qw9akE/J4CAmeoAsU8wvPpP+fnLec5hjr83M2UpLlgIdqy5EZKOL/S7
+         7Fk8J0PYNPC1w1UNPJkmdhb8Drawg+5fwOvzsLIRkZ7XnpXkY7dRmSMKKS6aDSB9Z3Zw
+         /+TtqgYrsNya9yDRjKpYlDCbY0XUWQ3sceLUDYSU49hWi6I8ON9JfgSPLXrO9IK+w8qW
+         Vclg==
+X-Gm-Message-State: AJIora9+7oxo5QSXp4EIHlI+qOnVQ+ICcQkXG2GhuIZTs+UlIgNIr25C
+        qnZ5tyn/+npkG3vw3QV1lEajIkzaoLj13QfgCRU=
+X-Google-Smtp-Source: AGRyM1s5tSKLfbal5GKlMJM1vwOqClRei2VKGwzNzkFdAy6Nlez8VmOgcLvUPmivlo8VaGlB8z1qtXricmb/puWoUkE=
+X-Received: by 2002:a05:600c:3847:b0:3a3:5333:8bcd with SMTP id
+ s7-20020a05600c384700b003a353338bcdmr1632919wmr.36.1658900341745; Tue, 26 Jul
+ 2022 22:39:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S+Jm_JAtWS4ZEjqD.3eEMr9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20220719165743.3409313-1-vschneid@redhat.com> <YthDjPq3CtWc+o0/@slm.duckdns.org>
+ <CAJhGHyAso+JH+QMXcfKTyOqq4yBD9Vc19sBbebEXohHe5znL8Q@mail.gmail.com>
+ <xhsmhv8rqfu6w.mognet@vschneid.remote.csb> <YtuEJLDkO/lATYeb@slm.duckdns.org>
+ <xhsmh8rohfq6m.mognet@vschneid.remote.csb> <YuAkroXHF+Zg45KU@slm.duckdns.org> <xhsmhmtcvehmx.mognet@vschneid.remote.csb>
+In-Reply-To: <xhsmhmtcvehmx.mognet@vschneid.remote.csb>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 27 Jul 2022 13:38:49 +0800
+Message-ID: <CAJhGHyA3gRmL=VCq2TAcc+TgBHCAizADJeukNRGmisa29U969g@mail.gmail.com>
+Subject: Re: [RFC PATCH] workqueue: Unbind workers before sending them to exit()
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,39 +73,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/S+Jm_JAtWS4ZEjqD.3eEMr9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Dave,
-
-On Wed, 27 Jul 2022 13:24:45 +1000 Dave Airlie <airlied@gmail.com> wrote:
+On Wed, Jul 27, 2022 at 4:36 AM Valentin Schneider <vschneid@redhat.com> wrote:
 >
-> My assumption is I fix this on sending my -next tree to Linus with a
-> resolution I create at that time?
->=20
-> Is there another option, we have this fixed in out drm-tip tree already.
+> On 26/07/22 07:30, Tejun Heo wrote:
+> > Hello,
+> >
+> > On Mon, Jul 25, 2022 at 11:21:37AM +0100, Valentin Schneider wrote:
+> >> Hm so my choice of words in the changelog wasn't great - "initial setup"
+> >> can be kernel init, but *also* setup of whatever workload is being deployed
+> >> onto the system.
+> >>
+> >> So you can be having "normal" background activity (I've seen some IRQs end
+> >> up with schedule_work() on isolated CPUs, they're not moved away at boot
+> >> time but rather shortly before launching the latency-sensitive app), some
+> >> preliminary stats collection / setup to make sure the CPU will be quiet
+> >> (e.g. refresh_vm_stats()), and *then* the application starts with
+> >> fresh-but-no-longer-required extra pcpu kworkers assigned to its CPU.
+> >
+> > Ah, I see. I guess we'll need to figure out how to unbind the workers then.
+> >
+>
+> I've been playing with different ways to unbind & wake the workers in a
+> sleepable context, but so far I haven't been happy with any of my
+> experiments.
 
-Sounds good, no problem.
 
---=20
-Cheers,
-Stephen Rothwell
+I'm writing code to handle the problems of cpu affinity and prematurely
+waking up of newly created worker.
 
---Sig_/S+Jm_JAtWS4ZEjqD.3eEMr9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+This work of unbinding the dying worker is also on the list.
+I haven't figured out a good solution.
 
------BEGIN PGP SIGNATURE-----
+I was planning to add set_cpus_allowed_ptr_off_rq() which only set
+cpumasks to the task only if it is sleeping and returns -EBUSY otherwise.
+And it is ensured and documented as being usable in an atomic context
+and it is recommended to be used for dying tasks only.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLgzy4ACgkQAVBC80lX
-0GwaSQgAgZHYGWcrMOkXIpee3BWW88sbFXX885guSGckGym/Fn3A75LulEe1d5Bc
-AeN5J6E+q7Sg3ihlTiW6wFdht8EDueyiwfXd+joQkEAgwtGuzr1M95mwckSNPPUs
-/W/Fy2iKEjHX+fc+9jG/3sG6t7+F3x0yx+ofDJ9Yl26ZqxvfOz8Rjb4SHVCwj7At
-571zQEZNFOBCPTWrEosO6uLRRE8REPt5fddCwnro63vGaXpuflbyCLsn87DiQkH4
-PkiuJ/J/ErU4QCVcMWeX+tsuH48K+Opbb5atBTFKjz1ETcsARi9iOw0fRnxMSxVk
-13edLDdDrf+zktsMlX5fw3p8K08FUA==
-=50DY
------END PGP SIGNATURE-----
+I can't really ensure it would be implemented as I'm expecting since
+it touches scheduler code.
 
---Sig_/S+Jm_JAtWS4ZEjqD.3eEMr9--
+I'd better back off.
+
+>
+> What hasn't changed much between my attempts is transferring to-be-destroyed
+> kworkers from their pool->idle_list to a reaper_list which is walked by
+> *something* that does unbind+wakeup. AFAIA as long as the kworker is off
+> the pool->idle_list we can play with it (i.e. unbind+wake) off the
+> pool->lock.
+>
+> It's the *something* that's annoying to get right, I don't want it to be
+> overly complicated given most users are probably not impacted by what I'm
+> trying to fix, but I'm getting the feeling it should still be a per-pool
+> kthread. I toyed with a single reaper kthread but a central synchronization
+> for all the pools feels like a stupid overhead.
+
+I think fixing it in the workqueue.c is complicated.
+
+Nevertheless, I will also try to fix it inside workqueue only to see
+what will come up.
+
+>
+> If any of that sounds ludicrous please shout, otherwise I'm going to keep
+> tinkering :)
+>
+> > Thanks.
+> >
+> > --
+> > tejun
+>

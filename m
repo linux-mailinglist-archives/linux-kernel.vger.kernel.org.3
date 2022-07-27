@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610EC582BBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A359582D26
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238697AbiG0QgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
+        id S240848AbiG0Qxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238079AbiG0QeE (ORCPT
+        with ESMTP id S240844AbiG0Qw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:34:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51AD55088;
-        Wed, 27 Jul 2022 09:26:53 -0700 (PDT)
+        Wed, 27 Jul 2022 12:52:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C60B45061;
+        Wed, 27 Jul 2022 09:34:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C96861A09;
-        Wed, 27 Jul 2022 16:26:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A26FC433C1;
-        Wed, 27 Jul 2022 16:26:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCCD161A94;
+        Wed, 27 Jul 2022 16:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D58B9C433C1;
+        Wed, 27 Jul 2022 16:34:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939181;
-        bh=Zu8qtbygSgh2+lzN3ZHdXU7oyiNrr/YxjoGng1rL5lY=;
+        s=korg; t=1658939675;
+        bh=UNdIwmeFR+X2tGp88fRtXow2FT7zbH9mXPKbFKuQrTg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XlNAnNgLbEgUUZLLcimPK1nuAwT6S62KXGQn97QiXK33ybomwZoFg9xqLu8Co1CtD
-         D3PGO2GiDRZJfWTLSanW+XIHpj+krhU5zHbwKcFzHhqWDGACvhnFQq3eB3Imnco1/C
-         eK1NIUxKnrpSLbA5dT/1X4r8L9FGLyHA0Psc0D4M=
+        b=kKiqkOvPTd+5+xClmqjSbqWJC5LmQTX3QprqbkP+HyO9RF8pfHRU3WRKSKZpvSAwG
+         s0U5+BruDANO+ODMgWnZAOAfWP8civylGXGE5RPVddplfqGhSt/9iz2qL6hqBQLdm/
+         JLu7t/EyLWm2bkNwyZbgLA5FAvpS+1WcKM4eVd7M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Fischetti <tony.fischetti@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 41/62] HID: add ALWAYS_POLL quirk to lenovo pixart mouse
-Date:   Wed, 27 Jul 2022 18:10:50 +0200
-Message-Id: <20220727161005.792257842@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 065/105] ipv4: Fix a data-race around sysctl_fib_multipath_use_neigh.
+Date:   Wed, 27 Jul 2022 18:10:51 +0200
+Message-Id: <20220727161014.664949445@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,48 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Fischetti <tony.fischetti@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 819d578d51d0ce73f06e35d69395ef55cd683a74 ]
+[ Upstream commit 87507bcb4f5de16bb419e9509d874f4db6c0ad0f ]
 
-A lenovo pixart mouse (17ef:608d) is afflicted common the the malfunction
-where it disconnects and reconnects every minute--each time incrementing
-the device number. This patch adds the device id of the device and
-specifies that it needs the HID_QUIRK_ALWAYS_POLL quirk in order to
-work properly.
+While reading sysctl_fib_multipath_use_neigh, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its reader.
 
-Signed-off-by: Tony Fischetti <tony.fischetti@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: a6db4494d218 ("net: ipv4: Consider failed nexthops in multipath routes")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-ids.h    | 1 +
- drivers/hid/hid-quirks.c | 1 +
- 2 files changed, 2 insertions(+)
+ net/ipv4/fib_semantics.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 1c1de7e128d6..70079d29822b 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -728,6 +728,7 @@
- #define USB_DEVICE_ID_LENOVO_X1_COVER	0x6085
- #define USB_DEVICE_ID_LENOVO_X1_TAB	0x60a3
- #define USB_DEVICE_ID_LENOVO_X1_TAB3	0x60b5
-+#define USB_DEVICE_ID_LENOVO_PIXART_USB_MOUSE_608D	0x608d
+diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
+index 70c866308abe..3824b7abecf7 100644
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -2232,7 +2232,7 @@ void fib_select_multipath(struct fib_result *res, int hash)
+ 	}
  
- #define USB_VENDOR_ID_LG		0x1fd2
- #define USB_DEVICE_ID_LG_MULTITOUCH	0x0064
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 48e9761d4ace..c1b76ba85fb4 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -111,6 +111,7 @@ static const struct hid_device_id hid_quirks[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_MOUSEPEN_I608X_V2), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_KYE_PENSKETCH_M912), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_KYE, USB_DEVICE_ID_PIXART_USB_OPTICAL_MOUSE_ID2), HID_QUIRK_ALWAYS_POLL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_LENOVO, USB_DEVICE_ID_LENOVO_PIXART_USB_MOUSE_608D), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_C007), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_C077), HID_QUIRK_ALWAYS_POLL },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_KEYBOARD_G710_PLUS), HID_QUIRK_NOGET },
+ 	change_nexthops(fi) {
+-		if (net->ipv4.sysctl_fib_multipath_use_neigh) {
++		if (READ_ONCE(net->ipv4.sysctl_fib_multipath_use_neigh)) {
+ 			if (!fib_good_nh(nexthop_nh))
+ 				continue;
+ 			if (!first) {
 -- 
 2.35.1
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B64582C14
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F68582E85
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238736AbiG0Ql4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S241449AbiG0RNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239145AbiG0QlI (ORCPT
+        with ESMTP id S230149AbiG0RMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:41:08 -0400
+        Wed, 27 Jul 2022 13:12:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D924E623;
-        Wed, 27 Jul 2022 09:29:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E1A753BD;
+        Wed, 27 Jul 2022 09:42:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9192BB821BC;
-        Wed, 27 Jul 2022 16:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B33DBC433C1;
-        Wed, 27 Jul 2022 16:29:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 456CDB821D5;
+        Wed, 27 Jul 2022 16:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD9FC433C1;
+        Wed, 27 Jul 2022 16:41:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939372;
-        bh=Ie/6QvGoxKNOLhlHGeLDcRr4cP1nWvy+w+noycFWjNg=;
+        s=korg; t=1658940119;
+        bh=BXg5fLLfCrboKcDhCRE6/09nN66VrHApWnu3zne7LGw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PXwVE7OdmypK5bWlPyLSTDNfQsxsrER6X9JNcK7XAySXry9EuzCc0uAmht2ztSrav
-         kf6rsbELy1wwPf++7ZICYmGmX45go73hbwjk6m1l37ozWQJW8nK2GatYIEY3E7SD9o
-         Oo9hcbUVed0tC+cLByuwbwyDRAqFBaO4p0w7AoTo=
+        b=JKEUadedFeR/cSTp3aoKAhDGVlJ61gorXWN3PmWrzIt+CsUh8I2m8dhNBDfno5KWj
+         7wTSr8ZDFAh7zzbYAk+mpCT3XhhjrBdo0Dbwa84uqxPhFkhdRwWEptGxjhoepzmEGi
+         L7IzTZzomZzyszCe9qrUaLs87MtE10GJuc7MXZdM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lennert Buytenhek <buytenh@arista.com>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 15/87] igc: Reinstate IGC_REMOVED logic and implement it properly
+Subject: [PATCH 5.15 104/201] pinctrl: armada-37xx: Convert to use dev_err_probe()
 Date:   Wed, 27 Jul 2022 18:10:08 +0200
-Message-Id: <20220727161009.617339738@linuxfoundation.org>
+Message-Id: <20220727161032.059592834@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,92 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lennert Buytenhek <buytenh@wantstofly.org>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 7c1ddcee5311f3315096217881d2dbe47cc683f9 ]
+[ Upstream commit 06cb10ea0cd5c5f4db9627a33ab47fec32cb5960 ]
 
-The initially merged version of the igc driver code (via commit
-146740f9abc4, "igc: Add support for PF") contained the following
-IGC_REMOVED checks in the igc_rd32/wr32() MMIO accessors:
+It's fine to call dev_err_probe() in ->probe() when error code is known.
+Convert the driver to use dev_err_probe().
 
-	u32 igc_rd32(struct igc_hw *hw, u32 reg)
-	{
-		u8 __iomem *hw_addr = READ_ONCE(hw->hw_addr);
-		u32 value = 0;
-
-		if (IGC_REMOVED(hw_addr))
-			return ~value;
-
-		value = readl(&hw_addr[reg]);
-
-		/* reads should not return all F's */
-		if (!(~value) && (!reg || !(~readl(hw_addr))))
-			hw->hw_addr = NULL;
-
-		return value;
-	}
-
-And:
-
-	#define wr32(reg, val) \
-	do { \
-		u8 __iomem *hw_addr = READ_ONCE((hw)->hw_addr); \
-		if (!IGC_REMOVED(hw_addr)) \
-			writel((val), &hw_addr[(reg)]); \
-	} while (0)
-
-E.g. igb has similar checks in its MMIO accessors, and has a similar
-macro E1000_REMOVED, which is implemented as follows:
-
-	#define E1000_REMOVED(h) unlikely(!(h))
-
-These checks serve to detect and take note of an 0xffffffff MMIO read
-return from the device, which can be caused by a PCIe link flap or some
-other kind of PCI bus error, and to avoid performing MMIO reads and
-writes from that point onwards.
-
-However, the IGC_REMOVED macro was not originally implemented:
-
-	#ifndef IGC_REMOVED
-	#define IGC_REMOVED(a) (0)
-	#endif /* IGC_REMOVED */
-
-This led to the IGC_REMOVED logic to be removed entirely in a
-subsequent commit (commit 3c215fb18e70, "igc: remove IGC_REMOVED
-function"), with the rationale that such checks matter only for
-virtualization and that igc does not support virtualization -- but a
-PCIe device can become detached even without virtualization being in
-use, and without proper checks, a PCIe bus error affecting an igc
-adapter will lead to various NULL pointer dereferences, as the first
-access after the error will set hw->hw_addr to NULL, and subsequent
-accesses will blindly dereference this now-NULL pointer.
-
-This patch reinstates the IGC_REMOVED checks in igc_rd32/wr32(), and
-implements IGC_REMOVED the way it is done for igb, by checking for the
-unlikely() case of hw_addr being NULL.  This change prevents the oopses
-seen when a PCIe link flap occurs on an igc adapter.
-
-Fixes: 146740f9abc4 ("igc: Add support for PF")
-Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
-Acked-by: Sasha Neftin <sasha.neftin@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igc/igc_regs.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_regs.h b/drivers/net/ethernet/intel/igc/igc_regs.h
-index 50d7c04dccf5..7bc7d7618fe1 100644
---- a/drivers/net/ethernet/intel/igc/igc_regs.h
-+++ b/drivers/net/ethernet/intel/igc/igc_regs.h
-@@ -236,4 +236,6 @@ do { \
+diff --git a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+index 40bcf05123eb..7d0d2771a9ac 100644
+--- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
++++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+@@ -736,10 +736,8 @@ static int armada_37xx_irqchip_register(struct platform_device *pdev,
+ 			break;
+ 		}
+ 	}
+-	if (ret) {
+-		dev_err(dev, "no gpio-controller child node\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "no gpio-controller child node\n");
  
- #define array_rd32(reg, offset) (igc_rd32(hw, (reg) + ((offset) << 2)))
+ 	nr_irq_parent = of_irq_count(np);
+ 	spin_lock_init(&info->irq_lock);
+@@ -996,10 +994,8 @@ static int armada_37xx_pinctrl_register(struct platform_device *pdev,
+ 		return ret;
  
-+#define IGC_REMOVED(h) unlikely(!(h))
-+
- #endif
+ 	info->pctl_dev = devm_pinctrl_register(dev, ctrldesc, info);
+-	if (IS_ERR(info->pctl_dev)) {
+-		dev_err(dev, "could not register pinctrl driver\n");
+-		return PTR_ERR(info->pctl_dev);
+-	}
++	if (IS_ERR(info->pctl_dev))
++		return dev_err_probe(dev, PTR_ERR(info->pctl_dev), "could not register pinctrl driver\n");
+ 
+ 	return 0;
+ }
+@@ -1135,10 +1131,8 @@ static int __init armada_37xx_pinctrl_probe(struct platform_device *pdev)
+ 	info->dev = dev;
+ 
+ 	regmap = syscon_node_to_regmap(np);
+-	if (IS_ERR(regmap)) {
+-		dev_err(dev, "cannot get regmap\n");
+-		return PTR_ERR(regmap);
+-	}
++	if (IS_ERR(regmap))
++		return dev_err_probe(dev, PTR_ERR(regmap), "cannot get regmap\n");
+ 	info->regmap = regmap;
+ 
+ 	info->data = of_device_get_match_data(dev);
 -- 
 2.35.1
 

@@ -2,91 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBDF582748
+	by mail.lfdr.de (Postfix) with ESMTP id 78B7C582749
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiG0NBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
+        id S233232AbiG0NBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233535AbiG0NAx (ORCPT
+        with ESMTP id S233540AbiG0NAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Jul 2022 09:00:53 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DFA237DC;
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3618252B5;
         Wed, 27 Jul 2022 06:00:52 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id l4so2421763wrm.13;
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-10e3852b463so5816419fac.3;
         Wed, 27 Jul 2022 06:00:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fChMX8GlPFpKqzi4SSOEluwQflXzCDYt0HZSmFL88cw=;
-        b=TI9dPJPm/HpiQsHlphg/YL2wRkFXK5o2L1VWNsm3YuOPu/uaeuXzWubEt1IJdi2YWh
-         dLtqcluYdMGh1ni1LQ4u3BDGS1Mof7UsgbD9KZrw2bZE/Op8TnFaXoQdrYjzzTH3aE+O
-         y3P1DADbJgqYfjwZWiK6F0NLcbGmsu3V2Kh2igJwVGH6LOFgrlTP9m4+y6N4cBrGe43m
-         8CY0HT82y5VFAahtgyfvmWPk8KkSsrSMGAdRdsDchkY1c8fY7b0N8s5ySGaGoGV+vq5s
-         uOy7Dd336WX4jG2uX9sIVfMSIlKbSiB4CkV8sqsOrcAe9AYVyXDPNcNwJSVN6EEd4926
-         LkaQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GBJ2vhetJDvn6LDdnSPcxjL/wCbAJT2NpPDCLIaXTrY=;
+        b=QebvzY8wMf6Sqn6zZKiROUGfVuG5WHCppffbmpmYXfWkp5l9alc/qTMKegoXbkmFfW
+         cbX0jFERL5jU+RJZNqZL2fKN+KuF8aj8T9sOrvvpMO9kdkWJ13XYOVriwU9+8IYItgp7
+         bzSHajX+uuqjud/XCABO05bTdYaH4u68CObVcxpgdTcjQNnOJ9MKAEZr0nIKBHhpJHP3
+         FlbzBvDh3pmBLXg/AbrUMc2lsu1s8i4iTlHXmZXly+OvI9YfXjTOAZfFY+9103Z5gmQL
+         V3nCKbRTmpLaFE9saV7vbCjkn87CZnq2wBTLKZZDrRP4Q0His9dMvukCXDRfzmnP+X4D
+         CE8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fChMX8GlPFpKqzi4SSOEluwQflXzCDYt0HZSmFL88cw=;
-        b=gT7/ocdnRgVNoVlpnRg3prTWC+IxibOHFxZeHV/BJqai2Aaf2i2pnwY9CLAEZcyUt7
-         xVZlvJ6rciU5ZFjliwTJ4plzcoT4nlWo9McARrnbF4L8xMhpvbidzIs0ZBc5vklw4YpT
-         vrA1WMwaWdgT5/BsQSVaARMUX1TFSJuVlPCuYZcdPtnkViuazQKblazXxfvgXUv1hGyA
-         jMvWDvu1KPRUgwlcQYEWwFY05HfJnhGSlHUy85ffL4hYvlbB7VckXDII/UFX+urssww7
-         XBr6PJTlb3cVL+V2ijpC5c4v1cY5bGz15ak7pV59KYIGIqjGvG+wZN+ddbsGRSyAT80e
-         UfPQ==
-X-Gm-Message-State: AJIora8yzVilZJYOUckTJTfDDlU9YuN5ijUsi5NoWpkbziqie0j34QK8
-        sQYsb7fNtU03tQJgkUdW/ZI=
-X-Google-Smtp-Source: AGRyM1tEzGhCruRkjJVU5gjish1059DIrNaG6+E54/YE8pOwR9FmSESMOW3+/Q3toQ03lqPIoAYhag==
-X-Received: by 2002:adf:f04e:0:b0:21e:48df:a13d with SMTP id t14-20020adff04e000000b0021e48dfa13dmr14057488wro.278.1658926850635;
-        Wed, 27 Jul 2022 06:00:50 -0700 (PDT)
-Received: from [192.168.2.202] (pd9ea3316.dip0.t-ipconnect.de. [217.234.51.22])
-        by smtp.gmail.com with ESMTPSA id w17-20020a5d6811000000b0021e6effef8bsm11713642wru.50.2022.07.27.06.00.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 06:00:49 -0700 (PDT)
-Message-ID: <acd7b231-3167-e35c-5cdf-8b3127a7d710@gmail.com>
-Date:   Wed, 27 Jul 2022 15:00:48 +0200
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=GBJ2vhetJDvn6LDdnSPcxjL/wCbAJT2NpPDCLIaXTrY=;
+        b=ahn3HnwVTSeXXwITJPQ3ZhsLbazRpnBSOHPbPMnDUfZOjWEU2l/5ERoZZfXlzj7Ebr
+         E5B819dS/6aS/OdxqavmKJ3kDyDj/54FYNUxf4aJTApGkbOu4dPQ1ghAnjo573U5NGCk
+         mLiLxu3IykREn7OEnSU1N+Jctem+F0yBR26AiaGW7pgnhQNoQ27xwVAqCWpuCnAinnB9
+         a071HvpoV1AYziwdPYeFcczZxYjuiOKxLt2O0TcgitQK6tH2Oatef40p+kiLYqwp5cog
+         yLofO+/X9o+hoChnPtlf/h9KAVh0whaIvIl/cV6X0riiILfm24BaPheybO6dVYea2/Wy
+         cDfg==
+X-Gm-Message-State: AJIora/YyffkHSf7FBImtpXnhooNcYlSWumEgjo1n7B9ZVakbaOMf5Mg
+        N1sJou/yUNv9k2G4N5O1fBFToCOt9j+OAA==
+X-Google-Smtp-Source: AGRyM1uY+/Q9/a9ZHnIPvmeDOqwjgItWCWuGVNvgQrXB28BKSSp63u0NlBDH0ez+WKYor9CO64bBsQ==
+X-Received: by 2002:a05:6870:438b:b0:10d:a65f:c5c3 with SMTP id r11-20020a056870438b00b0010da65fc5c3mr1910765oah.210.1658926852007;
+        Wed, 27 Jul 2022 06:00:52 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i11-20020a056830010b00b0061cb445a5fesm7356176otp.55.2022.07.27.06.00.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 06:00:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 27 Jul 2022 06:00:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, leonard.anderweit@gmail.com,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Quadro fan controller
+Message-ID: <20220727130050.GA772059@roeck-us.net>
+References: <20220727100606.9328-1-savicaleksa83@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
- <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
- <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
- <2e522bcd-5d55-e87f-126c-514f5edaa560@gmail.com>
- <53a602e2-0590-6c6a-597b-fd55faa3a4ab@linaro.org>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <53a602e2-0590-6c6a-597b-fd55faa3a4ab@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220727100606.9328-1-savicaleksa83@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,153 +75,256 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 13:24, Krzysztof Kozlowski wrote:
-> On 26/07/2022 17:00, Maximilian Luz wrote:
->> On 7/26/22 15:25, Krzysztof Kozlowski wrote:
->>> On 26/07/2022 13:15, Maximilian Luz wrote:
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    const: qcom,tee-uefisecapp
->>>>>
->>>>> Isn't this SoC-specific device? Generic compatibles are usually not
->>>>> expected.
->>>>
->>>> This is essentially software (kernel driver) talking to software (in the
->>>> TrustZone), so I don't expect there to be anything SoC specific about it.
->>>
->>> You are documenting here firmware in TZ (not kernel driver). Isn't this
->>> a specific piece which might vary from device to device?
->>>
->>> IOW, do you expect the same compatible to work for all possible Qualcomm
->>> boards (past and future like in 10 years from now)?
->>
->> I'm not sure if Qualcomm will still use the "uefisecapp" approach in 10
->> years, but I don't expect the interface of uefisecapp to change. The
->> interface is modeled after the respective UEFI functions, which are spec
->> and thus I don't expect those to change. Also, it seems to have been
->> around for a couple of generations and it hasn't changed. The oldest
->> tested is sdm850 (Lenovo Yoga C630), and the latest is sc8280xp
->> (Thinkpad X13s).
+On Wed, Jul 27, 2022 at 12:06:05PM +0200, Aleksa Savic wrote:
+> Extend aquacomputer_d5next driver to expose hardware temperature sensors
+> and fans of the Aquacomputer Quadro fan controller, which communicates
+> through a proprietary USB HID protocol. Implemented by Jack Doan [1].
 > 
-> Expectation is not the same as having a specification saying it will not
-> change.
->>
->> Why not make this behave like a "normal" third-party device? If the
->> interface ever changes use qcom,tee-uefisecapp-v2 or something like
->> that? Again, this does not seem to be directly tied to the SoC.
+> Four temperature sensors and PWM controllable fans are available. The
+> liquid flow sensor is also exposed, implemented by Leonard Anderweit [2].
 > 
-> Such approach is not "normal" for third-party devices. Compatible for
-> devices has model number. If the block has specification, then v2 would
-> have sense, otherwise you would invent own versioning...
+> Additionally, serial number, firmware version and power-on count are
+> exposed through debugfs.
 > 
-> I would say that firmware implementation can easily change. How much of
-> your code is tied to it, I don't know, but argument "I don't expect
-> Qualcomm to change something in their firmware" is not the correct argument.
-
-Fair points.
-
->> Then again, if you prefer to name everything based on
->> "qcom,<device>-<soc>" I don't have any strong arguments against it and
->> I'm happy to change that. I just think it will unnecessarily introduce
->> a bunch of compatibles and doesn't reflect the interface "versioning"
->> situation as I see it.
+> This driver has been tested on x86_64.
 > 
-> Why bunch? All devices could bind to one specific compatible, as they
-> are compatible.
-
-Ah, I think I misunderstood you there. I thought you were advocating for
-creating compatibles for each SoC just because it's a new SoC and things
-might be different. I'm not at all against naming this something like
-qcom,tee-uefisecapp-sc8180x then using that on all platforms that work.
-I just didn't like the idea of having a bunch of different
-qcom,tee-uefisecapp-<soc> pointing to the exact same thing without any
-difference at all.
-
->>>>>> +
->>>>>> +required:
->>>>>> +  - compatible
->>>>>> +
->>>>>> +additionalProperties: false
->>>>>> +
->>>>>> +examples:
->>>>>> +  - |
->>>>>> +    firmware {
->>>>>> +        scm {
->>>>>> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
->>>>>> +        };
->>>>>> +        tee-uefisecapp {
->>>>>> +            compatible = "qcom,tee-uefisecapp";
->>>>>
->>>>> You did not model here any dependency on SCM. This is not full
->>>>> description of the firmware/hardware
->>>>
->>>> How would I do that? A lot of other stuff also depends on SCM being
->>>> present (e.g. qcom_q6v5_pas for loading mdt files) and I don't see them
->>>> declare this in the device tree. As far as I can tell, SCM is pretty
->>>> much expected to be there at all times (i.e. can't be unloaded) and
->>>> drivers check for it when probing via qcom_scm_is_available(),
->>>> deferring probe if not.
->>>
->>> It seems this will be opening a can of worms...
->>
->> Indeed.
->>
->>> The problem with existing approach is:
->>> 1. Lack of any probe ordering or probe deferral support.
->>> 2. Lack of any other dependencies, e.g. for PM.
->>
->> I'm not entirely sure what you mean by "lack of probe deferral support".
->> We have qcom_scm_is_available() and defer probe if that fails. So
->> deferral works, unless I'm misunderstanding something.
+> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/5
+> [2] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/9
 > 
-> And how do you differentiate that qcom_scm_is_available() failed because
-> it is not yet available (defer probe) or it is broken and will never
-> load? All regular consumer-provider interfaces have it sorted out.
+> Originally-from: Jack Doan <me@jackdoan.com>
+> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
 
-Fair point. By shifting that to device links you'll at least know what
-it's waiting for and the driver won't attempt to probe until that's
-resolved. But your question applies to that then as well: How do you
-differentiate between the device link or supplier being broken somehow
-and the supplier being just not ready yet?
+Applied.
 
->> But yes, correct on the other points.
->>
->>> Unloading is "solved" only by disallowing the unload, not by proper
->>> device links and module get/put.
->>>
->>> I understand that SCM must be there, but the same for several other
->>> components and for these others we have ways to pass reference around
->>> (e.g. syscon regmap, PHYs handles).
->>>
->>>>
->>>> Don't take this as an excuse as in "I want to leave that out", it's just
->>>> that I don't know how one would declare such a dependency explicitly. If
->>>> you can tell me how to fix it, I'll include that for v2.
->>>
->>> I think there are no dedicated subsystem helpers for this (like for
->>> provider/consumer of resets/power domains/clocks etc), so one way would
->>> be something like nvidia,bpmp is doing.
->>
->> I assume you're referring to tegra_bpmp_get()? Does this correctly
->> handle PM dependencies? At least as far as I can tell it doesn't
->> explicitly establish a device link, it only gets a reference to the
->> device, which doesn't guarantee the presence of a driver. Nor correct PM
->> ordering. Please correct me if I'm wrong. As far as I know automatic
->> creation of device links only works with certain props defined in
->> of_supplier_bindings, right?
+Thanks,
+Guenter
+
+> ---
+>  Documentation/hwmon/aquacomputer_d5next.rst | 17 +++--
+>  drivers/hwmon/Kconfig                       |  6 +-
+>  drivers/hwmon/aquacomputer_d5next.c         | 69 +++++++++++++++++++--
+>  3 files changed, 78 insertions(+), 14 deletions(-)
 > 
-> The Tegra choice is not complete, but it implements at least parts of it
-> and firmware dependencies are modeled in DTS. Other way would be to add
-> your device as child of SMC firmware and then you do not need bindings
-> at all...
-
-Looking at the TrEE driver in [1] and thinking of future additions
-(re-entrant calls, callbacks/listeners, ..., all of which would require
-some state), combining both might be the best option: Have a TrEE main
-device for the interface that links up with SCM and then define the apps
-as children under that TrEE device.
-
-Regards,
-Max
-
-[1]: https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/blob/auto-kernel.lnx.4.14.c34/drivers/misc/qseecom.c
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index 717e28226cde..33649a1e3a05 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -9,6 +9,7 @@ Supported devices:
+>  * Aquacomputer Farbwerk RGB controller
+>  * Aquacomputer Farbwerk 360 RGB controller
+>  * Aquacomputer Octo fan controller
+> +* Aquacomputer Quadro fan controller
+>  
+>  Author: Aleksa Savic
+>  
+> @@ -33,6 +34,9 @@ better suited for userspace tools.
+>  The Octo exposes four temperature sensors and eight PWM controllable fans, along
+>  with their speed (in RPM), power, voltage and current.
+>  
+> +The Quadro exposes four temperature sensors, a flow sensor and four PWM controllable
+> +fans, along with their speed (in RPM), power, voltage and current.
+> +
+>  The Farbwerk and Farbwerk 360 expose four temperature sensors. Depending on the device,
+>  not all sysfs and debugfs entries will be available.
+>  
+> @@ -45,13 +49,14 @@ the kernel and supports hotswapping.
+>  Sysfs entries
+>  -------------
+>  
+> -================ =============================================
+> +================ ==============================================
+>  temp[1-4]_input  Temperature sensors (in millidegrees Celsius)
+> -fan[1-2]_input   Pump/fan speed (in RPM)
+> -power[1-2]_input Pump/fan power (in micro Watts)
+> -in[0-2]_input    Pump/fan voltage (in milli Volts)
+> -curr[1-2]_input  Pump/fan current (in milli Amperes)
+> -================ =============================================
+> +fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
+> +power[1-8]_input Pump/fan power (in micro Watts)
+> +in[0-7]_input    Pump/fan voltage (in milli Volts)
+> +curr[1-8]_input  Pump/fan current (in milli Amperes)
+> +pwm[1-8]         Fan PWM (0 - 255)
+> +================ ==============================================
+>  
+>  Debugfs entries
+>  ---------------
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index fd2446cf343b..e70d9614bec2 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -257,13 +257,13 @@ config SENSORS_AHT10
+>  	  will be called aht10.
+>  
+>  config SENSORS_AQUACOMPUTER_D5NEXT
+> -	tristate "Aquacomputer D5 Next, Octo, Farbwerk, and Farbwerk 360"
+> +	tristate "Aquacomputer D5 Next, Octo, Quadro, Farbwerk, and Farbwerk 360"
+>  	depends on USB_HID
+>  	select CRC16
+>  	help
+>  	  If you say yes here you get support for sensors and fans of
+> -	  the Aquacomputer D5 Next watercooling pump, Octo fan
+> -	  controller, Farbwerk and Farbwerk 360 RGB controllers, where
+> +	  the Aquacomputer D5 Next watercooling pump, Octo and Quadro fan
+> +	  controllers, Farbwerk and Farbwerk 360 RGB controllers, where
+>  	  available.
+>  
+>  	  This driver can also be built as a module. If so, the module
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index 738a1df8eae6..66430553cc45 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  /*
+> - * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo)
+> + * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk, Farbwerk 360, Octo,
+> + * Quadro)
+>   *
+>   * Aquacomputer devices send HID reports (with ID 0x01) every second to report
+>   * sensor values.
+> @@ -21,17 +22,19 @@
+>  
+>  #define USB_VENDOR_ID_AQUACOMPUTER	0x0c70
+>  #define USB_PRODUCT_ID_FARBWERK		0xf00a
+> +#define USB_PRODUCT_ID_QUADRO		0xf00d
+>  #define USB_PRODUCT_ID_D5NEXT		0xf00e
+>  #define USB_PRODUCT_ID_FARBWERK360	0xf010
+>  #define USB_PRODUCT_ID_OCTO		0xf011
+>  
+> -enum kinds { d5next, farbwerk, farbwerk360, octo };
+> +enum kinds { d5next, farbwerk, farbwerk360, octo, quadro };
+>  
+>  static const char *const aqc_device_names[] = {
+>  	[d5next] = "d5next",
+>  	[farbwerk] = "farbwerk",
+>  	[farbwerk360] = "farbwerk360",
+> -	[octo] = "octo"
+> +	[octo] = "octo",
+> +	[quadro] = "quadro"
+>  };
+>  
+>  #define DRIVER_NAME			"aquacomputer_d5next"
+> @@ -97,6 +100,18 @@ static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB
+>  /* Fan speed registers in Octo control report (from 0-100%) */
+>  static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0x259, 0x2AE };
+>  
+> +/* Register offsets for the Quadro fan controller */
+> +#define QUADRO_POWER_CYCLES		0x18
+> +#define QUADRO_NUM_FANS			4
+> +#define QUADRO_NUM_SENSORS		4
+> +#define QUADRO_SENSOR_START		0x34
+> +#define QUADRO_CTRL_REPORT_SIZE		0x3c1
+> +#define QUADRO_FLOW_SENSOR_OFFSET	0x6e
+> +static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+> +
+> +/* Fan speed registers in Quadro control report (from 0-100%) */
+> +static u16 quadro_ctrl_fan_offsets[] = { 0x36, 0x8b, 0xe0, 0x135 };
+> +
+>  /* Labels for D5 Next */
+>  static const char *const label_d5next_temp[] = {
+>  	"Coolant temp"
+> @@ -124,7 +139,7 @@ static const char *const label_d5next_current[] = {
+>  	"Fan current"
+>  };
+>  
+> -/* Labels for Farbwerk, Farbwerk 360 and Octo temperature sensors */
+> +/* Labels for Farbwerk, Farbwerk 360 and Octo and Quadro temperature sensors */
+>  static const char *const label_temp_sensors[] = {
+>  	"Sensor 1",
+>  	"Sensor 2",
+> @@ -132,7 +147,7 @@ static const char *const label_temp_sensors[] = {
+>  	"Sensor 4"
+>  };
+>  
+> -/* Labels for Octo */
+> +/* Labels for Octo and Quadro (except speed) */
+>  static const char *const label_fan_speed[] = {
+>  	"Fan 1 speed",
+>  	"Fan 2 speed",
+> @@ -177,6 +192,15 @@ static const char *const label_fan_current[] = {
+>  	"Fan 8 current"
+>  };
+>  
+> +/* Labels for Quadro fan speeds */
+> +static const char *const label_quadro_speeds[] = {
+> +	"Fan 1 speed",
+> +	"Fan 2 speed",
+> +	"Fan 3 speed",
+> +	"Fan 4 speed",
+> +	"Flow speed [dL/h]"
+> +};
+> +
+>  struct aqc_data {
+>  	struct hid_device *hdev;
+>  	struct device *hwmon_dev;
+> @@ -197,6 +221,7 @@ struct aqc_data {
+>  	int num_temp_sensors;
+>  	int temp_sensor_start_offset;
+>  	u16 power_cycle_count_offset;
+> +	u8 flow_sensor_offset;
+>  
+>  	/* General info, same across all devices */
+>  	u32 serial_number[2];
+> @@ -334,6 +359,18 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>  		}
+>  		break;
+>  	case hwmon_fan:
+> +		switch (priv->kind) {
+> +		case quadro:
+> +			/* Special case to support flow sensor */
+> +			if (channel < priv->num_fans + 1)
+> +				return 0444;
+> +			break;
+> +		default:
+> +			if (channel < priv->num_fans)
+> +				return 0444;
+> +			break;
+> +		}
+> +		break;
+>  	case hwmon_power:
+>  	case hwmon_curr:
+>  		if (channel < priv->num_fans)
+> @@ -578,6 +615,9 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+>  		priv->voltage_input[2] = get_unaligned_be16(data + D5NEXT_5V_VOLTAGE) * 10;
+>  		priv->voltage_input[3] = get_unaligned_be16(data + D5NEXT_12V_VOLTAGE) * 10;
+>  		break;
+> +	case quadro:
+> +		priv->speed_input[4] = get_unaligned_be16(data + priv->flow_sensor_offset);
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -719,6 +759,24 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->voltage_label = label_fan_voltage;
+>  		priv->current_label = label_fan_current;
+>  		break;
+> +	case USB_PRODUCT_ID_QUADRO:
+> +		priv->kind = quadro;
+> +
+> +		priv->num_fans = QUADRO_NUM_FANS;
+> +		priv->fan_sensor_offsets = quadro_sensor_fan_offsets;
+> +		priv->fan_ctrl_offsets = quadro_ctrl_fan_offsets;
+> +		priv->num_temp_sensors = QUADRO_NUM_SENSORS;
+> +		priv->temp_sensor_start_offset = QUADRO_SENSOR_START;
+> +		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
+> +		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
+> +		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
+> +
+> +		priv->temp_label = label_temp_sensors;
+> +		priv->speed_label = label_quadro_speeds;
+> +		priv->power_label = label_fan_power;
+> +		priv->voltage_label = label_fan_voltage;
+> +		priv->current_label = label_fan_current;
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -774,6 +832,7 @@ static const struct hid_device_id aqc_table[] = {
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK) },
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK360) },
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_OCTO) },
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_QUADRO) },
+>  	{ }
+>  };
+>  

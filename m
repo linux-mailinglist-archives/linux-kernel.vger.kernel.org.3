@@ -2,76 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A2A582A27
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D9C582A35
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiG0QBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S233451AbiG0QD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbiG0QBA (ORCPT
+        with ESMTP id S233421AbiG0QDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:01:00 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FEA4A83D;
-        Wed, 27 Jul 2022 09:00:59 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id y197so13034763iof.12;
-        Wed, 27 Jul 2022 09:00:59 -0700 (PDT)
+        Wed, 27 Jul 2022 12:03:23 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AE84A838;
+        Wed, 27 Jul 2022 09:03:23 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id f8so835524ils.13;
+        Wed, 27 Jul 2022 09:03:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=kUIs7DBnCsR9cP62lpQKrDWjtHiCWXhqawFuOwvIork=;
-        b=KJ8oRdswQ1XFgAjwIrm4JIf6r15D/jpgOydOfp1RvPz1HnPt+nO6NOBX/g1C0UEHRb
-         y74/XJZmEV2CybIu3xX+gUuLREjivcuW+rE4OvBENd1RhTv8TNROVkcLo0ChPfHICbtA
-         ENhr5PXNPUpT7vkTEjWa39YiDplgeiWFFVOqmee77O5oB1rfYZ8Xi4xvkevyd3k6dBM7
-         S2v13vkvhjn01bU3GUN6GoPpl9CCRXKVVz5y8h+BiOw6Hr5+3pUDn7ry3qgQ22W+SKSQ
-         EoVHxXxOehAQ+8xCU1+S9FIjeTNO1Bk8ntNRbPbEQ9vBcoBG1nbBv66oC+1Mvr15LI6J
-         4Adw==
-X-Gm-Message-State: AJIora9jB/BzbO0iUt7Q9e0gtWwjwn/Jlk+NDzlbBkerCh1T+axGn00K
-        QD96sgyYFcv1yHPkd6408Q==
-X-Google-Smtp-Source: AGRyM1sWxuWqBZ+/pnkqKc4dOYIKgmM7u9Z/u1EpfWc5rboGgsQ69l5hTpQ6oZfVbOxSBQsTzRwDwQ==
-X-Received: by 2002:a05:6638:d15:b0:341:610d:5472 with SMTP id q21-20020a0566380d1500b00341610d5472mr9165526jaj.188.1658937658422;
-        Wed, 27 Jul 2022 09:00:58 -0700 (PDT)
+        bh=wBsnIffBjiQs1dYf9x9tNvshsRG8mL+pqvf1EO0wYjk=;
+        b=fCzXo09KDuA1Jam4oVPaStv29i6W9oYEW3rVDkII+q8Pg/Rwp3UemoYRTdmdeHmAyx
+         SKvYQUxEhf8HbDQGMYCUIVyrpqR58mygd71w6F1eE7vfRbvwtoemEOci31DpW82mm4c3
+         LUGhpfJxiytIbRaCKy0cUXCVKsIzHsze+Tb9p6Pcw1YCW3Pox+Xu5wBFbdFMaeJ9VuLF
+         AAXMxEXusvCK/0SlxEb9igOqb3pjxAHdGDv9C9oUuNTqluLWA/I3V0TZ6e7XN78pEIuO
+         0LeLetqBCqPA0HY1tjcaANRfHpO1dHydnbAynzC9caoLuEgnPCIQ7skbI56qPo40JSsu
+         M25g==
+X-Gm-Message-State: AJIora94+kFUhcZiIYTC+Rb/Zui3h5VvUifmpp12zcVwp1T0m3PT4clp
+        GW+q9ZFQLHS8SghwOroEgw==
+X-Google-Smtp-Source: AGRyM1tPmy1PxfqCjQmXrwzib4b/M/R/vQyHbMQ1eoFA6LUMW4jtRIa+FKY7nd88pa4eRIcxLfaDhg==
+X-Received: by 2002:a05:6e02:1d1b:b0:2dc:dfac:6131 with SMTP id i27-20020a056e021d1b00b002dcdfac6131mr8892921ila.60.1658937802247;
+        Wed, 27 Jul 2022 09:03:22 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b8-20020a920b08000000b002dc06989d86sm7017921ilf.52.2022.07.27.09.00.56
+        by smtp.gmail.com with ESMTPSA id m4-20020a02a144000000b0033eff75fb32sm7921295jah.15.2022.07.27.09.03.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 09:00:58 -0700 (PDT)
-Received: (nullmailer pid 2755041 invoked by uid 1000);
-        Wed, 27 Jul 2022 16:00:55 -0000
-Date:   Wed, 27 Jul 2022 10:00:55 -0600
+        Wed, 27 Jul 2022 09:03:21 -0700 (PDT)
+Received: (nullmailer pid 2758902 invoked by uid 1000);
+        Wed, 27 Jul 2022 16:03:20 -0000
+Date:   Wed, 27 Jul 2022 10:03:20 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        George Sun <george.sun@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-media@vger.kernel.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, devicetree@vger.kernel.org,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-Subject: Re: [PATCH v2, 1/3] dt-bindings: media: mediatek: vcodec: add
- decoder dt-bindings for mt8188
-Message-ID: <20220727160055.GA2755004-robh@kernel.org>
-References: <20220727023721.31945-1-yunfei.dong@mediatek.com>
+To:     Bob Moragues <moragues@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moragues <moragues@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: document zoglin board
+Message-ID: <20220727160320.GA2755147-robh@kernel.org>
+References: <20220726212354.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220727023721.31945-1-yunfei.dong@mediatek.com>
+In-Reply-To: <20220726212354.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -82,14 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 10:37:19 +0800, Yunfei Dong wrote:
-> Add decoder document in dt-bindings yaml file for mt8188 platform.
+On Tue, Jul 26, 2022 at 09:24:31PM -0700, Bob Moragues wrote:
+> Zoglin is a Hoglin Chromebook with SPI Flash reduced from 64MB to 8MB.
+> Zoglin is identical to Hoglin except for the SPI Flash.
+> The actual SPI Flash is dynamically probed at and not specified in DTS.
 > 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Bob Moragues <moragues@chromium.org>
+> 
+> Signed-off-by: Bob Moragues <moragues@google.com>
 > ---
->  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml           | 1 +
+> 
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
 >  1 file changed, 1 insertion(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 581485392404..63091df3cbb3 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -475,6 +475,7 @@ properties:
+>  
+>        - description: Qualcomm Technologies, Inc. sc7280 CRD platform (newest rev)
+>          items:
+> +          - const: google,zoglin
+>            - const: google,hoglin
+>            - const: qcom,sc7280
 
-Acked-by: Rob Herring <robh@kernel.org>
+Is just "google,hoglin", "qcom,sc7280" no longer valid? If it is valid, 
+you need another entry.
+
+>  
+> -- 
+> 2.37.1.359.gd136c6c3e2-goog
+> 
+> 

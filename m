@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA53582E48
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA855582CCE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiG0RKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S240602AbiG0QuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241701AbiG0RJc (ORCPT
+        with ESMTP id S240689AbiG0QtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:09:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C377743C9;
-        Wed, 27 Jul 2022 09:41:05 -0700 (PDT)
+        Wed, 27 Jul 2022 12:49:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFC661729;
+        Wed, 27 Jul 2022 09:32:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2672A601C3;
-        Wed, 27 Jul 2022 16:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F233C433B5;
-        Wed, 27 Jul 2022 16:41:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13157B8217D;
+        Wed, 27 Jul 2022 16:32:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72286C433D7;
+        Wed, 27 Jul 2022 16:32:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940062;
-        bh=fVvNtlgbgAe6ClvXquGjijDpiSBJVzaHL91Kx5ew4Uk=;
+        s=korg; t=1658939561;
+        bh=ylf/3orbTSfk1Z147r4ddLb5MGB2Vm2oLSsvWTP+Gzc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qSCoePc2Gi9gJwFYn4Ivn6fHIEXdZPDtMQ4/B9PrmWSIOptuzfOI5wWAFwNG4eMbL
-         s7z6Ejw+ysdpZ46xMVJb2i54IlGYF4n+gijF+JXQWg9BeWKbLs/W3U51AO4c7qYHsw
-         EmNcpNIl66pYI8ret3/ox+Owhzar0uGQfV4bxnJA=
+        b=lRtD+JLoUt5Cxlt+ESM/3L0L2ECcJZsBeZSTAIXq+Oz8uhgASx/hbtycnzfAbcNkC
+         kPVTuA+VfeGWoCRQsJKsmV+mkFxI70FExpFho3h5ayLxABPnF/ljBmqDZ+4l2QMQ/a
+         +KZ8g7SEcbImNXTAh5LtEcd77DbbEpYMiB6c0uwY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 091/201] tcp: Fix data-races around sysctl_tcp_syn(ack)?_retries.
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Fedor Pchelkin <pchelkin@ispras.ru>
+Subject: [PATCH 5.10 009/105] docs: net: explain struct net_device lifetime
 Date:   Wed, 27 Jul 2022 18:09:55 +0200
-Message-Id: <20220727161031.529543535@linuxfoundation.org>
+Message-Id: <20220727161012.444477836@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,85 +53,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Fedor Pchelkin <pchelkin@ispras.ru>
 
-[ Upstream commit 20a3b1c0f603e8c55c3396abd12dfcfb523e4d3c ]
+From: Jakub Kicinski <kuba@kernel.org>
 
-While reading sysctl_tcp_syn(ack)?_retries, they can be changed
-concurrently.  Thus, we need to add READ_ONCE() to their readers.
+commit 2b446e650b418f9a9e75f99852e2f2560cabfa17 upstream.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Explain the two basic flows of struct net_device's operation.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/inet_connection_sock.c |  3 ++-
- net/ipv4/tcp.c                  |  3 ++-
- net/ipv4/tcp_timer.c            | 10 +++++++---
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ Documentation/networking/netdevices.rst |  171 ++++++++++++++++++++++++++++++--
+ net/core/rtnetlink.c                    |    2 
+ 2 files changed, 166 insertions(+), 7 deletions(-)
 
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index d3bbb344bbe1..a53f9bf7886f 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -829,7 +829,8 @@ static void reqsk_timer_handler(struct timer_list *t)
+--- a/Documentation/networking/netdevices.rst
++++ b/Documentation/networking/netdevices.rst
+@@ -10,18 +10,177 @@ Introduction
+ The following is a random collection of documentation regarding
+ network devices.
  
- 	icsk = inet_csk(sk_listener);
- 	net = sock_net(sk_listener);
--	max_syn_ack_retries = icsk->icsk_syn_retries ? : net->ipv4.sysctl_tcp_synack_retries;
-+	max_syn_ack_retries = icsk->icsk_syn_retries ? :
-+		READ_ONCE(net->ipv4.sysctl_tcp_synack_retries);
- 	/* Normally all the openreqs are young and become mature
- 	 * (i.e. converted to established socket) for first timeout.
- 	 * If synack was not acknowledged for 1 second, it means
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 4ac53c8f0583..e22a61b2ba82 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3974,7 +3974,8 @@ static int do_tcp_getsockopt(struct sock *sk, int level,
- 		val = keepalive_probes(tp);
- 		break;
- 	case TCP_SYNCNT:
--		val = icsk->icsk_syn_retries ? : net->ipv4.sysctl_tcp_syn_retries;
-+		val = icsk->icsk_syn_retries ? :
-+			READ_ONCE(net->ipv4.sysctl_tcp_syn_retries);
- 		break;
- 	case TCP_LINGER2:
- 		val = tp->linger2;
-diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
-index 4f3b9ab222b6..a234704e8163 100644
---- a/net/ipv4/tcp_timer.c
-+++ b/net/ipv4/tcp_timer.c
-@@ -239,7 +239,8 @@ static int tcp_write_timeout(struct sock *sk)
- 	if ((1 << sk->sk_state) & (TCPF_SYN_SENT | TCPF_SYN_RECV)) {
- 		if (icsk->icsk_retransmits)
- 			__dst_negative_advice(sk);
--		retry_until = icsk->icsk_syn_retries ? : net->ipv4.sysctl_tcp_syn_retries;
-+		retry_until = icsk->icsk_syn_retries ? :
-+			READ_ONCE(net->ipv4.sysctl_tcp_syn_retries);
- 		expired = icsk->icsk_retransmits >= retry_until;
- 	} else {
- 		if (retransmits_timed_out(sk, net->ipv4.sysctl_tcp_retries1, 0)) {
-@@ -406,12 +407,15 @@ abort:		tcp_write_err(sk);
- static void tcp_fastopen_synack_timer(struct sock *sk, struct request_sock *req)
- {
- 	struct inet_connection_sock *icsk = inet_csk(sk);
--	int max_retries = icsk->icsk_syn_retries ? :
--	    sock_net(sk)->ipv4.sysctl_tcp_synack_retries + 1; /* add one more retry for fastopen */
- 	struct tcp_sock *tp = tcp_sk(sk);
-+	int max_retries;
+-struct net_device allocation rules
+-==================================
++struct net_device lifetime rules
++================================
+ Network device structures need to persist even after module is unloaded and
+ must be allocated with alloc_netdev_mqs() and friends.
+ If device has registered successfully, it will be freed on last use
+-by free_netdev(). This is required to handle the pathologic case cleanly
+-(example: rmmod mydriver </sys/class/net/myeth/mtu )
++by free_netdev(). This is required to handle the pathological case cleanly
++(example: ``rmmod mydriver </sys/class/net/myeth/mtu``)
  
- 	req->rsk_ops->syn_ack_timeout(req);
- 
-+	/* add one more retry for fastopen */
-+	max_retries = icsk->icsk_syn_retries ? :
-+		READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_synack_retries) + 1;
+-alloc_netdev_mqs()/alloc_netdev() reserve extra space for driver
++alloc_netdev_mqs() / alloc_netdev() reserve extra space for driver
+ private data which gets freed when the network device is freed. If
+ separately allocated data is attached to the network device
+-(netdev_priv(dev)) then it is up to the module exit handler to free that.
++(netdev_priv()) then it is up to the module exit handler to free that.
 +
- 	if (req->num_timeout >= max_retries) {
- 		tcp_write_err(sk);
- 		return;
--- 
-2.35.1
-
++There are two groups of APIs for registering struct net_device.
++First group can be used in normal contexts where ``rtnl_lock`` is not already
++held: register_netdev(), unregister_netdev().
++Second group can be used when ``rtnl_lock`` is already held:
++register_netdevice(), unregister_netdevice(), free_netdevice().
++
++Simple drivers
++--------------
++
++Most drivers (especially device drivers) handle lifetime of struct net_device
++in context where ``rtnl_lock`` is not held (e.g. driver probe and remove paths).
++
++In that case the struct net_device registration is done using
++the register_netdev(), and unregister_netdev() functions:
++
++.. code-block:: c
++
++  int probe()
++  {
++    struct my_device_priv *priv;
++    int err;
++
++    dev = alloc_netdev_mqs(...);
++    if (!dev)
++      return -ENOMEM;
++    priv = netdev_priv(dev);
++
++    /* ... do all device setup before calling register_netdev() ...
++     */
++
++    err = register_netdev(dev);
++    if (err)
++      goto err_undo;
++
++    /* net_device is visible to the user! */
++
++  err_undo:
++    /* ... undo the device setup ... */
++    free_netdev(dev);
++    return err;
++  }
++
++  void remove()
++  {
++    unregister_netdev(dev);
++    free_netdev(dev);
++  }
++
++Note that after calling register_netdev() the device is visible in the system.
++Users can open it and start sending / receiving traffic immediately,
++or run any other callback, so all initialization must be done prior to
++registration.
++
++unregister_netdev() closes the device and waits for all users to be done
++with it. The memory of struct net_device itself may still be referenced
++by sysfs but all operations on that device will fail.
++
++free_netdev() can be called after unregister_netdev() returns on when
++register_netdev() failed.
++
++Device management under RTNL
++----------------------------
++
++Registering struct net_device while in context which already holds
++the ``rtnl_lock`` requires extra care. In those scenarios most drivers
++will want to make use of struct net_device's ``needs_free_netdev``
++and ``priv_destructor`` members for freeing of state.
++
++Example flow of netdev handling under ``rtnl_lock``:
++
++.. code-block:: c
++
++  static void my_setup(struct net_device *dev)
++  {
++    dev->needs_free_netdev = true;
++  }
++
++  static void my_destructor(struct net_device *dev)
++  {
++    some_obj_destroy(priv->obj);
++    some_uninit(priv);
++  }
++
++  int create_link()
++  {
++    struct my_device_priv *priv;
++    int err;
++
++    ASSERT_RTNL();
++
++    dev = alloc_netdev(sizeof(*priv), "net%d", NET_NAME_UNKNOWN, my_setup);
++    if (!dev)
++      return -ENOMEM;
++    priv = netdev_priv(dev);
++
++    /* Implicit constructor */
++    err = some_init(priv);
++    if (err)
++      goto err_free_dev;
++
++    priv->obj = some_obj_create();
++    if (!priv->obj) {
++      err = -ENOMEM;
++      goto err_some_uninit;
++    }
++    /* End of constructor, set the destructor: */
++    dev->priv_destructor = my_destructor;
++
++    err = register_netdevice(dev);
++    if (err)
++      /* register_netdevice() calls destructor on failure */
++      goto err_free_dev;
++
++    /* If anything fails now unregister_netdevice() (or unregister_netdev())
++     * will take care of calling my_destructor and free_netdev().
++     */
++
++    return 0;
++
++  err_some_uninit:
++    some_uninit(priv);
++  err_free_dev:
++    free_netdev(dev);
++    return err;
++  }
++
++If struct net_device.priv_destructor is set it will be called by the core
++some time after unregister_netdevice(), it will also be called if
++register_netdevice() fails. The callback may be invoked with or without
++``rtnl_lock`` held.
++
++There is no explicit constructor callback, driver "constructs" the private
++netdev state after allocating it and before registration.
++
++Setting struct net_device.needs_free_netdev makes core call free_netdevice()
++automatically after unregister_netdevice() when all references to the device
++are gone. It only takes effect after a successful call to register_netdevice()
++so if register_netdevice() fails driver is responsible for calling
++free_netdev().
++
++free_netdev() is safe to call on error paths right after unregister_netdevice()
++or when register_netdevice() fails. Parts of netdev (de)registration process
++happen after ``rtnl_lock`` is released, therefore in those cases free_netdev()
++will defer some of the processing until ``rtnl_lock`` is released.
++
++Devices spawned from struct rtnl_link_ops should never free the
++struct net_device directly.
++
++.ndo_init and .ndo_uninit
++~~~~~~~~~~~~~~~~~~~~~~~~~
++
++``.ndo_init`` and ``.ndo_uninit`` callbacks are called during net_device
++registration and de-registration, under ``rtnl_lock``. Drivers can use
++those e.g. when parts of their init process need to run under ``rtnl_lock``.
++
++``.ndo_init`` runs before device is visible in the system, ``.ndo_uninit``
++runs during de-registering after device is closed but other subsystems
++may still have outstanding references to the netdevice.
+ 
+ MTU
+ ===
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -3444,7 +3444,7 @@ replay:
+ 
+ 	if (ops->newlink) {
+ 		err = ops->newlink(link_net ? : net, dev, tb, data, extack);
+-		/* Drivers should call free_netdev() in ->destructor
++		/* Drivers should set dev->needs_free_netdev
+ 		 * and unregister it on failure after registration
+ 		 * so that device could be finally freed in rtnl_unlock.
+ 		 */
 
 

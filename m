@@ -2,294 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435BB582098
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 08:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB7358209C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 08:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiG0G65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 02:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
+        id S230070AbiG0G7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 02:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiG0G6o (ORCPT
+        with ESMTP id S231441AbiG0G7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 02:58:44 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9918427149
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:58:41 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id a23so23435718lfm.10
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:58:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rb0KbkHk7PTCMoYM91RlkHzdSgrQPlaj3fTfGw5qEhg=;
-        b=MQWnXp0+2fRjdDqI8dWMRgPzmlZny4Zw57IRU5iMS+wlHqdj2iUfnaPzo4a1iCtYjy
-         BCPekV9Mvey70aSR5riF0ULTzoEsCgo/P/eynw9rlY1fkEIF20k0lMe+snLj73oyHTGH
-         gGnnUSdGniyYcdDHBxgPupNom+WiVAQe5YUTg6pM3+eGIkIlPtJuBflVHD6QKHvOZxlf
-         fmg1kDTzNC39kaYYgcDoI2Hw6iDZxGywQXdN5/HusWs2ACzpfqTglhsXsRHbK793+Lge
-         4gVt4v4itXzqymqQXqVv/KsKIAvxFMyjklliwLWOWAMalXOIJJrYUhTnHw4fBIfpXqin
-         bpKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rb0KbkHk7PTCMoYM91RlkHzdSgrQPlaj3fTfGw5qEhg=;
-        b=DZNImG5uDaYSHX0RpY9r2hrKOnZV8CPkJMWADQo+rkRBnl0MCJjglRpUyIAjBZutZV
-         Gtf+5kbz5VPSjqbFCxvJXYHokeTz3gjksWHGlaQssh7jEFo5ylE91mWqtc56cowqdTv2
-         f2kBmSXX2pNZXR5hH8yJoVUPhIHlxVg3/8/6UPjFIv7kdqt65Ers7tujhX2jZ1ROcNUi
-         dZRjuxrVRoIJladIFbRvI2Bx8sv23aXNyAtPiVeFzkMsNeXdxQYuY8xgiOhCBM/Ee9vK
-         vEBKAlo/06szRke8t+BdmZ2VD6Zm3OR/JTg+FPPW3gH6FyFn4tNAi8ut0X9w0lTsulXU
-         a+HA==
-X-Gm-Message-State: AJIora9o68PasO7qr8IQg3SXtHjSrlbftC6LYUaKydF5PflFxRDI9RYs
-        cW1b8kkgt91WzdLqs9ljpGPf7g==
-X-Google-Smtp-Source: AGRyM1tPpvjbN6Io1v2HMbGocGnzfAejcneHJ2ZFjqY4jyr8I6OwUVCmLqkobxF5/sz54QT4a3ImwQ==
-X-Received: by 2002:a05:6512:1088:b0:48a:845c:452f with SMTP id j8-20020a056512108800b0048a845c452fmr6825347lfg.471.1658905119690;
-        Tue, 26 Jul 2022 23:58:39 -0700 (PDT)
-Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id w29-20020a197b1d000000b0047f647414efsm3623827lfc.190.2022.07.26.23.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 23:58:39 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Russell King <linux@armlinux.org.uk>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v4 5/5] ARM: qcom_defconfig: order items with savedefconfig
-Date:   Wed, 27 Jul 2022 08:58:30 +0200
-Message-Id: <20220727065830.10681-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220727065830.10681-1-krzysztof.kozlowski@linaro.org>
-References: <20220727065830.10681-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_75_100 autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 27 Jul 2022 02:59:18 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1E027175
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:59:07 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220727065905epoutp0375b0a8d825352d92458e4e93571b41f4~FnXDYugAi1467114671epoutp03B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:59:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220727065905epoutp0375b0a8d825352d92458e4e93571b41f4~FnXDYugAi1467114671epoutp03B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1658905145;
+        bh=lNNfLiLq987R9+I+SlWzlrwsx34BfKrbsSzg18k1BO4=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=D8IIiIIBBQB75u8AF4W+Jiz36v3io1J77S12mn7PU8cvZsROrGPF4Ya13psG9PGGj
+         fVjfH0DFWtzNH1pKD98RITKQYB5dNyY8jQ830HNG4ayuJk90U3qYZuJN8SDb1Bjhf9
+         Bc5uQN5si0JSebfrf7TEpLAbn9rM9/JogbQ6hjKQ=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220727065905epcas2p46087a372261c557b2b8689796a468825~FnXC2lDm81032510325epcas2p4O;
+        Wed, 27 Jul 2022 06:59:05 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Lt4Q04KhJz4x9Pv; Wed, 27 Jul
+        2022 06:59:04 +0000 (GMT)
+X-AuditID: b6c32a45-45bff700000025c2-b6-62e0e2389809
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0B.57.09666.832E0E26; Wed, 27 Jul 2022 15:59:04 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v4 0/7] scsi: ufs: wb: Add sysfs attribute and cleanup
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
+Date:   Wed, 27 Jul 2022 15:59:04 +0900
+X-CMS-MailID: 20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmqa7FowdJBk3nFSxOPlnDZvFg3jY2
+        i5c/r7JZHHzYyWIx7cNPZouXhzQtevu3slksurGNyeLyrjlsFt3Xd7BZLD/+j8mB2+PyFW+P
+        xXteMnlMWHSA0eP7+g42j49Pb7F49G1ZxejxeZOcR/uBbqYAjqhsm4zUxJTUIoXUvOT8lMy8
+        dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zBygO5UUyhJzSoFCAYnFxUr6djZF+aUl
+        qQoZ+cUltkqpBSk5BeYFesWJucWleel6eaklVoYGBkamQIUJ2RmfrtkVTOCouL6qgaWBcRdb
+        FyMHh4SAiUT3AtEuRi4OIYEdjBI7pj5kBonzCghK/N0hDGIKC7hJHH1u0sXICVSiJHFuzSxG
+        iLCBxK1ec5Awm4CexM8lM9hApogInGWWWPhwChNIQkKAV2JG+1MWCFtaYvvyrYwQtobEj2W9
+        zBC2qMTN1W/ZYez3x+ZD1YhItN47C1UjKPHg526ouKTEoUNfoa7Pl9hwIBAiXCPxdvkBqBJ9
+        iWsdG8HW8gr4Sizp/cUKYrMIqEp0rfwKtcpF4sv8N2A1zALyEtvfzgF7nFlAU2L9Ln2I6coS
+        R26xwDzSsPE3OzqbWYBPouPwX7j4jnlPmCBa1SQWNRlBhGUkvh6eD1XiIdF2qINpAqPiLEQg
+        z0JywiyEExYwMq9iFEstKM5NTy02KjCEx2pyfu4mRnBa1XLdwTj57Qe9Q4xMHIyHGCU4mJVE
+        eBOi7ycJ8aYkVlalFuXHF5XmpBYfYjQFen4is5Rocj4wseeVxBuaWBqYmJkZmhuZGpgrifN6
+        pWxIFBJITyxJzU5NLUgtgulj4uCUamBS9L+2Z3ecYefWjVEr3G9vKZmYMnd6d/P2li317SFN
+        T4zCX1yLD7U+0HfWcf3+mJdmq9jOczEDk8qpOX/jkhsmb2ie18aukBrLvN+6KenWG+PAO1k3
+        FC/s3NB29f63OCWXnx3fjwT9/LQm9bmHBId6hImh4y7FOXfudJtvyfzo1p0TH7Zy7t8Ns58+
+        O7pA6lJfW3COYp/J+orlrR8mNnikyp9bdU6rIUUvN3f+f2VXc6kNrSvUl4V6cUiyRxRKvVuV
+        qrHlf4teUt8iwf/Fy5SrzrxZHeMqVPTqZ9ueP7b/t9mWMC1nED7XOm1NkFdbg4XIp7R/CVzB
+        TPM8rK61J02rTRQIfZ4upHzWv/J4mxJLcUaioRZzUXEiAHfwaP80BAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d
+References: <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Run savedefconfig and order the entries, without removing or adding
-anything.  This reduces conflicts, as new entries should not be added to
-the end, and makes it easier to spot differences against actual config.
+This patch series is to clean up UFS's Write Booster code and
+adds sysfs attribute which can control the specific feature of it.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/configs/qcom_defconfig | 56 ++++++++++++++++-----------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+V2:
+	- modify commit message
+	- move & modify err messages
+	- remove unnesscessary debug messages
+V3:
+	- split patch (functional, non-functional)
+V4:
+	- split patch (The number of patches from 2 to 7)
+	- modify dev messages
+	- modify commit message
 
-diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
-index 829bdf8a37cc..aa2f8b7d0cd0 100644
---- a/arch/arm/configs/qcom_defconfig
-+++ b/arch/arm/configs/qcom_defconfig
-@@ -1,6 +1,7 @@
- CONFIG_SYSVIPC=y
- CONFIG_NO_HZ=y
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
- CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
- CONFIG_CGROUPS=y
-@@ -10,29 +11,28 @@ CONFIG_EMBEDDED=y
- # CONFIG_SLUB_DEBUG is not set
- # CONFIG_COMPAT_BRK is not set
- CONFIG_PROFILING=y
--CONFIG_KPROBES=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULE_FORCE_UNLOAD=y
--CONFIG_MODVERSIONS=y
--CONFIG_PARTITION_ADVANCED=y
- CONFIG_ARCH_QCOM=y
- CONFIG_ARCH_MSM8X60=y
- CONFIG_ARCH_MSM8960=y
- CONFIG_ARCH_MSM8974=y
- CONFIG_ARCH_MDM9615=y
--CONFIG_PCI=y
--CONFIG_PCI_MSI=y
--CONFIG_PCIE_QCOM=y
- CONFIG_SMP=y
--CONFIG_PREEMPT=y
-+CONFIG_ARM_PSCI=y
- CONFIG_HIGHMEM=y
- CONFIG_ARM_APPENDED_DTB=y
- CONFIG_ARM_ATAG_DTB_COMPAT=y
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPUFREQ_DT=y
- CONFIG_CPU_IDLE=y
- CONFIG_ARM_CPUIDLE=y
- CONFIG_VFP=y
- CONFIG_NEON=y
-+CONFIG_KPROBES=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODULE_FORCE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_PARTITION_ADVANCED=y
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
- CONFIG_CMA=y
- CONFIG_NET=y
-@@ -56,15 +56,18 @@ CONFIG_BT_HCIUART_BCM=y
- CONFIG_CFG80211=m
- CONFIG_MAC80211=m
- CONFIG_RFKILL=y
-+CONFIG_PCI=y
-+CONFIG_PCI_MSI=y
-+CONFIG_PCIE_QCOM=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_MTD=y
-+CONFIG_MTD_QCOMSMEM_PARTS=y
- CONFIG_MTD_BLOCK=y
- CONFIG_MTD_M25P80=y
- CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_QCOM=y
- CONFIG_MTD_SPI_NOR=y
--CONFIG_MTD_QCOMSMEM_PARTS=y
- CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
-@@ -133,10 +136,10 @@ CONFIG_PINCTRL_MSM8660=y
- CONFIG_PINCTRL_MSM8960=y
- CONFIG_PINCTRL_MDM9615=y
- CONFIG_PINCTRL_MSM8X74=y
--CONFIG_PINCTRL_SDX55=y
- CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
- CONFIG_PINCTRL_QCOM_SSBI_PMIC=y
- CONFIG_GPIOLIB=y
-+CONFIG_PINCTRL_SDX55=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_POWER_RESET=y
- CONFIG_POWER_RESET_MSM=y
-@@ -144,15 +147,17 @@ CONFIG_CHARGER_QCOM_SMBB=y
- CONFIG_CHARGER_BQ24190=m
- CONFIG_THERMAL=y
- CONFIG_QCOM_TSENS=y
-+CONFIG_WATCHDOG=y
-+CONFIG_QCOM_WDT=y
- CONFIG_MFD_PM8XXX=y
- CONFIG_MFD_QCOM_RPM=y
- CONFIG_MFD_SPMI_PMIC=y
- CONFIG_REGULATOR=y
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
- CONFIG_REGULATOR_QCOM_RPM=y
-+CONFIG_REGULATOR_QCOM_RPMH=y
- CONFIG_REGULATOR_QCOM_SMD_RPM=y
- CONFIG_REGULATOR_QCOM_SPMI=y
--CONFIG_REGULATOR_QCOM_RPMH=y
- CONFIG_MEDIA_SUPPORT=y
- CONFIG_DRM=y
- CONFIG_DRM_MSM=m
-@@ -160,11 +165,11 @@ CONFIG_DRM_PANEL_SIMPLE=y
- CONFIG_DRM_PANEL_EDP=y
- CONFIG_DRM_ANALOGIX_ANX78XX=m
- CONFIG_FB=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
- # CONFIG_LCD_CLASS_DEVICE is not set
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
- CONFIG_BACKLIGHT_LM3630A=y
- CONFIG_BACKLIGHT_LP855X=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_SOUND=y
- CONFIG_SND=y
- CONFIG_SND_DYNAMIC_MINORS=y
-@@ -180,6 +185,7 @@ CONFIG_USB_MON=y
- CONFIG_USB_EHCI_HCD=y
- CONFIG_USB_EHCI_MSM=y
- CONFIG_USB_ACM=y
-+CONFIG_USB_DWC3=y
- CONFIG_USB_CHIPIDEA=y
- CONFIG_USB_CHIPIDEA_UDC=y
- CONFIG_USB_CHIPIDEA_HOST=y
-@@ -196,7 +202,6 @@ CONFIG_USB_CONFIGFS_ECM=y
- CONFIG_USB_CONFIGFS_F_FS=y
- CONFIG_USB_ULPI_BUS=y
- CONFIG_USB_ETH=m
--CONFIG_USB_DWC3=y
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=32
- CONFIG_MMC_ARMMMCI=y
-@@ -218,8 +223,8 @@ CONFIG_COMMON_CLK_QCOM=y
- CONFIG_QCOM_A7PLL=y
- CONFIG_QCOM_CLK_APCS_SDX55=y
- CONFIG_QCOM_CLK_RPM=y
--CONFIG_QCOM_CLK_RPMH=y
- CONFIG_QCOM_CLK_SMD_RPM=y
-+CONFIG_QCOM_CLK_RPMH=y
- CONFIG_APQ_MMCC_8084=y
- CONFIG_IPQ_GCC_4019=y
- CONFIG_IPQ_LCC_806X=y
-@@ -229,12 +234,12 @@ CONFIG_MDM_LCC_9615=y
- CONFIG_MSM_MMCC_8960=y
- CONFIG_MSM_MMCC_8974=y
- CONFIG_SDX_GCC_55=y
--CONFIG_MSM_IOMMU=y
--CONFIG_ARM_SMMU=y
- CONFIG_HWSPINLOCK=y
- CONFIG_HWSPINLOCK_QCOM=y
- CONFIG_MAILBOX=y
- CONFIG_QCOM_APCS_IPC=y
-+CONFIG_MSM_IOMMU=y
-+CONFIG_ARM_SMMU=y
- CONFIG_REMOTEPROC=y
- CONFIG_QCOM_ADSP_PIL=y
- CONFIG_QCOM_Q6V5_PAS=y
-@@ -248,13 +253,13 @@ CONFIG_QCOM_GSBI=y
- CONFIG_QCOM_OCMEM=y
- CONFIG_QCOM_PM=y
- CONFIG_QCOM_RMTFS_MEM=y
-+CONFIG_QCOM_RPMH=y
-+CONFIG_QCOM_RPMHPD=y
- CONFIG_QCOM_RPMPD=y
- CONFIG_QCOM_SMEM=y
- CONFIG_QCOM_SMD_RPM=y
- CONFIG_QCOM_SMP2P=y
- CONFIG_QCOM_SMSM=y
--CONFIG_QCOM_RPMH=y
--CONFIG_QCOM_RPMHPD=y
- CONFIG_QCOM_SOCINFO=y
- CONFIG_QCOM_STATS=y
- CONFIG_QCOM_WCNSS_CTRL=y
-@@ -274,10 +279,10 @@ CONFIG_BMP280=y
- CONFIG_PWM=y
- CONFIG_PHY_QCOM_APQ8064_SATA=y
- CONFIG_PHY_QCOM_IPQ806X_SATA=y
--CONFIG_PHY_QCOM_USB_HS=y
--CONFIG_PHY_QCOM_USB_HSIC=y
- CONFIG_PHY_QCOM_QMP=y
-+CONFIG_PHY_QCOM_USB_HS=y
- CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=y
-+CONFIG_PHY_QCOM_USB_HSIC=y
- CONFIG_QCOM_QFPROM=y
- CONFIG_INTERCONNECT=y
- CONFIG_INTERCONNECT_QCOM=y
-@@ -303,8 +308,8 @@ CONFIG_CRYPTO_USER=m
- CONFIG_CRYPTO_USER_API=m
- CONFIG_CRYPTO_USER_API_HASH=m
- CONFIG_CRYPTO_USER_API_SKCIPHER=m
--CONFIG_CRYPTO_USER_API_AEAD=m
- CONFIG_CRYPTO_USER_API_RNG=m
-+CONFIG_CRYPTO_USER_API_AEAD=m
- CONFIG_CRYPTO_DEV_QCOM_RNG=m
- CONFIG_DMA_CMA=y
- CONFIG_CMA_SIZE_MBYTES=64
-@@ -314,8 +319,3 @@ CONFIG_DEBUG_INFO=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
--CONFIG_WATCHDOG=y
--CONFIG_QCOM_WDT=y
--CONFIG_ARM_PSCI=y
--CONFIG_CPU_FREQ=y
--CONFIG_CPUFREQ_DT=y
+Jinyoung Choi (7):
+  scsi: ufs: wb: Move ufshcd_is_wb_allowed() to callee function
+  scsi: ufs: wb: Change wb_enabled condition test
+  scsi: ufs: wb: Change functions name and modify parameter name
+  scsi: ufs: wb: Add explicit flush sysfs attribute
+  scsi: ufs: wb: Add ufshcd_is_wb_buf_flush_allowed()
+  scsi: ufs: wb: Modify messages
+  scsi: ufs: wb: Move the comment to the right position
+
+ drivers/ufs/core/ufs-sysfs.c | 46 +++++++++++++++++++++++-
+ drivers/ufs/core/ufshcd.c    | 69 +++++++++++++++++++-----------------
+ include/ufs/ufshcd.h         |  7 ++++
+ 3 files changed, 89 insertions(+), 33 deletions(-)
+
 -- 
-2.34.1
-
+2.25.1

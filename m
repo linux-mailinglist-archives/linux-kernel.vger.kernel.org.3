@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E96582AC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF560582BBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235926AbiG0QXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S238809AbiG0Qgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235536AbiG0QWx (ORCPT
+        with ESMTP id S235802AbiG0QfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:22:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1084D16E;
-        Wed, 27 Jul 2022 09:22:39 -0700 (PDT)
+        Wed, 27 Jul 2022 12:35:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2BD4F652;
+        Wed, 27 Jul 2022 09:27:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 290D5B821A6;
-        Wed, 27 Jul 2022 16:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5204DC433C1;
-        Wed, 27 Jul 2022 16:22:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FFBE619D6;
+        Wed, 27 Jul 2022 16:26:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EF8C433D7;
+        Wed, 27 Jul 2022 16:26:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658938956;
-        bh=gaBrScAaCmUC6aNKiBmd9h4bfCdJILFqhKUgDplWUvQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DCLXmZqe7JtOtz384FV+Wt0KDoGY3OIMYcbbhsDOGkFhiFTgkvKIRMsMgFxYa4MWE
-         oNJmf6EjNCVaVhzqYWKoNgDqdZRsH4pMZowIZurWQMJ5R7jRtbQ/HYSDd0Ernz029a
-         25lQdIwkKrll/9qc/7p6XX88cG38VW2e/5iFFNyo=
+        s=korg; t=1658939209;
+        bh=8CQ8rsKERdiu9+Ig5+Kfcc5GKHqTaAhILdolMlu++n4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=o/uWD2+z2fMKpTXuJzYjwYNHjKsykf+dSSdBCDTXxpx873jGnlaRDzKXeqMEFPFg6
+         NrPI1HtGAAR3hbSHY+q0D7IwdBzOfyEMgrECwW5lHxd0pDkR6DHKD+pfx1XMEqyaNo
+         ztl3fU3hGkLhMPJUoac+VGjNmMfQO4rsKB2medAg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.9 00/26] 4.9.325-rc1 review
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 20/62] tcp: Fix data-races around some timeout sysctl knobs.
 Date:   Wed, 27 Jul 2022 18:10:29 +0200
-Message-Id: <20220727160959.122591422@linuxfoundation.org>
+Message-Id: <20220727161004.987834230@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-MIME-Version: 1.0
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.325-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.9.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.9.325-rc1
-X-KernelTest-Deadline: 2022-07-29T16:10+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -61,151 +54,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.9.325 release.
-There are 26 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-Anything received after that time might be too late.
+[ Upstream commit 39e24435a776e9de5c6dd188836cf2523547804b ]
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.325-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-and the diffstat can be found below.
+While reading these sysctl knobs, they can be changed concurrently.
+Thus, we need to add READ_ONCE() to their readers.
 
-thanks,
+  - tcp_retries1
+  - tcp_retries2
+  - tcp_orphan_retries
+  - tcp_fin_timeout
 
-greg k-h
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/net/tcp.h     |  3 ++-
+ net/ipv4/tcp.c        |  2 +-
+ net/ipv4/tcp_output.c |  2 +-
+ net/ipv4/tcp_timer.c  | 10 +++++-----
+ 4 files changed, 9 insertions(+), 8 deletions(-)
 
--------------
-Pseudo-Shortlog of commits:
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 5c5807ed66ee..f92b93cf074c 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1430,7 +1430,8 @@ static inline u32 keepalive_time_elapsed(const struct tcp_sock *tp)
+ 
+ static inline int tcp_fin_time(const struct sock *sk)
+ {
+-	int fin_timeout = tcp_sk(sk)->linger2 ? : sock_net(sk)->ipv4.sysctl_tcp_fin_timeout;
++	int fin_timeout = tcp_sk(sk)->linger2 ? :
++		READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fin_timeout);
+ 	const int rto = inet_csk(sk)->icsk_rto;
+ 
+ 	if (fin_timeout < (rto << 2) - (rto >> 1))
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index b1b121d5076c..0f89d0f2c21f 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3386,7 +3386,7 @@ static int do_tcp_getsockopt(struct sock *sk, int level,
+ 	case TCP_LINGER2:
+ 		val = tp->linger2;
+ 		if (val >= 0)
+-			val = (val ? : net->ipv4.sysctl_tcp_fin_timeout) / HZ;
++			val = (val ? : READ_ONCE(net->ipv4.sysctl_tcp_fin_timeout)) / HZ;
+ 		break;
+ 	case TCP_DEFER_ACCEPT:
+ 		val = retrans_to_secs(icsk->icsk_accept_queue.rskq_defer_accept,
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 33f9a486661c..3d5ea169e905 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3776,7 +3776,7 @@ void tcp_send_probe0(struct sock *sk)
+ 	}
+ 
+ 	if (err <= 0) {
+-		if (icsk->icsk_backoff < net->ipv4.sysctl_tcp_retries2)
++		if (icsk->icsk_backoff < READ_ONCE(net->ipv4.sysctl_tcp_retries2))
+ 			icsk->icsk_backoff++;
+ 		icsk->icsk_probes_out++;
+ 		probe_max = TCP_RTO_MAX;
+diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+index 5d761333ffc4..e905fff09fea 100644
+--- a/net/ipv4/tcp_timer.c
++++ b/net/ipv4/tcp_timer.c
+@@ -124,7 +124,7 @@ static int tcp_out_of_resources(struct sock *sk, bool do_reset)
+  */
+ static int tcp_orphan_retries(struct sock *sk, bool alive)
+ {
+-	int retries = sock_net(sk)->ipv4.sysctl_tcp_orphan_retries; /* May be zero. */
++	int retries = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_orphan_retries); /* May be zero. */
+ 
+ 	/* We know from an ICMP that something is wrong. */
+ 	if (sk->sk_err_soft && !alive)
+@@ -226,7 +226,7 @@ static int tcp_write_timeout(struct sock *sk)
+ 		retry_until = icsk->icsk_syn_retries ? : net->ipv4.sysctl_tcp_syn_retries;
+ 		expired = icsk->icsk_retransmits >= retry_until;
+ 	} else {
+-		if (retransmits_timed_out(sk, net->ipv4.sysctl_tcp_retries1, 0)) {
++		if (retransmits_timed_out(sk, READ_ONCE(net->ipv4.sysctl_tcp_retries1), 0)) {
+ 			/* Black hole detection */
+ 			tcp_mtu_probing(icsk, sk);
+ 
+@@ -235,7 +235,7 @@ static int tcp_write_timeout(struct sock *sk)
+ 			sk_rethink_txhash(sk);
+ 		}
+ 
+-		retry_until = net->ipv4.sysctl_tcp_retries2;
++		retry_until = READ_ONCE(net->ipv4.sysctl_tcp_retries2);
+ 		if (sock_flag(sk, SOCK_DEAD)) {
+ 			const bool alive = icsk->icsk_rto < TCP_RTO_MAX;
+ 
+@@ -362,7 +362,7 @@ static void tcp_probe_timer(struct sock *sk)
+ 		 (s32)(tcp_time_stamp(tp) - start_ts) > icsk->icsk_user_timeout)
+ 		goto abort;
+ 
+-	max_probes = sock_net(sk)->ipv4.sysctl_tcp_retries2;
++	max_probes = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_retries2);
+ 	if (sock_flag(sk, SOCK_DEAD)) {
+ 		const bool alive = inet_csk_rto_backoff(icsk, TCP_RTO_MAX) < TCP_RTO_MAX;
+ 
+@@ -556,7 +556,7 @@ void tcp_retransmit_timer(struct sock *sk)
+ 	}
+ 	inet_csk_reset_xmit_timer(sk, ICSK_TIME_RETRANS,
+ 				  tcp_clamp_rto_to_user_timeout(sk), TCP_RTO_MAX);
+-	if (retransmits_timed_out(sk, net->ipv4.sysctl_tcp_retries1 + 1, 0))
++	if (retransmits_timed_out(sk, READ_ONCE(net->ipv4.sysctl_tcp_retries1) + 1, 0))
+ 		__sk_dst_reset(sk);
+ 
+ out:;
+-- 
+2.35.1
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.9.325-rc1
-
-Jose Alonso <joalonsof@gmail.com>
-    net: usb: ax88179_178a needs FLAG_SEND_ZLP
-
-Jiri Slaby <jslaby@suse.cz>
-    tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
-
-Jiri Slaby <jslaby@suse.cz>
-    tty: extract tty_flip_buffer_commit() from tty_flip_buffer_push()
-
-Jiri Slaby <jslaby@suse.cz>
-    tty: drop tty_schedule_flip()
-
-Jiri Slaby <jslaby@suse.cz>
-    tty: the rest, stop using tty_schedule_flip()
-
-Jiri Slaby <jslaby@suse.cz>
-    tty: drivers/tty/, stop using tty_schedule_flip()
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: memalloc: Align buffer allocations in page size
-
-Eric Dumazet <edumazet@google.com>
-    bpf: Make sure mac_header was set before using it
-
-Wang Cheng <wanngchenng@gmail.com>
-    mm/mempolicy: fix uninit-value in mpol_rebind_policy()
-
-Jason A. Donenfeld <Jason@zx2c4.com>
-    Revert "Revert "char/random: silence a lockdep splat with printk()""
-
-Hristo Venev <hristo@venev.name>
-    be2net: Fix buffer overflow in be_get_module_eeprom
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_notsent_lowat.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    igmp: Fix a data-race around sysctl_igmp_max_memberships.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    igmp: Fix data-races around sysctl_igmp_llm_reports.
-
-Robert Hancock <robert.hancock@calian.com>
-    i2c: cadence: Change large transfer count reset logic to be unconditional
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_probe_threshold.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp/dccp: Fix a data-race around sysctl_tcp_fwmark_accept.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    ip: Fix a data-race around sysctl_fwmark_reflect.
-
-Peter Zijlstra <peterz@infradead.org>
-    perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
-
-Miaoqian Lin <linmq006@gmail.com>
-    power/reset: arm-versatile: Fix refcount leak in versatile_reboot_probe
-
-Hangyu Hua <hbh25y@gmail.com>
-    xfrm: xfrm_policy: fix a possible double xfrm_pols_put() in xfrm_bundle_lookup()
-
-Shuah Khan <skhan@linuxfoundation.org>
-    misc: rtsx_usb: set return value in rsp_buf alloc err path
-
-Shuah Khan <skhan@linuxfoundation.org>
-    misc: rtsx_usb: use separate command and response buffers
-
-Shuah Khan <skhan@linuxfoundation.org>
-    misc: rtsx_usb: fix use of dma mapped buffer for usb bulk transfer
-
-Demi Marie Obenour <demi@invisiblethingslab.com>
-    xen/gntdev: Ignore failure to unmap INVALID_GRANT_HANDLE
-
-Stephen Smalley <sds@tycho.nsa.gov>
-    security,selinux,smack: kill security_task_wait hook
-
-
--------------
-
-Diffstat:
-
- Makefile                                       |  4 +-
- arch/alpha/kernel/srmcons.c                    |  2 +-
- drivers/char/random.c                          |  4 +-
- drivers/i2c/busses/i2c-cadence.c               | 30 ++----------
- drivers/mfd/rtsx_usb.c                         | 27 +++++++----
- drivers/net/ethernet/emulex/benet/be_cmds.c    | 10 ++--
- drivers/net/ethernet/emulex/benet/be_cmds.h    |  2 +-
- drivers/net/ethernet/emulex/benet/be_ethtool.c | 31 +++++++-----
- drivers/net/usb/ax88179_178a.c                 | 14 +++---
- drivers/power/reset/arm-versatile-reboot.c     |  1 +
- drivers/s390/char/keyboard.h                   |  4 +-
- drivers/tty/cyclades.c                         |  6 +--
- drivers/tty/goldfish.c                         |  2 +-
- drivers/tty/moxa.c                             |  4 +-
- drivers/tty/pty.c                              | 14 +-----
- drivers/tty/serial/lpc32xx_hs.c                |  2 +-
- drivers/tty/tty_buffer.c                       | 66 +++++++++++++++++---------
- drivers/tty/vt/keyboard.c                      |  6 +--
- drivers/tty/vt/vt.c                            |  2 +-
- drivers/xen/gntdev.c                           |  3 +-
- include/linux/lsm_hooks.h                      |  7 ---
- include/linux/mfd/rtsx_usb.h                   |  2 -
- include/linux/security.h                       |  6 ---
- include/linux/tty_flip.h                       |  4 +-
- include/net/inet_sock.h                        |  3 +-
- include/net/ip.h                               |  2 +-
- include/net/tcp.h                              |  2 +-
- kernel/bpf/core.c                              |  8 ++--
- kernel/events/core.c                           | 45 ++++++++++++------
- kernel/exit.c                                  | 19 +-------
- mm/mempolicy.c                                 |  2 +-
- net/ipv4/igmp.c                                | 23 +++++----
- net/ipv4/tcp_output.c                          |  2 +-
- net/xfrm/xfrm_policy.c                         |  5 +-
- security/security.c                            |  6 ---
- security/selinux/hooks.c                       |  6 ---
- security/smack/smack_lsm.c                     | 20 --------
- sound/core/memalloc.c                          |  1 +
- 38 files changed, 189 insertions(+), 208 deletions(-)
 
 

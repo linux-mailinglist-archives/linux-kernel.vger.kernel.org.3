@@ -2,133 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B5C581C9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 01:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792E4581CA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239987AbiGZX6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 19:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S240020AbiG0ACQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 20:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiGZX6B (ORCPT
+        with ESMTP id S229458AbiG0ACK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 19:58:01 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57787286F3;
-        Tue, 26 Jul 2022 16:58:00 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id g12so14645761pfb.3;
-        Tue, 26 Jul 2022 16:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7vhhqdup1oTrBRtqAz1oeIK0uowylKUwvLxltZF9KMQ=;
-        b=FsJ0yQA0O2hhoNSRToA55UGHf9r9Vn5a/jmg/5fGF9HFebqLSsZQEeQuufGwJYBgIt
-         jB4ECrOYW7uvrY2/P7SjhDCLXuNFYtvJnPyjrQuDLHf56TpYYEtE9twpuK4NS4RpqOmy
-         7cpOKphkkmhS23UF82wBYbGIOXTF8t5beGPXOOxGPQ44rnGgrrfDXl/Lo7gd39ZD66sO
-         l8y7lNJYzCeI52txGuTDPe7br4FpN+9uK7F+qRZ9HF8e+Ld9pK8Oik16JIZk5R43X37d
-         UhilUcY6y01ihXCJV9gQtFZ8lsGLySL14WAMb5PrSZwx4LI6JWqWox3lDhJu5vRl+/PT
-         Np7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7vhhqdup1oTrBRtqAz1oeIK0uowylKUwvLxltZF9KMQ=;
-        b=iQ4FJNtBlj6xMV9DaJr1GrhjRDmMeoeuHjQqGLJQj4+DAoc2s/R91XJWOzR13xyocX
-         5sHPYTtpNX/HZqrRRsgaymkAjRnHnmA44WpLoHPE1ZirjJ6N1dEwK+wc02kZqHs/FveY
-         xdbjIHmoH/ZTEpRtfh3m1QrQCvyU00CKeh8SUkMKZ40yq2yYTYdgI0NsimHHP2NOm3OG
-         gG7CuXEmbU/QBlH8XpZgw0pp9GB36ESsMHiuh+dPNnaHbN90qE2P8JzvHtuZUNecMUtz
-         aHQ9L10LutFg085ezlbPCfAf1JrLV6PcLd47ioTf/S2p3Zwd/IlvNr0/NociBHykvFuE
-         Skrg==
-X-Gm-Message-State: AJIora9dfs3jniR0ghO1v5dozlnMDZv8jVME4GB32/DUUPA+qHqJA+7S
-        +izANxJeuAI7HxjOBadsewE=
-X-Google-Smtp-Source: AGRyM1u6+KHcBHhA8RACFnwyKPEfhYWtP4sAvS5jxuS9+hMKkmgvZsiApx9P0gFL6I0lqiDzToPo6g==
-X-Received: by 2002:a63:6945:0:b0:41a:5127:a477 with SMTP id e66-20020a636945000000b0041a5127a477mr16528336pgc.15.1658879879799;
-        Tue, 26 Jul 2022 16:57:59 -0700 (PDT)
-Received: from localhost ([192.55.54.49])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902da8600b0016d763967f8sm5481807plx.107.2022.07.26.16.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 16:57:58 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 16:57:57 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Anup Patel <anup@brainfault.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH v7 002/102] Partially revert "KVM: Pass kvm_init()'s
- opaque param to additional arch funcs"
-Message-ID: <20220726235757.GF1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <4566737e3c57c5ab17c0bc29d6f4758744b6eed1.1656366337.git.isaku.yamahata@intel.com>
- <e4604ad23788a6d2950c091d04b7b805684a1a01.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e4604ad23788a6d2950c091d04b7b805684a1a01.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 20:02:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993C9205D6;
+        Tue, 26 Jul 2022 17:02:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 341A26171D;
+        Wed, 27 Jul 2022 00:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6213AC433C1;
+        Wed, 27 Jul 2022 00:02:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1658880128;
+        bh=hVS0UzV9td77mCUTc5XRrrAMTubY3281sDj0b9Bw3fg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bgJG/AoRhpYqly+BRSIJhDXqfByFj1B8Zl/kfMnItW4mY2aOtkiqsDd4y0/MyIxTh
+         1UXi9A31UPIJoTDpVWhzmZzhUzVYph/y5rwT26VPttmsUeMY8MdLsoBaHKHPZ0asku
+         YdLtXcn20RB1CMWAp75j+Ucv1De5BBb6ALlnwAjg=
+Date:   Tue, 26 Jul 2022 17:02:07 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Adam Sindelar <adam@wowsignal.io>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the mm tree
+Message-Id: <20220726170207.d902aebccf46c855c490b251@linux-foundation.org>
+In-Reply-To: <20220727092329.2a4aade0@canb.auug.org.au>
+References: <20220727092329.2a4aade0@canb.auug.org.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 01:55:46PM +1200,
-Kai Huang <kai.huang@intel.com> wrote:
+On Wed, 27 Jul 2022 09:23:29 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-> On Mon, 2022-06-27 at 14:52 -0700, isaku.yamahata@intel.com wrote:
-> > From: Chao Gao <chao.gao@intel.com>
-> > 
-> > This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaque
-> > param to additional arch funcs") remove opaque from
-> > kvm_arch_check_processor_compat because no one uses this opaque now.
-> > Address conflicts for ARM (due to file movement) and manually handle RISC-V
-> > which comes after the commit.
-> > 
-> > And changes about kvm_arch_hardware_setup() in original commit are still
-> > needed so they are not reverted.
+> In commit
 > 
-> I tried to dig the history to find out why we are doing this.
+>   1da6684b4930 ("selftests/vm: fix va_128TBswitch.sh permissions")
 > 
-> IMHO it's better to give a reason why you need to revert the opaque.  I guess no
-> one uses this opaque now doesn't mean we need to remove it?
+> Fixes tag
 > 
-> Perhaps you should mention this is a preparation to
-> hardware_enable_all()/hardware_disable_all() during module loading time. 
-> Instead of extending hardware_enable_all()/hardware_disable_all() to take the
-> opaque and pass to kvm_arch_check_process_compat(), just remove the opaque.
+>   Fixes: 1afd01d43efc3 ("selftests/vm: Only run 128TBswitch with 5-level
 > 
-> Or perhaps just merge this patch to next one?
+> has these problem(s):
+> 
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+> 
+> Please do not split Fixes tags over more than one line.  Also keep all
+> the commit message tags together at the end of the commit message.
+> 
+> This commit is also missing a Signed-off-by from its committer.
 
-
-Here is the updated commit message.
-
-    Partially revert "KVM: Pass kvm_init()'s opaque param to additional arch funcs"
-    
-    This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaque
-    param to additional arch funcs") remove opaque from
-    kvm_arch_check_processor_compat because no one uses this opaque now.
-    Address conflicts for ARM (due to file movement) and manually handle RISC-V
-    which comes after the commit.  The change about kvm_arch_hardware_setup()
-    in original commit are still needed so they are not reverted.
-    
-    The current implementation enables hardware (e.g. enable VMX on all CPUs),
-    arch-specific initialization for VM creation, and disables hardware (in
-    x86, disable VMX on all CPUs) for last VM destruction.
-    
-    TDX requires its initialization on loading KVM module with VMX enabled on
-    all available CPUs. It needs to enable/disable hardware on module
-    initialization.  To reuse the same logic, one way is to pass around the
-    unused opaque argument, another way is to remove the unused opaque
-    argument.  This patch is a preparation for the latter by removing the
-    argument.
-
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Bah, thanks.  Fixed&rebased.

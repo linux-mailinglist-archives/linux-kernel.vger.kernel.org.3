@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26B0582F21
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDEEB582C5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241884AbiG0RUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        id S239971AbiG0Qo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241850AbiG0RTJ (ORCPT
+        with ESMTP id S239803AbiG0Qn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:19:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4B17A525;
-        Wed, 27 Jul 2022 09:44:05 -0700 (PDT)
+        Wed, 27 Jul 2022 12:43:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247E120191;
+        Wed, 27 Jul 2022 09:30:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D021B8200C;
-        Wed, 27 Jul 2022 16:44:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72CA0C433D7;
-        Wed, 27 Jul 2022 16:44:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C77761A51;
+        Wed, 27 Jul 2022 16:30:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D728AC433C1;
+        Wed, 27 Jul 2022 16:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940242;
-        bh=UzOKAaZyLZP7WTuLlXyLJCkvlAGxGJPoJsJrNSK4noo=;
+        s=korg; t=1658939432;
+        bh=140xiridclUT8U66+YtY7xSGo9l8D28WAJ/uiCFQf+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ifghb2ngg8J3xtLVQaz59X0pu2nGWsRM2ulzzGNkMcXXq741/lKNaHNrs3n+A+Cb/
-         1go7ewDIWDWf4f4jG+X9Ir3JnaiEuY5ng8yrCo2D1pjUw5aygRHpX72EIPtaIpfaRA
-         lpMd33T9Y0uPa+ktFEQ9Vl1cCxqPV2Wb6vKLj7i8=
+        b=aZKOiYjexpX7forINftORVoGXx3uXJIB88YqZg8l2EDAuFJlwZ3Sro2RrtcK2Tc5x
+         RV+bEPn4HwnAMEo915o2mCbvvHo/DRqL/v4xaA6BSOwkxouEUSo8nHWbmDSv2rijqC
+         HsuWy/s8YpzfF8HoWbN4J16lFa2/qMGZ+M4aHVv4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 156/201] mt76: fix use-after-free by removing a non-RCU wcid pointer
+        stable@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 67/87] locking/refcount: Consolidate implementations of refcount_t
 Date:   Wed, 27 Jul 2022 18:11:00 +0200
-Message-Id: <20220727161034.293946361@linuxfoundation.org>
+Message-Id: <20220727161011.752079571@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,267 +61,542 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: Will Deacon <will@kernel.org>
 
-[ Upstream commit 51fb1278aa57ae0fc54adaa786e1965362bed4fb ]
+[ Upstream commit fb041bb7c0a918b95c6889fc965cdc4a75b4c0ca ]
 
-Fixes an issue caught by KASAN about use-after-free in mt76_txq_schedule
-by protecting mtxq->wcid with rcu_lock between mt76_txq_schedule and
-sta_info_[alloc, free].
+The generic implementation of refcount_t should be good enough for
+everybody, so remove ARCH_HAS_REFCOUNT and REFCOUNT_FULL entirely,
+leaving the generic implementation enabled unconditionally.
 
-[18853.876689] ==================================================================
-[18853.876751] BUG: KASAN: use-after-free in mt76_txq_schedule+0x204/0xaf8 [mt76]
-[18853.876773] Read of size 8 at addr ffffffaf989a2138 by task mt76-tx phy0/883
-[18853.876786]
-[18853.876810] CPU: 5 PID: 883 Comm: mt76-tx phy0 Not tainted 5.10.100-fix-510-56778d365941-kasan #5 0b01fbbcf41a530f52043508fec2e31a4215
-
-[18853.876840] Call trace:
-[18853.876861]  dump_backtrace+0x0/0x3ec
-[18853.876878]  show_stack+0x20/0x2c
-[18853.876899]  dump_stack+0x11c/0x1ac
-[18853.876918]  print_address_description+0x74/0x514
-[18853.876934]  kasan_report+0x134/0x174
-[18853.876948]  __asan_report_load8_noabort+0x44/0x50
-[18853.876976]  mt76_txq_schedule+0x204/0xaf8 [mt76 074e03e4640e97fe7405ee1fab547b81c4fa45d2]
-[18853.877002]  mt76_txq_schedule_all+0x2c/0x48 [mt76 074e03e4640e97fe7405ee1fab547b81c4fa45d2]
-[18853.877030]  mt7921_tx_worker+0xa0/0x1cc [mt7921_common f0875ebac9d7b4754e1010549e7db50fbd90a047]
-[18853.877054]  __mt76_worker_fn+0x190/0x22c [mt76 074e03e4640e97fe7405ee1fab547b81c4fa45d2]
-[18853.877071]  kthread+0x2f8/0x3b8
-[18853.877087]  ret_from_fork+0x10/0x30
-[18853.877098]
-[18853.877112] Allocated by task 941:
-[18853.877131]  kasan_save_stack+0x38/0x68
-[18853.877147]  __kasan_kmalloc+0xd4/0xfc
-[18853.877163]  kasan_kmalloc+0x10/0x1c
-[18853.877177]  __kmalloc+0x264/0x3c4
-[18853.877294]  sta_info_alloc+0x460/0xf88 [mac80211]
-[18853.877410]  ieee80211_prep_connection+0x204/0x1ee0 [mac80211]
-[18853.877523]  ieee80211_mgd_auth+0x6c4/0xa4c [mac80211]
-[18853.877635]  ieee80211_auth+0x20/0x2c [mac80211]
-[18853.877733]  rdev_auth+0x7c/0x438 [cfg80211]
-[18853.877826]  cfg80211_mlme_auth+0x26c/0x390 [cfg80211]
-[18853.877919]  nl80211_authenticate+0x6d4/0x904 [cfg80211]
-[18853.877938]  genl_rcv_msg+0x748/0x93c
-[18853.877954]  netlink_rcv_skb+0x160/0x2a8
-[18853.877969]  genl_rcv+0x3c/0x54
-[18853.877985]  netlink_unicast_kernel+0x104/0x1ec
-[18853.877999]  netlink_unicast+0x178/0x268
-[18853.878015]  netlink_sendmsg+0x3cc/0x5f0
-[18853.878030]  sock_sendmsg+0xb4/0xd8
-[18853.878043]  ____sys_sendmsg+0x2f8/0x53c
-[18853.878058]  ___sys_sendmsg+0xe8/0x150
-[18853.878071]  __sys_sendmsg+0xc4/0x1f4
-[18853.878087]  __arm64_compat_sys_sendmsg+0x88/0x9c
-[18853.878101]  el0_svc_common+0x1b4/0x390
-[18853.878115]  do_el0_svc_compat+0x8c/0xdc
-[18853.878131]  el0_svc_compat+0x10/0x1c
-[18853.878146]  el0_sync_compat_handler+0xa8/0xcc
-[18853.878161]  el0_sync_compat+0x188/0x1c0
-[18853.878171]
-[18853.878183] Freed by task 10927:
-[18853.878200]  kasan_save_stack+0x38/0x68
-[18853.878215]  kasan_set_track+0x28/0x3c
-[18853.878228]  kasan_set_free_info+0x24/0x48
-[18853.878244]  __kasan_slab_free+0x11c/0x154
-[18853.878259]  kasan_slab_free+0x14/0x24
-[18853.878273]  slab_free_freelist_hook+0xac/0x1b0
-[18853.878287]  kfree+0x104/0x390
-[18853.878402]  sta_info_free+0x198/0x210 [mac80211]
-[18853.878515]  __sta_info_destroy_part2+0x230/0x2d4 [mac80211]
-[18853.878628]  __sta_info_flush+0x300/0x37c [mac80211]
-[18853.878740]  ieee80211_set_disassoc+0x2cc/0xa7c [mac80211]
-[18853.878851]  ieee80211_mgd_deauth+0x4a4/0x10a0 [mac80211]
-[18853.878962]  ieee80211_deauth+0x20/0x2c [mac80211]
-[18853.879057]  rdev_deauth+0x7c/0x438 [cfg80211]
-[18853.879150]  cfg80211_mlme_deauth+0x274/0x414 [cfg80211]
-[18853.879243]  cfg80211_mlme_down+0xe4/0x118 [cfg80211]
-[18853.879335]  cfg80211_disconnect+0x218/0x2d8 [cfg80211]
-[18853.879427]  __cfg80211_leave+0x17c/0x240 [cfg80211]
-[18853.879519]  cfg80211_leave+0x3c/0x58 [cfg80211]
-[18853.879611]  wiphy_suspend+0xdc/0x200 [cfg80211]
-[18853.879628]  dpm_run_callback+0x58/0x408
-[18853.879642]  __device_suspend+0x4cc/0x864
-[18853.879658]  async_suspend+0x34/0xf4
-[18853.879673]  async_run_entry_fn+0xe0/0x37c
-[18853.879689]  process_one_work+0x508/0xb98
-[18853.879702]  worker_thread+0x7f4/0xcd4
-[18853.879717]  kthread+0x2f8/0x3b8
-[18853.879731]  ret_from_fork+0x10/0x30
-[18853.879741]
-[18853.879757] The buggy address belongs to the object at ffffffaf989a2000
-[18853.879757]  which belongs to the cache kmalloc-8k of size 8192
-[18853.879774] The buggy address is located 312 bytes inside of
-[18853.879774]  8192-byte region [ffffffaf989a2000, ffffffaf989a4000)
-[18853.879787] The buggy address belongs to the page:
-[18853.879807] page:000000004bda2a59 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1d89a0
-[18853.879823] head:000000004bda2a59 order:3 compound_mapcount:0 compound_pincount:0
-[18853.879839] flags: 0x8000000000010200(slab|head)
-[18853.879857] raw: 8000000000010200 ffffffffbc89e208 ffffffffb7fb5208 ffffffaec000cc80
-[18853.879873] raw: 0000000000000000 0000000000010001 00000001ffffffff 0000000000000000
-[18853.879885] page dumped because: kasan: bad access detected
-[18853.879896]
-[18853.879907] Memory state around the buggy address:
-[18853.879922]  ffffffaf989a2000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[18853.879935]  ffffffaf989a2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[18853.879948] >ffffffaf989a2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[18853.879961]                                         ^
-[18853.879973]  ffffffaf989a2180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[18853.879986]  ffffffaf989a2200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[18853.879998] ==================================================================
-
-Cc: stable@vger.kernel.org
-Reported-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Signed-off-by: Will Deacon <will@kernel.org>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Kees Cook <keescook@chromium.org>
+Tested-by: Hanjun Guo <guohanjun@huawei.com>
+Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: Elena Reshetova <elena.reshetova@intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lkml.kernel.org/r/20191121115902.2551-9-will@kernel.org
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mac80211.c     | 2 +-
- drivers/net/wireless/mediatek/mt76/mt76.h         | 2 +-
- drivers/net/wireless/mediatek/mt76/mt7603/main.c  | 2 +-
- drivers/net/wireless/mediatek/mt76/mt7615/main.c  | 2 +-
- drivers/net/wireless/mediatek/mt76/mt76x02_util.c | 4 +++-
- drivers/net/wireless/mediatek/mt76/mt7915/main.c  | 2 +-
- drivers/net/wireless/mediatek/mt76/mt7921/main.c  | 2 +-
- drivers/net/wireless/mediatek/mt76/tx.c           | 9 ++++-----
- 8 files changed, 13 insertions(+), 12 deletions(-)
+ arch/Kconfig                       |  21 ----
+ arch/arm/Kconfig                   |   1 -
+ arch/arm64/Kconfig                 |   1 -
+ arch/s390/configs/debug_defconfig  |   1 -
+ arch/x86/Kconfig                   |   1 -
+ arch/x86/include/asm/asm.h         |   6 --
+ arch/x86/include/asm/refcount.h    | 126 -----------------------
+ arch/x86/mm/extable.c              |  49 ---------
+ drivers/gpu/drm/i915/Kconfig.debug |   1 -
+ include/linux/refcount.h           | 158 +++++++++++------------------
+ lib/refcount.c                     |   2 +-
+ 11 files changed, 59 insertions(+), 308 deletions(-)
+ delete mode 100644 arch/x86/include/asm/refcount.h
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mac80211.c b/drivers/net/wireless/mediatek/mt76/mac80211.c
-index d03aedc3286b..029599d68ca7 100644
---- a/drivers/net/wireless/mediatek/mt76/mac80211.c
-+++ b/drivers/net/wireless/mediatek/mt76/mac80211.c
-@@ -1100,7 +1100,7 @@ mt76_sta_add(struct mt76_dev *dev, struct ieee80211_vif *vif,
- 			continue;
+diff --git a/arch/Kconfig b/arch/Kconfig
+index a8df66e64544..2219a07dca1e 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -915,27 +915,6 @@ config STRICT_MODULE_RWX
+ config ARCH_HAS_PHYS_TO_DMA
+ 	bool
  
- 		mtxq = (struct mt76_txq *)sta->txq[i]->drv_priv;
--		mtxq->wcid = wcid;
-+		mtxq->wcid = wcid->idx;
- 	}
+-config ARCH_HAS_REFCOUNT
+-	bool
+-	help
+-	  An architecture selects this when it has implemented refcount_t
+-	  using open coded assembly primitives that provide an optimized
+-	  refcount_t implementation, possibly at the expense of some full
+-	  refcount state checks of CONFIG_REFCOUNT_FULL=y.
+-
+-	  The refcount overflow check behavior, however, must be retained.
+-	  Catching overflows is the primary security concern for protecting
+-	  against bugs in reference counts.
+-
+-config REFCOUNT_FULL
+-	bool "Perform full reference count validation at the expense of speed"
+-	help
+-	  Enabling this switches the refcounting infrastructure from a fast
+-	  unchecked atomic_t implementation to a fully state checked
+-	  implementation, which can be (slightly) slower but provides protections
+-	  against various use-after-free conditions that can be used in
+-	  security flaw exploits.
+-
+ config HAVE_ARCH_COMPILER_H
+ 	bool
+ 	help
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index a1622b9290fd..a4364cce85f8 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -119,7 +119,6 @@ config ARM
+ 	select OLD_SIGSUSPEND3
+ 	select PCI_SYSCALL if PCI
+ 	select PERF_USE_VMALLOC
+-	select REFCOUNT_FULL
+ 	select RTC_LIB
+ 	select SYS_SUPPORTS_APM_EMULATION
+ 	# Above selects are sorted alphabetically; please add new ones
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index a1a828ca188c..6b73143f0cf8 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -181,7 +181,6 @@ config ARM64
+ 	select PCI_SYSCALL if PCI
+ 	select POWER_RESET
+ 	select POWER_SUPPLY
+-	select REFCOUNT_FULL
+ 	select SPARSE_IRQ
+ 	select SWIOTLB
+ 	select SYSCTL_EXCEPTION_TRACE
+diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
+index 38d64030aacf..2e60c80395ab 100644
+--- a/arch/s390/configs/debug_defconfig
++++ b/arch/s390/configs/debug_defconfig
+@@ -62,7 +62,6 @@ CONFIG_OPROFILE=m
+ CONFIG_KPROBES=y
+ CONFIG_JUMP_LABEL=y
+ CONFIG_STATIC_KEYS_SELFTEST=y
+-CONFIG_REFCOUNT_FULL=y
+ CONFIG_LOCK_EVENT_COUNTS=y
+ CONFIG_MODULES=y
+ CONFIG_MODULE_FORCE_LOAD=y
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index c6c71592f6e4..6002252692af 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -73,7 +73,6 @@ config X86
+ 	select ARCH_HAS_PMEM_API		if X86_64
+ 	select ARCH_HAS_PTE_DEVMAP		if X86_64
+ 	select ARCH_HAS_PTE_SPECIAL
+-	select ARCH_HAS_REFCOUNT
+ 	select ARCH_HAS_UACCESS_FLUSHCACHE	if X86_64
+ 	select ARCH_HAS_UACCESS_MCSAFE		if X86_64 && X86_MCE
+ 	select ARCH_HAS_SET_MEMORY
+diff --git a/arch/x86/include/asm/asm.h b/arch/x86/include/asm/asm.h
+index 1b563f9167ea..cd339b88d5d4 100644
+--- a/arch/x86/include/asm/asm.h
++++ b/arch/x86/include/asm/asm.h
+@@ -141,9 +141,6 @@
+ # define _ASM_EXTABLE_EX(from, to)				\
+ 	_ASM_EXTABLE_HANDLE(from, to, ex_handler_ext)
  
- 	ewma_signal_init(&wcid->rssi);
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/wireless/mediatek/mt76/mt76.h
-index 6e4d69715927..d1f00706d41e 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt76.h
-@@ -263,7 +263,7 @@ struct mt76_wcid {
- };
+-# define _ASM_EXTABLE_REFCOUNT(from, to)			\
+-	_ASM_EXTABLE_HANDLE(from, to, ex_handler_refcount)
+-
+ # define _ASM_NOKPROBE(entry)					\
+ 	.pushsection "_kprobe_blacklist","aw" ;			\
+ 	_ASM_ALIGN ;						\
+@@ -172,9 +169,6 @@
+ # define _ASM_EXTABLE_EX(from, to)				\
+ 	_ASM_EXTABLE_HANDLE(from, to, ex_handler_ext)
  
- struct mt76_txq {
--	struct mt76_wcid *wcid;
-+	u16 wcid;
+-# define _ASM_EXTABLE_REFCOUNT(from, to)			\
+-	_ASM_EXTABLE_HANDLE(from, to, ex_handler_refcount)
+-
+ /* For C file, we already have NOKPROBE_SYMBOL macro */
+ #endif
  
- 	u16 agg_ssn;
- 	bool send_bar;
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7603/main.c b/drivers/net/wireless/mediatek/mt76/mt7603/main.c
-index 7f52a4a11cea..0b7b87b4cc21 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7603/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7603/main.c
-@@ -74,7 +74,7 @@ mt7603_add_interface(struct ieee80211_hw *hw, struct ieee80211_vif *vif)
- 	mt7603_wtbl_init(dev, idx, mvif->idx, bc_addr);
- 
- 	mtxq = (struct mt76_txq *)vif->txq->drv_priv;
--	mtxq->wcid = &mvif->sta.wcid;
-+	mtxq->wcid = idx;
- 	rcu_assign_pointer(dev->mt76.wcid[idx], &mvif->sta.wcid);
- 
- out:
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/main.c b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-index 60a41d082961..7c52a4d85cea 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-@@ -235,7 +235,7 @@ static int mt7615_add_interface(struct ieee80211_hw *hw,
- 	rcu_assign_pointer(dev->mt76.wcid[idx], &mvif->sta.wcid);
- 	if (vif->txq) {
- 		mtxq = (struct mt76_txq *)vif->txq->drv_priv;
--		mtxq->wcid = &mvif->sta.wcid;
-+		mtxq->wcid = idx;
- 	}
- 
- 	ret = mt7615_mcu_add_dev_info(phy, vif, true);
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76x02_util.c b/drivers/net/wireless/mediatek/mt76/mt76x02_util.c
-index ccdbab341271..db7a4ffcad55 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76x02_util.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt76x02_util.c
-@@ -288,7 +288,8 @@ mt76x02_vif_init(struct mt76x02_dev *dev, struct ieee80211_vif *vif,
- 	mvif->group_wcid.idx = MT_VIF_WCID(idx);
- 	mvif->group_wcid.hw_key_idx = -1;
- 	mtxq = (struct mt76_txq *)vif->txq->drv_priv;
--	mtxq->wcid = &mvif->group_wcid;
-+	rcu_assign_pointer(dev->mt76.wcid[MT_VIF_WCID(idx)], &mvif->group_wcid);
-+	mtxq->wcid = MT_VIF_WCID(idx);
+diff --git a/arch/x86/include/asm/refcount.h b/arch/x86/include/asm/refcount.h
+deleted file mode 100644
+index 232f856e0db0..000000000000
+--- a/arch/x86/include/asm/refcount.h
++++ /dev/null
+@@ -1,126 +0,0 @@
+-#ifndef __ASM_X86_REFCOUNT_H
+-#define __ASM_X86_REFCOUNT_H
+-/*
+- * x86-specific implementation of refcount_t. Based on PAX_REFCOUNT from
+- * PaX/grsecurity.
+- */
+-#include <linux/refcount.h>
+-#include <asm/bug.h>
+-
+-/*
+- * This is the first portion of the refcount error handling, which lives in
+- * .text.unlikely, and is jumped to from the CPU flag check (in the
+- * following macros). This saves the refcount value location into CX for
+- * the exception handler to use (in mm/extable.c), and then triggers the
+- * central refcount exception. The fixup address for the exception points
+- * back to the regular execution flow in .text.
+- */
+-#define _REFCOUNT_EXCEPTION				\
+-	".pushsection .text..refcount\n"		\
+-	"111:\tlea %[var], %%" _ASM_CX "\n"		\
+-	"112:\t" ASM_UD2 "\n"				\
+-	ASM_UNREACHABLE					\
+-	".popsection\n"					\
+-	"113:\n"					\
+-	_ASM_EXTABLE_REFCOUNT(112b, 113b)
+-
+-/* Trigger refcount exception if refcount result is negative. */
+-#define REFCOUNT_CHECK_LT_ZERO				\
+-	"js 111f\n\t"					\
+-	_REFCOUNT_EXCEPTION
+-
+-/* Trigger refcount exception if refcount result is zero or negative. */
+-#define REFCOUNT_CHECK_LE_ZERO				\
+-	"jz 111f\n\t"					\
+-	REFCOUNT_CHECK_LT_ZERO
+-
+-/* Trigger refcount exception unconditionally. */
+-#define REFCOUNT_ERROR					\
+-	"jmp 111f\n\t"					\
+-	_REFCOUNT_EXCEPTION
+-
+-static __always_inline void refcount_add(unsigned int i, refcount_t *r)
+-{
+-	asm volatile(LOCK_PREFIX "addl %1,%0\n\t"
+-		REFCOUNT_CHECK_LT_ZERO
+-		: [var] "+m" (r->refs.counter)
+-		: "ir" (i)
+-		: "cc", "cx");
+-}
+-
+-static __always_inline void refcount_inc(refcount_t *r)
+-{
+-	asm volatile(LOCK_PREFIX "incl %0\n\t"
+-		REFCOUNT_CHECK_LT_ZERO
+-		: [var] "+m" (r->refs.counter)
+-		: : "cc", "cx");
+-}
+-
+-static __always_inline void refcount_dec(refcount_t *r)
+-{
+-	asm volatile(LOCK_PREFIX "decl %0\n\t"
+-		REFCOUNT_CHECK_LE_ZERO
+-		: [var] "+m" (r->refs.counter)
+-		: : "cc", "cx");
+-}
+-
+-static __always_inline __must_check
+-bool refcount_sub_and_test(unsigned int i, refcount_t *r)
+-{
+-	bool ret = GEN_BINARY_SUFFIXED_RMWcc(LOCK_PREFIX "subl",
+-					 REFCOUNT_CHECK_LT_ZERO,
+-					 r->refs.counter, e, "er", i, "cx");
+-
+-	if (ret) {
+-		smp_acquire__after_ctrl_dep();
+-		return true;
+-	}
+-
+-	return false;
+-}
+-
+-static __always_inline __must_check bool refcount_dec_and_test(refcount_t *r)
+-{
+-	bool ret = GEN_UNARY_SUFFIXED_RMWcc(LOCK_PREFIX "decl",
+-					 REFCOUNT_CHECK_LT_ZERO,
+-					 r->refs.counter, e, "cx");
+-
+-	if (ret) {
+-		smp_acquire__after_ctrl_dep();
+-		return true;
+-	}
+-
+-	return false;
+-}
+-
+-static __always_inline __must_check
+-bool refcount_add_not_zero(unsigned int i, refcount_t *r)
+-{
+-	int c, result;
+-
+-	c = atomic_read(&(r->refs));
+-	do {
+-		if (unlikely(c == 0))
+-			return false;
+-
+-		result = c + i;
+-
+-		/* Did we try to increment from/to an undesirable state? */
+-		if (unlikely(c < 0 || c == INT_MAX || result < c)) {
+-			asm volatile(REFCOUNT_ERROR
+-				     : : [var] "m" (r->refs.counter)
+-				     : "cc", "cx");
+-			break;
+-		}
+-
+-	} while (!atomic_try_cmpxchg(&(r->refs), &c, result));
+-
+-	return c != 0;
+-}
+-
+-static __always_inline __must_check bool refcount_inc_not_zero(refcount_t *r)
+-{
+-	return refcount_add_not_zero(1, r);
+-}
+-
+-#endif
+diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+index 4d75bc656f97..30bb0bd3b1b8 100644
+--- a/arch/x86/mm/extable.c
++++ b/arch/x86/mm/extable.c
+@@ -44,55 +44,6 @@ __visible bool ex_handler_fault(const struct exception_table_entry *fixup,
  }
+ EXPORT_SYMBOL_GPL(ex_handler_fault);
  
- int
-@@ -341,6 +342,7 @@ void mt76x02_remove_interface(struct ieee80211_hw *hw,
- 	struct mt76x02_vif *mvif = (struct mt76x02_vif *)vif->drv_priv;
+-/*
+- * Handler for UD0 exception following a failed test against the
+- * result of a refcount inc/dec/add/sub.
+- */
+-__visible bool ex_handler_refcount(const struct exception_table_entry *fixup,
+-				   struct pt_regs *regs, int trapnr,
+-				   unsigned long error_code,
+-				   unsigned long fault_addr)
+-{
+-	/* First unconditionally saturate the refcount. */
+-	*(int *)regs->cx = INT_MIN / 2;
+-
+-	/*
+-	 * Strictly speaking, this reports the fixup destination, not
+-	 * the fault location, and not the actually overflowing
+-	 * instruction, which is the instruction before the "js", but
+-	 * since that instruction could be a variety of lengths, just
+-	 * report the location after the overflow, which should be close
+-	 * enough for finding the overflow, as it's at least back in
+-	 * the function, having returned from .text.unlikely.
+-	 */
+-	regs->ip = ex_fixup_addr(fixup);
+-
+-	/*
+-	 * This function has been called because either a negative refcount
+-	 * value was seen by any of the refcount functions, or a zero
+-	 * refcount value was seen by refcount_dec().
+-	 *
+-	 * If we crossed from INT_MAX to INT_MIN, OF (Overflow Flag: result
+-	 * wrapped around) will be set. Additionally, seeing the refcount
+-	 * reach 0 will set ZF (Zero Flag: result was zero). In each of
+-	 * these cases we want a report, since it's a boundary condition.
+-	 * The SF case is not reported since it indicates post-boundary
+-	 * manipulations below zero or above INT_MAX. And if none of the
+-	 * flags are set, something has gone very wrong, so report it.
+-	 */
+-	if (regs->flags & (X86_EFLAGS_OF | X86_EFLAGS_ZF)) {
+-		bool zero = regs->flags & X86_EFLAGS_ZF;
+-
+-		refcount_error_report(regs, zero ? "hit zero" : "overflow");
+-	} else if ((regs->flags & X86_EFLAGS_SF) == 0) {
+-		/* Report if none of OF, ZF, nor SF are set. */
+-		refcount_error_report(regs, "unexpected saturation");
+-	}
+-
+-	return true;
+-}
+-EXPORT_SYMBOL(ex_handler_refcount);
+-
+ /*
+  * Handler for when we fail to restore a task's FPU state.  We should never get
+  * here because the FPU state of a task using the FPU (task->thread.fpu.state)
+diff --git a/drivers/gpu/drm/i915/Kconfig.debug b/drivers/gpu/drm/i915/Kconfig.debug
+index 41c8e39a73ba..e4f03fcb125e 100644
+--- a/drivers/gpu/drm/i915/Kconfig.debug
++++ b/drivers/gpu/drm/i915/Kconfig.debug
+@@ -21,7 +21,6 @@ config DRM_I915_DEBUG
+         depends on DRM_I915
+         select DEBUG_FS
+         select PREEMPT_COUNT
+-        select REFCOUNT_FULL
+         select I2C_CHARDEV
+         select STACKDEPOT
+         select DRM_DP_AUX_CHARDEV
+diff --git a/include/linux/refcount.h b/include/linux/refcount.h
+index 757d4630115c..0ac50cf62d06 100644
+--- a/include/linux/refcount.h
++++ b/include/linux/refcount.h
+@@ -1,64 +1,4 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _LINUX_REFCOUNT_H
+-#define _LINUX_REFCOUNT_H
+-
+-#include <linux/atomic.h>
+-#include <linux/compiler.h>
+-#include <linux/limits.h>
+-#include <linux/spinlock_types.h>
+-
+-struct mutex;
+-
+-/**
+- * struct refcount_t - variant of atomic_t specialized for reference counts
+- * @refs: atomic_t counter field
+- *
+- * The counter saturates at REFCOUNT_SATURATED and will not move once
+- * there. This avoids wrapping the counter and causing 'spurious'
+- * use-after-free bugs.
+- */
+-typedef struct refcount_struct {
+-	atomic_t refs;
+-} refcount_t;
+-
+-#define REFCOUNT_INIT(n)	{ .refs = ATOMIC_INIT(n), }
+-#define REFCOUNT_MAX		INT_MAX
+-#define REFCOUNT_SATURATED	(INT_MIN / 2)
+-
+-enum refcount_saturation_type {
+-	REFCOUNT_ADD_NOT_ZERO_OVF,
+-	REFCOUNT_ADD_OVF,
+-	REFCOUNT_ADD_UAF,
+-	REFCOUNT_SUB_UAF,
+-	REFCOUNT_DEC_LEAK,
+-};
+-
+-void refcount_warn_saturate(refcount_t *r, enum refcount_saturation_type t);
+-
+-/**
+- * refcount_set - set a refcount's value
+- * @r: the refcount
+- * @n: value to which the refcount will be set
+- */
+-static inline void refcount_set(refcount_t *r, int n)
+-{
+-	atomic_set(&r->refs, n);
+-}
+-
+-/**
+- * refcount_read - get a refcount's value
+- * @r: the refcount
+- *
+- * Return: the refcount's value
+- */
+-static inline unsigned int refcount_read(const refcount_t *r)
+-{
+-	return atomic_read(&r->refs);
+-}
+-
+-#ifdef CONFIG_REFCOUNT_FULL
+-#include <linux/bug.h>
+-
+ /*
+  * Variant of atomic_t specialized for reference counts.
+  *
+@@ -136,6 +76,64 @@ static inline unsigned int refcount_read(const refcount_t *r)
+  *
+  */
  
- 	dev->mt76.vif_mask &= ~BIT(mvif->idx);
-+	rcu_assign_pointer(dev->mt76.wcid[mvif->group_wcid.idx], NULL);
++#ifndef _LINUX_REFCOUNT_H
++#define _LINUX_REFCOUNT_H
++
++#include <linux/atomic.h>
++#include <linux/bug.h>
++#include <linux/compiler.h>
++#include <linux/limits.h>
++#include <linux/spinlock_types.h>
++
++struct mutex;
++
++/**
++ * struct refcount_t - variant of atomic_t specialized for reference counts
++ * @refs: atomic_t counter field
++ *
++ * The counter saturates at REFCOUNT_SATURATED and will not move once
++ * there. This avoids wrapping the counter and causing 'spurious'
++ * use-after-free bugs.
++ */
++typedef struct refcount_struct {
++	atomic_t refs;
++} refcount_t;
++
++#define REFCOUNT_INIT(n)	{ .refs = ATOMIC_INIT(n), }
++#define REFCOUNT_MAX		INT_MAX
++#define REFCOUNT_SATURATED	(INT_MIN / 2)
++
++enum refcount_saturation_type {
++	REFCOUNT_ADD_NOT_ZERO_OVF,
++	REFCOUNT_ADD_OVF,
++	REFCOUNT_ADD_UAF,
++	REFCOUNT_SUB_UAF,
++	REFCOUNT_DEC_LEAK,
++};
++
++void refcount_warn_saturate(refcount_t *r, enum refcount_saturation_type t);
++
++/**
++ * refcount_set - set a refcount's value
++ * @r: the refcount
++ * @n: value to which the refcount will be set
++ */
++static inline void refcount_set(refcount_t *r, int n)
++{
++	atomic_set(&r->refs, n);
++}
++
++/**
++ * refcount_read - get a refcount's value
++ * @r: the refcount
++ *
++ * Return: the refcount's value
++ */
++static inline unsigned int refcount_read(const refcount_t *r)
++{
++	return atomic_read(&r->refs);
++}
++
+ /**
+  * refcount_add_not_zero - add a value to a refcount unless it is 0
+  * @i: the value to add to the refcount
+@@ -298,46 +296,6 @@ static inline void refcount_dec(refcount_t *r)
+ 	if (unlikely(atomic_fetch_sub_release(1, &r->refs) <= 1))
+ 		refcount_warn_saturate(r, REFCOUNT_DEC_LEAK);
  }
- EXPORT_SYMBOL_GPL(mt76x02_remove_interface);
+-#else /* CONFIG_REFCOUNT_FULL */
+-# ifdef CONFIG_ARCH_HAS_REFCOUNT
+-#  include <asm/refcount.h>
+-# else
+-static inline __must_check bool refcount_add_not_zero(int i, refcount_t *r)
+-{
+-	return atomic_add_unless(&r->refs, i, 0);
+-}
+-
+-static inline void refcount_add(int i, refcount_t *r)
+-{
+-	atomic_add(i, &r->refs);
+-}
+-
+-static inline __must_check bool refcount_inc_not_zero(refcount_t *r)
+-{
+-	return atomic_add_unless(&r->refs, 1, 0);
+-}
+-
+-static inline void refcount_inc(refcount_t *r)
+-{
+-	atomic_inc(&r->refs);
+-}
+-
+-static inline __must_check bool refcount_sub_and_test(int i, refcount_t *r)
+-{
+-	return atomic_sub_and_test(i, &r->refs);
+-}
+-
+-static inline __must_check bool refcount_dec_and_test(refcount_t *r)
+-{
+-	return atomic_dec_and_test(&r->refs);
+-}
+-
+-static inline void refcount_dec(refcount_t *r)
+-{
+-	atomic_dec(&r->refs);
+-}
+-# endif /* !CONFIG_ARCH_HAS_REFCOUNT */
+-#endif /* !CONFIG_REFCOUNT_FULL */
  
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/main.c b/drivers/net/wireless/mediatek/mt76/mt7915/main.c
-index c25f8da590dd..6aca470e2401 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/main.c
-@@ -243,7 +243,7 @@ static int mt7915_add_interface(struct ieee80211_hw *hw,
- 	rcu_assign_pointer(dev->mt76.wcid[idx], &mvif->sta.wcid);
- 	if (vif->txq) {
- 		mtxq = (struct mt76_txq *)vif->txq->drv_priv;
--		mtxq->wcid = &mvif->sta.wcid;
-+		mtxq->wcid = idx;
- 	}
+ extern __must_check bool refcount_dec_if_one(refcount_t *r);
+ extern __must_check bool refcount_dec_not_one(refcount_t *r);
+diff --git a/lib/refcount.c b/lib/refcount.c
+index 8b7e249c0e10..ebac8b7d15a7 100644
+--- a/lib/refcount.c
++++ b/lib/refcount.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Out-of-line refcount functions common to all refcount implementations.
++ * Out-of-line refcount functions.
+  */
  
- 	if (vif->type != NL80211_IFTYPE_AP &&
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/main.c b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-index 13a7ae3d8351..6cb65391427f 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-@@ -283,7 +283,7 @@ static int mt7921_add_interface(struct ieee80211_hw *hw,
- 	rcu_assign_pointer(dev->mt76.wcid[idx], &mvif->sta.wcid);
- 	if (vif->txq) {
- 		mtxq = (struct mt76_txq *)vif->txq->drv_priv;
--		mtxq->wcid = &mvif->sta.wcid;
-+		mtxq->wcid = idx;
- 	}
- 
- out:
-diff --git a/drivers/net/wireless/mediatek/mt76/tx.c b/drivers/net/wireless/mediatek/mt76/tx.c
-index f0f7a913eaab..dce6f6b5f071 100644
---- a/drivers/net/wireless/mediatek/mt76/tx.c
-+++ b/drivers/net/wireless/mediatek/mt76/tx.c
-@@ -406,12 +406,11 @@ mt76_txq_stopped(struct mt76_queue *q)
- 
- static int
- mt76_txq_send_burst(struct mt76_phy *phy, struct mt76_queue *q,
--		    struct mt76_txq *mtxq)
-+		    struct mt76_txq *mtxq, struct mt76_wcid *wcid)
- {
- 	struct mt76_dev *dev = phy->dev;
- 	struct ieee80211_txq *txq = mtxq_to_txq(mtxq);
- 	enum mt76_txq_id qid = mt76_txq_get_qid(txq);
--	struct mt76_wcid *wcid = mtxq->wcid;
- 	struct ieee80211_tx_info *info;
- 	struct sk_buff *skb;
- 	int n_frames = 1;
-@@ -491,8 +490,8 @@ mt76_txq_schedule_list(struct mt76_phy *phy, enum mt76_txq_id qid)
- 			break;
- 
- 		mtxq = (struct mt76_txq *)txq->drv_priv;
--		wcid = mtxq->wcid;
--		if (wcid && test_bit(MT_WCID_FLAG_PS, &wcid->flags))
-+		wcid = rcu_dereference(dev->wcid[mtxq->wcid]);
-+		if (!wcid || test_bit(MT_WCID_FLAG_PS, &wcid->flags))
- 			continue;
- 
- 		spin_lock_bh(&q->lock);
-@@ -511,7 +510,7 @@ mt76_txq_schedule_list(struct mt76_phy *phy, enum mt76_txq_id qid)
- 		}
- 
- 		if (!mt76_txq_stopped(q))
--			n_frames = mt76_txq_send_burst(phy, q, mtxq);
-+			n_frames = mt76_txq_send_burst(phy, q, mtxq, wcid);
- 
- 		spin_unlock_bh(&q->lock);
- 
+ #include <linux/mutex.h>
 -- 
 2.35.1
 

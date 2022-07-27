@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB0658205F
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADAA582060
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 08:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiG0Goo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 02:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S231223AbiG0GpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 02:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiG0GoL (ORCPT
+        with ESMTP id S230107AbiG0GoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Jul 2022 02:44:11 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FE641995
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:43:49 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id a23so23392869lfm.10
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:43:49 -0700 (PDT)
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294A4419AC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:43:51 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id a13so18596068ljr.11
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9YzF/moGV0ykdIvPXLa6CisfKYdf2yrfdtDijEUJPuI=;
-        b=kZw2qp1fqzn/11TXztXmeboNZn+S/94NltYlqBuJzWhuN6PSawQ6kygf2qfhUEuxOn
-         jZ39zJQCcC/KfT0/sLA8dxxzyKDDuSnxT3E4ycdOqRPKrBd+wPVSjvD4FpJ/UaYtUzfN
-         jyD1IG61jopdRT5jfxqPJFi+zGSv0t8R0IH/YKCfNn4rGlagjYqJ9mtEHvAX/qHRAvmG
-         LvLYTYAnJRZrviGu+JwpmjH+EQkZeBlKqEayJcfGMIg/A8DlRizFnt1BrvC+x5JaNsh/
-         bkS+08klYM8jOOCQfUQbi98cIG3foD7iYgmWNOQXVSU0N7NmuPFTDHsvCniJAETgzTcA
-         89Kg==
+        bh=2odXpn4NqvflBREYUYmO1+1RxmW+GuL0cfDw3Dw0WVQ=;
+        b=M5LVaRcVeMUdyxjTy9X4a749CDwTC2L+S1rGrABeAnCVmMLXlZUhhSAGPfNkGkJs8+
+         JQjk61NYK23w4PK9C0W4lFUDAlxAihIBcBlh5KFv0vIjI+zlcJ46UWwxoD0XeXTBsEfr
+         myKPItxzYkFMNKpkcL0ZAjkHPWipe+wWSeEH1gOtGAOvMwo+UOQufTqB4HB+R8e8s9NO
+         KStZG2zKWuyt6NYOGbHGPOOIVDtWccQdJ6HoEv57uZVC2DzZfmcc4GBuAjSVO2EBPEgA
+         zjCxb3hQevi+8G8WdEd0TejJz+EX0kRTiWQHwaNlNeuWmuTtPK+kFS5NWo5mwKzC3g3p
+         Lrjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9YzF/moGV0ykdIvPXLa6CisfKYdf2yrfdtDijEUJPuI=;
-        b=XrqhPDx6IS9E46Ttv4q1NK8DYFTDkGJTJx0tV9vJtBfLnBCSOsZ7BWpPRPrZEDLFXv
-         qiDth3bP4U46Kvc5n/0p11jHnrPe50z1WFr4P4KOkD5GFLXFef5D6y8CXSKh/OmQ+9h6
-         vInDbY0KCR6cocLwMqvYDFb0vMD6O1Ray62qEz4t31DTyNEe856YsABsDFS8td4K7d76
-         A54vJRs40aLC46e/iMMSMTsADCoXAzc/pCB5GVNE50olTKGJ72Hc+PcJebCB9Xid615G
-         wjYUbVhLtMOL21XYRve1+QYHl1IoRtCcuqEPhQ4rZIFVjfx1IL56gBANA/cZ5kKmdfvI
-         9ZKQ==
-X-Gm-Message-State: AJIora9pUMoDS5wr0sgKnhOOkwKJCeNO5v5e0x4NOjo/pKaT35dGkDZt
-        qU7J3dBfdknVy7xoExQIf3sg0npsCuV1iw==
-X-Google-Smtp-Source: AGRyM1tTz/84Id/kCPHS/5up9fpPurIKbeeCVAo2XxHNrBTI9XHmL66WhjTosvTu54j7SvnhOBkQeg==
-X-Received: by 2002:a05:6512:39c8:b0:48a:7816:1f7f with SMTP id k8-20020a05651239c800b0048a78161f7fmr7251843lfu.571.1658904227638;
-        Tue, 26 Jul 2022 23:43:47 -0700 (PDT)
+        bh=2odXpn4NqvflBREYUYmO1+1RxmW+GuL0cfDw3Dw0WVQ=;
+        b=nYuqwcZ3hyjwmMMwDucQlYxuF6o56DXRJH8L7S1p+7xTvSBN/KjFOosDOVkMRB+74V
+         n/BR1tDS+X7KKlxxtl2eW2MLzC58WJ0smyz3q0X3Gp2OaIiwKJUUL7aT4q9tYqNcjAYK
+         9oNsB0//Hysgl2IADLD5YfjywY8HvlXyxGlK3oaASP0jHnnvCl91ug126Vgz4ElFyU2i
+         6onjbSuERrW0ls2xPnOW5IlfXJjqEbvsyGB1uF87F0eX857TzgBiM51kfRHizCG8jETn
+         pxBNVVJsI7COdWoTkvk30hMkqK95Baufnmwj9eHVOSZ6wg27sykQG990qpiAYLPNxehp
+         k/6g==
+X-Gm-Message-State: AJIora/MawhFbft2lp1Y12SA/Me5Yx5l/YnqPp6gaJ8IlchBlRaB7hJx
+        iTsIbCwhPYRri/UbnWGCs7LgLkUcq5eVqA==
+X-Google-Smtp-Source: AGRyM1v9ZHWvAdoM5hxEHP3+vt59f9C0lTTPauONXgBFyLTQhLSEZgKMsfzvVEnMO3r5sBQvh/at2Q==
+X-Received: by 2002:a2e:93c8:0:b0:24d:b348:b070 with SMTP id p8-20020a2e93c8000000b0024db348b070mr7445132ljh.434.1658904229157;
+        Tue, 26 Jul 2022 23:43:49 -0700 (PDT)
 Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
-        by smtp.gmail.com with ESMTPSA id w19-20020a05651234d300b0048a97a1df02sm1157231lfr.6.2022.07.26.23.43.46
+        by smtp.gmail.com with ESMTPSA id w19-20020a05651234d300b0048a97a1df02sm1157231lfr.6.2022.07.26.23.43.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 23:43:47 -0700 (PDT)
+        Tue, 26 Jul 2022 23:43:48 -0700 (PDT)
 From:   Marcin Wojtas <mw@semihalf.com>
 To:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         netdev@vger.kernel.org
@@ -59,9 +59,9 @@ Cc:     rafael@kernel.org, andriy.shevchenko@linux.intel.com,
         linux@armlinux.org.uk, hkallweit1@gmail.com, gjb@semihalf.com,
         mw@semihalf.com, jaz@semihalf.com, tn@semihalf.com,
         Samer.El-Haj-Mahmoud@arm.com, upstream@semihalf.com
-Subject: [net-next: PATCH v3 6/8] net: core: switch to fwnode_find_net_device_by_node()
-Date:   Wed, 27 Jul 2022 08:43:19 +0200
-Message-Id: <20220727064321.2953971-7-mw@semihalf.com>
+Subject: [net-next: PATCH v3 7/8] net: mdio: introduce fwnode_mdiobus_register_device()
+Date:   Wed, 27 Jul 2022 08:43:20 +0200
+Message-Id: <20220727064321.2953971-8-mw@semihalf.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20220727064321.2953971-1-mw@semihalf.com>
 References: <20220727064321.2953971-1-mw@semihalf.com>
@@ -77,134 +77,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A helper function which allows getting the struct net_device pointer
-associated with a given device tree node can be more generic and
-also support alternative hardware description. Switch to fwnode_
-and update the only existing caller in DSA subsystem.
-For that purpose use newly added fwnode_dev_node_match helper routine.
+As a preparation patch to extend MDIO capabilities in the ACPI world,
+introduce fwnode_mdiobus_register_device() to register non-PHY
+devices on the mdiobus.
+
+Use the newly introduced routine instead of of_mdiobus_register_device().
 
 Signed-off-by: Marcin Wojtas <mw@semihalf.com>
 ---
- include/linux/etherdevice.h |  1 +
- include/linux/of_net.h      |  6 -----
- net/core/net-sysfs.c        | 25 ++++++--------------
- net/dsa/dsa2.c              |  3 ++-
- 4 files changed, 10 insertions(+), 25 deletions(-)
+ include/linux/fwnode_mdio.h    |  3 ++
+ drivers/net/mdio/fwnode_mdio.c | 29 ++++++++++++++++++
+ drivers/net/mdio/of_mdio.c     | 32 +-------------------
+ 3 files changed, 33 insertions(+), 31 deletions(-)
 
-diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
-index 92b10e67d5f8..a335775af244 100644
---- a/include/linux/etherdevice.h
-+++ b/include/linux/etherdevice.h
-@@ -35,6 +35,7 @@ int nvmem_get_mac_address(struct device *dev, void *addrbuf);
- int device_get_mac_address(struct device *dev, char *addr);
- int device_get_ethdev_address(struct device *dev, struct net_device *netdev);
- int fwnode_get_mac_address(struct fwnode_handle *fwnode, char *addr);
-+struct net_device *fwnode_find_net_device_by_node(struct fwnode_handle *fwnode);
+diff --git a/include/linux/fwnode_mdio.h b/include/linux/fwnode_mdio.h
+index 98755b8c6c8a..39d74c5d1bb0 100644
+--- a/include/linux/fwnode_mdio.h
++++ b/include/linux/fwnode_mdio.h
+@@ -16,6 +16,9 @@ int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+ 				struct fwnode_handle *child, u32 addr);
  
- u32 eth_get_headlen(const struct net_device *dev, const void *data, u32 len);
- __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
-diff --git a/include/linux/of_net.h b/include/linux/of_net.h
-index 0484b613ca64..f672f831292d 100644
---- a/include/linux/of_net.h
-+++ b/include/linux/of_net.h
-@@ -15,7 +15,6 @@ struct net_device;
- extern int of_get_phy_mode(struct device_node *np, phy_interface_t *interface);
- extern int of_get_mac_address(struct device_node *np, u8 *mac);
- int of_get_ethdev_address(struct device_node *np, struct net_device *dev);
--extern struct net_device *of_find_net_device_by_node(struct device_node *np);
- #else
- static inline int of_get_phy_mode(struct device_node *np,
- 				  phy_interface_t *interface)
-@@ -32,11 +31,6 @@ static inline int of_get_ethdev_address(struct device_node *np, struct net_devic
- {
- 	return -ENODEV;
++int fwnode_mdiobus_register_device(struct mii_bus *mdio,
++				   struct fwnode_handle *child, u32 addr);
++
+ int fwnode_phy_register_fixed_link(struct fwnode_handle *fwnode);
+ 
+ void fwnode_phy_deregister_fixed_link(struct fwnode_handle *fwnode);
+diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+index 454fdae24150..3743f34e7c2d 100644
+--- a/drivers/net/mdio/fwnode_mdio.c
++++ b/drivers/net/mdio/fwnode_mdio.c
+@@ -149,6 +149,35 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
  }
+ EXPORT_SYMBOL(fwnode_mdiobus_register_phy);
+ 
++int fwnode_mdiobus_register_device(struct mii_bus *mdio,
++				   struct fwnode_handle *child, u32 addr)
++{
++	struct mdio_device *mdiodev;
++	int rc;
++
++	mdiodev = mdio_device_create(mdio, addr);
++	if (IS_ERR(mdiodev))
++		return PTR_ERR(mdiodev);
++
++	/* Associate the fwnode with the device structure so it
++	 * can be looked up later.
++	 */
++	device_set_node(&mdiodev->dev, child);
++
++	/* All data is now stored in the mdiodev struct; register it. */
++	rc = mdio_device_register(mdiodev);
++	if (rc) {
++		mdio_device_free(mdiodev);
++		fwnode_handle_put(child);
++		return rc;
++	}
++
++	dev_dbg(&mdio->dev, "registered mdio device %p fwnode at address %i\n",
++		child, addr);
++	return 0;
++}
++EXPORT_SYMBOL(fwnode_mdiobus_register_device);
++
+ /*
+  * fwnode_phy_is_fixed_link() and fwnode_phy_register_fixed_link() must
+  * support two bindings:
+diff --git a/drivers/net/mdio/of_mdio.c b/drivers/net/mdio/of_mdio.c
+index 409da6e92f7d..bd941da030bb 100644
+--- a/drivers/net/mdio/of_mdio.c
++++ b/drivers/net/mdio/of_mdio.c
+@@ -48,36 +48,6 @@ static int of_mdiobus_register_phy(struct mii_bus *mdio,
+ 	return fwnode_mdiobus_register_phy(mdio, of_fwnode_handle(child), addr);
+ }
+ 
+-static int of_mdiobus_register_device(struct mii_bus *mdio,
+-				      struct device_node *child, u32 addr)
+-{
+-	struct fwnode_handle *fwnode = of_fwnode_handle(child);
+-	struct mdio_device *mdiodev;
+-	int rc;
 -
--static inline struct net_device *of_find_net_device_by_node(struct device_node *np)
--{
--	return NULL;
--}
- #endif
- 
- #endif /* __LINUX_OF_NET_H */
-diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
-index d61afd21aab5..fc972545aaea 100644
---- a/net/core/net-sysfs.c
-+++ b/net/core/net-sysfs.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/capability.h>
-+#include <linux/etherdevice.h>
- #include <linux/kernel.h>
- #include <linux/netdevice.h>
- #include <linux/if_arp.h>
-@@ -1935,38 +1936,26 @@ static struct class net_class __ro_after_init = {
- 	.get_ownership = net_get_ownership,
- };
- 
--#ifdef CONFIG_OF
--static int of_dev_node_match(struct device *dev, const void *data)
--{
--	for (; dev; dev = dev->parent) {
--		if (dev->of_node == data)
--			return 1;
+-	mdiodev = mdio_device_create(mdio, addr);
+-	if (IS_ERR(mdiodev))
+-		return PTR_ERR(mdiodev);
+-
+-	/* Associate the OF node with the device structure so it
+-	 * can be looked up later.
+-	 */
+-	fwnode_handle_get(fwnode);
+-	device_set_node(&mdiodev->dev, fwnode);
+-
+-	/* All data is now stored in the mdiodev struct; register it. */
+-	rc = mdio_device_register(mdiodev);
+-	if (rc) {
+-		mdio_device_free(mdiodev);
+-		of_node_put(child);
+-		return rc;
 -	}
 -
+-	dev_dbg(&mdio->dev, "registered mdio device %pOFn at address %i\n",
+-		child, addr);
 -	return 0;
 -}
 -
- /*
-- * of_find_net_device_by_node - lookup the net device for the device node
-- * @np: OF device node
-+ * fwnode_find_net_device_by_node - lookup the net device for the device fwnode
-+ * @fwnode: firmware node
-  *
-- * Looks up the net_device structure corresponding with the device node.
-+ * Looks up the net_device structure corresponding with the fwnode.
-  * If successful, returns a pointer to the net_device with the embedded
-  * struct device refcount incremented by one, or NULL on failure. The
-  * refcount must be dropped when done with the net_device.
-  */
--struct net_device *of_find_net_device_by_node(struct device_node *np)
-+struct net_device *fwnode_find_net_device_by_node(struct fwnode_handle *fwnode)
- {
- 	struct device *dev;
+ /* The following is a list of PHY compatible strings which appear in
+  * some DTBs. The compatible string is never matched against a PHY
+  * driver, so is pointless. We only expect devices which are not PHYs
+@@ -186,7 +156,7 @@ int of_mdiobus_register(struct mii_bus *mdio, struct device_node *np)
+ 		if (of_mdiobus_child_is_phy(child))
+ 			rc = of_mdiobus_register_phy(mdio, child, addr);
+ 		else
+-			rc = of_mdiobus_register_device(mdio, child, addr);
++			rc = fwnode_mdiobus_register_device(mdio, of_fwnode_handle(child), addr);
  
--	dev = class_find_device(&net_class, NULL, np, of_dev_node_match);
-+	dev = class_find_device(&net_class, NULL, fwnode, fwnode_find_parent_dev_match);
- 	if (!dev)
- 		return NULL;
- 
- 	return to_net_dev(dev);
- }
--EXPORT_SYMBOL(of_find_net_device_by_node);
--#endif
-+EXPORT_SYMBOL(fwnode_find_net_device_by_node);
- 
- /* Delete sysfs entries but hold kobject reference until after all
-  * netdev references are gone.
-diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
-index 82fb3b009fb4..bba416eba9c2 100644
---- a/net/dsa/dsa2.c
-+++ b/net/dsa/dsa2.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/device.h>
-+#include <linux/etherdevice.h>
- #include <linux/err.h>
- #include <linux/list.h>
- #include <linux/netdevice.h>
-@@ -1498,7 +1499,7 @@ static int dsa_port_parse_fw(struct dsa_port *dp, struct fwnode_handle *fwnode)
- 		struct net_device *master;
- 		const char *user_protocol;
- 
--		master = of_find_net_device_by_node(to_of_node(ethernet));
-+		master = fwnode_find_net_device_by_node(ethernet);
- 		fwnode_handle_put(ethernet);
- 		if (!master)
- 			return -EPROBE_DEFER;
+ 		if (rc == -ENODEV)
+ 			dev_err(&mdio->dev,
 -- 
 2.29.0
 

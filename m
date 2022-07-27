@@ -2,133 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA12581F96
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 07:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B228581FA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 07:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiG0FjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 01:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
+        id S229709AbiG0FvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 01:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiG0FjX (ORCPT
+        with ESMTP id S229452AbiG0FvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 01:39:23 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0467E3B95B;
-        Tue, 26 Jul 2022 22:39:22 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id t1so25553943lft.8;
-        Tue, 26 Jul 2022 22:39:21 -0700 (PDT)
+        Wed, 27 Jul 2022 01:51:17 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77437E09F;
+        Tue, 26 Jul 2022 22:51:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TiljjiRdL3J7XgA9lRW8mh7Q8UMy2rckFdpaiD+6ujw=;
-        b=NztSDmjZzcPZTSmd5mq8HZlLFMGzHBXihUfv2sk5AX6Sm+oTSk2v97ABQJmVcRKGCr
-         nI7dnqm4kSht8qcX+gw4Q8cSGhYGf1bjKvSyIlN9SlgqU59J9Ul56QJLCovYcBnfmJRD
-         q6aLBlqsk7zmebygt0OPCeF5TLKGokvEcikOnaCurlpsi+kPxbBWQrZuG1kqY21lmCcZ
-         3xF9QLcn1wTH5Aw6y8NGMxumMK6ob4Yp4Odcw9uoMz45IJ5PJAb6xDLzXVmKOb/f79pv
-         oVNGbJSXYKtNM4EOmduPLzVooWUbOD9Ly63UwrLi11GBnoMikbrVq7T5U6J/Xx64KBWO
-         fmdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TiljjiRdL3J7XgA9lRW8mh7Q8UMy2rckFdpaiD+6ujw=;
-        b=OQzeH+sxY0XqUDhh7BpL4mOZa8qa9b0+sPHq7B+dSBooCdo/7+dC00ZWRlhRasho68
-         tBQEQSB8WATx04lQ0p8SmsJ9EWkTGQrejEFeH548S7hO3+GnbkC40EpGUfb8Un4l8pLo
-         Rz4azubXd/IU+4PAYCtODKhyiXIetfHE/TrpUatzpHOFIsGdVJ7kiAIfFTU2WuxiBKhj
-         Ac3HvZ40Z7Kx1pt0Z/c4u0ipSoU6GdmJwH5JIlQ6brVQb9acmm/Kw2qh84VtkkwfEk3J
-         3QItcKhmKKbMYmJZuShYP2N+vLGAgp7RIMQFytLt2G7Rz+Y5JqhLwoffFCSizSFTW5gf
-         f6qA==
-X-Gm-Message-State: AJIora/P7RG4SJPdd1eAnaA7IJNLpJwth4cpUZpXlgNNizxHkbDFtJyv
-        souG/rCwbQxeGHdfQcFVvh0PH6lZQQ86zn+C/Gs=
-X-Google-Smtp-Source: AGRyM1sj7CHKLLCJA3ZngRRcjw+xywD9YKDbSReMjh5p7lbqdpuRzGLay2un7mt8GHo/w/Z9ge1Msi88eyTx3z6We6w=
-X-Received: by 2002:a19:6d0d:0:b0:48a:8b3c:e28 with SMTP id
- i13-20020a196d0d000000b0048a8b3c0e28mr4826021lfc.265.1658900360081; Tue, 26
- Jul 2022 22:39:20 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658901075; x=1690437075;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VEjkzbDXO/nzCBnskeBQ348RYw6djOjzDmFL3vRyQ/g=;
+  b=j7uRRWF0CAKlANmW837i1FptpBZX00h30azdaIzrFSKlK1huM5Zkmr3N
+   RF96dVd3FlSdK2yQJ5d82qEgzNPJ9pZdBp3FmcGgpaCE4EF81ZWhlRTGg
+   xEKYc4vyWbjy5b1/47Y+O/ADtGnbOwNINfLMpWKVeAvRjyormxDfqIrnU
+   c=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Jul 2022 22:51:15 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 22:51:15 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Jul 2022 22:51:14 -0700
+Received: from [10.50.42.78] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Jul
+ 2022 22:51:11 -0700
+Message-ID: <e28ef7e2-c23a-f87b-09b2-958f2212c30e@quicinc.com>
+Date:   Wed, 27 Jul 2022 11:21:08 +0530
 MIME-Version: 1.0
-References: <20220717121124.154734-1-tmaimon77@gmail.com> <20220718125155.GA40038@minyard.net>
- <CAP6Zq1haOErfj2HZkqKwXZKr3+QvWP2VYK6QQOH5cjHYJ2rV0w@mail.gmail.com> <20220726194708.GO3834@minyard.net>
-In-Reply-To: <20220726194708.GO3834@minyard.net>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Wed, 27 Jul 2022 08:39:08 +0300
-Message-ID: <CAP6Zq1hHXiZw2a6+o30N-GUhcA_ZJoYH+wZa8AzLu3NmYST+kw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] char: ipmi: kcs: add Arbel NPCM8XX support
-To:     minyard@acm.org
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V3 2/2] arm64: dts: qcom: sc7280: Update lpassaudio clock
+ controller for resets
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_tdas@quicinc.com>
+References: <1658316144-16520-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1658316144-16520-3-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n53wdhH2P729KDDbghScCcU=4-sFmxVugyJgxmGeFs4mgw@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+In-Reply-To: <CAE-0n53wdhH2P729KDDbghScCcU=4-sFmxVugyJgxmGeFs4mgw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Corey,
 
-On Tue, 26 Jul 2022 at 22:47, Corey Minyard <minyard@acm.org> wrote:
->
-> On Tue, Jul 26, 2022 at 10:41:38PM +0300, Tomer Maimon wrote:
-> > Hi Corey,
-> >
-> >
-> > On Mon, 18 Jul 2022 at 15:51, Corey Minyard <minyard@acm.org> wrote:
-> > >
-> > > On Sun, Jul 17, 2022 at 03:11:22PM +0300, Tomer Maimon wrote:
-> > > > This patch set adds Arbel NPCM8XX Keyboard Controller Style (KCS) support to
-> > > > KCS NPCM driver.
-> > > >
-> > > > The NPCM KCS driver tested on NPCM845 evaluation board.
-> > >
-> > > This seems reasonable, I've pulled it into my tree.  If anyone has any
-> > > issues with this, please respond.
-> > >
-> > > -corey
-> > >
-> > > >
-> > > > Tomer Maimon (2):
-> > > >   dt-bindings: ipmi: Add npcm845 compatible
-> > > >   char: ipmi: modify NPCM KCS configuration
-> > > >
-> > > >  Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 5 +++--
-> > > >  drivers/char/ipmi/Kconfig                                  | 6 +++---
-> > > >  2 files changed, 6 insertions(+), 5 deletions(-)
-> > > >
-> > > > --
-> > > > 2.33.0
-> > > >
-> >
-> > Sorry but I need to do a little fix in the document file.
-> >
-> > Can I do it or have you already applied the patches?
->
-> At this point I'd prefer a patch on top of what is there.  5.19 isn't
-> released yet, so the window isn't open, but that will happen soon and I
-> don't want to rebase at this point.
-O.K. thanks,
-I will wait until 5.19 is released and then I will send the patch.
->
-> -corey
->
-> >
-> > Thanks,
-> >
-> > Tomer
+On 7/27/2022 6:52 AM, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-07-20 04:22:24)
+>> From: Taniya Das <quic_tdas@quicinc.com>
+>>
+>> The lpass audio supports TX/RX/WSA block resets. Also to keep
+>> consistency update lpasscore to lpass_core.
+> Consistency with what?
 
-Best regards,
 
-Tomer
+Hi Stephen,
+
+
+We got a comment to change this on previous posts, to keep consistency 
+with the other nodes like lpass_aon etc
+
+
+https://patchwork.kernel.org/project/linux-arm-msm/patch/20220503113246.13857-1-quic_tdas@quicinc.com/#24842497
+
+>> Fixes: 9499240d15f2 ("arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers")
+>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+>> ---
+>> Changes since v3:
+>>   - Remove the status="disabled" from lpasscc node.
+>>
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 71735bb..c641f0b 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -2184,6 +2184,7 @@
+>>                          power-domains = <&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
+>>                          #clock-cells = <1>;
+>>                          #power-domain-cells = <1>;
+>> +                       #reset-cells = <1>;
+> Is there a binding update for qcom,sc7280-lpassaudiocc?
+>
+>>                  };
+>>
+>>                  lpass_aon: clock-controller@3380000 {
+>> @@ -2191,13 +2192,13 @@
+>>                          reg = <0 0x03380000 0 0x30000>;
+>>                          clocks = <&rpmhcc RPMH_CXO_CLK>,
+>>                                 <&rpmhcc RPMH_CXO_CLK_A>,
+>> -                              <&lpasscore LPASS_CORE_CC_CORE_CLK>;
+>> +                              <&lpass_core LPASS_CORE_CC_CORE_CLK>;
+> Is this really necessary?
+>
+>>                          clock-names = "bi_tcxo", "bi_tcxo_ao", "iface";
+>>                          #clock-cells = <1>;
+>>                          #power-domain-cells = <1>;
+>>                  };
+>>
+>> -               lpasscore: clock-controller@3900000 {
+>> +               lpass_core: clock-controller@3900000 {
+> Is this really necessary?
+>
+>>                          compatible = "qcom,sc7280-lpasscorecc";
+>>                          reg = <0 0x03900000 0 0x50000>;
+>>                          clocks = <&rpmhcc RPMH_CXO_CLK>;

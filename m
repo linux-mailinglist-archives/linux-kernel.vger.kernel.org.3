@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49CC582CBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B005582CAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240379AbiG0Qtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
+        id S240527AbiG0Qtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240566AbiG0Qsh (ORCPT
+        with ESMTP id S240449AbiG0Qsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:48:37 -0400
+        Wed, 27 Jul 2022 12:48:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E3152FE3;
-        Wed, 27 Jul 2022 09:32:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5162561131;
+        Wed, 27 Jul 2022 09:32:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC388B821C5;
-        Wed, 27 Jul 2022 16:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF31C433C1;
-        Wed, 27 Jul 2022 16:32:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6710B821D0;
+        Wed, 27 Jul 2022 16:32:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBECC433D6;
+        Wed, 27 Jul 2022 16:32:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939547;
-        bh=WEuoNkNCmbfI/smKjyykrQDNsxLhwS75dQ9qBi0bW1M=;
+        s=korg; t=1658939550;
+        bh=0u1Q4T/coKPKlkRYB8LRz3wU3+rbSCklXjpL4Hkyeds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U+5qguhWyH/LjQctOxIUsZ6snleEqLQcJjyWmjQp6L+BuKfZSFIiMsHLRiBzweuF3
-         7Tqqx/WoHpLiZdc7jyb7y9vF9vdl/sabJV8279lH9eYOAB1gtJTuylA5NJRoz5Z9j/
-         Im7VXGG9rbS0z9/Bvu4i+p5zdLx0SdtnAsR06yi0=
+        b=Ys3SfmOY2ZvQtjqUamZWdKV5Ai9f1+MyiFzgLiLCVQgg+1LSk9LoQIr8HkEqsmZaQ
+         5mbzv3Wt/0Sf+pjZKxgmQxJ36doXCuTfRH9i2dI1UV1G4kt/MFlB86O9SCt7RRB35e
+         awjfyazj1clVvp84IIPHLaRUD3Q6nRmF8fjQzODA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, lee@kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Snowberg <eric.snowberg@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        John Haxby <john.haxby@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 004/105] lockdown: Fix kexec lockdown bypass with ima policy
-Date:   Wed, 27 Jul 2022 18:09:50 +0200
-Message-Id: <20220727161012.228499548@linuxfoundation.org>
+        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [PATCH 5.10 005/105] io_uring: Use original task for req identity in io_identity_cow()
+Date:   Wed, 27 Jul 2022 18:09:51 +0200
+Message-Id: <20220727161012.279068616@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
 References: <20220727161012.056867467@linuxfoundation.org>
@@ -55,57 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Snowberg <eric.snowberg@oracle.com>
+From: Lee Jones <lee@kernel.org>
 
-commit 543ce63b664e2c2f9533d089a4664b559c3e6b5b upstream.
+This issue is conceptually identical to the one fixed in 29f077d07051
+("io_uring: always use original task when preparing req identity"), so
+rather than reinvent the wheel, I'm shamelessly quoting the commit
+message from that patch - thanks Jens:
 
-The lockdown LSM is primarily used in conjunction with UEFI Secure Boot.
-This LSM may also be used on machines without UEFI.  It can also be
-enabled when UEFI Secure Boot is disabled.  One of lockdown's features
-is to prevent kexec from loading untrusted kernels.  Lockdown can be
-enabled through a bootparam or after the kernel has booted through
-securityfs.
+ "If the ring is setup with IORING_SETUP_IOPOLL and we have more than
+  one task doing submissions on a ring, we can up in a situation where
+  we assign the context from the current task rather than the request
+  originator.
 
-If IMA appraisal is used with the "ima_appraise=log" boot param,
-lockdown can be defeated with kexec on any machine when Secure Boot is
-disabled or unavailable.  IMA prevents setting "ima_appraise=log" from
-the boot param when Secure Boot is enabled, but this does not cover
-cases where lockdown is used without Secure Boot.
+  Always use req->task rather than assume it's the same as current.
 
-To defeat lockdown, boot without Secure Boot and add ima_appraise=log to
-the kernel command line; then:
+  No upstream patch exists for this issue, as only older kernels with
+  the non-native workers have this problem."
 
-  $ echo "integrity" > /sys/kernel/security/lockdown
-  $ echo "appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig" > \
-    /sys/kernel/security/ima/policy
-  $ kexec -ls unsigned-kernel
-
-Add a call to verify ima appraisal is set to "enforce" whenever lockdown
-is enabled.  This fixes CVE-2022-21505.
-
-Cc: stable@vger.kernel.org
-Fixes: 29d3c1c8dfe7 ("kexec: Allow kexec_file() with appropriate IMA policy when locked down")
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-Reviewed-by: John Haxby <john.haxby@oracle.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: io-uring@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Fixes: 5c3462cfd123b ("io_uring: store io_identity in io_uring_task")
+Signed-off-by: Lee Jones <lee@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/ima/ima_policy.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ fs/io_uring.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1805,6 +1805,10 @@ bool ima_appraise_signature(enum kernel_
- 	if (id >= READING_MAX_ID)
- 		return false;
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -1325,7 +1325,7 @@ static void io_req_clean_work(struct io_
+  */
+ static bool io_identity_cow(struct io_kiocb *req)
+ {
+-	struct io_uring_task *tctx = current->io_uring;
++	struct io_uring_task *tctx = req->task->io_uring;
+ 	const struct cred *creds = NULL;
+ 	struct io_identity *id;
  
-+	if (id == READING_KEXEC_IMAGE && !(ima_appraise & IMA_APPRAISE_ENFORCE)
-+	    && security_locked_down(LOCKDOWN_KEXEC))
-+		return false;
-+
- 	func = read_idmap[id] ?: FILE_CHECK;
- 
- 	rcu_read_lock();
 
 

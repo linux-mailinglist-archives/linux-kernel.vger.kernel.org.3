@@ -2,92 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0751A582900
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FB7582906
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234287AbiG0Ovc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        id S232729AbiG0Ov5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbiG0OvZ (ORCPT
+        with ESMTP id S234238AbiG0Ovu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:51:25 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A87E4330B;
-        Wed, 27 Jul 2022 07:51:24 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id z23so31661241eju.8;
-        Wed, 27 Jul 2022 07:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BcjOvUvgWV3BAQ3E9l0s9PTFaWNeusUy+QCOuPABOmE=;
-        b=aIlAHoCIkpUuoFHze+Z/HfYl16wa//iWgR50y4BIOQG12KxZNheuNuPx4QaMsPcHqm
-         mnZTKT30y4hERKheVcKgOWuc9ILKvw4bvMHYTknr/uVZW9ct0Ca6BFmzjcfx3DyePj7n
-         HAYQ76lfQFgdfuGwema7jPQu6LQk2DhfWdQ+oPd0fihedkj3mLKCQblU5z98ZVBTHIge
-         fh3OjF7BjuZxDumYWnhc6u6sn5U4IOAsTsRUuxARtB96zK69iLbRdwMg2dskRxnAox0s
-         zLu1DF5KshQ0UR0ZaWhIoIktCXouEHktxJT3w+9LNU1l51A511dTlxH59oI4qZkxWCf1
-         P9UA==
+        Wed, 27 Jul 2022 10:51:50 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232FD42AE9;
+        Wed, 27 Jul 2022 07:51:50 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id v185so13704330ioe.11;
+        Wed, 27 Jul 2022 07:51:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=BcjOvUvgWV3BAQ3E9l0s9PTFaWNeusUy+QCOuPABOmE=;
-        b=H8CP0P7uX3xoDSnLDDnBQ+6g4o+tt6oznWODDswGy2UXsKxWzBMDH0E5gT5rIBH6ct
-         2FsC56XejELVFUp/moitUYtkbLllUwUxj2EPouYK0OzvBJN0K3/UWN1CNFjxiNf9+yiO
-         nPylJLcZ5cJ6ChWaRjuMgqhcmZlpRIC3U4t3krhoMAAfPVUSgmqkj1izNxtVlS+L357I
-         7nelT7NDKOtjRHbELu85US9jgJ92PQOsjaCfltvAllMj+SZQ1gdVMXjNPUCkLGQ6cJjl
-         dLCIAFfPobZXPz3fbmdJnq1m4c5QFrL3HYH/Ur4KDy3mBXLxPpmOsXwMvobtEAt1jcRt
-         NtJQ==
-X-Gm-Message-State: AJIora8h7igH6mkcL5He9rgfFZXV9eDbj38s7jZEqdJE1CJ3pNgb+ljL
-        SVnkoqA7h4QphF7GqfDFIJ8=
-X-Google-Smtp-Source: AGRyM1s+7nwMGXZmSD9whtEJSdR5QkrRdiRbcb5I4XYYYpgtg2Y/shyvcZjjk5AcViB/yqWvzIj8OQ==
-X-Received: by 2002:a17:907:7f1c:b0:72b:6e63:1798 with SMTP id qf28-20020a1709077f1c00b0072b6e631798mr17622362ejc.538.1658933482763;
-        Wed, 27 Jul 2022 07:51:22 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id gr19-20020a170906e2d300b0072b592ee073sm7808216ejb.147.2022.07.27.07.51.21
+        bh=xCokfXhPR4KTF41sdrZm+RqhxEGMWVkr/Hg5KMBHFR8=;
+        b=H7KppZWnYL7txUh3Yivu8Z8ktrMODqMaki4KRP3lqpqZoGRZE0C25ZCDF5VE4zX14/
+         ujLlFL7993L/tnIIopWsa9aMRyei6SEG/266ztE5r256SlRK5c3hJyGTCNV2mi6+1yJH
+         s1esC8a9O7gj7cAXb7JrtGfZxVxMDSkGZrt16HLuim5xolnS00SzIinb6o9KxZ/Org9P
+         xr4WAqRQr/srv8u91w0bPghV43MyURbv8R95Ezh/tdpQV8xtd5Rxuyy/3sJxfVSAgyr/
+         zQBQCpaVSjbl/rd5D/OGgFeK5803nY/dwyGmICnCVtmzcaEGkObVNntreRmVWLnPrphh
+         oH6Q==
+X-Gm-Message-State: AJIora+ot8LpXgio4Ho2vExDE3fYcUMGC63N+MdboeaeULOhdeubCe62
+        2b6na9G1ePFISUVH9AA0Rr6YS4+kYg==
+X-Google-Smtp-Source: AGRyM1sdrzFHIbGmxlbzQsvgmhTb+u6PlXR7h1s1EkyZ/uFrpL41TeK9mHOW3wo0afjLUrYDMRJkHQ==
+X-Received: by 2002:a05:6638:250d:b0:340:4915:263 with SMTP id v13-20020a056638250d00b0034049150263mr9036435jat.17.1658933509322;
+        Wed, 27 Jul 2022 07:51:49 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id b11-20020a026f4b000000b0033158c4a312sm7921935jae.55.2022.07.27.07.51.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 07:51:22 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 17:51:19 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v5 06/14] net: dsa: qca8k: move mib init
- function to common code
-Message-ID: <20220727145119.cruovluea4go7yl7@skbuf>
-References: <20220727113523.19742-1-ansuelsmth@gmail.com>
- <20220727113523.19742-1-ansuelsmth@gmail.com>
- <20220727113523.19742-7-ansuelsmth@gmail.com>
- <20220727113523.19742-7-ansuelsmth@gmail.com>
+        Wed, 27 Jul 2022 07:51:49 -0700 (PDT)
+Received: (nullmailer pid 2644092 invoked by uid 1000);
+        Wed, 27 Jul 2022 14:51:47 -0000
+Date:   Wed, 27 Jul 2022 08:51:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Cristian Pop <cristian.pop@analog.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: iio/dac: adi,ad5766: Add missing type to
+ 'output-range-microvolts'
+Message-ID: <20220727145147.GA2644033-robh@kernel.org>
+References: <20220719215152.1877776-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220727113523.19742-7-ansuelsmth@gmail.com>
- <20220727113523.19742-7-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220719215152.1877776-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 01:35:15PM +0200, Christian Marangi wrote:
-> The same mib function is used by drivers based on qca8k family switch.
-> Move it to common code to make it accessible also by other drivers.
+On Tue, 19 Jul 2022 15:51:52 -0600, Rob Herring wrote:
+> 'output-range-microvolts' is missing a type definition. '-microvolts' is
+> not a standard unit (should be '-microvolt'). As the property is already
+> in use, add a type reference.
 > 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
+>  Documentation/devicetree/bindings/iio/dac/adi,ad5766.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Applied, thanks!

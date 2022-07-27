@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6F0582E5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96465582D36
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiG0RLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S240647AbiG0Qxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiG0RLT (ORCPT
+        with ESMTP id S240673AbiG0QwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:11:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3811474DCD;
-        Wed, 27 Jul 2022 09:41:31 -0700 (PDT)
+        Wed, 27 Jul 2022 12:52:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241054F185;
+        Wed, 27 Jul 2022 09:34:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7803AB821D4;
-        Wed, 27 Jul 2022 16:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B199BC433C1;
-        Wed, 27 Jul 2022 16:41:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F5F5619FF;
+        Wed, 27 Jul 2022 16:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E2F4C433C1;
+        Wed, 27 Jul 2022 16:34:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940088;
-        bh=0kYquqDGhF8Z1zRpTW2BhTWtRXVOwSnNBp010GmvBlM=;
+        s=korg; t=1658939661;
+        bh=irdUX5ecktLkYzxOiiVDLC72L1Te06yr2ZR4h6ykyLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D1d6s3zmfXxDwQs4GghpmFC214OgxFmxEN0qPc15JEaoYA3JZswzXjoCajywa+H64
-         Ty4tqdygo82ocrYdR5o7DwRUbDM3pw8qn0Whl4ZgtsQbV8W/+9OXwi9EOW3FPL5jJH
-         6zP93/vqa5VDkeo61uFThIpHI5rNUKY2Al7KQ6P8=
+        b=BKsMGOD/gKAPYEP/ZGy/DRKs7XzSZ4RKcTD2371UJvx7GciulqI696IYGtwWCWUd1
+         JEYEJGbl9YOnbpmSR2zL/NhjU4B6WAe1YKi578h1VNwcYR1Oinaqn2lvupCxpjeN5f
+         wxfYO6lRH/RXBodcAh0NvJCD+htB9UPdpdhVH3Ww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Yuchung Cheng <ycheng@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 099/201] tcp: Fix data-races around sysctl_tcp_fastopen.
-Date:   Wed, 27 Jul 2022 18:10:03 +0200
-Message-Id: <20220727161031.855970463@linuxfoundation.org>
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Carl Vanderlip <quic_carlv@quicinc.com>
+Subject: [PATCH 5.10 018/105] PCI: hv: Fix hv_arch_irq_unmask() for multi-MSI
+Date:   Wed, 27 Jul 2022 18:10:04 +0200
+Message-Id: <20220727161012.817332469@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,85 +55,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
 
-[ Upstream commit 5a54213318c43f4009ae158347aa6016e3b9b55a ]
+commit 455880dfe292a2bdd3b4ad6a107299fce610e64b upstream.
 
-While reading sysctl_tcp_fastopen, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+In the multi-MSI case, hv_arch_irq_unmask() will only operate on the first
+MSI of the N allocated.  This is because only the first msi_desc is cached
+and it is shared by all the MSIs of the multi-MSI block.  This means that
+hv_arch_irq_unmask() gets the correct address, but the wrong data (always
+0).
 
-Fixes: 2100c8d2d9db ("net-tcp: Fast Open base")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Acked-by: Yuchung Cheng <ycheng@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This can break MSIs.
+
+Lets assume MSI0 is vector 34 on CPU0, and MSI1 is vector 33 on CPU0.
+
+hv_arch_irq_unmask() is called on MSI0.  It uses a hypercall to configure
+the MSI address and data (0) to vector 34 of CPU0.  This is correct.  Then
+hv_arch_irq_unmask is called on MSI1.  It uses another hypercall to
+configure the MSI address and data (0) to vector 33 of CPU0.  This is
+wrong, and results in both MSI0 and MSI1 being routed to vector 33.  Linux
+will observe extra instances of MSI1 and no instances of MSI0 despite the
+endpoint device behaving correctly.
+
+For the multi-MSI case, we need unique address and data info for each MSI,
+but the cached msi_desc does not provide that.  However, that information
+can be gotten from the int_desc cached in the chip_data by
+compose_msi_msg().  Fix the multi-MSI case to use that cached information
+instead.  Since hv_set_msi_entry_from_desc() is no longer applicable,
+remove it.
+
+5.10 backport - removed unused hv_set_msi_entry_from_desc function from
+mshyperv.h instead of pci-hyperv.c. msi_entry.address/data.as_uint32
+changed to direct reference (as they are u32's, just sans union).
+
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/1651068453-29588-1-git-send-email-quic_jhugo@quicinc.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Carl Vanderlip <quic_carlv@quicinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/af_inet.c      | 2 +-
- net/ipv4/tcp.c          | 6 ++++--
- net/ipv4/tcp_fastopen.c | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/mshyperv.h     |    7 -------
+ drivers/pci/controller/pci-hyperv.c |    5 ++++-
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 781c595f6880..e4b2ced66261 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -220,7 +220,7 @@ int inet_listen(struct socket *sock, int backlog)
- 		 * because the socket was in TCP_LISTEN state previously but
- 		 * was shutdown() rather than close().
- 		 */
--		tcp_fastopen = sock_net(sk)->ipv4.sysctl_tcp_fastopen;
-+		tcp_fastopen = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen);
- 		if ((tcp_fastopen & TFO_SERVER_WO_SOCKOPT1) &&
- 		    (tcp_fastopen & TFO_SERVER_ENABLE) &&
- 		    !inet_csk(sk)->icsk_accept_queue.fastopenq.max_qlen) {
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index f853f34dfb79..1abdb8712655 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1159,7 +1159,8 @@ static int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg,
- 	struct sockaddr *uaddr = msg->msg_name;
- 	int err, flags;
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -247,13 +247,6 @@ bool hv_vcpu_is_preempted(int vcpu);
+ static inline void hv_apic_init(void) {}
+ #endif
  
--	if (!(sock_net(sk)->ipv4.sysctl_tcp_fastopen & TFO_CLIENT_ENABLE) ||
-+	if (!(READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen) &
-+	      TFO_CLIENT_ENABLE) ||
- 	    (uaddr && msg->msg_namelen >= sizeof(uaddr->sa_family) &&
- 	     uaddr->sa_family == AF_UNSPEC))
- 		return -EOPNOTSUPP;
-@@ -3626,7 +3627,8 @@ static int do_tcp_setsockopt(struct sock *sk, int level, int optname,
- 	case TCP_FASTOPEN_CONNECT:
- 		if (val > 1 || val < 0) {
- 			err = -EINVAL;
--		} else if (net->ipv4.sysctl_tcp_fastopen & TFO_CLIENT_ENABLE) {
-+		} else if (READ_ONCE(net->ipv4.sysctl_tcp_fastopen) &
-+			   TFO_CLIENT_ENABLE) {
- 			if (sk->sk_state == TCP_CLOSE)
- 				tp->fastopen_connect = val;
- 			else
-diff --git a/net/ipv4/tcp_fastopen.c b/net/ipv4/tcp_fastopen.c
-index 59412d6354a0..936544a4753e 100644
---- a/net/ipv4/tcp_fastopen.c
-+++ b/net/ipv4/tcp_fastopen.c
-@@ -338,7 +338,7 @@ static bool tcp_fastopen_no_cookie(const struct sock *sk,
- 				   const struct dst_entry *dst,
- 				   int flag)
- {
--	return (sock_net(sk)->ipv4.sysctl_tcp_fastopen & flag) ||
-+	return (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen) & flag) ||
- 	       tcp_sk(sk)->fastopen_no_cookie ||
- 	       (dst && dst_metric(dst, RTAX_FASTOPEN_NO_COOKIE));
- }
-@@ -353,7 +353,7 @@ struct sock *tcp_try_fastopen(struct sock *sk, struct sk_buff *skb,
- 			      const struct dst_entry *dst)
- {
- 	bool syn_data = TCP_SKB_CB(skb)->end_seq != TCP_SKB_CB(skb)->seq + 1;
--	int tcp_fastopen = sock_net(sk)->ipv4.sysctl_tcp_fastopen;
-+	int tcp_fastopen = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen);
- 	struct tcp_fastopen_cookie valid_foc = { .len = -1 };
- 	struct sock *child;
- 	int ret = 0;
--- 
-2.35.1
-
+-static inline void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+-					      struct msi_desc *msi_desc)
+-{
+-	msi_entry->address = msi_desc->msg.address_lo;
+-	msi_entry->data = msi_desc->msg.data;
+-}
+-
+ #else /* CONFIG_HYPERV */
+ static inline void hyperv_init(void) {}
+ static inline void hyperv_setup_mmu_ops(void) {}
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -1210,6 +1210,7 @@ static void hv_irq_unmask(struct irq_dat
+ 	struct msi_desc *msi_desc = irq_data_get_msi_desc(data);
+ 	struct irq_cfg *cfg = irqd_cfg(data);
+ 	struct hv_retarget_device_interrupt *params;
++	struct tran_int_desc *int_desc;
+ 	struct hv_pcibus_device *hbus;
+ 	struct cpumask *dest;
+ 	cpumask_var_t tmp;
+@@ -1224,6 +1225,7 @@ static void hv_irq_unmask(struct irq_dat
+ 	pdev = msi_desc_to_pci_dev(msi_desc);
+ 	pbus = pdev->bus;
+ 	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
++	int_desc = data->chip_data;
+ 
+ 	spin_lock_irqsave(&hbus->retarget_msi_interrupt_lock, flags);
+ 
+@@ -1231,7 +1233,8 @@ static void hv_irq_unmask(struct irq_dat
+ 	memset(params, 0, sizeof(*params));
+ 	params->partition_id = HV_PARTITION_ID_SELF;
+ 	params->int_entry.source = 1; /* MSI(-X) */
+-	hv_set_msi_entry_from_desc(&params->int_entry.msi_entry, msi_desc);
++	params->int_entry.msi_entry.address = int_desc->address & 0xffffffff;
++	params->int_entry.msi_entry.data = int_desc->data;
+ 	params->device_id = (hbus->hdev->dev_instance.b[5] << 24) |
+ 			   (hbus->hdev->dev_instance.b[4] << 16) |
+ 			   (hbus->hdev->dev_instance.b[7] << 8) |
 
 

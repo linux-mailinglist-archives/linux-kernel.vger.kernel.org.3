@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B727582A8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271BE582A97
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234822AbiG0QSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        id S233200AbiG0QVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbiG0QSk (ORCPT
+        with ESMTP id S234075AbiG0QVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:18:40 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED434AD7D;
-        Wed, 27 Jul 2022 09:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658938719; x=1690474719;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tBeOUp/yxaWMe5c9npreqRETmrBhESTwQGPebnMPCV8=;
-  b=WM6Zer+CYEHxp3MM/UrGAq+kb5Y9zI9bIJqfyt4yjQgtDWlrPiGd46BB
-   MlfW24giCYqtwn1VRqTXKCwGkEG0Ea3XP/n7SeDoyWK5ESGRYq0d2a++Q
-   bpucvPZtpPhYyGRQVE89XtvUF4kbjOmtY+2q9S9R4q3zP5bRVKsrO0Yd3
-   HU7/FfRVoB+dJGw55Ezqhznrc9D4+ls0SYKus5+kUexmT1YPE63QYBYUC
-   rZz/qn6yiV5VIsLSthg0B6haw3G24JV250wkg0N0REuyLo+EehCC5DhbI
-   neLaW3ZhuWQalWRIfa4xUn0TmvOGRAyZoS4xJ6uJNUqnRfZvXY1pGIXX0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="289473329"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="289473329"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 09:18:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="927851599"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Jul 2022 09:18:34 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGjk2-0008tK-0M;
-        Wed, 27 Jul 2022 16:18:34 +0000
-Date:   Thu, 28 Jul 2022 00:17:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34:
- warning: unused variable 'c8sectpfe_match'
-Message-ID: <202207280016.r8tOLF4N-lkp@intel.com>
+        Wed, 27 Jul 2022 12:21:32 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0796343E48;
+        Wed, 27 Jul 2022 09:21:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1658938862; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=YPp9A7wZ03tp8wezdjbFc7e9zwHpNpauHaJ6PHEKXYAihY+pGlTxgXZNIVVwMzJDCqoExmkzi+bP88Vs+c84o3IveIS0vlBR9TY6ieWSSQqFIt7ItCbxLv1/8+ZNksi6lMeMPg+lLvvwSVKOziC4MwzwgqqC5bK9eHPilrNGj1I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1658938862; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=9bWNAdarOcU8borJ9QY+qCVRT1DHj4b2kF/jYpSU85c=; 
+        b=WLnR68oCZhvr3LV8cR3r+pA1PahfvotNElQAGKwKistPSqtxzjgjDZuO+uSuL0Nea+ID0/WmdXNxQgb6mzCksukbuDYsRXUww3HbemDvK1iNcvR28RonnH6fwYPq8Qi633QtCoBwBKSdXeXcZTZHLxYKM3xZt3pNt9zulc/2OW0=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658938862;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=9bWNAdarOcU8borJ9QY+qCVRT1DHj4b2kF/jYpSU85c=;
+        b=WBiMOvQofgnmrlX/KDTIEWdpfV4rkfLrTG5khAOmhrYCG98rlbYRkEUNabWjw6nu
+        OFttNqXLjHsqjrq7SLioHW6hhVhlA9XdS14RGv9TzPfbf9FA1BKrD7RJauVo/ezCWMM
+        El4HJjMSakXH4IOQchuwITyfgJ3Cg3vVrwzdqWUQ=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1658938852066566.1813973782993; Wed, 27 Jul 2022 21:50:52 +0530 (IST)
+Date:   Wed, 27 Jul 2022 21:50:52 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "David Howells" <dhowells@redhat.com>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "linux-security-modules" <linux-security-module@vger.kernel.org>,
+        "linux-kernel-mentees" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "syzbot+c70d87ac1d001f29a058" 
+        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
+Message-ID: <182407602ce.190e58816827.7904364186178466266@siddh.me>
+In-Reply-To: <3558070.1658933200@warthog.procyon.org.uk>
+References: <1822b768504.1d4e377e236061.5518350412857967240@siddh.me> <20220723135447.199557-1-code@siddh.me> <Ytv/4Tljvlt0PJ2r@kroah.com> <3558070.1658933200@warthog.procyon.org.uk>
+Subject: Re: [PATCH] kernel/watch_queue: Make pipe NULL while clearing
+ watch_queue
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+On Wed, 27 Jul 2022 20:16:40 +0530  David Howells <dhowells@redhat.com> wrote:
+> Siddh Raman Pant <code@siddh.me> wrote:
+> 
+> > Greg KH <gregkh@linuxfoundation.org> wrote:
+> 
+> > > > - spin_unlock_bh(&wqueue->lock);
+> > > >   rcu_read_unlock();
+> > >
+> > > Also you now have a spinlock held when calling rcu_read_unlock(), are
+> > > you sure that's ok?
+> 
+> Worse, we have softirqs disabled still, which might cause problems for
+> rcu_read_unlock()?
+> 
+> > We logically should not do write operations in a read critical section, so the
+> > nulling of `wqueue->pipe->watch_queue` should happen after rcu_read_unlock().
+> > Also, since we already have a spinlock, we can use it to ensure the nulling.
+> > So I think it is okay.
+> 
+> Read/write locks are perhaps misnamed in this sense; they perhaps should be
+> shared/exclusive.  But, yes, we *can* do certain write operations with the
+> lock held - if we're careful.  Locks are required if we need to pairs of
+> related memory accesses; if we're only making a single non-dependent write,
+> then we don't necessarily need a write lock.
+> 
+> However, you're referring to RCU read lock.  That's a very special lock that
+> has to do with maintenance of persistence of objects without taking any other
+> lock.  The moment you drop that lock, anything you accessed under RCU protocol
+> rules should be considered to have evaporated.
+> 
+> Think of it more as a way to have a deferred destructor/deallocator.
+> 
+> So I would do:
+> 
+> +
+> +       /* Clearing the watch queue, so we should clean the associated pipe. */
+> +       if (wqueue->pipe) {
+> +               wqueue->pipe->watch_queue = NULL;
+> +               wqueue->pipe = NULL;
+> +       }
+> +
+>         spin_unlock_bh(&wqueue->lock);
+>         rcu_read_unlock();
+>  }
+> 
+> However, since you're now changing wqueue->pipe whilst a notification is being
+> posted, you need a barrier in post_one_notification() to prevent the compiler
+> from reloading the value:
+> 
+>         struct pipe_inode_info *pipe = READ_ONCE(wqueue->pipe);
+> 
+> David
+> 
 
-First bad commit (maybe != root cause):
+Thank you for explaining it!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   39c3c396f8131f3db454c80e0fcfcdc54ed9ec01
-commit: e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2 media: platform: place stm32/ and sti/ under st/ dir
-date:   4 months ago
-config: mips-buildonly-randconfig-r001-20220727 (https://download.01.org/0day-ci/archive/20220728/202207280016.r8tOLF4N-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e7b8153e2a4f0c9c8d1450aa7328d54ea64fe8b2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/ drivers/tty/serial/
+I will send a v3. Should I add a Suggested-by tag mentioning you?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1175:34: warning: unused variable 'c8sectpfe_match' [-Wunused-const-variable]
-   static const struct of_device_id c8sectpfe_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/c8sectpfe_match +1175 drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
-
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1174  
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30 @1175  static const struct of_device_id c8sectpfe_match[] = {
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1176  	{ .compatible = "st,stih407-c8sectpfe" },
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1177  	{ /* sentinel */ },
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1178  };
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1179  MODULE_DEVICE_TABLE(of, c8sectpfe_match);
-c5f5d0f99794cfb drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c Peter Griffin 2015-07-30  1180  
-
-:::::: The code at line 1175 was first introduced by commit
-:::::: c5f5d0f99794cfb675ecacfe37a1b33b352b9752 [media] c8sectpfe: STiH407/10 Linux DVB demux support
-
-:::::: TO: Peter Griffin <peter.griffin@linaro.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Siddh

@@ -2,128 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DEC582967
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42C0582979
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbiG0PQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S233848AbiG0PUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbiG0PQA (ORCPT
+        with ESMTP id S233642AbiG0PUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:16:00 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18033AB02
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:15:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j5Ry9zJ3csw3eqK7H4B7bzQ+IKLQdsNdUslJCHCYkR6MbDjLyWbq6866r1taPbzAoTU6UHGAQCa5zyj3cu7Nj0oTjQcqz+EoABgud5zmykbpGaFPsf9RUcK0LfHvLD652AqHQVX5GN/SMTbK62lQ4B16tgaFSnXnpUhP7K4An2hGK4uN2G9eiyPVp/RwHBaLPMcbTiWxLE2Ph8bdSbIqaK7oSK9fIQ7LGNqqYCUZ/B91FlyrZLqBJiKoodkXdxXmcWY3TyCtvvm1lJG+ncAXYxrG4S6EfIYM52Jk3nE0PBLYX3HU+xEmhlYx0xC+2GlFLBQlnjFsKn6jefqNT9Px2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A/NuTHojEuelbf6XTENMKI8DJF7F/2DrSH7wnyREkO4=;
- b=llkD1LJW11zb6NXBVjsb0iWMv3NM2+YEw8zPlvRh1KlXLX0t0/lEeI5XeizpVIX+NuZUu6OqxdDp2Y61nBK/0jpE0OBJ/mHQiWDOrPMcqt9AI+5UJvBEmBtCYgHXwVN28e9/O3hJEDgDz1Sn/cuF4AP9To8NyAoHGDHKR2XxJ7RBuIJjV8Ecle55h8V3KeYqzDt8xeqpK3iCbtNE6Qkl/Bi1x+l+hWU3kOKjUWoqkRdF1ZmbT+NViiuNh+Og9pc2phNqll1n8Sil5XZH0yeaReUKncomJzkI02bp9jpvm6sx2WZbXJqtEkBNqLdM7Z7i5tuVAyE4Boare3jVNDolTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A/NuTHojEuelbf6XTENMKI8DJF7F/2DrSH7wnyREkO4=;
- b=JV9ZBmZQgjjvw7Fbkrl7aPxcjJDkUaqp9QWUy0P7b1VXk/GpjP6rgcebz/+C4Zzl0MrIE0YKCLHHFlkiQYmokIMOzVthKPAkHBcYyrxS7gmSk8d27Kh91X/3mBRAZhP6whH1VBfeo3NRfltG8FiFQVItNPDv/DCBKoK4AvErg50=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by MWHPR12MB1247.namprd12.prod.outlook.com (2603:10b6:300:10::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Wed, 27 Jul
- 2022 15:15:55 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::6d50:f6c5:cea4:1d95]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::6d50:f6c5:cea4:1d95%7]) with mapi id 15.20.5458.025; Wed, 27 Jul 2022
- 15:15:55 +0000
-Message-ID: <1031eddb-4cfa-e94a-e77e-03aa3cb8b680@amd.com>
-Date:   Wed, 27 Jul 2022 20:50:17 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/amdgpu: fix i2s_pdata out of bound array access
-Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Sunil-kumar.Dommati@amd.com, David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        dan.carpenter@oracle.com
-References: <20220727144249.415228-1-Vijendar.Mukunda@amd.com>
- <CADnq5_PKjmNw+bAPCyDu_G=yNQcpJSpFd+EVzNwfNWzig8apFw@mail.gmail.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <CADnq5_PKjmNw+bAPCyDu_G=yNQcpJSpFd+EVzNwfNWzig8apFw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0187.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:be::10) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+        Wed, 27 Jul 2022 11:20:49 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23D35FE5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:20:48 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id 70so16434154pfx.1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fXbgfCs20nIBny0AEuL0qP1z9HJ+xwrZ9rBuN61bmCU=;
+        b=bv2pw1RfQwJv+QWkvayMp2r1aUYszimpAsG3MqiCg9btM5a/Ljzqk0nIjB6fVr5RSN
+         PUGQA76/xqL8mVeHfqAFT4xT8/Y/FRzJGN9GhttnIYxIOXTyX/VZZbAPsk1srL453ENH
+         KCLrLv3eT/19ujxfYmYqcvflLnofaqhTs3jgzcHLtXsNmt9F6AHUyVGy4dUVLAxB3NYB
+         ZyjobcaPHySw56zQONxOomI1ivMFJZFqTpBh6I6kfwlo4+HF3aT0QxOg15/tJT+Tt8GO
+         soJRM18qgmzqgSQfR5X5L4AP9X7embjX3fD7N5uovvJknKYsnTREohjLIolTVEg3ryV2
+         fIbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fXbgfCs20nIBny0AEuL0qP1z9HJ+xwrZ9rBuN61bmCU=;
+        b=eoWQaB0C33v+slSyqoeOTxLj8q/hLqKiKjP/4+CJh3/ne86Y1ZOBo5Yf0VFt3eX92m
+         BWjIwkzElkkQSzMWokmZ1NmZV3RWXGCf+4nN+fDkHCG260Y1cxD4RSgM6HjAoH23b0jM
+         mKmvYccDx/GeiXQcL3y7FN8rfc3bpAEfb0Udwd0a8rgTZj1PCeZ+6LSzcynsn6nFAeeA
+         9i8XH3LAapo9traOqE24CbUroIB2sIeI37HV58ac2GHjvMkvLXh+g+y+4F195/4BddT1
+         4G9toH8ShiXDExyDmoxS7E4JjqKZZJtAUIC36PZiIC8KZYyoXunctZuvFeuubfT6gZ6F
+         w2IQ==
+X-Gm-Message-State: AJIora+Thp3q9SgdcmSJTOVTRFFlV5Kduo1dv6uIJocUt3V/ElLdqr56
+        Ep90eF1gvLvWlwSjxC3Zkn0=
+X-Google-Smtp-Source: AGRyM1tOb0zSYA8vofxRyhdaTOQ2wNMqGb2pXBZtTHP+KXfbnhTXbMW1Y86I7bWL4zUVEVkJ8dkbDA==
+X-Received: by 2002:a65:498b:0:b0:412:8e4:2842 with SMTP id r11-20020a65498b000000b0041208e42842mr19255819pgs.71.1658935247776;
+        Wed, 27 Jul 2022 08:20:47 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:6:8000::a31c? ([2404:f801:9000:18:efed::a31c])
+        by smtp.gmail.com with ESMTPSA id 19-20020a17090a19d300b001f069352d73sm1850368pjj.25.2022.07.27.08.20.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 08:20:47 -0700 (PDT)
+Message-ID: <09574173-6a93-765e-a9e6-de12c8de2f32@gmail.com>
+Date:   Wed, 27 Jul 2022 23:20:43 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8e89f591-0d07-4f00-9574-08da6fe2e6a5
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1247:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: It9P2kacAdizA5JZEuRmWmyTLFnMZuNqCsmslynbIfLOa/Zbu7PDQLBXpELWTt2A1gZTiOzm1KRCQFseVtDLA50zFgrVbTmi/Ochu2OSM+lwaEvxeFAghpU/AFOwLbRe1VYfAB6+IPXydV6sW9esQYRTGueWxb0pBY7WAgsWTw7oKSr6uH+c8R4KkpiCBDZPAo6PEK22G5h+hRH4mxEkvno6dP2YU57Sk4U0Bw9wcRy+5cs0pcna51Suu+S6+mrJcYnsZ2B8CvO4t6i0Kx5dPQuFFMZvPrm8e9COY9e9kTysdMdsZ1VqiE21Cwbqna1g9qmQe//NTcxxkeo7MLcA0b/1o6PEBzz7tMn7qvcyF/uaDjtMp3sGsXN2gsxIBZPKv1V6cv2EF9YjFlrJmQso2F78wQJ3Q/utxNp09/ssWopLGnc+2bqarAvJqtJCY9zMoxsiAYBYNLqGUPcniIFFLjwefUVuKYE8BeANAeClVfnLQuzG8xTjHa5zPpOJ4bhm/KCRZX+lToCKWr9YmfgxqDMSskZ47w8O7htceJbr8vhuoaOomb4LOMiusDo+5HUiSmg4E8YpwUsgiGKsY5oRW0e0tsirl+HOkO8wxILrGtFzHT6yBFXFziC3wFfVTzf0l6405D18Dp18nuhcnxo12phsJue75T5MQ69E8qq0yVGu3ixgkNk8RoQ0OH1kfjtcKpUUuaqbZsw3PU39kU7k7euywLgz3dlW6QIBSb4qO5xSgGk+4M9pC9nVF7lFfEx/Lm9aZ2BQFey6IB/tb/3BdfEo6q5Xja+5BzkFZc/NrYWXlZ1uP95gXFEdkTlZzohCzAPd7+GU7OBLY/RqvlyRsg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(136003)(346002)(396003)(376002)(66946007)(31686004)(316002)(36756003)(83380400001)(38100700002)(6916009)(186003)(54906003)(53546011)(6506007)(4326008)(2906002)(8676002)(31696002)(66476007)(6666004)(41300700001)(6486002)(8936002)(478600001)(66556008)(26005)(2616005)(6512007)(5660300002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGIwWTF0Y0t0U0l6ZzdvSTIvWUJOMnVjMW0vclZ3RjBnM3hPd0xQbEVNdnZa?=
- =?utf-8?B?Wi9lUGdBTzZmeVM0QUVCVER2UFdlM20vK1dlM3pSQlhkS3hLOXpucG80UzJU?=
- =?utf-8?B?RkwzeUN5a2EvbXFXdy9uZTlXTGVIOGlzMVF3SGhvem9uaEZ4aTc2ZWNnZlNv?=
- =?utf-8?B?Qjh1cnFSbnRrUEQwcXRxTHZOQ0RmVE9NMEVRWjR0Nit3SFJxbmJCS2hSZ1Fx?=
- =?utf-8?B?aUd6Z1JIbFRvcVhDOTNGZzZ6T0hLZ04wcERGVnZlcTNrRHpGSmM4cGdrWXAx?=
- =?utf-8?B?OVJad2c5VlZJVHdTVjdWSngxVHphOFdBQzNjZkpXaWp2a1RrdFhPV3JFU29C?=
- =?utf-8?B?Y1NHT3VHNU9VUzdNOHJhK2RYSXVRQlB0c0NMSHRBWHkwYlNrQU5NU0hmRWl1?=
- =?utf-8?B?NlNrcGF1K09OdXQzWGsremgxK0xFRmlTZjM3MDN0VmRFZ1pjMmNmUE4ySld6?=
- =?utf-8?B?UVl4bVVNeWd5eENuMENrYWhTZHR6ZG9yTlVxeXFYUU12K0xsWnJwcjVwcUFx?=
- =?utf-8?B?cFlIUXVkVWZad2VCVExpd3VYaG5CUzlXOTJxQXljQXhCUG13S2RXQzZ5ZXpE?=
- =?utf-8?B?d20zeWViY0VuNW5hc1JiSWswTFJadmZmTlZtS0VUaXdMVXlxZllvLzFWM3hP?=
- =?utf-8?B?OEFXdjFHUi9nbm1Lc056OVJRZlZqVk1kMXd1aGsrdVNHRE9ETUVkbVZ6S2dO?=
- =?utf-8?B?WVFwZUZPSkRUU0RldWladjNOWkY4YjBCS2lXY09rYlMrYVMvM1hmR25WSzlr?=
- =?utf-8?B?Y25UT1RDV0c4dG1UTXV0SytleVl1akZaTU5JdnFqdHhodW5hMGtKaXordDVP?=
- =?utf-8?B?STg0V3FxL3JnSUFnbTFRczN5dTNwelk5K0w4dEhhTlMvOWkxaUpObE1rSllB?=
- =?utf-8?B?OXVvZUpMNjRPNnFISkNsUzJoTEg5OFRoVE5BbGRVclU1elVWdGUvQ3VGSTZ2?=
- =?utf-8?B?dndKQm1tazVHUFB5VzdMMFh6TVlONUU4eTRhVlYrRG1jZm4vUE4rMHlqc2k1?=
- =?utf-8?B?SFNxOVVtZ0VsZHArTzBOOG50Uy9NVFJyN2xJV1FsUElNcUVMdTY5bjM4N3lv?=
- =?utf-8?B?clBwYVByclJBR0tDK0dxME02d2xmOEMrTktwY1A5ajgyeEZiTTcvMVNFZGtU?=
- =?utf-8?B?TWFJa083UndUTEFJbEFWSmpLU3BEcGJBeDJhYThYcURlN0pQWEhFMEVtN3M4?=
- =?utf-8?B?bHZjL0tJcHFXMXhka0EwUFl5N0VhZ1RvUldhRGozK0g4ZmxUa0dHbGdma2dF?=
- =?utf-8?B?NWVWRXRPTCt4NTAzNGVraFBjL2IrV1JGOHJSUldjbXcwK1NDaWlPK0RpL0lr?=
- =?utf-8?B?aDlBZHcvU2RwbWZyaHJYYzBTSkRZdm1VSTVveko0QTJ4WllXOEVRbUhhZmtX?=
- =?utf-8?B?cWNNbUZmRjltMXdSeUh6WFZvYi9nd0xTWHNTVHd5aDRiN2Jxc2RvbXdYK3lR?=
- =?utf-8?B?YTFVaWhUQUZ1bE41MFI2UmpZNm1GbnM1eVZ5VW1aWFREY2M2ZUR3VlNBU1ll?=
- =?utf-8?B?MG9LcGdhU2xyYmdYVytjOC9HVkxLRk5VbVUrMVZWK2VxckNqcTRBNElOSWc3?=
- =?utf-8?B?S2pCd0trNlEwa3FqTkRvbjVKdktGM052K0V3cmIvMDNFN0JXVEhQS0tZUE9x?=
- =?utf-8?B?Wm1lQTJLMGJjV2VEd2ZTZFF0MzM0UUF5M09IMU5sbDN0NjRxTEx0K1JpM2U2?=
- =?utf-8?B?M1J6U3I1V0ZaQTlyNWc5bVJPNmlYd0c5K2xBb3grMWEwK2luYUE0SEtaeUFj?=
- =?utf-8?B?Y09wTDBDTzYxUGZWVGZXOVNHbmNENXpjMWpYamJwODVjZDJ5dFdZazJQN0ZY?=
- =?utf-8?B?azhoL25KTGYwTDV4empBUC9Zd012RlU4MTRFbFRxN1ZxS1E2R2w0aUxtMENo?=
- =?utf-8?B?VE1TYXhjMzRHZVBwWEhQNXEwblloL2RBNGhPbThIbnJWYWYzbEI5eTJjWmJI?=
- =?utf-8?B?VzJTVlFZVHB1Q2d0eTVmdE1NbXpUUnF2YmRpVExDeHJGZ1VWVXgxZHlXNmsy?=
- =?utf-8?B?bGIvN3ZKSEJLekNJWDZZc1VZbS9oRXpzdm10N2JqK2hYaEZYNEMxOGpYNlgr?=
- =?utf-8?B?SW9aK2RySlpnSEViZ1dDTWU5aERZaXRTUW5McnhvQlViK3Z1eG8vR2FQazZW?=
- =?utf-8?Q?DZxxUoNH6suaULPPjgLjtT6UO?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e89f591-0d07-4f00-9574-08da6fe2e6a5
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2022 15:15:55.2999
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KdPDrUreB8XIeGUguySN6m4SU6uy7nLwbXMWazCEdygq4GhLHdZuTTbESGLH0lo973yABspJ7XVC3Jx+1i+lKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1247
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [EXTERNAL] [PATCH] Revert "x86/sev: Expose sev_es_ghcb_hv_call()
+ for use by HyperV"
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+References: <YuFQJ9ynRk4QwFjn@zn.tnic>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <YuFQJ9ynRk4QwFjn@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,55 +77,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 8:25 PM, Alex Deucher wrote:
-> On Wed, Jul 27, 2022 at 10:42 AM Vijendar Mukunda
-> <Vijendar.Mukunda@amd.com> wrote:
->>
->> Fixed following Smatch static checker warning:
->>
->>     drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:393 acp_hw_init()
->>     error: buffer overflow 'i2s_pdata' 3 <= 3
->>     drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:396 acp_hw_init()
->>     error: buffer overflow 'i2s_pdata' 3 <= 3
->>
->> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
->> ---
->>  drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c | 8 --------
->>  1 file changed, 8 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
->> index bcc7ee02e0fc..6d72355ac492 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
->> @@ -390,14 +390,6 @@ static int acp_hw_init(void *handle)
->>                 i2s_pdata[2].i2s_reg_comp1 = ACP_BT_COMP1_REG_OFFSET;
->>                 i2s_pdata[2].i2s_reg_comp2 = ACP_BT_COMP2_REG_OFFSET;
->>
->> -               i2s_pdata[3].quirks = DW_I2S_QUIRK_COMP_REG_OFFSET;
->> -               switch (adev->asic_type) {
->> -               case CHIP_STONEY:
->> -                       i2s_pdata[3].quirks |= DW_I2S_QUIRK_16BIT_IDX_OVERRIDE;
->> -                       break;
->> -               default:
->> -                       break;
->> -               }
+On 7/27/2022 10:48 PM, Borislav Petkov wrote:
+> This reverts commit 007faec014cb5d26983c1f86fd08c6539b41392e.
 > 
-> Is this actually not used or should we just increase the allocation size?
+> Now that hyperv does its own protocol negotiation:
 > 
-> Alex
-it's my bad. i2s_pdata array size is 3. when we recently included code
-changes for JD platform , this piece of code was added mistakenly for
-Stoney platform switch case.
+>    49d6a3c062a1 ("x86/Hyper-V: Add SEV negotiate protocol support in Isolation VM")
+> 
+> revert this exposure of the sev_es_ghcb_hv_call() helper.
+> 
+> Cc: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> Cc: Wei Liu <wei.liu@kernel.org>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Link: https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20220614014553.1915929-1-ltykernel%40gmail.com&amp;data=05%7C01%7CTianyu.Lan%40microsoft.com%7Ca4ab2172b0c147eab3d608da6fdf0b7d%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C637945301113063277%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=1ITuubB%2FfGQ7PzGmKbEnJUt7zV8S3ZH4%2FKxq4e9%2FC88%3D&amp;reserved=0
+> ---
+> 
+> My plan is to queue this now and send it to Linus as an urgent fix so
+> that 5.19 gets released clean, without that export.
+> 
+> So if you folks see an issue, holler now pls.
+> 
+> Thx.
 
---
-Vijendar
+Reviewed-by：Tianyu Lan <tiala@microsoft.com>
+
 
 > 
->>                 adev->acp.acp_res[0].name = "acp2x_dma";
->>                 adev->acp.acp_res[0].flags = IORESOURCE_MEM;
->>                 adev->acp.acp_res[0].start = acp_base;
->> --
->> 2.25.1
->>
-
+>   arch/x86/include/asm/sev.h   |  7 +------
+>   arch/x86/kernel/sev-shared.c | 25 +++++++++----------------
+>   arch/x86/kernel/sev.c        | 17 ++++++++---------
+>   3 files changed, 18 insertions(+), 31 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> index 19514524f0f8..4a23e52fe0ee 100644
+> --- a/arch/x86/include/asm/sev.h
+> +++ b/arch/x86/include/asm/sev.h
+> @@ -72,7 +72,6 @@ static inline u64 lower_bits(u64 val, unsigned int bits)
+>   
+>   struct real_mode_header;
+>   enum stack_type;
+> -struct ghcb;
+>   
+>   /* Early IDT entry points for #VC handler */
+>   extern void vc_no_ghcb(void);
+> @@ -156,11 +155,7 @@ static __always_inline void sev_es_nmi_complete(void)
+>   		__sev_es_nmi_complete();
+>   }
+>   extern int __init sev_es_efi_map_ghcbs(pgd_t *pgd);
+> -extern enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+> -					  bool set_ghcb_msr,
+> -					  struct es_em_ctxt *ctxt,
+> -					  u64 exit_code, u64 exit_info_1,
+> -					  u64 exit_info_2);
+> +
+>   static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs)
+>   {
+>   	int rc;
+> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+> index b478edf43bec..3a5b0c9c4fcc 100644
+> --- a/arch/x86/kernel/sev-shared.c
+> +++ b/arch/x86/kernel/sev-shared.c
+> @@ -219,9 +219,10 @@ static enum es_result verify_exception_info(struct ghcb *ghcb, struct es_em_ctxt
+>   	return ES_VMM_ERROR;
+>   }
+>   
+> -enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
+> -				   struct es_em_ctxt *ctxt, u64 exit_code,
+> -				   u64 exit_info_1, u64 exit_info_2)
+> +static enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
+> +					  struct es_em_ctxt *ctxt,
+> +					  u64 exit_code, u64 exit_info_1,
+> +					  u64 exit_info_2)
+>   {
+>   	/* Fill in protocol and format specifiers */
+>   	ghcb->protocol_version = ghcb_version;
+> @@ -231,14 +232,7 @@ enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
+>   	ghcb_set_sw_exit_info_1(ghcb, exit_info_1);
+>   	ghcb_set_sw_exit_info_2(ghcb, exit_info_2);
+>   
+> -	/*
+> -	 * Hyper-V unenlightened guests use a paravisor for communicating and
+> -	 * GHCB pages are being allocated and set up by that paravisor. Linux
+> -	 * should not change the GHCB page's physical address.
+> -	 */
+> -	if (set_ghcb_msr)
+> -		sev_es_wr_ghcb_msr(__pa(ghcb));
+> -
+> +	sev_es_wr_ghcb_msr(__pa(ghcb));
+>   	VMGEXIT();
+>   
+>   	return verify_exception_info(ghcb, ctxt);
+> @@ -795,7 +789,7 @@ static enum es_result vc_handle_ioio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+>   		 */
+>   		sw_scratch = __pa(ghcb) + offsetof(struct ghcb, shared_buffer);
+>   		ghcb_set_sw_scratch(ghcb, sw_scratch);
+> -		ret = sev_es_ghcb_hv_call(ghcb, true, ctxt, SVM_EXIT_IOIO,
+> +		ret = sev_es_ghcb_hv_call(ghcb, ctxt, SVM_EXIT_IOIO,
+>   					  exit_info_1, exit_info_2);
+>   		if (ret != ES_OK)
+>   			return ret;
+> @@ -837,8 +831,7 @@ static enum es_result vc_handle_ioio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+>   
+>   		ghcb_set_rax(ghcb, rax);
+>   
+> -		ret = sev_es_ghcb_hv_call(ghcb, true, ctxt,
+> -					  SVM_EXIT_IOIO, exit_info_1, 0);
+> +		ret = sev_es_ghcb_hv_call(ghcb, ctxt, SVM_EXIT_IOIO, exit_info_1, 0);
+>   		if (ret != ES_OK)
+>   			return ret;
+>   
+> @@ -894,7 +887,7 @@ static enum es_result vc_handle_cpuid(struct ghcb *ghcb,
+>   		/* xgetbv will cause #GP - use reset value for xcr0 */
+>   		ghcb_set_xcr0(ghcb, 1);
+>   
+> -	ret = sev_es_ghcb_hv_call(ghcb, true, ctxt, SVM_EXIT_CPUID, 0, 0);
+> +	ret = sev_es_ghcb_hv_call(ghcb, ctxt, SVM_EXIT_CPUID, 0, 0);
+>   	if (ret != ES_OK)
+>   		return ret;
+>   
+> @@ -919,7 +912,7 @@ static enum es_result vc_handle_rdtsc(struct ghcb *ghcb,
+>   	bool rdtscp = (exit_code == SVM_EXIT_RDTSCP);
+>   	enum es_result ret;
+>   
+> -	ret = sev_es_ghcb_hv_call(ghcb, true, ctxt, exit_code, 0, 0);
+> +	ret = sev_es_ghcb_hv_call(ghcb, ctxt, exit_code, 0, 0);
+>   	if (ret != ES_OK)
+>   		return ret;
+>   
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index c05f0124c410..63dc626627a0 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -786,7 +786,7 @@ static int vmgexit_psc(struct snp_psc_desc *desc)
+>   		ghcb_set_sw_scratch(ghcb, (u64)__pa(data));
+>   
+>   		/* This will advance the shared buffer data points to. */
+> -		ret = sev_es_ghcb_hv_call(ghcb, true, &ctxt, SVM_VMGEXIT_PSC, 0, 0);
+> +		ret = sev_es_ghcb_hv_call(ghcb, &ctxt, SVM_VMGEXIT_PSC, 0, 0);
+>   
+>   		/*
+>   		 * Page State Change VMGEXIT can pass error code through
+> @@ -1212,8 +1212,7 @@ static enum es_result vc_handle_msr(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+>   		ghcb_set_rdx(ghcb, regs->dx);
+>   	}
+>   
+> -	ret = sev_es_ghcb_hv_call(ghcb, true, ctxt, SVM_EXIT_MSR,
+> -				  exit_info_1, 0);
+> +	ret = sev_es_ghcb_hv_call(ghcb, ctxt, SVM_EXIT_MSR, exit_info_1, 0);
+>   
+>   	if ((ret == ES_OK) && (!exit_info_1)) {
+>   		regs->ax = ghcb->save.rax;
+> @@ -1452,7 +1451,7 @@ static enum es_result vc_do_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt,
+>   
+>   	ghcb_set_sw_scratch(ghcb, ghcb_pa + offsetof(struct ghcb, shared_buffer));
+>   
+> -	return sev_es_ghcb_hv_call(ghcb, true, ctxt, exit_code, exit_info_1, exit_info_2);
+> +	return sev_es_ghcb_hv_call(ghcb, ctxt, exit_code, exit_info_1, exit_info_2);
+>   }
+>   
+>   /*
+> @@ -1628,7 +1627,7 @@ static enum es_result vc_handle_dr7_write(struct ghcb *ghcb,
+>   
+>   	/* Using a value of 0 for ExitInfo1 means RAX holds the value */
+>   	ghcb_set_rax(ghcb, val);
+> -	ret = sev_es_ghcb_hv_call(ghcb, true, ctxt, SVM_EXIT_WRITE_DR7, 0, 0);
+> +	ret = sev_es_ghcb_hv_call(ghcb, ctxt, SVM_EXIT_WRITE_DR7, 0, 0);
+>   	if (ret != ES_OK)
+>   		return ret;
+>   
+> @@ -1658,7 +1657,7 @@ static enum es_result vc_handle_dr7_read(struct ghcb *ghcb,
+>   static enum es_result vc_handle_wbinvd(struct ghcb *ghcb,
+>   				       struct es_em_ctxt *ctxt)
+>   {
+> -	return sev_es_ghcb_hv_call(ghcb, true, ctxt, SVM_EXIT_WBINVD, 0, 0);
+> +	return sev_es_ghcb_hv_call(ghcb, ctxt, SVM_EXIT_WBINVD, 0, 0);
+>   }
+>   
+>   static enum es_result vc_handle_rdpmc(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+> @@ -1667,7 +1666,7 @@ static enum es_result vc_handle_rdpmc(struct ghcb *ghcb, struct es_em_ctxt *ctxt
+>   
+>   	ghcb_set_rcx(ghcb, ctxt->regs->cx);
+>   
+> -	ret = sev_es_ghcb_hv_call(ghcb, true, ctxt, SVM_EXIT_RDPMC, 0, 0);
+> +	ret = sev_es_ghcb_hv_call(ghcb, ctxt, SVM_EXIT_RDPMC, 0, 0);
+>   	if (ret != ES_OK)
+>   		return ret;
+>   
+> @@ -1708,7 +1707,7 @@ static enum es_result vc_handle_vmmcall(struct ghcb *ghcb,
+>   	if (x86_platform.hyper.sev_es_hcall_prepare)
+>   		x86_platform.hyper.sev_es_hcall_prepare(ghcb, ctxt->regs);
+>   
+> -	ret = sev_es_ghcb_hv_call(ghcb, true, ctxt, SVM_EXIT_VMMCALL, 0, 0);
+> +	ret = sev_es_ghcb_hv_call(ghcb, ctxt, SVM_EXIT_VMMCALL, 0, 0);
+>   	if (ret != ES_OK)
+>   		return ret;
+>   
+> @@ -2197,7 +2196,7 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+>   		ghcb_set_rbx(ghcb, input->data_npages);
+>   	}
+>   
+> -	ret = sev_es_ghcb_hv_call(ghcb, true, &ctxt, exit_code, input->req_gpa, input->resp_gpa);
+> +	ret = sev_es_ghcb_hv_call(ghcb, &ctxt, exit_code, input->req_gpa, input->resp_gpa);
+>   	if (ret)
+>   		goto e_put;
+>   

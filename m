@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D1B582204
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207E958220F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiG0IZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 04:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
+        id S230389AbiG0I2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 04:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiG0IZJ (ORCPT
+        with ESMTP id S229604AbiG0I2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 04:25:09 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99195CE6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:25:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 49C4533A59;
-        Wed, 27 Jul 2022 08:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658910307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XYY/x95BQTCo7p5nmA5GQqvRLO4/w9jXUvzdB079WhA=;
-        b=z1SP2ty4T+GuZ1veAEfpCA/MrwMxYYUX9dzhBS5a5wJIDVJ1UetGZwtDWQnSNfdFIarGW/
-        xttJY/gunADg/GmMDXmFEhAJXvshqEPN3SF8Y3vxweuFNZCIIypYgs4Trb7c1WkML7vS+s
-        bt3d1HEtGArT3qE6hzWyYjnTfCYWijw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658910307;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XYY/x95BQTCo7p5nmA5GQqvRLO4/w9jXUvzdB079WhA=;
-        b=X0vNs04kTQBcvt7tTsUP5VRmh9fg7cb+h4k+i0iV5sr+XbpP189ylzeOF3v7MTt3KLvhKp
-        X69b3tS9aVWTqmAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23F5D13A8E;
-        Wed, 27 Jul 2022 08:25:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ypY4B2P24GJJLQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 27 Jul 2022 08:25:07 +0000
-Date:   Wed, 27 Jul 2022 10:25:04 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] firmware: dmi: Don't take garbage into
- consideration in dmi_smbios3_present()
-Message-ID: <20220727102504.6bbefcf9@endymion.delvare>
-In-Reply-To: <20220726094329.1725-1-andriy.shevchenko@linux.intel.com>
-References: <20220726094329.1725-1-andriy.shevchenko@linux.intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Wed, 27 Jul 2022 04:28:19 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660D645057;
+        Wed, 27 Jul 2022 01:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658910498; x=1690446498;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=tvgkr2Ds+DOMW1MZx5jh+W1rCZXn15syWivjTwgXnik=;
+  b=R13Qu9KpGmtgiY9k4v6EuX7cAFhx5Wb3uua0t16VZs2jAWVFTeziOsAF
+   k4YlVJ9+hEioAquaMLQMIPunGm1RapXnvfjgTJnNVHzWyw8CwbLcVhAw1
+   SC2MPqBlO/+uyHrKSGKsQ5DwT7zA/NmIhQYFthfYt6Zc3IVprKs9GOJSf
+   Y=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jul 2022 01:28:17 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 01:28:17 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Jul 2022 01:28:16 -0700
+Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Jul 2022 01:28:13 -0700
+From:   Satya Priya <quic_c_skakit@quicinc.com>
+To:     Rob Herring <robh@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Subject: [PATCH V7 0/5] Add support for audio clock gating resets for SC7280
+Date:   Wed, 27 Jul 2022 13:57:52 +0530
+Message-ID: <1658910477-6494-1-git-send-email-quic_c_skakit@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,44 +63,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+[v7]
+  * Fix commit text of [5/5]. Remove '.' from Fixes tag.
 
-On Tue, 26 Jul 2022 12:43:29 +0300, Andy Shevchenko wrote:
-> The byte at offset 6 represent length. Don't take it and drop it immediately
-> by using proper accessor, i.e. get_unaligned_be24().
+[v6]
+  * Add [1], [2] to handle the regmap overlap of lpasscc and lpass_aon 
 
-The subject sounds like you are fixing a bug, while this is only, at
-best, a minor optimization.
+[v5]
+  * Fix the fail path and add pm_runtime_disable().
 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/firmware/dmi_scan.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
-> index b2ea318a10a4..24537ce29bc4 100644
-> --- a/drivers/firmware/dmi_scan.c
-> +++ b/drivers/firmware/dmi_scan.c
-> @@ -630,7 +630,7 @@ static int __init dmi_smbios3_present(const u8 *buf)
->  {
->  	if (memcmp(buf, "_SM3_", 5) == 0 &&
->  	    buf[6] < 32 && dmi_checksum(buf, buf[6])) {
-> -		dmi_ver = get_unaligned_be32(buf + 6) & 0xFFFFFF;
-> +		dmi_ver = get_unaligned_be24(buf + 7);
->  		dmi_num = 0;			/* No longer specified */
->  		dmi_len = get_unaligned_le32(buf + 12);
->  		dmi_base = get_unaligned_le64(buf + 16);
+[v4]
+  * Fix the "fixes" tag.
 
-I admit I did not know about get_unaligned_be24(). While I agree that
-it makes the source code look better, one downside is that it actually
-increases the binary size on x86_64. The reason is that
-get_unaligned_be32() is optimized by assembly instruction bswapl, while
-get_unaligned_be24() is not. Situation appears to be the same on ia64
-and arm. Only arm64 would apparently benefit from your proposed
-change.
+[v3]
+  * Remove the maxItems from reg property.
 
-I'm not too sure what is preferred in such situations.
+[v2]
+  * Update/fix the YAML for reg property against each compatible.
+
+[v1]
+  * Add support for clock gating resets for lpass audio clock
+    controller & MCLKs.
+
+Satya Priya (2):
+  dt-bindings: clock: Add "qcom,adsp-pil-mode" property
+  clk: qcom: lpass: Handle the regmap overlap of lpasscc and lpass_aon
+
+Taniya Das (3):
+  dt-bindings: clock: Add resets for LPASS audio clock controller for
+    SC7280
+  dt-bindings: clock: Add support for external MCLKs for LPASS on SC7280
+  clk: qcom: lpass: Add support for resets & external mclk for SC7280
+
+ .../bindings/clock/qcom,sc7280-lpasscc.yaml        |  6 +-
+ .../bindings/clock/qcom,sc7280-lpasscorecc.yaml    | 26 ++++++++-
+ drivers/clk/qcom/lpassaudiocc-sc7280.c             | 66 +++++++++++++++++++++-
+ drivers/clk/qcom/lpasscc-sc7280.c                  | 44 ---------------
+ drivers/clk/qcom/lpasscorecc-sc7280.c              | 33 +++++++++++
+ .../dt-bindings/clock/qcom,lpassaudiocc-sc7280.h   |  5 ++
+ .../dt-bindings/clock/qcom,lpasscorecc-sc7280.h    |  2 +
+ 7 files changed, 130 insertions(+), 52 deletions(-)
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.7.4
+

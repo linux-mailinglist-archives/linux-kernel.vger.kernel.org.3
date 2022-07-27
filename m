@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD66D582B3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FC8582B98
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237391AbiG0Q34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
+        id S238159AbiG0QfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237352AbiG0Q3J (ORCPT
+        with ESMTP id S237301AbiG0Qds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:29:09 -0400
+        Wed, 27 Jul 2022 12:33:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E5050712;
-        Wed, 27 Jul 2022 09:24:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB7E4D4C2;
+        Wed, 27 Jul 2022 09:26:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35CF2619C4;
-        Wed, 27 Jul 2022 16:24:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E543C433C1;
-        Wed, 27 Jul 2022 16:24:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DB26619FD;
+        Wed, 27 Jul 2022 16:25:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFFDCC433C1;
+        Wed, 27 Jul 2022 16:25:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939074;
-        bh=Uknuv9wcc8IRez0QgrQGlZ4g7bk5i/d5XmE7lyLMh9c=;
+        s=korg; t=1658939156;
+        bh=TaTB8GRVljmqGovaTLx5QRJ/B7bQxZgLx0Nf/yBLeLU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qHiGViKde1acfJd0tIoVBrtilOs/s0/vOwhZF+vi4fIIdJfwTx6CAusQt2Szf1/Ur
-         VvTzwakIexrR+WTTwTnMx2NgXDCsCojYpON4y1kyTdZftuND4L7rdpRFDaJxUS29oE
-         FnTh4SdRjxEPCmG8CB7WS0tIeZpUvH0hxjQGVrso=
+        b=g+cb1140ZcSUceUi/P42dImNcPFLjT5uehstrdg0VnGYEVsJc4opllTH5fdcARoV2
+         M5fTibyPNGf3Q0z2lK30ELRj60C5Pb9MhLhHxEcl6Tdg1ADQWl5h/TG4voY4+nelZY
+         78SGQl0EcT1gnTW6ckPBjBOdvlZMtXTr/TeSRqys=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Cheng <wanngchenng@gmail.com>,
-        syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.14 16/37] mm/mempolicy: fix uninit-value in mpol_rebind_policy()
+        stable@vger.kernel.org,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Qian Cai <cai@lca.pw>,
+        Lech Perczak <l.perczak@camlintechnologies.com>,
+        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        kernel test robot <oliver.sang@intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.19 33/62] Revert "Revert "char/random: silence a lockdep splat with printk()""
 Date:   Wed, 27 Jul 2022 18:10:42 +0200
-Message-Id: <20220727161001.510305892@linuxfoundation.org>
+Message-Id: <20220727161005.505206431@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,106 +60,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Cheng <wanngchenng@gmail.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 018160ad314d75b1409129b2247b614a9f35894c upstream.
+In 2019, Sergey fixed a lockdep splat with 15341b1dd409 ("char/random:
+silence a lockdep splat with printk()"), but that got reverted soon
+after from 4.19 because back then it apparently caused various problems.
+But the issue it was fixing is still there, and more generally, many
+patches turning printk() into printk_deferred() have landed since,
+making me suspect it's okay to try this out again.
 
-mpol_set_nodemask()(mm/mempolicy.c) does not set up nodemask when
-pol->mode is MPOL_LOCAL.  Check pol->mode before access
-pol->w.cpuset_mems_allowed in mpol_rebind_policy()(mm/mempolicy.c).
+This should fix the following deadlock found by the kernel test robot:
 
-BUG: KMSAN: uninit-value in mpol_rebind_policy mm/mempolicy.c:352 [inline]
-BUG: KMSAN: uninit-value in mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
- mpol_rebind_policy mm/mempolicy.c:352 [inline]
- mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
- cpuset_change_task_nodemask kernel/cgroup/cpuset.c:1711 [inline]
- cpuset_attach+0x787/0x15e0 kernel/cgroup/cpuset.c:2278
- cgroup_migrate_execute+0x1023/0x1d20 kernel/cgroup/cgroup.c:2515
- cgroup_migrate kernel/cgroup/cgroup.c:2771 [inline]
- cgroup_attach_task+0x540/0x8b0 kernel/cgroup/cgroup.c:2804
- __cgroup1_procs_write+0x5cc/0x7a0 kernel/cgroup/cgroup-v1.c:520
- cgroup1_tasks_write+0x94/0xb0 kernel/cgroup/cgroup-v1.c:539
- cgroup_file_write+0x4c2/0x9e0 kernel/cgroup/cgroup.c:3852
- kernfs_fop_write_iter+0x66a/0x9f0 fs/kernfs/file.c:296
- call_write_iter include/linux/fs.h:2162 [inline]
- new_sync_write fs/read_write.c:503 [inline]
- vfs_write+0x1318/0x2030 fs/read_write.c:590
- ksys_write+0x28b/0x510 fs/read_write.c:643
- __do_sys_write fs/read_write.c:655 [inline]
- __se_sys_write fs/read_write.c:652 [inline]
- __x64_sys_write+0xdb/0x120 fs/read_write.c:652
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   18.287691] WARNING: possible circular locking dependency detected
+[   18.287692] 4.19.248-00165-g3d1f971aa81f #1 Not tainted
+[   18.287693] ------------------------------------------------------
+[   18.287712] stop/202 is trying to acquire lock:
+[   18.287713] (ptrval) (console_owner){..-.}, at: console_unlock (??:?)
+[   18.287717]
+[   18.287718] but task is already holding lock:
+[   18.287718] (ptrval) (&(&port->lock)->rlock){-...}, at: pty_write (pty.c:?)
+[   18.287722]
+[   18.287722] which lock already depends on the new lock.
+[   18.287723]
+[   18.287724]
+[   18.287725] the existing dependency chain (in reverse order) is:
+[   18.287725]
+[   18.287726] -> #2 (&(&port->lock)->rlock){-...}:
+[   18.287729] validate_chain+0x84a/0xe00
+[   18.287729] __lock_acquire (lockdep.c:?)
+[   18.287730] lock_acquire (??:?)
+[   18.287731] _raw_spin_lock_irqsave (??:?)
+[   18.287732] tty_port_tty_get (??:?)
+[   18.287733] tty_port_default_wakeup (tty_port.c:?)
+[   18.287734] tty_port_tty_wakeup (??:?)
+[   18.287734] uart_write_wakeup (??:?)
+[   18.287735] serial8250_tx_chars (??:?)
+[   18.287736] serial8250_handle_irq (??:?)
+[   18.287737] serial8250_default_handle_irq (8250_port.c:?)
+[   18.287738] serial8250_interrupt (8250_core.c:?)
+[   18.287738] __handle_irq_event_percpu (??:?)
+[   18.287739] handle_irq_event_percpu (??:?)
+[   18.287740] handle_irq_event (??:?)
+[   18.287741] handle_edge_irq (??:?)
+[   18.287742] handle_irq (??:?)
+[   18.287742] do_IRQ (??:?)
+[   18.287743] common_interrupt (entry_32.o:?)
+[   18.287744] _raw_spin_unlock_irqrestore (??:?)
+[   18.287745] uart_write (serial_core.c:?)
+[   18.287746] process_output_block (n_tty.c:?)
+[   18.287747] n_tty_write (n_tty.c:?)
+[   18.287747] tty_write (tty_io.c:?)
+[   18.287748] __vfs_write (??:?)
+[   18.287749] vfs_write (??:?)
+[   18.287750] ksys_write (??:?)
+[   18.287750] sys_write (??:?)
+[   18.287751] do_fast_syscall_32 (??:?)
+[   18.287752] entry_SYSENTER_32 (??:?)
+[   18.287752]
+[   18.287753] -> #1 (&port_lock_key){-.-.}:
+[   18.287756]
+[   18.287756] -> #0 (console_owner){..-.}:
+[   18.287759] check_prevs_add (lockdep.c:?)
+[   18.287760] validate_chain+0x84a/0xe00
+[   18.287761] __lock_acquire (lockdep.c:?)
+[   18.287761] lock_acquire (??:?)
+[   18.287762] console_unlock (??:?)
+[   18.287763] vprintk_emit (??:?)
+[   18.287764] vprintk_default (??:?)
+[   18.287764] vprintk_func (??:?)
+[   18.287765] printk (??:?)
+[   18.287766] get_random_u32 (??:?)
+[   18.287767] shuffle_freelist (slub.c:?)
+[   18.287767] allocate_slab (slub.c:?)
+[   18.287768] new_slab (slub.c:?)
+[   18.287769] ___slab_alloc+0x6d0/0xb20
+[   18.287770] __slab_alloc+0xd6/0x2e0
+[   18.287770] __kmalloc (??:?)
+[   18.287771] tty_buffer_alloc (tty_buffer.c:?)
+[   18.287772] __tty_buffer_request_room (tty_buffer.c:?)
+[   18.287773] tty_insert_flip_string_fixed_flag (??:?)
+[   18.287774] pty_write (pty.c:?)
+[   18.287775] process_output_block (n_tty.c:?)
+[   18.287776] n_tty_write (n_tty.c:?)
+[   18.287777] tty_write (tty_io.c:?)
+[   18.287778] __vfs_write (??:?)
+[   18.287779] vfs_write (??:?)
+[   18.287780] ksys_write (??:?)
+[   18.287780] sys_write (??:?)
+[   18.287781] do_fast_syscall_32 (??:?)
+[   18.287782] entry_SYSENTER_32 (??:?)
+[   18.287783]
+[   18.287783] other info that might help us debug this:
+[   18.287784]
+[   18.287785] Chain exists of:
+[   18.287785]   console_owner --> &port_lock_key --> &(&port->lock)->rlock
+[   18.287789]
+[   18.287790]  Possible unsafe locking scenario:
+[   18.287790]
+[   18.287791]        CPU0                    CPU1
+[   18.287792]        ----                    ----
+[   18.287792]   lock(&(&port->lock)->rlock);
+[   18.287794]                                lock(&port_lock_key);
+[   18.287814]                                lock(&(&port->lock)->rlock);
+[   18.287815]   lock(console_owner);
+[   18.287817]
+[   18.287818]  *** DEADLOCK ***
+[   18.287818]
+[   18.287819] 6 locks held by stop/202:
+[   18.287820] #0: (ptrval) (&tty->ldisc_sem){++++}, at: ldsem_down_read (??:?)
+[   18.287823] #1: (ptrval) (&tty->atomic_write_lock){+.+.}, at: tty_write_lock (tty_io.c:?)
+[   18.287826] #2: (ptrval) (&o_tty->termios_rwsem/1){++++}, at: n_tty_write (n_tty.c:?)
+[   18.287830] #3: (ptrval) (&ldata->output_lock){+.+.}, at: process_output_block (n_tty.c:?)
+[   18.287834] #4: (ptrval) (&(&port->lock)->rlock){-...}, at: pty_write (pty.c:?)
+[   18.287838] #5: (ptrval) (console_lock){+.+.}, at: console_trylock_spinning (printk.c:?)
+[   18.287841]
+[   18.287842] stack backtrace:
+[   18.287843] CPU: 0 PID: 202 Comm: stop Not tainted 4.19.248-00165-g3d1f971aa81f #1
+[   18.287843] Call Trace:
+[   18.287844] dump_stack (??:?)
+[   18.287845] print_circular_bug.cold+0x78/0x8b
+[   18.287846] check_prev_add+0x66a/0xd20
+[   18.287847] check_prevs_add (lockdep.c:?)
+[   18.287848] validate_chain+0x84a/0xe00
+[   18.287848] __lock_acquire (lockdep.c:?)
+[   18.287849] lock_acquire (??:?)
+[   18.287850] ? console_unlock (??:?)
+[   18.287851] console_unlock (??:?)
+[   18.287851] ? console_unlock (??:?)
+[   18.287852] ? native_save_fl (??:?)
+[   18.287853] vprintk_emit (??:?)
+[   18.287854] vprintk_default (??:?)
+[   18.287855] vprintk_func (??:?)
+[   18.287855] printk (??:?)
+[   18.287856] get_random_u32 (??:?)
+[   18.287857] ? shuffle_freelist (slub.c:?)
+[   18.287858] shuffle_freelist (slub.c:?)
+[   18.287858] ? page_address (??:?)
+[   18.287859] allocate_slab (slub.c:?)
+[   18.287860] new_slab (slub.c:?)
+[   18.287861] ? pvclock_clocksource_read (??:?)
+[   18.287862] ___slab_alloc+0x6d0/0xb20
+[   18.287862] ? kvm_sched_clock_read (kvmclock.c:?)
+[   18.287863] ? __slab_alloc+0xbc/0x2e0
+[   18.287864] ? native_wbinvd (paravirt.c:?)
+[   18.287865] __slab_alloc+0xd6/0x2e0
+[   18.287865] __kmalloc (??:?)
+[   18.287866] ? __lock_acquire (lockdep.c:?)
+[   18.287867] ? tty_buffer_alloc (tty_buffer.c:?)
+[   18.287868] tty_buffer_alloc (tty_buffer.c:?)
+[   18.287869] __tty_buffer_request_room (tty_buffer.c:?)
+[   18.287869] tty_insert_flip_string_fixed_flag (??:?)
+[   18.287870] pty_write (pty.c:?)
+[   18.287871] process_output_block (n_tty.c:?)
+[   18.287872] n_tty_write (n_tty.c:?)
+[   18.287873] ? print_dl_stats (??:?)
+[   18.287874] ? n_tty_ioctl (n_tty.c:?)
+[   18.287874] tty_write (tty_io.c:?)
+[   18.287875] ? n_tty_ioctl (n_tty.c:?)
+[   18.287876] ? tty_write_unlock (tty_io.c:?)
+[   18.287877] __vfs_write (??:?)
+[   18.287877] vfs_write (??:?)
+[   18.287878] ? __fget_light (file.c:?)
+[   18.287879] ksys_write (??:?)
 
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:524 [inline]
- slab_alloc_node mm/slub.c:3251 [inline]
- slab_alloc mm/slub.c:3259 [inline]
- kmem_cache_alloc+0x902/0x11c0 mm/slub.c:3264
- mpol_new mm/mempolicy.c:293 [inline]
- do_set_mempolicy+0x421/0xb70 mm/mempolicy.c:853
- kernel_set_mempolicy mm/mempolicy.c:1504 [inline]
- __do_sys_set_mempolicy mm/mempolicy.c:1510 [inline]
- __se_sys_set_mempolicy+0x44c/0xb60 mm/mempolicy.c:1507
- __x64_sys_set_mempolicy+0xd8/0x110 mm/mempolicy.c:1507
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-KMSAN: uninit-value in mpol_rebind_task (2)
-https://syzkaller.appspot.com/bug?id=d6eb90f952c2a5de9ea718a1b873c55cb13b59dc
-
-This patch seems to fix below bug too.
-KMSAN: uninit-value in mpol_rebind_mm (2)
-https://syzkaller.appspot.com/bug?id=f2fecd0d7013f54ec4162f60743a2b28df40926b
-
-The uninit-value is pol->w.cpuset_mems_allowed in mpol_rebind_policy().
-When syzkaller reproducer runs to the beginning of mpol_new(),
-
-	    mpol_new() mm/mempolicy.c
-	  do_mbind() mm/mempolicy.c
-	kernel_mbind() mm/mempolicy.c
-
-`mode` is 1(MPOL_PREFERRED), nodes_empty(*nodes) is `true` and `flags`
-is 0. Then
-
-	mode = MPOL_LOCAL;
-	...
-	policy->mode = mode;
-	policy->flags = flags;
-
-will be executed. So in mpol_set_nodemask(),
-
-	    mpol_set_nodemask() mm/mempolicy.c
-	  do_mbind()
-	kernel_mbind()
-
-pol->mode is 4 (MPOL_LOCAL), that `nodemask` in `pol` is not initialized,
-which will be accessed in mpol_rebind_policy().
-
-Link: https://lkml.kernel.org/r/20220512123428.fq3wofedp6oiotd4@ppc.localdomain
-Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
-Reported-by: <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com>
-Tested-by: <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+Cc: Qian Cai <cai@lca.pw>
+Cc: Lech Perczak <l.perczak@camlintechnologies.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Sasha Levin <sashal@kernel.org>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: John Ogness <john.ogness@linutronix.de>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/lkml/Ytz+lo4zRQYG3JUR@xsang-OptiPlex-9020
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mempolicy.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -347,7 +347,7 @@ static void mpol_rebind_preferred(struct
-  */
- static void mpol_rebind_policy(struct mempolicy *pol, const nodemask_t *newmask)
- {
--	if (!pol)
-+	if (!pol || pol->mode == MPOL_LOCAL)
- 		return;
- 	if (!mpol_store_user_nodemask(pol) && !(pol->flags & MPOL_F_LOCAL) &&
- 	    nodes_equal(pol->w.cpuset_mems_allowed, *newmask))
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -183,8 +183,8 @@ static void __cold process_random_ready_
+ 
+ #define warn_unseeded_randomness() \
+ 	if (IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM) && !crng_ready()) \
+-		pr_notice("%s called from %pS with crng_init=%d\n", \
+-			  __func__, (void *)_RET_IP_, crng_init)
++		printk_deferred(KERN_NOTICE "random: %s called from %pS with crng_init=%d\n", \
++				__func__, (void *)_RET_IP_, crng_init)
+ 
+ 
+ /*********************************************************************
 
 

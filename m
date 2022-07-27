@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E439B582D06
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29461582C16
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240889AbiG0Qw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
+        id S239281AbiG0Ql7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240813AbiG0QwO (ORCPT
+        with ESMTP id S239122AbiG0QlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:52:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF96D4C61A;
-        Wed, 27 Jul 2022 09:34:04 -0700 (PDT)
+        Wed, 27 Jul 2022 12:41:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36C251429;
+        Wed, 27 Jul 2022 09:29:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C36661A7E;
-        Wed, 27 Jul 2022 16:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69BCBC433C1;
-        Wed, 27 Jul 2022 16:34:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C55CB821BA;
+        Wed, 27 Jul 2022 16:29:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A70C7C433D6;
+        Wed, 27 Jul 2022 16:29:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939643;
-        bh=b1zYqBD/WqElTEuUwmtzh0IfW8TiO4wTB0nofd3g2Yk=;
+        s=korg; t=1658939375;
+        bh=CRrSIL4P0svdiiR+e0jcJwxpGu2VL7VEQG0U7nfZTjs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vOftltn1uzG4v19tOKOeCzM9KkBt/bP4ZKRiZFN4sCeOIYYmokrQ8xVzhU85c7PvX
-         e5QQaeWOJOsj48MUx61dQtC2FflTa8X9hX8Yrrf7h2ByaAiQn2rvLrauMZfLbOTpJn
-         rRrz5QPsMI9g47T/wqvoz7iTcmOCNdKbcpAUErUQ=
+        b=WtP6eZH75Ei/4yHidbTq3LDg+tsv22NYeL+z2QFAtVJrHCceJZPV7KfUBRJJXj05e
+         h6K0saWDwbtGs0LrrNiwNYbfp+sFV2bYuESh6BrEDBtQLGb935nurp+XolZHNmPRXG
+         cGOATgeHcKLPc71T0+mB2tLmVPtkCNk5aRBZL/Lo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 022/105] xfrm: xfrm_policy: fix a possible double xfrm_pols_put() in xfrm_bundle_lookup()
-Date:   Wed, 27 Jul 2022 18:10:08 +0200
-Message-Id: <20220727161012.982229722@linuxfoundation.org>
+Subject: [PATCH 5.4 16/87] ip: Fix data-races around sysctl_ip_no_pmtu_disc.
+Date:   Wed, 27 Jul 2022 18:10:09 +0200
+Message-Id: <20220727161009.659742989@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit f85daf0e725358be78dfd208dea5fd665d8cb901 ]
+[ Upstream commit 0968d2a441bf6afb551fd99e60fa65ed67068963 ]
 
-xfrm_policy_lookup() will call xfrm_pol_hold_rcu() to get a refcount of
-pols[0]. This refcount can be dropped in xfrm_expand_policies() when
-xfrm_expand_policies() return error. pols[0]'s refcount is balanced in
-here. But xfrm_bundle_lookup() will also call xfrm_pols_put() with
-num_pols == 1 to drop this refcount when xfrm_expand_policies() return
-error.
+While reading sysctl_ip_no_pmtu_disc, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-This patch also fix an illegal address access. pols[0] will save a error
-point when xfrm_policy_lookup fails. This lead to xfrm_pols_put to resolve
-an illegal address in xfrm_bundle_lookup's error path.
-
-Fix these by setting num_pols = 0 in xfrm_expand_policies()'s error path.
-
-Fixes: 80c802f3073e ("xfrm: cache bundles instead of policies for outgoing flows")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_policy.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/ipv4/af_inet.c    | 2 +-
+ net/ipv4/icmp.c       | 2 +-
+ net/ipv6/af_inet6.c   | 2 +-
+ net/xfrm/xfrm_state.c | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-index 93cbcc8f9b39..603b05ed7eb4 100644
---- a/net/xfrm/xfrm_policy.c
-+++ b/net/xfrm/xfrm_policy.c
-@@ -2680,8 +2680,10 @@ static int xfrm_expand_policies(const struct flowi *fl, u16 family,
- 		*num_xfrms = 0;
- 		return 0;
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 9ab73fcc7411..06153386776d 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -337,7 +337,7 @@ static int inet_create(struct net *net, struct socket *sock, int protocol,
+ 			inet->hdrincl = 1;
  	}
--	if (IS_ERR(pols[0]))
-+	if (IS_ERR(pols[0])) {
-+		*num_pols = 0;
- 		return PTR_ERR(pols[0]);
-+	}
  
- 	*num_xfrms = pols[0]->xfrm_nr;
+-	if (net->ipv4.sysctl_ip_no_pmtu_disc)
++	if (READ_ONCE(net->ipv4.sysctl_ip_no_pmtu_disc))
+ 		inet->pmtudisc = IP_PMTUDISC_DONT;
+ 	else
+ 		inet->pmtudisc = IP_PMTUDISC_WANT;
+diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
+index 9bc01411be4c..b44f51e404ae 100644
+--- a/net/ipv4/icmp.c
++++ b/net/ipv4/icmp.c
+@@ -886,7 +886,7 @@ static bool icmp_unreach(struct sk_buff *skb)
+ 			 * values please see
+ 			 * Documentation/networking/ip-sysctl.txt
+ 			 */
+-			switch (net->ipv4.sysctl_ip_no_pmtu_disc) {
++			switch (READ_ONCE(net->ipv4.sysctl_ip_no_pmtu_disc)) {
+ 			default:
+ 				net_dbg_ratelimited("%pI4: fragmentation needed and DF set\n",
+ 						    &iph->daddr);
+diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+index 942da168f18f..56f396ecc26b 100644
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@ -222,7 +222,7 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
+ 	inet->mc_list	= NULL;
+ 	inet->rcv_tos	= 0;
  
-@@ -2696,6 +2698,7 @@ static int xfrm_expand_policies(const struct flowi *fl, u16 family,
- 		if (pols[1]) {
- 			if (IS_ERR(pols[1])) {
- 				xfrm_pols_put(pols, *num_pols);
-+				*num_pols = 0;
- 				return PTR_ERR(pols[1]);
- 			}
- 			(*num_pols)++;
+-	if (net->ipv4.sysctl_ip_no_pmtu_disc)
++	if (READ_ONCE(net->ipv4.sysctl_ip_no_pmtu_disc))
+ 		inet->pmtudisc = IP_PMTUDISC_DONT;
+ 	else
+ 		inet->pmtudisc = IP_PMTUDISC_WANT;
+diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
+index 268bba29bb60..bee1a8143d75 100644
+--- a/net/xfrm/xfrm_state.c
++++ b/net/xfrm/xfrm_state.c
+@@ -2488,7 +2488,7 @@ int __xfrm_init_state(struct xfrm_state *x, bool init_replay, bool offload)
+ 	int err;
+ 
+ 	if (family == AF_INET &&
+-	    xs_net(x)->ipv4.sysctl_ip_no_pmtu_disc)
++	    READ_ONCE(xs_net(x)->ipv4.sysctl_ip_no_pmtu_disc))
+ 		x->props.flags |= XFRM_STATE_NOPMTUDISC;
+ 
+ 	err = -EPROTONOSUPPORT;
 -- 
 2.35.1
 

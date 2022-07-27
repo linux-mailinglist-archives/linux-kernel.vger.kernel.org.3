@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CBC582F33
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7557B582B6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237715AbiG0RWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S237838AbiG0QdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242104AbiG0RTr (ORCPT
+        with ESMTP id S237844AbiG0Qc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:19:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671185247E;
-        Wed, 27 Jul 2022 09:45:00 -0700 (PDT)
+        Wed, 27 Jul 2022 12:32:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EB753D2A;
+        Wed, 27 Jul 2022 09:26:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 79AEECE2309;
-        Wed, 27 Jul 2022 16:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C76EC433C1;
-        Wed, 27 Jul 2022 16:44:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3832617EF;
+        Wed, 27 Jul 2022 16:26:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9775C433D6;
+        Wed, 27 Jul 2022 16:26:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940296;
-        bh=rOrmLFrxGWYV871MsyQQEIzigWMtnhgSC8ReLXbMgD0=;
+        s=korg; t=1658939176;
+        bh=QF7pyE183J3Q+46NmYFF2shA3xAIisb+KwOnK6MxcHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GSOjbKE3wU4s/4uEmDrTxwG3K8jSudBzGARySogdGE83epLpnYTM4cW/w/CAsa4/S
-         EhhEIf5AtA1IQVcfZSgQhg9WwKFoMNT78yVlrWngb9i0vyZE8OjpB4tIkVUAhGMsxG
-         FebxHdrvZct/f4a98IzvROwNZqEV/vIM0SRVhFdI=
+        b=agHXFFMe9Zg8j+SrG1RRDS6a+z1suvfQ/Ip8kqvJ2s2IOzOllZINa+/1msjzwpnb3
+         osYTEziTsbGwLQWqMLQ4kG9EY1m/pZLO1RDRiD61y0LZRrgrvvM91bzlnRXjkGhd3Z
+         /RzijGqHWWfqlstWl1OZ8JAN4HZwmpW+Fqf0a9u0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 143/201] x86/mce: Deduplicate exception handling
-Date:   Wed, 27 Jul 2022 18:10:47 +0200
-Message-Id: <20220727161033.735314528@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Mikael=20Wikstr=C3=B6m?= <leakim.wikstrom@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 39/62] HID: multitouch: Lenovo X1 Tablet Gen3 trackpoint and buttons
+Date:   Wed, 27 Jul 2022 18:10:48 +0200
+Message-Id: <20220727161005.716889599@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,81 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Mikael Wikström <leakim.wikstrom@gmail.com>
 
-[ Upstream commit e42404afc4ca856c48f1e05752541faa3587c472 ]
+[ Upstream commit 8d5037dca7c2089f27e5903c2aecfc5bb10d7806 ]
 
-Prepare code for further simplification. No functional change.
+Add support for the trackpoint and three mouse buttons on the type cover
+of the Lenovo X1 Tablet Gen3.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20210908132525.096452100@linutronix.de
+This is the same as with the 2nd generation Lenovo X1 Tablet.
+
+Signed-off-by: Mikael Wikström <leakim.wikstrom@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/core.c | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ drivers/hid/hid-ids.h        | 1 +
+ drivers/hid/hid-multitouch.c | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 848cfb013f58..d8da3acf1ffd 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -382,13 +382,16 @@ static int msr_to_offset(u32 msr)
- 	return -1;
- }
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 8d4153c73f5c..1c1de7e128d6 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -727,6 +727,7 @@
+ #define USB_DEVICE_ID_LENOVO_TPPRODOCK	0x6067
+ #define USB_DEVICE_ID_LENOVO_X1_COVER	0x6085
+ #define USB_DEVICE_ID_LENOVO_X1_TAB	0x60a3
++#define USB_DEVICE_ID_LENOVO_X1_TAB3	0x60b5
  
--__visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
--				      struct pt_regs *regs, int trapnr,
--				      unsigned long error_code,
--				      unsigned long fault_addr)
-+static void ex_handler_msr_mce(struct pt_regs *regs, bool wrmsr)
- {
--	pr_emerg("MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
--		 (unsigned int)regs->cx, regs->ip, (void *)regs->ip);
-+	if (wrmsr) {
-+		pr_emerg("MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
-+			 (unsigned int)regs->cx, (unsigned int)regs->dx, (unsigned int)regs->ax,
-+			 regs->ip, (void *)regs->ip);
-+	} else {
-+		pr_emerg("MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
-+			 (unsigned int)regs->cx, regs->ip, (void *)regs->ip);
-+	}
+ #define USB_VENDOR_ID_LG		0x1fd2
+ #define USB_DEVICE_ID_LG_MULTITOUCH	0x0064
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index 5509b09f8656..1c4426c60972 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -1797,6 +1797,12 @@ static const struct hid_device_id mt_devices[] = {
+ 			   USB_VENDOR_ID_LENOVO,
+ 			   USB_DEVICE_ID_LENOVO_X1_TAB) },
  
- 	show_stack_regs(regs);
- 
-@@ -396,7 +399,14 @@ __visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
- 
- 	while (true)
- 		cpu_relax();
-+}
- 
-+__visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
-+				      struct pt_regs *regs, int trapnr,
-+				      unsigned long error_code,
-+				      unsigned long fault_addr)
-+{
-+	ex_handler_msr_mce(regs, false);
- 	return true;
- }
- 
-@@ -441,17 +451,7 @@ __visible bool ex_handler_wrmsr_fault(const struct exception_table_entry *fixup,
- 				      unsigned long error_code,
- 				      unsigned long fault_addr)
- {
--	pr_emerg("MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
--		 (unsigned int)regs->cx, (unsigned int)regs->dx, (unsigned int)regs->ax,
--		  regs->ip, (void *)regs->ip);
--
--	show_stack_regs(regs);
--
--	panic("MCA architectural violation!\n");
--
--	while (true)
--		cpu_relax();
--
-+	ex_handler_msr_mce(regs, true);
- 	return true;
- }
- 
++	/* Lenovo X1 TAB Gen 3 */
++	{ .driver_data = MT_CLS_WIN_8_DUAL,
++		HID_DEVICE(BUS_USB, HID_GROUP_MULTITOUCH_WIN_8,
++			   USB_VENDOR_ID_LENOVO,
++			   USB_DEVICE_ID_LENOVO_X1_TAB3) },
++
+ 	/* Anton devices */
+ 	{ .driver_data = MT_CLS_EXPORT_ALL_INPUTS,
+ 		MT_USB_DEVICE(USB_VENDOR_ID_ANTON,
 -- 
 2.35.1
 

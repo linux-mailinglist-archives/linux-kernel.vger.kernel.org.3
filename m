@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11229582B05
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3582D582AB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236490AbiG0Q0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S235643AbiG0QW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236318AbiG0QZr (ORCPT
+        with ESMTP id S235089AbiG0QWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:25:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B566B4F181;
-        Wed, 27 Jul 2022 09:23:35 -0700 (PDT)
+        Wed, 27 Jul 2022 12:22:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DE14BD3F;
+        Wed, 27 Jul 2022 09:22:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AF90619DD;
-        Wed, 27 Jul 2022 16:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722DCC433D6;
-        Wed, 27 Jul 2022 16:23:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 797E1B821B9;
+        Wed, 27 Jul 2022 16:22:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CE4C433D6;
+        Wed, 27 Jul 2022 16:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658938997;
-        bh=c3tV6BAXwRyUF0hyRxeSfe4RgHesWx2wasczt0+YFDU=;
+        s=korg; t=1658938940;
+        bh=wqVnnehyqL07Uxo1ruuI3rShLmuNDpQvGUe5zZS3fY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z6tU3AkuiAQ2YhggJMEb8wfoyOkp+N34t5uF4o7Wa+NbC5ouyKBdE8no8+GRbDUdb
-         h6L3tLJtF5Wk4sKQT0qFyRJENTqK5dqzBw/OtuMeM3Rd+9VTCI0FpSWrIbAvf8XXQb
-         Chjon2Yd0qbTUksbYoqFYYgwdG323M6/46dGFPuc=
+        b=AOapQWjYtgjxw/AY5WqBIYDNI/RNdSpxLCsuDNfd3dqfkLM2GBuhWYcvLcjZ8gLud
+         r2ZZRdZsmo5KxWERoWZx3VWlMfQE/wxigtlk63f5HyxZPIGvVyb+1asV3iv7kPqfFX
+         4Jk++lLqObMmXG4sPei/eqdJgRvZpErLkLMrnWDY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 07/37] tcp: Fix a data-race around sysctl_tcp_probe_threshold.
+        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        stable <stable@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 04/26] misc: rtsx_usb: use separate command and response buffers
 Date:   Wed, 27 Jul 2022 18:10:33 +0200
-Message-Id: <20220727161001.151820081@linuxfoundation.org>
+Message-Id: <20220727160959.317226011@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
+References: <20220727160959.122591422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +53,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit 92c0aa4175474483d6cf373314343d4e624e882a ]
+[ Upstream commit 3776c78559853fd151be7c41e369fd076fb679d5 ]
 
-While reading sysctl_tcp_probe_threshold, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+rtsx_usb uses same buffer for command and response. There could
+be a potential conflict using the same buffer for both especially
+if retries and timeouts are involved.
 
-Fixes: 6b58e0a5f32d ("ipv4: Use binary search to choose tcp PMTU probe_size")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Use separate command and response buffers to avoid conflicts.
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/07e3721804ff07aaab9ef5b39a5691d0718b9ade.1656642167.git.skhan@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mfd/rtsx_usb.c       | 26 +++++++++++++++++---------
+ include/linux/mfd/rtsx_usb.h |  1 -
+ 2 files changed, 17 insertions(+), 10 deletions(-)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index a231993c81c4..8ac23e8439c3 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -2087,7 +2087,7 @@ static int tcp_mtu_probe(struct sock *sk)
- 	 * probing process by not resetting search range to its orignal.
- 	 */
- 	if (probe_size > tcp_mtu_to_mss(sk, icsk->icsk_mtup.search_high) ||
--		interval < net->ipv4.sysctl_tcp_probe_threshold) {
-+	    interval < READ_ONCE(net->ipv4.sysctl_tcp_probe_threshold)) {
- 		/* Check whether enough time has elaplased for
- 		 * another round of probing.
- 		 */
+diff --git a/drivers/mfd/rtsx_usb.c b/drivers/mfd/rtsx_usb.c
+index b0ebd2299599..134c6fbd9c50 100644
+--- a/drivers/mfd/rtsx_usb.c
++++ b/drivers/mfd/rtsx_usb.c
+@@ -642,15 +642,18 @@ static int rtsx_usb_probe(struct usb_interface *intf,
+ 
+ 	ucr->pusb_dev = usb_dev;
+ 
+-	ucr->iobuf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
+-	if (!ucr->iobuf)
++	ucr->cmd_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
++	if (!ucr->cmd_buf)
+ 		return -ENOMEM;
+ 
++	ucr->rsp_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
++	if (!ucr->rsp_buf)
++		goto out_free_cmd_buf;
++
+ 	usb_set_intfdata(intf, ucr);
+ 
+ 	ucr->vendor_id = id->idVendor;
+ 	ucr->product_id = id->idProduct;
+-	ucr->cmd_buf = ucr->rsp_buf = ucr->iobuf;
+ 
+ 	mutex_init(&ucr->dev_mutex);
+ 
+@@ -678,9 +681,11 @@ static int rtsx_usb_probe(struct usb_interface *intf,
+ 
+ out_init_fail:
+ 	usb_set_intfdata(ucr->pusb_intf, NULL);
+-	kfree(ucr->iobuf);
+-	ucr->iobuf = NULL;
+-	ucr->cmd_buf = ucr->rsp_buf = NULL;
++	kfree(ucr->rsp_buf);
++	ucr->rsp_buf = NULL;
++out_free_cmd_buf:
++	kfree(ucr->cmd_buf);
++	ucr->cmd_buf = NULL;
+ 	return ret;
+ }
+ 
+@@ -693,9 +698,12 @@ static void rtsx_usb_disconnect(struct usb_interface *intf)
+ 	mfd_remove_devices(&intf->dev);
+ 
+ 	usb_set_intfdata(ucr->pusb_intf, NULL);
+-	kfree(ucr->iobuf);
+-	ucr->iobuf = NULL;
+-	ucr->cmd_buf = ucr->rsp_buf = NULL;
++
++	kfree(ucr->cmd_buf);
++	ucr->cmd_buf = NULL;
++
++	kfree(ucr->rsp_buf);
++	ucr->rsp_buf = NULL;
+ }
+ 
+ #ifdef CONFIG_PM
+diff --git a/include/linux/mfd/rtsx_usb.h b/include/linux/mfd/rtsx_usb.h
+index d3d231afb17c..09b08ff08830 100644
+--- a/include/linux/mfd/rtsx_usb.h
++++ b/include/linux/mfd/rtsx_usb.h
+@@ -65,7 +65,6 @@ struct rtsx_ucr {
+ 	struct usb_device	*pusb_dev;
+ 	struct usb_interface	*pusb_intf;
+ 	struct usb_sg_request	current_sg;
+-	unsigned char		*iobuf;
+ 
+ 	struct timer_list	sg_timer;
+ 	struct mutex		dev_mutex;
 -- 
 2.35.1
 

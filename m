@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72108582D8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A571582F8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236637AbiG0Q75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S233386AbiG0R1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240816AbiG0Q5o (ORCPT
+        with ESMTP id S232873AbiG0R1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:57:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E6D66AF9;
-        Wed, 27 Jul 2022 09:36:38 -0700 (PDT)
+        Wed, 27 Jul 2022 13:27:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C20F7E80E;
+        Wed, 27 Jul 2022 09:47:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5E5261AB3;
-        Wed, 27 Jul 2022 16:36:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF0F9C433C1;
-        Wed, 27 Jul 2022 16:36:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEB9260D3B;
+        Wed, 27 Jul 2022 16:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF0C7C433D7;
+        Wed, 27 Jul 2022 16:46:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939794;
-        bh=n3F8lmh2d1J+/JTqlyh1/WfUM4sggvcBvuWMKYpAjF4=;
+        s=korg; t=1658940408;
+        bh=BZLp5uwG5GWcYyxKYOPodzLCyM2oeGeRA1HANZnEyF4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mg7dcDBQoD9tkJeBE3/RXUx1pxhhXIUMVLIUN+AJn4xaOO3MdlhVt+EPc0Z1PYgWI
-         N8d4JTFrDksHP9HuOH0KMrIRmioKo4jclllzSosY7IM0RVbZu0lSlTkrmLxqsmB1J7
-         qqbOV7xHk578lPn+IunDfn/6oGBhoxBJ7RNsCbuc=
+        b=Th/OWrE8JjFiMwZHctJR4hYu/17ONN17WP2Nxp4xcr6MMLL8UHsV+ezUNRcofFK6x
+         8iI1BISMdcN7KZAQmMu8OOc22kAjtvkjonOtZ3wi+DLA/StwQzQBH8wAp1CEOnbrGf
+         H+N0+NlRTuEtQbOOw5s5iewZUNY1DX8jWF7uN6qI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 5.10 090/105] Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
-Date:   Wed, 27 Jul 2022 18:11:16 +0200
-Message-Id: <20220727161015.708423305@linuxfoundation.org>
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Fabio Porcedda <fabio.porcedda@gmail.com>
+Subject: [PATCH 5.18 013/158] bus: mhi: host: pci_generic: add Telit FN990
+Date:   Wed, 27 Jul 2022 18:11:17 +0200
+Message-Id: <20220727161021.984004086@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
+References: <20220727161021.428340041@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,154 +55,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-commit 81be03e026dc0c16dc1c64e088b2a53b73caa895 upstream.
+commit 77fc41204734042861210b9d05338c9b8360affb upstream.
 
-This makes use of bt_skb_sendmmsg instead using memcpy_from_msg which
-is not considered safe to be used when lock_sock is held.
+Add Telit FN990:
 
-Also make rfcomm_dlc_send handle skb with fragments and queue them all
-atomically.
+01:00.0 Unassigned class [ff00]: Qualcomm Device 0308
+        Subsystem: Device 1c5d:2010
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Link: https://lore.kernel.org/r/20220502112036.443618-1-dnlplm@gmail.com
+[mani: Added "host" to the subject]
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bluetooth/rfcomm/core.c |   50 +++++++++++++++++++++++++++++++++++++-------
- net/bluetooth/rfcomm/sock.c |   50 ++++++++++----------------------------------
- 2 files changed, 55 insertions(+), 45 deletions(-)
+ drivers/bus/mhi/host/pci_generic.c |   41 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
---- a/net/bluetooth/rfcomm/core.c
-+++ b/net/bluetooth/rfcomm/core.c
-@@ -549,22 +549,58 @@ struct rfcomm_dlc *rfcomm_dlc_exists(bda
- 	return dlc;
- }
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -481,6 +481,44 @@ static const struct mhi_pci_dev_info mhi
+ 	.sideband_wake = false,
+ };
  
-+static int rfcomm_dlc_send_frag(struct rfcomm_dlc *d, struct sk_buff *frag)
-+{
-+	int len = frag->len;
++static const struct mhi_channel_config mhi_telit_fn990_channels[] = {
++	MHI_CHANNEL_CONFIG_UL_SBL(2, "SAHARA", 32, 0),
++	MHI_CHANNEL_CONFIG_DL_SBL(3, "SAHARA", 32, 0),
++	MHI_CHANNEL_CONFIG_UL(4, "DIAG", 64, 1),
++	MHI_CHANNEL_CONFIG_DL(5, "DIAG", 64, 1),
++	MHI_CHANNEL_CONFIG_UL(12, "MBIM", 32, 0),
++	MHI_CHANNEL_CONFIG_DL(13, "MBIM", 32, 0),
++	MHI_CHANNEL_CONFIG_UL(32, "DUN", 32, 0),
++	MHI_CHANNEL_CONFIG_DL(33, "DUN", 32, 0),
++	MHI_CHANNEL_CONFIG_HW_UL(100, "IP_HW0_MBIM", 128, 2),
++	MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0_MBIM", 128, 3),
++};
 +
-+	BT_DBG("dlc %p mtu %d len %d", d, d->mtu, len);
++static struct mhi_event_config mhi_telit_fn990_events[] = {
++	MHI_EVENT_CONFIG_CTRL(0, 128),
++	MHI_EVENT_CONFIG_DATA(1, 128),
++	MHI_EVENT_CONFIG_HW_DATA(2, 1024, 100),
++	MHI_EVENT_CONFIG_HW_DATA(3, 2048, 101)
++};
 +
-+	if (len > d->mtu)
-+		return -EINVAL;
++static const struct mhi_controller_config modem_telit_fn990_config = {
++	.max_channels = 128,
++	.timeout_ms = 20000,
++	.num_channels = ARRAY_SIZE(mhi_telit_fn990_channels),
++	.ch_cfg = mhi_telit_fn990_channels,
++	.num_events = ARRAY_SIZE(mhi_telit_fn990_events),
++	.event_cfg = mhi_telit_fn990_events,
++};
 +
-+	rfcomm_make_uih(frag, d->addr);
-+	__skb_queue_tail(&d->tx_queue, frag);
++static const struct mhi_pci_dev_info mhi_telit_fn990_info = {
++	.name = "telit-fn990",
++	.config = &modem_telit_fn990_config,
++	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
++	.dma_data_width = 32,
++	.sideband_wake = false,
++	.mru_default = 32768,
++};
 +
-+	return len;
-+}
-+
- int rfcomm_dlc_send(struct rfcomm_dlc *d, struct sk_buff *skb)
- {
--	int len = skb->len;
-+	unsigned long flags;
-+	struct sk_buff *frag, *next;
-+	int len;
- 
- 	if (d->state != BT_CONNECTED)
- 		return -ENOTCONN;
- 
--	BT_DBG("dlc %p mtu %d len %d", d, d->mtu, len);
-+	frag = skb_shinfo(skb)->frag_list;
-+	skb_shinfo(skb)->frag_list = NULL;
- 
--	if (len > d->mtu)
--		return -EINVAL;
-+	/* Queue all fragments atomically. */
-+	spin_lock_irqsave(&d->tx_queue.lock, flags);
-+
-+	len = rfcomm_dlc_send_frag(d, skb);
-+	if (len < 0 || !frag)
-+		goto unlock;
-+
-+	for (; frag; frag = next) {
-+		int ret;
-+
-+		next = frag->next;
-+
-+		ret = rfcomm_dlc_send_frag(d, frag);
-+		if (ret < 0) {
-+			kfree_skb(frag);
-+			goto unlock;
-+		}
-+
-+		len += ret;
-+	}
- 
--	rfcomm_make_uih(skb, d->addr);
--	skb_queue_tail(&d->tx_queue, skb);
-+unlock:
-+	spin_unlock_irqrestore(&d->tx_queue.lock, flags);
- 
--	if (!test_bit(RFCOMM_TX_THROTTLED, &d->flags))
-+	if (len > 0 && !test_bit(RFCOMM_TX_THROTTLED, &d->flags))
- 		rfcomm_schedule();
- 	return len;
- }
---- a/net/bluetooth/rfcomm/sock.c
-+++ b/net/bluetooth/rfcomm/sock.c
-@@ -575,47 +575,21 @@ static int rfcomm_sock_sendmsg(struct so
- 	lock_sock(sk);
- 
- 	sent = bt_sock_wait_ready(sk, msg->msg_flags);
--	if (sent)
--		goto done;
--
--	while (len) {
--		size_t size = min_t(size_t, len, d->mtu);
--		int err;
--
--		skb = sock_alloc_send_skb(sk, size + RFCOMM_SKB_RESERVE,
--				msg->msg_flags & MSG_DONTWAIT, &err);
--		if (!skb) {
--			if (sent == 0)
--				sent = err;
--			break;
--		}
--		skb_reserve(skb, RFCOMM_SKB_HEAD_RESERVE);
--
--		err = memcpy_from_msg(skb_put(skb, size), msg, size);
--		if (err) {
--			kfree_skb(skb);
--			if (sent == 0)
--				sent = err;
--			break;
--		}
--
--		skb->priority = sk->sk_priority;
--
--		err = rfcomm_dlc_send(d, skb);
--		if (err < 0) {
--			kfree_skb(skb);
--			if (sent == 0)
--				sent = err;
--			break;
--		}
--
--		sent += size;
--		len  -= size;
--	}
- 
--done:
- 	release_sock(sk);
- 
-+	if (sent)
-+		return sent;
-+
-+	skb = bt_skb_sendmmsg(sk, msg, len, d->mtu, RFCOMM_SKB_HEAD_RESERVE,
-+			      RFCOMM_SKB_TAIL_RESERVE);
-+	if (IS_ERR_OR_NULL(skb))
-+		return PTR_ERR(skb);
-+
-+	sent = rfcomm_dlc_send(d, skb);
-+	if (sent < 0)
-+		kfree_skb(skb);
-+
- 	return sent;
- }
- 
+ static const struct pci_device_id mhi_pci_id_table[] = {
+ 	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
+ 	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
+@@ -492,6 +530,9 @@ static const struct pci_device_id mhi_pc
+ 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx55_info },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
+ 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
++	/* Telit FN990 */
++	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0308, 0x1c5d, 0x2010),
++		.driver_data = (kernel_ulong_t) &mhi_telit_fn990_info },
+ 	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
+ 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+ 	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
 
 

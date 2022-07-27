@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955DB582C12
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A70582B68
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239427AbiG0Qlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S235313AbiG0Qc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239570AbiG0QlA (ORCPT
+        with ESMTP id S237685AbiG0QcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:41:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382AC5140C;
-        Wed, 27 Jul 2022 09:29:32 -0700 (PDT)
+        Wed, 27 Jul 2022 12:32:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390004E868;
+        Wed, 27 Jul 2022 09:26:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2443B821BD;
-        Wed, 27 Jul 2022 16:29:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6E9C433C1;
-        Wed, 27 Jul 2022 16:29:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 359ABB821BC;
+        Wed, 27 Jul 2022 16:25:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943BFC433C1;
+        Wed, 27 Jul 2022 16:25:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939369;
-        bh=Lk+Blne/blYZaB0qzZO5oWNuvyqkY7TzTtvAIAIPXgs=;
+        s=korg; t=1658939145;
+        bh=GH8X8H40DZmlNZYLKIumjz4WqGqR3FFDqpyqZxYZORs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AlIjts3Fk/Umj1Pk5ZBZhWE8P5OKnZbxcYTe+FAP+VtjaNjzbiy+r9rureqVnoCzh
-         UAMa1RKkAjXry66KK0vqn5qDCFeeOozsmjVsNbXcvbG3RYaKGsPHyp3JO4UMIn3gTm
-         3x2qKu+iUHuLTQ0S5c554lQEtIx2N7PL3UvelcZU=
+        b=RyhA2VrYkeIvDfsc5SVs4xizTr50k2baTSKCDWOl/p6P3RwHv8LN8GLYPq+E6xYNa
+         8tnPvFd5pL0q3fKQHKvIDKwfBLGCRPxakWhZqXcHWsgq09LvcwA9gtp3YuLSt0BaS9
+         nLuOtXmzoLe13zMImDiSVVEw3o99AnNPyhSYKlGU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 44/87] ipv4: Fix a data-race around sysctl_fib_multipath_use_neigh.
-Date:   Wed, 27 Jul 2022 18:10:37 +0200
-Message-Id: <20220727161010.838337691@linuxfoundation.org>
+Subject: [PATCH 4.19 29/62] tcp: Fix a data-race around sysctl_tcp_retrans_collapse.
+Date:   Wed, 27 Jul 2022 18:10:38 +0200
+Message-Id: <20220727161005.350741940@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,32 +56,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 87507bcb4f5de16bb419e9509d874f4db6c0ad0f ]
+[ Upstream commit 1a63cb91f0c2fcdeced6d6edee8d1d886583d139 ]
 
-While reading sysctl_fib_multipath_use_neigh, it can be changed
+While reading sysctl_tcp_retrans_collapse, it can be changed
 concurrently.  Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: a6db4494d218 ("net: ipv4: Consider failed nexthops in multipath routes")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/fib_semantics.c | 2 +-
+ net/ipv4/tcp_output.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
-index 16fe03461563..28da0443f3e9 100644
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -2209,7 +2209,7 @@ void fib_select_multipath(struct fib_result *res, int hash)
- 	}
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 3b416dfb8aff..13d9e8570ce5 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2816,7 +2816,7 @@ static void tcp_retrans_try_collapse(struct sock *sk, struct sk_buff *to,
+ 	struct sk_buff *skb = to, *tmp;
+ 	bool first = true;
  
- 	change_nexthops(fi) {
--		if (net->ipv4.sysctl_fib_multipath_use_neigh) {
-+		if (READ_ONCE(net->ipv4.sysctl_fib_multipath_use_neigh)) {
- 			if (!fib_good_nh(nexthop_nh))
- 				continue;
- 			if (!first) {
+-	if (!sock_net(sk)->ipv4.sysctl_tcp_retrans_collapse)
++	if (!READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_retrans_collapse))
+ 		return;
+ 	if (TCP_SKB_CB(skb)->tcp_flags & TCPHDR_SYN)
+ 		return;
 -- 
 2.35.1
 

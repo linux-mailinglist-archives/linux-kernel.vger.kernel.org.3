@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493B2583052
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AAB583003
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240203AbiG0RgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S242131AbiG0RcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242691AbiG0Rer (ORCPT
+        with ESMTP id S242579AbiG0RaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:34:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C8B8322E;
-        Wed, 27 Jul 2022 09:49:29 -0700 (PDT)
+        Wed, 27 Jul 2022 13:30:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535276053A;
+        Wed, 27 Jul 2022 09:48:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68D56B821BA;
-        Wed, 27 Jul 2022 16:49:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D62C433D7;
-        Wed, 27 Jul 2022 16:49:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6728DB8200D;
+        Wed, 27 Jul 2022 16:48:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4666C433C1;
+        Wed, 27 Jul 2022 16:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940568;
-        bh=UfdR8alEtr+J6C83yGSrEMxB5kYXnNaWCvzjtgVLPQA=;
+        s=korg; t=1658940480;
+        bh=IQkqiL557D1Uy1xhbqyt5NvKMoYWp8sG7TSbNKRSI+o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PBp9GBgSN2ahNX9Xm+SsMMjpp4qpMQcdZP9eV/7x6uwwdg/9PxOQyx1u3XKhkEkbF
-         Ikc0BbYs8+IdlnryJMuyprXGf5zs29vyYgrMVSuJxrCXwg/hMq5f8lwHRzrfmr0x/T
-         Mmpi9H5Gm6imNhYxTyD1fpHBhsOEDh7eUkZwD5lk=
+        b=Q+hMuQ9TNbTIDITilDPY+XqLMDu1AIQ0TufPVEXvDXOAqEmkCTWlKQoNXR8GpX83p
+         c/2SbBKbJiwikF/LqrXEdumFyELwHFxlXe2ngg1VLILu0rfUBwxfQ/DxAf2LZttuIN
+         Q/dgXkJ3DIE+IKDSjAN8xL9aCtGOEOZGiD/vLl1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Jihong <yangjihong1@huawei.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 029/158] perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
-Date:   Wed, 27 Jul 2022 18:11:33 +0200
-Message-Id: <20220727161022.646512129@linuxfoundation.org>
+Subject: [PATCH 5.18 030/158] e1000e: Enable GPT clock before sending message to CSME
+Date:   Wed, 27 Jul 2022 18:11:34 +0200
+Message-Id: <20220727161022.686155057@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
 References: <20220727161021.428340041@linuxfoundation.org>
@@ -54,164 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-[ Upstream commit 68e3c69803dada336893640110cb87221bb01dcf ]
+[ Upstream commit b49feacbeffc7635cc6692cbcc6a1eae2c17da6f ]
 
-Yang Jihing reported a race between perf_event_set_output() and
-perf_mmap_close():
+On corporate (CSME) ADL systems, the Ethernet Controller may stop working
+("HW unit hang") after exiting from the s0ix state. The reason is that
+CSME misses the message sent by the host. Enabling the dynamic GPT clock
+solves this problem. This clock is cleared upon HW initialization.
 
-	CPU1					CPU2
-
-	perf_mmap_close(e2)
-	  if (atomic_dec_and_test(&e2->rb->mmap_count)) // 1 - > 0
-	    detach_rest = true
-
-						ioctl(e1, IOC_SET_OUTPUT, e2)
-						  perf_event_set_output(e1, e2)
-
-	  ...
-	  list_for_each_entry_rcu(e, &e2->rb->event_list, rb_entry)
-	    ring_buffer_attach(e, NULL);
-	    // e1 isn't yet added and
-	    // therefore not detached
-
-						    ring_buffer_attach(e1, e2->rb)
-						      list_add_rcu(&e1->rb_entry,
-								   &e2->rb->event_list)
-
-After this; e1 is attached to an unmapped rb and a subsequent
-perf_mmap() will loop forever more:
-
-	again:
-		mutex_lock(&e->mmap_mutex);
-		if (event->rb) {
-			...
-			if (!atomic_inc_not_zero(&e->rb->mmap_count)) {
-				...
-				mutex_unlock(&e->mmap_mutex);
-				goto again;
-			}
-		}
-
-The loop in perf_mmap_close() holds e2->mmap_mutex, while the attach
-in perf_event_set_output() holds e1->mmap_mutex. As such there is no
-serialization to avoid this race.
-
-Change perf_event_set_output() to take both e1->mmap_mutex and
-e2->mmap_mutex to alleviate that problem. Additionally, have the loop
-in perf_mmap() detach the rb directly, this avoids having to wait for
-the concurrent perf_mmap_close() to get around to doing it to make
-progress.
-
-Fixes: 9bb5d40cd93c ("perf: Fix mmap() accounting hole")
-Reported-by: Yang Jihong <yangjihong1@huawei.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Yang Jihong <yangjihong1@huawei.com>
-Link: https://lkml.kernel.org/r/YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net
+Fixes: 3e55d231716e ("e1000e: Add handshake with the CSME to support S0ix")
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=214821
+Reviewed-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/events/core.c | 45 ++++++++++++++++++++++++++++++--------------
- 1 file changed, 31 insertions(+), 14 deletions(-)
+ drivers/net/ethernet/intel/e1000e/netdev.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 950b25c3f210..82238406f5f5 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6254,10 +6254,10 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
+diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+index fa06f68c8c80..c64102b29862 100644
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -6494,6 +6494,10 @@ static void e1000e_s0ix_exit_flow(struct e1000_adapter *adapter)
  
- 		if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
- 			/*
--			 * Raced against perf_mmap_close() through
--			 * perf_event_set_output(). Try again, hope for better
--			 * luck.
-+			 * Raced against perf_mmap_close(); remove the
-+			 * event and try again.
- 			 */
-+			ring_buffer_attach(event, NULL);
- 			mutex_unlock(&event->mmap_mutex);
- 			goto again;
- 		}
-@@ -11826,14 +11826,25 @@ static int perf_copy_attr(struct perf_event_attr __user *uattr,
- 	goto out;
- }
- 
-+static void mutex_lock_double(struct mutex *a, struct mutex *b)
-+{
-+	if (b < a)
-+		swap(a, b);
-+
-+	mutex_lock(a);
-+	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
-+}
-+
- static int
- perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- {
- 	struct perf_buffer *rb = NULL;
- 	int ret = -EINVAL;
- 
--	if (!output_event)
-+	if (!output_event) {
-+		mutex_lock(&event->mmap_mutex);
- 		goto set;
-+	}
- 
- 	/* don't allow circular references */
- 	if (event == output_event)
-@@ -11871,8 +11882,15 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- 	    event->pmu != output_event->pmu)
- 		goto out;
- 
-+	/*
-+	 * Hold both mmap_mutex to serialize against perf_mmap_close().  Since
-+	 * output_event is already on rb->event_list, and the list iteration
-+	 * restarts after every removal, it is guaranteed this new event is
-+	 * observed *OR* if output_event is already removed, it's guaranteed we
-+	 * observe !rb->mmap_count.
-+	 */
-+	mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
- set:
--	mutex_lock(&event->mmap_mutex);
- 	/* Can't redirect output if we've got an active mmap() */
- 	if (atomic_read(&event->mmap_count))
- 		goto unlock;
-@@ -11882,6 +11900,12 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- 		rb = ring_buffer_get(output_event);
- 		if (!rb)
- 			goto unlock;
-+
-+		/* did we race against perf_mmap_close() */
-+		if (!atomic_read(&rb->mmap_count)) {
-+			ring_buffer_put(rb);
-+			goto unlock;
-+		}
- 	}
- 
- 	ring_buffer_attach(event, rb);
-@@ -11889,20 +11913,13 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
- 	ret = 0;
- unlock:
- 	mutex_unlock(&event->mmap_mutex);
-+	if (output_event)
-+		mutex_unlock(&output_event->mmap_mutex);
- 
- out:
- 	return ret;
- }
- 
--static void mutex_lock_double(struct mutex *a, struct mutex *b)
--{
--	if (b < a)
--		swap(a, b);
--
--	mutex_lock(a);
--	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
--}
--
- static int perf_event_set_clock(struct perf_event *event, clockid_t clk_id)
- {
- 	bool nmi_safe = false;
+ 	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
+ 	    hw->mac.type >= e1000_pch_adp) {
++		/* Keep the GPT clock enabled for CSME */
++		mac_data = er32(FEXTNVM);
++		mac_data |= BIT(3);
++		ew32(FEXTNVM, mac_data);
+ 		/* Request ME unconfigure the device from S0ix */
+ 		mac_data = er32(H2ME);
+ 		mac_data &= ~E1000_H2ME_START_DPG;
 -- 
 2.35.1
 

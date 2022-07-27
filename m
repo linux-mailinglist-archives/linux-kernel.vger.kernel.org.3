@@ -2,92 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B42583304
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9B158335A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbiG0TIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        id S236892AbiG0TTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233853AbiG0TIO (ORCPT
+        with ESMTP id S238002AbiG0TTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:08:14 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C8961B31;
-        Wed, 27 Jul 2022 11:44:32 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id b133so16870430pfb.6;
-        Wed, 27 Jul 2022 11:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=om6BXy1+SA87/CyEYzLsfCaTtqizfiZkOOEb0xpUUBA=;
-        b=B7/ER0VlJBi4Wqn6vZTg4IUv5o+ct1e++q+yV5mOqrDaPKS3wfHQVW1mQ/WfT13sbj
-         PjX3ewiWbtX2QMD8qJrELmgFn5JY2jozltHeSCumUdlF6S6wAcFFTt+CbLs9JLMM/zbM
-         OrvrvcthcbZDzrTRYY3MlZsImCnihzTJAQ2UMDm9P1thCMUJe7g69uEztIlHwKUJi7+8
-         lQzgfVN5rM4l0MpEflVgy5AAbZOcDEwCxM3wFWKM940MOQFcQwU3mGJk4FDcby0kv+w/
-         Sqxy21ZI6VoXDQzErkTC2yEw7n/V6LcETt89rlh0v8127+MFzwjRMJHen9+7RsVp3EY3
-         XiKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=om6BXy1+SA87/CyEYzLsfCaTtqizfiZkOOEb0xpUUBA=;
-        b=rn0/oOOo0mB94qT7xee/gjMdv3q9GYFFM9x+dOB6/X5wzDYku7kJZ21+Ulq/g6Acew
-         F9ZeSj9JAAtpucv0vdkrJfm2Y1ok7aQKoJq3g2JzLMqp2YcwxagegpueNnvVtf/F02ms
-         khtOoVW3N5RkrmigFVjD9Be0nqRGBzrLrAiF7V2f1D5//Jetq4nxucTO3xZhpYgDVOvU
-         sayOJpXsyN6Kh9ZLI/sSyoR9UztUOL9bzlGJYeRON1k6YmvOdABhupN3V7PMsD2bdrqg
-         QJ4bumxV64XPQZNx7uDvj+QIbbxfCIB6M0aP+B2CLrWQd/DITiCG1pEugSifh4slv8zH
-         TpCA==
-X-Gm-Message-State: AJIora/UdebAj6jcX8jXFinW95396GXv1FcTuYp7ZPQHC8jFNo3jhyk/
-        IxPVgts89ktJvdppXGHSszQ=
-X-Google-Smtp-Source: AGRyM1tveaaJIUdeJQ3voQs/C4iVq+FCkaGjBMCwGE4eIDBbabbJr2KvV/+/cfMbU/DU6ZpXPots3Q==
-X-Received: by 2002:a05:6a00:2312:b0:52b:928:99dd with SMTP id h18-20020a056a00231200b0052b092899ddmr22973465pfh.77.1658947472107;
-        Wed, 27 Jul 2022 11:44:32 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:5a55])
-        by smtp.gmail.com with ESMTPSA id bi5-20020a170902bf0500b0016bfea13321sm13969740plb.243.2022.07.27.11.44.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 11:44:31 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 27 Jul 2022 08:44:29 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH RESEND v6 8/8] blk-throttle: clean up flag
- 'THROTL_TG_PENDING'
-Message-ID: <YuGHjf9MWjirOWcm@slm.duckdns.org>
-References: <20220701093441.885741-1-yukuai1@huaweicloud.com>
- <20220701093441.885741-9-yukuai1@huaweicloud.com>
+        Wed, 27 Jul 2022 15:19:20 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307D14F663;
+        Wed, 27 Jul 2022 12:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=a52mJhM1gg4pRCLX2QchY4yYs0Td4xCM9hQG7dTnPWc=;
+        b=Bo6Vlb1aBj1EOmh8KUPkZyW2iZeA69lLQLzjQZlo152fYud67iqWd3Bwgt97TPQzx+0nbMntvI4/+
+         cEEPyYuz2LcyX/7zAYjgf2nE208mCyjJigtg6+gVMyf4yzLvCOuzFBxxOTUKBOZDvLZ9T63YQWKkbY
+         PuTaBq7pxb0LAnzj0q+kg1stfbXaD7Xo2v0EDWBPYq46vX8cMTjjprx4xSKcNbvCmFSB5QLqAtH6oX
+         Ml2Jn/E+w8VWq/LpZIt69VKXdP2XouTf5qi7RX/aL8r2lNrNsGET3d9CYv8F+fWzmIToESktsJm/la
+         SsqMRG9zxfWX+FzBvNaaAPn3zMLe6+w==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000008,0.009919)], BW: [Enabled, t: (0.000013,0.000001)], RTDA: [Enabled, t: (0.074415), Hit: No, Details: v2.41.0; Id: 15.52k3hs.1g90h4fac.fvmn; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([85.93.58.13])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 27 Jul 2022 22:11:27 +0300
+Date:   Wed, 27 Jul 2022 21:46:43 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: fpga: microchip,mpf-spi-fpga-mgr: use
+ spi-peripheral-props.yaml
+Message-ID: <20220727184643.7bpsrxxrrpyqbwtx@x260>
+References: <20220727164347.386398-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701093441.885741-9-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220727164347.386398-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 05:34:41PM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On Wed, Jul 27, 2022 at 06:43:47PM +0200, Krzysztof Kozlowski wrote:
+> Instead of listing directly properties typical for SPI peripherals,
+> reference the spi-peripheral-props.yaml schema.  This allows using all
+> properties typical for SPI-connected devices, even these which device
+> bindings author did not tried yet.
 > 
-> All related operations are inside 'queue_lock', there is no need to use
-> the flag, we only need to make sure throtl_enqueue_tg() is called when
-> the first bio is throttled, and throtl_dequeue_tg() is called when the
-> last throttled bio is dispatched.
+> Remove the spi-* properties which now come via spi-peripheral-props.yaml
+> schema, except for the cases when device schema adds some constraints
+> like maximum frequency.
+> 
+> While changing additionalProperties->unevaluatedProperties, put it in
+> typical place, just before example DTS.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Technically, this depends on [1] merged to SPI tree, if we want to
+> preserve existing behavior of not allowing SPI CPHA and CPOL in each of
+> schemas in this patch.
+> 
+> If this patch comes independently via different tree, the SPI CPHA and
+> CPOL will be allowed for brief period of time, before [1] is merged.
+> This will not have negative impact, just DT schema checks will be
+> loosened for that period.
+> 
+> [1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
+> ---
+>  .../bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml          | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> index aee45cb15592..527532f039ce 100644
+> --- a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> +++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> @@ -22,13 +22,14 @@ properties:
+>      description: SPI chip select
+>      maxItems: 1
+>  
+> -  spi-max-frequency: true
+> -
+>  required:
+>    - compatible
+>    - reg
+>  
+> -additionalProperties: false
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +
+> +unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> -- 
+> 2.34.1
+> 
 
-Ah, okay, so the prev patch was to enable this cleanup. Can you please note
-so in the previous patch and also that this doesn't cause any functional
-changes?
+Acked-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 
-Thanks.
-
--- 
-tejun

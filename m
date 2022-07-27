@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC512582FF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CEA582FF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237696AbiG0Rbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S242363AbiG0Rbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242296AbiG0R3U (ORCPT
+        with ESMTP id S242308AbiG0R3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:29:20 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD28E52477
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:47:38 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id p10so20432389lfd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:47:38 -0700 (PDT)
+        Wed, 27 Jul 2022 13:29:23 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6AA8049C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:47:39 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id t17so15695072lfk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:47:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZNmQiW5AvIOtEUDHlEIUtIO/nCYrI/d8smXZXTrIU/o=;
-        b=iWVXqzqfgZWyU6q37aPpBdfPk83KO2tiGk/vS4ImIdjeT2Dl+ubQlKovcWSMO8KLi+
-         XwvXqv6Se2XkUBte+uexnIyqDWxxfM0u0eOWoES6PD0zssoj//+yD59C9yD0hTc0h9xd
-         OJYba76JcO8JmYRV/v0dPrIFWkYQk785XpnZrV7QFo/tnpdo/SW9GYzql8UngmibcjR7
-         cJBtJKoQGp8m9zCsbIAFltb5r3tLwcBSLBei7BirzZAUDtF8jJpMjxo2m8OYcqfkXqoh
-         RVXUhQDUyJMgPmr640Dn12uoRvcqGywVXK2mIhMMU7GyeDheyh8xdE88NXCTLjDQlvPY
-         1p9A==
+        bh=DTTVWNUuMuaI4chfKvwmUvgtvzhYatcrU+SN3O9eX+s=;
+        b=U002gDRLMVsJcBk1u0QPgZOu1snf9GyRDIF0+hEXGZ3haziNjkH7VmHhe5k2dep76h
+         jGP1rmKNRvmnY0TKJOym7pFkVHO0Kzpg5nM8r6n8X2eRaMlpLLp321HsxcZxZYeR2tKj
+         dkCnVXuPkopn82sXC+6c6aJ3W9/+CnsLa768eW2cazuEiSffHnabzcZaJe/b1gW8rSDz
+         6YitIkc57NAJWyu483kFfVoK2QTJveFGqunRBSo1523GJGyLiiZzC/MHbCcu8HhYGvEw
+         Ab5DHDdwaUDwHCPINisD+tdZt5JiZmV/9vcDZO8x4qnkGSl97nw9JO5myfTyQ1VFH15x
+         OCNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZNmQiW5AvIOtEUDHlEIUtIO/nCYrI/d8smXZXTrIU/o=;
-        b=t5qH3BPQY9eXCUPuN/0zjDJeOG99N0Sv/4XDQJVvPNGiHXH5JvT3oq66AZah/FpP7h
-         pslnGabuAqsxjTEBTDjQZAm5TWVn9SK7cNXctNygrMTZVMaqbe5fGn7T8udpb31WyX9d
-         Q/SOYcXQn7AESvsZ34jaWTWREt0dSHgA5V+lsjbbTMY6h/NxkSH9q4nOiy6lIh30VGLg
-         SNh56zbdtBYaMJbgSCe8U0zJBKv61Khd06WdPJoR1i9cxA4NWhw3dwj53vpbtKlsJe8a
-         /J4yIMRXk1lGnqIL3urfshUxjL0+dg9th3YIoMmq1HyF93JyXT9Oeu9zWFVH8aUEbIii
-         ipwQ==
-X-Gm-Message-State: AJIora87eMEEu9gP9ANGC1jB2alSrQkQrvElL4fxXh1sOCt1llPKQNPq
-        4kzWdW8jE5LVngeed+XF6UPIDQ==
-X-Google-Smtp-Source: AGRyM1ut7IU0GDmY5J6kKoccIPiyd8sybZvYlRabx++YLduroVnAeRYMEgFsMozQNRD25CBNiFMpLA==
-X-Received: by 2002:a05:6512:c16:b0:48a:97b2:e060 with SMTP id z22-20020a0565120c1600b0048a97b2e060mr4471424lfu.660.1658940450562;
-        Wed, 27 Jul 2022 09:47:30 -0700 (PDT)
+        bh=DTTVWNUuMuaI4chfKvwmUvgtvzhYatcrU+SN3O9eX+s=;
+        b=uRvrULO3Rnd2y1ivO2nNpf9LcxwgL37F+dDBXJAHOE5Iv40rrwvRAVn+/VM8+qNp7+
+         mG/AiqCiUp6wVZ85W8d62K5C488UAAgEF+d+Eviep6AseI07pucgkqLr0nSNsjd8gDCI
+         8UR3iuylA5FFHaEEAPDZBKX2EOBwYZssdAxjrrnYVLKZd43CeDmbgwrghZPt0GJpuGF8
+         ymKICjQKpoUHZXaVZH017AF/4CDODArnxNuEj+p0KALiEN+pPNL2gm0Q9RZJFGq77XmW
+         DX83HpvgsKylKs78/xGfQYaIa7FFgoy5q0E0Smx/Mv/oON5FOKeQ9Mh5LtMzrPPT7ZD5
+         pWsA==
+X-Gm-Message-State: AJIora8WhbLCKgwqoN1Db+flml7BVyIdL5ga7N6GHqyyJke7grlKTNBV
+        Y7aH8nMASQvSdBFfUzMzEwKWug==
+X-Google-Smtp-Source: AGRyM1vVIiFk5cN8M18OeA3AFnnZUsvMne4m446kxamz2WkV0ZBhabaZIWjFAE7Y/F+ZoYUbqBF+nw==
+X-Received: by 2002:a05:6512:2350:b0:48a:794b:382 with SMTP id p16-20020a056512235000b0048a794b0382mr8070684lfu.185.1658940453508;
+        Wed, 27 Jul 2022 09:47:33 -0700 (PDT)
 Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id 18-20020ac25f52000000b0048910301774sm3375149lfz.307.2022.07.27.09.47.27
+        by smtp.gmail.com with ESMTPSA id 18-20020ac25f52000000b0048910301774sm3375149lfz.307.2022.07.27.09.47.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 09:47:29 -0700 (PDT)
+        Wed, 27 Jul 2022 09:47:32 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
@@ -101,9 +101,9 @@ To:     Lars-Peter Clausen <lars@metafoo.de>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 09/10] dt-bindings: iio: samsung,sensorhub-rinato: use spi-peripheral-props.yaml
-Date:   Wed, 27 Jul 2022 18:46:45 +0200
-Message-Id: <20220727164646.387541-10-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 10/10] dt-bindings: iio: temperature: use spi-peripheral-props.yaml
+Date:   Wed, 27 Jul 2022 18:46:46 +0200
+Message-Id: <20220727164646.387541-11-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220727164646.387541-1-krzysztof.kozlowski@linaro.org>
 References: <20220727164646.387541-1-krzysztof.kozlowski@linaro.org>
@@ -133,36 +133,88 @@ typical place, just before example DTS.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/iio/samsung,sensorhub-rinato.yaml           | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ .../bindings/iio/temperature/maxim,max31855k.yaml           | 4 ++--
+ .../devicetree/bindings/iio/temperature/maxim,max31856.yaml | 6 ++++--
+ .../devicetree/bindings/iio/temperature/maxim,max31865.yaml | 6 ++++--
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/samsung,sensorhub-rinato.yaml b/Documentation/devicetree/bindings/iio/samsung,sensorhub-rinato.yaml
-index a88b3b14d6bd..dd2ae2bd1ad7 100644
---- a/Documentation/devicetree/bindings/iio/samsung,sensorhub-rinato.yaml
-+++ b/Documentation/devicetree/bindings/iio/samsung,sensorhub-rinato.yaml
-@@ -40,10 +40,6 @@ properties:
-     description:
-       Reset the sensorhub.
+diff --git a/Documentation/devicetree/bindings/iio/temperature/maxim,max31855k.yaml b/Documentation/devicetree/bindings/iio/temperature/maxim,max31855k.yaml
+index 9969bac66aa1..0805ed7e2113 100644
+--- a/Documentation/devicetree/bindings/iio/temperature/maxim,max31855k.yaml
++++ b/Documentation/devicetree/bindings/iio/temperature/maxim,max31855k.yaml
+@@ -32,7 +32,6 @@ properties:
+   reg:
+     maxItems: 1
  
 -  spi-max-frequency: true
--
--additionalProperties: false
--
- required:
-   - compatible
-   - reg
-@@ -52,6 +48,11 @@ required:
-   - mcu-ap-gpios
-   - mcu-reset-gpios
+   spi-cpha: true
  
+ required:
+@@ -40,6 +39,7 @@ required:
+   - reg
+ 
+ allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+   - if:
+       properties:
+         compatible:
+@@ -53,7 +53,7 @@ allOf:
+       properties:
+         spi-cpha: false
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/iio/temperature/maxim,max31856.yaml b/Documentation/devicetree/bindings/iio/temperature/maxim,max31856.yaml
+index 873b34766676..228a94165487 100644
+--- a/Documentation/devicetree/bindings/iio/temperature/maxim,max31856.yaml
++++ b/Documentation/devicetree/bindings/iio/temperature/maxim,max31856.yaml
+@@ -19,7 +19,6 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  spi-max-frequency: true
+   spi-cpha: true
+ 
+   thermocouple-type:
+@@ -34,7 +33,10 @@ required:
+   - reg
+   - spi-cpha
+ 
+-additionalProperties: false
 +allOf:
 +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
 +
 +unevaluatedProperties: false
-+
+ 
  examples:
    - |
-     spi {
+diff --git a/Documentation/devicetree/bindings/iio/temperature/maxim,max31865.yaml b/Documentation/devicetree/bindings/iio/temperature/maxim,max31865.yaml
+index aafb33b16549..a2823ed6867b 100644
+--- a/Documentation/devicetree/bindings/iio/temperature/maxim,max31865.yaml
++++ b/Documentation/devicetree/bindings/iio/temperature/maxim,max31865.yaml
+@@ -25,7 +25,6 @@ properties:
+       enables 3-wire RTD connection. Else 2-wire or 4-wire RTD connection.
+     type: boolean
+ 
+-  spi-max-frequency: true
+   spi-cpha: true
+ 
+ required:
+@@ -33,7 +32,10 @@ required:
+   - reg
+   - spi-cpha
+ 
+-additionalProperties: false
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
+ 
+ examples:
+   - |
 -- 
 2.34.1
 

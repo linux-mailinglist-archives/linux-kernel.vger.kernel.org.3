@@ -2,146 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372BC58354E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75847583550
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbiG0WWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 18:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S236007AbiG0WX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 18:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbiG0WWK (ORCPT
+        with ESMTP id S229692AbiG0WXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 18:22:10 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D095465F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:22:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0F9DB20EA8;
-        Wed, 27 Jul 2022 22:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1658960528;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cCkKf0rQGCxzajZhjfopQ8LfgHUXEv0gi7XbuW/0jns=;
-        b=ZP246JOmy00P/OBY882FDnStWAS0KN2pK+60a3X+gPKoRvnrMHaqPF1h7GtM0QK+8OJ/LX
-        uRCx0eRJoSdXz0PMpQ3SdBcu2CEx9j7q134PxKSlS7akhdErCwTIf7/zB3Rywj3ZLRwQId
-        eZGBMNs0M8SpM459l4b5SXmzuP9cje8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1658960528;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cCkKf0rQGCxzajZhjfopQ8LfgHUXEv0gi7XbuW/0jns=;
-        b=vOpedHAuRbHxAa/bGO63PKPflKdvKO8x+TzYp+xrVzekShEi5RKGB5XAn24hTR1D1/j/ju
-        ejNwNBvgXNlMxVAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D94A413ABC;
-        Wed, 27 Jul 2022 22:22:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /SMnLo+64WIDBAAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Wed, 27 Jul 2022 22:22:07 +0000
-Date:   Thu, 28 Jul 2022 00:22:05 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Sterba <dsterba@suse.com>
-Subject: Re: [PATCH 1/1] drivers/base/cpu: Print kernel arch
-Message-ID: <YuG6jfeT9p47Ekn1@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20220727161135.24531-1-pvorel@suse.cz>
- <YuFqh6OrWEQsZV04@kroah.com>
+        Wed, 27 Jul 2022 18:23:25 -0400
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1D957246;
+        Wed, 27 Jul 2022 15:23:24 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id v2so198291qvs.12;
+        Wed, 27 Jul 2022 15:23:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Oy5RoLKG40jkr/f7xmBtTV08633/f8xQVyqFC8sXuLo=;
+        b=5WcTyG6uVM1skmhyhFvnvFTYZuyuPFSTjXPPCphspbb2rx5l+c6A8qaSwQ+U8ffZdM
+         WpPnyRudATOqzzh13Ihb4enxRImLuEmugTuGddXe4+mgGdPL29DlnbnJbeCczEOeZW0l
+         JoSWFfE3Dpg3HQ8hQjOz0+dm+kuwO7wdQ3S0MPgaaY5nGoVgCiVh9qPBhy0pOQe8qYhU
+         wP8mLME7yHk2KMODcIzJkpPdGTIuTks1LRppT2VJloM1NObkqHo7exFzlAQt/cYlJL5W
+         k71oxuCUmxZymI0A7lqWqOg4JbNnGFGp0M9QECQoX2WuLZ7ogXidi+NzZhxcc5h7H8zf
+         6trg==
+X-Gm-Message-State: AJIora+wPK3EFkkaL0nhR06n/4W2McvVk+JpW2qttmVUWFSyGWjivUE0
+        Q9R0Jghqa789W7RdzqWO8M94ReSdAxNPfR9a4tVKDN4+pnY+MW1m
+X-Google-Smtp-Source: AGRyM1sAPmZzDWkI51Eqr6vfkZTZLpmKyCgr96weXem6uLkULRtvAqw96C13ikedxBsI4jOTm5fOZlTo8JJr7NJN34o=
+X-Received: by 2002:ad4:5be9:0:b0:474:552c:26e8 with SMTP id
+ k9-20020ad45be9000000b00474552c26e8mr12313234qvc.102.1658960603824; Wed, 27
+ Jul 2022 15:23:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuFqh6OrWEQsZV04@kroah.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727111954.105118-1-gpavithrasha@gmail.com> <YuGTjvLUbehHe/Pj@kernel.org>
+In-Reply-To: <YuGTjvLUbehHe/Pj@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 27 Jul 2022 15:23:12 -0700
+Message-ID: <CAM9d7cjPTOx2vTHzYxjxOK7j9KSf8FjG1QRaUqKHt3-_o5MvXw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] perf mutex: Wrapped usage of pthread_mutex_t
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     gpavithrasha@gmail.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi,
 
-thanks for your review!
+On Wed, Jul 27, 2022 at 12:35 PM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Wed, Jul 27, 2022 at 04:49:51PM +0530, gpavithrasha@gmail.com escreveu:
+> > From: pavithra <gpavithrasha@gmail.com>
 
-> On Wed, Jul 27, 2022 at 06:11:35PM +0200, Petr Vorel wrote:
-> > Print kernel architecture in /sys/devices/system/cpu/arch
-> > using UTS_MACHINE, i.e. member of struct uts_namespace.machine.
+Please set the author name to be a full name.
 
-> > This helps people who debug kernel with initramfs with minimal
-> > environment (i.e. without coreutils or even busybox) or allow to open
-> > sysfs file instead of run uname -m in high level languages.
+> >
+> > Added a new header file mutex.h that wraps the
+> > usage of pthread_mutex_t and updated lock in dso.h.
 
-> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+What is the point of the wrapping?  I think it's to add
+error checks.  Then you need to describe it here and/or
+in the file comment.
+
+>
+> Hi,
+>
+>         You should create a first patch with just the new mutex.c and
+> mutex.h files, then you go on to change the users of
+> pthread_mutex_lock/unlock to the wrappers.
+>
+>         Also please add the license on the first line of the new
+> mutex.[ch] files, see Documentation/process/license-rules.rst.
+>
+>         tldr; probably what you want is to have this single line in
+> those the two new files (mutex.[ch]):
+>
+> // SPDX-License-Identifier: GPL-2.0
+>
+>
+>
+> > Signed-off-by: pavithra <gpavithrasha@gmail.com>
 > > ---
-> >  drivers/base/cpu.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
 
-> You can't add a new sysfs file without a Documentation/ABI/ update as
-> well.  Please fix that up.
-I'm sorry. Yes, I realized it later on (once I got offline).
-Sure, I'll fix this in v2. But the main question is whether this feature is
-acceptable and what is the best place for the file.
+[SNIP]
+> > diff --git a/tools/perf/util/mutex.c b/tools/perf/util/mutex.c
+> > new file mode 100644
+> > index 000000000000..b7264a1438c4
+> > --- /dev/null
+> > +++ b/tools/perf/util/mutex.c
+> > @@ -0,0 +1,32 @@
+> > +#include <mutex.h>
+> > +#include <pthread.h>
+> > +
+> > +//to avoid the warning : implicit declaration of BUG_ON,
+> > +//we add the following 2 headers.
 
+We usually omit this kind of information.  But if you really
+think it's necessary, you can add a single line comment like:
 
-> > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> > index 4c98849577d4..7c8032e3ff10 100644
-> > --- a/drivers/base/cpu.c
-> > +++ b/drivers/base/cpu.c
-> > @@ -3,6 +3,7 @@
-> >   * CPU subsystem support
-> >   */
+#include <linux/kernel.h>  /* BUG_ON */
 
-> > +#include <generated/compile.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/init.h>
-> > @@ -232,6 +233,13 @@ static ssize_t print_cpus_kernel_max(struct device *dev,
-> >  }
-> >  static DEVICE_ATTR(kernel_max, 0444, print_cpus_kernel_max, NULL);
-
-> > +static ssize_t print_cpus_arch(struct device *dev,
-> > +				     struct device_attribute *attr, char *buf)
+> > +#include <linux/compiler.h>
+> > +#include <linux/kernel.h>
+> > +
+> > +void mutex_init(struct mutex *mtx)
 > > +{
-> > +	return sysfs_emit(buf, "%s\n", UTS_MACHINE);
+> > +pthread_mutexattr_t lock_attr;
+
+No indentation?
+
+> > +pthread_mutexattr_init(&lock_attr);
+> > +pthread_mutexattr_settype(&lock_attr, PTHREAD_MUTEX_ERRORCHECK);
+> > +BUG_ON(pthread_mutex_init(&mtx->lock, &lock_attr));
+> > +//on success, returns 0.
+
+I believe this belongs to the above line, but it can just be omitted.
+
+> > +pthread_mutexattr_destroy(&lock_attr);
 > > +}
-> > +static DEVICE_ATTR(arch, 0444, print_cpus_arch, NULL);
+> > +
+> > +void mutex_destroy(struct mutex *mtx)
+> > +{
+> > +BUG_ON(pthread_mutex_destroy(&mtx->lock));     //on success, returns 0.
+> > +}
+> > +
+> > +void mutex_lock(struct mutex *mtx)
+> > +{
+> > +BUG_ON(pthread_mutex_lock(&mtx->lock) != 0);
 
-> why just UTS_MACHINE?  Doesn't 'uname' show this already?  And I thought
-> this was in /proc/cpuinfo but odd, it isn't...
-Sure, this info is in uname(). But for certain cases is really easier to read
-file from /proc or /sys than run create custom C bindings or a binary which
-calls uname(2) libc wrapper or run uname binary via execve(2).
+Maybe this form is better to indicate it returns 0 on success.
 
-Yes, I also expected /proc/cpuinfo would have it but it does not have it. I
-don't think it's a good idea to add 'arch  : foo' line to it, but I can do if
-there is consensus that it's the best place.
+Thanks,
+Namhyung
 
-> Also what about the other things in compile.h?
-UTS_VERSION is in /proc/version.
-LINUX_COMPILE_BY (e.g. "user"), LINUX_COMPILE_HOST (e.g. "host") and
-LINUX_COMPILER (e.g. "aarch64-alpine-linux-musl-gcc (Alpine 11.2.1_git20220219)
-...") are IMHO useless, but I can add it if you wish.
 
-Well, there is hostname in /proc/sys/kernel/hostname, there are also ostype and
-osrelease.. Thinking about it twice /proc/sys/kernel/ looks to me a better place
-for arch file than current /sys/devices/system/cpu/. WDYT?
-
-Kind regards,
-Petr
-
-> thanks,
-
-> greg k-h
+> > +}
+> > +
+> > +void mutex_unlock(struct mutex *mtx)
+> > +{
+> > +BUG_ON(pthread_mutex_unlock(&mtx->lock) != 0);
+> > +}
+> > diff --git a/tools/perf/util/mutex.h b/tools/perf/util/mutex.h
+> > new file mode 100644
+> > index 000000000000..ab2ebb98b24a
+> > --- /dev/null
+> > +++ b/tools/perf/util/mutex.h
+> > @@ -0,0 +1,15 @@
+> > +#ifndef __PERF_MUTEX_H
+> > +#define _PERF_MUTEX_H
+> > +
+> > +#include <pthread.h>
+> > +
+> > +struct mutex {
+> > +pthread_mutex_t lock;
+> > +};
+> > +
+> > +void mutex_lock(struct mutex *mtx);
+> > +void mutex_unlock(struct mutex *mtx);
+> > +void mutex_init(struct mutex *mtx);
+> > +void mutex_destroy(struct mutex *mtx);
+> > +
+> > +#endif /* _PERF_MUTEX_H */
+> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> > index a8f80e427674..342be12cfa1e 100644
+> > --- a/tools/perf/util/symbol.c
+> > +++ b/tools/perf/util/symbol.c
+> > @@ -1629,7 +1629,7 @@ int dso__load(struct dso *dso, struct map *map)
+> >       }
+> >
+> >       nsinfo__mountns_enter(dso->nsinfo, &nsc);
+> > -     pthread_mutex_lock(&dso->lock);
+> > +     mutex_lock(&dso->lock);
+> >
+> >       /* check again under the dso->lock */
+> >       if (dso__loaded(dso)) {
+> > @@ -1778,7 +1778,7 @@ int dso__load(struct dso *dso, struct map *map)
+> >               ret = 0;
+> >  out:
+> >       dso__set_loaded(dso);
+> > -     pthread_mutex_unlock(&dso->lock);
+> > +     mutex_unlock(&dso->lock);
+> >       nsinfo__mountns_exit(&nsc);
+> >
+> >       return ret;
+> > --
+> > 2.25.1
+> >
+>
+> --
+>
+> - Arnaldo

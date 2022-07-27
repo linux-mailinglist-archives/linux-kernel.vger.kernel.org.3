@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8243F582D5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D11582C6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241113AbiG0Qzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S240335AbiG0Qpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241155AbiG0Qy1 (ORCPT
+        with ESMTP id S240436AbiG0QoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:54:27 -0400
+        Wed, 27 Jul 2022 12:44:25 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFF74F663;
-        Wed, 27 Jul 2022 09:35:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954515F103;
+        Wed, 27 Jul 2022 09:31:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FA20B821C6;
-        Wed, 27 Jul 2022 16:35:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C57D9C433D6;
-        Wed, 27 Jul 2022 16:35:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D513EB821BD;
+        Wed, 27 Jul 2022 16:31:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32AE6C433D6;
+        Wed, 27 Jul 2022 16:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939738;
-        bh=2hJsBTzn0+OHhp5WVfO8GDI7HZLUvR3ikSXny/yDIsM=;
+        s=korg; t=1658939465;
+        bh=u7bKTBJfAOMOZ9/sDoWY4Vi6VndC+6DTovQ/pdYctDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X1K3B+B5chbnpv950lxAWIDf+X4KUKIrLlEOeUml/TcY1hWAuUmy416uXt3mWTWtb
-         VHUGPyI/pstAQQVG7/dh9JabA0jKkChfbQoSWSlTDdGlwIn9gF/cUctg0zVx76cRV0
-         RaFH0tpnDGtCzzouMRTD2R1gQAKCrmt6vDk26VNk=
+        b=xfMrcu2w7G5rU6DV3LWdtulVdA3quYkAAeVO3YRwxtzZSk8sp8kalBE1l7Kyt5hz0
+         cHvdUS8LFSugjj59Zws7jiX91iyxyBNzUHlDW9IJDV22Cot9isb56W9OpcJ59C3LiA
+         Z7w5ItckCFfBKtnTGjeLOf0XoRwk6WzILKpxLZdQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 085/105] bitfield.h: Fix "type of reg too small for mask" test
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Tedd Ho-Jeong An <tedd.an@intel.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 5.4 78/87] Bluetooth: Fix passing NULL to PTR_ERR
 Date:   Wed, 27 Jul 2022 18:11:11 +0200
-Message-Id: <20220727161015.506412298@linuxfoundation.org>
+Message-Id: <20220727161012.233338716@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,63 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit bff8c3848e071d387d8b0784dc91fa49cd563774 ]
+commit 266191aa8d14b84958aaeb5e96ee4e97839e3d87 upstream.
 
-The test: 'mask > (typeof(_reg))~0ull' only works correctly when both
-sides are unsigned, consider:
+Passing NULL to PTR_ERR will result in 0 (success), also since the likes of
+bt_skb_sendmsg does never return NULL it is safe to replace the instances of
+IS_ERR_OR_NULL with IS_ERR when checking its return.
 
- - 0xff000000 vs (int)~0ull
- - 0x000000ff vs (int)~0ull
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20211110101324.950210584@infradead.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Tested-by: Tedd Ho-Jeong An <tedd.an@intel.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/bitfield.h | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ include/net/bluetooth/bluetooth.h |    2 +-
+ net/bluetooth/rfcomm/sock.c       |    2 +-
+ net/bluetooth/sco.c               |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-index 4e035aca6f7e..6093fa6db260 100644
---- a/include/linux/bitfield.h
-+++ b/include/linux/bitfield.h
-@@ -41,6 +41,22 @@
+--- a/include/net/bluetooth/bluetooth.h
++++ b/include/net/bluetooth/bluetooth.h
+@@ -422,7 +422,7 @@ static inline struct sk_buff *bt_skb_sen
+ 		struct sk_buff *tmp;
  
- #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+ 		tmp = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
+-		if (IS_ERR_OR_NULL(tmp)) {
++		if (IS_ERR(tmp)) {
+ 			kfree_skb(skb);
+ 			return tmp;
+ 		}
+--- a/net/bluetooth/rfcomm/sock.c
++++ b/net/bluetooth/rfcomm/sock.c
+@@ -586,7 +586,7 @@ static int rfcomm_sock_sendmsg(struct so
  
-+#define __scalar_type_to_unsigned_cases(type)				\
-+		unsigned type:	(unsigned type)0,			\
-+		signed type:	(unsigned type)0
-+
-+#define __unsigned_scalar_typeof(x) typeof(				\
-+		_Generic((x),						\
-+			char:	(unsigned char)0,			\
-+			__scalar_type_to_unsigned_cases(char),		\
-+			__scalar_type_to_unsigned_cases(short),		\
-+			__scalar_type_to_unsigned_cases(int),		\
-+			__scalar_type_to_unsigned_cases(long),		\
-+			__scalar_type_to_unsigned_cases(long long),	\
-+			default: (x)))
-+
-+#define __bf_cast_unsigned(type, x)	((__unsigned_scalar_typeof(type))(x))
-+
- #define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)			\
- 	({								\
- 		BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),		\
-@@ -49,7 +65,8 @@
- 		BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?		\
- 				 ~((_mask) >> __bf_shf(_mask)) & (_val) : 0, \
- 				 _pfx "value too large for the field"); \
--		BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,		\
-+		BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >	\
-+				 __bf_cast_unsigned(_reg, ~0ull),	\
- 				 _pfx "type of reg too small for mask"); \
- 		__BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +			\
- 					      (1ULL << __bf_shf(_mask))); \
--- 
-2.35.1
-
+ 	skb = bt_skb_sendmmsg(sk, msg, len, d->mtu, RFCOMM_SKB_HEAD_RESERVE,
+ 			      RFCOMM_SKB_TAIL_RESERVE);
+-	if (IS_ERR_OR_NULL(skb))
++	if (IS_ERR(skb))
+ 		return PTR_ERR(skb);
+ 
+ 	sent = rfcomm_dlc_send(d, skb);
+--- a/net/bluetooth/sco.c
++++ b/net/bluetooth/sco.c
+@@ -720,7 +720,7 @@ static int sco_sock_sendmsg(struct socke
+ 		return -EOPNOTSUPP;
+ 
+ 	skb = bt_skb_sendmsg(sk, msg, len, len, 0, 0);
+-	if (IS_ERR_OR_NULL(skb))
++	if (IS_ERR(skb))
+ 		return PTR_ERR(skb);
+ 
+ 	lock_sock(sk);
 
 

@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F58582EBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148FE582EBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiG0RQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S233880AbiG0RQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236728AbiG0RPC (ORCPT
+        with ESMTP id S241590AbiG0RPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:15:02 -0400
+        Wed, 27 Jul 2022 13:15:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57B078220;
-        Wed, 27 Jul 2022 09:42:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518155C37F;
+        Wed, 27 Jul 2022 09:43:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2BC6B8200D;
-        Wed, 27 Jul 2022 16:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33294C433D6;
-        Wed, 27 Jul 2022 16:42:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96EE1B821AC;
+        Wed, 27 Jul 2022 16:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D11C433C1;
+        Wed, 27 Jul 2022 16:42:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940174;
-        bh=BYO7tIJ/ygk6lWF6pkc7YfJY1wS5uocuaZiaB1xDZH0=;
+        s=korg; t=1658940177;
+        bh=D6lvZDOlW//hEWRg9C+IUetipLsoLf/v/3N28GN55mQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IKhMzIwUr27bjmZbor9qhvCaa2RcnKPZeBCONjKV74bgcaSEGVWZRJulga9cU274Z
-         NJW34QX7tUO8zv+cQ53PoUBN0s0+5ON7XKGeMEy/w1dNI4j9lJsWsEbQHXCFCi2ILR
-         JtWQavzAOxfVqGDid2FlnShOYQnqTUpqsr32wskM=
+        b=nLq+Yo3k/kenBQnhpM6yd+mPMqVwcePi5EoGVDPf5WPtDuoKO58ZtZvlbrRZMHdHJ
+         o34qvx9AwR11TJI59WMgVauMEBm49V/+qRgyVjm2X1fEGpUdBRL+omCfpy7L1zA57+
+         T6X+2P7OiK3RCePNgEe/k5x1Gl3ER/8iqWnyBWqw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 131/201] gpio: gpio-xilinx: Fix integer overflow
-Date:   Wed, 27 Jul 2022 18:10:35 +0200
-Message-Id: <20220727161033.221183811@linuxfoundation.org>
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 132/201] KVM: selftests: Fix target thread to be migrated in rseq_test
+Date:   Wed, 27 Jul 2022 18:10:36 +0200
+Message-Id: <20220727161033.268900056@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
 References: <20220727161026.977588183@linuxfoundation.org>
@@ -54,37 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Neeli <srinivas.neeli@xilinx.com>
+From: Gavin Shan <gshan@redhat.com>
 
-[ Upstream commit 32c094a09d5829ad9b02cdf667569aefa8de0ea6 ]
+commit e923b0537d28e15c9d31ce8b38f810b325816903 upstream.
 
-Current implementation is not able to configure more than 32 pins
-due to incorrect data type. So type casting with unsigned long
-to avoid it.
+In rseq_test, there are two threads, which are vCPU thread and migration
+worker separately. Unfortunately, the test has the wrong PID passed to
+sched_setaffinity() in the migration worker. It forces migration on the
+migration worker because zeroed PID represents the calling thread, which
+is the migration worker itself. It means the vCPU thread is never enforced
+to migration and it can migrate at any time, which eventually leads to
+failure as the following logs show.
 
-Fixes: 02b3f84d9080 ("xilinx: Switch to use bitmap APIs")
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  host# uname -r
+  5.19.0-rc6-gavin+
+  host# # cat /proc/cpuinfo | grep processor | tail -n 1
+  processor    : 223
+  host# pwd
+  /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
+  host# for i in `seq 1 100`; do \
+        echo "--------> $i"; ./rseq_test; done
+  --------> 1
+  --------> 2
+  --------> 3
+  --------> 4
+  --------> 5
+  --------> 6
+  ==== Test Assertion Failure ====
+    rseq_test.c:265: rseq_cpu == cpu
+    pid=3925 tid=3925 errno=4 - Interrupted system call
+       1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
+       2  0x0000ffffb044affb: ?? ??:0
+       3  0x0000ffffb044b0c7: ?? ??:0
+       4  0x0000000000401a6f: _start at ??:?
+    rseq CPU = 4, sched CPU = 27
+
+Fix the issue by passing correct parameter, TID of the vCPU thread, to
+sched_setaffinity() in the migration worker.
+
+Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Gavin Shan <gshan@redhat.com>
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
+Message-Id: <20220719020830.3479482-1-gshan@redhat.com>
+Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-xilinx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/rseq_test.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-index a1b66338d077..db616ae560a3 100644
---- a/drivers/gpio/gpio-xilinx.c
-+++ b/drivers/gpio/gpio-xilinx.c
-@@ -99,7 +99,7 @@ static inline void xgpio_set_value32(unsigned long *map, int bit, u32 v)
- 	const unsigned long offset = (bit % BITS_PER_LONG) & BIT(5);
- 
- 	map[index] &= ~(0xFFFFFFFFul << offset);
--	map[index] |= v << offset;
-+	map[index] |= (unsigned long)v << offset;
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index 4158da0da2bb..2237d1aac801 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -82,8 +82,9 @@ static int next_cpu(int cpu)
+ 	return cpu;
  }
  
- static inline int xgpio_regoffset(struct xgpio_instance *chip, int ch)
+-static void *migration_worker(void *ign)
++static void *migration_worker(void *__rseq_tid)
+ {
++	pid_t rseq_tid = (pid_t)(unsigned long)__rseq_tid;
+ 	cpu_set_t allowed_mask;
+ 	int r, i, cpu;
+ 
+@@ -106,7 +107,7 @@ static void *migration_worker(void *ign)
+ 		 * stable, i.e. while changing affinity is in-progress.
+ 		 */
+ 		smp_wmb();
+-		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
++		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask), &allowed_mask);
+ 		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
+ 			    errno, strerror(errno));
+ 		smp_wmb();
+@@ -231,7 +232,8 @@ int main(int argc, char *argv[])
+ 	vm = vm_create_default(VCPU_ID, 0, guest_code);
+ 	ucall_init(vm, NULL);
+ 
+-	pthread_create(&migration_thread, NULL, migration_worker, 0);
++	pthread_create(&migration_thread, NULL, migration_worker,
++		       (void *)(unsigned long)gettid());
+ 
+ 	for (i = 0; !done; i++) {
+ 		vcpu_run(vm, VCPU_ID);
 -- 
-2.35.1
+2.37.1
 
 
 

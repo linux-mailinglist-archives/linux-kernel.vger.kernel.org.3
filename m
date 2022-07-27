@@ -2,78 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587EA5822DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598D95822E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiG0JNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S231535AbiG0JOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbiG0JMk (ORCPT
+        with ESMTP id S231767AbiG0JN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:12:40 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE74548C80;
-        Wed, 27 Jul 2022 02:09:19 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31f64093c21so9665317b3.6;
-        Wed, 27 Jul 2022 02:09:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LhOsBRxXhz/t+ynGnqroYsLAyuJRf45b+7ao/a2EGuY=;
-        b=c7FL5tPiXWhbsDJZV/iYKyhXsFCX/uy+ALzeJHW7nG4yf+fPeB2Sq979Z7EjnlXwso
-         Ks8EK0Dzk7FOkIfmbGdQQAGDXGKnSBTf8Tkic46zYcWQxKnrQb+EH9ci65YEO/4/awYf
-         6gEu7zPxqln4XZJ2n8h4h04dV3TbIlSJaeNioctaJJ22eczAJzT88aRLvSWDaqjtoRhP
-         Vwep7v+cxLjnEQC4hxv+F4/AGjEFzdPD8kxPTArdpjOpgWJjFqPc+EAp8ZkHQqYvMqAI
-         3I/EZaxwwgyhSsJbHOQN51jrwtmwTccx0Zb7wVwzZcHPadMoKjqqY6pbGuL5bprxyDMI
-         YMQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LhOsBRxXhz/t+ynGnqroYsLAyuJRf45b+7ao/a2EGuY=;
-        b=0Qsc7sIYp3M5y0xKopU7wIUAHiPcrlpbijrjkD2ea/J0gIG0nhh4CTfowufUYvTw6/
-         dS178UcXKze3MCSql1V0kO1b9qm8bNgccQlYPAq/V36II7YhKe1oZ65w1k2Rcy2fI0QT
-         jeBMTitAASeo+vr1UXkWFlnn7Xol/1S6CzPgbnlN5BuewfMFtyL/biUa/QFvSi5e87yH
-         mUG9N5E+nlQZKkF0393Rdou+DWlgGT1Jb9jSZZ28C28UUzC9VLKiZcXEurYFlI9jG5Q4
-         BWolofMozFQzSQTA7d0ApZOzsRzZRYKFi8Cm3ryD1VGMes4d5BaLasgfwnJtuh5KbJvc
-         JcUQ==
-X-Gm-Message-State: AJIora9ykKucFvosTpdaBGqpQ9mfaB/eBCI08Qb5Ni6TMp0FXuII5QX/
-        +JPcHEpicqiIgBhw6oAOPi57hn4BtKfamkjp/5M=
-X-Google-Smtp-Source: AGRyM1scO33sgcG8wgcvvA8weDtTskLR++MoDbmJLJDGl2d+NtRAl68cuEVh+81ylmZbjQ7jLFt7jVoQ2Veb6yn9hXw=
-X-Received: by 2002:a81:1d09:0:b0:31d:a40:8332 with SMTP id
- d9-20020a811d09000000b0031d0a408332mr19291445ywd.138.1658912959232; Wed, 27
- Jul 2022 02:09:19 -0700 (PDT)
+        Wed, 27 Jul 2022 05:13:59 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F78474E2;
+        Wed, 27 Jul 2022 02:11:18 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lt7K923Syz9sv0;
+        Wed, 27 Jul 2022 17:10:05 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Jul 2022 17:11:15 +0800
+Subject: Re: [PATCH net v2] ipv6/addrconf: fix a null-ptr-deref bug for
+ ip6_ptr
+To:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+CC:     David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220726115028.3055296-1-william.xuanziyang@huawei.com>
+ <CANn89iJNHhq9zbmL2DF-up_hBRHuwkPiNUpMS+LHoumy5ohQZA@mail.gmail.com>
+ <48fd2345-ef86-da0d-c471-c576aa93d9f5@kernel.org>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <b63eeb55-df38-618a-d7af-91b18f1d6f0f@huawei.com>
+Date:   Wed, 27 Jul 2022 17:11:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220726180623.1668-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <6a87ee9b-f944-ab8c-cc00-fd8bbb22cad8@linaro.org>
-In-Reply-To: <6a87ee9b-f944-ab8c-cc00-fd8bbb22cad8@linaro.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 27 Jul 2022 10:08:52 +0100
-Message-ID: <CA+V-a8uAcqGt6SP3jdJ9dPrV+rQdconfft41U+VdGXC8yFMByQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] riscv: dts: renesas: Add initial devicetree for
- Renesas RZ/Five SoC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <48fd2345-ef86-da0d-c471-c576aa93d9f5@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,46 +58,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+> On 7/26/22 6:13 AM, Eric Dumazet wrote:
+>> On Tue, Jul 26, 2022 at 1:50 PM Ziyang Xuan
+>> <william.xuanziyang@huawei.com> wrote:
+>>>
+>>> Change net device's MTU to smaller than IPV6_MIN_MTU or unregister
+>>> device while matching route. That may trigger null-ptr-deref bug
+>>> for ip6_ptr probability as following.
+>>>
+>>> =========================================================
+>>> BUG: KASAN: null-ptr-deref in find_match.part.0+0x70/0x134
+>>> Read of size 4 at addr 0000000000000308 by task ping6/263
+>>>
+>>> CPU: 2 PID: 263 Comm: ping6 Not tainted 5.19.0-rc7+ #14
+>>> Call trace:
+>>>  dump_backtrace+0x1a8/0x230
+>>>  show_stack+0x20/0x70
+>>>  dump_stack_lvl+0x68/0x84
+>>>  print_report+0xc4/0x120
+>>>  kasan_report+0x84/0x120
+>>>  __asan_load4+0x94/0xd0
+>>>  find_match.part.0+0x70/0x134
+>>>  __find_rr_leaf+0x408/0x470
+>>>  fib6_table_lookup+0x264/0x540
+>>>  ip6_pol_route+0xf4/0x260
+>>>  ip6_pol_route_output+0x58/0x70
+>>>  fib6_rule_lookup+0x1a8/0x330
+>>>  ip6_route_output_flags_noref+0xd8/0x1a0
+>>>  ip6_route_output_flags+0x58/0x160
+>>>  ip6_dst_lookup_tail+0x5b4/0x85c
+>>>  ip6_dst_lookup_flow+0x98/0x120
+>>>  rawv6_sendmsg+0x49c/0xc70
+>>>  inet_sendmsg+0x68/0x94
+>>>
+>>> Reproducer as following:
+>>> Firstly, prepare conditions:
+>>> $ip netns add ns1
+>>> $ip netns add ns2
+>>> $ip link add veth1 type veth peer name veth2
+>>> $ip link set veth1 netns ns1
+>>> $ip link set veth2 netns ns2
+>>> $ip netns exec ns1 ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1
+>>> $ip netns exec ns2 ip -6 addr add 2001:0db8:0:f101::2/64 dev veth2
+>>> $ip netns exec ns1 ifconfig veth1 up
+>>> $ip netns exec ns2 ifconfig veth2 up
+>>> $ip netns exec ns1 ip -6 route add 2000::/64 dev veth1 metric 1
+>>> $ip netns exec ns2 ip -6 route add 2001::/64 dev veth2 metric 1
+>>>
+>>> Secondly, execute the following two commands in two ssh windows
+>>> respectively:
+>>> $ip netns exec ns1 sh
+>>> $while true; do ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1; ip -6 route add 2000::/64 dev veth1 metric 1; ping6 2000::2; done
+>>>
+>>> $ip netns exec ns1 sh
+>>> $while true; do ip link set veth1 mtu 1000; ip link set veth1 mtu 1500; sleep 5; done
+>>>
+>>> It is because ip6_ptr has been assigned to NULL in addrconf_ifdown() firstly,
+>>> then ip6_ignore_linkdown() accesses ip6_ptr directly without NULL check.
+>>>
+>>>         cpu0                    cpu1
+>>> fib6_table_lookup
+>>> __find_rr_leaf
+>>>                         addrconf_notify [ NETDEV_CHANGEMTU ]
+>>>                         addrconf_ifdown
+>>>                         RCU_INIT_POINTER(dev->ip6_ptr, NULL)
+>>> find_match
+>>> ip6_ignore_linkdown
+>>>
+>>> So we can add NULL check for ip6_ptr before using in ip6_ignore_linkdown() to
+>>> fix the null-ptr-deref bug.
+>>>
+>>> Fixes: 6d3d07b45c86 ("ipv6: Refactor fib6_ignore_linkdown")
+>>
+>> If we need to backport, I guess dcd1f572954f ("net/ipv6: Remove fib6_idev")
+>> already had the bug.
+> 
+> Yes, that is the right Fixes commit.
 
-On Wed, Jul 27, 2022 at 9:55 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 26/07/2022 20:06, Lad Prabhakar wrote:
-> > Add initial device tree for Renesas RZ/Five RISC-V CPU Core (AX45MP
-> > Single).
-> >
-> > Below is the list of IP blocks added in the initial SoC DTSI which can be
-> > used to boot via initramfs on RZ/Five SMARC EVK:
-> > - AX45MP CPU
-> > - CPG
-> > - PINCTRL
-> > - PLIC
-> > - SCIF0
-> > - SYSC
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  arch/riscv/boot/dts/Makefile               |   1 +
-> >  arch/riscv/boot/dts/renesas/r9a07g043.dtsi | 121 +++++++++++++++++++++
-> >  2 files changed, 122 insertions(+)
-> >  create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043.dtsi
-> >
-> > diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-> > index ff174996cdfd..b0ff5fbabb0c 100644
-> > --- a/arch/riscv/boot/dts/Makefile
-> > +++ b/arch/riscv/boot/dts/Makefile
-> > @@ -3,5 +3,6 @@ subdir-y += sifive
-> >  subdir-y += starfive
-> >  subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
-> >  subdir-y += microchip
-> > +subdir-y += renesas
->
-> What are you building there? There is no DTS.
->
-My plan was to get the initial minimal SoC DTSi and then gradually add
-the board DTS, but it looks like I'll have to include it along with
-this series.
+OK
 
-Cheers,
-Prabhakar
+> 
+>>
+>>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+>>>
+>>> ---
+>>> v2:
+>>>   - Use NULL check in ip6_ignore_linkdown() but synchronize_net() in
+>>>     addrconf_ifdown()
+>>>   - Add timing analysis of the problem
+>>>
+>>> ---
+>>>  include/net/addrconf.h | 3 +++
+>>>  1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/include/net/addrconf.h b/include/net/addrconf.h
+>>> index f7506f08e505..c04f359655b8 100644
+>>> --- a/include/net/addrconf.h
+>>> +++ b/include/net/addrconf.h
+>>> @@ -405,6 +405,9 @@ static inline bool ip6_ignore_linkdown(const struct net_device *dev)
+>>>  {
+>>>         const struct inet6_dev *idev = __in6_dev_get(dev);
+>>>
+>>> +       if (unlikely(!idev))
+>>> +               return true;
+>>> +
+> 
+> Reviewed-by: David Ahern <dsahern@kernel.org>
+> 
+>>
+>> Note that we might read a non NULL pointer here, but read it again
+>> later in rt6_score_route(),
+>> since another thread could switch the pointer under us ?
+>>
+
+Yes, this patch just cover the problem I'm having.
+I have checked the codes in kernel, there are some scenarios using __in6_dev_get()
+without NULL check and rtnl_lock. There is a possibility of null-ptr-deref bug.
+I will give a patch to fix them later.
+
+> 
+> for silly MTU games yes, that could happen.
+> .
+> 

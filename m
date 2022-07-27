@@ -2,95 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936E858273F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13846582747
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiG0NAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S233594AbiG0NA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233490AbiG0NAp (ORCPT
+        with ESMTP id S233527AbiG0NAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:00:45 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EE6248E5
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:00:44 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id z25so27070202lfr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xt/iFa0Gww8PQ4QvOwKstYasksWx1xQKZXD7icliRMg=;
-        b=nbUaUiRllsTbFH3Eus9e9UO4svt+vu8pCbP4kZQ1WT8glgkQh76sC4B6uwYKBgcsgG
-         2xahkgtvpatCU6uSb9gtnePlK6Yaz5GKnH6PKRHc6yDcDaGHo03vfdwj4nZv0/8H+FtS
-         CAqLBZnrGAx5Vb/z1k+kaPvbI7xZhQb9pS8F1ppy/zdpq+qLjsh18zolWqj3H6y+LOdL
-         XFimzwZKqd7dJET7E5G85tNvJdiBYQDp3yiBGcDez1HrYZVoJWsIXhuWf8vRghlK/Qcf
-         5GLPT8J4ljVPbZ0xp1W3lNkz83IcNq+ejVOUgUaQsWBDfZeKmb5EGtrEsTR+63o2+VUD
-         D5qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xt/iFa0Gww8PQ4QvOwKstYasksWx1xQKZXD7icliRMg=;
-        b=8FGg/ZyaIJchJqwxraUZlXS2/Prpy6fpmJO74PnruxQkb0/qF5f6VnclSialXNCiHV
-         I4eQ79uUluSjabiWzmREH0US8KsXGLiAxplIv2hZMw/W4bVwjEU87w1TJBlwJf164mZD
-         CPEeNk1BpAPhbsp75NpVr0Aq7odeMNNclCea1IYVa09Ut60zfbpY97QKC0wLmXpt+rol
-         oOvyNujvmOO31AkBsMikX1vrF+aEFtEdPApQMKz3jIPd6m4WLo9DztWisl9QK79UdcdD
-         yMQcKV5keio57MBEKAH/U8bu7HUIcrK9rKJ4XH2R1MW//6fXVHMxWc2znS2tS7old6sF
-         1+AQ==
-X-Gm-Message-State: AJIora91I3Eieylzo1Sq0RWU2i26yNGUOQwiMsJea+pFQGZqUVroOPPH
-        QSAIe6x/bYD8hoISlAKyaNNn2Q==
-X-Google-Smtp-Source: AGRyM1um+pnIbZzevQmvuQYPA79p7q3V9/eshGhbnk08XsshNMDjZQ3pVxUN/3rrgAfllb5kV38jFg==
-X-Received: by 2002:a05:6512:1050:b0:48a:2319:59bc with SMTP id c16-20020a056512105000b0048a231959bcmr7964312lfb.665.1658926842477;
-        Wed, 27 Jul 2022 06:00:42 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id z20-20020a056512309400b0048a93325906sm1438931lfd.171.2022.07.27.06.00.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 06:00:41 -0700 (PDT)
-Message-ID: <75e5ace3-3255-2302-65f5-9fbef9cb1147@linaro.org>
-Date:   Wed, 27 Jul 2022 15:00:40 +0200
+        Wed, 27 Jul 2022 09:00:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EA622B1C;
+        Wed, 27 Jul 2022 06:00:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7586A61653;
+        Wed, 27 Jul 2022 13:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48A9FC433D6;
+        Wed, 27 Jul 2022 13:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658926847;
+        bh=4telximfke4kYtoD4Qom/uucpARdQoD99jUq0aKNIx8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Rhv6j/+IHsWWVQsnAoZpxhk2/uhfQ2gRkeBcFk9dZdU1F/6NAWFyLQ8VdxIbak5YN
+         TXXePq7Wonyt4cMAhTtxlZpxWT5cW/d7AujKSh3xmuEjA9SqbgezZF5EWpwaF/w9Yl
+         l0JTkPJDJoK/l1xlKYoP6/IsuHKGfrjqWxKztMJ2NzknKMiBgHYSSPGikti5vyHPC8
+         5k8n4Z+RQvXRnsqnzB2sQqsGWmAD3o90tgJAncoaveUQvSAnfPfrVwTvIzKa3o5YDN
+         zN+gz+g7+6e4CFnYoq/vVWmCNPV2wTNu1QIZXCWsdUDSievdUBgTNFu0oGFbh7uBF4
+         fgMyl4k6fTa7Q==
+Message-ID: <9f7a1304e3631274701b555589648e12696fa152.camel@kernel.org>
+Subject: Re: [RFC PATCH] vfs: don't check may_create_in_sticky if the file
+ is already open/created
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yongchen Yang <yoyang@redhat.com>
+Date:   Wed, 27 Jul 2022 09:00:46 -0400
+In-Reply-To: <20220727123207.akq6dlnuqviwtwx5@wittgenstein>
+References: <20220726202333.165490-1-jlayton@kernel.org>
+         <8e4d498a3e8ed80ada2d3da01e7503e082be31a3.camel@kernel.org>
+         <20220727113406.ewu4kzsoo643cf66@wittgenstein>
+         <b1d3c63ef5a7e8f98966552b4509381aae25afb6.camel@kernel.org>
+         <20220727123207.akq6dlnuqviwtwx5@wittgenstein>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 4/6] dt-bindings: riscv: Add DT binding documentation for
- Renesas RZ/Five SoC and SMARC EVK
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220726180623.1668-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <636e9214-4b36-e9a6-3c6b-b6edb944335e@linaro.org>
- <CA+V-a8sTw1qzuTeD2vb7RgDmmNdEP5qEcxXCjrFgkyrBrLrt5Q@mail.gmail.com>
- <e64cc15e-b31e-876d-b3cf-b60d255c495b@linaro.org>
- <CA+V-a8u1VW9xaj2KjySyMuegpisLVENO_6uJOpAFZGbKziYLYw@mail.gmail.com>
- <e31e0c1f-4755-704e-8428-93970877d8f5@linaro.org>
- <CA+V-a8sX=Frs_cds9MriauTFRvcZUNCvoeZ+SaC0GUpL7L6qhg@mail.gmail.com>
- <9f32a4a9-66b4-ba2e-1713-436103c2faf8@linaro.org>
- <OS0PR01MB5922763582B836DA45CDFF0886979@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <80f08089-e3bb-983e-313b-45613364829e@linaro.org>
- <OS0PR01MB5922FDF8CFFE44A611D3783886979@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <OS0PR01MB5922FDF8CFFE44A611D3783886979@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,37 +60,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/07/2022 14:56, Biju Das wrote:
->>
->> Then it is not the same SoC! Same means same, identical. CPU
->> architecture is one of the major differences, which means it is not the
->> same.
-> 
-> Family SoC(R9A07G043) is at top level. Then it has different SoCId for taking care of
-> differences for SoC based on ARMV8 and RISC-V which has separate compatible like
-> r9a07g043u11 and r9a07g043f01?
+On Wed, 2022-07-27 at 14:32 +0200, Christian Brauner wrote:
+> On Wed, Jul 27, 2022 at 08:04:34AM -0400, Jeff Layton wrote:
+> > On Wed, 2022-07-27 at 13:34 +0200, Christian Brauner wrote:
+> > > On Tue, Jul 26, 2022 at 04:27:56PM -0400, Jeff Layton wrote:
+> > > > On Tue, 2022-07-26 at 16:23 -0400, Jeff Layton wrote:
+> > > > > NFS server is exporting a sticky directory (mode 01777) with root
+> > > > > squashing enabled. Client has protect_regular enabled and then tr=
+ies to
+> > > > > open a file as root in that directory. File is created (with owne=
+rship
+> > > > > set to nobody:nobody) but the open syscall returns an error.
+> > > > >=20
+> > > > > The problem is may_create_in_sticky, which rejects the open even =
+though
+> > > > > the file has already been created/opened. Only call may_create_in=
+_sticky
+> > > > > if the file hasn't already been opened or created.
+> > > > >=20
+> > > > > Cc: Christian Brauner <brauner@kernel.org>
+> > > > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D1976829
+> > > > > Reported-by: Yongchen Yang <yoyang@redhat.com>
+> > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > > > ---
+> > > > >  fs/namei.c | 13 +++++++++----
+> > > > >  1 file changed, 9 insertions(+), 4 deletions(-)
+> > > > >=20
+> > > > > diff --git a/fs/namei.c b/fs/namei.c
+> > > > > index 1f28d3f463c3..7480b6dc8d27 100644
+> > > > > --- a/fs/namei.c
+> > > > > +++ b/fs/namei.c
+> > > > > @@ -3495,10 +3495,15 @@ static int do_open(struct nameidata *nd,
+> > > > >  			return -EEXIST;
+> > > > >  		if (d_is_dir(nd->path.dentry))
+> > > > >  			return -EISDIR;
+> > > > > -		error =3D may_create_in_sticky(mnt_userns, nd,
+> > > > > -					     d_backing_inode(nd->path.dentry));
+> > > > > -		if (unlikely(error))
+> > > > > -			return error;
+> > > > > +		if (!(file->f_mode & (FMODE_OPENED | FMODE_CREATED))) {
+> > > > > +			error =3D may_create_in_sticky(mnt_userns, nd,
+> > > > > +						d_backing_inode(nd->path.dentry));
+> > > > > +			if (unlikely(error)) {
+> > > > > +				printk("%s: f_mode=3D0x%x oflag=3D0x%x\n",
+> > > > > +					__func__, file->f_mode, open_flag);
+> > > > > +				return error;
+> > > > > +			}
+> > > > > +		}
+> > > > >  	}
+> > > > >  	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.de=
+ntry))
+> > > > >  		return -ENOTDIR;
+> > > >=20
+> > > > I'm pretty sure this patch is the wrong approach, actually, since i=
+t
+> > > > doesn't fix the regular (non-atomic) open codepath. Any thoughts on=
+ what
+> > >=20
+> > > Hey Jeff,
+> > >=20
+> > > I haven't quite understood why that won't work for the regular open
+> > > codepaths. I'm probably missing something obvious.
+> > >=20
+> >=20
+> > In the normal open codepaths, FMODE_OPENED | FMODE_CREATED are still
+> > clear. If we're not doing an atomic_open (i.e. the dentry doesn't exist
+> > yet or is negative), then nothing really happens until you get to the
+> > vfs_open call.
+>=20
+> Hm, so for atomic open with O_CREAT it's:
+>=20
+> path_openat()
+> -> open_last_lookups()
+>    -> lookup_open()
+>       /*=20
+>        * This is ->atomic_open() and FMODE_CREATED is set in the fs so
+>        * for NFS it's done in:
+>        * fs/nfs/dir.c:           file->f_mode |=3D FMODE_CREATED;
+>        */
+>       -> atomic_open()
+>=20
+> and for regular O_CREAT open it's:
+>=20
+> path_openat()
+> -> open_last_lookups()
+>    -> lookup_open()
+>       {
+>         if (!dentry->d_inode && (open_flag & O_CREAT)) {
+>                 file->f_mode |=3D FMODE_CREATED;
+>       }
+>=20
+>=20
+> and that should all get surfaced to:
+>=20
+> path_openat()
+>    -> do_open()
+>       -> may_create_in_sticky()
+>=20
+> ?
 
-This does not answer the concern - it's not the same SoC. The most
-generic compatible denotes the most common part. I would argue that
-instruction set and architecture are the most important differences.
-None of ARMv8 SoCs (SoCs, not CPU cores) have "arm,armv8" compatible and
-you went even more - you combined two architectures in the most generic
-compatibles.
+Basically, yes, but we also need to deal with the case where the file
+already exists. That's being denied currently too and I don't think it
+should be.
 
-> 
->>
->>> Using same SoM and Carrier board?
->>
->> It's like saying PC with x86 and ARMv8 board are the same because they
->> both use same "PC chassis".
-> 
-> What I meant is board based on Family SoC(R9A07G043) that is either based on ARMv8 or
-> RISC-V cpu architecture.
-
-I don't see this related to the topic at all. What board do you use,
-does not matter. The board does not change the fact these SoCs have
-entirely different architecture - ARMv8 and RISC-V.
-
-
-Best regards,
-Krzysztof
+--=20
+Jeff Layton <jlayton@kernel.org>

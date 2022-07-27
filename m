@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D86582F1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849AD582BB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbiG0RU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S238737AbiG0Qgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241899AbiG0RTS (ORCPT
+        with ESMTP id S239085AbiG0Qew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:19:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB1C7A524;
-        Wed, 27 Jul 2022 09:44:11 -0700 (PDT)
+        Wed, 27 Jul 2022 12:34:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161C04D4D9;
+        Wed, 27 Jul 2022 09:27:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6402BB8200C;
-        Wed, 27 Jul 2022 16:44:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36566C433D6;
-        Wed, 27 Jul 2022 16:44:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 947F861A1B;
+        Wed, 27 Jul 2022 16:27:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0018C433D7;
+        Wed, 27 Jul 2022 16:27:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940248;
-        bh=wNIplsC///Z+1aLsiUGI7BR3SSo4CPpuOnzTbHZt7Zg=;
+        s=korg; t=1658939247;
+        bh=zL31rUaogdM0Oz7SjUjidmnhf6c2vEMJMOe9tCOLlxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YSJrcV21spXwIq9Ks7zoYJnNwXVVvTodcRSZe4PmjZ4X4RUpx7vitFJ9gOJbN+51z
-         rh8EEP5CZ8zruLVUOEKIuv00m5qIvWdIM1rBKauKNDWLkcDwAUxUhB1Uwdn3f3UkEQ
-         sRU+DxEoda/6jHkzU+5PCJmBPvbKXiW+FcGWRBVQ=
+        b=E6NQpjE+qg/NytPHDFy4k45CvthsAk+7Pis+OGPtTY6132jfb9XcVYTnvcluaTfua
+         rdpUbWidfUOPBWOwk66GCKQIaLvQipL1bpRXpTpJo8AUZxagWYovNoGeTaVhdLfLHD
+         m+iRyLhI6GYpJuLGbRuPP30Cvw8G3aJxFBMPBqrA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 157/201] iwlwifi: fw: uefi: add missing include guards
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+Subject: [PATCH 4.19 52/62] serial: mvebu-uart: correctly report configured baudrate value
 Date:   Wed, 27 Jul 2022 18:11:01 +0200
-Message-Id: <20220727161034.339315972@linuxfoundation.org>
+Message-Id: <20220727161006.174737118@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +54,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 91000fdf82195b66350b4f88413c2e8b5f94d994 ]
+commit 4f532c1e25319e42996ec18a1f473fd50c8e575d upstream.
 
-We still don't use #pragma once in the kernel, but even if
-we did it'd be missing. Add the missing include guards.
+Functions tty_termios_encode_baud_rate() and uart_update_timeout() should
+be called with the baudrate value which was set to hardware. Linux then
+report exact values via ioctl(TCGETS2) to userspace.
 
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Fixes: 84c3c9952afb ("iwlwifi: move UEFI code to a separate file")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211024181719.7fc9988ed49b.I87e300fab664047581e51fb9b02744c75320d08c@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Change mvebu_uart_baud_rate_set() function to return baudrate value which
+was set to hardware and propagate this value to above mentioned functions.
+
+With this change userspace would see precise value in termios c_ospeed
+field.
+
+Fixes: 68a0db1d7da2 ("serial: mvebu-uart: add function to change baudrate")
+Cc: stable <stable@kernel.org>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Link: https://lore.kernel.org/r/20220628100922.10717-1-pali@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlwifi/fw/uefi.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/tty/serial/mvebu-uart.c |   25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/uefi.h b/drivers/net/wireless/intel/iwlwifi/fw/uefi.h
-index 45d0b36d79b5..d552c656ac9f 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/uefi.h
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/uefi.h
-@@ -2,7 +2,8 @@
- /*
-  * Copyright(c) 2021 Intel Corporation
-  */
--
-+#ifndef __iwl_fw_uefi__
-+#define __iwl_fw_uefi__
- 
- #define IWL_UEFI_OEM_PNVM_NAME		L"UefiCnvWlanOemSignedPnvm"
- #define IWL_UEFI_REDUCED_POWER_NAME	L"UefiCnvWlanReducedPower"
-@@ -40,3 +41,5 @@ void *iwl_uefi_get_reduced_power(struct iwl_trans *trans, size_t *len)
- 	return ERR_PTR(-EOPNOTSUPP);
+--- a/drivers/tty/serial/mvebu-uart.c
++++ b/drivers/tty/serial/mvebu-uart.c
+@@ -442,14 +442,14 @@ static void mvebu_uart_shutdown(struct u
+ 	}
  }
- #endif /* CONFIG_EFI */
+ 
+-static int mvebu_uart_baud_rate_set(struct uart_port *port, unsigned int baud)
++static unsigned int mvebu_uart_baud_rate_set(struct uart_port *port, unsigned int baud)
+ {
+ 	struct mvebu_uart *mvuart = to_mvuart(port);
+ 	unsigned int d_divisor, m_divisor;
+ 	u32 brdv;
+ 
+ 	if (IS_ERR(mvuart->clk))
+-		return -PTR_ERR(mvuart->clk);
++		return 0;
+ 
+ 	/*
+ 	 * The baudrate is derived from the UART clock thanks to two divisors:
+@@ -469,7 +469,7 @@ static int mvebu_uart_baud_rate_set(stru
+ 	brdv |= d_divisor;
+ 	writel(brdv, port->membase + UART_BRDV);
+ 
+-	return 0;
++	return DIV_ROUND_CLOSEST(port->uartclk, d_divisor * m_divisor);
+ }
+ 
+ static void mvebu_uart_set_termios(struct uart_port *port,
+@@ -506,15 +506,11 @@ static void mvebu_uart_set_termios(struc
+ 	max_baud = 230400;
+ 
+ 	baud = uart_get_baud_rate(port, termios, old, min_baud, max_baud);
+-	if (mvebu_uart_baud_rate_set(port, baud)) {
+-		/* No clock available, baudrate cannot be changed */
+-		if (old)
+-			baud = uart_get_baud_rate(port, old, NULL,
+-						  min_baud, max_baud);
+-	} else {
+-		tty_termios_encode_baud_rate(termios, baud, baud);
+-		uart_update_timeout(port, termios->c_cflag, baud);
+-	}
++	baud = mvebu_uart_baud_rate_set(port, baud);
 +
-+#endif /* __iwl_fw_uefi__ */
--- 
-2.35.1
-
++	/* In case baudrate cannot be changed, report previous old value */
++	if (baud == 0 && old)
++		baud = tty_termios_baud_rate(old);
+ 
+ 	/* Only the following flag changes are supported */
+ 	if (old) {
+@@ -525,6 +521,11 @@ static void mvebu_uart_set_termios(struc
+ 		termios->c_cflag |= CS8;
+ 	}
+ 
++	if (baud != 0) {
++		tty_termios_encode_baud_rate(termios, baud, baud);
++		uart_update_timeout(port, termios->c_cflag, baud);
++	}
++
+ 	spin_unlock_irqrestore(&port->lock, flags);
+ }
+ 
 
 

@@ -2,134 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4813E5828DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6115828E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234108AbiG0Op5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S234158AbiG0OrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234015AbiG0Opz (ORCPT
+        with ESMTP id S234127AbiG0Oqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:45:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A35EB4B8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:45:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658933153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UPwTphlEofW1gzVyQij5B8duPZwdaVcNitr1RayVqqU=;
-        b=IcX5LYesOJLmKfbHOMjFsABILoaZw4n710JmahF7dySwZENvZCyobsOPGIajqNEA6m6YpY
-        0TEQ/SSjnnCGcdIuTJ/rCtR50K6aWP51YJ1kPNWU50XN0aYH5uqqKPCMpTV5aP357U4xTn
-        l8EJMcFqzCtJxSdTwSuoH8Ah6QYVQIo=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-101-jpjKzrmBMKeYdz4RzveM4A-1; Wed, 27 Jul 2022 10:45:51 -0400
-X-MC-Unique: jpjKzrmBMKeYdz4RzveM4A-1
-Received: by mail-wr1-f72.google.com with SMTP id k26-20020adfb35a000000b0021d6c3b9363so2989813wrd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:45:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UPwTphlEofW1gzVyQij5B8duPZwdaVcNitr1RayVqqU=;
-        b=KwsKN6LA1QnmFpZyzqfmdF3POTlBuTBUeXlsTlX/ACOv0L2tP3UHRFfqiYD9oXQzJz
-         Od5IDcPI5CXDmIB+Kp+Okqvk0jr+4wUV78EKZ+9Dar/1fRBu6vLbQgvdOX8dp4n2gNtY
-         KvggFJSUBm+1p/8UQmy5+198II+3kpF4E7JTuYU2h5dBmf7LO+T0xO69nbwO3QRmzx6Q
-         d3knBYSSYo78dVIrxSZrTOdO3EBFR/N+0m2tRK3WFOEJ5I+T6ONcjsykBJ1qHPmLftKU
-         nr24CVr7/aWrcHEUa2izNl6f2MdmrBYFhp+vDnd4dxFGTw3esFtVjhTFrteng0DSWI19
-         1nxA==
-X-Gm-Message-State: AJIora+wF0tYTF4qFCJ+A8ycLA8qcUZV0rK2Nbhm1rbaKtZs+GIgeS66
-        m+LhjsGfSOt0FpOmZue8qiYFzsTqMiEbe3Urktery2a+BA86Jz8vN7eCmKR4AtMOozEY7kgv0ue
-        LI3K1aQi1Yo/Ee0sX0Fp0Q9EL
-X-Received: by 2002:a05:600c:3ac4:b0:3a3:19c5:7cb2 with SMTP id d4-20020a05600c3ac400b003a319c57cb2mr3399343wms.63.1658933150782;
-        Wed, 27 Jul 2022 07:45:50 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s6EJaKWyltBC+mMZ+ewmsTuEWGKm93G14zzMdF0IwF3w4YCkILjcZ/BxC2B1sq/Pb8+8Hg6Q==
-X-Received: by 2002:a05:600c:3ac4:b0:3a3:19c5:7cb2 with SMTP id d4-20020a05600c3ac400b003a319c57cb2mr3399327wms.63.1658933150598;
-        Wed, 27 Jul 2022 07:45:50 -0700 (PDT)
-Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05600c351200b003a31df6af2esm2693291wmq.1.2022.07.27.07.45.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 07:45:50 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 16:45:48 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Matthias May <matthias.may@westermo.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nicolas.dichtel@6wind.com,
-        eyal.birger@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2 net-next] geneve: fix TOS inheriting for ipv6
-Message-ID: <20220727144548.GB31646@pc-4.home>
-References: <20220724003741.57816-1-matthias.may@westermo.com>
- <20220724003741.57816-3-matthias.may@westermo.com>
- <20220725170519.GD18808@pc-4.home>
- <712bcd84-4dbe-67a6-afa9-ddc01ea27cc8@westermo.com>
+        Wed, 27 Jul 2022 10:46:55 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC607B864;
+        Wed, 27 Jul 2022 07:46:52 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26REkloG060208;
+        Wed, 27 Jul 2022 09:46:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1658933207;
+        bh=HH6/A4QoVI8XrsWuyUxunANjj1kmDchZTOuwiRXvt28=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=C1SmbkDzzwGA99K2o2okRLj5ajVawdFRhYCdCepWsYspmqgfOFAiz/T9DtlSouHYg
+         g/q7use3savg0toOu4QdSTzTUproUv7wDv3DRkvZ3uC5PQ0rmrUd3phzMCmWBwspR0
+         jmT7nNYXUZfyqj49CS/8v0SkB79HWKnHEyF9QXvg=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26REkl60069165
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 27 Jul 2022 09:46:47 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
+ Jul 2022 09:46:47 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 27 Jul 2022 09:46:47 -0500
+Received: from [10.24.69.12] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 26REkfdN035172;
+        Wed, 27 Jul 2022 09:46:42 -0500
+Message-ID: <df8b6249-93af-a323-3518-a1e0106b5c03@ti.com>
+Date:   Wed, 27 Jul 2022 20:16:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <712bcd84-4dbe-67a6-afa9-ddc01ea27cc8@westermo.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dma: ti: k3-udma: Reset UDMA_CHAN_RT byte counters to
+ prevent overflow
+Content-Language: en-US
+To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
+        <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <p.yadav@ti.com>,
+        <j-keerthy@ti.com>, <m-khayami@ti.com>, <stanley_liu@ti.com>
+References: <20220704111325.636-1-vaishnav.a@ti.com>
+ <ad6dcdb8-8d4d-6f8b-38de-be2756a39028@gmail.com>
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+In-Reply-To: <ad6dcdb8-8d4d-6f8b-38de-be2756a39028@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 06:29:56PM +0200, Matthias May wrote:
-> On 25/07/2022 19:05, Guillaume Nault wrote:
-> > On Sun, Jul 24, 2022 at 02:37:41AM +0200, Matthias May wrote:
-> > > The current code uses the RT_TOS macro to cut off the 6 DSCP
-> > > bits, down to the original 3 TOS bits.
-> > > 
-> > > Do not use this macro to get the prio for inheriting purposes.
-> > 
-> > Honestly, this patch is a bug fix and is suitable for the net tree
-> > (with appropriate 'Fixes' tag).
-> > 
-> > Ideally, we'd also fix ip6_dst_lookup_tunnel() (used by bareudp
-> > tunnels) and vxlan6_get_route().
-> > 
-> > Also, mlx5e_tc_tun_update_header_ipv6() and
-> > mlx5e_tc_tun_create_header_ipv6() both call RT_TOS() inside
-> > ip6_make_flowinfo() and certainly need to be fixed too.
-> > 
+Hi Peter, Vinod,
+
+On 09/07/22 11:50, Péter Ujfalusi wrote:
 > 
-> Hi Guillaume
-> How would i do that?
-> Send a v2 to net with the fixes tag on 95caf6f71a999?
-> Or just resend to net with the fixes tag on 95caf6f71a999?
-> Since there are no actual changes to the patch.
+> 
+> On 7/4/22 14:13, Vaishnav Achath wrote:
+>> UDMA_CHAN_RT_*BCNT_REG stores the real-time channel bytecount statistics.
+>> These registers are 32-bit hardware counters and the driver uses these
+>> counters to monitor the operational progress status for a channel, when
+>> transferring more than 4GB of data it was observed that these counters
+>> overflow and completion calculation of a operation gets affected and the
+>> transfer hangs indefinitely.
+>>
+>> This commit adds changes to decrease the byte count for every complete
+>> transaction so that these registers never overflow and the proper byte
+>> count statistics is maintained for ongoing transaction by the RT counters.
+>>
+>> Earlier uc->bcnt used to maintain a count of the completed bytes at driver
+>> side, since the RT counters maintain the statistics of current transaction
+>> now, the maintenance of uc->bcnt is not necessary.
+> 
+> Thanks for the patch,
+> 
+>> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+>> ---
+>>   drivers/dma/ti/k3-udma.c | 27 +++++++++++++++++++--------
+>>   1 file changed, 19 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+>> index 2f0d2c68c93c..0f91a3e47c19 100644
+>> --- a/drivers/dma/ti/k3-udma.c
+>> +++ b/drivers/dma/ti/k3-udma.c
+>> @@ -300,8 +300,6 @@ struct udma_chan {
+>>   
+>>   	struct udma_tx_drain tx_drain;
+>>   
+>> -	u32 bcnt; /* number of bytes completed since the start of the channel */
+>> -
+>>   	/* Channel configuration parameters */
+>>   	struct udma_chan_config config;
+>>   
+>> @@ -757,6 +755,22 @@ static void udma_reset_rings(struct udma_chan *uc)
+>>   	}
+>>   }
+>>   
+>> +static void udma_decrement_byte_counters(struct udma_chan *uc, u32 val)
+>> +{
+>> +	if (uc->tchan) {
+>> +		udma_tchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
+>> +		udma_tchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
+>> +		if (!uc->bchan)
+>> +			udma_tchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
+>> +	}
+>> +
+>> +	if (uc->rchan) {
+>> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
+>> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
+>> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
+>> +	}
+> 
+> In case of MEM_TO_MEM (or the not implemented DEV_TO_DEV) we use the
+> tchan's counter for position tracking, but we have the pair anyways (UDMA).
+> if ((uc->desc->dir == DMA_DEV_TO_MEM)
+> 	rchan bcnt reset
+> else
+> 	tchan bcnt reset
+> 
+>> +}
+>> +
+>>   static void udma_reset_counters(struct udma_chan *uc)
+>>   {
+>>   	u32 val;
+>> @@ -790,8 +804,6 @@ static void udma_reset_counters(struct udma_chan *uc)
+>>   		val = udma_rchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
+>>   		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
+>>   	}
+>> -
+>> -	uc->bcnt = 0;
+>>   }
+>>   
+>>   static int udma_reset_chan(struct udma_chan *uc, bool hard)
+>> @@ -1115,8 +1127,8 @@ static void udma_check_tx_completion(struct work_struct *work)
+>>   		if (uc->desc) {
+>>   			struct udma_desc *d = uc->desc;
+>>   
+>> -			uc->bcnt += d->residue;
+>>   			udma_start(uc);
+>> +			udma_decrement_byte_counters(uc, d->residue);
+> 
+> Why not before udma_start()?
+Thank you for your review and feedback, I have updated the addressed items in
+V2, Sorry for the delay in responding.
+V2: https://patchwork.kernel.org/project/linux-dmaengine/patch/20220727140837.25877-1-vaishnav.a@ti.com/
+> 
+>>   			vchan_cookie_complete(&d->vd);
+>>   			break;
+>>   		}
+>> @@ -1168,8 +1180,8 @@ static irqreturn_t udma_ring_irq_handler(int irq, void *data)
+>>   				vchan_cyclic_callback(&d->vd);
+>>   			} else {
+>>   				if (udma_is_desc_really_done(uc, d)) {
+>> -					uc->bcnt += d->residue;
+>>   					udma_start(uc);
+>> +					udma_decrement_byte_counters(uc, d->residue);
+>>   					vchan_cookie_complete(&d->vd);
+>>   				} else {
+>>   					schedule_delayed_work(&uc->tx_drain.work,
+>> @@ -1204,7 +1216,7 @@ static irqreturn_t udma_udma_irq_handler(int irq, void *data)
+>>   			vchan_cyclic_callback(&d->vd);
+>>   		} else {
+>>   			/* TODO: figure out the real amount of data */
+>> -			uc->bcnt += d->residue;
+>> +			udma_decrement_byte_counters(uc, d->residue);
+>>   			udma_start(uc);
+>>   			vchan_cookie_complete(&d->vd);
+>>   		}
+>> @@ -3809,7 +3821,6 @@ static enum dma_status udma_tx_status(struct dma_chan *chan,
+>>   			bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_BCNT_REG);
+>>   		}
+>>   
+>> -		bcnt -= uc->bcnt;
+>>   		if (bcnt && !(bcnt % uc->desc->residue))
+>>   			residue = 0;
+>>   		else
+> 
 
-Hi Matthias,
-
-Ideally, send a patch series to net that'd removes RT_TOS() from the
-ip6_make_flowinfo() calls in geneve, vxlan and bareudp (one patch for
-each protocol, with the appropriate Fixes tag). You can add the IPv4
-patch in that series or send it separately, as you see fit.
-
-Alternatively you can just repost this series to net, with a proper
-Fixes tag for each patch (and I'll take care of vxlan and bareudp in
-a future series).
-
-> This kind of contradicts the statement that IPv4 and IPv6 should behave the same.
-> --> v6 would be fixed, but v4 not.
-
-I personally consider the current IPv4 behaviour for TOS inherit option
-to be a bug, so, in this case, we can have both IPv4 and IPv6 fixed in
-the same tree.
-
-But generally speaking, we have some divergence in how IPv4 and IPv6
-treat tos/dsfield. That's because of some historical reasons and it's
-not easy to reconciliate both implementations (because of backward
-compatibility).
-
-> BR
-> Matthias
-
-
-
+-- 
+Thanks and Regards,
+Vaishnav

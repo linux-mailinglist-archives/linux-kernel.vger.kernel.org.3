@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C9C583311
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5688958331D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236261AbiG0TJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S236396AbiG0TKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236837AbiG0TJR (ORCPT
+        with ESMTP id S236903AbiG0TJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:09:17 -0400
+        Wed, 27 Jul 2022 15:09:18 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8696D2F3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:50:24 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31dfe25bd47so143644437b3.18
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:50:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259B27170E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:50:27 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f3959ba41so59519377b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:50:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=0gBJh1/DX5M6n5W65xmbWPerC4xN3qFPSKf5chwOdiw=;
-        b=bg8ph5OtD7AxG1zxeIOzd4c3YvuKJJwgTI0Hgqzl0BLzrOKqjOjkJROWso5PVvlwaw
-         SKFanteSKc7afiyOqABcwFH+hyZFpEQAOqasHcqh2f7L+Bdn+8xIYU+sBCOKIrfuO6vp
-         FADBwkrq/HXNQGrAFEpCfdTvNxN8H4jPOptrzVphWdjRaTQHxjniaTf7OmRYFPnKFrO/
-         zUbzV2HK8KGT3gR4BAIFqQtcSk3OB5PIqZkQQLX3UNakY3l4kaXGHklmrW+5TWobbdBt
-         SQhKYvoAqOFXhYx6Xbyj2YbePvXd9wsyZwbIquWXadlDeNtWsPMCAFj+S5VHWE/2enUi
-         JMQQ==
+        bh=BEk69dNG70BOHgb0SXLFWzzFpDyu+7tq1YolDhZdyzE=;
+        b=B7uDYX/Cr97zFSRCvB7/fn1gKg5skiOo3orS627VXpMcYo8QEZ7oIrvYBjLdXKLvyw
+         oxhx2F1iCRsyE1gIZ2hQTPsAZ46+3sYZ0ox/pMmaN1heCLPhTeZtrSP1HwOFBi+LY5w+
+         O36Puictr1H9b2lkfo4jRR0Mo/xQr3nN7QsINYg+iKLGVrHaFtsRNdO2iKXWdHOJB+yI
+         aOHHjRJdiN1hTtvuovOpKu1BWxPbokvLEXrXizIHGlzJb61Z0JET3FdTJLeRJ+YjUkgx
+         ZtsTrJIP/RTGLKgls6kpdVgkFafVspj0h5Ad++NOeAflXkUYcUYlzfpi2vBLdxNvt1Jf
+         7KOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=0gBJh1/DX5M6n5W65xmbWPerC4xN3qFPSKf5chwOdiw=;
-        b=bm2e5W6Z/v7JIjvL3zCehKm+gX8Fg/xr80+yOsEwYrQSEea3qPzYYZHZv1vVNgLNbK
-         St41fmlgpRlNKMFwLW6cRbfm0fKptXQwZ0VDMuDjLVVcEU8GB8kkpmNa2BLApHEj3il6
-         lBCH/epH2jHIxWJRjfE1VAa16EvZ+RDkk+SWwkrWgbCEjgAYSYdyPVAPsLVHTTXZqWKO
-         w+AZvkGhOOkH1NdFEcX2eSlK5L/t6M6hfkjcYgtnSJ/Sq901aij2MLZVUCGrvkaq+gDg
-         xz2huS9ddMmEkc04jniyzmTNXrUD4xtaAe6HZFJFZOWX4mRLr+QyuHiaB8ZJVcFaNsIk
-         /IyA==
-X-Gm-Message-State: AJIora/xNkyWK5By7A7JEkCciFcM9WYNlMOm8fyn9rx05HBadaZk8hd3
-        rv3IhQDQlSEioffchj/tR2rB1crBVnGQHvc=
-X-Google-Smtp-Source: AGRyM1vw9acn4WN7zKTrz4jHGTc3N/jAqDblTKq2t1lpN8G1rUtuPz0iWs9j4VcBcTn0CpXqkKAHxpdMjKm+bSs=
+        bh=BEk69dNG70BOHgb0SXLFWzzFpDyu+7tq1YolDhZdyzE=;
+        b=8JyMS7qvD5gY2Nho2LMFXlwsCS3U0YrtP0Rvs6DHj1x91O4KnW7xsa9sI936VbU/Ah
+         8+FkZmO6ero9stH845F1lOnZNQ2wa4mwW1XteYYRFQbolOA44AuHi3JhuvHb72bCecCu
+         rJY5nIr1/Ls2K6wkMJgOl+yU0x5qgxzdRr+K3i/syKqouoTW4C0jTcHWv3ete0OLqnYT
+         PH5yjhij/RdAvzKd+9+VySbvFweC0rRcEBF6G+hTpx1JR3KzS/b+4oAoVy7kCJRx5EMJ
+         CoozcznS7qudbT75O9N/MA1Oprqa0826vRCNFIhQXHW2i2+n8+h/3IoZaGfvxRdaj+Se
+         Y3+g==
+X-Gm-Message-State: AJIora+DDUqZ4XY9NS09dvOWL3Jb1Dy8tTI/tU3IOcNThWDUya8HHzDs
+        zOYLIJv9fHwbG7g60gWIypOIPBqF9DK4mWU=
+X-Google-Smtp-Source: AGRyM1vBbGCvhJnuNcqNxmyfgvBqU63X92ObJ+fmmE6nsBM1EgRJPhCmvWH4pzIt7pOBmOkC8sjtqMGkHE01FH0=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:40ee:bae0:a4fd:c75b])
- (user=saravanak job=sendgmr) by 2002:a81:54c5:0:b0:31c:7731:e1ac with SMTP id
- i188-20020a8154c5000000b0031c7731e1acmr20280110ywb.190.1658947823995; Wed, 27
- Jul 2022 11:50:23 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 11:50:10 -0700
+ (user=saravanak job=sendgmr) by 2002:a5b:502:0:b0:66e:206d:15f6 with SMTP id
+ o2-20020a5b0502000000b0066e206d15f6mr18796823ybp.160.1658947826888; Wed, 27
+ Jul 2022 11:50:26 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 11:50:11 -0700
 In-Reply-To: <20220727185012.3255200-1-saravanak@google.com>
-Message-Id: <20220727185012.3255200-3-saravanak@google.com>
+Message-Id: <20220727185012.3255200-4-saravanak@google.com>
 Mime-Version: 1.0
 References: <20220727185012.3255200-1-saravanak@google.com>
 X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v1 2/3] Revert "net: mdio: Delete usage of driver_deferred_probe_check_state()"
+Subject: [PATCH v1 3/3] Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
 From:   Saravana Kannan <saravanak@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -72,7 +72,7 @@ Cc:     Saravana Kannan <saravanak@google.com>, naresh.kamboju@linaro.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,7 +80,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit f8217275b57aa48d98cc42051c2aac34152718d6.
+This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
 
 There are a few more issues to fix that have been reported in the thread
 for the original series [1]. We'll need to fix those before this will
@@ -90,24 +90,22 @@ work. So, revert it for now.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/net/mdio/fwnode_mdio.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/base/power/domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
-index 3e79c2c51929..1c1584fca632 100644
---- a/drivers/net/mdio/fwnode_mdio.c
-+++ b/drivers/net/mdio/fwnode_mdio.c
-@@ -47,7 +47,9 @@ int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
- 	 * just fall back to poll mode
- 	 */
- 	if (rc == -EPROBE_DEFER)
--		rc = -ENODEV;
-+		rc = driver_deferred_probe_check_state(&phy->mdio.dev);
-+	if (rc == -EPROBE_DEFER)
-+		return rc;
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 3e86772d5fac..739e52cd4aba 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 		mutex_unlock(&gpd_list_lock);
+ 		dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+ 			__func__, PTR_ERR(pd));
+-		return -ENODEV;
++		return driver_deferred_probe_check_state(base_dev);
+ 	}
  
- 	if (rc > 0) {
- 		phy->irq = rc;
+ 	dev_dbg(dev, "adding to PM domain %s\n", pd->name);
 -- 
 2.37.1.359.gd136c6c3e2-goog
 

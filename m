@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E729158282E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EFA582836
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiG0OEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S233150AbiG0OGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiG0OEk (ORCPT
+        with ESMTP id S231204AbiG0OF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:04:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD76515FC7;
-        Wed, 27 Jul 2022 07:04:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F013617C0;
-        Wed, 27 Jul 2022 14:04:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7895C433C1;
-        Wed, 27 Jul 2022 14:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658930678;
-        bh=O6jeZVLKYQMWPi3PKSOn064mNnD47HdvIqglROSSWAo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iKCtRLWfM+8Rrgzm3doB5vIqySsG+YUcPS1Ge/iClPuQsripsOYXN90RaNJ5CwR3c
-         0FNkbeYPwuo0fSDV586zvxXkUlHAhkZlxh//dfZ9qtf7R60w3qwaKcBT1LjrXdF9Lf
-         iqEUbGXx47Z7w97SOCKi0+lYfgkmMCqcL7CFYnnMsCgDoMavosU4t3M+dkxEdLxtdb
-         cBl6Yc22NTmJ0CWUOqwJQE7Ag3gCbgwN2iibuSq5fVtbquyMjR5xn2b4gWlRTSLJE6
-         mLG09+NXpl/9qgSaPeja8aYm5FP61mHe9tnfaz31/VvJ3fYpD9Hpfb4d2k4w6DGBmB
-         16JClnZcbsXsA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2760F405DD; Wed, 27 Jul 2022 11:04:35 -0300 (-03)
-Date:   Wed, 27 Jul 2022 11:04:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, pc@us.ibm.com, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [RFC v3 06/17] perf kwork: Implement perf kwork report
-Message-ID: <YuFF83qDSyzBrhBm@kernel.org>
-References: <20220709015033.38326-1-yangjihong1@huawei.com>
- <20220709015033.38326-7-yangjihong1@huawei.com>
- <YuAnEBpYSf53PkXI@kernel.org>
- <b865f96a-856c-6a7d-a66a-c3343097ee5a@huawei.com>
+        Wed, 27 Jul 2022 10:05:58 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E5E5F58;
+        Wed, 27 Jul 2022 07:05:57 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id mh14so12977947qvb.1;
+        Wed, 27 Jul 2022 07:05:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g7sXk1x+mAlIVnjI6mSnBUc3PosDoepD30XFI2Dsmk8=;
+        b=o03vaz9SgZGF20HFejqu8j4uk14t+1+Ntu8f8HX38wHE6fda2DYCQTbuj2RG5re4ll
+         CZAinx0CB9KAOb6xR72buzUfZqho5Vg3XXffxwUrvYdC/lrwabGCRM4bEG4hPe6JEOV/
+         4E4ginhpyjdaE20FIubMwiaPeIRIReKh9QChah53hBBb6g7mVPTbeBdUrwarbtq3PWm8
+         KVqjnJ5zDWt7D4aSLMhLc0kFp6dUvMXmmv6EsPZYsr9wLeUqEfm+xgl+tYaifsP+aiRq
+         NQnIARacSJgYXRzG+qsTuv7W9mxZoEy0MTB4pYDDpg0rz4dlTDOeCWBQj6i4QXqOA3Ji
+         rvJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g7sXk1x+mAlIVnjI6mSnBUc3PosDoepD30XFI2Dsmk8=;
+        b=EM25ENfm3w1R6lQIKG384aV7i7j5TSDgWCy2JTjT+dypYQufUuUvUwYuQkNdFnyLHJ
+         UmCyhlgxi8xrUX3tJcUn4kih2Wzwpopn5lLPW9iPqezG5QQn9bkCmnd3Uuju9zFoa4Vg
+         C2l8AQcVe8bnV/FSUcCV8ZAp9I3t448UEKKTKcpelfygd0V5sHibGEI5n/8oOBMQrdk7
+         gY+TWDGo1uE0tQxJfZjZBQlF/5ESKp5xjuHP3hDprvlPzwV49PgnVEB0feiILyPMWiIz
+         58UnZTmTIkiM9xMr7Bmxbrf3HroKaMJRQxQ7GxQcVqsQoxhFuetEQ3+OKqL5k/rMj9pR
+         YGjQ==
+X-Gm-Message-State: AJIora8ixmN+h2SUiipo75XAyPIp50MJwKRqNE0VnTUDUGcgtxsXaRYv
+        dg3F945el6msHmJ5BrYp0gMfq1DD/Ws=
+X-Google-Smtp-Source: AGRyM1vhQ8zosTUVzYGVDlCdLsHQaHX3U9IIZfJxtNNoYlp4pYrpAnjXqd+GZ9j7fGo2+Ke8o74/Qg==
+X-Received: by 2002:a0c:b2d0:0:b0:473:2c19:f1ee with SMTP id d16-20020a0cb2d0000000b004732c19f1eemr19103337qvf.130.1658930756307;
+        Wed, 27 Jul 2022 07:05:56 -0700 (PDT)
+Received: from mimieux.lan ([38.126.102.198])
+        by smtp.gmail.com with ESMTPSA id ci23-20020a05622a261700b0031ed8ef7982sm10829015qtb.22.2022.07.27.07.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 07:05:56 -0700 (PDT)
+From:   "=?UTF-8?q?Jo=C3=A3o=20Paulo=20Rechi=20Vita?=" <jprvita@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Jo=C3=A3o=20Paulo=20Rechi=20Vita?= <jprvita@endlessos.org>
+To:     Ard Biesheuvel <ardb@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     linux@endlessos.org,
+        =?UTF-8?q?Jo=C3=A3o=20Paulo=20Rechi=20Vita?= 
+        <jprvita@endlessos.org>, linux-efi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] docs: efi-stub: Fix paths for x86 / arm stubs
+Date:   Wed, 27 Jul 2022 10:05:39 -0400
+Message-Id: <20220727140539.10021-1-jprvita@endlessos.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b865f96a-856c-6a7d-a66a-c3343097ee5a@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Jul 27, 2022 at 08:39:33AM +0800, Yang Jihong escreveu:
-> Hello,
-> 
-> On 2022/7/27 1:40, Arnaldo Carvalho de Melo wrote:
-> > Em Sat, Jul 09, 2022 at 09:50:22AM +0800, Yang Jihong escreveu:
-> > > +
-> > > +static void report_print_work(struct perf_kwork *kwork,
-> > > +			      struct kwork_work *work)
-> > > +{
-> > > +	int ret = 0;
-> > > +	char kwork_name[PRINT_KWORK_NAME_WIDTH];
-> > > +	char max_runtime_start[32], max_runtime_end[32];
-> > 
-> > Committer notes:
-> > 
-> > - Add some {} for multiline for/if blocks
-> > 
-> > - Return the calculated number of printed bytes in report_print_work,
-> >    otherwise soem compilers will complain that variable isn't used, e.g.:
-> > 
-> >     2    92.64 almalinux:9                   : FAIL clang version 13.0.1 (Red Hat 13.0.1-1.el9)
-> >      builtin-kwork.c:1061:6: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
-> >              int ret = 0;
-> > 
-> > 
-> OK, I'll fix it in next version.
+This fixes the paths of x86 / arm efi-stub source files.
 
-your work with these fixups is already at acme/perf/core:
+Signed-off-by: João Paulo Rechi Vita <jprvita@endlessos.org>
+---
+ Documentation/admin-guide/efi-stub.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
+diff --git a/Documentation/admin-guide/efi-stub.rst b/Documentation/admin-guide/efi-stub.rst
+index 833edb0d0bc4..b24e7c40d832 100644
+--- a/Documentation/admin-guide/efi-stub.rst
++++ b/Documentation/admin-guide/efi-stub.rst
+@@ -7,10 +7,10 @@ as a PE/COFF image, thereby convincing EFI firmware loaders to load
+ it as an EFI executable. The code that modifies the bzImage header,
+ along with the EFI-specific entry point that the firmware loader
+ jumps to are collectively known as the "EFI boot stub", and live in
+-arch/x86/boot/header.S and arch/x86/boot/compressed/eboot.c,
++arch/x86/boot/header.S and drivers/firmware/efi/libstub/x86-stub.c,
+ respectively. For ARM the EFI stub is implemented in
+ arch/arm/boot/compressed/efi-header.S and
+-arch/arm/boot/compressed/efi-stub.c. EFI stub code that is shared
++drivers/firmware/efi/libstub/arm32-stub.c. EFI stub code that is shared
+ between architectures is in drivers/firmware/efi/libstub.
+ 
+ For arm64, there is no compressed kernel support, so the Image itself
+-- 
+2.20.1
 
-Please continue from there. Please let me know if I made some mistake.
-
-Thanks for working on this!
-
-- Arnaldo

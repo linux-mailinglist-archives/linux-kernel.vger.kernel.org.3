@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56232583000
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E40582F30
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241218AbiG0RcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
+        id S241939AbiG0RV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242421AbiG0R3h (ORCPT
+        with ESMTP id S241980AbiG0RT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:29:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E43352DF3;
-        Wed, 27 Jul 2022 09:47:50 -0700 (PDT)
+        Wed, 27 Jul 2022 13:19:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784B120191;
+        Wed, 27 Jul 2022 09:44:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6927761556;
-        Wed, 27 Jul 2022 16:47:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7085FC433C1;
-        Wed, 27 Jul 2022 16:47:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDE69B8200C;
+        Wed, 27 Jul 2022 16:44:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A011C433D6;
+        Wed, 27 Jul 2022 16:44:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940468;
-        bh=MZS7xM2P/QhUfUhlJ/ZyYiAd7ucFRqtt4/MMoU+Odgg=;
+        s=korg; t=1658940282;
+        bh=oiSt1wyU14n0g8HwuwyUHAl3vR2Y3DGXQRQ94FaTDOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pLesKRth8yXu9ox0rZf4LulVDyhFZhmdfDV8rNTP5XPBfZGqyDsXjCx1+kJc0H56S
-         B+vI5SNaFN0nickEmLd4NCk5PxyUgnQCZkcfdxquXcjbm0Za0pKiS90faiq7Pk5S0V
-         hD3DWzcss1R1LnWzdyXH0E/PPvmsNU6f2OOqew4k=
+        b=AfRX+p0Iu3sVrtt2twRMgypv98bfK4VKWyF+NJmS+eFfpvJmkbZ85Mmj+qATdtJe3
+         H1F2bso4cYV4q2nA52RzKw/p9Fcah0j0dFqpitAMvRh5zZrRB6Y/LEaPzjb8dk+jjf
+         4QGSCkbD2yQ5403ySj9dRSvQkqypjVj+m/Z/UcSc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        Han Xu <han.xu@nxp.com>,
-        =?UTF-8?q?Tomasz=20Mo=C5=84?= <tomasz.mon@camlingroup.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.18 007/158] mtd: rawnand: gpmi: Set WAIT_FOR_READY timeout based on program/erase times
-Date:   Wed, 27 Jul 2022 18:11:11 +0200
-Message-Id: <20220727161021.734636052@linuxfoundation.org>
+        stable@vger.kernel.org, Yuezhang Mo <Yuezhang.Mo@sony.com>,
+        Andy Wu <Andy.Wu@sony.com>,
+        Aoyama Wataru <wataru.aoyama@sony.com>,
+        Daniel Palmer <daniel.palmer@sony.com>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 168/201] exfat: fix referencing wrong parent directory information after renaming
+Date:   Wed, 27 Jul 2022 18:11:12 +0200
+Message-Id: <20220727161034.786986554@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +58,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sascha Hauer <s.hauer@pengutronix.de>
+From: Yuezhang Mo <Yuezhang.Mo@sony.com>
 
-commit 0fddf9ad06fd9f439f137139861556671673e31c upstream.
+[ Upstream commit d8dad2588addd1d861ce19e7df3b702330f0c7e3 ]
 
-06781a5026350 Fixes the calculation of the DEVICE_BUSY_TIMEOUT register
-value from busy_timeout_cycles. busy_timeout_cycles is calculated wrong
-though: It is calculated based on the maximum page read time, but the
-timeout is also used for page write and block erase operations which
-require orders of magnitude bigger timeouts.
+During renaming, the parent directory information maybe
+updated. But the file/directory still references to the
+old parent directory information.
 
-Fix this by calculating busy_timeout_cycles from the maximum of
-tBERS_max and tPROG_max.
+This bug will cause 2 problems.
 
-This is for now the easiest and most obvious way to fix the driver.
-There's room for improvements though: The NAND_OP_WAITRDY_INSTR tells us
-the desired timeout for the current operation, so we could program the
-timeout dynamically for each operation instead of setting a fixed
-timeout. Also we could wire up the interrupt handler to actually detect
-and forward timeouts occurred when waiting for the chip being ready.
+(1) The renamed file can not be written.
 
-As a sidenote I verified that the change in 06781a5026350 is really
-correct. I wired up the interrupt handler in my tree and measured the
-time between starting the operation and the timeout interrupt handler
-coming in. The time increases 41us with each step in the timeout
-register which corresponds to 4096 clock cycles with the 99MHz clock
-that I have.
+    [10768.175172] exFAT-fs (sda1): error, failed to bmap (inode : 7afd50e4 iblock : 0, err : -5)
+    [10768.184285] exFAT-fs (sda1): Filesystem has been set read-only
+    ash: write error: Input/output error
 
-Fixes: 06781a5026350 ("mtd: rawnand: gpmi: Fix setting busy timeout setting")
-Fixes: b1206122069aa ("mtd: rawniand: gpmi: use core timings instead of an empirical derivation")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Acked-by: Han Xu <han.xu@nxp.com>
-Tested-by: Tomasz Moń <tomasz.mon@camlingroup.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+(2) Some dentries of the renamed file/directory are not set
+    to deleted after removing the file/directory.
+
+exfat_update_parent_info() is a workaround for the wrong parent
+directory information being used after renaming. Now that bug is
+fixed, this is no longer needed, so remove it.
+
+Fixes: 5f2aa075070c ("exfat: add inode operations")
+Cc: stable@vger.kernel.org # v5.7+
+Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+Reviewed-by: Andy Wu <Andy.Wu@sony.com>
+Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
+Reviewed-by: Daniel Palmer <daniel.palmer@sony.com>
+Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/exfat/namei.c | 27 +--------------------------
+ 1 file changed, 1 insertion(+), 26 deletions(-)
 
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -655,9 +655,10 @@ static int gpmi_nfc_compute_timings(stru
- 	unsigned int tRP_ps;
- 	bool use_half_period;
- 	int sample_delay_ps, sample_delay_factor;
--	u16 busy_timeout_cycles;
-+	unsigned int busy_timeout_cycles;
- 	u8 wrn_dly_sel;
- 	unsigned long clk_rate, min_rate;
-+	u64 busy_timeout_ps;
+diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
+index 9d8ada781250..939737ba520d 100644
+--- a/fs/exfat/namei.c
++++ b/fs/exfat/namei.c
+@@ -1069,6 +1069,7 @@ static int exfat_rename_file(struct inode *inode, struct exfat_chain *p_dir,
  
- 	if (sdr->tRC_min >= 30000) {
- 		/* ONFI non-EDO modes [0-3] */
-@@ -690,7 +691,8 @@ static int gpmi_nfc_compute_timings(stru
- 	addr_setup_cycles = TO_CYCLES(sdr->tALS_min, period_ps);
- 	data_setup_cycles = TO_CYCLES(sdr->tDS_min, period_ps);
- 	data_hold_cycles = TO_CYCLES(sdr->tDH_min, period_ps);
--	busy_timeout_cycles = TO_CYCLES(sdr->tWB_max + sdr->tR_max, period_ps);
-+	busy_timeout_ps = max(sdr->tBERS_max, sdr->tPROG_max);
-+	busy_timeout_cycles = TO_CYCLES(busy_timeout_ps, period_ps);
+ 		exfat_remove_entries(inode, p_dir, oldentry, 0,
+ 			num_old_entries);
++		ei->dir = *p_dir;
+ 		ei->entry = newentry;
+ 	} else {
+ 		if (exfat_get_entry_type(epold) == TYPE_FILE) {
+@@ -1159,28 +1160,6 @@ static int exfat_move_file(struct inode *inode, struct exfat_chain *p_olddir,
+ 	return 0;
+ }
  
- 	hw->timing0 = BF_GPMI_TIMING0_ADDRESS_SETUP(addr_setup_cycles) |
- 		      BF_GPMI_TIMING0_DATA_HOLD(data_hold_cycles) |
+-static void exfat_update_parent_info(struct exfat_inode_info *ei,
+-		struct inode *parent_inode)
+-{
+-	struct exfat_sb_info *sbi = EXFAT_SB(parent_inode->i_sb);
+-	struct exfat_inode_info *parent_ei = EXFAT_I(parent_inode);
+-	loff_t parent_isize = i_size_read(parent_inode);
+-
+-	/*
+-	 * the problem that struct exfat_inode_info caches wrong parent info.
+-	 *
+-	 * because of flag-mismatch of ei->dir,
+-	 * there is abnormal traversing cluster chain.
+-	 */
+-	if (unlikely(parent_ei->flags != ei->dir.flags ||
+-		     parent_isize != EXFAT_CLU_TO_B(ei->dir.size, sbi) ||
+-		     parent_ei->start_clu != ei->dir.dir)) {
+-		exfat_chain_set(&ei->dir, parent_ei->start_clu,
+-			EXFAT_B_TO_CLU_ROUND_UP(parent_isize, sbi),
+-			parent_ei->flags);
+-	}
+-}
+-
+ /* rename or move a old file into a new file */
+ static int __exfat_rename(struct inode *old_parent_inode,
+ 		struct exfat_inode_info *ei, struct inode *new_parent_inode,
+@@ -1211,8 +1190,6 @@ static int __exfat_rename(struct inode *old_parent_inode,
+ 		return -ENOENT;
+ 	}
+ 
+-	exfat_update_parent_info(ei, old_parent_inode);
+-
+ 	exfat_chain_dup(&olddir, &ei->dir);
+ 	dentry = ei->entry;
+ 
+@@ -1233,8 +1210,6 @@ static int __exfat_rename(struct inode *old_parent_inode,
+ 			goto out;
+ 		}
+ 
+-		exfat_update_parent_info(new_ei, new_parent_inode);
+-
+ 		p_dir = &(new_ei->dir);
+ 		new_entry = new_ei->entry;
+ 		ep = exfat_get_dentry(sb, p_dir, new_entry, &new_bh, NULL);
+-- 
+2.35.1
+
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38C5582B6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F343582F49
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbiG0QdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S242001AbiG0RWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236935AbiG0Qcq (ORCPT
+        with ESMTP id S241816AbiG0RUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:32:46 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B8453D3F;
-        Wed, 27 Jul 2022 09:26:19 -0700 (PDT)
+        Wed, 27 Jul 2022 13:20:24 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B1A5FD1;
+        Wed, 27 Jul 2022 09:45:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 367EECE22FE;
-        Wed, 27 Jul 2022 16:25:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 499D1C433D6;
-        Wed, 27 Jul 2022 16:25:53 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ED54ECE2314;
+        Wed, 27 Jul 2022 16:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7732C433C1;
+        Wed, 27 Jul 2022 16:45:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939153;
-        bh=L7lMBsBoieeJ4Z5Ul1uqgHY3s6Ia9S2f7PSI0ziw88o=;
+        s=korg; t=1658940308;
+        bh=avZDDaQpycf6zwWtz0rxv7VLnt+N8pteV3NItPBxSkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=snMDszp4lj4ALHG0ujvIeg+OWYDnk7Uw/xuOOI6JLDRc3sdXSIlJdB5yMl7T6CmLt
-         kNzF3VWn1DcII7oNFd1AlHN3Hge+PD6zxZQIAjenQppG1Cb8N4WUAIfrlPOhC2K8mu
-         Kzhi8I8x/zQQDnEFia/S5BTiuhmJzR3rfegUzjik=
+        b=0nh48BIiOlRSO2ZD/xX61AgzmFkWCJk5mNP0hoKy9oofFNCymrYHMFBl/h1xGFBQA
+         kOktJ+YzNaHOZxuxI3eWz5TDpSlclw3KQL0Lnw6L2a6x+x3r2RghBrkY4jyGX0p+3d
+         Afq+b9dVWPSPkFKrmzC2hxxaxk+w71T65/+l9ob4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 32/62] tcp: Fix data-races around sysctl_tcp_max_reordering.
+        stable@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.15 137/201] sched/deadline: Fix BUG_ON condition for deboosted tasks
 Date:   Wed, 27 Jul 2022 18:10:41 +0200
-Message-Id: <20220727161005.465160454@linuxfoundation.org>
+Message-Id: <20220727161033.482502962@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Juri Lelli <juri.lelli@redhat.com>
 
-[ Upstream commit a11e5b3e7a59fde1a90b0eaeaa82320495cf8cae ]
+commit ddfc710395cccc61247348df9eb18ea50321cbed upstream.
 
-While reading sysctl_tcp_max_reordering, it can be changed
-concurrently.  Thus, we need to add READ_ONCE() to its readers.
+Tasks the are being deboosted from SCHED_DEADLINE might enter
+enqueue_task_dl() one last time and hit an erroneous BUG_ON condition:
+since they are not boosted anymore, the if (is_dl_boosted()) branch is
+not taken, but the else if (!dl_prio) is and inside this one we
+BUG_ON(!is_dl_boosted), which is of course false (BUG_ON triggered)
+otherwise we had entered the if branch above. Long story short, the
+current condition doesn't make sense and always leads to triggering of a
+BUG.
 
-Fixes: dca145ffaa8d ("tcp: allow for bigger reordering level")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fix this by only checking enqueue flags, properly: ENQUEUE_REPLENISH has
+to be present, but additional flags are not a problem.
+
+Fixes: 64be6f1f5f71 ("sched/deadline: Don't replenish from a !SCHED_DEADLINE entity")
+Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: stable@vger.kernel.org
+Link: https://lkml.kernel.org/r/20220714151908.533052-1-juri.lelli@redhat.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_input.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/sched/deadline.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 3b63e05c3486..26f0994da31b 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -893,7 +893,7 @@ static void tcp_check_sack_reordering(struct sock *sk, const u32 low_seq,
- 			 tp->undo_marker ? tp->undo_retrans : 0);
- #endif
- 		tp->reordering = min_t(u32, (metric + mss - 1) / mss,
--				       sock_net(sk)->ipv4.sysctl_tcp_max_reordering);
-+				       READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_max_reordering));
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1561,7 +1561,10 @@ static void enqueue_task_dl(struct rq *r
+ 		 * the throttle.
+ 		 */
+ 		p->dl.dl_throttled = 0;
+-		BUG_ON(!is_dl_boosted(&p->dl) || flags != ENQUEUE_REPLENISH);
++		if (!(flags & ENQUEUE_REPLENISH))
++			printk_deferred_once("sched: DL de-boosted task PID %d: REPLENISH flag missing\n",
++					     task_pid_nr(p));
++
+ 		return;
  	}
  
- 	/* This exciting event is worth to be remembered. 8) */
-@@ -1878,7 +1878,7 @@ static void tcp_check_reno_reordering(struct sock *sk, const int addend)
- 		return;
- 
- 	tp->reordering = min_t(u32, tp->packets_out + addend,
--			       sock_net(sk)->ipv4.sysctl_tcp_max_reordering);
-+			       READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_max_reordering));
- 	tp->reord_seen++;
- 	NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPRENOREORDER);
- }
--- 
-2.35.1
-
 
 

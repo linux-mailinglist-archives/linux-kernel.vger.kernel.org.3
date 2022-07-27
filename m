@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC79A582D60
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9019582C78
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbiG0Q4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S240423AbiG0QqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240834AbiG0QzK (ORCPT
+        with ESMTP id S239849AbiG0Qou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:55:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD3E6556F;
-        Wed, 27 Jul 2022 09:36:02 -0700 (PDT)
+        Wed, 27 Jul 2022 12:44:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC4A5F986;
+        Wed, 27 Jul 2022 09:31:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF5EEB821CD;
-        Wed, 27 Jul 2022 16:35:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32BD5C433D6;
-        Wed, 27 Jul 2022 16:35:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CB5861A38;
+        Wed, 27 Jul 2022 16:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A6BBC433C1;
+        Wed, 27 Jul 2022 16:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939757;
-        bh=Kg0y1vRye2oDf6tlmP00OjE1w28PZk7rUTTcOu7cIz4=;
+        s=korg; t=1658939483;
+        bh=5sBIDrAeZCj2hefEhVNQeE//wJyI0ZVlN15c+IC1zaQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VsxcW4llILAdWubbnDFLz71r/rgDZb64OnXZVlq39emR+Oz0XkYnSx04lOMcDoZ2H
-         gdnMN1/c/ARQ4NHfpmxvS0OVxxC3UoSo//0gfY8JQ1sVwqvWJTL5Vi73iEPshl2yst
-         XtYKe8Ku61RPxRKnq/vfwZCoElkEMAYwvM65THEM=
+        b=e2YbXtlCjksN+zW+xwIlKa8pDXTeZe7fg2umwWdzrqgq077JAbrqGwYs3q9SWyIJ9
+         HLZZ8lKDnu4hKNIrF6QX2HHdHt+1vbGAk2mPsmQIYnqxSZsNwfNNIx/GIVaBz1/irA
+         wLi2xl1GQTb/gctOMUf8adYGqUdybC7JxAKQ2D1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 061/105] gpio: pca953x: use the correct range when do regmap sync
+Subject: [PATCH 5.4 54/87] tcp: Fix data-races around sysctl_tcp_max_reordering.
 Date:   Wed, 27 Jul 2022 18:10:47 +0200
-Message-Id: <20220727161014.527536738@linuxfoundation.org>
+Message-Id: <20220727161011.260536841@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 2abc17a93867dc816f0ed9d32021dda8078e7330 ]
+[ Upstream commit a11e5b3e7a59fde1a90b0eaeaa82320495cf8cae ]
 
-regmap will sync a range of registers, here use the correct range
-to make sure the sync do not touch other unexpected registers.
+While reading sysctl_tcp_max_reordering, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its readers.
 
-Find on pca9557pw on imx8qxp/dxl evk board, this device support
-8 pin, so only need one register(8 bits) to cover all the 8 pins's
-property setting. But when sync the output, we find it actually
-update two registers, output register and the following register.
-
-Fixes: b76574300504 ("gpio: pca953x: Restore registers after suspend/resume cycle")
-Fixes: ec82d1eba346 ("gpio: pca953x: Zap ad-hoc reg_output cache")
-Fixes: 0f25fda840a9 ("gpio: pca953x: Zap ad-hoc reg_direction cache")
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Fixes: dca145ffaa8d ("tcp: allow for bigger reordering level")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-pca953x.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ net/ipv4/tcp_input.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index bd7828e0f2f5..b63ac46beceb 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -899,12 +899,12 @@ static int device_pca95xx_init(struct pca953x_chip *chip, u32 invert)
- 	int ret;
- 
- 	ret = regcache_sync_region(chip->regmap, chip->regs->output,
--				   chip->regs->output + NBANK(chip));
-+				   chip->regs->output + NBANK(chip) - 1);
- 	if (ret)
- 		goto out;
- 
- 	ret = regcache_sync_region(chip->regmap, chip->regs->direction,
--				   chip->regs->direction + NBANK(chip));
-+				   chip->regs->direction + NBANK(chip) - 1);
- 	if (ret)
- 		goto out;
- 
-@@ -1117,14 +1117,14 @@ static int pca953x_regcache_sync(struct device *dev)
- 	 * sync these registers first and only then sync the rest.
- 	 */
- 	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
--	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
-+	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip) - 1);
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO dir registers: %d\n", ret);
- 		return ret;
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index f9884956aa13..c151c4dd4ae6 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -905,7 +905,7 @@ static void tcp_check_sack_reordering(struct sock *sk, const u32 low_seq,
+ 			 tp->undo_marker ? tp->undo_retrans : 0);
+ #endif
+ 		tp->reordering = min_t(u32, (metric + mss - 1) / mss,
+-				       sock_net(sk)->ipv4.sysctl_tcp_max_reordering);
++				       READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_max_reordering));
  	}
  
- 	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
--	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
-+	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip) - 1);
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO out registers: %d\n", ret);
- 		return ret;
-@@ -1134,7 +1134,7 @@ static int pca953x_regcache_sync(struct device *dev)
- 	if (chip->driver_data & PCA_PCAL) {
- 		regaddr = pca953x_recalc_addr(chip, PCAL953X_IN_LATCH, 0);
- 		ret = regcache_sync_region(chip->regmap, regaddr,
--					   regaddr + NBANK(chip));
-+					   regaddr + NBANK(chip) - 1);
- 		if (ret) {
- 			dev_err(dev, "Failed to sync INT latch registers: %d\n",
- 				ret);
-@@ -1143,7 +1143,7 @@ static int pca953x_regcache_sync(struct device *dev)
+ 	/* This exciting event is worth to be remembered. 8) */
+@@ -1886,7 +1886,7 @@ static void tcp_check_reno_reordering(struct sock *sk, const int addend)
+ 		return;
  
- 		regaddr = pca953x_recalc_addr(chip, PCAL953X_INT_MASK, 0);
- 		ret = regcache_sync_region(chip->regmap, regaddr,
--					   regaddr + NBANK(chip));
-+					   regaddr + NBANK(chip) - 1);
- 		if (ret) {
- 			dev_err(dev, "Failed to sync INT mask registers: %d\n",
- 				ret);
+ 	tp->reordering = min_t(u32, tp->packets_out + addend,
+-			       sock_net(sk)->ipv4.sysctl_tcp_max_reordering);
++			       READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_max_reordering));
+ 	tp->reord_seen++;
+ 	NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPRENOREORDER);
+ }
 -- 
 2.35.1
 

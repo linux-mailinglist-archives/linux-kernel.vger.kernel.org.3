@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE13582D29
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE1F582C29
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240965AbiG0Qxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S239873AbiG0Qmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240784AbiG0QwW (ORCPT
+        with ESMTP id S239220AbiG0QmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:52:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA4D54AF0;
-        Wed, 27 Jul 2022 09:34:27 -0700 (PDT)
+        Wed, 27 Jul 2022 12:42:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148D75C357;
+        Wed, 27 Jul 2022 09:29:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42663619BF;
-        Wed, 27 Jul 2022 16:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BCDCC433D6;
-        Wed, 27 Jul 2022 16:34:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF5B261A39;
+        Wed, 27 Jul 2022 16:29:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE92EC433D6;
+        Wed, 27 Jul 2022 16:29:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939666;
-        bh=CDy4plvDjjyk25XXASBm/JCvaBp3tZqSP4Flrdk2Nv8=;
+        s=korg; t=1658939395;
+        bh=HBTuDHmlNIq/Hz/znquvPZXH2RPXYA59ZP/S06U5vHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ixv5PTWH0/yiQ5Q6VKsQfFjKeYZ9c5L3hNGYbTe6vprvZwuxc5MWdI226Z8YhxKbU
-         sY9koToZf0xDvLvctncAjx6ARBE0dC6PWw47ZNxFcqm+/JCzS8qX11cYmOOOwTybnd
-         sXdXUdSLFHu1DUj6aOvPR5qDYeAHU0kMPNsilnYg=
+        b=fCFlkXne+xvJ4NpRvMhL4G2jqN2oRS8kmNmYqJCBwCFpb0IYaHmsGPbHScLtwLMlP
+         tnU4xovbf+XrwJ6lMdhdgtUPsy5SowECoow7VAQI4QTKEhsFdBO4loLzOkNmWFKgMp
+         1/5IW7jO6uqS84AICYHj2PSxlfZmZxxtrn2wvwWs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 062/105] gpio: pca953x: use the correct register address when regcache sync during init
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.4 55/87] spi: bcm2835: bcm2835_spi_handle_err(): fix NULL pointer deref for non DMA transfers
 Date:   Wed, 27 Jul 2022 18:10:48 +0200
-Message-Id: <20220727161014.566435860@linuxfoundation.org>
+Message-Id: <20220727161011.295157882@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit b8c768ccdd8338504fb78370747728d5002b1b5a ]
+commit 4ceaa684459d414992acbefb4e4c31f2dfc50641 upstream.
 
-For regcache_sync_region, we need to use pca953x_recalc_addr() to get
-the real register address.
+In case a IRQ based transfer times out the bcm2835_spi_handle_err()
+function is called. Since commit 1513ceee70f2 ("spi: bcm2835: Drop
+dma_pending flag") the TX and RX DMA transfers are unconditionally
+canceled, leading to NULL pointer derefs if ctlr->dma_tx or
+ctlr->dma_rx are not set.
 
-Fixes: ec82d1eba346 ("gpio: pca953x: Zap ad-hoc reg_output cache")
-Fixes: 0f25fda840a9 ("gpio: pca953x: Zap ad-hoc reg_direction cache")
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fix the NULL pointer deref by checking that ctlr->dma_tx and
+ctlr->dma_rx are valid pointers before accessing them.
+
+Fixes: 1513ceee70f2 ("spi: bcm2835: Drop dma_pending flag")
+Cc: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Link: https://lore.kernel.org/r/20220719072234.2782764-1-mkl@pengutronix.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-pca953x.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/spi/spi-bcm2835.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index b63ac46beceb..957be5f69406 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -896,15 +896,18 @@ static int pca953x_irq_setup(struct pca953x_chip *chip,
- static int device_pca95xx_init(struct pca953x_chip *chip, u32 invert)
- {
- 	DECLARE_BITMAP(val, MAX_LINE);
-+	u8 regaddr;
- 	int ret;
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -1159,10 +1159,14 @@ static void bcm2835_spi_handle_err(struc
+ 	struct bcm2835_spi *bs = spi_controller_get_devdata(ctlr);
  
--	ret = regcache_sync_region(chip->regmap, chip->regs->output,
--				   chip->regs->output + NBANK(chip) - 1);
-+	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
-+	ret = regcache_sync_region(chip->regmap, regaddr,
-+				   regaddr + NBANK(chip) - 1);
- 	if (ret)
- 		goto out;
+ 	/* if an error occurred and we have an active dma, then terminate */
+-	dmaengine_terminate_sync(ctlr->dma_tx);
+-	bs->tx_dma_active = false;
+-	dmaengine_terminate_sync(ctlr->dma_rx);
+-	bs->rx_dma_active = false;
++	if (ctlr->dma_tx) {
++		dmaengine_terminate_sync(ctlr->dma_tx);
++		bs->tx_dma_active = false;
++	}
++	if (ctlr->dma_rx) {
++		dmaengine_terminate_sync(ctlr->dma_rx);
++		bs->rx_dma_active = false;
++	}
+ 	bcm2835_spi_undo_prologue(bs);
  
--	ret = regcache_sync_region(chip->regmap, chip->regs->direction,
--				   chip->regs->direction + NBANK(chip) - 1);
-+	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
-+	ret = regcache_sync_region(chip->regmap, regaddr,
-+				   regaddr + NBANK(chip) - 1);
- 	if (ret)
- 		goto out;
- 
--- 
-2.35.1
-
+ 	/* and reset */
 
 

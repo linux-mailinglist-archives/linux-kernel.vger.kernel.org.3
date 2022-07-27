@@ -2,80 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141795825C1
+	by mail.lfdr.de (Postfix) with ESMTP id DB3775825C3
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiG0Lji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 07:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S232431AbiG0Ljm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 07:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232457AbiG0LjS (ORCPT
+        with ESMTP id S232240AbiG0LjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 07:39:18 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9D249B69;
-        Wed, 27 Jul 2022 04:38:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtBck6JMdz4x1b;
-        Wed, 27 Jul 2022 21:38:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658921926;
-        bh=vZ1KHTTvl4WPZCMlJGF7NAqeZrcXyA51xm2ZpU8RaFs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=HdzweyLffYlDjINn3KByiOAq2xYh8/sex4xMv+SVDRPDCVaB7HUEtM0/hD32aZDR8
-         gUPymMEIBmarc1AreFhzNyo1quyf71VI7EqCv78Evz1HHhAPCag7lOaPaB24P8VVcz
-         i9+Jzbd/b2L7BV2I4BmJ3rHH2IZscj34Tb5C8zxFFAKPBhXbN+I9mN+Tdf91d3vZz3
-         j00Sx7bTsyuN+MyhXJVIb4C8jXptBpyUozcU4aIq2wMUI0nheRq4CEFn11qBMjQNqp
-         7RPkFWe2DIBSfHb+USXKU5sytMm/PI0XFsBl7bBYV4+h20kF6bCOweEdk1nouxP0Gh
-         InPlO/YEquB3w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-next@vger.kernel.org, Sachin Sant <sachinp@linux.ibm.com>
-Subject: Re: [PATCH] watchdog: Fix build error when
- CONFIG_SOFTLOCKUP_DETECTOR is not set
-In-Reply-To: <20220727092109.31362-1-ldufour@linux.ibm.com>
-References: <20220727092109.31362-1-ldufour@linux.ibm.com>
-Date:   Wed, 27 Jul 2022 21:38:44 +1000
-Message-ID: <87sfmmaipn.fsf@mpe.ellerman.id.au>
+        Wed, 27 Jul 2022 07:39:19 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC0E49B73
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 04:38:59 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id u17so9348953lji.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 04:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MGUgabyld/EeWL+9XhnAgZD2EBdXnWluJ901k882Jpg=;
+        b=V5XzwXTKWH6s0hot7/PtPjtvOzCNi+SEBJkUHj157j7tvL/Phb8KT6SkItkdoTzpdv
+         09lGUuIsJCRieoy8cD/BkLtkvdLkAC+Ynp5sYksR+lEfretIPqExC24P+7yLAGMZAA3H
+         IxNPafDhUZnmPzYo/AfBuGPNAvHsvc46Yq5AJ+fbBBDq+jtmq78lIJLpO/escX0NsAvL
+         blF3F1+C3UyTXku/Bq5X2ONn8bgig2lGmvv8KQ+dKBt2X7ojSgdFclTKqYAFOw0umPmO
+         UuzCKUgYVWNiExNmMNR/KYE+Eenoeds+rzdMsehNhKdBnTox9340mpgyvjVmolJUtKuV
+         pNgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MGUgabyld/EeWL+9XhnAgZD2EBdXnWluJ901k882Jpg=;
+        b=W9xY07wNpHuPdlbn52tIHX2xbXUpSQPTicI2Kh+SHcFQwICXoASlffraTIaJgwZp8J
+         /hAtKb8TXpFvbEo+j4qy35/tURKcr+5VpRqXWcbjPRMmkoaip4fnx8iPVZG3QkA/4Am0
+         4ozW49NismrRbocU4mFtmemFpkVbpFAnjoPjP18ynGV0SDaHbFrYVgDynYZNgA/7PhIr
+         kV3H4S/RS6j1nx4/SWVYkzSj5V6oNpoBf/IexNxC+DseUlv14iATYug2BqDmtmJXbLN/
+         ZXfsrFkw3Awq6Kel6PkAGVsEUYpHrFOMWlhNOHfOWn0ecG6dQkjuRJo8h71iEN/EQdeM
+         GSxQ==
+X-Gm-Message-State: AJIora8ujT3lFL3QHA++zsM0tOREkwpXrlLv3mcWhWLyQmKNiUbW1B8f
+        U3LamTW+4CdG20N5w9Qs9LW/8w==
+X-Google-Smtp-Source: AGRyM1sQ74WtezfGlT4uCwItsqqfEXVEkE7x/nMn5V7yq4uiRQSeAryO4OrKcJgV8n1vzGNnBcDCRA==
+X-Received: by 2002:a2e:87ce:0:b0:25d:e933:f76c with SMTP id v14-20020a2e87ce000000b0025de933f76cmr7174054ljj.99.1658921937293;
+        Wed, 27 Jul 2022 04:38:57 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id z10-20020a056512376a00b00486d8a63c07sm3628641lft.121.2022.07.27.04.38.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 04:38:56 -0700 (PDT)
+Message-ID: <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
+Date:   Wed, 27 Jul 2022 13:38:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+Content-Language: en-US
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <20220726143005.wt4be7yo7sbd3xut@bogus>
+ <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
+ <20220726154138.74avqs6iqlzqpzjk@bogus>
+ <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> Sachin reported the following build error when CONFIG_SOFTLOCKUP_DETECTOR
-> is not set:
->
-> kernel/watchdog.c:597:20: error: static declaration of 'lockup_detector_reconfigure' follows non-static declaration
->  static inline void lockup_detector_reconfigure(void)
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from kernel/watchdog.c:17:
-> ./include/linux/nmi.h:125:6: note: previous declaration of 'lockup_detector_reconfigure' was here
->  void lockup_detector_reconfigure(void);
->       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> The definition of lockup_detector_reconfigure should be exported even in
-> that case, and __lockup_detector_reconfigure should remain static.
->
-> Fixes: 24a1260705b7 ("watchdog: export lockup_detector_reconfigure")
-> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
-> ---
->  kernel/watchdog.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On 26/07/2022 19:01, Maximilian Luz wrote:
+> On 7/26/22 17:41, Sudeep Holla wrote:
+>> On Tue, Jul 26, 2022 at 05:15:41PM +0200, Maximilian Luz wrote:
+>>>
+>>> So ultimately I think it's better to add a DT entry for it.
+>>
+>> I disagree for the reason that once you discover more apps running on the
+>> secure side, you want to add more entries and update DT on the platform
+>> every time you discover some new firmware entity and you wish to interact
+>> with it from the non-secure side.
+> 
+> Just as you'll have to add a driver to the kernel and update whatever is
+> probing the TrEE interface and add those strings to that interface. If
+> you then start doing SoC-specific lists, I think you'd be pretty much
+> re-implementing a DT in the kernel driver...
 
-Thanks.
+But you don't have any of these names in the DT either. Your DT node
+only indicates the presence of your driver, but does not hold any
+additional information like these IDs.
 
-I'll squash that in to the original commit.
+Basically we start modelling firmware components in devicetree. :/
 
-cheers
+Best regards,
+Krzysztof

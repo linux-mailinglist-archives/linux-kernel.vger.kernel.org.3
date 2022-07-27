@@ -2,182 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DBA5831DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1485C5831DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbiG0SUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S243383AbiG0ST4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243537AbiG0ST2 (ORCPT
+        with ESMTP id S243539AbiG0ST3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:19:28 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64815B3;
+        Wed, 27 Jul 2022 14:19:29 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9133B110
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:19:51 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id jw17so4573551pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:19:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :in-reply-to;
+        bh=Gg5X4yYRZBmyFbowsjiVzUaQDGCyqXoypwdoLH6RWO4=;
+        b=cdZnjL6Jkl2Y/jHtGLg6BK3uHQ0TdW8XHDdgtuN7lbI3l/mAbAa1CVj2drgJmV/vdK
+         tpbIW3K1QA7TZJdH86s21LjoeGL3Yiy6qHu0KtsbI8p9HNx76D5FicBMZgAPm6ApfzAg
+         uqXpgI0HpKbjQCLl4665HzWsbuCq+p7YHdnBk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:in-reply-to;
+        bh=Gg5X4yYRZBmyFbowsjiVzUaQDGCyqXoypwdoLH6RWO4=;
+        b=wR01zaJ8sw1t5ey98rKQ3P+Wo0XrClI8h2fbx5M6rCeIqikVa/oa7Tx//001mPQxBg
+         dnEsBInpHriElRxh92fnCtkxNY09o40l9W5Ivmr3VlFhIXPJbMCuYqVV4uxg4p8b5KmR
+         O2b43CvbmC9N61kEpRUJZrASlh7B/IxUvCd/m9fnchp7tYlAwdhceQ/XAg3/kUkWEg7e
+         VyphdHjVD9ZeEHkGm0p2c7CgfSZykSQ2oysaxcLJhPQsZ1+tRG0LhoSc3oNxBEpJ6Fct
+         RjpuSUItv7z6mQ6R/Bn3vTvZFlgBYCFwn3F3LqjWY/GR9EmSmHzbYD8nj28ZTBh3snlg
+         t4Ig==
+X-Gm-Message-State: AJIora/rwJK430X9eG6do7uwF//ynSC5Szi0ZaFN8XfwXiD00dEJVKIw
+        uR1DymTKra50mvHbOtOGjUwH1A==
+X-Google-Smtp-Source: AGRyM1u4XBcCtpAsrDVNa3RcUuIQr2kRoS4CEuBsLCgfIgWIc6zhzaXw3BiD2XZGdF4kGQgjmnjUuA==
+X-Received: by 2002:a17:902:ce83:b0:16c:2e89:d640 with SMTP id f3-20020a170902ce8300b0016c2e89d640mr22324410plg.23.1658942390950;
         Wed, 27 Jul 2022 10:19:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Qjt6jgON/IXxK9vUL+bWcu11UAynI91N7Vvf+lXsDnA=; b=Y4W3ohKogtIsv5sO1rsWnXkRxi
-        5K5uHf++cajTI1O4kH4egHglOMQeus8wDRum4prR6t6udBPNq07JZ54X79r4UJMJH02fEC/I/Y2sH
-        v65heA7zDLHxHvS7rJjLO4xZmNTPmCVFKs7E5Ga7iwzyEign4+hVEJIq+EcgFwm0YchyRH8C30w+k
-        KvERPaM0VaUp4n5N1AbSp9VJhr65btxexX2f+3qEBO83EjsA7A7FATL+HTj44yU92peMLVxFAO/ZF
-        eM0DzRb3pPzswO/t+XgtST8E7yS5ado6s5eooxQT2jZbRizD2JSFUDndZq31sVfRbYs2WKLld3mkG
-        AyDYg3xw==;
-Received: from 201-13-50-220.dsl.telesp.net.br ([201.13.50.220] helo=[192.168.15.109])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oGkhC-008yIs-Ri; Wed, 27 Jul 2022 19:19:42 +0200
-Message-ID: <9ef24c18-775b-000a-5a03-4e4fe0f1c83c@igalia.com>
-Date:   Wed, 27 Jul 2022 14:19:22 -0300
+Received: from C02YVCJELVCG.dhcp.broadcom.net ([192.19.144.250])
+        by smtp.gmail.com with ESMTPSA id x28-20020aa78f1c000000b0052ba859da14sm13999161pfr.184.2022.07.27.10.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 10:19:50 -0700 (PDT)
+From:   Andy Gospodarek <andrew.gospodarek@broadcom.com>
+X-Google-Original-From: Andy Gospodarek <gospo@broadcom.com>
+Date:   Wed, 27 Jul 2022 13:19:37 -0400
+To:     Vikas Gupta <vikas.gupta@broadcom.com>
+Cc:     jiri@nvidia.com, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        dsahern@kernel.org, stephen@networkplumber.org,
+        edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
+        leon@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
+        michael.chan@broadcom.com, andrew.gospodarek@broadcom.com
+Subject: Re: [PATCH net-next v9 1/2] devlink: introduce framework for
+ selftests
+Message-ID: <YuFzqb6HK+2gLqsF@C02YVCJELVCG.dhcp.broadcom.net>
+References: <20220727165721.37959-1-vikas.gupta@broadcom.com>
+ <20220727165721.37959-2-vikas.gupta@broadcom.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC] futex2: add NUMA awareness
-Content-Language: en-US
-To:     Andrey Semashev <andrey.semashev@gmail.com>
-Cc:     linux-api@vger.kernel.org, fweimer@redhat.com,
-        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        libc-alpha@sourceware.org, Davidlohr Bueso <dave@stgolabs.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-References: <36a8f60a-69b2-4586-434e-29820a64cd88@igalia.com>
- <74ba5239-27b0-299e-717c-595680cd52f9@gmail.com>
- <8bfd13a7-ed02-00dd-63a1-7144f2e55ef0@igalia.com>
- <3995754e-064b-6091-ccb0-224c3e698af2@gmail.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <3995754e-064b-6091-ccb0-224c3e698af2@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220727165721.37959-2-vikas.gupta@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000f0849f05e4cc9f26"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Às 13:42 de 22/07/22, Andrey Semashev escreveu:
-> On 7/14/22 18:00, André Almeida wrote:
->> Hi Andrey,
->>
->> Thanks for the feedback.
->>
->> Às 08:01 de 14/07/22, Andrey Semashev escreveu:
->>> On 7/14/22 06:18, André Almeida wrote:
->> [...]
->>>>
->>>> Feedback? Who else should I CC?
->>>
->>> Just a few questions:
->>>
->>> Do I understand correctly that notifiers won't be able to wake up
->>> waiters unless they know on which node they are waiting?
->>>
->>
->> If userspace is using NUMA_FLAG, yes. Otherwise all futexes would be
->> located in the default node, and userspace doesn't need to know which
->> one is the default.
->>
->>> Is it possible to wait on a futex on different nodes?
->>
->> Yes, given that you specify `.hint = id` with the proper node id.
-> 
-> So any given futex_wake(FUTEX_NUMA) operates only within its node, right?
-> 
->>> Is it possible to wake waiters on a futex on all nodes? When a single
->>> (or N, where N is not "all") waiter is woken, which node is selected? Is
->>> there a rotation of nodes, so that nodes are not skewed in terms of
->>> notified waiters?
->>
->> Regardless of which node the waiter process is running, what matter is
->> in which node the futex hash table is. So for instance if we have:
->>
->> 	struct futex32_numa f = {.value = 0, hint = 2};
->>
->> And now we add some waiters for this futex:
->>
->> Thread 1, running on node 3:
->>
->> 	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
->>
->> Thread 2, running on node 0:
->>
->> 	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
->>
->> Thread 3, running on node 2:
->>
->> 	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
->>
->> And then, Thread 4, running on node 3:
->>
->> 	futex_wake(&f, 2, FUTEX_NUMA | FUTEX_32);
->>
->> Now, two waiter would wake up (e.g. T1 and T3, node 3 and 2) and they
->> are from different nodes. futex_wake() doesn't provide guarantees of
->> which waiter will be selected, so I can't say which node would be
->> selected.
-> 
-> In this example, T1, T2 and T3 are all blocking on node 2 (since all of
-> them presumably specify hint == 2), right? In this sense, it doesn't
-> matter which node they are running on, what matters is what node they
-> block on.
+--000000000000f0849f05e4cc9f26
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-yes
+On Wed, Jul 27, 2022 at 10:27:20PM +0530, Vikas Gupta wrote:
+> Add a framework for running selftests.
+> Framework exposes devlink commands and test suite(s) to the user
+> to execute and query the supported tests by the driver.
+> 
+> Below are new entries in devlink_nl_ops
+> devlink_nl_cmd_selftests_show_doit/dumpit: To query the supported
+> selftests by the drivers.
+> devlink_nl_cmd_selftests_run: To execute selftests. Users can
+> provide a test mask for executing group tests or standalone tests.
+> 
+> Documentation/networking/devlink/ path is already part of MAINTAINERS &
+> the new files come under this path. Hence no update needed to the
+> MAINTAINERS
+> 
+> Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
 
-> 
-> What I'm asking is can I wake all threads blocked on all nodes on the
-> same futex? That is, is the following possible?
-> 
->   // I'm using hint == -1 to indicate the current node
->   // of the calling thread for waiters and all nodes for notifiers
->   struct futex32_numa f = {.value = 0, .hint = -1};
-> 
->   Thread 1, running on node 3, blocks on node 3:
-> 
->   futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-> 
->   Thread 2, running on node 0, blocks on node 0:
-> 
->   futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-> 
->   Thread 3, running on node 2, blocks on node 2:
-> 
->   futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-> 
->   And then, Thread 4, running on whatever node:
-> 
->   futex_wake(&f, -1, FUTEX_NUMA | FUTEX_32);
+Reviewed-by: Andy Gospodarek <gospo@broadcom.com>
 
-this futex_wake will wake all futexes waiting on the node that called
-futex_wake(), waking only one futex in this example. They are __not__
-the same futex. If they have different nodes, they would have different
-information inside the kernel.
 
-if you want to wake them all with the same futex_wake(), they need to be
-waiting on the same node.
+--000000000000f0849f05e4cc9f26
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> 
-> Here, futex_wake would wake T1, T2 and T3. Or:
-> 
->   futex_wake(&f, 1, FUTEX_NUMA | FUTEX_32);
-
-this would behave exactly as the futex_wake() above.
-
-> 
-> Here, futex_wake would wake any one of T1, T2 or T3.
-> 
->> There's no policy for fairness/starvation for futex_wake(). Do
->> you think this would be important for the NUMA case?
-> 
-> I'm not sure yet. If there isn't a cross-node behavior like in my
-> example above then, I suppose, it falls to the userspace to ensure fair
-> rotation of the wakeups on different nodes. If there is functionality
-> like this, I imagine, some sort of fairness would be desired.
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVkwggRBoAMCAQICDBPdG+g0KtOPKKsBCTANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIxNDAyMzhaFw0yMjA5MjIxNDExNTVaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGDAWBgNVBAMTD0FuZHkgR29zcG9kYXJlazEtMCsGCSqGSIb3
+DQEJARYeYW5kcmV3Lmdvc3BvZGFyZWtAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEAp9JFtMqwgpbnvA3lNVCpnR5ehv0kWK9zMpw2VWslbEZq4WxlXr1zZLZEFo9Y
+rdIZ0jlxwJ4QGYCvxE093p9easqc7NMemeMg7JpF63hhjCksrGnsxb6jCVUreXPSpBDD0cjaE409
+9yo/J5OQORNPelDd4Ihod6g0XlcxOLtlTk1F0SOODSjBZvaDm0zteqiVZb+7xgle3NOSZm3kiCby
+iRuyS0gMTdQN3gdgwal9iC3cSXHMZFBXyQz+JGSHomhPC66L6j4t6dUqSTdSP07wg38ZPV6ct/Sv
+/O2HcK+E/yYkdMXrDBgcOelO4t8AYHhmedCIvFVp4pFb2oit9tBuFQIDAQABo4IB3zCCAdswDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDApBgNVHREEIjAggR5hbmRyZXcuZ29zcG9kYXJla0Bicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYI
+KwYBBQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKARn7Ud
+RlGu+rBdUDirYE+Ee4TeMA0GCSqGSIb3DQEBCwUAA4IBAQAcWqh4fdwhDN0+MKyH7Mj0vS10E7xg
+mDetQhQ+twwKk5qPe3tJXrjD/NyZzrUgguNaE+X97jRsEbszO7BqdnM0j5vLDOmzb7d6qeNluJvk
+OYyzItlqZk9cJPoP9sD8w3lr2GRcajj5JCKV4pd2PX/i7r30Qco0VnloXpiesFmNTXQqD6lguUyn
+nb7IGM3v/Nb7NTFH8/KUVg33xw829ztuGrOvfrHfBbeVcUoOHEHObXoaofYOJjtmSOQdMeJIiBgP
+XEpJG8/HB8t4FF6A8W++4cHhv0+ayyEnznrbOCn6WUmIvV2WiJymRpvRG7Hhdlk0zA97MRpqK5yn
+ai3dQ6VvMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
+di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
+E90b6DQq048oqwEJMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBxFfHHaxfjBUvx
+h0ocx6wlduTKTiLXkhTU5r0AO+H0vjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
+DQEJBTEPFw0yMjA3MjcxNzE5NTFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
+SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
+BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAUDUDzI02QZL9cyUig1Gas85f4yHpM0QD
+Q/5IFk71xWKQOPchGDWJBMutdmNm/SnzImZHF1FtAnSDN4V3wzP41itJKWz7YqAynIjh+WeS+s9M
+Fp4JdS76m/zeptmAKreDsV/eCM0316EnNU4iJnDUFc+a497tlW4Jr25ncdwym0DX3KxKKDpTXRPU
+LdoHOCK0N+hH1ep4MFrAfAxV16METhJV8sLK9xufLyZnDF9qheBbMeZBVBSqNr/mThMXZlUNVB7P
+G7LVy+PLD4vt53vo+T1Ol4kPXlaQ9FkQkAtJJd0OjuuWOr+bYVSqu/FhOEMDvgLouWExPZvaF4XN
++k2ITA==
+--000000000000f0849f05e4cc9f26--

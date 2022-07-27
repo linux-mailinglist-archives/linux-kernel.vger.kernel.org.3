@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92571582E47
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E217D582E62
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237196AbiG0RKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        id S241506AbiG0RMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241636AbiG0RJW (ORCPT
+        with ESMTP id S241523AbiG0RLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:09:22 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9308374372
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:01 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id q23so14701564lfr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:01 -0700 (PDT)
+        Wed, 27 Jul 2022 13:11:38 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBED74DFC
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:40 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id q7so4997629ljp.13
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pixZf6AxzKsbblWkPgEa/wCEjEyv0eH7Z0aYp8YUpGU=;
-        b=vNCansP6Trr0iw18LZc9CTOYN+jcJ/hP3lk/BF0RUdZbtfbg4+HowoEuynrmouACf7
-         o04lz9lo+1IVXZtXMMJbnuK7BmlaKr2DgxuLzRhQCQjpznp8J0FkmLp4zQ2LwUkfFMtx
-         6urFZ06hO/g5AibAezm9Fi9ybD/kFR6al2ZO7slNIbPv4/cpuzQFFekqkwVBvSWv5vYs
-         +OwBIm6YiNQs7Abkj2eMLulvzgZSIYUFyb923C+ovEiC6j7W3BijHM+ZaRTid7+ou1Jt
-         Sk8bvlrPrQQwskCrr5ogokAmvMocGONqjWs48T6Pt2l5D/GVcDKT+p0pUTi9mGIN2LgH
-         aAUA==
+        bh=EjrmIY6br0JwMML5I5IsH4l21ubS3Zd2UVsxfz0zrWQ=;
+        b=jMMOnDuOyvT5MjTFryYduQK/RY48LBB89wkU1nKr3g22oGREE8Wlw5ovuddGmk1777
+         C5oyCsNSgVwjzgaMVV3lrx/A9RSJXDUlw/6oRB6h95ewv0MRYNZ7JaiAXafHdi/AaMoR
+         gwFiup9G4e394tdCjmRY8aQCKVjQndYSllXn3/tYsHVyAWsURSC+28LRzBtd1L9bG7tW
+         YcSv/hu6PKMNjl/xVP/hN/HMu56kKFibCPKwO7n4NY8kpwTbTHQWwmbX1/BKLClzbw6G
+         yiXqWnuj7YDnyDJ+zjd+XmiqP+SZbgUPMDOKgb7mr1M6reSluGSe2P2BR3fy+KXy9Km8
+         e9bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pixZf6AxzKsbblWkPgEa/wCEjEyv0eH7Z0aYp8YUpGU=;
-        b=wT80Lb34pCJSOUQTdY0NSB1Y4rl9doEWptshF9tEuQ3kd1cV2YQMhbzJccPyegZlj0
-         DQAfT54TEw8+7Z5mE3ll9zlwJVd3/gAFa63WmROEoX1psTASLfAy69gcIYeRM4fPwSS+
-         IpiT8ZzS61xiChQ/10v0EjbfrDnXUisynxnZuBbgUlOc/qZZpjYFMJx/xR2vr00VgM49
-         98kR1RaUXNwDW6ckynlE6KU1PAaWXIAoI1MS7JLrCVZ59Jhlhv/NRh2FfIWY/DEnRcfP
-         Q0bigZoo9nUVj1DTJLZuTsK7lk1PKW8sv5gqcD8MAxokjyBHvB4fyGkTuvOET500curQ
-         Eybg==
-X-Gm-Message-State: AJIora9C85x6J1QssESaAUAGjiuNSPk7Hq6HeT7vK39alPUmnEWH/FYL
-        3wMA6UP9ENbvsDnEBFv/OTqq+w==
-X-Google-Smtp-Source: AGRyM1sEa8xnb9s4uf0W9nB9PCobLc+j3L3f+ElRoTRRKIH1ldBG30FknIESIJMvaO4t5rvFhQ1TEQ==
-X-Received: by 2002:a19:6408:0:b0:48a:139e:67b7 with SMTP id y8-20020a196408000000b0048a139e67b7mr7923551lfb.203.1658940059516;
-        Wed, 27 Jul 2022 09:40:59 -0700 (PDT)
+        bh=EjrmIY6br0JwMML5I5IsH4l21ubS3Zd2UVsxfz0zrWQ=;
+        b=4Gaoib68uGwTSEfiwaHtxtxHlqXJVovRYQ3N/quCmd9Irga45Ujr2uPmiHIQv/AmaT
+         mWF4rtqP1vKwVN1LlybYxYzzQWCBZQv35Wqea0FQftX0PSle/fVxf0XQdzOry2uwfjVH
+         QqVdkhwBaN6TNSIMgescEDPFhBj3egVN+9tRobMdnI3/FzhuwK7I0gmO8GayOIpLUvWM
+         QGi2OpIx4zl+ncH4xw9fdGYx2RojEoZ3XaEorKRDibADromwSmsxkvmkU1ZaN6w7GSF1
+         Ym1h5NA8Uqg0STlsqWlZIiQIe8BexvYum4YfC6Y3GWrlFB0+tWrxvbVFjHlla8gFfcIl
+         UoBA==
+X-Gm-Message-State: AJIora82fLsx3ehyhvYE/LWJZcTUZp0fulz3/nhbRJwrVCPVva+f3aWK
+        3cqKETx88RMN7JGGexTv4WsNNQ==
+X-Google-Smtp-Source: AGRyM1tbxmt+m0wPQaDPBmSI4ZOiMzOv0P2lpYBxlI5htHP/NbFnJvzztwcBcIVithfgzBx/B6J3Aw==
+X-Received: by 2002:a05:651c:1587:b0:25d:7844:5910 with SMTP id h7-20020a05651c158700b0025d78445910mr8508285ljq.325.1658940093266;
+        Wed, 27 Jul 2022 09:41:33 -0700 (PDT)
 Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05651203a300b00478f174c598sm489358lfp.95.2022.07.27.09.40.57
+        by smtp.gmail.com with ESMTPSA id i17-20020a2ea231000000b0025a67779931sm3872519ljm.57.2022.07.27.09.41.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 09:40:58 -0700 (PDT)
+        Wed, 27 Jul 2022 09:41:32 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Bogdan Togorean <bogdan.togorean@analog.com>,
-        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ASoC: dt-bindings: use spi-peripheral-props.yaml
-Date:   Wed, 27 Jul 2022 18:40:50 +0200
-Message-Id: <20220727164050.385241-1-krzysztof.kozlowski@linaro.org>
+        Mark Greer <mgreer@animalcreek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>,
+        Adham Abozaeid <adham.abozaeid@microchip.com>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        Tony Lindgren <tony@atomide.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: nfc: use spi-peripheral-props.yaml
+Date:   Wed, 27 Jul 2022 18:41:29 +0200
+Message-Id: <20220727164130.385411-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,62 +107,117 @@ loosened for that period.
 
 [1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
 ---
- .../devicetree/bindings/sound/adi,adau1977.yaml          | 7 ++++---
- Documentation/devicetree/bindings/sound/wlf,wm8731.yaml  | 9 +++++----
- 2 files changed, 9 insertions(+), 7 deletions(-)
+ Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml | 4 ++--
+ Documentation/devicetree/bindings/net/nfc/st,st-nci.yaml   | 5 ++---
+ Documentation/devicetree/bindings/net/nfc/st,st95hf.yaml   | 7 ++++---
+ Documentation/devicetree/bindings/net/nfc/ti,trf7970a.yaml | 7 ++++---
+ 4 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/adi,adau1977.yaml b/Documentation/devicetree/bindings/sound/adi,adau1977.yaml
-index b80454ad97da..847b83398d3d 100644
---- a/Documentation/devicetree/bindings/sound/adi,adau1977.yaml
-+++ b/Documentation/devicetree/bindings/sound/adi,adau1977.yaml
-@@ -32,8 +32,6 @@ properties:
-   reset-gpios:
+diff --git a/Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml b/Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml
+index 1bcaf6ba822c..a191a04e681c 100644
+--- a/Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml
++++ b/Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml
+@@ -58,7 +58,6 @@ properties:
+ 
+   spi-cpha: true
+   spi-cpol: true
+-  spi-max-frequency: true
+ 
+ required:
+   - compatible
+@@ -85,6 +84,7 @@ allOf:
+           contains:
+             const: marvell,nfc-spi
+     then:
++      $ref: /schemas/spi/spi-peripheral-props.yaml#
+       properties:
+         break-control: false
+         flow-control: false
+@@ -108,7 +108,7 @@ allOf:
+         spi-max-frequency: false
+         reg: false
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/net/nfc/st,st-nci.yaml b/Documentation/devicetree/bindings/net/nfc/st,st-nci.yaml
+index ef1155038a2f..1dcbddbc5a74 100644
+--- a/Documentation/devicetree/bindings/net/nfc/st,st-nci.yaml
++++ b/Documentation/devicetree/bindings/net/nfc/st,st-nci.yaml
+@@ -30,8 +30,6 @@ properties:
+   reg:
      maxItems: 1
  
 -  spi-max-frequency: true
 -
-   AVDD-supply:
-     description: Analog power support for the device.
- 
-@@ -52,7 +50,10 @@ required:
-   - compatible
-   - AVDD-supply
+   uicc-present:
+     type: boolean
+     description: |
+@@ -55,10 +53,11 @@ then:
+   properties:
+     spi-max-frequency: false
+ else:
++  $ref: /schemas/spi/spi-peripheral-props.yaml#
+   required:
+     - spi-max-frequency
  
 -additionalProperties: false
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
 +unevaluatedProperties: false
  
  examples:
    - |
-diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8731.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8731.yaml
-index e7220e8b49f0..15795f63b5a3 100644
---- a/Documentation/devicetree/bindings/sound/wlf,wm8731.yaml
-+++ b/Documentation/devicetree/bindings/sound/wlf,wm8731.yaml
-@@ -52,10 +52,6 @@ properties:
-   DCVDD-supply:
-     description: Digital core supply regulator for the DCVDD pin.
+diff --git a/Documentation/devicetree/bindings/net/nfc/st,st95hf.yaml b/Documentation/devicetree/bindings/net/nfc/st,st95hf.yaml
+index 963d9531a856..647569051ed8 100644
+--- a/Documentation/devicetree/bindings/net/nfc/st,st95hf.yaml
++++ b/Documentation/devicetree/bindings/net/nfc/st,st95hf.yaml
+@@ -25,8 +25,6 @@ properties:
+   st95hfvin-supply:
+     description: ST95HF transceiver's Vin regulator supply
  
 -  spi-max-frequency: true
 -
--additionalProperties: false
--
  required:
-   - reg
    - compatible
-@@ -64,6 +60,11 @@ required:
-   - DBVDD-supply
-   - DCVDD-supply
+   - enable-gpio
+@@ -34,7 +32,10 @@ required:
+   - reg
+   - spi-max-frequency
  
+-additionalProperties: false
 +allOf:
 +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
 +
 +unevaluatedProperties: false
-+
+ 
  examples:
    - |
-     spi {
+diff --git a/Documentation/devicetree/bindings/net/nfc/ti,trf7970a.yaml b/Documentation/devicetree/bindings/net/nfc/ti,trf7970a.yaml
+index 404c8df99364..9cc236ec42f2 100644
+--- a/Documentation/devicetree/bindings/net/nfc/ti,trf7970a.yaml
++++ b/Documentation/devicetree/bindings/net/nfc/ti,trf7970a.yaml
+@@ -40,8 +40,6 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  spi-max-frequency: true
+-
+   ti,enable-gpios:
+     minItems: 1
+     maxItems: 2
+@@ -65,7 +63,10 @@ required:
+   - ti,enable-gpios
+   - vin-supply
+ 
+-additionalProperties: false
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
+ 
+ examples:
+   - |
 -- 
 2.34.1
 

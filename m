@@ -2,161 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE915825F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EDE5825F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiG0LzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 07:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S231364AbiG0L50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 07:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiG0LzL (ORCPT
+        with ESMTP id S229489AbiG0L5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 07:55:11 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D833D7B;
-        Wed, 27 Jul 2022 04:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658922909; x=1690458909;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TJMpj2evcKUJONVAmJwm8pa+9tXHQ3BmofeStSV5/5Y=;
-  b=h4XbqFYQaJs7FjanwsAMlXUgoGsXroAxoGiO/j311LBqBgsY645o8fSK
-   9uCuKKIWfPi56pxeArZHRrnIHCC7wh6f4m9seOKSlaRFRjLRo5a0mj3Es
-   kmHVFN39q/QMuzKSVNaSVPxYAYMSmPoq0a8Qx9oY8+MUf3ujsTB6uyMhC
-   AGQcNMDD5+fZf+bsjzYxIGV9TCYrd79DO1duOcXGXfVoKWykq4t4yx3kO
-   2clKJNY310l8VlHSTVxUEB7hx5iZbHhQHV3/95BqHfKKEyNJSj88k1qyf
-   JU8PaLmPM2GzGpC2mrQNb97HROn0SL21xMx/eMztXdEwrUFIEbax6Dy/x
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="289407428"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="289407428"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 04:55:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="846243376"
-Received: from jlseahol-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.1.35])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 04:55:07 -0700
-From:   Kai Huang <kai.huang@intel.com>
-To:     dave.hansen@linux.intel.com, linux-sgx@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, seanjc@google.com,
-        pbonzini@redhat.com, jarkko@kernel.org,
-        haitao.huang@linux.intel.com
-Subject: [PATCH] x86/sgx: Allow exposing EDECCSSA user leaf function to KVM guest
-Date:   Wed, 27 Jul 2022 23:54:42 +1200
-Message-Id: <20220727115442.464380-1-kai.huang@intel.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 27 Jul 2022 07:57:23 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7579E220F5;
+        Wed, 27 Jul 2022 04:57:22 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id ss3so30942561ejc.11;
+        Wed, 27 Jul 2022 04:57:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qsR1NbtCOfGFjl+nMv6v9h4NJWTfkBQzKivKQal2j2E=;
+        b=mQVSfdLHWYUblUnK8BsYXLvJVy3sqn9fy2+L+B8NU9mG3W7/DjISMH/cGJP7eWDaeV
+         8L0EFisFjN83a68WElHJBqoQx5s/XXX2xl2U1/qts4tbEF3NbyL9ZCthAtFzdyHj68/f
+         M0fSVu34uiEpiyYl2Jj/xWf5Km4e+samelQfGDyj0PkK0vlr4HOXlNc447lhN7YjBsV4
+         0/OypfAp+PkooftCqk6doXMfsf941AoYlaMGhh58AuCobbAzYNZClaLd7B+dF1nyCejP
+         8uo/OHJsxV36f8gFMc29PUPtvIH+2SVROaS9hAHCQo5OIjiXKK/Y9X4lAyU1PBpPaABt
+         wLDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qsR1NbtCOfGFjl+nMv6v9h4NJWTfkBQzKivKQal2j2E=;
+        b=O3Ybt2EpIZFx4amqVns5zfSmCy2KO9//wyTxAQiTuwC5cQJcTWDItnUwpgptFxBY0v
+         GBlLTaRGP2QgpFPGHHrsCTFZevNK3wsdyhEbKBPSwg2iRasiMQVqDlo65sYTkQrxgNAQ
+         xH7dHhnp2Ftqsjs9ETOZ4NqhV/JGLSIu4b3O5aQ4vl7OLH4AhyHJvp4l2/brlIGB9yRW
+         rDto6+uYmMRJr4VplgS6+XsK0dt/FJgi5OihBxViVCh41wnTcWMxNN+2iivFLFDLzZa1
+         /cr0T12FEQ4C/Jqeug4iWT+J92sHSy/sQMKW4fdt6EsoPLSfPxkZX3DRve8bg/TROE5E
+         HeAw==
+X-Gm-Message-State: AJIora94zWoGailxvC+fRPi9WfGv21MBCd3YULZKmRUGp5W6SHcGKuIL
+        pTRlITywVnJT63tZ0SsK8LIvmsgW9pOjjQoAw6ayWtcf+b0=
+X-Google-Smtp-Source: AGRyM1sdLplCsQl9Ma9p5xBO6+5UU4uo2krFGJ9mKpb/8WAtT7A6dol8UklHKfZVBrZ9SGXLgt/sGYpmxmfyq2zoURs=
+X-Received: by 2002:a17:906:7950:b0:72f:d4a4:564d with SMTP id
+ l16-20020a170906795000b0072fd4a4564dmr12008984ejo.479.1658923040776; Wed, 27
+ Jul 2022 04:57:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727064415.940690-1-potin.lai.pt@gmail.com>
+ <CAHp75VfNmq12Yv7mqVeijqK0vwRdPsSrH5wMzg9qR15+t7ArSQ@mail.gmail.com> <a385e266-b24e-7ffb-c083-891edd4b0b14@gmail.com>
+In-Reply-To: <a385e266-b24e-7ffb-c083-891edd4b0b14@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 27 Jul 2022 13:56:43 +0200
+Message-ID: <CAHp75VdjvJRwzPLLdMji+_m2tQY4JLBcNwt-QFkDJTyGFUOdKg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] iio: humidity: hdc100x: add manufacturer and
+ device ID cehck
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Coupled with the new SGX attribute to allow one enclave to receive the
-AEX notification, SGX also adds a new EDECCSSA user leaf function to
-facilitate the AEX notification handling.  The new EDECCSSA is
-enumerated via CPUID(EAX=0x12,ECX=0x0):EAX[11].
+On Wed, Jul 27, 2022 at 12:42 PM Potin Lai <potin.lai.pt@gmail.com> wrote:
+> On 7/27/22 18:00, Andy Shevchenko wrote:
+> > On Wed, Jul 27, 2022 at 8:46 AM Potin Lai <potin.lai.pt@gmail.com> wrote:
 
-Besides Allowing reporting the new AEX-notify attribute to KVM guests,
-also allow reporting the new EDECCSSA user leaf function to KVM guests
-so the guest can fully utilize the AEX-notify mechanism.
+...
 
-Introduce a new X86 CPU feature flag for the new EDECCSSA, and report it
-in KVM's supported CPUIDs so the userspace hypervisor (i.e. Qemu) can
-enable it for the guest.
+> >> +       data = device_get_match_data(&client->dev);
+> >> +       if (data) {
+> > This check is redundant. Too much protective programming. Just oblige
+> > that matched ID has to always have an associated data.
+> Is it guaranteed that device_get_match_data will not return NULL? I find some examples in other drivers, all of them have a check on returned data.
 
-Note there's no additional enabling work required to allow guest to use
-the new EDECCSSA.  KVM is not able to trap ENCLU anyway.
+No, but as I said you may guarantee that by obliging developers not to
+shoot in their feet.
 
-More background about how do AEX-notify and EDECCSSA work:
+> Will it be more appropriate if I move device_get_match_data to probe function, and return EINVAL when we get a NULL pointer from device_get_match_data?
 
-The new Asynchronous Exit (AEX) notification mechanism (AEX-notify)
-allows one enclave to receive a notification in the ERESUME after the
-enclave exit due to an AEX.  EDECCSSA is a new SGX user leaf function
-(ENCLU[EDECCSSA]) to facilitate the AEX notification handling.
+Why is this check needed? We do not like dead code.
 
-SGX maintains a Current State Save Area Frame (CSSA) for each enclave
-thread.  When AEX happens, the enclave thread context is saved to the
-CSSA and the CSSA is increased by 1.  For a normal ERESUME which doesn't
-deliver AEX notification, it restores the saved thread context from the
-previously saved SSA and decreases the CSSA.  If AEX-notify is enabled
-for one enclave, the ERESUME acts differently.  Instead of restoring the
-saved thread context and decreasing the CSSA, it acts like EENTER which
-doesn't decrease the CSSA but establishes a clean slate thread context
-at the CSSA for the enclave to handle the notification.  After some
-handling, the enclave must discard the "new-established" SSA and switch
-back to the previous saved SSA (upon AEX).  Otherwise, the enclave will
-run out of SSA space upon further AEXs and eventually fail to run.
+> >> +               if (!data->support_mfr_check)
+> >> +                       return true;
+> >> +       }
 
-To solve this problem, the new EDECCSSA essentially decreases the CSSA.
-It can be used by the enclave notification handler to switch back to the
-previous saved SSA when needed, i.e. after it handles the notification.
-
-Signed-off-by: Kai Huang <kai.huang@intel.com>
----
-Hi Dave,
-
-This is the patch you requested.  Feel free to merge.
-
-This patch isn't tested and needs KVM maintainers' review.
-
----
- arch/x86/include/asm/cpufeatures.h | 1 +
- arch/x86/kvm/cpuid.c               | 2 +-
- arch/x86/kvm/reverse_cpuid.h       | 3 +++
- 3 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 6466a58b9cff..d2ebb38b31e7 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -296,6 +296,7 @@
- #define X86_FEATURE_PER_THREAD_MBA	(11*32+ 7) /* "" Per-thread Memory Bandwidth Allocation */
- #define X86_FEATURE_SGX1		(11*32+ 8) /* "" Basic SGX */
- #define X86_FEATURE_SGX2		(11*32+ 9) /* "" SGX Enclave Dynamic Memory Management (EDMM) */
-+#define X86_FEATURE_SGX_EDECCSSA	(11*32+10) /* "" SGX EDECCSSA user leaf function */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 75dcf7a72605..c21b4a5dc8fa 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -644,7 +644,7 @@ void kvm_set_cpu_caps(void)
- 	);
- 
- 	kvm_cpu_cap_init_scattered(CPUID_12_EAX,
--		SF(SGX1) | SF(SGX2)
-+		SF(SGX1) | SF(SGX2) | SF(SGX_EDECCSSA)
- 	);
- 
- 	kvm_cpu_cap_mask(CPUID_8000_0001_ECX,
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index a19d473d0184..4e5b8444f161 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -23,6 +23,7 @@ enum kvm_only_cpuid_leafs {
- /* Intel-defined SGX sub-features, CPUID level 0x12 (EAX). */
- #define KVM_X86_FEATURE_SGX1		KVM_X86_FEATURE(CPUID_12_EAX, 0)
- #define KVM_X86_FEATURE_SGX2		KVM_X86_FEATURE(CPUID_12_EAX, 1)
-+#define KVM_X86_FEATURE_SGX_EDECCSSA	KVM_X86_FEATURE(CPUID_12_EAX, 11)
- 
- struct cpuid_reg {
- 	u32 function;
-@@ -78,6 +79,8 @@ static __always_inline u32 __feature_translate(int x86_feature)
- 		return KVM_X86_FEATURE_SGX1;
- 	else if (x86_feature == X86_FEATURE_SGX2)
- 		return KVM_X86_FEATURE_SGX2;
-+	else if (x86_feature == X86_FEATURE_SGX_EDECCSSA)
-+		return KVM_X86_FEATURE_SGX_EDECCSSA;
- 
- 	return x86_feature;
- }
 -- 
-2.36.1
-
+With Best Regards,
+Andy Shevchenko

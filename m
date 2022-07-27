@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE2758272F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D60D582735
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbiG0M47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S232825AbiG0M6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbiG0M45 (ORCPT
+        with ESMTP id S231786AbiG0M6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:56:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB622BB2F;
-        Wed, 27 Jul 2022 05:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658926616; x=1690462616;
+        Wed, 27 Jul 2022 08:58:42 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3472BB2F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658926721; x=1690462721;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=ZZz/K3MC/VTWwgoscj+ukc/J2fLhkf7sdFzroIufZjI=;
-  b=NYf9rincFkxFuBZzdxtcV69CILt9Y5j8aYTNDkdKAyJUk2m5Sm7E/jlC
-   HB12Hwc0se0SISi2jEyiYQQtyBLYRpf5f+OOlrMeDBFt/C+/N44MZpfJQ
-   eKv5sg6iyhv1h1JPoVEGykbRJXUt9nf3pXmb6fUwJmFSCbB4NwI0mC66W
-   /V6wvCyWNnNmkmlLJPcH4+bAaaWz9zYupx/ydSYhgKGeFoFQAbfagXebw
-   ZbGSa87HlWw/2pQewMMb/9ff5kLCh5H5w6DT63JTGvaWUdnO8aFWc8n7g
-   rm8XP9sLS37KG3pGQloP/pHbdfzxZoA0dR2tTJSmM/hpEG5wVtX1DvN8C
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="271264048"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="271264048"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 05:56:55 -0700
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="927778582"
-Received: from ncouniha-mobl.ger.corp.intel.com (HELO [10.213.217.229]) ([10.213.217.229])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 05:56:52 -0700
-Message-ID: <d2337b73-ae34-3dd3-afa3-85c77dc2135e@linux.intel.com>
-Date:   Wed, 27 Jul 2022 13:56:50 +0100
+  bh=r+Snd/dR150rn/ALudIia+roqPZYxvTlnF6J8rxm1O4=;
+  b=vJfCAtrGwxcBlRWS1q5ZUVW3AsFleIkJa0UHMxPbLDgByodLruCG6B1z
+   tI0QYVCJlw1Hae+1q6uwLmfbiUdSTXMuudi0y+0SLHn0p7L8xa1sVHvE5
+   12baUf8gY2v2ivWfkjo5v1Y2GsOftSCWI1ho3gy4/ZSGFpeAHLs2g9+i0
+   Y=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jul 2022 05:58:41 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 05:58:41 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Jul 2022 05:58:40 -0700
+Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Jul
+ 2022 05:58:37 -0700
+Message-ID: <bfcddb31-b721-a080-a9b6-161f1d1c674b@quicinc.com>
+Date:   Wed, 27 Jul 2022 20:58:35 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [Intel-gfx] [PATCH v2 06/21] drm/i915/gt: Batch TLB invalidations
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH] mm/page_owner.c: allow page_owner with given
+ start_pfn/count
+To:     "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+CC:     <akpm@linux-foundation.org>, <minchan@kernel.org>,
+        <iamjoonsoo.kim@lge.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <quic_guptap@quicinc.com>,
+        <quic_zhenhuah@quicinc.com>
+References: <20220722150810.27740-1-quic_yingangl@quicinc.com>
+ <YtrEXB6o+VROImdg@casper.infradead.org>
+ <e518246c-4ffa-14af-e568-798572f75bee@quicinc.com>
+ <ce6f3bcf-fe77-d042-4517-dd09d090b70b@kernel.org>
+ <b2814a36-4021-b2a4-52db-6ac707d32835@quicinc.com>
+ <ef94e33b-a006-ab3c-b6f9-e567220eb94c@kernel.org>
 Content-Language: en-US
-To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        intel-gfx@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <cover.1657800199.git.mchehab@kernel.org>
- <9f535a97f32320a213a619a30c961ba44b595453.1657800199.git.mchehab@kernel.org>
- <567823d5-57ba-30db-dd64-de609df4d8c5@linux.intel.com>
- <20220727134836.7f7b5fab@maurocar-mobl2>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220727134836.7f7b5fab@maurocar-mobl2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+From:   Kassey Li <quic_yingangl@quicinc.com>
+In-Reply-To: <ef94e33b-a006-ab3c-b6f9-e567220eb94c@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,109 +75,55 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 27/07/2022 12:48, Mauro Carvalho Chehab wrote:
-> On Wed, 20 Jul 2022 11:49:59 +0100
-> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+
+On 7/27/2022 6:59 PM, Vlastimil Babka (SUSE) wrote:
+> On 7/27/22 09:44, Kassey Li wrote:
+>>
+>>
+>> On 7/26/2022 10:03 PM, Vlastimil Babka (SUSE) wrote:
+>>> On 7/25/22 10:39, Kassey Li wrote:
+>>>> hi, Matthew:
+>>>>       sorry for the delay, I just started to learn how to upstream patch, and
+>>>> setup my Thunderbird with plain text only.
+>>>>       you are right, two users will cause problem here.
+>>>>       the uses case is dump CMA area to understand the page usage in a given
+>>>> cma pool. 2nd, dump whole memory page owner is very time cost, mostly our
+>>>> android device has 8G memory now.
+>>>>       I will research and check again, if you have more idea on this , please
+>>>> kindly to share.
+>>>
+>>> You could try employing lseek() to specify the start pfn, and as for end
+>>> pfn, the process can just stop reading and close when it has seen enough?
+>>
+>> lseek is a good idea.
+>> read_page_owner start with below
+>>      pfn = min_low_pfn + *ppos;
+>> so we need to export the min_low_pfn to user then decide the ppos to seek.
+>> (my_cma.base_pfn - min_low_pfn) is the ppos we want to set.
 > 
->> On 20/07/2022 08:13, Mauro Carvalho Chehab wrote:
->>> On Mon, 18 Jul 2022 14:52:05 +0100
->>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
->>>    
+> Hm could we just pfn = *ppos and then anything below min_low_pfn is skipped
+> internally? So we don't need to teach userspace min_low_pfn.
+	that makes sense.
+	I send out a new path "mm/page_owner.c: add llseek for page_owner" 
+according your suggest, please help to review again, thanks.
+> 
+>> is there concern to export min_low_pfn  ?
+>> or use a mutex lock for my previous debugfs version patch ?
+>>
+>>>
+>>>> BR
+>>>> Kassey
 >>>>
->>>> On 14/07/2022 13:06, Mauro Carvalho Chehab wrote:
->>>>> From: Chris Wilson <chris.p.wilson@intel.com>
+>>>> On 7/22/2022 11:38 PM, Matthew Wilcox wrote:
+>>>>> On Fri, Jul 22, 2022 at 11:08:10PM +0800, Kassey Li wrote:
+>>>>>> by default, page_owner iterates all page from min_low_pfn to
+>>>>>> max_pfn, this cost too much time if we want an alternative pfn range.
+>>>>>>
+>>>>>> with this patch it allows user to set pfn range to dump the page_onwer.
 >>>>>
->>>>> Invalidate TLB in patch, in order to reduce performance regressions.
+>>>>> This is a really bad UI.  If two users try to do different ranges at the
+>>>>> same time, it'll go wrong.  What use cases are you actually trying to
+>>>>> solve?
 >>>>
->>>> "in batches"?
 >>>
->>> Yeah. Will fix it.
 > 
->>> +void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb)
->>> +{
->>> +	/*
->>> +	 * Before we release the pages that were bound by this vma, we
->>> +	 * must invalidate all the TLBs that may still have a reference
->>> +	 * back to our physical address. It only needs to be done once,
->>> +	 * so after updating the PTE to point away from the pages, record
->>> +	 * the most recent TLB invalidation seqno, and if we have not yet
->>> +	 * flushed the TLBs upon release, perform a full invalidation.
->>> +	 */
->>> +	WRITE_ONCE(tlb, intel_gt_next_invalidate_tlb_full(vm->gt));
->>
->> Shouldn't tlb be a pointer for this to make sense?
-> 
-> Oh, my mistake! Will fix at the next version.
-> 
->>>    
->>>>> diff --git a/drivers/gpu/drm/i915/gt/intel_ppgtt.c b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
->>>>> index d8b94d638559..2da6c82a8bd2 100644
->>>>> --- a/drivers/gpu/drm/i915/gt/intel_ppgtt.c
->>>>> +++ b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
->>>>> @@ -206,8 +206,12 @@ void ppgtt_bind_vma(struct i915_address_space *vm,
->>>>>     void ppgtt_unbind_vma(struct i915_address_space *vm,
->>>>>     		      struct i915_vma_resource *vma_res)
->>>>>     {
->>>>> -	if (vma_res->allocated)
->>>>> -		vm->clear_range(vm, vma_res->start, vma_res->vma_size);
->>>>> +	if (!vma_res->allocated)
->>>>> +		return;
->>>>> +
->>>>> +	vm->clear_range(vm, vma_res->start, vma_res->vma_size);
->>>>> +	if (vma_res->tlb)
->>>>> +		vma_invalidate_tlb(vm, *vma_res->tlb);
->>>>
->>>> The patch is about more than batching? If there is a security hole in
->>>> this area (unbind) with the current code?
->>>
->>> No, I don't think there's a security hole. The rationale for this is
->>> not due to it.
->>
->> In this case obvious question is why are these changes in the patch
->> which declares itself to be about batching invalidations? Because...
-> 
-> Because vma_invalidate_tlb() basically stores a TLB seqno, but the
-> actual invalidation is deferred to when the pages are unset, at
-> __i915_gem_object_unset_pages().
-> 
-> So, what happens is:
-> 
-> - on VMA sync mode, the need to invalidate TLB is marked at
->    __vma_put_pages(), before VMA unbind;
-> - on async, this is deferred to happen at ppgtt_unbind_vma(), where
->    it marks the need to invalidate TLBs.
-> 
-> On both cases, __i915_gem_object_unset_pages() is called later,
-> when the driver is ready to unmap the page.
-
-Sorry still not clear to me why is the patch moving marking of the need 
-to invalidate (regardless if it a bit like today, or a seqno like in 
-this patch) from bind to unbind?
-
-What if the seqno was stored in i915_vma_bind, where the bit is set 
-today, and all the hunks which touch the unbind and evict would 
-disappear from the patch. What wouldn't work in that case, if anything?
-
-Regards,
-
-Tvrtko
-
-> 
->> I am explaining why it looks to me that the patch is doing two things.
->> Implementing batching _and_ adding invalidation points at VMA unbind
->> sites, while so far we had it at backing store release only. Maybe I am
->> wrong and perhaps I am too slow to pick up on the explanation here.
->>
->> So if the patch is doing two things please split it up.
->>
->> I am further confused by the invalidation call site in evict and in
->> unbind - why there can't be one logical site since the logical sequence
->> is evict -> unbind.
-> 
-> The invalidation happens only on one place: __i915_gem_object_unset_pages().
-> 
-> Despite its name, vma_invalidate_tlb() just marks the need of doing TLB
-> invalidation.
-> 
-> Regards,
-> Mauro

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A868582F71
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FB1582F4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242116AbiG0R0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
+        id S242013AbiG0RXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242345AbiG0RY4 (ORCPT
+        with ESMTP id S235333AbiG0RVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:24:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2667D1F4;
-        Wed, 27 Jul 2022 09:46:33 -0700 (PDT)
+        Wed, 27 Jul 2022 13:21:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C198751A1B;
+        Wed, 27 Jul 2022 09:45:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F375260DDB;
-        Wed, 27 Jul 2022 16:46:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 091E4C433D6;
-        Wed, 27 Jul 2022 16:46:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08F9AB821A6;
+        Wed, 27 Jul 2022 16:45:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67594C433C1;
+        Wed, 27 Jul 2022 16:45:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940391;
-        bh=h6k8ja6jrl5KWyFSSA41/040OlijOASIOH7TtWmIBKI=;
+        s=korg; t=1658940313;
+        bh=1YJj+zf8oi0rxQU45OyHdE/CCMttpqbIvrrCYGyaOQI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U+t2Ve8G4Uw9LoXEvkHI9yNtCxDrtkF21Cd+gK2MQhl3AmF9A/Yn8mT71hiafTMOM
-         C39KVqzGV4InpktvHhD9p5T6rJkX45dc0h4y5AT9TuLqPjeUh39rNcF3ZTQrC78wnu
-         iVw2K0pOyCJKRFQl54If+bG1ZDsqsHdyqG0FYrQE=
+        b=YxWWuAbRn5PlWl5w4uG3Hvvw9jlQXL0UbE257FJATS5182g8+1QvHaLP7hioyabwv
+         65nf+S5gWapbsL0Vzkgqc0hYnUnjH7oDKwR10DXUceS2+GlzpztkPDLPPAss7MeESv
+         GUC7AF6DZJYFLjBPmgEwMjPRAl+z/DiBQ20OkfpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 5.15 180/201] Bluetooth: Fix bt_skb_sendmmsg not allocating partial chunks
-Date:   Wed, 27 Jul 2022 18:11:24 +0200
-Message-Id: <20220727161035.261838671@linuxfoundation.org>
+        stable@vger.kernel.org, Wang Yugui <wangyugui@e16-tech.com>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Subject: [PATCH 5.15 181/201] exfat: use updated exfat_chain directly during renaming
+Date:   Wed, 27 Jul 2022 18:11:25 +0200
+Message-Id: <20220727161035.302903018@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
 References: <20220727161026.977588183@linuxfoundation.org>
@@ -55,38 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Sungjong Seo <sj1557.seo@samsung.com>
 
-commit 29fb608396d6a62c1b85acc421ad7a4399085b9f upstream.
+commit 204e6ceaa1035cb7b92b156517e88842ebb4c7ff upstream.
 
-Since bt_skb_sendmmsg can be used with the likes of SOCK_STREAM it
-shall return the partial chunks it could allocate instead of freeing
-everything as otherwise it can cause problems like bellow.
+In order for a file to access its own directory entry set,
+exfat_inode_info(ei) has two copied values. One is ei->dir, which is
+a snapshot of exfat_chain of the parent directory, and the other is
+ei->entry, which is the offset of the start of the directory entry set
+in the parent directory.
 
-Fixes: 81be03e026dc ("Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg")
-Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Link: https://lore.kernel.org/r/d7206e12-1b99-c3be-84f4-df22af427ef5@molgen.mpg.de
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215594
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Tested-by: Paul Menzel <pmenzel@molgen.mpg.de> (Nokia N9 (MeeGo/Harmattan)
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Since the parent directory can be updated after the snapshot point,
+it should be used only for accessing one's own directory entry set.
+
+However, as of now, during renaming, it could try to traverse or to
+allocate clusters via snapshot values, it does not make sense.
+
+This potential problem has been revealed when exfat_update_parent_info()
+was removed by commit d8dad2588add ("exfat: fix referencing wrong parent
+directory information after renaming"). However, I don't think it's good
+idea to bring exfat_update_parent_info() back.
+
+Instead, let's use the updated exfat_chain of parent directory diectly.
+
+Fixes: d8dad2588add ("exfat: fix referencing wrong parent directory information after renaming")
+Reported-by: Wang Yugui <wangyugui@e16-tech.com>
+Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
+Tested-by: Wang Yugui <wangyugui@e16-tech.com>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/bluetooth/bluetooth.h |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/exfat/namei.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/include/net/bluetooth/bluetooth.h
-+++ b/include/net/bluetooth/bluetooth.h
-@@ -475,8 +475,7 @@ static inline struct sk_buff *bt_skb_sen
+--- a/fs/exfat/namei.c
++++ b/fs/exfat/namei.c
+@@ -1190,7 +1190,9 @@ static int __exfat_rename(struct inode *
+ 		return -ENOENT;
+ 	}
  
- 		tmp = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
- 		if (IS_ERR(tmp)) {
--			kfree_skb(skb);
--			return tmp;
-+			return skb;
- 		}
+-	exfat_chain_dup(&olddir, &ei->dir);
++	exfat_chain_set(&olddir, EXFAT_I(old_parent_inode)->start_clu,
++		EXFAT_B_TO_CLU_ROUND_UP(i_size_read(old_parent_inode), sbi),
++		EXFAT_I(old_parent_inode)->flags);
+ 	dentry = ei->entry;
  
- 		len -= tmp->len;
+ 	ep = exfat_get_dentry(sb, &olddir, dentry, &old_bh, NULL);
 
 

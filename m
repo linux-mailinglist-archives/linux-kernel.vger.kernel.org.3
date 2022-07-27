@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329B5582BEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D01582B44
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238966AbiG0Qji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        id S236809AbiG0Qa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239130AbiG0Qiy (ORCPT
+        with ESMTP id S236502AbiG0Qac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:38:54 -0400
+        Wed, 27 Jul 2022 12:30:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D760250062;
-        Wed, 27 Jul 2022 09:28:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC22205EC;
+        Wed, 27 Jul 2022 09:25:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AC06B821CA;
-        Wed, 27 Jul 2022 16:28:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C879C433C1;
-        Wed, 27 Jul 2022 16:28:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43401B821BB;
+        Wed, 27 Jul 2022 16:25:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82905C433C1;
+        Wed, 27 Jul 2022 16:24:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939319;
-        bh=yp/pb7KUR+K/mKCaiDaXhO7Onv98a9lWavXvVVFNjjc=;
+        s=korg; t=1658939099;
+        bh=bSwEOEpsY25YU1kuF2UzXaIWJQ9XzvhLMp13mR3AYZ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cv4k2unjbz0d4N0wRDhJuedDQvmM2BsY+I/vTnxsG0vPXYBGw3gnxMo+nksKoxfzS
-         g5DWHvW6iBmzOcHlscSOPmPDEBhhTZT7OKS4nAcy9U/SoQvt2i1kbqBz2tQmQmY4a6
-         t9EwtNIEyDTp4E9a4r3eA94OQXQC5g4XUARxjgzQ=
+        b=1p3wN9v3qFDmLx0y9NUH59BKB7AixQlWcOdAIHudzvqPZRGNpr9Qzmxy07jyYIOkr
+         R0XaqrxLBsbb+YcaJMpYQmnMOZZiqVr+UPDMI96qArHEd32ihb+2QOLuSPBCBYLXYk
+         wLxyffn3zCWm50zPmSav2QyRb3t9a7BGcfp4KTgo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cedric Wassenaar <cedric@bytespeed.nl>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 28/87] net: stmmac: fix dma queue left shift overflow issue
-Date:   Wed, 27 Jul 2022 18:10:21 +0200
-Message-Id: <20220727161010.177774563@linuxfoundation.org>
+Subject: [PATCH 4.19 13/62] tcp: Fix a data-race around sysctl_tcp_probe_interval.
+Date:   Wed, 27 Jul 2022 18:10:22 +0200
+Message-Id: <20220727161004.701546594@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Junxiao Chang <junxiao.chang@intel.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 613b065ca32e90209024ec4a6bb5ca887ee70980 ]
+[ Upstream commit 2a85388f1d94a9f8b5a529118a2c5eaa0520d85c ]
 
-When queue number is > 4, left shift overflows due to 32 bits
-integer variable. Mask calculation is wrong for MTL_RXQ_DMA_MAP1.
+While reading sysctl_tcp_probe_interval, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-If CONFIG_UBSAN is enabled, kernel dumps below warning:
-[   10.363842] ==================================================================
-[   10.363882] UBSAN: shift-out-of-bounds in /build/linux-intel-iotg-5.15-8e6Tf4/
-linux-intel-iotg-5.15-5.15.0/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c:224:12
-[   10.363929] shift exponent 40 is too large for 32-bit type 'unsigned int'
-[   10.363953] CPU: 1 PID: 599 Comm: NetworkManager Not tainted 5.15.0-1003-intel-iotg
-[   10.363956] Hardware name: ADLINK Technology Inc. LEC-EL/LEC-EL, BIOS 0.15.11 12/22/2021
-[   10.363958] Call Trace:
-[   10.363960]  <TASK>
-[   10.363963]  dump_stack_lvl+0x4a/0x5f
-[   10.363971]  dump_stack+0x10/0x12
-[   10.363974]  ubsan_epilogue+0x9/0x45
-[   10.363976]  __ubsan_handle_shift_out_of_bounds.cold+0x61/0x10e
-[   10.363979]  ? wake_up_klogd+0x4a/0x50
-[   10.363983]  ? vprintk_emit+0x8f/0x240
-[   10.363986]  dwmac4_map_mtl_dma.cold+0x42/0x91 [stmmac]
-[   10.364001]  stmmac_mtl_configuration+0x1ce/0x7a0 [stmmac]
-[   10.364009]  ? dwmac410_dma_init_channel+0x70/0x70 [stmmac]
-[   10.364020]  stmmac_hw_setup.cold+0xf/0xb14 [stmmac]
-[   10.364030]  ? page_pool_alloc_pages+0x4d/0x70
-[   10.364034]  ? stmmac_clear_tx_descriptors+0x6e/0xe0 [stmmac]
-[   10.364042]  stmmac_open+0x39e/0x920 [stmmac]
-[   10.364050]  __dev_open+0xf0/0x1a0
-[   10.364054]  __dev_change_flags+0x188/0x1f0
-[   10.364057]  dev_change_flags+0x26/0x60
-[   10.364059]  do_setlink+0x908/0xc40
-[   10.364062]  ? do_setlink+0xb10/0xc40
-[   10.364064]  ? __nla_validate_parse+0x4c/0x1a0
-[   10.364068]  __rtnl_newlink+0x597/0xa10
-[   10.364072]  ? __nla_reserve+0x41/0x50
-[   10.364074]  ? __kmalloc_node_track_caller+0x1d0/0x4d0
-[   10.364079]  ? pskb_expand_head+0x75/0x310
-[   10.364082]  ? nla_reserve_64bit+0x21/0x40
-[   10.364086]  ? skb_free_head+0x65/0x80
-[   10.364089]  ? security_sock_rcv_skb+0x2c/0x50
-[   10.364094]  ? __cond_resched+0x19/0x30
-[   10.364097]  ? kmem_cache_alloc_trace+0x15a/0x420
-[   10.364100]  rtnl_newlink+0x49/0x70
-
-This change fixes MTL_RXQ_DMA_MAP1 mask issue and channel/queue
-mapping warning.
-
-Fixes: d43042f4da3e ("net: stmmac: mapping mtl rx to dma channel")
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216195
-Reported-by: Cedric Wassenaar <cedric@bytespeed.nl>
-Signed-off-by: Junxiao Chang <junxiao.chang@intel.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: 05cbc0db03e8 ("ipv4: Create probe timer for tcp PMTU as per RFC4821")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/ipv4/tcp_output.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
-index 66e60c7e9850..c440b192ec71 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
-@@ -215,6 +215,9 @@ static void dwmac4_map_mtl_dma(struct mac_device_info *hw, u32 queue, u32 chan)
- 	if (queue == 0 || queue == 4) {
- 		value &= ~MTL_RXQ_DMA_Q04MDMACH_MASK;
- 		value |= MTL_RXQ_DMA_Q04MDMACH(chan);
-+	} else if (queue > 4) {
-+		value &= ~MTL_RXQ_DMA_QXMDMACH_MASK(queue - 4);
-+		value |= MTL_RXQ_DMA_QXMDMACH(chan, queue - 4);
- 	} else {
- 		value &= ~MTL_RXQ_DMA_QXMDMACH_MASK(queue);
- 		value |= MTL_RXQ_DMA_QXMDMACH(chan, queue);
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 0e0f7803cf4e..33f9a486661c 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2030,7 +2030,7 @@ static inline void tcp_mtu_check_reprobe(struct sock *sk)
+ 	u32 interval;
+ 	s32 delta;
+ 
+-	interval = net->ipv4.sysctl_tcp_probe_interval;
++	interval = READ_ONCE(net->ipv4.sysctl_tcp_probe_interval);
+ 	delta = tcp_jiffies32 - icsk->icsk_mtup.probe_timestamp;
+ 	if (unlikely(delta >= interval * HZ)) {
+ 		int mss = tcp_current_mss(sk);
 -- 
 2.35.1
 

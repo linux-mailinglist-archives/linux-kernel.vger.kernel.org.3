@@ -2,118 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4CFF581FAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 07:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745B8582015
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 08:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiG0F6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 01:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        id S229589AbiG0GZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 02:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiG0F63 (ORCPT
+        with ESMTP id S229972AbiG0GZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 01:58:29 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0154B3D5B6;
-        Tue, 26 Jul 2022 22:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658901509; x=1690437509;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JFFzAepKe5rumUmhn8PlzZJmssi2RX0UtiJtzayX2is=;
-  b=NaIKRtRA0mXE0o7/yVjCTqJ64w/fsnaDQcEzne7kMFEfhZ0hT0tygpDZ
-   55FPV0rIeGJ2aPNXQBmGmvOwpgDqSGoLyJmQ9ejBby+Gcm8CHlCmlBuls
-   bYNBcRzObgUuoBWUQLVk9WA6Enk+thZR0W1B6yoGAs5hf6f5WfL9EBs9A
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Jul 2022 22:58:28 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 22:58:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Jul 2022 22:58:28 -0700
-Received: from [10.50.42.78] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Jul
- 2022 22:58:24 -0700
-Message-ID: <ecb58953-4758-3dec-b727-6ab6c8039cbf@quicinc.com>
-Date:   Wed, 27 Jul 2022 11:28:21 +0530
+        Wed, 27 Jul 2022 02:25:41 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8D5248D1;
+        Tue, 26 Jul 2022 23:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=kgGiHabl0/d2c20Z+4lE361tfrM1XekbYouuRVgUfS8=;
+        b=T/0l3MGwNWjkjtS8LmH59PhhgDtw21q1DFl8xWja3mKUiAwc2hwiztH3wDTh+nkghjW2JMj5mVxDa
+         FptKOqFzTBersO/hetIFz86LymsKWrGnXqnhqp9gzZgKr7VphJpLlSGmvBbdW4oS59RVFMPhhueeVF
+         QxXFwzhNyG5REqVUto1y0MosnHkFmeZ4ITF15W1QSmYolyJhRli3EGIjnU9MBz7lr7AsWq7VcvXM/Q
+         bMXp/Usq1ppehWnaHyD7wTiCj0XbG5JWHRcFBOu66vUNDh/gr5odoBxJRSj1nKEbGC0Gple9MUKoKb
+         VFuCHB4FQk0cZHiz/IA5/TcqZ6etBew==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000008,0.007390)], BW: [Enabled, t: (0.000013,0.000001)], RTDA: [Enabled, t: (0.076210), Hit: No, Details: v2.41.0; Id: 15.52k4j7.1g8v59cer.4ih1; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([85.93.58.13])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 27 Jul 2022 09:25:12 +0300
+Date:   Wed, 27 Jul 2022 09:00:30 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v5 0/2] Lattice ECP5 FPGA manager
+Message-ID: <20220727060030.7tlhisjwmm5wqjac@x260>
+References: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V6 5/5] clk: qcom: lpass: Add support for resets &
- external mclk for SC7280
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-soc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <robh@kernel.org>,
-        <robh+dt@kernel.org>, <quic_tdas@quicinc.com>
-References: <1658315023-3336-1-git-send-email-quic_c_skakit@quicinc.com>
- <1658315023-3336-6-git-send-email-quic_c_skakit@quicinc.com>
- <20220727013200.90E37C433C1@smtp.kernel.org>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-In-Reply-To: <20220727013200.90E37C433C1@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 19, 2022 at 02:23:33PM +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> slave SPI interface with .bit formatted uncompressed bitstream image.
+> 
+> ChangeLog:
+>   v1 -> v2:
+>     * remove "spi" from compatible string
+>     * reword description in dt-bindings doc
+>     * add reference to spi-peripheral-props.yaml in dt-binding doc
+>     * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+>       undersores in node names.
+>   v2 -> v3:
+>     * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+>   v3 -> v4:
+>     * dt-bindings: reword description
+>     * dt-bindings: revert props order
+>   v4 -> v5:
+>     * dt-bindings: remove trailing dot from title
+>     * dt-bindings: reword description to avoid driver reference
+>     * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+> 
+> Ivan Bornyakov (2):
+>   fpga: ecp5-spi: add Lattice ECP5 FPGA manager
+>   dt-bindings: fpga: add binding doc for ecp5-spi fpga mgr
+> 
+>  .../bindings/fpga/lattice,ecp5-fpga-mgr.yaml  |  74 +++++
+>  drivers/fpga/Kconfig                          |   7 +
+>  drivers/fpga/Makefile                         |   1 +
+>  drivers/fpga/ecp5-spi.c                       | 275 ++++++++++++++++++
+>  4 files changed, 357 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/lattice,ecp5-fpga-mgr.yaml
+>  create mode 100644 drivers/fpga/ecp5-spi.c
+> 
+> -- 
+> 2.37.1
+> 
 
-On 7/27/2022 7:01 AM, Stephen Boyd wrote:
-> Quoting Satya Priya (2022-07-20 04:03:43)
->> From: Taniya Das <quic_tdas@quicinc.com>
->>
->> The clock gating control for TX/RX/WSA core bus clocks would be required
->> to be reset(moved from hardware control) from audio core driver. Thus
->> add the support for the reset clocks.
->>
->> Also add the external mclk to interface external MI2S.
->>
->> Fixes: a9dd26639d05 ("clk: qcom: lpass: Add support for LPASS clock controller for SC7280").
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->> ---
->>   drivers/clk/qcom/lpassaudiocc-sc7280.c | 22 +++++++++++++++++++++-
->>   drivers/clk/qcom/lpasscorecc-sc7280.c  | 33 +++++++++++++++++++++++++++++++++
->>   2 files changed, 54 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
->> index 6067328..063e036 100644
->> --- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
->> +++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
->> @@ -23,6 +23,7 @@
->>   #include "clk-regmap-mux.h"
->>   #include "common.h"
->>   #include "gdsc.h"
->> +#include "reset.h"
->>   
->>   enum {
->>          P_BI_TCXO,
->> @@ -248,7 +249,7 @@ static struct clk_rcg2 lpass_aon_cc_main_rcg_clk_src = {
->>                  .parent_data = lpass_aon_cc_parent_data_0,
->>                  .num_parents = ARRAY_SIZE(lpass_aon_cc_parent_data_0),
->>                  .flags = CLK_OPS_PARENT_ENABLE,
->> -               .ops = &clk_rcg2_ops,
->> +               .ops = &clk_rcg2_shared_ops,
-> This diff isn't mentioned in the commit text at all. Is it intentional?
-> If so, please mention why it needs to change.
-
-
-It is updated to park the RCG at XO after disable as this clock signal 
-is used by hardware to turn ON memories in LPASS. I'll mention this in 
-the commit text.
-
+Friendly ping.
 

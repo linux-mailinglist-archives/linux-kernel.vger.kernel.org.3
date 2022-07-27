@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E26D458334C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E912C583361
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236424AbiG0TQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S237324AbiG0TUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236357AbiG0TPv (ORCPT
+        with ESMTP id S236009AbiG0TUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:15:51 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B86D5C957
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 12:04:40 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id x7so2927992pll.7
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 12:04:40 -0700 (PDT)
+        Wed, 27 Jul 2022 15:20:04 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7812266AE1;
+        Wed, 27 Jul 2022 12:13:14 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id i14so31802237yba.1;
+        Wed, 27 Jul 2022 12:13:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nsmujacVytercybwEzTpO980C/0aSSMQ0B+3OnRKSQ0=;
-        b=gdJhPtmUCwZmwlBzZ7mAbXflhOgEXZ6eNDtVjcumKvJjWlOPdN+SQptK0c8OogoJVL
-         oAsqLe3SBrlIUStLB5mdx2RkKc17Bizexfsp0UNEtyZ6fmSDnxrIb3Jb2uzj1HBj9wCa
-         TkcZPAseSbu9pxFaWGZXQRROJqcONQ/SDEMedqwYEkFNtfV7vEgiCuclrRj01iMXarIb
-         OitGP1TduULw0yNiGl/JBj2w2N7Mj0QmLzonWrIZcytyuYEvIvLwlTGmQMYdEumyol0Q
-         Ed5cwXUs/XQSFRyILPXOScInMTzhPALP71Zxnl3BTRw0VbGIULXDl4L861fHb4bRv70m
-         L40g==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mhBUWWVRG0hanjTnDj5rTeKOyivME1mqkocwt5OE7us=;
+        b=ceauQS1yAK6jl7VwTvkVaNDAv8cC/ocYrB/v9xEKwC2YCk/xhSZXEahlPlCSahSQpa
+         YbtFG2kU+oMQcogSH/a2XxIxoCM5SpBp/d7hk+sLrD/n5kb8LufjJrpdWtNqy2lVaZMP
+         1iyhyUE1MYL9lEQTW7fzao/c3rb7Ulv57841Z3qk2SSC51mPUGqh2861G36so6/fVp6v
+         zIktx7r7i9FRATdJq+vMk8H4uTXgZNSTbNdU9KCiS/yXja/W3sdRV8VW10n5NkWT1Oyg
+         CMNvUG3mzP7VRuPY8Du9Q9LRNJ/WHHxD8pfp8a2Fn9Fi2Iq6xJaKLUwVPjcyLg5ji6gj
+         2MFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nsmujacVytercybwEzTpO980C/0aSSMQ0B+3OnRKSQ0=;
-        b=giRFjEJilpOC1zvQDRg5RRElXAN1m0IQ9MhUGj5d8XusAjRGu4GndgItLtSsgG37dh
-         xEM8gnx5fWt86fY1ThlwswbpcC1m8/Q1dMlrwhUvjpmKSco7Vrh2BMM98m4LljyqEjwf
-         +4VEpTqs0i6q2bsWgKzMcaUVg0uysxpHJa6/d4OR2Q0BWxNzCk3pURHOBLHmEd02M4yx
-         8wYI3ZgnGMjsyHUKnHdee90OPwDwz8B4u4AqHqZXkvfbOSRlQTsxdCgOsTAcg52hZzBj
-         SuIujfV0HtcqXgijJluVJbfH9j5aoToPaQKKh5RLZdlZLwWW+KzkA5EwMVSArBOR1X1N
-         laCw==
-X-Gm-Message-State: AJIora9o9KPgFgOF0jB+C3MFSWLTPyWeEdobfhX7CkUmcR74uUHms2KJ
-        HFVkXNXb+KN5Mhy1yUkghz4Hf9GjGi3LpQ==
-X-Google-Smtp-Source: AGRyM1v5jZAAYPCzTHY4R3UJnbQ1qTswvrQtXwoxO1hpUHUEC9cP5l/K0qZ9Co2B1258A01GzolK6A==
-X-Received: by 2002:a17:903:2343:b0:16c:1efe:1fe0 with SMTP id c3-20020a170903234300b0016c1efe1fe0mr23912094plh.106.1658948679661;
-        Wed, 27 Jul 2022 12:04:39 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c6-20020a170902d48600b0016dbe37cebdsm467135plg.246.2022.07.27.12.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 12:04:39 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 19:04:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2 4/6] KVM: x86/mmu: Track the number of TDP MMU pages,
- but not the actual pages
-Message-ID: <YuGMQ/JJjuWxaUSu@google.com>
-References: <20220723012325.1715714-1-seanjc@google.com>
- <20220723012325.1715714-5-seanjc@google.com>
- <YuCl48wyA1XkqMan@yzhao56-desk.sh.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mhBUWWVRG0hanjTnDj5rTeKOyivME1mqkocwt5OE7us=;
+        b=EyoKng4g2OGJKUAzMGUtHAuUnYm4kGU51ix5u1OQX8qtWggaHM0T9iw0L68aNcsqdf
+         ySDb7+YBHMMRRTPvgwdLZUZHNPrPz12f3VCTIEOEBgIAdXnV9Jomd7FzxDGEgjfRvwsA
+         cniR5wUmhM0WbYtoi7T8F9LQGYT01XmXO10U/YU7pKP1PJCirGCY8UOX36/3zGfTjOtf
+         D02o9nS/h6Xzj84ZKeL6xGkZ2HKm3yu7DWcAMXtGMJ/ugJE3GgyN/v7qEwHc0Pby8vYm
+         Fq/nMZg5r/2QDndImnYCUcxFQEsYYs6mOoQTsQqUkl2JtyE8pyedZmNg7oRlT/kKErZA
+         Fivw==
+X-Gm-Message-State: AJIora+4iXRAcmptLtcbubdVIPUTdajxOkKyW6oOi9dShbg5AR0cpF7Z
+        YWmrNb6Ox4MEnO+CC/B3cjtYLi/15EnL3Kt7+ewbm2cJGUA=
+X-Google-Smtp-Source: AGRyM1v8JWg8mpDpYDeS0qdMtXhObRgUeYqjoM1X9hZANMRXNC2uRkYXRrKpkqB1jirjbmeZwEZRzYX9kIHmdGranR0=
+X-Received: by 2002:a5b:1c8:0:b0:671:5d14:5974 with SMTP id
+ f8-20020a5b01c8000000b006715d145974mr10588575ybp.123.1658949193593; Wed, 27
+ Jul 2022 12:13:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuCl48wyA1XkqMan@yzhao56-desk.sh.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com> <af067c133aa410370aaa4f11e334bc910b4c21e2.camel@svanheule.net>
+In-Reply-To: <af067c133aa410370aaa4f11e334bc910b4c21e2.camel@svanheule.net>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 27 Jul 2022 21:13:02 +0200
+Message-ID: <CAFBinCDZYb-Pt_Vn14cDmprM6CxRoEbTUTx16FMv=cWf-pnrQw@mail.gmail.com>
+Subject: Re: [PATCH RFC v1] spi: realtek-rtl: Fix clearing some register bits
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bert@biot.com, mail@birger-koblitz.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +66,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022, Yan Zhao wrote:
-> On Sat, Jul 23, 2022 at 01:23:23AM +0000, Sean Christopherson wrote:
-> 
-> <snip>
-> 
-> > @@ -386,16 +385,18 @@ static void handle_changed_spte_dirty_log(struct kvm *kvm, int as_id, gfn_t gfn,
-> >  static void tdp_mmu_unlink_sp(struct kvm *kvm, struct kvm_mmu_page *sp,
-> >  			      bool shared)
-> >  {
-> > +	atomic64_dec(&kvm->arch.tdp_mmu_pages);
-> > +
-> > +	if (!sp->nx_huge_page_disallowed)
-> > +		return;
-> > +
-> Does this read of sp->nx_huge_page_disallowed also need to be protected by
-> tdp_mmu_pages_lock in shared path?
+Hi Sander,
+
+On Tue, Jul 26, 2022 at 11:03 AM Sander Vanheule <sander@svanheule.net> wrote:
+[...]
+> >         value = readl(REG(RTL_SPI_SFCSR));
+> > -       value &= RTL_SPI_SFCSR_LEN_MASK;
+> > +       value &= ~RTL_SPI_SFCSR_LEN_MASK;
+>
+> Although typically a field mask has the only the bits of that field set,
+> RTL_SPI_SFCSR_LEN_MASK is already inverted. So LEN_MASK has all bits set,
+> *except* for those where LEN is stored.
+>
+> This means the code currently is:
+>         value &= ~(0x3 << 28);
+>
+> which is correct AFAICT, as it clears the LEN bits, but keeps all the others.
+Thank you for this hint! I completely missed that when reading the
+definition of the macro.
+
+> While this part is currently not wrong, I wouldn't be opposed to a patch to make
+> it less confusing by not inverting the field mask in the definition of
+> RTL_SPI_SFCSR_LEN_MASK.
+I can re-spin this patch and move the ~ operator where most people
+expect it to be.
+
+> >         if (size == 4)
+> >                 value |= RTL_SPI_SFCSR_LEN4;
+> >         else if (size == 1)
+> > @@ -143,7 +143,7 @@ static void init_hw(struct rtspi *rtspi)
+> >         /* Permanently disable CS1, since it's never used */
+> >         value |= RTL_SPI_SFCSR_CSB1;
+> >         /* Select CS0 for use */
+> > -       value &= RTL_SPI_SFCSR_CS;
+> > +       value &= ~RTL_SPI_SFCSR_CS;
+>
+> This macro is not inverted, so it does clear any previously set bits, and
+> probably doesn't end up with RTL_SPI_SFCRS_CS set. However, is in an init call
+> and it doesn't appear to cause any issues later on, right? Is this because the
+> SFCSR register is (unintentionally) cleared and that is actually required?
+I'm not sure what's right or wrong here but the code reads strange:
+    value = readl(...);
+    value |= BIT(30); /* RTL_SPI_SFCSR_CSB1 */
+    value &= BIT(24); /* RTL_SPI_SFCSR_CS */
+What's the point in setting RTL_SPI_SFCSR_CSB1 (bit 30) when it's
+immediately cleared in the next operation?
+
+Also any bits read from the register except RTL_SPI_SFCSR_CS (bit 24)
+are cleared - why even bother reading that register then?
+
+If you have any advice on how to change this code then I'm happy to do so.
+Otherwise I'd leave it as is, especially since I cannot test this in any way.
 
 
-No, because only one CPU can call tdp_mmu_unlink_sp() for a shadow page.  E.g. in
-a shared walk, the SPTE is zapped atomically and only the CPU that "wins" gets to
-unlink the s[.  The extra lock is needed to prevent list corruption, but the
-sp itself is thread safe.
-
-FWIW, even if that guarantee didn't hold, checking the flag outside of tdp_mmu_pages_lock
-is safe because false positives are ok.  untrack_possible_nx_huge_page() checks that
-the shadow page is actually on the list, i.e. it's a nop if a different task unlinks
-the page first.
-
-False negatives need to be avoided, but nx_huge_page_disallowed is cleared only
-when untrack_possible_nx_huge_page() is guaranteed to be called, i.e. true false
-negatives can't occur.
-
-Hmm, but I think there's a missing smp_rmb(), which is needed to ensure
-nx_huge_page_disallowed is read after observing the shadow-present SPTE (that's
-being unlinked).  I'll add that in the next version.
+Best regards,
+Martin

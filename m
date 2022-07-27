@@ -2,161 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2295835A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 01:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52B25835AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 01:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiG0Xds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 19:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S233000AbiG0Xef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 19:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiG0Xdo (ORCPT
+        with ESMTP id S229532AbiG0Xed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 19:33:44 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E2613E30;
-        Wed, 27 Jul 2022 16:33:43 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id p5-20020a4a4805000000b0043548dba757so17215ooa.8;
-        Wed, 27 Jul 2022 16:33:43 -0700 (PDT)
+        Wed, 27 Jul 2022 19:34:33 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6AE564E4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:34:32 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id v19-20020a252f13000000b0067174f085e9so366169ybv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=L3m2JC5GapMYqTiLfpgpy+Syxp+egGM8zqBmpln74FQ=;
+        b=QvTYidN+KmLvcyrB45xodWUwi/AdeLijHMBx02iEklp/7wl57m7u637uhOrULFDewY
+         TqAKGaiQ7JdJhAgxOWdP05ycp1WblrYbO0SCtaXgJg8L0lR2xMIw+Oe8OzAv+uEDD2l9
+         6fnOpN1vv4D2yUKVaT2JHZCS2EgkHP4db9EM4l7ip3q37wL7F5uWFshBXczDGRMuJUox
+         1SWxuGx+0993mtZ+Goym38hbqGpcArVYyE9t6b8l8IbutN+O5/7yXiMnDR/M7FhIVISX
+         d/9g9w1XuC97w6ae9THw15cTzlH/zf/Ipxh6j8XnRZkXRmCG0oeyVTrqdwPkKIPMu/34
+         kGtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y6mNGbKG32EZj+pRu9k63GQMtitbdxrC5+KmXFQp3Ho=;
-        b=IAPOwnTsAdHaIB9rSWHV/diDkTpxY2MVJMJq4wHHrVNQQn6gEXWFz9a/saiv/Eoj10
-         GdEhYxG0b8ROID6SnGyC2fg/IG8bN7VLdVoDG+gzZUVuv4j3mDqzsP2U4vBJgyvAHL5q
-         g6XdV18xUNv4aUK7t3aNDY1rSIPQB/MZDL+NpjKSlSOjOqPiXc6/gQ48FjdYmrtwLo2O
-         BpDvppxbbBpjLTLk7q7KAJ91oo8K3IvEc0MpEywRbcRM2lyud1006OtisMdIqTAHW+J2
-         ++pZAXjFBkUH/WbvQva8qaZ4XBYVcPQqFofbm/WOS1nQAOCjSvB8TQolRVQi09jqDDak
-         D9ig==
-X-Gm-Message-State: AJIora+PBURQ1XYErUY2ykmMDLdcA57hoqU4KmAx5SvpOoIyROJGyJxy
-        5Wbk2c+/EWJdtqDlKb91VZWXJGRYpxSLWbwR8ok=
-X-Google-Smtp-Source: AGRyM1v689DudA8J5K9PJqMq422qOAMA/3CE+F3AeykWp8IPzVdloadbmvDr3aQsYiK5A7SnQILyMbRmEfbW2lBtF8Q=
-X-Received: by 2002:a4a:d8d2:0:b0:435:66f0:c931 with SMTP id
- c18-20020a4ad8d2000000b0043566f0c931mr8503901oov.97.1658964823011; Wed, 27
- Jul 2022 16:33:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220709015033.38326-1-yangjihong1@huawei.com> <20220709015033.38326-2-yangjihong1@huawei.com>
-In-Reply-To: <20220709015033.38326-2-yangjihong1@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 27 Jul 2022 16:33:32 -0700
-Message-ID: <CAM9d7cjRPSsoAk22xTO=BFQTVn+HmMZkcm7grNehHkbtRWwhgw@mail.gmail.com>
-Subject: Re: [RFC v3 01/17] perf kwork: New tool
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Paul Clarke <pc@us.ibm.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=L3m2JC5GapMYqTiLfpgpy+Syxp+egGM8zqBmpln74FQ=;
+        b=x/1O0LdAty+IT31gYoahBf0yOmVrMoAgYuxzPaR1hfDlMWlORFI2XAjpkzLiwui1Sy
+         JH4RZCWVta548c+Vq+pCO08IgvicHvD8+0WW9mKwetb09YJssYmI4EgHI4WagVXi9zU/
+         bTJXoKMpaBxqxYEqJM4XXq2EUMusZgpTulrZDWnqAv2p0cT6mzb395ekQ8YsbTJnVpMx
+         hz8DJMd3bsJU28ziz4yg7Qlok2uGZZ4nOScyFRHJQarPQz918Sd1Irbc6V5/UlIo6gNY
+         WOj34XpK5yvy6rzEI/j+a1qDmONZweLjdWc2hsnq3QMHrjdN8S0L6TiKhu4Pwq1IRh5/
+         bg0w==
+X-Gm-Message-State: AJIora8HCYdtYmepSdIjf68QoF77oMe0KWrLBEjp1ie4bsDpAO5DnUR7
+        5TnfRDpOR80M+/7/BTNr/tXLRmVXmn0=
+X-Google-Smtp-Source: AGRyM1sca9IphNd8CVhj6GCoCv/IHqCsRy7Rx96SSaFVhtFNf05rx3qu5MLsio63ysQSa/8xeUoPppboX9I=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:1c45:0:b0:31f:539b:91db with SMTP id
+ c66-20020a811c45000000b0031f539b91dbmr7764607ywc.435.1658964872253; Wed, 27
+ Jul 2022 16:34:32 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed, 27 Jul 2022 23:34:21 +0000
+Message-Id: <20220727233424.2968356-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH 0/3] KVM: x86: Intel PERF_CAPABILITIES fix and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Fix a bug where KVM doesn't refresh the vPMU after userspace writes
+PERF_CAPABILITIES, and then leverage that fix to avoiding checking
+guest_cpuid_has(X86_FEATURE_PDCM) during VM-Enter, which is slow enough
+that it shows up in perf traces[*].
 
-On Fri, Jul 8, 2022 at 6:53 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> The perf-kwork tool is used to trace time properties of kernel work
-> (such as irq, softirq, and workqueue), including runtime, latency,
-> and timehist, using the infrastructure in the perf tools to allow
-> tracing extra targets.
->
-> This is the first commit to reuse perf_record framework code to
-> implement a simple record function, kwork is not supported currently.
->
-> Test cases:
->
->   # perf
->
->    usage: perf [--version] [--help] [OPTIONS] COMMAND [ARGS]
->
->    The most commonly used perf commands are:
->   <SNIP>
->      iostat          Show I/O performance metrics
->      kallsyms        Searches running kernel for symbols
->      kmem            Tool to trace/measure kernel memory properties
->      kvm             Tool to trace/measure kvm guest os
->      kwork           Tool to trace/measure kernel work properties (latencies)
->      list            List all symbolic event types
->      lock            Analyze lock events
->      mem             Profile memory accesses
->      record          Run a command and record its profile into perf.data
->   <SNIP>
->    See 'perf help COMMAND' for more information on a specific command.
->
->   # perf kwork
->
->    Usage: perf kwork [<options>] {record}
->
->       -D, --dump-raw-trace  dump raw trace in ASCII
->       -f, --force           don't complain, do it
->       -k, --kwork <kwork>   list of kwork to profile
->       -v, --verbose         be more verbose (show symbol address, etc)
->
->   # perf kwork record -- sleep 1
->   [ perf record: Woken up 0 times to write data ]
->   [ perf record: Captured and wrote 1.787 MB perf.data ]
->
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
-[SNIP]
-> +
-> +static int perf_kwork__record(struct perf_kwork *kwork,
-> +                             int argc, const char **argv)
-> +{
-> +       const char **rec_argv;
-> +       unsigned int rec_argc, i, j;
-> +       struct kwork_class *class;
-> +
-> +       const char *const record_args[] = {
-> +               "record",
-> +               "-a",
-> +               "-R",
-> +               "-m", "1024",
-> +               "-c", "1",
+[*] https://gist.github.com/avagin/f50a6d569440c9ae382281448c187f4e
 
-Please consider adding '--synth task' to skip costly synthesis
-if you don't need user space symbols.
+Sean Christopherson (3):
+  KVM: x86: Refresh PMU after writes to MSR_IA32_PERF_CAPABILITIES
+  KVM: VMX: Use proper type-safe functions for vCPU => LBRs helpers
+  KVM: VMX: Adjust number of LBR records for PERF_CAPABILITIES at
+    refresh
 
-> +       };
-> +
-> +       rec_argc = ARRAY_SIZE(record_args) + argc - 1;
-> +
-> +       list_for_each_entry(class, &kwork->class_list, list)
-> +               rec_argc += 2 * class->nr_tracepoints;
-> +
-> +       rec_argv = calloc(rec_argc + 1, sizeof(char *));
-> +       if (rec_argv == NULL)
-> +               return -ENOMEM;
-> +
-> +       for (i = 0; i < ARRAY_SIZE(record_args); i++)
-> +               rec_argv[i] = strdup(record_args[i]);
-> +
-> +       list_for_each_entry(class, &kwork->class_list, list) {
-> +               for (j = 0; j < class->nr_tracepoints; j++) {
-> +                       rec_argv[i++] = strdup("-e");
-> +                       rec_argv[i++] = strdup(class->tp_handlers[j].name);
-> +               }
-> +       }
-> +
-> +       for (j = 1; j < (unsigned int)argc; j++, i++)
-> +               rec_argv[i] = argv[j];
-> +
-> +       BUG_ON(i != rec_argc);
-> +
-> +       pr_debug("record comm: ");
-> +       for (j = 0; j < rec_argc; j++)
-> +               pr_debug("%s ", rec_argv[j]);
-> +       pr_debug("\n");
-> +
-> +       return cmd_record(i, rec_argv);
-> +}
+ arch/x86/kvm/vmx/pmu_intel.c | 12 +++---------
+ arch/x86/kvm/vmx/vmx.h       | 29 ++++++++++++++++++++---------
+ arch/x86/kvm/x86.c           |  4 ++--
+ 3 files changed, 25 insertions(+), 20 deletions(-)
+
+
+base-commit: 1a4d88a361af4f2e91861d632c6a1fe87a9665c2
+-- 
+2.37.1.359.gd136c6c3e2-goog
+

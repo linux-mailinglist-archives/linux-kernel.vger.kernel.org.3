@@ -2,151 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB85582A41
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BB0582A48
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbiG0QGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S234633AbiG0QHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbiG0QGl (ORCPT
+        with ESMTP id S232297AbiG0QHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:06:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FFC22515;
-        Wed, 27 Jul 2022 09:06:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7144AB821B2;
-        Wed, 27 Jul 2022 16:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA74DC433C1;
-        Wed, 27 Jul 2022 16:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658937997;
-        bh=5XHQir5HRajZVkwdA1nsiY7rF0CyIi1tGP/Ej1MXlVc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SR4njLkGCtRQJ3ftmswRAWHh/ViyPNjAZRf1LECfzlX9vwebRSx2YzVnz2Yt5geJm
-         UVmHLIeM/aqdmfPOtMOrnPAhflq8YJ6ilQ3F49cId+mxj0xMzWKgnWkKgQ4X+yxtgV
-         jY3iTRmqxjfP4j3x3roONUwhqbSPCLIjp0euEsOEDMlDzprcEbSBXfL01AUqSrnq1A
-         dFpxkO1+z0ugV6PdgTLOtTGPbWn4ZYBqk+a/qov2ElVa+VDFSFwEmJXohuNMNsU+//
-         dq/1YffRTAyX95u7lXCVJZLVafPCFucN+4T0SleIK94cbf4vd0vTyM2t7GWpMabnnP
-         l4IrbSwNK1TUw==
-Message-ID: <973f6718-bb88-724b-0900-5c8eb0c24d78@kernel.org>
-Date:   Wed, 27 Jul 2022 18:06:26 +0200
+        Wed, 27 Jul 2022 12:07:41 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538182A71C;
+        Wed, 27 Jul 2022 09:07:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=w9r9iD1+VJ1bB5BUofHhTNtVicBr0akZlYlPe4WCSQQ=; b=lvZsnsMXIad6IuUpCnGPnR81q2
+        acnY8KBBOU1hGSV7O0ISRk6vrJNFl/RF2gWT57/zETylrGdz0kZotBUWTPyxYZkRRefybX1Zc3PMM
+        OS/zAgpdVMu6hShabM3s88zg7aZWoAGhmJRap+XqlOdif7iB/6s6HyThVCwY1Gy1xbYX6U4GUSU8y
+        eenB9BdltjQlPKr5ZSxn8CH1RSQ6oHLkErzSEYeYnyVqBG6KbNXc7Ipgay4x4IaYfFa6IXLqENYcI
+        lZ49/7TVmlRFOWE8wJMSRk2EtilZ6o0Sx/tOtqDxsMVt2+LJXmySQ8r5lIDvmsJAuk793m0L+l/Xe
+        Uhd2GcCA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oGjZ7-000kBA-BG; Wed, 27 Jul 2022 16:07:19 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EA6A2980403; Wed, 27 Jul 2022 18:07:16 +0200 (CEST)
+Date:   Wed, 27 Jul 2022 18:07:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     hannes@cmpxchg.org, surenb@google.com, mingo@redhat.com,
+        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
+        rdunlap@infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        cgroups@vger.kernel.org
+Subject: Re: [PATCH 9/9] sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
+Message-ID: <YuFitL6KuCfuqujn@worktop.programming.kicks-ass.net>
+References: <20220721040439.2651-1-zhouchengming@bytedance.com>
+ <20220721040439.2651-10-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V7 04/16] rv/include: Add deterministic automata monitor
- definition via C macros
-Content-Language: en-US
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-References: <cover.1658778484.git.bristot@kernel.org>
- <75d14829c5234c2ff43aff744ac41f246b970ed8.1658778484.git.bristot@kernel.org>
- <YuFZ2scVb658mhoq@geo.homenetwork>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <YuFZ2scVb658mhoq@geo.homenetwork>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721040439.2651-10-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 17:29, Tao Zhou wrote:
->> +/*
->> + * Handle event for implicit monitor: da_get_monitor_##name() will figure out
->> + * the monitor.
->> + */
->> +#define DECLARE_DA_MON_MONITOR_HANDLER_IMPLICIT(name, type)					\
->> +												\
->> +static inline void __da_handle_event_##name(struct da_monitor *da_mon,				\
->> +					    enum events_##name event)				\
->> +{												\
->> +	int retval;										\
->> +												\
->> +	retval = da_monitor_handling_event_##name(da_mon);					\
->> +	if (!retval)										\
->> +		return;										\
-> I checked the callers of __da_handle_event_##name():
-> da_handle_event_##name() for all cases need the above check.
-> da_handle_start_event_##name() for all cases may not need this check.
-> (this function checked the enable first and the da_monitoring later and if
-> it is not monitoring it will start monitoring and return, the later event
-> handler will not be called. Otherwise enable is enabled, da_monitoring is
-> monitoring)
-> da_handle_start_run_event_##name() for implicit case may not need this check.
-> (almost the same with the above, the difference is if da-monitor is not
-> monitoring, it will start monitoring and not return and do the event handler,
-> here enable is enabled and da_monitoring is monitoring, if I am not wrong)
-> So after another(v7) looking at this patch, I realized that this check can
-> be omited in two cases(all three cases). Just in fuction da_handle_event_##name()
-> we need to do da_monitor_handling_event_##name().
-> So I'd write like this:
-> static inline void __da_handle_event_##name(struct da_monitor *da_mon,				\
-> 					    enum events_##name event)				\
-> {												\
-> 	int retval;										\
->                                                     \
->     retval = da_event_##name(da_mon, event);						\
->     if (!retval)										\
->         da_monitor_reset_##name(da_mon);						\
-> }												\
-> 
-> static inline void da_handle_event_##name(enum events_##name event)				\
-> {												\
->     struct da_monitor *da_mon = da_get_monitor_##name();					\
-> 	int retval;										\
->                                                     \
->     retval = da_monitor_handling_event_##name(da_mon);					\
->     if (!retval)										\
->         return;										\
->                                                     \
->     __da_handle_event_##name(da_mon, event);						\
-> 
-> }												\
-> 
+On Thu, Jul 21, 2022 at 12:04:39PM +0800, Chengming Zhou wrote:
+> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> index c124f7d186d0..195f123b1cd1 100644
+> --- a/include/linux/psi_types.h
+> +++ b/include/linux/psi_types.h
+> @@ -47,7 +47,8 @@ enum psi_res {
+>  	PSI_IO,
+>  	PSI_MEM,
+>  	PSI_CPU,
+> -	NR_PSI_RESOURCES = 3,
+> +	PSI_IRQ,
+> +	NR_PSI_RESOURCES = 4,
+>  };
+>  
+>  /*
+> @@ -63,9 +64,11 @@ enum psi_states {
+>  	PSI_MEM_FULL,
+>  	PSI_CPU_SOME,
+>  	PSI_CPU_FULL,
+> +	PSI_IRQ_SOME,
+> +	PSI_IRQ_FULL,
+>  	/* Only per-CPU, to weigh the CPU in the global average: */
+>  	PSI_NONIDLE,
+> -	NR_PSI_STATES = 7,
+> +	NR_PSI_STATES = 9,
+>  };
+>  
+>  enum psi_aggregators {
 
-IOW,
+$ pahole -EC psi_group_cpu defconfig-build/kernel/sched/build_utility.o
+struct psi_group_cpu {
+        /* typedef seqcount_t */ struct seqcount {
+                unsigned int       sequence;                                             /*     0     4 */
+        } seq __attribute__((__aligned__(64))); /*     0     4 */
+        unsigned int               tasks[5];                                             /*     4    20 */
+        /* typedef u32 -> __u32 */ unsigned int               state_mask;                /*    24     4 */
+        /* typedef u32 -> __u32 */ unsigned int               times[7];                  /*    28    28 */
+        /* typedef u64 -> __u64 */ long long unsigned int     state_start;               /*    56     8 */
+        /* --- cacheline 1 boundary (64 bytes) --- */
+        /* typedef u32 -> __u32 */ unsigned int               times_prev[2][7] __attribute__((__aligned__(64))); /*    64    56 */
 
-The code is checking twice if the monitor is enabled in these two cases:
-	- da_handle_start_run_event_##name()
-	- da_handle_start_event_##name()
+        /* size: 128, cachelines: 2, members: 6 */
+        /* padding: 8 */
+        /* forced alignments: 2 */
+} __attribute__((__aligned__(64)));
 
-Because it is checking in these functions first and then again in __da_handle_event_##name().
 
-The function da_handle_event_##name() is not checking if the monitors are enabled because
-__da_handle_event_##name() does it.
+$ pahole -EC psi_group_cpu defconfig-build/kernel/sched/build_utility.o
+struct psi_group_cpu {
+        /* typedef seqcount_t */ struct seqcount {
+                unsigned int       sequence;                                             /*     0     4 */
+        } seq __attribute__((__aligned__(64))); /*     0     4 */
+        unsigned int               tasks[5];                                             /*     4    20 */
+        /* typedef u32 -> __u32 */ unsigned int               state_mask;                /*    24     4 */
+        /* typedef u32 -> __u32 */ unsigned int               times[9];                  /*    28    36 */
+        /* --- cacheline 1 boundary (64 bytes) --- */
+        /* typedef u64 -> __u64 */ long long unsigned int     state_start;               /*    64     8 */
 
-By adding the check on da_handle_event_##name(), we can remove it in
-__da_handle_event_##name(). Making the check run only once for all cases.
+        /* XXX 56 bytes hole, try to pack */
 
-This is an optimization, and it makes sense.
+        /* --- cacheline 2 boundary (128 bytes) --- */
+        /* typedef u32 -> __u32 */ unsigned int               times_prev[2][9] __attribute__((__aligned__(64))); /*   128    72 */
 
-(changed return value to bool)
+        /* size: 256, cachelines: 4, members: 6 */
+        /* sum members: 144, holes: 1, sum holes: 56 */
+        /* padding: 56 */
+        /* forced alignments: 2, forced holes: 1, sum forced holes: 56 */
+} __attribute__((__aligned__(64)));
 
--- Daniel
+
+So yeah, I think not.

@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E999582F15
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CD3582C48
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241863AbiG0RUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S239761AbiG0Qos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241655AbiG0RSt (ORCPT
+        with ESMTP id S239559AbiG0Qnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:18:49 -0400
+        Wed, 27 Jul 2022 12:43:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B6979EFD;
-        Wed, 27 Jul 2022 09:43:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C70A63D9;
+        Wed, 27 Jul 2022 09:30:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E03E601C3;
-        Wed, 27 Jul 2022 16:43:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF77C433D6;
-        Wed, 27 Jul 2022 16:43:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46854619FD;
+        Wed, 27 Jul 2022 16:30:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25C01C433C1;
+        Wed, 27 Jul 2022 16:30:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940237;
-        bh=gZtPCMQ0JD9Ip4j75/GtiuMQLZb64IKyLIRcJaTpJzM=;
+        s=korg; t=1658939426;
+        bh=Qvf14IuKv1RKcZRvldurAQZascnOvDT/URMan2bY5GM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tAhagIZXgDd+pGcjRjNB+F7Fqu6UAqQ+V2tjbX8exDNcXaHZ0keHku2r1Sp8ivyMR
-         J8l+d2fbbFPG3vKd/+oTAymn8Sa/sLr7ytTvoS5U7Qh73EBXeC34lyfvXJpbz1BqN5
-         y55kituK6kne9qwiqL2mniwY1KDHm30GcKdmlUlk=
+        b=pyAz1WW/x61kyU9H2mgEdLHWBMjmJ8oqx/VFXTbx2oIdFETtIeDrjND2J9a38ww3B
+         QjqO5dWt9DpNS3Hn6DHs+7CITJ18aBInHKlPX9apIGyfLcEgjHlSb8NQJjD8nzQBS0
+         xsZdWS9KxyRv5GrqbC6hi0h5xqoc7LDjPSapH4wc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 154/201] xhci: dbc: Rename xhci_dbc_init and xhci_dbc_exit
+        stable@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 65/87] locking/refcount: Move saturation warnings out of line
 Date:   Wed, 27 Jul 2022 18:10:58 +0200
-Message-Id: <20220727161034.207557773@linuxfoundation.org>
+Message-Id: <20220727161011.681761418@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,106 +61,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Will Deacon <will@kernel.org>
 
-[ Upstream commit 5c44d9d7570b244ca08fef817c4c90aa7a1f1b5f ]
+[ Upstream commit 1eb085d94256aaa69b00cf5a86e3c5f5bb2bc460 ]
 
-These names give the impression the functions are related to
-module init calls, but are in fact creating and removing the dbc
-fake device
+Having the refcount saturation and warnings inline bloats the text,
+despite the fact that these paths should never be executed in normal
+operation.
 
-Rename them to xhci_create_dbc_dev() and xhci_remove_dbc_dev().
+Move the refcount saturation and warnings out of line to reduce the
+image size when refcount_t checking is enabled. Relative to an x86_64
+defconfig, the sizes reported by bloat-o-meter are:
 
-We will need the _init and _exit names for actual dbc module init
-and exit calls.
+ # defconfig+REFCOUNT_FULL, inline saturation (i.e. before this patch)
+ Total: Before=14762076, After=14915442, chg +1.04%
 
-No functional changes
+ # defconfig+REFCOUNT_FULL, out-of-line saturation (i.e. after this patch)
+ Total: Before=14762076, After=14835497, chg +0.50%
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220216095153.1303105-4-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+A side-effect of this change is that we now only get one warning per
+refcount saturation type, rather than one per problematic call-site.
+
+Signed-off-by: Will Deacon <will@kernel.org>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Hanjun Guo <guohanjun@huawei.com>
+Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: Elena Reshetova <elena.reshetova@intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lkml.kernel.org/r/20191121115902.2551-7-will@kernel.org
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-dbgcap.c | 5 +++--
- drivers/usb/host/xhci-dbgcap.h | 8 ++++----
- drivers/usb/host/xhci.c        | 4 ++--
- 3 files changed, 9 insertions(+), 8 deletions(-)
+ include/linux/refcount.h | 39 ++++++++++++++++++++-------------------
+ lib/refcount.c           | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-index f4da5708a40f..46c8f3c187f7 100644
---- a/drivers/usb/host/xhci-dbgcap.c
-+++ b/drivers/usb/host/xhci-dbgcap.c
-@@ -1017,7 +1017,8 @@ void xhci_dbc_remove(struct xhci_dbc *dbc)
- 	kfree(dbc);
- }
+diff --git a/include/linux/refcount.h b/include/linux/refcount.h
+index e3b218d669ce..1cd0a876a789 100644
+--- a/include/linux/refcount.h
++++ b/include/linux/refcount.h
+@@ -23,6 +23,16 @@ typedef struct refcount_struct {
  
--int xhci_dbc_init(struct xhci_hcd *xhci)
+ #define REFCOUNT_INIT(n)	{ .refs = ATOMIC_INIT(n), }
+ 
++enum refcount_saturation_type {
++	REFCOUNT_ADD_NOT_ZERO_OVF,
++	REFCOUNT_ADD_OVF,
++	REFCOUNT_ADD_UAF,
++	REFCOUNT_SUB_UAF,
++	REFCOUNT_DEC_LEAK,
++};
 +
-+int xhci_create_dbc_dev(struct xhci_hcd *xhci)
++void refcount_warn_saturate(refcount_t *r, enum refcount_saturation_type t);
++
+ /**
+  * refcount_set - set a refcount's value
+  * @r: the refcount
+@@ -154,10 +164,8 @@ static inline __must_check bool refcount_add_not_zero(int i, refcount_t *r)
+ 			break;
+ 	} while (!atomic_try_cmpxchg_relaxed(&r->refs, &old, old + i));
+ 
+-	if (unlikely(old < 0 || old + i < 0)) {
+-		refcount_set(r, REFCOUNT_SATURATED);
+-		WARN_ONCE(1, "refcount_t: saturated; leaking memory.\n");
+-	}
++	if (unlikely(old < 0 || old + i < 0))
++		refcount_warn_saturate(r, REFCOUNT_ADD_NOT_ZERO_OVF);
+ 
+ 	return old;
+ }
+@@ -182,11 +190,10 @@ static inline void refcount_add(int i, refcount_t *r)
  {
- 	struct device		*dev;
- 	void __iomem		*base;
-@@ -1041,7 +1042,7 @@ int xhci_dbc_init(struct xhci_hcd *xhci)
- 	return ret;
+ 	int old = atomic_fetch_add_relaxed(i, &r->refs);
+ 
+-	WARN_ONCE(!old, "refcount_t: addition on 0; use-after-free.\n");
+-	if (unlikely(old <= 0 || old + i <= 0)) {
+-		refcount_set(r, REFCOUNT_SATURATED);
+-		WARN_ONCE(old, "refcount_t: saturated; leaking memory.\n");
+-	}
++	if (unlikely(!old))
++		refcount_warn_saturate(r, REFCOUNT_ADD_UAF);
++	else if (unlikely(old < 0 || old + i < 0))
++		refcount_warn_saturate(r, REFCOUNT_ADD_OVF);
  }
  
--void xhci_dbc_exit(struct xhci_hcd *xhci)
-+void xhci_remove_dbc_dev(struct xhci_hcd *xhci)
- {
- 	unsigned long		flags;
- 
-diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-index 5d8c7815491c..8b5b363a0719 100644
---- a/drivers/usb/host/xhci-dbgcap.h
-+++ b/drivers/usb/host/xhci-dbgcap.h
-@@ -194,8 +194,8 @@ static inline struct dbc_ep *get_out_ep(struct xhci_dbc *dbc)
- }
- 
- #ifdef CONFIG_USB_XHCI_DBGCAP
--int xhci_dbc_init(struct xhci_hcd *xhci);
--void xhci_dbc_exit(struct xhci_hcd *xhci);
-+int xhci_create_dbc_dev(struct xhci_hcd *xhci);
-+void xhci_remove_dbc_dev(struct xhci_hcd *xhci);
- int xhci_dbc_tty_probe(struct device *dev, void __iomem *res, struct xhci_hcd *xhci);
- void xhci_dbc_tty_remove(struct xhci_dbc *dbc);
- struct xhci_dbc *xhci_alloc_dbc(struct device *dev, void __iomem *res,
-@@ -211,12 +211,12 @@ int xhci_dbc_suspend(struct xhci_hcd *xhci);
- int xhci_dbc_resume(struct xhci_hcd *xhci);
- #endif /* CONFIG_PM */
- #else
--static inline int xhci_dbc_init(struct xhci_hcd *xhci)
-+static inline int xhci_create_dbc_dev(struct xhci_hcd *xhci)
- {
- 	return 0;
- }
- 
--static inline void xhci_dbc_exit(struct xhci_hcd *xhci)
-+static inline void xhci_remove_dbc_dev(struct xhci_hcd *xhci)
- {
- }
- 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 94fe7d64e762..a4e99f8668b3 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -693,7 +693,7 @@ int xhci_run(struct usb_hcd *hcd)
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"Finished xhci_run for USB2 roothub");
- 
--	xhci_dbc_init(xhci);
-+	xhci_create_dbc_dev(xhci);
- 
- 	xhci_debugfs_init(xhci);
- 
-@@ -723,7 +723,7 @@ static void xhci_stop(struct usb_hcd *hcd)
- 		return;
+ /**
+@@ -253,10 +260,8 @@ static inline __must_check bool refcount_sub_and_test(int i, refcount_t *r)
+ 		return true;
  	}
  
--	xhci_dbc_exit(xhci);
-+	xhci_remove_dbc_dev(xhci);
+-	if (unlikely(old < 0 || old - i < 0)) {
+-		refcount_set(r, REFCOUNT_SATURATED);
+-		WARN_ONCE(1, "refcount_t: underflow; use-after-free.\n");
+-	}
++	if (unlikely(old < 0 || old - i < 0))
++		refcount_warn_saturate(r, REFCOUNT_SUB_UAF);
  
- 	spin_lock_irq(&xhci->lock);
- 	xhci->xhc_state |= XHCI_STATE_HALTED;
+ 	return false;
+ }
+@@ -291,12 +296,8 @@ static inline __must_check bool refcount_dec_and_test(refcount_t *r)
+  */
+ static inline void refcount_dec(refcount_t *r)
+ {
+-	int old = atomic_fetch_sub_release(1, &r->refs);
+-
+-	if (unlikely(old <= 1)) {
+-		refcount_set(r, REFCOUNT_SATURATED);
+-		WARN_ONCE(1, "refcount_t: decrement hit 0; leaking memory.\n");
+-	}
++	if (unlikely(atomic_fetch_sub_release(1, &r->refs) <= 1))
++		refcount_warn_saturate(r, REFCOUNT_DEC_LEAK);
+ }
+ #else /* CONFIG_REFCOUNT_FULL */
+ 
+diff --git a/lib/refcount.c b/lib/refcount.c
+index 3a534fbebdcc..8b7e249c0e10 100644
+--- a/lib/refcount.c
++++ b/lib/refcount.c
+@@ -8,6 +8,34 @@
+ #include <linux/spinlock.h>
+ #include <linux/bug.h>
+ 
++#define REFCOUNT_WARN(str)	WARN_ONCE(1, "refcount_t: " str ".\n")
++
++void refcount_warn_saturate(refcount_t *r, enum refcount_saturation_type t)
++{
++	refcount_set(r, REFCOUNT_SATURATED);
++
++	switch (t) {
++	case REFCOUNT_ADD_NOT_ZERO_OVF:
++		REFCOUNT_WARN("saturated; leaking memory");
++		break;
++	case REFCOUNT_ADD_OVF:
++		REFCOUNT_WARN("saturated; leaking memory");
++		break;
++	case REFCOUNT_ADD_UAF:
++		REFCOUNT_WARN("addition on 0; use-after-free");
++		break;
++	case REFCOUNT_SUB_UAF:
++		REFCOUNT_WARN("underflow; use-after-free");
++		break;
++	case REFCOUNT_DEC_LEAK:
++		REFCOUNT_WARN("decrement hit 0; leaking memory");
++		break;
++	default:
++		REFCOUNT_WARN("unknown saturation event!?");
++	}
++}
++EXPORT_SYMBOL(refcount_warn_saturate);
++
+ /**
+  * refcount_dec_if_one - decrement a refcount if it is 1
+  * @r: the refcount
 -- 
 2.35.1
 

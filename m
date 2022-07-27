@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58167582636
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466C558263C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbiG0MRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S232526AbiG0MRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiG0MRM (ORCPT
+        with ESMTP id S232827AbiG0MRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:17:12 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0249048CAE;
-        Wed, 27 Jul 2022 05:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1658924217;
-        bh=9rqtGCgPNwdvoouvIw62KMlkkvKBwy/u6kWoAY6g0O0=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=CpAd7/nNjCYpPQ3dRdph51VA/t/6Tp/oNiwPv7zJLOMZ1G/xaSlQpYPGIu7c6szOC
-         FwVOx3INeB48gkPeJJBNnl8NsTK29dphgxBQjdFF4P2t9BCwt+vuPZiX7yNbr4HSDj
-         mSW30vfDwkbLIbjGPN0iZ9n7taZC7ag/5y0kWoUc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.69] ([46.223.2.199]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mwwdl-1nWyIc2hgJ-00yP70; Wed, 27
- Jul 2022 14:16:57 +0200
-Message-ID: <744ad6e1-c4ad-1e6d-f94d-98aa5b105dc6@gmx.de>
-Date:   Wed, 27 Jul 2022 14:16:56 +0200
+        Wed, 27 Jul 2022 08:17:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDCF14AD51
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658924237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4rTHmFps6imtrmSGc8bdiFcqdRJQxILQMWRRFRNlZ68=;
+        b=KuixpPNWOHqiK7BSiaMgrOKSInQUKlXE/c4zordjG+PmUWUqjuk/FUAbXU3zNXxHYFsgu8
+        tjzkCmmNVZsWtvQQWjzRhc1BfsvCjP365VsqlZRom80pevoa3lfB2pKnnD59IT1jTTwZ7C
+        gqtKz6tuctaODSKgv0FFVwdO2vT/OUI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-MB6UoQnMOR2jD_XogMBxKg-1; Wed, 27 Jul 2022 08:17:16 -0400
+X-MC-Unique: MB6UoQnMOR2jD_XogMBxKg-1
+Received: by mail-wm1-f71.google.com with SMTP id n19-20020a05600c3b9300b003a314062cf4so1828654wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:17:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4rTHmFps6imtrmSGc8bdiFcqdRJQxILQMWRRFRNlZ68=;
+        b=6garPBJLf49GX2PJr8cctfX9Bm7r+SwjArOnFE8ZRa99GXBAFlHZxRKalaNgHaHrQk
+         s6w8XqwFBmEMpXHNh+GkOfKvUdKcdfWUvLWYK/nGCIHSRPuhoHQ/88NLl1rA6Mp1Nlxj
+         EzsTmzSQxt5qHqqzrRdLNX7nCaeKhHWQhj8aX6nK6bpOK3dor85z88OxG3Qjdfv2up2Q
+         Cdr0goznpDYsl9XqBgU6OU6SjxMFDPlqnDqRUOSJsr04Yg2RaEDO3Vcai8SC9+5ktEA/
+         k/I3MMNz/v/+THAGnBZyVCAZjzZ9th4GDtBEg+lZwNdBu4oHZzUWov2bMgqbTD2C4tfi
+         d+Ng==
+X-Gm-Message-State: AJIora9fvcg7pufaC6Kt95xA1D9LjFDT1T/ISaQZY1MbNx0W9+33ilrU
+        m4OYLFt1IWtzqpCZd60YAKbegWoJxGsu6SCba6fReQ/+VNB8aawEaQMJsCKi8jP7pcVtUHqT9yG
+        jfd7BPinmX03ZcdyN/yVKOlqu
+X-Received: by 2002:a5d:5252:0:b0:21e:6e28:a6da with SMTP id k18-20020a5d5252000000b0021e6e28a6damr12304199wrc.100.1658924235600;
+        Wed, 27 Jul 2022 05:17:15 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tD1wktJsEPz3BQ+vGkdusMkfMqeHo1K0hAUvaOWDoC8PIzZXcZgm9U3hnUKpQkGShIiKos+Q==
+X-Received: by 2002:a5d:5252:0:b0:21e:6e28:a6da with SMTP id k18-20020a5d5252000000b0021e6e28a6damr12304167wrc.100.1658924235252;
+        Wed, 27 Jul 2022 05:17:15 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id u9-20020adff889000000b0020fcaba73bcsm16713440wrp.104.2022.07.27.05.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 05:17:14 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 14:17:09 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v2 1/9] vsock: use sk_rcvlowat to set
+ POLLIN/POLLRDNORM
+Message-ID: <20220727121709.z26dspwegqeiv55x@sgarzare-redhat>
+References: <19e25833-5f5c-f9b9-ac0f-1945ea17638d@sberdevices.ru>
+ <aafc654d-5b42-aa18-bf74-f5277d549f73@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
- locality
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
- <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
- <Yr4x6KRSvzlXNdH2@kernel.org> <f0e33bc4-335c-322a-9295-18d6bc0b8286@gmx.de>
- <YsuQEoVuVa00gIdE@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <YsuQEoVuVa00gIdE@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jND3pvPI9LaMSApRKzpArZ1WkIA2tYqrkQQzBAWPOqyc6mhROIJ
- V8kG8gI3oILX3iVoqyd/mggYvchX2C2Q+N9BC0HGpnaXSGmIy+dhFD3jQ9L4CZiIy8vGSjW
- 5s/H0mfHssN2780MbgCGDIbHA1URkMkoCKQ/89nnFpqOL31zgWAjh+r/9S/MRai97VWKMeo
- UVsn0FH12XRNtaeMR8H7w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0JjASvmbeto=:3aKtAxXgzy/WFm0/zR6UY8
- ohjwB+bhBYtMAOuXKdLAqusnRNvqinYLYNNaxxVMz7iGEwlH/U3SG76YAsGKqWTb1DRQWq1UU
- uVkE/+i1JxaFN680Y4BMuG/KPmEfLQoDgu8HvnKqNqwWHQACPcCanmz+hKVuCslp4hvTqwR3A
- sPNxiHNwewjOYY85bogzsEun5mnuUuNV9zILHExsQOZvYBmffX/C9lwsdii7bKZMA063jVsJo
- /n3O+XEBbszCji+X0faPsU/n0u5sCsG2srhKBs3F9dPnHRtfQ213S2KdzbeRLIBuBclPSYewX
- VbbRN/PLs7Ly4LrwxfHpRV7q65tGncyHaTj87yhu9URZL0Sm974iQTHR+qTx4mXoeLW7/1PIe
- 2rMdbgC8T9e5IdCRJmgrshTkv+8vvbKM6hd3ngHRc2NZHhRAxHA0WmFmD2k9X8Dwe5qDtHWUP
- 6CQ2KJXocdSXgQE7SUziwI4sEUOTewXB0EbHv3bgdqbNxMoYJp2u3d7wck3XzmPZ0Lyg+3E2b
- ZnqWzJGJVmNayWUpWn1lNEEbScO5KocMcO37XGNKNFy7GMmJf5obQSMxNPSzMFAfOtOv+Gx/u
- FTjiJynd14yxsFR6BMmHuQ0xQollRNTI/JSuwNrTSwGYvGmRRjvHZ9llXjRJKl9HYchRNNkd3
- yGdzg58y2vP5ieHiYZRo16b3x6B4YwWc2OSRUppnO7+Qb7BXRIHnj6hP3yyyN/sU+Nd5ie1K1
- qsUVE4MkALOXYz0J+sK0uJyQg9S/TY8zcQjFt1sKo9aV2eLGolNmDSDEW2+vJStkhuQGrRskI
- BOFUT760QqHXNhgqp1O+QDpp+ppq0v2+4GSjuVWEnBCO+qe4spq1f4izgws0yPp7OyEKT3dtf
- +RpJEpr1oUH/Q2qs12gmMLWebTmO/79gGi0fqRmo0r1cc1LccMNWNN6NbiDvO56Kr8moK3+OH
- giCt68liUEDhLV8O6IASbFsxYmU9wtyOtYadBNnnxzCun9loAsZJu9S8Sz1bdY25a0Qy38dJA
- mzkpo9/2som4D5nF65r9wP6IMQDUsaywLuqdEGgJStcaRXNEA9pZ5lLCQAIIyANEKHrOPIs3Z
- nDoZmkJzfgBejzlwfWot8IJD2RWO3b5HwDt8y+SDVSp3nNks1F8cQKaYw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <aafc654d-5b42-aa18-bf74-f5277d549f73@sberdevices.ru>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11.07.22 04:50, Jarkko Sakkinen wrote:
-> On Mon, Jul 04, 2022 at 07:45:12PM +0200, Lino Sanfilippo wrote:
->>
->>
->> On 01.07.22 01:29, Jarkko Sakkinen wrote:
->>
->>>
->>> I'm kind of thinking that should tpm_tis_data have a lock for its
->>> contents?
->>
->> Most of the tpm_tis_data structure elements are set once during init an=
-d
->> then never changed but only read. So no need for locking for these. The
->> exceptions I see are
->>
->> - flags
->> - locality_count
->> - locality
->
-> I'd still go for single data struct lock, since this lock would
-> be taken in every transmit flow. It makes the whole thing easier
-> to maintain over time, and does not really affect scalability.
+On Mon, Jul 25, 2022 at 07:56:59AM +0000, Arseniy Krasnov wrote:
+>Both bits indicate, that next data read call won't be blocked, but when
+>sk_rcvlowat is not 1, these bits will be set by poll anyway, thus when
+>user tries to dequeue data,it will wait until sk_rcvlowat bytes of data
+>will be available.
 >
 
-This means switching to a complete new locking scheme which affects many
-parts of the TIS core code. It is also not directly related to what this p=
-atch series
-is about, namely activating the interrupts for TPM TIS.
+The patch LGTM, but I suggest you to rewrite the title and commit of the 
+message to better explain what this patch does (pass sock_rcvlowat to 
+notify_poll_in as target) and then explain why as you already did (to 
+set POLLIN/POLLRDNORM only when target is reached).
 
-I suggest to first finish polishing this series especially since there hav=
-e
-only been minor issues in the last versions. Once the interrupts work we
-still can think of implementing another lock handling in a follow up serie=
-s.
+Thanks,
+Stefano
 
-
-> This brings me to another question: what does this lock protect
-> against given that tpm_try_get_ops() already takes tpm_mutex?
-> It's not clear and that should be somehow reasoned in the commit
-> message.
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> net/vmw_vsock/af_vsock.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> Anyway, *if* a lock is needed the granularity should be the whole
-> struct.
->
-> BR, Jarkko
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index f04abf662ec6..63a13fa2686a 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1066,8 +1066,9 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+> 		if (transport && transport->stream_is_active(vsk) &&
+> 		    !(sk->sk_shutdown & RCV_SHUTDOWN)) {
+> 			bool data_ready_now = false;
+>+			int target = sock_rcvlowat(sk, 0, INT_MAX);
+> 			int ret = transport->notify_poll_in(
+>-					vsk, 1, &data_ready_now);
+>+					vsk, target, &data_ready_now);
+> 			if (ret < 0) {
+> 				mask |= EPOLLERR;
+> 			} else {
+>-- 
+>2.25.1
 
-Regards,
-Lino

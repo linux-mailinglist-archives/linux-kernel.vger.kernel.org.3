@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9390C582D68
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCC4582F41
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240927AbiG0Q5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S242028AbiG0RX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240816AbiG0Q5L (ORCPT
+        with ESMTP id S238415AbiG0RWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:57:11 -0400
+        Wed, 27 Jul 2022 13:22:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D5A664C5;
-        Wed, 27 Jul 2022 09:36:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2337C6A9F6;
+        Wed, 27 Jul 2022 09:45:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69FC161AA5;
-        Wed, 27 Jul 2022 16:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A5D4C433D7;
-        Wed, 27 Jul 2022 16:36:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C9D060D38;
+        Wed, 27 Jul 2022 16:45:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 784BFC433D6;
+        Wed, 27 Jul 2022 16:45:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939782;
-        bh=Fu+RQZP2lBIVjrGU4m9Qhg1VGiP+0En1tD5IuKWsy6g=;
+        s=korg; t=1658940327;
+        bh=SNZo9zZvoKvtkMCRfTolSwauE3cA8JC25YoaHnMIbc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wrlzgVN+GYIiK1skDqumeWFzoe8zjDrSBoDCM288epegzoknLRFw2aCIZpTs/epS4
-         xOkczbEx5pO5Y/5pLnZWklE9ZeCyJV8u7bzTm21dbJRPunN9cpClgID4s3BymFlu5S
-         f1HAwA4rfEbFU/xigIY1nUdmrlbTksSs7QLNywUc=
+        b=KwiNkWRKLwqhIvLGrhSMJqU5KPCBy9zDdDqYgg3DUCSZPaK8hYznzQg/W5gcrYr0i
+         wOMxwjjCAALylJi6RqgiRwIbZ1A7IoTJouCnkVZeSaZ6WrBpeYrZOF6Mv13/ISTrgU
+         1qOT5F0werVvAjwsXN7Gz1hVNiKVS0jujpgiha7s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sedat Dilek <sedat.dilek@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 103/105] watch-queue: remove spurious double semicolon
-Date:   Wed, 27 Jul 2022 18:11:29 +0200
-Message-Id: <20220727161016.245059455@linuxfoundation.org>
+        stable@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.15 186/201] x86/alternative: Report missing return thunk details
+Date:   Wed, 27 Jul 2022 18:11:30 +0200
+Message-Id: <20220727161035.480770452@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,36 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Kees Cook <keescook@chromium.org>
 
-commit 44e29e64cf1ac0cffb152e0532227ea6d002aa28 upstream.
+commit 65cdf0d623bedf0e069bb64ed52e8bb20105e2ba upstream.
 
-Sedat Dilek noticed that I had an extraneous semicolon at the end of a
-line in the previous patch.
+Debugging missing return thunks is easier if we can see where they're
+happening.
 
-It's harmless, but unintentional, and while compilers just treat it as
-an extra empty statement, for all I know some other tooling might warn
-about it. So clean it up before other people notice too ;)
-
-Fixes: 353f7988dd84 ("watchqueue: make sure to serialize 'wqueue->defunct' properly")
-Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/lkml/Ys66hwtFcGbYmoiZ@hirez.programming.kicks-ass.net/
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/watch_queue.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kernel/alternative.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -227,7 +227,7 @@ void __post_watch_notification(struct wa
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -554,7 +554,9 @@ void __init_or_module noinline apply_ret
+ 			dest = addr + insn.length + insn.immediate.value;
  
- 		if (lock_wqueue(wqueue)) {
- 			post_one_notification(wqueue, n);
--			unlock_wqueue(wqueue);;
-+			unlock_wqueue(wqueue);
- 		}
- 	}
+ 		if (__static_call_fixup(addr, op, dest) ||
+-		    WARN_ON_ONCE(dest != &__x86_return_thunk))
++		    WARN_ONCE(dest != &__x86_return_thunk,
++			      "missing return thunk: %pS-%pS: %*ph",
++			      addr, dest, 5, addr))
+ 			continue;
  
+ 		DPRINTK("return thunk at: %pS (%px) len: %d to: %pS",
 
 

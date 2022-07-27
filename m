@@ -2,519 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84A758288D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD6358288F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233749AbiG0O0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
+        id S233778AbiG0O0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiG0O0N (ORCPT
+        with ESMTP id S233565AbiG0O0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:26:13 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFD72AE26;
-        Wed, 27 Jul 2022 07:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658931971; x=1690467971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yRtRA2L5KXrA6ay/GCNvTsGR00ioBhNP9ppGrfmcupo=;
-  b=GBKQsb1TxYPwgVfbgWc01UsUuDujTqiV25A7cbF9WVDe0GaAixIpIaUt
-   O1v7Bnpuh2oGUzrJmGd9mwSebECDFqLsebS/rl2wAZxQYWcPCYCnhSTT2
-   4wdmj9s6FSgjFfay9Eesi9AQTiH00M2N6Mx8u0wZKcKZtnStUkqipzFny
-   SI7b3nuan9aoVxa0NkDXwstT3AOAYD5Jr6ZQ3mATDj+JL2HxUDfNhHZ4S
-   WJfNDoVhNt6AAy03EUGHHsLStTpKAbsB5bAGh6YdN48jLvEN3HIEuja4T
-   DFshycyztstkbCDE9bjJUb1amKNNzCQYU7wyK7qchvLlidMeg/L+eKsDA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="268627966"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="268627966"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:26:09 -0700
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="659218275"
-Received: from cene1-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.44.151])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:26:01 -0700
-Date:   Wed, 27 Jul 2022 16:25:59 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>,
-        Christian =?iso-8859-15?Q?K=F6nig?= <christian.koenig@amd.com>,
-        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-        Thomas =?iso-8859-15?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Ashutosh Dixit <ashutosh.dixit@intel.com>,
-        Ayaz A Siddiqui <ayaz.siddiqui@intel.com>,
-        Casey Bowman <casey.g.bowman@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Michael Cheng <michael.cheng@intel.com>,
-        Nirmoy Das <nirmoy.das@linux.intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, stable@vger.kernel.org,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Fei Yang <fei.yang@intel.com>
-Subject: Re: [PATCH v3 5/6] drm/i915/gt: Batch TLB invalidations
-Message-ID: <YuFK9x00rTQsVymf@alfio.lan>
-References: <cover.1658924372.git.mchehab@kernel.org>
- <4e97ef5deb6739cadaaf40aa45620547e9c4ec06.1658924372.git.mchehab@kernel.org>
+        Wed, 27 Jul 2022 10:26:44 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2054.outbound.protection.outlook.com [40.107.94.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BD92BB3E;
+        Wed, 27 Jul 2022 07:26:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PVkIV5s+3S9Ea0Urhym49a+Z7vFVdBfxa2G5Vy6IapW+tXcgxOmvVJdKX07r3J21Uxe88NaLjaVlzDYJCMh1fmFQounXm2gIfJUoIdlcLj4Nf5b/r9u8WMhYpFjoTJwy6jGzHuWRk/zEc/OY3ylpeC1pHuVWFJIpYmwW5B9uOWsboA+bVC43P+V0zVQy1FdxV5mfGFq51VFBiZMD3uDjlzbpLfnh80DmLHgSfOz1qdxWzCVymuSF/1aMjhQ4Fa2fsJ9g9jq3lIxQ5m8EbNSKnlDkXKBCvaSjCuMopKGAofQxWxs1nyqJtDZRP2kJkx+yiV0PmevAkoCWlJJGOek5cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t4F/LlD/JxutDEty4/El9J284e61PGpdKkuG2b6dWt0=;
+ b=ZEMv0ZUASmsi5Z0G+o9UGc+O+a5J/f84oGdFI6nOKzUZ6KTtghBXZZqdMMTTrE9x7C6EJ5s5H+L9F8OpWFQLfy52stzjHprv12+XRxOkCA38Jc8vddelk6WjuCPa9HbkZuSjxo1MLiYMGT523KcMDr6WwrBrIMgvgACWPdPxLm2KN45rIn3OdArRBO/tRwNsVv+FHRakPCNIlIYli1rWmAhA8zf+lPuGL3nLRmA8bNZ3//pkVlRjh7Hm5lNZovnx3sxLgDL4ZpZVM4KKFcFOGwCY276khk9uTL1mJv9XslRhzE5ttU7uZEG4km6+cgNEwSAC06WiMVdO24xPqtxa0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=renesas.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t4F/LlD/JxutDEty4/El9J284e61PGpdKkuG2b6dWt0=;
+ b=aXL/QeEelmga9o0sxFNT/RbFcstBgUhVyonJY7eHYN1O4ZTKYlxxvAQlShd17+YqHSkE13x40sdU2mtQips9tWPeHVnqqtbhWYI9Q5RJCPOTZepCaOq1jcC5Tqr1S7+BGDW59g0QQuUnG4QsSla5mZHTrxqiRnHu/U+oVLQB8tPfWHwx4n3o6Vg0gT3lVlnnL+/iTaWc7HaUeua3Q7SIgMz3RheD4M43tGmfRQo8z7LWjkqLidAMUThbRZv69zWt3dPB18XIjmfl2AMtdtRgQfN4d9cspe905h8S0Vx7XJY5oNygs9ghTZYoxyexnDYPCQIsT1FnlYnDwRR72BIRoA==
+Received: from MW4PR03CA0042.namprd03.prod.outlook.com (2603:10b6:303:8e::17)
+ by MN2PR12MB3661.namprd12.prod.outlook.com (2603:10b6:208:169::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Wed, 27 Jul
+ 2022 14:26:39 +0000
+Received: from CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8e:cafe::4c) by MW4PR03CA0042.outlook.office365.com
+ (2603:10b6:303:8e::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.10 via Frontend
+ Transport; Wed, 27 Jul 2022 14:26:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.238) by
+ CO1NAM11FT046.mail.protection.outlook.com (10.13.174.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5482.10 via Frontend Transport; Wed, 27 Jul 2022 14:26:39 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ DRHQMAIL105.nvidia.com (10.27.9.14) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Wed, 27 Jul 2022 14:26:38 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.26; Wed, 27 Jul 2022 07:26:38 -0700
+Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.26 via Frontend
+ Transport; Wed, 27 Jul 2022 07:26:35 -0700
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <kuninori.morimoto.gx@renesas.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH 0/2] DT binding for sample format conversion
+Date:   Wed, 27 Jul 2022 19:56:21 +0530
+Message-ID: <1658931983-31647-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e97ef5deb6739cadaaf40aa45620547e9c4ec06.1658924372.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e7f0f674-bfac-4c88-948d-08da6fdc04d8
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3661:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eI3K/awxtusKo46hV0/n3lEH1HhH4YdGEYEa6PqelFTXpp44V7ZUM2rmUev2w3k5tKSnjCn1jFjbmg+gZWFYupVAlQChVKG1YG4Gp45O3OTBxOM/i3hHjOk1EZ2irIqq9KsGjmy0rdU/lXM8YPvMYsApFpl74u3pLQUd1jAdlzHHI0hlCE3b4sKN8GOkhrr4aNqLnTSpaBVk8TVGv4SjzeS9Nr72cuWvv6jz4MT5Yp00vtTvhQwNVZCwnTsVSOu1LWcfRxNAQLXfVyfZKr82bef+2kR3Ijt9jgPrOlwheaXQfgs9nE7yNui5xnjibjo9Gj7l7+an+DK3OBpc3KgO6Er6kI1S6fJ4hPS7Ktyo2bIYk5+16qTFHUrAQFZYdBqDduFWqfsQEicrmiLm6RYunEm6hZmge7f3mvaFq7KYgsIaqOhkm29NVxjbhKH/JOVVmnWzmFPHm+JjVxh9Vbo7xSBwRQrnRPK9Zq9pQeEN6kLb8icUmgNB/o7MrHy0YMndqc099BPxNBBfWpyzzIonE9I3oxG0YA63q/fTLNBDuR450QY+nJIfLYdRHp479DGSs76dF9fQqdGjW0kQXoUwX5cHH1f72C/iOYI1r//DpuMpcJzv+Wr/yV5RnMnHTafgZ0lmrzunE1eFiTrKSyEksNVXror3WORqh0d8PnQA/BdFUMQqOVCIX7bcwSAtaHLQ6Kc7qqDSCFohPi7AesfFyPxw4NH8KKFO/RgloxfabNpCKEVGpXITB1k1UeMNigssRVEHNTpRkFJwrMmbz54tX4AE26l9pLROewTfRDyVDunvmOTrFNWTP5Do3Q8/BUz9xkfSn/BTRHomtdlZMPaCaA==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(39860400002)(396003)(346002)(46966006)(40470700004)(36840700001)(5660300002)(47076005)(478600001)(86362001)(186003)(2616005)(4744005)(40460700003)(426003)(40480700001)(8936002)(36860700001)(54906003)(7416002)(36756003)(110136005)(107886003)(336012)(81166007)(82740400003)(70206006)(26005)(356005)(70586007)(316002)(2906002)(41300700001)(7696005)(4326008)(6666004)(82310400005)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2022 14:26:39.0043
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7f0f674-bfac-4c88-948d-08da6fdc04d8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3661
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+DT binding properties are available to fixup rate and channel
+parameters of a DAI. This series extends this to sample format
+conversion as well. With this now DAI PCM parameters (channels,
+sample rate and sample format) can be fixed up as necessary
+in an audio path.
 
-I think there are still some unanswered questions from Tvrtko on
-this patch, am I right?
+Sameer Pujar (2):
+  ASoC: dt-bindings: Add sample format conversion
+  ASoC: simple-card-utils: Fixup DAI sample format
 
-Andi
+ .../devicetree/bindings/sound/audio-graph-port.yaml | 21 +++++++++++++++++++++
+ .../devicetree/bindings/sound/audio-graph.yaml      | 11 +++++++++++
+ .../devicetree/bindings/sound/simple-card.yaml      | 15 +++++++++++++++
+ include/sound/simple_card_utils.h                   |  1 +
+ sound/soc/generic/simple-card-utils.c               | 12 ++++++++++++
+ 5 files changed, 60 insertions(+)
 
-On Wed, Jul 27, 2022 at 02:29:55PM +0200, Mauro Carvalho Chehab wrote:
-> From: Chris Wilson <chris.p.wilson@intel.com>
-> 
-> Invalidate TLB in batches, in order to reduce performance regressions.
-> 
-> Currently, every caller performs a full barrier around a TLB
-> invalidation, ignoring all other invalidations that may have already
-> removed their PTEs from the cache. As this is a synchronous operation
-> and can be quite slow, we cause multiple threads to contend on the TLB
-> invalidate mutex blocking userspace.
-> 
-> We only need to invalidate the TLB once after replacing our PTE to
-> ensure that there is no possible continued access to the physical
-> address before releasing our pages. By tracking a seqno for each full
-> TLB invalidate we can quickly determine if one has been performed since
-> rewriting the PTE, and only if necessary trigger one for ourselves.
-> 
-> That helps to reduce the performance regression introduced by TLB
-> invalidate logic.
-> 
-> [mchehab: rebased to not require moving the code to a separate file]
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
-> Suggested-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-> Cc: Fei Yang <fei.yang@intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v3 0/6] at: https://lore.kernel.org/all/cover.1658924372.git.mchehab@kernel.org/
-> 
->  .../gpu/drm/i915/gem/i915_gem_object_types.h  |  3 +-
->  drivers/gpu/drm/i915/gem/i915_gem_pages.c     | 21 +++++---
->  drivers/gpu/drm/i915/gt/intel_gt.c            | 53 ++++++++++++++-----
->  drivers/gpu/drm/i915/gt/intel_gt.h            | 12 ++++-
->  drivers/gpu/drm/i915/gt/intel_gt_types.h      | 18 ++++++-
->  drivers/gpu/drm/i915/gt/intel_ppgtt.c         |  8 ++-
->  drivers/gpu/drm/i915/i915_vma.c               | 33 +++++++++---
->  drivers/gpu/drm/i915/i915_vma.h               |  1 +
->  drivers/gpu/drm/i915/i915_vma_resource.c      |  5 +-
->  drivers/gpu/drm/i915/i915_vma_resource.h      |  6 ++-
->  10 files changed, 125 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
-> index 5cf36a130061..9f6b14ec189a 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
-> @@ -335,7 +335,6 @@ struct drm_i915_gem_object {
->  #define I915_BO_READONLY          BIT(7)
->  #define I915_TILING_QUIRK_BIT     8 /* unknown swizzling; do not release! */
->  #define I915_BO_PROTECTED         BIT(9)
-> -#define I915_BO_WAS_BOUND_BIT     10
->  	/**
->  	 * @mem_flags - Mutable placement-related flags
->  	 *
-> @@ -616,6 +615,8 @@ struct drm_i915_gem_object {
->  		 * pages were last acquired.
->  		 */
->  		bool dirty:1;
-> +
-> +		u32 tlb;
->  	} mm;
->  
->  	struct {
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> index 6835279943df..8357dbdcab5c 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> @@ -191,6 +191,18 @@ static void unmap_object(struct drm_i915_gem_object *obj, void *ptr)
->  		vunmap(ptr);
->  }
->  
-> +static void flush_tlb_invalidate(struct drm_i915_gem_object *obj)
-> +{
-> +	struct drm_i915_private *i915 = to_i915(obj->base.dev);
-> +	struct intel_gt *gt = to_gt(i915);
-> +
-> +	if (!obj->mm.tlb)
-> +		return;
-> +
-> +	intel_gt_invalidate_tlb(gt, obj->mm.tlb);
-> +	obj->mm.tlb = 0;
-> +}
-> +
->  struct sg_table *
->  __i915_gem_object_unset_pages(struct drm_i915_gem_object *obj)
->  {
-> @@ -216,14 +228,7 @@ __i915_gem_object_unset_pages(struct drm_i915_gem_object *obj)
->  	__i915_gem_object_reset_page_iter(obj);
->  	obj->mm.page_sizes.phys = obj->mm.page_sizes.sg = 0;
->  
-> -	if (test_and_clear_bit(I915_BO_WAS_BOUND_BIT, &obj->flags)) {
-> -		struct drm_i915_private *i915 = to_i915(obj->base.dev);
-> -		struct intel_gt *gt = to_gt(i915);
-> -		intel_wakeref_t wakeref;
-> -
-> -		with_intel_gt_pm_if_awake(gt, wakeref)
-> -			intel_gt_invalidate_tlbs(gt);
-> -	}
-> +	flush_tlb_invalidate(obj);
->  
->  	return pages;
->  }
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-> index 5c55a90672f4..f435e06125aa 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> @@ -38,8 +38,6 @@ static void __intel_gt_init_early(struct intel_gt *gt)
->  {
->  	spin_lock_init(&gt->irq_lock);
->  
-> -	mutex_init(&gt->tlb_invalidate_lock);
-> -
->  	INIT_LIST_HEAD(&gt->closed_vma);
->  	spin_lock_init(&gt->closed_lock);
->  
-> @@ -50,6 +48,8 @@ static void __intel_gt_init_early(struct intel_gt *gt)
->  	intel_gt_init_reset(gt);
->  	intel_gt_init_requests(gt);
->  	intel_gt_init_timelines(gt);
-> +	mutex_init(&gt->tlb.invalidate_lock);
-> +	seqcount_mutex_init(&gt->tlb.seqno, &gt->tlb.invalidate_lock);
->  	intel_gt_pm_init_early(gt);
->  
->  	intel_uc_init_early(&gt->uc);
-> @@ -770,6 +770,7 @@ void intel_gt_driver_late_release_all(struct drm_i915_private *i915)
->  		intel_gt_fini_requests(gt);
->  		intel_gt_fini_reset(gt);
->  		intel_gt_fini_timelines(gt);
-> +		mutex_destroy(&gt->tlb.invalidate_lock);
->  		intel_engines_free(gt);
->  	}
->  }
-> @@ -908,7 +909,7 @@ get_reg_and_bit(const struct intel_engine_cs *engine, const bool gen8,
->  	return rb;
->  }
->  
-> -void intel_gt_invalidate_tlbs(struct intel_gt *gt)
-> +static void mmio_invalidate_full(struct intel_gt *gt)
->  {
->  	static const i915_reg_t gen8_regs[] = {
->  		[RENDER_CLASS]			= GEN8_RTCR,
-> @@ -931,12 +932,6 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->  	const i915_reg_t *regs;
->  	unsigned int num = 0;
->  
-> -	if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
-> -		return;
-> -
-> -	if (intel_gt_is_wedged(gt))
-> -		return;
-> -
->  	if (GRAPHICS_VER(i915) == 12) {
->  		regs = gen12_regs;
->  		num = ARRAY_SIZE(gen12_regs);
-> @@ -951,9 +946,6 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->  			  "Platform does not implement TLB invalidation!"))
->  		return;
->  
-> -	GEM_TRACE("\n");
-> -
-> -	mutex_lock(&gt->tlb_invalidate_lock);
->  	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
->  
->  	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
-> @@ -973,6 +965,8 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->  		awake |= engine->mask;
->  	}
->  
-> +	GT_TRACE(gt, "invalidated engines %08x\n", awake);
-> +
->  	/* Wa_2207587034:tgl,dg1,rkl,adl-s,adl-p */
->  	if (awake &&
->  	    (IS_TIGERLAKE(i915) ||
-> @@ -1012,5 +1006,38 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->  	 * transitions.
->  	 */
->  	intel_uncore_forcewake_put_delayed(uncore, FORCEWAKE_ALL);
-> -	mutex_unlock(&gt->tlb_invalidate_lock);
-> +}
-> +
-> +static bool tlb_seqno_passed(const struct intel_gt *gt, u32 seqno)
-> +{
-> +	u32 cur = intel_gt_tlb_seqno(gt);
-> +
-> +	/* Only skip if a *full* TLB invalidate barrier has passed */
-> +	return (s32)(cur - ALIGN(seqno, 2)) > 0;
-> +}
-> +
-> +void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno)
-> +{
-> +	intel_wakeref_t wakeref;
-> +
-> +	if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
-> +		return;
-> +
-> +	if (intel_gt_is_wedged(gt))
-> +		return;
-> +
-> +	if (tlb_seqno_passed(gt, seqno))
-> +		return;
-> +
-> +	with_intel_gt_pm_if_awake(gt, wakeref) {
-> +		mutex_lock(&gt->tlb.invalidate_lock);
-> +		if (tlb_seqno_passed(gt, seqno))
-> +			goto unlock;
-> +
-> +		mmio_invalidate_full(gt);
-> +
-> +		write_seqcount_invalidate(&gt->tlb.seqno);
-> +unlock:
-> +		mutex_unlock(&gt->tlb.invalidate_lock);
-> +	}
->  }
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.h b/drivers/gpu/drm/i915/gt/intel_gt.h
-> index 82d6f248d876..40b06adf509a 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.h
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.h
-> @@ -101,6 +101,16 @@ void intel_gt_info_print(const struct intel_gt_info *info,
->  
->  void intel_gt_watchdog_work(struct work_struct *work);
->  
-> -void intel_gt_invalidate_tlbs(struct intel_gt *gt);
-> +static inline u32 intel_gt_tlb_seqno(const struct intel_gt *gt)
-> +{
-> +	return seqprop_sequence(&gt->tlb.seqno);
-> +}
-> +
-> +static inline u32 intel_gt_next_invalidate_tlb_full(const struct intel_gt *gt)
-> +{
-> +	return intel_gt_tlb_seqno(gt) | 1;
-> +}
-> +
-> +void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno);
->  
->  #endif /* __INTEL_GT_H__ */
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_types.h b/drivers/gpu/drm/i915/gt/intel_gt_types.h
-> index df708802889d..3804a583382b 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt_types.h
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt_types.h
-> @@ -11,6 +11,7 @@
->  #include <linux/llist.h>
->  #include <linux/mutex.h>
->  #include <linux/notifier.h>
-> +#include <linux/seqlock.h>
->  #include <linux/spinlock.h>
->  #include <linux/types.h>
->  #include <linux/workqueue.h>
-> @@ -83,7 +84,22 @@ struct intel_gt {
->  	struct intel_uc uc;
->  	struct intel_gsc gsc;
->  
-> -	struct mutex tlb_invalidate_lock;
-> +	struct {
-> +		/* Serialize global tlb invalidations */
-> +		struct mutex invalidate_lock;
-> +
-> +		/*
-> +		 * Batch TLB invalidations
-> +		 *
-> +		 * After unbinding the PTE, we need to ensure the TLB
-> +		 * are invalidated prior to releasing the physical pages.
-> +		 * But we only need one such invalidation for all unbinds,
-> +		 * so we track how many TLB invalidations have been
-> +		 * performed since unbind the PTE and only emit an extra
-> +		 * invalidate if no full barrier has been passed.
-> +		 */
-> +		seqcount_mutex_t seqno;
-> +	} tlb;
->  
->  	struct i915_wa_list wa_list;
->  
-> diff --git a/drivers/gpu/drm/i915/gt/intel_ppgtt.c b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
-> index d8b94d638559..2da6c82a8bd2 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_ppgtt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
-> @@ -206,8 +206,12 @@ void ppgtt_bind_vma(struct i915_address_space *vm,
->  void ppgtt_unbind_vma(struct i915_address_space *vm,
->  		      struct i915_vma_resource *vma_res)
->  {
-> -	if (vma_res->allocated)
-> -		vm->clear_range(vm, vma_res->start, vma_res->vma_size);
-> +	if (!vma_res->allocated)
-> +		return;
-> +
-> +	vm->clear_range(vm, vma_res->start, vma_res->vma_size);
-> +	if (vma_res->tlb)
-> +		vma_invalidate_tlb(vm, *vma_res->tlb);
->  }
->  
->  static unsigned long pd_count(u64 size, int shift)
-> diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
-> index ef3b04c7e153..84a9ccbc5fc5 100644
-> --- a/drivers/gpu/drm/i915/i915_vma.c
-> +++ b/drivers/gpu/drm/i915/i915_vma.c
-> @@ -538,8 +538,6 @@ int i915_vma_bind(struct i915_vma *vma,
->  				   bind_flags);
->  	}
->  
-> -	set_bit(I915_BO_WAS_BOUND_BIT, &vma->obj->flags);
-> -
->  	atomic_or(bind_flags, &vma->flags);
->  	return 0;
->  }
-> @@ -1310,6 +1308,19 @@ I915_SELFTEST_EXPORT int i915_vma_get_pages(struct i915_vma *vma)
->  	return err;
->  }
->  
-> +void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb)
-> +{
-> +	/*
-> +	 * Before we release the pages that were bound by this vma, we
-> +	 * must invalidate all the TLBs that may still have a reference
-> +	 * back to our physical address. It only needs to be done once,
-> +	 * so after updating the PTE to point away from the pages, record
-> +	 * the most recent TLB invalidation seqno, and if we have not yet
-> +	 * flushed the TLBs upon release, perform a full invalidation.
-> +	 */
-> +	WRITE_ONCE(tlb, intel_gt_next_invalidate_tlb_full(vm->gt));
-> +}
-> +
->  static void __vma_put_pages(struct i915_vma *vma, unsigned int count)
->  {
->  	/* We allocate under vma_get_pages, so beware the shrinker */
-> @@ -1941,7 +1952,12 @@ struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async)
->  		vma->vm->skip_pte_rewrite;
->  	trace_i915_vma_unbind(vma);
->  
-> -	unbind_fence = i915_vma_resource_unbind(vma_res);
-> +	if (async)
-> +		unbind_fence = i915_vma_resource_unbind(vma_res,
-> +							&vma->obj->mm.tlb);
-> +	else
-> +		unbind_fence = i915_vma_resource_unbind(vma_res, NULL);
-> +
->  	vma->resource = NULL;
->  
->  	atomic_and(~(I915_VMA_BIND_MASK | I915_VMA_ERROR | I915_VMA_GGTT_WRITE),
-> @@ -1949,10 +1965,13 @@ struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async)
->  
->  	i915_vma_detach(vma);
->  
-> -	if (!async && unbind_fence) {
-> -		dma_fence_wait(unbind_fence, false);
-> -		dma_fence_put(unbind_fence);
-> -		unbind_fence = NULL;
-> +	if (!async) {
-> +		if (unbind_fence) {
-> +			dma_fence_wait(unbind_fence, false);
-> +			dma_fence_put(unbind_fence);
-> +			unbind_fence = NULL;
-> +		}
-> +		vma_invalidate_tlb(vma->vm, vma->obj->mm.tlb);
->  	}
->  
->  	/*
-> diff --git a/drivers/gpu/drm/i915/i915_vma.h b/drivers/gpu/drm/i915/i915_vma.h
-> index 88ca0bd9c900..5048eed536da 100644
-> --- a/drivers/gpu/drm/i915/i915_vma.h
-> +++ b/drivers/gpu/drm/i915/i915_vma.h
-> @@ -213,6 +213,7 @@ bool i915_vma_misplaced(const struct i915_vma *vma,
->  			u64 size, u64 alignment, u64 flags);
->  void __i915_vma_set_map_and_fenceable(struct i915_vma *vma);
->  void i915_vma_revoke_mmap(struct i915_vma *vma);
-> +void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb);
->  struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async);
->  int __i915_vma_unbind(struct i915_vma *vma);
->  int __must_check i915_vma_unbind(struct i915_vma *vma);
-> diff --git a/drivers/gpu/drm/i915/i915_vma_resource.c b/drivers/gpu/drm/i915/i915_vma_resource.c
-> index 27c55027387a..5a67995ea5fe 100644
-> --- a/drivers/gpu/drm/i915/i915_vma_resource.c
-> +++ b/drivers/gpu/drm/i915/i915_vma_resource.c
-> @@ -223,10 +223,13 @@ i915_vma_resource_fence_notify(struct i915_sw_fence *fence,
->   * Return: A refcounted pointer to a dma-fence that signals when unbinding is
->   * complete.
->   */
-> -struct dma_fence *i915_vma_resource_unbind(struct i915_vma_resource *vma_res)
-> +struct dma_fence *i915_vma_resource_unbind(struct i915_vma_resource *vma_res,
-> +					   u32 *tlb)
->  {
->  	struct i915_address_space *vm = vma_res->vm;
->  
-> +	vma_res->tlb = tlb;
-> +
->  	/* Reference for the sw fence */
->  	i915_vma_resource_get(vma_res);
->  
-> diff --git a/drivers/gpu/drm/i915/i915_vma_resource.h b/drivers/gpu/drm/i915/i915_vma_resource.h
-> index 5d8427caa2ba..06923d1816e7 100644
-> --- a/drivers/gpu/drm/i915/i915_vma_resource.h
-> +++ b/drivers/gpu/drm/i915/i915_vma_resource.h
-> @@ -67,6 +67,7 @@ struct i915_page_sizes {
->   * taken when the unbind is scheduled.
->   * @skip_pte_rewrite: During ggtt suspend and vm takedown pte rewriting
->   * needs to be skipped for unbind.
-> + * @tlb: pointer for obj->mm.tlb, if async unbind. Otherwise, NULL
->   *
->   * The lifetime of a struct i915_vma_resource is from a binding request to
->   * the actual possible asynchronous unbind has completed.
-> @@ -119,6 +120,8 @@ struct i915_vma_resource {
->  	bool immediate_unbind:1;
->  	bool needs_wakeref:1;
->  	bool skip_pte_rewrite:1;
-> +
-> +	u32 *tlb;
->  };
->  
->  bool i915_vma_resource_hold(struct i915_vma_resource *vma_res,
-> @@ -131,7 +134,8 @@ struct i915_vma_resource *i915_vma_resource_alloc(void);
->  
->  void i915_vma_resource_free(struct i915_vma_resource *vma_res);
->  
-> -struct dma_fence *i915_vma_resource_unbind(struct i915_vma_resource *vma_res);
-> +struct dma_fence *i915_vma_resource_unbind(struct i915_vma_resource *vma_res,
-> +					   u32 *tlb);
->  
->  void __i915_vma_resource_init(struct i915_vma_resource *vma_res);
->  
-> -- 
-> 2.36.1
+-- 
+2.7.4
+

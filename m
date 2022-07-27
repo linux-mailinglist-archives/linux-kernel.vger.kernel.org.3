@@ -2,55 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598D95822E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4C65822E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiG0JOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
+        id S229972AbiG0JOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbiG0JN7 (ORCPT
+        with ESMTP id S232012AbiG0JOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:13:59 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F78474E2;
-        Wed, 27 Jul 2022 02:11:18 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lt7K923Syz9sv0;
-        Wed, 27 Jul 2022 17:10:05 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Jul 2022 17:11:15 +0800
-Subject: Re: [PATCH net v2] ipv6/addrconf: fix a null-ptr-deref bug for
- ip6_ptr
-To:     David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>
-CC:     David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220726115028.3055296-1-william.xuanziyang@huawei.com>
- <CANn89iJNHhq9zbmL2DF-up_hBRHuwkPiNUpMS+LHoumy5ohQZA@mail.gmail.com>
- <48fd2345-ef86-da0d-c471-c576aa93d9f5@kernel.org>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <b63eeb55-df38-618a-d7af-91b18f1d6f0f@huawei.com>
-Date:   Wed, 27 Jul 2022 17:11:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Wed, 27 Jul 2022 05:14:12 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAD4FC2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:13:27 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id v5so10144125wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yGOC0yzOwk2ivyOmjUhHiy+4brmp+dp+tJmS/rscJ4A=;
+        b=NOjV7VNiYCi1rRKx6ZgsktE8t50WNfR5DF/rY/r0hHfl9xwf/fVyO7N2/i0fCGv1Co
+         Z5b4SASyQsTgQNpoP0+PouhRN7AUA+beX7KgfvelkwOY88afmOGn1XEwt3LRkJpdShLC
+         44gMQYPRTScnXD9p1YP1eS71+vCvcEELoShlAqMaWfG6025BlAX4VN4hSxoeRJ+VHK5G
+         SK+dpR0rGsCSIjg56z5f9U1pt2kgpMA0EcrllmVNjoXyFriPpYUUDQzGg25ESVnw2NvL
+         LiJEMiYD++9X9a8LxUXz/VH/Xhoty1tq1jWDp1xoibS81TxCmM9WD/LY7vxRVZ3jv+9/
+         vlJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yGOC0yzOwk2ivyOmjUhHiy+4brmp+dp+tJmS/rscJ4A=;
+        b=ThDhfQcAsxR9ZGYm4MickAdK+nWb4vpyL9ynG5zSPKoBD/8ZxRP8b/nWjdKrSX4izk
+         LxAaMsIPedHv6rfCso5bQrXkBi9emHgHoSVe+t1Bt49csHJ7wfjLDVHe24A2n4JYAGAO
+         zjU7ByiQLtSb+qkU0KV5QSXtgKR4yELlwK6MLUFdJ+UNPyGcp7lKWdU8BVa0VDx8amUB
+         EdEdYQMfGLNJ2qZno/Si77VP29dWoP+LZIHBqcE8vIRDY5sVTMkHebSniCZpGTD+HQJH
+         2+RKyKEaI/arw4DHxaGCZN33Ey0GAHNcxRZxa1nCtLuEr6w+XzYCOBEuWKyttElCGyKl
+         Sl/g==
+X-Gm-Message-State: AJIora//DEcNUWXmGoZ0UxNGTnuH6QGTFE3mghXLoAxzPj5RABcunj4f
+        J7KlPB/XrS9qeFAdA0EmWruAHzSB3cwncQ==
+X-Google-Smtp-Source: AGRyM1vFTaSMiSRGpOF33y4BBk8NEA0MsIE4LCK0TVhGQ9rRWaXcxOExPpnTCiNQgHBroF/wf4Glfw==
+X-Received: by 2002:a05:600c:b5a:b0:3a3:186f:a564 with SMTP id k26-20020a05600c0b5a00b003a3186fa564mr2342980wmr.71.1658913206348;
+        Wed, 27 Jul 2022 02:13:26 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::22ef? ([2620:10d:c093:600::1:754a])
+        by smtp.gmail.com with ESMTPSA id l21-20020a05600c1d1500b003a326b84340sm1642856wms.44.2022.07.27.02.13.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 02:13:25 -0700 (PDT)
+Message-ID: <06afa5b9-95d9-a58b-3b03-5a43faa582cf@gmail.com>
+Date:   Wed, 27 Jul 2022 10:12:20 +0100
 MIME-Version: 1.0
-In-Reply-To: <48fd2345-ef86-da0d-c471-c576aa93d9f5@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [axboe-block:for-5.20/io_uring-zerocopy-send 23/23]
+ io_uring/notif.c:52:23: error: implicit declaration of function
+ 'io_alloc_req_refill'; did you mean 'io_rsrc_refs_refill'?
 Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+References: <202207271204.TWHjABcr-lkp@intel.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <202207271204.TWHjABcr-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,125 +76,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 7/26/22 6:13 AM, Eric Dumazet wrote:
->> On Tue, Jul 26, 2022 at 1:50 PM Ziyang Xuan
->> <william.xuanziyang@huawei.com> wrote:
->>>
->>> Change net device's MTU to smaller than IPV6_MIN_MTU or unregister
->>> device while matching route. That may trigger null-ptr-deref bug
->>> for ip6_ptr probability as following.
->>>
->>> =========================================================
->>> BUG: KASAN: null-ptr-deref in find_match.part.0+0x70/0x134
->>> Read of size 4 at addr 0000000000000308 by task ping6/263
->>>
->>> CPU: 2 PID: 263 Comm: ping6 Not tainted 5.19.0-rc7+ #14
->>> Call trace:
->>>  dump_backtrace+0x1a8/0x230
->>>  show_stack+0x20/0x70
->>>  dump_stack_lvl+0x68/0x84
->>>  print_report+0xc4/0x120
->>>  kasan_report+0x84/0x120
->>>  __asan_load4+0x94/0xd0
->>>  find_match.part.0+0x70/0x134
->>>  __find_rr_leaf+0x408/0x470
->>>  fib6_table_lookup+0x264/0x540
->>>  ip6_pol_route+0xf4/0x260
->>>  ip6_pol_route_output+0x58/0x70
->>>  fib6_rule_lookup+0x1a8/0x330
->>>  ip6_route_output_flags_noref+0xd8/0x1a0
->>>  ip6_route_output_flags+0x58/0x160
->>>  ip6_dst_lookup_tail+0x5b4/0x85c
->>>  ip6_dst_lookup_flow+0x98/0x120
->>>  rawv6_sendmsg+0x49c/0xc70
->>>  inet_sendmsg+0x68/0x94
->>>
->>> Reproducer as following:
->>> Firstly, prepare conditions:
->>> $ip netns add ns1
->>> $ip netns add ns2
->>> $ip link add veth1 type veth peer name veth2
->>> $ip link set veth1 netns ns1
->>> $ip link set veth2 netns ns2
->>> $ip netns exec ns1 ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1
->>> $ip netns exec ns2 ip -6 addr add 2001:0db8:0:f101::2/64 dev veth2
->>> $ip netns exec ns1 ifconfig veth1 up
->>> $ip netns exec ns2 ifconfig veth2 up
->>> $ip netns exec ns1 ip -6 route add 2000::/64 dev veth1 metric 1
->>> $ip netns exec ns2 ip -6 route add 2001::/64 dev veth2 metric 1
->>>
->>> Secondly, execute the following two commands in two ssh windows
->>> respectively:
->>> $ip netns exec ns1 sh
->>> $while true; do ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1; ip -6 route add 2000::/64 dev veth1 metric 1; ping6 2000::2; done
->>>
->>> $ip netns exec ns1 sh
->>> $while true; do ip link set veth1 mtu 1000; ip link set veth1 mtu 1500; sleep 5; done
->>>
->>> It is because ip6_ptr has been assigned to NULL in addrconf_ifdown() firstly,
->>> then ip6_ignore_linkdown() accesses ip6_ptr directly without NULL check.
->>>
->>>         cpu0                    cpu1
->>> fib6_table_lookup
->>> __find_rr_leaf
->>>                         addrconf_notify [ NETDEV_CHANGEMTU ]
->>>                         addrconf_ifdown
->>>                         RCU_INIT_POINTER(dev->ip6_ptr, NULL)
->>> find_match
->>> ip6_ignore_linkdown
->>>
->>> So we can add NULL check for ip6_ptr before using in ip6_ignore_linkdown() to
->>> fix the null-ptr-deref bug.
->>>
->>> Fixes: 6d3d07b45c86 ("ipv6: Refactor fib6_ignore_linkdown")
->>
->> If we need to backport, I guess dcd1f572954f ("net/ipv6: Remove fib6_idev")
->> already had the bug.
+On 7/27/22 05:31, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-5.20/io_uring-zerocopy-send
+> head:   fbe6f6bc3210e853aab74f20da776c15c5b052fe
+> commit: fbe6f6bc3210e853aab74f20da776c15c5b052fe [23/23] io_uring/zc: notification completion optimisation
+> config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220727/202207271204.TWHjABcr-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> reproduce (this is a W=1 build):
+>          # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=fbe6f6bc3210e853aab74f20da776c15c5b052fe
+>          git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+>          git fetch --no-tags axboe-block for-5.20/io_uring-zerocopy-send
+>          git checkout fbe6f6bc3210e853aab74f20da776c15c5b052fe
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 > 
-> Yes, that is the right Fixes commit.
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 
-OK
+Looks like I forgot to send a patch it depends on, thanks!
 
-> 
->>
->>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->>>
->>> ---
->>> v2:
->>>   - Use NULL check in ip6_ignore_linkdown() but synchronize_net() in
->>>     addrconf_ifdown()
->>>   - Add timing analysis of the problem
->>>
->>> ---
->>>  include/net/addrconf.h | 3 +++
->>>  1 file changed, 3 insertions(+)
->>>
->>> diff --git a/include/net/addrconf.h b/include/net/addrconf.h
->>> index f7506f08e505..c04f359655b8 100644
->>> --- a/include/net/addrconf.h
->>> +++ b/include/net/addrconf.h
->>> @@ -405,6 +405,9 @@ static inline bool ip6_ignore_linkdown(const struct net_device *dev)
->>>  {
->>>         const struct inet6_dev *idev = __in6_dev_get(dev);
->>>
->>> +       if (unlikely(!idev))
->>> +               return true;
->>> +
-> 
-> Reviewed-by: David Ahern <dsahern@kernel.org>
-> 
->>
->> Note that we might read a non NULL pointer here, but read it again
->> later in rt6_score_route(),
->> since another thread could switch the pointer under us ?
->>
 
-Yes, this patch just cover the problem I'm having.
-I have checked the codes in kernel, there are some scenarios using __in6_dev_get()
-without NULL check and rtnl_lock. There is a possibility of null-ptr-deref bug.
-I will give a patch to fix them later.
+> All error/warnings (new ones prefixed by >>):
+> 
+>     In file included from include/linux/export.h:33,
+>                      from include/linux/linkage.h:7,
+>                      from include/linux/kernel.h:17,
+>                      from io_uring/notif.c:1:
+>     io_uring/notif.c: In function 'io_alloc_notif':
+>>> io_uring/notif.c:52:23: error: implicit declaration of function 'io_alloc_req_refill'; did you mean 'io_rsrc_refs_refill'? [-Werror=implicit-function-declaration]
+>        52 |         if (unlikely(!io_alloc_req_refill(ctx)))
+>           |                       ^~~~~~~~~~~~~~~~~~~
+>     include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+>        78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>           |                                             ^
+>>> io_uring/notif.c:54:17: error: implicit declaration of function 'io_alloc_req'; did you mean 'xa_alloc_irq'? [-Werror=implicit-function-declaration]
+>        54 |         notif = io_alloc_req(ctx);
+>           |                 ^~~~~~~~~~~~
+>           |                 xa_alloc_irq
+>>> io_uring/notif.c:54:15: warning: assignment to 'struct io_kiocb *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>        54 |         notif = io_alloc_req(ctx);
+>           |               ^
+>     cc1: some warnings being treated as errors
+> 
+> 
+> vim +52 io_uring/notif.c
+> 
+>     > 1	#include <linux/kernel.h>
+>       2	#include <linux/errno.h>
+>       3	#include <linux/file.h>
+>       4	#include <linux/slab.h>
+>       5	#include <linux/net.h>
+>       6	#include <linux/io_uring.h>
+>       7	
+>       8	#include "io_uring.h"
+>       9	#include "notif.h"
+>      10	#include "rsrc.h"
+>      11	
+>      12	static void __io_notif_complete_tw(struct io_kiocb *notif, bool *locked)
+>      13	{
+>      14		struct io_notif_data *nd = io_notif_to_data(notif);
+>      15		struct io_ring_ctx *ctx = notif->ctx;
+>      16	
+>      17		if (nd->account_pages && ctx->user) {
+>      18			__io_unaccount_mem(ctx->user, nd->account_pages);
+>      19			nd->account_pages = 0;
+>      20		}
+>      21		io_req_task_complete(notif, locked);
+>      22	}
+>      23	
+>      24	static inline void io_notif_complete(struct io_kiocb *notif)
+>      25		__must_hold(&notif->ctx->uring_lock)
+>      26	{
+>      27		bool locked = true;
+>      28	
+>      29		__io_notif_complete_tw(notif, &locked);
+>      30	}
+>      31	
+>      32	static void io_uring_tx_zerocopy_callback(struct sk_buff *skb,
+>      33						  struct ubuf_info *uarg,
+>      34						  bool success)
+>      35	{
+>      36		struct io_notif_data *nd = container_of(uarg, struct io_notif_data, uarg);
+>      37		struct io_kiocb *notif = cmd_to_io_kiocb(nd);
+>      38	
+>      39		if (refcount_dec_and_test(&uarg->refcnt)) {
+>      40			notif->io_task_work.func = __io_notif_complete_tw;
+>      41			io_req_task_work_add(notif);
+>      42		}
+>      43	}
+>      44	
+>      45	struct io_kiocb *io_alloc_notif(struct io_ring_ctx *ctx,
+>      46					struct io_notif_slot *slot)
+>      47		__must_hold(&ctx->uring_lock)
+>      48	{
+>      49		struct io_kiocb *notif;
+>      50		struct io_notif_data *nd;
+>      51	
+>    > 52		if (unlikely(!io_alloc_req_refill(ctx)))
+>      53			return NULL;
+>    > 54		notif = io_alloc_req(ctx);
+>      55		notif->opcode = IORING_OP_NOP;
+>      56		notif->flags = 0;
+>      57		notif->file = NULL;
+>      58		notif->task = current;
+>      59		io_get_task_refs(1);
+>      60		notif->rsrc_node = NULL;
+>      61		io_req_set_rsrc_node(notif, ctx, 0);
+>      62		notif->cqe.user_data = slot->tag;
+>      63		notif->cqe.flags = slot->seq++;
+>      64		notif->cqe.res = 0;
+>      65	
+>      66		nd = io_notif_to_data(notif);
+>      67		nd->account_pages = 0;
+>      68		nd->uarg.flags = SKBFL_ZEROCOPY_FRAG | SKBFL_DONT_ORPHAN;
+>      69		nd->uarg.callback = io_uring_tx_zerocopy_callback;
+>      70		/* master ref owned by io_notif_slot, will be dropped on flush */
+>      71		refcount_set(&nd->uarg.refcnt, 1);
+>      72		return notif;
+>      73	}
+>      74	
+> 
 
-> 
-> for silly MTU games yes, that could happen.
-> .
-> 
+-- 
+Pavel Begunkov

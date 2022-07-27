@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DB2582739
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E9858273C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbiG0NAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
+        id S233509AbiG0NAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiG0M76 (ORCPT
+        with ESMTP id S233505AbiG0NAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:59:58 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B373E77D;
-        Wed, 27 Jul 2022 05:59:57 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10d6ddda695so22529176fac.0;
-        Wed, 27 Jul 2022 05:59:57 -0700 (PDT)
+        Wed, 27 Jul 2022 09:00:32 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A334AB7FB
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:00:30 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id b11so8276264qvo.11
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=a0DmGg0JIp0Zp/9VQLWAQ9V8gjmWQSxY/8mrp7VzZkM=;
-        b=IQHEMwAjhAxVeHBbnNF3nYUeyUyT6A2fnyIgul8BPhU+7xy51w48ROG4kARGrIgTQM
-         q/ODaginwZqJ1QJUjgEU4SusrF8AGmcwwngRA5cnHOcZkqJERmN5D2Xr4z+09P9OBHMC
-         2RwgLpO82Pux3p5WyHV17XaWl6s5NzYoTai2S4Kd2ZlxR8hcSrLPcfLSD8UQmRVs8HRi
-         FQdIvww+oOkb9bG7kkmGEw+WWFrxTu1Arn6q4cOTyXa7gRxhL/0fHBEdSab1jkP+GfpU
-         AKBrfT2owP3rwI88UOMZvzLNo0xDehOvmwJg8DYlv3IKQt81vvHifDT3hrfzDKX2Rjey
-         sPzA==
+        bh=n6b1aqsIK88pylFiOISBY0ELZL9Xn38SDDWKXVWVdB4=;
+        b=mxeEHVKroQaEoNkoAbosEAI+dwFaB8qB8NsFaQPj5VYhC75/7PYl6GD/R0zO3TyA1o
+         nBoj0AqdsPWFpokMFX7xH1L99L/Wt5B3Vhap0k0fS0Wvpxa4tOtPicKtinbNQMNuutQ/
+         YMVBISTb6VDgAqg17inYCaUofGhW7ywH/m9nNmo/oAm55BIbDT+vkFKe9oij5crJdKPZ
+         yc3QzeBkdujnDYXXN2sg9rxjjeXVghNgNJffb03vGdBSiCc8kfoJzJNXPTdAQPi0o/oD
+         LJgEWF4gM6XX9sS8R+p8R9tweLfFEPPDS3fyv1LmunM9vr+l6K6rj3qoJCRwHUS/nD0V
+         wf7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=a0DmGg0JIp0Zp/9VQLWAQ9V8gjmWQSxY/8mrp7VzZkM=;
-        b=mKTyzC2bIO81fN6GdjuKd/kOah54VIPX6RW4cseLUf0CTb8LsmfOu54rS9+ptBogJz
-         Mnr72bcdKcDm+HktLp4KoBKDZh5KD92AvplPMVsxoV+y6O7Ym4yiz74RiJ5URyjDHTRB
-         CgIaJ86EHdNVDS1bxZp9jRb57hzoGoDREya1sgt9+w2nEC2iyDnXsIfSPU+MMWCDvAFj
-         LmupPWVhNTOoW5g1BYjz3P1bVYbWI5LrbTlP9EvdsIputg/VoZHlLV6MeVJWBUC07oiZ
-         WQVDY3vH90cFmFB2dJo7BI6k2uT36MKfmD1X2PTg3AZ0Ha7yBXsg1jEVCqrf643QXwyq
-         z63Q==
-X-Gm-Message-State: AJIora+LHw3FJWTl6I/J/rxBpnlGZaSjhNHHdFnnzd2Yxw9fOVlVqtkY
-        jtMeUb52bpVvtUvjdhmfKNA=
-X-Google-Smtp-Source: AGRyM1tTYbID95XUFJav5r2BCxzQxtIadm9c4gsLJNmxBqfsbH/NF7jO/w6nsmErwCv9Dw/I0pK9LQ==
-X-Received: by 2002:a05:6870:b52c:b0:10e:4488:6cf2 with SMTP id v44-20020a056870b52c00b0010e44886cf2mr2041525oap.58.1658926795817;
-        Wed, 27 Jul 2022 05:59:55 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c10-20020a056830314a00b0061c564a83ebsm7442676ots.19.2022.07.27.05.59.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=n6b1aqsIK88pylFiOISBY0ELZL9Xn38SDDWKXVWVdB4=;
+        b=rOPYVrJc4cy1haiQ65RQWTdCzfOs+f/O2nsMzadfPFPvZCVsBIi3zX3YrEFxSO43Ur
+         WoUWn7yW5VU3jb2HoC26ADLtxfaXNv+AlcvYirf9Lb7XwtLUBM+3gMZBIfV/93z8bqfG
+         kuJVdPfNSYz+Q2w1RDLTIopBsPNppwXv46iV0QWY5SI5tosEMkg6VxCWZ5NPI+7KqYAF
+         TEqVqwX69JKkDQvoBFECp1IpXDv8oNhUHx0WBr3W5B2s82pb4Y4eFP/mqtxEGKmZnmcU
+         vXOQf9SMRVVOZp7CY3V8t5gkXvB0p6ZImLNQzwc3AoYTVVdnlcD/NOnBOWOJCy6oD6+S
+         WSmA==
+X-Gm-Message-State: AJIora/tPutQ5gQodl2YCL0yBOZ0vgzHqkuKYXtga/n5sSRRcLphWX+C
+        b8P1WWobsc6j2pm4wXfbVOixGA==
+X-Google-Smtp-Source: AGRyM1tQlxdrNIeWa4eutKhbk2YT1/mYsEXphAU0xZQV+RpGi7NGdgSIVDLz7QE85q7UyjWbQXje1w==
+X-Received: by 2002:a05:6214:f0b:b0:474:11dd:177d with SMTP id gw11-20020a0562140f0b00b0047411dd177dmr18192068qvb.111.1658926829378;
+        Wed, 27 Jul 2022 06:00:29 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:994f])
+        by smtp.gmail.com with ESMTPSA id l25-20020a37f919000000b006b61b2cb1d2sm1985419qkj.46.2022.07.27.06.00.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 05:59:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 27 Jul 2022 05:59:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Improve documentation
-Message-ID: <20220727125952.GA734857@roeck-us.net>
-References: <20220727083004.5684-1-W_Armin@gmx.de>
+        Wed, 27 Jul 2022 06:00:28 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 09:00:27 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
+        rdunlap@infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        cgroups@vger.kernel.org
+Subject: Re: [PATCH 9/9] sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
+Message-ID: <YuE26+jMjnE4GZZ2@cmpxchg.org>
+References: <20220721040439.2651-1-zhouchengming@bytedance.com>
+ <20220721040439.2651-10-zhouchengming@bytedance.com>
+ <Yt7gOhbqYzIKyhfv@cmpxchg.org>
+ <5f91e194-439a-12c0-4987-5dea0e68a60a@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220727083004.5684-1-W_Armin@gmx.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5f91e194-439a-12c0-4987-5dea0e68a60a@bytedance.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 10:30:04AM +0200, Armin Wolf wrote:
-> Notify users of this driver that each pwmX
-> attribute controls fan number X, meaning that
-> probing of pwm channels is unnecessary.
+On Wed, Jul 27, 2022 at 07:28:37PM +0800, Chengming Zhou wrote:
+> On 2022/7/26 02:26, Johannes Weiner wrote:
+> > I think we can remove the NR_CPU task count, which frees up one
+> > u32. Something like the below diff should work (untested!)
 > 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Hi, I tested ok, would you mind if I put this patch in this series?
+> 
+> Subject: [PATCH] sched/psi: remove NR_ONCPU task accounting
+> 
+> We put all fields updated by the scheduler in the first cacheline of
+> struct psi_group_cpu for performance.
+> 
+> Since we want add another PSI_IRQ_FULL to track IRQ/SOFTIRQ pressure,
+> we need to reclaim space first. This patch remove NR_ONCPU task accounting
+> in struct psi_group_cpu, use TSK_ONCPU in state_mask to track instead.
 
-Applied.
+Thanks for testing it, that sounds good.
 
-Thanks,
-Guenter
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> Reviewed-by: Chengming Zhou <zhouchengming@bytedance.com>
+> Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-> ---
->  Documentation/hwmon/dell-smm-hwmon.rst | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> --
-> 2.30.2
-> 
-> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
-> index e5d85e40972c..d8f1d6859b96 100644
-> --- a/Documentation/hwmon/dell-smm-hwmon.rst
-> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
-> @@ -46,6 +46,9 @@ temp[1-10]_input                RO      Temperature reading in milli-degrees
->  temp[1-10]_label                RO      Temperature sensor label.
->  =============================== ======= =======================================
-> 
-> +Due to the nature of the SMM interface, each pwmX attribute controls
-> +fan number X.
-> +
->  Disabling automatic BIOS fan control
->  ------------------------------------
+Since you're handling the patch, you need to add your own
+Signed-off-by: as well. And keep From: Johannes (git commit --author).
+
+Thanks!

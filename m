@@ -2,107 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA03C582A00
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24ACF582A03
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbiG0PwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
+        id S234322AbiG0Pwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232850AbiG0PwJ (ORCPT
+        with ESMTP id S232850AbiG0Pwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:52:09 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349DB1CFDA
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:52:08 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z25so27799463lfr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:52:08 -0700 (PDT)
+        Wed, 27 Jul 2022 11:52:32 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A7349B7C;
+        Wed, 27 Jul 2022 08:52:31 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id i13so12828466edj.11;
+        Wed, 27 Jul 2022 08:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r+ha7lhBflc460y5THF4+LjZQv3BBhWbPvt660ntV4w=;
-        b=HajfvI/6l0BHtjFFyVInnth5cHgPWWwo3Mq9rUoDiz9X1M/3YvaIv8wMF0NqAPYv9E
-         yOmjV8QRRUcNgLO8UwrGvft4G7GcyUjP6Y691j2KWfT+LavcKebJoLy+TDiYJwXxwuV2
-         XZEN1g2vG1DUCxl1719eQXToHXh9X1q4wpIJ/uXF7iY8xN7ypE2dzJuC3oZmUE7S6z+f
-         /HAikeciCEZQhnAXP4SVD/PLZ3YOWZBynQvpD0RK4WU0D96zwQv9TJWvuhVrDzi7OuWI
-         Lp9lQTpV56DyqMdnfU7FaIYfnujISyLgVwnUlX3lP4n2+M9drfHz7+r+awyLXEIei0OL
-         wojw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sCiIbne8ijwxYERRgWmKwN6VqmxC0psTKJdz1VQXbvI=;
+        b=CPyK0OvuJ25Cp/X56lhMJFw/HcqGnRwWjTnIEipGqnnhjaMCyRed/L43d82BCzlDOy
+         PP0dL0w6z0N6064je/4MjYzHVvrzOaZOpMAbOBSEaT5/LkZpKg05Z4wmcIrBU0N5XqZc
+         OvaqNnS+O/THezH2K3YV3+pdd6vNJ8RKo4W+nta/N/khWX3C/vEsQwrGkXmnSol1/8Qj
+         qeZa6hyP/zvcsnc/DSKgYe7Xd0cjIaP3rVnsnIM7K1xBahOGIb2mZvKvaszEgJI/OTT0
+         AEvZ23vcC/narjoLqyNJqQT3nLwpMs/mlbVhzW2D01rxQHZiljyUKNN7tELenJoWjGEN
+         pKjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=r+ha7lhBflc460y5THF4+LjZQv3BBhWbPvt660ntV4w=;
-        b=QFi1KA4P+u82OqiuDoaoG/XprryUJAzfB+XJqQUSD0q48akwX8uWdKM8vqTJuS+LSO
-         lJlRIGAQ3PjqQK1tM448AtiVbFypupATbaCNoJR9sAPeBxFPJoLdToWO8j6rIMJD7fo5
-         KLfM5MBKfKzX8KEkIYuK53R8UBFsHn4PX2s7lLZn5i3RJ+Sf8CHqvu14+KEqQeX0GYrK
-         hnxyKQg8L57AidSrLawWwBWXvNcNi2t55heJbpuVFfMzT0F9HYOPKXuG0iT3o7X9WWh0
-         DSguuNxkRoHHRIe1lGNN5fpw6DE9fbgLAI+MHF3Kjn/kdUEOgn1NCLMU0ugSlXtG7tsL
-         sMPQ==
-X-Gm-Message-State: AJIora9kopVN1zgyx/MRv08DiQcI59uY/zCF6DX8F4zbatzLmb5amXkw
-        MU5VT5B3x+BZn5QMcaUvvlBrkw==
-X-Google-Smtp-Source: AGRyM1uFlGo+mQfFG/MD+0PotT2fpEV4uoMRX06vRFxHGoiB6r1NRZaNOdvd2pgdj6mnncVtzb3Ktg==
-X-Received: by 2002:ac2:4f03:0:b0:481:5092:ec8f with SMTP id k3-20020ac24f03000000b004815092ec8fmr8817640lfr.35.1658937126228;
-        Wed, 27 Jul 2022 08:52:06 -0700 (PDT)
-Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id dt9-20020a0565122a8900b0048a835a60f6sm2392163lfb.251.2022.07.27.08.52.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 08:52:05 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: iio: adc: ti,am3359-adc: add ti,am654-adc
-Date:   Wed, 27 Jul 2022 17:52:03 +0200
-Message-Id: <20220727155203.320929-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=sCiIbne8ijwxYERRgWmKwN6VqmxC0psTKJdz1VQXbvI=;
+        b=eytcIG1bDzCt0n+43QHGiYKIovsfFMTh9AZHVOedsR1RFrT8f58iw70IX0kxu+O3v1
+         at/HjoJ5Qtxg9Q3HbWNJ3LEcRZjKE8MuuzcRLvV2+SE3CWcYgnO+flW17P706injSZTj
+         FGuUxwgWsMUFB7DRqmGqKZU6G8vJE/41KhD9IL2Y2pQhkjL+WhgEPCvNqPGq9WAC1hqe
+         ulBnrEjCkrDuTo0MGvqbPsHPSjg1Atg1pLtTZo2z773skWsylF1640fg5TpYfy2HjRGd
+         3W01rEvSxKoPcdBFHA6e4ksdz8EDSBxn/86wqvwH2tTH1Uq++8+KVE0b1Lv36ulPXBWg
+         0whQ==
+X-Gm-Message-State: AJIora8bsUk6aj4bLCQsYcU/msJ1KyQsjT5SUz189BxAlq/iqitOicZi
+        H5j0ZzZ+VySfuUkfnhnj5e0=
+X-Google-Smtp-Source: AGRyM1vO98nO6kDOdEHUpaoV1DgveBsqp+R6esVhO9kfIWL8XEmB3Qxg/xn0FPdBMHzrRB4QH5ScWQ==
+X-Received: by 2002:a05:6402:f12:b0:43c:a70d:ee6 with SMTP id i18-20020a0564020f1200b0043ca70d0ee6mr4771269eda.316.1658937149598;
+        Wed, 27 Jul 2022 08:52:29 -0700 (PDT)
+Received: from ?IPV6:2a04:241e:502:a09c:994d:5eac:a62d:7a76? ([2a04:241e:502:a09c:994d:5eac:a62d:7a76])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b0072fe6408526sm2914413ejo.9.2022.07.27.08.52.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 08:52:29 -0700 (PDT)
+Message-ID: <5b88eea6-1d84-8c16-36f4-358053e247f2@gmail.com>
+Date:   Wed, 27 Jul 2022 18:52:27 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/6] net/crypto: Introduce crypto_pool
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Dmitry Safonov <dima@arista.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20220726201600.1715505-1-dima@arista.com>
+ <YuCEN7LKcVLL0zBn@gondor.apana.org.au>
+From:   Leonard Crestez <cdleonard@gmail.com>
+In-Reply-To: <YuCEN7LKcVLL0zBn@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the ti,am654-adc compatible already used in DTS:
+On 7/27/22 03:17, Herbert Xu wrote:
+> On Tue, Jul 26, 2022 at 09:15:54PM +0100, Dmitry Safonov wrote:
+>> Add crypto_pool - an API for allocating per-CPU array of crypto requests
+>> on slow-path (in sleep'able context) and to use them on a fast-path,
+>> which is RX/TX for net/ users (or in any other bh-disabled users).
+>> The design is based on the current implementations of md5sig_pool.
+>>
+>> Previously, I've suggested to add such API on TCP-AO patch submission [1],
+>> where Herbert kindly suggested to help with introducing new crypto API.
+> 
+> What I was suggesting is modifying the actual ahash interface so
+> that the tfm can be shared between different key users by moving
+> the key into the request object.
 
-  arch/arm64/boot/dts/ti/k3-am642-evm.dtb: adc: compatible:0: 'ti,am654-adc' is not one of ['ti,am3359-adc', 'ti,am4372-adc']
+The fact that setkey is implemented at the crypto_ahash instead of the 
+ahash_request level is baked into all algorithm implementations 
+(including many hardware-specific ones). Changing this seems extremely 
+difficult.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/iio/adc/ti,am3359-adc.yaml    | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Supporting setkey at the tfm level could be achieved by making it an 
+optional capability on a per-algorithm basis, then something like 
+crypto_pool could detect this scenario and avoid allocating a per-cpu 
+tfm. This would also require a crypto_pool_setkey wrapper.
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/ti,am3359-adc.yaml b/Documentation/devicetree/bindings/iio/adc/ti,am3359-adc.yaml
-index d6f21d5cccd7..b32be24a9f98 100644
---- a/Documentation/devicetree/bindings/iio/adc/ti,am3359-adc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/ti,am3359-adc.yaml
-@@ -11,9 +11,14 @@ maintainers:
- 
- properties:
-   compatible:
--    enum:
--      - ti,am3359-adc
--      - ti,am4372-adc
-+    oneOf:
-+      - enum:
-+          - ti,am3359-adc
-+          - ti,am4372-adc
-+      - items:
-+          - enum:
-+              - ti,am654-adc
-+          - const: ti,am3359-adc
- 
-   '#io-channel-cells':
-     const: 1
--- 
-2.34.1
+As it stands right now multiple crypto-api users needs to duplicate 
+logic for allocating a percpu array of transforms so adding this "pool" 
+API is an useful step forward.
 
+As far as I remember the requirement for a per-cpu scratch buffer is 
+based on weird architectures having limitations on what kind of memory 
+can be passed to crypto api so this will have to remain.
+
+--
+Regards,
+Leonard

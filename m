@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E792F5831A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B214D58317D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243361AbiG0SLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S243306AbiG0SIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233400AbiG0SLP (ORCPT
+        with ESMTP id S232276AbiG0SIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:11:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E6CD365D;
-        Wed, 27 Jul 2022 10:13:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Jul 2022 14:08:31 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A5DCB74F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:11:55 -0700 (PDT)
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 046BCB821E3;
-        Wed, 27 Jul 2022 17:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A82C43141;
-        Wed, 27 Jul 2022 17:13:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658941987;
-        bh=CCZnCiGIC2XrY3X8NeTs1iYP+uKvFbdPaa4pIVTAjAw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CVfcEZzmXv9MWds2e88SvnXEj7PD2ix5vWQ1FEZlWbm6pip+STnRWqbWFNDzTk9bt
-         SuzRgdLIc0hFQsGuiguTmjHfP9LNfpMSzPKxWqeZ1WXMTy4bpLjSVlSWQlExPueIrG
-         ZXhKVoC6KmK/xQhLaiVHZ0AWXNYxKvUzNNyvJ0oL7+KZgRBemXiH9be6CqUPTI7jgc
-         VUMiZY32jpo8SA+bT4Fa+1Sl+a8MQwNAscaz5YFIghD07FWFwUeAOL2pJEp6nBtHJC
-         0YITe+fNt3NV+ClM7l28a3zQDwpOy8L5YG7zIdnojfBw/YuW4f8wVGRuGZ3RXsmLNv
-         htI6ADzqFVOGA==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: [PATCH V8 11/16] Documentation/rv: Add deterministic automata instrumentation documentation
-Date:   Wed, 27 Jul 2022 19:11:39 +0200
-Message-Id: <5db4b3a747988afc5052fd26343ac3ced2115d68.1658940828.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1658940828.git.bristot@kernel.org>
-References: <cover.1658940828.git.bristot@kernel.org>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8EB713F130
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 17:11:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1658941912;
+        bh=p8BxUinmu0In37tgfklk8SPEbUyiUeXieDC0F6YQ4cE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=oCIGhuE+BbtgzTjbzXY+o5mSVkNAXeBXBu16cmUG8GF/VYDhZJeXAH9lhtV13o08w
+         B6WXRFbTxNAyjFEunOqRx83DS3zet66aRFc2kYGwBEZzOlmo/+TC4mygD3XBtqWDJG
+         AN4oiC2fQ/hZCh5ta1DTZkpbaUyl8Oa410mruViOBvW48M3y9+EywQWJuxtBhUapmh
+         Zz8H1fWGSoVYIaP1Pr5oxXyUBsomojrJ4gyZbcC8JoK/7pEB37cJFIGJqtyZB4VqPl
+         ELiW9nBppKf/VkrSnTRN5RZKZP+oekH4qVB9h7LlFNKy9kM4hwg89e63VqDA5zW1aq
+         aAybR6puiyKmg==
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-10d6ce04410so9480195fac.23
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:11:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p8BxUinmu0In37tgfklk8SPEbUyiUeXieDC0F6YQ4cE=;
+        b=ZDCeacaovvnNh16tmjGQBZuB2XtRVOPIQ6QINoFU2SR+oqMyWN7jPL7Vq4J8S9UGkg
+         aukJOkcZxhfQwya2hc7YJRkoYLeo4otzBaV03AgAhmOrniHZ6dGo5AohSlnGOso4D+As
+         YUFd1usxqrswbctOsG6Gof7JNpAkD0wojMeQGjXX8U2Ssw1o9a0JyVjrzD8+IRiHGQvu
+         EUwHjytD2xygh6rPKEAU4mPGqzkXm1WYQQMgUmwoAj6/ocsAeTwZdM8RNUSUTaky5LbS
+         nzRYL7dzCcJk7H/50q6DCxOvMk+aqMHE5K+yqBt61hWKmenVyvXuG0DPk7koCSg39+Bp
+         Ttcg==
+X-Gm-Message-State: AJIora/xGdjxwwAEGTHqKigL7jx/X5LGBC4SQNeMZxUSGUcURmnToXKM
+        O5Alri1IpH8cNiL4wOk6zfNKAV547vgV8JAUYh01EcbwqTB/1nQAh76j8rIrCOup9er2xodE4lV
+        51orVj5dAbx9KkRG6ABkuVh1y9YijGdy9Gjuq15N2RMCdKArZArfLktAFng==
+X-Received: by 2002:a54:4789:0:b0:33a:5a42:71c with SMTP id o9-20020a544789000000b0033a5a42071cmr2428439oic.239.1658941911503;
+        Wed, 27 Jul 2022 10:11:51 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sjA2df/OeFt0huzK7VUHvD950PBKeHpumiDp/V7HBV47IAKGCR86pSSZrHEHOHOu4IOdk2k6op21RrZN9myhs=
+X-Received: by 2002:a54:4789:0:b0:33a:5a42:71c with SMTP id
+ o9-20020a544789000000b0033a5a42071cmr2428429oic.239.1658941911233; Wed, 27
+ Jul 2022 10:11:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220722022416.137548-1-mfo@canonical.com> <20220722022416.137548-4-mfo@canonical.com>
+ <CAK7LNARvJEhEOwg_PHe3WKT9BkSchnGOmeiUaB+7E__NS9qrVw@mail.gmail.com>
+In-Reply-To: <CAK7LNARvJEhEOwg_PHe3WKT9BkSchnGOmeiUaB+7E__NS9qrVw@mail.gmail.com>
+From:   Mauricio Faria de Oliveira <mfo@canonical.com>
+Date:   Wed, 27 Jul 2022 14:11:39 -0300
+Message-ID: <CAO9xwp2Ud-60Eb0cdpsBpq_ixOBaiOannxZ7SsbfHKrjj8mGDQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/6] sysctl, mod_devicetable: shadow struct
+ ctl_table.procname for file2alias
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,223 +83,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the da_monitor_instrumentation.rst. It describes the basics
-of RV monitor instrumentation.
+On Tue, Jul 26, 2022 at 6:27 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Fri, Jul 22, 2022 at 11:24 AM Mauricio Faria de Oliveira
+> <mfo@canonical.com> wrote:
+> >
+> > In order to expose a sysctl entry to modpost (file2alias.c, precisely)
+> > we have to shadow 'struct ctl_table' in mod_devicetable.h, as scripts
+> > should not access kernel headers or its types (see file2alias.c).
+> >
+> > The required field is '.procname' (basename of '/proc/sys/.../entry').
+> >
+> > Since 'struct ctl_table' is annotated for structure randomization and
+> > we need a known offset for '.procname' (remember, no kernel headers),
+> > take it out of the randomized portion (as in, eg, 'struct task_struct').
+> >
+> > Of course, add build-time checks for struct size and .procname offset
+> > between both structs. (This has to be done on kernel side; for headers.)
+> >
+> > With that in place, use the regular macros in devicetable-offsets.c to
+> > define SIZE_... and OFF_... macros for the shadow struct and the field
+> > of interest.
+> >
+> > Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
+> > ---
+> >  fs/proc/proc_sysctl.c             | 19 +++++++++++++++++++
+> >  include/linux/mod_devicetable.h   | 25 +++++++++++++++++++++++++
+> >  include/linux/sysctl.h            | 11 ++++++++++-
+> >  kernel/sysctl.c                   |  1 +
+> >  scripts/mod/devicetable-offsets.c |  3 +++
+> >  5 files changed, 58 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+> > index 021e83fe831f..ebbf8702387e 100644
+> > --- a/fs/proc/proc_sysctl.c
+> > +++ b/fs/proc/proc_sysctl.c
+> > @@ -19,6 +19,24 @@
+> >  #include <linux/kmemleak.h>
+> >  #include "internal.h"
+> >
+> > +#ifdef CONFIG_MODULES
+> > +#include <linux/mod_devicetable.h>
+> > +
+> > +static void check_struct_sysctl_device_id(void)
+> > +{
+> > +       /*
+> > +        * The shadow struct sysctl_device_id for file2alias.c needs
+> > +        * the same size of struct ctl_table and offset for procname.
+> > +        */
+> > +       BUILD_BUG_ON(sizeof(struct sysctl_device_id)
+> > +                       != sizeof(struct ctl_table));
+> > +       BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
+> > +                       != offsetof(struct ctl_table, procname));
+>
+>
+> Nit:
+>
+> If you use static_assert(), you can remove
+>  check_struct_sysctl_device_id().
+>
+>
+> You can write static_assert() out of a function.
 
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Marco Elver <elver@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Gabriele Paoloni <gpaoloni@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Clark Williams <williams@redhat.com>
-Cc: Tao Zhou <tao.zhou@linux.dev>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-trace-devel@vger.kernel.org
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- .../trace/rv/da_monitor_instrumentation.rst   | 171 ++++++++++++++++++
- Documentation/trace/rv/index.rst              |   1 +
- 2 files changed, 172 insertions(+)
- create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+That's a nice cleanup; thanks!
 
-diff --git a/Documentation/trace/rv/da_monitor_instrumentation.rst b/Documentation/trace/rv/da_monitor_instrumentation.rst
-new file mode 100644
-index 000000000000..6c67c7b57811
---- /dev/null
-+++ b/Documentation/trace/rv/da_monitor_instrumentation.rst
-@@ -0,0 +1,171 @@
-+Deterministic Automata Instrumentation
-+======================================
-+
-+The RV monitor file created by dot2k, with the name "$MODEL_NAME.c"
-+includes a section dedicated to instrumentation.
-+
-+In the example of the wip.dot monitor created on [1], it will look like::
-+
-+  /*
-+   * This is the instrumentation part of the monitor.
-+   *
-+   * This is the section where manual work is required. Here the kernel events
-+   * are translated into model's event.
-+   *
-+   */
-+  static void handle_preempt_disable(void *data, /* XXX: fill header */)
-+  {
-+	da_handle_event_wip(preempt_disable_wip);
-+  }
-+
-+  static void handle_preempt_enable(void *data, /* XXX: fill header */)
-+  {
-+	da_handle_event_wip(preempt_enable_wip);
-+  }
-+
-+  static void handle_sched_waking(void *data, /* XXX: fill header */)
-+  {
-+	da_handle_event_wip(sched_waking_wip);
-+  }
-+
-+  static int enable_wip(void)
-+  {
-+	int retval;
-+
-+	retval = da_monitor_init_wip();
-+	if (retval)
-+		return retval;
-+
-+	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
-+	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
-+	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
-+
-+	return 0;
-+  }
-+
-+The comment at the top of the section explains the general idea: the
-+instrumentation section translates *kernel events* into the *model's
-+event*.
-+
-+Tracing callback functions
-+--------------------------
-+
-+The first three functions are the starting point of the callback *handler
-+functions* for each of the three events from the wip model. The developer
-+does not necessarily need to use them: they are just starting points.
-+
-+Using the example of::
-+
-+ void handle_preempt_disable(void *data, /* XXX: fill header */)
-+ {
-+        da_handle_event_wip(preempt_disable_wip);
-+ }
-+
-+The preempt_disable event from the model connects directly to the
-+preemptirq:preempt_disable. The preemptirq:preempt_disable event
-+has the following signature, from include/trace/events/preemptirq.h::
-+
-+  TP_PROTO(unsigned long ip, unsigned long parent_ip)
-+
-+Hence, the handle_preempt_disable() function will look like::
-+
-+  void handle_preempt_disable(void *data, unsigned long ip, unsigned long parent_ip)
-+
-+In this case, the kernel event translates one to one with the automata
-+event, and indeed, no other change is required for this function.
-+
-+The next handler function, handle_preempt_enable() has the same argument
-+list from the handle_preempt_disable(). The difference is that the
-+preempt_enable event will be used to synchronize the system to the model.
-+
-+Initially, the *model* is placed in the initial state. However, the *system*
-+might or might not be in the initial state. The monitor cannot start
-+processing events until it knows that the system has reached the initial state.
-+Otherwise, the monitor and the system could be out-of-sync.
-+
-+Looking at the automata definition, it is possible to see that the system
-+and the model are expected to return to the initial state after the
-+preempt_enable execution. Hence, it can be used to synchronize the
-+system and the model at the initialization of the monitoring section.
-+
-+The start is informed via a special handle function, the
-+"da_handle_start_event_$(MONITOR_NAME)(event)", in this case::
-+
-+  da_handle_start_event_wip(preempt_enable_wip);
-+
-+So, the callback function will look like::
-+
-+  void handle_preempt_enable(void *data, unsigned long ip, unsigned long parent_ip)
-+  {
-+        da_handle_start_event_wip(preempt_enable_wip);
-+  }
-+
-+Finally, the "handle_sched_waking()" will look like::
-+
-+  void handle_sched_waking(void *data, struct task_struct *task)
-+  {
-+        da_handle_event_wip(sched_waking_wip);
-+  }
-+
-+And the explanation is left for the reader as an exercise.
-+
-+enable and disable functions
-+----------------------------
-+
-+dot2k automatically creates two special functions::
-+
-+  enable_$(MONITOR_NAME)()
-+  disable_$(MONITOR_NAME)()
-+
-+These functions are called when the monitor is enabled and disabled,
-+respectively.
-+
-+They should be used to *attach* and *detach* the instrumentation to the running
-+system. The developer must add to the relative function all that is needed to
-+*attach* and *detach* its monitor to the system.
-+
-+For the wip case, these functions were named::
-+
-+ enable_wip()
-+ disable_wip()
-+
-+But no change was required because: by default, these functions *attach* and
-+*detach* the tracepoints_to_attach, which was enough for this case.
-+
-+Instrumentation helpers
-+-----------------------
-+
-+To complete the instrumentation, the *handler functions* need to be attached to a
-+kernel event, at the monitoring enable phase.
-+
-+The RV interface also facilitates this step. For example, the macro "rv_attach_trace_probe()"
-+is used to connect the wip model events to the relative kernel event. dot2k automatically
-+adds "rv_attach_trace_probe()" function call for each model event in the enable phase, as
-+a suggestion.
-+
-+For example, from the wip sample model::
-+
-+  static int enable_wip(void)
-+  {
-+        int retval;
-+
-+        retval = da_monitor_init_wip();
-+        if (retval)
-+                return retval;
-+
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
-+
-+        return 0;
-+  }
-+
-+The probes then need to be detached at the disable phase.
-+
-+[1] The wip model is presented in::
-+
-+  Documentation/trace/rv/deterministic_automata.rst
-+
-+The wip monitor is presented in::
-+
-+  Documentation/trace/rv/da_monitor_synthesis.rst
-diff --git a/Documentation/trace/rv/index.rst b/Documentation/trace/rv/index.rst
-index 46d47f33052c..db2ae3f90b90 100644
---- a/Documentation/trace/rv/index.rst
-+++ b/Documentation/trace/rv/index.rst
-@@ -9,3 +9,4 @@ Runtime Verification
-    runtime-verification.rst
-    deterministic_automata.rst
-    da_monitor_synthesis.rst
-+   da_monitor_instrumentation.rst
--- 
-2.35.1
+>
+>
+>
+> > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> > index 223376959d29..15073621cfa8 100644
+> > --- a/kernel/sysctl.c
+> > +++ b/kernel/sysctl.c
+> > @@ -2487,6 +2487,7 @@ int __init sysctl_init_bases(void)
+> >
+> >         return 0;
+> >  }
+> > +
+>
+>
+> Noise.
 
+Fixed.
+
+
+>
+>
+>
+>
+> >  #endif /* CONFIG_SYSCTL */
+> >  /*
+> >   * No sense putting this after each symbol definition, twice,
+> > diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
+> > index c0d3bcb99138..43b2549940d2 100644
+> > --- a/scripts/mod/devicetable-offsets.c
+> > +++ b/scripts/mod/devicetable-offsets.c
+> > @@ -262,5 +262,8 @@ int main(void)
+> >         DEVID(ishtp_device_id);
+> >         DEVID_FIELD(ishtp_device_id, guid);
+> >
+> > +       DEVID(sysctl_device_id);
+> > +       DEVID_FIELD(sysctl_device_id, procname);
+> > +
+> >         return 0;
+> >  }
+> > --
+> > 2.25.1
+> >
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
+
+
+
+--
+Mauricio Faria de Oliveira

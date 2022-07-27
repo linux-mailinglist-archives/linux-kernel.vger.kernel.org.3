@@ -2,54 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0668D582C80
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD768582D6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240460AbiG0QrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S241081AbiG0Q5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240134AbiG0QqU (ORCPT
+        with ESMTP id S241075AbiG0Q5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:46:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DFB60507;
-        Wed, 27 Jul 2022 09:31:37 -0700 (PDT)
+        Wed, 27 Jul 2022 12:57:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2033C664F7;
+        Wed, 27 Jul 2022 09:36:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04140B821A6;
-        Wed, 27 Jul 2022 16:31:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3820BC433C1;
-        Wed, 27 Jul 2022 16:31:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF54661AB0;
+        Wed, 27 Jul 2022 16:36:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA072C433C1;
+        Wed, 27 Jul 2022 16:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939494;
-        bh=2KhsuBtZEV+6+XuZIeLhyX0nuT5PSEtGK16KaFUVp48=;
+        s=korg; t=1658939791;
+        bh=/V/CnQTHWxmBgs1j8ItrLydwOjqwX4HqQIRjQZZZYPI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UQLC9MmUEnyVIdsi0L45/ykBXMaluiE7glNouiGB1Psau4NDPYkKijKl4LhE/Qcab
-         k4FsAIJ0QiwNknSc+cn7PJyoFUbySaQ4H/NHxyQCCwgKAHIav/lC48JsWgaO90asKc
-         76LsQj82Rx9HXg+sHJFh4XUQXVa1JtJb5zMipXoQ=
+        b=k6lf1O2XL07218mLoY4XcMVky71RpB8rd9PfExhPqijnaxzRNbs9K4ccSNQTPgcnY
+         ebFIf0qMtWcLOAlbcW8TapQOFrtn8HKfl8wm0LOGrdyw4KGIRhAe9J7DVFMRmeVP94
+         xd2meOlW1/t2JUebo0890lKJaxXnxP2W4wNvbcl0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Johan Hovold <johan@kernel.org>, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 5.4 82/87] tty: the rest, stop using tty_schedule_flip()
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 5.10 089/105] Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg
 Date:   Wed, 27 Jul 2022 18:11:15 +0200
-Message-Id: <20220727161012.386373695@linuxfoundation.org>
+Message-Id: <20220727161015.668549709@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,84 +55,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit b68b914494df4f79b4e9b58953110574af1cb7a2 upstream.
+commit 0771cbb3b97d3c1d68eecd7f00055f599954c34e upstream.
 
-Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
-tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). We are
-going to remove the latter (as it is used less), so call the former in
-the rest of the users.
+This makes use of bt_skb_sendmsg instead of allocating a different
+buffer to be used with memcpy_from_msg which cause one extra copy.
 
-Cc: Richard Henderson <rth@twiddle.net>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: William Hubbs <w.d.hubbs@gmail.com>
-Cc: Chris Brannon <chris@the-brannons.com>
-Cc: Kirk Reiser <kirk@reisers.ca>
-Cc: Samuel Thibault <samuel.thibault@ens-lyon.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Reviewed-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20211122111648.30379-3-jslaby@suse.cz
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/alpha/kernel/srmcons.c         |    2 +-
- drivers/s390/char/keyboard.h        |    4 ++--
- drivers/staging/speakup/spk_ttyio.c |    4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ net/bluetooth/sco.c |   34 +++++++++++-----------------------
+ 1 file changed, 11 insertions(+), 23 deletions(-)
 
---- a/arch/alpha/kernel/srmcons.c
-+++ b/arch/alpha/kernel/srmcons.c
-@@ -59,7 +59,7 @@ srmcons_do_receive_chars(struct tty_port
- 	} while((result.bits.status & 1) && (++loops < 10));
- 
- 	if (count)
--		tty_schedule_flip(port);
-+		tty_flip_buffer_push(port);
- 
- 	return count;
+--- a/net/bluetooth/sco.c
++++ b/net/bluetooth/sco.c
+@@ -280,27 +280,19 @@ static int sco_connect(struct hci_dev *h
+ 	return err;
  }
---- a/drivers/s390/char/keyboard.h
-+++ b/drivers/s390/char/keyboard.h
-@@ -56,7 +56,7 @@ static inline void
- kbd_put_queue(struct tty_port *port, int ch)
+ 
+-static int sco_send_frame(struct sock *sk, void *buf, int len,
+-			  unsigned int msg_flags)
++static int sco_send_frame(struct sock *sk, struct sk_buff *skb)
  {
- 	tty_insert_flip_char(port, ch, 0);
--	tty_schedule_flip(port);
-+	tty_flip_buffer_push(port);
+ 	struct sco_conn *conn = sco_pi(sk)->conn;
+-	struct sk_buff *skb;
+-	int err;
+ 
+ 	/* Check outgoing MTU */
+-	if (len > conn->mtu)
++	if (skb->len > conn->mtu)
+ 		return -EINVAL;
+ 
+-	BT_DBG("sk %p len %d", sk, len);
+-
+-	skb = bt_skb_send_alloc(sk, len, msg_flags & MSG_DONTWAIT, &err);
+-	if (!skb)
+-		return err;
++	BT_DBG("sk %p len %d", sk, skb->len);
+ 
+-	memcpy(skb_put(skb, len), buf, len);
+ 	hci_send_sco(conn->hcon, skb);
+ 
+-	return len;
++	return skb->len;
  }
  
- static inline void
-@@ -64,5 +64,5 @@ kbd_puts_queue(struct tty_port *port, ch
+ static void sco_recv_frame(struct sco_conn *conn, struct sk_buff *skb)
+@@ -727,7 +719,7 @@ static int sco_sock_sendmsg(struct socke
+ 			    size_t len)
  {
- 	while (*cp)
- 		tty_insert_flip_char(port, *cp++, 0);
--	tty_schedule_flip(port);
-+	tty_flip_buffer_push(port);
+ 	struct sock *sk = sock->sk;
+-	void *buf;
++	struct sk_buff *skb;
+ 	int err;
+ 
+ 	BT_DBG("sock %p, sk %p", sock, sk);
+@@ -739,24 +731,20 @@ static int sco_sock_sendmsg(struct socke
+ 	if (msg->msg_flags & MSG_OOB)
+ 		return -EOPNOTSUPP;
+ 
+-	buf = kmalloc(len, GFP_KERNEL);
+-	if (!buf)
+-		return -ENOMEM;
+-
+-	if (memcpy_from_msg(buf, msg, len)) {
+-		kfree(buf);
+-		return -EFAULT;
+-	}
++	skb = bt_skb_sendmsg(sk, msg, len, len, 0, 0);
++	if (IS_ERR_OR_NULL(skb))
++		return PTR_ERR(skb);
+ 
+ 	lock_sock(sk);
+ 
+ 	if (sk->sk_state == BT_CONNECTED)
+-		err = sco_send_frame(sk, buf, len, msg->msg_flags);
++		err = sco_send_frame(sk, skb);
+ 	else
+ 		err = -ENOTCONN;
+ 
+ 	release_sock(sk);
+-	kfree(buf);
++	if (err)
++		kfree_skb(skb);
+ 	return err;
  }
---- a/drivers/staging/speakup/spk_ttyio.c
-+++ b/drivers/staging/speakup/spk_ttyio.c
-@@ -88,7 +88,7 @@ static int spk_ttyio_receive_buf2(struct
- 	}
  
- 	if (!ldisc_data->buf_free)
--		/* ttyio_in will tty_schedule_flip */
-+		/* ttyio_in will tty_flip_buffer_push */
- 		return 0;
- 
- 	/* Make sure the consumer has read buf before we have seen
-@@ -325,7 +325,7 @@ static unsigned char ttyio_in(int timeou
- 	mb();
- 	ldisc_data->buf_free = true;
- 	/* Let TTY push more characters */
--	tty_schedule_flip(speakup_tty->port);
-+	tty_flip_buffer_push(speakup_tty->port);
- 
- 	return rv;
- }
 
 

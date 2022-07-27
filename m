@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE832582D58
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1992582A9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbiG0Q4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
+        id S232782AbiG0QWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241073AbiG0QyR (ORCPT
+        with ESMTP id S235148AbiG0QV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:54:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD5F54CBF;
-        Wed, 27 Jul 2022 09:35:29 -0700 (PDT)
+        Wed, 27 Jul 2022 12:21:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C622A4C61B;
+        Wed, 27 Jul 2022 09:21:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F198DB821BE;
-        Wed, 27 Jul 2022 16:35:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431EBC433D6;
-        Wed, 27 Jul 2022 16:35:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CCF8B821A6;
+        Wed, 27 Jul 2022 16:21:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDCC2C433D6;
+        Wed, 27 Jul 2022 16:21:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939726;
-        bh=tcNKqGtDtsyWutxE+xvFDDK7Vyq6N/uegsJekL4Td60=;
+        s=korg; t=1658938912;
+        bh=8ihxxbqtwdKbI1YhUaUxR76a6ck1XLoQsIDulE25NPw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dfsDHCcW6ejxNOJgEz1H4U/FGaB5F+Olw//Jm2jQR+z9x3k5Ncj8tzGqZVnm4CT6o
-         rIiuBq/XQ2gis/yAiE4XlgiCGwOtW+pdP1bdHfXZvy/AtXBpIF3p4U35t5KkD2NlNY
-         yZBlgWAdK6tD7LqEyPCG5AQFPs3CXEX1xX2yVSNM=
+        b=Cf/WwwKffonbvVj0iNGihEmJdiYlXCA/XlGrZtdZar46gnwOc/ZuSkFTuwej3mT8u
+         GlIJzq5MfHvIcZ/56UYJYVhzuBNBOlPdR9nRmZRBZnyk7opJNiSR9TVgnU8iGOaAe7
+         AjgQqiXkKKT4J5sOo3rprkrrROVktTj2HiiXoVHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Yuchung Cheng <ycheng@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 055/105] tcp: Fix data-races around sysctl_tcp_fastopen.
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 12/26] i2c: cadence: Change large transfer count reset logic to be unconditional
 Date:   Wed, 27 Jul 2022 18:10:41 +0200
-Message-Id: <20220727161014.289382540@linuxfoundation.org>
+Message-Id: <20220727160959.618902682@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
+References: <20220727160959.122591422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +55,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit 5a54213318c43f4009ae158347aa6016e3b9b55a ]
+[ Upstream commit 4ca8ca873d454635c20d508261bfc0081af75cf8 ]
 
-While reading sysctl_tcp_fastopen, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+Problems were observed on the Xilinx ZynqMP platform with large I2C reads.
+When a read of 277 bytes was performed, the controller NAKed the transfer
+after only 252 bytes were transferred and returned an ENXIO error on the
+transfer.
 
-Fixes: 2100c8d2d9db ("net-tcp: Fast Open base")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Acked-by: Yuchung Cheng <ycheng@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+There is some code in cdns_i2c_master_isr to handle this case by resetting
+the transfer count in the controller before it reaches 0, to allow larger
+transfers to work, but it was conditional on the CDNS_I2C_BROKEN_HOLD_BIT
+quirk being set on the controller, and ZynqMP uses the r1p14 version of
+the core where this quirk is not being set. The requirement to do this to
+support larger reads seems like an inherently required workaround due to
+the core only having an 8-bit transfer size register, so it does not
+appear that this should be conditional on the broken HOLD bit quirk which
+is used elsewhere in the driver.
+
+Remove the dependency on the CDNS_I2C_BROKEN_HOLD_BIT for this transfer
+size reset logic to fix this problem.
+
+Fixes: 63cab195bf49 ("i2c: removed work arounds in i2c driver for Zynq Ultrascale+ MPSoC")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>
+Acked-by: Michal Simek <michal.simek@amd.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/af_inet.c      | 2 +-
- net/ipv4/tcp.c          | 6 ++++--
- net/ipv4/tcp_fastopen.c | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-cadence.c | 30 +++++-------------------------
+ 1 file changed, 5 insertions(+), 25 deletions(-)
 
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 9d1ff3baa213..a733ce1a3f8f 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -220,7 +220,7 @@ int inet_listen(struct socket *sock, int backlog)
- 		 * because the socket was in TCP_LISTEN state previously but
- 		 * was shutdown() rather than close().
- 		 */
--		tcp_fastopen = sock_net(sk)->ipv4.sysctl_tcp_fastopen;
-+		tcp_fastopen = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen);
- 		if ((tcp_fastopen & TFO_SERVER_WO_SOCKOPT1) &&
- 		    (tcp_fastopen & TFO_SERVER_ENABLE) &&
- 		    !inet_csk(sk)->icsk_accept_queue.fastopenq.max_qlen) {
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 6cd5ce3eac0c..f1fd26bb199c 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1148,7 +1148,8 @@ static int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg,
- 	struct sockaddr *uaddr = msg->msg_name;
- 	int err, flags;
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 9ab056bb834d..fce1906e7df1 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -203,9 +203,9 @@ static inline bool cdns_is_holdquirk(struct cdns_i2c *id, bool hold_wrkaround)
+  */
+ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
+ {
+-	unsigned int isr_status, avail_bytes, updatetx;
++	unsigned int isr_status, avail_bytes;
+ 	unsigned int bytes_to_send;
+-	bool hold_quirk;
++	bool updatetx;
+ 	struct cdns_i2c *id = ptr;
+ 	/* Signal completion only after everything is updated */
+ 	int done_flag = 0;
+@@ -224,11 +224,7 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
+ 	 * Check if transfer size register needs to be updated again for a
+ 	 * large data receive operation.
+ 	 */
+-	updatetx = 0;
+-	if (id->recv_count > id->curr_recv_count)
+-		updatetx = 1;
+-
+-	hold_quirk = (id->quirks & CDNS_I2C_BROKEN_HOLD_BIT) && updatetx;
++	updatetx = id->recv_count > id->curr_recv_count;
  
--	if (!(sock_net(sk)->ipv4.sysctl_tcp_fastopen & TFO_CLIENT_ENABLE) ||
-+	if (!(READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen) &
-+	      TFO_CLIENT_ENABLE) ||
- 	    (uaddr && msg->msg_namelen >= sizeof(uaddr->sa_family) &&
- 	     uaddr->sa_family == AF_UNSPEC))
- 		return -EOPNOTSUPP;
-@@ -3390,7 +3391,8 @@ static int do_tcp_setsockopt(struct sock *sk, int level, int optname,
- 	case TCP_FASTOPEN_CONNECT:
- 		if (val > 1 || val < 0) {
- 			err = -EINVAL;
--		} else if (net->ipv4.sysctl_tcp_fastopen & TFO_CLIENT_ENABLE) {
-+		} else if (READ_ONCE(net->ipv4.sysctl_tcp_fastopen) &
-+			   TFO_CLIENT_ENABLE) {
- 			if (sk->sk_state == TCP_CLOSE)
- 				tp->fastopen_connect = val;
- 			else
-diff --git a/net/ipv4/tcp_fastopen.c b/net/ipv4/tcp_fastopen.c
-index 107111984384..ed7aa6ae7b51 100644
---- a/net/ipv4/tcp_fastopen.c
-+++ b/net/ipv4/tcp_fastopen.c
-@@ -349,7 +349,7 @@ static bool tcp_fastopen_no_cookie(const struct sock *sk,
- 				   const struct dst_entry *dst,
- 				   int flag)
- {
--	return (sock_net(sk)->ipv4.sysctl_tcp_fastopen & flag) ||
-+	return (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen) & flag) ||
- 	       tcp_sk(sk)->fastopen_no_cookie ||
- 	       (dst && dst_metric(dst, RTAX_FASTOPEN_NO_COOKIE));
- }
-@@ -364,7 +364,7 @@ struct sock *tcp_try_fastopen(struct sock *sk, struct sk_buff *skb,
- 			      const struct dst_entry *dst)
- {
- 	bool syn_data = TCP_SKB_CB(skb)->end_seq != TCP_SKB_CB(skb)->seq + 1;
--	int tcp_fastopen = sock_net(sk)->ipv4.sysctl_tcp_fastopen;
-+	int tcp_fastopen = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen);
- 	struct tcp_fastopen_cookie valid_foc = { .len = -1 };
- 	struct sock *child;
- 	int ret = 0;
+ 	/* When receiving, handle data interrupt and completion interrupt */
+ 	if (id->p_recv_buf &&
+@@ -251,7 +247,7 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
+ 			id->recv_count--;
+ 			id->curr_recv_count--;
+ 
+-			if (cdns_is_holdquirk(id, hold_quirk))
++			if (cdns_is_holdquirk(id, updatetx))
+ 				break;
+ 		}
+ 
+@@ -262,7 +258,7 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
+ 		 * maintain transfer size non-zero while performing a large
+ 		 * receive operation.
+ 		 */
+-		if (cdns_is_holdquirk(id, hold_quirk)) {
++		if (cdns_is_holdquirk(id, updatetx)) {
+ 			/* wait while fifo is full */
+ 			while (cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET) !=
+ 			       (id->curr_recv_count - CDNS_I2C_FIFO_DEPTH))
+@@ -284,22 +280,6 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
+ 						  CDNS_I2C_XFER_SIZE_OFFSET);
+ 				id->curr_recv_count = id->recv_count;
+ 			}
+-		} else if (id->recv_count && !hold_quirk &&
+-						!id->curr_recv_count) {
+-
+-			/* Set the slave address in address register*/
+-			cdns_i2c_writereg(id->p_msg->addr & CDNS_I2C_ADDR_MASK,
+-						CDNS_I2C_ADDR_OFFSET);
+-
+-			if (id->recv_count > CDNS_I2C_TRANSFER_SIZE) {
+-				cdns_i2c_writereg(CDNS_I2C_TRANSFER_SIZE,
+-						CDNS_I2C_XFER_SIZE_OFFSET);
+-				id->curr_recv_count = CDNS_I2C_TRANSFER_SIZE;
+-			} else {
+-				cdns_i2c_writereg(id->recv_count,
+-						CDNS_I2C_XFER_SIZE_OFFSET);
+-				id->curr_recv_count = id->recv_count;
+-			}
+ 		}
+ 
+ 		/* Clear hold (if not repeated start) and signal completion */
 -- 
 2.35.1
 

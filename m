@@ -2,193 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1BC58233B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDAE582338
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiG0Jfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
+        id S231317AbiG0Jfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiG0Jfv (ORCPT
+        with ESMTP id S230418AbiG0Jf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:35:51 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E232BA;
-        Wed, 27 Jul 2022 02:35:50 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id j63so8252159ybb.13;
-        Wed, 27 Jul 2022 02:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tO96KCUrmod4Bc1ngFqk0NF3aHyVouo2a5XyYHy3WtA=;
-        b=bfGBK5IAfMvP2xnlRZtAoV1vqJHJNuA+Rk9DU4uwapU+O4esI07HFst2iQtQ+dXDw5
-         w/ieBMT3/j5vQDkH2VKCyKkZikrEY4wP/rgaWMejjZ7bfgm3jc+2RFe7cYa5kAmxsPS7
-         E10w/dQLhdcgSNaNjMlRb1R2MS3XgFykoYMqbfofmbXustfawqSJOi5N9WSSh1NTdaaZ
-         r0Pi25Emj5arzzrrQPG3CHmlj44IAfgUsjkFjHiw6L+EoEc7wnnD8lQrEoQbYeBntkAf
-         yJYYRJ4FsPnvrSNsIvbR69v6/dbBWokNQfTYPmgS1KzXjCZPWXyT9B+GuLy8aqE84Kqy
-         NXBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tO96KCUrmod4Bc1ngFqk0NF3aHyVouo2a5XyYHy3WtA=;
-        b=6TLf5BBpknBB1LihF3Q/QmLrJMSU7Jf8w1JC23J/duoR6/hubLUQI11hAaarYlu2tJ
-         YIYAIK8qYys5D5A1oN1FAUUzKz3TWtoCLGKLNJRZgweTz17mE+xYEeA99/niygeG8Hez
-         DJQvezAQMUtMqQWzXGBOD4X84M+XuDXoPcdB9i0bL2t7IAnKx2/g0d8q8Kr9c9LTnYvK
-         ugx7u0iMexhkCm4dH7UtVuwc+kIBRMfEgYHkxNM9JSv0NyqfuOPhJ8IcCbWe+NuBwNZC
-         4ckC/5I8ZDSm64owRi2ve+YoRP7bjgbkO0BDf+3C69tt3SGJFJJ7RPXxEULGOSSaBp+c
-         NFIg==
-X-Gm-Message-State: AJIora+39TiHfCgah/dyfIT2ocJMUpr0x61gmZfjL/Yu+5U9flAoVCaz
-        dGsYeW8eqSJ/qgQRWpokmUnafL+2kFATInjfisk=
-X-Google-Smtp-Source: AGRyM1tTw4w511Z1qejEOK9vSuyQPylIYKCBdl8onOcjCJ2A9h7t/jpCh5PWMT+1BJjigzlLpNJe0GLPufh8KC9k13Q=
-X-Received: by 2002:a25:830f:0:b0:66f:cc60:c740 with SMTP id
- s15-20020a25830f000000b0066fcc60c740mr17248720ybk.117.1658914549731; Wed, 27
- Jul 2022 02:35:49 -0700 (PDT)
+        Wed, 27 Jul 2022 05:35:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C2C2BA;
+        Wed, 27 Jul 2022 02:35:27 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 329356601B24;
+        Wed, 27 Jul 2022 10:35:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658914526;
+        bh=tInxg3UBVvu6TuW4H5I/jhEdHs4D2SGfyBq65EqJZwQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bNprFWkGm1Z9AhAai0N1DHKm/NH+2mFmsCVDemBDhhZ6Q8//sW9nLiToEbBt2336x
+         m6O9P/haG14FVpv6JNnfA59It28VKISS/8uZZRqE0LB5mF2ULxqK/2jlsYMctZ1HCJ
+         Twa7W6SiPDTrFw63pvgDQuKEH5RlzCVYr/mmvxVkozaMk6cJJ6SJtYwZlZF/AJkHLZ
+         luMWHcmVkzamWI5mXjPd2jMiqvM81yquso5a4yB6GbrUP6v602rKem6RXR1AZrItjF
+         NMBm2iE7WzR6uhxwCVb8YtpeSfRCYeJsCpAOzNQ9Ym/jdVeAlZxKg9SvWZYRqkvPZp
+         GHGcq+nhrRopQ==
+Message-ID: <4990e4c4-1158-feff-089c-918c890d35d3@collabora.com>
+Date:   Wed, 27 Jul 2022 11:35:23 +0200
 MIME-Version: 1.0
-References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220726180623.1668-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <636e9214-4b36-e9a6-3c6b-b6edb944335e@linaro.org> <CA+V-a8sTw1qzuTeD2vb7RgDmmNdEP5qEcxXCjrFgkyrBrLrt5Q@mail.gmail.com>
- <OS0PR01MB5922F1DEF93337884249DBF586979@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922F1DEF93337884249DBF586979@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 27 Jul 2022 10:35:22 +0100
-Message-ID: <CA+V-a8t6h2++KfhG92FrKXtwg4nF5-nE2TPjfnWZzNgtxJHONA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] dt-bindings: riscv: Add DT binding documentation for
- Renesas RZ/Five SoC and SMARC EVK
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v15 04/11] video/hdmi: Add audio_infoframe packing for DP
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
+        airlied@linux.ie
+Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
+        wenst@chromium.org, ck.hu@mediatek.com, liangxu.xu@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fbdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220727045035.32225-1-rex-bc.chen@mediatek.com>
+ <20220727045035.32225-5-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220727045035.32225-5-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+Il 27/07/22 06:50, Bo-Chen Chen ha scritto:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> Similar to HDMI, DP uses audio infoframes as well which are structured
+> very similar to the HDMI ones.
+> 
+> This patch adds a helper function to pack the HDMI audio infoframe for
+> DP, called hdmi_audio_infoframe_pack_for_dp().
+> hdmi_audio_infoframe_pack_only() is split into two parts. One of them
+> packs the payload only and can be used for HDMI and DP.
+> 
+> Also constify the frame parameter in hdmi_audio_infoframe_check() as
+> it is passed to hdmi_audio_infoframe_check_only() which expects a const.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-On Wed, Jul 27, 2022 at 10:27 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
->
-> Hi Lad, Prabhakar,
->
-> > Subject: Re: [PATCH 4/6] dt-bindings: riscv: Add DT binding
-> > documentation for Renesas RZ/Five SoC and SMARC EVK
-> >
-> > Hi Krzysztof,
-> >
-> > Thank you for the review.
-> >
-> > On Wed, Jul 27, 2022 at 9:54 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> > >
-> > > On 26/07/2022 20:06, Lad Prabhakar wrote:
-> > > > Document Renesas RZ/Five (R9A07G043) SoC and SMARC EVK based on this
-> > SoC.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > ---
-> > > >  .../devicetree/bindings/riscv/renesas.yaml    | 49
-> > +++++++++++++++++++
-> > > >  1 file changed, 49 insertions(+)
-> > > >  create mode 100644
-> > > > Documentation/devicetree/bindings/riscv/renesas.yaml
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/riscv/renesas.yaml
-> > > > b/Documentation/devicetree/bindings/riscv/renesas.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..f72f8aea6a82
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/riscv/renesas.yaml
-> > > > @@ -0,0 +1,49 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
-> > > > +---
-> > > > +$id:
->
-> > > > +
-> > > > +title: Renesas RZ/Five Platform Device Tree Bindings
-> > > > +
-> > > > +maintainers:
-> > > > +  - Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > +
-> > > > +# We want to ignore this schema if the board is SMARC EVK based on
-> > > > +ARM64 arch
-> > > > +select:
-> > > > +  not:
-> > > > +    properties:
-> > > > +      compatible:
-> > > > +        contains:
-> > > > +          items:
-> > >
-> > > I think you should rather ignore the RiscV SoCs, not specific board.
-> > >
-> > You mean to ignore ARM/64 SoCs?
-> >
-> > Agreed just the below enum, should do the trick.
-> >
-> >             - enum:
-> >                 - renesas,r9a07g043u11
-> >                 - renesas,r9a07g043u12
-> >                 - renesas,r9a07g044c1
-> >                 - renesas,r9a07g044c2
-> >                 - renesas,r9a07g044l1
-> >                 - renesas,r9a07g044l2
-> >                 - renesas,r9a07g054l1
-> >                 - renesas,r9a07g054l2
->
-> Why do we need to add renesas,r9a07g044 and renesas,r9a07g054
-> in riscv file? These are arm64 only SoC's.
->
-The above needs to be added to avoid dtbs_check/dt_binding_check
-errors. The above hunk ignores the RISC-V schema if it's an ARM64 SoC.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Cheers,
-Prabhakar
-
-> Cheers,
-> Biju
->
->
->
-> >
-> > > > +            - const: renesas,smarc-evk
-> > > > +            - enum:
-> > > > +                - renesas,r9a07g043u11
-> > > > +                - renesas,r9a07g043u12
-> > > > +                - renesas,r9a07g044c1
-> > > > +                - renesas,r9a07g044c2
-> > > > +                - renesas,r9a07g044l1
-> > > > +                - renesas,r9a07g044l2
-> > > > +                - renesas,r9a07g054l1
-> > > > +                - renesas,r9a07g054l2
-> > > > +            - enum:
-> > > > +                - renesas,r9a07g043
-> > > > +                - renesas,r9a07g044
-> > > > +                - renesas,r9a07g054
-> > >
-> > > Did you actually test that it works and properly matches?
-> > >
-> > Yes I have run the dtbs_check and dt_binding _check for ARM64 and RISC-
-> > V. Do you see any cases where it can fail?
-> >
-> > Cheers,
-> > Prabhakar

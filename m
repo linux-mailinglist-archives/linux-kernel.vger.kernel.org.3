@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095D05825B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4EA5825BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbiG0LhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 07:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        id S232439AbiG0LjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 07:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232390AbiG0Lgj (ORCPT
+        with ESMTP id S232479AbiG0LjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 07:36:39 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103244AD56;
-        Wed, 27 Jul 2022 04:36:01 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id va17so31026803ejb.0;
-        Wed, 27 Jul 2022 04:36:01 -0700 (PDT)
+        Wed, 27 Jul 2022 07:39:01 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B744AD51;
+        Wed, 27 Jul 2022 04:38:19 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id j195so10385222ybj.11;
+        Wed, 27 Jul 2022 04:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=VQSHx8GgcQmMd+AXBHE02GOQHiSvUP8WAJUnL9ocUio=;
-        b=mhk1h2uJZTlyGcOzrIpB2D5oT+iA5R8TkMmRYlcsXA6caVLNYJq7G+ZoJWUJA+C0Jo
-         N91TkTPT6I2nm3v7JISL7BsrQS992myNakALbwb53lYzx0emlf7CDtAcBt07ZUUfOyNl
-         SxX6Xn5z/CUlaRFb9VMbwtERgUYKT/N5HjzQpaSD7C9MlxcDebZepb4mdkJxVTmMjldz
-         ovgWe2/vaCzUHLnnSheoFbF0dHwgcT8ODTWI5TG20gDc2p9xG5royM4RFsIMqC9ckFeh
-         zil5vh5Oh/OoU4rFO2jWWuQcdEH4eEwyqGksCnm30iskVz/njWA58Q4bQ7H3U876yz3w
-         clYg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fUe3ZPHnv3mne953AtKNlkKN9ecK/p0RKLrloPpqCts=;
+        b=K1YSA94w7f1jm0mGfMBGTj4RDOeDsH5BdZYnKdj+ltvE01uB52qrkFVPQswgNq/6/f
+         MNUEbKdU6xkDgPDPLA81boaWlH4bnwjhdQQ5xAIt2g1/tuenHsM8TSSKYjjun4bFEeys
+         XldrNCP4c32arY7cDQFRNmTu0CL9PAkzjLHXcaUVoSNXh6lk7T0oUdfMrRpRaEIWe8Rj
+         WhzFHunzCcgQ8+v2QYKyYHHqFT0NNAG1FqCP5SWKOm+M9MHFGaTkT7MKSBibE1Gnzawi
+         BihjbXPoXNMA4vNyb6g3RyotpVNoT6lQJivBdjz1E+oDJQpAEHkRfddQNSPyQIb5Tf8z
+         3CYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VQSHx8GgcQmMd+AXBHE02GOQHiSvUP8WAJUnL9ocUio=;
-        b=5tZlMiqqWC67aDqYQRno7izNgS2AQMUXpxmLLWnJmJzVpLjYykOqMBPHuJgEcTSrxG
-         PJf+S0ax0sH+jmj5NaKJp/Gb/OPFVKSlqJvAAU4PX+nnKEMr8QIDek7MQ2G2aEH/qutK
-         GaG2nM/1bYf1Bu/9DRyezlthtNxPYyEBV8CxCM9AukoaGAlCTEsrT750J0F7OQOAzaLa
-         Ew+XAxZeu9IAv0UxG3xmNEPA3EfX8Jiwr5hPwTLknZLBEAQQRC5Nqt2BgXWHZ2IU9Z3R
-         U95NLCFL+fBoHO8wxqxuQmZEMKbiksB/zs9P1EdWCB+NpqqF4afZhDYnx3E6+I+p9iwo
-         P2rw==
-X-Gm-Message-State: AJIora9UIhgYA2w0PWao419i9vgUh56cMAlrVziE2Ez3RLI+Mzs3hg9V
-        WKnvGnDoTChHluYfpY1W460=
-X-Google-Smtp-Source: AGRyM1uUycM1SKpDmZ+nnw7DJYgP8fA+MsFQMpzc+KtJIYKSaIiSvpsXa4+ky7jTZxMRpyaav9a64g==
-X-Received: by 2002:a17:907:6295:b0:703:92b8:e113 with SMTP id nd21-20020a170907629500b0070392b8e113mr17629609ejc.594.1658921761353;
-        Wed, 27 Jul 2022 04:36:01 -0700 (PDT)
-Received: from localhost.localdomain (c105-182.i13-27.melita.com. [94.17.105.182])
-        by smtp.googlemail.com with ESMTPSA id p25-20020aa7cc99000000b0043ca6fb7e7dsm1334056edt.68.2022.07.27.04.35.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 04:36:00 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [net-next PATCH v5 14/14] net: dsa: qca8k: move read_switch_id function to common code
-Date:   Wed, 27 Jul 2022 13:35:23 +0200
-Message-Id: <20220727113523.19742-15-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220727113523.19742-1-ansuelsmth@gmail.com>
-References: <20220727113523.19742-1-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fUe3ZPHnv3mne953AtKNlkKN9ecK/p0RKLrloPpqCts=;
+        b=fmUtoePimh6ifQwB5LGjGVUms0BDs2Ei0tXDf6xKeTkDC4OKxu4D40a6ptM/SSAPrh
+         mTqgMpnZMCWqVM7gRtw5OR6Brc28N4vGQYvRg9O9ixZ+EZ77w9SlKC9ukhvCfhLGHhar
+         zT8adWZUkqN2uo3DtE4l4QfeeX+jgY/JEMD01OfSWOEmFqon3Qoamf3aB/mvlPkxIKD9
+         J53M2uNwisUffrYdrDIGscsehM9CEiPsSEDzCqubq0J25cx0V93buQRC71F3AC8dcB/u
+         xpXKN7mXFx11v44+Gxv2EYpLE5d7WX2wm2KSfzz7NFeL3BVtT6ofi5aJREAnyqh3Dcss
+         FfGA==
+X-Gm-Message-State: AJIora94uCcuxOjkfctWuyu4f8hY4jO525TYZnyXVXgEexJWwuGL/XGU
+        g68XQXBbjIwOc8xsN9lauT/JCuC+9QzY+iz8d3s=
+X-Google-Smtp-Source: AGRyM1vbDxpZI15cnPe+RYbwuyh4ob36FZL9kr7Whb06GU0opVS/mtU/X897buqVar2JA+fAkDH7xA5y7j2o5CywCXU=
+X-Received: by 2002:a25:bd83:0:b0:670:fc70:67f3 with SMTP id
+ f3-20020a25bd83000000b00670fc7067f3mr16485485ybh.244.1658921897467; Wed, 27
+ Jul 2022 04:38:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220726180623.1668-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <636e9214-4b36-e9a6-3c6b-b6edb944335e@linaro.org> <CA+V-a8sTw1qzuTeD2vb7RgDmmNdEP5qEcxXCjrFgkyrBrLrt5Q@mail.gmail.com>
+ <e64cc15e-b31e-876d-b3cf-b60d255c495b@linaro.org> <CA+V-a8u1VW9xaj2KjySyMuegpisLVENO_6uJOpAFZGbKziYLYw@mail.gmail.com>
+ <e31e0c1f-4755-704e-8428-93970877d8f5@linaro.org>
+In-Reply-To: <e31e0c1f-4755-704e-8428-93970877d8f5@linaro.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 27 Jul 2022 12:37:50 +0100
+Message-ID: <CA+V-a8sX=Frs_cds9MriauTFRvcZUNCvoeZ+SaC0GUpL7L6qhg@mail.gmail.com>
+Subject: Re: [PATCH 4/6] dt-bindings: riscv: Add DT binding documentation for
+ Renesas RZ/Five SoC and SMARC EVK
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,106 +84,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The same function to read the switch id is used by drivers based on
-qca8k family switch. Move them to common code to make them accessible
-also by other drivers.
+Hi Krzysztof,
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/net/dsa/qca/qca8k-8xxx.c   | 29 -----------------------------
- drivers/net/dsa/qca/qca8k-common.c | 29 +++++++++++++++++++++++++++++
- drivers/net/dsa/qca/qca8k.h        |  1 +
- 3 files changed, 30 insertions(+), 29 deletions(-)
+On Wed, Jul 27, 2022 at 11:09 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 27/07/2022 12:06, Lad, Prabhakar wrote:
+> > Hi Krzysztof,
+> >
+> > On Wed, Jul 27, 2022 at 10:54 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 27/07/2022 11:05, Lad, Prabhakar wrote:
+> >>> Hi Krzysztof,
+> >>>
+> >>> Thank you for the review.
+> >>>
+> >>> On Wed, Jul 27, 2022 at 9:54 AM Krzysztof Kozlowski
+> >>> <krzysztof.kozlowski@linaro.org> wrote:
+> >>>>
+> >>>> On 26/07/2022 20:06, Lad Prabhakar wrote:
+> >>>>> Document Renesas RZ/Five (R9A07G043) SoC and SMARC EVK based on this SoC.
+> >>>>>
+> >>>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >>>>> ---
+> >>>>>  .../devicetree/bindings/riscv/renesas.yaml    | 49 +++++++++++++++++++
+> >>>>>  1 file changed, 49 insertions(+)
+> >>>>>  create mode 100644 Documentation/devicetree/bindings/riscv/renesas.yaml
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/riscv/renesas.yaml b/Documentation/devicetree/bindings/riscv/renesas.yaml
+> >>>>> new file mode 100644
+> >>>>> index 000000000000..f72f8aea6a82
+> >>>>> --- /dev/null
+> >>>>> +++ b/Documentation/devicetree/bindings/riscv/renesas.yaml
+> >>>>> @@ -0,0 +1,49 @@
+> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>>>> +%YAML 1.2
+> >>>>> +---
+> >>>>> +$id: http://devicetree.org/schemas/riscv/renesas.yaml#
+> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>>>> +
+> >>>>> +title: Renesas RZ/Five Platform Device Tree Bindings
+> >>>>> +
+> >>>>> +maintainers:
+> >>>>> +  - Geert Uytterhoeven <geert+renesas@glider.be>
+> >>>>> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >>>>> +
+> >>>>> +# We want to ignore this schema if the board is SMARC EVK based on ARM64 arch
+> >>>>> +select:
+> >>>>> +  not:
+> >>>>> +    properties:
+> >>>>> +      compatible:
+> >>>>> +        contains:
+> >>>>> +          items:
+> >>>>
+> >>>> I think you should rather ignore the RiscV SoCs, not specific board.
+> >>>>
+> >>> You mean to ignore ARM/64 SoCs?
+> >>>
+> >>> Agreed just the below enum, should do the trick.
+> >>>
+> >>>             - enum:
+> >>>                 - renesas,r9a07g043u11
+> >>>                 - renesas,r9a07g043u12
+> >>>                 - renesas,r9a07g044c1
+> >>>                 - renesas,r9a07g044c2
+> >>>                 - renesas,r9a07g044l1
+> >>>                 - renesas,r9a07g044l2
+> >>>                 - renesas,r9a07g054l1
+> >>>                 - renesas,r9a07g054l2
+> >>>
+> >>>
+> >>>>> +            - const: renesas,smarc-evk
+> >>>>> +            - enum:
+> >>>>> +                - renesas,r9a07g043u11
+> >>>>> +                - renesas,r9a07g043u12
+> >>>>> +                - renesas,r9a07g044c1
+> >>>>> +                - renesas,r9a07g044c2
+> >>>>> +                - renesas,r9a07g044l1
+> >>>>> +                - renesas,r9a07g044l2
+> >>>>> +                - renesas,r9a07g054l1
+> >>>>> +                - renesas,r9a07g054l2
+> >>>>> +            - enum:
+> >>>>> +                - renesas,r9a07g043
+> >>>>> +                - renesas,r9a07g044
+> >>>>> +                - renesas,r9a07g054
+> >>>>
+> >>>> Did you actually test that it works and properly matches?
+> >>>>
+> >>> Yes I have run the dtbs_check and dt_binding _check for ARM64 and
+> >>> RISC-V. Do you see any cases where it can fail?
+> >>
+> >>
+> >> Just remove the renesas,smarc-evk2 from
+> >> arch/arm64/boot/dts/renesas/r9a07g043u11-smarc.dts. Do you see the
+> >> error? Not from this schema. The only error you will see is that no
+> >> matching schema was found.
+> >>
+> > I did run the dtbs_check test as per your suggestion (below is the
+> > log) and didn't see "no matching schema error"
+> >
+>
+> So you do not see any errors at all. Then it does not work, does it?
+>
+Right I reverted my changes I can see it complaining, dtb_check seems
+to have returned false positive in my case.
 
-diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
-index 4d6ea47a4469..1d3e7782a71f 100644
---- a/drivers/net/dsa/qca/qca8k-8xxx.c
-+++ b/drivers/net/dsa/qca/qca8k-8xxx.c
-@@ -1876,35 +1876,6 @@ static const struct dsa_switch_ops qca8k_switch_ops = {
- 	.connect_tag_protocol	= qca8k_connect_tag_protocol,
- };
- 
--static int qca8k_read_switch_id(struct qca8k_priv *priv)
--{
--	u32 val;
--	u8 id;
--	int ret;
--
--	if (!priv->info)
--		return -ENODEV;
--
--	ret = qca8k_read(priv, QCA8K_REG_MASK_CTRL, &val);
--	if (ret < 0)
--		return -ENODEV;
--
--	id = QCA8K_MASK_CTRL_DEVICE_ID(val);
--	if (id != priv->info->id) {
--		dev_err(priv->dev,
--			"Switch id detected %x but expected %x",
--			id, priv->info->id);
--		return -ENODEV;
--	}
--
--	priv->switch_id = id;
--
--	/* Save revision to communicate to the internal PHY driver */
--	priv->switch_revision = QCA8K_MASK_CTRL_REV_ID(val);
--
--	return 0;
--}
--
- static int
- qca8k_sw_probe(struct mdio_device *mdiodev)
- {
-diff --git a/drivers/net/dsa/qca/qca8k-common.c b/drivers/net/dsa/qca/qca8k-common.c
-index c881a95441dd..bba95613e218 100644
---- a/drivers/net/dsa/qca/qca8k-common.c
-+++ b/drivers/net/dsa/qca/qca8k-common.c
-@@ -1179,3 +1179,32 @@ int qca8k_port_lag_leave(struct dsa_switch *ds, int port,
- {
- 	return qca8k_lag_refresh_portmap(ds, port, lag, true);
- }
-+
-+int qca8k_read_switch_id(struct qca8k_priv *priv)
-+{
-+	u32 val;
-+	u8 id;
-+	int ret;
-+
-+	if (!priv->info)
-+		return -ENODEV;
-+
-+	ret = qca8k_read(priv, QCA8K_REG_MASK_CTRL, &val);
-+	if (ret < 0)
-+		return -ENODEV;
-+
-+	id = QCA8K_MASK_CTRL_DEVICE_ID(val);
-+	if (id != priv->info->id) {
-+		dev_err(priv->dev,
-+			"Switch id detected %x but expected %x",
-+			id, priv->info->id);
-+		return -ENODEV;
-+	}
-+
-+	priv->switch_id = id;
-+
-+	/* Save revision to communicate to the internal PHY driver */
-+	priv->switch_revision = QCA8K_MASK_CTRL_REV_ID(val);
-+
-+	return 0;
-+}
-diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
-index e87bfee837c1..e36ecc9777f4 100644
---- a/drivers/net/dsa/qca/qca8k.h
-+++ b/drivers/net/dsa/qca/qca8k.h
-@@ -432,6 +432,7 @@ extern const struct qca8k_mib_desc ar8327_mib[];
- extern const struct regmap_access_table qca8k_readable_table;
- int qca8k_mib_init(struct qca8k_priv *priv);
- void qca8k_port_set_status(struct qca8k_priv *priv, int port, int enable);
-+int qca8k_read_switch_id(struct qca8k_priv *priv);
- 
- /* Common read/write/rmw function */
- int qca8k_read(struct qca8k_priv *priv, u32 reg, u32 *val);
--- 
-2.36.1
+What approach would you suggest to ignore the schema here?
 
+Cheers,
+Prabhakar

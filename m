@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64894582203
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D1B582204
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiG0IYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 04:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
+        id S230374AbiG0IZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 04:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiG0IYu (ORCPT
+        with ESMTP id S230361AbiG0IZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 04:24:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FE445062;
-        Wed, 27 Jul 2022 01:24:48 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 27 Jul 2022 04:25:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99195CE6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:25:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 22B476601B12;
-        Wed, 27 Jul 2022 09:24:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658910287;
-        bh=8b3gB2PEEzP1TsEwR0L1dzW3+hdJVSaWwUA09H63Z24=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WEgQcI3Ilp323F8vWcBDY+Uaz6wE6HfeMlV4T85u/Ccbfmd4BL3mRvSN3T4654JwN
-         MLoMJfi+Alskj6prf8IMPW0W3HptSXUdR24MaiY4VqfkQTXRisC1JOqSO3sAv4fjpZ
-         ETEWiBciryZWXLN0d7vEMdIpu3kcW9KxMTaQls6NKr7rL6lOQgageWQa68USWhV2Xg
-         e1IfbSHBK890D+e1mCQ43wyD8+hcDO5HdkONAVouFnZxR5s26zjjxCHGLmsgR8lt/W
-         VBfaA0Sdze9GvlCVgum9zv33uAozJCoPkA+c40jJkWt4+FKKuCOn+3e043Jdgir2Yk
-         p4U11EHNPu0UQ==
-Message-ID: <3cb97e73-d60a-086d-83c2-1711c70057a2@collabora.com>
-Date:   Wed, 27 Jul 2022 10:24:43 +0200
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 49C4533A59;
+        Wed, 27 Jul 2022 08:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658910307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XYY/x95BQTCo7p5nmA5GQqvRLO4/w9jXUvzdB079WhA=;
+        b=z1SP2ty4T+GuZ1veAEfpCA/MrwMxYYUX9dzhBS5a5wJIDVJ1UetGZwtDWQnSNfdFIarGW/
+        xttJY/gunADg/GmMDXmFEhAJXvshqEPN3SF8Y3vxweuFNZCIIypYgs4Trb7c1WkML7vS+s
+        bt3d1HEtGArT3qE6hzWyYjnTfCYWijw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658910307;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XYY/x95BQTCo7p5nmA5GQqvRLO4/w9jXUvzdB079WhA=;
+        b=X0vNs04kTQBcvt7tTsUP5VRmh9fg7cb+h4k+i0iV5sr+XbpP189ylzeOF3v7MTt3KLvhKp
+        X69b3tS9aVWTqmAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23F5D13A8E;
+        Wed, 27 Jul 2022 08:25:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ypY4B2P24GJJLQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 27 Jul 2022 08:25:07 +0000
+Date:   Wed, 27 Jul 2022 10:25:04 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] firmware: dmi: Don't take garbage into
+ consideration in dmi_smbios3_present()
+Message-ID: <20220727102504.6bbefcf9@endymion.delvare>
+In-Reply-To: <20220726094329.1725-1-andriy.shevchenko@linux.intel.com>
+References: <20220726094329.1725-1-andriy.shevchenko@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek
- folder
-Content-Language: en-US
-To:     Balsam CHIHI <bchihi@baylibre.com>, rafael@kernel.org,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-References: <20220726135506.485108-1-bchihi@baylibre.com>
- <20220726135506.485108-2-bchihi@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220726135506.485108-2-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,83 +72,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/07/22 15:55, Balsam CHIHI ha scritto:
-> Add Mediatek proprietary folder to upstream more thermal zone and cooler
-> drivers. Relocate the original thermal controller driver to it and rename
-> as soc_temp.c to show its purpose more clearly.
-> 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+Hi Andy,
+
+On Tue, 26 Jul 2022 12:43:29 +0300, Andy Shevchenko wrote:
+> The byte at offset 6 represent length. Don't take it and drop it immediately
+> by using proper accessor, i.e. get_unaligned_be24().
+
+The subject sounds like you are fixing a bug, while this is only, at
+best, a minor optimization.
+
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->   drivers/thermal/Kconfig                       | 14 ++++-------
->   drivers/thermal/Makefile                      |  2 +-
->   drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
->   drivers/thermal/mediatek/Makefile             |  1 +
->   .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
->   5 files changed, 29 insertions(+), 11 deletions(-)
->   create mode 100644 drivers/thermal/mediatek/Kconfig
->   create mode 100644 drivers/thermal/mediatek/Makefile
->   rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+>  drivers/firmware/dmi_scan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 0e5cc948373c..ecba8d6e313b 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -412,16 +412,10 @@ config DA9062_THERMAL
->   	  zone.
->   	  Compatible with the DA9062 and DA9061 PMICs.
->   
-> -config MTK_THERMAL
-> -	tristate "Temperature sensor driver for mediatek SoCs"
-> -	depends on ARCH_MEDIATEK || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	depends on NVMEM || NVMEM=n
-> -	depends on RESET_CONTROLLER
-> -	default y
-> -	help
-> -	  Enable this option if you want to have support for thermal management
-> -	  controller present in Mediatek SoCs
-> +menu "Mediatek thermal drivers"
-> +depends on ARCH_MEDIATEK || COMPILE_TEST
-> +source "drivers/thermal/mediatek/Kconfig"
-> +endmenu
->   
->   config AMLOGIC_THERMAL
->   	tristate "Amlogic Thermal Support"
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index def8e1a0399c..3c00e864ad55 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -55,7 +55,7 @@ obj-y				+= st/
->   obj-$(CONFIG_QCOM_TSENS)	+= qcom/
->   obj-y				+= tegra/
->   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
->   obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
->   obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
-> new file mode 100644
-> index 000000000000..9c41e9079fc3
-> --- /dev/null
-> +++ b/drivers/thermal/mediatek/Kconfig
-> @@ -0,0 +1,23 @@
-> +config MTK_THERMAL
-> +	tristate "MediaTek thermal drivers"
-> +	depends on THERMAL_OF
-> +	help
-> +		This is the option for MediaTek thermal software
-> +		solutions. Please enable corresponding options to
-> +		get temperature information from thermal sensors or
-> +		turn on throttle mechaisms for thermal mitigation.
+> diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
+> index b2ea318a10a4..24537ce29bc4 100644
+> --- a/drivers/firmware/dmi_scan.c
+> +++ b/drivers/firmware/dmi_scan.c
+> @@ -630,7 +630,7 @@ static int __init dmi_smbios3_present(const u8 *buf)
+>  {
+>  	if (memcmp(buf, "_SM3_", 5) == 0 &&
+>  	    buf[6] < 32 && dmi_checksum(buf, buf[6])) {
+> -		dmi_ver = get_unaligned_be32(buf + 6) & 0xFFFFFF;
+> +		dmi_ver = get_unaligned_be24(buf + 7);
+>  		dmi_num = 0;			/* No longer specified */
+>  		dmi_len = get_unaligned_le32(buf + 12);
+>  		dmi_base = get_unaligned_le64(buf + 16);
 
-Sorry, I just noticed that the indentation must be fixed.
+I admit I did not know about get_unaligned_be24(). While I agree that
+it makes the source code look better, one downside is that it actually
+increases the binary size on x86_64. The reason is that
+get_unaligned_be32() is optimized by assembly instruction bswapl, while
+get_unaligned_be24() is not. Situation appears to be the same on ia64
+and arm. Only arm64 would apparently benefit from your proposed
+change.
 
-	help
-	  This is the option .....
+I'm not too sure what is preferred in such situations.
 
-Thanks,
-Angelo
+-- 
+Jean Delvare
+SUSE L3 Support

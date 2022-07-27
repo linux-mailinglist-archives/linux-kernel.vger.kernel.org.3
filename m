@@ -2,125 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64348582880
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC31582885
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbiG0OXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
+        id S233719AbiG0OYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiG0OXm (ORCPT
+        with ESMTP id S233565AbiG0OYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:23:42 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CE81ADA0;
-        Wed, 27 Jul 2022 07:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658931821; x=1690467821;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QDqJWX3QsIY+mVrjQjqamt6AMbOAQVyx8v1KjAUsHEM=;
-  b=KZ2SzJxwlUVPQEowgw/NnnmY3vF4gaL9UpHW79AyAIiilzyR+/zXGtRB
-   yZSQ9T0ZrXMzas2tHL88mjt9j9rH7h3SMv6UycGxMQv6TqZuzPx5CjHrb
-   VV1sRox5/D3m3/itnTD9MYBfml3MOr1+GBV3D3icMAXhcy4VKlcgffA17
-   +xvk8ZCxsleE3pteEJpVdZs7BAW/bwxipeM8tkJPd0XaqItiDYTTv9J7G
-   o+A6NXHkF/KH9LRzg82aquGyrsDGRfiK6h73azVzaIXt/cWs9ZSBknak1
-   +kkfvAkHgeH98ceMRHLzpSHSGKsD3tsCTE1VQD5uqdoUEvYCoc/A1tWQj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="275120443"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="275120443"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:23:40 -0700
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="726942897"
-Received: from jkasten-mobl.amr.corp.intel.com (HELO [10.209.24.156]) ([10.209.24.156])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:23:40 -0700
-Message-ID: <3dc43f00-0b01-1b02-74dc-6938f6db6e29@linux.intel.com>
-Date:   Wed, 27 Jul 2022 07:23:39 -0700
+        Wed, 27 Jul 2022 10:24:46 -0400
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24E624BC8;
+        Wed, 27 Jul 2022 07:24:45 -0700 (PDT)
+Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1oGhxl-0008Bo-Ua;
+        Wed, 27 Jul 2022 10:24:37 -0400
+Date:   Wed, 27 Jul 2022 10:24:37 -0400
+From:   Rik van Riel <riel@surriel.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, kernel-team@fb.com,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Breno Leitao <leitao@debian.org>
+Subject: [PATCH v4] livepatch: fix race between fork and KLP transition
+Message-ID: <20220727102437.34530586@imladris.surriel.com>
+In-Reply-To: <20220727001040.vlqnnb4a3um46746@treble>
+References: <20220720121023.043738bb@imladris.surriel.com>
+        <YtrCqMLUqJlcoqIo@alley>
+        <20220722150106.683f3704@imladris.surriel.com>
+        <Yt6bZo5ztnVSjLLC@alley>
+        <20220725094919.52bcde19@imladris.surriel.com>
+        <20220727001040.vlqnnb4a3um46746@treble>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v1] PCI/DPC: Skip EDR init when BIOS disable OS native DPC
-Content-Language: en-US
-To:     Xiaochun Lee <lixiaochun.2888@163.com>, linux-pci@vger.kernel.org
-Cc:     bhelgaas@google.com, linux-kernel@vger.kernel.org,
-        Xiaochun Lee <lixc17@lenovo.com>
-References: <1658919957-53006-1-git-send-email-lixiaochun.2888@163.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <1658919957-53006-1-git-send-email-lixiaochun.2888@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+v4: address changelog comments by Josh (thank you)
 
-On 7/27/22 4:05 AM, Xiaochun Lee wrote:
-> From: Xiaochun Lee <lixc17@lenovo.com>
-> 
-> ACPI BIOS may disable OS native AER and DPC support to notify OS
-> that our platform doesn't support AER and DPC via the _OSC method.
-> BIOS also might leave the containment be accomplished purely in HW.
-> When firmware is set to non-aware OS DPC, we skip to install
-> EDR handler to an ACPI device.
+---8<---
+When a KLP fails to apply, klp_reverse_transition will clear the
+TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
+which are not on the task list yet. A similar race is possible
+for normal (forward) transitions, where TIF_PATCH_PENDING gets
+copied to the child, then later cleared in the parent.
 
-No, EDR is used when firmware controls the DPC.
+Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
+parent to the child early on, in dup_task_struct -> setup_thread_stack.
 
-When the Firmware owns Downstream Port Containment, it is expected to use
-the new “Error Disconnect Recover” notification to alert OSPM of a
-Downstream Port Containment event.
+Much later, klp_copy_process will set child->patch_state to match
+that of the parent.
 
-> 
-> Signed-off-by: Xiaochun Lee <lixc17@lenovo.com>
-> ---
->  drivers/pci/pcie/edr.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
-> index a6b9b47..97a680b 100644
-> --- a/drivers/pci/pcie/edr.c
-> +++ b/drivers/pci/pcie/edr.c
-> @@ -19,6 +19,17 @@
->  #define EDR_OST_SUCCESS			0x80
->  #define EDR_OST_FAILED			0x81
->  
-> +static int pcie_dpc_is_native(struct pci_dev *dev)
-> +{
-> +	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
-> +
-> +	if (!dev->dpc_cap)
-> +		return 0;
-> +
-> +	return pcie_ports_dpc_native || host->native_dpc;
-> +}
-> +
-> +
->  /*
->   * _DSM wrapper function to enable/disable DPC
->   * @pdev   : PCI device structure
-> @@ -212,6 +223,11 @@ void pci_acpi_add_edr_notifier(struct pci_dev *pdev)
->  		return;
->  	}
->  
-> +	if (!pcie_dpc_is_native(pdev) && !pcie_aer_is_native(pdev)) {
-> +		pci_dbg(pdev, "OS doesn't control DPC, skipping EDR init\n");
-> +		return;
-> +	}
-> +
->  	status = acpi_install_notify_handler(adev->handle, ACPI_SYSTEM_NOTIFY,
->  					     edr_handle_event, pdev);
->  	if (ACPI_FAILURE(status)) {
+However, the parent's patch_state may have been changed by KLP loading
+or unloading since it was initially copied over into the child.
 
+This results in the KLP code occasionally hitting this warning in
+klp_complete_transition:
+
+        for_each_process_thread(g, task) {
+                WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
+                task->patch_state = KLP_UNDEFINED;
+        }
+
+Set, or clear, the TIF_PATCH_PENDING flag in the child task
+depending on whether or not it is needed at the time
+klp_copy_process is called, at a point in copy_process where the
+tasklist_lock is held exclusively, preventing races with the KLP
+code.
+
+The KLP code does have a few places where the state is changed
+without the tasklist_lock held, but those should not cause
+problems because klp_update_patch_state(current) cannot be
+called while the current task is in the middle of fork,
+klp_check_and_switch_task() which is called under the pi_lock,
+which prevents rescheduling, and manipulation of the patch
+state of idle tasks, which do not fork.
+
+This should prevent this warning from triggering again in the
+future, and close the race for both normal and reverse transitions.
+
+Signed-off-by: Rik van Riel <riel@surriel.com>
+Reported-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Fixes: d83a7cb375ee ("livepatch: change to a per-task consistency model")
+Cc: stable@kernel.org
+---
+ kernel/livepatch/transition.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 5d03a2ad1066..30187b1d8275 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -610,9 +610,23 @@ void klp_reverse_transition(void)
+ /* Called from copy_process() during fork */
+ void klp_copy_process(struct task_struct *child)
+ {
+-	child->patch_state = current->patch_state;
+ 
+-	/* TIF_PATCH_PENDING gets copied in setup_thread_stack() */
++	/*
++	 * The parent process may have gone through a KLP transition since
++	 * the thread flag was copied in setup_thread_stack earlier. Bring
++	 * the task flag up to date with the parent here.
++	 *
++	 * The operation is serialized against all klp_*_transition()
++	 * operations by the tasklist_lock. The only exception is
++	 * klp_update_patch_state(current), but we cannot race with
++	 * that because we are current.
++	 */
++	if (test_tsk_thread_flag(current, TIF_PATCH_PENDING))
++		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
++	else
++		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
++
++	child->patch_state = current->patch_state;
+ }
+ 
+ /*
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.35.1
+

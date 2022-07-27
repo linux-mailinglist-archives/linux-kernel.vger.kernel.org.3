@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3603A58357E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 01:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7775A583585
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 01:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236988AbiG0XC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 19:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
+        id S231964AbiG0XPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 19:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiG0XC5 (ORCPT
+        with ESMTP id S236179AbiG0XOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 19:02:57 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A82420F56;
-        Wed, 27 Jul 2022 16:02:56 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id va17so336424ejb.0;
-        Wed, 27 Jul 2022 16:02:56 -0700 (PDT)
+        Wed, 27 Jul 2022 19:14:31 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799F84F6A2;
+        Wed, 27 Jul 2022 16:14:14 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id b11so221050eju.10;
+        Wed, 27 Jul 2022 16:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=UccYnvkXJ9TbV8KUpT9J6zIdbsOHqZHbizSjT0errm8=;
-        b=fd7BlUYoHTBhaInTSJ/QMQQCFgGZuJA3bxO4XT1o7hw/Zb1p6b/XHgCEJ4DZ3Kno1X
-         E382YOICjJf1/0RwQ4bQaU70OocUHcC5FwpsYerBoH7nleD2rzfG6wJ8D2Q4rqyKz3ET
-         ljnrYTVYtwDWIQcNVwhkUfbUq54sSUO7jxTz30dPjaMaU5VVw7Hbr1nMKY++NVBfke45
-         r9QLkGeCt4/pmrCYN2XCHM+0g0oJYey3hLdnk0tkanaX/65DNA875/QTPXDUgHR9kNUe
-         ALYabtNcw+7zx+w1NqHQuex4MgsNZGEoQ5OMldlnVWO8WLtuuCymj+z7nRVQmZzZ4iCL
-         Wixg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=TcR/Hba16utRWgzQ8bdXRxPgeMOIHRSrEa8M8CqJAe8=;
+        b=blQu6uJ/ksKBqhhrpsET0yR3sRRpKO8zTyMyBxMBZHb7cBmfNsb19+xa6J5OtHpuZf
+         denPmiVelgTazluhPaCaJUkc4VZicW4xeY8fhJXMWey7hg5/IDDsP0Lnz8kPhMVcrmoU
+         Ac1g2Wutw6irx1dv5kjcMdZu+0YD3UJlW7xafYm/MV55JHuRTc7dfiq1RzIl0aOqSDs0
+         krBAwEtJL40MFyWUXFUcopB5KtaNkIrg2d0qrZQrbyL/knj1PDssGo9o1QRDdMQz6WX8
+         C5elhvMh1iSDgbFk+dOy8SDBw99MC9LFWSUhNQfnGnTJ0NDAk9kOpntf8KPCYriPCEcS
+         jFEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=UccYnvkXJ9TbV8KUpT9J6zIdbsOHqZHbizSjT0errm8=;
-        b=Iey1VLoo6jA1GKSXY2zD39ZgRGu0fkr+V11psdhAbyDceK/t7raIClGhRqCdc15fcM
-         Tp8C1nFhRwdnexy+pLg0hU64PeAzRyGIbMcudiQiMz47/6r8sGoHatw2WD68juFcQcJA
-         JthkL4Qk27/ZCbJFyJAz9ppAuvfeMX0wpv3BtAHBsspvaFNGlW0WCptvM+nT+XLHHRll
-         CIxeM9R9e6r75wU//vlbZo+y+29KNN68tY5dMjaeNq1x9FAgM1sKX9AanNYFFh2c8uGU
-         n5zskqBfKcG+BwGqibTIiYiTieesCeY1dJqJT6QRXRt7/Dy94HaSMNGERv6Hk6kAdtEy
-         Os0g==
-X-Gm-Message-State: AJIora+QznnEfd6I0XT1+8kkHLT08Ajy3V/VSA6KQBaAwxBQi/pVqC1g
-        owGC+oUsMVxbPIsNBvLCqqqrHbXyEeVxYUIO+FY=
-X-Google-Smtp-Source: AGRyM1vsQriy8kQ4jAl+BU2ma4HvbVp50hN3UCqA7Lgjqujgb5/tymV/C6dzwIl49zGE7mZtxeYPQ4KXw/bITOBNtfU=
-X-Received: by 2002:a17:907:2808:b0:72b:4d49:b2e9 with SMTP id
- eb8-20020a170907280800b0072b4d49b2e9mr20015090ejc.176.1658962974933; Wed, 27
- Jul 2022 16:02:54 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=TcR/Hba16utRWgzQ8bdXRxPgeMOIHRSrEa8M8CqJAe8=;
+        b=EfaxxfnesWhWhzKyNQ2KuGGMK05PfhERV3e993knBwmPCeZCtqcmK/iDJNyatwZdA8
+         QPsdDkMvMbxk4/D8efuew8J/xGTWV2CQS5lZHlAlUx5exlVPhPbkN7WNez8hKzARsZD2
+         2yTDdJn2jpN5vaM6ZHAXmM6h4Bp7Tz9kOQJNgTq7xwAB0Yq3EadorrJFjKJnBlN3E6gV
+         Ij0zAE9bPGwjhBB5xQFLC8t4HYGHfDs0xBuZRPv6N15ZH+PenkLgerpeJfM3UHDvWnik
+         k5SxkXST6NevSCY9YpQ4NoTE1IyiLyVf9sqQIH/LO377897K/sR7WTCXi7iGrKyCkqWk
+         Yu+A==
+X-Gm-Message-State: AJIora+hc6tRRYFzDf4xHJytf8xak9K4FHPZS3TEYkg2Tkq2uihgE1ck
+        4xtaaGwOqEzAXJwyjAmMWZnJjOEnjUkd+iZN
+X-Google-Smtp-Source: AGRyM1tL0RDZ8Eh6SJuyD07h37mCSFRwuyhUVDR0BMwC/BbTbxZmaeQ3MLIE83tlp7vlSYaKV5/fuA==
+X-Received: by 2002:a17:907:6ea7:b0:72f:2cf2:9aef with SMTP id sh39-20020a1709076ea700b0072f2cf29aefmr19471363ejc.215.1658963652300;
+        Wed, 27 Jul 2022 16:14:12 -0700 (PDT)
+Received: from [192.168.74.101] ([77.78.38.236])
+        by smtp.gmail.com with ESMTPSA id ck15-20020a0564021c0f00b0043adc6552d6sm10806486edb.20.2022.07.27.16.14.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 16:14:11 -0700 (PDT)
+Message-ID: <79077e08-4bd8-6967-748d-876589ef978e@gmail.com>
+Date:   Thu, 28 Jul 2022 02:14:10 +0300
 MIME-Version: 1.0
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
-In-Reply-To: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 27 Jul 2022 16:02:43 -0700
-Message-ID: <CAEf4BzbWpQS6js5LfS80PkqwDwcLc+NgzfqqUTG-CkLP16shCg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-To:     Joe Burton <jevburton.kernel@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Joe Burton <jevburton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/5] regulator: qcom_spmi: Add support for new
+ regulator types
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20220726181133.3262695-1-iskren.chernev@gmail.com>
+ <20220726181133.3262695-4-iskren.chernev@gmail.com>
+ <YuEoLteLBgd+b8sg@sirena.org.uk>
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+In-Reply-To: <YuEoLteLBgd+b8sg@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,103 +88,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 12:40 PM Joe Burton <jevburton.kernel@gmail.com> wrote:
->
-> From: Joe Burton <jevburton@google.com>
->
-> Add an extensible variant of bpf_obj_get() capable of setting the
-> `file_flags` parameter.
->
-> This parameter is needed to enable unprivileged access to BPF maps.
-> Without a method like this, users must manually make the syscall.
->
-> Signed-off-by: Joe Burton <jevburton@google.com>
-> ---
->  tools/lib/bpf/bpf.c      | 10 ++++++++++
->  tools/lib/bpf/bpf.h      |  9 +++++++++
->  tools/lib/bpf/libbpf.map |  1 +
->  3 files changed, 20 insertions(+)
->
-
-I agree that bpf_obj_get_opts should be separate from bpf_get_fd_opts.
-Just because both currently have file_flags in them doesn't mean that
-they should/will always stay in sync. So two separate opts for two
-separate APIs makes sense to me.
-
-So I'd accept this patch, but please see a few small things below and
-send v3. Thanks!
 
 
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 5eb0df90eb2b..5acb0e8bd13c 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char *pathname)
->  }
->
->  int bpf_obj_get(const char *pathname)
-> +{
-> +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
 
-if you were doing it this way, here should be an empty line. But
-really you can/should just pass NULL instead of opts in this case.
+On 7/27/22 14:57, Mark Brown wrote:
+> On Tue, Jul 26, 2022 at 09:11:31PM +0300, Iskren Chernev wrote:
+>
+>> Add support for some regulator types that are missing in this driver, all
+>> belonging to the FTSMPS426 register layout.  This is done in preparation
+>> for adding support for the PM6125 PMIC.
+>
+>> +	.set_mode		= spmi_regulator_ftsmps3_set_mode,
+>> +	.get_mode		= spmi_regulator_ftsmps426_get_mode,
+>
+> Why are set and get asymmetric?
 
-> +       return bpf_obj_get_opts(pathname, &opts);
-> +}
-> +
-> +int bpf_obj_get_opts(const char *pathname, const struct bpf_obj_get_opts *opts)
->  {
->         union bpf_attr attr;
->         int fd;
->
-> +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
-> +               return libbpf_err(-EINVAL);
-> +
->         memset(&attr, 0, sizeof(attr));
->         attr.pathname = ptr_to_u64((void *)pathname);
-> +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
->
->         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
->         return libbpf_err_errno(fd);
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 88a7cc4bd76f..f31b493b5f9a 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int fd, const void *keys, const void *values
->                                     __u32 *count,
->                                     const struct bpf_map_batch_opts *opts);
->
-> +struct bpf_obj_get_opts {
-> +       size_t sz; /* size of this struct for forward/backward compatibility */
-> +
-> +       __u32 file_flags;
+Because the get method, only uses AUTO and HPM, which have the same value
+for ftsmps3 and ftsmps426 (so there is no need for a new function).
 
-please add size_t :0; to avoid non-zero-initialized padding  (we do it
-in a lot of other opts structs)
+>> @@ -1473,7 +1557,7 @@ static const struct spmi_regulator_mapping supported_regulators[] = {
+>>  	SPMI_VREG(LDO,   HT_P600,  0, INF, HFS430, hfs430, ht_p600, 10000),
+>>  	SPMI_VREG(LDO,   HT_P150,  0, INF, HFS430, hfs430, ht_p150, 10000),
+>>  	SPMI_VREG(BUCK,  GP_CTL,   0, INF, SMPS,   smps,   smps,   100000),
+>> -	SPMI_VREG(BUCK,  HFS430,   0, INF, HFS430, hfs430, hfs430,  10000),
+>> +	SPMI_VREG(BUCK,  HFS430,   0,   3, HFS430, hfs430, hfs430,  10000),
+>
+> The changelog said we were adding support for new types but this looks
+> like changing an existing type.
 
+The code, as written now does a different thing for BUCK, HFS430 (on
+mainline (ML) and downstream (DS) linked in the commit message). Since DS
+only supports newer stuff, to be on safe side, I kept existing behavior for
+rev 0-3 on BUCK(3)+HFS430(10), so at least DS and ML agree on pm6125
+completely.
 
-> +};
-> +#define bpf_obj_get_opts__last_field file_flags
-> +
->  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
->  LIBBPF_API int bpf_obj_get(const char *pathname);
-> +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
-> +                               const struct bpf_obj_get_opts *opts);
->
->  struct bpf_prog_attach_opts {
->         size_t sz; /* size of this struct for forward/backward compatibility */
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 0625adb9e888..119e6e1ea7f1 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
->
->  LIBBPF_1.0.0 {
->         global:
-> +               bpf_obj_get_opts;
->                 bpf_prog_query_opts;
->                 bpf_program__attach_ksyscall;
->                 btf__add_enum64;
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
+The commit [1] that adds support for BUCK+HFS430 might be wrong, or it
+might be right for the time being (i.e initial revisions had different
+behavior). I'm CC-ing Jorge.
+
+Question is is BUCK+HFS430 on common2 (ftsmps426) or common3 (ftsmps3) or
+a mix (depending on revision).
+
+[1] 0211f68e626f (regulator: qcom_spmi: add PMS405 SPMI regulator, 2019-06-17)

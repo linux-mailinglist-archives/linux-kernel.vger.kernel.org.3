@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EC3582F31
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3181582AA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241837AbiG0RWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S235156AbiG0QW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242019AbiG0RTf (ORCPT
+        with ESMTP id S234962AbiG0QWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:19:35 -0400
+        Wed, 27 Jul 2022 12:22:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F295C9C1;
-        Wed, 27 Jul 2022 09:44:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7CC4B0DD;
+        Wed, 27 Jul 2022 09:22:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0301461479;
-        Wed, 27 Jul 2022 16:44:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1322FC433B5;
-        Wed, 27 Jul 2022 16:44:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC85761995;
+        Wed, 27 Jul 2022 16:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090EDC433C1;
+        Wed, 27 Jul 2022 16:22:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940291;
-        bh=LaAiy6oA8wRBDndG/jd576RVds9v/VmyZte9tl5TmaI=;
+        s=korg; t=1658938923;
+        bh=WOj+s5vKPdoTepok1yhOUhX1S4XBseNZDgBPvkKvjHk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JU8227mjhqPSOSgldRhf8+wRZGMTlCCvztAPqhh7Qnme6FzHt4P6QJFzPo4W48Ci+
-         6B5+l0f0YHgbYCGSp5j9Lk1dBzm+AO7GW2+uIRZVI/Uuhr50Xw7TaRiG+ZYvuqAW3u
-         jqCPu2Vh4eEi3EnWqviEVGgoL3kcqx4BIvy79EyI=
+        b=Om9LuwHireBxHycKymkBrJ7pQt8ov8KZX8FR8OPw4n8GnylUhZ1Y4A3O4OaMKGpm4
+         uivkhJ5UmwcNvC7LzAc6vccwJ48y2rhoS6bnGKSXGP4JaZDZ6EYc4A8KBrvJ9cemul
+         wU07Kqw00zRIKMsiOsQAh4tgR575Y7zjrwpPkv/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 141/201] x86/extable: Tidy up redundant handler functions
+        stable@vger.kernel.org, Hristo Venev <hristo@venev.name>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 16/26] be2net: Fix buffer overflow in be_get_module_eeprom
 Date:   Wed, 27 Jul 2022 18:10:45 +0200
-Message-Id: <20220727161033.656172234@linuxfoundation.org>
+Message-Id: <20220727160959.770313545@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
+References: <20220727160959.122591422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,78 +54,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Hristo Venev <hristo@venev.name>
 
-[ Upstream commit 326b567f82df0c4c8f50092b9af9a3014616fb3c ]
+[ Upstream commit d7241f679a59cfe27f92cb5c6272cb429fb1f7ec ]
 
-No need to have the same code all over the place.
+be_cmd_read_port_transceiver_data assumes that it is given a buffer that
+is at least PAGE_DATA_LEN long, or twice that if the module supports SFF
+8472. However, this is not always the case.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20210908132524.963232825@linutronix.de
+Fix this by passing the desired offset and length to
+be_cmd_read_port_transceiver_data so that we only copy the bytes once.
+
+Fixes: e36edd9d26cf ("be2net: add ethtool "-m" option support")
+Signed-off-by: Hristo Venev <hristo@venev.name>
+Link: https://lore.kernel.org/r/20220716085134.6095-1-hristo@venev.name
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/mm/extable.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/net/ethernet/emulex/benet/be_cmds.c   | 10 +++---
+ drivers/net/ethernet/emulex/benet/be_cmds.h   |  2 +-
+ .../net/ethernet/emulex/benet/be_ethtool.c    | 31 ++++++++++++-------
+ 3 files changed, 25 insertions(+), 18 deletions(-)
 
-diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
-index e1664e9f969c..d9a1046f3a98 100644
---- a/arch/x86/mm/extable.c
-+++ b/arch/x86/mm/extable.c
-@@ -39,9 +39,8 @@ __visible bool ex_handler_fault(const struct exception_table_entry *fixup,
- 				unsigned long error_code,
- 				unsigned long fault_addr)
+diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.c b/drivers/net/ethernet/emulex/benet/be_cmds.c
+index 8887dd3abed7..619cc13ffb55 100644
+--- a/drivers/net/ethernet/emulex/benet/be_cmds.c
++++ b/drivers/net/ethernet/emulex/benet/be_cmds.c
+@@ -2291,7 +2291,7 @@ int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num, u32 *state)
+ 
+ /* Uses sync mcc */
+ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+-				      u8 page_num, u8 *data)
++				      u8 page_num, u32 off, u32 len, u8 *data)
  {
--	regs->ip = ex_fixup_addr(fixup);
- 	regs->ax = trapnr;
--	return true;
-+	return ex_handler_default(fixup, regs, trapnr, error_code, fault_addr);
- }
- EXPORT_SYMBOL_GPL(ex_handler_fault);
+ 	struct be_dma_mem cmd;
+ 	struct be_mcc_wrb *wrb;
+@@ -2325,10 +2325,10 @@ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+ 	req->port = cpu_to_le32(adapter->hba_port_num);
+ 	req->page_num = cpu_to_le32(page_num);
+ 	status = be_mcc_notify_wait(adapter);
+-	if (!status) {
++	if (!status && len > 0) {
+ 		struct be_cmd_resp_port_type *resp = cmd.va;
  
-@@ -76,8 +75,7 @@ __visible bool ex_handler_uaccess(const struct exception_table_entry *fixup,
- 				  unsigned long fault_addr)
+-		memcpy(data, resp->page_data, PAGE_DATA_LEN);
++		memcpy(data, resp->page_data + off, len);
+ 	}
+ err:
+ 	mutex_unlock(&adapter->mcc_lock);
+@@ -2419,7 +2419,7 @@ int be_cmd_query_cable_type(struct be_adapter *adapter)
+ 	int status;
+ 
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		switch (adapter->phy.interface_type) {
+ 		case PHY_TYPE_QSFP:
+@@ -2444,7 +2444,7 @@ int be_cmd_query_sfp_info(struct be_adapter *adapter)
+ 	int status;
+ 
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		strlcpy(adapter->phy.vendor_name, page_data +
+ 			SFP_VENDOR_NAME_OFFSET, SFP_VENDOR_NAME_LEN - 1);
+diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.h b/drivers/net/ethernet/emulex/benet/be_cmds.h
+index 09da2d82c2f0..8af11a5e49fe 100644
+--- a/drivers/net/ethernet/emulex/benet/be_cmds.h
++++ b/drivers/net/ethernet/emulex/benet/be_cmds.h
+@@ -2431,7 +2431,7 @@ int be_cmd_set_beacon_state(struct be_adapter *adapter, u8 port_num, u8 beacon,
+ int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num,
+ 			    u32 *state);
+ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+-				      u8 page_num, u8 *data);
++				      u8 page_num, u32 off, u32 len, u8 *data);
+ int be_cmd_query_cable_type(struct be_adapter *adapter);
+ int be_cmd_query_sfp_info(struct be_adapter *adapter);
+ int lancer_cmd_read_object(struct be_adapter *adapter, struct be_dma_mem *cmd,
+diff --git a/drivers/net/ethernet/emulex/benet/be_ethtool.c b/drivers/net/ethernet/emulex/benet/be_ethtool.c
+index 56db37d92937..ca7750f483f9 100644
+--- a/drivers/net/ethernet/emulex/benet/be_ethtool.c
++++ b/drivers/net/ethernet/emulex/benet/be_ethtool.c
+@@ -1345,7 +1345,7 @@ static int be_get_module_info(struct net_device *netdev,
+ 		return -EOPNOTSUPP;
+ 
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		if (!page_data[SFP_PLUS_SFF_8472_COMP]) {
+ 			modinfo->type = ETH_MODULE_SFF_8079;
+@@ -1363,25 +1363,32 @@ static int be_get_module_eeprom(struct net_device *netdev,
  {
- 	WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in user access. Non-canonical address?");
--	regs->ip = ex_fixup_addr(fixup);
--	return true;
-+	return ex_handler_default(fixup, regs, trapnr, error_code, fault_addr);
+ 	struct be_adapter *adapter = netdev_priv(netdev);
+ 	int status;
++	u32 begin, end;
+ 
+ 	if (!check_privilege(adapter, MAX_PRIVILEGES))
+ 		return -EOPNOTSUPP;
+ 
+-	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   data);
+-	if (status)
+-		goto err;
++	begin = eeprom->offset;
++	end = eeprom->offset + eeprom->len;
++
++	if (begin < PAGE_DATA_LEN) {
++		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0, begin,
++							   min_t(u32, end, PAGE_DATA_LEN) - begin,
++							   data);
++		if (status)
++			goto err;
++
++		data += PAGE_DATA_LEN - begin;
++		begin = PAGE_DATA_LEN;
++	}
+ 
+-	if (eeprom->offset + eeprom->len > PAGE_DATA_LEN) {
+-		status = be_cmd_read_port_transceiver_data(adapter,
+-							   TR_PAGE_A2,
+-							   data +
+-							   PAGE_DATA_LEN);
++	if (end > PAGE_DATA_LEN) {
++		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A2,
++							   begin - PAGE_DATA_LEN,
++							   end - begin, data);
+ 		if (status)
+ 			goto err;
+ 	}
+-	if (eeprom->offset)
+-		memcpy(data, data + eeprom->offset, eeprom->len);
+ err:
+ 	return be_cmd_status(status);
  }
- EXPORT_SYMBOL(ex_handler_uaccess);
- 
-@@ -87,9 +85,7 @@ __visible bool ex_handler_copy(const struct exception_table_entry *fixup,
- 			       unsigned long fault_addr)
- {
- 	WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in user access. Non-canonical address?");
--	regs->ip = ex_fixup_addr(fixup);
--	regs->ax = trapnr;
--	return true;
-+	return ex_handler_fault(fixup, regs, trapnr, error_code, fault_addr);
- }
- EXPORT_SYMBOL(ex_handler_copy);
- 
-@@ -103,10 +99,9 @@ __visible bool ex_handler_rdmsr_unsafe(const struct exception_table_entry *fixup
- 		show_stack_regs(regs);
- 
- 	/* Pretend that the read succeeded and returned 0. */
--	regs->ip = ex_fixup_addr(fixup);
- 	regs->ax = 0;
- 	regs->dx = 0;
--	return true;
-+	return ex_handler_default(fixup, regs, trapnr, error_code, fault_addr);
- }
- EXPORT_SYMBOL(ex_handler_rdmsr_unsafe);
- 
-@@ -121,8 +116,7 @@ __visible bool ex_handler_wrmsr_unsafe(const struct exception_table_entry *fixup
- 		show_stack_regs(regs);
- 
- 	/* Pretend that the write succeeded. */
--	regs->ip = ex_fixup_addr(fixup);
--	return true;
-+	return ex_handler_default(fixup, regs, trapnr, error_code, fault_addr);
- }
- EXPORT_SYMBOL(ex_handler_wrmsr_unsafe);
- 
 -- 
 2.35.1
 

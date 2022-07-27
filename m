@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E80582B1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89654582C7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236871AbiG0Q15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
+        id S240440AbiG0QqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbiG0Q1P (ORCPT
+        with ESMTP id S240176AbiG0QpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:27:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6CE4F1A7;
-        Wed, 27 Jul 2022 09:24:03 -0700 (PDT)
+        Wed, 27 Jul 2022 12:45:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19195F9B3;
+        Wed, 27 Jul 2022 09:31:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0F27B821BC;
-        Wed, 27 Jul 2022 16:24:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F309C433D6;
-        Wed, 27 Jul 2022 16:23:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23280B821C2;
+        Wed, 27 Jul 2022 16:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2F8C433D6;
+        Wed, 27 Jul 2022 16:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939040;
-        bh=IS95Ux7y3Du7rX8+WAHdx5ZWxHFA3ifE1uxa9QhbhDA=;
+        s=korg; t=1658939485;
+        bh=ljxSfJEmWLh3FCXueOr70/5vy8YC0vANe67kfev0fKs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jMap0XDOHwmhPcRL2i3xkITVKAi9y8LInfZffwN42yNhumCH+IRvskXZYwPjudZ46
-         liFvyN4f1Sepa34yRVaUHhI8GaaL2Yfz2QaVGqKg96cCqe3Inwr56Po0H3jOlWYoWx
-         TJ2O57g+cZsRdv3TH7qcaXVEgTKCB1QTP5MMuaNk=
+        b=XJw8beJ0zSDXepzCZgfineEx8ooG5Nm09TYHUR1PL2YlOgkmP+rgqOirsaj303N0T
+         4TzGwhmfy071AhxNMCryGhxqvFA3weOWEXIvSDT+nJiRQErdF8CakNnKy5Aos/Vls9
+         tlz8pYvTLzSxBah7SG4/Xksr460aI9fAuWZbuErM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 12/37] igmp: Fix a data-race around sysctl_igmp_max_memberships.
+Subject: [PATCH 5.4 45/87] udp: Fix a data-race around sysctl_udp_l3mdev_accept.
 Date:   Wed, 27 Jul 2022 18:10:38 +0200
-Message-Id: <20220727161001.357244881@linuxfoundation.org>
+Message-Id: <20220727161010.877370593@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,32 +56,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 6305d821e3b9b5379d348528e5b5faf316383bc2 ]
+[ Upstream commit 3d72bb4188c708bb16758c60822fc4dda7a95174 ]
 
-While reading sysctl_igmp_max_memberships, it can be changed concurrently.
+While reading sysctl_udp_l3mdev_accept, it can be changed concurrently.
 Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: 63a6fff353d0 ("net: Avoid receiving packets with an l3mdev on unbound UDP sockets")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/igmp.c | 2 +-
+ include/net/udp.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/igmp.c b/net/ipv4/igmp.c
-index 4b3875acc876..fd2c634eeee4 100644
---- a/net/ipv4/igmp.c
-+++ b/net/ipv4/igmp.c
-@@ -2179,7 +2179,7 @@ int ip_mc_join_group(struct sock *sk, struct ip_mreqn *imr)
- 		count++;
- 	}
- 	err = -ENOBUFS;
--	if (count >= net->ipv4.sysctl_igmp_max_memberships)
-+	if (count >= READ_ONCE(net->ipv4.sysctl_igmp_max_memberships))
- 		goto done;
- 	iml = sock_kmalloc(sk, sizeof(*iml), GFP_KERNEL);
- 	if (!iml)
+diff --git a/include/net/udp.h b/include/net/udp.h
+index 9787a42f7ed3..e66854e767dc 100644
+--- a/include/net/udp.h
++++ b/include/net/udp.h
+@@ -252,7 +252,7 @@ static inline bool udp_sk_bound_dev_eq(struct net *net, int bound_dev_if,
+ 				       int dif, int sdif)
+ {
+ #if IS_ENABLED(CONFIG_NET_L3_MASTER_DEV)
+-	return inet_bound_dev_eq(!!net->ipv4.sysctl_udp_l3mdev_accept,
++	return inet_bound_dev_eq(!!READ_ONCE(net->ipv4.sysctl_udp_l3mdev_accept),
+ 				 bound_dev_if, dif, sdif);
+ #else
+ 	return inet_bound_dev_eq(true, bound_dev_if, dif, sdif);
 -- 
 2.35.1
 

@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECC3581E7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 06:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334AE581E7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 06:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240274AbiG0EDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 00:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        id S233185AbiG0EDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 00:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240231AbiG0EDP (ORCPT
+        with ESMTP id S240175AbiG0EDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 00:03:15 -0400
+        Wed, 27 Jul 2022 00:03:09 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97280175B0;
-        Tue, 26 Jul 2022 21:03:14 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lt0QZ3vsXzWfxn;
-        Wed, 27 Jul 2022 11:59:18 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C086A18346;
+        Tue, 26 Jul 2022 21:03:08 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lt0QS3VCVzWfxD;
+        Wed, 27 Jul 2022 11:59:12 +0800 (CST)
 Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Jul 2022 12:03:04 +0800
+ 15.1.2375.24; Wed, 27 Jul 2022 12:03:05 +0800
 Received: from ubuntu1804.huawei.com (10.67.174.174) by
  kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Jul 2022 12:03:03 +0800
+ 15.1.2375.24; Wed, 27 Jul 2022 12:03:04 +0800
 From:   Li Huafei <lihuafei1@huawei.com>
 To:     <linux@armlinux.org.uk>, <rmk+kernel@armlinux.org.uk>,
         <ardb@kernel.org>, <will@kernel.org>, <broonie@kernel.org>,
@@ -38,10 +38,12 @@ CC:     <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
         <ndesaulniers@google.com>, <lihuafei1@huawei.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
-Subject: [PATCH v3 0/4] ARM: Convert to ARCH_STACKWALK
-Date:   Wed, 27 Jul 2022 12:00:18 +0800
-Message-ID: <20220727040022.139387-1-lihuafei1@huawei.com>
+Subject: [PATCH v3 1/4] ARM: stacktrace: Skip frame pointer boundary check for call_with_stack()
+Date:   Wed, 27 Jul 2022 12:00:19 +0800
+Message-ID: <20220727040022.139387-2-lihuafei1@huawei.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220727040022.139387-1-lihuafei1@huawei.com>
+References: <20220727040022.139387-1-lihuafei1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.174.174]
@@ -56,42 +58,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series mainly updates the ARM stack trace code to use the newer and
-simpler arch_stack_walk() interface (see patches 3 and 4). Two issues
-were fixed before that (see patches 1 and 2).
+When using the frame pointer unwinder, it was found that the stack trace
+output of stack_trace_save() is incomplete if the stack contains
+call_with_stack():
 
-v3:
- - According to the discussion with Linus and Russell in v1:
-   - Add a comment about "regs[1]" in patch 2, and remove the
-     unnecessary ternary operator in the initialization of
-     "frame->ex_frame".
-   - Remove the patch "ARM: stacktrace: Allow stack trace saving for
-     non-current tasks", and keep the check for not being able to
-     unwind non-current tasks (including tasks running on other CPUs)
-     when CONFIG_SMP=y in patch 4.
- - Rebase to linux-5.19-rc8.
+ [0x7f00002c] dump_stack_task+0x2c/0x90 [hrtimer]
+ [0x7f0000a0] hrtimer_hander+0x10/0x18 [hrtimer]
+ [0x801a67f0] __hrtimer_run_queues+0x1b0/0x3b4
+ [0x801a7350] hrtimer_run_queues+0xc4/0xd8
+ [0x801a597c] update_process_times+0x3c/0x88
+ [0x801b5a98] tick_periodic+0x50/0xd8
+ [0x801b5bf4] tick_handle_periodic+0x24/0x84
+ [0x8010ffc4] twd_handler+0x38/0x48
+ [0x8017d220] handle_percpu_devid_irq+0xa8/0x244
+ [0x80176e9c] generic_handle_domain_irq+0x2c/0x3c
+ [0x8052e3a8] gic_handle_irq+0x7c/0x90
+ [0x808ab15c] generic_handle_arch_irq+0x60/0x80
+ [0x8051191c] call_with_stack+0x1c/0x20
 
-v2: https://lore.kernel.org/lkml/20220713110020.85511-1-lihuafei1@huawei.com/
- - As suggested by Mark, the commit logs for patch 4 and 5 were
-   refined for easy review.
+For the frame pointer unwinder, unwind_frame() checks stackframe::fp by
+stackframe::sp. Since call_with_stack() switches the SP from one stack
+to another, stackframe::fp and stackframe: :sp will point to different
+stacks, so we can no longer check stackframe::fp by stackframe::sp. Skip
+checking stackframe::fp at this point to avoid this problem.
 
-v1: https://lore.kernel.org/lkml/20220712021527.109921-1-lihuafei1@huawei.com/
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+Reviewed-by: Linus Waleij <linus.walleij@linaro.org>
+---
+ arch/arm/kernel/stacktrace.c   | 40 ++++++++++++++++++++++++++++------
+ arch/arm/lib/call_with_stack.S |  2 ++
+ 2 files changed, 35 insertions(+), 7 deletions(-)
 
-Li Huafei (4):
-  ARM: stacktrace: Skip frame pointer boundary check for
-    call_with_stack()
-  ARM: stacktrace: Avoid duplicate saving of exception PC value
-  ARM: stacktrace: Make stack walk callback consistent with generic code
-  ARM: stacktrace: Convert stacktrace to generic ARCH_STACKWALK
-
- arch/arm/Kconfig                  |   1 +
- arch/arm/include/asm/stacktrace.h |   8 +-
- arch/arm/kernel/perf_callchain.c  |   9 +-
- arch/arm/kernel/return_address.c  |   9 +-
- arch/arm/kernel/stacktrace.c      | 191 ++++++++++++++----------------
- arch/arm/lib/call_with_stack.S    |   2 +
- 6 files changed, 110 insertions(+), 110 deletions(-)
-
+diff --git a/arch/arm/kernel/stacktrace.c b/arch/arm/kernel/stacktrace.c
+index d0fa2037460a..af87040b0353 100644
+--- a/arch/arm/kernel/stacktrace.c
++++ b/arch/arm/kernel/stacktrace.c
+@@ -9,6 +9,8 @@
+ #include <asm/stacktrace.h>
+ #include <asm/traps.h>
+ 
++#include "reboot.h"
++
+ #if defined(CONFIG_FRAME_POINTER) && !defined(CONFIG_ARM_UNWIND)
+ /*
+  * Unwind the current stack frame and store the new register values in the
+@@ -39,29 +41,53 @@
+  * Note that with framepointer enabled, even the leaf functions have the same
+  * prologue and epilogue, therefore we can ignore the LR value in this case.
+  */
+-int notrace unwind_frame(struct stackframe *frame)
++
++extern unsigned long call_with_stack_end;
++
++static int frame_pointer_check(struct stackframe *frame)
+ {
+ 	unsigned long high, low;
+ 	unsigned long fp = frame->fp;
++	unsigned long pc = frame->pc;
++
++	/*
++	 * call_with_stack() is the only place we allow SP to jump from one
++	 * stack to another, with FP and SP pointing to different stacks,
++	 * skipping the FP boundary check at this point.
++	 */
++	if (pc >= (unsigned long)&call_with_stack &&
++			pc < (unsigned long)&call_with_stack_end)
++		return 0;
+ 
+ 	/* only go to a higher address on the stack */
+ 	low = frame->sp;
+ 	high = ALIGN(low, THREAD_SIZE);
+ 
+-#ifdef CONFIG_CC_IS_CLANG
+ 	/* check current frame pointer is within bounds */
++#ifdef CONFIG_CC_IS_CLANG
+ 	if (fp < low + 4 || fp > high - 4)
+ 		return -EINVAL;
+-
+-	frame->sp = frame->fp;
+-	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
+-	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 4));
+ #else
+-	/* check current frame pointer is within bounds */
+ 	if (fp < low + 12 || fp > high - 4)
+ 		return -EINVAL;
++#endif
++
++	return 0;
++}
++
++int notrace unwind_frame(struct stackframe *frame)
++{
++	unsigned long fp = frame->fp;
++
++	if (frame_pointer_check(frame))
++		return -EINVAL;
+ 
+ 	/* restore the registers from the stack frame */
++#ifdef CONFIG_CC_IS_CLANG
++	frame->sp = frame->fp;
++	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
++	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 4));
++#else
+ 	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 12));
+ 	frame->sp = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 8));
+ 	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 4));
+diff --git a/arch/arm/lib/call_with_stack.S b/arch/arm/lib/call_with_stack.S
+index 0a268a6c513c..5030d4e8d126 100644
+--- a/arch/arm/lib/call_with_stack.S
++++ b/arch/arm/lib/call_with_stack.S
+@@ -46,4 +46,6 @@ UNWIND( .setfp	fpreg, sp	)
+ 	pop	{fpreg, pc}
+ UNWIND( .fnend			)
+ #endif
++	.globl call_with_stack_end
++call_with_stack_end:
+ ENDPROC(call_with_stack)
 -- 
 2.17.1
 

@@ -2,169 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BEF5832C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A165832D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234514AbiG0TEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
+        id S235059AbiG0TEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbiG0TD6 (ORCPT
+        with ESMTP id S229628AbiG0TER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:03:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF13286EF
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:24:28 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oGlhi-0007n7-7T; Wed, 27 Jul 2022 20:24:18 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3747CBC532;
-        Wed, 27 Jul 2022 18:24:16 +0000 (UTC)
-Date:   Wed, 27 Jul 2022 20:24:14 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
- register (btr)
-Message-ID: <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
- <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
- <20220727113054.ffcckzlcipcxer2c@pengutronix.de>
- <20220727192839.707a3453.max@enpas.org>
+        Wed, 27 Jul 2022 15:04:17 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39EC558D1;
+        Wed, 27 Jul 2022 11:27:27 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y141so16787327pfb.7;
+        Wed, 27 Jul 2022 11:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=epPjtN4wCIaFRIOaZPdFKvlDUTQEZpKeGhh4HLykvnw=;
+        b=VdemlUi3yoDyBLRyuRAKSV/EqdNPyL80KIWvp5r0gjhfr2t+20gST0YEokL+zm8RIg
+         iUfMskLvEBSnrC+fr0V4fF/4zKbnTbPDECt038Z8tWHKq/vxUIHkR5bBCnKGE1osHK+S
+         Jbaqo8cVOqbSDuYjODlyVe+bMQ5WCiwyaNH7bhuTHpFHU00fLlhK/Wn4TYO+foGqIWLw
+         D/dONyACF7EvEbyI0QbQyqpan3kQ77LaeKlKAgvwEXxLbEiTIzuNwmWbyzr7zWkGSVFK
+         Ssd9IkY/ZDcyuQvTti3OT6Mt+aeOwUyGqoxzmWVWraMzcMBzNkqVEBpi0InPVbwdcCAl
+         Fn7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=epPjtN4wCIaFRIOaZPdFKvlDUTQEZpKeGhh4HLykvnw=;
+        b=2+PgY0+/p9FA1uDRHj8dOcHxn3daY0FTUGJpcsrnJsyt0SjyfWm0nRa72x2pupN4QN
+         3nHj7K0xcQaX7ktXqh+uN3Ggh99TZCRj1pGMOnsBZ1303F7vPsLDNoErLo/jM2Q084EL
+         WnggY3iRE2+MBCsd1EE1BS6Db2ncSriYr8P6BKUqb1F0nDVUQH2r4JcB3KDpB2TxkuBk
+         VhEXnq7eO3R7TFLcAW4c4lKVmpGzSbwGVvP7gbayttMD83zTGUEZ6SPE7BzfcxCDK2LG
+         hxbVqh0oo6jMaSk1zYttt8WblZ44FiZdZ5VECAAEc0IYPTQWf3JlLl9FEsqLBD1irgtt
+         FCjg==
+X-Gm-Message-State: AJIora9ZHijuvC2309fUxKUnScT7r14tGTRDM+tigj2N/vRa4CesKYLf
+        fMOAzgkKa8LrYIVGY7VlhUs=
+X-Google-Smtp-Source: AGRyM1vyL7zJPphkIWuwDHPJv7y2makdkihmCp6bfYo7xi7XlNGRRk6+w1ZeJDhQs+64gWceuISyNA==
+X-Received: by 2002:a63:3181:0:b0:417:b4b5:df09 with SMTP id x123-20020a633181000000b00417b4b5df09mr20426470pgx.398.1658946447042;
+        Wed, 27 Jul 2022 11:27:27 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:5a55])
+        by smtp.gmail.com with ESMTPSA id f5-20020aa79d85000000b00525161431f5sm14082289pfq.36.2022.07.27.11.27.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 11:27:26 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 27 Jul 2022 08:27:24 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH RESEND v6 1/8] blk-throttle: fix that io throttle can
+ only work for single bio
+Message-ID: <YuGDjFkxDSsVrcRw@slm.duckdns.org>
+References: <20220701093441.885741-1-yukuai1@huaweicloud.com>
+ <20220701093441.885741-2-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j5a7w3uipafkmwfr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220727192839.707a3453.max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220701093441.885741-2-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sorry about the long delay.
 
---j5a7w3uipafkmwfr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So, the code looks nice but I have a difficult time following the logic.
 
-On 27.07.2022 19:28:39, Max Staudt wrote:
-> On Wed, 27 Jul 2022 13:30:54 +0200
-> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->=20
-> > As far as I understand, setting the btr is an alternative way to set the
-> > bitrate, right? I don't like the idea of poking arbitrary values into a
-> > hardware from user space.
->=20
-> I agree with Marc here.
->=20
-> This is a modification across the whole stack, specific to a single
-> device, when there are ways around.
->=20
-> If I understand correctly, the CAN232 "S" command sets one of the fixed
-> bitrates, whereas "s" sets the two BTR registers. Now the question is,
-> what do BTR0/BTR1 mean, and what are they? If they are merely a divider
-> in a CAN controller's master clock, like in ELM327, then you could
->=20
->   a) Calculate the BTR values from the bitrate userspace requests, or
+On Fri, Jul 01, 2022 at 05:34:34PM +0800, Yu Kuai wrote:
+> @@ -811,7 +811,7 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
+>  	unsigned int bio_size = throtl_bio_data_size(bio);
+>  
+>  	/* no need to throttle if this bio's bytes have been accounted */
+> -	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
+> +	if (bps_limit == U64_MAX) {
+>  		if (wait)
+>  			*wait = 0;
+>  		return true;
+> @@ -921,11 +921,8 @@ static void throtl_charge_bio(struct throtl_grp *tg, struct bio *bio)
+>  	unsigned int bio_size = throtl_bio_data_size(bio);
+>  
+>  	/* Charge the bio to the group */
+> -	if (!bio_flagged(bio, BIO_THROTTLED)) {
+> -		tg->bytes_disp[rw] += bio_size;
+> -		tg->last_bytes_disp[rw] += bio_size;
+> -	}
+> -
+> +	tg->bytes_disp[rw] += bio_size;
+> +	tg->last_bytes_disp[rw] += bio_size;
+>  	tg->io_disp[rw]++;
+>  	tg->last_io_disp[rw]++;
 
-Most of the other CAN drivers write the BTR values into the register of
-the hardware. How are these BTR values transported into the driver?
+So, we're charging and controlling whether it has already been throttled or
+not.
 
-There are 2 ways:
+> @@ -2121,6 +2118,21 @@ bool __blk_throtl_bio(struct bio *bio)
+>  			tg->last_low_overflow_time[rw] = jiffies;
+>  		throtl_downgrade_check(tg);
+>  		throtl_upgrade_check(tg);
+> +
+> +		/*
+> +		 * re-entered bio has accounted bytes already, so try to
+> +		 * compensate previous over-accounting. However, if new
+> +		 * slice is started, just forget it.
+> +		 */
+> +		if (bio_flagged(bio, BIO_THROTTLED)) {
+> +			unsigned int bio_size = throtl_bio_data_size(bio);
+> +
+> +			if (tg->bytes_disp[rw] >= bio_size)
+> +				tg->bytes_disp[rw] -= bio_size;
+> +			if (tg->last_bytes_disp[rw] >= bio_size)
+> +				tg->last_bytes_disp[rw] -= bio_size;
+> +		}
 
-1) - user space configures a bitrate
-   - the kernel calculates with the "struct can_bittiming_const" [1] given
-     by driver and the CAN clock rate the low level timing parameters.
+and trying to restore the overaccounting. However, it's not clear why this
+helps with the problem you're describing. The comment should be clearly
+spelling out why it's done this way and how this works.
 
-     [1] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/c=
-an/netlink.h#L47
+Also, blk_throttl_bio() doesn't call into __blk_throtl_bio() at all if
+THROTTLED is set and HAS_IOPS_LIMIT is not, so if there are only bw limits,
+we end up accounting these IOs twice?
 
-2) - user space configures low level bit timing parameter
-     (Sample point in one-tenth of a percent, Time quanta (TQ) in
-      nanoseconds, Propagation segment in TQs, Phase buffer segment 1 in
-      TQs, Phase buffer segment 2 in TQs, Synchronisation jump width in
-      TQs)
-    - the kernel calculates the Bit-rate prescaler from the given TQ and
-      CAN clock rate
+Thanks.
 
-Both ways result in a fully calculated "struct can_bittiming" [2]. The
-driver translates this into the hardware specific BTR values and writes
-the into the registers.
-
-If you know the CAN clock and the bit timing const parameters of the
-slcan's BTR register you can make use of the automatic BTR calculation,
-too. Maybe the framework needs some tweaking if the driver supports both
-fixed CAN bit rate _and_ "struct can_bittiming_const".
-
-[2] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/ne=
-tlink.h#L31
-
->   b) pre-calculate a huge table of possible bitrates and present them
->      all to userspace. Sounds horrible, but that's what I did in can327,
->      haha. Maybe I should have reigned them in a little, to the most
->      useful values.
-
-If your adapter only supports fixed values, then that's the only way to
-go.
-
->   c) just limit the bitrates to whatever seems most useful (like the
->      "S" command's table), and let users complain if they really need
->      something else. In the meantime, they are still free to slcand or
->      minicom to their heart's content before attaching slcan, thanks to
->      your backwards compatibility efforts.
-
-In the early stages of the non-mainline CAN framework we had tables for
-BTR values for some fixed bit rates, but that turned out to be not
-scaleable.
-
-> In short, to me, this isn't a deal breaker for your patch series.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---j5a7w3uipafkmwfr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLhgssACgkQrX5LkNig
-01016gf/ZRRMvoB/gGzSsmrEKOpsdLDEh6uPZxPh0LTnGQ2KyUa2HzyKWSgP9xsk
-BXu1c2T4jSf2KLDvFUnVSKd+bXIPQ4cMEF7BXE8neYoXuTht9bPKvKOh37SXl8DN
-Hi29mngtdk3SXgSUBBNvE91LfJoMZdGoSty2CXZkr5fm/RCDkHW2jCCb7JntBCso
-7NGfFbSUG0T2tbhfmVZI32OwOTlxFhNNtWutFd7kHjvs0v4FpgW811mT+pAyGSLX
-8LldzpDCvlp2MYkNLLlu+uiaTxNQmOpI2UYSCioNkGkIpGyeGw3S489Y5NCGjPGz
-7A+0/8hiKSYxaUHeE+qcEjiAnEWgYQ==
-=Ric7
------END PGP SIGNATURE-----
-
---j5a7w3uipafkmwfr--
+-- 
+tejun

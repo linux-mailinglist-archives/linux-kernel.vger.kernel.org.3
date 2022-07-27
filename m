@@ -2,232 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7385835BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 01:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE065835C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 01:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbiG0XpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 19:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S234099AbiG0XpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 19:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiG0XpH (ORCPT
+        with ESMTP id S234140AbiG0XpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 19:45:07 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00FE5508C
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658965505; x=1690501505;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4A4JzBKKpNoYURdsGNZM0P+iPGNRtEhpcKWo/f/FtfI=;
-  b=ZnZ/UNjQ3tDQ4xjQfE13qA/7gHxmeWEk2uAemAngDBfsigp7E0EIrPIj
-   D0C02KT5iYlumZtGQt8WdZ+rR05DCPYhqd6yWaKszh+odrbXcl3hesXj7
-   OxM4QXKZV8NA57ixNZgBS/xNoHNYpsRUHP4sPGQYewGTvdjM2W2eXP5Kp
-   5aMIG6O+RocCmmPY2sUHD+O1sbHuxk72ZOH71mX4kPKl3dccAzNJJkC20
-   YuRQ7MrE1gtBnV3yAdMqLatqWu+77APeSdKWcjMVHZwlHu5N0X2SkgpU4
-   pQarCATrAa8KX4yVrffD2yu+L96Ofj+oTrOAfqUY773CQ3QdCCNKP91pA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="352371770"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="352371770"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 16:45:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="690055873"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jul 2022 16:45:02 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGqi6-0009F0-0m;
-        Wed, 27 Jul 2022 23:45:02 +0000
-Date:   Thu, 28 Jul 2022 07:44:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Manisha Chinthapally <manisha.chinthapally@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Faycal Benmlih <faycal.benmlih@intel.com>
-Subject: drivers/platform/x86/socperf/soc_uncore.c:756:47: sparse: sparse:
- cast removes address space '__iomem' of expression
-Message-ID: <202207280731.gqXOKcZ8-lkp@intel.com>
+        Wed, 27 Jul 2022 19:45:10 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7249E55A6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:45:09 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id t82so147381vkb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QX15C/cRjIIovRKvx8W4155J59etdzJ2q+y0+vxvYBc=;
+        b=G++tRHl0yTFNevRFkdRyQdMTJarlIzF6hI95rVItM1MHA/OSaMwnTaoVOgxSP3b/+D
+         AUSRvEnk6Rfvkyf6zb1esVrFS2Wp1/044LaC8Kk1OR6YGCH/5MrP8wiyp0N9ogK8wzZy
+         TmX+y5JmsQ5SqHdJptl8Ti/+OEKpnpuDMpl935ldWWu1xUa+KCcICRsBkVkiUN8QfY8o
+         R15wlyYU5EpSfpvk6kvneSQ9z0R5OYyhD3tJ2stX8Iyg+QQ3bUKBWh1GM8EZaCOSUrBs
+         cJE12BJozEuA9q637jSg+B1RKnwzOX4t1N3BdCWCwILeo/v0HKMAbsgZDcp0uAE+TVBk
+         LF1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QX15C/cRjIIovRKvx8W4155J59etdzJ2q+y0+vxvYBc=;
+        b=kd58ikhp7KpCcB3jxIyJTYRe+uXmndn1PCDEOZxW65/NI5LdBHjJ7p/9KLlQTCUQFY
+         rtRgUbISFeBPOW0r354/uUEKow8w3FSvVFZmNTwRnEIUQffDWGk2qK7u4MFz/w2ERIeo
+         XT+yYfaZ834kmxZ4apZlT0F7uYw1dEMQ4FeENN6HdJw+zuQ/+HdkZZU3qgXPJ5k7wvMx
+         5FLZlGBNSx3/6KW1Y81M0Atk5Edvo3sK0QK/OjGF4J3LGS1Meyyd7xuGHCng0+Q/PZwA
+         zI17MG24gz9qvvXrDWGM9wiSZWceUN8lV3y/o5Jj5SjpknAcaRCYUOCX/0946BmlapVd
+         6e+w==
+X-Gm-Message-State: AJIora92A67ECL3XOjwKPaAmZcQtLNK2BwCejRYFaz1SK74RH6UwNGLW
+        oVrc0mfEUZkO5A22ckWBU/+Ip2n6Zl1+r3cm32T+uw==
+X-Google-Smtp-Source: AGRyM1tsWaGlWDHmxvH3zUB62BDxcWrdHz42qr4efY7Bf7LvG5dgYcZd/qUImq4EQCRDIeoUcjoXAcjEU8lyAFTg6fo=
+X-Received: by 2002:a1f:38c8:0:b0:376:353e:cb5c with SMTP id
+ f191-20020a1f38c8000000b00376353ecb5cmr6853368vka.33.1658965508087; Wed, 27
+ Jul 2022 16:45:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715063653.3203761-1-irogers@google.com> <20220715063653.3203761-16-irogers@google.com>
+ <CAM9d7cigU9Sq2T3i3M1vA_vU+MrqCEbhOZPQ4D13dO+WomKP_A@mail.gmail.com>
+ <CAP-5=fWqJkytGTCRsxUzJgAOUYmqwgh_bp_01HrwLQMPZmiOig@mail.gmail.com> <CAM9d7ciB+d3d7ZRtcBcb-fkAx2SJ84hrhXLazt6YLNieZzORGg@mail.gmail.com>
+In-Reply-To: <CAM9d7ciB+d3d7ZRtcBcb-fkAx2SJ84hrhXLazt6YLNieZzORGg@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 27 Jul 2022 16:44:56 -0700
+Message-ID: <CAP-5=fX8hUiin0y9kuqJK7tXFQHr8+OxERd9Ob--1UFbEKq_bQ@mail.gmail.com>
+Subject: Re: [PATCH v1 15/15] perf jevents: Compress the pmu_events_table
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_10
-head:   c55df4a2b60fc7c6c4d00fd9f9fb447087833513
-commit: 4a8adda8065c4c6944ffedd3025605c845c262a5 SEP/SOCWATCH resolve build errors after rebasing to linux v5.6-rc3
-date:   1 year, 10 months ago
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220728/202207280731.gqXOKcZ8-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/mchinth/linux/commit/4a8adda8065c4c6944ffedd3025605c845c262a5
-        git remote add mchinth https://github.com/mchinth/linux
-        git fetch --no-tags mchinth sep_socwatch_linux_5_10
-        git checkout 4a8adda8065c4c6944ffedd3025605c845c262a5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Wed, Jul 27, 2022 at 4:20 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> On Tue, Jul 26, 2022 at 9:53 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Tue, Jul 26, 2022 at 9:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > >
+> > > Hi Ian,
+> > >
+> > > On Thu, Jul 14, 2022 at 11:37 PM Ian Rogers <irogers@google.com> wrote:
+> > > > +def c_len(s: str) -> int:
+> > > > +  """Return the length of s a C string
+> > > > +
+> > > > +  This doesn't handle all escape characters properly. It first assumes
+> > > > +  all \ are for escaping, it then adjusts as it will have over counted
+> > > > +  \\. The code uses \000 rather than \0 as a terminator as an adjacent
+> > > > +  number would be folded into a string of \0 (ie. "\0" + "5" doesn't
+> > > > +  equal a terminator followed by the number 5 but the escape of
+> > > > +  \05). The code adjusts for \000 but not properly for all octal, hex
+> > > > +  or unicode values.
+> > > > +  """
+> > > > +  try:
+> > > > +    utf = s.encode(encoding='utf-8',errors='strict')
+> > > > +  except:
+> > > > +    print(f'broken string {s}')
+> > > > +    raise
+> > > > +  return len(utf) - utf.count(b'\\') + utf.count(b'\\\\') - (utf.count(b'\\000') * 2)
+> > >
+> > > Sorry, I don't understand why it needs the last utf.count * 2.
+> > > Could you elaborate more?
+> >
+> > Yep, so
+> > 1) start with the length of the string
+> > 2) \ will escape the next character, e.g. \n, so instead of counting
+> > that as 2 count it as 1
+> > 3) but, \\ will now get counted as 0 and it should be 1
+> > 4) but also, a numeric escape like \000 will get counted as 3 rather
+> > than 1 so adjust that.
+>
+> Ah, ok.  Thanks for the explanation.  I think it'd be nice to
+> have it in the comment.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ack. will add to v2.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/platform/x86/socperf/soc_uncore.c:756:47: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socperf/soc_uncore.c:889:10: sparse: sparse: Initializer entry defined twice
-   drivers/platform/x86/socperf/soc_uncore.c:893:10: sparse:   also defined here
---
->> drivers/platform/x86/socperf/npk_uncore.c:292:39: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socperf/npk_uncore.c:492:10: sparse: sparse: Initializer entry defined twice
-   drivers/platform/x86/socperf/npk_uncore.c:496:10: sparse:   also defined here
---
->> drivers/platform/x86/socperf/haswellunc_sa.c:203:39: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socperf/haswellunc_sa.c:395:10: sparse: sparse: Initializer entry defined twice
-   drivers/platform/x86/socperf/haswellunc_sa.c:399:10: sparse:   also defined here
---
->> drivers/platform/x86/socwatch/sw_telem.c:239:33: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socwatch/sw_telem.c:242:28: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socwatch/sw_telem.c:245:58: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/platform/x86/socwatch/sw_telem.c:260:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_punitInterfaceAddr @@
-   drivers/platform/x86/socwatch/sw_telem.c:260:25: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/platform/x86/socwatch/sw_telem.c:260:25: sparse:     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_punitInterfaceAddr
-   drivers/platform/x86/socwatch/sw_telem.c:264:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_punitDataAddr @@
-   drivers/platform/x86/socwatch/sw_telem.c:264:25: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/platform/x86/socwatch/sw_telem.c:264:25: sparse:     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_punitDataAddr
->> drivers/platform/x86/socwatch/sw_telem.c:268:54: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned long long volatile [usertype] *ssram_virt_addr @@
-   drivers/platform/x86/socwatch/sw_telem.c:268:54: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/platform/x86/socwatch/sw_telem.c:268:54: sparse:     got unsigned long long volatile [usertype] *ssram_virt_addr
-   drivers/platform/x86/socwatch/sw_telem.c:280:28: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socwatch/sw_telem.c:283:28: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socwatch/sw_telem.c:286:29: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socwatch/sw_telem.c:289:29: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socwatch/sw_telem.c:292:56: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/platform/x86/socwatch/sw_telem.c:307:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_pmcIPCCmdAddr @@
-   drivers/platform/x86/socwatch/sw_telem.c:307:25: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/platform/x86/socwatch/sw_telem.c:307:25: sparse:     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_pmcIPCCmdAddr
-   drivers/platform/x86/socwatch/sw_telem.c:311:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_pmcIPCStsAddr @@
-   drivers/platform/x86/socwatch/sw_telem.c:311:25: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/platform/x86/socwatch/sw_telem.c:311:25: sparse:     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_pmcIPCStsAddr
-   drivers/platform/x86/socwatch/sw_telem.c:315:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_pmcIPCWBufAddr @@
-   drivers/platform/x86/socwatch/sw_telem.c:315:25: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/platform/x86/socwatch/sw_telem.c:315:25: sparse:     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_pmcIPCWBufAddr
-   drivers/platform/x86/socwatch/sw_telem.c:319:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_pmcIPCRBufAddr @@
-   drivers/platform/x86/socwatch/sw_telem.c:319:25: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/platform/x86/socwatch/sw_telem.c:319:25: sparse:     got unsigned long long volatile [usertype] *static [assigned] [toplevel] s_pmcIPCRBufAddr
-   drivers/platform/x86/socwatch/sw_telem.c:323:52: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned long long volatile [usertype] *ssram_virt_addr @@
-   drivers/platform/x86/socwatch/sw_telem.c:323:52: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/platform/x86/socwatch/sw_telem.c:323:52: sparse:     got unsigned long long volatile [usertype] *ssram_virt_addr
->> drivers/platform/x86/socwatch/sw_telem.c:671:5: sparse: sparse: symbol 'read_telem' was not declared. Should it be static?
---
->> drivers/platform/x86/socwatch/sw_trace_notifier_provider.c:1634:67: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int flags @@     got restricted gfp_t @@
-   drivers/platform/x86/socwatch/sw_trace_notifier_provider.c:1634:67: sparse:     expected unsigned int flags
-   drivers/platform/x86/socwatch/sw_trace_notifier_provider.c:1634:67: sparse:     got restricted gfp_t
+> >
+> > Obviously this isn't full C string parsing, but it is sufficient for
+> > what comes in the json files.
+> >
+> > >
+> > > > +
+> > > > +class BigCString:
+> > > > +  """A class to hold many strings concatenated together.
+> > > > +
+> > > > +  Generating a large number of stand-alone C strings creates a large
+> > > > +  number of relocations in position independent code. The BigCString
+> > > > +  is a helper for this case. It builds a single string which within it
+> > > > +  are all the other C strings (to avoid memory issues the string
+> > > > +  itself is held as a list of strings). The offsets within the big
+> > > > +  string are recorded and when stored to disk these don't need
+> > > > +  relocation. To reduce the size of the string further, identical
+> > > > +  strings are merged. If a longer string ends-with the same value as a
+> > > > +  shorter string, these entries are also merged.
+> > > > +  """
+> > > > +  strings: Set[str]
+> > > > +  big_string: Sequence[str]
+> > > > +  offsets: Dict[str, int]
+> > > > +
+> > > > +  def __init__(self):
+> > > > +    self.strings = set()
+> > > > +
+> > > > +  def add(self, s: str) -> None:
+> > > > +    """Called to add to the big string."""
+> > > > +    self.strings.add(s)
+> > > > +
+> > > > +  def compute(self) -> None:
+> > > > +    """Called once all strings are added to compute the string and offsets."""
+> > > > +
+> > > > +    folded_strings = {}
+> > > > +    # Determine if two strings can be folded, ie. let 1 string use the
+> > > > +    # end of another. First reverse all strings and sort them.
+> > > > +    sorted_reversed_strings = sorted([x[::-1] for x in self.strings])
+> > >
+> > > I think some blank lines would increase readability a bit.
+> >
+> > Ack. Can add in v2.
+> >
+> > > IIUC these strings are already concatenated with \\000
+> > > by build_c_string(), right?
+> >
+> > They are, but this code is agnostic to that. The code must give every
+> > string an offset, but it also tries as much as possible to combine
+> > strings. The \\000 defeats that in all but 1 case for x86, but if we
+> > were to have 1 offset per field it does better.
+>
+> Do you want to have per field offset on other arch?
 
-vim +/__iomem +756 drivers/platform/x86/socperf/soc_uncore.c
+Not really, there isn't a huge difference with the bits of json being
+used across architectures. The non-python empty-pmu-events.c is still
+using per field C strings.
 
-   674	
-   675	/* ------------------------------------------------------------------------- */
-   676	/*!
-   677	 * @fn uncore_Create_Mem()
-   678	 *
-   679	 * @param    None
-   680	 *
-   681	 * @return   None     No return needed
-   682	 *
-   683	 * @brief    Read the counters
-   684	 *
-   685	 */
-   686	static VOID uncore_Create_Mem(U32 memory_size, U64 *trace_buffer)
-   687	{
-   688		ECB pecb;
-   689		DRV_PCI_DEVICE_ENTRY dpden;
-   690		U32 bar_name = 0;
-   691		DRV_PCI_DEVICE_ENTRY curr_pci_entry = NULL;
-   692		U64 mmio_offset = 0;
-   693		U32 dev_index = 0;
-   694		U32 data_val = 0;
-   695		U32 reg_index = 0;
-   696		U64 physical_high = 0;
-   697		U64 odla_physical_address = 0;
-   698	
-   699		if (device_uncore == NULL) {
-   700			SOCPERF_PRINT_ERROR("ERROR: NULL device_uncore!\n");
-   701			return;
-   702		}
-   703		pecb = (ECB)LWPMU_DEVICE_PMU_register_data(device_uncore)[0];
-   704		if (pecb == NULL) {
-   705			SOCPERF_PRINT_ERROR("ERROR: null pecb!\n");
-   706			return;
-   707		}
-   708	
-   709		if (!trace_buffer) {
-   710			return;
-   711		}
-   712	
-   713		ECB_pcidev_entry_list(pecb) = (DRV_PCI_DEVICE_ENTRY)(
-   714			(S8 *)pecb + ECB_pcidev_list_offset(pecb));
-   715		dpden = ECB_pcidev_entry_list(pecb);
-   716	
-   717		for (dev_index = 0; dev_index < ECB_num_pci_devices(pecb);
-   718		     dev_index++) {
-   719			curr_pci_entry = &dpden[dev_index];
-   720			bar_name = DRV_PCI_DEVICE_ENTRY_bar_name(curr_pci_entry);
-   721			mmio_offset = DRV_PCI_DEVICE_ENTRY_base_offset_for_mmio(
-   722				curr_pci_entry);
-   723	
-   724			if (DRV_PCI_DEVICE_ENTRY_prog_type(curr_pci_entry) ==
-   725				    UNC_MEMORY &&
-   726			    DRV_PCI_DEVICE_ENTRY_config_type(curr_pci_entry) ==
-   727				    UNC_PCICFG &&
-   728			    bar_name == UNC_SOCPCI &&
-   729			    DRV_PCI_DEVICE_ENTRY_operation(curr_pci_entry) ==
-   730				    UNC_OP_WRITE) {
-   731				read_From_Register(
-   732					DRV_PCI_DEVICE_ENTRY_bus_no(curr_pci_entry),
-   733					DRV_PCI_DEVICE_ENTRY_dev_no(curr_pci_entry),
-   734					DRV_PCI_DEVICE_ENTRY_func_no(curr_pci_entry),
-   735					DRV_PCI_DEVICE_ENTRY_port_id(curr_pci_entry),
-   736					SOC_COUNTER_READ_OP_CODE, mmio_offset,
-   737					&data_val);
-   738				if (reg_index == 1) {
-   739					odla_physical_address = data_val;
-   740				} else if (reg_index == 2) {
-   741					physical_high = data_val;
-   742					odla_physical_address = odla_physical_address |
-   743								(physical_high << 32);
-   744				}
-   745				SOCPERF_PRINT_DEBUG(
-   746					"op=%d port=%d offset=%x val=%x\n",
-   747					DRV_PCI_DEVICE_ENTRY_op_code(curr_pci_entry),
-   748					DRV_PCI_DEVICE_ENTRY_port_id(curr_pci_entry),
-   749					mmio_offset, data_val);
-   750				reg_index++;
-   751			}
-   752			continue;
-   753		}
-   754		SOCPERF_PRINT_DEBUG("Physical Address=%llx\n", odla_physical_address);
-   755		if (odla_physical_address) {
- > 756			trace_virtual_address = (U64)(UIOP)ioremap_cache(
-   757				odla_physical_address, SOC_UNCORE_PAGE_SIZE);
-   758			SOCPERF_PRINT_DEBUG("PHY=%llx ODLA VIRTUAL ADDRESS=%llx\n",
-   759					    odla_physical_address,
-   760					    trace_virtual_address);
-   761			if (trace_buffer) {
-   762				*trace_buffer = odla_physical_address;
-   763			}
-   764		}
-   765	}
-   766	
+> >
+> > > > +    # Strings 'xyz' and 'yz' will now be [ 'zy', 'zyx' ]. Scan forward
+> > > > +    # for each string to see if there is a better candidate to fold it
+> > > > +    # into, in the example rather than using 'yz' we can use'xyz' at
+> > > > +    # an offset of 1.
+> > > > +    for pos,s in enumerate(sorted_reversed_strings):
+> > > > +      best_pos = pos
+> > > > +      for check_pos in range(pos + 1, len(sorted_reversed_strings)):
+> > > > +        if sorted_reversed_strings[check_pos].startswith(s):
+> > > > +          best_pos = check_pos
+> > > > +        else:
+> > > > +          break
+> > >
+> > > That means the best pos is the last match?  I guess python
+> > > string comparison can deal with strings with NUL bytes in it.
+> > >
+> > > Also I'm not sure how much it actually hits?
+> >
+> > Once for x86 currently. The code runs quickly so I didn't disable it.
+> > In other situations it hits more, as mentioned above.
+> >
+> > > In my understanding, each string contains a name, description
+> > > and many other fields.  Does it have some duplication?
+> >
+> > There may be, and having an offset per variable would mean we could
+> > take advantage of that. What I found was that a majority of the
+> > variables are empty/NULL so what we lose by not having sharing is more
+> > than gained by reducing a variable down to 1 byte rather than 4 (in
+> > the order of 100s of KB).
+> >
+> > > Maybe I'm missing but not sure it's worth the complexity.
+> >
+> > Agreed. There's limited utility in finding 1 string inside another for
+> > the current string representation. The code is still necessary to give
+> > every string an offset. The code to find 1 string inside another isn't
+> > that large nor that slow, so I kept it around.
+>
+> But my main concern is code complexity.  Although it's not very
+> complex, it'd be better to start with something simple.  We can
+> always add it back if needed. :)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Agreed. There is some minimum functionality to get some compression to
+work and then things that will bring us to where we are in this patch.
+I was thinking of the BigCString as a general purpose utility, hence
+doing the string within a string offset finding. It is a win for just
+1 string on x86 as in this patch today and not as useful as just
+deduplicating strings (or renaming the topic of <arch>-metric to just
+be metric). I could separate the offset within a string into a
+separate patch if you think it is useful. I'd be tempted just to leave
+it, the truly troublesome/brittle bit of code is the C string length
+computation. Getting that wrong results in lots of empty fields.
+
+Thanks,
+Ian
+
+> Thanks,
+> Namhyung
+>
+> > >
+> > >
+> > > > +      if pos != best_pos:
+> > > > +        folded_strings[s[::-1]] = sorted_reversed_strings[best_pos][::-1]
+> > > > +    # Compute reverse mappings for debugging.
+> > > > +    fold_into_strings = collections.defaultdict(set)
+> > > > +    for key, val in folded_strings.items():
+> > > > +      if key != val:
+> > > > +        fold_into_strings[val].add(key)
+> > > > +    # big_string_offset is the current location within the C string
+> > > > +    # being appended to - comments, etc. don't count. big_string is
+> > > > +    # the string contents represented as a list. Strings are immutable
+> > > > +    # in Python and so appending to one causes memory issues, while
+> > > > +    # lists are mutable.
+> > > > +    big_string_offset = 0
+> > > > +    self.big_string = []
+> > > > +    self.offsets = {}
+> > > > +    # Emit all strings that aren't folded in a sorted manner.
+> > > > +    for s in sorted(self.strings):
+> > > > +      if s not in folded_strings:
+> > > > +        self.offsets[s] = big_string_offset
+> > > > +        self.big_string.append(f'/* offset={big_string_offset} */ "')
+> > > > +        self.big_string.append(s)
+> > > > +        self.big_string.append('"')
+> > > > +        if s in fold_into_strings:
+> > > > +          self.big_string.append(' /* also: ' + ', '.join(fold_into_strings[s]) + ' */')
+> > > > +        self.big_string.append('\n')
+> > > > +        big_string_offset += c_len(s)
+> > > > +        continue
+> > > > +    # Compute the offsets of the folded strings.
+> > > > +    for s in folded_strings.keys():
+> > > > +      assert s not in self.offsets
+> > > > +      folded_s = folded_strings[s]
+> > > > +      self.offsets[s] = self.offsets[folded_s] + c_len(folded_s) - c_len(s)
+> > > > +
+> > > > +_bcs = BigCString()

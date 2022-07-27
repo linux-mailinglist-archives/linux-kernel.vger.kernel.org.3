@@ -2,159 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EF9581D97
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 04:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF2C581D99
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 04:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240153AbiG0C0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 22:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S240162AbiG0C0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 22:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbiG0C0K (ORCPT
+        with ESMTP id S233553AbiG0C0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 22:26:10 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FEE2A96D;
-        Tue, 26 Jul 2022 19:26:08 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LsyKt36rGzl2Jl;
-        Wed, 27 Jul 2022 10:25:06 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgD3_9M9ouBipOrwBA--.53742S3;
-        Wed, 27 Jul 2022 10:26:06 +0800 (CST)
-Subject: Re: [PATCH v3] blk-mq: fix io hung due to missing commit_rqs
-To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     axboe@kernel.dk, osandov@fb.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-References: <20220726122224.1790882-1-yukuai1@huaweicloud.com>
- <YuCe7e5KapIqzO0S@T590>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <1d970dd9-f39c-bc58-bcf4-782eab5db3aa@huaweicloud.com>
-Date:   Wed, 27 Jul 2022 10:26:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 26 Jul 2022 22:26:47 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226132A96D;
+        Tue, 26 Jul 2022 19:26:47 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id BD53E5C011A;
+        Tue, 26 Jul 2022 22:26:44 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 26 Jul 2022 22:26:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1658888804; x=
+        1658975204; bh=smaAqEBD9EAasFw+KnLs6MeGfeaKJNcvnsdlP0YdAZA=; b=e
+        yH6etxCEem1MHLMcE9mBPEo8DE9rabU94kXFfBczNhejqt6t/CE64WNJk0ecl8Lo
+        KXXsPCHvD6AimHesZfc8DpVujIhjfA2JcrDVFBf9rWXJzrLuAh0y0oDgWWe1tc6r
+        MH/Ehr3Pm1/DQBcfDzXVPaAjEqUBim58abcH/iwSAb/sbOuoqLii1Cxdcf0CCEhx
+        8+XspcZUMP2NJlybm6fU7KCdcXrrFQjiZFmr59M0js4QO/xEOPszUk+mU+e4Y/66
+        ja+W6de23AKWonmvFrqrfCKt6fNevrOq8YEJ2xf3JFWB7TU34ljnNd1gz2x3epPu
+        oV9Yaq/7T4KhwHDDKmjsw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658888804; x=
+        1658975204; bh=smaAqEBD9EAasFw+KnLs6MeGfeaKJNcvnsdlP0YdAZA=; b=C
+        llVo+h5raTWZsHvVx3JWUw6ZM4mvWGUItNeZXhEQvfI7g4+PFX7yOOYsS0QPgzXI
+        p/chPYd/AHFfJPb2wTLq7wFyXYdv9gsMSq/qnETDIgRefyuNb5Ve0TLhRSX6Bc+I
+        daHWFe0zYgSm/GhDZX+IotZslPzFyuJ1YbdfSAlNQSHSZc8WTmfdxVzt9jgr3362
+        KmxLNyIA8H8WiCsKAwAqP71z7DgJ7vzBKrJeqKVmqW9w8RoJ0oogJLOJoDjKFpAG
+        jyq6Vfalo7nL5+vmllKSKnAsV82Fwp2OLnF+hIn1XDmJcWA4CXp+CCpLR0ADpr2B
+        RU90qXJ2k5n8jJJA278RQ==
+X-ME-Sender: <xms:ZKLgYtQwgnRW-fZIUNn-5gJXqJkJmiuXt6o8cxlgL8Z_j5VHwEcd_w>
+    <xme:ZKLgYmxes7YH51fqdfQRJNcUveYHaXUxym_-LK7C4ONpTEUK7u23JjxyfmfIB0pN0
+    zLWsbfvMP_i4_0UjA>
+X-ME-Received: <xmr:ZKLgYi2UJJxZVgV5pTfRuCkOw-DrJIz-w_442pmhMbXXXWFWMhJ83bYPFbqZr9txHpHvkHSk0HJIxNGCIRROeqqT2egkfNu7vBw1INbAWto9X9KBc111k8YQuA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduuddgiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedtvefhheehgfdvkeetffeludeuudehudeuvddtveelleekvedv
+    uedviefhkeeuheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:ZKLgYlDxEj25usO0sH-Rqq5EjzfFeZowtX2BJHCAxNRmdnYjFeJDeA>
+    <xmx:ZKLgYmhj4hfwIb1e-jwEKMRsVXu932p0TRpJnAr3370KmBR3H_wi2g>
+    <xmx:ZKLgYppfeuUKoX2WVeMcOmHoiCBb-gidgGnUaFRitTzsLcgNL-Y07A>
+    <xmx:ZKLgYqhboQU9r49rqUhm6TvPoF9m44ekNlOMPcEsGSeCXbXmk9u-Xw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 26 Jul 2022 22:26:43 -0400 (EDT)
+Subject: Re: [PATCH] clk: sunxi-ng: Fix H6 RTC clock definition
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        wens@csie.org
+Cc:     mturquette@baylibre.com, andre.przywara@arm.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220719183725.2605141-1-jernej.skrabec@gmail.com>
+ <a7a253a0-1cc3-61e4-ae59-fc299057974a@sholland.org>
+ <2118699.Icojqenx9y@jernej-laptop>
+ <20220726225855.615E1C433D6@smtp.kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <6ff332d4-fcd4-ce6b-3543-377667dbd30e@sholland.org>
+Date:   Tue, 26 Jul 2022 21:26:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <YuCe7e5KapIqzO0S@T590>
-Content-Type: text/plain; charset=gbk; format=flowed
+In-Reply-To: <20220726225855.615E1C433D6@smtp.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgD3_9M9ouBipOrwBA--.53742S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFykuw1xCrWUArWUJF4kCrg_yoW5ur1kpF
-        WxC3W2kws5tr47tF97Xa17Aa4jvwsxKrW7GryfKw43ZF4UKrWIqrs3Ja13WFyIyFs8uwsF
-        gF45XFyYqw1DAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ming
-
-ÔÚ 2022/07/27 10:11, Ming Lei Ð´µÀ:
-> On Tue, Jul 26, 2022 at 08:22:24PM +0800, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
+On 7/26/22 5:58 PM, Stephen Boyd wrote:
+> Quoting Jernej Å krabec (2022-07-20 08:16:54)
+>> Dne sreda, 20. julij 2022 ob 02:21:29 CEST je Samuel Holland napisal(a):
+>>> On 7/19/22 1:37 PM, Jernej Skrabec wrote:
+>>>>
+>>>> Fixes: 38d321b61bda ("clk: sunxi-ng: h6-r: Add RTC gate clock")
+>>>> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+>>>
+>>> Reviewed-by: Samuel Holland <samuel@sholland.org>
+>>>
+>>> This bug also got fixed in passing by e1c51d31befc ("clk: sunxi-ng:
+>>> Deduplicate ccu_clks arrays"), but that won't land until 5.20.
 >>
->> Currently, in virtio_scsi, if 'bd->last' is not set to true while
->> dispatching request, such io will stay in driver's queue, and driver
->> will wait for block layer to dispatch more rqs. However, if block
->> layer failed to dispatch more rq, it should trigger commit_rqs to
->> inform driver.
->>
->> There is a problem in blk_mq_try_issue_list_directly() that commit_rqs
->> won't be called:
->>
->> // assume that queue_depth is set to 1, list contains two rq
->> blk_mq_try_issue_list_directly
->>   blk_mq_request_issue_directly
->>   // dispatch first rq
->>   // last is false
->>    __blk_mq_try_issue_directly
->>     blk_mq_get_dispatch_budget
->>     // succeed to get first budget
->>     __blk_mq_issue_directly
->>      scsi_queue_rq
->>       cmd->flags |= SCMD_LAST
->>        virtscsi_queuecommand
->>         kick = (sc->flags & SCMD_LAST) != 0
->>         // kick is false, first rq won't issue to disk
->>   queued++
->>
->>   blk_mq_request_issue_directly
->>   // dispatch second rq
->>    __blk_mq_try_issue_directly
->>     blk_mq_get_dispatch_budget
->>     // failed to get second budget
->>   ret == BLK_STS_RESOURCE
->>    blk_mq_request_bypass_insert
->>   // errors is still 0
->>
->>   if (!list_empty(list) || errors && ...)
->>    // won't pass, commit_rqs won't be called
->>
->> In this situation, first rq relied on second rq to dispatch, while
->> second rq relied on first rq to complete, thus they will both hung.
->>
->> Fix the problem by also treat 'BLK_STS_*RESOURCE' as 'errors' since
->> it means that request is not queued successfully.
->>
->> Same problem exists in blk_mq_dispatch_rq_list(), 'BLK_STS_*RESOURCE'
->> can't be treated as 'errors' here, fix the problem by calling
->> commit_rqs if queue_rq return 'BLK_STS_*RESOURCE'.
->>
->> Fixes: d666ba98f849 ("blk-mq: add mq_ops->commit_rqs()")
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->> Changes in v3:
->>   - as poinited out by Ming, v2 will break return value by treating
->>   BLK_STS_*RESOURCE as errors.
->> Changes in v2:
->>   - suggested by Ming, handle blk_mq_dispatch_rq_list() as well.
->>   - change title and modify commit message.
->>
->>   block/blk-mq.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/block/blk-mq.c b/block/blk-mq.c
->> index 70177ee74295..7d26b222cbc9 100644
->> --- a/block/blk-mq.c
->> +++ b/block/blk-mq.c
->> @@ -1931,7 +1931,8 @@ bool blk_mq_dispatch_rq_list(struct blk_mq_hw_ctx *hctx, struct list_head *list,
->>   	/* If we didn't flush the entire list, we could have told the driver
->>   	 * there was more coming, but that turned out to be a lie.
->>   	 */
->> -	if ((!list_empty(list) || errors) && q->mq_ops->commit_rqs && queued)
->> +	if ((!list_empty(list) || errors || needs_resource ||
->> +	     ret == BLK_STS_DEV_RESOURCE) && q->mq_ops->commit_rqs && queued)
+>> Argh, good catch. I will send your patch as fix then, otherwise there will be 
+>> issues during merging.
 > 
-> 'ret == BLK_STS_DEV_RESOURCE' may happen before, but 'ret' could be
-> overridden later.
+> This is a one line fix. I can just apply this and send this off and deal
+> with the merge conflict locally by taking the other side.
 
- From what I see, if queue_rq return 'BLK_STS_RESOURCE' or
-'BLK_STS_DEV_RESOURCE', the loop will break, so that 'ret' could not
-be overridden. 'BLK_STS_ZONE_RESOURCE' can be overridden, however,
-needs_resource can cover that case.
+That sounds good to me. I also would prefer to take only this targeted fix for 5.19.
 
-Thanks,
-Kuai
-> 
-> Thanks,
-> Ming
-> 
-> .
-> 
-
+Regards,
+Samuel

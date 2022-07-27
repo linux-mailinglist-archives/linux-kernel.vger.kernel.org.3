@@ -2,149 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0825826B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD23558275D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233417AbiG0Mcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S233575AbiG0NIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbiG0McY (ORCPT
+        with ESMTP id S229565AbiG0NIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:32:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF31A1FCC4;
-        Wed, 27 Jul 2022 05:32:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C06B614A4;
-        Wed, 27 Jul 2022 12:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7C1C433D6;
-        Wed, 27 Jul 2022 12:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658925132;
-        bh=g/KeDrK+jJ4tTe8vBs+mW9oom/Igowkt6lbTWbMxH/8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ryJKaFyVScAyCGIRcG7LRDOPmJ/Bm1zrFBXA+eVHnOBYRzMF2KZNozRjrrUbtiCdM
-         V05BaE0lB+NDSg3bv2TfLEtaO/Czwb2jqzw2bg6mTmkA8c0I7ICZ2hDBM1KfMPxlms
-         ujxEKIb6H7af2u9aKZHiz0ah+6W4bGtsWXFWirl5VRLJFkg7jb6pZYlMRACNvpaLmQ
-         Z39IClsGUIb/O9a6hRFLuXt67WorI+uB9v9KQrmEKpM4JSWhyJMeOsgkcDEdIB+UGv
-         AlHAP7vLjmJdcwXazwglXr2HXkFJnXUIqWBu+sOGhi3RNK6BeMGHMx3AuzYURZIJw6
-         4TDAZlXxAES9g==
-Date:   Wed, 27 Jul 2022 14:32:07 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yongchen Yang <yoyang@redhat.com>
-Subject: Re: [RFC PATCH] vfs: don't check may_create_in_sticky if the file is
- already open/created
-Message-ID: <20220727123207.akq6dlnuqviwtwx5@wittgenstein>
-References: <20220726202333.165490-1-jlayton@kernel.org>
- <8e4d498a3e8ed80ada2d3da01e7503e082be31a3.camel@kernel.org>
- <20220727113406.ewu4kzsoo643cf66@wittgenstein>
- <b1d3c63ef5a7e8f98966552b4509381aae25afb6.camel@kernel.org>
+        Wed, 27 Jul 2022 09:08:16 -0400
+X-Greylist: delayed 2126 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Jul 2022 06:08:15 PDT
+Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0795D281
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
+        s=20200302mail; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+        bh=E6+gj7hdT4Zrz9hBQQ/b6zaYk6fh+BZKunB47YG96+k=; b=OCAUvZFu5ee5MYoUnfUBLlXn0o
+        2TC3qv2dP8aUNapSne3agJCSYl1uC90+RCFSpxZZlb5BD5J7s6Fn9Ed3aB0biUnIt4hy+Iv53ZtQD
+        Qq18ySSH64SAAQ2Da6lCkEeHTMdJZ8aQNlQGlVIsaxoAYEVxn58NPsuf9CKLuFYFtbv4=;
+Received: from xenbits.xenproject.org ([104.239.192.120])
+        by mail.xenproject.org with esmtp (Exim 4.92)
+        (envelope-from <julien@xen.org>)
+        id 1oGgDU-0004ih-79; Wed, 27 Jul 2022 12:32:44 +0000
+Received: from [54.239.6.186] (helo=[192.168.6.7])
+        by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <julien@xen.org>)
+        id 1oGgDT-0008Pi-VU; Wed, 27 Jul 2022 12:32:44 +0000
+Message-ID: <51ba135e-a105-036f-b891-e7d9e1bb607d@xen.org>
+Date:   Wed, 27 Jul 2022 13:32:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b1d3c63ef5a7e8f98966552b4509381aae25afb6.camel@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [PATCH v2] x86/xen: Add support for
+ HVMOP_set_evtchn_upcall_vector
+Content-Language: en-US
+To:     Jane Malalane <jane.malalane@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Maximilian Heyne <mheyne@amazon.de>,
+        Jan Beulich <jbeulich@suse.com>,
+        Colin Ian King <colin.king@intel.com>,
+        xen-devel@lists.xenproject.org
+References: <20220726125657.12151-1-jane.malalane@citrix.com>
+From:   Julien Grall <julien@xen.org>
+In-Reply-To: <20220726125657.12151-1-jane.malalane@citrix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 08:04:34AM -0400, Jeff Layton wrote:
-> On Wed, 2022-07-27 at 13:34 +0200, Christian Brauner wrote:
-> > On Tue, Jul 26, 2022 at 04:27:56PM -0400, Jeff Layton wrote:
-> > > On Tue, 2022-07-26 at 16:23 -0400, Jeff Layton wrote:
-> > > > NFS server is exporting a sticky directory (mode 01777) with root
-> > > > squashing enabled. Client has protect_regular enabled and then tries to
-> > > > open a file as root in that directory. File is created (with ownership
-> > > > set to nobody:nobody) but the open syscall returns an error.
-> > > > 
-> > > > The problem is may_create_in_sticky, which rejects the open even though
-> > > > the file has already been created/opened. Only call may_create_in_sticky
-> > > > if the file hasn't already been opened or created.
-> > > > 
-> > > > Cc: Christian Brauner <brauner@kernel.org>
-> > > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=1976829
-> > > > Reported-by: Yongchen Yang <yoyang@redhat.com>
-> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > ---
-> > > >  fs/namei.c | 13 +++++++++----
-> > > >  1 file changed, 9 insertions(+), 4 deletions(-)
-> > > > 
-> > > > diff --git a/fs/namei.c b/fs/namei.c
-> > > > index 1f28d3f463c3..7480b6dc8d27 100644
-> > > > --- a/fs/namei.c
-> > > > +++ b/fs/namei.c
-> > > > @@ -3495,10 +3495,15 @@ static int do_open(struct nameidata *nd,
-> > > >  			return -EEXIST;
-> > > >  		if (d_is_dir(nd->path.dentry))
-> > > >  			return -EISDIR;
-> > > > -		error = may_create_in_sticky(mnt_userns, nd,
-> > > > -					     d_backing_inode(nd->path.dentry));
-> > > > -		if (unlikely(error))
-> > > > -			return error;
-> > > > +		if (!(file->f_mode & (FMODE_OPENED | FMODE_CREATED))) {
-> > > > +			error = may_create_in_sticky(mnt_userns, nd,
-> > > > +						d_backing_inode(nd->path.dentry));
-> > > > +			if (unlikely(error)) {
-> > > > +				printk("%s: f_mode=0x%x oflag=0x%x\n",
-> > > > +					__func__, file->f_mode, open_flag);
-> > > > +				return error;
-> > > > +			}
-> > > > +		}
-> > > >  	}
-> > > >  	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
-> > > >  		return -ENOTDIR;
-> > > 
-> > > I'm pretty sure this patch is the wrong approach, actually, since it
-> > > doesn't fix the regular (non-atomic) open codepath. Any thoughts on what
-> > 
-> > Hey Jeff,
-> > 
-> > I haven't quite understood why that won't work for the regular open
-> > codepaths. I'm probably missing something obvious.
-> > 
-> 
-> In the normal open codepaths, FMODE_OPENED | FMODE_CREATED are still
-> clear. If we're not doing an atomic_open (i.e. the dentry doesn't exist
-> yet or is negative), then nothing really happens until you get to the
-> vfs_open call.
+Hi Jane,
 
-Hm, so for atomic open with O_CREAT it's:
+On 26/07/2022 13:56, Jane Malalane wrote:
+> diff --git a/arch/x86/xen/suspend_hvm.c b/arch/x86/xen/suspend_hvm.c
+> index 9d548b0c772f..0c4f7554b7cc 100644
+> --- a/arch/x86/xen/suspend_hvm.c
+> +++ b/arch/x86/xen/suspend_hvm.c
+> @@ -5,6 +5,7 @@
+>   #include <xen/hvm.h>
+>   #include <xen/features.h>
+>   #include <xen/interface/features.h>
+> +#include <xen/events.h>
+>   
+>   #include "xen-ops.h"
+>   
+> @@ -14,6 +15,13 @@ void xen_hvm_post_suspend(int suspend_cancelled)
+>   		xen_hvm_init_shared_info();
+>   		xen_vcpu_restore();
+>   	}
+> -	xen_setup_callback_vector();
+> +	if (xen_percpu_upcall) {
+> +		unsigned int cpu;
+> +
+> +		for_each_online_cpu(cpu)
+> +			BUG_ON(xen_set_upcall_vector(cpu));
+> +	} else {
+> +		xen_setup_callback_vector();
+> +	}
+>   	xen_unplug_emulated_devices();
+>   }
+> diff --git a/drivers/xen/events/events_base.c b/drivers/xen/events/events_base.c
+> index 46d9295d9a6e..2ad93595d03a 100644
+> --- a/drivers/xen/events/events_base.c
+> +++ b/drivers/xen/events/events_base.c
+> @@ -48,6 +48,7 @@
+>   #include <asm/xen/pci.h>
+>   #endif
+>   #include <asm/sync_bitops.h>
+> +#include <asm/xen/cpuid.h>
 
-path_openat()
--> open_last_lookups()
-   -> lookup_open()
-      /* 
-       * This is ->atomic_open() and FMODE_CREATED is set in the fs so
-       * for NFS it's done in:
-       * fs/nfs/dir.c:           file->f_mode |= FMODE_CREATED;
-       */
-      -> atomic_open()
+This include doesn't exist on Arm and will result to a build failure:
 
-and for regular O_CREAT open it's:
-
-path_openat()
--> open_last_lookups()
-   -> lookup_open()
-      {
-        if (!dentry->d_inode && (open_flag & O_CREAT)) {
-                file->f_mode |= FMODE_CREATED;
-      }
+linux/drivers/xen/events/events_base.c:51:10: fatal error: 
+asm/xen/cpuid.h: No such file or directory
+    51 | #include <asm/xen/cpuid.h>
+       |          ^~~~~~~~~~~~~~~~~
 
 
-and that should all get surfaced to:
+>   #include <asm/xen/hypercall.h>
+>   #include <asm/xen/hypervisor.h>
+>   #include <xen/page.h>
+> @@ -2195,11 +2196,48 @@ void xen_setup_callback_vector(void)
+>   		callback_via = HVM_CALLBACK_VECTOR(HYPERVISOR_CALLBACK_VECTOR);
+>   		if (xen_set_callback_via(callback_via)) {
+>   			pr_err("Request for Xen HVM callback vector failed\n");
+> -			xen_have_vector_callback = 0;
+> +			xen_have_vector_callback = false;
+>   		}
+>   	}
+>   }
+>   
+> +/* Setup per-vCPU vector-type callbacks and trick toolstack to think
+> + * we are enlightened. If this setup is unavailable, fallback to the
+> + * global vector-type callback. */
+> +static __init void xen_init_setup_upcall_vector(void)
+> +{
+> +	unsigned int cpu = 0;
+> +
+> +	if (!xen_have_vector_callback)
+> +		return;
+> +
+> +	if ((cpuid_eax(xen_cpuid_base() + 4) & XEN_HVM_CPUID_UPCALL_VECTOR) &&
+> +	    !xen_set_upcall_vector(cpu) && !xen_set_callback_via(1))
 
-path_openat()
-   -> do_open()
-      -> may_create_in_sticky()
+xen_cpuid_base() is an x86-ism. This is going to build because 
+CONFIG_XEN_PVHVM is only set for x86. However, I think this is quite 
+fragile.
 
-?
+You are also using more variable defined only on x86. So it feels to me 
+that these functions should be implemented in x86 code.
+
+> +		xen_percpu_upcall = true;
+> +	else if (xen_feature(XENFEAT_hvm_callback_vector))
+> +		xen_setup_callback_vector();
+> +	else
+> +		xen_have_vector_callback = false;
+> +}
+> +
+> +int xen_set_upcall_vector(unsigned int cpu)
+> +{
+> +	int rc;
+> +	xen_hvm_evtchn_upcall_vector_t op = {
+> +		.vector = HYPERVISOR_CALLBACK_VECTOR,
+> +		.vcpu = per_cpu(xen_vcpu_id, cpu),
+> +	};
+> +
+> +	rc = HYPERVISOR_hvm_op(HVMOP_set_evtchn_upcall_vector, &op);
+> +	if (rc)
+> +		return rc;
+> +
+> +	if (!cpu)
+> +		rc = xen_set_callback_via(1);
+> +
+> +	return rc;
+> +}
+> +
+>   static __init void xen_alloc_callback_vector(void)
+>   {
+>   	if (!xen_have_vector_callback)
+> @@ -2210,6 +2248,8 @@ static __init void xen_alloc_callback_vector(void)
+>   }
+>   #else
+>   void xen_setup_callback_vector(void) {}
+> +static inline void xen_init_setup_upcall_vector(void) {}
+> +int xen_set_upcall_vector(unsigned int cpu) {}
+>   static inline void xen_alloc_callback_vector(void) {}
+>   #endif
+>   
+> @@ -2271,10 +2311,9 @@ void __init xen_init_IRQ(void)
+>   		if (xen_initial_domain())
+>   			pci_xen_initial_domain();
+>   	}
+> -	if (xen_feature(XENFEAT_hvm_callback_vector)) {
+> -		xen_setup_callback_vector();
+> -		xen_alloc_callback_vector();
+> -	}
+> +	xen_init_setup_upcall_vector();
+> +	xen_alloc_callback_vector();
+> +
+>   
+>   	if (xen_hvm_domain()) {
+>   		native_init_IRQ();
+> diff --git a/include/xen/hvm.h b/include/xen/hvm.h
+> index b7fd7fc9ad41..8da7a6747058 100644
+> --- a/include/xen/hvm.h
+> +++ b/include/xen/hvm.h
+> @@ -60,4 +60,6 @@ static inline int hvm_get_parameter(int idx, uint64_t *value)
+>   
+>   void xen_setup_callback_vector(void);
+>   
+> +int xen_set_upcall_vector(unsigned int cpu);
+> +
+>   #endif /* XEN_HVM_H__ */
+> diff --git a/include/xen/interface/hvm/hvm_op.h b/include/xen/interface/hvm/hvm_op.h
+> index f3097e79bb03..e714d8b6ef89 100644
+> --- a/include/xen/interface/hvm/hvm_op.h
+> +++ b/include/xen/interface/hvm/hvm_op.h
+> @@ -46,4 +46,19 @@ struct xen_hvm_get_mem_type {
+>   };
+>   DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_get_mem_type);
+>   
+> +/*
+> + * HVMOP_set_evtchn_upcall_vector: Set a <vector> that should be used for event
+> + *                                 channel upcalls on the specified <vcpu>. If set,
+> + *                                 this vector will be used in preference to the
+> + *                                 domain global callback via (see
+> + *                                 HVM_PARAM_CALLBACK_IRQ).
+> + */
+
+Technically this hypercall is x86 specific. IOW, it would be possible 
+for another architecture to define 23 for something different.
+
+If it is not possible (or desired) to surround with an #ifdef, then I 
+think we should at least be mentioned it in the comment.
+
+Cheers,
+
+-- 
+Julien Grall

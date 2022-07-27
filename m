@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21D9583120
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC20582A6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238614AbiG0Rqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S234783AbiG0QPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242844AbiG0RqP (ORCPT
+        with ESMTP id S232259AbiG0QPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:46:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E158C59D;
-        Wed, 27 Jul 2022 09:53:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB58BB8200D;
-        Wed, 27 Jul 2022 16:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0043CC433C1;
-        Wed, 27 Jul 2022 16:53:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940815;
-        bh=Fu+RQZP2lBIVjrGU4m9Qhg1VGiP+0En1tD5IuKWsy6g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GpzrzVwcUmn+29pAW3Y9wslbA8nZg+rvMj5ASp8V4zUzH9IJSNaZ881IlPHl/L4CO
-         dM/UFVxP30bRJhB96gXY2vFBNtGbZ93d+mTUQ6f3kBC0nHj3E1JWGTCLE/UpXNu30O
-         1vnFcRFhC2HWOp+kRgmS36cGHF1YyyafMiJp5uDw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sedat Dilek <sedat.dilek@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.18 158/158] watch-queue: remove spurious double semicolon
-Date:   Wed, 27 Jul 2022 18:13:42 +0200
-Message-Id: <20220727161027.658313194@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Wed, 27 Jul 2022 12:15:15 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB4221BF;
+        Wed, 27 Jul 2022 09:15:14 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id tk8so32344128ejc.7;
+        Wed, 27 Jul 2022 09:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nEQIzIbqw9tVaGjrZxnadiXsV/LO+6rSYxOknhZz9+0=;
+        b=UEhGj5bYowOxm7P9F3F1YOg14wIJ4SyZm+OQo126czghjj3mQZZ3esFdQR5dQyE730
+         cCJbhN+DzrfMyJIASQVc1/4mFNOP6+760mtO7Smhrkk49G26rJAYVN08p94Rg7JgZiR+
+         jFNUonYSPuFUc2o1leXKOGd6I3i7ZBFaAWuA4jIuro45hBMdu0HpsRl8iIXTbpXqR36n
+         koVk+yNAxVouLWt2XVEIx7x/m0P4QZjNKQ2pMBGbLExXLFw4SJ7bViOhwyUKN2/n+ge9
+         QIvAzIsvPLXiX64gOvCHPbtnPK9Hl/b3RAK2I7yzj2M9mwYB7kQZTtxcjRdDaYiJcxs0
+         mMew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nEQIzIbqw9tVaGjrZxnadiXsV/LO+6rSYxOknhZz9+0=;
+        b=NAY1fkYCe3QqJbK9kJrLuUEU3c2Zv2ta3adOoCXSCCAtGKJL0PsIfbg2Thch6eRD6F
+         CMqC3YuJh2OlC0Wd9jy0t6WBlhW0DqdveuCHEt+eXZijMwU3czyXZ/UirT3Lqbjmp6Pc
+         sCBL9TLVsNZPwTozlKpJcTpXypShqb298heyWKA/o0TRM7qFYwijQKu7eHuocJSzSItl
+         5p20vihYeS8g4pPv+/y6r1uX+LIfxv3oAql2R9tnOKCUkuQg/DwG7287TTu83giWz3zH
+         1Jqm4ETyQi1tCfg5/AdOcMZgrWAtdN6Cx6W0dyB4u7wHabkdGCdokjKtowzJXn7ZVl8v
+         2kWQ==
+X-Gm-Message-State: AJIora+4GpEvRmJlz7PSF57Sw5t9dbJi1b21q49PTNq81U4303kX/yfC
+        KWh/J6FLZkyf3HyfMi6tkBxvndQIZQkJxjETyORW8n1A
+X-Google-Smtp-Source: AGRyM1v/y62b9L2Sj88bKJD1ZgQN6QQwveKYmTFbg9xiUSSMShe/d05MOog5wiSu5RMvcuJdcI/0Tn3ZhAGpfY1NTyA=
+X-Received: by 2002:a17:907:a0c6:b0:72d:3fd2:5daa with SMTP id
+ hw6-20020a170907a0c600b0072d3fd25daamr18633865ejc.728.1658938513064; Wed, 27
+ Jul 2022 09:15:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726205458.0b5ca446@canb.auug.org.au> <87leseabci.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87leseabci.fsf@mpe.ellerman.id.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 27 Jul 2022 12:15:01 -0400
+Message-ID: <CADnq5_OkWWO+hNz-n+bw5Wptn3JsfyuXe+ScXYTKwFz6JJf8fQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the amdgpu and
+ powerpc-fixes trees
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        Melissa Wen <mwen@igalia.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
++ Rodrigo, Melissa
 
-commit 44e29e64cf1ac0cffb152e0532227ea6d002aa28 upstream.
-
-Sedat Dilek noticed that I had an extraneous semicolon at the end of a
-line in the previous patch.
-
-It's harmless, but unintentional, and while compilers just treat it as
-an extra empty statement, for all I know some other tooling might warn
-about it. So clean it up before other people notice too ;)
-
-Fixes: 353f7988dd84 ("watchqueue: make sure to serialize 'wqueue->defunct' properly")
-Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- kernel/watch_queue.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -227,7 +227,7 @@ void __post_watch_notification(struct wa
- 
- 		if (lock_wqueue(wqueue)) {
- 			post_one_notification(wqueue, n);
--			unlock_wqueue(wqueue);;
-+			unlock_wqueue(wqueue);
- 		}
- 	}
- 
-
-
+On Wed, Jul 27, 2022 at 10:17 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> > Hi all,
+> >
+> > After merging the amdgpu tree, today's linux-next build (powerpc
+> > allyesconfig) failed like this:
+> >
+> > ld: drivers/gpu/drm/amd/display/dc/dml/display_mode_lib.o uses hard float, drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.o uses soft float
+> > ld: failed to merge target specific data of file drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.o
+> >
+> > I have reverted commit
+> >
+> >   c653c591789b ("drm/amdgpu: Re-enable DCN for 64-bit powerpc")
+> >
+> > for today.
+>
+> It bisects to:
+>
+>   40b31e5355ba ("drm/amd/display: Remove FPU flags from DCN30 Makefile")
+>
+> So I guess there's still some float code in dcn30?
+>
+> cheers

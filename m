@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4A058271E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4E25826F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbiG0MyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S230136AbiG0Mr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233497AbiG0MyJ (ORCPT
+        with ESMTP id S232724AbiG0Mr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:54:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23EB27B13;
-        Wed, 27 Jul 2022 05:54:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E832B82149;
-        Wed, 27 Jul 2022 12:54:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EFEAC433C1;
-        Wed, 27 Jul 2022 12:54:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658926446;
-        bh=bUI8RRcRRi8N4BCjRhAZBlP3oQu0WfRYo+LB9U7ijHI=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=JCHGNXwGYot1cE5EL6Gc3+C09mDz8gC6wsoK7F+rP4k6EuhITigg3GaQXGPRg3GmV
-         Pl7jfG5plca5zDcHmeAM47HBPux8Dw8QLBSmMvE+tNpbjiBKXweXjGpbV3Jx/NrDgA
-         PBgUJPE4rkdvgioC+hPE0tefuicFIwpDDumQkL+pKXOYbWuGzpwMWh2CPdrwbkRIt7
-         09aDkk2Oe1kyVOpM6qo7tP+YaTmMGbs/wFlkBOOEayw2BvZN9/z1G2pHrkoyHqt+sK
-         RoBx2TqQJGMTf+CbVrJXlLRqEkR6pRZC+OfidtHElKtiypk1AQUdPDuMSWEaWO5vMe
-         2Hjnq/JaUcWtQ==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 27 Jul 2022 08:47:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359BF1C109
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:47:54 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LtD565KcPzjXSb;
+        Wed, 27 Jul 2022 20:44:58 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Jul 2022 20:47:52 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Jul 2022 20:47:51 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>
+CC:     <linux-kernel@vger.kernel.org>, <catalin.marinas@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] bus: fsl-mc: dprc: replace strncpy() with strscpy_pad()
+Date:   Wed, 27 Jul 2022 20:54:32 +0800
+Message-ID: <20220727125432.160233-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: wifi: b43: do not initialise static variable to 0
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220720194245.8442-1-gaoxin@cdjrlc.com>
-References: <20220720194245.8442-1-gaoxin@cdjrlc.com>
-To:     Xin Gao <gaoxin@cdjrlc.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xin Gao <gaoxin@cdjrlc.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165892644221.11639.11999522991830836091.kvalo@kernel.org>
-Date:   Wed, 27 Jul 2022 12:54:03 +0000 (UTC)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,20 +51,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xin Gao <gaoxin@cdjrlc.com> wrote:
+Following warning when using W=1 to build kernel,
 
-> No need to initialise static variables to zero.
-> 
-> Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
-> Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
-> [kvalo@kernel.org: improve commit log]
+   drivers/bus/fsl-mc/dprc.c: In function 'dprc_get_obj':
+   drivers/bus/fsl-mc/dprc.c:453:9: warning: 'strncpy' output may be truncated copying 15 bytes from a string of length 15 [-Wstringop-truncation]
+     453 |         strncpy(obj_desc->type, rsp_params->type, 16);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/fsl-mc/dprc.c:455:9: warning: 'strncpy' output may be truncated copying 15 bytes from a string of length 15 [-Wstringop-truncation]
+     455 |         strncpy(obj_desc->label, rsp_params->label, 16);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/fsl-mc/dprc.c: In function 'dprc_set_obj_irq':
+   drivers/bus/fsl-mc/dprc.c:494:9: warning: 'strncpy' specified bound 16 equals destination size [-Wstringop-truncation]
+     494 |         strncpy(cmd_params->obj_type, obj_type, 16);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/bus/fsl-mc/dprc.c: In function 'dprc_get_obj_region':
+   drivers/bus/fsl-mc/dprc.c:567:9: warning: 'strncpy' specified bound 16 equals destination size [-Wstringop-truncation]
+     567 |         strncpy(cmd_params->obj_type, obj_type, 16);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Patch applied to wireless-next.git, thanks.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ drivers/bus/fsl-mc/dprc.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-dbf8cd368a47 wifi: b43: do not initialise static variable to 0
-
+diff --git a/drivers/bus/fsl-mc/dprc.c b/drivers/bus/fsl-mc/dprc.c
+index d129338b8bc0..dd1b5c0fb7e2 100644
+--- a/drivers/bus/fsl-mc/dprc.c
++++ b/drivers/bus/fsl-mc/dprc.c
+@@ -450,10 +450,8 @@ int dprc_get_obj(struct fsl_mc_io *mc_io,
+ 	obj_desc->ver_major = le16_to_cpu(rsp_params->version_major);
+ 	obj_desc->ver_minor = le16_to_cpu(rsp_params->version_minor);
+ 	obj_desc->flags = le16_to_cpu(rsp_params->flags);
+-	strncpy(obj_desc->type, rsp_params->type, 16);
+-	obj_desc->type[15] = '\0';
+-	strncpy(obj_desc->label, rsp_params->label, 16);
+-	obj_desc->label[15] = '\0';
++	strscpy_pad(obj_desc->type, rsp_params->type, 16);
++	strscpy_pad(obj_desc->label, rsp_params->label, 16);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(dprc_get_obj);
+@@ -491,8 +489,7 @@ int dprc_set_obj_irq(struct fsl_mc_io *mc_io,
+ 	cmd_params->irq_addr = cpu_to_le64(irq_cfg->paddr);
+ 	cmd_params->irq_num = cpu_to_le32(irq_cfg->irq_num);
+ 	cmd_params->obj_id = cpu_to_le32(obj_id);
+-	strncpy(cmd_params->obj_type, obj_type, 16);
+-	cmd_params->obj_type[15] = '\0';
++	strscpy_pad(cmd_params->obj_type, obj_type, 16);
+ 
+ 	/* send command to mc*/
+ 	return mc_send_command(mc_io, &cmd);
+@@ -564,8 +561,7 @@ int dprc_get_obj_region(struct fsl_mc_io *mc_io,
+ 	cmd_params = (struct dprc_cmd_get_obj_region *)cmd.params;
+ 	cmd_params->obj_id = cpu_to_le32(obj_id);
+ 	cmd_params->region_index = region_index;
+-	strncpy(cmd_params->obj_type, obj_type, 16);
+-	cmd_params->obj_type[15] = '\0';
++	strscpy_pad(cmd_params->obj_type, obj_type, 16);
+ 
+ 	/* send command to mc*/
+ 	err = mc_send_command(mc_io, &cmd);
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220720194245.8442-1-gaoxin@cdjrlc.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.35.3
 

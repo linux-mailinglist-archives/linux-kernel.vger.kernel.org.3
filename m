@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4DF583002
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A704583006
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242375AbiG0RcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S242175AbiG0RcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242385AbiG0R3c (ORCPT
+        with ESMTP id S242585AbiG0RaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:29:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0284952DF1;
-        Wed, 27 Jul 2022 09:47:47 -0700 (PDT)
+        Wed, 27 Jul 2022 13:30:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38485246C;
+        Wed, 27 Jul 2022 09:48:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BB6AB821D2;
-        Wed, 27 Jul 2022 16:47:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D755CC433C1;
-        Wed, 27 Jul 2022 16:47:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A23C600BE;
+        Wed, 27 Jul 2022 16:47:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9943BC433C1;
+        Wed, 27 Jul 2022 16:47:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940463;
-        bh=m+MdzK3zbrk88iLvCTtfSb2ljfBx9asE8hnGNYWG9Rk=;
+        s=korg; t=1658940466;
+        bh=LDTAR5XNGEs6IbAPArum+Jk2Iiza2SC3BANq8xb76xM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2JK6MAeOhwkgIY0tOMHTLZBQlj1PRjnwgK2ViqiarigWGi6tcxuukdRYbo+TNobeq
-         aUkaW43FryG7esEp2sKFCel0ltigDeO74GEDJeMHgtSAj7uoGLerALcph7y+j9O7GD
-         HSypBxcT2lognDBFNip7E9ytmJh7icNhqb2eTmos=
+        b=1xOISjigE5jYPoVqbVcfrKCqkAX90p8HZbZ7BURSqVTFhkzCPSkkPIHJ2w7ff6GfZ
+         42bCXcO9jeuwaJn3JlRnDOe22e7z50I8qRofunRbhEFuhJarXzu6+eVuKgW0aog1zI
+         SssQrerLwXWUlms3+D0yPYHHvyRj0Dfi53/3tuso=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Snowberg <eric.snowberg@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        John Haxby <john.haxby@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.18 005/158] lockdown: Fix kexec lockdown bypass with ima policy
-Date:   Wed, 27 Jul 2022 18:11:09 +0200
-Message-Id: <20220727161021.663655785@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Yegor Yefremov <yegorslists@googlemail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.18 006/158] mmc: sdhci-omap: Fix a lockdep warning for PM runtime init
+Date:   Wed, 27 Jul 2022 18:11:10 +0200
+Message-Id: <20220727161021.703512831@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
 References: <20220727161021.428340041@linuxfoundation.org>
@@ -55,57 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Snowberg <eric.snowberg@oracle.com>
+From: Tony Lindgren <tony@atomide.com>
 
-commit 543ce63b664e2c2f9533d089a4664b559c3e6b5b upstream.
+commit 51189eb9ddc88851edc42f539a0f9862fd0630c2 upstream.
 
-The lockdown LSM is primarily used in conjunction with UEFI Secure Boot.
-This LSM may also be used on machines without UEFI.  It can also be
-enabled when UEFI Secure Boot is disabled.  One of lockdown's features
-is to prevent kexec from loading untrusted kernels.  Lockdown can be
-enabled through a bootparam or after the kernel has booted through
-securityfs.
+We need runtime PM enabled early in probe before sdhci_setup_host() for
+sdhci_omap_set_capabilities(). But on the first runtime resume we must
+not call sdhci_runtime_resume_host() as sdhci_setup_host() has not been
+called yet. Let's check for an initialized controller like we already do
+for context restore to fix a lockdep warning.
 
-If IMA appraisal is used with the "ima_appraise=log" boot param,
-lockdown can be defeated with kexec on any machine when Secure Boot is
-disabled or unavailable.  IMA prevents setting "ima_appraise=log" from
-the boot param when Secure Boot is enabled, but this does not cover
-cases where lockdown is used without Secure Boot.
-
-To defeat lockdown, boot without Secure Boot and add ima_appraise=log to
-the kernel command line; then:
-
-  $ echo "integrity" > /sys/kernel/security/lockdown
-  $ echo "appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig" > \
-    /sys/kernel/security/ima/policy
-  $ kexec -ls unsigned-kernel
-
-Add a call to verify ima appraisal is set to "enforce" whenever lockdown
-is enabled.  This fixes CVE-2022-21505.
-
+Fixes: f433e8aac6b9 ("mmc: sdhci-omap: Implement PM runtime functions")
+Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 Cc: stable@vger.kernel.org
-Fixes: 29d3c1c8dfe7 ("kexec: Allow kexec_file() with appropriate IMA policy when locked down")
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-Reviewed-by: John Haxby <john.haxby@oracle.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/r/20220622051215.34063-1-tony@atomide.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/integrity/ima/ima_policy.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/mmc/host/sdhci-omap.c |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -2181,6 +2181,10 @@ bool ima_appraise_signature(enum kernel_
- 	if (id >= READING_MAX_ID)
- 		return false;
+--- a/drivers/mmc/host/sdhci-omap.c
++++ b/drivers/mmc/host/sdhci-omap.c
+@@ -1303,8 +1303,9 @@ static int sdhci_omap_probe(struct platf
+ 	/*
+ 	 * omap_device_pm_domain has callbacks to enable the main
+ 	 * functional clock, interface clock and also configure the
+-	 * SYSCONFIG register of omap devices. The callback will be invoked
+-	 * as part of pm_runtime_get_sync.
++	 * SYSCONFIG register to clear any boot loader set voltage
++	 * capabilities before calling sdhci_setup_host(). The
++	 * callback will be invoked as part of pm_runtime_get_sync.
+ 	 */
+ 	pm_runtime_use_autosuspend(dev);
+ 	pm_runtime_set_autosuspend_delay(dev, 50);
+@@ -1446,7 +1447,8 @@ static int __maybe_unused sdhci_omap_run
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct sdhci_omap_host *omap_host = sdhci_pltfm_priv(pltfm_host);
  
-+	if (id == READING_KEXEC_IMAGE && !(ima_appraise & IMA_APPRAISE_ENFORCE)
-+	    && security_locked_down(LOCKDOWN_KEXEC))
-+		return false;
-+
- 	func = read_idmap[id] ?: FILE_CHECK;
+-	sdhci_runtime_suspend_host(host);
++	if (omap_host->con != -EINVAL)
++		sdhci_runtime_suspend_host(host);
  
- 	rcu_read_lock();
+ 	sdhci_omap_context_save(omap_host);
+ 
+@@ -1463,10 +1465,10 @@ static int __maybe_unused sdhci_omap_run
+ 
+ 	pinctrl_pm_select_default_state(dev);
+ 
+-	if (omap_host->con != -EINVAL)
++	if (omap_host->con != -EINVAL) {
+ 		sdhci_omap_context_restore(omap_host);
+-
+-	sdhci_runtime_resume_host(host, 0);
++		sdhci_runtime_resume_host(host, 0);
++	}
+ 
+ 	return 0;
+ }
 
 

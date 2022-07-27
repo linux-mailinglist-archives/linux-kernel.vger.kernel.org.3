@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78891582C84
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6B2582D7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240471AbiG0QrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S241135AbiG0Q6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240297AbiG0QqY (ORCPT
+        with ESMTP id S236197AbiG0Q6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:46:24 -0400
+        Wed, 27 Jul 2022 12:58:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA3460525;
-        Wed, 27 Jul 2022 09:31:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90F666AF0;
+        Wed, 27 Jul 2022 09:36:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05B4D61A39;
-        Wed, 27 Jul 2022 16:31:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FAFEC433C1;
-        Wed, 27 Jul 2022 16:31:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7111461AA5;
+        Wed, 27 Jul 2022 16:36:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5BDC433B5;
+        Wed, 27 Jul 2022 16:36:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939500;
-        bh=2Vlo7M8NSNs8mY3VMCsSnVhil6Q8QE9JRpDlIGdKv1U=;
+        s=korg; t=1658939796;
+        bh=S8SWVllnVkzSgkTz6JoTxKs8jyHatnSGmDp56hMozCU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pgEeIzNPyBlDUUnEirXGbDJs6pS7FMv0XPS+o7lim3SOCPDmFgx1HChKHHBkPnOfF
-         jQX+zRcPCMfx2+aGKqqRme61+iEJiZvtIRT7eKSsC9InQWGAOlDGMf7HTgXjk67KmM
-         zx7n0Wr5JdcOVRBz4tWMbywIYFeSyUNpGmZ603ak=
+        b=G/bHrId0+3zWAs8nz5800nB/VdRM595khJhDMXoRv/r5OkxlBW/nepOICr+9hJ5/N
+         TcklePfRzfVqqtO/emdZiPOFtHxT3Vo5HoXPTkCuOtDg1pb80HKiiA/GIcBtSUde8g
+         +72XPpJeED1RXWIuLqMV+jUwIcKXUNOAvWWg6ylo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
-        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 5.4 84/87] tty: extract tty_flip_buffer_commit() from tty_flip_buffer_push()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Tedd Ho-Jeong An <tedd.an@intel.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 5.10 091/105] Bluetooth: Fix passing NULL to PTR_ERR
 Date:   Wed, 27 Jul 2022 18:11:17 +0200
-Message-Id: <20220727161012.464035141@linuxfoundation.org>
+Message-Id: <20220727161015.745281832@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit 716b10580283fda66f2b88140e3964f8a7f9da89 upstream.
+commit 266191aa8d14b84958aaeb5e96ee4e97839e3d87 upstream.
 
-We will need this new helper in the next patch.
+Passing NULL to PTR_ERR will result in 0 (success), also since the likes of
+bt_skb_sendmsg does never return NULL it is safe to replace the instances of
+IS_ERR_OR_NULL with IS_ERR when checking its return.
 
-Cc: Hillf Danton <hdanton@sina.com>
-Cc: 一只狗 <chennbnbnb@gmail.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220707082558.9250-1-jslaby@suse.cz
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Tested-by: Tedd Ho-Jeong An <tedd.an@intel.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/tty_buffer.c |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ include/net/bluetooth/bluetooth.h |    2 +-
+ net/bluetooth/rfcomm/sock.c       |    2 +-
+ net/bluetooth/sco.c               |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -523,6 +523,15 @@ static void flush_to_ldisc(struct work_s
+--- a/include/net/bluetooth/bluetooth.h
++++ b/include/net/bluetooth/bluetooth.h
+@@ -474,7 +474,7 @@ static inline struct sk_buff *bt_skb_sen
+ 		struct sk_buff *tmp;
  
- }
+ 		tmp = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
+-		if (IS_ERR_OR_NULL(tmp)) {
++		if (IS_ERR(tmp)) {
+ 			kfree_skb(skb);
+ 			return tmp;
+ 		}
+--- a/net/bluetooth/rfcomm/sock.c
++++ b/net/bluetooth/rfcomm/sock.c
+@@ -583,7 +583,7 @@ static int rfcomm_sock_sendmsg(struct so
  
-+static inline void tty_flip_buffer_commit(struct tty_buffer *tail)
-+{
-+	/*
-+	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
-+	 * buffer data.
-+	 */
-+	smp_store_release(&tail->commit, tail->used);
-+}
-+
- /**
-  *	tty_flip_buffer_push	-	terminal
-  *	@port: tty port to push
-@@ -538,11 +547,7 @@ void tty_flip_buffer_push(struct tty_por
- {
- 	struct tty_bufhead *buf = &port->buf;
+ 	skb = bt_skb_sendmmsg(sk, msg, len, d->mtu, RFCOMM_SKB_HEAD_RESERVE,
+ 			      RFCOMM_SKB_TAIL_RESERVE);
+-	if (IS_ERR_OR_NULL(skb))
++	if (IS_ERR(skb))
+ 		return PTR_ERR(skb);
  
--	/*
--	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
--	 * buffer data.
--	 */
--	smp_store_release(&buf->tail->commit, buf->tail->used);
-+	tty_flip_buffer_commit(buf->tail);
- 	queue_work(system_unbound_wq, &buf->work);
- }
- EXPORT_SYMBOL(tty_flip_buffer_push);
+ 	sent = rfcomm_dlc_send(d, skb);
+--- a/net/bluetooth/sco.c
++++ b/net/bluetooth/sco.c
+@@ -732,7 +732,7 @@ static int sco_sock_sendmsg(struct socke
+ 		return -EOPNOTSUPP;
+ 
+ 	skb = bt_skb_sendmsg(sk, msg, len, len, 0, 0);
+-	if (IS_ERR_OR_NULL(skb))
++	if (IS_ERR(skb))
+ 		return PTR_ERR(skb);
+ 
+ 	lock_sock(sk);
 
 

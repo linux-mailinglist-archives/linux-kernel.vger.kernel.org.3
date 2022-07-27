@@ -2,101 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C14582C75
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79403582C5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240377AbiG0Qq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
+        id S240363AbiG0Qpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240427AbiG0QqR (ORCPT
+        with ESMTP id S240482AbiG0Qo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:46:17 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CE75FAFF
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:31:36 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id 125so13932667iou.6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HLpauEQ5M+lWRIlS3PcwqsZWVTFiAvj2+32FpHGOhBk=;
-        b=klS/6ZXoSeM0uv5HT7/w1pRROtMu2SFyiAGZpuVTlKfCMmZO+NVgryshOQKXZ3mRwO
-         aCapBXgciK6e8ZLoA0VmgIdcFIShZvj3yTsNZAVCWrgAfnyA1QH0nmrIVsxq906pdmc0
-         hmwXJXpwp0IwAbDiWt5D++aDEST91D1pWaKsHwWFDLX494ZYqaluBT3sHd8k0UTlRBI2
-         jEfCfG3Cu4m+fuqo+JGBOr/N1asAZoHTfyfmGqch2N4qoAxdB4As1OnAQTKzEjYhm7vg
-         3XTBjSn/35ULRdJL1A6mahAfA9wsliZ8gk/LfZ5hmyy9h93oqA8sg161qx782ugJASrw
-         dWtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HLpauEQ5M+lWRIlS3PcwqsZWVTFiAvj2+32FpHGOhBk=;
-        b=BoDQEZfR4q3ktiR90+sEKbW5OAwaoN8ccUHOGafuYy0fmj8/bQ2NeI5Hl5oJEek6u+
-         zqutGClFzrJBhjCShlTUjqRiUGo9k2F1T+ql+aM1nyp/BcJb4OvHvVwvxhMlq1xlwmpk
-         qfCuTFqRsNPx2lHIDhFCIek+fmkDbXjqTtv7/Up7+HZMVAucm9j5hTLjHrQYiAcj3ii9
-         jNxh0euyzBoo9+wpDxixgj+AUW7aunADIHzH+UuJCcOtrLOm+0tGhIhWDFaMQO23lRfL
-         5YbfoeR/l575FbCbIOXNUEKJNQPKEcm0642F+Fdr6DSgLOb30a3Yt8FkgGV9zZKw5NyD
-         6J+A==
-X-Gm-Message-State: AJIora/aFWxHJgoXYae7Qk328ic3oP/izTdR9+ecJfPJgocFfcFzoCRO
-        C76yha2503LUjnGP5W88MpkW7dpF0zs0ujxpm1Nn9Q==
-X-Google-Smtp-Source: AGRyM1vzxJdX05n48cDiHKWT4UyZZ4xthB7HHUEb5MIzbitr5xn078iGRk5ZiOqwPRiIpO312Lx7K0+ksI9j1fyn3gg=
-X-Received: by 2002:a02:a68c:0:b0:33f:46d4:918e with SMTP id
- j12-20020a02a68c000000b0033f46d4918emr8580458jam.58.1658939495323; Wed, 27
- Jul 2022 09:31:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210929185823.499268-1-alex.popov@linux.com> <d290202d-a72d-0821-9edf-efbecf6f6cef@linux.com>
- <20210929194924.GA880162@paulmck-ThinkPad-P17-Gen-1> <YVWAPXSzFNbHz6+U@alley>
- <CAHk-=widOm3FXMPXXK0cVaoFuy3jCk65=5VweLceQCuWdep=Hg@mail.gmail.com> <7c567acd-1cc1-a480-ca5a-d50a9c5a69ef@ispras.ru>
-In-Reply-To: <7c567acd-1cc1-a480-ca5a-d50a9c5a69ef@ispras.ru>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 27 Jul 2022 18:30:59 +0200
-Message-ID: <CAG48ez2Sh-kngNVeCF9-X550PQMaNnQaEvS+EAiWaDjWnmoHOg@mail.gmail.com>
-Subject: Re: [PATCH] Introduce the pkill_on_warn boot parameter
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Alexander Popov <alex.popov@linux.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Maciej Rozycki <macro@orcam.me.uk>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>, Wei Liu <wl@xen.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Garnier <thgarnie@google.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Laura Abbott <labbott@redhat.com>,
-        David S Miller <davem@davemloft.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-hardening@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        notify@kernel.org
+        Wed, 27 Jul 2022 12:44:29 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B025F108
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1658939469;
+        bh=HrNxPzF6dJ12J1BPkZaz5pUYuW251mjEZT0aRcTaEHQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=XIRjQux7MbnnW0Aj0AGPLttXUPm8Yw+iCdS0o3c7e7/Gy0uXgEXPAHrwHhZ72i6Lf
+         fqaVEsfKo4q64xC5x21iUOLSzZi6rftk8SS/xchNMpz8KvjB77nmvW0kI/w8j3rk/N
+         kM4u3WWUKTS7rNAQ9S2LjSh8OcZGrTGTfKbHLQqM=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 4B3016698A;
+        Wed, 27 Jul 2022 12:31:08 -0400 (EDT)
+Message-ID: <4007f3ef167f93ffd9fcae841e144a0fc89f0117.camel@xry111.site>
+Subject: [PATCH 5/5] LoongArch: Support modules with new relocation types
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     loongarch@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 28 Jul 2022 00:31:07 +0800
+In-Reply-To: <385f63bcbee8e37c42f479ce9cdc7e7d731d419b.camel@xry111.site>
+References: <385f63bcbee8e37c42f479ce9cdc7e7d731d419b.camel@xry111.site>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,44 +52,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 6:17 PM Alexey Khoroshilov
-<khoroshilov@ispras.ru> wrote:
-> On 01.10.2021 22:59, Linus Torvalds wrote:
-> Coming back to the discussion of WARN_ON()/pr_warn("WARNING:") semantics.
->
-> We see a number of cases where WARNING is used to inform userspace that
-> it is doing something wrong, e.g.
-> https://elixir.bootlin.com/linux/v5.19-rc8/source/net/can/j1939/socket.c#L181
-> https://elixir.bootlin.com/linux/v5.19-rc8/source/drivers/video/fbdev/core/fbmem.c#L1023
->
-> It is definitely useful, but it does not make sense in case of fuzzing
-> when the userspace should do wrong things and check if kernel behaves
-> correctly.
->
-> As a result we have warnings with two different intentions:
-> - warn that something wrong happens in kernel, but we are able to continue;
-> - warn userspace that it is doing something wrong.
->
-> During fuzzing we would like to report the former and to ignore the
-> latter. Are any ideas how these intentions can be recognized automatically?
+If GAS 2.40 and/or GCC 13 is used to build the kernel, the modules will
+contain R_LARCH_B26, R_LARCH_PCALA_HI20, R_LARCH_PCALA_LO12,
+R_LARCH_GOT_PC_HI20, and R_LARCH_GOT_PC_LO12 relocations.  Support them
+in the module loader to allow a kernel built with latest toolchain
+capable to load the modules.
 
-https://elixir.bootlin.com/linux/v5.19-rc8/source/include/asm-generic/bug.h#L74
-says:
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+---
+ arch/loongarch/include/asm/elf.h        | 37 +++++++++++
+ arch/loongarch/kernel/module-sections.c | 12 +++-
+ arch/loongarch/kernel/module.c          | 83 +++++++++++++++++++++++++
+ 3 files changed, 130 insertions(+), 2 deletions(-)
 
- * WARN(), WARN_ON(), WARN_ON_ONCE, and so on can be used to report
- * significant kernel issues that need prompt attention if they should ever
- * appear at runtime.
- *
- * Do not use these macros when checking for invalid external inputs
- * (e.g. invalid system call arguments, or invalid data coming from
- * network/devices), and on transient conditions like ENOMEM or EAGAIN.
- * These macros should be used for recoverable kernel issues only.
- * For invalid external inputs, transient conditions, etc use
- * pr_err[_once/_ratelimited]() followed by dump_stack(), if necessary.
- * Do not include "BUG"/"WARNING" in format strings manually to make these
- * conditions distinguishable from kernel issues.
+diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/=
+elf.h
+index f3960b18a90e..aeca7a9924ea 100644
+--- a/arch/loongarch/include/asm/elf.h
++++ b/arch/loongarch/include/asm/elf.h
+@@ -74,6 +74,43 @@
+ #define R_LARCH_SUB64				56
+ #define R_LARCH_GNU_VTINHERIT			57
+ #define R_LARCH_GNU_VTENTRY			58
++#define R_LARCH_B16				64
++#define R_LARCH_B21				65
++#define R_LARCH_B26				66
++#define R_LARCH_ABS_HI20			67
++#define R_LARCH_ABS_LO12			68
++#define R_LARCH_ABS64_LO20			69
++#define R_LARCH_ABS64_HI12			70
++#define R_LARCH_PCALA_HI20			71
++#define R_LARCH_PCALA_LO12			72
++#define R_LARCH_PCALA64_LO20			73
++#define R_LARCH_PCALA64_HI12			74
++#define R_LARCH_GOT_PC_HI20			75
++#define R_LARCH_GOT_PC_LO12			76
++#define R_LARCH_GOT64_PC_LO20			77
++#define R_LARCH_GOT64_PC_HI12			78
++#define R_LARCH_GOT_HI20			79
++#define R_LARCH_GOT_LO12			80
++#define R_LARCH_GOT64_LO20			81
++#define R_LARCH_GOT64_HI12			82
++#define R_LARCH_TLS_LE_HI20			83
++#define R_LARCH_TLS_LE_LO12			84
++#define R_LARCH_TLS_LE64_LO20			85
++#define R_LARCH_TLS_LE64_HI12			86
++#define R_LARCH_TLS_IE_PC_HI20			87
++#define R_LARCH_TLS_IE_PC_LO12			88
++#define R_LARCH_TLS_IE64_PC_LO20		89
++#define R_LARCH_TLS_IE64_PC_HI12		90
++#define R_LARCH_TLS_IE_HI20			91
++#define R_LARCH_TLS_IE_LO12			92
++#define R_LARCH_TLS_IE64_LO20			93
++#define R_LARCH_TLS_IE64_HI12			94
++#define R_LARCH_TLS_LD_PC_HI20			95
++#define R_LARCH_TLS_LD_HI20			96
++#define R_LARCH_TLS_GD_PC_HI20			97
++#define R_LARCH_TLS_GD_HI20			98
++#define R_LARCH_32_PCREL			99
++#define R_LARCH_RELAX				100
+=20
+ #ifndef ELF_ARCH
+=20
+diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kerne=
+l/module-sections.c
+index 73976addbf60..9baf119388b9 100644
+--- a/arch/loongarch/kernel/module-sections.c
++++ b/arch/loongarch/kernel/module-sections.c
+@@ -76,12 +76,20 @@ static void count_max_entries(Elf_Rela *relas, int num,
+=20
+ 	for (i =3D 0; i < num; i++) {
+ 		type =3D ELF_R_TYPE(relas[i].r_info);
+-		if (type =3D=3D R_LARCH_SOP_PUSH_PLT_PCREL) {
++		switch (type) {
++		case R_LARCH_SOP_PUSH_PLT_PCREL:
++		case R_LARCH_B26:
+ 			if (!duplicate_rela(relas, i))
+ 				(*plts)++;
+-		} else if (type =3D=3D R_LARCH_SOP_PUSH_GPREL)
++			break;
++		case R_LARCH_SOP_PUSH_GPREL:
++		case R_LARCH_GOT_PC_HI20:
+ 			if (!duplicate_rela(relas, i))
+ 				(*gots)++;
++			break;
++		default:
++			/* Do nothing. */
++		}
+ 	}
+ }
+=20
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.=
+c
+index e5f1fd022cd0..1aa6a58b1c21 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -291,6 +291,84 @@ static int apply_r_larch_add_sub(struct module *mod, u=
+32 *location, Elf_Addr v,
+ 	}
+ }
+=20
++static int apply_r_larch_b26(struct module *mod, u32 *location, Elf_Addr v=
+,
++			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++{
++	ptrdiff_t offset =3D (void *)v - (void *)location;
++
++	if (offset >=3D SZ_128M)
++		v =3D module_emit_plt_entry(mod, v);
++
++	if (offset < -SZ_128M)
++		v =3D module_emit_plt_entry(mod, v);
++
++	offset =3D (void *)v - (void *)location;
++
++	if (!signed_imm_check(offset, 28)) {
++		pr_err("module %s: jump offset =3D 0x%llx overflow! dangerous R_LARCH_B2=
+6 (%u) relocation\n",
++				mod->name, (long long)offset, type);
++		return -ENOEXEC;
++	}
++
++	if (offset & 3) {
++		pr_err("module %s: jump offset =3D 0x%llx unaligned! dangerous R_LARCH_B=
+26 (%u) relocation\n",
++				mod->name, (long long)offset, type);
++		return -ENOEXEC;
++	}
++
++	*location &=3D ~(u32)0x3ffffff;
++	*location |=3D (offset >> 18) & 0x3ff;
++	*location |=3D ((offset >> 2) & 0xffff) << 10;
++	return 0;
++}
++
++static int apply_r_larch_pcala_hi20(struct module *mod, u32 *location,
++		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
++		unsigned int type)
++{
++	ptrdiff_t offset =3D (void *)((v + 0x800) & ~0xfff) -
++		(void *)((Elf_Addr)location & ~0xfff);
++
++	if (!signed_imm_check(offset, 32)) {
++		pr_err("module %s: PCALA offset =3D 0x%llx does not fit in 32-bit signed=
+ and is unsupported by kernel! dangerous %s (%u) relocation\n",
++				mod->name, (long long)offset, __func__, type);
++		return -ENOEXEC;
++	}
++
++	*location &=3D ~((u32)0xfffff << 5);
++	*location |=3D ((offset >> 12) & 0xfffff) << 5;
++	return 0;
++}
++
++static int apply_r_larch_got_pc_hi20(struct module *mod, u32 *location,
++		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
++		unsigned int type)
++{
++	Elf_Addr got =3D module_emit_got_entry(mod, v);
++
++	return apply_r_larch_pcala_hi20(mod, location, got, rela_stack,
++			rela_stack_top, type);
++}
++
++static int apply_r_larch_pcala_lo12(struct module *mod, u32 *location,
++		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
++		unsigned int type)
++{
++	*location &=3D ~((u32)0xfff << 10);
++	*location |=3D ((u32)v & 0xfff) << 10;
++	return 0;
++}
++
++static int apply_r_larch_got_pc_lo12(struct module *mod, u32 *location,
++		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
++		unsigned int type)
++{
++	Elf_Addr got =3D module_emit_got_entry(mod, v);
++
++	return apply_r_larch_pcala_lo12(mod, location, got, rela_stack,
++			rela_stack_top, type);
++}
++
+ /*
+  * reloc_handlers_rela() - Apply a particular relocation to a module
+  * @mod: the module to apply the reloc to
+@@ -321,6 +399,11 @@ static reloc_rela_handler reloc_rela_handlers[] =3D {
+ 	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] =3D apply_r_larch_so=
+p_imm_field,
+ 	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     =3D apply_r_larch_add_sub,
+ 	[R_LARCH_SOP_PUSH_GPREL]			     =3D apply_r_larch_sop_push_gprel,
++	[R_LARCH_B26]					     =3D apply_r_larch_b26,
++	[R_LARCH_PCALA_HI20]				     =3D apply_r_larch_pcala_hi20,
++	[R_LARCH_PCALA_LO12]				     =3D apply_r_larch_pcala_lo12,
++	[R_LARCH_GOT_PC_HI20]				     =3D apply_r_larch_got_pc_hi20,
++	[R_LARCH_GOT_PC_LO12]				     =3D apply_r_larch_got_pc_lo12,
+ };
+=20
+ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+--=20
+2.37.0
 
-So if you see drivers intentionally using WARN() or printing
-"WARNING:" on codepaths that are reachable with bogus inputs from
-userspace, those codepaths should be fixed to log warnings in a
-different format.
+

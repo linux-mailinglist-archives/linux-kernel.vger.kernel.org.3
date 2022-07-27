@@ -2,45 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB48582313
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2040F58231A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiG0J2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S231249AbiG0J2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiG0J1l (ORCPT
+        with ESMTP id S231570AbiG0J15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:27:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 885E62654D;
-        Wed, 27 Jul 2022 02:27:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A237D6E;
-        Wed, 27 Jul 2022 02:27:40 -0700 (PDT)
-Received: from [10.57.42.213] (unknown [10.57.42.213])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADD893F70D;
-        Wed, 27 Jul 2022 02:27:38 -0700 (PDT)
-Message-ID: <62efe3a0-21d7-dfee-2532-cf2090359548@arm.com>
-Date:   Wed, 27 Jul 2022 10:27:37 +0100
+        Wed, 27 Jul 2022 05:27:57 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F76A47BB8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:27:55 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id d124so11878009ybb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bBFDz2W5xcHE0ZM3OCmaQTYQarGqNZfYlbjkrHAkU7Y=;
+        b=GzP/fohU8r+nSa3pQEBIHnxBWxZwdz999gax3ajvKKV/3qdNXgkMNf+4icGDdVliom
+         bSnb1aJALnTPPwUJAbpGuWaJJZ9qjslqNlGZZAneOAIusIAWv1CUuTznA9SxSf6+mIh2
+         pqhUvsR4XeiSykRLGwKylGq9JxhtxOWhs99agWtcf4xdfPblA4Wo+3WABwYAmdva9L0J
+         WvKFgZo2Q/IJkcXb3a3GjoXn0WD+wzQDWCfiux1tarsXAr2hhDUGBq7rwGFG8tURaiPF
+         pK8/1x0OC8CDhcC+tZW4s05T4/N2tzLIO2a2LvZLqCsmQI478xmdYM+ibJPHWyDy5TvS
+         m9Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bBFDz2W5xcHE0ZM3OCmaQTYQarGqNZfYlbjkrHAkU7Y=;
+        b=DEtwSnKypD+nHPWLkE7vjszlftLo4uYWOP2CdVhY9MJkDhsnN4p9W+oBHRByTLp+br
+         2BKI/O1ruEfK8eHWkgl3Bf0td5wfObfnAARGsYP7AiPzbocQDuvatrwhjL/i1MVvQRBC
+         CnutaTyzv60IXGGz1tEibo9BfipXpV2NNhOq+4aNC5KQcIHLFBe2IADsD9ouQoQnih0j
+         dOfXtevZwI7MDwzZ/YF17dM5EpEGb0K909Z7ALEvllhK6r+sHFq2r5MWAc9F6gbveD3J
+         IxfKxssAjZQXYxcNZCVj1uvFP8OYhUnI+c0GjUxl0pMdAOkNpm2yQf19Ol/arfYng/cv
+         wFiA==
+X-Gm-Message-State: AJIora+KuZg8dg9f5uQ1Tla/8uWVfOjWKLwnrQfGg8xGOswvn335C6Gk
+        fDgtZyZeXuk4tlqMOGOvwAXfNPIVpuXO8tYbbjgGbg==
+X-Google-Smtp-Source: AGRyM1ug6YIa7Qapp9b4B5y5/JmJxQbX5IwK+4B6dyOrtwMDpXUoAPCGrqsdEXvxbtlSDQIZ8jY0SSTJaKISEH9GcuU=
+X-Received: by 2002:a25:ab84:0:b0:671:748b:ffab with SMTP id
+ v4-20020a25ab84000000b00671748bffabmr5212697ybi.427.1658914074600; Wed, 27
+ Jul 2022 02:27:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] perf/tests: Fix test case 95 Check branch stack sampling
- on s390
-Content-Language: en-US
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, acme@kernel.org,
-        german.gomez@arm.com
-References: <20220727071159.173360-1-tmricht@linux.ibm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220727071159.173360-1-tmricht@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <cover.1658815925.git.cdleonard@gmail.com> <ad19d5c8a24054d48e1c35bb0ec92075b9f0dc6a.1658815925.git.cdleonard@gmail.com>
+ <CANn89i+ByJsdKLXi982jq0H3irYg_ANSEdmL2zwZ_7G-E_g2eg@mail.gmail.com>
+ <CANn89i+=LVDFx_zjDy6uK+QorR+fosdkb8jqNMO6syqOsS7ZqQ@mail.gmail.com> <dd2ca85e-ab29-2973-f129-9afafb405851@gmail.com>
+In-Reply-To: <dd2ca85e-ab29-2973-f129-9afafb405851@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 27 Jul 2022 11:27:43 +0200
+Message-ID: <CANn89iLUuSWFHbZnb9DSJfR58bCU=pq+uPmT6s45=nrDzMWYYg@mail.gmail.com>
+Subject: Re: [PATCH v6 21/26] selftests: net/fcnal: Initial tcp_authopt support
+To:     Leonard Crestez <cdleonard@gmail.com>
+Cc:     David Ahern <dsahern@kernel.org>, Philip Paeps <philip@trouble.is>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,59 +88,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 27, 2022 at 10:29 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+>
+>
+> On 7/26/22 10:27, Eric Dumazet wrote:
+> > On Tue, Jul 26, 2022 at 9:06 AM Eric Dumazet <edumazet@google.com> wrote:
+> >>
+> >> On Tue, Jul 26, 2022 at 8:16 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+> >>>
+> >>> Tests are mostly copied from tcp_md5 with minor changes.
+> >>>
+> >>> It covers VRF support but only based on binding multiple servers: not
+> >>> multiple keys bound to different interfaces.
+> >>>
+> >>> Also add a specific -t tcp_authopt to run only these tests specifically.
+> >>>
+> >>
+> >> Thanks for the test.
+> >>
+> >> Could you amend the existing TCP MD5 test to make sure dual sockets
+> >> mode is working ?
+> >>
+> >> Apparently, if we have a dual stack listener socket (AF_INET6),
+> >> correct incoming IPV4 SYNs are dropped.
+>
+> >>   If this is the case, fixing MD5 should happen first ;
+>
+> I remember looking into this and my conclusion was that ipv4-mapped-ipv6
+> is not worth supporting for AO, at least not in the initial version.
+>
+> Instead I just wrote a test to check that ipv4-mapped-ipv6 fails for AO:
+> https://github.com/cdleonard/tcp-authopt-test/blob/main/tcp_authopt_test/test_verify_capture.py#L191
+>
+> On a closer look it does appear that support existed for
+> ipv4-mapped-ipv6 in TCP-MD5 but my test didn't actually exercise it
+> correctly so the test had to be fixed.
+>
+>
+> Do you think it makes sense to add support for ipv4-mapped-ipv6 for AO?
+> It's not particularly difficult to test, it was skipped due to a lack of
+> application use case and to keep the initial series smaller.
 
+I think this makes sense. ipv4-mapped support is definitely used.
 
-On 27/07/2022 08:11, Thomas Richter wrote:
-> On linux-next tree perf test 95 was added recently.
-> s390 does not support branch sampling at all. Therefore
-> omit this test on s390 platform.
-> 
-> Output before:
->  # ./perf test -Fv 95
->  95: Check branch stack sampling                                     :
->  --- start ---
->  Testing user branch stack sampling
->  ---- end ----
->  Check branch stack sampling: FAILED!
->  #
-> 
-> Output after:
->  # ./perf test -Fv 95
->  95: Check branch stack sampling                                     :
->  --- start ---
->  ---- end ----
->  Check branch stack sampling: Skip
->  #
-> 
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> ---
->  tools/perf/tests/shell/test_brstack.sh | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
-> index 113ccd17bf03..dedaf74164dc 100755
-> --- a/tools/perf/tests/shell/test_brstack.sh
-> +++ b/tools/perf/tests/shell/test_brstack.sh
-> @@ -4,6 +4,9 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # German Gomez <german.gomez@arm.com>, 2022
->  
-> +# s390 does not support branch sampling, omit
-> +[ $(uname -m) = "s390" -o $(uname -m) = "s390x" ] && exit 2
-> +
+>
+> Adding support for this later as a separate commit should be fine. Since
+> ivp4-mapped-ipv6 addresses shouldn't appear on the wire giving them
+> special treatment "later" should raise no compatibility concerns.
+>
+>
+> >> I think that we are very late in the cycle (linux-5.19 should be
+> >> released in 5 days), and your patch set should not be merged so late.
+>
+> This was posted in order to get code reviews, I'm not actually expecting
+> inclusion.
 
-Hi Thomas,
-
-Do you know why the below check doesn't cover this scenario? It seems
-like it would be best to check if it's available wherever it's running
-rather than enumerate every platform where it's not supported:
-
-  # skip the test if the hardware doesn't support branch stack sampling
-  perf record -b -o- -e dummy -B true > /dev/null 2>&1 || exit 2
-
-Thanks
-James
-
->  # we need a C compiler to build the test programs
->  # so bail if none is found
->  if ! [ -x "$(command -v cc)" ]; then
+To be clear, I am supporting this work and would like to see it being
+merged hopefully soon ;)

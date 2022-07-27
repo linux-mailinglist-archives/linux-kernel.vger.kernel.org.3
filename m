@@ -2,93 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93218582340
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE769582344
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiG0JhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
+        id S231534AbiG0Jhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiG0JhF (ORCPT
+        with ESMTP id S229600AbiG0Jhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:37:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3A8394;
-        Wed, 27 Jul 2022 02:37:04 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 969426601B24;
-        Wed, 27 Jul 2022 10:37:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658914623;
-        bh=aNeE4NIwYGWJ7gmVikW1+br2hiX94QgkF1KjhpADzTA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NIkq8FAmVhT+As5rqjhYmdrF1jOw3KVT1eGdp/io0BOt0GGmB3eoIcp/QsU21cu59
-         IAQoqrELvegPiAt1mXWDdp5Nh19eap8kOg0a9MzI5OZrjtMuBbANW4fc95LQwjOsoD
-         0lnESPF9T0KAu5c1uvyuxRxAMqehdZaLcXSWt4BwHkAG06/L07FIXTYKMoL+gU+guV
-         GmM1f8/iag7fItPd2syuUSI6/cBpwi/ld07U5ZRdOaHvQKBxSPNbRk7JEcESn9MN5n
-         R4Kq8GLtlPeSx1TgFt7a0ZeUZZh3s0zf3x1FVJmM7uGqBDYul3VeAGgD3N0zpGMYvD
-         H+HY8PX6XBN0g==
-Message-ID: <99295c28-af23-2bf4-b2b5-ed39209a1897@collabora.com>
-Date:   Wed, 27 Jul 2022 11:36:59 +0200
+        Wed, 27 Jul 2022 05:37:33 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B053C2A94E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:37:32 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id c139so15652161pfc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=vJn+MLWCsk+ei9hsjhMzOKCAi7lwMqHzERz4ilhjRd8=;
+        b=BAhli0xR/K813sba6mxZ6qzpHkBuQ4XWkwcm3SYX26nlD7jupj4lyIm8AZWeSTrPTU
+         uaNdRXX43CRPYE0tkW/2ileR6tI0bBEP3hf1Gb2uTf1dQGypO3EBgYByss0gfOR3mUZv
+         P5/YmzgTICq86WARnnbyd6/1midmJWjkxayGrnR7TaNtYE87DBcqeKyXVMrzn5zQRc9q
+         OoQMm93hby7hlcUQ/FBMFOnGABtmX17n4C4lArmjtRL6pgvbiKX5+vJbaIivq7YiUuHs
+         WAo3aG1YsmNpvTQ7yZ/TmvahbK4tE5hDB+ARbVgHPrPYTVCXpkGHQ3usbGHYgP6NyQRt
+         nDJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=vJn+MLWCsk+ei9hsjhMzOKCAi7lwMqHzERz4ilhjRd8=;
+        b=YuUOENTtnxhd9yxEDNCmDv6/JbRoPD20ch0lhFRgwU3wBqtzoLuasTL1cG9yL6xQEQ
+         eFwZRpIrMfAt/HcdUECMNvNFCOB0BW7xhUHwa+65dzGB7VbBS03dCgVq+obIuXVDWx+r
+         qR+N/Fwoh9eyfgxYgouyiS2M2BMZJY4wZpUnpRBMTGIG9UfYeSO5mw0jKzUyuU1uyd5q
+         UW+ZBVb+TfZLL/cGeSJPJBtkw8f+Hr1QtQDIUfMKP7zItsG+kGsVhcgoOhcse5ZTQ0ia
+         JOar7yBE6CflyvqEXbsboogu9fFcqBtmfdDTgcaFL9QU81tHK5cwYu8PjHaOLxXyjo9w
+         em/w==
+X-Gm-Message-State: AJIora8PNUUC+3dhWgNRSZOKRpYMYaZoFHrnUuWYNcLRl3M05wpwoO0V
+        gdyW4J8YpxmonZ4LmUnH0r2gNMHZn9PUMqfH
+X-Google-Smtp-Source: AGRyM1vpKLg/coFT9BHg45n8K+BH+qcz7PnJfDmPqrf9RdHbYZUKQkVRHlxrGkdE9u9DBN4Z6IWoXw==
+X-Received: by 2002:a65:6398:0:b0:415:7d00:c1de with SMTP id h24-20020a656398000000b004157d00c1demr18665628pgv.610.1658914652147;
+        Wed, 27 Jul 2022 02:37:32 -0700 (PDT)
+Received: from [10.2.192.95] ([61.120.150.78])
+        by smtp.gmail.com with ESMTPSA id i128-20020a636d86000000b0041a4df3d3e2sm11591867pgc.68.2022.07.27.02.37.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 02:37:31 -0700 (PDT)
+Message-ID: <b54b068b-fe9a-8609-3e9f-170579affc27@bytedance.com>
+Date:   Wed, 27 Jul 2022 17:37:23 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v15 05/11] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [PATCH v3] PCI/ERR: Use pcie_aer_is_native() to judge whether OS
+ owns AER
 Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
-        airlied@linux.ie
-Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
-        wenst@chromium.org, ck.hu@mediatek.com, liangxu.xu@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fbdev@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220727045035.32225-1-rex-bc.chen@mediatek.com>
- <20220727045035.32225-6-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220727045035.32225-6-rex-bc.chen@mediatek.com>
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     ruscur@russell.cc, oohall@gmail.com, bhelgaas@google.com,
+        lukas@wunner.de, jan.kiszka@siemens.com, stuart.w.hayes@gmail.com,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chenzhuo.1@bytedance.com
+References: <20220727035334.9997-1-chenzhuo.1@bytedance.com>
+ <b5c746db-f6a0-d89e-6db5-e4a206c9237a@linux.intel.com>
+ <cfd44d9c-453b-e498-2630-9057947cf3cd@bytedance.com>
+In-Reply-To: <cfd44d9c-453b-e498-2630-9057947cf3cd@bytedance.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/07/22 06:50, Bo-Chen Chen ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195 SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so that
-> both can work with the same register range. The phy driver sets device
-> data that is read by the parent to get the phy device that can be used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+On 7/26/22 1:35 PM, Zhuo Chen wrote:
+> 
+> On 7/26/22 9:02 PM, Sathyanarayanan Kuppuswamy wrote:
+>>
+>>
+>> On 7/26/22 8:53 PM, Zhuo Chen wrote:
+>>> Use pcie_aer_is_native() in place of "host->native_aer ||
+>>> pcie_ports_native" to judge whether OS has native control of AER
+>>> in pcie_do_recovery().
+>>>
+>>> Replace "dev->aer_cap && (pcie_ports_native || host->native_aer)" in
+>>> get_port_device_capability() with pcie_aer_is_native(), which has no
+>>> functional changes.
+>>>
+>>> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+>>> ---
+>>
+>> Patch looks better now. It looks like following two changes
+>> can also be replaced with pcie_aer_is_native() check.
+>>
+>> drivers/pci/pcie/aer.c:1407:    if ((host->native_aer || 
+>> pcie_ports_native) && aer) {
+>> drivers/pci/pcie/aer.c:1426:    if ((host->native_aer || 
+>> pcie_ports_native) && aer) {
+> 
+> Good advice. But I wonder is there a scenario that dev->rcec ("root") is 
+> NULL meanwhile dev->aer_cap is not NULL? If so, replace 
+> "(host->native_aer || pcie_ports_native) && aer" with 
+> pcie_aer_is_native() will change original function.
+> 
+Do you mean changing "if ((host->native_aer || pcie_ports_native) && 
+aer)" into "if (pcie_aer_is_native(dev) && aer)" ?
+I thought changing into "if (pcie_aer_is_native(dev))" before.
+
+One another doubt. Not every pci device support aer. When dev->aer_cap 
+is NULL and root->aer_cap is not NULL in aer_root_reset(), 
+pcie_aer_is_native() will return false and OS cannot operate root 
+register. It's different from just using "(host->native_aer || 
+pcie_ports_native)".
+
+Or we can change "if ((host->native_aer || pcie_ports_native) && aer)" 
+into "if (pcie_aer_is_native(root))". But in this way, argument NULL 
+pointer check should be added in pcie_aer_is_native().
+
+>>
+>>
+>>
+>>> Changelog:
+>>> v3:
+>>> - Simplify why we use pcie_aer_is_native().
+>>> - Revert modification of pci_aer_clear_nonfatal_status() and comments.
+>>> v2:
+>>> - Add details and note in commit log.
+>>> ---
+>>>   drivers/pci/pcie/err.c          | 3 +--
+>>>   drivers/pci/pcie/portdrv_core.c | 3 +--
+>>>   2 files changed, 2 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+>>> index 0c5a143025af..121a53338e44 100644
+>>> --- a/drivers/pci/pcie/err.c
+>>> +++ b/drivers/pci/pcie/err.c
+>>> @@ -184,7 +184,6 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev 
+>>> *dev,
+>>>       int type = pci_pcie_type(dev);
+>>>       struct pci_dev *bridge;
+>>>       pci_ers_result_t status = PCI_ERS_RESULT_CAN_RECOVER;
+>>> -    struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
+>>>       /*
+>>>        * If the error was detected by a Root Port, Downstream Port, 
+>>> RCEC,
+>>> @@ -243,7 +242,7 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev 
+>>> *dev,
+>>>        * it is responsible for clearing this status.  In that case, the
+>>>        * signaling device may not even be visible to the OS.
+>>>        */
+>>> -    if (host->native_aer || pcie_ports_native) {
+>>> +    if (pcie_aer_is_native(dev)) {
+>>>           pcie_clear_device_status(dev);
+>>>           pci_aer_clear_nonfatal_status(dev);
+>>>       }
+>>> diff --git a/drivers/pci/pcie/portdrv_core.c 
+>>> b/drivers/pci/pcie/portdrv_core.c
+>>> index 604feeb84ee4..98c18f4a01b2 100644
+>>> --- a/drivers/pci/pcie/portdrv_core.c
+>>> +++ b/drivers/pci/pcie/portdrv_core.c
+>>> @@ -221,8 +221,7 @@ static int get_port_device_capability(struct 
+>>> pci_dev *dev)
+>>>       }
+>>>   #ifdef CONFIG_PCIEAER
+>>> -    if (dev->aer_cap && pci_aer_available() &&
+>>> -        (pcie_ports_native || host->native_aer)) {
+>>> +    if (pcie_aer_is_native(dev) && pci_aer_available()) {
+>>>           services |= PCIE_PORT_SERVICE_AER;
+>>>           /*
+>>
+> 
+> Thanks,
+> Zhuo Chen
+
+-- 
+Thanks,
+Zhuo Chen

@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4183358328D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33C6583290
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiG0S5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
+        id S233962AbiG0S6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbiG0S4o (ORCPT
+        with ESMTP id S234515AbiG0S5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:56:44 -0400
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94554C62D;
-        Wed, 27 Jul 2022 10:58:00 -0700 (PDT)
-Received: by mail-pj1-f49.google.com with SMTP id ha11so731106pjb.2;
-        Wed, 27 Jul 2022 10:58:00 -0700 (PDT)
+        Wed, 27 Jul 2022 14:57:48 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839CCF7D
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:02:13 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id 130-20020a6b0188000000b0067bd829cf29so6331267iob.17
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:02:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4vE7Bsz6vrHUNePlGNIG+g1zzaWWwe+MjkqFS82oLcU=;
-        b=jaOFWWE6QX36qBEc/1dpgUqRXGaox+48OC/dj7b1V9GjH1VjXarB362XWI0FEUWeF4
-         9/oyohNFj3F0Z9mTOfo4BSV+bl+yzfQDZfu12TS6tnFRYWBmbGOE+P1tRDf7tNaLIOkr
-         iMSvdRbGbkMmycf8ijlFerJKSGR1oPZTtqwjvgFw9dIZokCH+q0A6vjmXQt91ZECdCHQ
-         lPASR2KDllApn+1Kx2GLDl4xFh0kbBtDay8u0vnyi5foLK4loO/5smvMSff/gz4YKt7r
-         BxOOv6V6mZCnatDtw1ieYyr2+ShVMd5bn/GKG685yjyxxQVgpvgfNC63ltU/AnXyZsr8
-         1QHg==
-X-Gm-Message-State: AJIora/+ZwT0XYj9OC7Z/0uOyvGQg2UMW2MQxDtt0HAWQYV80t1TlUNK
-        X2OzLSeFhhjqLCp+tlS9CRk=
-X-Google-Smtp-Source: AGRyM1tFVd8EqwxIE+VDBtTOrcnZ22zKgfGpfCBk21Zv7Woc9eTIJzAuoFWzsa9F1fR+kw0nGXPpKw==
-X-Received: by 2002:a17:90b:4d0e:b0:1f1:9109:99df with SMTP id mw14-20020a17090b4d0e00b001f1910999dfmr5884407pjb.234.1658944680200;
-        Wed, 27 Jul 2022 10:58:00 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:a84e:2ec1:1b57:b033? ([2620:15c:211:201:a84e:2ec1:1b57:b033])
-        by smtp.gmail.com with ESMTPSA id e1-20020a170902784100b0016d4f05eb95sm9939079pln.272.2022.07.27.10.57.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 10:57:58 -0700 (PDT)
-Message-ID: <fa60e605-a881-79aa-b9ed-9c8bdf06778f@acm.org>
-Date:   Wed, 27 Jul 2022 10:57:56 -0700
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=75VrUxYfW5kJMnHvbElcHjjSxM6mLyjVzzf+hp4INcg=;
+        b=GE5Z+Z16+3cm84Adsv+mOwxMBuY/ENz9IwRDAdchSl/i7DDLCzKHyrxV/PTc8o7oDo
+         dEPA8rFUzrN8V3bSd590lZTzeW0O8VX3tOOzpKdwFIi+54Ow28KIcMob7mvhZxmx8F5D
+         vAWXnyY84+IpSG2kX/C2rHO0nDxhSKHRu1JoYZ0fDRs85rsGL6NvZJYPN6G5nxPo7IR7
+         pAvFRoy5OvDCUwEiMNFh1DqCLzHFREsvU/j+uQO5Zw/2C8Xtl/pm/eYIRMsMyRk18EBX
+         nTNoA6NOwd78O/i5cecHtHzDNxy21u29mOxHz7THi5RcNZU2uYN28fEqTldaBw1wGsl6
+         yFyA==
+X-Gm-Message-State: AJIora8B/Ev8Gl3Rnsvl/GfItLt6NWPFYxzNBGmzVrZxHToCtXuqMunf
+        RhSFKu4oMU+igKwQ2VRVP87Rbq6lUILd9GP8hhls2KVNEEiC
+X-Google-Smtp-Source: AGRyM1tlDxcDEOua9jBoleEWwnBUKVrPzMUmWycT3IqeTpqEFnqtf2Ygnq4QCYQ6H5DhixcquI0ZMf/xL7kfbLAOF2QKHKoE/e/x
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/5] scsi: ufs: ufs-mediatek: Provide detailed
- description for UIC errors
-Content-Language: en-US
-To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
-Cc:     peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
-        alice.chao@mediatek.com, powen.kao@mediatek.com,
-        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, eddie.huang@mediatek.com,
-        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
-References: <20220727034454.31892-1-stanley.chu@mediatek.com>
- <20220727034454.31892-3-stanley.chu@mediatek.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220727034454.31892-3-stanley.chu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:db4a:0:b0:2da:ac43:947f with SMTP id
+ w10-20020a92db4a000000b002daac43947fmr9440060ilq.174.1658944932927; Wed, 27
+ Jul 2022 11:02:12 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 11:02:12 -0700
+In-Reply-To: <00000000000026269d05e4c9fe23@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006de26305e4cd37ae@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in exit_mmap
+From:   syzbot <syzbot+99551d8b4d180f6cb1c0@syzkaller.appspotmail.com>
+To:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bigeasy@linutronix.de, ccross@google.com, david@redhat.com,
+        ebiederm@xmission.com, liam.howlett@oracle.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vbabka@suse.cz, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 20:44, Stanley Chu wrote:
-> diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-> index aa26d415527b..9017ab8f9867 100644
-> --- a/drivers/ufs/host/ufs-mediatek.h
-> +++ b/drivers/ufs/host/ufs-mediatek.h
-> @@ -26,6 +26,44 @@
->   #define REG_UFS_DEBUG_SEL_B2        0x22D8
->   #define REG_UFS_DEBUG_SEL_B3        0x22DC
->   
-> +/*
-> + * Details of UIC Errors
-> + */
-> +static const u8 *ufs_uic_err_str[] = {
-> +	"PHY Adapter Layer",
-> +	"Data Link Layer",
-> +	"Network Link Layer",
-> +	"Transport Link Layer",
-> +	"DME"
-> +};
+syzbot has bisected this issue to:
 
-Why type u8 for strings instead of char?
+commit e23cb70bcbef5c189790042d1d6d89e33308c386
+Author: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Date:   Tue Jun 21 20:47:14 2022 +0000
 
-Please define arrays in .c files. Otherwise one copy of the array will 
-be included in each source file this header file is included in.
+    mm: remove the vma linked list
 
-Thanks,
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1078f202080000
+start commit:   cb71b93c2dc3 Add linux-next specific files for 20220628
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1278f202080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1478f202080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
+dashboard link: https://syzkaller.appspot.com/bug?extid=99551d8b4d180f6cb1c0
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117dc816080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12695b26080000
 
-Bart.
+Reported-by: syzbot+99551d8b4d180f6cb1c0@syzkaller.appspotmail.com
+Fixes: e23cb70bcbef ("mm: remove the vma linked list")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

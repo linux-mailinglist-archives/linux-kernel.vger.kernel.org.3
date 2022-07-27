@@ -2,137 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A0E581E71
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 05:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8749E581E78
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 06:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240380AbiG0Dzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 23:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
+        id S233991AbiG0ECP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 00:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240213AbiG0DzX (ORCPT
+        with ESMTP id S229447AbiG0ECN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 23:55:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BA83ED56;
-        Tue, 26 Jul 2022 20:54:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D09C617D2;
-        Wed, 27 Jul 2022 03:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B626AC433B5;
-        Wed, 27 Jul 2022 03:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658894090;
-        bh=QS+qP7KbhBDY5zMM/YWZqzh8w15YmbOtuiOmKuYNj8E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jyC4HUEHAByQ77gLS1yXYLUAV5aDxYiBUb9zIQmDDVkRO7UG5S69aH0CrYujOjLz6
-         Ahgdc+L4cZ0ZeQwdXNt1KBxyZGiNK7iXJgU1HM6vYQbXxckAIwIrbcwMN4nXKQDbN/
-         eC2ydEKSQIdC6oNYxJdBCa2qxJRZBcFy3Se9eybeiBzE7BcsUTETzOvhB4ZVgBMM44
-         v7iYdtXeWBtB4poobFFq4Hali4YwFE9TbZ5q/D4j7CLYztvfywVBaXhT0D2+KsTjQH
-         CXm/5FLJ/dKbIlwuagJ+7yYm2nAuukH9/rRx2KjB+Lr7Z4R1bcX2xScruB6iKXQ4t1
-         F+2IrxhDCvD7A==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31e47ac84daso162882527b3.0;
-        Tue, 26 Jul 2022 20:54:50 -0700 (PDT)
-X-Gm-Message-State: AJIora9bLYWUj6kSS74tkBSQyhjY6RlcvqHlW0xNufI5Z5fGwlOY/gmD
-        Sg6OwMWdSOPqC+CxNpXee9hOs/1DtFS41YQwNQM=
-X-Google-Smtp-Source: AGRyM1sVxrz8xGmq6xEy5Rmi6mEED7hPnN20JZHyh2Rd8bkQ1bhhAi3F5uV+vkmbRikYq+oP5uUF8YkhL9j9X7np0u0=
-X-Received: by 2002:a0d:f985:0:b0:31f:5a01:eaf2 with SMTP id
- j127-20020a0df985000000b0031f5a01eaf2mr3257675ywf.447.1658894089690; Tue, 26
- Jul 2022 20:54:49 -0700 (PDT)
+        Wed, 27 Jul 2022 00:02:13 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684C311802;
+        Tue, 26 Jul 2022 21:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658894532; x=1690430532;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qPDH2zg55z0dq693EvtAztxxc5KcUkiwaVa+S6O66dg=;
+  b=Joc5exCmymQ31lwx8fVmZyBiC6bQ2+lL/mUcXngtTdvZFkanEUIb3zEC
+   oomW3sK/UeHsQ3h2BwoUEAY4yAAGAQ4QP0tp5YjJnNJIl6gz2r/JGMSVe
+   EQch1gLr4mS4At0pCFUyZE62Xi/YJn80VBm9bhwUfRKKPrnHld1ngmtlh
+   wiRRu2BWVfm3zIpGNJkuRPQcnNS1X3Sajdr2nufPmaj9KeoCwxxvvr+Kq
+   KC1SZvOV0bg00uLJVTa2x973f21gFgKxCKwL5xetjghlNPYS1iwfSJCwU
+   gHS77Lqc+M7teRTz/bhUXKjQM1Wtkvb9fg8nv0mZ2+HSzYAqXpqvaVKqa
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="288899601"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="288899601"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 21:02:11 -0700
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="927631462"
+Received: from arianrah-mobl2.amr.corp.intel.com (HELO [10.251.20.146]) ([10.251.20.146])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 21:02:11 -0700
+Message-ID: <b5c746db-f6a0-d89e-6db5-e4a206c9237a@linux.intel.com>
+Date:   Tue, 26 Jul 2022 21:02:10 -0700
 MIME-Version: 1.0
-References: <20220721175147.214642-1-song@kernel.org> <20220726233302.zwloxsammnu7clu4@treble>
-In-Reply-To: <20220726233302.zwloxsammnu7clu4@treble>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 26 Jul 2022 20:54:38 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7tmRt=yx1+i62HPRJJ4Gp8xB_3XvpVxUC=SyGv6iCBEQ@mail.gmail.com>
-Message-ID: <CAPhsuW7tmRt=yx1+i62HPRJJ4Gp8xB_3XvpVxUC=SyGv6iCBEQ@mail.gmail.com>
-Subject: Re: [PATCH v3] livepatch: Clear relocation targets on a module removal
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     live-patching@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        X86 ML <x86@kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v3] PCI/ERR: Use pcie_aer_is_native() to judge whether OS
+ owns AER
+Content-Language: en-US
+To:     Zhuo Chen <chenzhuo.1@bytedance.com>, ruscur@russell.cc,
+        oohall@gmail.com, bhelgaas@google.com
+Cc:     lukas@wunner.de, jan.kiszka@siemens.com, stuart.w.hayes@gmail.com,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220727035334.9997-1-chenzhuo.1@bytedance.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220727035334.9997-1-chenzhuo.1@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 4:33 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Thu, Jul 21, 2022 at 10:51:47AM -0700, Song Liu wrote:
-> > From: Miroslav Benes <mbenes@suse.cz>
-> >
-> > Josh reported a bug:
-> >
-> >   When the object to be patched is a module, and that module is
-> >   rmmod'ed and reloaded, it fails to load with:
-> >
-> >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> >
-> >   The livepatch module has a relocation which references a symbol
-> >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> >   tries to replace the old relocation with a new one, it sees that
-> >   the previous one is nonzero and it errors out.
-> >
-> >   On ppc64le, we have a similar issue:
-> >
-> >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> >
-> > He also proposed three different solutions. We could remove the error
-> > check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> > ("x86/module: Detect and skip invalid relocations"). However the check
-> > is useful for detecting corrupted modules.
-> >
-> > We could also deny the patched modules to be removed. If it proved to be
-> > a major drawback for users, we could still implement a different
-> > approach. The solution would also complicate the existing code a lot.
-> >
-> > We thus decided to reverse the relocation patching (clear all relocation
-> > targets on x86_64). The solution is not
-> > universal and is too much arch-specific, but it may prove to be simpler
-> > in the end.
-> >
-> > Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> > Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-> > Signed-off-by: Song Liu <song@kernel.org>
-> >
-> > ---
-> >
-> > Changes from v2:
-> > 1. Rewrite x86 changes to match current code style.
-> > 2. Remove powerpc changes as there is no test coverage in v3.
-> > 3. Only keep 1/3 of v2.
->
-> 1) All the copy/paste is ugly and IMO guaranteed to eventually introduce
->    bugs when somebody forgets to update the copy.  Wouldn't it be more
->    robust to reuse the existing apply_relocate_add() code by making it
->    more generic somehow, like with a new 'clear' bool arg which sets
->    'val' to zero?
 
-Agreed. I can give it a try.
 
->
-> 2) We can't only fix x86, powerpc also needs a fix.
+On 7/26/22 8:53 PM, Zhuo Chen wrote:
+> Use pcie_aer_is_native() in place of "host->native_aer ||
+> pcie_ports_native" to judge whether OS has native control of AER
+> in pcie_do_recovery().
+> 
+> Replace "dev->aer_cap && (pcie_ports_native || host->native_aer)" in
+> get_port_device_capability() with pcie_aer_is_native(), which has no
+> functional changes.
+> 
+> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+> ---
 
-I have very little experience with powerpc. Would someone be willing to
-help with powerpc part of this?
+Patch looks better now. It looks like following two changes
+can also be replaced with pcie_aer_is_native() check.
 
-> 3) A selftest would be a good idea.
+drivers/pci/pcie/aer.c:1407:	if ((host->native_aer || pcie_ports_native) && aer) {
+drivers/pci/pcie/aer.c:1426:	if ((host->native_aer || pcie_ports_native) && aer) {
 
-I will try this.
 
-Thanks,
-Song
+
+> Changelog:
+> v3:
+> - Simplify why we use pcie_aer_is_native().
+> - Revert modification of pci_aer_clear_nonfatal_status() and comments.
+> v2:
+> - Add details and note in commit log.
+> ---
+>  drivers/pci/pcie/err.c          | 3 +--
+>  drivers/pci/pcie/portdrv_core.c | 3 +--
+>  2 files changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+> index 0c5a143025af..121a53338e44 100644
+> --- a/drivers/pci/pcie/err.c
+> +++ b/drivers/pci/pcie/err.c
+> @@ -184,7 +184,6 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+>  	int type = pci_pcie_type(dev);
+>  	struct pci_dev *bridge;
+>  	pci_ers_result_t status = PCI_ERS_RESULT_CAN_RECOVER;
+> -	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
+>  
+>  	/*
+>  	 * If the error was detected by a Root Port, Downstream Port, RCEC,
+> @@ -243,7 +242,7 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+>  	 * it is responsible for clearing this status.  In that case, the
+>  	 * signaling device may not even be visible to the OS.
+>  	 */
+> -	if (host->native_aer || pcie_ports_native) {
+> +	if (pcie_aer_is_native(dev)) {
+>  		pcie_clear_device_status(dev);
+>  		pci_aer_clear_nonfatal_status(dev);
+>  	}
+> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+> index 604feeb84ee4..98c18f4a01b2 100644
+> --- a/drivers/pci/pcie/portdrv_core.c
+> +++ b/drivers/pci/pcie/portdrv_core.c
+> @@ -221,8 +221,7 @@ static int get_port_device_capability(struct pci_dev *dev)
+>  	}
+>  
+>  #ifdef CONFIG_PCIEAER
+> -	if (dev->aer_cap && pci_aer_available() &&
+> -	    (pcie_ports_native || host->native_aer)) {
+> +	if (pcie_aer_is_native(dev) && pci_aer_available()) {
+>  		services |= PCIE_PORT_SERVICE_AER;
+>  
+>  		/*
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

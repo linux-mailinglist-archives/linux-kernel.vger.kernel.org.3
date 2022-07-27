@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB4D58282A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E729158282E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbiG0OB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S233036AbiG0OEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbiG0OBz (ORCPT
+        with ESMTP id S231204AbiG0OEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:01:55 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402A715706
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:01:54 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id m12so26164283lfj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QTRv04jRGjZbH4AAF7E6i5dcKRpckaIkqqWvwX8C2Dc=;
-        b=M00BLd+qHlqHsi7yxk28/QtIWrZNTL1x1UfNgDIELA7ybYbjuRUlZblE5A9Z3mjKWV
-         T0qzUOb4aluSX16LSr2FcytO+Pv9YbTEEXN2mUx0HHsUpxl49QG41JB/1/iKL8p//w7B
-         L7mNjyfCpq9dNIzwwKM0tMeytq+Qcs0/XJ2a7hL6jp7qeFrDY4TKEHxDXRWuXwRyKmdl
-         4aU1getVQ1us3+2gh9dAmCmT213To4z1YSSgZ2WZ0GUmn0shLKW3af0vmOfUGDv5OKJC
-         oI4lyqv0QMn6kW0B8oIQQdKmM9OR6kQ4o4HbCX+lMfGV6BsK40hm+DTbJCaTmvBRY/xF
-         FKZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QTRv04jRGjZbH4AAF7E6i5dcKRpckaIkqqWvwX8C2Dc=;
-        b=CgmNcjEooY1RJamZhR0y8Pb0dN4hvNN6zXFNEBb4KDWLeTvewvkcDYHKZqtUvWo6Km
-         Tyc8d+HJTFZXFRQ8Lff61cawRmkLVPCRqqavxidkHbIrOEHpZO8yV1B1pphrGSWQTzPq
-         SMJocIOXRO7+5yGOCRU8fmKlA8NuA98aC6nyKQPQ9w9j8cmTDjJ7+AlaY/iEBdOlPIoF
-         kqNbg02uNLdzgrhnjfOteo44nh7RZ3X3oLUDsB5ouZ7xoInLAj5uMz8A0LP2AcJs4YzA
-         6l91trKjC5236gm8LJduZajyDT8DwElycg6VLP26WvTJ4KV2u+Ww2FKVXSKnUUbe0ZdN
-         X9FA==
-X-Gm-Message-State: AJIora9/yzz7sYk0wErQSB2GkEQB9nomBl4r+a3PalRsHL6Fa0xz5nOE
-        4j3NXO0nnhYZcKafiTYrEss3Xg==
-X-Google-Smtp-Source: AGRyM1s7Oh2i8t4FMTF1klFD9obE209h7ljaba3F2fI3DYREDp2Kf1mczCOKJAhm9xtJnxAW/LoG4w==
-X-Received: by 2002:a19:2d15:0:b0:48a:85f7:7e37 with SMTP id k21-20020a192d15000000b0048a85f77e37mr7009108lfj.392.1658930512516;
-        Wed, 27 Jul 2022 07:01:52 -0700 (PDT)
-Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id bi18-20020a05651c231200b0025e119e9276sm1203287ljb.99.2022.07.27.07.01.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 07:01:52 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: iio: gyroscope: bosch,bmg160: correct number of pins
-Date:   Wed, 27 Jul 2022 16:01:48 +0200
-Message-Id: <20220727140148.223508-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 27 Jul 2022 10:04:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD76515FC7;
+        Wed, 27 Jul 2022 07:04:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F013617C0;
+        Wed, 27 Jul 2022 14:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7895C433C1;
+        Wed, 27 Jul 2022 14:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658930678;
+        bh=O6jeZVLKYQMWPi3PKSOn064mNnD47HdvIqglROSSWAo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iKCtRLWfM+8Rrgzm3doB5vIqySsG+YUcPS1Ge/iClPuQsripsOYXN90RaNJ5CwR3c
+         0FNkbeYPwuo0fSDV586zvxXkUlHAhkZlxh//dfZ9qtf7R60w3qwaKcBT1LjrXdF9Lf
+         iqEUbGXx47Z7w97SOCKi0+lYfgkmMCqcL7CFYnnMsCgDoMavosU4t3M+dkxEdLxtdb
+         cBl6Yc22NTmJ0CWUOqwJQE7Ag3gCbgwN2iibuSq5fVtbquyMjR5xn2b4gWlRTSLJE6
+         mLG09+NXpl/9qgSaPeja8aYm5FP61mHe9tnfaz31/VvJ3fYpD9Hpfb4d2k4w6DGBmB
+         16JClnZcbsXsA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2760F405DD; Wed, 27 Jul 2022 11:04:35 -0300 (-03)
+Date:   Wed, 27 Jul 2022 11:04:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, pc@us.ibm.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [RFC v3 06/17] perf kwork: Implement perf kwork report
+Message-ID: <YuFF83qDSyzBrhBm@kernel.org>
+References: <20220709015033.38326-1-yangjihong1@huawei.com>
+ <20220709015033.38326-7-yangjihong1@huawei.com>
+ <YuAnEBpYSf53PkXI@kernel.org>
+ <b865f96a-856c-6a7d-a66a-c3343097ee5a@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b865f96a-856c-6a7d-a66a-c3343097ee5a@huawei.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BMG160 has two interrupt pins to which interrupts can be freely mapped.
-Correct the schema to express such case and fix warnings like:
+Em Wed, Jul 27, 2022 at 08:39:33AM +0800, Yang Jihong escreveu:
+> Hello,
+> 
+> On 2022/7/27 1:40, Arnaldo Carvalho de Melo wrote:
+> > Em Sat, Jul 09, 2022 at 09:50:22AM +0800, Yang Jihong escreveu:
+> > > +
+> > > +static void report_print_work(struct perf_kwork *kwork,
+> > > +			      struct kwork_work *work)
+> > > +{
+> > > +	int ret = 0;
+> > > +	char kwork_name[PRINT_KWORK_NAME_WIDTH];
+> > > +	char max_runtime_start[32], max_runtime_end[32];
+> > 
+> > Committer notes:
+> > 
+> > - Add some {} for multiline for/if blocks
+> > 
+> > - Return the calculated number of printed bytes in report_print_work,
+> >    otherwise soem compilers will complain that variable isn't used, e.g.:
+> > 
+> >     2    92.64 almalinux:9                   : FAIL clang version 13.0.1 (Red Hat 13.0.1-1.el9)
+> >      builtin-kwork.c:1061:6: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
+> >              int ret = 0;
+> > 
+> > 
+> OK, I'll fix it in next version.
 
-  qcom/msm8916-alcatel-idol347.dtb: gyroscope@68: interrupts: [[97, 1], [98, 1]] is too long
+your work with these fixups is already at acme/perf/core:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml        | 3 +++
- 1 file changed, 3 insertions(+)
+git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
 
-diff --git a/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml b/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-index b6bbc312a7cf..ebf98bc2eb7f 100644
---- a/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-+++ b/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-@@ -24,6 +24,9 @@ properties:
- 
-   interrupts:
-     minItems: 1
-+    items:
-+      - description: INT1 pin
-+      - description: INT2 pin
-     description:
-       Should be configured with type IRQ_TYPE_EDGE_RISING.
- 
--- 
-2.34.1
+Please continue from there. Please let me know if I made some mistake.
 
+Thanks for working on this!
+
+- Arnaldo

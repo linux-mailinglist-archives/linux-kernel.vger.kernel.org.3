@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C35582B9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A44582CEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238594AbiG0QgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
+        id S240805AbiG0QwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238367AbiG0QeW (ORCPT
+        with ESMTP id S240596AbiG0Qvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:34:22 -0400
+        Wed, 27 Jul 2022 12:51:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFA654CBE;
-        Wed, 27 Jul 2022 09:27:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234ED54670;
+        Wed, 27 Jul 2022 09:33:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFBC661A1E;
-        Wed, 27 Jul 2022 16:26:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B35C433D6;
-        Wed, 27 Jul 2022 16:26:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 514CE61A24;
+        Wed, 27 Jul 2022 16:33:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D3FEC433C1;
+        Wed, 27 Jul 2022 16:33:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939190;
-        bh=4a07L9FAYE6Hy2yov2eTzQtFHuUk6iOwB8T/ZXIwaEE=;
+        s=korg; t=1658939609;
+        bh=LMFLkaARFUSM+NsSDl+g6LE9sF4zJ1l9KvkUVRUo8Hs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YBNyOCag7oJOH4C3PjZgwSP051CEMMSZGYPJxuqyRXGpOO/GGFjxr3I0kZK+A3fKc
-         TCjP8YcdalBoZ+xYMYqjl1kXOiRMo/HR1L8vsg7EhLgxB0fKUq8tmSnN4SQ+vNRuJg
-         Rl6GCtjj4sy4Frr1q4xcEd86jtBqeXnUegBwcSrU=
+        b=Gri+OL2yS+BOo/vdT1wOpsnMWNRJ8KE7RrG36WZ46BnSRJkOt6TqBBwZIWZP6LT1s
+         4/Q+uC/FsQYjrpMphsFnVtQCrWixk32vYweJIgx4P3G3eL++feivaFOx0Q3AuT5LmK
+         9SoCU9jzB4vtkdcs4KXV8mVtWpw8DfTWaguhAwYY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        stable@vger.kernel.org, Biao Huang <biao.huang@mediatek.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 17/62] igmp: Fix data-races around sysctl_igmp_llm_reports.
-Date:   Wed, 27 Jul 2022 18:10:26 +0200
-Message-Id: <20220727161004.870745121@linuxfoundation.org>
+Subject: [PATCH 5.10 041/105] net: stmmac: fix unbalanced ptp clock issue in suspend/resume flow
+Date:   Wed, 27 Jul 2022 18:10:27 +0200
+Message-Id: <20220727161013.744754839@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,108 +54,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Biao Huang <biao.huang@mediatek.com>
 
-[ Upstream commit f6da2267e71106474fbc0943dc24928b9cb79119 ]
+[ Upstream commit f4c7d8948e866918d61493264dbbd67e45ef2bda ]
 
-While reading sysctl_igmp_llm_reports, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+Current stmmac driver will prepare/enable ptp_ref clock in
+stmmac_init_tstamp_counter().
 
-This test can be packed into a helper, so such changes will be in the
-follow-up series after net is merged into net-next.
+The stmmac_pltfr_noirq_suspend will disable it once in suspend flow.
 
-  if (ipv4_is_local_multicast(pmc->multiaddr) &&
-      !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
+But in resume flow,
+	stmmac_pltfr_noirq_resume --> stmmac_init_tstamp_counter
+	stmmac_resume --> stmmac_hw_setup --> stmmac_init_ptp --> stmmac_init_tstamp_counter
+ptp_ref clock reference counter increases twice, which leads to unbalance
+ptp clock when resume back.
 
-Fixes: df2cf4a78e48 ("IGMP: Inhibit reports for local multicast groups")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Move ptp_ref clock prepare/enable out of stmmac_init_tstamp_counter to fix it.
+
+Fixes: 0735e639f129d ("net: stmmac: skip only stmmac_ptp_register when resume from suspend")
+Signed-off-by: Biao Huang <biao.huang@mediatek.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/igmp.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c   | 17 ++++++++---------
+ .../ethernet/stmicro/stmmac/stmmac_platform.c   |  8 +++++++-
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/net/ipv4/igmp.c b/net/ipv4/igmp.c
-index ee179e08dd20..957e1170a8a3 100644
---- a/net/ipv4/igmp.c
-+++ b/net/ipv4/igmp.c
-@@ -471,7 +471,8 @@ static struct sk_buff *add_grec(struct sk_buff *skb, struct ip_mc_list *pmc,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index e9aa9a5eba6b..27b7bb64a028 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -738,19 +738,10 @@ int stmmac_init_tstamp_counter(struct stmmac_priv *priv, u32 systime_flags)
+ 	struct timespec64 now;
+ 	u32 sec_inc = 0;
+ 	u64 temp = 0;
+-	int ret;
  
- 	if (pmc->multiaddr == IGMP_ALL_HOSTS)
- 		return skb;
--	if (ipv4_is_local_multicast(pmc->multiaddr) && !net->ipv4.sysctl_igmp_llm_reports)
-+	if (ipv4_is_local_multicast(pmc->multiaddr) &&
-+	    !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
- 		return skb;
+ 	if (!(priv->dma_cap.time_stamp || priv->dma_cap.atime_stamp))
+ 		return -EOPNOTSUPP;
  
- 	mtu = READ_ONCE(dev->mtu);
-@@ -597,7 +598,7 @@ static int igmpv3_send_report(struct in_device *in_dev, struct ip_mc_list *pmc)
- 			if (pmc->multiaddr == IGMP_ALL_HOSTS)
- 				continue;
- 			if (ipv4_is_local_multicast(pmc->multiaddr) &&
--			     !net->ipv4.sysctl_igmp_llm_reports)
-+			    !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
- 				continue;
- 			spin_lock_bh(&pmc->lock);
- 			if (pmc->sfcount[MCAST_EXCLUDE])
-@@ -740,7 +741,8 @@ static int igmp_send_report(struct in_device *in_dev, struct ip_mc_list *pmc,
- 	if (type == IGMPV3_HOST_MEMBERSHIP_REPORT)
- 		return igmpv3_send_report(in_dev, pmc);
+-	ret = clk_prepare_enable(priv->plat->clk_ptp_ref);
+-	if (ret < 0) {
+-		netdev_warn(priv->dev,
+-			    "failed to enable PTP reference clock: %pe\n",
+-			    ERR_PTR(ret));
+-		return ret;
+-	}
+-
+ 	stmmac_config_hw_tstamping(priv, priv->ptpaddr, systime_flags);
+ 	priv->systime_flags = systime_flags;
  
--	if (ipv4_is_local_multicast(group) && !net->ipv4.sysctl_igmp_llm_reports)
-+	if (ipv4_is_local_multicast(group) &&
-+	    !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
- 		return 0;
+@@ -2755,6 +2746,14 @@ static int stmmac_hw_setup(struct net_device *dev, bool ptp_register)
  
- 	if (type == IGMP_HOST_LEAVE_MESSAGE)
-@@ -924,7 +926,8 @@ static bool igmp_heard_report(struct in_device *in_dev, __be32 group)
+ 	stmmac_mmc_setup(priv);
  
- 	if (group == IGMP_ALL_HOSTS)
- 		return false;
--	if (ipv4_is_local_multicast(group) && !net->ipv4.sysctl_igmp_llm_reports)
-+	if (ipv4_is_local_multicast(group) &&
-+	    !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
- 		return false;
++	if (ptp_register) {
++		ret = clk_prepare_enable(priv->plat->clk_ptp_ref);
++		if (ret < 0)
++			netdev_warn(priv->dev,
++				    "failed to enable PTP reference clock: %pe\n",
++				    ERR_PTR(ret));
++	}
++
+ 	ret = stmmac_init_ptp(priv);
+ 	if (ret == -EOPNOTSUPP)
+ 		netdev_warn(priv->dev, "PTP not supported by HW\n");
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+index b40b962055fa..f70d8d1ce329 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+@@ -814,7 +814,13 @@ static int __maybe_unused stmmac_pltfr_noirq_resume(struct device *dev)
+ 		if (ret)
+ 			return ret;
  
- 	rcu_read_lock();
-@@ -1049,7 +1052,7 @@ static bool igmp_heard_query(struct in_device *in_dev, struct sk_buff *skb,
- 		if (im->multiaddr == IGMP_ALL_HOSTS)
- 			continue;
- 		if (ipv4_is_local_multicast(im->multiaddr) &&
--		    !net->ipv4.sysctl_igmp_llm_reports)
-+		    !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
- 			continue;
- 		spin_lock_bh(&im->lock);
- 		if (im->tm_running)
-@@ -1299,7 +1302,8 @@ static void igmp_group_dropped(struct ip_mc_list *im)
- #ifdef CONFIG_IP_MULTICAST
- 	if (im->multiaddr == IGMP_ALL_HOSTS)
- 		return;
--	if (ipv4_is_local_multicast(im->multiaddr) && !net->ipv4.sysctl_igmp_llm_reports)
-+	if (ipv4_is_local_multicast(im->multiaddr) &&
-+	    !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
- 		return;
+-		stmmac_init_tstamp_counter(priv, priv->systime_flags);
++		ret = clk_prepare_enable(priv->plat->clk_ptp_ref);
++		if (ret < 0) {
++			netdev_warn(priv->dev,
++				    "failed to enable PTP reference clock: %pe\n",
++				    ERR_PTR(ret));
++			return ret;
++		}
+ 	}
  
- 	reporter = im->reporter;
-@@ -1336,7 +1340,8 @@ static void igmp_group_added(struct ip_mc_list *im)
- #ifdef CONFIG_IP_MULTICAST
- 	if (im->multiaddr == IGMP_ALL_HOSTS)
- 		return;
--	if (ipv4_is_local_multicast(im->multiaddr) && !net->ipv4.sysctl_igmp_llm_reports)
-+	if (ipv4_is_local_multicast(im->multiaddr) &&
-+	    !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
- 		return;
- 
- 	if (in_dev->dead)
-@@ -1657,7 +1662,7 @@ static void ip_mc_rejoin_groups(struct in_device *in_dev)
- 		if (im->multiaddr == IGMP_ALL_HOSTS)
- 			continue;
- 		if (ipv4_is_local_multicast(im->multiaddr) &&
--		    !net->ipv4.sysctl_igmp_llm_reports)
-+		    !READ_ONCE(net->ipv4.sysctl_igmp_llm_reports))
- 			continue;
- 
- 		/* a failover is happening and switches
+ 	return 0;
 -- 
 2.35.1
 

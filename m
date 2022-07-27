@@ -2,552 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4FB581F51
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 06:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB3E581F5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 07:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240425AbiG0Ex7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 00:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S240270AbiG0FAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 01:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiG0Ex4 (ORCPT
+        with ESMTP id S229681AbiG0FAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 00:53:56 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D553ED45
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 21:53:53 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 8-20020a05600c024800b003a2fe343db1so399234wmj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 21:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VfIlsxK1VlIloX47nwajbiVHF3hEhwMYcSlo1ktsUCQ=;
-        b=tdHCFvUCkoZV0I0vri/AeWYibyP34zUuYSbOAuRJxK5wPXmj+fBAHtZXJjPc4dSspu
-         C8ZyxS/DVWo9qIuGnPi2N3fM02H4b+f+8EttYop2KHjg6qdcsJOxnuVYVcAdvvixpInU
-         lHGoijq6c6SjoZYQRM0Hu23OtRUkNJpNjzoYSbG2eIGO7Itai1MbUtYzHIoxMt7bQNpx
-         Tu/t/HvZfrytDRygpro/Mr0Fr8hbr2MowT8Nv+dciPagqX0LQFY6hnD3MS/NrBnUcAoA
-         h47MWTGCtOzYv/Jc3K7hGZa0wiJaXhJN6PbUyomW3xdg0I6vo+JP31H22FkqvxVEEtOD
-         SWeA==
+        Wed, 27 Jul 2022 01:00:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0618D2663
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 22:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658898009;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=328C7t/lfMBTNWuslbDt6MRb5wfKGX7Nq000FG5WAWM=;
+        b=ArZNzZg/XZA9GwTHQgFoTatrPXYX+X+Ssq6wmX9IUV6AJs023WTTwiZEzB5n0SE653ybGr
+        Z3YZm1geN1TFYyR6MUkzk2VGZdzvOGMwtOxLOPqkarSdrwblcc+MXijFAHSR9678RnXPbg
+        TKeTEHb0BD5rIPZ6XQ8OEwrL8Ma/tEQ=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-478-wekvP2ldOY2KLkCZ7a3MZw-1; Wed, 27 Jul 2022 01:00:04 -0400
+X-MC-Unique: wekvP2ldOY2KLkCZ7a3MZw-1
+Received: by mail-lf1-f69.google.com with SMTP id k25-20020a195619000000b00489e6a6527eso4899851lfb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 22:00:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VfIlsxK1VlIloX47nwajbiVHF3hEhwMYcSlo1ktsUCQ=;
-        b=3hjDrDifOP6rH6r0m04thlPOVHCBadkLvvj2ERxrIzu3sjby8XS6c/Mso6pCl3N/Wn
-         uYfqA8e3EpHytWxnU4c53LNAt8md8snajrXHw/yKAdrnz8fQuJXj7vE+ha/noimxZy/P
-         LTRTAUWr6Lo08uVfVWzaJe39ae3lbe2xEiGw5mNifaUALx4GcW8A8M8iN9ymnt6UUxDJ
-         OYbd90CUl3OTTbNZg2raocfGUF147KDJwbFf4pC0EgFPpXYU+6WwrNft9fY3Rvo1qVMK
-         NwlWOsOarQ+dqF0G5Jp0OLGUZe8LJu8ftODqmjaGJ+Nru7VqYT87dDaMP3ZLWWc5mvSs
-         j6Pg==
-X-Gm-Message-State: AJIora8uDycWCwKdyb0nJkiMtUQ+rauDote6ApLk2mfNDK6iIhElkvoH
-        u7Kuqwe1ItlDxzGYOcoRxe9pKoq2/VbfcuLU9k+Ffg==
-X-Google-Smtp-Source: AGRyM1src0SO+YNtTeVThg0n7AG9r+ESwkyTepNhpLMcMryMbH1rQcTjKXsrv9YMTSDgBpJjStqq7J7mkHQZP/AWMu0=
-X-Received: by 2002:a05:600c:2854:b0:3a3:1551:d7d with SMTP id
- r20-20020a05600c285400b003a315510d7dmr1431530wmb.174.1658897631699; Tue, 26
- Jul 2022 21:53:51 -0700 (PDT)
+        bh=328C7t/lfMBTNWuslbDt6MRb5wfKGX7Nq000FG5WAWM=;
+        b=s242MO8pM0szcmq/S5sMUnbpVMuQQxE2WhDSqczrO9MqBqjf6X2mvae9F6ruR+NpG1
+         7Pt9/gt5kbPWRYvy+OLj9HcG3B5B6Pu2tlu/Kci+WGXdpQ1EZXVm1G9kP+Sx4dHYSBFn
+         f7JT0x/XLOY2Up5MKIbu+Ogv18Wb/rbwIn57UCtvg6TsSEU+bxaMA+NUW+m50DVEejq4
+         244lg8auiMgyfnf1f2O5WqLdeSRw8kMLnca5ETzVMCEt11fA0kCkJkYE//cZFv4H0Jqz
+         uSXDfDe4l+sG4dRingeYr/J+cZJrZu3qcaJRvA28b7XU1gS1bpCrLbUi0Z+gEC0sGTao
+         pRBA==
+X-Gm-Message-State: AJIora+X8iiNAGHQWYbB3jdYsNtxPaGZ4mMB5GETRepIohMpa+OYPnhs
+        4q5qEuQZ5wy0cA0pvGyg3SazZvOCUG3QYElzOR26W7X4+Ch4u5SHCGIvEu1H4aJBpGQ/yh5N49z
+        BBX+1tLScwO7bxRV4G4o8hPUUi3wTqR7PL8X3pvh4
+X-Received: by 2002:a05:6512:b0d:b0:481:5cb4:cf1e with SMTP id w13-20020a0565120b0d00b004815cb4cf1emr7237915lfu.442.1658898002517;
+        Tue, 26 Jul 2022 22:00:02 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vPZY8nVY+qvmUV4ThmrrYh3uP7ne096VDRSFkv/b1xcj8u86DgdUtULwU3n9XG1Cd3R8XLqLMox4qIi7Z0n3o=
+X-Received: by 2002:a05:6512:b0d:b0:481:5cb4:cf1e with SMTP id
+ w13-20020a0565120b0d00b004815cb4cf1emr7237901lfu.442.1658898002007; Tue, 26
+ Jul 2022 22:00:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715063653.3203761-1-irogers@google.com> <20220715063653.3203761-16-irogers@google.com>
- <CAM9d7cigU9Sq2T3i3M1vA_vU+MrqCEbhOZPQ4D13dO+WomKP_A@mail.gmail.com>
-In-Reply-To: <CAM9d7cigU9Sq2T3i3M1vA_vU+MrqCEbhOZPQ4D13dO+WomKP_A@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 26 Jul 2022 21:53:39 -0700
-Message-ID: <CAP-5=fWqJkytGTCRsxUzJgAOUYmqwgh_bp_01HrwLQMPZmiOig@mail.gmail.com>
-Subject: Re: [PATCH v1 15/15] perf jevents: Compress the pmu_events_table
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
+References: <20220726131135.146912-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20220726131135.146912-1-wangkefeng.wang@huawei.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 27 Jul 2022 12:59:50 +0800
+Message-ID: <CACGkMEvZDfxt97_GfE6oYwj6mQX95zUAz-B2k2FaedBeDUe9bw@mail.gmail.com>
+Subject: Re: [PATCH] mm: use is_zone_movable_page() helper
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 9:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
+On Tue, Jul 26, 2022 at 9:05 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 >
-> Hi Ian,
+> Use is_zone_movable_page() helper to simplify code.
 >
-> On Thu, Jul 14, 2022 at 11:37 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > The pmu_events array requires 15 pointers per entry which in position
-> > independent code need relocating. Change the array to be an array of
-> > offsets within a big C string. Only the offset of the first variable is
-> > required, subsequent variables are stored in order after the \0
-> > terminator (requiring a byte per variable rather than 4 bytes per
-> > offset).
-> >
-> > The file size savings are:
-> > no jevents - the same 19,579,104bytes
-> > x86 jevents - ~12.5% file size saving 22,088,944bytes vs 25,235,048bytes
-> > all jevents - ~15.8% file size saving 22,821,896bytes vs 27,106,648bytes
-> > default build options plus NO_LIBBFD=1.
-> >
-> > For example, the x86 build savings come from .rela.dyn and
-> > .data.rel.ro becoming smaller by 1,911,072bytes and 2,022,656bytes
-> > respectively. .rodata increases by 789,600bytes, giving an overall
-> > 3,146,104bytes saving.
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+> ---
+>  drivers/virtio/virtio_mem.c | 6 ++----
+>  mm/memory_hotplug.c         | 2 +-
+>  2 files changed, 3 insertions(+), 5 deletions(-)
 >
-> Great!  I also noticed my build has fairly large reloc sections.
+> diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
+> index e07486f01999..0c2892ec6817 100644
+> --- a/drivers/virtio/virtio_mem.c
+> +++ b/drivers/virtio/virtio_mem.c
+> @@ -862,8 +862,7 @@ static void virtio_mem_sbm_notify_online(struct virtio_mem *vm,
+>                                          unsigned long mb_id,
+>                                          unsigned long start_pfn)
+>  {
+> -       const bool is_movable = page_zonenum(pfn_to_page(start_pfn)) ==
+> -                               ZONE_MOVABLE;
+> +       const bool is_movable = is_zone_movable_page(pfn_to_page(start_pfn));
+>         int new_state;
 >
-> >
-> > To make metric strings more shareable, the topic is changed from say
-> > 'skx metrics' to just 'metrics'.
-> >
-> > To try to help with the memory layout the pmu_events are ordered as used
-> > by perf qsort comparator functions.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/pmu-events/jevents.py | 236 +++++++++++++++++++++++++------
-> >  1 file changed, 193 insertions(+), 43 deletions(-)
-> >
-> > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> > index d7e03864ca6a..b5bc25790695 100755
-> > --- a/tools/perf/pmu-events/jevents.py
-> > +++ b/tools/perf/pmu-events/jevents.py
-> > @@ -6,8 +6,8 @@ import csv
-> >  import json
-> >  import os
-> >  import sys
-> > -from typing import Callable
-> > -from typing import Sequence
-> > +from typing import (Callable, Dict, Sequence, Set)
-> > +import collections
-> >
-> >  # Global command line arguments.
-> >  _args = None
-> > @@ -21,6 +21,19 @@ _arch_std_events = {}
-> >  _close_table = False
-> >  # Events to write out when the table is closed
-> >  _pending_events = []
-> > +# Global BigCString shared by all structures.
-> > +_bcs = None
-> > +# Order specific JsonEvent attributes will be visited.
-> > +_json_event_attributes = [
-> > +    # cmp_sevent related attributes.
-> > +    'name', 'pmu', 'topic', 'desc', 'metric_name', 'metric_group',
-> > +    # Seems useful, put it early.
-> > +    'event',
-> > +    # Short things in alphabetical order.
-> > +    'aggr_mode', 'compat', 'deprecated', 'perpkg', 'unit',
-> > +    # Longer things (the last won't be iterated over during decompress).
-> > +    'metric_constraint', 'metric_expr', 'long_desc'
-> > +]
-> >
-> >
-> >  def removesuffix(s: str, suffix: str) -> str:
-> > @@ -40,6 +53,100 @@ def file_name_to_table_name(parents: Sequence[str], dirname: str) -> str:
-> >    tblname += '_' + dirname
-> >    return tblname.replace('-', '_')
-> >
-> > +def c_len(s: str) -> int:
-> > +  """Return the length of s a C string
-> > +
-> > +  This doesn't handle all escape characters properly. It first assumes
-> > +  all \ are for escaping, it then adjusts as it will have over counted
-> > +  \\. The code uses \000 rather than \0 as a terminator as an adjacent
-> > +  number would be folded into a string of \0 (ie. "\0" + "5" doesn't
-> > +  equal a terminator followed by the number 5 but the escape of
-> > +  \05). The code adjusts for \000 but not properly for all octal, hex
-> > +  or unicode values.
-> > +  """
-> > +  try:
-> > +    utf = s.encode(encoding='utf-8',errors='strict')
-> > +  except:
-> > +    print(f'broken string {s}')
-> > +    raise
-> > +  return len(utf) - utf.count(b'\\') + utf.count(b'\\\\') - (utf.count(b'\\000') * 2)
+>         switch (virtio_mem_sbm_get_mb_state(vm, mb_id)) {
+> @@ -1158,8 +1157,7 @@ static void virtio_mem_fake_online(unsigned long pfn, unsigned long nr_pages)
+>   */
+>  static int virtio_mem_fake_offline(unsigned long pfn, unsigned long nr_pages)
+>  {
+> -       const bool is_movable = page_zonenum(pfn_to_page(pfn)) ==
+> -                               ZONE_MOVABLE;
+> +       const bool is_movable = is_zone_movable_page(pfn_to_page(pfn));
+>         int rc, retry_count;
 >
-> Sorry, I don't understand why it needs the last utf.count * 2.
-> Could you elaborate more?
-
-Yep, so
-1) start with the length of the string
-2) \ will escape the next character, e.g. \n, so instead of counting
-that as 2 count it as 1
-3) but, \\ will now get counted as 0 and it should be 1
-4) but also, a numeric escape like \000 will get counted as 3 rather
-than 1 so adjust that.
-
-Obviously this isn't full C string parsing, but it is sufficient for
-what comes in the json files.
-
+>         /*
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 1213d0c67a53..0f5914964a32 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -936,7 +936,7 @@ static struct zone *auto_movable_zone_for_pfn(int nid,
+>                         if (!page)
+>                                 continue;
+>                         /* If anything is !MOVABLE online the rest !MOVABLE. */
+> -                       if (page_zonenum(page) != ZONE_MOVABLE)
+> +                       if (!is_zone_movable_page(page))
+>                                 goto kernel_zone;
+>                         online_pages += PAGES_PER_SECTION;
+>                 }
+> --
+> 2.35.3
 >
-> > +
-> > +class BigCString:
-> > +  """A class to hold many strings concatenated together.
-> > +
-> > +  Generating a large number of stand-alone C strings creates a large
-> > +  number of relocations in position independent code. The BigCString
-> > +  is a helper for this case. It builds a single string which within it
-> > +  are all the other C strings (to avoid memory issues the string
-> > +  itself is held as a list of strings). The offsets within the big
-> > +  string are recorded and when stored to disk these don't need
-> > +  relocation. To reduce the size of the string further, identical
-> > +  strings are merged. If a longer string ends-with the same value as a
-> > +  shorter string, these entries are also merged.
-> > +  """
-> > +  strings: Set[str]
-> > +  big_string: Sequence[str]
-> > +  offsets: Dict[str, int]
-> > +
-> > +  def __init__(self):
-> > +    self.strings = set()
-> > +
-> > +  def add(self, s: str) -> None:
-> > +    """Called to add to the big string."""
-> > +    self.strings.add(s)
-> > +
-> > +  def compute(self) -> None:
-> > +    """Called once all strings are added to compute the string and offsets."""
-> > +
-> > +    folded_strings = {}
-> > +    # Determine if two strings can be folded, ie. let 1 string use the
-> > +    # end of another. First reverse all strings and sort them.
-> > +    sorted_reversed_strings = sorted([x[::-1] for x in self.strings])
->
-> I think some blank lines would increase readability a bit.
 
-Ack. Can add in v2.
-
-> IIUC these strings are already concatenated with \\000
-> by build_c_string(), right?
-
-They are, but this code is agnostic to that. The code must give every
-string an offset, but it also tries as much as possible to combine
-strings. The \\000 defeats that in all but 1 case for x86, but if we
-were to have 1 offset per field it does better.
-
-> > +    # Strings 'xyz' and 'yz' will now be [ 'zy', 'zyx' ]. Scan forward
-> > +    # for each string to see if there is a better candidate to fold it
-> > +    # into, in the example rather than using 'yz' we can use'xyz' at
-> > +    # an offset of 1.
-> > +    for pos,s in enumerate(sorted_reversed_strings):
-> > +      best_pos = pos
-> > +      for check_pos in range(pos + 1, len(sorted_reversed_strings)):
-> > +        if sorted_reversed_strings[check_pos].startswith(s):
-> > +          best_pos = check_pos
-> > +        else:
-> > +          break
->
-> That means the best pos is the last match?  I guess python
-> string comparison can deal with strings with NUL bytes in it.
->
-> Also I'm not sure how much it actually hits?
-
-Once for x86 currently. The code runs quickly so I didn't disable it.
-In other situations it hits more, as mentioned above.
-
-> In my understanding, each string contains a name, description
-> and many other fields.  Does it have some duplication?
-
-There may be, and having an offset per variable would mean we could
-take advantage of that. What I found was that a majority of the
-variables are empty/NULL so what we lose by not having sharing is more
-than gained by reducing a variable down to 1 byte rather than 4 (in
-the order of 100s of KB).
-
-> Maybe I'm missing but not sure it's worth the complexity.
-
-Agreed. There's limited utility in finding 1 string inside another for
-the current string representation. The code is still necessary to give
-every string an offset. The code to find 1 string inside another isn't
-that large nor that slow, so I kept it around.
-
-Thanks,
-Ian
-
-> Thanks,
-> Namhyung
->
->
-> > +      if pos != best_pos:
-> > +        folded_strings[s[::-1]] = sorted_reversed_strings[best_pos][::-1]
-> > +    # Compute reverse mappings for debugging.
-> > +    fold_into_strings = collections.defaultdict(set)
-> > +    for key, val in folded_strings.items():
-> > +      if key != val:
-> > +        fold_into_strings[val].add(key)
-> > +    # big_string_offset is the current location within the C string
-> > +    # being appended to - comments, etc. don't count. big_string is
-> > +    # the string contents represented as a list. Strings are immutable
-> > +    # in Python and so appending to one causes memory issues, while
-> > +    # lists are mutable.
-> > +    big_string_offset = 0
-> > +    self.big_string = []
-> > +    self.offsets = {}
-> > +    # Emit all strings that aren't folded in a sorted manner.
-> > +    for s in sorted(self.strings):
-> > +      if s not in folded_strings:
-> > +        self.offsets[s] = big_string_offset
-> > +        self.big_string.append(f'/* offset={big_string_offset} */ "')
-> > +        self.big_string.append(s)
-> > +        self.big_string.append('"')
-> > +        if s in fold_into_strings:
-> > +          self.big_string.append(' /* also: ' + ', '.join(fold_into_strings[s]) + ' */')
-> > +        self.big_string.append('\n')
-> > +        big_string_offset += c_len(s)
-> > +        continue
-> > +    # Compute the offsets of the folded strings.
-> > +    for s in folded_strings.keys():
-> > +      assert s not in self.offsets
-> > +      folded_s = folded_strings[s]
-> > +      self.offsets[s] = self.offsets[folded_s] + c_len(folded_s) - c_len(s)
-> > +
-> > +_bcs = BigCString()
-> >
-> >  class JsonEvent:
-> >    """Representation of an event loaded from a json file dictionary."""
-> > @@ -203,26 +310,18 @@ class JsonEvent:
-> >          s += f'\t{attr} = {value},\n'
-> >      return s + '}'
-> >
-> > +  def build_c_string(self):
-> > +    s = ''
-> > +    for attr in _json_event_attributes:
-> > +      x = getattr(self, attr)
-> > +      s += f'{x}\\000' if x else '\\000'
-> > +    return s
-> > +
-> >    def to_c_string(self) -> str:
-> >      """Representation of the event as a C struct initializer."""
-> >
-> > -    def attr_string(attr: str, value: str) -> str:
-> > -      return f'\t.{attr} = \"{value}\",\n'
-> > -
-> > -    def str_if_present(self, attr: str) -> str:
-> > -      if not getattr(self, attr):
-> > -        return ''
-> > -      return attr_string(attr, getattr(self, attr))
-> > -
-> > -    s = '{\n'
-> > -    for attr in [
-> > -        'aggr_mode', 'compat', 'deprecated', 'desc', 'event', 'long_desc',
-> > -        'metric_constraint', 'metric_expr', 'metric_group', 'metric_name',
-> > -        'name', 'perpkg', 'pmu', 'topic', 'unit'
-> > -    ]:
-> > -      s += str_if_present(self, attr)
-> > -    s += '},\n'
-> > -    return s
-> > +    s = self.build_c_string()
-> > +    return f'{{ { _bcs.offsets[s] } }}, /* {s} */\n'
-> >
-> >
-> >  def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
-> > @@ -237,7 +336,6 @@ def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
-> >      event.topic = topic
-> >    return result
-> >
-> > -
-> >  def preprocess_arch_std_files(archpath: str) -> None:
-> >    """Read in all architecture standard events."""
-> >    global _arch_std_events
-> > @@ -253,7 +351,7 @@ def print_events_table_prefix(tblname: str) -> None:
-> >    global _close_table
-> >    if _close_table:
-> >      raise IOError('Printing table prefix but last table has no suffix')
-> > -  _args.output_file.write(f'static const struct pmu_event {tblname}[] = {{\n')
-> > +  _args.output_file.write(f'static const struct compact_pmu_event {tblname}[] = {{\n')
-> >    _close_table = True
-> >
-> >
-> > @@ -286,23 +384,37 @@ def print_events_table_suffix() -> None:
-> >      _args.output_file.write(event.to_c_string())
-> >      _pending_events = []
-> >
-> > -  _args.output_file.write("""{
-> > -\t.name = 0,
-> > -\t.event = 0,
-> > -\t.desc = 0,
-> > -},
-> > -};
-> > -""")
-> > +  _args.output_file.write('};\n\n')
-> >    _close_table = False
-> >
-> > +def get_topic(topic: str) -> str:
-> > +  if topic.endswith('metrics.json'):
-> > +    return 'metrics'
-> > +  return removesuffix(topic, '.json').replace('-', ' ')
-> > +
-> > +def preprocess_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
-> > +
-> > +  if item.is_dir():
-> > +    return
-> > +
-> > +  # base dir or too deep
-> > +  level = len(parents)
-> > +  if level == 0 or level > 4:
-> > +    return
-> > +
-> > +  # Ignore other directories. If the file name does not have a .json
-> > +  # extension, ignore it. It could be a readme.txt for instance.
-> > +  if not item.is_file() or not item.name.endswith('.json'):
-> > +    return
-> > +
-> > +  topic = get_topic(item.name)
-> > +  for event in read_json_events(item.path, topic):
-> > +    _bcs.add(event.build_c_string())
-> >
-> >  def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
-> >    """Process a JSON file during the main walk."""
-> >    global _sys_event_tables
-> >
-> > -  def get_topic(topic: str) -> str:
-> > -    return removesuffix(topic, '.json').replace('-', ' ')
-> > -
-> >    def is_leaf_dir(path: str) -> bool:
-> >      for item in os.scandir(path):
-> >        if item.is_dir():
-> > @@ -337,7 +449,8 @@ def print_mapping_table(archs: Sequence[str]) -> None:
-> >    _args.output_file.write("""
-> >  /* Struct used to make the PMU event table implementation opaque to callers. */
-> >  struct pmu_events_table {
-> > -        const struct pmu_event *entries;
-> > +        const struct compact_pmu_event *entries;
-> > +        size_t length;
-> >  };
-> >
-> >  /*
-> > @@ -365,7 +478,10 @@ const struct pmu_events_map pmu_events_map[] = {
-> >        _args.output_file.write("""{
-> >  \t.arch = "testarch",
-> >  \t.cpuid = "testcpu",
-> > -\t.table = { pme_test_soc_cpu },
-> > +\t.table = {
-> > +\t.entries = pme_test_soc_cpu,
-> > +\t.length = ARRAY_SIZE(pme_test_soc_cpu),
-> > +\t}
-> >  },
-> >  """)
-> >      else:
-> > @@ -380,7 +496,10 @@ const struct pmu_events_map pmu_events_map[] = {
-> >              _args.output_file.write(f"""{{
-> >  \t.arch = "{arch}",
-> >  \t.cpuid = "{cpuid}",
-> > -\t.table = {{ {tblname} }}
-> > +\t.table = {{
-> > +\t\t.entries = {tblname},
-> > +\t\t.length = ARRAY_SIZE({tblname})
-> > +\t}}
-> >  }},
-> >  """)
-> >            first = False
-> > @@ -388,7 +507,7 @@ const struct pmu_events_map pmu_events_map[] = {
-> >    _args.output_file.write("""{
-> >  \t.arch = 0,
-> >  \t.cpuid = 0,
-> > -\t.table = { 0 },
-> > +\t.table = { 0, 0 },
-> >  }
-> >  };
-> >  """)
-> > @@ -406,23 +525,41 @@ static const struct pmu_sys_events pmu_sys_event_tables[] = {
-> >  """)
-> >    for tblname in _sys_event_tables:
-> >      _args.output_file.write(f"""\t{{
-> > -\t\t.table = {{ {tblname} }},
-> > +\t\t.table = {{
-> > +\t\t\t.entries = {tblname},
-> > +\t\t\t.length = ARRAY_SIZE({tblname})
-> > +\t\t}},
-> >  \t\t.name = \"{tblname}\",
-> >  \t}},
-> >  """)
-> >    _args.output_file.write("""\t{
-> > -\t\t.table = { 0 }
-> > +\t\t.table = { 0, 0 }
-> >  \t},
-> >  };
-> >
-> > -int pmu_events_table_for_each_event(const struct pmu_events_table *table, pmu_event_iter_fn fn,
-> > +static void decompress(int offset, struct pmu_event *pe)
-> > +{
-> > +\tconst char *p = &big_c_string[offset];
-> > +""")
-> > +  for attr in _json_event_attributes:
-> > +    _args.output_file.write(f"""
-> > +\tpe->{attr} = (*p == '\\0' ? NULL : p);
-> > +""")
-> > +    if attr == _json_event_attributes[-1]:
-> > +      continue
-> > +    _args.output_file.write('\twhile (*p++);')
-> > +  _args.output_file.write("""}
-> > +
-> > +int pmu_events_table_for_each_event(const struct pmu_events_table *table,
-> > +                                    pmu_event_iter_fn fn,
-> >                                      void *data)
-> >  {
-> > -        for (const struct pmu_event *pe = &table->entries[0];
-> > -             pe->name || pe->metric_group || pe->metric_name;
-> > -             pe++) {
-> > -                int ret = fn(pe, table, data);
-> > +        for (size_t i = 0; i < table->length; i++) {
-> > +                struct pmu_event pe;
-> > +                int ret;
-> >
-> > +                decompress(table->entries[i].offset, &pe);
-> > +                ret = fn(&pe, table, data);
-> >                  if (ret)
-> >                          return ret;
-> >          }
-> > @@ -531,7 +668,7 @@ def main() -> None:
-> >        help='Root of tree containing architecture directories containing json files'
-> >    )
-> >    ap.add_argument(
-> > -      'output_file', type=argparse.FileType('w'), nargs='?', default=sys.stdout)
-> > +      'output_file', type=argparse.FileType('w', encoding='utf-8'), nargs='?', default=sys.stdout)
-> >    _args = ap.parse_args()
-> >
-> >    _args.output_file.write("""
-> > @@ -541,6 +678,10 @@ def main() -> None:
-> >  #include <string.h>
-> >  #include <stddef.h>
-> >
-> > +struct compact_pmu_event {
-> > +  int offset;
-> > +};
-> > +
-> >  """)
-> >    archs = []
-> >    for item in os.scandir(_args.starting_dir):
-> > @@ -556,6 +697,15 @@ def main() -> None:
-> >    for arch in archs:
-> >      arch_path = f'{_args.starting_dir}/{arch}'
-> >      preprocess_arch_std_files(arch_path)
-> > +    ftw(arch_path, [], preprocess_one_file)
-> > +
-> > +  _bcs.compute()
-> > +  _args.output_file.write('static const char *const big_c_string =\n')
-> > +  for s in _bcs.big_string:
-> > +    _args.output_file.write(s)
-> > +  _args.output_file.write(';\n\n')
-> > +  for arch in archs:
-> > +    arch_path = f'{_args.starting_dir}/{arch}'
-> >      ftw(arch_path, [], process_one_file)
-> >      print_events_table_suffix()
-> >
-> > --
-> > 2.37.0.170.g444d1eabd0-goog
-> >

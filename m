@@ -2,222 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631C358211D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEF1582120
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiG0Hct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
+        id S230262AbiG0HdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiG0Hcr (ORCPT
+        with ESMTP id S229580AbiG0HdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:32:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4E9CE2B
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658907166; x=1690443166;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=3tUr9o4XtgqSSOj6k+rQU7NSjzLE5T5O5gATaSlQ9No=;
-  b=UhDhouZM4PapK2r+qGlLmJQI5DpDx3/YyV8xDyyv674/el52zvSVS8Qz
-   buMXK7m535bQX4f4hwUvAG+4jmxkJMT9dMx07wNSBE7xeGvNR44B8lAkT
-   KPVk5LscG7ztXCUQw2nd4zmvF6VxTTbdNtJk8jFSHvNh+rDa5TLvpIxuU
-   oTZLhkdRWQ4ns400wRK01CY53mvy8rgk8leQaX1P5MomoujwKohJLC9h3
-   srPFtEJ82bJH1fWmQ7A10omu8G1iBKVsvj7t3fMOkUAEmikSD3iorsII+
-   UXvfq9lvPh9PMRJy0fyiLLWBf3EX3EG0TrGq2VdpBSxkbvc3z5OovAgTI
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="289360402"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="289360402"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 00:32:46 -0700
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="659079451"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.171.125]) ([10.249.171.125])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 00:32:43 -0700
-Subject: Re: [kbuild-all] Re: drivers/iio/adc/ti-tsc2046.c:242:62: warning:
- taking address of packed member 'data' of class or structure
- 'tsc2046_adc_atom' may result in an unaligned pointer value
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <202207251140.M7YAqoLC-lkp@intel.com>
- <CAHp75Vf0LjA8+JQNmKNYTe-1U58mSUsTiqQWbLAcrBXWs8NGjQ@mail.gmail.com>
- <YuAFeyKirrneGPSB@dev-arch.thelio-3990X>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <3b82019e-a913-1a5e-3118-1ed61d8bae87@intel.com>
-Date:   Wed, 27 Jul 2022 15:32:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Wed, 27 Jul 2022 03:33:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41E213F24;
+        Wed, 27 Jul 2022 00:33:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6712E615E0;
+        Wed, 27 Jul 2022 07:33:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255B2C433D6;
+        Wed, 27 Jul 2022 07:33:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658907189;
+        bh=98UvVK1hQ5nxz3e59OpZYvviPSmMObiqhZm0riCYgm0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=umd2TjCpVeA8NoflpwamOYbEhjZGSoco4pRNEr6mO9vwE5ItP7vFXKZAyULUS9z7g
+         9/+7TS6hvNXI0Vw7fDLfoanAsabQJYly5dt9byn1Cw+bLsagH0C5jeVZBq14t/a+hA
+         1DmO0NklCZRy08FHbyk7Teby2+LVOLJsF9xbyykg=
+Date:   Wed, 27 Jul 2022 09:33:06 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Andy Guo =?utf-8?B?KOmDreWNq+aWjCk=?= <guoweibin@inspur.com>
+Cc:     "b-liu@ti.com" <b-liu@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: musb: Fix musb_gadget.c rxstate may cause
+ request->buf overflow problems
+Message-ID: <YuDqMpDBb27FbG3B@kroah.com>
+References: <7acfffb210974cff959d056ef88221de@inspur.com>
 MIME-Version: 1.0
-In-Reply-To: <YuAFeyKirrneGPSB@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7acfffb210974cff959d056ef88221de@inspur.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 27, 2022 at 07:21:39AM +0000, Andy Guo (郭卫斌) wrote:
+> when the rxstate function executes the 'goto buffer_aint_mapped' code
+> branch, it will always copy the fifocnt bytes data to request->buf,
+> which may cause request->buf out of bounds. for Ethernet-over-USB will
+> cause skb_over_panic when a packet larger than mtu is recived.
+> 
+> Fix it by add the length check :
+> fifocnt = min_t(unsigned, request->length - request->actual, fifocnt);
+> 
+> Signed-off-by: guoweibin <guoweibin@inspur.com>
+> ---
+>  drivers/usb/musb/musb_gadget.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
+> index 51274b87f46c..4ad5a1f31d7e 100644
+> --- a/drivers/usb/musb/musb_gadget.c
+> +++ b/drivers/usb/musb/musb_gadget.c
+> @@ -760,6 +760,7 @@ static void rxstate(struct musb *musb, struct musb_request *req)
+>  			musb_writew(epio, MUSB_RXCSR, csr);
+>  
+>  buffer_aint_mapped:
+> +			fifo_count = min_t(unsigned, request->length - request->actual, fifo_count);
+>  			musb_read_fifo(musb_ep->hw_ep, fifo_count, (u8 *)
+>  					(request->buf + request->actual));
+>  			request->actual += fifo_count;
+> 
 
 
-On 7/26/2022 11:17 PM, Nathan Chancellor wrote:
-> On Tue, Jul 26, 2022 at 10:07:09AM +0200, Andy Shevchenko wrote:
->> Seems yet another false positive from Clang.
-> 
-> This warning should not show up because it is disabled in the main
-> Makefile. Unfortunately, a recent change in clang made '-mtune' warn
-> when it is not supported in the backend, which is the case for ARM:
-> 
-> https://github.com/ClangBuiltLinux/linux/issues/1674
-> 
-> As a result, all subsequent cc-option calls fail, which was the root
-> cause of this warning last time, just with MIPS:
-> 
-> https://lore.kernel.org/YenXz+RznXBuJMSR@dev-arch.archlinux-ax161/
-> 
-> Intel folks, could you update your version of clang or add this
-> particular warning to your blocklist? It should be resolved with
-> https://github.com/llvm/llvm-project/commit/1d23f6c5a4f6ebb101c282f8f506588fe4d9e92f.
+Hi,
 
-Hi Nathan,
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Thanks for the advice, we have updated the clang in our environment.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Best Regards,
-Rong Chen
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file, Documentation/SubmittingPatches
+  for how to do this correctly.
 
-> 
-> Cheers,
-> Nathan
-> 
->> On Mon, Jul 25, 2022 at 5:55 AM kernel test robot <lkp@intel.com> wrote:
->>>
->>> Hi Oleksij,
->>>
->>> FYI, the error/warning still remains.
->>>
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>> head:   e0dccc3b76fb35bb257b4118367a883073d7390e
->>> commit: 9374e8f5a38defe90bc65b2decf317c1c62d91dd iio: adc: add ADC driver for the TI TSC2046 controller
->>> date:   1 year, 2 months ago
->>> config: arm-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251140.M7YAqoLC-lkp@intel.com/config)
->>> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
->>> reproduce (this is a W=1 build):
->>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>          chmod +x ~/bin/make.cross
->>>          # install arm cross compiling tool for clang build
->>>          # apt-get install binutils-arm-linux-gnueabi
->>>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9374e8f5a38defe90bc65b2decf317c1c62d91dd
->>>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>          git fetch --no-tags linus master
->>>          git checkout 9374e8f5a38defe90bc65b2decf317c1c62d91dd
->>>          # save the config file
->>>          mkdir build_dir && cp config build_dir/.config
->>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/ drivers/staging/ fs/
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> Reported-by: kernel test robot <lkp@intel.com>
->>>
->>> All warnings (new ones prefixed by >>):
->>>
->>>>> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
->>
->> What the heck? The get_unaligned_*() is exactly to get unaligned data.
->>
->>>             return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
->>>                                                                         ^~~~~~~~~
->>>     include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
->>>                     __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
->>>                                             ^~~~
->>>     include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
->>>                     BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
->>>                                                        ^~~~
->>>     include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->>>     #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->>>                                                              ^~~~
->>>     note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->>>     include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
->>>                     if (!(condition))                                       \
->>>                           ^~~~~~~~~
->>>     include/linux/compiler.h:56:47: note: expanded from macro 'if'
->>>     #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
->>>                                                   ^~~~
->>>     include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
->>>     #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
->>>                                                        ^~~~
->>>>> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
->>>             return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
->>>                                                                         ^~~~~~~~~
->>>     include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
->>>                     __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
->>>                                             ^~~~
->>>     include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
->>>                     BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
->>>                                                        ^~~~
->>>     include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->>>     #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->>>                                                              ^~~~
->>>     note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->>>     include/linux/compiler_types.h:308:9: note: expanded from macro '__compiletime_assert'
->>>                     if (!(condition))                                       \
->>>                           ^~~~~~~~~
->>>     include/linux/compiler.h:56:47: note: expanded from macro 'if'
->>>     #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
->>>                                                   ^~~~
->>>     include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
->>>     #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
->>>                                                                 ^~~~
->>>>> drivers/iio/adc/ti-tsc2046.c:242:62: warning: taking address of packed member 'data' of class or structure 'tsc2046_adc_atom' may result in an unaligned pointer value [-Waddress-of-packed-member]
->>>             return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
->>>                                                                         ^~~~~~~~~
->>>     include/linux/bitfield.h:108:27: note: expanded from macro 'FIELD_GET'
->>>                     __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
->>>                                             ^~~~
->>>     include/linux/bitfield.h:52:38: note: expanded from macro '__BF_FIELD_CHECK'
->>>                     BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,         \
->>>                                                        ^~~~
->>>     include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->>>     #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->>>                                                              ^~~~
->>>     note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->>>     include/linux/compiler.h:56:47: note: expanded from macro 'if'
->>>     #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
->>>                                                   ^~~~
->>>     include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
->>>     #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
->>>                                                                                          ^~~~
->>>     include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
->>>             (cond) ?                                        \
->>>              ^~~~
->>>     3 warnings generated.
->>>
->>>
->>> vim +242 drivers/iio/adc/ti-tsc2046.c
->>>
->>>     239
->>>     240  static u16 tsc2046_adc_get_value(struct tsc2046_adc_atom *buf)
->>>     241  {
->>>   > 242          return FIELD_GET(TI_TSC2046_DATA_12BIT, get_unaligned_be16(&buf->data));
->>>     243  }
->>
->>
->> -- 
->> With Best Regards,
->> Andy Shevchenko
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> 
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

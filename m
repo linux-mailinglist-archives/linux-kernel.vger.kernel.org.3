@@ -2,121 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84E2581CB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB89581CB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240024AbiG0AN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 20:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S239699AbiG0AO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 20:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239961AbiG0AN5 (ORCPT
+        with ESMTP id S233303AbiG0AOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 20:13:57 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F94D2C67A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:13:56 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id e69so12516433iof.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=R2qD9ax08h9nKFO1+IcTWhLCwKpkzgVVPrZ1uEJXMzU=;
-        b=O39nmq3Fa3xXO2eNr2WDsfIOFsBx/Agfx0G7paz+IEzhMwjHOgWPgKuW9UDzGUGcVN
-         BLCHzlVtcuFd1lHCKyTH+zKIySPD2inblpqIDGJWxaXTvNVSTLqyLqe898w2cBawQap5
-         YVgewCoXMLGo6FU3BwqduskKqmpzpl6u5x9zY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=R2qD9ax08h9nKFO1+IcTWhLCwKpkzgVVPrZ1uEJXMzU=;
-        b=TgWDr72znciEz3R23PsAjHLWUHEFV5xYC1BDBRXruk4l/uXJzjazOEgXvmdJZne8RH
-         Y7bXHGqeshNeBy5tHjzbrweazWEUAD45flMOtHKU+U+YtKZkL58H7+9ZvTFHlKKgjWk1
-         GPuplkO3kUAAexn1lSnRpKJjmDmXRRWxGPYyXf2euBi7lMJDucJtC7eVdkvVGyHC+S4n
-         iW3C8CrNExbv0hohyjmHm/xJLZTjLUmzaUcoIvb6ZUMrCjQYhY7c7kWlk1t+IAPh5Hkz
-         +N0PvGFdAmOTWagtHsU/iK0dyGqQJQVRrg63aGtrjtTq7/sVtm4AJfANjZVoCatp778J
-         bFmw==
-X-Gm-Message-State: AJIora8n6eUXrtmG2xAXQEOyOMtbVbMdSCEOTG2i2YMdswql0yODNhvn
-        /wSgNPZa/oYBoIT0zna2a0bTfg==
-X-Google-Smtp-Source: AGRyM1vH3cJG6PYumk1AjyMd2TV9Hzppapg1EgTQOvu2+RZBu5ZKQdBtQKOp3uTHLvR9/RYndv5f1Q==
-X-Received: by 2002:a02:b697:0:b0:341:5553:ae49 with SMTP id i23-20020a02b697000000b003415553ae49mr7617346jam.109.1658880835497;
-        Tue, 26 Jul 2022 17:13:55 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z27-20020a027a5b000000b003322a709c7esm7272755jad.30.2022.07.26.17.13.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 17:13:54 -0700 (PDT)
-Subject: Re: [PATCH] Makefile: replace headers_install with headers for
- kselftest
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Tim Bird <Tim.Bird@sony.com>, kernel@collabora.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com>
- <f35a71d6-bd96-7aa9-c143-39ae88bc85d5@linuxfoundation.org>
- <8fc9d169-78ff-0fe4-67c0-784097861f12@collabora.com>
- <CAK7LNAQ4iMBwu4bOmmOrMudNH49ruz-7AK_H3-ceTixd=G+brQ@mail.gmail.com>
- <81241d70-7952-2f55-9181-d18679068998@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8a3c18c5-2abc-9ea2-0867-95b31d45da1d@linuxfoundation.org>
-Date:   Tue, 26 Jul 2022 18:13:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 26 Jul 2022 20:14:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C023AB11;
+        Tue, 26 Jul 2022 17:14:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB056B818CC;
+        Wed, 27 Jul 2022 00:14:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A698C433D6;
+        Wed, 27 Jul 2022 00:14:18 +0000 (UTC)
+Date:   Tue, 26 Jul 2022 20:14:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] tracing/user_events: Use bits vs bytes for
+ enabled status page data
+Message-ID: <20220726201412.7fbd3b1f@rorschach.local.home>
+In-Reply-To: <20220727000249.GA2289@kbox>
+References: <20220425184631.2068-1-beaub@linux.microsoft.com>
+        <20220425184631.2068-7-beaub@linux.microsoft.com>
+        <20220726180115.69320865@gandalf.local.home>
+        <20220727000249.GA2289@kbox>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <81241d70-7952-2f55-9181-d18679068998@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 11:31 AM, Guillaume Tucker wrote:
-> On 19/07/2022 17:06, Masahiro Yamada wrote:
->> On Tue, Jul 19, 2022 at 9:37 PM Guillaume Tucker
->> <guillaume.tucker@collabora.com> wrote:
->>>
+On Tue, 26 Jul 2022 17:02:49 -0700
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
->>>
->>> Masahiro-san,
->>>
->>> A you OK with applying this in the kbuild tree ahead of the
->>> upcoming merge window?
->>
->>
->> No.
->>
->> This is a fix-up patch on top of the previous one [1],
->> which  was applied to the kselftest tree.
->>
->> This cannot apply to the kbuild tree.
+> > >  /* Limit how long of an event name plus args within the subsystem. */
+> > >  #define MAX_EVENT_DESC 512
+> > >  #define EVENT_NAME(user_event) ((user_event)->tracepoint.name)
+> > >  #define MAX_FIELD_ARRAY_SIZE 1024
+> > >  
+> > > +#define STATUS_BYTE(bit) ((bit) >> 3)
+> > > +#define STATUS_MASK(bit) (1 << ((bit) & 7))
+> > > +
+> > > +/* Internal bits to keep track of connected probes */
+> > > +#define EVENT_STATUS_FTRACE (1 << 0)
+> > > +#define EVENT_STATUS_PERF (1 << 1)
+> > > +#define EVENT_STATUS_OTHER (1 << 7)  
+> > 
+> > Did you mean to shift STATUS_OTHER by 7?
+> >   
 > 
-> OK thank you for confirming.
+> Yes, it should be the value 128.
 > 
-> Shuah, I guess you're happy to apply it to the kselftest tree
-> instead then?
+> > Is EVENT_STATUS_OTHER suppose to be one of the flags within the 3 bits of
+> > the 7 in STATUS_MASK?
+> >   
 > 
+> My thought was that STATUS_OTHER would stay on the highest bit.
+> Then when we have other systems they would slot into (1 << 2), etc.
+> 
+> This may not be as important now since the byte is never given back to
+> the user and is only used when printing out status via the
+> user_events_status file in text form.
 
-Sorry for a late response due to time off. Working through my Inbox.
+So, it is confusing because of STATUS_MASK() is bits 0,1,2 and we are
+only using bits 0 and 1, with a OTHER bit at bit 7. And it would be
+good to use the BIT() macro.
 
-Applied now to linux-kselftest next for 5.20-rc1.
+Is STATUS_OTHER suppose to be part of STATUS_MASK()?
 
-thanks,
--- Shuah
-
-
+-- Steve

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE1F582F1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7AA582CBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241809AbiG0RUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        id S240005AbiG0Qs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241827AbiG0RTG (ORCPT
+        with ESMTP id S240478AbiG0QsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:19:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763777A514;
-        Wed, 27 Jul 2022 09:44:02 -0700 (PDT)
+        Wed, 27 Jul 2022 12:48:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3CD61101;
+        Wed, 27 Jul 2022 09:32:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48393B821AC;
-        Wed, 27 Jul 2022 16:44:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976ABC433C1;
-        Wed, 27 Jul 2022 16:43:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D671061A04;
+        Wed, 27 Jul 2022 16:27:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36A5C433D6;
+        Wed, 27 Jul 2022 16:27:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940240;
-        bh=e7ZRv2aecf6ctDZd+OHUCvxL1ffQxSvAwxPQGF0uR9s=;
+        s=korg; t=1658939241;
+        bh=UOpROHzo/X7Rd+9/tzUGSTkx8KnfLTdzuVsBE7Rw9Vs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZOjdlK3HMhWoQlbvLvHWtMf+oW0JoE9xZSx3b8AFWx8yEcR2omLXyr7URaLHBq674
-         OsWR863HSNmScvTw3fg6LIrm6XlciLaFiX40vJjhRr8xUVBj6eea9mDH3Y0T3JEVnh
-         /KeVPHWZ88dC5NYb8d+0y0ycbgqxXPZZEYZai1iI=
+        b=YkDQOf/AoF2Tcf+FRzzcKMwnrAiSjMNkrRGA+woMMkLOTSMO7WOkebQpSR3DD+oj1
+         yCGmjzwGDUxZtnaYTJD3P5sNvTUxZ49Wez149gN+kr9jiNmcJf3RO9Q9TwSZwoeun8
+         CFqZYDHzlH2Gl/lBq67A/I9LNIDf62dCW3ueb69o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 155/201] xhci: Set HCD flag to defer primary roothub registration
+        stable@vger.kernel.org, Tedd Ho-Jeong An <tedd.an@intel.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 4.19 50/62] Bluetooth: SCO: Fix sco_send_frame returning skb->len
 Date:   Wed, 27 Jul 2022 18:10:59 +0200
-Message-Id: <20220727161034.246013417@linuxfoundation.org>
+Message-Id: <20220727161006.082825060@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kishon Vijay Abraham I <kishon@ti.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit b7a4f9b5d0e4b6dd937678c546c0b322dd1a4054 ]
+commit 037ce005af6b8a3e40ee07c6e9266c8997e6a4d6 upstream.
 
-Set "HCD_FLAG_DEFER_RH_REGISTER" to hcd->flags in xhci_run() to defer
-registering primary roothub in usb_add_hcd() if xhci has two roothubs.
-This will make sure both primary roothub and secondary roothub will be
-registered along with the second HCD.
-This is required for cold plugged USB devices to be detected in certain
-PCIe USB cards (like Inateck USB card connected to AM64 EVM or J7200 EVM).
+The skb in modified by hci_send_sco which pushes SCO headers thus
+changing skb->len causing sco_sock_sendmsg to fail.
 
-This patch has been added and reverted earier as it triggered a race
-in usb device enumeration.
-That race is now fixed in 5.16-rc3, and in stable back to 5.4
-commit 6cca13de26ee ("usb: hub: Fix locking issues with address0_mutex")
-commit 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0
-race")
-
-[minor rebase change, and commit message update -Mathias]
-
-CC: stable@vger.kernel.org # 5.4+
-Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Tested-by: Chris Chiu <chris.chiu@canonical.com>
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-Link: https://lore.kernel.org/r/20220510091630.16564-3-kishon@ti.com
+Fixes: 0771cbb3b97d ("Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg")
+Tested-by: Tedd Ho-Jeong An <tedd.an@intel.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/bluetooth/sco.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index a4e99f8668b3..d76c10f9ad80 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -693,6 +693,8 @@ int xhci_run(struct usb_hcd *hcd)
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"Finished xhci_run for USB2 roothub");
+--- a/net/bluetooth/sco.c
++++ b/net/bluetooth/sco.c
+@@ -282,16 +282,17 @@ static int sco_connect(struct hci_dev *h
+ static int sco_send_frame(struct sock *sk, struct sk_buff *skb)
+ {
+ 	struct sco_conn *conn = sco_pi(sk)->conn;
++	int len = skb->len;
  
-+	set_bit(HCD_FLAG_DEFER_RH_REGISTER, &hcd->flags);
+ 	/* Check outgoing MTU */
+-	if (skb->len > conn->mtu)
++	if (len > conn->mtu)
+ 		return -EINVAL;
+ 
+-	BT_DBG("sk %p len %d", sk, skb->len);
++	BT_DBG("sk %p len %d", sk, len);
+ 
+ 	hci_send_sco(conn->hcon, skb);
+ 
+-	return skb->len;
++	return len;
+ }
+ 
+ static void sco_recv_frame(struct sco_conn *conn, struct sk_buff *skb)
+@@ -731,7 +732,8 @@ static int sco_sock_sendmsg(struct socke
+ 		err = -ENOTCONN;
+ 
+ 	release_sock(sk);
+-	if (err)
 +
- 	xhci_create_dbc_dev(xhci);
- 
- 	xhci_debugfs_init(xhci);
--- 
-2.35.1
-
++	if (err < 0)
+ 		kfree_skb(skb);
+ 	return err;
+ }
 
 

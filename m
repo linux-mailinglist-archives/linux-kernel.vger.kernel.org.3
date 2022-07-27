@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A65581D44
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E211581D4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240186AbiG0BlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 21:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S240107AbiG0Btb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 21:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiG0Bk6 (ORCPT
+        with ESMTP id S231205AbiG0Bt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 21:40:58 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2DE388A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:40:57 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id j70so19258612oih.10
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:40:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=ZQP39BlWuH5uB0igKBxBSRYwBAlp0vmJqoxShBhFmBY=;
-        b=dI2oF0ZD8dQ0SzyPbg8twIuj4mxUSEjCINx9u4QJDkseMmtr0SHQJ+/mijZafeqRTS
-         yjCUC7o6km74hUzt+USVp7m+SHz8f9jdwRmiDdZugO4cH9w3k7NQh4k4m++b4Jj/ftbX
-         qsMI4p0BMuDs0sn+J29Su2nd190GkHbD7dmQ8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=ZQP39BlWuH5uB0igKBxBSRYwBAlp0vmJqoxShBhFmBY=;
-        b=kzWbUw2n21tdykAkV3cyVFNiozjfY7iuIEsTHLPDnaTEp6vEy1cRprsHw9EJJpTA4k
-         V0QN6B+QHsYQ/j65LJqUOnt5WvpgraOxUvWROcxz9rRYuKJ+Egt1w+MB4dDOLr3hTJY5
-         cVpLiEm+mOo0XnfCKCjY5Nt7B/2f6gHFeYuwokmN+0NZc7IN7Z8HlbcbwwCYCwjzMAGI
-         fVM0ui0hfs3RMoXnSpQ4D8UTPMB4VtrOIgWdbMeNWCurWXVpHrk9/tx1EqXSD24FEn7I
-         XSLkufX3fdbq/ZoDTgHJoG3hNUiRil4T7UYv4E60+3YIL60fxlP4VcanG9jIzJugBeZJ
-         LnnA==
-X-Gm-Message-State: AJIora/HdMVfjpF//mt1kwfqcMxWyenVO3lo+f7+ST4msfu//dSbs9lm
-        KNTI5EDyQX9ll2D9q3ATLZxmjIfbxFdVTr6k+pLqkA==
-X-Google-Smtp-Source: AGRyM1uoeYlsAmwt/493nEC5g8suOwARV4xuMdrjwWz2LdrSKJMHfmgJDWrtUE5AcUZccggj4+diTgO6NtU5+paSQ98=
-X-Received: by 2002:a05:6808:2206:b0:33a:b472:48fd with SMTP id
- bd6-20020a056808220600b0033ab47248fdmr874798oib.44.1658886057293; Tue, 26 Jul
- 2022 18:40:57 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 26 Jul 2022 20:40:56 -0500
+        Tue, 26 Jul 2022 21:49:29 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D71B37F89
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:49:28 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LsxTp1984zkXkg;
+        Wed, 27 Jul 2022 09:46:54 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Jul 2022 09:49:26 +0800
+Subject: Re: [bug report] mm/hugetlb: possible data leak with huge pmd sharing
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Linux-MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>
+References: <025b3ea6-4b26-f091-5464-0eef5aac7719@huawei.com>
+ <Yt7iVRaDGuIx8LVE@monkey> <2ec4cd05-5b3a-cd5c-7785-5a7236804bef@huawei.com>
+ <YuAh0JQL9zQwfZkg@monkey>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <9d670229-4bbf-a33b-ba80-73fc33c9bac3@huawei.com>
+Date:   Wed, 27 Jul 2022 09:49:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <CAODwPW-9UPokepL_VVGuCLaWTDT7hmN9R9Z2yXABrP4g3_N4uQ@mail.gmail.com>
-References: <20220726235115.1184532-1-jrosenth@chromium.org> <CAODwPW-9UPokepL_VVGuCLaWTDT7hmN9R9Z2yXABrP4g3_N4uQ@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 26 Jul 2022 20:40:56 -0500
-Message-ID: <CAE-0n51RsN3P5hT+kApw-kPqjm_K7=7bvySWLNdQuQPnrQYZRw@mail.gmail.com>
-Subject: Re: [PATCH] firmware: google: Implement vboot workbuf in sysfs
-To:     Jack Rosenthal <jrosenth@chromium.org>,
-        Julius Werner <jwerner@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YuAh0JQL9zQwfZkg@monkey>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Julius Werner (2022-07-26 17:26:41)
-> Sorry, this wasn't quite what I meant. I think we should definitely
-> not hardcode any details about the vboot data structure layout here.
-> It's already enough of a pain to keep crossystem in sync with
-> different data structure versions, we absolutely don't want to have to
-> keep updating that in the kernel as well.
->
-> I assume that the reason you went that route seems to have been mostly
-> that the lb_cbmem_ref coreboot table entry has no size field, so you
-> had to infer the size from within the data structure. Thankfully, we
-> don't need to use lb_cbmem_ref for this, that's somewhat of a legacy
-> entry type that we're trying to phase out where it's no longer needed
-> for backwards-compatibility anyway (and in fact I think we should be
-> okay to remove the vboot entry there nowadays). We also have
-> lb_cbmem_entry (see
-> https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/master/src/lib/imd_cbmem.c#222)
-> that exports info about every area in CBMEM, with address, size and
-> CBMEM ID. The vboot workbuffer is CBMEM ID 0x78007343.
->
-> I think we should just add a general driver for lb_cbmem_entry tags
-> here, that uses the "id" as (part of) the device name and contains
-> node to read/write the raw bytes of the buffer. Then crossystem can
-> easily find the right one for vboot, and the infrastructure may also
-> come in handy for other uses (or debugging) in the future.
+On 2022/7/27 1:18, Mike Kravetz wrote:
+> On 07/26/22 15:14, Miaohe Lin wrote:
+>> On 2022/7/26 2:35, Mike Kravetz wrote:
+>>> On 07/25/22 17:07, Miaohe Lin wrote:
+>>>> Hi all:
+>>>>     When I investigate the mm/hugetlb code, I found there's a possible data leak issue
+>>>> with huge pmd sharing. Thank about the below scene:
+>>>>
+>>>>     1. Process A and process B shares huge pmd page.(vm_flags: VM_MAYSHARE but !VM_SHARED)
+>>>
+>>> Thanks,
+>>>
+>>> I often get confused about the setting of VM_MAYSHARE and VM_SHARED.  When
+>>> you throw in the possibility of shared and anonymous, then I struggle a bit
+>>> more.  At one time did an audit to get the meaning clear in my mind, but still
+>>> struggle with the meanings.
+>>>
+>>> Is it possible to have VM_MAYSHARE and !VM_SHARED on a hugetlb vma?  I only
+>>> took a quick look and could not find a way for this to happen.  But, I> could have easily missed something.
+>>
+>> Thanks for your reply. It's possible to have VM_MAYSHARE and !VM_SHARED on a hugetlb vma
+>> with below code snippet:
+>>
+>> ...
+>>     fd = open("/root/huge/hugepagefile", O_CREAT | O_RDONLY, 0755);
+>>     if (fd < 0) {
+>>             perror("Open failed");
+>>             exit(1);
+>>     }
+>>
+>>     addr = mmap(0, 32UL*1024*1024, PROT_READ, MAP_SHARED, fd, 0);
+>> ...
+>>
+>> cat /proc/<pid>/smaps:
+>>
+>> 400000000000-400002000000 r--s 00000000 00:2f 153780886                  /root/huge/hugepagefile
+>> Size:              32768 kB
+>> KernelPageSize:     2048 kB
+>> MMUPageSize:        2048 kB
+>> ...
+>> VmFlags: rd mr me ms de ht
+>>
+>> /* sh: VM_SHARED, mw: VM_MAYWRITE, ms:VM_MAYSHARE */
+>>
+>> So vm_flags is VM_MAYSHARE but !VM_SHARED.
+>>
+>> But in this case, it's readonly. So the above scene won't happen. Sorry for make noise.
+>>
+> 
+> No worries!  And, thank you for looking at the pmd sharing code.  In concept
+> the functionality is simple.  However, details and edge cases make things
+> complicated.
+> 
+> If you are interested in the pmd sharing code, more eyes on this proposal
+> would be appreciated.
 
-If there's nothing to really "drive" then a driver is overkill. Would
-exposing some raw bytes in /sys/firmware/coreboot be sufficient here,
-possibly under some sort of /sys/firmware/coreboot/cbmem_entries/ path?
+Yes, thanks for your hard work. ;)
 
-I honestly have no idea what vboot workbuffer is though so maybe I'm
-just talking nonsense. If this ends up in sysfs please document the
-files in Documentation/ABI/ and include it in the patch so we know what
-is being exposed in the kernel ABI.
+> 
+> https://lore.kernel.org/linux-mm/20220706202347.95150-1-mike.kravetz@oracle.com/
+> 
+

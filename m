@@ -2,92 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C32A5832D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413295832D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbiG0TFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S231623AbiG0TFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234483AbiG0TE1 (ORCPT
+        with ESMTP id S233561AbiG0TFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:04:27 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39265FAC0;
-        Wed, 27 Jul 2022 11:28:41 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id y141so16789793pfb.7;
-        Wed, 27 Jul 2022 11:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=Rr2DmdH/Yw7QfWPKMwga2AxXi65vqNRwg8R5+haMBnY=;
-        b=RliP9yXWD5CA9bljnE2oiVxs9BJAxE9TKXJCXAXuaE6qP14dhUHkl97uK3BdsKC6Wu
-         XY5b23DHu/JtYErCI6ZXaU/2hJCMlb0yNyib9sD417uZ3FtLx17W4FRkkUmT/FjLzfSP
-         Ts8R0vQSQcJvBj0Wq11eQqdWGb3fHRbbMnGyninuRlUNg23k7gX49OPL/+O0/g1Iy8Rm
-         yk+FhOE0II5xBWvTIdSNL4V5U8SLo+FmytbcpdiVSjF5NNWJd8Q2e/7n3f/U6BiF1dn3
-         Msf+k/AiaqpGJHf/pBx4q5TxzXLg3TwiGnTfPMlUCua1RExTi0MI4CMUQXGU+lSbjylp
-         aI0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=Rr2DmdH/Yw7QfWPKMwga2AxXi65vqNRwg8R5+haMBnY=;
-        b=evWJx1CFQZpz/H6kB3qzPoHRdYcpMqeBLwg9yYLeurGg30TywAR7AHsP7J03b8E9YR
-         wCNSkXW+/nEy5+ZEgzUnc6o8M67mM5xR39AwSR9PL0WTBPY/OB7SCW6aQ2Snr8/HfFMD
-         YsE+6mPeY0Qrc4Xq5ECnu8KMn5ka98tGf7fDV0fqz/j4VD3fOdj5qqr0iv6HXwfq7BXf
-         yPpQ5yKynY5Uaeo+fzvseOFB3NAWtlu+HzXrZhxsoIUGgzsC6nUnG7BNfTtIzpZE4mbm
-         S6vlxmAVEpWhMsOxco9u+myiqFC9nrBeknZ35rdfqdVvIh2Wwv7LOFNxl3yyfkbfmdnc
-         8RRw==
-X-Gm-Message-State: AJIora+VP8ZoA4YJycFoqEpREmYiQjeEgOPF5sw/EONvBkyW4xDvBBhf
-        q9/6mD74ZH6rkYiotJ71dSo=
-X-Google-Smtp-Source: AGRyM1tTr14FJaUQBQ8nWS67O2L/U66szXsIK5MhQcM1+eQAuv01bCGhWYtk4wY1i1lZAzhXSEssJA==
-X-Received: by 2002:a63:fb52:0:b0:419:cb1e:6e2 with SMTP id w18-20020a63fb52000000b00419cb1e06e2mr20185224pgj.356.1658946521270;
-        Wed, 27 Jul 2022 11:28:41 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:5a55])
-        by smtp.gmail.com with ESMTPSA id l17-20020a170903245100b0016c454598b5sm1818636pls.167.2022.07.27.11.28.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 11:28:40 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 27 Jul 2022 08:28:38 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH RESEND v6 2/8] blk-throttle: prevent overflow while
- calculating wait time
-Message-ID: <YuGD1s2TJ9euYpCv@slm.duckdns.org>
-References: <20220701093441.885741-1-yukuai1@huaweicloud.com>
- <20220701093441.885741-3-yukuai1@huaweicloud.com>
+        Wed, 27 Jul 2022 15:05:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFE0BD8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:32:18 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oGlos-0000OO-EA; Wed, 27 Jul 2022 20:31:42 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 54871BC544;
+        Wed, 27 Jul 2022 18:31:34 +0000 (UTC)
+Date:   Wed, 27 Jul 2022 20:31:33 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Tom Rix <trix@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Yufeng Mo <moyufeng@huawei.com>, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH v3 0/9] can: slcan: extend supported features (step 2)
+Message-ID: <20220727183133.2n6b2scaahrnrgws@pengutronix.de>
+References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2qvjhjmgxrqvnzor"
 Content-Disposition: inline
-In-Reply-To: <20220701093441.885741-3-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 05:34:35PM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> In tg_with_in_bps_limit(), 'bps_limit * jiffy_elapsed_rnd' might
-> overflow. FIx the problem by calling mul_u64_u64_div_u64() instead.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Acked-by: Tejun Heo <tj@kernel.org>
+--2qvjhjmgxrqvnzor
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-BTW, have you observed this happening or is it from just reviewing the code?
+On 26.07.2022 23:02:08, Dario Binacchi wrote:
+> With this series I try to finish the task, started with the series [1],
+> of completely removing the dependency of the slcan driver from the
+> userspace slcand/slcan_attach applications.
+>=20
+> The series also contains patches that remove the legacy stuff (slcan_devs,
+> SLCAN_MAGIC, ...) and do some module cleanup.
+>=20
+> The series has been created on top of the patches:
+>=20
+> can: slcan: convert comments to network style comments
+> can: slcan: slcan_init() convert printk(LEVEL ...) to pr_level()
+> can: slcan: fix whitespace issues
+> can: slcan: convert comparison to NULL into !val
+> can: slcan: clean up if/else
+> can: slcan: use scnprintf() as a hardening measure
+> can: slcan: do not report txerr and rxerr during bus-off
+> can: slcan: do not sleep with a spin lock held
+>=20
+> applied to linux-next.
+>=20
+> [1] https://lore.kernel.org/all/20220628163137.413025-1-dario.binacchi@am=
+arulasolutions.com/
+>=20
+> Changes in v3:
+> - Update the commit message.
+> - Use 1 space in front of the =3D.
+> - Put the series as RFC again.
 
-Thanks.
+No need to change the series to RFC again :)
 
--- 
-tejun
+> - Pick up the patch "can: slcan: use KBUILD_MODNAME and define pr_fmt to =
+replace hardcoded names".
+> - Add the patch "ethtool: add support to get/set CAN bit time register"
+>   to the series.
+> - Add the patch "can: slcan: add support to set bit time register (btr)"
+>   to the series.
+> - Replace the link https://marc.info/?l=3Dlinux-can&m=3D165806705927851&w=
+=3D2 with
+>   https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartko=
+pp.net.
+> - Add the `Suggested-by' tag.
+
+Please post a v4 with both BTR patches dropped and add Max Staudt's
+Reviewed-by to patch 3.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--2qvjhjmgxrqvnzor
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLhhIIACgkQrX5LkNig
+012GYggAh6V/9hqrrLehCLoGuydxrDM1rdCB2FyiwWqN+uEYbWoU/uZi5Vzn6ZKI
+VSy0ML7e7/IajaxumfhSyLm+wbHnsU1RjYDAQEyBVyFtd4wF3ThKmyNQQ4g0DHVx
+Rde/d0Jv+aEOedsWyF6AT4SUJk/6tuoXriKt+VIUzg7cPLszkJKe7tiPm1JwAOz3
+MHmI3meaJbJw0usbt0pguj4KbU1/U8V28R4OmE+ZIaQunwc1oQziK68Q/z6QpG4L
+cjd73E2aChtIgbO3Trg2MYEzOlHbSgUsUt6mMsXEm+72jXz+lfPEYBvcOVSwmMMb
+8ThhDpGFZWbbfBeaa3FlW+P/NOYqFQ==
+=s9bc
+-----END PGP SIGNATURE-----
+
+--2qvjhjmgxrqvnzor--

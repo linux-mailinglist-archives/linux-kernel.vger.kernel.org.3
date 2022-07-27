@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66C1583007
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F263582C8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242252AbiG0Rcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S240445AbiG0Qro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242251AbiG0Ra3 (ORCPT
+        with ESMTP id S240114AbiG0Qq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:30:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD74F81B2F;
-        Wed, 27 Jul 2022 09:48:13 -0700 (PDT)
+        Wed, 27 Jul 2022 12:46:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FD552DCA;
+        Wed, 27 Jul 2022 09:31:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2871261479;
-        Wed, 27 Jul 2022 16:47:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C2AC433C1;
-        Wed, 27 Jul 2022 16:47:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52D27B821BC;
+        Wed, 27 Jul 2022 16:31:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 932F8C433C1;
+        Wed, 27 Jul 2022 16:31:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940471;
-        bh=9tCpcYupvaxeRANDUq8GCP66gANHEGG8QwCZcmAUZjA=;
+        s=korg; t=1658939512;
+        bh=UOpROHzo/X7Rd+9/tzUGSTkx8KnfLTdzuVsBE7Rw9Vs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=biiGTC1kaQnp34+WnNnKB/EyJmK9nJodVUdoso4tFv8yZ7hR0U6eGhzs5G/AmM2xn
-         DPfNO6J38mi1h4PDbuXC3aaQonOQq+2KQSeoA7LJIy3JP0ntqiNdRd+yCsotOZJygR
-         y0AbqkIjjzEdsMJlXN0qpuNSuap+kefc5B/Qh8oA=
+        b=sCEzQY2xDafzN0LxhCnJ5AECCpB1gZyZKfBWNI7Ei9SOAIxWfJB6FFHlN3NlKkEkE
+         TOfSzhO8EB5avBk98WJTgOFxwze/EpuA8LwJ/unVXIKtBz39Wz4LNvyoOTo4bJu9Nr
+         IG9an1zLhrF8fgw5LpddcMGxfuNGsS81MeFXw5YU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: [PATCH 5.18 008/158] drm/ttm: fix locking in vmap/vunmap TTM GEM helpers
+        stable@vger.kernel.org, Tedd Ho-Jeong An <tedd.an@intel.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 5.4 79/87] Bluetooth: SCO: Fix sco_send_frame returning skb->len
 Date:   Wed, 27 Jul 2022 18:11:12 +0200
-Message-Id: <20220727161021.764692072@linuxfoundation.org>
+Message-Id: <20220727161012.273423762@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian König <christian.koenig@amd.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit dbd0da2453c694f2f74651834d90fb280b57f151 upstream.
+commit 037ce005af6b8a3e40ee07c6e9266c8997e6a4d6 upstream.
 
-I've stumbled over this while reviewing patches for DMA-buf and it looks
-like we completely messed the locking up here.
+The skb in modified by hci_send_sco which pushes SCO headers thus
+changing skb->len causing sco_sock_sendmsg to fail.
 
-In general most TTM function should only be called while holding the
-appropriate BO resv lock. Without this we could break the internal
-buffer object state here.
-
-Only compile tested!
-
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Fixes: 43676605f890 ("drm/ttm: Add vmap/vunmap to TTM and TTM GEM helpers")
-Cc: stable@vger.kernel.org
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220715111533.467012-1-christian.koenig@amd.com
+Fixes: 0771cbb3b97d ("Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg")
+Tested-by: Tedd Ho-Jeong An <tedd.an@intel.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_gem_ttm_helper.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ net/bluetooth/sco.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/drivers/gpu/drm/drm_gem_ttm_helper.c
-+++ b/drivers/gpu/drm/drm_gem_ttm_helper.c
-@@ -64,8 +64,13 @@ int drm_gem_ttm_vmap(struct drm_gem_obje
- 		     struct iosys_map *map)
+--- a/net/bluetooth/sco.c
++++ b/net/bluetooth/sco.c
+@@ -282,16 +282,17 @@ static int sco_connect(struct hci_dev *h
+ static int sco_send_frame(struct sock *sk, struct sk_buff *skb)
  {
- 	struct ttm_buffer_object *bo = drm_gem_ttm_of_gem(gem);
-+	int ret;
+ 	struct sco_conn *conn = sco_pi(sk)->conn;
++	int len = skb->len;
  
--	return ttm_bo_vmap(bo, map);
-+	dma_resv_lock(gem->resv, NULL);
-+	ret = ttm_bo_vmap(bo, map);
-+	dma_resv_unlock(gem->resv);
+ 	/* Check outgoing MTU */
+-	if (skb->len > conn->mtu)
++	if (len > conn->mtu)
+ 		return -EINVAL;
+ 
+-	BT_DBG("sk %p len %d", sk, skb->len);
++	BT_DBG("sk %p len %d", sk, len);
+ 
+ 	hci_send_sco(conn->hcon, skb);
+ 
+-	return skb->len;
++	return len;
+ }
+ 
+ static void sco_recv_frame(struct sco_conn *conn, struct sk_buff *skb)
+@@ -731,7 +732,8 @@ static int sco_sock_sendmsg(struct socke
+ 		err = -ENOTCONN;
+ 
+ 	release_sock(sk);
+-	if (err)
 +
-+	return ret;
++	if (err < 0)
+ 		kfree_skb(skb);
+ 	return err;
  }
- EXPORT_SYMBOL(drm_gem_ttm_vmap);
- 
-@@ -82,7 +87,9 @@ void drm_gem_ttm_vunmap(struct drm_gem_o
- {
- 	struct ttm_buffer_object *bo = drm_gem_ttm_of_gem(gem);
- 
-+	dma_resv_lock(gem->resv, NULL);
- 	ttm_bo_vunmap(bo, map);
-+	dma_resv_unlock(gem->resv);
- }
- EXPORT_SYMBOL(drm_gem_ttm_vunmap);
- 
 
 

@@ -2,128 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EB1582E75
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE45582EA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241585AbiG0RM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S241586AbiG0RP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241502AbiG0RMK (ORCPT
+        with ESMTP id S241674AbiG0ROL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:12:10 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DCA74E3F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:53 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id d17so25844633lfa.12
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:53 -0700 (PDT)
+        Wed, 27 Jul 2022 13:14:11 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB027754E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:42:33 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id z23so32275903eju.8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:42:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HLLpAzhNV/l0ttpD0m4mlf6L5UXu2Cn5/3KpjyhDTBY=;
-        b=uPUaQqLTpWBsddAvwhB8kXR3XZqpK0bsfMJYxtl6vmn0LIxzSjWbEkXM+1GyWv4q3K
-         0lXRAxsqbWIDmTHN9W9otGvZnmtq6Gi31EciPJxgE8fjh2qUREoJtZEh1xQiYckDq06b
-         RsAcgGnVa7t22jloyDww1FlcS+NSMIoxuplRVXowLQCO7zd4UqWHIJTdos7ONZAPMoQO
-         X8GTSCn5qBzEmzNsHgudvTRUKqbh5UBpG8+/KsiBX1774UKZHSPq9SrIQvAY2SyBGYum
-         lrUgOkkjGsHBhfhQR0ZmWQvSkCw8rH2kUtWhMyPFl6EyINP0S5yN50siJJonzjzCBX5j
-         aA0w==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AcPJOkIHEC0icvBEnpWtnVKxz/BvRtFJOpxpTEHoQRg=;
+        b=dnnAblfbBitvVzSIxg4x60tAPSI8URVjg+EFtGQCO+Egbv95vWxxuJA0seKRUNvCni
+         MH/l2lfP3y3m2n82QniX+RZ7l/z/R/u1/iB5fRHweoFmNcwnKUaQHfBq5L2Tk1oDNYlw
+         q+xyWk2wZadVAhHiWbYj77fvxQHCyW96l9uJ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HLLpAzhNV/l0ttpD0m4mlf6L5UXu2Cn5/3KpjyhDTBY=;
-        b=yaEsHuOedX4oegb1o+t3ufnPacvquUxNmXHYPrtQvvFWwb9uMRFo0g8UZV3ZxCyckZ
-         VvlGrWWRFEkPsYNu8qnvoLAXSq1OCb/kOjO1iVQ/I08EFpSpgveIwNfjlEghRfdnzdEi
-         +0Fb1VGUJo78GKWl8z6hkjLSR7bvMYtwQvBF8HOAjN5V0NSerx0QEgEEd4GugfIvft/3
-         3zbzo8MRqhVERvz70J+MIKEETgFpzoD2s9Mtn3RG5u5Mk+3z/1z1JdqYL0rvBJKmA+tE
-         PwDEkYs/dQg1WWWYZ1am3AtMVKCH53iTcHSApFOeHh11rGx8I7IOh59Z+PNxwXl7t8vd
-         m3qA==
-X-Gm-Message-State: AJIora+y5yhzldNqqwx65RJr5uPaR69fahgFjJdRKttSrP4GTi7sINiZ
-        gF+i6oxa8IcnaBviIOnho6ma/w==
-X-Google-Smtp-Source: AGRyM1uF0dw37mu6pVrn0amas3Oc/3y1uf9T6DdFSISA35nOH4HUEzm1LE/4X3+zt0Kb9+FISznkdw==
-X-Received: by 2002:ac2:4f0a:0:b0:48a:839c:2fe with SMTP id k10-20020ac24f0a000000b0048a839c02femr6823774lfr.40.1658940111411;
-        Wed, 27 Jul 2022 09:41:51 -0700 (PDT)
-Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id z19-20020a056512371300b0048a73a75908sm784409lfr.302.2022.07.27.09.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 09:41:50 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Schocher <hs@denx.de>, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: mtd: microchip,mchp48l640: use spi-peripheral-props.yaml
-Date:   Wed, 27 Jul 2022 18:41:48 +0200
-Message-Id: <20220727164148.385476-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AcPJOkIHEC0icvBEnpWtnVKxz/BvRtFJOpxpTEHoQRg=;
+        b=LTHT4f6C4jZrlo4MyeihkoUp57FkTo7VU5kDdsf5ND+DXvlx/6NJS/Xpl3oeOwVydH
+         jgCzt99QPswd8+7K3d2KXe5ZZt4817k0tm7puRLwc3JMFngmMLnLXwlO1RUdm1fE9YjW
+         90yQMF+VgTCaLg8tzg16g5DVn0vK2mtEYAVSt4tRDAJ4lOVRllHQtEW9xz6t7uDm4PjS
+         J5uPgUVmlKkuYa8fGNem2e8/ztd+AxG0Dpwb7lCa2pOeRfPJFko7bOd4DAf619ljYo8L
+         2Bw6i0oDfn46SvfXtMfspXqxtLnF2WPMVGytavp+E/BaW7NyvtkNmr3ahLtuqWgaHrHl
+         lukg==
+X-Gm-Message-State: AJIora+jfMscaORpr8LT92V0jbUrBXZ8pzmNlTyVi8WAzvDZJ5G+uk5l
+        xg3kK3LDmmMrl3OoaLC9kMnkuD61aCnVEK0X
+X-Google-Smtp-Source: AGRyM1uXCccNlffFijyS17h5gFUVepUDaN652+eRFT87KKwbxXkYyNP+YDIhKqh8rayLbuD35uhY6w==
+X-Received: by 2002:a17:906:9b0a:b0:72b:4f33:b247 with SMTP id eo10-20020a1709069b0a00b0072b4f33b247mr18633962ejc.267.1658940150043;
+        Wed, 27 Jul 2022 09:42:30 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id i21-20020aa7c715000000b0043a6fde6e7bsm10346422edq.19.2022.07.27.09.42.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 09:42:29 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id d8so25226977wrp.6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:42:28 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
+ g16-20020a05600c4ed000b003a33ef3c8d1mr3721170wmq.154.1658940137807; Wed, 27
+ Jul 2022 09:42:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20210929185823.499268-1-alex.popov@linux.com> <d290202d-a72d-0821-9edf-efbecf6f6cef@linux.com>
+ <20210929194924.GA880162@paulmck-ThinkPad-P17-Gen-1> <YVWAPXSzFNbHz6+U@alley>
+ <CAHk-=widOm3FXMPXXK0cVaoFuy3jCk65=5VweLceQCuWdep=Hg@mail.gmail.com> <7c567acd-1cc1-a480-ca5a-d50a9c5a69ef@ispras.ru>
+In-Reply-To: <7c567acd-1cc1-a480-ca5a-d50a9c5a69ef@ispras.ru>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 27 Jul 2022 09:42:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgSyNh2gZTnC-EoiGs5WNtVu99jcHXxLRUvwMabm37iKg@mail.gmail.com>
+Message-ID: <CAHk-=wgSyNh2gZTnC-EoiGs5WNtVu99jcHXxLRUvwMabm37iKg@mail.gmail.com>
+Subject: Re: [PATCH] Introduce the pkill_on_warn boot parameter
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Popov <alex.popov@linux.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Maciej Rozycki <macro@orcam.me.uk>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>, Wei Liu <wl@xen.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jann Horn <jannh@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Garnier <thgarnie@google.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Laura Abbott <labbott@redhat.com>,
+        David S Miller <davem@davemloft.net>,
+        Borislav Petkov <bp@alien8.de>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-hardening@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        notify@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of listing directly properties typical for SPI peripherals,
-reference the spi-peripheral-props.yaml schema.  This allows using all
-properties typical for SPI-connected devices, even these which device
-bindings author did not tried yet.
+On Wed, Jul 27, 2022 at 9:17 AM Alexey Khoroshilov
+<khoroshilov@ispras.ru> wrote:
+>
+> We see a number of cases where WARNING is used to inform userspace that
+> it is doing something wrong, e.g.
+> https://elixir.bootlin.com/linux/v5.19-rc8/source/net/can/j1939/socket.c#L181
+> https://elixir.bootlin.com/linux/v5.19-rc8/source/drivers/video/fbdev/core/fbmem.c#L1023
 
-Remove the spi-* properties which now come via spi-peripheral-props.yaml
-schema, except for the cases when device schema adds some constraints
-like maximum frequency.
+That first case is entirely bogus.
 
-While changing additionalProperties->unevaluatedProperties, put it in
-typical place, just before example DTS.
+WARN_ON() should only be used for "This cannot happen, but if it does,
+I want to know how we got here".
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+But the second case is fine: Using "pr_warn()" is fine. A kernel
+warning (without a backtrace) is a normal thing for something that is
+deprecated or questionable, and you want to tell the user that "this
+app is doing something wrong".
 
----
+So if that j1939 thing is something that can be triggered by a user,
+then the backtrace should be reported to the driver maintainer, and
+then either
 
-Technically, this depends on [1] merged to SPI tree, if we want to
-preserve existing behavior of not allowing SPI CPHA and CPOL in each of
-schemas in this patch.
+ (a) the WARN_ON_ONCE() should just be removed ("ok, this can happen,
+we understand why it can happen, and it's fine")
 
-If this patch comes independently via different tree, the SPI CPHA and
-CPOL will be allowed for brief period of time, before [1] is merged.
-This will not have negative impact, just DT schema checks will be
-loosened for that period.
+ (b) the problem the WARN_ON_ONCE() reports about should be made
+impossible some way
 
-[1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
----
- .../devicetree/bindings/mtd/microchip,mchp48l640.yaml      | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ (c) it might be downgraded to a pr_warn() if people really want to
+tell user space that "guys, you're doing something wrong" and it's
+considered a useful warning.
 
-diff --git a/Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml b/Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml
-index 2cdf6bf3dc4a..8cc2a7ceb5fb 100644
---- a/Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml
-+++ b/Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml
-@@ -22,13 +22,14 @@ properties:
-   reg:
-     maxItems: 1
- 
--  spi-max-frequency: true
--
- required:
-   - compatible
-   - reg
- 
--additionalProperties: false
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+unevaluatedProperties: false
- 
- examples:
-   - |
--- 
-2.34.1
+Honestly, for something like that j1939 can driver, I doubt (c) is
+ever an option. The "return -EBUSY" is the only real information that
+a user needs.
 
+               Linus

@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EFA582836
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF97582838
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiG0OGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S233152AbiG0OHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiG0OF6 (ORCPT
+        with ESMTP id S231266AbiG0OHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:05:58 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E5E5F58;
-        Wed, 27 Jul 2022 07:05:57 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id mh14so12977947qvb.1;
-        Wed, 27 Jul 2022 07:05:57 -0700 (PDT)
+        Wed, 27 Jul 2022 10:07:21 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E01255B2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:07:19 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t17so15024906lfk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:07:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g7sXk1x+mAlIVnjI6mSnBUc3PosDoepD30XFI2Dsmk8=;
-        b=o03vaz9SgZGF20HFejqu8j4uk14t+1+Ntu8f8HX38wHE6fda2DYCQTbuj2RG5re4ll
-         CZAinx0CB9KAOb6xR72buzUfZqho5Vg3XXffxwUrvYdC/lrwabGCRM4bEG4hPe6JEOV/
-         4E4ginhpyjdaE20FIubMwiaPeIRIReKh9QChah53hBBb6g7mVPTbeBdUrwarbtq3PWm8
-         KVqjnJ5zDWt7D4aSLMhLc0kFp6dUvMXmmv6EsPZYsr9wLeUqEfm+xgl+tYaifsP+aiRq
-         NQnIARacSJgYXRzG+qsTuv7W9mxZoEy0MTB4pYDDpg0rz4dlTDOeCWBQj6i4QXqOA3Ji
-         rvJg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pbXRFwb+6mnOqb4qko6w4MUz1iH8dRLuiEYG/yozVuU=;
+        b=poGVkIjHOsIvKU5OvFt21FuMAjEooxE4gTH04sm0jJ7bDQ6SCGqgdCc2jOwDEAaU9W
+         08Mq7crS4yYQkJlGle+naSbCagOYjrJtZu7TtqnAxJgtkkV8eEoithy3pgZZ9rVLkJAf
+         uAA3uk2OfGbt0OKGthKgFxuMl+om4hR0ZqeO9r+v64FAGVfQSRxZMWQz3EtOvM8nAT7u
+         ZaRCLIzrTXbexhh9PTF1eGzlsLvx8ddl6TrySxOJbWcmW6KQ9aUwgs9uvesIx5KAxJKh
+         9okHSFD+OyFvIaI6iAnbUaDDhXJ0pcGcSyP+CiWaUMRFAAe+vk2V/6i4NOUWF5/AetyH
+         vqlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g7sXk1x+mAlIVnjI6mSnBUc3PosDoepD30XFI2Dsmk8=;
-        b=EM25ENfm3w1R6lQIKG384aV7i7j5TSDgWCy2JTjT+dypYQufUuUvUwYuQkNdFnyLHJ
-         UmCyhlgxi8xrUX3tJcUn4kih2Wzwpopn5lLPW9iPqezG5QQn9bkCmnd3Uuju9zFoa4Vg
-         C2l8AQcVe8bnV/FSUcCV8ZAp9I3t448UEKKTKcpelfygd0V5sHibGEI5n/8oOBMQrdk7
-         gY+TWDGo1uE0tQxJfZjZBQlF/5ESKp5xjuHP3hDprvlPzwV49PgnVEB0feiILyPMWiIz
-         58UnZTmTIkiM9xMr7Bmxbrf3HroKaMJRQxQ7GxQcVqsQoxhFuetEQ3+OKqL5k/rMj9pR
-         YGjQ==
-X-Gm-Message-State: AJIora8ixmN+h2SUiipo75XAyPIp50MJwKRqNE0VnTUDUGcgtxsXaRYv
-        dg3F945el6msHmJ5BrYp0gMfq1DD/Ws=
-X-Google-Smtp-Source: AGRyM1vhQ8zosTUVzYGVDlCdLsHQaHX3U9IIZfJxtNNoYlp4pYrpAnjXqd+GZ9j7fGo2+Ke8o74/Qg==
-X-Received: by 2002:a0c:b2d0:0:b0:473:2c19:f1ee with SMTP id d16-20020a0cb2d0000000b004732c19f1eemr19103337qvf.130.1658930756307;
-        Wed, 27 Jul 2022 07:05:56 -0700 (PDT)
-Received: from mimieux.lan ([38.126.102.198])
-        by smtp.gmail.com with ESMTPSA id ci23-20020a05622a261700b0031ed8ef7982sm10829015qtb.22.2022.07.27.07.05.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 07:05:56 -0700 (PDT)
-From:   "=?UTF-8?q?Jo=C3=A3o=20Paulo=20Rechi=20Vita?=" <jprvita@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Jo=C3=A3o=20Paulo=20Rechi=20Vita?= <jprvita@endlessos.org>
-To:     Ard Biesheuvel <ardb@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     linux@endlessos.org,
-        =?UTF-8?q?Jo=C3=A3o=20Paulo=20Rechi=20Vita?= 
-        <jprvita@endlessos.org>, linux-efi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] docs: efi-stub: Fix paths for x86 / arm stubs
-Date:   Wed, 27 Jul 2022 10:05:39 -0400
-Message-Id: <20220727140539.10021-1-jprvita@endlessos.org>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pbXRFwb+6mnOqb4qko6w4MUz1iH8dRLuiEYG/yozVuU=;
+        b=lGgldiOroj8qr82/SqFUbctHf3nmnVjlLdTx6H7QHOSWidjVR+pQVRqVtQW/sp3vqp
+         uwYxcOTNWUDE809Jb7KxiRtwChIV/V4bWg6SwXBbiKbH5nYnRZgvq7B3UeUIDc9eh3nB
+         XqekMkKQF6qhnafj3yNH+Xh05WJ39O/t1YEPZJaDVrqtpE2YjdvsV108mrwmIsH4JAmf
+         Dwr6jFyymPDhu0yx5Px9x6EURVnphoz2iR9816Ehvra04PKOOWXoXiW/Kvu1XUSYaH9i
+         iuTWYbn00CjmzXnBnAuji4xVyY57dFPeE6+6oBTlFOzXgdDtVAb8FfnxvYr8KZWp5OCm
+         kPhA==
+X-Gm-Message-State: AJIora/Ntcl6AgUpuDr8rfFqgCdDmxBGE4+xJKbL+h8cp4AKgpVRJ9kd
+        uqr3BuxIej4f/NUCkIjdSE9XWCKIHTq1BUKCUoknOkeDABYA4w==
+X-Google-Smtp-Source: AGRyM1vX862+bxpk11BK++4y3iu+NiKqfuius4fds95B9RW+xG19y7YW29rzvG0sKDYPMzmjHJ9aFOE14Npknvr91c4=
+X-Received: by 2002:a05:6512:21a7:b0:48a:a06e:1d21 with SMTP id
+ c7-20020a05651221a700b0048aa06e1d21mr3099565lft.494.1658930837575; Wed, 27
+ Jul 2022 07:07:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220715192956.1873315-1-pgonda@google.com> <20220715192956.1873315-10-pgonda@google.com>
+ <20220719154330.wnwnu23gagcya3o7@kamzik> <CAMkAt6rFO6J5heuwocmvb_wstOOwsf9WooXu9iEUOvK0wEDAhw@mail.gmail.com>
+ <20220727135603.ld5torjrn4gatjb4@kamzik>
+In-Reply-To: <20220727135603.ld5torjrn4gatjb4@kamzik>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Wed, 27 Jul 2022 08:07:05 -0600
+Message-ID: <CAMkAt6r9wrDZTxzGJMKV7VQBgjwdM5YouDw-=Ntv1xo+RCoxNw@mail.gmail.com>
+Subject: Re: [RFC V1 08/10] KVM: selftests: Make ucall work with encrypted guests
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marc Orr <marcorr@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,30 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the paths of x86 / arm efi-stub source files.
+On Wed, Jul 27, 2022 at 7:56 AM Andrew Jones <andrew.jones@linux.dev> wrote:
+>
+> On Wed, Jul 27, 2022 at 07:38:29AM -0600, Peter Gonda wrote:
+> > On Tue, Jul 19, 2022 at 9:43 AM Andrew Jones <andrew.jones@linux.dev> wrote:
+> > > I'm not a big fan of mixing the concept of encrypted guests into ucalls. I
+> > > think we should have two types of ucalls, those have a uc pool in memory
+> > > shared with the host and those that don't. Encrypted guests pick the pool
+> > > version.
+> >
+> > Sean suggested this version where encrypted guests and normal guests
+> > used the same ucall macros/functions. I am fine with adding a second
+> > interface for encrypted VM ucall, do you think macros like
+> > ENCRYPTED_GUEST_SYNC, ENCRYPTED_GUEST_ASSERT, and
+> > get_encrypted_ucall() ?
+> >
+>
+> It's fine to add new functionality to ucall in order to keep the
+> interfaces the same, except for initializing with some sort of indication
+> that the "uc pool" version is needed. I just don't like all the references
+> to encrypted guests inside ucall. ucall should implement uc pools without
+> the current motivation for uc pools creeping into its implementation.
 
-Signed-off-by: João Paulo Rechi Vita <jprvita@endlessos.org>
----
- Documentation/admin-guide/efi-stub.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ah that makes sense. So maybe instead of checking for 'if
+(vm->memcrypt.enabled)' I should just add a new field in kvm_vm to
+select for use of the uc pool? Something like kvm_vm.enable_uc_pool?
 
-diff --git a/Documentation/admin-guide/efi-stub.rst b/Documentation/admin-guide/efi-stub.rst
-index 833edb0d0bc4..b24e7c40d832 100644
---- a/Documentation/admin-guide/efi-stub.rst
-+++ b/Documentation/admin-guide/efi-stub.rst
-@@ -7,10 +7,10 @@ as a PE/COFF image, thereby convincing EFI firmware loaders to load
- it as an EFI executable. The code that modifies the bzImage header,
- along with the EFI-specific entry point that the firmware loader
- jumps to are collectively known as the "EFI boot stub", and live in
--arch/x86/boot/header.S and arch/x86/boot/compressed/eboot.c,
-+arch/x86/boot/header.S and drivers/firmware/efi/libstub/x86-stub.c,
- respectively. For ARM the EFI stub is implemented in
- arch/arm/boot/compressed/efi-header.S and
--arch/arm/boot/compressed/efi-stub.c. EFI stub code that is shared
-+drivers/firmware/efi/libstub/arm32-stub.c. EFI stub code that is shared
- between architectures is in drivers/firmware/efi/libstub.
- 
- For arm64, there is no compressed kernel support, so the Image itself
--- 
-2.20.1
-
+Thanks Drew!

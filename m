@@ -2,389 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD8958278D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B228582790
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbiG0NWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S232916AbiG0NXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiG0NWt (ORCPT
+        with ESMTP id S232804AbiG0NW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:22:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEA321E17
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:22:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DFFD616F9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:22:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E1EC433D6;
-        Wed, 27 Jul 2022 13:22:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658928167;
-        bh=F3cV5lPOH1ZiNYSHLYaUKmWDENpqXHCzAQKiSGpp0D0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uFubDy2ZQjUD83zYfZRe8qi3I1k9nl4m3lbA5+a3raHq4NGhGxNVHO+xj8XTIpBAZ
-         pdE6hlOB4SpLwjV9ymYnonLeKSdBVo7bgM4D2jeAs28mcXyt1fNBAlMRx9z8VbktC/
-         +JFB8DplMAGXtJaUR95E67kka9a4hjOkAJG7ZaVc=
-Date:   Wed, 27 Jul 2022 15:22:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiho Chu <jiho.chu@samsung.com>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        yelini.jeong@samsung.com, myungjoo.ham@samsung.com
-Subject: Re: [PATCH 1/9] trinity: Add base driver
-Message-ID: <YuE8JNjIBNdg/kkX@kroah.com>
-References: <20220725065308.2457024-1-jiho.chu@samsung.com>
- <CGME20220725065309epcas1p4565e7bb0fea1aaf3e5e300de00774c2a@epcas1p4.samsung.com>
- <20220725065308.2457024-2-jiho.chu@samsung.com>
+        Wed, 27 Jul 2022 09:22:58 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4862D1FB;
+        Wed, 27 Jul 2022 06:22:57 -0700 (PDT)
+Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 27C74835;
+        Wed, 27 Jul 2022 15:22:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1658928174;
+        bh=eotjNVMAx8QGW06uc3w0MIvKkRtcfjCQLq3gxWF/uIQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Q+e5gl73+JqpP0dYQ4eSjNqjCNe4M4TG2Sjx+O2xlDudTYz/i3tKWrWLtynEldDgO
+         Nwmzb60YTLItlupERg3e/OWkyQwRdzR6t4IoGoK4uI22nQijb75Fof+RwTIL873C7/
+         vlfPQQ8tLDGP1OtT+jfY2n9LJ2C5yvIEYQQF1rVs=
+Message-ID: <83df99ee-1304-121f-97e6-85ca416aef1f@ideasonboard.com>
+Date:   Wed, 27 Jul 2022 16:22:50 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725065308.2457024-2-jiho.chu@samsung.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 8/8] drm/tidss: Enable Dual and Duplicate Modes for OLDI
+Content-Language: en-US
+To:     Aradhya Bhatia <a-bhatia1@ti.com>, Jyri Sarha <jyri.sarha@iki.fi>,
+        Rob Herring <robh+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Darren Etheridge <detheridge@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Krunal Bhargav <k-bhargav@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>
+References: <20220719080845.22122-1-a-bhatia1@ti.com>
+ <20220719080845.22122-9-a-bhatia1@ti.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20220719080845.22122-9-a-bhatia1@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 03:53:00PM +0900, Jiho Chu wrote:
-> It contains the base codes for trinity driver. Minimal codes to load and
-> probe device is provided. The Trinity Family is controlled by the
-> Memory-Mapped Registers, the register addresses and offsets are
-> described. And user api interfaces are presented to control device under
-> ioctl manner.
+Hi,
+
+On 19/07/2022 11:08, Aradhya Bhatia wrote:
+> The AM625 DSS peripheral supports 2 OLDI TXes which can work to enable 2
+> duplicated displays of smaller resolutions or enable a single Dual-Link
+> display with a higher resolution (1920x1200).
 > 
-> Signed-off-by: Jiho Chu <jiho.chu@samsung.com>
-> Signed-off-by: yelini-jeong <yelini.jeong@samsung.com>
-> Signed-off-by: Dongju Chae <dongju.chae@samsung.com>
-> Signed-off-by: Parichay Kapoor <pk.kapoor@samsung.com>
-> Signed-off-by: Wook Song <wook16.song@samsung.com>
-> Signed-off-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Configure the necessary register to enable the different modes.
+> 
+> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
 > ---
->  drivers/misc/Kconfig                        |   1 +
->  drivers/misc/Makefile                       |   1 +
->  drivers/misc/trinity/Kconfig                |  27 ++
->  drivers/misc/trinity/Makefile               |   7 +
->  drivers/misc/trinity/trinity.c              | 369 ++++++++++++++
->  drivers/misc/trinity/trinity_common.h       | 392 +++++++++++++++
->  drivers/misc/trinity/trinity_vision2_drv.c  | 512 ++++++++++++++++++++
->  drivers/misc/trinity/trinity_vision2_regs.h | 210 ++++++++
->  include/uapi/misc/trinity.h                 | 458 +++++++++++++++++
->  9 files changed, 1977 insertions(+)
->  create mode 100644 drivers/misc/trinity/Kconfig
->  create mode 100644 drivers/misc/trinity/Makefile
->  create mode 100644 drivers/misc/trinity/trinity.c
->  create mode 100644 drivers/misc/trinity/trinity_common.h
->  create mode 100644 drivers/misc/trinity/trinity_vision2_drv.c
->  create mode 100644 drivers/misc/trinity/trinity_vision2_regs.h
->  create mode 100644 include/uapi/misc/trinity.h
+>   drivers/gpu/drm/tidss/tidss_dispc.c | 44 +++++++++++++++++++++++++++--
+>   1 file changed, 41 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 41d2bb0ae23a..ad0d5f6af291 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -500,4 +500,5 @@ source "drivers/misc/cardreader/Kconfig"
->  source "drivers/misc/habanalabs/Kconfig"
->  source "drivers/misc/uacce/Kconfig"
->  source "drivers/misc/pvpanic/Kconfig"
-> +source "drivers/misc/trinity/Kconfig"
->  endmenu
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index 70e800e9127f..c63f3fc89780 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -60,3 +60,4 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
->  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
->  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
->  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-> +obj-$(CONFIG_TRINITY)		+= trinity/
-> diff --git a/drivers/misc/trinity/Kconfig b/drivers/misc/trinity/Kconfig
-> new file mode 100644
-> index 000000000000..ad4bab78f7c6
-> --- /dev/null
-> +++ b/drivers/misc/trinity/Kconfig
-> @@ -0,0 +1,27 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
+> index 0b9689453ee8..28cb61259471 100644
+> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
+> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
+> @@ -1021,8 +1021,8 @@ static void dispc_enable_oldi(struct dispc_device *dispc, u32 hw_videoport,
+>   	int count = 0;
+>   
+>   	/*
+> -	 * For the moment DUALMODESYNC, MASTERSLAVE, MODE, and SRC
+> -	 * bits of DISPC_VP_DSS_OLDI_CFG are set statically to 0.
+> +	 * For the moment MASTERSLAVE, and SRC bits of DISPC_VP_DSS_OLDI_CFG are
+> +	 * set statically to 0.
+>   	 */
+>   
+>   	if (fmt->data_width == 24)
+> @@ -1039,7 +1039,45 @@ static void dispc_enable_oldi(struct dispc_device *dispc, u32 hw_videoport,
+>   
+>   	oldi_cfg |= BIT(0); /* ENABLE */
+>   
+> -	dispc_vp_write(dispc, hw_videoport, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +	/*
+> +	 * As per all the current implementations of DSS, the OLDI TXes are present only on
+> +	 * hw_videoport = 0 (OLDI TX 0). However, the config register for 2nd OLDI TX (OLDI TX 1)
+> +	 * is present in the address space of hw_videoport = 1. Hence, using "hw_videoport + 1" to
+> +	 * configure OLDI TX 1.
+> +	 */
 > +
-> +config TRINITY
-> +	bool "Samsung Neural Processing Unit"
-> +	depends on HAS_IOMEM
-> +	depends on HAS_DMA
-> +	default n
-
-The default is 'n', no need to ever say it again.
-
-> +	help
-> +	  Select this option to enable driver support for Samsung
-> +	  Neural Processing Unit (NPU).
+> +	switch (dispc->oldi_mode) {
+> +	case OLDI_MODE_OFF:
+> +		oldi_cfg &= ~BIT(0); /* DISABLE */
+> +		dispc_vp_write(dispc, hw_videoport, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +		dispc_vp_write(dispc, hw_videoport + 1, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +		break;
 > +
-> +	  This driver works as a base driver of the other drivers
-> +	  for Trinity device family.
+> +	case OLDI_SINGLE_LINK_SINGLE_MODE_0:
+> +		dispc_vp_write(dispc, hw_videoport, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +		break;
 > +
-> +	  This option should be enabled to support Trinity
-> +	  Vision 2 (TRIV2), and Trinity Audio (TRIA).
+> +	case OLDI_SINGLE_LINK_SINGLE_MODE_1:
+> +		dispc_vp_write(dispc, hw_videoport + 1, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +		break;
 > +
-> +config TRINITY_VISION2
-> +	tristate "Samsung NPU Trinity Vision 2"
-
-What happened to "vision 1"?
-
-> +	depends on TRINITY
-> +	default n
-> +	help
-> +	  Select this option to enable driver support for a Samsung
-> +	  Neural Processing Unit (NPU), Tinity Vision 2.
+> +	case OLDI_SINGLE_LINK_DUPLICATE_MODE:
+> +		oldi_cfg |= BIT(5); /* DUPLICATE MODE */
+> +		dispc_vp_write(dispc, hw_videoport, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +		dispc_vp_write(dispc, hw_videoport + 1, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +		break;
 > +
-> +	  This driver enables userspace system library to access the
-> +	  device via /dev/triv2-N.
-
-What is the module name?
-
-Where is the userspace library code that talks to this?  Any
-documentation for this interface anywhere?
-
-> +#define BASE_DEV_NAME "trinity"
-
-KBUILD_MODNAME?
-
-> +/* A global lock for shared static variables such as dev_bitmap */
-> +static DEFINE_SPINLOCK(trinity_lock);
-
-That's a sign something is wrong, you should not need any module-wide
-code variables.
-
-> +/* A bitmap to keep track of active Trinity devices */
-> +static unsigned long dev_bitmap[TRINITY_DEV_END];
-
-Should not be needed, use a simple ida structure if you really want to
-name things cleanly.
-
+> +	case OLDI_DUAL_LINK:
+> +		oldi_cfg |= BIT(11); /* DUALMODESYNC */
+> +		dispc_vp_write(dispc, hw_videoport, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +		dispc_vp_write(dispc, hw_videoport + 1, DISPC_VP_DSS_OLDI_CFG, oldi_cfg);
+> +		break;
 > +
-> +/**
-> + * trinity_release() - A common callback for close() in file_operations for a
-> + *		Trinity	device node. If there are device-specific data to be
-> + *		cleaned-up, it is required to clean them up before invoke this
-> + *		callback.
-> + *
-> + * @inode: Inode to be closed
-> + * @file: File to be closed
-> + *
-> + * Returns 0 on success. Otherwise, returns negative error.
-> + */
-> +int trinity_release(struct inode *inode, struct file *file)
-> +{
-> +	struct trinity_driver *drv;
-> +
-> +	drv = file->private_data;
-> +
-> +	if (drv->verbose)
-> +		dev_info(drv_to_dev_ptr(drv), "%s\n", "Device closed");
-> +
-> +	mutex_lock(&drv->lock);
-> +	drv->opened = drv->opened - 1;
-
-That will never work, you can't keep track of open/close calls.
-
-> +	if (drv->opened == 0) {
-> +		/* wait already submitted requests */
-> +		if (drv->desc->drain_reqs)
-> +			drv->desc->drain_reqs(drv);
-> +
-> +		drv->desc->set_state(drv, TRINITY_STATE_PAUSE);
-> +	}
-> +	mutex_unlock(&drv->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static bool trinity_is_empty(void)
-> +{
-> +	enum trinity_dev_type type;
-> +	bool empty = true;
-> +
-> +	spin_lock(&trinity_lock);
-> +	for (type = TRINITY_DEV_UNKNOWN, type++; type < TRINITY_DEV_END;
-> +	     type++) {
-> +		if (find_first_bit(&dev_bitmap[type], TRINITY_DEV_EACH_MAX) !=
-> +		    TRINITY_DEV_EACH_MAX) {
-> +			empty = false;
-> +			break;
-> +		}
-> +	}
-> +	spin_unlock(&trinity_lock);
-> +
-> +	return empty;
-> +}
-> +
-> +/**
-> + * trinity_wait_ready() - Wait until trinity is ready state
-> + *
-> + * @drv: an instance of trinity driver
-> + *
-> + * Returns 0 on success. Otherwise, returns negative error.
-> + */
-> +int trinity_wait_ready(struct trinity_driver *drv)
-> +{
-> +	const unsigned long time_out = HZ / 100UL; /* 1/100 seconds*/
-> +	const unsigned int max_retry = 10;
-> +	unsigned int retry = 0;
-> +	wait_queue_head_t wq;
-> +
-> +	drv->desc->set_state(drv, TRINITY_STATE_READY);
-> +
-> +	init_waitqueue_head(&wq);
-> +	/* try to ensure that NPU is in the ready state */
-> +	while (wait_event_timeout(
-> +		       wq, drv->desc->get_state(drv) == TRINITY_STATE_READY,
-> +		       time_out) == 0) {
-> +		/* regarded as failure */
-> +		if (retry == max_retry)
-> +			return -ETIMEDOUT;
-> +		retry++;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * trinity_open() - A common callback for open() in file_operations for a Trinity
-> + *		device node. If device-specific open() is required, this
-> + *		callback should be invoked by that open().
-> + *
-> + * @inode: inode to be opened
-> + * @f: file to be opened
-> + *
-> + * Returns 0 on success. Otherwise, returns negative error.
-> + */
-> +int trinity_open(struct inode *inode, struct file *f)
-> +{
-> +	struct miscdevice *miscdev;
-> +	struct trinity_driver *drv;
-> +	int ret = 0;
-> +
-> +	miscdev = (struct miscdevice *)f->private_data;
-
-Why the cast?
-
-> +	drv = container_of(miscdev, struct trinity_driver, mdev);
-> +	f->private_data = drv;
-> +
-> +	mutex_lock(&drv->lock);
-> +	/** remove PAUSE set on the CP of the NPU */
-> +	if (drv->opened == 0) {
-> +		ret = trinity_wait_ready(drv);
-> +		if (ret != 0)
-> +			goto out;
-> +	}
-> +	drv->opened = drv->opened + 1;
-
-Again, trying to keep track of open/close calls will never work.  Just
-let the vfs handle that for you (you will note it does that already).
-Your driver should never need to worry about it.
-
-
-> +
-> +	if (drv->verbose)
-> +		dev_info(drv_to_dev_ptr(drv), "%s\n", "Device opened");
-> +
-> +out:
-> +	mutex_unlock(&drv->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static void trinity_common_init(struct device *dev)
-> +{
-> +	if (!trinity_is_empty())
+> +	default:
+> +		dev_warn(dispc->dev, "%s: Incorrect oldi mode. Returning.\n",
+> +			 __func__);
 > +		return;
-> +
-> +	/* Common init codes */
-> +}
-
-Missing something?
-
-
-> +
-> +static void trinity_common_exit(void)
-> +{
-> +	if (!trinity_is_empty())
-> +		return;
-> +
-> +	/* Common deinit codes */
-> +}
-> +
-
-Don't provide empty functions that do nothing please.
-
-> +static int trinity_set_device_id(struct trinity_driver *drv)
-> +{
-> +	const struct trinity_desc *desc = drv->desc;
-> +	struct device *dev = drv_to_dev_ptr(drv);
-> +	int err = -EEXIST;
-> +
-> +	spin_lock(&trinity_lock);
-> +	drv->dev_id =
-> +		find_first_zero_bit(&dev_bitmap[dev->id], TRINITY_DEV_EACH_MAX);
-
-Again, use an ida structure please.
-
-> +	if (drv->dev_id < TRINITY_DEV_EACH_MAX) {
-> +		set_bit(drv->dev_id, &dev_bitmap[dev->id]);
-> +		err = 0;
 > +	}
-> +	spin_unlock(&trinity_lock);
-> +
-> +	if (err == 0) {
-> +		drv->name = devm_kasprintf(dev, GFP_KERNEL, "%s-%u", desc->type,
-> +					   drv->dev_id);
-> +		err = IS_ERR_OR_NULL(drv->name) ? -ENOMEM : 0;
+>   
+>   	while (!(oldi_reset_bit & dispc_read(dispc, DSS_SYSSTATUS)) &&
+>   	       count < 10000)
 
-Spell out if statements, this just makes things hard to read.  And you
-just leaked a "bit" if this failed, so are you sure this was ever
-tested?
+This feels a bit hacky:
 
+- The function is dispc_enable_oldi, but the above code also disables 
+oldi. We have code in dispc_vp_unprepare() which disables OLDI at the 
+moment.
 
+- The function takes hw_videoport as a parameter, and is designed to 
+work on that videoport. The above operates on two videoports. Isn't the 
+function also called for hw_videoport +1, which would result in reg 
+writes to hw_videoport + 2?
 
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +int trinity_create_node(struct trinity_driver *drv)
-> +{
-> +	struct device *dev = drv_to_dev_ptr(drv);
-> +	int err;
-> +
-> +	/** register as a misc device */
-> +	drv->mdev.minor = MISC_DYNAMIC_MINOR;
-> +	drv->mdev.parent = NULL;
+- No matching code in dispc_vp_unprepare
 
-No parent device?  Why not?  What bus does this device live on?  This is
-a platform device lower on in this code, please use that, don't just
-hang out there at the top of the device tree.
+Obviously the duplicate mode (I presume that's "cloning") and the dual 
+link complicate things here, and I have to say I haven't worked with 
+such setups. But I think somehow this should be restructured so that 
+common configuration (common to the OLDIs) is done somewhere else.
 
+I would guess that there are other drivers that support cloning and dual 
+mode. Did you have a look how they handle things?
 
-> +	drv->mdev.name = drv->name;
-> +
-> +	err = misc_register(&drv->mdev);
-> +	if (err < 0)
-> +		dev_err(dev, "failed to register as a misc device");
-> +	else
-> +		dev_info(dev, "misc device created!");
-
-Again, drivers are quiet if all goes well.
-
-I stopped here.
-
-Also, please remove the layers of abstraction you have in your
-structures that you never use, but yet still define in this patch for
-some reason...
-
-thanks,
-
-greg k-h
+  Tomi

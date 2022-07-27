@@ -2,110 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D0358212E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FEC7582141
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiG0HgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
+        id S230390AbiG0Hhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiG0HgX (ORCPT
+        with ESMTP id S229680AbiG0Hhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:36:23 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5017F21278
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:36:22 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id l3so12722962qkl.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:36:22 -0700 (PDT)
+        Wed, 27 Jul 2022 03:37:37 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27D63B950;
+        Wed, 27 Jul 2022 00:37:36 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id y9so12106192qtv.5;
+        Wed, 27 Jul 2022 00:37:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=streamunlimited.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rO4phdManN60SPf1W9WiyPdt9raYFpN1OI/PcK1NnQ0=;
-        b=uf7lDkpVYO56NWMPL08t3bV7ykOUYmDaRNEf57tqkkhLMFpNUwzcla0Lokoe8tkjv6
-         GY7TYiWRZHqk7bMBMb76LrdFBYz0PHG29omXVyfilS5Kj7k2Y34QjUeFMx9v5Rx6hD86
-         OatRJqn2LPFVr9JyH10I7+SY5t911D/Yjk6Sc=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7wBtopi5nrrnF3/tK6d3mUXKRzW2T+DIHWRi/Z/g55U=;
+        b=JrXv07SnypKXIiO9c1hDaO1ve2XFoCQh3YJA9N0xzJ8VKdcy+NOWbVByEfE93yA1bT
+         Tl79vU21bY1Riyh5vdmQjiXNRM6Y+lisVzjlFGA12N5TkfsJVvBTZVM+DXhLMCRLgtAT
+         CWazI0B5gaYgTPfT/LBhBjVu7eM5hrdl/RUhg4FDmsUWR19oAbFy6HoE9edFHPyenD8T
+         Qf2WPKI/e5SPnIeUMPrpopEK3VVMRKkcz81I6LE01vsC+va5BFGobzRlWIltgg+x4gCQ
+         EHVJv70L2zauSaiZEF5yiD6RME26xNIBHXc93G+wfeZxZyIdgW4ZKl6QFkorqrFDfTKD
+         6LhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rO4phdManN60SPf1W9WiyPdt9raYFpN1OI/PcK1NnQ0=;
-        b=FrPTfO7oI8wv5FilmgdG60e2rKeF/ueZAgcHYyfHav6A6GTj7BN3PsN56io5iMIQPM
-         Sm7Z3FJ3EWE9nLrVCa6b/e7GJYssEKE2MTk9xqwf8BA9XNL9syUNbrXMg609xQpmpOxN
-         phDkQ3djaSGcyVlZYQVJp2MzwsL2/oMIF5irA4UR9dDIYLfn8aX83LtHsxFims+3S78r
-         1rRvIQO42gyCfJiF+j2SdJ9eIzsm9v5CtLZEU/POYCkZYjgO3Y1SNuwqV/Qf7AMcdoKm
-         2OISNzvLaXPl0JZERKBpwtNnRxbqL9gdK+hx9PWXij13tz5F3lr7n8uIi9kLiwvxZ8HN
-         BH6A==
-X-Gm-Message-State: AJIora8A5yVcr7cLaTmZuqP+jGsXqi9Zfi72r/Y3KUmiH43G/JcbsCr9
-        cI45+thJwHTm+mbPJlWm+xIxWg==
-X-Google-Smtp-Source: AGRyM1tTVXmc9JrwYNXN2698PGpq5P5gj2i9zaPSZqNDeI8sJMebG7pGAmT8yx65QQjJq/P/t8m5dQ==
-X-Received: by 2002:a05:620a:2552:b0:6b4:8dbf:8992 with SMTP id s18-20020a05620a255200b006b48dbf8992mr15785127qko.109.1658907381478;
-        Wed, 27 Jul 2022 00:36:21 -0700 (PDT)
-Received: from localhost.localdomain (vpn.streamunlimited.com. [91.114.0.140])
-        by smtp.gmail.com with ESMTPSA id x22-20020ac86b56000000b0031f4007dd92sm2709526qts.89.2022.07.27.00.36.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 00:36:21 -0700 (PDT)
-From:   Peter Suti <peter.suti@streamunlimited.com>
-To:     chuansheng.liu@intel.com, dan.carpenter@oracle.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Peter Suti <peter.suti@streamunlimited.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] staging: fbtft: core: set smem_len before fb_deferred_io_init call
-Date:   Wed, 27 Jul 2022 09:35:50 +0200
-Message-Id: <20220727073550.1491126-1-peter.suti@streamunlimited.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <YuDlfLeossnntH/C@kroah.com>
-References: <YuDlfLeossnntH/C@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7wBtopi5nrrnF3/tK6d3mUXKRzW2T+DIHWRi/Z/g55U=;
+        b=6Jat2MyN2X/bCcy4KChsFEgToktjw+TM2nIp1GsWV6ZzmD6Rvuyrj1WVCZLEay7Yy8
+         q74Yij3pzdIaz/b3Dx1814Y7F7SZ4G/HV33u1NUwo1HFCib9KKUGzmTEDTFzeUjfU0Bs
+         QX31Xn8Ix8XeXydaf8AcdSF3TvwfwPs2BaLCmimOEG8poqkdfChiJgGU3sbSMzaEOAPp
+         tjrZy4no79UXKPkp/eBai9E81Hw5Bzcf2HNvuOYOYl0cPXcPSChnTM9IDK5Jn7McZXoP
+         xHO/bCA9YNSGqGzehOVJ5hVsFJnBC1xruUQWUOhNGDVuRflhxLBmPlRaFHVf97VUhQHe
+         GsuA==
+X-Gm-Message-State: AJIora+ycXd0R3vO91GJKaKDVU9HJPaB0TnRR6u89peGwkCT5WgXMS1m
+        XRVpcxeT3Rf2n10XEOj8napxn7O9AWFngkOo0UeP0b2UjH0=
+X-Google-Smtp-Source: AGRyM1sXpKQZrYG0IbOgoxNKanSErlzr5LcY9lrHn4FGhRFmisG96yuJDLZQZGtegCOB6F8ydUZqqM5XWqwFIZtxfFQ=
+X-Received: by 2002:a05:622a:6098:b0:2f0:f0d2:b5f0 with SMTP id
+ hf24-20020a05622a609800b002f0f0d2b5f0mr17361865qtb.583.1658907456035; Wed, 27
+ Jul 2022 00:37:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-12-peterwu.pub@gmail.com>
+ <CAHp75VewxvEDGoPdRBvLSLQOQ6OZzVft1ce3DkF7MK_O1VXZkQ@mail.gmail.com>
+ <CABtFH5+im7=vyKLUqztYeAX81e7ETFc+9o7y0seg2pxH0PEnUQ@mail.gmail.com> <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
+In-Reply-To: <CAHp75Vd4ApTju2LCCHQ1skgOjttwWo5b2NF3u+zbGyVnnFKNhA@mail.gmail.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Wed, 27 Jul 2022 15:36:59 +0800
+Message-ID: <CABtFH5+bQx5ym5jOzCPJWbZ23WtGYYwS7cMRt2g3ipEEqTb3JA@mail.gmail.com>
+Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
+ sink type LED Indicator support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fbtft_framebuffer_alloc() calls fb_deferred_io_init() before
-initializing info->fix.smem_len.  It is set to zero by the
-framebuffer_alloc() function.  It will trigger a WARN_ON() at the
-start of fb_deferred_io_init() and the function will not do anything.
+On Tue, Jul 26, 2022 at 8:18 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 
-Fixes: 856082f021a2 ("fbdev: defio: fix the pagelist corruption")
+...
 
-Signed-off-by: Peter Suti <peter.suti@streamunlimited.com>
----
- V2 -> V3: Add patch changelog 
- V1 -> V2: Change commit message and base on top of linux-next
+> > Just for saving memory space.
+> > Because these led_classdevs do not be used at the same time.
+> > Or do you think it would be better to rewrite it as follows?
+> > -------------------------------------------------------------------------------------
+> > struct mt6370_led {
+> >        struct led_classdev isink;
+> >        struct led_classdev_mc mc;
+> >        struct mt6370_priv *priv;
+> >        u32 default_state;
+> >        u32 index;
+> > };
+> > -------------------------------------------------------------------------------------
+>
+> You obviously didn't get what I'm talking about...
+> Each union to work properly should have an associated variable that
+> holds the information of which field of the union is in use. Do you
+> have such a variable? If not, how does your code know which one to
+> use? If yes, add a proper comment there.
+>
 
- drivers/staging/fbtft/fbtft-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ummm... from my understanding,
+if the colors of these four LEDs are set to 'LED_COLOR_ID_RGB' or
+'LED_COLOR_ID_MULTI' in DT,
+their 'led->index' will be set to 'MT6370_VIRTUAL_MULTICOLOR' in
+'mt6370_leds_probe()'.
+If so, these led devices will be set as 'struct led_classdev_mc' and
+use related ops functions in 'mt6370_init_led_properties()'.
+Instead, they whose 'led->index' is not 'MT6370_VIRTUAL_MULTICOLOR'
+will be set as 'struct led_classdev'.
+So, maybe the member 'index' of the 'struct mt6370_led' is what you
+describe the information of which field of the union is in use?
+I will add the proper comment here to describe this thing. I'm so
+sorry for misunderstanding your mean last time.
+Thanks again for your review.
 
-diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
-index 9b3eaed80cdd..afaba94d1d1c 100644
---- a/drivers/staging/fbtft/fbtft-core.c
-+++ b/drivers/staging/fbtft/fbtft-core.c
-@@ -654,7 +654,6 @@ struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
- 	fbdefio->delay =            HZ / fps;
- 	fbdefio->sort_pagereflist = true;
- 	fbdefio->deferred_io =      fbtft_deferred_io;
--	fb_deferred_io_init(info);
- 
- 	snprintf(info->fix.id, sizeof(info->fix.id), "%s", dev->driver->name);
- 	info->fix.type =           FB_TYPE_PACKED_PIXELS;
-@@ -665,6 +664,7 @@ struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
- 	info->fix.line_length =    width * bpp / 8;
- 	info->fix.accel =          FB_ACCEL_NONE;
- 	info->fix.smem_len =       vmem_size;
-+	fb_deferred_io_init(info);
- 
- 	info->var.rotate =         pdata->rotate;
- 	info->var.xres =           width;
 -- 
-2.25.1
-
+Best Regards,
+ChiaEn Wu

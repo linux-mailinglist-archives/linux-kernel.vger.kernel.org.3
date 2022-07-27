@@ -2,125 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB2C582BF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95723582BED
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239283AbiG0QkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
+        id S239355AbiG0QkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239463AbiG0QjQ (ORCPT
+        with ESMTP id S239526AbiG0QjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:39:16 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3035926A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1658939322;
-        bh=Iwt8WdYsuC5jK4JTIRtEaA1Ad9D4kr5a9YoeDI0+3FU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ggUT3csrm6pEJ5Wmol1fudCE/EKG7wqnSEXfikmrzN+PId1w+FCAFt1KI5jXx5vR4
-         EQZyhh27swq4ZjBoxFDDvhO+wRGLrlculT22SI0eE9uJGohhNj36eaiR7l3vP3UqnI
-         kQtnSlTbcHEX26UpQspAh35ZnYqaKnIyHzJEXjN0=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 0E74266986;
-        Wed, 27 Jul 2022 12:28:40 -0400 (EDT)
-Message-ID: <99733532831377ab6585d43ee40bf314a2d4c5a3.camel@xry111.site>
-Subject: [PATCH 3/5] LoongArch: Support relocation against
- _GLOBAL_OFFSET_TABLE_
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     loongarch@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 28 Jul 2022 00:28:39 +0800
-In-Reply-To: <385f63bcbee8e37c42f479ce9cdc7e7d731d419b.camel@xry111.site>
-References: <385f63bcbee8e37c42f479ce9cdc7e7d731d419b.camel@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
+        Wed, 27 Jul 2022 12:39:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC275A2F7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:28:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7CCCB821C8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:28:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86838C433D7;
+        Wed, 27 Jul 2022 16:28:49 +0000 (UTC)
+Date:   Wed, 27 Jul 2022 12:28:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Li Qiong <liqiong@nfschina.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        yuzhe@nfschina.com, renyu@nfschina.com, jiaming@nfschina.com
+Subject: Re: [PATCH] tracing: Do PTR_ERR() after IS_ERR()
+Message-ID: <20220727122847.6b00e29d@rorschach.local.home>
+In-Reply-To: <20220727153519.6697-1-liqiong@nfschina.com>
+References: <20220727153519.6697-1-liqiong@nfschina.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the stack-based relocations, the assembler emits three relocations
-to push the PC-relative offset of a GOT entry:
+On Wed, 27 Jul 2022 23:35:19 +0800
+Li Qiong <liqiong@nfschina.com> wrote:
 
-    R_LARCH_SOP_PUSH_PCREL _GLOBAL_OFFSET_TABLE_
-    R_LARCH_SOP_PUSH_GPREL foo
-    R_LARCH_SOP_ADD
+> Check IS_ERR() firstly, then do PTR_ERR().
 
-"_GLOBAL_OFFSET_TABLE_" does not really exist in the symtab and the BFD
-linker handles it with special hack.  Implement a similar hack for
-kernel so we will be able to really use R_LARCH_SOP_PUSH_GPREL
-relocation.
+Why?
 
-Signed-off-by: Xi Ruoyao <xry111@xry111.site>
----
- arch/loongarch/kernel/module-sections.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+The code is fine as is.
 
-diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kerne=
-l/module-sections.c
-index 509c0b86b1e9..73976addbf60 100644
---- a/arch/loongarch/kernel/module-sections.c
-+++ b/arch/loongarch/kernel/module-sections.c
-@@ -89,6 +89,9 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *s=
-echdrs,
- 			      char *secstrings, struct module *mod)
- {
- 	unsigned int i, num_plts =3D 0, num_gots =3D 0;
-+	Elf_Shdr *symtab =3D NULL;
-+	Elf_Sym *symbols;
-+	char *strings;
-=20
- 	/*
- 	 * Find the empty .plt sections.
-@@ -100,6 +103,8 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr =
-*sechdrs,
- 			mod->arch.plt_idx.shdr =3D sechdrs + i;
- 		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".got"))
- 			mod->arch.got.shdr =3D sechdrs + i;
-+		else if (sechdrs[i].sh_type =3D=3D SHT_SYMTAB)
-+			symtab =3D sechdrs + i;
- 	}
-=20
- 	if (!mod->arch.plt.shdr) {
-@@ -115,6 +120,22 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr=
- *sechdrs,
- 		return -ENOEXEC;
- 	}
-=20
-+	if (!symtab) {
-+		pr_err("%s: module symbol table missing\n", mod->name);
-+		return -ENOEXEC;
-+	}
-+
-+	symbols =3D (void *) ehdr + symtab->sh_offset;
-+	strings =3D (void *) ehdr + sechdrs[symtab->sh_link].sh_offset;
-+
-+	for (i =3D 0; i < symtab->sh_size / sizeof(Elf_Sym); i++)
-+		if (symbols[i].st_shndx =3D=3D SHN_UNDEF &&
-+		    strcmp(strings + symbols[i].st_name,
-+			   "_GLOBAL_OFFSET_TABLE_") =3D=3D 0) {
-+			symbols[i].st_shndx =3D mod->arch.got.shdr - sechdrs;
-+			symbols[i].st_value =3D 0;
-+		}
-+
- 	/* Calculate the maxinum number of entries */
- 	for (i =3D 0; i < ehdr->e_shnum; i++) {
- 		int num_rela =3D sechdrs[i].sh_size / sizeof(Elf_Rela);
---=20
-2.37.0
-
+-- Steve
 

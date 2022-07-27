@@ -2,86 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D8D583285
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A77583289
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236275AbiG0S4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
+        id S231987AbiG0S4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbiG0Sz4 (ORCPT
+        with ESMTP id S234475AbiG0S4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:55:56 -0400
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1958127B27;
-        Wed, 27 Jul 2022 10:55:56 -0700 (PDT)
-Received: by mail-pg1-f169.google.com with SMTP id bf13so16495252pgb.11;
-        Wed, 27 Jul 2022 10:55:56 -0700 (PDT)
+        Wed, 27 Jul 2022 14:56:00 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E403053D26;
+        Wed, 27 Jul 2022 10:56:02 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id b22so178835plz.9;
+        Wed, 27 Jul 2022 10:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc;
+        bh=FNJqWOgunTysXo2x6MYgmJbijH0daSpLu5NGEZRQviE=;
+        b=A/u3Wjgc6Pq6XfpcsLe9ZPc/0GNdFxt8A6JJ8VmjPhGMKdLSNN0EOiS3dWtui4azMj
+         jn+/Al0U4PLfPbF/zMf5d86WrI52ysytboMjjFBBeB648qMEb8Aqz+lZbCbQyc57iKpo
+         oKudOAu9TkIAt9p86u7HAMxUvTwWdKk1L1IUsue7nMeXmd15oOllnyTw3zhykckM7Y+U
+         FIJSVm1SxY6FrxyjbHs06eOwTeYNwwU5vX0hJdD170g4TLSKUb2BEfS6OdC0gHLwKLNE
+         qnf4v73uF3y43EfbJUa8wb/VLBO59ynVFHOdiixIpZXo/amlH+T+In2IblGizPkTzNh+
+         MXkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7qxn+JNDvcIG+lyVki0RgRQJyk3Tl2RlS02Rp/s2JCk=;
-        b=K8JHfvN1G1QdSYLrl6zoAGa+extXSsGu2FKZfLze/LAUbCYFWdrUoIp1/6Xb3BJmKk
-         IJdqzVeTzE1v+S2l2DiQrqL07lZdwjnS+N7ZwPkFBsVwe+Nw40kzwowZeLiISkakyvOM
-         LdHjqrJMcfDsMBJIxcHUaIM0Uto/pgHUisL5Uu47ewua4qBAhpNxq9M7puP1erpOcW+3
-         pfUhc0/ZZecn2dnDckWKTJmIYifvY74LWroQjAcFSwmuFpB+qOhess1jrR4aucWxWHkF
-         ZX0Of0FO3OFxAVIQ+DYQPGvfaC4tdqLuLdHcekDS1tg9NTJkLmqmPhWjFSLzGb+TQcFw
-         2/Sw==
-X-Gm-Message-State: AJIora8y1tefT7wgAFugzd9T5EswFf8Nrm2LfBFYCJqebIxiB35nYP4j
-        gRTT2d2dgSTxmK5RPDvLcHU=
-X-Google-Smtp-Source: AGRyM1tO2NHQPOkTbEkiTtiX+GPr//1Bgn2ydfjx67gqokU31MXnafLgfUyNg7YxYZECA4U2oJYiCQ==
-X-Received: by 2002:a63:c5:0:b0:40d:d290:24ef with SMTP id 188-20020a6300c5000000b0040dd29024efmr16467841pga.141.1658944555427;
-        Wed, 27 Jul 2022 10:55:55 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:a84e:2ec1:1b57:b033? ([2620:15c:211:201:a84e:2ec1:1b57:b033])
-        by smtp.gmail.com with ESMTPSA id mj1-20020a17090b368100b001f310564e8bsm1480908pjb.30.2022.07.27.10.55.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 10:55:54 -0700 (PDT)
-Message-ID: <b8ecd9ce-35b7-276d-b028-2d8a4a900945@acm.org>
-Date:   Wed, 27 Jul 2022 10:55:51 -0700
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc;
+        bh=FNJqWOgunTysXo2x6MYgmJbijH0daSpLu5NGEZRQviE=;
+        b=Px/LucuhAfcFZE3AAu2h8J9FCVRnJ+LQmq4zVSURZ/G6W9daOTWO8tlqPKozW7clHg
+         nSWDzpVqbAW6iS2ztDiaG2JpcN6NHGmCB+J0gwl4D8TqCTBCVck5+cy9OtxaTDCmv7LO
+         z/jfrefipCphBgFe76TnRGIjxKx4GAAOuCkRXZiLdSfEddaTHO3hYe3ij1NrGDxUceSr
+         ZSbRAnDbRwkzxA56RMxnpydLb4qXBcRFA89c0/vKiL2HWHNamN4RJmML13CbFK6ro4E+
+         VT2TevF7ejOftXpTko2QOwNS3Ds9vyWNzb6NkrlNV4cE3BEmB4sThC7Gw/yeTFgaAH7v
+         oz5Q==
+X-Gm-Message-State: AJIora9SmmgU5LJ2HqRCB4bMgU23Pok0AtiRvwaQeEtinT0q21DoOXcQ
+        BNuT7QqfqeitjQFyLW26WLk=
+X-Google-Smtp-Source: AGRyM1vtw0uIJ2M7Ps/ai2eBKkXMxcto+mK+opMvLe2CBHf2/mbesFYUsC65FJyktEAbZTHaPPV2sQ==
+X-Received: by 2002:a17:903:2281:b0:16d:614a:63a0 with SMTP id b1-20020a170903228100b0016d614a63a0mr18846955plh.140.1658944561122;
+        Wed, 27 Jul 2022 10:56:01 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:5a55])
+        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b0016d01c133e1sm6882006plk.248.2022.07.27.10.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 10:55:59 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 27 Jul 2022 07:55:58 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Dmitry Shmidt <dimitrysh@google.com>,
+        Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org
+Subject: Re: [PATCH cgroup/for-5.20] cgroup: remove "no" prefixed mount
+ options options
+Message-ID: <YuF8LrDcd9tpYLnX@slm.duckdns.org>
+References: <YtDvN0wJ6CKaEPN8@slm.duckdns.org>
+ <YtDvU4jRPSsarcNp@slm.duckdns.org>
+ <20220726143246.GA23794@blackbody.suse.cz>
+ <YuBIACfZDk72yjI3@slm.duckdns.org>
+ <YuB5ICv3bXsy5Xuh@slm.duckdns.org>
+ <YuB9QXapVUy1t8TZ@slm.duckdns.org>
+ <20220727092715.GA1569@blackbody.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/5] scsi: ufs: ufs-mediatek: Remove redundant header
- files
-Content-Language: en-US
-To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
-Cc:     peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
-        alice.chao@mediatek.com, powen.kao@mediatek.com,
-        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, eddie.huang@mediatek.com,
-        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
-References: <20220727034454.31892-1-stanley.chu@mediatek.com>
- <20220727034454.31892-2-stanley.chu@mediatek.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220727034454.31892-2-stanley.chu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220727092715.GA1569@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 20:44, Stanley Chu wrote:
-> Remove redundant header files like
-> <linux/sched/clock.h>
+On Wed, Jul 27, 2022 at 11:27:15AM +0200, Michal Koutný wrote:
+> On Tue, Jul 26, 2022 at 01:48:17PM -1000, Tejun Heo <tj@kernel.org> wrote:
+> Thanks.
 > 
-> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
-> Change-Id: I7796a23a5fdc767a4d00475b399844ceeaded0a8
+> > While a bit confusing, given that there is a way to turn off the options,
+> > there's no reason to have the explicit "no" prefixed options. Let's remove
+> > them.
+> 
+> This is sensible...
+> 
+> >  Documentation/admin-guide/cgroup-v2.rst |    8 ++++----
+> >  kernel/cgroup/cgroup.c                  |   24 ++++--------------------
+> >  2 files changed, 8 insertions(+), 24 deletions(-)
+> 
+> ...and cleaner.
 
-Please leave out Change-Id tags from patches that are sent upstream.
+Alright, applied to cgroup/for-5.20.
 
-Otherwise this patch looks good to me.
+Thanks.
 
-Thanks,
-
-Bart.
+-- 
+tejun

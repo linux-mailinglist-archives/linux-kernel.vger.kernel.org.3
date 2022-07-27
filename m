@@ -2,146 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33AA58342C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 22:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E040583433
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 22:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbiG0Ul7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 16:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        id S234067AbiG0UoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 16:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiG0Ul5 (ORCPT
+        with ESMTP id S229924AbiG0UoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 16:41:57 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E4450057
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658954516; x=1690490516;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cBy4FodWZnHqf7//8vQ019DMO0qEwapi7UZ8kTuLDBw=;
-  b=HaXDrOFC96aa/X8M16axR2fWZR3Ldh9ztgflpEbTUHeqybugaKuJszxo
-   rS0+yGSxi3h3h9YyRGkwvByq0pkk98lJhccjwidcLEsvVoApuWqG0JeDf
-   xN+WBRfpUIxCKr53DsHtVA1meKlXzwakPJjMfW8NTnsupTEDuFo/Hcf/n
-   iRVnnDc71iT82P0UFRx4bhTvuTvo1ODqbG8Ws1iyY7yAxmM9hdlBOwhxv
-   /rfY8tacypxnYsuxS7JbeF0178cgfiH81MFE9U3u513P1yzfQw7yFmMJI
-   8hhfol7da5hD5lEMgiltmUB0r3HNgGMLNI1tcDI0icHouK+gLWe3FNeHS
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="268726240"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="268726240"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 13:41:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="550993499"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Jul 2022 13:41:54 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGnqr-000966-23;
-        Wed, 27 Jul 2022 20:41:53 +0000
-Date:   Thu, 28 Jul 2022 04:41:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Volodymyr Mytnyk <vmytnyk@marvell.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Vadym Kochan <vkochan@marvell.com>,
-        Yevhen Orlov <yevhen.orlov@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>
-Subject: include/linux/compiler_types.h:322:45: error: call to
- '__compiletime_assert_366' declared with attribute error: BUILD_BUG_ON
- failed: sizeof(struct prestera_msg_event_fdb) != 20
-Message-ID: <202207280401.jA7KdKlp-lkp@intel.com>
+        Wed, 27 Jul 2022 16:44:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991F5501A1;
+        Wed, 27 Jul 2022 13:44:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BDFAB821BC;
+        Wed, 27 Jul 2022 20:44:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A5BC433C1;
+        Wed, 27 Jul 2022 20:44:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658954655;
+        bh=o1bEquRZUISTz+ILsSz7+IiI4+5ykqc4Ff8IODEXRAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qT4qlCLH1qXrQpOFOAWBYNvwc2nTRY2Qw7hkgpINvTPrf14FwCF/rbu2sGrrSxHs7
+         dI/pFs5YPAWup9dlE7o+Nq35+pbBsIHghkmlSsyje85+LSFXgL0A6AcDzahKcrfeMK
+         UReoFM/3BHSg9IZpETbleQzFx6zwuA6N/vScZq5Xz1eRZ3gpq8pVv4XSstW0oLnUiq
+         SVLM5IVLewuEZ9UaRi610STU9pyoUgWPSrlGAHpk5AVyCs5ztKCzq0w1H/geqP2ec3
+         g13l0BImBDpvaz4oGj0HpSdEqUf8+69+kn0fiA3kZYJnfmenhUkO9OIejZQ+a1wIBU
+         JRzIck04gkbeA==
+Date:   Wed, 27 Jul 2022 16:44:14 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Xiaoming Ni <nixiaoming@huawei.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Iurii Zaikin <yzaikin@google.com>, Jan Kara <jack@suse.cz>,
+        Paul Turner <pjt@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>, Qing Wang <wangqing@vivo.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Stephen Kitt <steve@sk2.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Antti Palosaari <crope@iki.fi>, Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Lukas Middendorf <kernel@tuxforce.de>,
+        Mark Fasheh <mark@fasheh.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Tso <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 5.15 040/201] sysctl: move some boundary constants from
+ sysctl.c to sysctl_vals
+Message-ID: <YuGjnm7ePDsgosCV@sashalap>
+References: <20220727161026.977588183@linuxfoundation.org>
+ <20220727161028.534205480@linuxfoundation.org>
+ <YuF2eU9SbDDHdqaU@bombadil.infradead.org>
+ <YuF/t6/DtsGPLQVc@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YuF/t6/DtsGPLQVc@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Volodymyr,
+On Wed, Jul 27, 2022 at 08:11:03PM +0200, Greg Kroah-Hartman wrote:
+>On Wed, Jul 27, 2022 at 10:31:37AM -0700, Luis Chamberlain wrote:
+>> On Wed, Jul 27, 2022 at 06:09:04PM +0200, Greg Kroah-Hartman wrote:
+>> > From: Xiaoming Ni <nixiaoming@huawei.com>
+>> >
+>> > [ Upstream commit 78e36f3b0dae586f623c4a37ec5eb5496f5abbe1 ]
+>> >
+>> > sysctl has helpers which let us specify boundary values for a min or max
+>> > int value.  Since these are used for a boundary check only they don't
+>> > change, so move these variables to sysctl_vals to avoid adding duplicate
+>> > variables.  This will help with our cleanup of kernel/sysctl.c.
+>> >
+>> > [akpm@linux-foundation.org: update it for "mm/pagealloc: sysctl: change watermark_scale_factor max limit to 30%"]
+>> > [mcgrof@kernel.org: major rebase]
+>> >
+>> > Link: https://lkml.kernel.org/r/20211123202347.818157-3-mcgrof@kernel.org
+>> > Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
+>> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+>> > Reviewed-by: Kees Cook <keescook@chromium.org>
+>> > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+>> > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+>> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>
+>> I'm a bit puzzled. How / why is this a stable fix?
+>
+>I think it's needed by a patch later in the series.  Sasha, can you
+>verify?
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6e7765cb477a9753670d4351d14de93f1e9dbbd4
-commit: bb5dbf2cc64d5cfa696765944c784c0010c48ae8 net: marvell: prestera: add firmware v4.0 support
-date:   9 months ago
-config: arm-randconfig-r022-20220727 (https://download.01.org/0day-ci/archive/20220728/202207280401.jA7KdKlp-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb5dbf2cc64d5cfa696765944c784c0010c48ae8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout bb5dbf2cc64d5cfa696765944c784c0010c48ae8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/net/ethernet/marvell/prestera/prestera_hw.c:284:1: warning: alignment 1 of 'union prestera_msg_port_param' is less than 4 [-Wpacked-not-aligned]
-     284 | } __packed;
-         | ^
-   In file included from <command-line>:
-   In function 'prestera_hw_build_tests',
-       inlined from 'prestera_hw_switch_init' at drivers/net/ethernet/marvell/prestera/prestera_hw.c:788:2:
->> include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_366' declared with attribute error: BUILD_BUG_ON failed: sizeof(struct prestera_msg_event_fdb) != 20
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_hw.c:531:9: note: in expansion of macro 'BUILD_BUG_ON'
-     531 |         BUILD_BUG_ON(sizeof(struct prestera_msg_event_fdb) != 20);
-         |         ^~~~~~~~~~~~
-
-
-vim +/__compiletime_assert_366 +322 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  310  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  311  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  312  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  318   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  319   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  320   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  321  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @322  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  323  
-
-:::::: The code at line 322 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
+Yes, about 30 patches in this series need this patch.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Sasha

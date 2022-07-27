@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9237C5835AD
+	by mail.lfdr.de (Postfix) with ESMTP id 4734D5835AC
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 01:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbiG0Xel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 19:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S233709AbiG0Xer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 19:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbiG0Xeg (ORCPT
+        with ESMTP id S233676AbiG0Xej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 19:34:36 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DA9564E4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:34:35 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id b8-20020a17090a010800b001f1f4fc8178so46892pjb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:34:35 -0700 (PDT)
+        Wed, 27 Jul 2022 19:34:39 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6145A2D7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:34:37 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id u11-20020a654c0b000000b00415ed4acf16so79006pgq.22
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=9adtlHGn9FKeVF+3PI8cEyItaITWCpmMoTEZzIf1mcM=;
-        b=MxgkAjshFD75JkjIup9q/SXMa6S6NoCx9gVLA1H+AQFV5thN3RjNINV2iRYwUHD6EX
-         gJZJ5O1ynmeduCLJQt0/UkNObPn8A7bprprHXX1O8RU88TJH4Nj/EawxCIlt+UveuKZY
-         imPdS/udjs99VBxkQ3Wdy2BojQjLlbsNxP60/mEjJoIbbiL+5sHSiUK2xQkx/Vryn9ZL
-         7TXOoUPd2hJDRQRohZ2BTJzDf6S1hUtfXrZa3Qfz5kfBPqM9aKib6JvBKenSc6PSP4RG
-         iY4Lm/Sg1Fhy9o1iM78AMxbcBxl8WkMyk0W7p1NSNYYAh3KV6UFdXjB9X2rLfOuGm86e
-         KyHA==
+        bh=WtmlaQOLAvBdCC5Xqq1im2R9nvQtqKXLoleX18wOxFw=;
+        b=as8BVIHPEYuQOT1/Dby16+bzXRaZ05D9D2fWsshSMOYLYfsXR0/39JxhqtnEQB4IxS
+         eM4rSIS9aSD7gHcRze5YYaCaEq1A6a+bjgSmFYmbpZpr0UzwSM82VEf5T94R9+97rcoI
+         Ql5MFDPF2BRKS3THfDro7hqaKXTxrbUj9euvFyMHg7EpBPgKpN/OwppB3YDH21WDWHCo
+         U0hFEIzXfbP5/V+M0ym460tN5GG1QmGvMz1hWd8BT8pM4bxWSeRbmgTpsnJmenbzt0HJ
+         DvJtO4GX3bAbrWBlHdUEdle7w8nB1um53PEK4mosNCbQMy1kw0JkPV1t7yN7a2bOOkY3
+         DeeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=9adtlHGn9FKeVF+3PI8cEyItaITWCpmMoTEZzIf1mcM=;
-        b=c2sorTPfkl5/QrZNFESPuFV5SZ1gvc52at+25YLAzRcptyz5QOBRRwcCtAmvzOfoQp
-         7YObShnnKSxvHN87j6BiTfiiRzOdLZI4I3LAmilxMkqqEDbmLIlXh4sbT/os+BcCmDCt
-         UDs+PfDFdwJqjE8+1SeO3aaE2b5eWqLuli1LmaUzkZJTO8PgTHYfEeTDk6DKY2wC7+F9
-         Ucd8T9WNYbWN4ZzdOY4RqDuVrHpo3Vw+E3FgC2+S+Bksa5ueBUiPGgm2fa3wigpxOYGa
-         AisdOIYmZm1uEoE1ML7znTA5h6yGAMHhYl827wP57JKrBu4/3La5akuF6jmZwSCOtU0r
-         HeBA==
-X-Gm-Message-State: AJIora/AcV9wNkQKGejwAKf8X0cAFhxED5pY3MwfQfW/TbFk5+X7A/uU
-        uILLMz5tdLn9Ak6AbrMH43Pwgx1SihU=
-X-Google-Smtp-Source: AGRyM1t4yxhEgp8+BSQkOzsakccZRL77cL08/ZNyF5q5C7BitXgV7iYO7x2oypitk2O1HFgkgsi3N9utlD8=
+        bh=WtmlaQOLAvBdCC5Xqq1im2R9nvQtqKXLoleX18wOxFw=;
+        b=7oMaa7Qc96p1mHh/CUcEOSpcp7o5/N6Y0XTEYtgMQsPB076SiuDSoJXpRnTULPgPuY
+         SfBGyzGqACKTE9Yj4XWu2EdMMWKV9AsgsgwuK56TvJS08hvn3dBXxJtXdhpNhXtF680t
+         k2TMpCKPPx9czxsWCsmyyhfAR7DvJX2Rb8jBwq5sTMOWwom4J+LFB+4Qe9gLRSqZur1o
+         INGuOxz7M48cIphu1wprPjJ1eJPTVNkNDiCnjF4rPXKbVRHwxN887rq/EIdrLOPueL7y
+         UTrJxCC2NUIN+EV/a8kaJBk1hhBeT/tQdyo4zfFP+LmOpgEluIChdznHKPSlM+Dz6kCd
+         w+Kg==
+X-Gm-Message-State: AJIora/wxjyzOVtyxdG9DRue2dZ/iy77ES7Q/IohWHosBJwOVC1nUZGS
+        isprO29UTCtWFCHVHkYQAK2kLkfzmPQ=
+X-Google-Smtp-Source: AGRyM1sJeEN47VSsEvXaqSGcKVReigYyfKFSXGDSr32GDLnIG87fO1QpS9KkPyctRxcOtdCxQF4vbC+0Aro=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:d507:b0:16d:7d89:15dc with SMTP id
- b7-20020a170902d50700b0016d7d8915dcmr14924262plg.31.1658964875032; Wed, 27
- Jul 2022 16:34:35 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:10e:b0:1f1:f3b0:9304 with SMTP id
+ p14-20020a17090b010e00b001f1f3b09304mr658262pjz.1.1658964876762; Wed, 27 Jul
+ 2022 16:34:36 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 27 Jul 2022 23:34:23 +0000
+Date:   Wed, 27 Jul 2022 23:34:24 +0000
 In-Reply-To: <20220727233424.2968356-1-seanjc@google.com>
-Message-Id: <20220727233424.2968356-3-seanjc@google.com>
+Message-Id: <20220727233424.2968356-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220727233424.2968356-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH 2/3] KVM: VMX: Use proper type-safe functions for vCPU => LBRs helpers
+Subject: [PATCH 3/3] KVM: VMX: Adjust number of LBR records for
+ PERF_CAPABILITIES at refresh
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -62,7 +63,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,69 +71,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turn vcpu_to_lbr_desc() and vcpu_to_lbr_records() into functions in order
-to provide type safety, to document exactly what they return, and to
-allow consuming the helpers in vmx.h.  Move the definitions as necessary
-(the macros "reference" to_vmx() before its definition).
+Now that the PMU is refreshed when MSR_IA32_PERF_CAPABILITIES is written
+by host userspace, zero out the number of LBR records for a vCPU during
+PMU refresh if PMU_CAP_LBR_FMT is not set in PERF_CAPABILITIES instead of
+handling the check at run-time.
 
-No functional change intended.
+guest_cpuid_has() is expensive due to the linear search of guest CPUID
+entries, intel_pmu_lbr_is_enabled() is checked on every VM-Enter, _and_
+simply enumerating the same "Model" as the host causes KVM to set the
+number of LBR records to a non-zero value.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/vmx.h | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+ arch/x86/kvm/vmx/pmu_intel.c | 12 +++---------
+ arch/x86/kvm/vmx/vmx.h       |  7 +++++--
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 286c88e285ea..690421b7d26c 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -6,6 +6,7 @@
- 
- #include <asm/kvm.h>
- #include <asm/intel_pt.h>
-+#include <asm/perf_event.h>
- 
- #include "capabilities.h"
- #include "kvm_cache_regs.h"
-@@ -91,15 +92,6 @@ union vmx_exit_reason {
- 	u32 full;
- };
- 
--#define vcpu_to_lbr_desc(vcpu) (&to_vmx(vcpu)->lbr_desc)
--#define vcpu_to_lbr_records(vcpu) (&to_vmx(vcpu)->lbr_desc.records)
--
--void intel_pmu_cross_mapped_check(struct kvm_pmu *pmu);
--bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu);
--
--int intel_pmu_create_guest_lbr_event(struct kvm_vcpu *vcpu);
--void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu);
--
- struct lbr_desc {
- 	/* Basic info about guest LBR records. */
- 	struct x86_pmu_lbr records;
-@@ -524,6 +516,22 @@ static inline struct vcpu_vmx *to_vmx(struct kvm_vcpu *vcpu)
- 	return container_of(vcpu, struct vcpu_vmx, vcpu);
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index cfcb590afaa7..d111dc0d86df 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -171,13 +171,6 @@ static inline struct kvm_pmc *get_fw_gp_pmc(struct kvm_pmu *pmu, u32 msr)
+ 	return get_gp_pmc(pmu, msr, MSR_IA32_PMC0);
  }
  
-+static inline struct lbr_desc *vcpu_to_lbr_desc(struct kvm_vcpu *vcpu)
-+{
-+	return &to_vmx(vcpu)->lbr_desc;
-+}
-+
-+static inline struct x86_pmu_lbr *vcpu_to_lbr_records(struct kvm_vcpu *vcpu)
-+{
-+	return &vcpu_to_lbr_desc(vcpu)->records;
-+}
-+
-+void intel_pmu_cross_mapped_check(struct kvm_pmu *pmu);
-+bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu);
-+
-+int intel_pmu_create_guest_lbr_event(struct kvm_vcpu *vcpu);
-+void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu);
-+
- static inline unsigned long vmx_get_exit_qual(struct kvm_vcpu *vcpu)
+-bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
+-{
+-	struct x86_pmu_lbr *lbr = vcpu_to_lbr_records(vcpu);
+-
+-	return lbr->nr && (vcpu_get_perf_capabilities(vcpu) & PMU_CAP_LBR_FMT);
+-}
+-
+ static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
  {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+ 	struct x86_pmu_lbr *records = vcpu_to_lbr_records(vcpu);
+@@ -590,7 +583,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	bitmap_set(pmu->all_valid_pmc_idx,
+ 		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
+ 
+-	if (cpuid_model_is_consistent(vcpu))
++	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
++	if (cpuid_model_is_consistent(vcpu) &&
++	    (perf_capabilities & PMU_CAP_LBR_FMT))
+ 		x86_perf_get_lbr(&lbr_desc->records);
+ 	else
+ 		lbr_desc->records.nr = 0;
+@@ -598,7 +593,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	if (lbr_desc->records.nr)
+ 		bitmap_set(pmu->all_valid_pmc_idx, INTEL_PMC_IDX_FIXED_VLBR, 1);
+ 
+-	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
+ 	if (perf_capabilities & PERF_CAP_PEBS_FORMAT) {
+ 		if (perf_capabilities & PERF_CAP_PEBS_BASELINE) {
+ 			pmu->pebs_enable_mask = counter_mask;
+diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+index 690421b7d26c..c05e302fe2b1 100644
+--- a/arch/x86/kvm/vmx/vmx.h
++++ b/arch/x86/kvm/vmx/vmx.h
+@@ -526,9 +526,12 @@ static inline struct x86_pmu_lbr *vcpu_to_lbr_records(struct kvm_vcpu *vcpu)
+ 	return &vcpu_to_lbr_desc(vcpu)->records;
+ }
+ 
++static inline bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
++{
++	return !!vcpu_to_lbr_records(vcpu)->nr;
++}
++
+ void intel_pmu_cross_mapped_check(struct kvm_pmu *pmu);
+-bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu);
+-
+ int intel_pmu_create_guest_lbr_event(struct kvm_vcpu *vcpu);
+ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu);
+ 
 -- 
 2.37.1.359.gd136c6c3e2-goog
 

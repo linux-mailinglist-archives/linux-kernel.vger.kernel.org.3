@@ -2,158 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70CF581F54
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 06:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECC3581E7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 06:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240480AbiG0EyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 00:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S240274AbiG0EDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 00:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240453AbiG0EyS (ORCPT
+        with ESMTP id S240231AbiG0EDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 00:54:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D972227B2E;
-        Tue, 26 Jul 2022 21:54:16 -0700 (PDT)
-X-UUID: 855b2d6425c5445594d02ceb62656d88-20220727
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:ffe840de-a03d-4d53-96ed-da0b88abf037,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:dc42eacb-7c9b-4dbc-a9d4-00659d6b7a90,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 855b2d6425c5445594d02ceb62656d88-20220727
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1570475188; Wed, 27 Jul 2022 12:54:11 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
- Wed, 27 Jul 2022 04:53:55 +0000
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 27 Jul 2022 11:27:47 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 27 Jul 2022 11:27:47 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
-        <bvanassche@acm.org>
-CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
-        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
-        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
-        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <stanley.chu@mediatek.com>
-Subject: [PATCH v1 4/5] scsi: ufs: ufs-mediatek: Fix performance scaling
-Date:   Wed, 27 Jul 2022 11:27:44 +0800
-Message-ID: <20220727032745.31728-5-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220727032745.31728-1-stanley.chu@mediatek.com>
-References: <20220727032745.31728-1-stanley.chu@mediatek.com>
+        Wed, 27 Jul 2022 00:03:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97280175B0;
+        Tue, 26 Jul 2022 21:03:14 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lt0QZ3vsXzWfxn;
+        Wed, 27 Jul 2022 11:59:18 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Jul 2022 12:03:04 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.174) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Jul 2022 12:03:03 +0800
+From:   Li Huafei <lihuafei1@huawei.com>
+To:     <linux@armlinux.org.uk>, <rmk+kernel@armlinux.org.uk>,
+        <ardb@kernel.org>, <will@kernel.org>, <broonie@kernel.org>,
+        <linus.walleij@linaro.org>
+CC:     <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <arnd@arndb.de>,
+        <rostedt@goodmis.org>, <nick.hawkins@hpe.com>, <john@phrozen.org>,
+        <mhiramat@kernel.org>, <ast@kernel.org>, <linyujun809@huawei.com>,
+        <ndesaulniers@google.com>, <lihuafei1@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
+Subject: [PATCH v3 0/4] ARM: Convert to ARCH_STACKWALK
+Date:   Wed, 27 Jul 2022 12:00:18 +0800
+Message-ID: <20220727040022.139387-1-lihuafei1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.174.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Wang <peter.wang@mediatek.com>
+This series mainly updates the ARM stack trace code to use the newer and
+simpler arch_stack_walk() interface (see patches 3 and 4). Two issues
+were fixed before that (see patches 1 and 2).
 
-If clk-scaling is enabled, performance scaling can be bound
-to the decision of clk-scaling to avoid unnecessary boosting.
+v3:
+ - According to the discussion with Linus and Russell in v1:
+   - Add a comment about "regs[1]" in patch 2, and remove the
+     unnecessary ternary operator in the initialization of
+     "frame->ex_frame".
+   - Remove the patch "ARM: stacktrace: Allow stack trace saving for
+     non-current tasks", and keep the check for not being able to
+     unwind non-current tasks (including tasks running on other CPUs)
+     when CONFIG_SMP=y in patch 4.
+ - Rebase to linux-5.19-rc8.
 
-Meanwhile, fix missing initialization of pm-qos request.
+v2: https://lore.kernel.org/lkml/20220713110020.85511-1-lihuafei1@huawei.com/
+ - As suggested by Mark, the commit logs for patch 4 and 5 were
+   refined for easy review.
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/ufs/host/ufs-mediatek.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+v1: https://lore.kernel.org/lkml/20220712021527.109921-1-lihuafei1@huawei.com/
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index ddbfcf1ab925..1faa0912a473 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -597,6 +597,12 @@ static void ufs_mtk_boost_pm_qos(struct ufs_hba *hba, bool boost)
- 				       boost ? 0 : PM_QOS_DEFAULT_VALUE);
- }
- 
-+static void ufs_mtk_scale_perf(struct ufs_hba *hba, bool scale_up)
-+{
-+	ufs_mtk_boost_crypt(hba, scale_up);
-+	ufs_mtk_boost_pm_qos(hba, scale_up);
-+}
-+
- static void ufs_mtk_pwr_ctrl(struct ufs_hba *hba, bool on)
- {
- 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
-@@ -604,11 +610,11 @@ static void ufs_mtk_pwr_ctrl(struct ufs_hba *hba, bool on)
- 	if (on) {
- 		phy_power_on(host->mphy);
- 		ufs_mtk_setup_ref_clk(hba, on);
--		ufs_mtk_boost_crypt(hba, on);
--		ufs_mtk_boost_pm_qos(hba, on);
-+		if (!ufshcd_is_clkscaling_supported(hba))
-+			ufs_mtk_scale_perf(hba, on);
- 	} else {
--		ufs_mtk_boost_pm_qos(hba, on);
--		ufs_mtk_boost_crypt(hba, on);
-+		if (!ufshcd_is_clkscaling_supported(hba))
-+			ufs_mtk_scale_perf(hba, on);
- 		ufs_mtk_setup_ref_clk(hba, on);
- 		phy_power_off(host->mphy);
- 	}
-@@ -832,6 +838,10 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 
- 	host->ip_ver = ufshcd_readl(hba, REG_UFS_MTK_IP_VER);
- 
-+	/* Initialize pm-qos request */
-+	cpu_latency_qos_add_request(&host->pm_qos_req, PM_QOS_DEFAULT_VALUE);
-+	host->pm_qos_init = true;
-+
- 	goto out;
- 
- out_variant_clear:
-@@ -1424,7 +1434,6 @@ static int ufs_mtk_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int ufs_mtk_system_suspend(struct device *dev)
- {
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
-@@ -1447,7 +1456,6 @@ static int ufs_mtk_system_resume(struct device *dev)
- 
- 	return ufshcd_system_resume(dev);
- }
--#endif
- 
- static int ufs_mtk_runtime_suspend(struct device *dev)
- {
-@@ -1473,10 +1481,8 @@ static int ufs_mtk_runtime_resume(struct device *dev)
- }
- 
- static const struct dev_pm_ops ufs_mtk_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend,
--				ufs_mtk_system_resume)
--	SET_RUNTIME_PM_OPS(ufs_mtk_runtime_suspend,
--			   ufs_mtk_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend, ufs_mtk_system_resume)
-+	RUNTIME_PM_OPS(ufs_mtk_runtime_suspend, ufs_mtk_runtime_resume, NULL)
- 	.prepare	 = ufshcd_suspend_prepare,
- 	.complete	 = ufshcd_resume_complete,
- };
+Li Huafei (4):
+  ARM: stacktrace: Skip frame pointer boundary check for
+    call_with_stack()
+  ARM: stacktrace: Avoid duplicate saving of exception PC value
+  ARM: stacktrace: Make stack walk callback consistent with generic code
+  ARM: stacktrace: Convert stacktrace to generic ARCH_STACKWALK
+
+ arch/arm/Kconfig                  |   1 +
+ arch/arm/include/asm/stacktrace.h |   8 +-
+ arch/arm/kernel/perf_callchain.c  |   9 +-
+ arch/arm/kernel/return_address.c  |   9 +-
+ arch/arm/kernel/stacktrace.c      | 191 ++++++++++++++----------------
+ arch/arm/lib/call_with_stack.S    |   2 +
+ 6 files changed, 110 insertions(+), 110 deletions(-)
+
 -- 
-2.18.0
+2.17.1
 

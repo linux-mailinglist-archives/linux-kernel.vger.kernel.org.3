@@ -2,103 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DAC581DC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 04:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D01581DD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 05:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240066AbiG0C4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 22:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
+        id S240207AbiG0DAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 23:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233991AbiG0C4i (ORCPT
+        with ESMTP id S240144AbiG0DAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 22:56:38 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69647357D5;
-        Tue, 26 Jul 2022 19:56:36 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id r24so11820215qtx.6;
-        Tue, 26 Jul 2022 19:56:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tnVUfveHENcuNsM+rkNWOjb5mSPRIjYCSwHkGzsISFw=;
-        b=jRydY8a62raCEIP2zW1yVhusvCE/TTO1NTCkdf4RwKvDeQLiePvqnyUgmBv7zW4clL
-         CSBr+mg4EKts3IKmQPJ/IoF2SQX6sAV+7dAbkip7GxNXOt1LR0MDGuSsYSe2L3NbLJ6x
-         eHT2YB4htn5rPhqC15brIJrrUwXUVuyVCR/cIP1tCW76EEoCE1OI53bIUXwFKj+nCi9D
-         PPPmw1OjptaUN/MvtZZMrkSDSKQOPqoWaJ4i2+P+xE5ge9NycFGp54q7cH4jnblfjl98
-         udZBRq4R2/5Ao/fPXkKD1qI0fXTiaEdvuZHUKkocyz/AVdiFK9cPE9s9MRwEXRPQVsuG
-         IUQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tnVUfveHENcuNsM+rkNWOjb5mSPRIjYCSwHkGzsISFw=;
-        b=AkfH6XLAJ/PXJwyZGMeLBMK8S0QWbfxyxTocDPUopbehD9ac1rWpuY7H7IN9xdErNE
-         DrFVdbVHR/qsp+saYqSTg8lI1Jeuc7OIbyF0yfVDLEmHZeQvr7zSc88o0I1KkpKgNiVv
-         N31kdJu8scXV6IS9YNHejTBoc/a2d5+GtEl3AdFTTJT4pErW6QZnXQUl5pVbUNEeFQkX
-         J5ZKnWczYpJoIDGgDiEvbmNrp9tD0Hx/h8wIrU3zJ//RX0ZbBWvUHUv6lEiQiWDFFbOk
-         3CyVi/J3lO4b7903pQ4H5J8Hrb+TPc7XXbPAB1NBcxYJpFWBhQvYCnCtZ64v7mwXioc4
-         NIkQ==
-X-Gm-Message-State: AJIora/9aZuBJszaCelLog5T4JaWtQUDRbQro1T3Ex0SHRxm7UazkJtO
-        qe82tm0HrOtJ6OWW1qnoA8JTLxaTUm/qVA==
-X-Google-Smtp-Source: AGRyM1uqOZgdEQs40Dm6b/CDZFfYTmhoxiy5GsI+RRvlYH6CyNNRrjxamqVD7fU+DhEHpXsUeQCuBA==
-X-Received: by 2002:a05:622a:287:b0:31f:32f6:1db1 with SMTP id z7-20020a05622a028700b0031f32f61db1mr13805911qtw.480.1658890595478;
-        Tue, 26 Jul 2022 19:56:35 -0700 (PDT)
-Received: from [192.168.0.9] ([198.179.6.194])
-        by smtp.gmail.com with ESMTPSA id s1-20020ac85cc1000000b0031ef67386a5sm10550688qta.68.2022.07.26.19.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 19:56:35 -0700 (PDT)
-Message-ID: <8a35df7d-a6cc-63e9-b207-6fbed05e32e5@gmail.com>
-Date:   Tue, 26 Jul 2022 22:56:33 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: PROBLEM: Regression likely in hid_uclogic driver breaks Huion
- Inspiroy H640 drawing tablet
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ping Cheng <ping.cheng@wacom.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <9e16d503-2203-57ed-d6af-61fea0c3e10b@gmail.com>
- <nycvar.YFH.7.76.2207231339500.19850@cbobk.fhfr.pm>
- <20220724114849.GA32182@elementary> <20220725224841.GA75640@elementary>
- <3f2e0a49-38a8-417e-1bb0-9a9f28371240@gmail.com>
- <20220726214858.GA3202@elementary>
-From:   Stefan Hansson <newbie13xd@gmail.com>
-In-Reply-To: <20220726214858.GA3202@elementary>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 23:00:15 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C9A12603;
+        Tue, 26 Jul 2022 20:00:13 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 0D0EC1E80D8E;
+        Wed, 27 Jul 2022 11:00:25 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZSFJZEL-oIX6; Wed, 27 Jul 2022 11:00:22 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 97E001E80D05;
+        Wed, 27 Jul 2022 11:00:21 +0800 (CST)
+From:   Yu Zhe <yuzhe@nfschina.com>
+To:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        liqiong@nfschina.com, Yu Zhe <yuzhe@nfschina.com>
+Subject: [PATCH] drm/amdkfd: use time_is_before_jiffies(a + b) to replace "jiffies - a > b"
+Date:   Wed, 27 Jul 2022 10:59:17 +0800
+Message-Id: <20220727025917.22477-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+time_is_before_jiffies deals with timer wrapping correctly.
 
->> Thanks for looking into this! Bisecting has been slow on my end
->> unfortunately. I built today's linux-next (20220726) with your proposed
->> patch below and my drawing tablet curiously still does not work as expected.
->> The stylus works a couple of times, but eventually stops working (unlike
->> prior where it always seemed to only work once). Do I need both your revert
->> and this diff for it to work properly?
-> 
-> You are right, I just tested for a while with the diff applied (without
-> reverting the commit causing the issue) and after putting the pen in
-> and out proximity a fair amount of times (> 100) it stopped working.
+Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This part is peculiar to me. When I said "a couple of times", I really 
-meant a couple of times. For me, this issue reproduces after maybe 10 
-times at most. I have never been able to do it for anything close to 100 
-times. I wonder what's up with this disparity?
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c b/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
+index a9466d154395..6397926e059c 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
+@@ -156,7 +156,7 @@ static void interrupt_wq(struct work_struct *work)
+ 	while (dequeue_ih_ring_entry(dev, ih_ring_entry)) {
+ 		dev->device_info.event_interrupt_class->interrupt_wq(dev,
+ 								ih_ring_entry);
+-		if (jiffies - start_jiffies > HZ) {
++		if (time_is_before_jiffies(start_jiffies + HZ)) {
+ 			/* If we spent more than a second processing signals,
+ 			 * reschedule the worker to avoid soft-lockup warnings
+ 			 */
+-- 
+2.11.0
 
-Regards,
-Stefan Hansson

@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F5F583412
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 22:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C13583417
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 22:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbiG0U2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 16:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S232827AbiG0Uap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 16:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiG0U2a (ORCPT
+        with ESMTP id S230392AbiG0Uan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 16:28:30 -0400
-Received: from mx2.uni-rostock.de (mx2.uni-rostock.de [139.30.22.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CF650183
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:28:26 -0700 (PDT)
-DKIM-Signature: v=1; c=relaxed/relaxed; d=uni-rostock.de; s=itmze; 
- t=1658953704; bh=wYujtMIftyArbuldmfvD9P/FF1mhNFu2F0ApzJrZ1sE=; h=
- "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
- a=ed25519-sha256; b=
- X7WYzEps4xiDvZXJD6Dl+WEIxM1rW5a4bbDtidXDvUvTfNN/7BfXnOZDLRvH/gkZncO2bbOV+q+z7iqo3mb6Bg==
-DKIM-Signature: v=1; c=relaxed/relaxed; d=uni-rostock.de; s=itmz; 
- t=1658953704; bh=wYujtMIftyArbuldmfvD9P/FF1mhNFu2F0ApzJrZ1sE=; h=
- "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
- a=rsa-sha256; b=
- lcDArlZRl6PG4+eSUFaW84qfHJHaeN0BDlklPoA70GwIub2KidM+be3U+VsLpODwrFhGWCsaBIOdGXoElR/aEZ1to4+gOLRzhsnEe+WNcBXzl/ZEabTs+4vxxz1ry0GQELygOYCiP3EVVXSrDfiixii6+3JPI+Sx35Qttqf4K48=
-Received: from 139.30.22.81 by mx2.uni-rostock.de (Tls12, Aes256, Sha384,
- DiffieHellmanEllipticKey384); Wed, 27 Jul 2022 20:28:24 GMT
-Received: from [192.168.0.222] (91.59.50.48) by email1.uni-rostock.de
- (139.30.22.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Wed, 27 Jul
- 2022 22:28:23 +0200
-Message-ID: <53bdf85f-8c29-7843-7ccd-88432e66b282@uni-rostock.de>
-Date:   Wed, 27 Jul 2022 22:28:25 +0200
+        Wed, 27 Jul 2022 16:30:43 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13074186D6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:30:42 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31e7ca45091so187501267b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qC/2GpX8G1YxmI7AUAGx9cdmS+R/MtU1fjbm5R4/Jec=;
+        b=ErpR4J7KGPLRGFTeh7WSrlbaCVKxU6h+F40DUq9lM3MEtkVqAi/6ULVCfZOoCeYHJO
+         vFzug27yaISebUNhmAWpEmoqfFsTDdhHbkgEwEeCSh1SiiVRdnbmZLRL0UO0DW/NyAWV
+         vn6ALx1BuxYECq/isTZMp18Iq/EPVLT7Cca/B8e9ZHJXj/xId1+VifkVZEYY70xbFWfq
+         cgsjZXbsI/YlSt5s97I9Uq3hZW/b8FYFVhiPeo+UuUdOKrl/K6zUCYUzIu3uwwiAlpzB
+         IpNHits3Q79nGlf+4+GfygpjRvfdYqca7/O5oH1O99iW7dhRaSJW3L3CQNisGH8eGY71
+         +lFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qC/2GpX8G1YxmI7AUAGx9cdmS+R/MtU1fjbm5R4/Jec=;
+        b=oHH9g68SVCyHEvqAA9fkRMnmCUbHdkU5/JRlQk9GlRP4gxCpqKy+Uh1sUpvEzH4VlF
+         d6CoikuqZ8aSwI4JN09Pfp5lBsd4jCN+dEdc2xXrnWoKi0hefYB4EUgGcQKSfX/D01O8
+         TEWsMfgzPif0cJ7WpVSon/GyuqaMZK0fMXdBT65Kbim6+7WsxXzfltHv9KNd7KoW7cyl
+         RlRNmZCnFm9tZi+9tBeCsi3XoWQUaDuqXYkidxNwx8Rfopv6r65b2ZUSZBCIdiVIwBom
+         GWKavpx3w93BgEmGxKLeLzc7A4mUUMTXVateGzJgq8lcAV8VDlm0cbTPOUXGXwfzxJWM
+         X8Gw==
+X-Gm-Message-State: AJIora/0CGNipJ51RMonnJpBTrcznUVfsvw/Qd9ZdE6IeM0VD0VJxEFf
+        kto8JQpC0eQODkyQm15tHBZHD2w0QjE2fKqm3GbrVQ==
+X-Google-Smtp-Source: AGRyM1tF9tqlr/OBQG5UXGRIEwwgef5cEbQqoI+epbDEySB8RGnwa70IMHc3cAhVXNq9/NOFtZFrS4i640PWV9ZQGeI=
+X-Received: by 2002:a81:a247:0:b0:31d:72da:e931 with SMTP id
+ z7-20020a81a247000000b0031d72dae931mr20987026ywg.469.1658953841024; Wed, 27
+ Jul 2022 13:30:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] um: read multiple msg from virtio slave request fd
-Content-Language: de-DE
-To:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>
-CC:     Johannes Berg <johannes.berg@intel.com>,
-        <linux-um@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20220607112714.516408-1-benjamin.beichler@uni-rostock.de>
-From:   Benjamin Beichler <Benjamin.Beichler@uni-rostock.de>
-Organization: =?UTF-8?Q?Universit=c3=a4t_Rostock?=
-In-Reply-To: <20220607112714.516408-1-benjamin.beichler@uni-rostock.de>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature";
-        micalg=sha-256; boundary="------------ms040807060402020002030106"
-X-Originating-IP: [91.59.50.48]
-X-ClientProxiedBy: email3.uni-rostock.de (139.30.22.83) To
- email1.uni-rostock.de (139.30.22.81)
-X-TM-SNTS-SMTP: ECC928D852296DCDFA97C9F7BF7A7AE6329880FA912278F5B755C025201055E62002:8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220128131006.67712-1-michel@lespinasse.org> <20220128131006.67712-24-michel@lespinasse.org>
+ <20220727073420.GA8985@hu-pkondeti-hyd.qualcomm.com>
+In-Reply-To: <20220727073420.GA8985@hu-pkondeti-hyd.qualcomm.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 27 Jul 2022 13:30:29 -0700
+Message-ID: <CAJuCfpG0_xwGhTbzWRRwcBKO263TgrVm0T1gJ+PdzcL-EzcHpA@mail.gmail.com>
+Subject: Re: [PATCH v2 23/35] mm: add mmu_notifier_lock
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Michel Lespinasse <michel@lespinasse.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel-team@fb.com,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Jerome Glisse <jglisse@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Rik van Riel <riel@surriel.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,259 +86,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---------------ms040807060402020002030106
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-Are there any issues with that patch=3F
-I would be happy to receive any comments or an acceptance :-D
-
-Sorry for my former HTML-Email.
-
-kind regards
-
-Benjamin
-
-
-Am 07.06.2022 um 13:27 schrieb Benjamin Beichler:
-> If VHOST=5FUSER=5FPROTOCOL=5FF=5FINBAND=5FNOTIFICATIONS is activated, the us=
-er mode
-> linux virtio irq handler only read one msg from the corresponding socket.
-> This creates issues, when the device emulation creates multiple call
-> requests (e.g. for multiple virtqueues), as the socket buffer tend to fill
-> up and the call requests are delayed.
+On Wed, Jul 27, 2022 at 12:34 AM Pavan Kondeti
+<quic_pkondeti@quicinc.com> wrote:
 >
-> This creates a deadlock situation, when the device simulation blocks,
-> because of sending a msg and the kernel side blocks because of
-> synchronously waiting for an acknowledge of kick request.
+> On Fri, Jan 28, 2022 at 05:09:54AM -0800, Michel Lespinasse wrote:
+> > Introduce mmu_notifier_lock as a per-mm percpu_rw_semaphore,
+> > as well as the code to initialize and destroy it together with the mm.
+> >
+> > This lock will be used to prevent races between mmu_notifier_register()
+> > and speculative fault handlers that need to fire MMU notifications
+> > without holding any of the mmap or rmap locks.
+> >
+> > Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
+> > ---
+> >  include/linux/mm_types.h     |  6 +++++-
+> >  include/linux/mmu_notifier.h | 27 +++++++++++++++++++++++++--
+> >  kernel/fork.c                |  3 ++-
+> >  3 files changed, 32 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> > index 305f05d2a4bc..f77e2dec038d 100644
+> > --- a/include/linux/mm_types.h
+> > +++ b/include/linux/mm_types.h
+> > @@ -462,6 +462,7 @@ struct vm_area_struct {
+> >  } __randomize_layout;
+> >
+> >  struct kioctx_table;
+> > +struct percpu_rw_semaphore;
+> >  struct mm_struct {
+> >       struct {
+> >               struct vm_area_struct *mmap;            /* list of VMAs */
+> > @@ -608,7 +609,10 @@ struct mm_struct {
+> >               struct file __rcu *exe_file;
+> >  #ifdef CONFIG_MMU_NOTIFIER
+> >               struct mmu_notifier_subscriptions *notifier_subscriptions;
+> > -#endif
+> > +#ifdef CONFIG_SPECULATIVE_PAGE_FAULT
+> > +             struct percpu_rw_semaphore *mmu_notifier_lock;
+> > +#endif       /* CONFIG_SPECULATIVE_PAGE_FAULT */
+> > +#endif       /* CONFIG_MMU_NOTIFIER */
+> >  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) && !USE_SPLIT_PMD_PTLOCKS
+> >               pgtable_t pmd_huge_pte; /* protected by page_table_lock */
+> >  #endif
+> > diff --git a/include/linux/mmu_notifier.h b/include/linux/mmu_notifier.h
+> > index 45fc2c81e370..ace76fe91c0c 100644
+> > --- a/include/linux/mmu_notifier.h
+> > +++ b/include/linux/mmu_notifier.h
+> > @@ -6,6 +6,8 @@
+> >  #include <linux/spinlock.h>
+> >  #include <linux/mm_types.h>
+> >  #include <linux/mmap_lock.h>
+> > +#include <linux/percpu-rwsem.h>
+> > +#include <linux/slab.h>
+> >  #include <linux/srcu.h>
+> >  #include <linux/interval_tree.h>
+> >
+> > @@ -499,15 +501,35 @@ static inline void mmu_notifier_invalidate_range(struct mm_struct *mm,
+> >               __mmu_notifier_invalidate_range(mm, start, end);
+> >  }
+> >
+> > -static inline void mmu_notifier_subscriptions_init(struct mm_struct *mm)
+> > +static inline bool mmu_notifier_subscriptions_init(struct mm_struct *mm)
+> >  {
+> > +#ifdef CONFIG_SPECULATIVE_PAGE_FAULT
+> > +     mm->mmu_notifier_lock = kzalloc(sizeof(struct percpu_rw_semaphore), GFP_KERNEL);
+> > +     if (!mm->mmu_notifier_lock)
+> > +             return false;
+> > +     if (percpu_init_rwsem(mm->mmu_notifier_lock)) {
+> > +             kfree(mm->mmu_notifier_lock);
+> > +             return false;
+> > +     }
+> > +#endif
+> > +
+> >       mm->notifier_subscriptions = NULL;
+> > +     return true;
+> >  }
+> >
+> >  static inline void mmu_notifier_subscriptions_destroy(struct mm_struct *mm)
+> >  {
+> >       if (mm_has_notifiers(mm))
+> >               __mmu_notifier_subscriptions_destroy(mm);
+> > +
+> > +#ifdef CONFIG_SPECULATIVE_PAGE_FAULT
+> > +     if (!in_atomic()) {
+> > +             percpu_free_rwsem(mm->mmu_notifier_lock);
+> > +             kfree(mm->mmu_notifier_lock);
+> > +     } else {
+> > +             percpu_rwsem_async_destroy(mm->mmu_notifier_lock);
+> > +     }
+> > +#endif
+> >  }
+> >
 >
-> Actually inband notifications are meant to be used in combination with the
-> time travel protocol, but it is not required, therefore this corner case
-> needs to be handled.
+> We have received a bug report from our customer running Android GKI kernel
+> android-13-5.15 branch where this series is included. As the callstack [1]
+> indicates, the non-atomic test it self is not sufficient to free the percpu
+> rwsem.
 >
-> Anyways, in general it seems to be more natural to consume always all
-> messages from a socket, instead of only a single one.
+> The scenario deduced from the callstack:
 >
-> Fixes: 2cd097ba8c05 ("um: virtio: Implement VHOST=5FUSER=5FPROTOCOL=5FF=5FSL=
-AVE=5FREQ")
-> Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
-> ---
->   arch/um/drivers/virtio=5Fuml.c | 71 +++++++++++++++++++-----------------
->   1 file changed, 37 insertions(+), 34 deletions(-)
+> - context switch on CPU#0 from 'A' to idle. idle thread took A's mm
 >
-> diff --git a/arch/um/drivers/virtio=5Fuml.c b/arch/um/drivers/virtio=5Fuml.c
-> index 82ff3785bf69..3716c5f6f9aa 100644
-> --- a/arch/um/drivers/virtio=5Fuml.c
-> +++ b/arch/um/drivers/virtio=5Fuml.c
-> @@ -374,45 +374,48 @@ static irqreturn=5Ft vu=5Freq=5Fread=5Fmessage(struct =
-virtio=5Fuml=5Fdevice *vu=5Fdev,
->   =09=09u8 extra=5Fpayload[512];
->   =09} msg;
->   =09int rc;
-> +=09irqreturn=5Ft irq=5Frc =3D IRQ=5FNONE;
->   
-> -=09rc =3D vhost=5Fuser=5Frecv=5Freq(vu=5Fdev, &msg.msg,
-> -=09=09=09=09 sizeof(msg.msg.payload) +
-> -=09=09=09=09 sizeof(msg.extra=5Fpayload));
-> -
-> -=09vu=5Fdev->recv=5Frc =3D rc;
-> -=09if (rc)
-> -=09=09return IRQ=5FNONE;
-> -
-> -=09switch (msg.msg.header.request) {
-> -=09case VHOST=5FUSER=5FSLAVE=5FCONFIG=5FCHANGE=5FMSG:
-> -=09=09vu=5Fdev->config=5Fchanged=5Firq =3D true;
-> -=09=09response =3D 0;
-> -=09=09break;
-> -=09case VHOST=5FUSER=5FSLAVE=5FVRING=5FCALL:
-> -=09=09virtio=5Fdevice=5Ffor=5Feach=5Fvq((&vu=5Fdev->vdev), vq) {
-> -=09=09=09if (vq->index =3D=3D msg.msg.payload.vring=5Fstate.index) {
-> -=09=09=09=09response =3D 0;
-> -=09=09=09=09vu=5Fdev->vq=5Firq=5Fvq=5Fmap |=3D BIT=5FULL(vq->index);
-> -=09=09=09=09break;
-> +=09while (1) {
-> +=09=09rc =3D vhost=5Fuser=5Frecv=5Freq(vu=5Fdev, &msg.msg,
-> +=09=09=09=09=09 sizeof(msg.msg.payload) +
-> +=09=09=09=09=09 sizeof(msg.extra=5Fpayload));
-> +=09=09if (rc)
-> +=09=09=09break;
-> +
-> +=09=09switch (msg.msg.header.request) {
-> +=09=09case VHOST=5FUSER=5FSLAVE=5FCONFIG=5FCHANGE=5FMSG:
-> +=09=09=09vu=5Fdev->config=5Fchanged=5Firq =3D true;
-> +=09=09=09response =3D 0;
-> +=09=09=09break;
-> +=09=09case VHOST=5FUSER=5FSLAVE=5FVRING=5FCALL:
-> +=09=09=09virtio=5Fdevice=5Ffor=5Feach=5Fvq((&vu=5Fdev->vdev), vq) {
-> +=09=09=09=09if (vq->index =3D=3D msg.msg.payload.vring=5Fstate.index) {
-> +=09=09=09=09=09response =3D 0;
-> +=09=09=09=09=09vu=5Fdev->vq=5Firq=5Fvq=5Fmap |=3D BIT=5FULL(vq->index);
-> +=09=09=09=09=09break;
-> +=09=09=09=09}
->   =09=09=09}
-> +=09=09=09break;
-> +=09=09case VHOST=5FUSER=5FSLAVE=5FIOTLB=5FMSG:
-> +=09=09=09/* not supported - VIRTIO=5FF=5FACCESS=5FPLATFORM */
-> +=09=09case VHOST=5FUSER=5FSLAVE=5FVRING=5FHOST=5FNOTIFIER=5FMSG:
-> +=09=09=09/* not supported - VHOST=5FUSER=5FPROTOCOL=5FF=5FHOST=5FNOTIFIER *=
-/
-> +=09=09default:
-> +=09=09=09vu=5Ferr(vu=5Fdev, "unexpected slave request %d\n",
-> +=09=09=09       msg.msg.header.request);
->   =09=09}
-> -=09=09break;
-> -=09case VHOST=5FUSER=5FSLAVE=5FIOTLB=5FMSG:
-> -=09=09/* not supported - VIRTIO=5FF=5FACCESS=5FPLATFORM */
-> -=09case VHOST=5FUSER=5FSLAVE=5FVRING=5FHOST=5FNOTIFIER=5FMSG:
-> -=09=09/* not supported - VHOST=5FUSER=5FPROTOCOL=5FF=5FHOST=5FNOTIFIER */
-> -=09default:
-> -=09=09vu=5Ferr(vu=5Fdev, "unexpected slave request %d\n",
-> -=09=09       msg.msg.header.request);
-> -=09}
-> -
-> -=09if (ev && !vu=5Fdev->suspended)
-> -=09=09time=5Ftravel=5Fadd=5Firq=5Fevent(ev);
->   
-> -=09if (msg.msg.header.flags & VHOST=5FUSER=5FFLAG=5FNEED=5FREPLY)
-> -=09=09vhost=5Fuser=5Freply(vu=5Fdev, &msg.msg, response);
-> +=09=09if (ev && !vu=5Fdev->suspended)
-> +=09=09=09time=5Ftravel=5Fadd=5Firq=5Fevent(ev);
->   
-> -=09return IRQ=5FHANDLED;
-> +=09=09if (msg.msg.header.flags & VHOST=5FUSER=5FFLAG=5FNEED=5FREPLY)
-> +=09=09=09vhost=5Fuser=5Freply(vu=5Fdev, &msg.msg, response);
-> +=09=09irq=5Frc =3D IRQ=5FHANDLED;
-> +=09};
-> +=09/* mask EAGAIN as we try non-blocking read until socket is empty */
-> +=09vu=5Fdev->recv=5Frc =3D (rc =3D=3D -EAGAIN) =3F 0 : rc;
-> +=09return irq=5Frc;
->   }
->   
->   static irqreturn=5Ft vu=5Freq=5Finterrupt(int irq, void *data)
+> - 'A' later ran on another CPU and exited. A's mm has still reference.
+>
+> - Now CPU#0 is being hotplugged out. As part of this, idle thread's
+> mm is switched (in idle_task_exit()) but its active_mm freeing is
+> deferred to finish_cpu() which gets called later from the control processor
+> (the thread which initiated the CPU hotplug). Please see the reasoning
+> on why mmdrop() is not called in idle_task_exit() at
+> commit bf2c59fce4074('sched/core: Fix illegal RCU from offline CPUs')
+>
+> - Now when finish_cpu() tries call percpu_free_rwsem() directly since we are
+> not in atomic path but hotplug path where cpus_write_lock() called is causing
+> the deadlock.
+>
+> I am not sure if there is a clean way other than freeing the per-cpu
+> rwsemaphore asynchronously all the time.
 
+Thanks for reporting this issue, Pavan. I think your suggestion of
+doing unconditional async destruction of mmu_notifier_lock would be
+fine here. percpu_rwsem_async_destroy has a bit of an overhead to
+schedule that work but I don't think the exit path is too performance
+critical to suffer from that. Michel, WDYT?
 
--- 
-M.Sc. Benjamin Beichler
-
-Universit=C3=A4t Rostock, Fakult=C3=A4t f=C3=BCr Informatik und Elektrotechnik
-Institut f=C3=BCr Angewandte Mikroelektronik und Datentechnik
-
-University of Rostock, Department of CS and EE
-Institute of Applied Microelectronics and CE
-
-Richard-Wagner-Stra=C3=9Fe 31
-18119 Rostock
-Deutschland/Germany
-
-phone: +49 (0) 381 498 - 7278
-email: Benjamin.Beichler@uni-rostock.de
-www: http://www.imd.uni-rostock.de/
-
---------------ms040807060402020002030106
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCC
-EKcwggUSMIID+qADAgECAgkA4wvV+K8l2YEwDQYJKoZIhvcNAQELBQAwgYIxCzAJBgNVBAYT
-AkRFMSswKQYDVQQKDCJULVN5c3RlbXMgRW50ZXJwcmlzZSBTZXJ2aWNlcyBHbWJIMR8wHQYD
-VQQLDBZULVN5c3RlbXMgVHJ1c3QgQ2VudGVyMSUwIwYDVQQDDBxULVRlbGVTZWMgR2xvYmFs
-Um9vdCBDbGFzcyAyMB4XDTE2MDIyMjEzMzgyMloXDTMxMDIyMjIzNTk1OVowgZUxCzAJBgNV
-BAYTAkRFMUUwQwYDVQQKEzxWZXJlaW4genVyIEZvZXJkZXJ1bmcgZWluZXMgRGV1dHNjaGVu
-IEZvcnNjaHVuZ3NuZXR6ZXMgZS4gVi4xEDAOBgNVBAsTB0RGTi1QS0kxLTArBgNVBAMTJERG
-Ti1WZXJlaW4gQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkgMjCCASIwDQYJKoZIhvcNAQEBBQAD
-ggEPADCCAQoCggEBAMtg1/9moUHN0vqHl4pzq5lN6mc5WqFggEcVToyVsuXPztNXS43O+FZs
-FVV2B+pG/cgDRWM+cNSrVICxI5y+NyipCf8FXRgPxJiZN7Mg9mZ4F4fCnQ7MSjLnFp2uDo0p
-eQcAIFTcFV9Kltd4tjTTwXS1nem/wHdN6r1ZB+BaL2w8pQDcNb1lDY9/Mm3yWmpLYgHurDg0
-WUU2SQXaeMpqbVvAgWsRzNI8qIv4cRrKO+KA3Ra0Z3qLNupOkSk9s1FcragMvp0049ENF4N1
-xDkesJQLEvHVaY4l9Lg9K7/AjsMeO6W/VRCrKq4Xl14zzsjz9AkH4wKGMUZrAcUQDBHHWekC
-AwEAAaOCAXQwggFwMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQUk+PYMiba1fFKpZFK4OpL
-4qIMz+EwHwYDVR0jBBgwFoAUv1kgNgB5oKAia4zV8mHSuCzLgkowEgYDVR0TAQH/BAgwBgEB
-/wIBAjAzBgNVHSAELDAqMA8GDSsGAQQBga0hgiwBAQQwDQYLKwYBBAGBrSGCLB4wCAYGZ4EM
-AQICMEwGA1UdHwRFMEMwQaA/oD2GO2h0dHA6Ly9wa2kwMzM2LnRlbGVzZWMuZGUvcmwvVGVs
-ZVNlY19HbG9iYWxSb290X0NsYXNzXzIuY3JsMIGGBggrBgEFBQcBAQR6MHgwLAYIKwYBBQUH
-MAGGIGh0dHA6Ly9vY3NwMDMzNi50ZWxlc2VjLmRlL29jc3ByMEgGCCsGAQUFBzAChjxodHRw
-Oi8vcGtpMDMzNi50ZWxlc2VjLmRlL2NydC9UZWxlU2VjX0dsb2JhbFJvb3RfQ2xhc3NfMi5j
-ZXIwDQYJKoZIhvcNAQELBQADggEBAIcL/z4Cm2XIVi3WO5qYi3FP2ropqiH5Ri71sqQPrhE4
-eTizDnS6dl2e6BiClmLbTDPo3flq3zK9LExHYFV/53RrtCyD2HlrtrdNUAtmB7Xts5et6u5/
-MOaZ/SLick0+hFvu+c+Z6n/XUjkurJgARH5pO7917tALOxrN5fcPImxHhPalR6D90Bo0fa3S
-PXez7vTXTf/D6OWST1k+kEcQSrCFWMBvf/iu7QhCnh7U3xQuTY+8npTD5+32GPg8SecmqKc2
-2CzeIs2LgtjZeOJVEqM7h0S2EQvVDFKvaYwPBt/QolOLV5h7z/0HJPT8vcP9SpIClxvyt7bP
-ZYoaorVyGTkwggWsMIIElKADAgECAgcbY7rQHiw9MA0GCSqGSIb3DQEBCwUAMIGVMQswCQYD
-VQQGEwJERTFFMEMGA1UEChM8VmVyZWluIHp1ciBGb2VyZGVydW5nIGVpbmVzIERldXRzY2hl
-biBGb3JzY2h1bmdzbmV0emVzIGUuIFYuMRAwDgYDVQQLEwdERk4tUEtJMS0wKwYDVQQDEyRE
-Rk4tVmVyZWluIENlcnRpZmljYXRpb24gQXV0aG9yaXR5IDIwHhcNMTYwNTI0MTEzODQwWhcN
-MzEwMjIyMjM1OTU5WjCBjTELMAkGA1UEBhMCREUxRTBDBgNVBAoMPFZlcmVpbiB6dXIgRm9l
-cmRlcnVuZyBlaW5lcyBEZXV0c2NoZW4gRm9yc2NodW5nc25ldHplcyBlLiBWLjEQMA4GA1UE
-CwwHREZOLVBLSTElMCMGA1UEAwwcREZOLVZlcmVpbiBHbG9iYWwgSXNzdWluZyBDQTCCASIw
-DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ07eRxH3h+Gy8Zp1xCeOdfZojDbchwFfylf
-S2jxrRnWTOFrG7ELf6Gr4HuLi9gtzm6IOhDuV+UefwRRNuu6cG1joL6WLkDh0YNMZj0cZGnl
-m6Stcq5oOVGHecwX064vXWNxSzl660Knl5BpBb+Q/6RAcL0D57+eGIgfn5mITQ5HjUhfZZkQ
-0tkqSe3BuS0dnxLLFdM/fx5ULzquk1enfnjK1UriGuXtQX1TX8izKvWKMKztFwUkP7agCwf9
-TRqaA1KgNpzeJIdl5Of6x5ZzJBTN0OgbaJ4YWa52fvfRCng8h0uwN89Tyjo4EPPLR22MZD08
-WkVKusqAfLjz56dMTM0CAwEAAaOCAgUwggIBMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P
-AQH/BAQDAgEGMCkGA1UdIAQiMCAwDQYLKwYBBAGBrSGCLB4wDwYNKwYBBAGBrSGCLAEBBDAd
-BgNVHQ4EFgQUazqYi/nyU4na4K2yMh4JH+iqO3QwHwYDVR0jBBgwFoAUk+PYMiba1fFKpZFK
-4OpL4qIMz+EwgY8GA1UdHwSBhzCBhDBAoD6gPIY6aHR0cDovL2NkcDEucGNhLmRmbi5kZS9n
-bG9iYWwtcm9vdC1nMi1jYS9wdWIvY3JsL2NhY3JsLmNybDBAoD6gPIY6aHR0cDovL2NkcDIu
-cGNhLmRmbi5kZS9nbG9iYWwtcm9vdC1nMi1jYS9wdWIvY3JsL2NhY3JsLmNybDCB3QYIKwYB
-BQUHAQEEgdAwgc0wMwYIKwYBBQUHMAGGJ2h0dHA6Ly9vY3NwLnBjYS5kZm4uZGUvT0NTUC1T
-ZXJ2ZXIvT0NTUDBKBggrBgEFBQcwAoY+aHR0cDovL2NkcDEucGNhLmRmbi5kZS9nbG9iYWwt
-cm9vdC1nMi1jYS9wdWIvY2FjZXJ0L2NhY2VydC5jcnQwSgYIKwYBBQUHMAKGPmh0dHA6Ly9j
-ZHAyLnBjYS5kZm4uZGUvZ2xvYmFsLXJvb3QtZzItY2EvcHViL2NhY2VydC9jYWNlcnQuY3J0
-MA0GCSqGSIb3DQEBCwUAA4IBAQCBeEWkTqR/DlXwCbFqPnjMaDWpHPOVnj/z+N9rOHeJLI21
-rT7H8pTNoAauusyosa0zCLYkhmI2THhuUPDVbmCNT1IxQ5dGdfBi5G5mUcFCMWdQ5UnnOR7L
-n8qGSN4IFP8VSytmm6A4nwDO/afr0X9XLchMX9wQEZc+lgQCXISoKTlslPwQkgZ7nu7YRrQb
-tQMMONncsKk/cQYLsgMHM8KNSGMlJTx6e1du94oFOO+4oK4v9NsH1VuEGMGpuEvObJAaguS5
-Pfp38dIfMwK/U+d2+dwmJUFvL6Yb+qQTkPp8ftkLYF3sv8pBoGH7EUkp2KgtdRXYShjqFu9V
-NCIaE40GMIIF3TCCBMWgAwIBAgIMJLUFOr7DT1PAbUHrMA0GCSqGSIb3DQEBCwUAMIGNMQsw
-CQYDVQQGEwJERTFFMEMGA1UECgw8VmVyZWluIHp1ciBGb2VyZGVydW5nIGVpbmVzIERldXRz
-Y2hlbiBGb3JzY2h1bmdzbmV0emVzIGUuIFYuMRAwDgYDVQQLDAdERk4tUEtJMSUwIwYDVQQD
-DBxERk4tVmVyZWluIEdsb2JhbCBJc3N1aW5nIENBMB4XDTIxMDUwNzE4MzIxMloXDTI0MDUw
-NjE4MzIxMlowbjELMAkGA1UEBhMCREUxHTAbBgNVBAoMFFVuaXZlcnNpdGFldCBSb3N0b2Nr
-MREwDwYDVQQEDAhCZWljaGxlcjERMA8GA1UEKgwIQmVuamFtaW4xGjAYBgNVBAMMEUJlbmph
-bWluIEJlaWNobGVyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2b8u90iXRBjH
-yBjGxC1OB7LXQfzdDYQ7JSdKvmpmyJKFuljDEIy5yYzjRHee0+Kf5DhrSgshWuvYAD1sIqQF
-WlM38YTJRtwq9NF6yCdZQgxwaR8qUplUw72d/PCqD+KjFyj8scb32EOclVXY9UpEYeGp1BnG
-66o9Oewbk4rdHqeYDt/9VDPZOmi5YYtXUfwITZ/A6LpgGYf+NDQHRWcmG5thbvcXVYvSOwrm
-vZnf8ZW4GbMsTorXWKFqx3gntf5VmY/xZ7XH4mE1V9gtNAo5XaTpj9g3ncJel1jEMtii1DeH
-/tnP5ICo6GabZhyUfRo0vYGQhBGYqRm5vMowdqJ38wIDAQABo4ICWTCCAlUwPgYDVR0gBDcw
-NTAPBg0rBgEEAYGtIYIsAQEEMBAGDisGAQQBga0hgiwBAQQIMBAGDisGAQQBga0hgiwCAQQI
-MAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDAdBgNVHQ4EFgQUVUQ/tNKbRqzbUgK5NMo8iU5mwfswHwYDVR0jBBgwFoAUazqYi/ny
-U4na4K2yMh4JH+iqO3QwKwYDVR0RBCQwIoEgQmVuamFtaW4uQmVpY2hsZXJAdW5pLXJvc3Rv
-Y2suZGUwgY0GA1UdHwSBhTCBgjA/oD2gO4Y5aHR0cDovL2NkcDEucGNhLmRmbi5kZS9kZm4t
-Y2EtZ2xvYmFsLWcyL3B1Yi9jcmwvY2FjcmwuY3JsMD+gPaA7hjlodHRwOi8vY2RwMi5wY2Eu
-ZGZuLmRlL2Rmbi1jYS1nbG9iYWwtZzIvcHViL2NybC9jYWNybC5jcmwwgdsGCCsGAQUFBwEB
-BIHOMIHLMDMGCCsGAQUFBzABhidodHRwOi8vb2NzcC5wY2EuZGZuLmRlL09DU1AtU2VydmVy
-L09DU1AwSQYIKwYBBQUHMAKGPWh0dHA6Ly9jZHAxLnBjYS5kZm4uZGUvZGZuLWNhLWdsb2Jh
-bC1nMi9wdWIvY2FjZXJ0L2NhY2VydC5jcnQwSQYIKwYBBQUHMAKGPWh0dHA6Ly9jZHAyLnBj
-YS5kZm4uZGUvZGZuLWNhLWdsb2JhbC1nMi9wdWIvY2FjZXJ0L2NhY2VydC5jcnQwDQYJKoZI
-hvcNAQELBQADggEBACOufP2NVgvUwvjvP2WPeIHDEVtJ/+s/Mj0LWp5soBW7NigeBcLIuEk0
-2SCxCrfhn2KP9UtQbVecIbJ1swZDyLvhth/fFarUy0oVjkljW3C9v5Ahsl+XGt0vuykJjyz5
-KDlioNEAG3aMrfeWA/wAMJLDZ62xGHJZR94PgiFtyMpuxfMHy0INKPaxLjS6xDESL8ecqHTq
-Q53DDAPudkZg7aUllBEufBk4aS3mBO1Gl2kOXR/1om14+7fKMxiQCbpaPiJH9VA0txBJfnfk
-KeFTOAf9OdtZ77WWZTEA9JLLrcG9l44WJt7DM5Ui38NC/ZBprX4IVDhOdoIgv5uWUVTHVIwx
-ggQLMIIEBwIBATCBnjCBjTELMAkGA1UEBhMCREUxRTBDBgNVBAoMPFZlcmVpbiB6dXIgRm9l
-cmRlcnVuZyBlaW5lcyBEZXV0c2NoZW4gRm9yc2NodW5nc25ldHplcyBlLiBWLjEQMA4GA1UE
-CwwHREZOLVBLSTElMCMGA1UEAwwcREZOLVZlcmVpbiBHbG9iYWwgSXNzdWluZyBDQQIMJLUF
-Or7DT1PAbUHrMA0GCWCGSAFlAwQCAQUAoIICPTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjcyMDI4MjZaMC8GCSqGSIb3DQEJBDEiBCBNeLI5oZbR
-OiGs7Tdy1GWObL92G+WbAdBdqdYPz2C34zBsBgkqhkiG9w0BCQ8xXzBdMAsGCWCGSAFlAwQB
-KjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwDgYIKoZIhvcNAwICAgCAMA0GCCqGSIb3DQMC
-AgFAMAcGBSsOAwIHMA0GCCqGSIb3DQMCAgEoMIGvBgkrBgEEAYI3EAQxgaEwgZ4wgY0xCzAJ
-BgNVBAYTAkRFMUUwQwYDVQQKDDxWZXJlaW4genVyIEZvZXJkZXJ1bmcgZWluZXMgRGV1dHNj
-aGVuIEZvcnNjaHVuZ3NuZXR6ZXMgZS4gVi4xEDAOBgNVBAsMB0RGTi1QS0kxJTAjBgNVBAMM
-HERGTi1WZXJlaW4gR2xvYmFsIElzc3VpbmcgQ0ECDCS1BTq+w09TwG1B6zCBsQYLKoZIhvcN
-AQkQAgsxgaGggZ4wgY0xCzAJBgNVBAYTAkRFMUUwQwYDVQQKDDxWZXJlaW4genVyIEZvZXJk
-ZXJ1bmcgZWluZXMgRGV1dHNjaGVuIEZvcnNjaHVuZ3NuZXR6ZXMgZS4gVi4xEDAOBgNVBAsM
-B0RGTi1QS0kxJTAjBgNVBAMMHERGTi1WZXJlaW4gR2xvYmFsIElzc3VpbmcgQ0ECDCS1BTq+
-w09TwG1B6zANBgkqhkiG9w0BAQEFAASCAQByVyKKPyIK8cCYxdvIvNLUhIpTucvwciEKs4Hy
-zzIBor8CLP3RgiFpotHKv2UkVKlWKXCzZpPYKLn3U+JZOJpjv2PvH+5SNCO1Y6eGMEgvFbZl
-s1BzitZAw8FjcNqrmigp46EB1RgI5rvVoIYnd6LJ4Ts1Nko+Fhq5tGXxWDSivx6VUx8lRwFu
-P9x0s/Ak0dCzeJIa/01/1XVwkqdB9NJDUv5ZxyrNSWdPKuiZLpdfhXcqrOp2IN3UU7JLhK+7
-q72tgRAF3MVTR/qG3huXxJoUSNQBnJQ77QDCpZzb5vsxYFDnjZd7MLM7HljX9hgoJT0hddwl
-xa1PRtWSy3iBDOtBAAAAAAAA
---------------ms040807060402020002030106--
-
+>
+> [1]
+>
+> -001|context_switch(inline)
+> -001|__schedule()
+> -002|__preempt_count_sub(inline)
+> -002|schedule()
+> -003|_raw_spin_unlock_irq(inline)
+> -003|spin_unlock_irq(inline)
+> -003|percpu_rwsem_wait()
+> -004|__preempt_count_add(inline)
+> -004|__percpu_down_read()
+> -005|percpu_down_read(inline)
+> -005|cpus_read_lock() // trying to get cpu_hotplug_lock again
+> -006|rcu_barrier()
+> -007|rcu_sync_dtor()
+> -008|mmu_notifier_subscriptions_destroy(inline)
+> -008|__mmdrop()
+> -009|mmdrop(inline)
+> -009|finish_cpu()
+> -010|cpuhp_invoke_callback()
+> -011|cpuhp_invoke_callback_range(inline)
+> -011|cpuhp_down_callbacks()
+> -012|_cpu_down() // acquired cpu_hotplug_lock (write lock)
+>
+> Thanks,
+> Pavan
+>

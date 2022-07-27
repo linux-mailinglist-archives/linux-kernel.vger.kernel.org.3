@@ -2,151 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD06583299
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C6558329B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbiG0S7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
+        id S233401AbiG0TAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbiG0S6u (ORCPT
+        with ESMTP id S232849AbiG0TAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:58:50 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2966E2F9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:08:08 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-31e47ac84daso184253417b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NMXcRI87yufdY6/XT5cLLLORQt3sxSxSpP/LTh5+LvM=;
-        b=S+TOJiLqHXqCcXVfOGmduOCIM0kskUGMNI92Ai1NEPb0uxl8PI2/KmpWvLVjiD919D
-         ZvZS4emRhEfkqWESzGR5OlA4oWesobF5FDdCT+pj3IUTAQvEbfG3bcxkh6iWymMF1RU+
-         tTN0RwcYj1C6I2G7aaAoMjgrPeFGRE3ffcUa7oMvXlq0nIpJh7SmEjEyb1XXB6pVt9xr
-         pWhBykPSHwtd4h0Xq157RIzg6P7UY4aEAIHcCKecJU5iKJOzl4QL6m54x48zjZP/7V//
-         S6xdyM+FN8dU9RizSaLb4lV8OS/TPMjkoHJKI1dY/+79Oc3l+B/7a6THeWohcl2Ww4M8
-         A9fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NMXcRI87yufdY6/XT5cLLLORQt3sxSxSpP/LTh5+LvM=;
-        b=5JpYMyR1akM8/PF8Wr4ofwcSMVTVlZmPyVBqk267nsZ0a2h16tc39UwByN64NZXqUs
-         5xCwrZupVl1wzqN9c1UrSs/vG4mTehNWvmUaqnJGhZZOTBtH+JcbVbuuezoDCmwC8kwX
-         AwleNrkiQTmwd0/uugE2X687TX/K+b/Jx08NmZG0ri9Ei2/I3oZB6pROQ7DOt2LYGegL
-         VEiHOvrhbL4Q8Wz7Trg0wXJxalTeHHj1vgYrqytgtWcui8906encfAjhguztg3QsCXlC
-         TuOyRdQ35ja/gMSOasDJlnY3d4tzivmjudGJloAzrQitDgkqXbY3LcqzDMN++A2j4Unv
-         bsSg==
-X-Gm-Message-State: AJIora8kyzcLPyQGWo6+/pMk2O5DtVu2AGegcXn4Uxb+WhA5dYS3B/90
-        CZawooXUG1QOmtNQj7VPpwEiw5+o1hcJoUr1LJ85y1X8YEY=
-X-Google-Smtp-Source: AGRyM1uD7b1fr29udoQDI9d1E7IIKfgZyoN4ai5FBzz23w5LGSBRFo2LyXt+kDCYDfuXed2hJDzynnxut0qJtcvmw4c=
-X-Received: by 2002:a81:4807:0:b0:31e:7002:46cc with SMTP id
- v7-20020a814807000000b0031e700246ccmr20494789ywa.83.1658945287641; Wed, 27
- Jul 2022 11:08:07 -0700 (PDT)
+        Wed, 27 Jul 2022 15:00:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC11374DF5;
+        Wed, 27 Jul 2022 11:11:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5974D61988;
+        Wed, 27 Jul 2022 18:11:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD6EC433C1;
+        Wed, 27 Jul 2022 18:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658945466;
+        bh=Mom6Ph0FsAAZ+C+h67Qnnz+WO0GGSqzSCicWOfVwSFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RuKOM3Ol94eIS35+inrZhT7DED0Yq1YgX9yUMQFL7diTl8EruJ3Xk+o8nrTVlyX7a
+         H7msQA5o2kYik/cqyALUfZN9FHx4wehSeGCpNxzqqHZp8RhzOnK1bowgIn8SYa4gfQ
+         3MNzOqVTdOJhOAJVxDb4SdE4zZ+1osqEyrQ7pI4Q=
+Date:   Wed, 27 Jul 2022 20:11:03 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Iurii Zaikin <yzaikin@google.com>, Jan Kara <jack@suse.cz>,
+        Paul Turner <pjt@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>, Qing Wang <wangqing@vivo.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Stephen Kitt <steve@sk2.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Antti Palosaari <crope@iki.fi>, Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Lukas Middendorf <kernel@tuxforce.de>,
+        Mark Fasheh <mark@fasheh.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Tso <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.15 040/201] sysctl: move some boundary constants from
+ sysctl.c to sysctl_vals
+Message-ID: <YuF/t6/DtsGPLQVc@kroah.com>
+References: <20220727161026.977588183@linuxfoundation.org>
+ <20220727161028.534205480@linuxfoundation.org>
+ <YuF2eU9SbDDHdqaU@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
- <20220302211100.65264-2-paul.kocialkowski@bootlin.com> <YiaTfsMDs7RGob2N@robh.at.kernel.org>
- <CAGETcx9u9RO_5nSp+=qgwDGY=jL_Q1hAcj+RfVN=q-H_8iuT4w@mail.gmail.com>
- <20220727120631.iefzititedahdsdt@houat> <CAGETcx_o=L+Ku9CPGbQW2wS15etvi+ofkKZ0K=C7imP4=JcXeQ@mail.gmail.com>
- <YuFzG9SykSHw1bVe@aptenodytes>
-In-Reply-To: <YuFzG9SykSHw1bVe@aptenodytes>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 27 Jul 2022 11:07:31 -0700
-Message-ID: <CAGETcx_=UJWtNoqZUbOx9LmQWKg070cL265nk4W2nXQdZ940bA@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 1/8] of: Mark interconnects property supplier as optional
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Rob Herring <robh@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuF2eU9SbDDHdqaU@bombadil.infradead.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 10:17 AM Paul Kocialkowski
-<paul.kocialkowski@bootlin.com> wrote:
->
-> Hi,
->
-> On Wed 27 Jul 22, 09:06, Saravana Kannan wrote:
-> > On Wed, Jul 27, 2022 at 5:06 AM Maxime Ripard <maxime@cerno.tech> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Mon, Mar 07, 2022 at 07:34:22PM -0800, Saravana Kannan wrote:
-> > > > On Mon, Mar 7, 2022 at 3:21 PM Rob Herring <robh@kernel.org> wrote:
-> > > > >
-> > > > > +Saravana
-> > > > >
-> > > > > On Wed, Mar 02, 2022 at 10:10:53PM +0100, Paul Kocialkowski wrote:
-> > > > > > In order to set their correct DMA address offset, some devices rely on
-> > > > > > the device-tree interconnects property which identifies an
-> > > > > > interconnect node that provides a dma-ranges property that can be used
-> > > > > > to set said offset.
-> > > > > >
-> > > > > > Since that logic is all handled by the generic openfirmware and driver
-> > > > > > code, the device-tree description could be enough to properly set
-> > > > > > the offset.
-> > > > > >
-> > > > > > However the interconnects property is currently not marked as
-> > > > > > optional, which implies that a driver for the corresponding node
-> > > > > > must be loaded as a requirement. When no such driver exists, this
-> > > > > > results in an endless EPROBE_DEFER which gets propagated to the
-> > > > > > calling driver. This ends up in the driver never loading.
-> > > > > >
-> > > > > > Marking the interconnects property as optional makes it possible
-> > > > > > to load the driver in that situation, since the EPROBE_DEFER return
-> > > > > > code will no longer be propagated to the driver.
-> > > > > >
-> > > > > > There might however be undesirable consequences with this change,
-> > > > > > which I do not fully grasp at this point.
-> > > >
-> > > > Temporary NACK till I get a bit more time to take a closer look. I
-> > > > really don't like the idea of making interconnects optional. IOMMUs
-> > > > and DMAs were exceptions. Also, we kinda discuss similar issues in
-> > > > LPC. We had some consensus on how to handle these and I noted them all
-> > > > down with a lot of details -- let me go take a look at those notes
-> > > > again and see if I can send a more generic patch.
-> > > >
-> > > > Paul,
-> > > >
-> > > > Can you point to the DTS (not DTSI) file that corresponds to this?
-> > > > Also, if it's a builtin kernel, I'd recommend setting
-> > > > deferred_probe_timeout=1 and that should take care of it too.
-> > >
-> > > For the record, I also encountered this today on next-20220726 with this
-> > > device:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/sun5i.dtsi#n775
-> > >
-> > > The driver won't probe without fw_devlink=off
-> >
-> > Really? I basically ended up doing what I mentioned in my original
-> > reply. next-20220726 should have my changes that'll make sure
-> > fw_devlink doesn't block any probe (it'll still try to create as many
-> > device links as possible) after 10s (default deferred probe timeout).
-> > Can you try to find more info on why it's not probing?
-> > <debugfs>/devices_deferred should give more details.
->
-> By the way last time I checked the initial issue that I reported appeared to be
-> fixed by the patch (Extend deferred probe timeout on driver registration).
+On Wed, Jul 27, 2022 at 10:31:37AM -0700, Luis Chamberlain wrote:
+> On Wed, Jul 27, 2022 at 06:09:04PM +0200, Greg Kroah-Hartman wrote:
+> > From: Xiaoming Ni <nixiaoming@huawei.com>
+> > 
+> > [ Upstream commit 78e36f3b0dae586f623c4a37ec5eb5496f5abbe1 ]
+> > 
+> > sysctl has helpers which let us specify boundary values for a min or max
+> > int value.  Since these are used for a boundary check only they don't
+> > change, so move these variables to sysctl_vals to avoid adding duplicate
+> > variables.  This will help with our cleanup of kernel/sysctl.c.
+> > 
+> > [akpm@linux-foundation.org: update it for "mm/pagealloc: sysctl: change watermark_scale_factor max limit to 30%"]
+> > [mcgrof@kernel.org: major rebase]
+> > 
+> > Link: https://lkml.kernel.org/r/20211123202347.818157-3-mcgrof@kernel.org
+> > Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
+> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> 
+> I'm a bit puzzled. How / why is this a stable fix?
 
-Thanks for the confirmation.
+I think it's needed by a patch later in the series.  Sasha, can you
+verify?
 
--Saravana
+thanks,
+
+greg k-h

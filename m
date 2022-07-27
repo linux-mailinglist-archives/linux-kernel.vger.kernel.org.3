@@ -2,182 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D4B582A39
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348C1582A3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbiG0QEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S234599AbiG0QE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbiG0QEQ (ORCPT
+        with ESMTP id S233708AbiG0QEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:04:16 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2066.outbound.protection.outlook.com [40.107.94.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4335491D2;
-        Wed, 27 Jul 2022 09:04:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OD6+Id6FMAlo34bQXpne2nqbn92VE1VInZYfL0USyHKuhYCGBAJ56gHa9TwRxu8mtf5FNTMUaABiyAnwFNCMijoUTPw3di37vh92zgFGcooTUJC2Y3z3NsnPcAM4cELCVIyJJ0ltwIm23KjDUbqPJPa+JifyP7QXkTINNm7BvxHNm5rRiJKZ6h+lxEDYXig3U5168WBAX4xqq/3MDefRQOSNWfqV+LSkMLjoSpNOSJC52W9yjaRn4wRFkYIHjjOONVHs10DQajy2W0eWJIRe/8xSp99DjTA+FzVPLbUBhMbV0y+YRUG0xhE3nVl4IHtjFwiAObQZ5+far1JgsADDOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lcUQ8k++Hl8/w5pcOezVWHmJ5Ppv5G1VP5LgK/1cmIY=;
- b=oIkZkVexJKeuss1Q+4b8kcqRKLcqzIFLh19ZDNIPtddYp1HaC+Z/QrHvriKiYutX5V9QqBO34++ySrixpD70CMKpCCS9jbCigYASJ0M9d8RbMlMuDERmIsUfql0OtY2k0WArLKrPEuczr4tpciagEcGf/V9j2XNKSduaQdBo3owVRfKpwafyVdg+ZZ4BIJOuenpFiaJz6cQ32iJTTgHxZn6dH+4yHoyNBYXVrs5NftfnZRcqP7q7ca+Bqd3jK7H2jxtfoz5uRumZfqPVR7yewOl2Fw/2gH0HPu00yLlkPx+o1OVWw4tY5GiJmGmWWr8ff7I+5DqaCACn/UL8Pf5uXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lcUQ8k++Hl8/w5pcOezVWHmJ5Ppv5G1VP5LgK/1cmIY=;
- b=Sr0blYj+gp24WPOcIn7mxPd4aQ9s1EUWWGjhn2IVuj0f8/yqdy9szEH0twltn7Qk/7iMjIBZLXg5fZHMUqDtTu5zFRAZ7h7Rg/rpQCOfg52um/FejgObHhAXMN2XgDPR3kZ3GrX+0APBbzmVCqvaqGFr3ASvv/hwUIHmjZCE3mY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by CH0PR12MB5316.namprd12.prod.outlook.com (2603:10b6:610:d7::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Wed, 27 Jul
- 2022 16:04:13 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::406d:afb5:d2d7:8115]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::406d:afb5:d2d7:8115%5]) with mapi id 15.20.5458.025; Wed, 27 Jul 2022
- 16:04:13 +0000
-Message-ID: <17e02cd8-eba1-91b8-2506-91a7893ac967@amd.com>
-Date:   Wed, 27 Jul 2022 12:04:10 -0400
+        Wed, 27 Jul 2022 12:04:22 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6F2491D2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:04:21 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id bn9so14229433wrb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc;
+        bh=6NrUn7E//ykFF4QQhJDK/6i3k3Gu7D6eaxZjwgfcbTM=;
+        b=lfb3jPEvnfhUcOiVEqU0NK6hdjncV70kQO/e8gQ9cmp58Dj0vpmYYbzlCikJ+lWSVe
+         C9bBJA07O+VwuOohfmt5qlowKa3FMQxKT3nNOQt9Rgsb1joHmnVjjVy30x0MILDlZb7V
+         nMV8AeH7Z+YinSC2VfZfFbgqoeYdIqmp441mVX1UbpocRjAzUwc7fsFYP8dm+7d7/GGh
+         IaXC077PHMkRp9kj/mpP1lReQOWQEMHx2CxfI7j+gltAt6u4W8AC1jAV0NHvvDlbqAjO
+         FU/TVdda779L0hCzByZGds9S5sPr8O3uF64NX4cuRSaG+wubU4uzT5M5jlDjhlneU3lD
+         KLmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc;
+        bh=6NrUn7E//ykFF4QQhJDK/6i3k3Gu7D6eaxZjwgfcbTM=;
+        b=HyD4iYnCWzKoRXECr23AEEevMYh6J5kg17T1FSoY/MN4VMNiVGcUxnJxCzgIbfA+Xn
+         jxQE/D3qOKmZm08KP6Sk49/DqCJfdPehs6NTfi/MGc2wgEwhW9AC6DzwplxafO1DKJrK
+         b95hTY9VR8w3vU1oIeP/cJDLUcensZ/L+Pw8+Dv1xkXu/qGeJIZFa4R26KgzkR9jm1Zb
+         u7ga8HZoTPZOVYDew04XVXMg/rRA3LtKso3VAJh5RKVgVXE/2P4/MgK/loMw1NP5tFOw
+         wBpqlcgT1ViT/DzutWuSRqV5Z/LUaJPUXUBO1OKYWREIely/9COZAx4FhAoFgo4rOVxV
+         TERQ==
+X-Gm-Message-State: AJIora8KdELwZf/n4g5wNnIQrQqUtskJVLfDiyB5tRQ2TRT+hD35pDOf
+        0vsSAYY5qjbv3PDbIzyMBbAtpw==
+X-Google-Smtp-Source: AGRyM1vg/CnCRzKaOiyCAp0pY1hj4SpyrC3dqPfR9kcVOPTokuKZYv+GXpDMc6cTZAhojiK02rpt7g==
+X-Received: by 2002:a05:600c:2196:b0:3a2:feff:4c42 with SMTP id e22-20020a05600c219600b003a2feff4c42mr3628523wme.163.1658937859480;
+        Wed, 27 Jul 2022 09:04:19 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0? ([2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0])
+        by smtp.googlemail.com with ESMTPSA id h15-20020a5d430f000000b0021b5861eaf7sm17511327wrq.3.2022.07.27.09.04.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 09:04:19 -0700 (PDT)
+Message-ID: <7472984e-f502-5f27-82bf-070127dd85a5@linaro.org>
+Date:   Wed, 27 Jul 2022 18:04:17 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/amdkfd: use time_is_before_jiffies(a + b) to replace
- "jiffies - a > b"
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Yu Zhe <yuzhe@nfschina.com>, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        liqiong@nfschina.com
-References: <20220727025917.22477-1-yuzhe@nfschina.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <20220727025917.22477-1-yuzhe@nfschina.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Samuel Holland <samuel@sholland.org>,
+        XU pengfei <xupengfei@nfschina.com>,
+        Li zeming <zeming@nfschina.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] timer drivers for v5.20-rc1
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT3PR01CA0071.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:84::12) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: de8ab7a3-7992-4960-4206-08da6fe9a5ed
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5316:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dIlZzzRSzKp2Ip/stngwCKQW3vrNqiBWi8SARYOvzVcOrFwAcpWsYHmkgEuApB0neGyawbxD+FmnYOUnQ1TF25mEu6t6jNWNtiBVrcSEKgJI4NSlhqqRN7UUShFUtfpnt5xbsm8ViXC/X3TkEf6CxrGIIje5DImjNMGqM9fNQnJ+COPYz5eXtsSxRDOLxRgmzUBiUDiD+QluEHP9WS7cnB6nwS9fcL3dFx4B2WxrZJ2k0xAIYkdCiZj7Dhy5iZJmhgUwmvSuGXc0FN5UGedBna8ZPBGKUgze2WGc9iU8F85Is5jtmsZw8XXTHiE83Y9h+M07nlEJw4Bac3o3y4+3SIA6nD6ft865tlgbMqo9gL2DCqXEPcIXWTMYG/x73YLfoKruwDc4G9MggVRoqfct8knT8Qh3ic2u2oFyxeyNLFJ+xGhbsU9KTvexQfsEEMFuXTKEwY1CVLNIPwhPoCRFsV3DfCQqWGiZGoIeFKCbuqiIeTvbpoGA4asmyw2MVN5QVfFS9cEmHXwtjRDX0saV0WIbeXC6T4saU/jq/oQPvFbddIF8YiNS7c1K9lcO3s2wPz9hIxIZdEIIsBJASxYSjKC7b6YC2QX91qAd2NLwT45XSdU4Ih240U+sFQ+DI1r6qsQWCkZTpabduaTQ2CeG1gxe3B973VBrA7LHECWWq1oauDyZZDZmRb9+/digaSa7Ixzam5SZxS8rtdco3CfUVoIF3/Hfz8Y40vlXvpBUrqc9+t6u6wCg96AYAhegkEv4wN7MYpIB5M+ra+2Eo1Lj4ToZGOYb2E5cZz+S7EaJ02SW/Hg3QtKPmj+zdbSpo4A8T5CcR297u3g8a3jt9kfClg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(31696002)(86362001)(36756003)(38100700002)(8936002)(5660300002)(44832011)(478600001)(6486002)(316002)(4326008)(66476007)(66556008)(83380400001)(66946007)(186003)(2616005)(31686004)(41300700001)(26005)(2906002)(6506007)(6512007)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MmphK1RCYUxZMTNXZ1RQZlVvWWNtL1BPbXUzaEVIQzNaNmpaN0JwUk05cFZ4?=
- =?utf-8?B?SXlqV0pTSHZQdmRLTjNncWZ3TlMydjVsUmI4aHpCNnBubGJQYXpocDgwOFkr?=
- =?utf-8?B?bG96YjB0MlFGcjlwbk15L1dnNFkwVmFGVmplRVpiU2NWK29PS2pDZXpkRlFC?=
- =?utf-8?B?VVhjMm51Z2ZLMjRWZ3htbzFPejdUMW5QNnczd3pNZnRRNlpuNlY5QlFHek1p?=
- =?utf-8?B?L0NGQUVBUGU4Q0JLQ1BLWTdBbm56Ym9CV3A4VXdGdzB1b2FLeWZtUHFOaDFP?=
- =?utf-8?B?YlA5N2J5NWNHemlWVys3c1FTY2o2ZzRodXhHVDZaWTJGQ3Qyamh2VmlCOS9S?=
- =?utf-8?B?UFFEZ1JRTE5jSDRPbE4ybTJ3Vm4wb3haUjBxS2ZPMHg1amozNmtGOXNuaUpY?=
- =?utf-8?B?VzE0ejBMeExNTUFZRnBYSGZLTitrbUowdjVocjhhbTlrME1rSm0rRzR0emor?=
- =?utf-8?B?MGZiM1dQdk9ES0Q3N0tlWE9KcmdFVmNISm93ZDYzZU1NSjBWL04xSXVwNzN1?=
- =?utf-8?B?bnozWkpIMWRwblNCWm5wbTlZNEpldjk5UE5SQjZBOUY5VjBjUEF6YngzOVox?=
- =?utf-8?B?cVh3N0gzenBDK1g0V3NwU0NiZFdMZTlYT3ZkcS9XSEdsdzlDdEVab3hqNlpI?=
- =?utf-8?B?a3R4UzJJU3VXaEJ0aDFydnpZcGpidDBUMTRxMVFURHM4a3MwUmpzdFk1SmVu?=
- =?utf-8?B?V3hEZlRmc2pRVWlwS24rZDllSEZqRS9ZVmsyV1VYWnRUU3piam5QTi9iaTVG?=
- =?utf-8?B?anhJaVVHUjF2RnBGN3EvV3d5S2x1SXRMSjVBTy9mYXB5ZU5lb3hOK3ZZelRX?=
- =?utf-8?B?UHFyNFovcnFRNjBoeWJjZklld0JiclF5MUZjUWV5ai9sUXRSeVRERVVFdmxS?=
- =?utf-8?B?bk1La3hRV052blJqZEVXUzkrSmswRHl1OWpuWEhoNnluRll2aEROLy96UE1S?=
- =?utf-8?B?NjZlRFF5eU5KWDZmSXBvMXNzY1BUYzhNaXU4REJJNXp5Q3U3QWFUNWN2ODlJ?=
- =?utf-8?B?cXRHVFBoeUFibTB0VTVkL3EyeW1tU29qQm0yZEZ2bUVpV3pXQkF6TktIOVFi?=
- =?utf-8?B?ZndnSmdmZFkvL3BuSDNGSUlUZ2RKZ0ppdy9iVlBkWGt3Z0sxYW1KT25jeDVC?=
- =?utf-8?B?eEJkVHg2TTBrbEFiaURHcGt6aE9peU5CM1VFbVVCMW1qQk1lY2l1eXY5LzdC?=
- =?utf-8?B?dVRBT3V3WWlKMFNRN3hjbmgxOFBLWWJRZDRBcDZvWDdOb1BLZXdwQkEzT1k5?=
- =?utf-8?B?QjhFSFFDMmp3ajcxOGorWGlSQ05qdmw0Qnh3OU1ORWNadkhrelZ4enloT3V1?=
- =?utf-8?B?NjR4MmVJUnVWR2tHN01ySnFMazlrYWU5SGZUK3NJUnF4UXNhQzIwYWUreHlU?=
- =?utf-8?B?cHpTd3FGYk90OHNOYjZOQzVmSUd4NU5mVklTV2FsTi83SllqS3RGV1pjczMr?=
- =?utf-8?B?R0FtZnVHTjNveEtjT1lYSEtaR29CMzNmOE1kdlBKUUE5a1l3WkFHMGFyMXUx?=
- =?utf-8?B?RU5iSHZhUzRhMUZKQVpFUEtLMTVxQnB3Z3o4YXhDeE1oWUZ1VW0zM01MSTNT?=
- =?utf-8?B?THVBRlhFZ2FrMExENzVIZzl2SzF2bzVaMWNNNTNqZjJLTDg4cXRZRHZZWlVr?=
- =?utf-8?B?TjJ0ZEhtVzBUejE4YmpPeGxGNjhUL1E0RkVXRTg4ZGROTTROODlDejVZMTZS?=
- =?utf-8?B?d2Z2QXZJTEdoaXpYRGRHeWE0YkVNaFM4b21GZ2VTakJWYmZjc0Rob245aEZD?=
- =?utf-8?B?YWkvVG1KWVFUMzBEbDdpbDRXZWxGdXcxOFlIUTBWelNXMkM3L1F6YjJMV1p4?=
- =?utf-8?B?QkNxU2tUUmVEZTJCOEo3N3BPRUdiNzJJQkE1VVB6V0FSZFNxay9QcEpqNy9s?=
- =?utf-8?B?aGRvYVRnTEVndEhUdG5McENES200aCtOQ3BpZU9kclA3MEJpcDNpSm9nUGNR?=
- =?utf-8?B?ME9aeXdLVzRFcU44SVVtcDdpeE9QZkFJYjBYaVc0aXBSV2tTZGVjYnhBS09u?=
- =?utf-8?B?OXRkbDB0RGM1TGx6YXBxbHhhVlEvbUpJcDN3bytNd3U5OExNQWVBdC92bkRY?=
- =?utf-8?B?MUtFZkxtbyt6blZSUDVxdXZHUk1vc2liMkpNZTJheVpObGR4V08zK3Z6cUJa?=
- =?utf-8?Q?8DtjywJZCqcTDJRlWlQ5CddBi?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de8ab7a3-7992-4960-4206-08da6fe9a5ed
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2022 16:04:12.9448
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 56PnFny50NM1GeoUfnNPsHUuSBV1H5iKRAw9Q7PsVif3e4tICswilZIu1jKBGrFL6muIJoW6g+L0HjHjknWcfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5316
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces a build warning for me:
 
-   CC [M]  drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_interrupt.o
-In file included from /home/fkuehlin/compute/kernel/include/linux/spinlock.h:54,
-                  from /home/fkuehlin/compute/kernel/include/linux/mmzone.h:8,
-                  from /home/fkuehlin/compute/kernel/include/linux/gfp.h:6,
-                  from /home/fkuehlin/compute/kernel/include/linux/slab.h:15,
-                  from /home/fkuehlin/compute/kernel/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_interrupt.c:44:
-/home/fkuehlin/compute/kernel/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_interrupt.c: In function ?interrupt_wq?:
-/home/fkuehlin/compute/kernel/include/linux/typecheck.h:12:18: warning: comparison of distinct pointer types lacks a cast
-    12 |  (void)(&__dummy == &__dummy2); \
-       |                  ^~
-/home/fkuehlin/compute/kernel/include/linux/jiffies.h:106:3: note: in expansion of macro ?typecheck?
-   106 |   typecheck(unsigned long, b) && \
-       |   ^~~~~~~~~
-/home/fkuehlin/compute/kernel/include/linux/jiffies.h:154:35: note: in expansion of macro ?time_after?
-   154 | #define time_is_before_jiffies(a) time_after(jiffies, a)
-       |                                   ^~~~~~~~~~
-/home/fkuehlin/compute/kernel/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_interrupt.c:159:7: note: in expansion of macro ?time_is_before_jiffies?
-   159 |   if (time_is_before_jiffies(start_jiffies + HZ)) {
-       |       ^~~~~~~~~~~~~~~~~~~~~~
+Hi Thomas,
 
-I think you need to change the the definition of start_jiffies to be 
-unsigned long. Do you want to submit a v2 of your patch?
+please consider pulling the changes:
 
-That said, I think the existing code was fine, though the type-mismatch 
-highlighted by your patch is a bit iffy.
+The following changes since commit 57963a92a70b037aa22544fbc34742e5be689c04:
 
-Regards,
-   Felix
+   Merge tag 'timers-v5.19-rc1' of 
+https://git.linaro.org/people/daniel.lezcano/linux into timers/core 
+(2022-05-27 10:32:08 +0200)
 
+are available in the Git repository at:
 
-Am 2022-07-26 um 22:59 schrieb Yu Zhe:
-> time_is_before_jiffies deals with timer wrapping correctly.
->
-> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c b/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
-> index a9466d154395..6397926e059c 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
-> @@ -156,7 +156,7 @@ static void interrupt_wq(struct work_struct *work)
->   	while (dequeue_ih_ring_entry(dev, ih_ring_entry)) {
->   		dev->device_info.event_interrupt_class->interrupt_wq(dev,
->   								ih_ring_entry);
-> -		if (jiffies - start_jiffies > HZ) {
-> +		if (time_is_before_jiffies(start_jiffies + HZ)) {
->   			/* If we spent more than a second processing signals,
->   			 * reschedule the worker to avoid soft-lockup warnings
->   			 */
+   https://git.linaro.org/people/daniel.lezcano/linux.git 
+tags/timers-v5.20-rc1
+
+for you to fetch changes up to 148399c90e25bb5d1aa6f3e1dde25fec6f4005f2:
+
+   clocksource/drivers/sun5i: Remove unnecessary (void*) conversions 
+(2022-07-27 17:01:52 +0200)
+
+----------------------------------------------------------------
+- Add the missing DT bindings for the MTU nomadik timer (Linus
+   Walleij)
+
+- Fix grammar typo in the ARM global timer Kconfig option (Randy
+   Dunlap)
+
+- Add the tegra186 timer and use it on the tegra234 board (Thierry
+   Reding)
+
+- Add the 'CPUXGPT' CPU timer for Mediatek MT6795 and implement a
+   workaround to overcome an ATF bug where the timer is not correctly
+   initialized (AngeloGioacchino Del Regno)
+
+- Rework the suspend/resume approach to enable the feature on the
+   timer even it is not an active clock and fix a compilation warning
+   (Claudiu Beznea)
+
+- Add the Add R-Car Gen4 timer support along with the DT bindings
+   (Wolfram Sang)
+
+- Add compatible for ti,am654-timer to support AM6 SoC (Tony Lindgren)
+
+- Fix Kconfig option to put it back to 'bool' instead of 'tristate'
+   for the tegra186 (Daniel Lezcano)
+
+- Sort 'family,type' DT bindings for the Renesas timers (Geert
+   Uytterhoeven)
+
+- Add compatible 'allwinner,sun20i-d1-timer' for Allwinner D1 (Samuel
+   Holland)
+
+- Remove unnecessary (void*) conversions for sun4i (XU pengfei)
+
+- Remove unnecessary (void*) conversions for sun5i (Li zeming)
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (2):
+       dt-bindings: timer: mediatek: Add CPUX System Timer and MT6795 
+compatible
+       clocksource/drivers/timer-mediatek: Implement CPUXGPT timers
+
+Claudiu Beznea (3):
+       clocksource/drivers/timer-microchip-pit64b: Remove suspend/resume 
+ops for ce
+       clocksource/drivers/timer-microchip-pit64b: Use 
+mchp_pit64b_{suspend, resume}
+       clocksource/drivers/timer-microchip-pit64b: Fix compilation warnings
+
+Daniel Lezcano (1):
+       clocksource/drivers/tegra186: Put Kconfig option 'tristate' to 'bool'
+
+Geert Uytterhoeven (1):
+       dt-bindings: timer: renesas,cmt: Fix R-Car Gen4 fall-out
+
+Kartik (1):
+       clocksource/drivers/timer-tegra186: Add support for Tegra234 SoC
+
+Krzysztof Kozlowski (1):
+       dt-bindings: timer: ingenic,tcu: use absolute path to other schema
+
+Li zeming (1):
+       clocksource/drivers/sun5i: Remove unnecessary (void*) conversions
+
+Linus Walleij (1):
+       dt-bindings: timer: Add Nomadik MTU binding
+
+Randy Dunlap (1):
+       clocksource/drivers/arm_global_timer: Fix Kconfig "its" grammar
+
+Samuel Holland (1):
+       dt-bindings: timer: allwinner,sun4i-a10-timer: Add D1 compatible
+
+Thierry Reding (1):
+       clocksource: Add Tegra186 timers support
+
+Tony Lindgren (4):
+       clocksource/drivers/timer-ti-dm: Move inline functions to driver 
+for am6
+       clocksource/drivers/timer-ti-dm: Make timer selectable for ARCH_K3
+       clocksource/drivers/timer-ti-dm: Add compatible for am6 SoCs
+       clocksource/drivers/timer-ti-dm: Make driver selection bool for TI K3
+
+Wolfram Sang (4):
+       thermal/drivers/rcar_gen3_thermal: Add r8a779f0 support
+       dt-bindings: timer: renesas,cmt: Add r8a779f0 and generic Gen4 
+CMT support
+       dt-bindings: timer: renesas,cmt: R-Car V3U is R-Car Gen4
+       clocksource/drivers/sh_cmt: Add R-Car Gen4 support
+
+XU pengfei (1):
+       clocksource/drivers/sun4i: Remove unnecessary (void*) conversions
+
+  .../bindings/timer/allwinner,sun4i-a10-timer.yaml  |   1 +
+  .../devicetree/bindings/timer/ingenic,tcu.yaml     |   4 +-
+  .../bindings/timer/mediatek,mtk-timer.txt          |   6 +-
+  .../devicetree/bindings/timer/renesas,cmt.yaml     |  16 +-
+  .../devicetree/bindings/timer/st,nomadik-mtu.yaml  |  58 +++
+  arch/arm/mach-omap2/Kconfig                        |   2 +
+  drivers/clocksource/Kconfig                        |  19 +-
+  drivers/clocksource/Makefile                       |   3 +-
+  drivers/clocksource/sh_cmt.c                       |   8 +
+  drivers/clocksource/timer-mediatek.c               | 114 +++++
+  drivers/clocksource/timer-microchip-pit64b.c       |  64 ++-
+  drivers/clocksource/timer-sun4i.c                  |   2 +-
+  drivers/clocksource/timer-sun5i.c                  |   2 +-
+  drivers/clocksource/timer-tegra186.c               | 514 
++++++++++++++++++++++
+  drivers/clocksource/timer-ti-dm.c                  | 123 +++++
+  drivers/thermal/rcar_gen3_thermal.c                |   4 +
+  include/clocksource/timer-ti-dm.h                  | 144 ------
+  17 files changed, 893 insertions(+), 191 deletions(-)
+  create mode 100644 
+Documentation/devicetree/bindings/timer/st,nomadik-mtu.yaml
+  create mode 100644 drivers/clocksource/timer-tegra186.c
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

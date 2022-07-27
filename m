@@ -2,76 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7450658314E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE793583154
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243107AbiG0R4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        id S242150AbiG0R5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243115AbiG0R4B (ORCPT
+        with ESMTP id S238698AbiG0R51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:56:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288708B490;
-        Wed, 27 Jul 2022 10:00:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 27 Jul 2022 13:57:27 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AAF6B247;
+        Wed, 27 Jul 2022 10:01:44 -0700 (PDT)
+Received: from zn.tnic (p200300ea970f4fe3329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:4fe3:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19AD461884;
-        Wed, 27 Jul 2022 17:00:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 793BFC433C1;
-        Wed, 27 Jul 2022 17:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658941230;
-        bh=rbXQhemBM2OLPzGRQYNjnah19PIzWC0ECugQ8LsL3ig=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=bngjNI9K35lmJwM9BluslKPLPogVzrKqQfTXo17dojylJxVqaS6qC3Wx0PfRrMvf5
-         sNsS7cgI8oTRNgZb1fQ8xhsQmCnEF23r+DH2Kt4TqVcP6LoVv92arF/X8phZ9ge8B6
-         QNzLSDwSyqLuUU7rMmtM8u2yT9xTkbKAO77dUOCmr3DMe5PGp36ruE78rjxRnTPYhv
-         ObEZ0RTNXzsRZNxUVvIU6Kev6UC3KM8PGsSqbbUbMNJ2OWmAhiF+m5QYSma+QECmj8
-         qQSSXU60dbNUtVABbSyOTbh2fy3QhexLf22jHC8Tt47YEda23fqu94wcWJvYkJyRoq
-         FC54qmA4OnL3g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 67A1EC43140;
-        Wed, 27 Jul 2022 17:00:30 +0000 (UTC)
-Subject: Re: [GIT PULL] asm-generic fixes for 5.19, part 2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a13Z96qf7O=94XkfWsq8yC3QTzFv0by7i180DSn10b-CA@mail.gmail.com>
-References: <CAK8P3a13Z96qf7O=94XkfWsq8yC3QTzFv0by7i180DSn10b-CA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a13Z96qf7O=94XkfWsq8yC3QTzFv0by7i180DSn10b-CA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-5.19-2
-X-PR-Tracked-Commit-Id: e2a619ca0b38f2114347b7078b8a67d72d457a3d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6e7765cb477a9753670d4351d14de93f1e9dbbd4
-Message-Id: <165894123042.29306.8592359334851153853.pr-tracker-bot@kernel.org>
-Date:   Wed, 27 Jul 2022 17:00:30 +0000
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F050F1EC04DA;
+        Wed, 27 Jul 2022 19:01:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658941298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RWJzFBq0WyV6tQ+ZqLZ1AEB5KdQiAYWTFZnp9js+IYk=;
+        b=E1jfg4k4GTyDy4tx4WSwNylGy++reaewl6nh/UZAIdvOu54O6BrtIP6SOogm1scyjOXkAm
+        8OhwlXGLsnG/RMNgmC8aGcjmXcdcrTMVKMEdygb4vDnz8FHsZzd0q5O65TP4M8EaAActq7
+        gUMbQ6dBJ9jj5WGbPtQGg33bagoOLwQ=
+Date:   Wed, 27 Jul 2022 19:01:34 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
+ when adding it to RMP table
+Message-ID: <YuFvbm/Zck9Tr5pq@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 27 Jul 2022 17:21:07 +0200:
+On Mon, Jun 20, 2022 at 11:03:07PM +0000, Ashish Kalra wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-5.19-2
+> Subject: x86/sev: Invalid pages from direct map when adding it to RMP table
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6e7765cb477a9753670d4351d14de93f1e9dbbd4
+"...: Invalidate pages from the direct map when adding them to the RMP table"
 
-Thank you!
+> +static int restore_direct_map(u64 pfn, int npages)
+> +{
+> +	int i, ret = 0;
+> +
+> +	for (i = 0; i < npages; i++) {
+> +		ret = set_direct_map_default_noflush(pfn_to_page(pfn + i));
+
+set_memory_p() ?
+
+> +		if (ret)
+> +			goto cleanup;
+> +	}
+> +
+> +cleanup:
+> +	WARN(ret > 0, "Failed to restore direct map for pfn 0x%llx\n", pfn + i);
+
+Warn for each pfn?!
+
+That'll flood dmesg mightily.
+
+> +	return ret;
+> +}
+> +
+> +static int invalid_direct_map(unsigned long pfn, int npages)
+> +{
+> +	int i, ret = 0;
+> +
+> +	for (i = 0; i < npages; i++) {
+> +		ret = set_direct_map_invalid_noflush(pfn_to_page(pfn + i));
+
+As above, set_memory_np() doesn't work here instead of looping over each
+page?
+
+> @@ -2462,11 +2494,38 @@ static int rmpupdate(u64 pfn, struct rmpupdate *val)
+>  	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+>  		return -ENXIO;
+>  
+> +	level = RMP_TO_X86_PG_LEVEL(val->pagesize);
+> +	npages = page_level_size(level) / PAGE_SIZE;
+> +
+> +	/*
+> +	 * If page is getting assigned in the RMP table then unmap it from the
+> +	 * direct map.
+> +	 */
+> +	if (val->assigned) {
+> +		if (invalid_direct_map(pfn, npages)) {
+> +			pr_err("Failed to unmap pfn 0x%llx pages %d from direct_map\n",
+
+"Failed to unmap %d pages at pfn 0x... from the direct map\n"
+
+> +			       pfn, npages);
+> +			return -EFAULT;
+> +		}
+> +	}
+> +
+>  	/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
+>  	asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
+>  		     : "=a"(ret)
+>  		     : "a"(paddr), "c"((unsigned long)val)
+>  		     : "memory", "cc");
+> +
+> +	/*
+> +	 * Restore the direct map after the page is removed from the RMP table.
+> +	 */
+> +	if (!ret && !val->assigned) {
+> +		if (restore_direct_map(pfn, npages)) {
+> +			pr_err("Failed to map pfn 0x%llx pages %d in direct_map\n",
+
+"Failed to map %d pages at pfn 0x... into the direct map\n"
+
+Thx.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,96 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2045833CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04ABC5833DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235705AbiG0ToL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
+        id S232747AbiG0T5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbiG0ToF (ORCPT
+        with ESMTP id S229938AbiG0T5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:44:05 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25E05245F;
-        Wed, 27 Jul 2022 12:44:04 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id q16so16716078pgq.6;
-        Wed, 27 Jul 2022 12:44:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BWrsUDoB9+7Y574+57XLS7gWjGKhdg5+bty83bzhgMk=;
-        b=INfHXwxxGDtgm/sRN8M7957HKU5+MkwViNx17Zv8ebk4MQin44h1OTXDZgTnfqelxb
-         tI62Yxf4p0QDI03/AVS7Fbnku/pRYBrBL/MErxbxccvSM6FZgJenSolx5D1Pvv8Kzbq7
-         mlBYXCuNR1of44pBu1uCpdseBslNIzh0A0n/T27nxDdDgnq8DdBd0W3YReLaK8EHcLoe
-         tKBJdmzUFAJJYgLW4gzXAdacr56PgJ2JbiHMyVvWLIJlu3R+6RRghPlRAklnJguyUU3S
-         igUJwvLwAFYp3GsZvPu8PlK7R/iO8MI0+wMRQW4rnrUpCbaIYxzPWogD8aAUwuryBCbV
-         EwWw==
-X-Gm-Message-State: AJIora/glWDngt5ouktawgc5wrCNl49IInG3FPWpO46t1epaeN4BcBPh
-        u0FNgRyctvrVB7rgJ2lHCDo=
-X-Google-Smtp-Source: AGRyM1unipVrmM6ZQWx0gHivnfNuqNnv2jo2rrrctYcUvHnW0vQMarfXVqPfiLcjUh5Tm3rCxsdkhw==
-X-Received: by 2002:a05:6a02:30a:b0:41a:b002:83ac with SMTP id bn10-20020a056a02030a00b0041ab00283acmr20880154pgb.113.1658951044130;
-        Wed, 27 Jul 2022 12:44:04 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:a84e:2ec1:1b57:b033? ([2620:15c:211:201:a84e:2ec1:1b57:b033])
-        by smtp.gmail.com with ESMTPSA id k13-20020a63d84d000000b0040c52ff0ba9sm12480194pgj.37.2022.07.27.12.44.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 12:44:03 -0700 (PDT)
-Message-ID: <90ef5f84-1e4e-d93e-5ee9-acdf36109827@acm.org>
-Date:   Wed, 27 Jul 2022 12:44:01 -0700
+        Wed, 27 Jul 2022 15:57:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5252158B47;
+        Wed, 27 Jul 2022 12:57:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E82F2B82279;
+        Wed, 27 Jul 2022 19:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58074C433D6;
+        Wed, 27 Jul 2022 19:57:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658951838;
+        bh=7QZYmwrZG8Sh+D/oho3aNQtPpOKtF7UQO1cgldixeeM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ttzeWYdIb1nRjk/211e/C9p3EW2o66CuWJWHiSEXQN2nuTmFo91k/lUqNaY2YeMKj
+         5smWl38FbyzKv+eaoBDXl0azZ3lMoznTCdeCNFaJL6hvi/k82aZ34qb2gt4SVsGbmO
+         6kDjiD/pcBQ5KrChlE+0oRrlXL0fdcFkMJ09eP5+f4eXBxWOLHaYCyKs3gl9jsg28k
+         aAiGAyG7Ffaft6uPWbE33lxGpj3seSIZCdXSlSVhHfO5xLUuuUv/fzGrcBz1u+w7m9
+         K1IQwBpuJo9LEXr9GRivOYTxSJdtM2UlUoLuI4Wds2phLrvHUaz2coHyisCQ5FbFoA
+         jCFtHB13pyb9Q==
+Date:   Wed, 27 Jul 2022 14:57:16 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Xiaowei Song <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        linux-pci@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Why set .suppress_bind_attrs even though .remove() implemented?
+Message-ID: <20220727195716.GA220011@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 5/7] scsi: ufs: wb: Add
- ufshcd_is_wb_buf_flush_allowed()
-Content-Language: en-US
-To:     j-young.choi@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
- <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
- <20220727070410epcms2p5206785e4d960b32dcbb6729710dab535@epcms2p5>
- <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
- <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p7>
- <20220727071024epcms2p70366b54ac8eca3758b7cf4336e0d457c@epcms2p7>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220727071024epcms2p70366b54ac8eca3758b7cf4336e0d457c@epcms2p7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yt+6azfwd/LuMzoG@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 00:10, Jinyoung CHOI wrote:
-> diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-> index 94bcfec98fb8..78adc556444a 100644
-> --- a/include/ufs/ufshcd.h
-> +++ b/include/ufs/ufshcd.h
-> @@ -1017,6 +1017,12 @@ static inline bool ufshcd_is_wb_allowed(struct ufs_hba *hba)
->   	return hba->caps & UFSHCD_CAP_WB_EN;
->   }
->   
-> +static inline bool ufshcd_is_wb_buf_flush_allowed(struct ufs_hba *hba)
-> +{
-> +	return ufshcd_is_wb_allowed(hba) &&
-> +		!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL);
-> +}
+On Tue, Jul 26, 2022 at 11:56:59AM +0200, Johan Hovold wrote:
+> On Mon, Jul 25, 2022 at 06:35:27PM +0100, Marc Zyngier wrote:
+> > On Mon, 25 Jul 2022 16:18:48 +0100,
+> > Johan Hovold <johan@kernel.org> wrote:
+> 
+> > > Since when is unloading modules something that is expected to
+> > > work perfectly? I keep hearing "well, don't do that then" when
+> > > someone complains about unloading this module while doing this
+> > > or that broke something. (And it's only root that can unload
+> > > modules in the first place.)
+> > 
+> > Well, maybe I have higher standards. For the stuff I maintain, I
+> > now point-blank refuse to support module unloading if this can
+> > result in a crash. Or worse.
+> 
+> That makes sense for regular interrupt controllers where its hard to
+> tell that all consumers are gone, but I don't think that should
+> limit the usefulness of having modular PCI controller drivers where
+> we know that the consumers are gone after deregistering the bus
+> (i.e. the consumers are descendants of the controller in the device
+> tree).
 
-Since this function is only used inside the UFS driver core it should be 
-added in drivers/ufs/core/ufshcd-priv.h instead of include/ufs/ufshcd.h.
+Those consumers are endpoint drivers, so I think this depends on those
+drivers correctly unmapping the interrupts they use, right?
 
-Thanks,
+> > > It's useful for developers, but use it at your own risk.
+> > > 
+> > > That said, I agree that if something is next to impossible to
+> > > get right, as may be the case with interrupt controllers
+> > > generally, then fine, let's disable module unloading for that
+> > > class of drivers.
+> > > 
+> > > And this would mean disabling driver unbind for the 20+ driver
+> > > PCI drivers that currently implement it to some degree.
+> > 
+> > That would be Bjorn's and Lorenzo's call.
+> 
+> Sure, but I think it would be the wrong decision here. Especially,
+> since the end result will likely just be that more drivers will
+> become always compiled-in.
 
-Bart.
+Can you elaborate on this?  I think Marc is suggesting that these PCI
+controller drivers be modular but not removable.  Why would that cause
+more of them to be compiled-in?
+
+> > > > > Turns out the pcie-qcom driver does not support legacy
+> > > > > interrupts so there's no risk of there being any lingering
+> > > > > mappings if I understand things correctly.
+> > > > 
+> > > > It still does MSIs, thanks to dw_pcie_host_init(). If you can
+> > > > remove the driver while devices are up and running with MSIs
+> > > > allocated, things may get ugly if things align the wrong way
+> > > > (if a driver still has a reference to an irq_desc or irq_data,
+> > > > for example).
+> > > 
+> > > That is precisely the way I've been testing it and everything
+> > > appears to be tore down as it should.
+> > >
+> > > And a PCI driver that has been unbound should have released its
+> > > resources, or that's a driver bug. Right?
+> > 
+> > But that's the thing: you can easily remove part of the
+> > infrastructure without the endpoint driver even noticing. It may
+> > not happen in your particular case if removing the RC driver will
+> > also nuke the endpoints in the process, but I can't see this is an
+> > absolute guarantee. The crash pointed to by an earlier email is
+> > symptomatic of it.
+> 
+> But that was arguably due to a driver bug, which we know how to fix.
+> For MSIs the endpoint driver will free its interrupts and all is
+> good.
+> 
+> The key observation is that the driver model will make sure that any
+> endpoint drivers have been unbound before the bus is deregistered.
+> 
+> That means there are no longer any consumers of the interrupts,
+> which can be disposed. For MSI this is handled by
+> pci_free_irq_vectors() when unbinding the endpoint drivers. For
+> legacy interrupts, which can be shared, the PCIe RC driver needs to
+> manage this itself after the consumers are gone.
+
+The driver model ensures that endpoint drivers have been unbound. But
+doesn't the interrupt disposal depend on the correct functioning of
+those endpoint drivers?  So if a buggy endpoint driver failed to
+dispose of them, we're still vulnerable?
+
+Bjorn

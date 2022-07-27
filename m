@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D376582412
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47501582414
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiG0KUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 06:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S231287AbiG0KVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 06:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiG0KUs (ORCPT
+        with ESMTP id S230159AbiG0KUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 06:20:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBA1A468;
-        Wed, 27 Jul 2022 03:20:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D467661839;
-        Wed, 27 Jul 2022 10:20:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1269C433D6;
-        Wed, 27 Jul 2022 10:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658917246;
-        bh=zInUtRDkP0CInDHQOs4hPEp3ldGko/tXOIpnWeY7TuQ=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=JaGgQ2Zg1rB1DBHAmio7/LzXyQ5VbRV/63eZoEv2bBrCkHxhOiKb225WuOHJsaGuG
-         1wxx8zpuJ/NQrGYTCbRMl1nWDM2WcV5kKsrkf9CnLQZ3c2hjA30R2nVIA2wpihs9/l
-         nfAfDmkfVW4rZdVVgg+vOd0tJeXyr5rIx6qfB85rs35fHNKVeb10qin856M1AjEsJ7
-         D5V7f79hBT7SFeLLVVOz8ex++C0H9n8RS1e/10CThBm2IXjmpTmSAUJXPgtVKSnT8X
-         vqPFXtah9axurwYZJVxM5TFOFOOpy68/UylL2Sj+RseuD/AuvyKN2p81F8BWAnRcwt
-         MzU8FfmSL+siw==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 27 Jul 2022 06:20:52 -0400
+Received: from gentwo.de (gentwo.de [IPv6:2a02:c206:2048:5042::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA66B7DE
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 03:20:49 -0700 (PDT)
+Received: by gentwo.de (Postfix, from userid 1001)
+        id 66F50B00264; Wed, 27 Jul 2022 12:20:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
+        t=1658917247; bh=iiWn5QMcngKlLYivm+GA6lb+fbbu7FPY3WiuGWJO0is=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=g1EsMqUgJ6SkuH7Eop/o2cEKrnNldDGecwPmkcRY0hT7aRg5qpLjl10a8TBQDHOHn
+         WKvVxXeJV8Zlyeuxtnta8PfE79flIEwy989p9XS7k2EMr4mShx07z8+Wmg7nhUDbzv
+         B/pvzrlumA9m+u2PO+Vg6wJxn2UcQxDWkPRc9p9otVT/mQZT/oMeTAF1g/etzQErGx
+         4IdKuqREezU/TuQdcC39B3KANaPyogBEvfbjgmMt48o9wx7+s9oRPbSbd+nZK1uvXa
+         CPTLNB9m6yNobbqyWG2ekLUO3ZEKRzo+VvpYELm3zskRz9gxBel8MoCmLPIWCB5PP+
+         738RKcnKuUZCA==
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id 62911B00224;
+        Wed, 27 Jul 2022 12:20:47 +0200 (CEST)
+Date:   Wed, 27 Jul 2022 12:20:47 +0200 (CEST)
+From:   Christoph Lameter <cl@gentwo.de>
+To:     Feng Tang <feng.tang@intel.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v3 1/3] mm/slub: enable debugging memory wasting of
+ kmalloc
+In-Reply-To: <20220727071042.8796-2-feng.tang@intel.com>
+Message-ID: <alpine.DEB.2.22.394.2207271214570.1205438@gentwo.de>
+References: <20220727071042.8796-1-feng.tang@intel.com> <20220727071042.8796-2-feng.tang@intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: wil6210: debugfs: fix uninitialized variable use in
- `wil_write_file_wmi()`
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220724202452.61846-1-ammar.faizi@intel.com>
-References: <20220724202452.61846-1-ammar.faizi@intel.com>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Linux Wireless Mailing List <linux-wireless@vger.kernel.org>,
-        netdev Mailing List <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        kernel test robot <lkp@intel.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165891724082.18387.16489160205660897757.kvalo@kernel.org>
-Date:   Wed, 27 Jul 2022 10:20:42 +0000 (UTC)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
+On Wed, 27 Jul 2022, Feng Tang wrote:
 
-> Commit 7a4836560a61 changes simple_write_to_buffer() with memdup_user()
-> but it forgets to change the value to be returned that came from
-> simple_write_to_buffer() call. It results in the following warning:
-> 
->   warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
->            return rc;
->                   ^~
-> 
-> Remove rc variable and just return the passed in length if the
-> memdup_user() succeeds.
-> 
-> Cc: Dan Carpenter <dan.carpenter@oracle.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 7a4836560a6198d245d5732e26f94898b12eb760 ("wifi: wil6210: debugfs: fix info leak in wil_write_file_wmi()")
-> Fixes: ff974e4083341383d3dd4079e52ed30f57f376f0 ("wil6210: debugfs interface to send raw WMI command")
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> @@ -2905,7 +2950,7 @@ static inline void *get_freelist(struct kmem_cache *s, struct slab *slab)
+>   * already disabled (which is the case for bulk allocation).
+>   */
+>  static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+> -			  unsigned long addr, struct kmem_cache_cpu *c)
+> +			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
+>  {
+>  	void *freelist;
+>  	struct slab *slab;
+> @@ -3102,7 +3147,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+>   * pointer.
+>   */
+>  static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+> -			  unsigned long addr, struct kmem_cache_cpu *c)
+> +			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
+>  {
+>  	void *p;
+>
+> @@ -3115,7 +3160,7 @@ static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+>  	c = slub_get_cpu_ptr(s->cpu_slab);
+>  #endif
+>
+> -	p = ___slab_alloc(s, gfpflags, node, addr, c);
+> +	p = ___slab_alloc(s, gfpflags, node, addr, c, orig_size);
+>  #ifdef CONFIG_PREEMPT_COUNT
+>  	slub_put_cpu_ptr(s->cpu_slab);
 
-Patch applied to ath-next branch of ath.git, thanks.
+This is modifying and making execution of standard slab functions more
+expensive. Could you restrict modifications to the kmalloc subsystem?
 
-d578e0af3a00 wifi: wil6210: debugfs: fix uninitialized variable use in `wil_write_file_wmi()`
+kmem_cache_alloc() and friends are not doing any rounding up to power of
+two  sizes.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220724202452.61846-1-ammar.faizi@intel.com/
+What is happening here is that you pass kmalloc object size info through
+the kmem_cache_alloc functions so that the regular allocation functions
+debug functionality can then save the kmalloc specific object request
+size. This is active even when no debugging options are enabled.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Can you avoid that? Have kmalloc do the object allocation without passing
+through the kmalloc request size and then add the original size info
+to the debug field later after execution continues in the kmalloc functions?
+
 

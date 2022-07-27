@@ -2,144 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2B8582346
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5466B582351
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbiG0Jh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S231664AbiG0Jik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbiG0Jhv (ORCPT
+        with ESMTP id S230110AbiG0Jih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:37:51 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0281D47BA0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:37:45 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 27 Jul 2022 05:38:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B1F45046;
+        Wed, 27 Jul 2022 02:38:36 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2590E3F0ED
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:37:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658914664;
-        bh=hILhH7/kC6Kccs7jjUf20npcM9l6uxbNnqr7pxtXMH8=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=B+qIGBBtBzJ6obhiob11BqwfBd5/VxIa8s578Gq2cewITr1Y/+j1IuNUbsdIDmbvV
-         FhSy278+3U8VBAZ8JOb0IOdxaUnsYKVd6pqvYZkPPVDbT33I9VYixprajE89rkTMju
-         yp9YcjZ5LwLlSw+oo7/bWXSSh/r3IGgR1q+EtxpqkJ9etajzeaXlyBNQRjcNJj1nBm
-         4KO7vIG2jmubU/zs60RmQzjE52U3NWsfp/xKJFCU56kuZxKWTqO6lcc7Sc8GKUFJvd
-         oHPhup/8m80gOod7V2ytTH+Op5FTiekIZtKOpYh+tc6g5JgFUQpt7TNBu+J5L0EnYU
-         HgyBle5k+UacA==
-Received: by mail-ed1-f71.google.com with SMTP id o2-20020a056402438200b0043ccb3ed7dfso30647edc.22
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:37:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hILhH7/kC6Kccs7jjUf20npcM9l6uxbNnqr7pxtXMH8=;
-        b=M2W7lKYzctJZQb40kgiqbwqsOWtCmbo55imi/OLhfqfQhxVfkYRlU9NuXsD12j4OD/
-         5b2EiqjgQZf7jdNK0CgL2MxpzA77l9HVfX1G7cOaEzkdNbqmjqDnqCHG6hzbSRw90ieD
-         WVgjr9soV35G2vsO4MtkR2ZbbHUakopuRHBoX/ADBf8WKPh0tv4DXucnZLGqoxujZLjh
-         AniHn3DJjjfdkammc7BB4DG5q0CMolaaX4afWIAhdtUsgkcs5GXLFhTeKPamjnL3ZY8s
-         YQhKJ/faWI+OTTPz3oz20dlf/8wYO0Sd2eMG+S8DErSg/sBiwbyYQeBeN1TXR/0ROahU
-         QbbQ==
-X-Gm-Message-State: AJIora9fUZAVSZNPoJQeew51/LyJjslCyxhBTicVrJ0XT9dunp3P3bGO
-        3QCKnIlrkDI+dMWMwVpWSIbpR4mYpRa9qBysPm6579KtF4MNg0NfGuAMKP4092Efmn1bS03QZXt
-        gL0XM6E8FkDzbECta2NQ6RD8C/XaaDLYDGPLPS7pSmg==
-X-Received: by 2002:aa7:c784:0:b0:43a:caa8:75b9 with SMTP id n4-20020aa7c784000000b0043acaa875b9mr21256939eds.311.1658914663786;
-        Wed, 27 Jul 2022 02:37:43 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tLLbtz3ZSxyKsrW5QpuIdirXzcFPHDjvKcNtHAMHHwrM5te/71ixtY2CwMWYC9MbKlNZozJw==
-X-Received: by 2002:aa7:c784:0:b0:43a:caa8:75b9 with SMTP id n4-20020aa7c784000000b0043acaa875b9mr21256922eds.311.1658914663607;
-        Wed, 27 Jul 2022 02:37:43 -0700 (PDT)
-Received: from callisto.. (p579d80fd.dip0.t-ipconnect.de. [87.157.128.253])
-        by smtp.gmail.com with ESMTPSA id g6-20020a17090669c600b0072a815f569bsm7440928ejs.185.2022.07.27.02.37.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 02:37:43 -0700 (PDT)
-From:   Kleber Sacilotto de Souza <kleber.souza@canonical.com>
-To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Justin Iurman <justin.iurman@uliege.be>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH] selftests: net: fix IOAM test skip return code
-Date:   Wed, 27 Jul 2022 11:37:42 +0200
-Message-Id: <20220727093742.115882-1-kleber.souza@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9FB9D6601B24;
+        Wed, 27 Jul 2022 10:38:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658914715;
+        bh=kb0hA66Ulh+7LVrBFaFbFx4CH2CTog1BkhvnquNUp4A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=exegzssRDPydn8NZXLEP2+QYLvxDERNon/2ad2ZmKIpheWyJazAyQuSY2ZqWnOVcs
+         ku5Rv+1nSC7XQZn8dkx4/JKenuKhvPAHIEAd+tvBKPlFx9ZZgULuH9Ji5az4p3wsL3
+         V9pETgTGcmQTPAga1ReDqiLddUaCO64/yuf+qpDiY6YbO5wd4AgW7rrBOOwMTJTN0z
+         iw3uaAqF/T+qItfif0rvrZVQijd+w64c9GCLnlTTvVws8LIBZSJz10ayELJkbzcnGR
+         A8qJTVumydv065wwRiOvGEQvy/6AbegSLh21ZpjcKUnTIsiUPtxoqCSAXB+kS3h7KR
+         jM8qRNBBRntRQ==
+Message-ID: <223f8f7f-8655-6f72-e4f7-c4a6a3159203@collabora.com>
+Date:   Wed, 27 Jul 2022 11:38:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v15 06/11] drm/mediatek: Add MT8195 External DisplayPort
+ support
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
+        airlied@linux.ie
+Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
+        wenst@chromium.org, ck.hu@mediatek.com, liangxu.xu@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fbdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220727045035.32225-1-rex-bc.chen@mediatek.com>
+ <20220727045035.32225-7-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220727045035.32225-7-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ioam6.sh test script exits with an error code (1) when tests are
-skipped due to lack of support from userspace/kernel or not enough
-permissions. It should return the kselftests SKIP code instead.
+Il 27/07/22 06:50, Bo-Chen Chen ha scritto:
+> From: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> This patch adds External DisplayPort support to the mt8195 eDP driver.
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
----
- tools/testing/selftests/net/ioam6.sh | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/net/ioam6.sh b/tools/testing/selftests/net/ioam6.sh
-index a2b9fad5a9a6..4ceb401da1bf 100755
---- a/tools/testing/selftests/net/ioam6.sh
-+++ b/tools/testing/selftests/net/ioam6.sh
-@@ -117,6 +117,8 @@
- #        | Schema Data         |                                     |
- #        +-----------------------------------------------------------+
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
- 
- ################################################################################
- #                                                                              #
-@@ -211,7 +213,7 @@ check_kernel_compatibility()
-     echo "SKIP: kernel version probably too old, missing ioam support"
-     ip link del veth0 2>/dev/null || true
-     ip netns del ioam-tmp-node || true
--    exit 1
-+    exit $ksft_skip
-   fi
- 
-   ip -netns ioam-tmp-node route add db02::/64 encap ioam6 mode inline \
-@@ -227,7 +229,7 @@ check_kernel_compatibility()
-          "without CONFIG_IPV6_IOAM6_LWTUNNEL?"
-     ip link del veth0 2>/dev/null || true
-     ip netns del ioam-tmp-node || true
--    exit 1
-+    exit $ksft_skip
-   fi
- 
-   ip link del veth0 2>/dev/null || true
-@@ -752,20 +754,20 @@ nfailed=0
- if [ "$(id -u)" -ne 0 ]
- then
-   echo "SKIP: Need root privileges"
--  exit 1
-+  exit $ksft_skip
- fi
- 
- if [ ! -x "$(command -v ip)" ]
- then
-   echo "SKIP: Could not run test without ip tool"
--  exit 1
-+  exit $ksft_skip
- fi
- 
- ip ioam &>/dev/null
- if [ $? = 1 ]
- then
-   echo "SKIP: iproute2 too old, missing ioam command"
--  exit 1
-+  exit $ksft_skip
- fi
- 
- check_kernel_compatibility
--- 
-2.34.1
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

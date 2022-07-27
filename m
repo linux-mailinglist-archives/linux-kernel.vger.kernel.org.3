@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE5058232F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CDE582333
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiG0JeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S230515AbiG0Jeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiG0JeO (ORCPT
+        with ESMTP id S231135AbiG0Jea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:34:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B2033E37;
-        Wed, 27 Jul 2022 02:34:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Jul 2022 05:34:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE3E474F0;
+        Wed, 27 Jul 2022 02:34:27 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FA516178F;
-        Wed, 27 Jul 2022 09:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33584C433D6;
-        Wed, 27 Jul 2022 09:34:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658914452;
-        bh=6JmACeP5ozhHq4rfyR4QydvrbyG2gSDUNRgLQiHN5mo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qc1SBcSTBva8z84KNsURkaAhFrDPd1tPb8VbjXJXdhuA54t5SFhzcH7ZF0IsuhzEZ
-         h0fsbSCw02rGrQ8+EWVKk7B+xZhUjY5FnrLXl6Ud8iwq5hjVPBPt36Yeoc1E2pI759
-         peDyI6yC3oH2WZO9EmLuLllkC2kSH35kKBERzKNU=
-Date:   Wed, 27 Jul 2022 11:34:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: qcom: Defer dwc3-qcom probe if dwc3 isn't
- probed properly
-Message-ID: <YuEGkkWV5s+q4hbf@kroah.com>
-References: <1657810516-31143-1-git-send-email-quic_kriskura@quicinc.com>
- <YtAv8R7QlTZCjvRO@kroah.com>
- <YtA78UfeibaQW4pf@google.com>
- <b491bb80-aef5-f90b-4763-68fa5435b6d9@quicinc.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B29B66601B20;
+        Wed, 27 Jul 2022 10:34:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658914465;
+        bh=re1AAxEYmTd0QiwLwExzRHmr/caYRFR3LwatCDthflQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ifcai99apGuxDyGJyBX3PBhR56PMkciZfnPA/j/IaDAAfLzOTUBMbcbEq7eA3p0CR
+         Ryv/KPtT9FvopGSPbjlVdUWM6AUmnzDH6BWY4BrM2JUeQWVgm0sEbGZJkjz7P22MWb
+         AkNbqg3G6pErGj7FRTvFLxsbRk1xDw5v/Y7tEpYn0CQprTQxNsut+5+/2g+cA6/bt5
+         9vsYzBrvvAFdYEGI9jjA9Ygvj0nvTxe5Gib/cJdmCNxkp8L5Pdwg2+uNk1SLtiS9qY
+         VGQusEg4pgNW8isGfPTzyLDsAdvFtNY81SQodUpnkdLQya06qhT/pRzenFr5Lk5dAZ
+         OyVrLNXKg5nEQ==
+Message-ID: <936f416e-2141-ed33-d0e9-33becfb46ba4@collabora.com>
+Date:   Wed, 27 Jul 2022 11:34:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b491bb80-aef5-f90b-4763-68fa5435b6d9@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v15 03/11] drm/edid: Add cea_sad helpers for freq/length
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
+        airlied@linux.ie
+Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
+        wenst@chromium.org, ck.hu@mediatek.com, liangxu.xu@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fbdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220727045035.32225-1-rex-bc.chen@mediatek.com>
+ <20220727045035.32225-4-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220727045035.32225-4-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
-
-A: No.
-Q: Should I include quotations after my reply?
-
-http://daringfireball.net/2007/07/on_top
-
-On Wed, Jul 27, 2022 at 02:56:06PM +0530, Krishna Kurapati PSSNV wrote:
-> Hi Greg,
+Il 27/07/22 06:50, Bo-Chen Chen ha scritto:
+> From: Guillaume Ranquet <granquet@baylibre.com>
 > 
->   As Mathias pointed out in another thread, no issue was seen so far on
-> present QC targets as wakeup-source property was added recently and only for
-> SC7180 and SC7280. We ran into some issues like wakeup from system suspend
-> in host mode wasn't happening although we enabled wakeup-source in SC7180
-> that eventually led us to this bug. But i tried to add debug prints to
-> follow the code flow and see that the issue is present on SM8350 as well :
-> *"supplier 88e9000.phy-wrapper not ready" *and deferring dwc3 probe.**This
-> doesn't seem to be specific to SC7180.
+> This patch adds two helper functions that extract the frequency and word
+> length from a struct cea_sad.
+> 
+> For these helper functions new defines are added that help translate the
+> 'freq' and 'byte2' fields into real numbers.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-I have no context here at all, sorry.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Remember, some of us get thousands of emails a week to handle and
-review.  I don't know what other thread you are talking about, nor what
-the issue here is at all, nor even what the patch is.
-
-totally confused,
-
-greg k-h

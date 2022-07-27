@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459AE582882
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64348582880
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbiG0OYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
+        id S233626AbiG0OXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233695AbiG0OYF (ORCPT
+        with ESMTP id S229957AbiG0OXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:24:05 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB2A24BC8;
-        Wed, 27 Jul 2022 07:24:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1658931818; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=Gn6024WfIqYtxX409/CLXpvCxOVLgbqFJ6qEMea3xTxlY7nwj/9Q9JJrsB0EcxnhgVOQzVC2p8IygGnoZA8HmOcnHuzSa6a9EwwwNIeSSujseaj493ETZ119KI6D0Uk7yMtBbT2gqPq4Lqz6xFC4BCkw8S8gBeapv+Dbhm5+Umk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1658931818; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=vJz648pDJtTE6Zea5RSkp7IQnH9AlpVg9o0A4CGYeA0=; 
-        b=ciEOj1Fr/2J5wyyAk/UMgLQIynSBGzd3zTddvhElc65sGCBvN4h27IKVqUdaRYy1HNyOImWTt29vbF16MLl8c/D3NLEz135bscA/ilTkCy/rvo0A4Jt/KYx94vz/ZJ6AdE0cGOpp6lgqhSObUR175oHzI2WgUB4AtuK8Gi4Isk0=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658931818;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=vJz648pDJtTE6Zea5RSkp7IQnH9AlpVg9o0A4CGYeA0=;
-        b=ZQCB67Mu/wHCWnMIR0ae4dmc5rffor0LThYV+OyZtrTDNBN50Kq9kHAK56CX6U68
-        cSptNF2hfrpmvhv1IkhduRq6lnqBT5Vz0L825c0y/faH3LGS17I5CE6OYFLfxBCGJ3E
-        58kQiv9Bfw9A1RUBTAQAnu+d/6FjeJ/IToUDWh4g=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1658931806891187.92810589018586; Wed, 27 Jul 2022 19:53:26 +0530 (IST)
-Date:   Wed, 27 Jul 2022 19:53:26 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "David Howells" <dhowells@redhat.com>
-Cc:     "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "linux-security-modules" <linux-security-module@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "syzbot+c70d87ac1d001f29a058" 
-        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
-Message-ID: <182400a8296.20631a172223.5777840252698367587@siddh.me>
-In-Reply-To: <3473429.1658931342@warthog.procyon.org.uk>
-References: <20220723135447.199557-1-code@siddh.me> <3473429.1658931342@warthog.procyon.org.uk>
-Subject: Re: [PATCH] kernel/watch_queue: Make pipe NULL while clearing
- watch_queue
+        Wed, 27 Jul 2022 10:23:42 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CE81ADA0;
+        Wed, 27 Jul 2022 07:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658931821; x=1690467821;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QDqJWX3QsIY+mVrjQjqamt6AMbOAQVyx8v1KjAUsHEM=;
+  b=KZ2SzJxwlUVPQEowgw/NnnmY3vF4gaL9UpHW79AyAIiilzyR+/zXGtRB
+   yZSQ9T0ZrXMzas2tHL88mjt9j9rH7h3SMv6UycGxMQv6TqZuzPx5CjHrb
+   VV1sRox5/D3m3/itnTD9MYBfml3MOr1+GBV3D3icMAXhcy4VKlcgffA17
+   +xvk8ZCxsleE3pteEJpVdZs7BAW/bwxipeM8tkJPd0XaqItiDYTTv9J7G
+   o+A6NXHkF/KH9LRzg82aquGyrsDGRfiK6h73azVzaIXt/cWs9ZSBknak1
+   +kkfvAkHgeH98ceMRHLzpSHSGKsD3tsCTE1VQD5uqdoUEvYCoc/A1tWQj
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="275120443"
+X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
+   d="scan'208";a="275120443"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:23:40 -0700
+X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
+   d="scan'208";a="726942897"
+Received: from jkasten-mobl.amr.corp.intel.com (HELO [10.209.24.156]) ([10.209.24.156])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:23:40 -0700
+Message-ID: <3dc43f00-0b01-1b02-74dc-6938f6db6e29@linux.intel.com>
+Date:   Wed, 27 Jul 2022 07:23:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v1] PCI/DPC: Skip EDR init when BIOS disable OS native DPC
+Content-Language: en-US
+To:     Xiaochun Lee <lixiaochun.2888@163.com>, linux-pci@vger.kernel.org
+Cc:     bhelgaas@google.com, linux-kernel@vger.kernel.org,
+        Xiaochun Lee <lixc17@lenovo.com>
+References: <1658919957-53006-1-git-send-email-lixiaochun.2888@163.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <1658919957-53006-1-git-send-email-lixiaochun.2888@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 19:45:42 +0530  David Howells <dhowells@redhat.com> wrote:
-> Siddh Raman Pant <code@siddh.me> wrote:
-> 
-> > +++ b/kernel/watch_queue.c
-> > ...
-> >+#ifdef CONFIG_WATCH_QUEUE
-> 
-> But it says:
-> 
-> obj-$(CONFIG_WATCH_QUEUE) += watch_queue.o
-> 
-> in the Makefile.
-> 
-> David
-> 
-> 
+Hi,
 
-Yes, that's what I realised and meant in reply to Khalid.
+On 7/27/22 4:05 AM, Xiaochun Lee wrote:
+> From: Xiaochun Lee <lixc17@lenovo.com>
+> 
+> ACPI BIOS may disable OS native AER and DPC support to notify OS
+> that our platform doesn't support AER and DPC via the _OSC method.
+> BIOS also might leave the containment be accomplished purely in HW.
+> When firmware is set to non-aware OS DPC, we skip to install
+> EDR handler to an ACPI device.
 
-I had sent a v2, which you can find here:
-https://lore.kernel.org/linux-kernel/20220724040240.7842-1-code@siddh.me/
+No, EDR is used when firmware controls the DPC.
 
-Thanks,
-Siddh
+When the Firmware owns Downstream Port Containment, it is expected to use
+the new “Error Disconnect Recover” notification to alert OSPM of a
+Downstream Port Containment event.
+
+> 
+> Signed-off-by: Xiaochun Lee <lixc17@lenovo.com>
+> ---
+>  drivers/pci/pcie/edr.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
+> index a6b9b47..97a680b 100644
+> --- a/drivers/pci/pcie/edr.c
+> +++ b/drivers/pci/pcie/edr.c
+> @@ -19,6 +19,17 @@
+>  #define EDR_OST_SUCCESS			0x80
+>  #define EDR_OST_FAILED			0x81
+>  
+> +static int pcie_dpc_is_native(struct pci_dev *dev)
+> +{
+> +	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
+> +
+> +	if (!dev->dpc_cap)
+> +		return 0;
+> +
+> +	return pcie_ports_dpc_native || host->native_dpc;
+> +}
+> +
+> +
+>  /*
+>   * _DSM wrapper function to enable/disable DPC
+>   * @pdev   : PCI device structure
+> @@ -212,6 +223,11 @@ void pci_acpi_add_edr_notifier(struct pci_dev *pdev)
+>  		return;
+>  	}
+>  
+> +	if (!pcie_dpc_is_native(pdev) && !pcie_aer_is_native(pdev)) {
+> +		pci_dbg(pdev, "OS doesn't control DPC, skipping EDR init\n");
+> +		return;
+> +	}
+> +
+>  	status = acpi_install_notify_handler(adev->handle, ACPI_SYSTEM_NOTIFY,
+>  					     edr_handle_event, pdev);
+>  	if (ACPI_FAILURE(status)) {
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

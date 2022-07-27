@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1485C5831DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BD45831DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243383AbiG0ST4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S239211AbiG0SVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243539AbiG0ST3 (ORCPT
+        with ESMTP id S234668AbiG0SUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:19:29 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9133B110
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:19:51 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id jw17so4573551pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:19:51 -0700 (PDT)
+        Wed, 27 Jul 2022 14:20:43 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DED9A6B5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:20:42 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id o3so1225191ple.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:date:to:cc:subject:message-id:references:mime-version
          :in-reply-to;
-        bh=Gg5X4yYRZBmyFbowsjiVzUaQDGCyqXoypwdoLH6RWO4=;
-        b=cdZnjL6Jkl2Y/jHtGLg6BK3uHQ0TdW8XHDdgtuN7lbI3l/mAbAa1CVj2drgJmV/vdK
-         tpbIW3K1QA7TZJdH86s21LjoeGL3Yiy6qHu0KtsbI8p9HNx76D5FicBMZgAPm6ApfzAg
-         uqXpgI0HpKbjQCLl4665HzWsbuCq+p7YHdnBk=
+        bh=R8+usPLIwz+MXGsS+bekSP0orn4EaRr/ntckm1nyiew=;
+        b=F6+tkec2RJZyxHcLU+UPdeK/yDTNXGYOeapb7pqaKBD78Se+A2GdsgVhyh+/1hOCOT
+         xhRodf72c7sHxbi6z0dm2MGMMrVs5bVYSBv1VRFDptw5TtOnZD4zVpSjyaUGBab2pwmo
+         mePZA9I5o2kLUp1Kc2ggI4BXIsja/k9eJ8vmc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:in-reply-to;
-        bh=Gg5X4yYRZBmyFbowsjiVzUaQDGCyqXoypwdoLH6RWO4=;
-        b=wR01zaJ8sw1t5ey98rKQ3P+Wo0XrClI8h2fbx5M6rCeIqikVa/oa7Tx//001mPQxBg
-         dnEsBInpHriElRxh92fnCtkxNY09o40l9W5Ivmr3VlFhIXPJbMCuYqVV4uxg4p8b5KmR
-         O2b43CvbmC9N61kEpRUJZrASlh7B/IxUvCd/m9fnchp7tYlAwdhceQ/XAg3/kUkWEg7e
-         VyphdHjVD9ZeEHkGm0p2c7CgfSZykSQ2oysaxcLJhPQsZ1+tRG0LhoSc3oNxBEpJ6Fct
-         RjpuSUItv7z6mQ6R/Bn3vTvZFlgBYCFwn3F3LqjWY/GR9EmSmHzbYD8nj28ZTBh3snlg
-         t4Ig==
-X-Gm-Message-State: AJIora/rwJK430X9eG6do7uwF//ynSC5Szi0ZaFN8XfwXiD00dEJVKIw
-        uR1DymTKra50mvHbOtOGjUwH1A==
-X-Google-Smtp-Source: AGRyM1u4XBcCtpAsrDVNa3RcUuIQr2kRoS4CEuBsLCgfIgWIc6zhzaXw3BiD2XZGdF4kGQgjmnjUuA==
-X-Received: by 2002:a17:902:ce83:b0:16c:2e89:d640 with SMTP id f3-20020a170902ce8300b0016c2e89d640mr22324410plg.23.1658942390950;
-        Wed, 27 Jul 2022 10:19:50 -0700 (PDT)
+        bh=R8+usPLIwz+MXGsS+bekSP0orn4EaRr/ntckm1nyiew=;
+        b=3ev7QZmXUQGdP5qY5m8Ukdj+iynay2oL284C3rHV5HN/TNJpuL2MnIUB3wVyGLAJeo
+         KySWEzsKe8huEQQLVsYbBosBg7OR0EhElNUI3hOisHDn7XFP1IqLSqiyuZYrTntz9ru0
+         vLsb/olV7qfjthuX+C9Hc9Y9Dmplnz3XeuHQXgtx7mNsymB49IRwfhGNMA72sA848U43
+         oTfXxXE14s46oLca8u3hiProI4hpqHDMVhRHKUb1BAszIubIGjQX/0CinUTozwr7mcPs
+         +dBEH8CvmR/ys9IopFpXHPigUvMQCSaa0wcwT5xK2pg/gVyjPWZyMAWAcicMYoK5V0Jk
+         4D2Q==
+X-Gm-Message-State: AJIora8pDYhs8IKx31Q1tQUXetWgc/jcMev9gBsTNiN21MdDuf9fSZ9m
+        ysOoey9fdZ+Sef1Gn/RP/txqgw==
+X-Google-Smtp-Source: AGRyM1uPaExlNCd0RDT2CusQ+PPUHml1jrjSD0NO8XmNHd85coDYSGQ5Arvt8yuzkXbtcjwieFB6OA==
+X-Received: by 2002:a17:902:d651:b0:16b:f55e:c626 with SMTP id y17-20020a170902d65100b0016bf55ec626mr22708740plh.78.1658942441058;
+        Wed, 27 Jul 2022 10:20:41 -0700 (PDT)
 Received: from C02YVCJELVCG.dhcp.broadcom.net ([192.19.144.250])
-        by smtp.gmail.com with ESMTPSA id x28-20020aa78f1c000000b0052ba859da14sm13999161pfr.184.2022.07.27.10.19.47
+        by smtp.gmail.com with ESMTPSA id x28-20020aa78f1c000000b0052ba859da14sm14000068pfr.184.2022.07.27.10.20.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 10:19:50 -0700 (PDT)
+        Wed, 27 Jul 2022 10:20:40 -0700 (PDT)
 From:   Andy Gospodarek <andrew.gospodarek@broadcom.com>
 X-Google-Original-From: Andy Gospodarek <gospo@broadcom.com>
-Date:   Wed, 27 Jul 2022 13:19:37 -0400
+Date:   Wed, 27 Jul 2022 13:20:35 -0400
 To:     Vikas Gupta <vikas.gupta@broadcom.com>
 Cc:     jiri@nvidia.com, kuba@kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, davem@davemloft.net,
@@ -55,15 +55,15 @@ Cc:     jiri@nvidia.com, kuba@kernel.org, netdev@vger.kernel.org,
         edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
         leon@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
         michael.chan@broadcom.com, andrew.gospodarek@broadcom.com
-Subject: Re: [PATCH net-next v9 1/2] devlink: introduce framework for
+Subject: Re: [PATCH net-next v9 2/2] bnxt_en: implement callbacks for devlink
  selftests
-Message-ID: <YuFzqb6HK+2gLqsF@C02YVCJELVCG.dhcp.broadcom.net>
+Message-ID: <YuFz488QqY3L1PxF@C02YVCJELVCG.dhcp.broadcom.net>
 References: <20220727165721.37959-1-vikas.gupta@broadcom.com>
- <20220727165721.37959-2-vikas.gupta@broadcom.com>
+ <20220727165721.37959-3-vikas.gupta@broadcom.com>
 MIME-Version: 1.0
-In-Reply-To: <20220727165721.37959-2-vikas.gupta@broadcom.com>
+In-Reply-To: <20220727165721.37959-3-vikas.gupta@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f0849f05e4cc9f26"
+        boundary="000000000000ec7a9205e4cca218"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -73,31 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000f0849f05e4cc9f26
+--000000000000ec7a9205e4cca218
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Jul 27, 2022 at 10:27:20PM +0530, Vikas Gupta wrote:
-> Add a framework for running selftests.
-> Framework exposes devlink commands and test suite(s) to the user
-> to execute and query the supported tests by the driver.
+On Wed, Jul 27, 2022 at 10:27:21PM +0530, Vikas Gupta wrote:
+> From: vikas <vikas.gupta@broadcom.com>
 > 
-> Below are new entries in devlink_nl_ops
-> devlink_nl_cmd_selftests_show_doit/dumpit: To query the supported
-> selftests by the drivers.
-> devlink_nl_cmd_selftests_run: To execute selftests. Users can
-> provide a test mask for executing group tests or standalone tests.
+> Add callbacks
+> =============
+> .selftest_check: returns true for flash selftest.
+> .selftest_run: runs a flash selftest.
 > 
-> Documentation/networking/devlink/ path is already part of MAINTAINERS &
-> the new files come under this path. Hence no update needed to the
-> MAINTAINERS
+> Also, refactor NVM APIs so that they can be
+> used with devlink and ethtool both.
 > 
 > Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
 
 Reviewed-by: Andy Gospodarek <gospo@broadcom.com>
 
 
---000000000000f0849f05e4cc9f26
+--000000000000ec7a9205e4cca218
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -168,14 +164,14 @@ nb7IGM3v/Nb7NTFH8/KUVg33xw829ztuGrOvfrHfBbeVcUoOHEHObXoaofYOJjtmSOQdMeJIiBgP
 XEpJG8/HB8t4FF6A8W++4cHhv0+ayyEnznrbOCn6WUmIvV2WiJymRpvRG7Hhdlk0zA97MRpqK5yn
 ai3dQ6VvMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
 di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
-E90b6DQq048oqwEJMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBxFfHHaxfjBUvx
-h0ocx6wlduTKTiLXkhTU5r0AO+H0vjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
-DQEJBTEPFw0yMjA3MjcxNzE5NTFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
+E90b6DQq048oqwEJMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA6DbHmWiISz3AF
+j6LGxtKrYD6yc9gS9ATTWE6GpkENfzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
+DQEJBTEPFw0yMjA3MjcxNzIwNDFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
 SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
-BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAUDUDzI02QZL9cyUig1Gas85f4yHpM0QD
-Q/5IFk71xWKQOPchGDWJBMutdmNm/SnzImZHF1FtAnSDN4V3wzP41itJKWz7YqAynIjh+WeS+s9M
-Fp4JdS76m/zeptmAKreDsV/eCM0316EnNU4iJnDUFc+a497tlW4Jr25ncdwym0DX3KxKKDpTXRPU
-LdoHOCK0N+hH1ep4MFrAfAxV16METhJV8sLK9xufLyZnDF9qheBbMeZBVBSqNr/mThMXZlUNVB7P
-G7LVy+PLD4vt53vo+T1Ol4kPXlaQ9FkQkAtJJd0OjuuWOr+bYVSqu/FhOEMDvgLouWExPZvaF4XN
-+k2ITA==
---000000000000f0849f05e4cc9f26--
+BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEALyo9djY2rirWjRhNjh5DNq1CS/gW+FXv
+zciO3q2APpS2b87J1cMpkVEtoKqBWCqWpkNFWgOrAn7nqdCEUEAuAj2XaXFvInF8xEyzo2rCfIO1
+kuh4BWqEHynLWZC1V2OU9ztgLBc7P/sYR63grBzD6+PFoM4LmofizlYMBOBXwJAtOg0pTqRgj4Ws
+0b7mf1/5jtOlHTKsqadHA4hpy2Qy3e7Wa4ZmytGrn7a86adGE+XY9pZc3z7YRR09d9UGuzNtLXWe
+NePDiVX4u27ttJn6PnMGO/K/IZxN++8aTaX34YkStUFF56Y8HR6ZWCxkjL9fFbjgbr94jBqSyBV6
+aVGdfw==
+--000000000000ec7a9205e4cca218--

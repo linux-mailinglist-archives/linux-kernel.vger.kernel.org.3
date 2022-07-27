@@ -2,166 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13846582747
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBDF582748
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbiG0NA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        id S233381AbiG0NBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233527AbiG0NAu (ORCPT
+        with ESMTP id S233535AbiG0NAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:00:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EA622B1C;
-        Wed, 27 Jul 2022 06:00:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7586A61653;
-        Wed, 27 Jul 2022 13:00:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48A9FC433D6;
-        Wed, 27 Jul 2022 13:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658926847;
-        bh=4telximfke4kYtoD4Qom/uucpARdQoD99jUq0aKNIx8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Rhv6j/+IHsWWVQsnAoZpxhk2/uhfQ2gRkeBcFk9dZdU1F/6NAWFyLQ8VdxIbak5YN
-         TXXePq7Wonyt4cMAhTtxlZpxWT5cW/d7AujKSh3xmuEjA9SqbgezZF5EWpwaF/w9Yl
-         l0JTkPJDJoK/l1xlKYoP6/IsuHKGfrjqWxKztMJ2NzknKMiBgHYSSPGikti5vyHPC8
-         5k8n4Z+RQvXRnsqnzB2sQqsGWmAD3o90tgJAncoaveUQvSAnfPfrVwTvIzKa3o5YDN
-         zN+gz+g7+6e4CFnYoq/vVWmCNPV2wTNu1QIZXCWsdUDSievdUBgTNFu0oGFbh7uBF4
-         fgMyl4k6fTa7Q==
-Message-ID: <9f7a1304e3631274701b555589648e12696fa152.camel@kernel.org>
-Subject: Re: [RFC PATCH] vfs: don't check may_create_in_sticky if the file
- is already open/created
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yongchen Yang <yoyang@redhat.com>
-Date:   Wed, 27 Jul 2022 09:00:46 -0400
-In-Reply-To: <20220727123207.akq6dlnuqviwtwx5@wittgenstein>
-References: <20220726202333.165490-1-jlayton@kernel.org>
-         <8e4d498a3e8ed80ada2d3da01e7503e082be31a3.camel@kernel.org>
-         <20220727113406.ewu4kzsoo643cf66@wittgenstein>
-         <b1d3c63ef5a7e8f98966552b4509381aae25afb6.camel@kernel.org>
-         <20220727123207.akq6dlnuqviwtwx5@wittgenstein>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Wed, 27 Jul 2022 09:00:53 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DFA237DC;
+        Wed, 27 Jul 2022 06:00:52 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id l4so2421763wrm.13;
+        Wed, 27 Jul 2022 06:00:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fChMX8GlPFpKqzi4SSOEluwQflXzCDYt0HZSmFL88cw=;
+        b=TI9dPJPm/HpiQsHlphg/YL2wRkFXK5o2L1VWNsm3YuOPu/uaeuXzWubEt1IJdi2YWh
+         dLtqcluYdMGh1ni1LQ4u3BDGS1Mof7UsgbD9KZrw2bZE/Op8TnFaXoQdrYjzzTH3aE+O
+         y3P1DADbJgqYfjwZWiK6F0NLcbGmsu3V2Kh2igJwVGH6LOFgrlTP9m4+y6N4cBrGe43m
+         8CY0HT82y5VFAahtgyfvmWPk8KkSsrSMGAdRdsDchkY1c8fY7b0N8s5ySGaGoGV+vq5s
+         uOy7Dd336WX4jG2uX9sIVfMSIlKbSiB4CkV8sqsOrcAe9AYVyXDPNcNwJSVN6EEd4926
+         LkaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fChMX8GlPFpKqzi4SSOEluwQflXzCDYt0HZSmFL88cw=;
+        b=gT7/ocdnRgVNoVlpnRg3prTWC+IxibOHFxZeHV/BJqai2Aaf2i2pnwY9CLAEZcyUt7
+         xVZlvJ6rciU5ZFjliwTJ4plzcoT4nlWo9McARrnbF4L8xMhpvbidzIs0ZBc5vklw4YpT
+         vrA1WMwaWdgT5/BsQSVaARMUX1TFSJuVlPCuYZcdPtnkViuazQKblazXxfvgXUv1hGyA
+         jMvWDvu1KPRUgwlcQYEWwFY05HfJnhGSlHUy85ffL4hYvlbB7VckXDII/UFX+urssww7
+         XBr6PJTlb3cVL+V2ijpC5c4v1cY5bGz15ak7pV59KYIGIqjGvG+wZN+ddbsGRSyAT80e
+         UfPQ==
+X-Gm-Message-State: AJIora8yzVilZJYOUckTJTfDDlU9YuN5ijUsi5NoWpkbziqie0j34QK8
+        sQYsb7fNtU03tQJgkUdW/ZI=
+X-Google-Smtp-Source: AGRyM1tEzGhCruRkjJVU5gjish1059DIrNaG6+E54/YE8pOwR9FmSESMOW3+/Q3toQ03lqPIoAYhag==
+X-Received: by 2002:adf:f04e:0:b0:21e:48df:a13d with SMTP id t14-20020adff04e000000b0021e48dfa13dmr14057488wro.278.1658926850635;
+        Wed, 27 Jul 2022 06:00:50 -0700 (PDT)
+Received: from [192.168.2.202] (pd9ea3316.dip0.t-ipconnect.de. [217.234.51.22])
+        by smtp.gmail.com with ESMTPSA id w17-20020a5d6811000000b0021e6effef8bsm11713642wru.50.2022.07.27.06.00.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 06:00:49 -0700 (PDT)
+Message-ID: <acd7b231-3167-e35c-5cdf-8b3127a7d710@gmail.com>
+Date:   Wed, 27 Jul 2022 15:00:48 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
+ <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
+ <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
+ <2e522bcd-5d55-e87f-126c-514f5edaa560@gmail.com>
+ <53a602e2-0590-6c6a-597b-fd55faa3a4ab@linaro.org>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <53a602e2-0590-6c6a-597b-fd55faa3a4ab@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-27 at 14:32 +0200, Christian Brauner wrote:
-> On Wed, Jul 27, 2022 at 08:04:34AM -0400, Jeff Layton wrote:
-> > On Wed, 2022-07-27 at 13:34 +0200, Christian Brauner wrote:
-> > > On Tue, Jul 26, 2022 at 04:27:56PM -0400, Jeff Layton wrote:
-> > > > On Tue, 2022-07-26 at 16:23 -0400, Jeff Layton wrote:
-> > > > > NFS server is exporting a sticky directory (mode 01777) with root
-> > > > > squashing enabled. Client has protect_regular enabled and then tr=
-ies to
-> > > > > open a file as root in that directory. File is created (with owne=
-rship
-> > > > > set to nobody:nobody) but the open syscall returns an error.
-> > > > >=20
-> > > > > The problem is may_create_in_sticky, which rejects the open even =
-though
-> > > > > the file has already been created/opened. Only call may_create_in=
-_sticky
-> > > > > if the file hasn't already been opened or created.
-> > > > >=20
-> > > > > Cc: Christian Brauner <brauner@kernel.org>
-> > > > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D1976829
-> > > > > Reported-by: Yongchen Yang <yoyang@redhat.com>
-> > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > > ---
-> > > > >  fs/namei.c | 13 +++++++++----
-> > > > >  1 file changed, 9 insertions(+), 4 deletions(-)
-> > > > >=20
-> > > > > diff --git a/fs/namei.c b/fs/namei.c
-> > > > > index 1f28d3f463c3..7480b6dc8d27 100644
-> > > > > --- a/fs/namei.c
-> > > > > +++ b/fs/namei.c
-> > > > > @@ -3495,10 +3495,15 @@ static int do_open(struct nameidata *nd,
-> > > > >  			return -EEXIST;
-> > > > >  		if (d_is_dir(nd->path.dentry))
-> > > > >  			return -EISDIR;
-> > > > > -		error =3D may_create_in_sticky(mnt_userns, nd,
-> > > > > -					     d_backing_inode(nd->path.dentry));
-> > > > > -		if (unlikely(error))
-> > > > > -			return error;
-> > > > > +		if (!(file->f_mode & (FMODE_OPENED | FMODE_CREATED))) {
-> > > > > +			error =3D may_create_in_sticky(mnt_userns, nd,
-> > > > > +						d_backing_inode(nd->path.dentry));
-> > > > > +			if (unlikely(error)) {
-> > > > > +				printk("%s: f_mode=3D0x%x oflag=3D0x%x\n",
-> > > > > +					__func__, file->f_mode, open_flag);
-> > > > > +				return error;
-> > > > > +			}
-> > > > > +		}
-> > > > >  	}
-> > > > >  	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.de=
-ntry))
-> > > > >  		return -ENOTDIR;
-> > > >=20
-> > > > I'm pretty sure this patch is the wrong approach, actually, since i=
-t
-> > > > doesn't fix the regular (non-atomic) open codepath. Any thoughts on=
- what
-> > >=20
-> > > Hey Jeff,
-> > >=20
-> > > I haven't quite understood why that won't work for the regular open
-> > > codepaths. I'm probably missing something obvious.
-> > >=20
-> >=20
-> > In the normal open codepaths, FMODE_OPENED | FMODE_CREATED are still
-> > clear. If we're not doing an atomic_open (i.e. the dentry doesn't exist
-> > yet or is negative), then nothing really happens until you get to the
-> > vfs_open call.
->=20
-> Hm, so for atomic open with O_CREAT it's:
->=20
-> path_openat()
-> -> open_last_lookups()
->    -> lookup_open()
->       /*=20
->        * This is ->atomic_open() and FMODE_CREATED is set in the fs so
->        * for NFS it's done in:
->        * fs/nfs/dir.c:           file->f_mode |=3D FMODE_CREATED;
->        */
->       -> atomic_open()
->=20
-> and for regular O_CREAT open it's:
->=20
-> path_openat()
-> -> open_last_lookups()
->    -> lookup_open()
->       {
->         if (!dentry->d_inode && (open_flag & O_CREAT)) {
->                 file->f_mode |=3D FMODE_CREATED;
->       }
->=20
->=20
-> and that should all get surfaced to:
->=20
-> path_openat()
->    -> do_open()
->       -> may_create_in_sticky()
->=20
-> ?
+On 7/27/22 13:24, Krzysztof Kozlowski wrote:
+> On 26/07/2022 17:00, Maximilian Luz wrote:
+>> On 7/26/22 15:25, Krzysztof Kozlowski wrote:
+>>> On 26/07/2022 13:15, Maximilian Luz wrote:
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    const: qcom,tee-uefisecapp
+>>>>>
+>>>>> Isn't this SoC-specific device? Generic compatibles are usually not
+>>>>> expected.
+>>>>
+>>>> This is essentially software (kernel driver) talking to software (in the
+>>>> TrustZone), so I don't expect there to be anything SoC specific about it.
+>>>
+>>> You are documenting here firmware in TZ (not kernel driver). Isn't this
+>>> a specific piece which might vary from device to device?
+>>>
+>>> IOW, do you expect the same compatible to work for all possible Qualcomm
+>>> boards (past and future like in 10 years from now)?
+>>
+>> I'm not sure if Qualcomm will still use the "uefisecapp" approach in 10
+>> years, but I don't expect the interface of uefisecapp to change. The
+>> interface is modeled after the respective UEFI functions, which are spec
+>> and thus I don't expect those to change. Also, it seems to have been
+>> around for a couple of generations and it hasn't changed. The oldest
+>> tested is sdm850 (Lenovo Yoga C630), and the latest is sc8280xp
+>> (Thinkpad X13s).
+> 
+> Expectation is not the same as having a specification saying it will not
+> change.
+>>
+>> Why not make this behave like a "normal" third-party device? If the
+>> interface ever changes use qcom,tee-uefisecapp-v2 or something like
+>> that? Again, this does not seem to be directly tied to the SoC.
+> 
+> Such approach is not "normal" for third-party devices. Compatible for
+> devices has model number. If the block has specification, then v2 would
+> have sense, otherwise you would invent own versioning...
+> 
+> I would say that firmware implementation can easily change. How much of
+> your code is tied to it, I don't know, but argument "I don't expect
+> Qualcomm to change something in their firmware" is not the correct argument.
 
-Basically, yes, but we also need to deal with the case where the file
-already exists. That's being denied currently too and I don't think it
-should be.
+Fair points.
 
---=20
-Jeff Layton <jlayton@kernel.org>
+>> Then again, if you prefer to name everything based on
+>> "qcom,<device>-<soc>" I don't have any strong arguments against it and
+>> I'm happy to change that. I just think it will unnecessarily introduce
+>> a bunch of compatibles and doesn't reflect the interface "versioning"
+>> situation as I see it.
+> 
+> Why bunch? All devices could bind to one specific compatible, as they
+> are compatible.
+
+Ah, I think I misunderstood you there. I thought you were advocating for
+creating compatibles for each SoC just because it's a new SoC and things
+might be different. I'm not at all against naming this something like
+qcom,tee-uefisecapp-sc8180x then using that on all platforms that work.
+I just didn't like the idea of having a bunch of different
+qcom,tee-uefisecapp-<soc> pointing to the exact same thing without any
+difference at all.
+
+>>>>>> +
+>>>>>> +required:
+>>>>>> +  - compatible
+>>>>>> +
+>>>>>> +additionalProperties: false
+>>>>>> +
+>>>>>> +examples:
+>>>>>> +  - |
+>>>>>> +    firmware {
+>>>>>> +        scm {
+>>>>>> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
+>>>>>> +        };
+>>>>>> +        tee-uefisecapp {
+>>>>>> +            compatible = "qcom,tee-uefisecapp";
+>>>>>
+>>>>> You did not model here any dependency on SCM. This is not full
+>>>>> description of the firmware/hardware
+>>>>
+>>>> How would I do that? A lot of other stuff also depends on SCM being
+>>>> present (e.g. qcom_q6v5_pas for loading mdt files) and I don't see them
+>>>> declare this in the device tree. As far as I can tell, SCM is pretty
+>>>> much expected to be there at all times (i.e. can't be unloaded) and
+>>>> drivers check for it when probing via qcom_scm_is_available(),
+>>>> deferring probe if not.
+>>>
+>>> It seems this will be opening a can of worms...
+>>
+>> Indeed.
+>>
+>>> The problem with existing approach is:
+>>> 1. Lack of any probe ordering or probe deferral support.
+>>> 2. Lack of any other dependencies, e.g. for PM.
+>>
+>> I'm not entirely sure what you mean by "lack of probe deferral support".
+>> We have qcom_scm_is_available() and defer probe if that fails. So
+>> deferral works, unless I'm misunderstanding something.
+> 
+> And how do you differentiate that qcom_scm_is_available() failed because
+> it is not yet available (defer probe) or it is broken and will never
+> load? All regular consumer-provider interfaces have it sorted out.
+
+Fair point. By shifting that to device links you'll at least know what
+it's waiting for and the driver won't attempt to probe until that's
+resolved. But your question applies to that then as well: How do you
+differentiate between the device link or supplier being broken somehow
+and the supplier being just not ready yet?
+
+>> But yes, correct on the other points.
+>>
+>>> Unloading is "solved" only by disallowing the unload, not by proper
+>>> device links and module get/put.
+>>>
+>>> I understand that SCM must be there, but the same for several other
+>>> components and for these others we have ways to pass reference around
+>>> (e.g. syscon regmap, PHYs handles).
+>>>
+>>>>
+>>>> Don't take this as an excuse as in "I want to leave that out", it's just
+>>>> that I don't know how one would declare such a dependency explicitly. If
+>>>> you can tell me how to fix it, I'll include that for v2.
+>>>
+>>> I think there are no dedicated subsystem helpers for this (like for
+>>> provider/consumer of resets/power domains/clocks etc), so one way would
+>>> be something like nvidia,bpmp is doing.
+>>
+>> I assume you're referring to tegra_bpmp_get()? Does this correctly
+>> handle PM dependencies? At least as far as I can tell it doesn't
+>> explicitly establish a device link, it only gets a reference to the
+>> device, which doesn't guarantee the presence of a driver. Nor correct PM
+>> ordering. Please correct me if I'm wrong. As far as I know automatic
+>> creation of device links only works with certain props defined in
+>> of_supplier_bindings, right?
+> 
+> The Tegra choice is not complete, but it implements at least parts of it
+> and firmware dependencies are modeled in DTS. Other way would be to add
+> your device as child of SMC firmware and then you do not need bindings
+> at all...
+
+Looking at the TrEE driver in [1] and thinking of future additions
+(re-entrant calls, callbacks/listeners, ..., all of which would require
+some state), combining both might be the best option: Have a TrEE main
+device for the interface that links up with SCM and then define the apps
+as children under that TrEE device.
+
+Regards,
+Max
+
+[1]: https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/blob/auto-kernel.lnx.4.14.c34/drivers/misc/qseecom.c

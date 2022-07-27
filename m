@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76271582F2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3F3582B71
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241867AbiG0RWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
+        id S237973AbiG0QdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242133AbiG0RTu (ORCPT
+        with ESMTP id S237778AbiG0Qcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:19:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D99F5244F;
-        Wed, 27 Jul 2022 09:45:03 -0700 (PDT)
+        Wed, 27 Jul 2022 12:32:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415E953D04;
+        Wed, 27 Jul 2022 09:26:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E94860D3B;
-        Wed, 27 Jul 2022 16:45:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D4AC433C1;
-        Wed, 27 Jul 2022 16:45:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CBC2B821BF;
+        Wed, 27 Jul 2022 16:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC04FC433C1;
+        Wed, 27 Jul 2022 16:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940302;
-        bh=gKdiTShjdV4qFP0ikFKCW4jh3SAdJPkniJlckYo/GPs=;
+        s=korg; t=1658939179;
+        bh=ZNOEerogwL3QPkDGQqI5U5SJ+ivJ/Zl/Vr1t0W0P1UI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vLXBbmnupgUSEeMSOFFFELWDmipgUZwxBe0ej3kvBczLa/7PcyDMMOf0QozCE7L/K
-         XWfs7glOCjFvuLgKMJ4wixQQspL5vEnIcfKp1UODcbLAY2Ax74nDhilFIlWi4NqKuy
-         lUwdaIC7L/cvJvUsNWi5POkx8RAYSylSPaHEHcnM=
+        b=G4jXdI5fpZELXJPRlxVcY1Kwm//Nyt1foA6OLCc0vlafc45RlzNHVn7wCahCqz1tP
+         bdYFfm0ZGkwx3DPVBJuP0NHGjsef3I+CHvxsbEJZxYCNWZ61tGWnHdNQeAK1H2Ya+6
+         Tx6tMwEXN4ocjuGfnKD7Y5sUmc8uWrJEdYciowFY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 145/201] x86/extable: Provide EX_TYPE_DEFAULT_MCE_SAFE and EX_TYPE_FAULT_MCE_SAFE
+        stable@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Matthias Fend <Matthias.Fend@wolfvision.net>
+Subject: [PATCH 4.19 40/62] HID: multitouch: add support for the Smart Tech panel
 Date:   Wed, 27 Jul 2022 18:10:49 +0200
-Message-Id: <20220727161033.823638585@linuxfoundation.org>
+Message-Id: <20220727161005.764401878@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,66 +55,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-[ Upstream commit 2cadf5248b9316d3c8af876e795d61c55476f6e9 ]
+[ Upstream commit 69ecd44d68a7bf4caeda39825af720362db69233 ]
 
-Provide exception fixup types which can be used to identify fixups which
-allow in kernel #MC recovery and make them invoke the existing handlers.
+This panel is not very friendly to us:
+it exposes multiple multitouch collections, some of them being of
+logical application stylus.
 
-These will be used at places where #MC recovery is handled correctly by the
-caller.
+Usually, a device has only one report per application, and that is
+what I assumed in commit 8dfe14b3b47f ("HID: multitouch: ditch mt_report_id")
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20210908132525.269689153@linutronix.de
+To avoid breaking all working device, add a new class and a new quirk
+for that situation.
+
+Reported-and-tested-by: Matthias Fend <Matthias.Fend@wolfvision.net>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/extable_fixup_types.h | 3 +++
- arch/x86/kernel/cpu/mce/severity.c         | 2 ++
- arch/x86/mm/extable.c                      | 2 ++
- 3 files changed, 7 insertions(+)
+ drivers/hid/hid-multitouch.c | 34 ++++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
-index 0adc117618e6..409524d5d2eb 100644
---- a/arch/x86/include/asm/extable_fixup_types.h
-+++ b/arch/x86/include/asm/extable_fixup_types.h
-@@ -16,4 +16,7 @@
- #define	EX_TYPE_WRMSR_IN_MCE		10
- #define	EX_TYPE_RDMSR_IN_MCE		11
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index 1c4426c60972..ce027eda9b17 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -72,6 +72,7 @@ MODULE_LICENSE("GPL");
+ #define MT_QUIRK_STICKY_FINGERS		BIT(16)
+ #define MT_QUIRK_ASUS_CUSTOM_UP		BIT(17)
+ #define MT_QUIRK_WIN8_PTP_BUTTONS	BIT(18)
++#define MT_QUIRK_SEPARATE_APP_REPORT	BIT(19)
  
-+#define	EX_TYPE_DEFAULT_MCE_SAFE	12
-+#define	EX_TYPE_FAULT_MCE_SAFE		13
-+
- #endif
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index 74fe763bffda..d9b77a74f8d2 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -278,6 +278,8 @@ static int error_context(struct mce *m, struct pt_regs *regs)
- 		m->kflags |= MCE_IN_KERNEL_COPYIN;
- 		fallthrough;
- 	case EX_TYPE_FAULT:
-+	case EX_TYPE_FAULT_MCE_SAFE:
-+	case EX_TYPE_DEFAULT_MCE_SAFE:
- 		m->kflags |= MCE_IN_KERNEL_RECOV;
- 		return IN_KERNEL_RECOV;
+ #define MT_INPUTMODE_TOUCHSCREEN	0x02
+ #define MT_INPUTMODE_TOUCHPAD		0x03
+@@ -107,6 +108,7 @@ struct mt_usages {
+ struct mt_application {
+ 	struct list_head list;
+ 	unsigned int application;
++	unsigned int report_id;
+ 	struct list_head mt_usages;	/* mt usages list */
+ 
+ 	__s32 quirks;
+@@ -207,6 +209,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
+ #define MT_CLS_VTL				0x0110
+ #define MT_CLS_GOOGLE				0x0111
+ #define MT_CLS_RAZER_BLADE_STEALTH		0x0112
++#define MT_CLS_SMART_TECH			0x0113
+ 
+ #define MT_DEFAULT_MAXCONTACT	10
+ #define MT_MAX_MAXCONTACT	250
+@@ -357,6 +360,12 @@ static const struct mt_class mt_classes[] = {
+ 			MT_QUIRK_CONTACT_CNT_ACCURATE |
+ 			MT_QUIRK_WIN8_PTP_BUTTONS,
+ 	},
++	{ .name = MT_CLS_SMART_TECH,
++		.quirks = MT_QUIRK_ALWAYS_VALID |
++			MT_QUIRK_IGNORE_DUPLICATES |
++			MT_QUIRK_CONTACT_CNT_ACCURATE |
++			MT_QUIRK_SEPARATE_APP_REPORT,
++	},
+ 	{ }
+ };
+ 
+@@ -513,8 +522,9 @@ static struct mt_usages *mt_allocate_usage(struct hid_device *hdev,
+ }
+ 
+ static struct mt_application *mt_allocate_application(struct mt_device *td,
+-						      unsigned int application)
++						      struct hid_report *report)
+ {
++	unsigned int application = report->application;
+ 	struct mt_application *mt_application;
+ 
+ 	mt_application = devm_kzalloc(&td->hdev->dev, sizeof(*mt_application),
+@@ -539,6 +549,7 @@ static struct mt_application *mt_allocate_application(struct mt_device *td,
+ 	mt_application->scantime = DEFAULT_ZERO;
+ 	mt_application->raw_cc = DEFAULT_ZERO;
+ 	mt_application->quirks = td->mtclass.quirks;
++	mt_application->report_id = report->id;
+ 
+ 	list_add_tail(&mt_application->list, &td->applications);
+ 
+@@ -546,19 +557,23 @@ static struct mt_application *mt_allocate_application(struct mt_device *td,
+ }
+ 
+ static struct mt_application *mt_find_application(struct mt_device *td,
+-						  unsigned int application)
++						  struct hid_report *report)
+ {
++	unsigned int application = report->application;
+ 	struct mt_application *tmp, *mt_application = NULL;
+ 
+ 	list_for_each_entry(tmp, &td->applications, list) {
+ 		if (application == tmp->application) {
+-			mt_application = tmp;
+-			break;
++			if (!(td->mtclass.quirks & MT_QUIRK_SEPARATE_APP_REPORT) ||
++			    tmp->report_id == report->id) {
++				mt_application = tmp;
++				break;
++			}
+ 		}
+ 	}
+ 
+ 	if (!mt_application)
+-		mt_application = mt_allocate_application(td, application);
++		mt_application = mt_allocate_application(td, report);
+ 
+ 	return mt_application;
+ }
+@@ -575,7 +590,7 @@ static struct mt_report_data *mt_allocate_report_data(struct mt_device *td,
+ 		return NULL;
+ 
+ 	rdata->report = report;
+-	rdata->application = mt_find_application(td, report->application);
++	rdata->application = mt_find_application(td, report);
+ 
+ 	if (!rdata->application) {
+ 		devm_kfree(&td->hdev->dev, rdata);
+@@ -1571,6 +1586,9 @@ static int mt_input_configured(struct hid_device *hdev, struct hid_input *hi)
+ 	case HID_VD_ASUS_CUSTOM_MEDIA_KEYS:
+ 		suffix = "Custom Media Keys";
+ 		break;
++	case HID_DG_PEN:
++		suffix = "Stylus";
++		break;
  	default:
-diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
-index 5db46df409b5..f37e290e6d0a 100644
---- a/arch/x86/mm/extable.c
-+++ b/arch/x86/mm/extable.c
-@@ -131,8 +131,10 @@ int fixup_exception(struct pt_regs *regs, int trapnr, unsigned long error_code,
+ 		suffix = "UNKNOWN";
+ 		break;
+@@ -2038,6 +2056,10 @@ static const struct hid_device_id mt_devices[] = {
+ 		HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
+ 			USB_VENDOR_ID_SYNAPTICS, 0x8323) },
  
- 	switch (e->type) {
- 	case EX_TYPE_DEFAULT:
-+	case EX_TYPE_DEFAULT_MCE_SAFE:
- 		return ex_handler_default(e, regs);
- 	case EX_TYPE_FAULT:
-+	case EX_TYPE_FAULT_MCE_SAFE:
- 		return ex_handler_fault(e, regs, trapnr);
- 	case EX_TYPE_UACCESS:
- 		return ex_handler_uaccess(e, regs, trapnr);
++	/* Smart Tech panels */
++	{ .driver_data = MT_CLS_SMART_TECH,
++		MT_USB_DEVICE(0x0b8c, 0x0092)},
++
+ 	/* Stantum panels */
+ 	{ .driver_data = MT_CLS_CONFIDENCE,
+ 		MT_USB_DEVICE(USB_VENDOR_ID_STANTUM_STM,
 -- 
 2.35.1
 

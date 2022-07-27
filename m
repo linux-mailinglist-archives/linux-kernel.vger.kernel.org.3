@@ -2,191 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AD7581F6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 07:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D674581F76
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 07:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240225AbiG0FWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 01:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S232226AbiG0FZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 01:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiG0FWm (ORCPT
+        with ESMTP id S229507AbiG0FZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 01:22:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D483ED4C;
-        Tue, 26 Jul 2022 22:22:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Jul 2022 01:25:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D981B3DBC3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 22:25:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53DF9B81F27;
-        Wed, 27 Jul 2022 05:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F7CCC433D7;
-        Wed, 27 Jul 2022 05:22:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658899357;
-        bh=OZIRhN7VrvtIIX7C5jGw3KpdUFPLglKm2y+Z9engUX4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o4h43SfALHCO4IWCDLSQ3e43OmHAxZz3LDz9q/wTF4EH1eFciCHXtKRogB65bYafG
-         rToIz4PzSTF8TXIWn6vlOrDyRmdTOWp3KNq889jPLcTl9AkaSnircHErJ0SmztFl1L
-         8/Ah5X2DlEWuUT5fquO7JURchr8UcTjrDAAaV5PrFn05XRGuCC/JogDOp64nTJN3bg
-         wXgyEa5+Zlxe1A4TenKvOW80qvRyG5Iu7UL6d3j/ImfxvrLQNZYiSM9Eoj4dVnt3e9
-         vlw9LUzo8FHIvUG+PYQM+9yq7/jwSQsAYzCYtV3Wda6wIKZbIeyP2lJx9/Gnla40q/
-         Cf29kGu1HApkA==
-Date:   Wed, 27 Jul 2022 10:52:33 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: watchdog: qcom,pm8916-wdt: convert to
- dtschema
-Message-ID: <YuDLmbEQKfuGzkUC@matsya>
-References: <20220726120215.101868-1-krzysztof.kozlowski@linaro.org>
- <20220726120215.101868-3-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726120215.101868-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1FA0820156;
+        Wed, 27 Jul 2022 05:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658899534; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bdqmQ5p2ejZx38NuBZXzRSiBR0XeVRrw8M3dUjIZMMw=;
+        b=UvMxtc8LNEj6R91u/dPgYCdwo81tvHkxZHFcc5ChPMt6KGXFEh5ZazTsiTYgGUUKdht70S
+        ZBNK/V/prwer8fk6Ef/L4arzxq/Ejb6ovKOUj1HeVWAiwaHJSxXcQJ3L6UXVvE7CjDUuXU
+        RpocNP/tRbeaUhXCsyS54EiRHL5+37Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658899534;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bdqmQ5p2ejZx38NuBZXzRSiBR0XeVRrw8M3dUjIZMMw=;
+        b=yu0yTJPq1NYJt+Rw/fdkL6xr9Uq6K6UfnKT1yAWtwPbiJDzGYALauCC7nIMWm1vfVPDOmg
+        /+0lxs6uQVVERHBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9A8213A7C;
+        Wed, 27 Jul 2022 05:25:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bFNyNE3M4GJjZQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 27 Jul 2022 05:25:33 +0000
+Date:   Wed, 27 Jul 2022 07:25:33 +0200
+Message-ID: <87tu73p1o2.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Dipanjan Das <mail.dipanjan.das@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, perex@perex.cz,
+        tiwai@suse.com, consult.awy@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com,
+        fleischermarius@googlemail.com, its.priyanka.bose@gmail.com
+Subject: Re: KASAN: vmalloc-out-of-bounds Write in snd_pcm_hw_params
+In-Reply-To: <CANX2M5Ywm+GpYY3+GsOWCLH24Nhy0M0LjBE-pHC8wFcd7SO=wQ@mail.gmail.com>
+References: <CANX2M5Zw_zW6ez0_wvaXL1pbLnR2jWY=T7MgkT=4a-zNkiwVig@mail.gmail.com>
+        <YtuceCr5OCJcDatJ@kroah.com>
+        <874jz82kx0.wl-tiwai@suse.de>
+        <CANX2M5Ywm+GpYY3+GsOWCLH24Nhy0M0LjBE-pHC8wFcd7SO=wQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-07-22, 14:02, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm PM8916 watchdog timer controller bindings to DT
-> schema and include them in parent device schema.
-
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
-
+On Tue, 26 Jul 2022 23:40:48 +0200,
+Dipanjan Das wrote:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/power/reset/qcom,pon.yaml        |  4 ++
->  .../bindings/watchdog/qcom,pm8916-wdt.txt     | 28 ----------
->  .../bindings/watchdog/qcom,pm8916-wdt.yaml    | 51 +++++++++++++++++++
->  3 files changed, 55 insertions(+), 28 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
+> On Sat, Jul 23, 2022 at 3:17 AM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Sat, 23 Jul 2022 09:00:08 +0200,
+> > Greg KH wrote:
+> > >
+> > > Wondeful, do you have a fix for this that solves the reported problem
+> > > that you have tested with the reproducer?
+> >
+> > ... or at least more detailed information.
 > 
-> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> index e8ecb75155db..e7b436d2e757 100644
-> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> @@ -36,6 +36,10 @@ properties:
->      type: object
->      $ref: /schemas/input/qcom,pm8941-pwrkey.yaml#
->  
-> +  watchdog:
-> +    type: object
-> +    $ref: /schemas/watchdog/qcom,pm8916-wdt.yaml
-> +
->  required:
->    - compatible
->    - reg
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.txt b/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.txt
-> deleted file mode 100644
-> index 6fb984f31982..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.txt
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
-> -QCOM PM8916 watchdog timer controller
-> -
-> -This pm8916 watchdog timer controller must be under pm8916-pon node.
-> -
-> -Required properties:
-> -- compatible: should be "qcom,pm8916-wdt"
-> -
-> -Optional properties :
-> -- interrupts : Watchdog pre-timeout (bark) interrupt.
-> -- timeout-sec : Watchdog timeout value in seconds.
-> -
-> -Example:
-> -
-> -	pm8916_0: pm8916@0 {
-> -		compatible = "qcom,pm8916", "qcom,spmi-pmic";
-> -		reg = <0x0 SPMI_USID>;
-> -
-> -		pon@800 {
-> -			compatible = "qcom,pm8916-pon";
-> -			reg = <0x800>;
-> -
-> -			watchdog {
-> -				compatible = "qcom,pm8916-wdt";
-> -				interrupts = <0x0 0x8 6 IRQ_TYPE_EDGE_RISING>;
-> -				timeout-sec = <10>;
-> -			};
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
-> new file mode 100644
-> index 000000000000..568eb8480fc3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/qcom,pm8916-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PM8916 watchdog timer controller
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,pm8916-wdt
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/spmi/spmi.h>
-> +
-> +    pmic@0 {
-> +        compatible = "qcom,pm8916", "qcom,spmi-pmic";
-> +        reg = <0x0 SPMI_USID>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        pon@800 {
-> +            compatible = "qcom,pm8916-pon";
-> +            reg = <0x800>;
-> +            mode-bootloader = <0x2>;
-> +            mode-recovery = <0x1>;
-> +
-> +            watchdog {
-> +                compatible = "qcom,pm8916-wdt";
-> +                interrupts = <0x0 0x8 6 IRQ_TYPE_EDGE_RISING>;
-> +                timeout-sec = <60>;
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.34.1
+> Here is our analysis of the bug in the kernel v5.10.131.
+> 
+> During allocation, the `size` of the DMA buffer is not page-aligned:
+> https://elixir.bootlin.com/linux/v5.10.131/source/sound/core/memalloc.c#L149.
+> However, in sound/core/pcm_native.c:798
+> (https://elixir.bootlin.com/linux/v5.10.131/source/sound/core/pcm_native.c#L798),
+> the `size` variable is page-aligned before memset-ing the `dma_area`.
+> >From the other BUG_ON assertions in other parts of the code, it looks
+> like the DMA area is not supposed to be equal to or greater than
+> 0x200000 bytes. However, due to page-alignment, the `size` can indeed
+> get rounded up to 0x200000 which causes the out of bound access.
+> 
+> > Last but not least, you should check whether it's specific to your
+> > 5.10.x kernel or it's also seen with the latest upstream, too.
+> 
+> The bug is not reproducible on the latest mainline, because in
+> sound/core/memalloc.c:66
+> (https://github.com/torvalds/linux/blob/5de64d44968e4ae66ebdb0a2d08b443f189d3651/sound/core/memalloc.c#L66)
+> the allocation function `snd_dma_alloc_dir_pages()` now page-aligns
+> the `size` right before allocating the DMA buffer. Therefore, any
+> subsequent page-alignment, like the one in `snd_pcm_hw_params()` does
+> not cause an out of bound access.
 
--- 
-~Vinod
+Thanks for the analysis.  A good news is that, at least for the
+vmalloc() case, it's a kind of false-positive; vmalloc() always takes
+the full pages, so practically seen, the size is page-aligned.  It's
+fooling the memory checker, though.
+
+But the similar problem could be seen with genalloc calls, and this
+was fixed by the upstream commit
+5c1733e33c888a3cb7f576564d8ad543d5ad4a9e
+    ALSA: memalloc: Align buffer allocations in page size
+
+I suppose you can simply backport this commit to 5.10.y.  Could you
+confirm that this fixes your problem?
+
+
+thanks,
+
+Takashi

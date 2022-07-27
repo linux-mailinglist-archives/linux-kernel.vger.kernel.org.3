@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22F3582B1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDBF582D1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236369AbiG0Q1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        id S241013AbiG0QyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbiG0Q1C (ORCPT
+        with ESMTP id S240863AbiG0Qwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:27:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E80C4F660;
-        Wed, 27 Jul 2022 09:24:00 -0700 (PDT)
+        Wed, 27 Jul 2022 12:52:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6AB4F199;
+        Wed, 27 Jul 2022 09:34:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4A8617F2;
-        Wed, 27 Jul 2022 16:23:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA2EC433D7;
-        Wed, 27 Jul 2022 16:23:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3ED6EB8200C;
+        Wed, 27 Jul 2022 16:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE4EC433C1;
+        Wed, 27 Jul 2022 16:34:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939037;
-        bh=YwiXB5APA1WYv8fxecXvZn4EzQvRXPGzGh2MiJmq0JE=;
+        s=korg; t=1658939687;
+        bh=Iz/mwSZsiPX2GA66vcgC0gHeYQ5WYfVUcaxSwmCZink=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BSwMi6R+194ak/cWaokhrX7sxgghAlA16X+ckwnmupXk+g3cxHNVR/vVq9hVIsqFK
-         gGSHe3Be5VB0mttO2LXKOUWD3hzhJ90C5Djo/SFCy4jH9oBy8axUSE+tHpsy2h+STk
-         N2LZsVQt65fcoSbEVuRnCmkS5b34jUqIIyOYLAqk=
+        b=t4UncEyqz5ciHix5MnAIIsfcST7NXfaVDth9LzsueVyrw0Hj5DCfpiHIURcFqMtDq
+         DRWer/zDOLuwuaTAlRg3gdkrQVeWIJRLmlrSv3XeOtFGkb+zMHneW7xmZh55G9c5pf
+         VrCRlZev7eLBg+F7Akl7uuGkr+xusWSrjY10iWdM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Johan Hovold <johan@kernel.org>, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 4.14 29/37] tty: the rest, stop using tty_schedule_flip()
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 069/105] tcp: Fix a data-race around sysctl_tcp_early_retrans.
 Date:   Wed, 27 Jul 2022 18:10:55 +0200
-Message-Id: <20220727161002.019474639@linuxfoundation.org>
+Message-Id: <20220727161014.829100312@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,84 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit b68b914494df4f79b4e9b58953110574af1cb7a2 upstream.
+[ Upstream commit 52e65865deb6a36718a463030500f16530eaab74 ]
 
-Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
-tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). We are
-going to remove the latter (as it is used less), so call the former in
-the rest of the users.
+While reading sysctl_tcp_early_retrans, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Cc: Richard Henderson <rth@twiddle.net>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: William Hubbs <w.d.hubbs@gmail.com>
-Cc: Chris Brannon <chris@the-brannons.com>
-Cc: Kirk Reiser <kirk@reisers.ca>
-Cc: Samuel Thibault <samuel.thibault@ens-lyon.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Reviewed-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20211122111648.30379-3-jslaby@suse.cz
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: eed530b6c676 ("tcp: early retransmit")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/alpha/kernel/srmcons.c         |    2 +-
- drivers/s390/char/keyboard.h        |    4 ++--
- drivers/staging/speakup/spk_ttyio.c |    4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ net/ipv4/tcp_output.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/alpha/kernel/srmcons.c
-+++ b/arch/alpha/kernel/srmcons.c
-@@ -59,7 +59,7 @@ srmcons_do_receive_chars(struct tty_port
- 	} while((result.bits.status & 1) && (++loops < 10));
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 772dd6241b70..0cbf3d859745 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2735,7 +2735,7 @@ bool tcp_schedule_loss_probe(struct sock *sk, bool advancing_rto)
+ 	if (rcu_access_pointer(tp->fastopen_rsk))
+ 		return false;
  
- 	if (count)
--		tty_schedule_flip(port);
-+		tty_flip_buffer_push(port);
- 
- 	return count;
- }
---- a/drivers/s390/char/keyboard.h
-+++ b/drivers/s390/char/keyboard.h
-@@ -45,7 +45,7 @@ static inline void
- kbd_put_queue(struct tty_port *port, int ch)
- {
- 	tty_insert_flip_char(port, ch, 0);
--	tty_schedule_flip(port);
-+	tty_flip_buffer_push(port);
- }
- 
- static inline void
-@@ -53,5 +53,5 @@ kbd_puts_queue(struct tty_port *port, ch
- {
- 	while (*cp)
- 		tty_insert_flip_char(port, *cp++, 0);
--	tty_schedule_flip(port);
-+	tty_flip_buffer_push(port);
- }
---- a/drivers/staging/speakup/spk_ttyio.c
-+++ b/drivers/staging/speakup/spk_ttyio.c
-@@ -87,7 +87,7 @@ static int spk_ttyio_receive_buf2(struct
- 	}
- 
- 	if (!ldisc_data->buf_free)
--		/* ttyio_in will tty_schedule_flip */
-+		/* ttyio_in will tty_flip_buffer_push */
- 		return 0;
- 
- 	/* Make sure the consumer has read buf before we have seen
-@@ -299,7 +299,7 @@ static unsigned char ttyio_in(int timeou
- 	mb();
- 	ldisc_data->buf_free = true;
- 	/* Let TTY push more characters */
--	tty_schedule_flip(speakup_tty->port);
-+	tty_flip_buffer_push(speakup_tty->port);
- 
- 	return rv;
- }
+-	early_retrans = sock_net(sk)->ipv4.sysctl_tcp_early_retrans;
++	early_retrans = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_early_retrans);
+ 	/* Schedule a loss probe in 2*RTT for SACK capable connections
+ 	 * not in loss recovery, that are either limited by cwnd or application.
+ 	 */
+-- 
+2.35.1
+
 
 

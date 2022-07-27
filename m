@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E76582F7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C86582D66
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiG0R0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
+        id S241064AbiG0Q5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242324AbiG0RYy (ORCPT
+        with ESMTP id S241028AbiG0Q4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:24:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420077D1DC;
-        Wed, 27 Jul 2022 09:46:30 -0700 (PDT)
+        Wed, 27 Jul 2022 12:56:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB6165D43;
+        Wed, 27 Jul 2022 09:36:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C28BCB821BE;
-        Wed, 27 Jul 2022 16:46:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E63FC433C1;
-        Wed, 27 Jul 2022 16:46:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D945B61A91;
+        Wed, 27 Jul 2022 16:36:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74DEC433B5;
+        Wed, 27 Jul 2022 16:36:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940388;
-        bh=8wseduYSB04klnmbB3qO5dWg7kVn28vt/87y7JL97D4=;
+        s=korg; t=1658939766;
+        bh=F+ACtrEf14QUeYU2sFIUpqYkfswQs9zrhKx3+j/JC/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uCM6svHfXDhLOC4Pdi5YxlyIO09BwIK7ubU9Eu6O60yEOUsrvrE7w05hMzIZBd2J7
-         j4uyhHkA/sU8m3yyYSoWvfaCGgz2hzJX3y9eWUVl1Oihvcjow7ebMM+fBs23buw51r
-         lkmxoOM5vJ6fg8NHkE58hYQ532UEIrKXQUg2ljfA=
+        b=umkw2VqXP3CBnGkaPboHpse6J+bYD2sk8jhCBuDzDj8LNnO2IWW2vEVBLqJDlNGpv
+         bXXtrtqjOlLMM9Os8MPyQMaOwgUX6HZOWMTE5sKuIYiDPYYnJ0qYY0Uam6T0VnwPoq
+         Ebh3I81rfgHMf3jFtpURvZfMQKZrnXbSRGXPXrIo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tedd Ho-Jeong An <tedd.an@intel.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 5.15 179/201] Bluetooth: SCO: Fix sco_send_frame returning skb->len
+        stable@vger.kernel.org, Vladimir Zapolskiy <vz@mleia.com>,
+        Johan Hovold <johan@kernel.org>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 5.10 097/105] tty: drivers/tty/, stop using tty_schedule_flip()
 Date:   Wed, 27 Jul 2022 18:11:23 +0200
-Message-Id: <20220727161035.212051689@linuxfoundation.org>
+Message-Id: <20220727161016.006747819@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +53,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-commit 037ce005af6b8a3e40ee07c6e9266c8997e6a4d6 upstream.
+commit 5f6a85158ccacc3f09744b3aafe8b11ab3b6c6f6 upstream.
 
-The skb in modified by hci_send_sco which pushes SCO headers thus
-changing skb->len causing sco_sock_sendmsg to fail.
+Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
+tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). We are
+going to remove the latter (as it is used less), so call the former in
+drivers/tty/.
 
-Fixes: 0771cbb3b97d ("Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg")
-Tested-by: Tedd Ho-Jeong An <tedd.an@intel.com>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Reviewed-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20211122111648.30379-2-jslaby@suse.cz
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bluetooth/sco.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/tty/cyclades.c          |    6 +++---
+ drivers/tty/goldfish.c          |    2 +-
+ drivers/tty/moxa.c              |    4 ++--
+ drivers/tty/serial/lpc32xx_hs.c |    2 +-
+ drivers/tty/vt/keyboard.c       |    6 +++---
+ drivers/tty/vt/vt.c             |    2 +-
+ 6 files changed, 11 insertions(+), 11 deletions(-)
 
---- a/net/bluetooth/sco.c
-+++ b/net/bluetooth/sco.c
-@@ -283,16 +283,17 @@ static int sco_connect(struct hci_dev *h
- static int sco_send_frame(struct sock *sk, struct sk_buff *skb)
+--- a/drivers/tty/cyclades.c
++++ b/drivers/tty/cyclades.c
+@@ -556,7 +556,7 @@ static void cyy_chip_rx(struct cyclades_
+ 		}
+ 		info->idle_stats.recv_idle = jiffies;
+ 	}
+-	tty_schedule_flip(port);
++	tty_flip_buffer_push(port);
+ 
+ 	/* end of service */
+ 	cyy_writeb(info, CyRIR, save_xir & 0x3f);
+@@ -996,7 +996,7 @@ static void cyz_handle_rx(struct cyclade
+ 		mod_timer(&info->rx_full_timer, jiffies + 1);
+ #endif
+ 	info->idle_stats.recv_idle = jiffies;
+-	tty_schedule_flip(&info->port);
++	tty_flip_buffer_push(&info->port);
+ 
+ 	/* Update rx_get */
+ 	cy_writel(&buf_ctrl->rx_get, new_rx_get);
+@@ -1172,7 +1172,7 @@ static void cyz_handle_cmd(struct cyclad
+ 		if (delta_count)
+ 			wake_up_interruptible(&info->port.delta_msr_wait);
+ 		if (special_count)
+-			tty_schedule_flip(&info->port);
++			tty_flip_buffer_push(&info->port);
+ 	}
+ }
+ 
+--- a/drivers/tty/goldfish.c
++++ b/drivers/tty/goldfish.c
+@@ -151,7 +151,7 @@ static irqreturn_t goldfish_tty_interrup
+ 	address = (unsigned long)(void *)buf;
+ 	goldfish_tty_rw(qtty, address, count, 0);
+ 
+-	tty_schedule_flip(&qtty->port);
++	tty_flip_buffer_push(&qtty->port);
+ 	return IRQ_HANDLED;
+ }
+ 
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -1385,7 +1385,7 @@ static int moxa_poll_port(struct moxa_po
+ 		if (inited && !tty_throttled(tty) &&
+ 				MoxaPortRxQueue(p) > 0) { /* RX */
+ 			MoxaPortReadData(p);
+-			tty_schedule_flip(&p->port);
++			tty_flip_buffer_push(&p->port);
+ 		}
+ 	} else {
+ 		clear_bit(EMPTYWAIT, &p->statusflags);
+@@ -1410,7 +1410,7 @@ static int moxa_poll_port(struct moxa_po
+ 
+ 	if (tty && (intr & IntrBreak) && !I_IGNBRK(tty)) { /* BREAK */
+ 		tty_insert_flip_char(&p->port, 0, TTY_BREAK);
+-		tty_schedule_flip(&p->port);
++		tty_flip_buffer_push(&p->port);
+ 	}
+ 
+ 	if (intr & IntrLine)
+--- a/drivers/tty/serial/lpc32xx_hs.c
++++ b/drivers/tty/serial/lpc32xx_hs.c
+@@ -344,7 +344,7 @@ static irqreturn_t serial_lpc32xx_interr
+ 		       LPC32XX_HSUART_IIR(port->membase));
+ 		port->icount.overrun++;
+ 		tty_insert_flip_char(tport, 0, TTY_OVERRUN);
+-		tty_schedule_flip(tport);
++		tty_flip_buffer_push(tport);
+ 	}
+ 
+ 	/* Data received? */
+--- a/drivers/tty/vt/keyboard.c
++++ b/drivers/tty/vt/keyboard.c
+@@ -311,7 +311,7 @@ int kbd_rate(struct kbd_repeat *rpt)
+ static void put_queue(struct vc_data *vc, int ch)
  {
- 	struct sco_conn *conn = sco_pi(sk)->conn;
-+	int len = skb->len;
- 
- 	/* Check outgoing MTU */
--	if (skb->len > conn->mtu)
-+	if (len > conn->mtu)
- 		return -EINVAL;
- 
--	BT_DBG("sk %p len %d", sk, skb->len);
-+	BT_DBG("sk %p len %d", sk, len);
- 
- 	hci_send_sco(conn->hcon, skb);
- 
--	return skb->len;
-+	return len;
+ 	tty_insert_flip_char(&vc->port, ch, 0);
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
  }
  
- static void sco_recv_frame(struct sco_conn *conn, struct sk_buff *skb)
-@@ -743,7 +744,8 @@ static int sco_sock_sendmsg(struct socke
- 		err = -ENOTCONN;
- 
- 	release_sock(sk);
--	if (err)
-+
-+	if (err < 0)
- 		kfree_skb(skb);
- 	return err;
+ static void puts_queue(struct vc_data *vc, char *cp)
+@@ -320,7 +320,7 @@ static void puts_queue(struct vc_data *v
+ 		tty_insert_flip_char(&vc->port, *cp, 0);
+ 		cp++;
+ 	}
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
  }
+ 
+ static void applkey(struct vc_data *vc, int key, char mode)
+@@ -565,7 +565,7 @@ static void fn_inc_console(struct vc_dat
+ static void fn_send_intr(struct vc_data *vc)
+ {
+ 	tty_insert_flip_char(&vc->port, 0, TTY_BREAK);
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
+ }
+ 
+ static void fn_scroll_forw(struct vc_data *vc)
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -1834,7 +1834,7 @@ static void csi_m(struct vc_data *vc)
+ static void respond_string(const char *p, size_t len, struct tty_port *port)
+ {
+ 	tty_insert_flip_string(port, p, len);
+-	tty_schedule_flip(port);
++	tty_flip_buffer_push(port);
+ }
+ 
+ static void cursor_report(struct vc_data *vc, struct tty_struct *tty)
 
 

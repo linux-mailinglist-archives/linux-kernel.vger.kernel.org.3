@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391B8582E46
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B627E582CC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241541AbiG0RKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S240589AbiG0QuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241621AbiG0RJU (ORCPT
+        with ESMTP id S240643AbiG0QtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:09:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DB04C639;
-        Wed, 27 Jul 2022 09:40:59 -0700 (PDT)
+        Wed, 27 Jul 2022 12:49:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2C761735;
+        Wed, 27 Jul 2022 09:32:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECBAEB821AC;
-        Wed, 27 Jul 2022 16:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539C2C433C1;
-        Wed, 27 Jul 2022 16:40:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A3DAB8200D;
+        Wed, 27 Jul 2022 16:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72314C433D6;
+        Wed, 27 Jul 2022 16:32:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940056;
-        bh=sKZP2mYqjo4WOulxsCq2wPhmo/rksLNmsICaNcomTXA=;
+        s=korg; t=1658939558;
+        bh=cz+hdvCS81/1ofgS66D9vhSA5DTELGq6dMXwQkqw964=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=npsl9ltSJrpwpAHKVOgCsx3JGbNhbWlOIHkmDCulvh3fUIJaSVsIq9BNR6XLwA6z3
-         ibSsz0FoPW6AnKAFPQipRhqUa0K7qjTvoq3Tf+TNxmNNqkEGzsZVOubRdqBTUJi00S
-         DVNl25nTd95FObWM841MjVOpPan0zWrICEVW9k4w=
+        b=jYVd2EyksE928bZo/Vh2b+ldR0GCH2eDSItd6WhweQ/Hy0g39sARLv8V2Ij1foBou
+         U5NnRcjvVmVYh5OF3yL1d/ul19Z6JhD+DrpOfkVAqkXhcIp3GxOdJyuyg+xQbrzCCW
+         GNYoCYmh5L5kcGHa/lUHiHVRiDRPyBCz2pO7+vXc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 089/201] igmp: Fix data-races around sysctl_igmp_max_msf.
-Date:   Wed, 27 Jul 2022 18:09:53 +0200
-Message-Id: <20220727161031.436175071@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: [PATCH 5.10 008/105] block: fix bounce_clone_bio for passthrough bios
+Date:   Wed, 27 Jul 2022 18:09:54 +0200
+Message-Id: <20220727161012.411398366@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 6ae0f2e553737b8cce49a1372573c81130ffa80e ]
+commit b90994c6ab623baf9268df9710692f14920ce9d2 upstream.
 
-While reading sysctl_igmp_max_msf, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+Now that bio_alloc_bioset does not fall back to kmalloc for a NULL
+bio_set, handle that case explicitly and simplify the calling
+conventions.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Based on an earlier patch from Chaitanya Kulkarni.
+
+Fixes: 3175199ab0ac ("block: split bio_kmalloc from bio_alloc_bioset")
+Reported-by: Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/igmp.c        | 2 +-
- net/ipv4/ip_sockglue.c | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ block/bounce.c |   17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/net/ipv4/igmp.c b/net/ipv4/igmp.c
-index 8920ae3751d1..9f4674244aff 100644
---- a/net/ipv4/igmp.c
-+++ b/net/ipv4/igmp.c
-@@ -2384,7 +2384,7 @@ int ip_mc_source(int add, int omode, struct sock *sk, struct
+--- a/block/bounce.c
++++ b/block/bounce.c
+@@ -214,8 +214,7 @@ static void bounce_end_io_read_isa(struc
+ 	__bounce_end_io_read(bio, &isa_page_pool);
+ }
+ 
+-static struct bio *bounce_clone_bio(struct bio *bio_src, gfp_t gfp_mask,
+-		struct bio_set *bs)
++static struct bio *bounce_clone_bio(struct bio *bio_src, gfp_t gfp_mask)
+ {
+ 	struct bvec_iter iter;
+ 	struct bio_vec bv;
+@@ -242,8 +241,11 @@ static struct bio *bounce_clone_bio(stru
+ 	 *    asking for trouble and would force extra work on
+ 	 *    __bio_clone_fast() anyways.
+ 	 */
+-
+-	bio = bio_alloc_bioset(gfp_mask, bio_segments(bio_src), bs);
++	if (bio_is_passthrough(bio_src))
++		bio = bio_kmalloc(gfp_mask, bio_segments(bio_src));
++	else
++		bio = bio_alloc_bioset(gfp_mask, bio_segments(bio_src),
++				       &bounce_bio_set);
+ 	if (!bio)
+ 		return NULL;
+ 	bio->bi_disk		= bio_src->bi_disk;
+@@ -294,7 +296,6 @@ static void __blk_queue_bounce(struct re
+ 	unsigned i = 0;
+ 	bool bounce = false;
+ 	int sectors = 0;
+-	bool passthrough = bio_is_passthrough(*bio_orig);
+ 
+ 	bio_for_each_segment(from, *bio_orig, iter) {
+ 		if (i++ < BIO_MAX_PAGES)
+@@ -305,14 +306,14 @@ static void __blk_queue_bounce(struct re
+ 	if (!bounce)
+ 		return;
+ 
+-	if (!passthrough && sectors < bio_sectors(*bio_orig)) {
++	if (!bio_is_passthrough(*bio_orig) &&
++	    sectors < bio_sectors(*bio_orig)) {
+ 		bio = bio_split(*bio_orig, sectors, GFP_NOIO, &bounce_bio_split);
+ 		bio_chain(bio, *bio_orig);
+ 		submit_bio_noacct(*bio_orig);
+ 		*bio_orig = bio;
  	}
- 	/* else, add a new source to the filter */
+-	bio = bounce_clone_bio(*bio_orig, GFP_NOIO, passthrough ? NULL :
+-			&bounce_bio_set);
++	bio = bounce_clone_bio(*bio_orig, GFP_NOIO);
  
--	if (psl && psl->sl_count >= net->ipv4.sysctl_igmp_max_msf) {
-+	if (psl && psl->sl_count >= READ_ONCE(net->ipv4.sysctl_igmp_max_msf)) {
- 		err = -ENOBUFS;
- 		goto done;
- 	}
-diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-index 8268e427f889..38f296afb663 100644
---- a/net/ipv4/ip_sockglue.c
-+++ b/net/ipv4/ip_sockglue.c
-@@ -782,7 +782,7 @@ static int ip_set_mcast_msfilter(struct sock *sk, sockptr_t optval, int optlen)
- 	/* numsrc >= (4G-140)/128 overflow in 32 bits */
- 	err = -ENOBUFS;
- 	if (gsf->gf_numsrc >= 0x1ffffff ||
--	    gsf->gf_numsrc > sock_net(sk)->ipv4.sysctl_igmp_max_msf)
-+	    gsf->gf_numsrc > READ_ONCE(sock_net(sk)->ipv4.sysctl_igmp_max_msf))
- 		goto out_free_gsf;
- 
- 	err = -EINVAL;
-@@ -832,7 +832,7 @@ static int compat_ip_set_mcast_msfilter(struct sock *sk, sockptr_t optval,
- 
- 	/* numsrc >= (4G-140)/128 overflow in 32 bits */
- 	err = -ENOBUFS;
--	if (n > sock_net(sk)->ipv4.sysctl_igmp_max_msf)
-+	if (n > READ_ONCE(sock_net(sk)->ipv4.sysctl_igmp_max_msf))
- 		goto out_free_gsf;
- 	err = set_mcast_msfilter(sk, gf32->gf_interface, n, gf32->gf_fmode,
- 				 &gf32->gf_group, gf32->gf_slist_flex);
-@@ -1242,7 +1242,7 @@ static int do_ip_setsockopt(struct sock *sk, int level, int optname,
- 		}
- 		/* numsrc >= (1G-4) overflow in 32 bits */
- 		if (msf->imsf_numsrc >= 0x3ffffffcU ||
--		    msf->imsf_numsrc > net->ipv4.sysctl_igmp_max_msf) {
-+		    msf->imsf_numsrc > READ_ONCE(net->ipv4.sysctl_igmp_max_msf)) {
- 			kfree(msf);
- 			err = -ENOBUFS;
- 			break;
--- 
-2.35.1
-
+ 	/*
+ 	 * Bvec table can't be updated by bio_for_each_segment_all(),
 
 

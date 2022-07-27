@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEC6582A91
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1789582B9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbiG0QVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S238456AbiG0Qfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233600AbiG0QVb (ORCPT
+        with ESMTP id S237948AbiG0Qd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:21:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DEB2BB14;
-        Wed, 27 Jul 2022 09:21:30 -0700 (PDT)
+        Wed, 27 Jul 2022 12:33:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC8E54CA2;
+        Wed, 27 Jul 2022 09:26:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4009B821B8;
-        Wed, 27 Jul 2022 16:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 564FCC433D6;
-        Wed, 27 Jul 2022 16:21:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B95FB821BE;
+        Wed, 27 Jul 2022 16:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6058BC433C1;
+        Wed, 27 Jul 2022 16:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658938887;
-        bh=EOHRt/4AM/Ab3RBnOHd9Utdsb/HFtX8gqBeaSdnh3l8=;
+        s=korg; t=1658939147;
+        bh=ZfemfIdXq7/HvQDmRDnhv6Y/L+qAEtaf6wJBBzpCc9o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jWahFHjaM/aH68kVQvBGVM2z5fIIo+V1N/NkRwlSYENwtmkgWp4TV5zaelvdPtXYH
-         upoOWuiLHkYdt+xmMvOQVgnN7xsgCsT4+8ldOhiUJXvAbPul9J0p+hNIrg8UR4hNS6
-         tRH7uaqMQ43++slFtrhFeA69KoW2zE7fR+Ui6DZ4=
+        b=CFOs0hUjmFaYCRhbHrY5WMfm2lJ5eeYayHzq4C2ElXmekoYWElaXJWVP3pucGfAbI
+         m//8PpSZpQnMhLnjWz5UP0/8yQj1Sa24b+tOLpQNWXG6PI8ij27cwLYHE3INoOuK03
+         PxwvWI9kGgIaQKZx9LdS5fjWiVU5BKMZpwHRxcq4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 10/26] tcp/dccp: Fix a data-race around sysctl_tcp_fwmark_accept.
+Subject: [PATCH 4.19 30/62] tcp: Fix a data-race around sysctl_tcp_stdurg.
 Date:   Wed, 27 Jul 2022 18:10:39 +0200
-Message-Id: <20220727160959.547072616@linuxfoundation.org>
+Message-Id: <20220727161005.392552075@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
-References: <20220727160959.122591422@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,33 +56,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 1a0008f9df59451d0a17806c1ee1a19857032fa8 ]
+[ Upstream commit 4e08ed41cb1194009fc1a916a59ce3ed4afd77cd ]
 
-While reading sysctl_tcp_fwmark_accept, it can be changed concurrently.
+While reading sysctl_tcp_stdurg, it can be changed concurrently.
 Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: 84f39b08d786 ("net: support marking accepting TCP sockets")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/inet_sock.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/ipv4/tcp_input.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/inet_sock.h b/include/net/inet_sock.h
-index 6213a90a8cec..f5dbee53fb85 100644
---- a/include/net/inet_sock.h
-+++ b/include/net/inet_sock.h
-@@ -113,7 +113,8 @@ static inline struct inet_request_sock *inet_rsk(const struct request_sock *sk)
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 731c4d220905..3b63e05c3486 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -5292,7 +5292,7 @@ static void tcp_check_urg(struct sock *sk, const struct tcphdr *th)
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	u32 ptr = ntohs(th->urg_ptr);
  
- static inline u32 inet_request_mark(const struct sock *sk, struct sk_buff *skb)
- {
--	if (!sk->sk_mark && sock_net(sk)->ipv4.sysctl_tcp_fwmark_accept)
-+	if (!sk->sk_mark &&
-+	    READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fwmark_accept))
- 		return skb->mark;
+-	if (ptr && !sock_net(sk)->ipv4.sysctl_tcp_stdurg)
++	if (ptr && !READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_stdurg))
+ 		ptr--;
+ 	ptr += ntohl(th->seq);
  
- 	return sk->sk_mark;
 -- 
 2.35.1
 

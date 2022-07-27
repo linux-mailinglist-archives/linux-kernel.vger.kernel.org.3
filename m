@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8749E581E78
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 06:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D231581F59
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 06:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbiG0ECP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 00:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
+        id S240504AbiG0E4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 00:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiG0ECN (ORCPT
+        with ESMTP id S232586AbiG0E4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 00:02:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684C311802;
-        Tue, 26 Jul 2022 21:02:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658894532; x=1690430532;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qPDH2zg55z0dq693EvtAztxxc5KcUkiwaVa+S6O66dg=;
-  b=Joc5exCmymQ31lwx8fVmZyBiC6bQ2+lL/mUcXngtTdvZFkanEUIb3zEC
-   oomW3sK/UeHsQ3h2BwoUEAY4yAAGAQ4QP0tp5YjJnNJIl6gz2r/JGMSVe
-   EQch1gLr4mS4At0pCFUyZE62Xi/YJn80VBm9bhwUfRKKPrnHld1ngmtlh
-   wiRRu2BWVfm3zIpGNJkuRPQcnNS1X3Sajdr2nufPmaj9KeoCwxxvvr+Kq
-   KC1SZvOV0bg00uLJVTa2x973f21gFgKxCKwL5xetjghlNPYS1iwfSJCwU
-   gHS77Lqc+M7teRTz/bhUXKjQM1Wtkvb9fg8nv0mZ2+HSzYAqXpqvaVKqa
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="288899601"
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="288899601"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 21:02:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="927631462"
-Received: from arianrah-mobl2.amr.corp.intel.com (HELO [10.251.20.146]) ([10.251.20.146])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 21:02:11 -0700
-Message-ID: <b5c746db-f6a0-d89e-6db5-e4a206c9237a@linux.intel.com>
-Date:   Tue, 26 Jul 2022 21:02:10 -0700
+        Wed, 27 Jul 2022 00:56:06 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4CCE005;
+        Tue, 26 Jul 2022 21:55:59 -0700 (PDT)
+X-UUID: 1522f4cf26b54007b51356b8b20ab2a5-20220727
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:0a9dbb06-2c81-42c5-ba01-d08930884d09,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:45f77bc9-5f65-4fda-abe9-f2436fed4c72,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 1522f4cf26b54007b51356b8b20ab2a5-20220727
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 214813613; Wed, 27 Jul 2022 12:55:54 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
+ Wed, 27 Jul 2022 04:55:52 +0000
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 27 Jul 2022 10:37:26 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 27 Jul 2022 10:37:24 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2, 3/3] media: mediatek: vcodec: Add mt8188 encoder's chip name
+Date:   Wed, 27 Jul 2022 10:37:21 +0800
+Message-ID: <20220727023721.31945-3-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220727023721.31945-1-yunfei.dong@mediatek.com>
+References: <20220727023721.31945-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3] PCI/ERR: Use pcie_aer_is_native() to judge whether OS
- owns AER
-Content-Language: en-US
-To:     Zhuo Chen <chenzhuo.1@bytedance.com>, ruscur@russell.cc,
-        oohall@gmail.com, bhelgaas@google.com
-Cc:     lukas@wunner.de, jan.kiszka@siemens.com, stuart.w.hayes@gmail.com,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220727035334.9997-1-chenzhuo.1@bytedance.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20220727035334.9997-1-chenzhuo.1@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Getting mt8188's chip name according to encoder compatible name.
 
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On 7/26/22 8:53 PM, Zhuo Chen wrote:
-> Use pcie_aer_is_native() in place of "host->native_aer ||
-> pcie_ports_native" to judge whether OS has native control of AER
-> in pcie_do_recovery().
-> 
-> Replace "dev->aer_cap && (pcie_ports_native || host->native_aer)" in
-> get_port_device_capability() with pcie_aer_is_native(), which has no
-> functional changes.
-> 
-> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
-> ---
-
-Patch looks better now. It looks like following two changes
-can also be replaced with pcie_aer_is_native() check.
-
-drivers/pci/pcie/aer.c:1407:	if ((host->native_aer || pcie_ports_native) && aer) {
-drivers/pci/pcie/aer.c:1426:	if ((host->native_aer || pcie_ports_native) && aer) {
-
-
-
-> Changelog:
-> v3:
-> - Simplify why we use pcie_aer_is_native().
-> - Revert modification of pci_aer_clear_nonfatal_status() and comments.
-> v2:
-> - Add details and note in commit log.
-> ---
->  drivers/pci/pcie/err.c          | 3 +--
->  drivers/pci/pcie/portdrv_core.c | 3 +--
->  2 files changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
-> index 0c5a143025af..121a53338e44 100644
-> --- a/drivers/pci/pcie/err.c
-> +++ b/drivers/pci/pcie/err.c
-> @@ -184,7 +184,6 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
->  	int type = pci_pcie_type(dev);
->  	struct pci_dev *bridge;
->  	pci_ers_result_t status = PCI_ERS_RESULT_CAN_RECOVER;
-> -	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
->  
->  	/*
->  	 * If the error was detected by a Root Port, Downstream Port, RCEC,
-> @@ -243,7 +242,7 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
->  	 * it is responsible for clearing this status.  In that case, the
->  	 * signaling device may not even be visible to the OS.
->  	 */
-> -	if (host->native_aer || pcie_ports_native) {
-> +	if (pcie_aer_is_native(dev)) {
->  		pcie_clear_device_status(dev);
->  		pci_aer_clear_nonfatal_status(dev);
->  	}
-> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
-> index 604feeb84ee4..98c18f4a01b2 100644
-> --- a/drivers/pci/pcie/portdrv_core.c
-> +++ b/drivers/pci/pcie/portdrv_core.c
-> @@ -221,8 +221,7 @@ static int get_port_device_capability(struct pci_dev *dev)
->  	}
->  
->  #ifdef CONFIG_PCIEAER
-> -	if (dev->aer_cap && pci_aer_available() &&
-> -	    (pcie_ports_native || host->native_aer)) {
-> +	if (pcie_aer_is_native(dev) && pci_aer_available()) {
->  		services |= PCIE_PORT_SERVICE_AER;
->  
->  		/*
-
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+index 25e816863597..75454b955638 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
+@@ -225,6 +225,8 @@ static int mtk_vcodec_enc_get_chip_name(void *priv)
+ 		return 8192;
+ 	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-enc"))
+ 		return 8195;
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8188-vcodec-enc"))
++		return 8188;
+ 	else
+ 		return 8173;
+ }
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.18.0
+

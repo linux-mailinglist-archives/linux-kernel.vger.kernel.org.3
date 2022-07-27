@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C538582D39
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A38582B35
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240998AbiG0QyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
+        id S236845AbiG0Q3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240854AbiG0Qwe (ORCPT
+        with ESMTP id S236924AbiG0Q1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:52:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE3A4D4D8;
-        Wed, 27 Jul 2022 09:34:45 -0700 (PDT)
+        Wed, 27 Jul 2022 12:27:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7224F65E;
+        Wed, 27 Jul 2022 09:24:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3F8661A3F;
-        Wed, 27 Jul 2022 16:34:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D40C433D6;
-        Wed, 27 Jul 2022 16:34:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5493AB821B9;
+        Wed, 27 Jul 2022 16:23:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D85C433D6;
+        Wed, 27 Jul 2022 16:23:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939684;
-        bh=07XIG2GMPoCXlF1LVyvINxUFkecKs0VlRnCAf3tGxxs=;
+        s=korg; t=1658939035;
+        bh=YMfKNxtdvzVM8qLd/+CL3RZRZFtcZ64WkllD3RQPKhQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kwmv/JdVCBBEmWic2iIM2YypJ4brPqmIJD9s+8z9eqrbY7wv+wUx7p121qQ6UYwW+
-         zpJV9F+zCKXMYrsB613JVRq0XGFw5082vvOIJkHwKrobnnqfOAB8muhRDolIg8mDNj
-         0p0ykyoqD2gfGhMlxO53EMMsSWA7BscCGzsa8Mu4=
+        b=CCFpBphI/Jws0L+zTAw8Iu1Qr6i7G1Q5pXbzkCi8RtBTQS2sxaIcVZ0x+zZIA/MkW
+         7fja31YEZSiSO8wNIBhdHx7NAuAnAbtntLZgYR9OuQBen8djREln2zKZLNrOr1QetD
+         Z7kAxyQ2bdxa6a0udjjuC2KC2CB4+slQGhCMOGgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 068/105] tcp: Fix data-races around sysctl knobs related to SYN option.
+        stable@vger.kernel.org, Vladimir Zapolskiy <vz@mleia.com>,
+        Johan Hovold <johan@kernel.org>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 4.14 28/37] tty: drivers/tty/, stop using tty_schedule_flip()
 Date:   Wed, 27 Jul 2022 18:10:54 +0200
-Message-Id: <20220727161014.793683267@linuxfoundation.org>
+Message-Id: <20220727161001.978971195@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
+References: <20220727161000.822869853@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,180 +53,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit 3666f666e99600518ab20982af04a078bbdad277 ]
+commit 5f6a85158ccacc3f09744b3aafe8b11ab3b6c6f6 upstream.
 
-While reading these knobs, they can be changed concurrently.
-Thus, we need to add READ_ONCE() to their readers.
+Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
+tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). We are
+going to remove the latter (as it is used less), so call the former in
+drivers/tty/.
 
-  - tcp_sack
-  - tcp_window_scaling
-  - tcp_timestamps
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Reviewed-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20211122111648.30379-2-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../ethernet/chelsio/inline_crypto/chtls/chtls_cm.c    |  6 +++---
- net/core/secure_seq.c                                  |  4 ++--
- net/ipv4/syncookies.c                                  |  6 +++---
- net/ipv4/tcp_input.c                                   |  6 +++---
- net/ipv4/tcp_output.c                                  | 10 +++++-----
- 5 files changed, 16 insertions(+), 16 deletions(-)
+ drivers/tty/cyclades.c          |    6 +++---
+ drivers/tty/goldfish.c          |    2 +-
+ drivers/tty/moxa.c              |    4 ++--
+ drivers/tty/serial/lpc32xx_hs.c |    2 +-
+ drivers/tty/vt/keyboard.c       |    6 +++---
+ drivers/tty/vt/vt.c             |    2 +-
+ 6 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_cm.c b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_cm.c
-index 51e071c20e39..cd6e016e6210 100644
---- a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_cm.c
-+++ b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_cm.c
-@@ -1235,8 +1235,8 @@ static struct sock *chtls_recv_sock(struct sock *lsk,
- 	csk->sndbuf = newsk->sk_sndbuf;
- 	csk->smac_idx = ((struct port_info *)netdev_priv(ndev))->smt_idx;
- 	RCV_WSCALE(tp) = select_rcv_wscale(tcp_full_space(newsk),
--					   sock_net(newsk)->
--						ipv4.sysctl_tcp_window_scaling,
-+					   READ_ONCE(sock_net(newsk)->
-+						     ipv4.sysctl_tcp_window_scaling),
- 					   tp->window_clamp);
- 	neigh_release(n);
- 	inet_inherit_port(&tcp_hashinfo, lsk, newsk);
-@@ -1383,7 +1383,7 @@ static void chtls_pass_accept_request(struct sock *sk,
+--- a/drivers/tty/cyclades.c
++++ b/drivers/tty/cyclades.c
+@@ -556,7 +556,7 @@ static void cyy_chip_rx(struct cyclades_
+ 		}
+ 		info->idle_stats.recv_idle = jiffies;
+ 	}
+-	tty_schedule_flip(port);
++	tty_flip_buffer_push(port);
+ 
+ 	/* end of service */
+ 	cyy_writeb(info, CyRIR, save_xir & 0x3f);
+@@ -998,7 +998,7 @@ static void cyz_handle_rx(struct cyclade
+ 				jiffies + 1);
  #endif
+ 	info->idle_stats.recv_idle = jiffies;
+-	tty_schedule_flip(&info->port);
++	tty_flip_buffer_push(&info->port);
+ 
+ 	/* Update rx_get */
+ 	cy_writel(&buf_ctrl->rx_get, new_rx_get);
+@@ -1174,7 +1174,7 @@ static void cyz_handle_cmd(struct cyclad
+ 		if (delta_count)
+ 			wake_up_interruptible(&info->port.delta_msr_wait);
+ 		if (special_count)
+-			tty_schedule_flip(&info->port);
++			tty_flip_buffer_push(&info->port);
  	}
- 	if (req->tcpopt.wsf <= 14 &&
--	    sock_net(sk)->ipv4.sysctl_tcp_window_scaling) {
-+	    READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_window_scaling)) {
- 		inet_rsk(oreq)->wscale_ok = 1;
- 		inet_rsk(oreq)->snd_wscale = req->tcpopt.wsf;
- 	}
-diff --git a/net/core/secure_seq.c b/net/core/secure_seq.c
-index 7131cd1fb2ad..189eea1372d5 100644
---- a/net/core/secure_seq.c
-+++ b/net/core/secure_seq.c
-@@ -64,7 +64,7 @@ u32 secure_tcpv6_ts_off(const struct net *net,
- 		.daddr = *(struct in6_addr *)daddr,
- 	};
- 
--	if (net->ipv4.sysctl_tcp_timestamps != 1)
-+	if (READ_ONCE(net->ipv4.sysctl_tcp_timestamps) != 1)
- 		return 0;
- 
- 	ts_secret_init();
-@@ -120,7 +120,7 @@ EXPORT_SYMBOL(secure_ipv6_port_ephemeral);
- #ifdef CONFIG_INET
- u32 secure_tcp_ts_off(const struct net *net, __be32 saddr, __be32 daddr)
- {
--	if (net->ipv4.sysctl_tcp_timestamps != 1)
-+	if (READ_ONCE(net->ipv4.sysctl_tcp_timestamps) != 1)
- 		return 0;
- 
- 	ts_secret_init();
-diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
-index b52cc46bdadd..41afc9155f31 100644
---- a/net/ipv4/syncookies.c
-+++ b/net/ipv4/syncookies.c
-@@ -249,12 +249,12 @@ bool cookie_timestamp_decode(const struct net *net,
- 		return true;
- 	}
- 
--	if (!net->ipv4.sysctl_tcp_timestamps)
-+	if (!READ_ONCE(net->ipv4.sysctl_tcp_timestamps))
- 		return false;
- 
- 	tcp_opt->sack_ok = (options & TS_OPT_SACK) ? TCP_SACK_SEEN : 0;
- 
--	if (tcp_opt->sack_ok && !net->ipv4.sysctl_tcp_sack)
-+	if (tcp_opt->sack_ok && !READ_ONCE(net->ipv4.sysctl_tcp_sack))
- 		return false;
- 
- 	if ((options & TS_OPT_WSCALE_MASK) == TS_OPT_WSCALE_MASK)
-@@ -263,7 +263,7 @@ bool cookie_timestamp_decode(const struct net *net,
- 	tcp_opt->wscale_ok = 1;
- 	tcp_opt->snd_wscale = options & TS_OPT_WSCALE_MASK;
- 
--	return net->ipv4.sysctl_tcp_window_scaling != 0;
-+	return READ_ONCE(net->ipv4.sysctl_tcp_window_scaling) != 0;
  }
- EXPORT_SYMBOL(cookie_timestamp_decode);
  
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 5cbabe0e42c9..8ac3acde08b4 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -4007,7 +4007,7 @@ void tcp_parse_options(const struct net *net,
- 				break;
- 			case TCPOPT_WINDOW:
- 				if (opsize == TCPOLEN_WINDOW && th->syn &&
--				    !estab && net->ipv4.sysctl_tcp_window_scaling) {
-+				    !estab && READ_ONCE(net->ipv4.sysctl_tcp_window_scaling)) {
- 					__u8 snd_wscale = *(__u8 *)ptr;
- 					opt_rx->wscale_ok = 1;
- 					if (snd_wscale > TCP_MAX_WSCALE) {
-@@ -4023,7 +4023,7 @@ void tcp_parse_options(const struct net *net,
- 			case TCPOPT_TIMESTAMP:
- 				if ((opsize == TCPOLEN_TIMESTAMP) &&
- 				    ((estab && opt_rx->tstamp_ok) ||
--				     (!estab && net->ipv4.sysctl_tcp_timestamps))) {
-+				     (!estab && READ_ONCE(net->ipv4.sysctl_tcp_timestamps)))) {
- 					opt_rx->saw_tstamp = 1;
- 					opt_rx->rcv_tsval = get_unaligned_be32(ptr);
- 					opt_rx->rcv_tsecr = get_unaligned_be32(ptr + 4);
-@@ -4031,7 +4031,7 @@ void tcp_parse_options(const struct net *net,
- 				break;
- 			case TCPOPT_SACK_PERM:
- 				if (opsize == TCPOLEN_SACK_PERM && th->syn &&
--				    !estab && net->ipv4.sysctl_tcp_sack) {
-+				    !estab && READ_ONCE(net->ipv4.sysctl_tcp_sack)) {
- 					opt_rx->sack_ok = TCP_SACK_SEEN;
- 					tcp_sack_reset(opt_rx);
- 				}
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index e7348e70e6e3..772dd6241b70 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -789,18 +789,18 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
- 	opts->mss = tcp_advertise_mss(sk);
- 	remaining -= TCPOLEN_MSS_ALIGNED;
+--- a/drivers/tty/goldfish.c
++++ b/drivers/tty/goldfish.c
+@@ -159,7 +159,7 @@ static irqreturn_t goldfish_tty_interrup
+ 	address = (unsigned long)(void *)buf;
+ 	goldfish_tty_rw(qtty, address, count, 0);
  
--	if (likely(sock_net(sk)->ipv4.sysctl_tcp_timestamps && !*md5)) {
-+	if (likely(READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_timestamps) && !*md5)) {
- 		opts->options |= OPTION_TS;
- 		opts->tsval = tcp_skb_timestamp(skb) + tp->tsoffset;
- 		opts->tsecr = tp->rx_opt.ts_recent;
- 		remaining -= TCPOLEN_TSTAMP_ALIGNED;
+-	tty_schedule_flip(&qtty->port);
++	tty_flip_buffer_push(&qtty->port);
+ 	return IRQ_HANDLED;
+ }
+ 
+--- a/drivers/tty/moxa.c
++++ b/drivers/tty/moxa.c
+@@ -1397,7 +1397,7 @@ static int moxa_poll_port(struct moxa_po
+ 		if (inited && !tty_throttled(tty) &&
+ 				MoxaPortRxQueue(p) > 0) { /* RX */
+ 			MoxaPortReadData(p);
+-			tty_schedule_flip(&p->port);
++			tty_flip_buffer_push(&p->port);
+ 		}
+ 	} else {
+ 		clear_bit(EMPTYWAIT, &p->statusflags);
+@@ -1422,7 +1422,7 @@ static int moxa_poll_port(struct moxa_po
+ 
+ 	if (tty && (intr & IntrBreak) && !I_IGNBRK(tty)) { /* BREAK */
+ 		tty_insert_flip_char(&p->port, 0, TTY_BREAK);
+-		tty_schedule_flip(&p->port);
++		tty_flip_buffer_push(&p->port);
  	}
--	if (likely(sock_net(sk)->ipv4.sysctl_tcp_window_scaling)) {
-+	if (likely(READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_window_scaling))) {
- 		opts->ws = tp->rx_opt.rcv_wscale;
- 		opts->options |= OPTION_WSCALE;
- 		remaining -= TCPOLEN_WSCALE_ALIGNED;
+ 
+ 	if (intr & IntrLine)
+--- a/drivers/tty/serial/lpc32xx_hs.c
++++ b/drivers/tty/serial/lpc32xx_hs.c
+@@ -350,7 +350,7 @@ static irqreturn_t serial_lpc32xx_interr
+ 		       LPC32XX_HSUART_IIR(port->membase));
+ 		port->icount.overrun++;
+ 		tty_insert_flip_char(tport, 0, TTY_OVERRUN);
+-		tty_schedule_flip(tport);
++		tty_flip_buffer_push(tport);
  	}
--	if (likely(sock_net(sk)->ipv4.sysctl_tcp_sack)) {
-+	if (likely(READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_sack))) {
- 		opts->options |= OPTION_SACK_ADVERTISE;
- 		if (unlikely(!(OPTION_TS & opts->options)))
- 			remaining -= TCPOLEN_SACKPERM_ALIGNED;
-@@ -3648,7 +3648,7 @@ static void tcp_connect_init(struct sock *sk)
- 	 * See tcp_input.c:tcp_rcv_state_process case TCP_SYN_SENT.
- 	 */
- 	tp->tcp_header_len = sizeof(struct tcphdr);
--	if (sock_net(sk)->ipv4.sysctl_tcp_timestamps)
-+	if (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_timestamps))
- 		tp->tcp_header_len += TCPOLEN_TSTAMP_ALIGNED;
  
- #ifdef CONFIG_TCP_MD5SIG
-@@ -3684,7 +3684,7 @@ static void tcp_connect_init(struct sock *sk)
- 				  tp->advmss - (tp->rx_opt.ts_recent_stamp ? tp->tcp_header_len - sizeof(struct tcphdr) : 0),
- 				  &tp->rcv_wnd,
- 				  &tp->window_clamp,
--				  sock_net(sk)->ipv4.sysctl_tcp_window_scaling,
-+				  READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_window_scaling),
- 				  &rcv_wscale,
- 				  rcv_wnd);
+ 	/* Data received? */
+--- a/drivers/tty/vt/keyboard.c
++++ b/drivers/tty/vt/keyboard.c
+@@ -309,7 +309,7 @@ int kbd_rate(struct kbd_repeat *rpt)
+ static void put_queue(struct vc_data *vc, int ch)
+ {
+ 	tty_insert_flip_char(&vc->port, ch, 0);
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
+ }
  
--- 
-2.35.1
-
+ static void puts_queue(struct vc_data *vc, char *cp)
+@@ -318,7 +318,7 @@ static void puts_queue(struct vc_data *v
+ 		tty_insert_flip_char(&vc->port, *cp, 0);
+ 		cp++;
+ 	}
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
+ }
+ 
+ static void applkey(struct vc_data *vc, int key, char mode)
+@@ -563,7 +563,7 @@ static void fn_inc_console(struct vc_dat
+ static void fn_send_intr(struct vc_data *vc)
+ {
+ 	tty_insert_flip_char(&vc->port, 0, TTY_BREAK);
+-	tty_schedule_flip(&vc->port);
++	tty_flip_buffer_push(&vc->port);
+ }
+ 
+ static void fn_scroll_forw(struct vc_data *vc)
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -1482,7 +1482,7 @@ static void respond_string(const char *p
+ 		tty_insert_flip_char(port, *p, 0);
+ 		p++;
+ 	}
+-	tty_schedule_flip(port);
++	tty_flip_buffer_push(port);
+ }
+ 
+ static void cursor_report(struct vc_data *vc, struct tty_struct *tty)
 
 

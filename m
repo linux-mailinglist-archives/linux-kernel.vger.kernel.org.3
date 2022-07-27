@@ -2,109 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC555822E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11F25823F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiG0JOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S232086AbiG0KOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 06:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbiG0JOO (ORCPT
+        with ESMTP id S229763AbiG0KOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:14:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D81627A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658913216; x=1690449216;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=m1SaoX9uSfbY4s1EjmnVRFaXJa0od/V0m4Hy6L3DAng=;
-  b=BKqB3Z7zoykG+VFg65r0QbvqVcZtl9RCqaSZI6CApwPvMydRZ3xdSUsS
-   EBlBWezx2Dymc8PVSCzntNFE6E5cTpQS7EgCa8mf8AOdwi45UsQEPu0Mn
-   w7Q3GKFcQwOWvypT+6aW0QM29v2fOxDV5zInmiauJj2LVMKhInpX2b160
-   v8SymIP6Apx/uuZNr/edq8WMMynUMTSciMBrv+cApnkIveKuAEty9ZnWh
-   cSihvJjObXYojndSM/B0G2bhfP5Vd699noGjgVuOCjr5cDXrI1rciYjZE
-   quiXBmFNvM0RWQUhoxWQ/e3fBkU10xMUkQRaog9QYwvp3msEY8TPfSK0X
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="288196872"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="288196872"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 02:13:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="659113574"
-Received: from q.bj.intel.com ([10.238.154.102])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Jul 2022 02:13:34 -0700
-From:   shaoqin.huang@intel.com
-To:     rppt@kernel.org
-Cc:     Shaoqin Huang <shaoqin.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] memblock test: Modify the obsolete description in README
-Date:   Wed, 27 Jul 2022 18:16:15 -0600
-Message-Id: <20220728001615.19099-1-shaoqin.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 27 Jul 2022 06:14:06 -0400
+X-Greylist: delayed 588 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Jul 2022 03:14:04 PDT
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C60B1277B;
+        Wed, 27 Jul 2022 03:14:04 -0700 (PDT)
+Received: from mxde.zte.com.cn (unknown [10.35.8.63])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Lt8Wf6X0KzvLC;
+        Wed, 27 Jul 2022 18:04:14 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4Lt8WN3JS5zCVKg3;
+        Wed, 27 Jul 2022 18:04:00 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4Lt8WJ6mXSzdmXX7;
+        Wed, 27 Jul 2022 18:03:56 +0800 (CST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.81])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Lt8WF1LG4z8R047;
+        Wed, 27 Jul 2022 18:03:53 +0800 (CST)
+Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
+        by mse-fl1.zte.com.cn with SMTP id 26RA3VN4074081;
+        Wed, 27 Jul 2022 18:03:31 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from fox-cloudhost8.zte.com.cn (unknown [10.234.72.110])
+        by smtp (Zmail) with SMTP;
+        Wed, 27 Jul 2022 18:03:32 +0800
+X-Zmail-TransId: 3e8162e10d73022-19baa
+From:   Yi Wang <wang.yi59@zte.com.cn>
+To:     trond.myklebust@hammerspace.com
+Cc:     anna@kernel.org, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
+        wang.yi59@zte.com.cn, wang.liang82@zte.com.cn,
+        Zhang Xianwei <zhang.xianwei8@zte.com.cn>
+Subject: [PATCH] NFSv4.1: RECLAIM_COMPLETE must handle EACCES
+Date:   Wed, 27 Jul 2022 18:01:07 +0800
+Message-Id: <20220727100107.3062-1-wang.yi59@zte.com.cn>
+X-Mailer: git-send-email 2.33.0.rc0.dirty
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 26RA3VN4074081
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 62E10D9D.000 by FangMail milter!
+X-FangMail-Envelope: 1658916255/4Lt8Wf6X0KzvLC/62E10D9D.000/10.35.8.63/[10.35.8.63]/mxde.zte.com.cn/<wang.yi59@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 62E10D9D.000/4Lt8Wf6X0KzvLC
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaoqin Huang <shaoqin.huang@intel.com>
+From: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
 
-The VERBOSE option in Makefile has been moved, but there still have the
-description left in README. For now, we use `-v` options when running
-memblock test to print information, so also add some description about
-it.
+A client should be able to handle getting an EACCES error while doing
+a mount operation to reclaim state due to NFS4CLNT_RECLAIM_REBOOT
+being set. If the server returns RPC_AUTH_BADCRED because authentication
+failed when we execute "exportfs -au", then RECLAIM_COMPLETE will go a
+wrong way. After mount succeeds, all OPEN call will fail due to an
+NFS4ERR_GRACE error being returned. This patch is to fix it by resending
+a RPC request.
 
-Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
+Signed-off-by: Zhang Xianwei <zhang.xianwei8@zte.com.cn>
+Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
 ---
- tools/testing/memblock/README | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ fs/nfs/nfs4proc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/memblock/README b/tools/testing/memblock/README
-index 058146b528a5..f39cc0aa6b76 100644
---- a/tools/testing/memblock/README
-+++ b/tools/testing/memblock/README
-@@ -33,20 +33,21 @@ To run the tests, build the main target and run it:
- 
- $ make && ./main
- 
--A successful run produces no output. It is also possible to override different
--configuration parameters. For example, to include verbose output, specify the
--VERBOSE flag when building the main target:
-+A successful run produces no output. It it also possible to override different
-+configuration parameters. For example, to simulate enabled NUMA, use:
- 
--$ make VERBOSE=1
-+$ make NUMA=1
- 
--This will print information about which functions are being tested and the
--number of test cases that passed.
-+For the full list of options, see `make help`.
- 
--To simulate enabled NUMA, use:
-+It is also possible to pass options at run time. For example:
- 
--$ make NUMA=1
-+$ ./main -v
- 
--For the full list of options, see `make help`.
-+This will print information about which functions are being tested and the
-+number of test cases that passed.
-+
-+For the full list of options, see `./main --help`.
- 
- Project structure
- =================
+diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+index bb0e84a46d61..b51b83506011 100644
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -9477,6 +9477,9 @@ static int nfs41_reclaim_complete_handle_errors(struct rpc_task *task, struct nf
+ 		rpc_delay(task, NFS4_POLL_RETRY_MAX);
+ 		fallthrough;
+ 	case -NFS4ERR_RETRY_UNCACHED_REP:
++	case -EACCES:
++		dprintk("%s: failed to reclaim complete error %d for server %s, retrying\n",
++			__func__, task->tk_status, clp->cl_hostname);
+ 		return -EAGAIN;
+ 	case -NFS4ERR_BADSESSION:
+ 	case -NFS4ERR_DEADSESSION:
 -- 
-2.30.2
-
+2.18.4

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25077582B75
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B672F582EB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbiG0Qdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S241692AbiG0RQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237737AbiG0QdF (ORCPT
+        with ESMTP id S241897AbiG0ROo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:33:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F42024E878;
-        Wed, 27 Jul 2022 09:26:29 -0700 (PDT)
+        Wed, 27 Jul 2022 13:14:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7835378208;
+        Wed, 27 Jul 2022 09:42:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D4D9619FE;
-        Wed, 27 Jul 2022 16:25:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748DEC433C1;
-        Wed, 27 Jul 2022 16:25:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 255BFB821A6;
+        Wed, 27 Jul 2022 16:42:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73CA4C433C1;
+        Wed, 27 Jul 2022 16:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939133;
-        bh=/f09EqkA8ylK2cgveU08oawcKEHfM+5sXxQirEs8kZ8=;
+        s=korg; t=1658940171;
+        bh=Tw6UWWkLeLNhHN4n5Og//nBQliGEATcfi0b3897XIO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JW554foM8SxUYOgHSGMKqV4X5nhWYVUBhWItwd0xFmTD1VcU/e30s7jhSbBv70uoW
-         jzux9Ydkj5DFQpkMCF1HbxdZDeQwj47vjSkjGbvGQSQi8laQSwrplFUuWQSyuJmsMm
-         grMufSLQKVkmqxHkiA/FsAS8xRLvu0pxPcuRxfp4=
+        b=VA3U2LDjuDHisz5cmwhw/91Oy0a72eTBQmXOVFFQFmMMucWxE2FY27SFFSiQ25w5q
+         25bUJ1M2s0F3E7f1sBVaErMoGREgSmHw8LEsv7wquHYzJeqRB26afRdXKBt0TZiWSu
+         fCjZxtISQtNCrISkmKtcVzbpZ1kbcAr9LKGKOBMw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 25/62] tcp: Fix a data-race around sysctl_tcp_early_retrans.
+Subject: [PATCH 5.15 130/201] tcp: Fix data-races around sysctl_tcp_max_reordering.
 Date:   Wed, 27 Jul 2022 18:10:34 +0200
-Message-Id: <20220727161005.188759957@linuxfoundation.org>
+Message-Id: <20220727161033.171437127@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,32 +56,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 52e65865deb6a36718a463030500f16530eaab74 ]
+[ Upstream commit a11e5b3e7a59fde1a90b0eaeaa82320495cf8cae ]
 
-While reading sysctl_tcp_early_retrans, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+While reading sysctl_tcp_max_reordering, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: eed530b6c676 ("tcp: early retransmit")
+Fixes: dca145ffaa8d ("tcp: allow for bigger reordering level")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/tcp_input.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 3d5ea169e905..8dcb9484a20c 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -2454,7 +2454,7 @@ bool tcp_schedule_loss_probe(struct sock *sk, bool advancing_rto)
- 	if (tp->fastopen_rsk)
- 		return false;
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 6309a4eb3acd..2d21d8bf3b8c 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -1043,7 +1043,7 @@ static void tcp_check_sack_reordering(struct sock *sk, const u32 low_seq,
+ 			 tp->undo_marker ? tp->undo_retrans : 0);
+ #endif
+ 		tp->reordering = min_t(u32, (metric + mss - 1) / mss,
+-				       sock_net(sk)->ipv4.sysctl_tcp_max_reordering);
++				       READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_max_reordering));
+ 	}
  
--	early_retrans = sock_net(sk)->ipv4.sysctl_tcp_early_retrans;
-+	early_retrans = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_early_retrans);
- 	/* Schedule a loss probe in 2*RTT for SACK capable connections
- 	 * not in loss recovery, that are either limited by cwnd or application.
- 	 */
+ 	/* This exciting event is worth to be remembered. 8) */
+@@ -2022,7 +2022,7 @@ static void tcp_check_reno_reordering(struct sock *sk, const int addend)
+ 		return;
+ 
+ 	tp->reordering = min_t(u32, tp->packets_out + addend,
+-			       sock_net(sk)->ipv4.sysctl_tcp_max_reordering);
++			       READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_max_reordering));
+ 	tp->reord_seen++;
+ 	NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPRENOREORDER);
+ }
 -- 
 2.35.1
 

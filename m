@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2810583051
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACE6582F6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237457AbiG0RgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S242050AbiG0RZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242654AbiG0Rek (ORCPT
+        with ESMTP id S242127AbiG0RYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:34:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1238321D;
-        Wed, 27 Jul 2022 09:49:27 -0700 (PDT)
+        Wed, 27 Jul 2022 13:24:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9053E7B783;
+        Wed, 27 Jul 2022 09:46:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E45CC616FF;
-        Wed, 27 Jul 2022 16:49:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6045C433C1;
-        Wed, 27 Jul 2022 16:49:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09BFFB821A6;
+        Wed, 27 Jul 2022 16:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6732FC4314B;
+        Wed, 27 Jul 2022 16:46:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940565;
-        bh=grI3TtxyBN+CVhA9VjS4IQUU/Bu18uoVSuQlV5oauoM=;
+        s=korg; t=1658940366;
+        bh=hcMIUtGOhA2zAhTnvG6zDqVyHPDT5753U0ywcU6I810=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zoY5nh8sogbIe+XxVe2ZCKW5HWFEIL630A+SZ0LIue4Hd5kmx36P/hqHBHY8EYokH
-         B8PnD041l74HmCwqoS+0kHn6YIs2NwzbPZEW8bX44f3Cm0XMkhg/iZbNmf7CYUlXfJ
-         b65gmxHs+0Vr66v88Xae5/qBCiwbjpS5OtimzRfs=
+        b=HJvSCjaqqTkuVx5TxRQgDiun9K1Cdpmjtg53atBJsYoEnUZfYMOdPRhdG0o0Hwa3u
+         +D8elDzREEwIm4uptqU9kMVItP7sMyajxuMNwI0ykKvtHJQnwrTyDC3l6GhS0l1vxM
+         l1v8o8J8MIM7RGsTNDvJ8SHfQqHnUn0mxA1Kp3LM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 038/158] ip: Fix a data-race around sysctl_fwmark_reflect.
-Date:   Wed, 27 Jul 2022 18:11:42 +0200
-Message-Id: <20220727161022.998435138@linuxfoundation.org>
+        stable@vger.kernel.org, Jan Beulich <jbeulich@suse.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 199/201] x86: drop bogus "cc" clobber from __try_cmpxchg_user_asm()
+Date:   Wed, 27 Jul 2022 18:11:43 +0200
+Message-Id: <20220727161036.039919451@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +53,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Jan Beulich <jbeulich@suse.com>
 
-[ Upstream commit 85d0b4dbd74b95cc492b1f4e34497d3f894f5d9a ]
+commit 1df931d95f4dc1c11db1123e85d4e08156e46ef9 upstream.
 
-While reading sysctl_fwmark_reflect, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+As noted (and fixed) a couple of times in the past, "=@cc<cond>" outputs
+and clobbering of "cc" don't work well together. The compiler appears to
+mean to reject such, but doesn't - in its upstream form - quite manage
+to yet for "cc". Furthermore two similar macros don't clobber "cc", and
+clobbering "cc" is pointless in asm()-s for x86 anyway - the compiler
+always assumes status flags to be clobbered there.
 
-Fixes: e110861f8609 ("net: add a sysctl to reflect the fwmark on replies")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 989b5db215a2 ("x86/uaccess: Implement macros for CMPXCHG on user addresses")
+Signed-off-by: Jan Beulich <jbeulich@suse.com>
+Message-Id: <485c0c0b-a3a7-0b7c-5264-7d00c01de032@suse.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/ip.h | 2 +-
+ arch/x86/include/asm/uaccess.h |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 05fe313f72fa..4a15b6bcb4b8 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -384,7 +384,7 @@ void ipfrag_init(void);
- void ip_static_sysctl_init(void);
- 
- #define IP4_REPLY_MARK(net, mark) \
--	((net)->ipv4.sysctl_fwmark_reflect ? (mark) : 0)
-+	(READ_ONCE((net)->ipv4.sysctl_fwmark_reflect) ? (mark) : 0)
- 
- static inline bool ip_is_fragment(const struct iphdr *iph)
- {
--- 
-2.35.1
-
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -471,7 +471,7 @@ do {									\
+ 		       [ptr] "+m" (*_ptr),				\
+ 		       [old] "+a" (__old)				\
+ 		     : [new] ltype (__new)				\
+-		     : "memory", "cc");					\
++		     : "memory");					\
+ 	if (unlikely(__err))						\
+ 		goto label;						\
+ 	if (unlikely(!success))						\
 
 

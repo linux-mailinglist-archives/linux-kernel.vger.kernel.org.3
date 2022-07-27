@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C6558329B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9D25832CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbiG0TAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        id S234450AbiG0TDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbiG0TAP (ORCPT
+        with ESMTP id S232410AbiG0TCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:00:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC11374DF5;
-        Wed, 27 Jul 2022 11:11:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5974D61988;
-        Wed, 27 Jul 2022 18:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD6EC433C1;
-        Wed, 27 Jul 2022 18:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658945466;
-        bh=Mom6Ph0FsAAZ+C+h67Qnnz+WO0GGSqzSCicWOfVwSFc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RuKOM3Ol94eIS35+inrZhT7DED0Yq1YgX9yUMQFL7diTl8EruJ3Xk+o8nrTVlyX7a
-         H7msQA5o2kYik/cqyALUfZN9FHx4wehSeGCpNxzqqHZp8RhzOnK1bowgIn8SYa4gfQ
-         3MNzOqVTdOJhOAJVxDb4SdE4zZ+1osqEyrQ7pI4Q=
-Date:   Wed, 27 Jul 2022 20:11:03 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Iurii Zaikin <yzaikin@google.com>, Jan Kara <jack@suse.cz>,
-        Paul Turner <pjt@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>, Qing Wang <wangqing@vivo.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Stephen Kitt <steve@sk2.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Antti Palosaari <crope@iki.fi>, Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Lukas Middendorf <kernel@tuxforce.de>,
-        Mark Fasheh <mark@fasheh.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Tso <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 040/201] sysctl: move some boundary constants from
- sysctl.c to sysctl_vals
-Message-ID: <YuF/t6/DtsGPLQVc@kroah.com>
-References: <20220727161026.977588183@linuxfoundation.org>
- <20220727161028.534205480@linuxfoundation.org>
- <YuF2eU9SbDDHdqaU@bombadil.infradead.org>
+        Wed, 27 Jul 2022 15:02:43 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D7A10D6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:18:10 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 982905C0156;
+        Wed, 27 Jul 2022 14:18:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 27 Jul 2022 14:18:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1658945889; x=1659032289; bh=qIWv+ZMtF2
+        lt0YMNEhnDHuA6uaYCrHAWKeY3aG5HYac=; b=bbkvSchrtgoiEmiUyW+gU6LRiA
+        cwth1Swzn5uiGk0d6GYSbxGzJFbonJlgGXYlhfy7RmayejCE2GZ+YuxmiJ6SHpta
+        INE7qCmHLhx7gUWt9RULcYoXNUnRK/mL628UH7g5sZv3I56lVyG9z5Ay2BOLx4GJ
+        b6YSsPABvzgavQLs7FGnqKULr39OLAN66pNjyYIIfw3+8ZMVJhYm3XhaEZifKl7J
+        t9Lic3Jt1xGF8X6gtPEorC2oJjLzAqQJmtYE4wphuhmVDDJM99uaUQ1o8xk3rMmn
+        qynUjB7EQBOft7liFmV5uiT//2sNdA8h/QlHPCk5ACZJUqCqsaiMBqm+I5rQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1658945889; x=1659032289; bh=qIWv+ZMtF2lt0YMNEhnDHuA6uaYC
+        rHAWKeY3aG5HYac=; b=sHaFahFVqjrOvnXYD16N4CO7W2Jjk+pJIgmKRg+tuF+p
+        /lWhDoFM8bQvJ+S024rYP0bAXqa4CS9xNbCphJLvJf2uWjnKA/fg7baehYZqQZoK
+        gzyJidGRPXmzAeeUXMHM4+S/CbFgOe6GUcv8HE2uai2/KSX8/ZizuhFv9LCZFiLZ
+        uqm0Ulk5pc3AHJ6zs6gg1ElGkVWVDxNrc627GiGMcEabxvTTHFKWiVeF6FjaOIUg
+        ca+fiyAu0hhVwNyCMkuNhhbqBKH2AYIQt+fZHqfqEz6hAyyuXs4G6sQrr+9+bsH7
+        HUQLs3QVZlcV/zzuuU7lJm8i7KwzPdmxskCqiciuBg==
+X-ME-Sender: <xms:YIHhYuO3eQEQ3S9If2f44cZL-sUM-DQZUjMb9GuZpFZXQswF6POmdw>
+    <xme:YIHhYs9ZQ6N55PoF7BjMitgrUQGEjtpIPDiEokd1ShdgR4YiLSmLXFm3_l7XifUi4
+    U4E3qvCpA2avhFntjc>
+X-ME-Received: <xmr:YIHhYlSPkUo0rp9wLAbleT2t1zTz3IAi8sJc0Quw4MM55x7JlqyH1cf9eD2fpA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduvddguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigt
+    hhhoucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtf
+    frrghtthgvrhhnpeelveduteeghfehkeeukefhudfftefhheetfedthfevgfetleevvddu
+    veetueefheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthihtghhohesthihtghhohdrphhi
+    iiiirg
+X-ME-Proxy: <xmx:YIHhYuvqEsUH3OMS9bPDTPf61bZY5nlXdLUKxM1OG6wvO6yp5I_gKg>
+    <xmx:YIHhYmfsBH_X9patdG0S3g7xcbGlU9IB8GaZiA-xI_BBuU33TcF9gA>
+    <xmx:YIHhYi3OV0O2O2Ch2WKwLLQk8rLjUIYKKRkozH_IIoNrDTsbRTpWNg>
+    <xmx:YYHhYm7siNzULX3n7xYEVm4F-USHQLJZaISwJarwoXu4nVd0TQaJlQ>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 27 Jul 2022 14:18:07 -0400 (EDT)
+Date:   Wed, 27 Jul 2022 12:18:06 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched: __fatal_signal_pending() should also check
+ PF_EXITING
+Message-ID: <YuGBXnqb5rPwAlYk@tycho.pizza>
+References: <Ys2PwTS0qFmGNFqy@netflix>
+ <20220713175305.1327649-1-tycho@tycho.pizza>
+ <20220720150328.GA30749@mail.hallyn.com>
+ <YthsgqAZYnwHZLn+@tycho.pizza>
+ <20220721015459.GA4297@mail.hallyn.com>
+ <YuFdUj5X4qckC/6g@tycho.pizza>
+ <20220727175538.GC18822@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuF2eU9SbDDHdqaU@bombadil.infradead.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220727175538.GC18822@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 10:31:37AM -0700, Luis Chamberlain wrote:
-> On Wed, Jul 27, 2022 at 06:09:04PM +0200, Greg Kroah-Hartman wrote:
-> > From: Xiaoming Ni <nixiaoming@huawei.com>
-> > 
-> > [ Upstream commit 78e36f3b0dae586f623c4a37ec5eb5496f5abbe1 ]
-> > 
-> > sysctl has helpers which let us specify boundary values for a min or max
-> > int value.  Since these are used for a boundary check only they don't
-> > change, so move these variables to sysctl_vals to avoid adding duplicate
-> > variables.  This will help with our cleanup of kernel/sysctl.c.
-> > 
-> > [akpm@linux-foundation.org: update it for "mm/pagealloc: sysctl: change watermark_scale_factor max limit to 30%"]
-> > [mcgrof@kernel.org: major rebase]
-> > 
-> > Link: https://lkml.kernel.org/r/20211123202347.818157-3-mcgrof@kernel.org
-> > Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Wed, Jul 27, 2022 at 07:55:39PM +0200, Oleg Nesterov wrote:
+> On 07/27, Tycho Andersen wrote:
+> >
+> > Hi all,
+> >
+> > On Wed, Jul 20, 2022 at 08:54:59PM -0500, Serge E. Hallyn wrote:
+> > > Oh - I didn't either - checking the sigkill in shared signals *seems*
+> > > legit if they can be put there - but since you posted the new patch I
+> > > assumed his reasoning was clear to you.  I know Eric's busy, cc:ing Oleg
+> > > for his interpretation too.
+> >
+> > Any thoughts on this?
 > 
-> I'm a bit puzzled. How / why is this a stable fix?
+> Cough... I don't know what can I say except I personally dislike this
+> patch no matter what ;)
+> 
+> And I do not understand how can this patch help. OK, a single-threaded
+> PF_EXITING task sleeps in TASK_KILLABLE. send_signal_locked() won't
+> wake it up anyway?
+> 
+> I must have missed something.
 
-I think it's needed by a patch later in the series.  Sasha, can you
-verify?
+What do you think of the patch in
+https://lore.kernel.org/all/YsyHMVLuT5U6mm+I@netflix/ ? Hopefully that
+has an explanation that makes more sense.
 
-thanks,
-
-greg k-h
+Tycho

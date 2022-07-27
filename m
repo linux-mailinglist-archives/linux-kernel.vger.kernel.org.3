@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43055827EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F136C5827F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiG0Npq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S233069AbiG0NqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbiG0Npm (ORCPT
+        with ESMTP id S232951AbiG0NqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:45:42 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3400BDFCD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:45:41 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id j7so2372513wrh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:45:41 -0700 (PDT)
+        Wed, 27 Jul 2022 09:46:09 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFCC18345
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:46:08 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ss3so31452421ejc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:46:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7gGrlyDdirvdUA7riaI7TlemrpJ1LUBifzMGQQE/jDU=;
-        b=aKoczN7k/b/+LolbU8csJT7jtDZsDTeSvx3Zk5EwoZBtEzljz8+BJasZmELiDP475B
-         mEFBsLIGvifwWkMkXIYH2RcsiBiXb3wBrA1Q3rVg03uLkD8ToYWlnTudgtmSeEyJK6o5
-         LRsIzG21yeKngXSQQPo3ZgGRuoRD7UP1vuerJ5Wf/v4+3Ui9Qz/F+Xt3h4+Itbn5i3PH
-         To03EGaMHO0UuYhZHMs/ZioA2XpkC5ElpQYihO33E7SVqRU+62Wj5CZuctyUZllDX+g0
-         L4py3NLskYAR4kEvkX3nR4WUg4EpXOmxb53sGNDBFjnjo2+QgUWi0/G3EpqNWyheC9lY
-         Glrg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3+CIoBgIXCefHdiPwAwmZSqgvqBVzos7wCXQs6Z6pGY=;
+        b=aAMKAAp0Q4vQ/GYiK/iVkkfSuNwFapAYxENRknBuwJ0oTeimvIONUDXaUCGYJnl+MN
+         dCm+jifGdmZjh4mTxyNbJnJUuU0nV5KE68sSxyqe66eohR+CGWtnV5MeI+pKrrCklWCV
+         FmD3Gc8j8kYyGdNRRSEFwFprV0BA1X2ynOk+g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7gGrlyDdirvdUA7riaI7TlemrpJ1LUBifzMGQQE/jDU=;
-        b=1YHXd74Ei0Hal6vSUj6FNGFd/LZfp3dXs8hnu6WaOI2s5d4kTzEBAMxx2GjVUj1kNt
-         gddXqSX4/oVEM9DQ/lRs+krmntHKFevbyEbR7CRanKTac1kyB4edcURNiYdEiXt4+XXc
-         KOa8YcKV6RMtV+DJG4HFiPQIJnxLOu9Yif+ql8hTQ3PTkFwvhSu9g4HY9PEI5h7uXL85
-         ah7odkuZr6gK9c4A/JYLMfrtGvj9d12lylF3X3YboRuJVMxq4xY0N1LdrJ52YKbN9hKh
-         USe1Bqgk1Qfsp19EhAwRBW2nJfcelUOJgFrDd2/UyXuvNWgg3Y0b81gsFLP876nWtDkx
-         WlQg==
-X-Gm-Message-State: AJIora8o4qGj0WYkGstlA+lmezbElmOQ2/0FVofZAiWxL4sueH8tTfzY
-        sw22k2yfJz5bIGf8o/UPzHJd8BAXQZ6BpXGurDHnTg==
-X-Google-Smtp-Source: AGRyM1vX7ezpYljF/hOQ0ZqLM8P3MfOOLiOVDi5erUYoEUOh9xltKy4QxFtI8mHqlZRaN5MibKtQN46hvKBVNtxOYxM=
-X-Received: by 2002:a05:600c:5114:b0:3a3:3f7f:27ec with SMTP id
- o20-20020a05600c511400b003a33f7f27ecmr3109497wms.93.1658929539557; Wed, 27
- Jul 2022 06:45:39 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3+CIoBgIXCefHdiPwAwmZSqgvqBVzos7wCXQs6Z6pGY=;
+        b=InpYtHtzsOXcELewQd01RXoOnQyrpiPnVZwQHLXlC0zkgph3jwzSnPvByly7TF+NrE
+         vHOb9tVFwguz0U5uXNyV6wiDP8msOtx73RCkFGyml1WqyXpT5OoARZrFteubXHtIWLL7
+         EgYAx2eSBvfwEBCzbKH5Zvea7CRCH4Wki0o7ICngigrqY2sGrGxMuHPmUg4DHA9eYehD
+         iuyjPAcDTMxGC5cioTbQOzcCVGoxun1BTz5aO2kC4rziGtGHWkiB6gA3pZaIrcVVzStP
+         nN10Cqde9BNVMzeWWMqrAvWEm/qXsfo8ZZmRw0ht105bx+YtNkj07M+G3wtWEgHqeBO6
+         ssRw==
+X-Gm-Message-State: AJIora95hsx6udm2qz+NQ2Lt5LR2zo4e880dXN496ljUL2kLLzDE9j7z
+        1xs0oY8Q8IHKtDgLqJNeWSTlC0lK0Lbwe9M8
+X-Google-Smtp-Source: AGRyM1v3ZSk3PBFrf0xNG3vE7L/SJvgstEOQwqpJVKM7EKS7zm2HBOwRdySffrPGknR8h48rMDBhUg==
+X-Received: by 2002:a17:907:2e01:b0:72b:764f:ea1a with SMTP id ig1-20020a1709072e0100b0072b764fea1amr17925156ejc.666.1658929567259;
+        Wed, 27 Jul 2022 06:46:07 -0700 (PDT)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id i21-20020aa7c715000000b0043a6fde6e7bsm10099010edq.19.2022.07.27.06.46.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 06:46:05 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id bn9so13397818wrb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:46:03 -0700 (PDT)
+X-Received: by 2002:adf:ead2:0:b0:21d:8b49:6138 with SMTP id
+ o18-20020adfead2000000b0021d8b496138mr14815614wrn.138.1658929563550; Wed, 27
+ Jul 2022 06:46:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220727114302.302201-1-apatel@ventanamicro.com>
- <20220727114302.302201-2-apatel@ventanamicro.com> <372e37bf-ac90-c371-ad9e-b9c18e1cc059@linaro.org>
- <20220727124556.owk3zlyzsg5uaa4t@bogus>
-In-Reply-To: <20220727124556.owk3zlyzsg5uaa4t@bogus>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 27 Jul 2022 19:15:28 +0530
-Message-ID: <CAAhSdy0TSKhR8_2eU7pmgizybuxPbwAycn4YudvkfGWGbnXNtQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: Add optional DT property riscv,timer-can-wake-cpu
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Anup Patel <apatel@ventanamicro.com>,
+References: <20220726212354.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
+In-Reply-To: <20220726212354.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 27 Jul 2022 06:45:50 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VJDT5dK46AonaO69Xzf_LTBvbZrBOqpPV8qqhvp1Ms=g@mail.gmail.com>
+Message-ID: <CAD=FV=VJDT5dK46AonaO69Xzf_LTBvbZrBOqpPV8qqhvp1Ms=g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: document zoglin board
+To:     Bob Moragues <moragues@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moragues <moragues@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        Stephen Boyd <sboyd@codeaurora.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+Hi,
 
-On Wed, Jul 27, 2022 at 6:16 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Tue, Jul 26, 2022 at 9:24 PM Bob Moragues <moragues@chromium.org> wrote:
 >
-> On Wed, Jul 27, 2022 at 02:07:50PM +0200, Krzysztof Kozlowski wrote:
-> > On 27/07/2022 13:43, Anup Patel wrote:
-> > > We add an optional DT property riscv,timer-can-wake-cpu which if present
-> > > in CPU DT node then CPU timer is always powered-on and never loses context.
-> > >
-> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
-> > >  1 file changed, 6 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > index d632ac76532e..b60b64b4113a 100644
-> > > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > @@ -78,6 +78,12 @@ properties:
-> > >        - rv64imac
-> > >        - rv64imafdc
-> > >
-> > > +  riscv,timer-can-wake-cpu:
-> > > +    type: boolean
-> > > +    description:
-> > > +      If present, the timer interrupt can wake up the CPU from
-> > > +      suspend/idle state.
-> >
-> > Isn't this a property of a timer, not CPU? IOW, your timer node should
-> > have "wakeup-source" property.
-> >
+> Zoglin is a Hoglin Chromebook with SPI Flash reduced from 64MB to 8MB.
+> Zoglin is identical to Hoglin except for the SPI Flash.
+> The actual SPI Flash is dynamically probed at and not specified in DTS.
 >
-> I agree on the concept that this is property of the timer and not CPU.
-> However we generally don't need to use wakeup-source property for timer
-> as we ideally use this for waking up from system sleep state and we don't
-> want to be running timer when we enter the state.
+> Signed-off-by: Bob Moragues <moragues@chromium.org>
+>
+> Signed-off-by: Bob Moragues <moragues@google.com>
 
-It seems ARM is using two separate timer DT properties: one for
-system suspend (i.e. arm,no-tick-in-suspend) and another for CPU
-system (i.e. always-on). Is this understanding correct ?
+You need to figure out how to get your system not to add the extra
+"@google.com" Signed-off-by. It's probably worth spinning a v2 with
+that, if for no other reason than to debug your setup for the next
+patch you send.
 
->
-> > Now that's actual problem: why the RISC-V timer is bound to "riscv"
-> > compatible, not to dedicated timer node? How is it related to actual CPU
-> > (not SoC)?
->
-> We have "always-on" property for this on arm arch timer, and I also see
-> "regulator-always-on" or something similar defined. So in absence of timer
-> node probably "local-timer-always-on" make sense ? Thoughts ?
->
-> --
-> Regards,
-> Sudeep
+Other than that, this looks right to me.
 
-Regards,
-Anup
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+(you should carry my Reviewed-by tag forward on your v2 unless you
+change anything significant)

@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C3E5822E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D3D5822EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbiG0JOv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 27 Jul 2022 05:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S231482AbiG0JRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbiG0JOL (ORCPT
+        with ESMTP id S230521AbiG0JRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:14:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968FCF79
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:13:24 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oGd6M-0002GS-78; Wed, 27 Jul 2022 11:13:10 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oGd6L-0004W1-DD; Wed, 27 Jul 2022 11:13:09 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oGd6K-0004jc-L2; Wed, 27 Jul 2022 11:13:08 +0200
-Message-ID: <a1f170aae331e0ad9694ad99451bfb06098d9965.camel@pengutronix.de>
-Subject: Re: [PATCH v2 2/2] reset: tps380x: Add TPS380x device driver supprt
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Marco Felsch <m.felsch@pengutronix.de>, robh+dt@kernel.org,
-        krzk+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Date:   Wed, 27 Jul 2022 11:13:08 +0200
-In-Reply-To: <20220726084518.qmb2wjcazi3djcqr@pengutronix.de>
-References: <20220530092226.748644-1-m.felsch@pengutronix.de>
-         <20220530092226.748644-2-m.felsch@pengutronix.de>
-         <20220726084518.qmb2wjcazi3djcqr@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Wed, 27 Jul 2022 05:17:46 -0400
+Received: from sender4-pp-o93.zoho.com (sender4-pp-o93.zoho.com [136.143.188.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3739D3B95B;
+        Wed, 27 Jul 2022 02:17:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1658913454; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=jvtsXujE1niNFpJmnKma3mexAyKwPimFZXpVFIVSmsfDiOhsm8A7TD5QYYgNr/YrJZd1qdJhzNwyGs2Emmj7DlQGtpRb+9kUEBwUPIqetEgiIayK1rVlSF7CWMBw9cyibAe76nMP3Gewzw+ABM3nf1XU9NW4Ix8XFqXldc2rV2E=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1658913454; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=tbBLibR6scgO9qEy5TFmX57B29Vru5orCKKuf3M47YM=; 
+        b=lo5Z7a8FvTU6AflmKqCNI2YWDwUK8VAjiCH2USoa2kzjDJB4HGTcVaKXXiayh78GPrRVypJT19wdKa1Ug7Y5GVFgKQiBfiE3wrzz/MepQ+BNq+xnzsr/q2H0bWk+DphQjFLIks/cVAuet9K0OIPupHKwYRgoDqt3rwJIOBdmABk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=hmsjwzb@zoho.com;
+        dmarc=pass header.from=<hmsjwzb@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version; 
+  b=fL0WfHL8yINXRurDjRoeO6YIXlhhtk18YeT5GSN4LkdLivlfdR8S0nqzLsQcc1lLJVQ5jk4q4xgX
+    XX7TqrwanG/+j/ZwANEMJVSQ0F2P58NXY1BBG/13iP4+fmbTeHig  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658913454;
+        s=zm2022; d=zoho.com; i=hmsjwzb@zoho.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=tbBLibR6scgO9qEy5TFmX57B29Vru5orCKKuf3M47YM=;
+        b=FjNjkRgfi4H2Uhr/qLddGWBe5DjkQycgj89wXafu/sV/dLfBN1KQ4huZou4hZKcY
+        ZdlPcdGPAmsmUC9qmDqP5zoUs1kwcfHTskBmNYtUindzjBwJ67eu3sXgKyHpSLHpWzk
+        jt4evuDxIXvQfSc5qreYmhquB5IjMwt9eEO90LGU=
+Received: from localhost.localdomain (58.247.201.117 [58.247.201.117]) by mx.zohomail.com
+        with SMTPS id 1658913450622251.66284437874526; Wed, 27 Jul 2022 02:17:30 -0700 (PDT)
+From:   "Flint.Wang" <hmsjwzb@zoho.com>
+To:     dsterba@suse.cz, nborisov@suse.com, josef@toxicpanda.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] btrfs/219: fix problems with mount old generation
+Date:   Wed, 27 Jul 2022 17:16:57 +0800
+Message-Id: <20220727091657.4998-1-hmsjwzb@zoho.com>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <1aaff0ac-436e-7782-081c-3549ff3d8c8f@zoho.com>
+References: <1aaff0ac-436e-7782-081c-3549ff3d8c8f@zoho.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
+Hi Nikolay & David,
 
-On Di, 2022-07-26 at 10:45 +0200, Marco Felsch wrote:
-> Hi Philipp,
-> 
-> gentle ping.
+As we discussed, I changed the test btrfs/219 to make it pass.
 
-Applied to reset/next.
+This test try to mount btrfs filesystem with old generation.
 
-I've taken liberty to remove the TODO comment, see below:
+Devices are matched by UUID in btrfs filesystem. The mount of btrfs with
+old generation should be failed on purpose.
 
-> On 22-05-30, Marco Felsch wrote:
-[...]
-> > +	/*
-> > +	 * Todo:
-> > +	 * Add firmware handling to switch between min/typ/max reset time
-> > +	 */
+Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
+---
+ tests/btrfs/219     | 3 +--
+ tests/btrfs/219.out | 1 +
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I've dropped this because I think waiting for max reset time is the
-only way to guarantee correctness, if we expect that tps3801 delay
-times actually vary between min and max reset time (whether that is due
-to production variance or temperature sensitivity).
+diff --git a/tests/btrfs/219 b/tests/btrfs/219
+index 528175b8..5152fa91 100755
+--- a/tests/btrfs/219
++++ b/tests/btrfs/219
+@@ -73,8 +73,7 @@ _mount $loop_dev $loop_mnt > /dev/null 2>&1 || \
+ $UMOUNT_PROG $loop_mnt
+ 
+ _mount -o loop $fs_img2 $loop_mnt > /dev/null 2>&1 || \
+-	_fail "We couldn't mount the old generation"
+-$UMOUNT_PROG $loop_mnt
++	echo "We couldn't mount the old generation"
+ 
+ _mount $loop_dev $loop_mnt > /dev/null 2>&1 || \
+ 	_fail "Failed to mount the second time"
+diff --git a/tests/btrfs/219.out b/tests/btrfs/219.out
+index 162074d3..6fe85f24 100644
+--- a/tests/btrfs/219.out
++++ b/tests/btrfs/219.out
+@@ -1,2 +1,3 @@
+ QA output created by 219
++We couldn't mount the old generation
+ Silence is golden
+-- 
+2.37.0
 
-If a board vendor can guarantee that the actual max delay on a given
-board is less than the specified max reset time, this could be handled
-via an optional device tree parameter to overrride the delay.
-
-regards
-Philipp
-> 
+Thanks

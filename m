@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B69582874
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263AE582877
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbiG0OUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S233661AbiG0OVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiG0OUu (ORCPT
+        with ESMTP id S229957AbiG0OVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:20:50 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502E4B4BB
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658931650; x=1690467650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rZS/z2pPCJR+9C5Wg/O1igele6E4XF4KknGxce6vuL8=;
-  b=Y6U5jebzPp4LyJPTdbU6Ik2020vQo1DMFJ6TYq5JDjNaBuNKgj8mlu3O
-   FKF9y3xHE8AoL75iYOx0hZfjHaoDie1IVTDtv1aG/8qK5nDfxFEDonN5A
-   Q5D852I+hVwVtlsJywvqi+6kxMTjdcYmVWmCFyLjHrqCmYJHAx6JgKe2+
-   z6fAOcmA8Fx/JzqqkbOq02QbawBeZj+iw4COy6xne3xYre2pof/Irz1YF
-   EAgMjIdwRl6HZQpBq6Za3ltmzOWI5smcRyxMz2DNsMpNG7CctFnWgDDxM
-   WzGxdnLDPZyoggLYG+O4LajFMPoFWbi2RPvdqSF0LQHa7A31iauxWeKoG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="314024139"
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="314024139"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:20:49 -0700
-X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
-   d="scan'208";a="659216188"
-Received: from cene1-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.44.151])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 07:20:41 -0700
-Date:   Wed, 27 Jul 2022 16:20:39 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: Re: [Intel-gfx] [PATCH v3 6/6] drm/i915/gt: describe the new tlb
- parameter at i915_vma_resource
-Message-ID: <YuFJtzTmyRZLwwK7@alfio.lan>
-References: <cover.1658924372.git.mchehab@kernel.org>
- <aa55eef7e63b8f3d0f69b525db2dd2eb87e9db6b.1658924372.git.mchehab@kernel.org>
+        Wed, 27 Jul 2022 10:21:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130E7BE01;
+        Wed, 27 Jul 2022 07:21:11 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26RECiek008601;
+        Wed, 27 Jul 2022 14:21:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=NNEtgKqQd2Ulg0EEpFDmrESfRAQBHwM464PULugCseQ=;
+ b=o6fhW9/vzs/8LNmVT0agAI1yC2FuFhKbEPZxrTSACAUolBQFn4a26A72/go9wRdGchw0
+ c8mxQvCGMM1vNgbWmzh7A4fivgMNzPXQie5qZXpO4b0Ncv1ZnSgV5cxHZ2kRehZIXQVt
+ ZmMF6YDsWuPaa49w1kDQLqwAldKiGMBDdP3QdUkK4Xtr++ccwAYSMXH9HgCu+QAIbt8h
+ c+XItakkXXU2xBNuZTlfGV7E5euww4MYOfaDcc+SkiEEBHsZgScVRp5rqgwdMElhO1xU
+ j2KJV5+2I2OuSz003ZldZU3f4Gl2zYxaI4hQjik34C6mDyRKf6P3On1ob7TzkLYP6HWq EQ== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hk6gf1pw8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Jul 2022 14:21:01 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26RE7xZd019128;
+        Wed, 27 Jul 2022 14:20:58 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 3hg95ybwca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Jul 2022 14:20:58 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26REIsPL23658804
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Jul 2022 14:18:54 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E5BF34C040;
+        Wed, 27 Jul 2022 14:20:55 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AA53E4C044;
+        Wed, 27 Jul 2022 14:20:55 +0000 (GMT)
+Received: from [9.145.87.150] (unknown [9.145.87.150])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 27 Jul 2022 14:20:55 +0000 (GMT)
+Message-ID: <4dd9afa4-ddc1-c6c9-1205-bca28a858022@linux.ibm.com>
+Date:   Wed, 27 Jul 2022 16:20:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa55eef7e63b8f3d0f69b525db2dd2eb87e9db6b.1658924372.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [PATCH] watchdog: Fix build error when CONFIG_SOFTLOCKUP_DETECTOR
+ is not set
+Content-Language: fr
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-next@vger.kernel.org, Sachin Sant <sachinp@linux.ibm.com>
+References: <20220727092109.31362-1-ldufour@linux.ibm.com>
+ <87sfmmaipn.fsf@mpe.ellerman.id.au>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87sfmmaipn.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2bS7xJeYOh8k7OEL6uh4WyRS94ZLkDnt
+X-Proofpoint-ORIG-GUID: 2bS7xJeYOh8k7OEL6uh4WyRS94ZLkDnt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-27_05,2022-07-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxscore=0 mlxlogscore=999 adultscore=0 phishscore=0 lowpriorityscore=0
+ spamscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207270056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+Le 27/07/2022 à 13:38, Michael Ellerman a écrit :
+> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>> Sachin reported the following build error when CONFIG_SOFTLOCKUP_DETECTOR
+>> is not set:
+>>
+>> kernel/watchdog.c:597:20: error: static declaration of 'lockup_detector_reconfigure' follows non-static declaration
+>>  static inline void lockup_detector_reconfigure(void)
+>>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> In file included from kernel/watchdog.c:17:
+>> ./include/linux/nmi.h:125:6: note: previous declaration of 'lockup_detector_reconfigure' was here
+>>  void lockup_detector_reconfigure(void);
+>>       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> The definition of lockup_detector_reconfigure should be exported even in
+>> that case, and __lockup_detector_reconfigure should remain static.
+>>
+>> Fixes: 24a1260705b7 ("watchdog: export lockup_detector_reconfigure")
+>> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+>> ---
+>>  kernel/watchdog.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Thanks.
+> 
+> I'll squash that in to the original commit.
 
-> TLB cache invalidation can happen on two different situations:
-> 
-> 1. synchronously, at __vma_put_pages();
-> 2. asynchronously.
-> 
-> On the first case, TLB cache invalidation happens inside
-> __vma_put_pages(). So, no need to do it later on.
-> 
-> However, on the second case, the pages will keep in memory
-> until __i915_vma_evict() is called.
-> 
-> So, we need to store the TLB data at struct i915_vma_resource,
-> in order to do a TLB cache invalidation before allowing
-> userspace to re-use the same memory.
-> 
-> So, i915_vma_resource_unbind() has gained a new parameter
-> in order to store the TLB data at the second case.
-> 
-> Document it.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v3 0/6] at: https://lore.kernel.org/all/cover.1658924372.git.mchehab@kernel.org/
-> 
->  drivers/gpu/drm/i915/i915_vma_resource.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_vma_resource.c b/drivers/gpu/drm/i915/i915_vma_resource.c
-> index 5a67995ea5fe..4fe09ea0a825 100644
-> --- a/drivers/gpu/drm/i915/i915_vma_resource.c
-> +++ b/drivers/gpu/drm/i915/i915_vma_resource.c
-> @@ -216,6 +216,10 @@ i915_vma_resource_fence_notify(struct i915_sw_fence *fence,
->  /**
->   * i915_vma_resource_unbind - Unbind a vma resource
->   * @vma_res: The vma resource to unbind.
-> + * @tlb: pointer to vma->obj->mm.tlb associated with the resource
-> + *	 to be stored at vma_res->tlb. When not-NULL, it will be used
-> + *	 to do TLB cache invalidation before freeing a VMA resource.
-> + *	 used only for async unbind.
+Thanks Michael,
 
-/used/Used/
+I was thinking this is too late for such a squash.
 
-With that:
+Laurent.
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-
-Thanks,
-Andi

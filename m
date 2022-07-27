@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FC8582F1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38375582B38
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235035AbiG0RVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S237314AbiG0Q3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241925AbiG0RTV (ORCPT
+        with ESMTP id S236543AbiG0Q2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:19:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734F150721;
-        Wed, 27 Jul 2022 09:44:17 -0700 (PDT)
+        Wed, 27 Jul 2022 12:28:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523B55018C;
+        Wed, 27 Jul 2022 09:24:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 057E4B821AC;
-        Wed, 27 Jul 2022 16:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B3BAC433C1;
-        Wed, 27 Jul 2022 16:44:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE01D619C0;
+        Wed, 27 Jul 2022 16:24:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C818FC433D6;
+        Wed, 27 Jul 2022 16:24:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940254;
-        bh=ExWebhwnzEVWFIDCEFYoZ68tGImeblCF9aJvnPOKp+4=;
+        s=korg; t=1658939063;
+        bh=ZyoYRBKz5DuCDinjIvv/3ET8Bs0cHLEPSRydJa3gzFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P70lwEOTvRwp/7j88lmbR4yMy+DRIrBVxSlfO6LxjDZ6wPPsnhOD2LT6LzvP+Wozw
-         SzkK87BK7l34QvnDcD7NFGO+K+gxF0P3HumI7fpP1/xrXbrC+kSIxMDhURnNPOLm9V
-         isJ5oHlHaryGtupVPzKZdp7Rz8S8NYeCOFoJLkVo=
+        b=r5nAklTDCpQ85swa7dJtQz3lycPDc1YS0yT5cFNSVG3ph8ICD5ufsphvCNYWM5Qdp
+         K1NCBqiCN/04msorYWasLc4//Fp1LTb19+yKolJRP8Sryw+33rCJEv0zHH2hhPk2P/
+         gIz4daNOoZuwVGpYo+ZxvrgTj/CpnKKMO21/pdZ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Marco Chiappero <marco.chiappero@intel.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 159/201] crypto: qat - use pre-allocated buffers in datapath
+        Dexuan Cui <decui@microsoft.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Carl Vanderlip <quic_carlv@quicinc.com>
+Subject: [PATCH 4.14 37/37] PCI: hv: Fix interrupt mapping for multi-MSI
 Date:   Wed, 27 Jul 2022 18:11:03 +0200
-Message-Id: <20220727161034.418781055@linuxfoundation.org>
+Message-Id: <20220727161002.347852819@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
+References: <20220727161000.822869853@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,207 +56,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
 
-[ Upstream commit e0831e7af4e03f2715de102e18e9179ec0a81562 ]
+commit a2bad844a67b1c7740bda63e87453baf63c3a7f7 upstream.
 
-In order to do DMAs, the QAT device requires that the scatterlist
-structures are mapped and translated into a format that the firmware can
-understand. This is defined as the composition of a scatter gather list
-(SGL) descriptor header, the struct qat_alg_buf_list, plus a variable
-number of flat buffer descriptors, the struct qat_alg_buf.
+According to Dexuan, the hypervisor folks beleive that multi-msi
+allocations are not correct.  compose_msi_msg() will allocate multi-msi
+one by one.  However, multi-msi is a block of related MSIs, with alignment
+requirements.  In order for the hypervisor to allocate properly aligned
+and consecutive entries in the IOMMU Interrupt Remapping Table, there
+should be a single mapping request that requests all of the multi-msi
+vectors in one shot.
 
-The allocation and mapping of these data structures is done each time a
-request is received from the skcipher and aead APIs.
-In an OOM situation, this behaviour might lead to a dead-lock if an
-allocation fails.
+Dexuan suggests detecting the multi-msi case and composing a single
+request related to the first MSI.  Then for the other MSIs in the same
+block, use the cached information.  This appears to be viable, so do it.
 
-Based on the conversation in [1], increase the size of the aead and
-skcipher request contexts to include an SGL descriptor that can handle
-a maximum of 4 flat buffers.
-If requests exceed 4 entries buffers, memory is allocated dynamically.
+4.14 backport - file moved to host/pci-hyperv.c. add hv_msi_get_int_vector
+helper function. Fixed merge conflict due to delivery_mode name change
+(APIC_DELIVERY_MODE_FIXED is the value given to dest_Fixed). Removed unused
+variable in hv_compose_msi_msg. Fixed reference to msi_desc->pci to point
+to the same is_msix variable. Removed changes to compose_msi_req_v3 since
+it doesn't exist yet. Added "reason" to put_pcichild (unused in function).
 
-[1] https://lore.kernel.org/linux-crypto/20200722072932.GA27544@gondor.apana.org.au/
-
-Cc: stable@vger.kernel.org
-Fixes: d370cec32194 ("crypto: qat - Intel(R) QAT crypto interface")
-Reported-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Reviewed-by: Marco Chiappero <marco.chiappero@intel.com>
-Reviewed-by: Wojciech Ziemba <wojciech.ziemba@intel.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Suggested-by: Dexuan Cui <decui@microsoft.com>
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
+Tested-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/1652282599-21643-1-git-send-email-quic_jhugo@quicinc.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Carl Vanderlip <quic_carlv@quicinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/qat/qat_common/qat_algs.c   | 64 +++++++++++++---------
- drivers/crypto/qat/qat_common/qat_crypto.h | 24 ++++++++
- 2 files changed, 61 insertions(+), 27 deletions(-)
+ drivers/pci/host/pci-hyperv.c |   62 ++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 54 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
-index f998ed58457c..ec635fe44c1f 100644
---- a/drivers/crypto/qat/qat_common/qat_algs.c
-+++ b/drivers/crypto/qat/qat_common/qat_algs.c
-@@ -46,19 +46,6 @@
- static DEFINE_MUTEX(algs_lock);
- static unsigned int active_devs;
+--- a/drivers/pci/host/pci-hyperv.c
++++ b/drivers/pci/host/pci-hyperv.c
+@@ -846,6 +846,11 @@ static void hv_int_desc_free(struct hv_p
+ 		u8 buffer[sizeof(struct pci_delete_interrupt)];
+ 	} ctxt;
  
--struct qat_alg_buf {
--	u32 len;
--	u32 resrvd;
--	u64 addr;
--} __packed;
--
--struct qat_alg_buf_list {
--	u64 resrvd;
--	u32 num_bufs;
--	u32 num_mapped_bufs;
--	struct qat_alg_buf bufers[];
--} __packed __aligned(64);
--
- /* Common content descriptor */
- struct qat_alg_cd {
- 	union {
-@@ -693,7 +680,10 @@ static void qat_alg_free_bufl(struct qat_crypto_instance *inst,
- 				 bl->bufers[i].len, DMA_BIDIRECTIONAL);
- 
- 	dma_unmap_single(dev, blp, sz, DMA_TO_DEVICE);
--	kfree(bl);
++	if (!int_desc->vector_count) {
++		kfree(int_desc);
++		return;
++	}
 +
-+	if (!qat_req->buf.sgl_src_valid)
-+		kfree(bl);
-+
- 	if (blp != blpout) {
- 		/* If out of place operation dma unmap only data */
- 		int bufless = blout->num_bufs - blout->num_mapped_bufs;
-@@ -704,7 +694,9 @@ static void qat_alg_free_bufl(struct qat_crypto_instance *inst,
- 					 DMA_BIDIRECTIONAL);
- 		}
- 		dma_unmap_single(dev, blpout, sz_out, DMA_TO_DEVICE);
--		kfree(blout);
-+
-+		if (!qat_req->buf.sgl_dst_valid)
-+			kfree(blout);
- 	}
+ 	memset(&ctxt, 0, sizeof(ctxt));
+ 	int_pkt = (struct pci_delete_interrupt *)&ctxt.pkt.message;
+ 	int_pkt->message_type.type =
+@@ -908,6 +913,13 @@ static void hv_irq_mask(struct irq_data
+ 	pci_msi_mask_irq(data);
  }
  
-@@ -721,15 +713,24 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
- 	dma_addr_t blp = DMA_MAPPING_ERROR;
- 	dma_addr_t bloutp = DMA_MAPPING_ERROR;
- 	struct scatterlist *sg;
--	size_t sz_out, sz = struct_size(bufl, bufers, n + 1);
-+	size_t sz_out, sz = struct_size(bufl, bufers, n);
-+	int node = dev_to_node(&GET_DEV(inst->accel_dev));
- 
- 	if (unlikely(!n))
- 		return -EINVAL;
- 
--	bufl = kzalloc_node(sz, GFP_ATOMIC,
--			    dev_to_node(&GET_DEV(inst->accel_dev)));
--	if (unlikely(!bufl))
--		return -ENOMEM;
-+	qat_req->buf.sgl_src_valid = false;
-+	qat_req->buf.sgl_dst_valid = false;
++static unsigned int hv_msi_get_int_vector(struct irq_data *data)
++{
++	struct irq_cfg *cfg = irqd_cfg(data);
 +
-+	if (n > QAT_MAX_BUFF_DESC) {
-+		bufl = kzalloc_node(sz, GFP_ATOMIC, node);
-+		if (unlikely(!bufl))
-+			return -ENOMEM;
-+	} else {
-+		bufl = &qat_req->buf.sgl_src.sgl_hdr;
-+		memset(bufl, 0, sizeof(struct qat_alg_buf_list));
-+		qat_req->buf.sgl_src_valid = true;
-+	}
- 
- 	for_each_sg(sgl, sg, n, i)
- 		bufl->bufers[i].addr = DMA_MAPPING_ERROR;
-@@ -760,12 +761,18 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
- 		struct qat_alg_buf *bufers;
- 
- 		n = sg_nents(sglout);
--		sz_out = struct_size(buflout, bufers, n + 1);
-+		sz_out = struct_size(buflout, bufers, n);
- 		sg_nctr = 0;
--		buflout = kzalloc_node(sz_out, GFP_ATOMIC,
--				       dev_to_node(&GET_DEV(inst->accel_dev)));
--		if (unlikely(!buflout))
--			goto err_in;
++	return cfg->vector;
++}
 +
-+		if (n > QAT_MAX_BUFF_DESC) {
-+			buflout = kzalloc_node(sz_out, GFP_ATOMIC, node);
-+			if (unlikely(!buflout))
-+				goto err_in;
-+		} else {
-+			buflout = &qat_req->buf.sgl_dst.sgl_hdr;
-+			memset(buflout, 0, sizeof(struct qat_alg_buf_list));
-+			qat_req->buf.sgl_dst_valid = true;
+ static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
+ 			  int nvec, msi_alloc_info_t *info)
+ {
+@@ -1050,12 +1062,12 @@ static void hv_pci_compose_compl(void *c
+ 
+ static u32 hv_compose_msi_req_v1(
+ 	struct pci_create_interrupt *int_pkt, struct cpumask *affinity,
+-	u32 slot, u8 vector)
++	u32 slot, u8 vector, u8 vector_count)
+ {
+ 	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE;
+ 	int_pkt->wslot.slot = slot;
+ 	int_pkt->int_desc.vector = vector;
+-	int_pkt->int_desc.vector_count = 1;
++	int_pkt->int_desc.vector_count = vector_count;
+ 	int_pkt->int_desc.delivery_mode =
+ 		(apic->irq_delivery_mode == dest_LowestPrio) ?
+ 			dest_LowestPrio : dest_Fixed;
+@@ -1071,14 +1083,14 @@ static u32 hv_compose_msi_req_v1(
+ 
+ static u32 hv_compose_msi_req_v2(
+ 	struct pci_create_interrupt2 *int_pkt, struct cpumask *affinity,
+-	u32 slot, u8 vector)
++	u32 slot, u8 vector, u8 vector_count)
+ {
+ 	int cpu;
+ 
+ 	int_pkt->message_type.type = PCI_CREATE_INTERRUPT_MESSAGE2;
+ 	int_pkt->wslot.slot = slot;
+ 	int_pkt->int_desc.vector = vector;
+-	int_pkt->int_desc.vector_count = 1;
++	int_pkt->int_desc.vector_count = vector_count;
+ 	int_pkt->int_desc.delivery_mode =
+ 		(apic->irq_delivery_mode == dest_LowestPrio) ?
+ 			dest_LowestPrio : dest_Fixed;
+@@ -1108,7 +1120,6 @@ static u32 hv_compose_msi_req_v2(
+  */
+ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+ {
+-	struct irq_cfg *cfg = irqd_cfg(data);
+ 	struct hv_pcibus_device *hbus;
+ 	struct hv_pci_dev *hpdev;
+ 	struct pci_bus *pbus;
+@@ -1117,6 +1128,8 @@ static void hv_compose_msi_msg(struct ir
+ 	unsigned long flags;
+ 	struct compose_comp_ctxt comp;
+ 	struct tran_int_desc *int_desc;
++	struct msi_desc *msi_desc;
++	u8 vector, vector_count;
+ 	struct {
+ 		struct pci_packet pci_pkt;
+ 		union {
+@@ -1137,7 +1150,8 @@ static void hv_compose_msi_msg(struct ir
+ 		return;
+ 	}
+ 
+-	pdev = msi_desc_to_pci_dev(irq_data_get_msi_desc(data));
++	msi_desc = irq_data_get_msi_desc(data);
++	pdev = msi_desc_to_pci_dev(msi_desc);
+ 	dest = irq_data_get_effective_affinity_mask(data);
+ 	pbus = pdev->bus;
+ 	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
+@@ -1149,6 +1163,36 @@ static void hv_compose_msi_msg(struct ir
+ 	if (!int_desc)
+ 		goto drop_reference;
+ 
++	if (!msi_desc->msi_attrib.is_msix && msi_desc->nvec_used > 1) {
++		/*
++		 * If this is not the first MSI of Multi MSI, we already have
++		 * a mapping.  Can exit early.
++		 */
++		if (msi_desc->irq != data->irq) {
++			data->chip_data = int_desc;
++			int_desc->address = msi_desc->msg.address_lo |
++					    (u64)msi_desc->msg.address_hi << 32;
++			int_desc->data = msi_desc->msg.data +
++					 (data->irq - msi_desc->irq);
++			msg->address_hi = msi_desc->msg.address_hi;
++			msg->address_lo = msi_desc->msg.address_lo;
++			msg->data = int_desc->data;
++			put_pcichild(hpdev, hv_pcidev_ref_by_slot);
++			return;
 +		}
- 
- 		bufers = buflout->bufers;
- 		for_each_sg(sglout, sg, n, i)
-@@ -810,7 +817,9 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
- 			dma_unmap_single(dev, buflout->bufers[i].addr,
- 					 buflout->bufers[i].len,
- 					 DMA_BIDIRECTIONAL);
--	kfree(buflout);
++		/*
++		 * The vector we select here is a dummy value.  The correct
++		 * value gets sent to the hypervisor in unmask().  This needs
++		 * to be aligned with the count, and also not zero.  Multi-msi
++		 * is powers of 2 up to 32, so 32 will always work here.
++		 */
++		vector = 32;
++		vector_count = msi_desc->nvec_used;
++	} else {
++		vector = hv_msi_get_int_vector(data);
++		vector_count = 1;
++	}
 +
-+	if (!qat_req->buf.sgl_dst_valid)
-+		kfree(buflout);
+ 	memset(&ctxt, 0, sizeof(ctxt));
+ 	init_completion(&comp.comp_pkt.host_event);
+ 	ctxt.pci_pkt.completion_func = hv_pci_compose_compl;
+@@ -1159,14 +1203,16 @@ static void hv_compose_msi_msg(struct ir
+ 		size = hv_compose_msi_req_v1(&ctxt.int_pkts.v1,
+ 					dest,
+ 					hpdev->desc.win_slot.slot,
+-					cfg->vector);
++					vector,
++					vector_count);
+ 		break;
  
- err_in:
- 	if (!dma_mapping_error(dev, blp))
-@@ -823,7 +832,8 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
- 					 bufl->bufers[i].len,
- 					 DMA_BIDIRECTIONAL);
+ 	case PCI_PROTOCOL_VERSION_1_2:
+ 		size = hv_compose_msi_req_v2(&ctxt.int_pkts.v2,
+ 					dest,
+ 					hpdev->desc.win_slot.slot,
+-					cfg->vector);
++					vector,
++					vector_count);
+ 		break;
  
--	kfree(bufl);
-+	if (!qat_req->buf.sgl_src_valid)
-+		kfree(bufl);
- 
- 	dev_err(dev, "Failed to map buf for dma\n");
- 	return -ENOMEM;
-diff --git a/drivers/crypto/qat/qat_common/qat_crypto.h b/drivers/crypto/qat/qat_common/qat_crypto.h
-index b6a4c95ae003..0928f159ea99 100644
---- a/drivers/crypto/qat/qat_common/qat_crypto.h
-+++ b/drivers/crypto/qat/qat_common/qat_crypto.h
-@@ -21,6 +21,26 @@ struct qat_crypto_instance {
- 	atomic_t refctr;
- };
- 
-+#define QAT_MAX_BUFF_DESC	4
-+
-+struct qat_alg_buf {
-+	u32 len;
-+	u32 resrvd;
-+	u64 addr;
-+} __packed;
-+
-+struct qat_alg_buf_list {
-+	u64 resrvd;
-+	u32 num_bufs;
-+	u32 num_mapped_bufs;
-+	struct qat_alg_buf bufers[];
-+} __packed;
-+
-+struct qat_alg_fixed_buf_list {
-+	struct qat_alg_buf_list sgl_hdr;
-+	struct qat_alg_buf descriptors[QAT_MAX_BUFF_DESC];
-+} __packed __aligned(64);
-+
- struct qat_crypto_request_buffs {
- 	struct qat_alg_buf_list *bl;
- 	dma_addr_t blp;
-@@ -28,6 +48,10 @@ struct qat_crypto_request_buffs {
- 	dma_addr_t bloutp;
- 	size_t sz;
- 	size_t sz_out;
-+	bool sgl_src_valid;
-+	bool sgl_dst_valid;
-+	struct qat_alg_fixed_buf_list sgl_src;
-+	struct qat_alg_fixed_buf_list sgl_dst;
- };
- 
- struct qat_crypto_request;
--- 
-2.35.1
-
+ 	default:
 
 

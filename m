@@ -2,103 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00447583547
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372BC58354E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiG0WSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 18:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S234042AbiG0WWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 18:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233423AbiG0WSI (ORCPT
+        with ESMTP id S232731AbiG0WWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 18:18:08 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1DAB46;
-        Wed, 27 Jul 2022 15:18:07 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id w185so344397pfb.4;
-        Wed, 27 Jul 2022 15:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PhrzBC+u8XXMU708mTbVCiWs4Y408E8Gnlbker0YCmc=;
-        b=hga+n2rcFwbRsybKKxT5Ocdn5MThteXg6iivx+yhJoT9XHHMAlxEhXdUCxkwb9R019
-         /l4SzuPV9Kc0b2KxxOkffKXSY7pXp1dzfbf8MJ6J+Npgxm3kJqG2s6dEl2EkEHf7oTVg
-         zVlpnWqBbnh356tHAUgjPmSgoHr55EKiFLTzFQeZx4qgtMY2HnQFnf8ZV1kqZIaboFnY
-         PjlqldtL+FcRRE4WqcSYdEtmljnhsX3HoN14q8S7/3BQnHghsUqi9/M/jJABUIP5vcuu
-         GiwZF71r4zzCN4FeFa9v3pfawI2UFrbd4sRhyADWvan5zsYJQsOAw/gg+NBAZWW9Mko1
-         U14g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PhrzBC+u8XXMU708mTbVCiWs4Y408E8Gnlbker0YCmc=;
-        b=jCNQStoRWczncZpseceKjUvqzSIpIV3cwt3lZNS1cj+BAM2h7eK5bwZO+XS0DT+mdb
-         dwTVbA8fsQ+Xpeag/Gxe7EzHHZUsC4LehAHEiGbA7EEek7tiNF+8i/xaCweqk3mQaLrE
-         THWZNYOAy3IbkNsXKfLEFssvrdiAL+gR4tksVplzDZ0to+F8V4hUcxy5wAphVcwyDtOf
-         PoaI8ETFg5nSJ5fAquc3kGeygoQQUVUqUGdYc2oJdjUmhYJEQ6ZACkYlSl5QlwkOLnUR
-         zBa8AU6+WVz9nQJwUgLvKqzodLANftPysUIP92OY0tUS3jMIb4R/feDJXbCK5TGckayE
-         FPGQ==
-X-Gm-Message-State: AJIora9li1944kiErAmSLmGF/m5/FW1XrPb0lfOtUU0Ahf2r2TF1owyr
-        6S0a9FNRSFocVgV/0fzpj5PLId69loQ=
-X-Google-Smtp-Source: AGRyM1tc3Juh7OUE+WZ9kPlpP6xSRR+DG9TKJ/I2+rAdT0+xTS3+Duc4Qm2Rcs74zqsvB9OJdoKP/w==
-X-Received: by 2002:aa7:84c1:0:b0:52a:e11a:f5e9 with SMTP id x1-20020aa784c1000000b0052ae11af5e9mr23856756pfn.55.1658960286589;
-        Wed, 27 Jul 2022 15:18:06 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id p19-20020a634f53000000b0040cfb5151fcsm12582193pgl.74.2022.07.27.15.18.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 15:18:06 -0700 (PDT)
-Message-ID: <c7f1ad2d-b412-e792-57bc-dfd6373cd6c6@gmail.com>
-Date:   Wed, 27 Jul 2022 15:18:04 -0700
+        Wed, 27 Jul 2022 18:22:10 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D095465F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:22:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0F9DB20EA8;
+        Wed, 27 Jul 2022 22:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1658960528;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cCkKf0rQGCxzajZhjfopQ8LfgHUXEv0gi7XbuW/0jns=;
+        b=ZP246JOmy00P/OBY882FDnStWAS0KN2pK+60a3X+gPKoRvnrMHaqPF1h7GtM0QK+8OJ/LX
+        uRCx0eRJoSdXz0PMpQ3SdBcu2CEx9j7q134PxKSlS7akhdErCwTIf7/zB3Rywj3ZLRwQId
+        eZGBMNs0M8SpM459l4b5SXmzuP9cje8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1658960528;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cCkKf0rQGCxzajZhjfopQ8LfgHUXEv0gi7XbuW/0jns=;
+        b=vOpedHAuRbHxAa/bGO63PKPflKdvKO8x+TzYp+xrVzekShEi5RKGB5XAn24hTR1D1/j/ju
+        ejNwNBvgXNlMxVAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D94A413ABC;
+        Wed, 27 Jul 2022 22:22:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /SMnLo+64WIDBAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Wed, 27 Jul 2022 22:22:07 +0000
+Date:   Thu, 28 Jul 2022 00:22:05 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Sterba <dsterba@suse.com>
+Subject: Re: [PATCH 1/1] drivers/base/cpu: Print kernel arch
+Message-ID: <YuG6jfeT9p47Ekn1@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20220727161135.24531-1-pvorel@suse.cz>
+ <YuFqh6OrWEQsZV04@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4.9 00/26] 4.9.325-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220727160959.122591422@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuFqh6OrWEQsZV04@kroah.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 09:10, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.325 release.
-> There are 26 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.325-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
+Hi Greg,
+
+thanks for your review!
+
+> On Wed, Jul 27, 2022 at 06:11:35PM +0200, Petr Vorel wrote:
+> > Print kernel architecture in /sys/devices/system/cpu/arch
+> > using UTS_MACHINE, i.e. member of struct uts_namespace.machine.
+
+> > This helps people who debug kernel with initramfs with minimal
+> > environment (i.e. without coreutils or even busybox) or allow to open
+> > sysfs file instead of run uname -m in high level languages.
+
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > ---
+> >  drivers/base/cpu.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+
+> You can't add a new sysfs file without a Documentation/ABI/ update as
+> well.  Please fix that up.
+I'm sorry. Yes, I realized it later on (once I got offline).
+Sure, I'll fix this in v2. But the main question is whether this feature is
+acceptable and what is the best place for the file.
+
+
+> > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+> > index 4c98849577d4..7c8032e3ff10 100644
+> > --- a/drivers/base/cpu.c
+> > +++ b/drivers/base/cpu.c
+> > @@ -3,6 +3,7 @@
+> >   * CPU subsystem support
+> >   */
+
+> > +#include <generated/compile.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/init.h>
+> > @@ -232,6 +233,13 @@ static ssize_t print_cpus_kernel_max(struct device *dev,
+> >  }
+> >  static DEVICE_ATTR(kernel_max, 0444, print_cpus_kernel_max, NULL);
+
+> > +static ssize_t print_cpus_arch(struct device *dev,
+> > +				     struct device_attribute *attr, char *buf)
+> > +{
+> > +	return sysfs_emit(buf, "%s\n", UTS_MACHINE);
+> > +}
+> > +static DEVICE_ATTR(arch, 0444, print_cpus_arch, NULL);
+
+> why just UTS_MACHINE?  Doesn't 'uname' show this already?  And I thought
+> this was in /proc/cpuinfo but odd, it isn't...
+Sure, this info is in uname(). But for certain cases is really easier to read
+file from /proc or /sys than run create custom C bindings or a binary which
+calls uname(2) libc wrapper or run uname binary via execve(2).
+
+Yes, I also expected /proc/cpuinfo would have it but it does not have it. I
+don't think it's a good idea to add 'arch  : foo' line to it, but I can do if
+there is consensus that it's the best place.
+
+> Also what about the other things in compile.h?
+UTS_VERSION is in /proc/version.
+LINUX_COMPILE_BY (e.g. "user"), LINUX_COMPILE_HOST (e.g. "host") and
+LINUX_COMPILER (e.g. "aarch64-alpine-linux-musl-gcc (Alpine 11.2.1_git20220219)
+...") are IMHO useless, but I can add it if you wish.
+
+Well, there is hostname in /proc/sys/kernel/hostname, there are also ostype and
+osrelease.. Thinking about it twice /proc/sys/kernel/ looks to me a better place
+for arch file than current /sys/devices/system/cpu/. WDYT?
+
+Kind regards,
+Petr
+
 > thanks,
-> 
+
 > greg k-h
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and build tested on BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian

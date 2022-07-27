@@ -2,176 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EF7581D34
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE1E581D30
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240178AbiG0BeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 21:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S240149AbiG0BeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 21:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240173AbiG0BeI (ORCPT
+        with ESMTP id S240099AbiG0Bdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 21:34:08 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52163B954;
-        Tue, 26 Jul 2022 18:34:02 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id E199F3F39B;
-        Wed, 27 Jul 2022 01:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658885640;
-        bh=DsZRX8j/q4Cpjzn1W11I3hAQXEWJrBN86NgoVVaLV3A=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=TFT3im8fedDV8eqhGPtwSn5vtGFvE76IEoZRXyiGAyzytfZ8PqyKDLyMGQMWenpoz
-         EdSIjBu6PSxYV7wq2N2wFN1sjp2XAE+SK1jV7fNMAAz8baJle8ANICSqr+hTaycaEh
-         FuYrwAQ2Di/3kKJWgn6RN/72amg9Xwr4/uATsenmxJ0BgIRSXeod0tz+cHOwRMQnu1
-         /R68+i0BdBJgtsIjpvbw9QwfsdOwIwgSUDlTyRXpn9DA6Sh2gOy/CNheuZLoPyvSq5
-         a4cN9IRMFVgkW+Ij64VEIj9aOxWqBDJLEO93w7suSgZPd0+IMpRG85rwJZ24vvL62M
-         1rBCFxj6z5rGg==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     bhelgaas@google.com
-Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Russell Currey <ruscur@russell.cc>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        Tue, 26 Jul 2022 21:33:55 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540733B943
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:33:54 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 21-20020a630015000000b0041b022ba974so2981954pga.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=1N3h8/3xSQWX6SxOF5BPCgS/YJL4wXTsZ8CkYeFIT3M=;
+        b=QpSGMoTn06o1HCqJaequgVUCWVDL6y7V2pJAXhgcZslE7hepnB5qO5bhCsayf8BgZT
+         ioAnJDRO4dHDHZqT9epxdMWWuTHPxYpYQv7N9ry1QlIk5/V+cdUycj6fXPdRo+zdPUo4
+         +0Z324w4ZR5jGLPTe46w9q+JE1ZZ5ABziZoQBzBQTrwwhqWlRBOLEcHVBm9L7dK5/Xdi
+         xfKd8NoIGd/LYe/RpZOiwPs5NxYvdylykP+HFfsBwc/HIFJB2XohGmZzvFpXtiCPc2sI
+         KLyTgTV/B/ZJi0VZmQ1yZMC9+h2YpRh2EOANQBwbCIdYGeqvIQFkcbdQymaE9OuWqLHy
+         Y7lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=1N3h8/3xSQWX6SxOF5BPCgS/YJL4wXTsZ8CkYeFIT3M=;
+        b=wfDT4xD1vCk/dOrkuh1o469g7D7xqOPBxBsdRD91mg+XFjfYv01JD0tfYdVqM+ghxu
+         S/LT6Btx9vJjXfJrm9O52fkUT7z1t+QPOM0ldwmxEjVn6UW+78HwqU+idU1k6/fjJTDG
+         CvbqbuqVAx2Vb6JyCMJtjks8jERrubEZph1lrFeIoH0XQ2ZbcdV+JK9q6RSw9XXpYUWE
+         giAZ0yhvH8d85owByTvW03SazyYN0cXThjGRy2OpMV8+do0vp6cw7cBAY1j4bo4dbOWo
+         hR1RjBNOw+4dnNuSLK9+O3xghEfEb/Nh4x7F5OjqSCt+k7PT62jaaXIV00kEyb7tgsYd
+         Cb+Q==
+X-Gm-Message-State: AJIora/4DYklsPY1T/AmH7EY1sms/GreN1tmkB21T6X0LdoIheG2+IPO
+        aDAGjCc1AIpHQk21xaoVEmO1DBGHQ+faYuc=
+X-Google-Smtp-Source: AGRyM1tNXxJJfexei0sXfG1FBir9ecawTKSUmr8oBmd7eGPMiF6IiFNkyG65ifGlltihpNEjyyTucthrEgJjoHc=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f771:727:f95a:5335])
+ (user=saravanak job=sendgmr) by 2002:a17:90a:6b45:b0:1e3:3cfa:3104 with SMTP
+ id x5-20020a17090a6b4500b001e33cfa3104mr1862493pjl.113.1658885633796; Tue, 26
+ Jul 2022 18:33:53 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 18:33:48 -0700
+Message-Id: <20220727013349.3056826-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v1] pinctrl: samsung: Finish initializing the gpios before
+ registering them
+From:   Saravana Kannan <saravanak@google.com>
+To:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] PCI/DPC: Disable DPC service on suspend when IRQ is shared with PME
-Date:   Wed, 27 Jul 2022 09:32:52 +0800
-Message-Id: <20220727013255.269815-3-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220727013255.269815-1-kai.heng.feng@canonical.com>
-References: <20220727013255.269815-1-kai.heng.feng@canonical.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCIe service that shares IRQ with PME may cause spurious wakeup on
-system suspend.
+As soon as a gpio is registered, it should be usable by a consumer. So,
+do all the initialization before registering the gpios. Without this
+change, a consumer can request a GPIO IRQ and have the gpio to IRQ
+mapping fail.
 
-Since AER is conditionally disabled in previous patch, also apply the
-same condition to disable DPC which depends on AER to work.
-
-PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
-that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
-(D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
-much here to disable DPC during system suspend.
-
-This is very similar to previous attempts to suspend AER and DPC [1],
-but with a different reason.
-
-[1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.feng@canonical.com/
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216295
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/pci/pcie/dpc.c | 52 +++++++++++++++++++++++++++++++++---------
- 1 file changed, 41 insertions(+), 11 deletions(-)
+ drivers/pinctrl/samsung/pinctrl-samsung.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-index 3e9afee02e8d1..542f282c43f75 100644
---- a/drivers/pci/pcie/dpc.c
-+++ b/drivers/pci/pcie/dpc.c
-@@ -343,13 +343,33 @@ void pci_dpc_init(struct pci_dev *pdev)
- 	}
- }
+diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
+index 26d309d2516d..a302b38a63a8 100644
+--- a/drivers/pinctrl/samsung/pinctrl-samsung.c
++++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+@@ -1168,15 +1168,15 @@ static int samsung_pinctrl_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_put_banks;
  
-+static void dpc_enable(struct pcie_device *dev)
-+{
-+	struct pci_dev *pdev = dev->port;
-+	u16 ctl;
-+
-+	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-+	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
-+	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+}
-+
-+static void dpc_disable(struct pcie_device *dev)
-+{
-+	struct pci_dev *pdev = dev->port;
-+	u16 ctl;
-+
-+	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-+	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
-+	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+}
-+
- #define FLAG(x, y) (((x) & (y)) ? '+' : '-')
- static int dpc_probe(struct pcie_device *dev)
- {
- 	struct pci_dev *pdev = dev->port;
- 	struct device *device = &dev->device;
- 	int status;
--	u16 ctl, cap;
-+	u16 cap;
- 
- 	if (!pcie_aer_is_native(pdev) && !pcie_ports_dpc_native)
- 		return -ENOTSUPP;
-@@ -364,10 +384,7 @@ static int dpc_probe(struct pcie_device *dev)
- 	}
- 
- 	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CAP, &cap);
--	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
+-	ret = samsung_gpiolib_register(pdev, drvdata);
+-	if (ret)
+-		goto err_unregister;
 -
--	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
--	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+	dpc_enable(dev);
- 	pci_info(pdev, "enabled with IRQ %d\n", dev->irq);
+ 	if (ctrl->eint_gpio_init)
+ 		ctrl->eint_gpio_init(drvdata);
+ 	if (ctrl->eint_wkup_init)
+ 		ctrl->eint_wkup_init(drvdata);
  
- 	pci_info(pdev, "error containment capabilities: Int Msg #%d, RPExt%c PoisonedTLP%c SwTrigger%c RP PIO Log %d, DL_ActiveErr%c\n",
-@@ -380,14 +397,25 @@ static int dpc_probe(struct pcie_device *dev)
- 	return status;
- }
- 
--static void dpc_remove(struct pcie_device *dev)
-+static int dpc_suspend(struct pcie_device *dev)
- {
--	struct pci_dev *pdev = dev->port;
--	u16 ctl;
-+	if (dev->shared_pme_irq)
-+		dpc_disable(dev);
- 
--	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
--	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
--	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+	return 0;
-+}
++	ret = samsung_gpiolib_register(pdev, drvdata);
++	if (ret)
++		goto err_unregister;
 +
-+static int dpc_resume(struct pcie_device *dev)
-+{
-+	if (dev->shared_pme_irq)
-+		dpc_enable(dev);
-+
-+	return 0;
-+}
-+
-+static void dpc_remove(struct pcie_device *dev)
-+{
-+	dpc_disable(dev);
- }
+ 	platform_set_drvdata(pdev, drvdata);
  
- static struct pcie_port_service_driver dpcdriver = {
-@@ -395,6 +423,8 @@ static struct pcie_port_service_driver dpcdriver = {
- 	.port_type	= PCIE_ANY_PORT,
- 	.service	= PCIE_PORT_SERVICE_DPC,
- 	.probe		= dpc_probe,
-+	.suspend	= dpc_suspend,
-+	.resume		= dpc_resume,
- 	.remove		= dpc_remove,
- };
- 
+ 	return 0;
 -- 
-2.36.1
+2.37.1.359.gd136c6c3e2-goog
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806A9582AF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31343582C06
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236147AbiG0QZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S239617AbiG0QlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236242AbiG0QYT (ORCPT
+        with ESMTP id S239518AbiG0Qkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:24:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6E04D146;
-        Wed, 27 Jul 2022 09:23:13 -0700 (PDT)
+        Wed, 27 Jul 2022 12:40:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BFE5070F;
+        Wed, 27 Jul 2022 09:29:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F239619C6;
-        Wed, 27 Jul 2022 16:23:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80634C433C1;
-        Wed, 27 Jul 2022 16:23:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD5C8B821BA;
+        Wed, 27 Jul 2022 16:29:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0F65C433D6;
+        Wed, 27 Jul 2022 16:29:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658938992;
-        bh=hsWA+swU9odQ5uHMtyE2bfc7DAGCDKff987Lcq+Io/g=;
+        s=korg; t=1658939350;
+        bh=Z4UYzcGRaTnpq6XWlbuB7/PvmXxFujGotKImP9Tflyo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ziBvzrr6bRwgSyZGw1/CUCC65khVcFV5CWIujS76M8xLNnLO8j48opf0UemWVvfuF
-         SYD2RZ6kh47zmDVefywxrmnDlcJgQAF5BeekZW1yOjyuIH3cmaJ+xyD2qF65iwnWn3
-         8JhFXXAK3ZvHopQxjC+rwa3ARJc6zBlBZU6tDOHk=
+        b=ArwhYsGC0Hnlg6HI7gB6JweHRaBeFJhoJ6mKn/2cQEUpNX+6gd3BDUj4ylGYQZf5V
+         Hhcc6Gp8nGPnu+5dlDA7Dt9CelTCGY2Qx3XlFo5YXOq8tFXGJVgC0nfa7i/W+AjcfK
+         OwTiQcGirDnCSKGaPDkFsIOfPne5asnoJ/k71p2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Yuchung Cheng <ycheng@google.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 05/37] ip: Fix a data-race around sysctl_fwmark_reflect.
+Subject: [PATCH 5.4 38/87] tcp: Fix data-races around sysctl_tcp_fastopen.
 Date:   Wed, 27 Jul 2022 18:10:31 +0200
-Message-Id: <20220727161001.053195375@linuxfoundation.org>
+Message-Id: <20220727161010.592613490@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,32 +57,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 85d0b4dbd74b95cc492b1f4e34497d3f894f5d9a ]
+[ Upstream commit 5a54213318c43f4009ae158347aa6016e3b9b55a ]
 
-While reading sysctl_fwmark_reflect, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+While reading sysctl_tcp_fastopen, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: e110861f8609 ("net: add a sysctl to reflect the fwmark on replies")
+Fixes: 2100c8d2d9db ("net-tcp: Fast Open base")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Acked-by: Yuchung Cheng <ycheng@google.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/ip.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/af_inet.c      | 2 +-
+ net/ipv4/tcp.c          | 6 ++++--
+ net/ipv4/tcp_fastopen.c | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 4aff48d6ba91..2a92a5f4f9b3 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -305,7 +305,7 @@ void ipfrag_init(void);
- void ip_static_sysctl_init(void);
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 06153386776d..d61ca7be6eda 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -219,7 +219,7 @@ int inet_listen(struct socket *sock, int backlog)
+ 		 * because the socket was in TCP_LISTEN state previously but
+ 		 * was shutdown() rather than close().
+ 		 */
+-		tcp_fastopen = sock_net(sk)->ipv4.sysctl_tcp_fastopen;
++		tcp_fastopen = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen);
+ 		if ((tcp_fastopen & TFO_SERVER_WO_SOCKOPT1) &&
+ 		    (tcp_fastopen & TFO_SERVER_ENABLE) &&
+ 		    !inet_csk(sk)->icsk_accept_queue.fastopenq.max_qlen) {
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 333d221e0717..4b31f6e9ec61 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -1148,7 +1148,8 @@ static int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg,
+ 	struct sockaddr *uaddr = msg->msg_name;
+ 	int err, flags;
  
- #define IP4_REPLY_MARK(net, mark) \
--	((net)->ipv4.sysctl_fwmark_reflect ? (mark) : 0)
-+	(READ_ONCE((net)->ipv4.sysctl_fwmark_reflect) ? (mark) : 0)
- 
- static inline bool ip_is_fragment(const struct iphdr *iph)
+-	if (!(sock_net(sk)->ipv4.sysctl_tcp_fastopen & TFO_CLIENT_ENABLE) ||
++	if (!(READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen) &
++	      TFO_CLIENT_ENABLE) ||
+ 	    (uaddr && msg->msg_namelen >= sizeof(uaddr->sa_family) &&
+ 	     uaddr->sa_family == AF_UNSPEC))
+ 		return -EOPNOTSUPP;
+@@ -3127,7 +3128,8 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
+ 	case TCP_FASTOPEN_CONNECT:
+ 		if (val > 1 || val < 0) {
+ 			err = -EINVAL;
+-		} else if (net->ipv4.sysctl_tcp_fastopen & TFO_CLIENT_ENABLE) {
++		} else if (READ_ONCE(net->ipv4.sysctl_tcp_fastopen) &
++			   TFO_CLIENT_ENABLE) {
+ 			if (sk->sk_state == TCP_CLOSE)
+ 				tp->fastopen_connect = val;
+ 			else
+diff --git a/net/ipv4/tcp_fastopen.c b/net/ipv4/tcp_fastopen.c
+index a5ec77a5ad6f..21705b2ddaff 100644
+--- a/net/ipv4/tcp_fastopen.c
++++ b/net/ipv4/tcp_fastopen.c
+@@ -349,7 +349,7 @@ static bool tcp_fastopen_no_cookie(const struct sock *sk,
+ 				   const struct dst_entry *dst,
+ 				   int flag)
  {
+-	return (sock_net(sk)->ipv4.sysctl_tcp_fastopen & flag) ||
++	return (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen) & flag) ||
+ 	       tcp_sk(sk)->fastopen_no_cookie ||
+ 	       (dst && dst_metric(dst, RTAX_FASTOPEN_NO_COOKIE));
+ }
+@@ -364,7 +364,7 @@ struct sock *tcp_try_fastopen(struct sock *sk, struct sk_buff *skb,
+ 			      const struct dst_entry *dst)
+ {
+ 	bool syn_data = TCP_SKB_CB(skb)->end_seq != TCP_SKB_CB(skb)->seq + 1;
+-	int tcp_fastopen = sock_net(sk)->ipv4.sysctl_tcp_fastopen;
++	int tcp_fastopen = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen);
+ 	struct tcp_fastopen_cookie valid_foc = { .len = -1 };
+ 	struct sock *child;
+ 	int ret = 0;
 -- 
 2.35.1
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF25583046
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC477582F64
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242453AbiG0Rfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S230238AbiG0RZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242460AbiG0ReL (ORCPT
+        with ESMTP id S241993AbiG0RX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:34:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF4F4E85B;
-        Wed, 27 Jul 2022 09:49:03 -0700 (PDT)
+        Wed, 27 Jul 2022 13:23:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2837AC13;
+        Wed, 27 Jul 2022 09:45:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BECB1B821D2;
-        Wed, 27 Jul 2022 16:49:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2A2C433C1;
-        Wed, 27 Jul 2022 16:48:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A309601D2;
+        Wed, 27 Jul 2022 16:45:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17624C433C1;
+        Wed, 27 Jul 2022 16:45:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940540;
-        bh=IZNnPTniXjTLUs78BbccaslE5cuZUNEFv5XO4brCuo0=;
+        s=korg; t=1658940350;
+        bh=/DE94iSpnRoKGxTdCHkKpVV3Z0O7VoGmiHYgXKyAVEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RkXQxKcvwrHh5crTqq+z+tzZShKcFOnUkTR9G7EEXPA3yqkeaXx2Fp5CkeWvctwsg
-         9Y8mVLyyYGYBUHO+rBwnVlcDdNjpM6e1p7V4IPPZKb5a9/1/5grZIrZ4vGjr3Cg8sS
-         Cj6df+kaW6mxgcnXFO+2l2nOh059Aovs1cUrKg2M=
+        b=IU+XamX5uo25avdv9UNm0on2dEVs22+posL+caI7sy0qQTqBds2CF5/GkKYPwfASC
+         GmrWemztMBz3IrvcHxm6zyqqZJUsDj2KRWBMyZK8zNcAKHz2iPjOd/uIWOEXehx2Gc
+         Ll53Q0fyBVNQ0YF1Uildd9gjTQoE1XGM7IlYbN+U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lennert Buytenhek <buytenh@arista.com>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 032/158] igc: Reinstate IGC_REMOVED logic and implement it properly
-Date:   Wed, 27 Jul 2022 18:11:36 +0200
-Message-Id: <20220727161022.772710635@linuxfoundation.org>
+        stable@vger.kernel.org, Jose Alonso <joalonsof@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 193/201] net: usb: ax88179_178a needs FLAG_SEND_ZLP
+Date:   Wed, 27 Jul 2022 18:11:37 +0200
+Message-Id: <20220727161035.761975836@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,119 +53,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lennert Buytenhek <buytenh@wantstofly.org>
+From: Jose Alonso <joalonsof@gmail.com>
 
-[ Upstream commit 7c1ddcee5311f3315096217881d2dbe47cc683f9 ]
+commit 36a15e1cb134c0395261ba1940762703f778438c upstream.
 
-The initially merged version of the igc driver code (via commit
-146740f9abc4, "igc: Add support for PF") contained the following
-IGC_REMOVED checks in the igc_rd32/wr32() MMIO accessors:
+The extra byte inserted by usbnet.c when
+ (length % dev->maxpacket == 0) is causing problems to device.
 
-	u32 igc_rd32(struct igc_hw *hw, u32 reg)
-	{
-		u8 __iomem *hw_addr = READ_ONCE(hw->hw_addr);
-		u32 value = 0;
+This patch sets FLAG_SEND_ZLP to avoid this.
 
-		if (IGC_REMOVED(hw_addr))
-			return ~value;
+Tested with: 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
 
-		value = readl(&hw_addr[reg]);
+Problems observed:
+======================================================================
+1) Using ssh/sshfs. The remote sshd daemon can abort with the message:
+   "message authentication code incorrect"
+   This happens because the tcp message sent is corrupted during the
+   USB "Bulk out". The device calculate the tcp checksum and send a
+   valid tcp message to the remote sshd. Then the encryption detects
+   the error and aborts.
+2) NETDEV WATCHDOG: ... (ax88179_178a): transmit queue 0 timed out
+3) Stop normal work without any log message.
+   The "Bulk in" continue receiving packets normally.
+   The host sends "Bulk out" and the device responds with -ECONNRESET.
+   (The netusb.c code tx_complete ignore -ECONNRESET)
+Under normal conditions these errors take days to happen and in
+intense usage take hours.
 
-		/* reads should not return all F's */
-		if (!(~value) && (!reg || !(~readl(hw_addr))))
-			hw->hw_addr = NULL;
+A test with ping gives packet loss, showing that something is wrong:
+ping -4 -s 462 {destination}	# 462 = 512 - 42 - 8
+Not all packets fail.
+My guess is that the device tries to find another packet starting
+at the extra byte and will fail or not depending on the next
+bytes (old buffer content).
+======================================================================
 
-		return value;
-	}
-
-And:
-
-	#define wr32(reg, val) \
-	do { \
-		u8 __iomem *hw_addr = READ_ONCE((hw)->hw_addr); \
-		if (!IGC_REMOVED(hw_addr)) \
-			writel((val), &hw_addr[(reg)]); \
-	} while (0)
-
-E.g. igb has similar checks in its MMIO accessors, and has a similar
-macro E1000_REMOVED, which is implemented as follows:
-
-	#define E1000_REMOVED(h) unlikely(!(h))
-
-These checks serve to detect and take note of an 0xffffffff MMIO read
-return from the device, which can be caused by a PCIe link flap or some
-other kind of PCI bus error, and to avoid performing MMIO reads and
-writes from that point onwards.
-
-However, the IGC_REMOVED macro was not originally implemented:
-
-	#ifndef IGC_REMOVED
-	#define IGC_REMOVED(a) (0)
-	#endif /* IGC_REMOVED */
-
-This led to the IGC_REMOVED logic to be removed entirely in a
-subsequent commit (commit 3c215fb18e70, "igc: remove IGC_REMOVED
-function"), with the rationale that such checks matter only for
-virtualization and that igc does not support virtualization -- but a
-PCIe device can become detached even without virtualization being in
-use, and without proper checks, a PCIe bus error affecting an igc
-adapter will lead to various NULL pointer dereferences, as the first
-access after the error will set hw->hw_addr to NULL, and subsequent
-accesses will blindly dereference this now-NULL pointer.
-
-This patch reinstates the IGC_REMOVED checks in igc_rd32/wr32(), and
-implements IGC_REMOVED the way it is done for igb, by checking for the
-unlikely() case of hw_addr being NULL.  This change prevents the oopses
-seen when a PCIe link flap occurs on an igc adapter.
-
-Fixes: 146740f9abc4 ("igc: Add support for PF")
-Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
-Acked-by: Sasha Neftin <sasha.neftin@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Jose Alonso <joalonsof@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/igc/igc_main.c | 3 +++
- drivers/net/ethernet/intel/igc/igc_regs.h | 5 ++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/net/usb/ax88179_178a.c |   20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 74b2c590ed5d..38e46e9ba8bb 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -6171,6 +6171,9 @@ u32 igc_rd32(struct igc_hw *hw, u32 reg)
- 	u8 __iomem *hw_addr = READ_ONCE(hw->hw_addr);
- 	u32 value = 0;
- 
-+	if (IGC_REMOVED(hw_addr))
-+		return ~value;
-+
- 	value = readl(&hw_addr[reg]);
- 
- 	/* reads should not return all F's */
-diff --git a/drivers/net/ethernet/intel/igc/igc_regs.h b/drivers/net/ethernet/intel/igc/igc_regs.h
-index e197a33d93a0..026c3b65fc37 100644
---- a/drivers/net/ethernet/intel/igc/igc_regs.h
-+++ b/drivers/net/ethernet/intel/igc/igc_regs.h
-@@ -306,7 +306,8 @@ u32 igc_rd32(struct igc_hw *hw, u32 reg);
- #define wr32(reg, val) \
- do { \
- 	u8 __iomem *hw_addr = READ_ONCE((hw)->hw_addr); \
--	writel((val), &hw_addr[(reg)]); \
-+	if (!IGC_REMOVED(hw_addr)) \
-+		writel((val), &hw_addr[(reg)]); \
- } while (0)
- 
- #define rd32(reg) (igc_rd32(hw, reg))
-@@ -318,4 +319,6 @@ do { \
- 
- #define array_rd32(reg, offset) (igc_rd32(hw, (reg) + ((offset) << 2)))
- 
-+#define IGC_REMOVED(h) unlikely(!(h))
-+
- #endif
--- 
-2.35.1
-
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1796,7 +1796,7 @@ static const struct driver_info ax88179_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1809,7 +1809,7 @@ static const struct driver_info ax88178a
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1822,7 +1822,7 @@ static const struct driver_info cypress_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1835,7 +1835,7 @@ static const struct driver_info dlink_du
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1848,7 +1848,7 @@ static const struct driver_info sitecom_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1861,7 +1861,7 @@ static const struct driver_info samsung_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1874,7 +1874,7 @@ static const struct driver_info lenovo_i
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1887,7 +1887,7 @@ static const struct driver_info belkin_i
+ 	.link_reset = ax88179_link_reset,
+ 	.reset	= ax88179_reset,
+ 	.stop	= ax88179_stop,
+-	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags	= FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1900,7 +1900,7 @@ static const struct driver_info toshiba_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset	= ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags	= FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1913,7 +1913,7 @@ static const struct driver_info mct_info
+ 	.link_reset = ax88179_link_reset,
+ 	.reset	= ax88179_reset,
+ 	.stop	= ax88179_stop,
+-	.flags	= FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags	= FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
 
 

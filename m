@@ -2,236 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABCC583177
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6775258317F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242529AbiG0SIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S238708AbiG0SJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238974AbiG0SHr (ORCPT
+        with ESMTP id S243313AbiG0SIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:07:47 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0B8C7AC1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:11:22 -0700 (PDT)
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 27 Jul 2022 14:08:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1575A8B5;
+        Wed, 27 Jul 2022 10:12:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C426B3F0DA
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 17:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658941880;
-        bh=H/YoNoMBJ5KLzizvRdlp2kaTQKAcETzt8x9wjboShNc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=f294ewGx3RuSG3n7RyP908ORZRmbHecmM5VYwd9wR8OGMeSoiOgbk6YtQXC4VTZ4S
-         nKiy1hi/htLv4QHn5YuzkepU7QVIlFfJ4QCG8YdE9W9gBEUt7ItVPTCTz9DOo0+/DD
-         BQwninWot1opMfUg0re/qunCpuYKxCaszaIG3xjFyYZc6Wod8iHbkWNKE7h7ZZP6jA
-         XhHJZzBPJFPUBl51Q/NDQ6YQ539fmzKBUt8/qxMW/iOn9M0iaUFZVU3odIIVGJ6/QG
-         8hbcvadoNLdlvWmsS+3tSBr/d9pqrMcigh2ja8ucrKwR5MmrKFMlFwd8SQfCpyBvYD
-         K6YrN8vrcL/uw==
-Received: by mail-oi1-f198.google.com with SMTP id bo42-20020a05680822aa00b0033ac79f2523so5158258oib.22
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:11:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H/YoNoMBJ5KLzizvRdlp2kaTQKAcETzt8x9wjboShNc=;
-        b=k36tzOxRHAHTOvJYOmG+aPk4WEbM7dUgdu7Ok69NbWzkXsrNmB50m01WhUW901FswH
-         BQz3nA/+KZ6vZmzFHhGnUycVg1cRssM2LhG73Nz2+Iy6r6Iy4wU78gvI4njOTJ45vjXD
-         liRR7cGrMnoV2kPLcReepONTqWicRBhmu1oZ9oNr3B+cR1mnHDh96nf2EkYpM7vhIHLK
-         r9K5t+Cc3zi3DbooHLiYUteSbCRe/FzwSEzKv3YPmrn2x3qtz1ZW7onDwEuKFF2Mvof0
-         pRM7d7ypxgkce58nvk3d1i974BDi5TahXs4xiAEV33K49MLwbwFK/EZLdyXpnGdqpgLg
-         8HyQ==
-X-Gm-Message-State: AJIora9W6It9/TrVMcA055I6NvMjP87unG31blLRdmNfEmOfBZ+uDUoa
-        IADCdL910xo7JZW4aQ+GRm7+6WcRpUqP6XbIhyJW7XSCj5ETdot1bYfMhSYqakizYn84dUNDZb9
-        beOpjPD4ovGzHszpSA4Wejf05QY9vLAa6xOj71XRaxxNDsWDQvJF1qivjNA==
-X-Received: by 2002:a9d:2602:0:b0:61c:30c1:fa03 with SMTP id a2-20020a9d2602000000b0061c30c1fa03mr9316714otb.86.1658941879704;
-        Wed, 27 Jul 2022 10:11:19 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sUAq7yzvxs08MQ/1pmGOGHFSPETa6NtLulFJUJqWOK5wr+vL658B/OM4yj6drYQZjU8O1hrMUjyEk+FKH3IyE=
-X-Received: by 2002:a9d:2602:0:b0:61c:30c1:fa03 with SMTP id
- a2-20020a9d2602000000b0061c30c1fa03mr9316702otb.86.1658941879435; Wed, 27 Jul
- 2022 10:11:19 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E4B3619A3;
+        Wed, 27 Jul 2022 17:12:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4ABC433B5;
+        Wed, 27 Jul 2022 17:11:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658941925;
+        bh=03Mxfsg1RQo51H34ujBHbTUGNVPbW7U8UijOYMCriIc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Yscx4F4yb0EjvaPMpGQFMOAB39TJX5at6mvRnQffxGhqAN+uNri8+cSB2TsSBhYRy
+         MwebsIt4Y+pizZWOSlsRL2cOYmtgxTdDIQoqAh+CSzxXUX4ngGt3a+s46yaN/YZRXg
+         StUFa7SrbnaQ4TthsdtN4cxxTzXiCGAvaOPyDP2p0Pav8cntB2Y1jh6CNsFRj+kvX1
+         too+y1z+Oow/rizGihDCU7twDthvyHyGHAye6e+5/wXasvia/sSvDS8vlTPj5TEiAn
+         WF1evRc41KMpOWnBJB46AKG/FexNEhwCYKt7vmytVvF93udtPmh237xuVa5dkyJCrv
+         ON+RmJ10+FQjQ==
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Tao Zhou <tao.zhou@linux.dev>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: [PATCH V8 00/16] The Runtime Verification (RV) interface
+Date:   Wed, 27 Jul 2022 19:11:28 +0200
+Message-Id: <cover.1658940828.git.bristot@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220722022416.137548-1-mfo@canonical.com> <20220722022416.137548-7-mfo@canonical.com>
- <CAK7LNARbSjmZgp1vg5m2j4oRYHgCUv7Wsj+4-OYdo9Cpe0Xs3A@mail.gmail.com>
-In-Reply-To: <CAK7LNARbSjmZgp1vg5m2j4oRYHgCUv7Wsj+4-OYdo9Cpe0Xs3A@mail.gmail.com>
-From:   Mauricio Faria de Oliveira <mfo@canonical.com>
-Date:   Wed, 27 Jul 2022 14:11:08 -0300
-Message-ID: <CAO9xwp33Q9ksED_MxPFJYT=DSsEX5=g_C-b5mcF4irU9dy6Vaw@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/6] sysctl: introduce /proc/sys/kernel/modprobe_sysctl_alias
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 6:24 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Fri, Jul 22, 2022 at 11:24 AM Mauricio Faria de Oliveira
-> <mfo@canonical.com> wrote:
-> >
-> > The goal of the earlier patches is to let sysctl userspace tools
-> > load the kernel module with a sysctl entry that is not available
-> > yet in /proc/sys/ when the tool runs (so it can become available).
-> >
-> > Let's expose this file for userspace for two reasons:
-> >
-> > 1) Allow such tools to identify that the running kernel has the
-> >    code which produces sysctl module aliases, so they could run
-> >    'modprobe sysctl:<entry>' only when it may actually help.
-> >
-> > 2) Allow an administrator to hint such tools not to do that, if
-> >    that is desired for some reason (e.g., rather have the tools
-> >    fail if something is misconfigured in a critical deployment).
->
-> This flag is just a hint.
-> User-space tools are still able to ignore it.
->
-> Perhaps, such administrator's choice might be specified in
-> tools' configuration file.
->
-> For example,
->
-> /etc/modprobe.d/forbid-sysctl-alias.conf
->
-> may specify
->
->     blacklist:  sysctl:*
->
-> if they want to forbid sysctl aliasing.
-> (but I do not know if this works or not).
+Over the last years, I've been exploring the possibility of
+verifying the Linux kernel behavior using Runtime Verification.
 
-Yes, it's just a hint. I considered this isn't strong enough, but
-didn't think more into it.
+Runtime Verification (RV) is a lightweight (yet rigorous) method that
+complements classical exhaustive verification techniques (such as model
+checking and theorem proving) with a more practical approach for complex
+systems.
 
-Now, your idea with modprobe.d is strong enough. We have to change it a bit, as
-only 'alias' supports wildcards per modprobe.d(5), then add 'install'
-to make sure.
+Instead of relying on a fine-grained model of a system (e.g., a
+re-implementation a instruction level), RV works by analyzing the trace of the
+system's actual execution, comparing it against a formal specification of
+the system behavior.
 
-# cat /etc/modprobe.d/disable-sysctl-alias.conf
-alias sysctl:* sysctl_alias_off
-install sysctl_alias_off /bin/false
-# or /bin/true, per the sysadmin.
+The usage of deterministic automaton for RV is a well-established
+approach. In the specific case of the Linux kernel, you can check how
+to model complex behavior of the Linux kernel with this paper:
 
-# modprobe sysctl:nf_conntrack_max
-modprobe: ERROR: ../libkmod/libkmod-module.c:990 command_do() Error
-running install command '/bin/false' for module sysctl_alias_off:
-retcode 1
-modprobe: ERROR: could not insert 'sysctl_alias_off': Invalid argument
+  De Oliveira, Daniel Bristot; Cucinotta, Tommaso; De Oliveira, Romulo Silva.
+  *Efficient formal verification for the Linux kernel.* In: International
+  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
+  p. 315-332.
 
-I'll document this in the commit message for now.
+And how efficient is this approach here:
 
-P.S.: Since the flag is a hint to userspace tools in sense 1) as well
-(so they know not to run modprobe if sysctl aliases aren't expected),
-the idea or the file itself seems worth keeping -- but maybe differently.
+  De Oliveira, Daniel B.; De Oliveira, Romulo S.; Cucinotta, Tommaso. *A thread
+  synchronization model for the PREEMPT_RT Linux kernel.* Journal of Systems
+  Architecture, 2020, 107: 101729.
 
-Thanks,
+tlrd: it is possible to model complex behaviors in a modular way, with
+an acceptable overhead (even for production systems). See this
+presentation at 2019's ELCE: https://www.youtube.com/watch?v=BfTuEHafNgg
+
+Here I am proposing a more practical approach for the usage of deterministic
+automata for runtime verification, and it includes:
+
+	- An interface for controlling the verification;
+	- A tool and set of headers that enables the automatic code
+	  generation of the RV monitor (Monitor Synthesis);
+	- Sample monitors to evaluate the interface;
+
+Given that RV is a tracing consumer, the code is being placed inside the
+tracing subsystem (Steven and I have been talking about it for a while).
+
+Features to be added after this patchset:
+	- safe_wtd monitor (requires further discussion with watchdog maintainers)
+	- Export symbols for external modules
+	- dot2bpf
+	- Add a reactor that enables the visualization of the visited
+	  states via KCOV (Marco Elver & Dmitry Vyukov)
+	- Add a CRC method to check from user-space if the values
+	  exported by the monitor were not corrupted by any other
+	  kernel task (Gabriele Paoloni)
+
+Changes from v7:
+	- Optmize the check for monitoring enabled (Tao)
+	- add lockdep checks on rv_enable/disable_monitor (Steven)
+	- Adjusted the "------" of documentation titles (Steven)
+	- Adjusted turn_monitoring_on(), and added a
+	   turn_monitoring_on_with_reset() (Steven)
+	- Moved all tracepoint_synchronize_unregister() to run with
+	  interface lock taken, and added a comment about it (Steven)
+	- lockdep, WARN, and call reactor_cleanup_monitor() (Steven)
+	- Improve comments on synchronization (Steven)
+	- pop, I could've had a v-8 Joke (Daniel)
+Changes from v6:
+	- Remove lock protection when reading static data (Steven)
+	- Add lock protection in disable_all_monitors() (Steven)
+	- Re-arrange enable_monitor (Steven/Tao)
+	- Fix monitor_desc_read_data() Description (Tao)
+	- Wait for tracepoint_synchronize_unregister() anytime a monitor
+	  is Disabled (daniel)
+	- Add memory barriers around monitoring_on and reacting_on (Steven)
+	- Make rv reactor name and description const char * (Tao)
+	- Append missing _##name for some da_automata functions/variables (Steven)
+	- rv_unregister_monitor() will disable the monitor if necessary, and
+	  take care of synchronization (Daniel)
+	- Fixed da_monitor_instrumentation.rst (Tao)
+	- Fix !CONFIG_Rv_REACTORS (kbuild test)
+	- Moved struct rv/rv.h to linux/rv.h (Daniel)
+	- Add rv_ prefix on get/put task slot (Daniel)
+Changes from v5:
+	- Add task monitor slot checks (Daniel/Tao)
+	- Reset the monitors only after initializing the data (Daniel)
+	- Add static for static data (Daniel/0-day)
+	- Change start/stop *functions to enable/disable (like the user-
+	  interface (Daniel)
+	- s/init/start/ for the functions starting the monitoring (Daniel)
+	- Access monitoring_on and reacting_on via functions (Daniel)
+	- Improved vector access checks (Tao)
+	- cleanups (Daniel/Tao)
+Changes from v4:
+	- The watchdog monitor will be discussed on another thread (Daniel)
+	- s/safe/final/ in the tracepoint definition (Daniel)
+	- Improved error handling at __init functions (Daniel)
+	- Remove the hostname from example of commands in a shell (Bagas Sanjaya)
+	- Added documentation about automata representation in C/DOT/Formal
+	  and this documentation is cited in a comment on all model.h
+	  (Steven)
+	- Make wwnr a single patch (Daniel/Steven)
+	- Add the .dot file for each monitor (Daniel)
+	- Add a document for each monitor (Daniel)
+	- Add an order for documentation in the index.rst (Daniel)
+	- Add wip/wwnr/... long description (Steven/Randy)
+	- Add comments for helper functions (Steven)
+	- Improve checks in da_monitor.h (Tao Zhou)
+	- Change final states set to bool (Tao/Daniel)
+	- Adjust indentation on enabling monitor/reactor (Steven)
+	- Use strim on buffers from user-space (Steven)
+	- Remove ifdefs inside functions (Steven)
+	- Adjust depends on RV in Kconfig (Steven)
+	- Check empty enabled monitor list (Tao Zhou)
+	- Fixed Copyright (Steven)
+	- Adjusted structures' indentation (Steven)
+	- Fix rv/monitors/$monitor/enabled return value (Song Liu)
+	- Typos (Punit Agrawal/Randy)
+	- Improved python scripts w.r.t. consistency (Steve)
+	- Blamed myself for so many problems :-) (Daniel's mind)
+Changes from v3:
+	- Rebased on 5.19
+	(rostedt's request were made on 1x1 meetings)
+	- Moved monitors to monitors/$name/ (Rostedt)
+	- Consolidate the tracepoints into a single include file in the default
+	  directory (trace/events/rv.h) (Rostedt)
+	- The tracepoints now record the entire string to the buffer.
+	- Change the enable_monitors to disable monitors with ! (instead of -).
+	  (Rostedt)
+	- Add a suffix to the state/events enums, to avoid conflict in the
+	  vmlinux.h used by eBPF.
+	- The models are now placed in the $name.h (it used to store the
+	  tracepoints, but they are now consolidated in a single file)
+	- dot2c and dot2k updated to the changes
+	- models re-generated with these new standards.
+	- user-space tools moved to an directory outside of tools/tracing as
+	  other methods of verification/log sources are planned.
+Changes from v2:
+	- Tons of checkpatch and kernel test robot
+	- Moved files to better places
+	- Adjusted watchdog tracepoints patch (Guenter Roeck)
+	- Added pretimeout watchdog events (Peter Enderborg) 
+	- Used task struct to store per-task monitors (Peter Zijlstra)
+	- Changed the instrumentation to use internal definition of tracepoint
+	  and check the callback signature (Steven Rostedt)
+	- Used printk_deferred() and removed the comment about deadlocks
+	  (Shuah Khan/John Ogness)
+	- Some simplifications:
+		- Removed the safe watchdog nowayout for now (myself)
+		- Removed export symbols for now (myself)
+Changes from V1:
+	- rebased to the latest kernel;
+	- code cleanup;
+	- the watchdog dev monitor;
+	- safety app;
 
 
->
->
->
->
->
->
->
->
->
->
->
->
->
->
-> > Also add a module parameter for that (proc.modprobe_sysctl_alias),
-> > for another method that doesn't depend on sysctl tools to be set
-> > (that wouldn't fail them to try and set it if it's not there yet).
-> >
-> > Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
-> > ---
-> >  fs/proc/proc_sysctl.c  | 8 ++++++++
-> >  include/linux/module.h | 1 +
-> >  kernel/sysctl.c        | 9 +++++++++
-> >  3 files changed, 18 insertions(+)
-> >
-> > diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-> > index ebbf8702387e..1e63819fcda8 100644
-> > --- a/fs/proc/proc_sysctl.c
-> > +++ b/fs/proc/proc_sysctl.c
-> > @@ -33,6 +33,14 @@ static void check_struct_sysctl_device_id(void)
-> >         BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
-> >                         != offsetof(struct ctl_table, procname));
-> >  }
-> > +
-> > +/*
-> > + * Hint sysctl userspace tools whether or not to run modprobe with sysctl alias
-> > + * ('modprobe sysctl:entry') if they cannot find the file '/proc/sys/.../entry'
-> > + */
-> > +int modprobe_sysctl_alias = 1;
-> > +module_param(modprobe_sysctl_alias, int, 0644);
-> > +
-> >  #else
-> >  static void check_struct_sysctl_device_id(void) {}
-> >  #endif
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index 3010f687df19..5f565491c596 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -304,6 +304,7 @@ struct notifier_block;
-> >  #ifdef CONFIG_MODULES
-> >
-> >  extern int modules_disabled; /* for sysctl */
-> > +extern int modprobe_sysctl_alias; /* for proc sysctl */
-> >  /* Get/put a kernel symbol (calls must be symmetric) */
-> >  void *__symbol_get(const char *symbol);
-> >  void *__symbol_get_gpl(const char *symbol);
-> > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> > index 15073621cfa8..b396cfcb55fc 100644
-> > --- a/kernel/sysctl.c
-> > +++ b/kernel/sysctl.c
-> > @@ -1763,6 +1763,15 @@ static struct ctl_table kern_table[] = {
-> >                 .mode           = 0644,
-> >                 .proc_handler   = proc_dostring,
-> >         },
-> > +#ifdef CONFIG_PROC_SYSCTL
-> > +       {
-> > +               .procname       = "modprobe_sysctl_alias",
-> > +               .data           = &modprobe_sysctl_alias,
-> > +               .maxlen         = sizeof(modprobe_sysctl_alias),
-> > +               .mode           = 0644,
-> > +               .proc_handler   = proc_dointvec,
-> > +       },
-> > +#endif
-> >         {
-> >                 .procname       = "modules_disabled",
-> >                 .data           = &modules_disabled,
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Best Regards
-> Masahiro Yamada
 
+Daniel Bristot de Oliveira (16):
+  rv: Add Runtime Verification (RV) interface
+  rv: Add runtime reactors interface
+  rv/include: Add helper functions for deterministic automata
+  rv/include: Add deterministic automata monitor definition via C macros
+  rv/include: Add instrumentation helper functions
+  Documentation/rv: Add a basic documentation
+  tools/rv: Add dot2c
+  Documentation/rv: Add deterministic automaton documentation
+  tools/rv: Add dot2k
+  Documentation/rv: Add deterministic automata monitor synthesis
+    documentation
+  Documentation/rv: Add deterministic automata instrumentation
+    documentation
+  rv/monitor: Add the wip monitor skeleton created by dot2k
+  rv/monitor: Add the wip monitor
+  rv/monitor: Add the wwnr monitor
+  rv/reactor: Add the printk reactor
+  rv/reactor: Add the panic reactor
 
+ Documentation/trace/index.rst                 |   1 +
+ .../trace/rv/da_monitor_instrumentation.rst   | 171 ++++
+ .../trace/rv/da_monitor_synthesis.rst         | 147 ++++
+ .../trace/rv/deterministic_automata.rst       | 184 ++++
+ Documentation/trace/rv/index.rst              |  14 +
+ Documentation/trace/rv/monitor_wip.rst        |  55 ++
+ Documentation/trace/rv/monitor_wwnr.rst       |  45 +
+ .../trace/rv/runtime-verification.rst         | 231 +++++
+ include/linux/rv.h                            |  70 ++
+ include/linux/sched.h                         |  11 +
+ include/rv/automata.h                         |  75 ++
+ include/rv/da_monitor.h                       | 543 ++++++++++++
+ include/rv/instrumentation.h                  |  29 +
+ include/trace/events/rv.h                     | 142 ++++
+ kernel/fork.c                                 |  14 +
+ kernel/trace/Kconfig                          |   2 +
+ kernel/trace/Makefile                         |   1 +
+ kernel/trace/rv/Kconfig                       |  78 ++
+ kernel/trace/rv/Makefile                      |   8 +
+ kernel/trace/rv/monitors/wip/wip.c            |  88 ++
+ kernel/trace/rv/monitors/wip/wip.h            |  46 +
+ kernel/trace/rv/monitors/wwnr/wwnr.c          |  87 ++
+ kernel/trace/rv/monitors/wwnr/wwnr.h          |  46 +
+ kernel/trace/rv/reactor_panic.c               |  43 +
+ kernel/trace/rv/reactor_printk.c              |  42 +
+ kernel/trace/rv/rv.c                          | 799 ++++++++++++++++++
+ kernel/trace/rv/rv.h                          |  69 ++
+ kernel/trace/rv/rv_reactors.c                 | 508 +++++++++++
+ kernel/trace/trace.c                          |   2 +
+ kernel/trace/trace.h                          |   9 +
+ tools/verification/dot2/Makefile              |  26 +
+ tools/verification/dot2/automata.py           | 174 ++++
+ tools/verification/dot2/dot2c                 |  26 +
+ tools/verification/dot2/dot2c.py              | 254 ++++++
+ tools/verification/dot2/dot2k                 |  47 ++
+ tools/verification/dot2/dot2k.py              | 177 ++++
+ .../dot2/dot2k_templates/main_global.c        |  91 ++
+ .../dot2/dot2k_templates/main_per_cpu.c       |  91 ++
+ .../dot2/dot2k_templates/main_per_task.c      |  91 ++
+ tools/verification/models/wip.dot             |  16 +
+ tools/verification/models/wwnr.dot            |  16 +
+ 41 files changed, 4569 insertions(+)
+ create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+ create mode 100644 Documentation/trace/rv/da_monitor_synthesis.rst
+ create mode 100644 Documentation/trace/rv/deterministic_automata.rst
+ create mode 100644 Documentation/trace/rv/index.rst
+ create mode 100644 Documentation/trace/rv/monitor_wip.rst
+ create mode 100644 Documentation/trace/rv/monitor_wwnr.rst
+ create mode 100644 Documentation/trace/rv/runtime-verification.rst
+ create mode 100644 include/linux/rv.h
+ create mode 100644 include/rv/automata.h
+ create mode 100644 include/rv/da_monitor.h
+ create mode 100644 include/rv/instrumentation.h
+ create mode 100644 include/trace/events/rv.h
+ create mode 100644 kernel/trace/rv/Kconfig
+ create mode 100644 kernel/trace/rv/Makefile
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.c
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.h
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.c
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.h
+ create mode 100644 kernel/trace/rv/reactor_panic.c
+ create mode 100644 kernel/trace/rv/reactor_printk.c
+ create mode 100644 kernel/trace/rv/rv.c
+ create mode 100644 kernel/trace/rv/rv.h
+ create mode 100644 kernel/trace/rv/rv_reactors.c
+ create mode 100644 tools/verification/dot2/Makefile
+ create mode 100644 tools/verification/dot2/automata.py
+ create mode 100644 tools/verification/dot2/dot2c
+ create mode 100644 tools/verification/dot2/dot2c.py
+ create mode 100644 tools/verification/dot2/dot2k
+ create mode 100644 tools/verification/dot2/dot2k.py
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_global.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_cpu.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_task.c
+ create mode 100644 tools/verification/models/wip.dot
+ create mode 100644 tools/verification/models/wwnr.dot
 
---
-Mauricio Faria de Oliveira
+-- 
+2.35.1
+

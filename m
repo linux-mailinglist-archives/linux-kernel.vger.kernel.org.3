@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B3A582BB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE6C582C6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238907AbiG0QhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S240325AbiG0Qpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238394AbiG0QfT (ORCPT
+        with ESMTP id S240371AbiG0QoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:35:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFEB56BB8;
-        Wed, 27 Jul 2022 09:27:50 -0700 (PDT)
+        Wed, 27 Jul 2022 12:44:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDA61C129;
+        Wed, 27 Jul 2022 09:31:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0494DB821BC;
-        Wed, 27 Jul 2022 16:27:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 536C8C43140;
-        Wed, 27 Jul 2022 16:27:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5954061A24;
+        Wed, 27 Jul 2022 16:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 625A2C433C1;
+        Wed, 27 Jul 2022 16:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939235;
-        bh=vUKJwHwLGw596+/yixKmcE8tD832L7JBjKGObLJdvwM=;
+        s=korg; t=1658939462;
+        bh=bFaCTNfL1lzbtcicnm51lbv1Qy3ofyJYMwpu0XKTRIA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=02fB/PrsyqNI8XR0eBxuWKhnTb3SSEL+ruZreI26Npv+Hjxg6NHFZbxzCYeA06tR0
-         dwLkq2y30ejzSYWd6QiGUfSU43MDaY7xhIk0frFxNLo+dYW65H+gGCiVIM2tYhxaU7
-         ow66T97LiA6hsLDTtvj+LeCWrYivVGxNMmlgGQAs=
+        b=cfY9T9El78GCFUx8WaiSuTt9OAkvtMlaZ+NMikXXS+TZELo+F1qjc4PsCdpNUMWZx
+         Q+odAOm2XG4pF9ueYEhY5mb+k+git07+Lga8szvSwwqj52Nb1ScgxOeWxd+kucNqKr
+         bSIV2xbT59QXZk3X87IbSfKcHCcJdr2lgujKk8ko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Carl Vanderlip <quic_carlv@quicinc.com>
-Subject: [PATCH 4.19 61/62] PCI: hv: Reuse existing IRTE allocation in compose_msi_msg()
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 5.4 77/87] Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
 Date:   Wed, 27 Jul 2022 18:11:10 +0200
-Message-Id: <20220727161006.525330926@linuxfoundation.org>
+Message-Id: <20220727161012.193306231@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +55,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit b4b77778ecc5bfbd4e77de1b2fd5c1dd3c655f1f upstream.
+commit 81be03e026dc0c16dc1c64e088b2a53b73caa895 upstream.
 
-Currently if compose_msi_msg() is called multiple times, it will free any
-previous IRTE allocation, and generate a new allocation.  While nothing
-prevents this from occurring, it is extraneous when Linux could just reuse
-the existing allocation and avoid a bunch of overhead.
+This makes use of bt_skb_sendmmsg instead using memcpy_from_msg which
+is not considered safe to be used when lock_sock is held.
 
-However, when future IRTE allocations operate on blocks of MSIs instead of
-a single line, freeing the allocation will impact all of the lines.  This
-could cause an issue where an allocation of N MSIs occurs, then some of
-the lines are retargeted, and finally the allocation is freed/reallocated.
-The freeing of the allocation removes all of the configuration for the
-entire block, which requires all the lines to be retargeted, which might
-not happen since some lines might already be unmasked/active.
+Also make rfcomm_dlc_send handle skb with fragments and queue them all
+atomically.
 
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Tested-by: Dexuan Cui <decui@microsoft.com>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/1652282582-21595-1-git-send-email-quic_jhugo@quicinc.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
-Signed-off-by: Carl Vanderlip <quic_carlv@quicinc.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-hyperv.c |   16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ net/bluetooth/rfcomm/core.c |   50 +++++++++++++++++++++++++++++++++++++-------
+ net/bluetooth/rfcomm/sock.c |   50 ++++++++++----------------------------------
+ 2 files changed, 55 insertions(+), 45 deletions(-)
 
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -1109,6 +1109,15 @@ static void hv_compose_msi_msg(struct ir
- 	u32 size;
- 	int ret;
+--- a/net/bluetooth/rfcomm/core.c
++++ b/net/bluetooth/rfcomm/core.c
+@@ -553,22 +553,58 @@ struct rfcomm_dlc *rfcomm_dlc_exists(bda
+ 	return dlc;
+ }
  
-+	/* Reuse the previous allocation */
-+	if (data->chip_data) {
-+		int_desc = data->chip_data;
-+		msg->address_hi = int_desc->address >> 32;
-+		msg->address_lo = int_desc->address & 0xffffffff;
-+		msg->data = int_desc->data;
-+		return;
-+	}
++static int rfcomm_dlc_send_frag(struct rfcomm_dlc *d, struct sk_buff *frag)
++{
++	int len = frag->len;
 +
- 	pdev = msi_desc_to_pci_dev(irq_data_get_msi_desc(data));
- 	dest = irq_data_get_effective_affinity_mask(data);
- 	pbus = pdev->bus;
-@@ -1117,13 +1126,6 @@ static void hv_compose_msi_msg(struct ir
- 	if (!hpdev)
- 		goto return_null_message;
++	BT_DBG("dlc %p mtu %d len %d", d, d->mtu, len);
++
++	if (len > d->mtu)
++		return -EINVAL;
++
++	rfcomm_make_uih(frag, d->addr);
++	__skb_queue_tail(&d->tx_queue, frag);
++
++	return len;
++}
++
+ int rfcomm_dlc_send(struct rfcomm_dlc *d, struct sk_buff *skb)
+ {
+-	int len = skb->len;
++	unsigned long flags;
++	struct sk_buff *frag, *next;
++	int len;
  
--	/* Free any previous message that might have already been composed. */
--	if (data->chip_data) {
--		int_desc = data->chip_data;
--		data->chip_data = NULL;
--		hv_int_desc_free(hpdev, int_desc);
--	}
+ 	if (d->state != BT_CONNECTED)
+ 		return -ENOTCONN;
+ 
+-	BT_DBG("dlc %p mtu %d len %d", d, d->mtu, len);
++	frag = skb_shinfo(skb)->frag_list;
++	skb_shinfo(skb)->frag_list = NULL;
+ 
+-	if (len > d->mtu)
+-		return -EINVAL;
++	/* Queue all fragments atomically. */
++	spin_lock_irqsave(&d->tx_queue.lock, flags);
++
++	len = rfcomm_dlc_send_frag(d, skb);
++	if (len < 0 || !frag)
++		goto unlock;
++
++	for (; frag; frag = next) {
++		int ret;
++
++		next = frag->next;
++
++		ret = rfcomm_dlc_send_frag(d, frag);
++		if (ret < 0) {
++			kfree_skb(frag);
++			goto unlock;
++		}
++
++		len += ret;
++	}
+ 
+-	rfcomm_make_uih(skb, d->addr);
+-	skb_queue_tail(&d->tx_queue, skb);
++unlock:
++	spin_unlock_irqrestore(&d->tx_queue.lock, flags);
+ 
+-	if (!test_bit(RFCOMM_TX_THROTTLED, &d->flags))
++	if (len > 0 && !test_bit(RFCOMM_TX_THROTTLED, &d->flags))
+ 		rfcomm_schedule();
+ 	return len;
+ }
+--- a/net/bluetooth/rfcomm/sock.c
++++ b/net/bluetooth/rfcomm/sock.c
+@@ -578,47 +578,21 @@ static int rfcomm_sock_sendmsg(struct so
+ 	lock_sock(sk);
+ 
+ 	sent = bt_sock_wait_ready(sk, msg->msg_flags);
+-	if (sent)
+-		goto done;
 -
- 	int_desc = kzalloc(sizeof(*int_desc), GFP_ATOMIC);
- 	if (!int_desc)
- 		goto drop_reference;
+-	while (len) {
+-		size_t size = min_t(size_t, len, d->mtu);
+-		int err;
+-
+-		skb = sock_alloc_send_skb(sk, size + RFCOMM_SKB_RESERVE,
+-				msg->msg_flags & MSG_DONTWAIT, &err);
+-		if (!skb) {
+-			if (sent == 0)
+-				sent = err;
+-			break;
+-		}
+-		skb_reserve(skb, RFCOMM_SKB_HEAD_RESERVE);
+-
+-		err = memcpy_from_msg(skb_put(skb, size), msg, size);
+-		if (err) {
+-			kfree_skb(skb);
+-			if (sent == 0)
+-				sent = err;
+-			break;
+-		}
+-
+-		skb->priority = sk->sk_priority;
+-
+-		err = rfcomm_dlc_send(d, skb);
+-		if (err < 0) {
+-			kfree_skb(skb);
+-			if (sent == 0)
+-				sent = err;
+-			break;
+-		}
+-
+-		sent += size;
+-		len  -= size;
+-	}
+ 
+-done:
+ 	release_sock(sk);
+ 
++	if (sent)
++		return sent;
++
++	skb = bt_skb_sendmmsg(sk, msg, len, d->mtu, RFCOMM_SKB_HEAD_RESERVE,
++			      RFCOMM_SKB_TAIL_RESERVE);
++	if (IS_ERR_OR_NULL(skb))
++		return PTR_ERR(skb);
++
++	sent = rfcomm_dlc_send(d, skb);
++	if (sent < 0)
++		kfree_skb(skb);
++
+ 	return sent;
+ }
+ 
 
 

@@ -2,150 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413295832D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6955832DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbiG0TFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S235060AbiG0TFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiG0TFZ (ORCPT
+        with ESMTP id S233755AbiG0TF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:05:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFE0BD8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:32:18 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oGlos-0000OO-EA; Wed, 27 Jul 2022 20:31:42 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 54871BC544;
-        Wed, 27 Jul 2022 18:31:34 +0000 (UTC)
-Date:   Wed, 27 Jul 2022 20:31:33 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Tom Rix <trix@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Yufeng Mo <moyufeng@huawei.com>, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v3 0/9] can: slcan: extend supported features (step 2)
-Message-ID: <20220727183133.2n6b2scaahrnrgws@pengutronix.de>
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
+        Wed, 27 Jul 2022 15:05:28 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEA0C50;
+        Wed, 27 Jul 2022 11:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:References:Cc:To:From:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=SxqIxoB46XQQzufy517WF/ExkkxnsZ5pxzOa6F+2UDs=; b=F2Wd3ULW8xn5qjhM2xrw5lGl04
+        6wCCjtdhIn/taUdv6L/aNTC7OAfh544VNRi/pcpBj3UH3I+I0CycnBncTCxv8IR2eRnWCZjxEzMIw
+        kbtUgQMVjhqAwmq9b5ixP+OiZSFbgjxR3Cj9R2SYaaXLz+ueIYG2nHcF+QBpgWsQirsBUGAqeM9ke
+        s4xivoC6de24FOOrDX6HwATqbTWdjy9tbnYITd12YRzueNtWA+afQqKowXArcZHxXGkfY+/h1YA7J
+        u4uu6HiIDHGxdyU1UVEo/P3M+3kdg8SoZkWY7V4DU6ybq0938kP4eeZtiDW5hUkXe9HestBDMS4MM
+        24pD3cFQ==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1oGlpO-001n9P-H9; Wed, 27 Jul 2022 12:32:16 -0600
+Message-ID: <838314fe-a85d-19be-71b6-264cad7e83c9@deltatee.com>
+Date:   Wed, 27 Jul 2022 12:32:12 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2qvjhjmgxrqvnzor"
-Content-Disposition: inline
-In-Reply-To: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+References: <20220727214807.6209642e@canb.auug.org.au>
+Content-Language: en-US
+In-Reply-To: <20220727214807.6209642e@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, hch@lst.de, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build warning after merge of the dma-mapping tree
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---2qvjhjmgxrqvnzor
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 26.07.2022 23:02:08, Dario Binacchi wrote:
-> With this series I try to finish the task, started with the series [1],
-> of completely removing the dependency of the slcan driver from the
-> userspace slcand/slcan_attach applications.
->=20
-> The series also contains patches that remove the legacy stuff (slcan_devs,
-> SLCAN_MAGIC, ...) and do some module cleanup.
->=20
-> The series has been created on top of the patches:
->=20
-> can: slcan: convert comments to network style comments
-> can: slcan: slcan_init() convert printk(LEVEL ...) to pr_level()
-> can: slcan: fix whitespace issues
-> can: slcan: convert comparison to NULL into !val
-> can: slcan: clean up if/else
-> can: slcan: use scnprintf() as a hardening measure
-> can: slcan: do not report txerr and rxerr during bus-off
-> can: slcan: do not sleep with a spin lock held
->=20
-> applied to linux-next.
->=20
-> [1] https://lore.kernel.org/all/20220628163137.413025-1-dario.binacchi@am=
-arulasolutions.com/
->=20
-> Changes in v3:
-> - Update the commit message.
-> - Use 1 space in front of the =3D.
-> - Put the series as RFC again.
+On 2022-07-27 05:48, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the dma-mapping tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/driver-api/infrastructure:50: kernel/dma/mapping.c:258: WARNING: Option list ends without a blank line; unexpected unindent.
+> 
+> Introduced by commit
+> 
+>   7c2645a2a30a ("dma-mapping: allow EREMOTEIO return code for P2PDMA transfers")
 
-No need to change the series to RFC again :)
 
-> - Pick up the patch "can: slcan: use KBUILD_MODNAME and define pr_fmt to =
-replace hardcoded names".
-> - Add the patch "ethtool: add support to get/set CAN bit time register"
->   to the series.
-> - Add the patch "can: slcan: add support to set bit time register (btr)"
->   to the series.
-> - Replace the link https://marc.info/?l=3Dlinux-can&m=3D165806705927851&w=
-=3D2 with
->   https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartko=
-pp.net.
-> - Add the `Suggested-by' tag.
+Oh, hmm, I thought I addressed this when I added the extra line at the
+end of the comment, but it seems the htmldocs is a bit fussier than that
+with the white space. 
 
-Please post a v4 with both BTR patches dropped and add Max Staudt's
-Reviewed-by to patch 3.
+The only way I can seem to suppress that error is by adding another tab
+character in the list; see below.
 
-Marc
+I'll send a full patch shortly.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Logan
 
---2qvjhjmgxrqvnzor
-Content-Type: application/pgp-signature; name="signature.asc"
+--
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLhhIIACgkQrX5LkNig
-012GYggAh6V/9hqrrLehCLoGuydxrDM1rdCB2FyiwWqN+uEYbWoU/uZi5Vzn6ZKI
-VSy0ML7e7/IajaxumfhSyLm+wbHnsU1RjYDAQEyBVyFtd4wF3ThKmyNQQ4g0DHVx
-Rde/d0Jv+aEOedsWyF6AT4SUJk/6tuoXriKt+VIUzg7cPLszkJKe7tiPm1JwAOz3
-MHmI3meaJbJw0usbt0pguj4KbU1/U8V28R4OmE+ZIaQunwc1oQziK68Q/z6QpG4L
-cjd73E2aChtIgbO3Trg2MYEzOlHbSgUsUt6mMsXEm+72jXz+lfPEYBvcOVSwmMMb
-8ThhDpGFZWbbfBeaa3FlW+P/NOYqFQ==
-=s9bc
------END PGP SIGNATURE-----
-
---2qvjhjmgxrqvnzor--
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index 746d46825d08..99e1e0c9a295 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -249,15 +249,15 @@ EXPORT_SYMBOL(dma_map_sg_attrs);
+  * Returns 0 on success or a negative error code on error. The following
+  * error codes are supported with the given meaning:
+  *
+- *   -EINVAL	An invalid argument, unaligned access or other error
+- *		in usage. Will not succeed if retried.
+- *   -ENOMEM	Insufficient resources (like memory or IOVA space) to
+- *		complete the mapping. Should succeed if retried later.
+- *   -EIO	Legacy error code with an unknown meaning. eg. this is
+- *		returned if a lower level call returned DMA_MAPPING_ERROR.
+- *   -EREMOTEIO	The DMA device cannot access P2PDMA memory specified in
+- *		the sg_table. This will not succeed if retried.
+- *
++ *   -EINVAL		An invalid argument, unaligned access or other error
++ *			in usage. Will not succeed if retried.
++ *   -ENOMEM		Insufficient resources (like memory or IOVA space) to
++ *			complete the mapping. Should succeed if retried later.
++ *   -EIO		Legacy error code with an unknown meaning. eg. this is
++ *			returned if a lower level call returned
++ *			DMA_MAPPING_ERROR.
++ *   -EREMOTEIO		The DMA device cannot access P2PDMA memory specified
++ *			in the sg_table. This will not succeed if retried.
+  */
+ int dma_map_sgtable(struct device *dev, struct sg_table *sgt,
+ 		    enum dma_data_direction dir, unsigned long attrs)

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600D1582BA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E999582F15
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238613AbiG0QgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        id S241863AbiG0RUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238452AbiG0Qe0 (ORCPT
+        with ESMTP id S241655AbiG0RSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:34:26 -0400
+        Wed, 27 Jul 2022 13:18:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCC64E86D;
-        Wed, 27 Jul 2022 09:27:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B6979EFD;
+        Wed, 27 Jul 2022 09:43:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CED9361A09;
-        Wed, 27 Jul 2022 16:27:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA484C433C1;
-        Wed, 27 Jul 2022 16:27:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E03E601C3;
+        Wed, 27 Jul 2022 16:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF77C433D6;
+        Wed, 27 Jul 2022 16:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939224;
-        bh=u7bKTBJfAOMOZ9/sDoWY4Vi6VndC+6DTovQ/pdYctDU=;
+        s=korg; t=1658940237;
+        bh=gZtPCMQ0JD9Ip4j75/GtiuMQLZb64IKyLIRcJaTpJzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I4a9rwj1fqIUzDbOzsdhFciJQewh1MdWq34GyQVMnziuM8BLWK0wSqlvu1t61EDWZ
-         q2GeESQBSkDY5Ocjlek8uSN2BE6WaRVTUJzMDzkde0jkNPi0suTop8Kud3S/+r+eDv
-         et4P3vxnuUA60x5Qv8ojg9EtwlG5CdW8vzyYnDSw=
+        b=tAhagIZXgDd+pGcjRjNB+F7Fqu6UAqQ+V2tjbX8exDNcXaHZ0keHku2r1Sp8ivyMR
+         J8l+d2fbbFPG3vKd/+oTAymn8Sa/sLr7ytTvoS5U7Qh73EBXeC34lyfvXJpbz1BqN5
+         y55kituK6kne9qwiqL2mniwY1KDHm30GcKdmlUlk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Tedd Ho-Jeong An <tedd.an@intel.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 4.19 49/62] Bluetooth: Fix passing NULL to PTR_ERR
+        stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 154/201] xhci: dbc: Rename xhci_dbc_init and xhci_dbc_exit
 Date:   Wed, 27 Jul 2022 18:10:58 +0200
-Message-Id: <20220727161006.045213779@linuxfoundation.org>
+Message-Id: <20220727161034.207557773@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +54,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-commit 266191aa8d14b84958aaeb5e96ee4e97839e3d87 upstream.
+[ Upstream commit 5c44d9d7570b244ca08fef817c4c90aa7a1f1b5f ]
 
-Passing NULL to PTR_ERR will result in 0 (success), also since the likes of
-bt_skb_sendmsg does never return NULL it is safe to replace the instances of
-IS_ERR_OR_NULL with IS_ERR when checking its return.
+These names give the impression the functions are related to
+module init calls, but are in fact creating and removing the dbc
+fake device
 
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Tested-by: Tedd Ho-Jeong An <tedd.an@intel.com>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Rename them to xhci_create_dbc_dev() and xhci_remove_dbc_dev().
+
+We will need the _init and _exit names for actual dbc module init
+and exit calls.
+
+No functional changes
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20220216095153.1303105-4-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/bluetooth/bluetooth.h |    2 +-
- net/bluetooth/rfcomm/sock.c       |    2 +-
- net/bluetooth/sco.c               |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci-dbgcap.c | 5 +++--
+ drivers/usb/host/xhci-dbgcap.h | 8 ++++----
+ drivers/usb/host/xhci.c        | 4 ++--
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
---- a/include/net/bluetooth/bluetooth.h
-+++ b/include/net/bluetooth/bluetooth.h
-@@ -422,7 +422,7 @@ static inline struct sk_buff *bt_skb_sen
- 		struct sk_buff *tmp;
+diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+index f4da5708a40f..46c8f3c187f7 100644
+--- a/drivers/usb/host/xhci-dbgcap.c
++++ b/drivers/usb/host/xhci-dbgcap.c
+@@ -1017,7 +1017,8 @@ void xhci_dbc_remove(struct xhci_dbc *dbc)
+ 	kfree(dbc);
+ }
  
- 		tmp = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
--		if (IS_ERR_OR_NULL(tmp)) {
-+		if (IS_ERR(tmp)) {
- 			kfree_skb(skb);
- 			return tmp;
- 		}
---- a/net/bluetooth/rfcomm/sock.c
-+++ b/net/bluetooth/rfcomm/sock.c
-@@ -586,7 +586,7 @@ static int rfcomm_sock_sendmsg(struct so
+-int xhci_dbc_init(struct xhci_hcd *xhci)
++
++int xhci_create_dbc_dev(struct xhci_hcd *xhci)
+ {
+ 	struct device		*dev;
+ 	void __iomem		*base;
+@@ -1041,7 +1042,7 @@ int xhci_dbc_init(struct xhci_hcd *xhci)
+ 	return ret;
+ }
  
- 	skb = bt_skb_sendmmsg(sk, msg, len, d->mtu, RFCOMM_SKB_HEAD_RESERVE,
- 			      RFCOMM_SKB_TAIL_RESERVE);
--	if (IS_ERR_OR_NULL(skb))
-+	if (IS_ERR(skb))
- 		return PTR_ERR(skb);
+-void xhci_dbc_exit(struct xhci_hcd *xhci)
++void xhci_remove_dbc_dev(struct xhci_hcd *xhci)
+ {
+ 	unsigned long		flags;
  
- 	sent = rfcomm_dlc_send(d, skb);
---- a/net/bluetooth/sco.c
-+++ b/net/bluetooth/sco.c
-@@ -720,7 +720,7 @@ static int sco_sock_sendmsg(struct socke
- 		return -EOPNOTSUPP;
+diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
+index 5d8c7815491c..8b5b363a0719 100644
+--- a/drivers/usb/host/xhci-dbgcap.h
++++ b/drivers/usb/host/xhci-dbgcap.h
+@@ -194,8 +194,8 @@ static inline struct dbc_ep *get_out_ep(struct xhci_dbc *dbc)
+ }
  
- 	skb = bt_skb_sendmsg(sk, msg, len, len, 0, 0);
--	if (IS_ERR_OR_NULL(skb))
-+	if (IS_ERR(skb))
- 		return PTR_ERR(skb);
+ #ifdef CONFIG_USB_XHCI_DBGCAP
+-int xhci_dbc_init(struct xhci_hcd *xhci);
+-void xhci_dbc_exit(struct xhci_hcd *xhci);
++int xhci_create_dbc_dev(struct xhci_hcd *xhci);
++void xhci_remove_dbc_dev(struct xhci_hcd *xhci);
+ int xhci_dbc_tty_probe(struct device *dev, void __iomem *res, struct xhci_hcd *xhci);
+ void xhci_dbc_tty_remove(struct xhci_dbc *dbc);
+ struct xhci_dbc *xhci_alloc_dbc(struct device *dev, void __iomem *res,
+@@ -211,12 +211,12 @@ int xhci_dbc_suspend(struct xhci_hcd *xhci);
+ int xhci_dbc_resume(struct xhci_hcd *xhci);
+ #endif /* CONFIG_PM */
+ #else
+-static inline int xhci_dbc_init(struct xhci_hcd *xhci)
++static inline int xhci_create_dbc_dev(struct xhci_hcd *xhci)
+ {
+ 	return 0;
+ }
  
- 	lock_sock(sk);
+-static inline void xhci_dbc_exit(struct xhci_hcd *xhci)
++static inline void xhci_remove_dbc_dev(struct xhci_hcd *xhci)
+ {
+ }
+ 
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 94fe7d64e762..a4e99f8668b3 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -693,7 +693,7 @@ int xhci_run(struct usb_hcd *hcd)
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+ 			"Finished xhci_run for USB2 roothub");
+ 
+-	xhci_dbc_init(xhci);
++	xhci_create_dbc_dev(xhci);
+ 
+ 	xhci_debugfs_init(xhci);
+ 
+@@ -723,7 +723,7 @@ static void xhci_stop(struct usb_hcd *hcd)
+ 		return;
+ 	}
+ 
+-	xhci_dbc_exit(xhci);
++	xhci_remove_dbc_dev(xhci);
+ 
+ 	spin_lock_irq(&xhci->lock);
+ 	xhci->xhc_state |= XHCI_STATE_HALTED;
+-- 
+2.35.1
+
 
 

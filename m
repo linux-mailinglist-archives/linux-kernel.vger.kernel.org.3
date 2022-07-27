@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47E25821E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647945821EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiG0IR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 04:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
+        id S229755AbiG0ISx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 04:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiG0IRY (ORCPT
+        with ESMTP id S229449AbiG0ISv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 04:17:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6FF4504C;
-        Wed, 27 Jul 2022 01:17:23 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 27 Jul 2022 04:18:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA2E43E63
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:18:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CFF896601B1A;
-        Wed, 27 Jul 2022 09:17:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658909841;
-        bh=fXIJ2hAtpli+W6S1Y8IGI1hYRxklmzSVaDFjnGNKiYE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HVzr2P0a9UH6kJl2DYJR97d2HxdM8dsRiIvlj5Djxi0fRrCGxPd17mDSXLprr4cHl
-         rBXJ9ladoQn/B6hhQmy7p2JTKdishZmHQjtEvE6mTrrDqVtpoc30TgtBn9BizdDiep
-         LE4ZpOU6H56tOR7kLsvuY1HAZ1+PZFG+E9EBkHYuC8CzUj3fmJRg5m6lohXqQY02mt
-         HTNgagQi/NQtGs7W5GXhimenTLjfhE2uIi5ZDfbySn+L4iS0t8qAGHI1heOisUrEv0
-         YziUA4Ler8HgqLm4DKLxDRsmj5eb4ZAOE22WjiG2hR0907g4zsI/a3oqbzlIGFG4sf
-         EC+/wUhAP65Ow==
-Message-ID: <cad2ac1c-992b-960c-09c7-ba12baa58c93@collabora.com>
-Date:   Wed, 27 Jul 2022 10:17:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek
- folder
-Content-Language: en-US
-To:     Balsam CHIHI <bchihi@baylibre.com>, rafael@kernel.org,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-References: <20220726135506.485108-1-bchihi@baylibre.com>
- <20220726135506.485108-2-bchihi@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220726135506.485108-2-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5220E33C68;
+        Wed, 27 Jul 2022 08:18:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658909929; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Afwxwpqi4PHP9gQvy42ArBsEBv8pS8AltwvoI3yDjtQ=;
+        b=Rj1jADJ+94fsezLiBkilEODE/x0JDmp6RVLfmcn04NIL3VzMnC3684XxezLNv/DAyHWHGh
+        scAdWXy3jC4ZMHbrlvhF+NvJY83WPuOsfxBZb/vzhExk9jwc2po8a+NDBq8Xx3mVOTShrB
+        3zaCPz2DyXowRHoeBStTkHKNR8qXhN8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658909929;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Afwxwpqi4PHP9gQvy42ArBsEBv8pS8AltwvoI3yDjtQ=;
+        b=T/Rt4UlJHJV8xdC1uyul6jxikYFTC+ckRjAFVcJEH2PNDpg4Qiiv4m4Yl2xCryj6mvEg4f
+        vO3emAdzQbsSFeCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 17D1E13ABC;
+        Wed, 27 Jul 2022 08:18:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id x+kHBen04GIwKgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 27 Jul 2022 08:18:49 +0000
+Date:   Wed, 27 Jul 2022 10:18:48 +0200
+Message-ID: <875yjjotnb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Matthieu CHARETTE <matthieu.charette@gmail.com>
+Cc:     lkp@intel.com, airlied@linux.ie, andrealmeid@igalia.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de
+Subject: Re: [PATCH] drm: Fix EDID firmware load on resume
+In-Reply-To: <20220727074152.43059-1-matthieu.charette@gmail.com>
+References: <202207172035.mtErdlaw-lkp@intel.com>
+        <20220727074152.43059-1-matthieu.charette@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,15 +72,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/07/22 15:55, Balsam CHIHI ha scritto:
-> Add Mediatek proprietary folder to upstream more thermal zone and cooler
-> drivers. Relocate the original thermal controller driver to it and rename
-> as soc_temp.c to show its purpose more clearly.
+On Wed, 27 Jul 2022 09:41:52 +0200,
+Matthieu CHARETTE wrote:
 > 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> Loading an EDID using drm.edid_firmware parameter makes resume to fail
+> after firmware cache is being cleaned. This is because edid_load() use a
+> temporary device to request the firmware. This cause the EDID firmware
+> not to be cached from suspend. And, requesting the EDID firmware return
+> an error during resume.
+> So the request_firmware() call should use a permanent device for each
+> connector. Also, we should cache the EDID even if no monitor is
+> connected, in case it's plugged while suspended.
+> 
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2061
+> Signed-off-by: Matthieu CHARETTE <matthieu.charette@gmail.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Can we simply cache the already loaded EDID bytes instead?
+Something like below (totally untested).
 
+
+thanks,
+
+Takashi
+
+-- 8< --
+diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+index 1c48d162c77e..b9d2803b518b 100644
+--- a/drivers/gpu/drm/drm_connector.c
++++ b/drivers/gpu/drm/drm_connector.c
+@@ -286,6 +286,7 @@ int drm_connector_init(struct drm_device *dev,
+ 	connector->status = connector_status_unknown;
+ 	connector->display_info.panel_orientation =
+ 		DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
++	connector->firmware_edid = NULL;
+ 
+ 	drm_connector_get_cmdline_mode(connector);
+ 
+@@ -485,6 +486,7 @@ void drm_connector_cleanup(struct drm_connector *connector)
+ 	ida_simple_remove(&dev->mode_config.connector_ida,
+ 			  connector->index);
+ 
++	kfree(connector->firmware_edid);
+ 	kfree(connector->display_info.bus_formats);
+ 	drm_mode_object_unregister(dev, &connector->base);
+ 	kfree(connector->name);
+diff --git a/drivers/gpu/drm/drm_edid_load.c b/drivers/gpu/drm/drm_edid_load.c
+index 37d8ba3ddb46..a38fe4e00e4a 100644
+--- a/drivers/gpu/drm/drm_edid_load.c
++++ b/drivers/gpu/drm/drm_edid_load.c
+@@ -253,6 +253,13 @@ static void *edid_load(struct drm_connector *connector, const char *name,
+ 			edid = new_edid;
+ 	}
+ 
++	connector->firmware_edid = drm_edid_duplicate((struct edid *)edid);
++	if (!connector->firmware_edid) {
++		kfree(edid);
++		edid = ERR_PTR(-ENOMEM);
++		goto out;
++	}
++
+ 	DRM_INFO("Got %s EDID base block and %d extension%s from "
+ 	    "\"%s\" for connector \"%s\"\n", (builtin >= 0) ? "built-in" :
+ 	    "external", valid_extensions, valid_extensions == 1 ? "" : "s",
+@@ -269,6 +276,12 @@ struct edid *drm_load_edid_firmware(struct drm_connector *connector)
+ 	char *edidname, *last, *colon, *fwstr, *edidstr, *fallback = NULL;
+ 	struct edid *edid;
+ 
++	/* already loaded? */
++	if (connector->firmware_edid) {
++		edid = drm_edid_duplicate(connector->firmware_edid);
++		return edid ? edid : ERR_PTR(-ENOMEM);
++	}
++
+ 	if (edid_firmware[0] == '\0')
+ 		return ERR_PTR(-ENOENT);
+ 
+diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+index 3ac4bf87f257..b5d0c87327a3 100644
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -1528,6 +1528,8 @@ struct drm_connector {
+ 	enum drm_connector_force force;
+ 	/** @override_edid: has the EDID been overwritten through debugfs for testing? */
+ 	bool override_edid;
++	/** @firmware_edid: the cached firmware EDID bytes */
++	struct edid *firmware_edid;
+ 	/** @epoch_counter: used to detect any other changes in connector, besides status */
+ 	u64 epoch_counter;
+ 

@@ -2,67 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C2D582629
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0973A58262B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbiG0MLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        id S232764AbiG0MMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbiG0MLV (ORCPT
+        with ESMTP id S232725AbiG0MMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:11:21 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7DB43307;
-        Wed, 27 Jul 2022 05:11:19 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LtCK32j8szl8pD;
-        Wed, 27 Jul 2022 20:10:15 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDnSWliK+Fi5YEBBQ--.61681S3;
-        Wed, 27 Jul 2022 20:11:16 +0800 (CST)
-Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-To:     Paolo VALENTE <paolo.valente@unimore.it>
-Cc:     Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220610021701.2347602-1-yukuai3@huawei.com>
- <20220610021701.2347602-4-yukuai3@huawei.com>
- <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
- <abdbb5db-e280-62f8-0670-536fcb8ec4d9@huaweicloud.com>
- <C2CF100A-9A7C-4300-9A70-1295BC939C66@unimore.it>
- <9b2d667f-6636-9347-08a1-8bd0aa2346f2@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
-Date:   Wed, 27 Jul 2022 20:11:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 27 Jul 2022 08:12:13 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FCA3DF2B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:12:12 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id h12so2042498ljg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=10ubXVPVFe54DessUBAS/FFT1kv6KKtGGGZr+g/3Ww0=;
+        b=sVrtDV9tkd7k9d14Bok3CvF2/a6VNOb3pxYAIgeqYAFfAGFskKkuSOdXWuxFTMvSjO
+         1jacSHBH+UGugbQD9PkAbVbW1Js6Co5HbawZnZq1xDNbfIc6Umd96s7jFgoWUVJNqiw8
+         f+z7Vp57N23CStMykgKOrKSlxpwji0uMfMDbGQh7FXF+eyEnA7vx6HILPhhoYzfXllEx
+         JYqAksVlbAE/tHdaFmxbhDX9VAL1FCHtH9KVVmy3i5OKFGyep+aYgD9o7VBjZQdvvmhT
+         t5jv/GAAJsN/4fWoisNzawQ+VCyTpagmY19yPDGAhZlz6/W+zue0BBWT6KgL8iueuRt/
+         uYlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=10ubXVPVFe54DessUBAS/FFT1kv6KKtGGGZr+g/3Ww0=;
+        b=QTepR105FMZ0yys31S1oK7Qbs0Iuwq+ixZMh4TePCRA2VN0IXZaekIPMn5qNYOsAKI
+         1yRt+s7bhoIrxcM4pm/tTfT93NAhprNd5JnlatedNvvEnAZuuCtonYVxGURhXh4QkV5r
+         EgOY9zdw54TtGfS7WFk/sesKXuPotxzXNtho1vjGD+7+vbADNAjpuVtXR0VqLdcas5ZX
+         Rug+fWs5lQG+g0fBn0UvMiCP7EXwBJR1Xq8Gz/jWSMalkliQZ5J7U2r98eoaA6xR3TR6
+         SuBohS6u7OG1EzZY3VbC39GE3k5x/nYSeLoGGl2/4/709+POk3Cg80vRA+rHyiVLjFXD
+         +PGg==
+X-Gm-Message-State: AJIora+t9dnoV0LGfmk740VnNZFP+WyyN/tGDT/cfGaaM1Y9+1sthP+i
+        CjtuURCe8IauTPsy2lfzolVanQ==
+X-Google-Smtp-Source: AGRyM1sIeYWy7b3sDYVyaroNvjI7uSsdun+0oCSFKP4gpTGnNIJzeDZ0Zs0O9UaW7IT44ATj/IgObA==
+X-Received: by 2002:a05:651c:11d2:b0:25d:e9a1:b104 with SMTP id z18-20020a05651c11d200b0025de9a1b104mr8263054ljo.116.1658923931080;
+        Wed, 27 Jul 2022 05:12:11 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id 197-20020a2e05ce000000b0025d70efeaaasm3912382ljf.75.2022.07.27.05.12.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 05:12:10 -0700 (PDT)
+Message-ID: <ccfd96cd-756a-da73-178a-4a7e0e4de410@linaro.org>
+Date:   Wed, 27 Jul 2022 14:12:09 +0200
 MIME-Version: 1.0
-In-Reply-To: <9b2d667f-6636-9347-08a1-8bd0aa2346f2@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 3/9] arm64: dts: bcmbca: update BCM4908 board dts files
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        William Zhang <william.zhang@broadcom.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com, f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220725055402.6013-1-william.zhang@broadcom.com>
+ <20220725055402.6013-4-william.zhang@broadcom.com>
+ <20220725233238.GA2960972-robh@kernel.org>
+ <1004391f-fb6c-5f84-de28-8f76dc3471e5@broadcom.com>
+ <0af44be8f5802e66011b4642de4632d4@milecki.pl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0af44be8f5802e66011b4642de4632d4@milecki.pl>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDnSWliK+Fi5YEBBQ--.61681S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxtrWfZr4ktF47Cr4fGFy3Jwb_yoW7Kr1kp3
-        yfKa17Ar4UXr1Sqr1Yq3WUXrySqryfAry8Wr1DJr1ftrnFyFn2qFnFvw4F9Fy8ZrZ3Jr12
-        vr1jg3sruw1UtFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,174 +84,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Paolo
+On 27/07/2022 12:39, Rafał Miłecki wrote:
+> On 2022-07-26 03:09, William Zhang wrote:
+>> On 07/25/2022 04:32 PM, Rob Herring wrote:
+>>> On Sun, Jul 24, 2022 at 10:53:56PM -0700, William Zhang wrote:
+>>>> Append "brcm,bcmbca" to compatible strings based on the new bcmbca
+>>>> binding rule for BCM4908 family based boards. This will break drivers
+>>>> that use the old compatible string for binding. Fortunately there is 
+>>>> no
+>>>> such usage in linux and u-boot.
+>>>
+>>> How does adding an additional compatible break things?
+>>> In theory when some crazy code tries to match the entire string. But 
+>>> not
+>> in linux, u-boot code and hopefully not in other bootloader and Os
+>> does that. But this does change an existing compatible string so
+>> Krzysztof suggested to add comment about the breakage in the commit
+>> message. I can remove this and send v3 if you guys think it is
+>> necessary.
+> 
+> Krzysztof commented on ABI breakage [1] when you tried removing
+> "brcm,bcm4908" from the "compatible" list in your patch
+> [RFC PATCH 3/3] arm64: dts: bcmbca: update bcm4808 board dts file [2]
+> 
+> In this version of your patch you don't remove "brcm,bcm4908" anymore so
+> this change doesn't break anything. Adding a new "compatible" string
+> doesn't break things. You can remove that info from the commit message.
 
-Are you still interested in this patchset?
+Thanks... It is second thing (after not existing Reviewed-by) attributed
+to me by William, although here probably by misunderstanding... So for
+clarity (obvious stuff is not always obvious to everyone):
+1. Removal of compatible is an ABI break.
+2. Add of compatible is not an ABI break.
 
-在 2022/07/20 19:38, Yu Kuai 写道:
-> Hi
->
-> 在 2022/07/20 19:24, Paolo VALENTE 写道:
->>
->>
->>> Il giorno 12 lug 2022, alle ore 15:30, Yu Kuai 
->>> <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
->>>
->>> Hi!
->>>
->>> I'm copying my reply with new mail address, because Paolo seems
->>> didn't receive my reply.
->>>
->>> 在 2022/06/23 23:32, Paolo Valente 写道:
->>>> Sorry for the delay.
->>>>> Il giorno 10 giu 2022, alle ore 04:17, Yu Kuai <yukuai3@huawei.com 
->>>>> <mailto:yukuai3@huawei.com>> ha scritto:
->>>>>
->>>>> Currently, bfq can't handle sync io concurrently as long as they
->>>>> are not issued from root group. This is because
->>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->>>>> bfq_asymmetric_scenario().
->>>>>
->>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>>>>
->>>>> Before this patch:
->>>>> 1) root group will never be counted.
->>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
->>>>> 3) Don't count if bfqg and it's child bfqgs complete all the 
->>>>> requests.
->>>>>
->>>>> After this patch:
->>>>> 1) root group is counted.
->>>>> 2) Count if bfqg have pending requests.
->>>>> 3) Don't count if bfqg complete all the requests.
->>>>>
->>>>> With this change, the occasion that only one group is activated 
->>>>> can be
->>>>> detected, and next patch will support concurrent sync io in the
->>>>> occasion.
->>>>>
->>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com 
->>>>> <mailto:yukuai3@huawei.com>>
->>>>> Reviewed-by: Jan Kara <jack@suse.cz <mailto:jack@suse.cz>>
->>>>> ---
->>>>> block/bfq-iosched.c | 42 ------------------------------------------
->>>>> block/bfq-iosched.h | 18 +++++++++---------
->>>>> block/bfq-wf2q.c    | 19 ++++---------------
->>>>> 3 files changed, 13 insertions(+), 66 deletions(-)
->>>>>
->>>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->>>>> index 0ec21018daba..03b04892440c 100644
->>>>> --- a/block/bfq-iosched.c
->>>>> +++ b/block/bfq-iosched.c
->>>>> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct 
->>>>> bfq_data *bfqd,
->>>>> void bfq_weights_tree_remove(struct bfq_data *bfqd,
->>>>>     struct bfq_queue *bfqq)
->>>>> {
->>>>> -struct bfq_entity *entity = bfqq->entity.parent;
->>>>> -
->>>>> -for_each_entity(entity) {
->>>>> -struct bfq_sched_data *sd = entity->my_sched_data;
->>>>> -
->>>>> -if (sd->next_in_service || sd->in_service_entity) {
->>>>> -/*
->>>>> -* entity is still active, because either
->>>>> -* next_in_service or in_service_entity is not
->>>>> -* NULL (see the comments on the definition of
->>>>> -* next_in_service for details on why
->>>>> -* in_service_entity must be checked too).
->>>>> -*
->>>>> -* As a consequence, its parent entities are
->>>>> -* active as well, and thus this loop must
->>>>> -* stop here.
->>>>> -*/
->>>>> -break;
->>>>> -}
->>>>> -
->>>>> -/*
->>>>> -* The decrement of num_groups_with_pending_reqs is
->>>>> -* not performed immediately upon the deactivation of
->>>>> -* entity, but it is delayed to when it also happens
->>>>> -* that the first leaf descendant bfqq of entity gets
->>>>> -* all its pending requests completed. The following
->>>>> -* instructions perform this delayed decrement, if
->>>>> -* needed. See the comments on
->>>>> -* num_groups_with_pending_reqs for details.
->>>>> -*/
->>>>> -if (entity->in_groups_with_pending_reqs) {
->>>>> -entity->in_groups_with_pending_reqs = false;
->>>>> -bfqd->num_groups_with_pending_reqs--;
->>>>> -}
->>>>> -}
->>>> With this part removed, I'm missing how you handle the following
->>>> sequence of events:
->>>> 1.  a queue Q becomes non busy but still has dispatched requests, so
->>>> it must not be removed from the counter of queues with pending reqs
->>>> yet
->>>> 2.  the last request of Q is completed with Q being still idle (non
->>>> busy).  At this point Q must be removed from the counter.  It seems to
->>>> me that this case is not handled any longer
->>> Hi, Paolo
->>>
->>> 1) At first, patch 1 support to track if bfqq has pending requests, 
->>> it's
->>> done by setting the flag 'entity->in_groups_with_pending_reqs' when the
->>> first request is inserted to bfqq, and it's cleared when the last
->>> request is completed(based on weights_tree insertion and removal).
->>>
->>
->> In patch 1 I don't see the flag cleared for the request-completion 
->> event :(
->>
->> The piece of code involved is this:
->>
->> static void bfq_completed_request(struct bfq_queue *bfqq, struct 
->> bfq_data *bfqd)
->> {
->> u64 now_ns;
->> u32 delta_us;
->>
->> bfq_update_hw_tag(bfqd);
->>
->> bfqd->rq_in_driver[bfqq->actuator_idx]--;
->> bfqd->tot_rq_in_driver--;
->> bfqq->dispatched--;
->>
->> if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq)) {
->> /*
->> * Set budget_timeout (which we overload to store the
->> * time at which the queue remains with no backlog and
->> * no outstanding request; used by the weight-raising
->> * mechanism).
->> */
->> bfqq->budget_timeout = jiffies;
->>
->> bfq_weights_tree_remove(bfqd, bfqq);
->> }
->> ...
->>
->> Am I missing something?
->
-> I add a new api bfq_del_bfqq_in_groups_with_pending_reqs() in patch 1
-> to clear the flag, and it's called both from bfq_del_bfqq_busy() and
-> bfq_completed_request(). I think you may miss the later:
->
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 0d46cb728bbf..0ec21018daba 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -6263,6 +6263,7 @@ static void bfq_completed_request(struct 
-> bfq_queue *bfqq, struct bfq_data *bfqd)
->           */
->          bfqq->budget_timeout = jiffies;
->
-> +        bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
->          bfq_weights_tree_remove(bfqd, bfqq);
->      }
->
-> Thanks,
-> Kuai
->>
->> Thanks,
->> Paolo
+See also:
+https://elixir.bootlin.com/linux/v5.19-rc8/source/Documentation/devicetree/bindings/ABI.rst#L26
 
+Best regards,
+Krzysztof

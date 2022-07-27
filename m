@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFE8581CFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE44581D03
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240132AbiG0BRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 21:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
+        id S240138AbiG0BTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 21:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiG0BRf (ORCPT
+        with ESMTP id S229906AbiG0BTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 21:17:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88132A261;
-        Tue, 26 Jul 2022 18:17:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F5D616D4;
-        Wed, 27 Jul 2022 01:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95DAC433D7;
-        Wed, 27 Jul 2022 01:17:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658884653;
-        bh=yHdFI7UZExa1GxsmSAJPPFlPx1kKFocZoTBH3mG9NMo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mdshVMdvfzhti6LRuDN6H7FqRhIPEHgJQTuekQbRk/mzcXXE8ynF8tli3utiZLp5O
-         QxJiEvHmZWAdKm0SYEtppBgNd1fXBwwgNxA1xN/58n6z/5G0fZLq1uX8wd9Gu+Ny9s
-         3BZFdmz9bgUxy7tc8D9OXGQTNnxX+AolldBOTMuoHbo/jeOpa7QOB7GpQQczyvNU5w
-         Mb6G9CKihsYC/NAcfU+R9sFAv01z9O5gFdLey2i/K+Dz7mddR0bFAiv8OXIQMYhtc1
-         +saf5fv4mak89IDZ4Wam0A9XfwnyABJR6qN7sfsaT3/bqbqGI+zbkKoRM2ZPP2tLqf
-         rmhz8+MSk3NtQ==
-Message-ID: <40928cfc-150c-8714-bb83-21d325ce93e5@kernel.org>
-Date:   Tue, 26 Jul 2022 19:17:30 -0600
+        Tue, 26 Jul 2022 21:19:20 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F4B39B96
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:19:19 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-f2a4c51c45so20832212fac.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=N3xrUzjUYFPtoTbDR74Lo54Yq/ddaaWSnnHdJbvIshU=;
+        b=csS2R2IZMt5wdMU536xlBF5TJRObaR2yn7fl6kdl10elppqpFKNDU/b53ozNfjcDs+
+         4lolN0ww4/KdeEm38w/ObNhLwoBXSFG28PR/PSpXS2UcOXhNPzeR/HfcqQj2Ygct05zn
+         /TYnlGGQgtmaODLNi0aZqMKMtGMizkm7WkF1k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=N3xrUzjUYFPtoTbDR74Lo54Yq/ddaaWSnnHdJbvIshU=;
+        b=k/3Y9sIkgTOkdjIv1SWzWIqxiG4uw8th0Qg8SOQeohZrxgxFof6jm+RMZ1HGZEC4R/
+         upjkb+DfOxDpoESpLQQla7VqrVTlfOlTZjus6m1HlD9s4SWDOPgQIaONNwl+OV84yKDP
+         yH8mf5Xw2+z91LXPUW/55MbwMOChQ4CFb5mJePzXWDf/twhyf1f+1WqvmGUJ/GhxMdU+
+         OClN7sjl+79k447mk1Uj/+Q7c3t2KkHy4E6rQ4hVbW7Szhsx24HxPb34R3s9nkHMrtWa
+         +/Ljh4v7A6czc9YzQ88NFA6OoMdlDAndeStxp7fyYcdUmgAliHGQ5blR5ULoR6IFdL4w
+         JLTw==
+X-Gm-Message-State: AJIora+N6+PsA82BpVKOacsO7iqvanHWhdiFxt1bSqEDkxPic+ZNo2O9
+        rZce9225xFjm3BVT8++HTvn11mp2cVQj+uwcM9bwQw==
+X-Google-Smtp-Source: AGRyM1sITUa1kmugE3kEUcG0/QUqaOExLTLf+OwZHOnylEFi62EbnydR2G47tkAROqiHwutJOJOI0DUIwm8VfP1A84s=
+X-Received: by 2002:a05:6870:9a17:b0:e9:3d1:f91a with SMTP id
+ fo23-20020a0568709a1700b000e903d1f91amr942074oab.44.1658884759251; Tue, 26
+ Jul 2022 18:19:19 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 26 Jul 2022 20:19:18 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v6 02/26] tcp: authopt: Remove more unused noops
-Content-Language: en-US
-To:     Leonard Crestez <cdleonard@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Philip Paeps <philip@trouble.is>
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1658815925.git.cdleonard@gmail.com>
- <2e9007e2f536ef2b8e3dfdaa1dd44dcc6bfc125f.1658815925.git.cdleonard@gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <2e9007e2f536ef2b8e3dfdaa1dd44dcc6bfc125f.1658815925.git.cdleonard@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <dc737abb-041b-491a-14f1-a584f9e64a3d@quicinc.com>
+References: <YrxtXdOsIZ5LKhdV@google.com> <de1f3f33-0a8c-eb87-694c-16ebf2835720@quicinc.com>
+ <Yr6oLlmfWRkiAZG7@google.com> <52c6ab15-1cd8-324e-4bcc-c449d8bceb19@quicinc.com>
+ <Yr66ZZqEnBApHYMA@google.com> <0481d3cc-4bb9-4969-0232-76ba57ff260d@quicinc.com>
+ <YsLhxx+L3+GJDRyO@google.com> <bcc5f059-b991-296a-bba6-9cb1236097f2@quicinc.com>
+ <Ys1tYAO39LKzEAOE@google.com> <dc737abb-041b-491a-14f1-a584f9e64a3d@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 26 Jul 2022 20:19:18 -0500
+Message-ID: <CAE-0n528QaTtZFp=WAaHShegFRpKVN_67jQfUJTtsRPr6s--zA@mail.gmail.com>
+Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+To:     Lee Jones <lee.jones@linaro.org>, Mark Brown <broonie@kernel.org>,
+        Satya Priya Kakitapalli <quic_c_skakit@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 12:15 AM, Leonard Crestez wrote:
-> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
-> ---
->  include/net/tcp_authopt.h | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
-> index adf325c260d5..bc2cff82830d 100644
-> --- a/include/net/tcp_authopt.h
-> +++ b/include/net/tcp_authopt.h
-> @@ -60,14 +60,10 @@ DECLARE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
->  void tcp_authopt_clear(struct sock *sk);
->  int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen);
->  int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key);
->  int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen);
->  #else
-> -static inline int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key)
-> -{
-> -	return -ENOPROTOOPT;
-> -}
->  static inline void tcp_authopt_clear(struct sock *sk)
->  {
->  }
->  #endif
->  
-added in the previous patch, so this one should be folded into patch 1
+Quoting Satya Priya Kakitapalli (Temp) (2022-07-21 23:31:16)
+>
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 regulator-name =
+=3D "pm8008_l6";
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 };
+>
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 pm8008_l7: ldo7@4600 {
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 reg =3D <0x4600=
+>;
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 regulator-name =
+=3D "pm8008_l7";
+>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 };
+>  =C2=A0=C2=A0 =C2=A0};
+> };
+>
+>
+> Stephen/Mark, Please do let me know if you are OK with this design.
+>
+
+I was happy with the previous version of the DT node. That had one node
+for the "pm8008 chip", which is important because it really is one
+package. Why isn't that possible to implement and also register i2c
+devices on the i2c bus for the second address?

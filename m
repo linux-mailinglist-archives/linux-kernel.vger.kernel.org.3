@@ -2,126 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2DE583245
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD57583249
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242061AbiG0SoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+        id S239526AbiG0SpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233678AbiG0SoF (ORCPT
+        with ESMTP id S239416AbiG0Soy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:44:05 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12BA11E5BF
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:40:44 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id o13so7439699edc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:40:44 -0700 (PDT)
+        Wed, 27 Jul 2022 14:44:54 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E569BA0E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:41:23 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id j1-20020a4ab1c1000000b0043576bcb9b1so3328846ooo.10
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:41:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=fvcBspaXwtQ8UlPkEV+dRJPq7S+l9Y7n+jrnxZWjDBc=;
-        b=W7zYwejzKcjmsfHqUm2v6YWHlBkLZ0/XcurfEMRBRJD2c+2wA28gDiDH+tAOWeqUBX
-         LzeXW/PMHjUupnWeQe8NAwDszG8t3skLjD689OPl68wBRdro/GMMdLV4l7xkDl2yMIxZ
-         zcIDGOaVUzMZbXZFOIIqveayAbIJ8CgSdQ18s=
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VXHqyZDYmIQ3rpqxptc15nYDRULliBEgKqonht7y21s=;
+        b=KfA5hlXNMKatVFo7kjZB6fHQZh0bPOashrO56ytvMrdaUFnESzhb+pcJ+HV9wGgvTx
+         kqumxc/h9xexjEi+9nIHmPtpScepB1PhfpoECzSoYSpAq10qe+ymLX1uW2pAK2UOvYEm
+         FZrnEPUti3VwIjw5wkUf5iyeDr4pgPc56E5GeR3S363LfneRFu7x+tV5vJgSZ3f0FZhR
+         1eYYuIZpj2AwNqV/pDnzFK6pMtXYr21A/4/f90mzGYGzCJYF1OQa3omqkt0qlMyYJM78
+         hRmi6DMT/mfbpm1/hTgSJOIk9Y2FJAfWN9RFUR3WNyxsBd4pDQLjqW7OXqcT2DRmNIN/
+         9h2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fvcBspaXwtQ8UlPkEV+dRJPq7S+l9Y7n+jrnxZWjDBc=;
-        b=jY+tzJEEpbc3jeTzBBiChNkG642NaxxuTGZ89E67EAiaWIBMoQO92XTiXp4QkypViV
-         6aTiFijuZInRj7zjNFms8eT7N4otm8LUE1M7gqPorMnZLtj2jUu43y5chLqLWEY+Pe0q
-         wsxBIKiaLQEtUDf9kv+BJXDmOuVNiRfiWNWrhT9evWHfdC0dlH29KcsKrVHOIJHsxycw
-         S6r0DWVpzNDm98Cp5lW1e5LeZQ9xh8jdaRfuRF/wPjO3K9F5s+VCOAdzLhVENzo4C/M/
-         vhxdlh84YlC0vZG/939K1T58jhNs5HmB3DwDelgnulk+jwy94wPqNQFxb4ofHTMwGVCZ
-         i6tA==
-X-Gm-Message-State: AJIora9fm/MU9MAqFOkQOfgEDJzrnrAwpBdjYuwC3I4CCSZBHIKyPx8U
-        gt4wG+P+iCDmJSySMB0Tx62c3zQDyhfOW8OK4qM=
-X-Google-Smtp-Source: AGRyM1tr2bnRXGCChd+C2x2o7RPj5yp0gmeStE1n82QufEqy+OBKt0mYQoPKmVfXitbk6zhVCjb34w==
-X-Received: by 2002:a05:6402:11cb:b0:43c:c7a3:ff86 with SMTP id j11-20020a05640211cb00b0043cc7a3ff86mr2539002edw.383.1658943642627;
-        Wed, 27 Jul 2022 10:40:42 -0700 (PDT)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
-        by smtp.gmail.com with ESMTPSA id y19-20020aa7d513000000b0043a7293a03dsm10580045edq.7.2022.07.27.10.40.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 10:40:40 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id h8so25506061wrw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:40:39 -0700 (PDT)
-X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
- c18-20020adffb12000000b0020c79b2a200mr15255140wrr.617.1658943639429; Wed, 27
- Jul 2022 10:40:39 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VXHqyZDYmIQ3rpqxptc15nYDRULliBEgKqonht7y21s=;
+        b=2haRk5Yd50tNot2eCt+9q/7J35cji1sOG/rSSgiKs6pRmQoS2qyMaMARtQ6iuRNrX7
+         UrQZADsF926ToSo1osko9fNCqHK0EBG5n0aLcArRoL7zydttcGtnYLgMl9cvBPg4iBAU
+         63EIt2rH+mFXsBntQ/EajT/S5iC1y8wJdMxz1Y03/BK/5396hOMu1xI7leksO05wZ5GN
+         zBYQTZkzO1ce4VHbi+b/4JcwF0E4H1BXtXrCWar5L0Ha0tZIh8X33WJLUO2sXYJgpWxt
+         /dU5pgwN452oxm/JIRoCx4bObGQonuBtr0oOcitBQs0PFTLN/QlDu3ZeF0n4N+hqU6Kc
+         nLlw==
+X-Gm-Message-State: AJIora+nISYxUvRvg9wM/kQO4+3UNHDjUAV3nR+HTcTlJktXA+Md+Lu/
+        6OG6Gp1prvwz13VDa3dxKIiuc1ykBANJ0Led0zsJhQ==
+X-Google-Smtp-Source: AGRyM1uObxFbk/OdalJ5bp779OxgIf3N8kPgC9BFL6XJs+LvsaPS3cBTKwyifuXYvvSAj9WSxRlU6+FIFIz5WVAJV4s=
+X-Received: by 2002:a4a:6550:0:b0:435:f3e8:8d3e with SMTP id
+ z16-20020a4a6550000000b00435f3e88d3emr3987894oog.13.1658943682324; Wed, 27
+ Jul 2022 10:41:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220726212354.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
- <20220727160320.GA2755147-robh@kernel.org>
-In-Reply-To: <20220727160320.GA2755147-robh@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 27 Jul 2022 10:40:26 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U8ek0FR=hZwemK5JcbUP=JsnRTtv7WzJKmOb-UFwHfXA@mail.gmail.com>
-Message-ID: <CAD=FV=U8ek0FR=hZwemK5JcbUP=JsnRTtv7WzJKmOb-UFwHfXA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: document zoglin board
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bob Moragues <moragues@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bob Moragues <moragues@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20220727064321.2953971-1-mw@semihalf.com> <20220727064321.2953971-7-mw@semihalf.com>
+ <20220727143147.u6yd6wqslilspyhw@skbuf> <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
+ <CAHp75Vfn+tfuzxU31kVxp3sMAoT=ve3tcfDv84Omm-1tqvW3+w@mail.gmail.com>
+In-Reply-To: <CAHp75Vfn+tfuzxU31kVxp3sMAoT=ve3tcfDv84Omm-1tqvW3+w@mail.gmail.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Wed, 27 Jul 2022 19:41:10 +0200
+Message-ID: <CAPv3WKdyFWgqfObCU=0e29BT8Lq_cQ6WMkvXCDT-DRCueDsGFw@mail.gmail.com>
+Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to fwnode_find_net_device_by_node()
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Jul 27, 2022 at 9:03 AM Rob Herring <robh@kernel.org> wrote:
+=C5=9Br., 27 lip 2022 o 19:00 Andy Shevchenko <andy.shevchenko@gmail.com> n=
+apisa=C5=82(a):
 >
-> On Tue, Jul 26, 2022 at 09:24:31PM -0700, Bob Moragues wrote:
-> > Zoglin is a Hoglin Chromebook with SPI Flash reduced from 64MB to 8MB.
-> > Zoglin is identical to Hoglin except for the SPI Flash.
-> > The actual SPI Flash is dynamically probed at and not specified in DTS.
-> >
-> > Signed-off-by: Bob Moragues <moragues@chromium.org>
-> >
-> > Signed-off-by: Bob Moragues <moragues@google.com>
-> > ---
-> >
-> >  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> > index 581485392404..63091df3cbb3 100644
-> > --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> > @@ -475,6 +475,7 @@ properties:
-> >
-> >        - description: Qualcomm Technologies, Inc. sc7280 CRD platform (newest rev)
-> >          items:
-> > +          - const: google,zoglin
-> >            - const: google,hoglin
-> >            - const: qcom,sc7280
+> On Wed, Jul 27, 2022 at 5:24 PM Marcin Wojtas <mw@semihalf.com> wrote:
+> > =C5=9Br., 27 lip 2022 o 16:31 Vladimir Oltean <olteanv@gmail.com> napis=
+a=C5=82(a):
+> > > On Wed, Jul 27, 2022 at 08:43:19AM +0200, Marcin Wojtas wrote:
 >
-> Is just "google,hoglin", "qcom,sc7280" no longer valid? If it is valid,
-> you need another entry.
+> ...
+>
+> > > > +     dev =3D class_find_device(&net_class, NULL, fwnode, fwnode_fi=
+nd_parent_dev_match);
+> > >
+> > > This needs to maintain compatibility with DSA masters that have
+> > > dev->of_node but don't have dev->fwnode populated.
+> >
+> > Do you mean a situation analogous to what I addressed in:
+> > [net-next: PATCH v3 4/8] net: mvpp2: initialize port fwnode pointer
+> > ?
+> >
+> > I found indeed a couple of drivers that may require a similar change
+> > (e.g. dpaa2).
+> >
+> > IMO we have 2 options:
+> > - update these drivers
+>
+> Not Vladimir here, but my 2cents that update is best and elegant, it
+> can be done even before this series.
+>
 
-If it makes people happy to have another entry then it wouldn't hurt,
-but it has no long term benefit and I would recommend against it. The
-next patch in this series changes the existing "hoglin" device tree to
-have all 3 compatible strings and thus when both patches land then
-make dtbs_check will pass. I assume that is the only goal of
-documenting these boards here. Certainly if you had a device tree that
-had only "google,zoglin" it would boot fine on zoglin devices and if
-you had a device tree that had only "google,hoglin" it would boot fine
-on hoglin device. This is true of all of the entries for Chromebooks
-that have multiple compatible entries.
+In general I agree it's desired, but I'm not sure if we can catch all
+cases just by reading code or rather base on regression reports
+later...
 
--Doug
+Best regards,
+Marcin

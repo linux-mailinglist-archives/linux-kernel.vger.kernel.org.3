@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5E8582B36
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8862582F39
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236829AbiG0Q3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S241978AbiG0RWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237254AbiG0Q2g (ORCPT
+        with ESMTP id S241913AbiG0RTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:28:36 -0400
+        Wed, 27 Jul 2022 13:19:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C351D50188;
-        Wed, 27 Jul 2022 09:24:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF22E5D0D5;
+        Wed, 27 Jul 2022 09:44:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E30EA617F3;
-        Wed, 27 Jul 2022 16:24:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E87B0C433D6;
-        Wed, 27 Jul 2022 16:24:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39B7F60DDB;
+        Wed, 27 Jul 2022 16:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F3A3C433C1;
+        Wed, 27 Jul 2022 16:44:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939060;
-        bh=RcrKG+om7QizUr7G5MTJNYhf8ZbjqH7rKkIdTUsFlvo=;
+        s=korg; t=1658940251;
+        bh=8TAjTG3BVgjt6+mej6insq8utXxrMq0kT2BsFUAqqQA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U3ZY6Cpgq0BjE4NOIInFlrC2VEP5myIV5Hu0KLisCMwQo1WzJM087cgiBeDSGf6Z5
-         N4MsKERxXuhIUbzBPBtNVnikCP4bU4lpFAfi5wsqGf64ncJgnyVoQPmfCM8FF75/K1
-         61WZuzS1In9uCdbLAF7gbOTUDiPCKutrxi5YrmGo=
+        b=orB/p/fmPQKpEBjcW4pJNSJdhZiBxIGfzcwgSbu/xdi8nvcPIaAcgfggg+nYlDQES
+         9xWPWUallzFOSaoBkagHs6ahwKvCncZcZMVQ+P1RqrPJRDEuBWBfkbCrdbQ83ivywk
+         NEsmsPHxfL5Y8FNVdOrrzl77Rpc3Epj15iVnvx2I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Carl Vanderlip <quic_carlv@quicinc.com>
-Subject: [PATCH 4.14 36/37] PCI: hv: Reuse existing IRTE allocation in compose_msi_msg()
+        stable@vger.kernel.org,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Adam Guerin <adam.guerin@intel.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 158/201] crypto: qat - set to zero DH parameters before free
 Date:   Wed, 27 Jul 2022 18:11:02 +0200
-Message-Id: <20220727161002.297940565@linuxfoundation.org>
+Message-Id: <20220727161034.370335483@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,68 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
 
-commit b4b77778ecc5bfbd4e77de1b2fd5c1dd3c655f1f upstream.
+[ Upstream commit 1731160ff7c7bbb11bb1aacb14dd25e18d522779 ]
 
-Currently if compose_msi_msg() is called multiple times, it will free any
-previous IRTE allocation, and generate a new allocation.  While nothing
-prevents this from occurring, it is extraneous when Linux could just reuse
-the existing allocation and avoid a bunch of overhead.
+Set to zero the context buffers containing the DH key before they are
+freed.
+This is a defense in depth measure that avoids keys to be recovered from
+memory in case the system is compromised between the free of the buffer
+and when that area of memory (containing keys) gets overwritten.
 
-However, when future IRTE allocations operate on blocks of MSIs instead of
-a single line, freeing the allocation will impact all of the lines.  This
-could cause an issue where an allocation of N MSIs occurs, then some of
-the lines are retargeted, and finally the allocation is freed/reallocated.
-The freeing of the allocation removes all of the configuration for the
-entire block, which requires all the lines to be retargeted, which might
-not happen since some lines might already be unmasked/active.
-
-4.14 backport - driver location change to host/pci-hyperv.c
-
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Tested-by: Dexuan Cui <decui@microsoft.com>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/1652282582-21595-1-git-send-email-quic_jhugo@quicinc.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
-Signed-off-by: Carl Vanderlip <quic_carlv@quicinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org
+Fixes: c9839143ebbf ("crypto: qat - Add DH support")
+Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Reviewed-by: Adam Guerin <adam.guerin@intel.com>
+Reviewed-by: Wojciech Ziemba <wojciech.ziemba@intel.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/host/pci-hyperv.c |   16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/crypto/qat/qat_common/qat_asym_algs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/pci/host/pci-hyperv.c
-+++ b/drivers/pci/host/pci-hyperv.c
-@@ -1128,6 +1128,15 @@ static void hv_compose_msi_msg(struct ir
- 	u32 size;
- 	int ret;
- 
-+	/* Reuse the previous allocation */
-+	if (data->chip_data) {
-+		int_desc = data->chip_data;
-+		msg->address_hi = int_desc->address >> 32;
-+		msg->address_lo = int_desc->address & 0xffffffff;
-+		msg->data = int_desc->data;
-+		return;
-+	}
-+
- 	pdev = msi_desc_to_pci_dev(irq_data_get_msi_desc(data));
- 	dest = irq_data_get_effective_affinity_mask(data);
- 	pbus = pdev->bus;
-@@ -1136,13 +1145,6 @@ static void hv_compose_msi_msg(struct ir
- 	if (!hpdev)
- 		goto return_null_message;
- 
--	/* Free any previous message that might have already been composed. */
--	if (data->chip_data) {
--		int_desc = data->chip_data;
--		data->chip_data = NULL;
--		hv_int_desc_free(hpdev, int_desc);
--	}
--
- 	int_desc = kzalloc(sizeof(*int_desc), GFP_ATOMIC);
- 	if (!int_desc)
- 		goto drop_reference;
+diff --git a/drivers/crypto/qat/qat_common/qat_asym_algs.c b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+index b0b78445418b..5633f9df3b6f 100644
+--- a/drivers/crypto/qat/qat_common/qat_asym_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+@@ -420,14 +420,17 @@ static int qat_dh_set_params(struct qat_dh_ctx *ctx, struct dh *params)
+ static void qat_dh_clear_ctx(struct device *dev, struct qat_dh_ctx *ctx)
+ {
+ 	if (ctx->g) {
++		memset(ctx->g, 0, ctx->p_size);
+ 		dma_free_coherent(dev, ctx->p_size, ctx->g, ctx->dma_g);
+ 		ctx->g = NULL;
+ 	}
+ 	if (ctx->xa) {
++		memset(ctx->xa, 0, ctx->p_size);
+ 		dma_free_coherent(dev, ctx->p_size, ctx->xa, ctx->dma_xa);
+ 		ctx->xa = NULL;
+ 	}
+ 	if (ctx->p) {
++		memset(ctx->p, 0, ctx->p_size);
+ 		dma_free_coherent(dev, ctx->p_size, ctx->p, ctx->dma_p);
+ 		ctx->p = NULL;
+ 	}
+-- 
+2.35.1
+
 
 

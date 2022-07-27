@@ -2,117 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578F958324D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1269583250
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239386AbiG0SqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S238835AbiG0SsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240646AbiG0SqJ (ORCPT
+        with ESMTP id S243303AbiG0Sru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:46:09 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FD962A42;
-        Wed, 27 Jul 2022 10:43:05 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z18so10059795edb.10;
-        Wed, 27 Jul 2022 10:43:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=C2Ju39ZLdGUdTnSwgOEZB94uWj4r/akcygfkFhuyTdA=;
-        b=iVeMmgCrZrtHa1AAHFSj5VzI8wh9aQnb0x3HAs3cA5lSln5st+kTZWbCfk4bM+Nbrt
-         7F1YufeHs69Wyu2UhGoskeRwJDm+G01f76DTt165iM0pSQZnbD/8KjSefw7uEsj3jW/H
-         kIlx1UtaAKp9OQMj74ufsLa0bDeoR1/mMjM0M7BQBiRZ9VEeW/95U5pmG6o4lJGGOfVo
-         SRzUUzAQ1Mpqs+Mb5OswjO0FRIkDprxDSmPYj1tNG8957jtIFB3SdxWPfcW1hPxpHD43
-         Dtu7PuH9D8Ha27HXj4vJPYqcJas7IY0OC5MpuHTamCppSezlaHF0TmTOSoVZ2Ig0wrkJ
-         uKkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=C2Ju39ZLdGUdTnSwgOEZB94uWj4r/akcygfkFhuyTdA=;
-        b=oxI99tUMEnCdLJr/zGZNUerekpw3Vgh+93OB6QFWUYDilNmBKjfe9keIvu1QNoY1ws
-         RIKJHhFHmrJKMJjDk4Mzh4uKfXxtBzWlR6l4gDoY1V0pycZ/CncarNU4AvYBdJjmcmYD
-         Ta1Ht3TRlFlTqrWYl36LU17ZqrFgk1YohTj11UjuNG4a1F96RUhAncjy2ycGXrjEEdtz
-         DLzpr7FBF9Zop2/SiJJjv9Fvyujol2WymsKKEfNDWQBDbaOxv/EQEkhDZBhxNLJcvxOg
-         FXMimEVcaplZpRZUsMzjHwLfyE74WjLhtetuJAvS3dbdgX5QUinnkXCqEGg7zcJOh5nm
-         Z3sQ==
-X-Gm-Message-State: AJIora/HmHQphDwC0b6TP30XUmxxBYkWaTXLsjtAW9GnAVcIuy91raIV
-        +hDIxm0lEoTfqNaojoaf2tU=
-X-Google-Smtp-Source: AGRyM1uKNauI17QJV0ufqjFQBZKjgQLkYqFfiUDe8XdhtEZ0bep5kJzH3x2r1J1F0TlIwkONs9YFeg==
-X-Received: by 2002:a05:6402:3514:b0:43b:d87c:7a99 with SMTP id b20-20020a056402351400b0043bd87c7a99mr23245114edd.43.1658943784036;
-        Wed, 27 Jul 2022 10:43:04 -0700 (PDT)
-Received: from [10.176.234.249] ([137.201.254.41])
-        by smtp.googlemail.com with ESMTPSA id j16-20020a50ed10000000b0043ab36d6019sm10506558eds.9.2022.07.27.10.43.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 10:43:03 -0700 (PDT)
-Message-ID: <1f8e95da0c92f92937b5455a45430c939539d524.camel@gmail.com>
-Subject: Re: [PATCH v4 4/7] scsi: ufs: wb: Add explicit flush sysfs attribute
-From:   Bean Huo <huobean@gmail.com>
-To:     j-young.choi@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 27 Jul 2022 19:43:02 +0200
-In-Reply-To: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
-References: <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
-         <20220727070410epcms2p5206785e4d960b32dcbb6729710dab535@epcms2p5>
-         <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
-         <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p5>
-         <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Wed, 27 Jul 2022 14:47:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235FB8AEF7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:45:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DA596185C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 17:44:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A19C433C1;
+        Wed, 27 Jul 2022 17:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658943898;
+        bh=AWPi2RklWEjJYdEzBQpvRo0y/4ESXyMm2zfHiG6ND9g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=etgrUijw96ihMWnWUPv3FzrcFwxEpRCLr+oOGWV72DLbEwxwtQoDFJM2MeWFySaPz
+         VOKAb1tMManT0QS58XVOGXyj9H0HwmLcEWPFE0ZEhzvjaSYj+yuU0h6DIGWD/wdTUY
+         QohUfPXgUiTr4YYnUsJ8JZ6f0CDJkba73puBdNfNaYBF3QRpvNbQ6SULjYluTHjVw9
+         PCOgvcY43jreB4bOKDQRGIRcGzD0xcub70nrEW6QcXwulyfR8oghe+BEMQs3fZM9rz
+         GupPSX/fAsMDZKY6sD2oyk3LG3L7A//Q4t8iqRIM5W+iXv/s8UU2Oo7/u9gXWVVYmJ
+         97ORi+2uluY0Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oGl5c-00ATqn-6O;
+        Wed, 27 Jul 2022 18:44:56 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     tabba@google.com, oliver.upton@linux.dev, broonie@kernel.org,
+        Kalesh Singh <kaleshsingh@google.com>, mark.rutland@arm.com,
+        madvenka@linux.microsoft.com
+Cc:     andreyknvl@gmail.com, kvmarm@lists.cs.columbia.edu,
+        will@kernel.org, wangkefeng.wang@huawei.com,
+        catalin.marinas@arm.com, vincenzo.frascino@arm.com, ast@kernel.org,
+        kernel-team@android.com, elver@google.com, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        android-mm@google.com
+Subject: Re: [PATCH v6 00/17] KVM nVHE Hypervisor stack unwinder
+Date:   Wed, 27 Jul 2022 18:44:53 +0100
+Message-Id: <165894387426.1300284.3994289980983137161.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220726073750.3219117-1-kaleshsingh@google.com>
+References: <20220726073750.3219117-1-kaleshsingh@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tabba@google.com, oliver.upton@linux.dev, broonie@kernel.org, kaleshsingh@google.com, mark.rutland@arm.com, madvenka@linux.microsoft.com, andreyknvl@gmail.com, kvmarm@lists.cs.columbia.edu, will@kernel.org, wangkefeng.wang@huawei.com, catalin.marinas@arm.com, vincenzo.frascino@arm.com, ast@kernel.org, kernel-team@android.com, elver@google.com, mhiramat@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, android-mm@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTA3LTI3IGF0IDE2OjA4ICswOTAwLCBKaW55b3VuZyBDSE9JIHdyb3RlOgo+
-IFRoZXJlIGlzIHRoZSBmb2xsb3dpbmcgcXVpcmsgdG8gYnlwYXNzICJXQiBGbHVzaCIgaW4gV3Jp
-dGUgQm9vc3Rlci4KPiAKPiDCoMKgwqDCoMKgwqDCoMKgLSBVRlNIQ0lfUVVJUktfU0tJUF9NQU5V
-QUxfV0JfRkxVU0hfQ1RSTAo+IAo+IElmIHRoaXMgcXVpcmsgaXMgbm90IHNldCwgdGhlcmUgaXMg
-bm8ga25vYiB0aGF0IGNhbiBjb250cm9sICJXQgo+IEZsdXNoIi4KCj4gCj4gVGhlcmUgYXJlIHRo
-cmVlIGZsYWdzIHRoYXQgY29udHJvbCBXcml0ZSBCb29zdGVyIEZlYXR1cmUuCj4gwqDCoMKgwqDC
-oMKgwqDCoDEuIFdCIE9OL09GRgo+IMKgwqDCoMKgwqDCoMKgwqAyLiBXQiBIaWJlcm4gRmx1c2gg
-T04vT0ZGIChpbXBsaWNpdGx5KQo+IMKgwqDCoMKgwqDCoMKgwqAzLiBXQiBGbHVzaCBPTi9PRkYg
-KGV4cGxpY2l0KQo+IAo+IFRoZSBzeXNmcyBhdHRyaWJ1dGUgdGhhdCBjb250cm9scyB0aGUgV0Ig
-d2FzIGltcGxlbWVudGVkLiAoMSkKPiAKPiBJbiB0aGUgY2FzZSBvZiAiSGliZXJuIEZsdXNoIiwg
-aXQgaXMgYWx3YXlzIGdvb2QgdG8gdHVybiBvbi4KPiBDb250cm9sIG1heSBub3QgYmUgcmVxdWly
-ZWQuICgyKQo+IAo+IEZpbmFsbHksICJGbHVzaCIgbWF5IGJlIG5lY2Vzc2FyeSBiZWNhdXNlIHRo
-ZSBBdXRvLUhpYmVybjggaXMgbm90Cj4gc3VwcG9ydGVkIGluIGEgc3BlY2lmaWMgZW52aXJvbm1l
-bnQuCj4gU28gdGhlIHN5c2ZzIGF0dHJpYnV0ZSB0aGF0IGNvbnRyb2xzIHRoaXMgaXMgbmVjZXNz
-YXJ5LiAoMykKPiAKPiBSZXZpZXdlZC1ieTogQXZyaSBBbHRtYW4gPGF2cmkuYWx0bWFuQHdkYy5j
-b20+Cj4gU2lnbmVkLW9mZi1ieTogSmlueW91bmcgQ2hvaSA8ai15b3VuZy5jaG9pQHNhbXN1bmcu
-Y29tPgo+IC0tLQouLi4KPiAKPiArc3RhdGljIHNzaXplX3Qgd2JfYnVmX2ZsdXNoX2VuX3N0b3Jl
-KHN0cnVjdCBkZXZpY2UgKmRldiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgZGV2aWNlX2F0dHJp
-YnV0ZSAqYXR0ciwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb25zdCBjaGFyICpidWYsIHNpemVfdCBjb3Vu
-dCkKPiArewo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCB1ZnNfaGJhICpoYmEgPSBkZXZfZ2V0X2Ry
-dmRhdGEoZGV2KTsKPiArwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBpbnQgd2JfYnVmX2ZsdXNoX2Vu
-Owo+ICvCoMKgwqDCoMKgwqDCoHNzaXplX3QgcmVzOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBpZiAo
-dWZzaGNkX2lzX3diX2FsbG93ZWQoaGJhKSAmJgo+ICvCoMKgwqDCoMKgwqDCoMKgwqAgIShoYmEt
-PnF1aXJrcyAmIFVGU0hDSV9RVUlSS19TS0lQX01BTlVBTF9XQl9GTFVTSF9DVFJMKSkgewo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkZXZfd2FybihkZXYsICJJdCBpcyBub3QgYWxs
-b3dlZCB0byBjb25maWd1cmUgV0IgYnVmCj4gZmx1c2ghXG4iKTsKPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FT1BOT1RTVVBQOwo+ICvCoMKgwqDCoMKgwqDCoH0KPiAr
-CkhpIEoteW91bmcsCgpJIGRvbid0IHVuZGVyc3RhbmQgaGVyZSwgaWYgVUZTSENJX1FVSVJLX1NL
-SVBfTUFOVUFMX1dCX0ZMVVNIX0NUUkwgaXMKbm90IHNldCAobWFudWFsIGZsdXNoIGlzIG5vdCBk
-aXNhYmxlKSwgc28gd2UgY2Fubm90IG1hbnVhbGx5IGZsdXNoCmJ1ZmZlcj8gb3Igc2hvdWxkIHdl
-IGNoZWNrIGlmIEF1dG8tSGliZXJuOCBpcyBzdXBwb3J0ZWQ/CgpLaW5kIHJlZ2FyZHMsCkJlYW4K
+On Tue, 26 Jul 2022 00:37:33 -0700, Kalesh Singh wrote:
+> This is v6 of nVHE stacktrace support. The series is based on
+> arm64 for-next/stacktrace.
+> 
+> The previous versions were posted at:
+> v5: https://lore.kernel.org/r/20220721055728.718573-1-kaleshsingh@google.com/
+> v4: https://lore.kernel.org/r/20220715061027.1612149-1-kaleshsingh@google.com/
+> v3: https://lore.kernel.org/r/20220607165105.639716-1-kaleshsingh@google.com/
+> v2: https://lore.kernel.org/r/20220502191222.4192768-1-kaleshsingh@google.com/
+> v1: https://lore.kernel.org/r/20220427184716.1949239-1-kaleshsingh@google.com/
+> 
+> [...]
 
+Applied to next, thanks!
+
+[01/17] arm64: stacktrace: Add shared header for common stack unwinding code
+        commit: 6bf212c89c48458d8deef1c973678c62528dab04
+[02/17] arm64: stacktrace: Factor out on_accessible_stack_common()
+        commit: 15a59f19a015185bff90a68f601caec151dea4b4
+[03/17] arm64: stacktrace: Factor out unwind_next_common()
+        commit: be63c647fd28d25484257f5f36a008db7d99991d
+[04/17] arm64: stacktrace: Handle frame pointer from different address spaces
+        commit: 5b1b08619f50422c3e43d1fd7af257595a9e4a67
+[05/17] arm64: stacktrace: Factor out common unwind()
+        commit: f51e7146740514347d6c5526a2c393e224a19c0d
+[06/17] arm64: stacktrace: Add description of stacktrace/common.h
+        commit: 051ece6758cc10c2a6f1700ffe86d23fbb0b2553
+[07/17] KVM: arm64: On stack overflow switch to hyp overflow_stack
+        commit: 548ec3336f323db56260b312c232ab37285f0284
+[08/17] KVM: arm64: Stub implementation of non-protected nVHE HYP stack unwinder
+        commit: 573e1e8275f7167ddd533c6e4e0f500f8be4d974
+[09/17] KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
+        commit: 879e5ac7b2e4db05799a905b5a07fc9e5dedf651
+[10/17] KVM: arm64: Implement non-protected nVHE hyp stack unwinder
+        commit: db129d486ebdf4e3168282236f9d9008b42cac7e
+[11/17] KVM: arm64: Introduce hyp_dump_backtrace()
+        commit: 314a61dc31845c233e47c53db3fe6f34284034f4
+[12/17] KVM: arm64: Add PROTECTED_NVHE_STACKTRACE Kconfig
+        commit: 72adac1bd234002a65cef738e0eebfd6c2ce2e30
+[13/17] KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
+        commit: 6928bcc84bc4bd9a24a1cb1986418c3de76e1d99
+[14/17] KVM: arm64: Stub implementation of pKVM HYP stack unwinder
+        commit: 25aa73b6db1831527cd4f14bf0ddf8dceadec802
+[15/17] KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
+        commit: 871c5d931417d3c0e1aa32c9e04da1dc74703843
+[16/17] KVM: arm64: Implement protected nVHE hyp stack unwinder
+        commit: 75e9459e48d4867caf549e388bd4faabe1dbcbd3
+[17/17] KVM: arm64: Introduce pkvm_dump_backtrace()
+        commit: 3a7e1b55aad45c0cf86bd4e2f212bb9a61905142
+
+Cheers,
+
+	M.
+-- 
+Marc Zyngier <maz@kernel.org>
 

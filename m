@@ -2,141 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC7858224E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F9858227F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbiG0IlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 04:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S230087AbiG0IxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 04:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbiG0Ik7 (ORCPT
+        with ESMTP id S229504AbiG0IxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 04:40:59 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7F7459BB;
-        Wed, 27 Jul 2022 01:40:57 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lt6cY6bDSzkYKB;
-        Wed, 27 Jul 2022 16:38:21 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Jul 2022 16:40:49 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Jul
- 2022 16:40:47 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <djwong@kernel.org>
-CC:     <linux-xfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chenxiaosong2@huawei.com>, <guoxuenan@huawei.com>,
-        <liuyongqiang13@huawei.com>, <yi.zhang@huawei.com>,
-        <zhangxiaoxu5@huawei.com>
-Subject: [PATCH] xfs: fix NULL pointer dereference in xfs_getbmap()
-Date:   Wed, 27 Jul 2022 16:52:30 +0800
-Message-ID: <20220727085230.4073478-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 27 Jul 2022 04:53:17 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE1446D8B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:53:16 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id b21so12056790ljk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WT6Bf9Wd4u+/b76NZ7GFsefZqgMs6EzwTFrQjSlCe3w=;
+        b=P2Xf23tKUaRyXof5W984HGD9Q13GEbmMRWtao19Yy6tXQymySJSoLwBl8IJu5ivoeW
+         ZHAWQdljf+z/vec6k1AUBOC+6cCSWgo2AxWN6rzMP45tV3++m0ABQlibobCzXP5egc19
+         sliU3eo/trQLpCikT4ArHN6v4p+iHZXjlB0VswATrBYX63mTGndF63tmFxasgkbJ6mlV
+         nJIxVVo0e2MFB2uA1q32lpdasb/ZVBNcg9HU/25HKqdnn/iAmmygOJPjmaAx3rPcGoWX
+         3wWFZmFVDT9icClBwCfQ7ChFFzGpYPE3rIu2GAQnYG0eM0kUdRwAfzemPWbWDNhl+Min
+         1ZDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WT6Bf9Wd4u+/b76NZ7GFsefZqgMs6EzwTFrQjSlCe3w=;
+        b=nda9v6bInm/KHGyeaaEtgA7lxtaLDLYQOS0/eU9j210BYObh+WErgMA+6C61kQBu/O
+         a+htjc5legmO0xZ0Yga00Xw7WzyYky/H3HoBuSB9kKAXTHJezmzi3kwPRKAp13FKnz32
+         q6hR9CyNQSIAC6DRGzMN7py+VQodAHAEPezn/rU4cs6StbUatUBZVJQbHeGH6hp52k8E
+         DHE51hG9WMNIrvzueG909DCP9ncpQYLIK6gv5ATqr4Yqylwedn/Zp95LDVUkX4ocCydq
+         hI8AgfDCujD9uK/85muZcxho2EJKGkDFSoqfk6v3vlQ53qQ9K9hwUi0kcyGLI18W7ptR
+         mAqA==
+X-Gm-Message-State: AJIora8PV0Mpzr7w9aHXUi7OoSk94/+lL6b0kdomqa/o/D15Y3cL2pa/
+        rLMfjPPQ/Jjn9DM+J/Wz16sspg==
+X-Google-Smtp-Source: AGRyM1sGsKeiDwI8gtL3TJYG4H41ewonY4JOKjtqR9UyMESCXxgq6JLJOzIk0g47YQaVf+2cD3uWPA==
+X-Received: by 2002:a2e:700d:0:b0:25d:d6fc:277f with SMTP id l13-20020a2e700d000000b0025dd6fc277fmr7357817ljc.52.1658911994144;
+        Wed, 27 Jul 2022 01:53:14 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id f16-20020a05651c03d000b0025d67053f0dsm1789534ljp.135.2022.07.27.01.53.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 01:53:13 -0700 (PDT)
+Message-ID: <952a85ec-d1e9-7c14-6404-bc087723252f@linaro.org>
+Date:   Wed, 27 Jul 2022 10:53:12 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/6] dt-bindings: arm: renesas: Ignore the schema for
+ RISC-V arch
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Anup Patel <anup@brainfault.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reproducer:
- 1. fallocate -l 100M image
- 2. mkfs.xfs -f image
- 3. mount image /mnt
- 4. setxattr("/mnt", "trusted.overlay.upper", NULL, 0, XATTR_CREATE)
- 5. char arg[32] = "\x01\xff\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00"
-                   "\x00\x00\x00\x00\x00\x08\x00\x00\x00\xc6\x2a\xf7";
-    fd = open("/mnt", O_RDONLY|O_DIRECTORY);
-    ioctl(fd, _IOC(_IOC_READ|_IOC_WRITE, 0x58, 0x2c, 0x20), arg);
+On 26/07/2022 20:06, Lad Prabhakar wrote:
+> Ignore the ARM renesas.yaml schema if the board is RZ/Five SMARC EVK
+> (RISC-V arch).
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/arm/renesas.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/arm/renesas.yaml
+> index ff80152f092f..f646df1a23af 100644
+> --- a/Documentation/devicetree/bindings/arm/renesas.yaml
+> +++ b/Documentation/devicetree/bindings/arm/renesas.yaml
+> @@ -9,6 +9,15 @@ title: Renesas SH-Mobile, R-Mobile, and R-Car Platform Device Tree Bindings
+>  maintainers:
+>    - Geert Uytterhoeven <geert+renesas@glider.be>
+>  
+> +# We want to ignore this schema if the board is of RISC-V arch
+> +select:
+> +  not:
+> +    properties:
+> +      compatible:
+> +        contains:
+> +          items:
+> +            - const: renesas,r9a07g043f01
 
-NULL pointer dereference will occur when race happens between xfs_getbmap()
-and xfs_bmap_set_attrforkoff():
+Second issue - why not renesas,r9a07g043?
 
-         ioctl               |       setxattr
- ----------------------------|---------------------------
- xfs_getbmap                 |
-   xfs_ifork_ptr             |
-     xfs_inode_has_attr_fork |
-       ip->i_forkoff == 0    |
-     return NULL             |
-   ifp == NULL               |
-                             | xfs_bmap_set_attrforkoff
-                             |   ip->i_forkoff > 0
-   xfs_inode_has_attr_fork   |
-     ip->i_forkoff > 0       |
-   ifp == NULL               |
-   ifp->if_format            |
 
-Fix this by locking i_lock before xfs_ifork_ptr().
-
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
----
- fs/xfs/xfs_bmap_util.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/fs/xfs/xfs_bmap_util.c b/fs/xfs/xfs_bmap_util.c
-index 74f96e1aa5cd..04d0c2bff67c 100644
---- a/fs/xfs/xfs_bmap_util.c
-+++ b/fs/xfs/xfs_bmap_util.c
-@@ -439,29 +439,28 @@ xfs_getbmap(
- 		whichfork = XFS_COW_FORK;
- 	else
- 		whichfork = XFS_DATA_FORK;
--	ifp = xfs_ifork_ptr(ip, whichfork);
- 
- 	xfs_ilock(ip, XFS_IOLOCK_SHARED);
- 	switch (whichfork) {
- 	case XFS_ATTR_FORK:
-+		lock = xfs_ilock_attr_map_shared(ip);
- 		if (!xfs_inode_has_attr_fork(ip))
--			goto out_unlock_iolock;
-+			goto out_unlock_ilock;
- 
- 		max_len = 1LL << 32;
--		lock = xfs_ilock_attr_map_shared(ip);
- 		break;
- 	case XFS_COW_FORK:
-+		lock = XFS_ILOCK_SHARED;
-+		xfs_ilock(ip, lock);
-+
- 		/* No CoW fork? Just return */
--		if (!ifp)
--			goto out_unlock_iolock;
-+		if (!xfs_ifork_ptr(ip, whichfork))
-+			goto out_unlock_ilock;
- 
- 		if (xfs_get_cowextsz_hint(ip))
- 			max_len = mp->m_super->s_maxbytes;
- 		else
- 			max_len = XFS_ISIZE(ip);
--
--		lock = XFS_ILOCK_SHARED;
--		xfs_ilock(ip, lock);
- 		break;
- 	case XFS_DATA_FORK:
- 		if (!(iflags & BMV_IF_DELALLOC) &&
-@@ -491,6 +490,8 @@ xfs_getbmap(
- 		break;
- 	}
- 
-+	ifp = xfs_ifork_ptr(ip, whichfork);
-+
- 	switch (ifp->if_format) {
- 	case XFS_DINODE_FMT_EXTENTS:
- 	case XFS_DINODE_FMT_BTREE:
--- 
-2.31.1
-
+Best regards,
+Krzysztof

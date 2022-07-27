@@ -2,156 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB1D5822AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEBD5822B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiG0JDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
+        id S231473AbiG0JGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiG0JDr (ORCPT
+        with ESMTP id S231348AbiG0JGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:03:47 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEB1474C4;
-        Wed, 27 Jul 2022 02:03:45 -0700 (PDT)
-Received: from [10.10.2.52] (unknown [10.10.2.52])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 940BF40737D5;
-        Wed, 27 Jul 2022 09:03:38 +0000 (UTC)
-Subject: Re: [ldv-project] [PATCH v2] usb: cdns3: change place of 'priv_ep'
- assignment in cdns3_gadget_ep_dequeue(), cdns3_gadget_ep_enable()
-To:     Peter Chen <peter.chen@kernel.org>,
-        Andrey Strachuk <strochuk@ispras.ru>
-Cc:     ldv-project@linuxtesting.org, Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>
-References: <20220718160052.4188-1-strochuk@ispras.ru>
- <20220727083956.GA269370@nchen-desktop>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <370caacd-6e03-8c8c-1ea6-0beef763fee6@ispras.ru>
-Date:   Wed, 27 Jul 2022 12:03:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 27 Jul 2022 05:06:13 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4C1474ED;
+        Wed, 27 Jul 2022 02:06:11 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id z132so10371839yba.3;
+        Wed, 27 Jul 2022 02:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TVtZIwcu07JXR0+8xN/nQ/0RqGwtHXT7p6Ok3vBeYZE=;
+        b=ZWqbYH4Scf7v0uPK5nBhI+Oi2aGMD3geeu+RxWWfYOXlH233jnt/MhtON9mgnkNPJ8
+         6ASkPkPzx9T4XCRpBU4dfQfAwQ8QUbQgPkk4EYRT0FR3+xAI7fi8WsZqVSR/HQUjFpD+
+         45rkjW8YLxnp4INk5NmrDVeL7osGrneXlYxnSb+Yz0G0q3DWwVQr77QSpWWNIRjDkdlg
+         FtxTn4NGkfcH+d8cQ4VFkyrGGtlohUQwGzDu27uTyzhzk/eBetVM6Dg9boxyEcUtHkmz
+         Ax9VJZbcH7ZK6WV6wWnOPnjSvPvX9iocq148gy1lgQCZIMr57pRH1usjDQ2kobJ2rbHE
+         BtpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TVtZIwcu07JXR0+8xN/nQ/0RqGwtHXT7p6Ok3vBeYZE=;
+        b=yE6zXk6zaGXWBRZG9UaxJQuk4Jpph/bqXQONq9egj41viwoRp1YXg9GCUUD07y/rRE
+         FVKoqWv2rT8v6EloE9+sNQSBke6OwUt3s3V3lRXikFOjM6GXZFXDK8e7QdyyfWm8d94l
+         6Webt5RrSgygrJLVNCWIWzCKZhvWPISWAjPwALrLm5H9dzwBNyz7gGnGxOPkF6xIKLfX
+         WPR/SylcXJZQgogtpQWs9/eTO6t3ZNS5J5wuXRv71tDi5N6PwUJkB1jhjmnHk7JArurB
+         wryRzPPSs0VC9rdQS/odDIppxQTBlriw9b13KjyTh27fKu07a3ZU0Sac1oGlpIKCP3e8
+         9Q0g==
+X-Gm-Message-State: AJIora+LC0QoiJjVMe46Rcgre8YMljySipqCNGumABXeMBZuSERRlE4l
+        QGbcFGgUTnSF2NzTP1g9jel7yc70npb3PBDuY80=
+X-Google-Smtp-Source: AGRyM1vMDtzNnEM6xTH8HaoM2lTtPMXOMKIaKhZ65B7NZ920zrB5f8/tgkkYAAYImsgLC6OF2gaBWwRSwVR8dhHF0+M=
+X-Received: by 2002:a25:4689:0:b0:671:6d4f:c974 with SMTP id
+ t131-20020a254689000000b006716d4fc974mr6910885yba.354.1658912769970; Wed, 27
+ Jul 2022 02:06:09 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220727083956.GA269370@nchen-desktop>
-Content-Type: text/plain; charset=utf-8
-Content-Language: ru-RU
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220726180623.1668-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <636e9214-4b36-e9a6-3c6b-b6edb944335e@linaro.org>
+In-Reply-To: <636e9214-4b36-e9a6-3c6b-b6edb944335e@linaro.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 27 Jul 2022 10:05:43 +0100
+Message-ID: <CA+V-a8sTw1qzuTeD2vb7RgDmmNdEP5qEcxXCjrFgkyrBrLrt5Q@mail.gmail.com>
+Subject: Re: [PATCH 4/6] dt-bindings: riscv: Add DT binding documentation for
+ Renesas RZ/Five SoC and SMARC EVK
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.07.2022 11:39, Peter Chen wrote:
-> On 22-07-18 19:00:52, Andrey Strachuk wrote:
->> If 'ep' is NULL, result of ep_to_cdns3_ep(ep) is invalid pointer
->> and its dereference with priv_ep->cdns3_dev may cause panic.
->>
->> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>
->> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
->> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
->> ---
->>  drivers/usb/cdns3/cdns3-gadget.c | 9 ++++++---
->>  1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
->> index 5c15c48952a6..aea5db0ec72d 100644
->> --- a/drivers/usb/cdns3/cdns3-gadget.c
->> +++ b/drivers/usb/cdns3/cdns3-gadget.c
->> @@ -2285,13 +2285,14 @@ static int cdns3_gadget_ep_enable(struct usb_ep *ep,
->>  	int val;
->>
->>  	priv_ep = ep_to_cdns3_ep(ep);
->> -	priv_dev = priv_ep->cdns3_dev;
->> -	comp_desc = priv_ep->endpoint.comp_desc;
->>  
->>  	if (!ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT) {
->>  		dev_dbg(priv_dev->dev, "usbss: invalid parameters\n");
->>  		return -EINVAL;
->>  	}
->> +
->> +	comp_desc = priv_ep->endpoint.comp_desc;
->> +	priv_dev = priv_ep->cdns3_dev;
->>
->>  	if (!desc->wMaxPacketSize) {
->>  		dev_err(priv_dev->dev, "usbss: missing wMaxPacketSize\n");
->> @@ -2600,7 +2601,7 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
->>  			    struct usb_request *request)
->>  {
->>  	struct cdns3_endpoint *priv_ep = ep_to_cdns3_ep(ep);
->> -	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
->> +	struct cdns3_device *priv_dev;
->>  	struct usb_request *req, *req_temp;
->>  	struct cdns3_request *priv_req;
->>  	struct cdns3_trb *link_trb;
->> @@ -2610,6 +2611,8 @@ int cdns3_gadget_ep_dequeue(struct usb_ep *ep,
->>  
->>  	if (!ep || !request || !ep->desc)
->>  		return -EINVAL;
->> +
->> +	priv_dev = priv_ep->cdns3_dev;
->>
->>  	spin_lock_irqsave(&priv_dev->lock, flags);
->>
->> -- 
-> 
-> Acked-by: Peter Chen <peter.chen@kernel.org>
-> 
+Hi Krzysztof,
 
-Looks good, but I would suggest to move
+Thank you for the review.
 
-  priv_ep = ep_to_cdns3_ep(ep);
+On Wed, Jul 27, 2022 at 9:54 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 26/07/2022 20:06, Lad Prabhakar wrote:
+> > Document Renesas RZ/Five (R9A07G043) SoC and SMARC EVK based on this SoC.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  .../devicetree/bindings/riscv/renesas.yaml    | 49 +++++++++++++++++++
+> >  1 file changed, 49 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/riscv/renesas.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/riscv/renesas.yaml b/Documentation/devicetree/bindings/riscv/renesas.yaml
+> > new file mode 100644
+> > index 000000000000..f72f8aea6a82
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/riscv/renesas.yaml
+> > @@ -0,0 +1,49 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/riscv/renesas.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Renesas RZ/Five Platform Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Geert Uytterhoeven <geert+renesas@glider.be>
+> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > +
+> > +# We want to ignore this schema if the board is SMARC EVK based on ARM64 arch
+> > +select:
+> > +  not:
+> > +    properties:
+> > +      compatible:
+> > +        contains:
+> > +          items:
+>
+> I think you should rather ignore the RiscV SoCs, not specific board.
+>
+You mean to ignore ARM/64 SoCs?
 
-below the check of 'ep' as well.
+Agreed just the below enum, should do the trick.
 
---
-Alexey
+            - enum:
+                - renesas,r9a07g043u11
+                - renesas,r9a07g043u12
+                - renesas,r9a07g044c1
+                - renesas,r9a07g044c2
+                - renesas,r9a07g044l1
+                - renesas,r9a07g044l2
+                - renesas,r9a07g054l1
+                - renesas,r9a07g054l2
+
+
+> > +            - const: renesas,smarc-evk
+> > +            - enum:
+> > +                - renesas,r9a07g043u11
+> > +                - renesas,r9a07g043u12
+> > +                - renesas,r9a07g044c1
+> > +                - renesas,r9a07g044c2
+> > +                - renesas,r9a07g044l1
+> > +                - renesas,r9a07g044l2
+> > +                - renesas,r9a07g054l1
+> > +                - renesas,r9a07g054l2
+> > +            - enum:
+> > +                - renesas,r9a07g043
+> > +                - renesas,r9a07g044
+> > +                - renesas,r9a07g054
+>
+> Did you actually test that it works and properly matches?
+>
+Yes I have run the dtbs_check and dt_binding _check for ARM64 and
+RISC-V. Do you see any cases where it can fail?
+
+Cheers,
+Prabhakar

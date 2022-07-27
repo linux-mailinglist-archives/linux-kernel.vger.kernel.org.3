@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B54F582E8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F24582CD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241634AbiG0ROI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S240722AbiG0QvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238131AbiG0RNl (ORCPT
+        with ESMTP id S240717AbiG0Quu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:13:41 -0400
+        Wed, 27 Jul 2022 12:50:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6525B78C;
-        Wed, 27 Jul 2022 09:42:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6419061D8F;
+        Wed, 27 Jul 2022 09:33:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B1D360D3B;
-        Wed, 27 Jul 2022 16:42:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79991C433D6;
-        Wed, 27 Jul 2022 16:42:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35B9A61A24;
+        Wed, 27 Jul 2022 16:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43205C433C1;
+        Wed, 27 Jul 2022 16:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940135;
-        bh=QMlouGdUSHtpzVpbNT1n810JgfCBDB50pAHdCH7HfUk=;
+        s=korg; t=1658939592;
+        bh=oLuofaZzXhRDN7d9d6KpMVZa4bYXqOlIP0G4Leb4uJc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K6qaPdM/zUPU5HLzE8hYEhQFZ9D/iUNJj2ERHOjl15Pk72IjfSP+qu2by3veba5Q9
-         OuVtDzWaOdmzsKeWd9WofJ0VyC2+MrVrk9GPSG2AGE0I9cKdihqweF+kcmasd6TBY5
-         KgVD92X0dGFHqlljpSRvcSuMAedRvMqY8G8fIBaA=
+        b=n/243BHaAqGMjjc8/0mbnSSCrwGtKmBhGeovJ2LVpFb+mgsmleCQ4MK0cCuBb1tg1
+         L9EVF6jQvMOv/rfEdm1pZMnr2i/Iye8a/r2vOMBOnonrP3m2IUAMeg6bbDpRnq1l58
+         i4AKdmt9wB+Pl52Q4zaPztlxepAWNlwXaI1MU0RU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Ido Schimmel <idosch@nvidia.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 118/201] ipv4: Fix data-races around sysctl_fib_multipath_hash_fields.
+Subject: [PATCH 5.10 036/105] tcp: Fix data-races around sysctl_tcp_base_mss.
 Date:   Wed, 27 Jul 2022 18:10:22 +0200
-Message-Id: <20220727161032.665812955@linuxfoundation.org>
+Message-Id: <20220727161013.550990320@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,65 +56,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 8895a9c2ac76fb9d3922fed4fe092c8ec5e5cccc ]
+[ Upstream commit 88d78bc097cd8ebc6541e93316c9d9bf651b13e8 ]
 
-While reading sysctl_fib_multipath_hash_fields, it can be changed
-concurrently.  Thus, we need to add READ_ONCE() to its readers.
+While reading sysctl_tcp_base_mss, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: ce5c9c20d364 ("ipv4: Add a sysctl to control multipath hash fields")
+Fixes: 5d424d5a674f ("[TCP]: MTU probing")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 2 +-
- net/ipv4/route.c                                      | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ net/ipv4/tcp_output.c | 2 +-
+ net/ipv4/tcp_timer.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-index 6cdf0e232b1c..55de90d5ae59 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-@@ -9606,7 +9606,7 @@ static void mlxsw_sp_mp4_hash_init(struct mlxsw_sp *mlxsw_sp,
- 		mlxsw_sp_mp_hash_inner_l3(config);
- 		break;
- 	case 3:
--		hash_fields = net->ipv4.sysctl_fib_multipath_hash_fields;
-+		hash_fields = READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_fields);
- 		/* Outer */
- 		MLXSW_SP_MP_HASH_HEADER_SET(headers, IPV4_EN_NOT_TCP_NOT_UDP);
- 		MLXSW_SP_MP_HASH_HEADER_SET(headers, IPV4_EN_TCP_UDP);
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index ade6cb309c40..ca59b61fd3a3 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1929,7 +1929,7 @@ static u32 fib_multipath_custom_hash_outer(const struct net *net,
- 					   const struct sk_buff *skb,
- 					   bool *p_has_inner)
- {
--	u32 hash_fields = net->ipv4.sysctl_fib_multipath_hash_fields;
-+	u32 hash_fields = READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_fields);
- 	struct flow_keys keys, hash_keys;
- 
- 	if (!(hash_fields & FIB_MULTIPATH_HASH_FIELD_OUTER_MASK))
-@@ -1958,7 +1958,7 @@ static u32 fib_multipath_custom_hash_inner(const struct net *net,
- 					   const struct sk_buff *skb,
- 					   bool has_inner)
- {
--	u32 hash_fields = net->ipv4.sysctl_fib_multipath_hash_fields;
-+	u32 hash_fields = READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_fields);
- 	struct flow_keys keys, hash_keys;
- 
- 	/* We assume the packet carries an encapsulation, but if none was
-@@ -2018,7 +2018,7 @@ static u32 fib_multipath_custom_hash_skb(const struct net *net,
- static u32 fib_multipath_custom_hash_fl4(const struct net *net,
- 					 const struct flowi4 *fl4)
- {
--	u32 hash_fields = net->ipv4.sysctl_fib_multipath_hash_fields;
-+	u32 hash_fields = READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_fields);
- 	struct flow_keys hash_keys;
- 
- 	if (!(hash_fields & FIB_MULTIPATH_HASH_FIELD_OUTER_MASK))
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 423ec09ad831..9f3eec8e7e4c 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -1766,7 +1766,7 @@ void tcp_mtup_init(struct sock *sk)
+ 	icsk->icsk_mtup.enabled = READ_ONCE(net->ipv4.sysctl_tcp_mtu_probing) > 1;
+ 	icsk->icsk_mtup.search_high = tp->rx_opt.mss_clamp + sizeof(struct tcphdr) +
+ 			       icsk->icsk_af_ops->net_header_len;
+-	icsk->icsk_mtup.search_low = tcp_mss_to_mtu(sk, net->ipv4.sysctl_tcp_base_mss);
++	icsk->icsk_mtup.search_low = tcp_mss_to_mtu(sk, READ_ONCE(net->ipv4.sysctl_tcp_base_mss));
+ 	icsk->icsk_mtup.probe_size = 0;
+ 	if (icsk->icsk_mtup.enabled)
+ 		icsk->icsk_mtup.probe_timestamp = tcp_jiffies32;
+diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+index 3c0d689cafac..795716fd3761 100644
+--- a/net/ipv4/tcp_timer.c
++++ b/net/ipv4/tcp_timer.c
+@@ -171,7 +171,7 @@ static void tcp_mtu_probing(struct inet_connection_sock *icsk, struct sock *sk)
+ 		icsk->icsk_mtup.probe_timestamp = tcp_jiffies32;
+ 	} else {
+ 		mss = tcp_mtu_to_mss(sk, icsk->icsk_mtup.search_low) >> 1;
+-		mss = min(net->ipv4.sysctl_tcp_base_mss, mss);
++		mss = min(READ_ONCE(net->ipv4.sysctl_tcp_base_mss), mss);
+ 		mss = max(mss, net->ipv4.sysctl_tcp_mtu_probe_floor);
+ 		mss = max(mss, net->ipv4.sysctl_tcp_min_snd_mss);
+ 		icsk->icsk_mtup.search_low = tcp_mss_to_mtu(sk, mss);
 -- 
 2.35.1
 

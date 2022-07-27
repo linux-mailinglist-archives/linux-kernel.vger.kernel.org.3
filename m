@@ -2,106 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5AF5829E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12225829EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233511AbiG0Pou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S233612AbiG0PrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbiG0Poq (ORCPT
+        with ESMTP id S229613AbiG0PrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:44:46 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACDA47B91;
-        Wed, 27 Jul 2022 08:44:46 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id 70so16492736pfx.1;
-        Wed, 27 Jul 2022 08:44:46 -0700 (PDT)
+        Wed, 27 Jul 2022 11:47:06 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0567922299;
+        Wed, 27 Jul 2022 08:47:05 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id c20so12904328qtw.8;
+        Wed, 27 Jul 2022 08:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QlqJyCLvvK+TzxVp0Du/4sfixvkQDQzIZY8oBXbSMvI=;
-        b=Bwdq8tjLd/xcPIAX/uEU4inNf7eeMUPTp9P1C+D0MChY+VIXw28n3UkSB/a1OdUNj0
-         0+QFhKaZN1H0VWQDVV4xwl3vHnsEj+cnfTVGWkv5YeZjdGg5tPLjPWcJ0N1SUU1v9kBN
-         ZFe5SUBKqVGeSE+tpUXxbUFrmy3y1XCjwkzIE98+N8n8A5pVcp8/jJedgnzPRquBnRkq
-         dUOU6rx0R4mNCZ//8Mi79hRHJBZJ8uHiFcSKMx03ltmwyZjiKxtUWR3cqcepMKY8QsYc
-         CYHsiHY2a+niuSncMud8bS/oOwb0jPlN+P/pR4tHOnRF5Rf8ZlFFToN7pdTaxb/20C8N
-         ONCw==
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rKRkz1r3/CKmoOGWsptt41HcBfvgNG2KAxM3cUlyRgg=;
+        b=VoB86KfUBj/OZpm9xIVznbBQgZc4uhxKvVqM6lBqGHVxY4BRsFuuc3xlU3sMxZvcWa
+         4b8ibsPfgRsNd5aIAwrY7NssOu/jUVv3lLJDGVPa6vRidh5+LMt14tCMnn1XwZLBFp+O
+         HQ+Tj+xaYFKZ7w8ImT5JLW2a/FZn2lAizet0UGek3kuZgKbaK7WyoezQ8YGBsO8CqdJ1
+         EjYv/CNb2NbNMBeCTv9ZteUxUViXcld1dSsU03u5kcWMpLMWMZYO0GH+RqTQJOpRT0K7
+         sWi/+E8fjLR9kw8t4Qs+GVWY5Hcq0BKNIHpf3iWNYd5XZjYbecqJl8L+vRAphnxKscDy
+         E1FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QlqJyCLvvK+TzxVp0Du/4sfixvkQDQzIZY8oBXbSMvI=;
-        b=4iOCBhaCUaxoHghbr2BJODEQv4JiVRPTn5zwG6qTIxXQIuYehcXFqfTWhezugRQHL4
-         Bd5PjqloQ5vOcS5V26UDe7qcXi5WDLlMXyEktnNHetvuCPqrLQJyoicS3TVt0LIabkRd
-         77gJf5xNY0MeeDPDcnBCyC5yOrO7F7E+13L/2Wk1XFfKOc9OqTWNfG/9zhRhJ8ETd8tE
-         El50iO3b2DI1OF1BHVAmIETn3Zq8nEzCv93SSppBp+Ym/5IuFJuibwg5AcLQROeL+PJ+
-         RYMSV9KRmqwlX6agvKDPTvCGz6dthfun10x8AtOsQMjxgtK845R7Girb6x7sQZA9wyUf
-         0oeA==
-X-Gm-Message-State: AJIora873qUNbxv4pVMZBsFEiuAB1niXk7PbXkQTQcO/3mChY2bi+zA5
-        g7UKVfBN/xESXV2cKt8f+Fg=
-X-Google-Smtp-Source: AGRyM1sDCBNblHpd1A/SV3TzZb8mfKld5q5VlxnaFVr0AN48IX0aLrkPmvmWp+XpPjoMYuy/0dqNWQ==
-X-Received: by 2002:a63:2a95:0:b0:41a:27e5:1996 with SMTP id q143-20020a632a95000000b0041a27e51996mr19160174pgq.447.1658936685669;
-        Wed, 27 Jul 2022 08:44:45 -0700 (PDT)
-Received: from [10.10.20.47] (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b0016d1e514ec5sm13849539pln.139.2022.07.27.08.44.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 08:44:44 -0700 (PDT)
-Message-ID: <47516b38-58e1-e3c9-1ac2-7b8d8586566e@gmail.com>
-Date:   Wed, 27 Jul 2022 23:44:42 +0800
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=rKRkz1r3/CKmoOGWsptt41HcBfvgNG2KAxM3cUlyRgg=;
+        b=HgSYz2mpjNDuCKJGm/ufh63qzUIqY/DRNRL3KZlKwA0T3pWB6POEV7c2X1MKBjZqyR
+         2Ux06PQIWQJ35+9nDVCTEgJAECLfPcueGzvsXurnNa8XxbpFQtQhqqVtVrIGYk41EDps
+         4lDPeta0NaFntZQI1bAzG9/5xUPwtPnkDw2W5DRtlW/ArEE5bPz4MvtmD5LdgHlW3PBV
+         W7sC7aOU/GmWiZpQ6qeaFXvTH4RXawJz9WnBgO+OoAWtnxDEoiWvg2yt1ALZHw8fDV/W
+         hlXAUkmc2ftgpbRBHoSRj7kqBmanPRCcJS/9kG9UJ3TaRuPznJkficrZ9jlVydG6wgTe
+         BedA==
+X-Gm-Message-State: AJIora8Y49hJ85okr9VO5yDhhrmKQjZIt2GMKTBQu3lmGDRtfUSG5GbJ
+        bwMx/CgJaJ+NyKKkEyPjRw==
+X-Google-Smtp-Source: AGRyM1syoHp48BJmUDOkb6xY/O5snpMs1dVQsCfX28eSSiv/YiQUo0sVB6pmKfpcMiJUw10Xvbbbnw==
+X-Received: by 2002:a05:622a:1316:b0:31e:f3b4:1c8c with SMTP id v22-20020a05622a131600b0031ef3b41c8cmr19396972qtk.339.1658936823961;
+        Wed, 27 Jul 2022 08:47:03 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.144.75])
+        by smtp.gmail.com with ESMTPSA id de39-20020a05620a372700b006b568bdd7d5sm14091459qkb.71.2022.07.27.08.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 08:47:03 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:495f:ee54:913c:d540])
+        by serve.minyard.net (Postfix) with ESMTPSA id AF322180052;
+        Wed, 27 Jul 2022 15:47:01 +0000 (UTC)
+Date:   Wed, 27 Jul 2022 10:47:00 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v1 0/2] char: ipmi: kcs: add Arbel NPCM8XX support
+Message-ID: <20220727154700.GS3834@minyard.net>
+Reply-To: minyard@acm.org
+References: <20220717121124.154734-1-tmaimon77@gmail.com>
+ <20220718125155.GA40038@minyard.net>
+ <CAP6Zq1haOErfj2HZkqKwXZKr3+QvWP2VYK6QQOH5cjHYJ2rV0w@mail.gmail.com>
+ <20220726194708.GO3834@minyard.net>
+ <CAP6Zq1hHXiZw2a6+o30N-GUhcA_ZJoYH+wZa8AzLu3NmYST+kw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/1] iio: humidity: hdc100x: add manufacturer and
- device ID cehck
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220727064415.940690-1-potin.lai.pt@gmail.com>
- <CAHp75VfNmq12Yv7mqVeijqK0vwRdPsSrH5wMzg9qR15+t7ArSQ@mail.gmail.com>
- <a385e266-b24e-7ffb-c083-891edd4b0b14@gmail.com>
- <CAHp75VdjvJRwzPLLdMji+_m2tQY4JLBcNwt-QFkDJTyGFUOdKg@mail.gmail.com>
-From:   Potin Lai <potin.lai.pt@gmail.com>
-In-Reply-To: <CAHp75VdjvJRwzPLLdMji+_m2tQY4JLBcNwt-QFkDJTyGFUOdKg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP6Zq1hHXiZw2a6+o30N-GUhcA_ZJoYH+wZa8AzLu3NmYST+kw@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 27, 2022 at 08:39:08AM +0300, Tomer Maimon wrote:
+> Hi Corey,
+> 
+> On Tue, 26 Jul 2022 at 22:47, Corey Minyard <minyard@acm.org> wrote:
+> >
+> > On Tue, Jul 26, 2022 at 10:41:38PM +0300, Tomer Maimon wrote:
+> > > Hi Corey,
+> > >
+> > >
+> > > On Mon, 18 Jul 2022 at 15:51, Corey Minyard <minyard@acm.org> wrote:
+> > > >
+> > > > On Sun, Jul 17, 2022 at 03:11:22PM +0300, Tomer Maimon wrote:
+> > > > > This patch set adds Arbel NPCM8XX Keyboard Controller Style (KCS) support to
+> > > > > KCS NPCM driver.
+> > > > >
+> > > > > The NPCM KCS driver tested on NPCM845 evaluation board.
+> > > >
+> > > > This seems reasonable, I've pulled it into my tree.  If anyone has any
+> > > > issues with this, please respond.
+> > > >
+> > > > -corey
+> > > >
+> > > > >
+> > > > > Tomer Maimon (2):
+> > > > >   dt-bindings: ipmi: Add npcm845 compatible
+> > > > >   char: ipmi: modify NPCM KCS configuration
+> > > > >
+> > > > >  Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 5 +++--
+> > > > >  drivers/char/ipmi/Kconfig                                  | 6 +++---
+> > > > >  2 files changed, 6 insertions(+), 5 deletions(-)
+> > > > >
+> > > > > --
+> > > > > 2.33.0
+> > > > >
+> > >
+> > > Sorry but I need to do a little fix in the document file.
+> > >
+> > > Can I do it or have you already applied the patches?
+> >
+> > At this point I'd prefer a patch on top of what is there.  5.19 isn't
+> > released yet, so the window isn't open, but that will happen soon and I
+> > don't want to rebase at this point.
+> O.K. thanks,
+> I will wait until 5.19 is released and then I will send the patch.
 
-Andy Shevchenko 於 7/27/2022 7:56 PM 寫道:
-> On Wed, Jul 27, 2022 at 12:42 PM Potin Lai <potin.lai.pt@gmail.com> wrote:
->> On 7/27/22 18:00, Andy Shevchenko wrote:
->>> On Wed, Jul 27, 2022 at 8:46 AM Potin Lai <potin.lai.pt@gmail.com> wrote:
-> ...
->
->>>> +       data = device_get_match_data(&client->dev);
->>>> +       if (data) {
->>> This check is redundant. Too much protective programming. Just oblige
->>> that matched ID has to always have an associated data.
->> Is it guaranteed that device_get_match_data will not return NULL? I find some examples in other drivers, all of them have a check on returned data.
-> No, but as I said you may guarantee that by obliging developers not to
-> shoot in their feet.
-Thanks for the explanation, I will remove the checking part.
+Oh, sorry I wasn't clear.  You can send it now, I just don't want to
+rebase what I have already.  Just a new patch on top of it, and I'll get
+it in to 5.19.
 
-Potin
->> Will it be more appropriate if I move device_get_match_data to probe function, and return EINVAL when we get a NULL pointer from device_get_match_data?
-> Why is this check needed? We do not like dead code.
->
->>>> +               if (!data->support_mfr_check)
->>>> +                       return true;
->>>> +       }
+-corey

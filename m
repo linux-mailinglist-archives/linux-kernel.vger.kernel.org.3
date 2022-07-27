@@ -2,207 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4ED3581CB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945BA581CB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239938AbiG0AMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 20:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
+        id S239996AbiG0AMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 20:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239726AbiG0AML (ORCPT
+        with ESMTP id S233272AbiG0AMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 20:12:11 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69D2E0FB
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=lrQVRdpyTQanHDn5jVr9FDMO6Z/Xr+0Zl1av9ZPUerE=; b=E098vHSF2AsYjqSljAF0EmIZAF
-        9v8jTeTj5p3jfc9sPPeJsqjRVYwSlKDOCstexFctzUTWQNACaA/8TwrOXQEcYJjxRyaKO6ErQJ7vN
-        CTkvgFcRv6mVFU0QpY+QWoHflrInTlm3rHuTmHEnrgEyGJHPI2ceMyMJ6DzVVggdxxuOjdyGyj38s
-        nQEoV6vebL8gBb9g1COm6S4hirbQMp16iJ2gO8WPOrO69WHcHys75Pcpy33qV6zteN3dU9yEPZXmf
-        5szqToC8MbBe9gt4vyfiMZKU3UDAhM+2Yb/4klBFPjjd8591Qrxj7yquGlhiOAG6KPmz7tjUjVfKh
-        ZgqbpGjQ==;
-Received: from [165.90.126.25] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oGUeb-007w0B-G4; Wed, 27 Jul 2022 02:11:57 +0200
-Date:   Tue, 26 Jul 2022 23:11:44 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Magali Lemes <magalilemes00@gmail.com>
-Cc:     =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
-        siqueirajordao@riseup.net, mairacanal@riseup.net,
-        sunpeng.li@amd.com, tales.aparecida@gmail.com, Xinhui.Pan@amd.com,
-        Rodrigo.Siqueira@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, airlied@linux.ie,
-        dri-devel@lists.freedesktop.org, alexander.deucher@amd.com,
-        isabbasso@riseup.net, andrealmeid@riseup.net,
-        christian.koenig@amd.com
-Subject: Re: [PATCH 1/2] drm/amd/display: change variables type
-Message-ID: <20220727001124.dsulur5hhlinjg6o@mail.igalia.com>
-References: <20220725181559.250030-1-magalilemes00@gmail.com>
- <a7589316-2a55-85f2-b665-5fe4bebf7a69@igalia.com>
- <4f359e30-90f8-c8bf-4e07-6856fcfd3506@gmail.com>
- <20220725233853.5y7wgpbhfau24ric@mail.igalia.com>
- <88ce4703-e295-f41a-5905-d8afe5589f80@gmail.com>
+        Tue, 26 Jul 2022 20:12:43 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D33E0FB
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:12:42 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id y10so354043ili.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=DocosmU9Kih0cpMr66Xs6WDlyGW3+GYjRnYbNFkWMN0=;
+        b=NWGur+C0j3Nw/dMU+vHao3G7hasFNp8oVPBmdLU74TXTT7+bsLq8GrujVjA0TD7eOL
+         JX4Nw0V8FaKfSu9Y4vNjXP4ffFaUfaDa7hW+GLU5ZMP37np8bro0ZgwbxpbLDOCrXPRE
+         LVhKvW9/I4OzmrU8GCe9Xg4G7P+ZEc4aWEPgc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=DocosmU9Kih0cpMr66Xs6WDlyGW3+GYjRnYbNFkWMN0=;
+        b=GXb9T8HnjkUWauNbUAugqdIr/G9Cppqu4FrpRUjp5u1SFG6cdTnkQxSEnontpZEEWE
+         4B09JatG594GuyHX5GoOURH/SWBUuV1r0NUyicZKDTuZ04p28IFfq6lzkMsU4zrxI2CZ
+         E/GdkI2q3mHF0PAeZAMOrVLLaIMMYGR8de0+LkFILOitdeFaGoODukN8pzxtvOGczMaO
+         /MDT2NjL5doaHWGXdqAN5cOsJsvuXldV97E1PCu8veux5irVjWnHuKwEgZlFJ691icjo
+         1pnBHMyXt7LFJYIn4jdeMvSf29kq7npR/XogPPmdFMBsMeTxIhdUNPOWbmA+z0bMiCp6
+         A1eA==
+X-Gm-Message-State: AJIora+dr25bmxE4W7K2/RV4tCzhfru0AkdewADv8GaU/D3/lwt6sRdS
+        ysK77tUCg1PzJhXt2qydz/kJGfIQcvtawypOY/E=
+X-Google-Smtp-Source: AGRyM1sfQH526VAJg3UdB1E919SRjnpNvpENIAV1y/d52pxfJV3KswI8ZQ+ShUgq10WHNTNzbp4mtw==
+X-Received: by 2002:a05:6e02:1c8e:b0:2dd:470e:3d6f with SMTP id w14-20020a056e021c8e00b002dd470e3d6fmr5432653ill.189.1658880761629;
+        Tue, 26 Jul 2022 17:12:41 -0700 (PDT)
+Received: from jrosenth45.corp.google.com ([100.107.108.177])
+        by smtp.gmail.com with ESMTPSA id z3-20020a92d183000000b002dae42fa5f2sm6120577ilz.56.2022.07.26.17.12.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 17:12:41 -0700 (PDT)
+From:   Jack Rosenthal <jrosenth@chromium.org>
+To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Cc:     Jack Rosenthal <jrosenth@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Subject: [PATCH v2] firmware: google: Implement vboot workbuf in sysfs
+Date:   Tue, 26 Jul 2022 18:12:19 -0600
+Message-Id: <20220727001219.1300288-1-jrosenth@chromium.org>
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2tzm6eoxhjctyhdr"
-Content-Disposition: inline
-In-Reply-To: <88ce4703-e295-f41a-5905-d8afe5589f80@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The vboot workbuf is a large data structure exposed by coreboot for
+payloads and the operating system to use.  Existing tools like
+crossystem re-create this structure in userspace by reading the
+deprecated vboot v1 VBSD structure from FDT/ACPI, and translating it
+back to a vboot v2 workbuf.  Since not all data required for vboot v2
+is available in the VBSD structure, crossystem also has to shell out
+to tools like flashrom to fill in the missing bits.
 
---2tzm6eoxhjctyhdr
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l7b6ouf554xuusjc"
-Content-Disposition: inline
+Since coreboot commit a8bda43, this workbuf is also available in
+CBMEM, and since workbuf struct version 2 (vboot commit ecdca93), this
+data also contains the vboot context, making it useful.  Exposing it
+via sysfs enables tools like crossystem significantly easier access to
+read and manipulate vboot variables.
 
+Link: https://issuetracker.google.com/239604743
+Cc: Stephen Boyd <swboyd@chromium.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Julius Werner <jwerner@chromium.org>
+Tested-by: Jack Rosenthal <jrosenth@chromium.org>
+Signed-off-by: Jack Rosenthal <jrosenth@chromium.org>
+---
+ drivers/firmware/google/Kconfig  |   8 ++
+ drivers/firmware/google/Makefile |   1 +
+ drivers/firmware/google/vboot.c  | 174 +++++++++++++++++++++++++++++++
+ 3 files changed, 183 insertions(+)
+ create mode 100644 drivers/firmware/google/vboot.c
 
---l7b6ouf554xuusjc
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
+index 983e07dc022e..f0e691cb9496 100644
+--- a/drivers/firmware/google/Kconfig
++++ b/drivers/firmware/google/Kconfig
+@@ -67,6 +67,14 @@ config GOOGLE_MEMCONSOLE_COREBOOT
+ 	  the coreboot table.  If found, this log is exported to userland
+ 	  in the file /sys/firmware/log.
+ 
++config GOOGLE_VBOOT_SYSFS
++	tristate "Verified Boot in sysfs"
++	depends on GOOGLE_COREBOOT_TABLE
++	help
++	  This option enables the kernel to search for the Verified Boot
++	  workbuf coreboot table.  If found, the workbuf is exported
++	  to userland in /sys/firmware/vboot.
++
+ config GOOGLE_VPD
+ 	tristate "Vital Product Data"
+ 	depends on GOOGLE_COREBOOT_TABLE
+diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
+index d17caded5d88..f8db06764725 100644
+--- a/drivers/firmware/google/Makefile
++++ b/drivers/firmware/google/Makefile
+@@ -6,6 +6,7 @@ obj-$(CONFIG_GOOGLE_FRAMEBUFFER_COREBOOT)  += framebuffer-coreboot.o
+ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
+ obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
+ obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
++obj-$(CONFIG_GOOGLE_VBOOT_SYSFS)           += vboot.o
+ 
+ vpd-sysfs-y := vpd.o vpd_decode.o
+ obj-$(CONFIG_GOOGLE_VPD)		+= vpd-sysfs.o
+diff --git a/drivers/firmware/google/vboot.c b/drivers/firmware/google/vboot.c
+new file mode 100644
+index 000000000000..3c1e3d3ea0d9
+--- /dev/null
++++ b/drivers/firmware/google/vboot.c
+@@ -0,0 +1,174 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * vboot.c
++ *
++ * Driver for exporting the vboot workbuf to sysfs.
++ *
++ * Copyright 2022 Google Inc.
++ */
++
++#include <linux/capability.h>
++#include <linux/ctype.h>
++#include <linux/dev_printk.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/kobject.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/sysfs.h>
++
++#include "coreboot_table.h"
++
++#define LB_TAG_VBOOT_WORKBUF 0x34
++
++/* "V2SD" = vb2_shared_data.magic */
++#define VB2_SHARED_DATA_MAGIC 0x44533256
++#define VB2_CONTEXT_MAX_SIZE_V2 192
++#define VB2_CONTEXT_MAX_SIZE_V3 384
++
++struct workbuf {
++	u32 magic;
++	u16 version_major;
++	u16 version_minor;
++	union {
++		/*
++		 * V1 not supported as workbuf and vboot context
++		 * located separately.
++		 */
++		struct {
++			u8 context_padding[VB2_CONTEXT_MAX_SIZE_V2];
++			u32 workbuf_size;
++		} v2;
++		struct {
++			u8 context_padding[VB2_CONTEXT_MAX_SIZE_V3];
++			u32 workbuf_size;
++		} v3;
++	};
++} __packed;
++
++static struct kobject *vboot_kobj;
++
++static struct {
++	u8 *buf;
++	u32 size;
++	struct bin_attribute bin_attr;
++} workbuf_info;
++
++static ssize_t workbuf_read(struct file *filp, struct kobject *kobp,
++			    struct bin_attribute *bin_attr, char *buf,
++			    loff_t pos, size_t count)
++{
++	return memory_read_from_buffer(buf, count, &pos, workbuf_info.buf,
++				       workbuf_info.size);
++}
++
++static ssize_t workbuf_write(struct file *filp, struct kobject *kobp,
++			     struct bin_attribute *bin_attr, char *buf,
++			     loff_t pos, size_t count)
++{
++	if (!capable(CAP_SYS_ADMIN))
++		return -EPERM;
++	if (pos < 0 || pos >= workbuf_info.size)
++		return -EINVAL;
++	if (count > workbuf_info.size - pos)
++		count = workbuf_info.size - pos;
++
++	memcpy(workbuf_info.buf + pos, buf, count);
++	return count;
++}
++
++/*
++ * This function should only be called during initialization -- prior
++ * to workbuf being added to sysfs.  The workbuf can be manipulated
++ * via sysfs, and thus, we should not trust the size in the workbuf
++ * after we've given the user write access to the buffer.
++ */
++static int get_workbuf_size(struct coreboot_device *dev, u32 *size_out)
++{
++	int ret = 0;
++	struct workbuf *workbuf;
++
++	workbuf = memremap(dev->cbmem_ref.cbmem_addr, sizeof(struct workbuf),
++			   MEMREMAP_WB);
++
++	if (workbuf->magic != VB2_SHARED_DATA_MAGIC) {
++		dev_err(&dev->dev, "%s: workbuf has invalid magic number\n",
++			__func__);
++		ret = -EINVAL;
++		goto exit;
++	}
++
++	switch (workbuf->version_major) {
++	case 2:
++		*size_out = workbuf->v2.workbuf_size;
++		break;
++	case 3:
++		*size_out = workbuf->v3.workbuf_size;
++		break;
++	default:
++		dev_err(&dev->dev, "%s: workbuf v%hu.%hu not supported",
++			__func__, workbuf->version_major,
++			workbuf->version_minor);
++		ret = -EINVAL;
++		goto exit;
++	}
++
++exit:
++	memunmap(workbuf);
++	return ret;
++}
++
++static int vboot_probe(struct coreboot_device *dev)
++{
++	int ret;
++
++	vboot_kobj = kobject_create_and_add("vboot", firmware_kobj);
++	if (!vboot_kobj)
++		return -ENOMEM;
++
++	ret = get_workbuf_size(dev, &workbuf_info.size);
++	if (ret)
++		goto exit;
++
++	workbuf_info.buf = memremap(dev->cbmem_ref.cbmem_addr,
++				    workbuf_info.size, MEMREMAP_WB);
++
++	sysfs_bin_attr_init(&workbuf_info.bin_attr);
++	workbuf_info.bin_attr.attr.name = "workbuf";
++	workbuf_info.bin_attr.attr.mode = 0666;
++	workbuf_info.bin_attr.size = workbuf_info.size;
++	workbuf_info.bin_attr.read = workbuf_read;
++	workbuf_info.bin_attr.write = workbuf_write;
++
++	ret = sysfs_create_bin_file(vboot_kobj, &workbuf_info.bin_attr);
++
++exit:
++	if (ret) {
++		kobject_put(vboot_kobj);
++		return ret;
++	}
++
++	return 0;
++}
++
++static void vboot_remove(struct coreboot_device *dev)
++{
++	sysfs_remove_bin_file(vboot_kobj, &workbuf_info.bin_attr);
++	kobject_put(vboot_kobj);
++	memunmap(&workbuf_info.buf);
++}
++
++static struct coreboot_driver vboot_driver = {
++	.probe = vboot_probe,
++	.remove = vboot_remove,
++	.drv = {
++		.name = "vboot",
++	},
++	.tag = LB_TAG_VBOOT_WORKBUF,
++};
++module_coreboot_driver(vboot_driver);
++
++MODULE_AUTHOR("Google, Inc.");
++MODULE_LICENSE("GPL");
+-- 
+2.37.1.359.gd136c6c3e2-goog
 
-On 07/26, Magali Lemes wrote:
-> On 7/25/22 20:38, Melissa Wen wrote:
->=20
-> > On 07/25, Magali Lemes wrote:
-> > > On 7/25/22 16:42, Andr=E9 Almeida wrote:
-> > > > Hi Magali,
-> > > >=20
-> > > > =C0s 15:15 de 25/07/22, Magali Lemes escreveu:
-> > > > > As "dcn3_15_soc" and "dcn3_16_soc" are of type "struct
-> > > > > _vcs_dpi_soc_bounding_box_st", change their types accordingly.
-> > > > >=20
-> > > > I can see that indeed this type change sense for those variables, b=
-ut
-> > > > isn't a bit strange that the type was wrong in the first place? I w=
-onder
-> > > > if this variable is even used, given that it would very likely thro=
-w a
-> > > > compiler error when using the wrong type and trying to access struct
-> > > > members that aren't defined.
-> > >=20
-> > > A compilation error would be thrown if either "dc/dcn315/dcn315_resou=
-rce.h"
-> > > or "dc/dcn316/dcn316_resource.h" were included in the files where
-> > > "dcn3_15_soc" and "dcn3_16_soc" are initialized. Since they are not
-> > > included, the wrong variable type error is not shown.
-> > > To solve the sparse warning in the second patch of this series, those
-> > > variables need to be declared first, but they are already declared, w=
-e're
-> > > only missing the headers. If I only add the headers, then those varia=
-bles
-> > > will be seen, and I get the expected incompatible variables types err=
-or. So,
-> > > fixing the types here is a preliminary work for the next patch.
-> > >=20
-> > Hi Magali,
-> >=20
-> > Thanks for inspecting it. What you say makes sense, but Andr=E9 pointed
-> > out something that makes sense to me too.
-> >=20
-> > As fas as I checked, dcn3_15_soc and dcn16_soc is not used outside their
-> > respective FPU files. Maybe the proper solution is removing those
-> > declarations (and make the struct static). Can you take a look at it?
-> >=20
-> > Best Regards,
-> >=20
-> > Melissa
->=20
-> Hi, Melissa. Thank you for the suggestion!
-> My sole reason not to make those structs static was to keep some sort of
-> consistency with the rest of the dcn*_resource.h files, since that is whe=
-re
-> all the other structs are first declared. I'm not sure, though, if that's=
- a
-> good enough reason not to turn these variables into static. Let me know w=
-hat
-> you think.
-
-I don't see any other file using dcn3_15_soc, it's only in dcn30_fpu, so
-better make it static. Also, I see that doing this will ring a bell
-for some misuse of the struct outside FPU protection, in the future.
-
-With those points addressed, you can add in the next version:
-
-Reviewed-by: Melissa Wen <mwen@igalia.com>
-
-Thanks,
-
-Melissa
-
->=20
-> Magali
->=20
->=20
->=20
-> > Magali
-> >=20
-> >=20
-> > > > > Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
-> > > > > ---
-> > > > >    drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h | 2 +-
-> > > > >    drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h | 2 +-
-> > > > >    2 files changed, 2 insertions(+), 2 deletions(-)
-> > > > >=20
-> > > > > diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resourc=
-e.h b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
-> > > > > index 39929fa67a51..45276317c057 100644
-> > > > > --- a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
-> > > > > +++ b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
-> > > > > @@ -32,7 +32,7 @@
-> > > > >    	container_of(pool, struct dcn315_resource_pool, base)
-> > > > >    extern struct _vcs_dpi_ip_params_st dcn3_15_ip;
-> > > > > -extern struct _vcs_dpi_ip_params_st dcn3_15_soc;
-> > > > > +extern struct _vcs_dpi_soc_bounding_box_st dcn3_15_soc;
-> > > > >    struct dcn315_resource_pool {
-> > > > >    	struct resource_pool base;
-> > > > > diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resourc=
-e.h b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
-> > > > > index 0dc5a6c13ae7..d2234aac5449 100644
-> > > > > --- a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
-> > > > > +++ b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
-> > > > > @@ -32,7 +32,7 @@
-> > > > >    	container_of(pool, struct dcn316_resource_pool, base)
-> > > > >    extern struct _vcs_dpi_ip_params_st dcn3_16_ip;
-> > > > > -extern struct _vcs_dpi_ip_params_st dcn3_16_soc;
-> > > > > +extern struct _vcs_dpi_soc_bounding_box_st dcn3_16_soc;
-> > > > >    struct dcn316_resource_pool {
-> > > > >    	struct resource_pool base;
-
---l7b6ouf554xuusjc--
-
---2tzm6eoxhjctyhdr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmLggsAACgkQwqF3j0dL
-ehzLzw//fHDVwNgg4vD2hJIWf8vnNMimAx0eCtHRRiBOi6D000hZ5hkEENmUssIh
-ZxT6UXgrF+btpEkW0NTpfylPyo/7EcxpckQrTjlGSJXnQwQ0wPG+iBzgwzolHSO+
-Tn8ldJh2a9e10k0kUiuynzxh6XzDQtTLDDgN/0AvQG26nFHXl0sc4yi/gXBNlZXn
-8yy6f0JqELCsWdtKQTogmv79xHKDMj+HlCkG4wAahxJReNq/U2lcltWm3ouf6he3
-jN6Q4hgVGiFvmPSV2+VBBfOMOufp2gDV5BiedEh5DEyKxwjyLlmxPhr3nMqI2RuU
-U8XGcvyf+5q4kQ6DuzdlrIdamf7PXybJDMRyp3me2erc2QhzyoqTRPmYx+DjZrIl
-O9YyWYYtY/+TfInOxR8y3Gy05TTHJ7rtlDW58OvOLKHM2NsdNtpEBhV4FkB/IScZ
-l7NwoNxX02/L1BTKPO9EVONkbTlLoqYa9Kp08tdE9BQjYwpFPxvf+OmeetGYI2gR
-iuGVByuK1D4jBfv0Z5pN7Tq5CuwjZooZ63H1/fu/1LlXvcUxEES87ZxTt3orhbSG
-aWQydBauME/S6ZzPxlBAO2dTPDQ7rtKk3j2Y7ieyyg9rsk6Lr33TRDd/CwckLKts
-ZGUj7vRqLZWH4VjS6WIdpUmvmFTJ+wEtPFmL//IGg+OPvKL6cvQ=
-=Pcd0
------END PGP SIGNATURE-----
-
---2tzm6eoxhjctyhdr--

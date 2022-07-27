@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F2F582ED0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77841582C40
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241720AbiG0RRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S235821AbiG0Qoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241652AbiG0RQr (ORCPT
+        with ESMTP id S239879AbiG0Qnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:16:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47EC78DCE;
-        Wed, 27 Jul 2022 09:43:14 -0700 (PDT)
+        Wed, 27 Jul 2022 12:43:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD255D0E3;
+        Wed, 27 Jul 2022 09:30:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA22CB8200C;
-        Wed, 27 Jul 2022 16:43:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26EE5C433D7;
-        Wed, 27 Jul 2022 16:43:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BC5761A55;
+        Wed, 27 Jul 2022 16:30:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F53C433D6;
+        Wed, 27 Jul 2022 16:30:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940191;
-        bh=njurI18qD1t1r66D78QE8tvSsJDqwpTLVeo3OeAw6N4=;
+        s=korg; t=1658939423;
+        bh=jN76glgLg76fpSC8BmLDBgVCmpV2XuZmWzCxAT1uP3s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RYtvxZDwY1pk3cQUVots/Xr++2B+LTLdwdgso2YunB0xXqo/hHkdxHXBbDxb/ORwo
-         vDVeANNHtb0WTzNf3ylvmilU2mLet8lsrCwydBGqBXdojf0cOZLnKQIHQktikjMXl/
-         iS3cpR3c216T+PesZKqU2s0Fafjq4RIjf7TcTJEs=
+        b=S+2GjVnB3ZmXL7LYcP/JmXAjeQ6VbImu4qgCR0Em1UW+myATaUtAlMrIErXCrvdeA
+         knB6QypRXiPTf55a52PSArsdvgb2ZVy7xYPhHXbcDvRTCJYWQvw8G/2YcjcfpHqANn
+         MM7BOesgd75JsayUc2dIa4JWVO7b6/kP1Tm0QnSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 5.15 136/201] bpf: Make sure mac_header was set before using it
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 47/87] tcp: Fix a data-race around sysctl_tcp_early_retrans.
 Date:   Wed, 27 Jul 2022 18:10:40 +0200
-Message-Id: <20220727161033.442229540@linuxfoundation.org>
+Message-Id: <20220727161010.956863929@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 0326195f523a549e0a9d7fd44c70b26fd7265090 upstream.
+[ Upstream commit 52e65865deb6a36718a463030500f16530eaab74 ]
 
-Classic BPF has a way to load bytes starting from the mac header.
+While reading sysctl_tcp_early_retrans, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Some skbs do not have a mac header, and skb_mac_header()
-in this case is returning a pointer that 65535 bytes after
-skb->head.
-
-Existing range check in bpf_internal_load_pointer_neg_helper()
-was properly kicking and no illegal access was happening.
-
-New sanity check in skb_mac_header() is firing, so we need
-to avoid it.
-
-WARNING: CPU: 1 PID: 28990 at include/linux/skbuff.h:2785 skb_mac_header include/linux/skbuff.h:2785 [inline]
-WARNING: CPU: 1 PID: 28990 at include/linux/skbuff.h:2785 bpf_internal_load_pointer_neg_helper+0x1b1/0x1c0 kernel/bpf/core.c:74
-Modules linked in:
-CPU: 1 PID: 28990 Comm: syz-executor.0 Not tainted 5.19.0-rc4-syzkaller-00865-g4874fb9484be #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-RIP: 0010:skb_mac_header include/linux/skbuff.h:2785 [inline]
-RIP: 0010:bpf_internal_load_pointer_neg_helper+0x1b1/0x1c0 kernel/bpf/core.c:74
-Code: ff ff 45 31 f6 e9 5a ff ff ff e8 aa 27 40 00 e9 3b ff ff ff e8 90 27 40 00 e9 df fe ff ff e8 86 27 40 00 eb 9e e8 2f 2c f3 ff <0f> 0b eb b1 e8 96 27 40 00 e9 79 fe ff ff 90 41 57 41 56 41 55 41
-RSP: 0018:ffffc9000309f668 EFLAGS: 00010216
-RAX: 0000000000000118 RBX: ffffffffffeff00c RCX: ffffc9000e417000
-RDX: 0000000000040000 RSI: ffffffff81873f21 RDI: 0000000000000003
-RBP: ffff8880842878c0 R08: 0000000000000003 R09: 000000000000ffff
-R10: 000000000000ffff R11: 0000000000000001 R12: 0000000000000004
-R13: ffff88803ac56c00 R14: 000000000000ffff R15: dffffc0000000000
-FS: 00007f5c88a16700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fdaa9f6c058 CR3: 000000003a82c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-<TASK>
-____bpf_skb_load_helper_32 net/core/filter.c:276 [inline]
-bpf_skb_load_helper_32+0x191/0x220 net/core/filter.c:264
-
-Fixes: f9aefd6b2aa3 ("net: warn if mac header was not set")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220707123900.945305-1-edumazet@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: eed530b6c676 ("tcp: early retransmit")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/core.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ net/ipv4/tcp_output.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -66,11 +66,13 @@ void *bpf_internal_load_pointer_neg_help
- {
- 	u8 *ptr = NULL;
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 5cc345c4006e..72ee1fca0501 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2509,7 +2509,7 @@ bool tcp_schedule_loss_probe(struct sock *sk, bool advancing_rto)
+ 	if (rcu_access_pointer(tp->fastopen_rsk))
+ 		return false;
  
--	if (k >= SKF_NET_OFF)
-+	if (k >= SKF_NET_OFF) {
- 		ptr = skb_network_header(skb) + k - SKF_NET_OFF;
--	else if (k >= SKF_LL_OFF)
-+	} else if (k >= SKF_LL_OFF) {
-+		if (unlikely(!skb_mac_header_was_set(skb)))
-+			return NULL;
- 		ptr = skb_mac_header(skb) + k - SKF_LL_OFF;
--
-+	}
- 	if (ptr >= skb->head && ptr + size <= skb_tail_pointer(skb))
- 		return ptr;
- 
+-	early_retrans = sock_net(sk)->ipv4.sysctl_tcp_early_retrans;
++	early_retrans = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_early_retrans);
+ 	/* Schedule a loss probe in 2*RTT for SACK capable connections
+ 	 * not in loss recovery, that are either limited by cwnd or application.
+ 	 */
+-- 
+2.35.1
+
 
 

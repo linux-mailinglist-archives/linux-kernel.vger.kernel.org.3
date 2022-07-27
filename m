@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB9D581DBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 04:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F002E581DC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 04:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240108AbiG0CxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 22:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S240038AbiG0CzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 22:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiG0CxE (ORCPT
+        with ESMTP id S231259AbiG0CzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 22:53:04 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1461C3C8F4;
-        Tue, 26 Jul 2022 19:53:04 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so780696pjq.4;
-        Tue, 26 Jul 2022 19:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=oP5EcKUTnTotHqCr3RZjdU6N2l//ESkENxt8OIL1puQ=;
-        b=e1VMT+MQCKBSorOASKzbpman+CU4Izb6XZ7qTSVB0yNsPwK0grZlXyL+KQ7KDti7m5
-         Jn4PKkBdpBWwZsbcivSgI0Dq4w80Sv0siG0vpFGRlNT19s37s2s4Ff65mIwxisiHtzkK
-         5DwTeYwcohOg1vUTj6cgFY1QEemY/RF654m0w0V7F0G7BVLqOQyxz4JqbgXRgsEY+xd5
-         7aPhvtwW31XSKclhzTHPpRg4Y/wMuI3DDlB5Akx1IwteS1UEnmLeoX1AevJPZzWYrn4U
-         2IkGqi33PaYgmOLSKpHb+NgGyG5s7C9bRmFZCgPa7NiGNEfBbJunYNpYgun5dbb733WN
-         bp9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=oP5EcKUTnTotHqCr3RZjdU6N2l//ESkENxt8OIL1puQ=;
-        b=6u9Nlf7+lLiQz9arDoLV7qUiwHuYoS1pQXHf1aylnUZUQzPajoas72jMOE7lVFi+/t
-         CdChGwQcIGHqoJXKrgJ7fxIhwPtNSizyxZXSZxadMefeGe9f4rHvtnP4iLsKY1nTlwrb
-         0gDasMP1ZMFz5T2O0AEcM5pCVcYBWjhFXNvVE1dHF9hY01b85hPhz1FEM13LokjPyIW+
-         CJ+fKGPeCpzi7sOtwmF4JPVPYqMUuDDqDadpTpc2Lf7RNo/bVRAEgutFrpxZJb7Smf8R
-         WaJPgfSWCxxupyYz+SoEbZqkUmOSnnfegY6vJIeu0/5+ELEeud6XqEZ03q1wP9ovYruF
-         C5iA==
-X-Gm-Message-State: AJIora8UGN9m0q94oWUO/VdAiuvY7FnAISxUvlO4JJqfdLksMMAwofuM
-        rkjBAlVZ3zXCMsiMvuyKHbA=
-X-Google-Smtp-Source: AGRyM1uIT+u8rmBKWROAg/+c+QttLYk08s3kUbUZWuoS4KnuQ0LBg7naaCcAIqqGMKOMGLXYIDiaoQ==
-X-Received: by 2002:a17:902:76c5:b0:16d:847b:a4d0 with SMTP id j5-20020a17090276c500b0016d847ba4d0mr9695493plt.148.1658890383475;
-        Tue, 26 Jul 2022 19:53:03 -0700 (PDT)
-Received: from localhost.localdomain ([122.172.90.97])
-        by smtp.gmail.com with ESMTPSA id 186-20020a6215c3000000b0052536c695c0sm12743979pfv.170.2022.07.26.19.52.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 19:53:02 -0700 (PDT)
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-To:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] net: dsa: microchip: remove of_match_ptr() from ksz9477_dt_ids
-Date:   Wed, 27 Jul 2022 08:22:55 +0530
-Message-Id: <20220727025255.61232-1-jrdr.linux@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 26 Jul 2022 22:55:17 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF1C1150;
+        Tue, 26 Jul 2022 19:55:14 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lsz0b4Tvbz4x1W;
+        Wed, 27 Jul 2022 12:55:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658890512;
+        bh=17gluqyXS9jfy3B9QJ3z57bs8ssPCqXX0ftG48rcxA4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bJ0l6+uVnxG8wrxHA5ireEiRVTboEOzvf02LkYrtvIEECY5ABukV4W29wFZVzWwJg
+         iIa/h7M/cgMTBz7NAJq53Vh4A6Seq6R8m6XgR3htZgjDRjYAhkW78oDfnanRKdFU2q
+         bi+wUOTll7J9LrOYpp+mHOn6qeda63SoM02GZbMTwDzBnY75zQByxvRdnDXDOpGzp2
+         zTYYrmcxVoSDrqSVQK/SAlHg5eckW++J10oJjuJSb7nVBUrjmhvImzYVKC4dG6oDF0
+         3tpd8vaGfjfdCIJCB/CozD8R6WnOyUiK05SOOwgZhZX6OOZ+YvYQLkTr/WOVRsgPP1
+         XKQS0bxf+BT/Q==
+Date:   Wed, 27 Jul 2022 12:55:08 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the drm tree with the
+ drm-misc-fixes tree
+Message-ID: <20220727125508.1991f1e7@canb.auug.org.au>
+In-Reply-To: <20220718094453.2f1a1f09@canb.auug.org.au>
+References: <20220711124742.3b151992@canb.auug.org.au>
+        <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
+        <20220718094453.2f1a1f09@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/iz8zI2QfuiEyLtX1sFCVOPA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,34 +60,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+--Sig_/iz8zI2QfuiEyLtX1sFCVOPA
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
->> drivers/net/dsa/microchip/ksz9477_i2c.c:89:34:
-warning: 'ksz9477_dt_ids' defined but not used [-Wunused-const-variable=]
-      89 | static const struct of_device_id ksz9477_dt_ids[] = {
-         |                                  ^~~~~~~~~~~~~~
+Hi all,
 
-Removed of_match_ptr() from ksz9477_dt_ids.
+On Mon, 18 Jul 2022 09:44:53 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Mon, 11 Jul 2022 10:05:45 +0200 Christian K=C3=B6nig <christian.koenig=
+@amd.com> wrote:
+> >
+> > Am 11.07.22 um 04:47 schrieb Stephen Rothwell: =20
+> > >
+> > > Today's linux-next merge of the drm tree got a conflict in:
+> > >
+> > >    drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
+> > >
+> > > between commit:
+> > >
+> > >    925b6e59138c ("Revert "drm/amdgpu: add drm buddy support to amdgpu=
+"")
+> > >
+> > > from the drm-misc-fixes tree and commit:
+> > >
+> > >    5e3f1e7729ec ("drm/amdgpu: fix start calculation in amdgpu_vram_mg=
+r_new")
+> > >
+> > > from the drm tree.
+> > >
+> > > This is a mess :-(  I have just reverted the above revert before merg=
+in
+> > > the drm tree for today, please fix it up.   =20
+> >=20
+> > Sorry for the noise, the patch "5e3f1e7729ec ("drm/amdgpu: fix start
+> > calculation in amdgpu_vram_mgr_new")" and another one is going to be
+> > reverted from the drm tree as well.
+> >=20
+> > It's just that -fixes patches where faster than -next patches. =20
+>=20
+> Here we are a week later, -rc7 has been released and as far as I can
+> tell (though I may have missed it), this is still a problem :-(
+>=20
+> I am still reverting 925b6e59138c (which is now in Linus' tree).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
----
- drivers/net/dsa/microchip/ksz9477_i2c.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ping?
 
-diff --git a/drivers/net/dsa/microchip/ksz9477_i2c.c b/drivers/net/dsa/microchip/ksz9477_i2c.c
-index 99966514d444..c967a03a22c6 100644
---- a/drivers/net/dsa/microchip/ksz9477_i2c.c
-+++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
-@@ -118,7 +118,7 @@ MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
- static struct i2c_driver ksz9477_i2c_driver = {
- 	.driver = {
- 		.name	= "ksz9477-switch",
--		.of_match_table = of_match_ptr(ksz9477_dt_ids),
-+		.of_match_table = ksz9477_dt_ids,
- 	},
- 	.probe	= ksz9477_i2c_probe,
- 	.remove	= ksz9477_i2c_remove,
--- 
-2.25.1
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/iz8zI2QfuiEyLtX1sFCVOPA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLgqQwACgkQAVBC80lX
+0GyVWgf9GwEX6bHLApvSCJDTXCThI/pRHsnhuWITnGzfjAB8P13nwYpCxYtGxaY2
+BFoIIp+NsVqDyiN67mEqZLSX0nOYce5RJA65le0yUeIQt4lmjT+8x/xy4a7fpEIv
+ELvxfvNMpYJDwW/8ZLjc4cm3UEhaYEKIJunYZs9+mVbSTuAVakt0tpvOnZMAUowM
+8bXTbV+B3sa7MQr+Sy8hdIv2L2F8SefQhu/4jsVH6N3oecg6wT67Bo8xRnIW/qVJ
+pIlmII/5aViLcYygcPY6x2ZkLzHVJEgj9tYDdX+fvZHlUdCLEKefvXFOzJ12nMrb
+EiUUVrfmDgyyhglqcsuuskIsbN6dxQ==
+=RG5S
+-----END PGP SIGNATURE-----
+
+--Sig_/iz8zI2QfuiEyLtX1sFCVOPA--

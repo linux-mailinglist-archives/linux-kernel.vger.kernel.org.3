@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E040583433
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 22:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF19583446
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 22:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234067AbiG0UoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 16:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
+        id S233095AbiG0UxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 16:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiG0UoT (ORCPT
+        with ESMTP id S229924AbiG0Uw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 16:44:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991F5501A1;
-        Wed, 27 Jul 2022 13:44:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BDFAB821BC;
-        Wed, 27 Jul 2022 20:44:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A5BC433C1;
-        Wed, 27 Jul 2022 20:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658954655;
-        bh=o1bEquRZUISTz+ILsSz7+IiI4+5ykqc4Ff8IODEXRAE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qT4qlCLH1qXrQpOFOAWBYNvwc2nTRY2Qw7hkgpINvTPrf14FwCF/rbu2sGrrSxHs7
-         dI/pFs5YPAWup9dlE7o+Nq35+pbBsIHghkmlSsyje85+LSFXgL0A6AcDzahKcrfeMK
-         UReoFM/3BHSg9IZpETbleQzFx6zwuA6N/vScZq5Xz1eRZ3gpq8pVv4XSstW0oLnUiq
-         SVLM5IVLewuEZ9UaRi610STU9pyoUgWPSrlGAHpk5AVyCs5ztKCzq0w1H/geqP2ec3
-         g13l0BImBDpvaz4oGj0HpSdEqUf8+69+kn0fiA3kZYJnfmenhUkO9OIejZQ+a1wIBU
-         JRzIck04gkbeA==
-Date:   Wed, 27 Jul 2022 16:44:14 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Xiaoming Ni <nixiaoming@huawei.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Iurii Zaikin <yzaikin@google.com>, Jan Kara <jack@suse.cz>,
-        Paul Turner <pjt@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>, Qing Wang <wangqing@vivo.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Stephen Kitt <steve@sk2.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Antti Palosaari <crope@iki.fi>, Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Lukas Middendorf <kernel@tuxforce.de>,
-        Mark Fasheh <mark@fasheh.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Tso <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 5.15 040/201] sysctl: move some boundary constants from
- sysctl.c to sysctl_vals
-Message-ID: <YuGjnm7ePDsgosCV@sashalap>
-References: <20220727161026.977588183@linuxfoundation.org>
- <20220727161028.534205480@linuxfoundation.org>
- <YuF2eU9SbDDHdqaU@bombadil.infradead.org>
- <YuF/t6/DtsGPLQVc@kroah.com>
+        Wed, 27 Jul 2022 16:52:57 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E615071D
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658955176; x=1690491176;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xdEvTODN9bwCEQN4THkpljZuXpgpyz9/fZ1pG2d8C5M=;
+  b=hPq59/w88vMrO5GYD1LciSl+NiEdioD+C73PRWiQXMtYVE3ziD+6NU5Z
+   ar1iw18Gj4Y5ctpkmMmea1h8ScVSL3ffZSxl+CIkq8/bMlfiAhqyHyfAQ
+   JGXbYAlwTkScfYaew7tNIMsleawrvy218rN2bGSYstEPUoJSoipKOIYag
+   iCGwkQlkGPcR0vaR4QB3q74bSAY8dXq1jATndRWXHbGz0f43aElQZgIgF
+   iKtCOddt+vGgjYNQfjPQOtA6tsKea/13CK6FX15TjpV+ZP1MgocFoPC1Q
+   h/Q18D88qXDBx6tX/p3WJIkMEF6BxmnZLS8zpMSKDVZ2Hp3SpfyBd4JIW
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="289115374"
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="289115374"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 13:52:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="576147075"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jul 2022 13:52:55 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGo1W-00096g-11;
+        Wed, 27 Jul 2022 20:52:54 +0000
+Date:   Thu, 28 Jul 2022 04:52:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:hdmi-dbg 16/23] kismet: WARNING: unmet direct
+ dependencies detected for SND_SOC_PCM512x_I2C when selected by
+ SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC
+Message-ID: <202207280432.VGa4ENtE-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuF/t6/DtsGPLQVc@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 08:11:03PM +0200, Greg Kroah-Hartman wrote:
->On Wed, Jul 27, 2022 at 10:31:37AM -0700, Luis Chamberlain wrote:
->> On Wed, Jul 27, 2022 at 06:09:04PM +0200, Greg Kroah-Hartman wrote:
->> > From: Xiaoming Ni <nixiaoming@huawei.com>
->> >
->> > [ Upstream commit 78e36f3b0dae586f623c4a37ec5eb5496f5abbe1 ]
->> >
->> > sysctl has helpers which let us specify boundary values for a min or max
->> > int value.  Since these are used for a boundary check only they don't
->> > change, so move these variables to sysctl_vals to avoid adding duplicate
->> > variables.  This will help with our cleanup of kernel/sysctl.c.
->> >
->> > [akpm@linux-foundation.org: update it for "mm/pagealloc: sysctl: change watermark_scale_factor max limit to 30%"]
->> > [mcgrof@kernel.org: major rebase]
->> >
->> > Link: https://lkml.kernel.org/r/20211123202347.818157-3-mcgrof@kernel.org
->> > Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
->> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->> > Reviewed-by: Kees Cook <keescook@chromium.org>
->> > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
->> > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
->> > Signed-off-by: Sasha Levin <sashal@kernel.org>
->>
->> I'm a bit puzzled. How / why is this a stable fix?
->
->I think it's needed by a patch later in the series.  Sasha, can you
->verify?
+tree:   git://linuxtv.org/hverkuil/media_tree.git hdmi-dbg
+head:   7e5cf0f879352d748b928e53f0411da8a0350bd0
+commit: 855d99bdc8325d5c59c539e796a21ae638d9da71 [16/23] hifiberry_dacplusadc: add support for the Hifiberry DAC+ ADC
+config: (https://download.01.org/0day-ci/archive/20220728/202207280432.VGa4ENtE-lkp@intel.com/config)
+reproduce:
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree hdmi-dbg
+        git checkout 855d99bdc8325d5c59c539e796a21ae638d9da71
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_SND_SOC_PCM512x_I2C --selectors CONFIG_SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC -a=x86_64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=x86_64 olddefconfig
 
-Yes, about 30 patches in this series need this patch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for SND_SOC_PCM512x_I2C when selected by SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC
+   
+   WARNING: unmet direct dependencies detected for SND_SOC_PCM512x_I2C
+     Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && I2C [=n]
+     Selected by [y]:
+     - SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && (SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S [=n] || COMMON_CLK [=y])
 
 -- 
-Thanks,
-Sasha
+0-DAY CI Kernel Test Service
+https://01.org/lkp

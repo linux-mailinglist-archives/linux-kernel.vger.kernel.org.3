@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD43582B1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304DD582AB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234839AbiG0Q1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S234666AbiG0QWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236613AbiG0Q1B (ORCPT
+        with ESMTP id S235144AbiG0QWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:27:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A440C4D4D3;
-        Wed, 27 Jul 2022 09:23:58 -0700 (PDT)
+        Wed, 27 Jul 2022 12:22:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADD02BB04;
+        Wed, 27 Jul 2022 09:22:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E5925CE214D;
-        Wed, 27 Jul 2022 16:23:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A90ECC433D6;
-        Wed, 27 Jul 2022 16:23:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6D22B821B9;
+        Wed, 27 Jul 2022 16:22:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D12C433D6;
+        Wed, 27 Jul 2022 16:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939018;
-        bh=sjyoKRonvaulD/nuE0ZGgIzLrSbHpjhptVMNs4+PNsg=;
+        s=korg; t=1658938931;
+        bh=x7MXIbRyh87EpyP2If66oVAwRiv0rDKPLJvSBv6XxHo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mP+rYXb0ykQI3+BaoXSska9QHpeo+SFBMy1E7ApM4tT6LRcG43LOng+ZPsIuRm64F
-         sH7oIV0jJQvzCWwgRetJNCUbkofj2KMf56xJBR4fkaR0nV6YNduWocX4TixgTR1FZB
-         ikoKl/K8wNU+z13wBL2m8E7U5yPF744JE+pULvLA=
+        b=wIMoQXhmwao9Iv7H6mar+kUqwBYVIXUMxG1JBpY08N6PjlLoaeQj1pAev1b+G6UR1
+         +uTgAfZgJ9iDF/TwBf3SRS6G06S+MFcI6gQEX+FKyAiI3gtIdzCZV0O75Y0wUyQicE
+         pPczKB2RF5zKfK2gT0l5v6FjUIS6SZvrKBMt1x/g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 4.14 22/37] Bluetooth: Add bt_skb_sendmmsg helper
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH 4.9 19/26] bpf: Make sure mac_header was set before using it
 Date:   Wed, 27 Jul 2022 18:10:48 +0200
-Message-Id: <20220727161001.717725019@linuxfoundation.org>
+Message-Id: <20220727160959.878920967@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
+References: <20220727160959.122591422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 97e4e80299844bb5f6ce5a7540742ffbffae3d97 upstream.
+commit 0326195f523a549e0a9d7fd44c70b26fd7265090 upstream.
 
-This works similarly to bt_skb_sendmsg but can split the msg into
-multiple skb fragments which is useful for stream sockets.
+Classic BPF has a way to load bytes starting from the mac header.
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Some skbs do not have a mac header, and skb_mac_header()
+in this case is returning a pointer that 65535 bytes after
+skb->head.
+
+Existing range check in bpf_internal_load_pointer_neg_helper()
+was properly kicking and no illegal access was happening.
+
+New sanity check in skb_mac_header() is firing, so we need
+to avoid it.
+
+WARNING: CPU: 1 PID: 28990 at include/linux/skbuff.h:2785 skb_mac_header include/linux/skbuff.h:2785 [inline]
+WARNING: CPU: 1 PID: 28990 at include/linux/skbuff.h:2785 bpf_internal_load_pointer_neg_helper+0x1b1/0x1c0 kernel/bpf/core.c:74
+Modules linked in:
+CPU: 1 PID: 28990 Comm: syz-executor.0 Not tainted 5.19.0-rc4-syzkaller-00865-g4874fb9484be #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+RIP: 0010:skb_mac_header include/linux/skbuff.h:2785 [inline]
+RIP: 0010:bpf_internal_load_pointer_neg_helper+0x1b1/0x1c0 kernel/bpf/core.c:74
+Code: ff ff 45 31 f6 e9 5a ff ff ff e8 aa 27 40 00 e9 3b ff ff ff e8 90 27 40 00 e9 df fe ff ff e8 86 27 40 00 eb 9e e8 2f 2c f3 ff <0f> 0b eb b1 e8 96 27 40 00 e9 79 fe ff ff 90 41 57 41 56 41 55 41
+RSP: 0018:ffffc9000309f668 EFLAGS: 00010216
+RAX: 0000000000000118 RBX: ffffffffffeff00c RCX: ffffc9000e417000
+RDX: 0000000000040000 RSI: ffffffff81873f21 RDI: 0000000000000003
+RBP: ffff8880842878c0 R08: 0000000000000003 R09: 000000000000ffff
+R10: 000000000000ffff R11: 0000000000000001 R12: 0000000000000004
+R13: ffff88803ac56c00 R14: 000000000000ffff R15: dffffc0000000000
+FS: 00007f5c88a16700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fdaa9f6c058 CR3: 000000003a82c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+<TASK>
+____bpf_skb_load_helper_32 net/core/filter.c:276 [inline]
+bpf_skb_load_helper_32+0x191/0x220 net/core/filter.c:264
+
+Fixes: f9aefd6b2aa3 ("net: warn if mac header was not set")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220707123900.945305-1-edumazet@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/bluetooth/bluetooth.h |   38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ kernel/bpf/core.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/include/net/bluetooth/bluetooth.h
-+++ b/include/net/bluetooth/bluetooth.h
-@@ -395,6 +395,44 @@ static inline struct sk_buff *bt_skb_sen
- 	return skb;
- }
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -60,11 +60,13 @@ void *bpf_internal_load_pointer_neg_help
+ {
+ 	u8 *ptr = NULL;
  
-+/* Similar to bt_skb_sendmsg but can split the msg into multiple fragments
-+ * accourding to the MTU.
-+ */
-+static inline struct sk_buff *bt_skb_sendmmsg(struct sock *sk,
-+					      struct msghdr *msg,
-+					      size_t len, size_t mtu,
-+					      size_t headroom, size_t tailroom)
-+{
-+	struct sk_buff *skb, **frag;
-+
-+	skb = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
-+	if (IS_ERR_OR_NULL(skb))
-+		return skb;
-+
-+	len -= skb->len;
-+	if (!len)
-+		return skb;
-+
-+	/* Add remaining data over MTU as continuation fragments */
-+	frag = &skb_shinfo(skb)->frag_list;
-+	while (len) {
-+		struct sk_buff *tmp;
-+
-+		tmp = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
-+		if (IS_ERR_OR_NULL(tmp)) {
-+			kfree_skb(skb);
-+			return tmp;
-+		}
-+
-+		len -= tmp->len;
-+
-+		*frag = tmp;
-+		frag = &(*frag)->next;
+-	if (k >= SKF_NET_OFF)
++	if (k >= SKF_NET_OFF) {
+ 		ptr = skb_network_header(skb) + k - SKF_NET_OFF;
+-	else if (k >= SKF_LL_OFF)
++	} else if (k >= SKF_LL_OFF) {
++		if (unlikely(!skb_mac_header_was_set(skb)))
++			return NULL;
+ 		ptr = skb_mac_header(skb) + k - SKF_LL_OFF;
+-
 +	}
-+
-+	return skb;
-+}
-+
- int bt_to_errno(u16 code);
+ 	if (ptr >= skb->head && ptr + size <= skb_tail_pointer(skb))
+ 		return ptr;
  
- void hci_sock_set_flag(struct sock *sk, int nr);
 
 

@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF30D582F7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657D1582BB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238204AbiG0R0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        id S238865AbiG0Qgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbiG0RZV (ORCPT
+        with ESMTP id S237965AbiG0QfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:25:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792215FADA;
-        Wed, 27 Jul 2022 09:46:40 -0700 (PDT)
+        Wed, 27 Jul 2022 12:35:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA8F56B93;
+        Wed, 27 Jul 2022 09:27:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F99561560;
-        Wed, 27 Jul 2022 16:46:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D911C433D7;
-        Wed, 27 Jul 2022 16:46:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 228A9B821CB;
+        Wed, 27 Jul 2022 16:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF34C433D6;
+        Wed, 27 Jul 2022 16:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940396;
-        bh=xmzjyxsesrVir23dMT/MhOAnIeNp3qCflA/JyTIZJGQ=;
+        s=korg; t=1658939260;
+        bh=lybdaq6uKudUqfYXxUSkTfKxk/xAIs80HzWNT+hwtq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=su/mHB16+LhuZSLjnzWkdASyESTrW3PDnCN8j51ob/8pbcqB5QNs1qCzwTCw1xTdx
-         Y2o2CaO7mbDYeO8ckJPTgudZHA2Co4HBXStU/NHvB5Pb0WKllIdH0c147Rc7fnutSp
-         Ekp3aFTge+Hf7TYzRO7YKJ0kuUWAxi97guY/bv1c=
+        b=XMYem/mLFbTz+dWaKIfrFjH2hjzJRgATqTbML/5yR9FLvDON5fpbBAVKjePrbnDzj
+         wJYtRCYQfu3y/ww32yviEl7PuvSfhHwihoLgvQPJH/8eMgCqst2j59HaHMHilW6HK/
+         hNPV+JpfLlewCMrWa3+u37sf779aygzAxbEbPGWQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.18 001/158] pinctrl: armada-37xx: use raw spinlocks for regmap to avoid invalid wait context
-Date:   Wed, 27 Jul 2022 18:11:05 +0200
-Message-Id: <20220727161021.487449726@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Hillf Danton <hdanton@sina.com>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 4.19 57/62] tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
+Date:   Wed, 27 Jul 2022 18:11:06 +0200
+Message-Id: <20220727161006.374175944@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,86 +55,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-commit 4546760619cfa9b718fe2059ceb07101cf9ff61e upstream.
+commit a501ab75e7624d133a5a3c7ec010687c8b961d23 upstream.
 
-The irqchip->irq_set_type method is called by __irq_set_trigger() under
-the desc->lock raw spinlock.
+There is a race in pty_write(). pty_write() can be called in parallel
+with e.g. ioctl(TIOCSTI) or ioctl(TCXONC) which also inserts chars to
+the buffer. Provided, tty_flip_buffer_push() in pty_write() is called
+outside the lock, it can commit inconsistent tail. This can lead to out
+of bounds writes and other issues. See the Link below.
 
-The armada-37xx implementation, armada_37xx_irq_set_type(), uses an MMIO
-regmap created by of_syscon_register(), which uses plain spinlocks
-(the kind that are sleepable on RT).
+To fix this, we have to introduce a new helper called
+tty_insert_flip_string_and_push_buffer(). It does both
+tty_insert_flip_string() and tty_flip_buffer_commit() under the port
+lock. It also calls queue_work(), but outside the lock. See
+71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in
+pty_write) for the reasons.
 
-Therefore, this is an invalid locking scheme for which we get a kernel
-splat stating just that ("[ BUG: Invalid wait context ]"), because the
-context in which the plain spinlock may sleep is atomic due to the raw
-spinlock. We need to go raw spinlocks all the way.
+Keep the helper internal-only (in drivers' tty.h). It is not intended to
+be used widely.
 
-Make this driver create its own MMIO regmap, with use_raw_spinlock=true,
-and stop relying on syscon to provide it.
-
-This patch depends on commit 67021f25d952 ("regmap: teach regmap to use
-raw spinlocks if requested in the config").
-
-Cc: <stable@vger.kernel.org> # 5.15+
-Fixes: 2f227605394b ("pinctrl: armada-37xx: Add irqchip support")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/r/20220716233745.1704677-3-vladimir.oltean@nxp.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://seclists.org/oss-sec/2022/q2/155
+Fixes: 71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in pty_write)
+Cc: 一只狗 <chennbnbnb@gmail.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Suggested-by: Hillf Danton <hdanton@sina.com>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220707082558.9250-2-jslaby@suse.cz
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/mvebu/pinctrl-armada-37xx.c |   27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ drivers/tty/pty.c        |   14 ++------------
+ drivers/tty/tty_buffer.c |   31 +++++++++++++++++++++++++++++++
+ include/linux/tty_flip.h |    3 +++
+ 3 files changed, 36 insertions(+), 12 deletions(-)
 
---- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-+++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-@@ -1121,25 +1121,40 @@ static const struct of_device_id armada_
- 	{ },
- };
- 
-+static const struct regmap_config armada_37xx_pinctrl_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_stride = 4,
-+	.use_raw_spinlock = true,
-+};
-+
- static int __init armada_37xx_pinctrl_probe(struct platform_device *pdev)
+--- a/drivers/tty/pty.c
++++ b/drivers/tty/pty.c
+@@ -111,21 +111,11 @@ static void pty_unthrottle(struct tty_st
+ static int pty_write(struct tty_struct *tty, const unsigned char *buf, int c)
  {
- 	struct armada_37xx_pinctrl *info;
- 	struct device *dev = &pdev->dev;
--	struct device_node *np = dev->of_node;
- 	struct regmap *regmap;
-+	void __iomem *base;
- 	int ret;
+ 	struct tty_struct *to = tty->link;
+-	unsigned long flags;
  
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
-+	if (IS_ERR(base)) {
-+		dev_err(dev, "failed to ioremap base address: %pe\n", base);
-+		return PTR_ERR(base);
-+	}
+-	if (tty->stopped)
++	if (tty->stopped || !c)
+ 		return 0;
+ 
+-	if (c > 0) {
+-		spin_lock_irqsave(&to->port->lock, flags);
+-		/* Stuff the data into the input queue of the other end */
+-		c = tty_insert_flip_string(to->port, buf, c);
+-		spin_unlock_irqrestore(&to->port->lock, flags);
+-		/* And shovel */
+-		if (c)
+-			tty_flip_buffer_push(to->port);
+-	}
+-	return c;
++	return tty_insert_flip_string_and_push_buffer(to->port, buf, c);
+ }
+ 
+ /**
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -548,6 +548,37 @@ void tty_flip_buffer_push(struct tty_por
+ EXPORT_SYMBOL(tty_flip_buffer_push);
+ 
+ /**
++ * tty_insert_flip_string_and_push_buffer - add characters to the tty buffer and
++ *	push
++ * @port: tty port
++ * @chars: characters
++ * @size: size
++ *
++ * The function combines tty_insert_flip_string() and tty_flip_buffer_push()
++ * with the exception of properly holding the @port->lock.
++ *
++ * To be used only internally (by pty currently).
++ *
++ * Returns: the number added.
++ */
++int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
++		const unsigned char *chars, size_t size)
++{
++	struct tty_bufhead *buf = &port->buf;
++	unsigned long flags;
 +
-+	regmap = devm_regmap_init_mmio(dev, base,
-+				       &armada_37xx_pinctrl_regmap_config);
-+	if (IS_ERR(regmap)) {
-+		dev_err(dev, "failed to create regmap: %pe\n", regmap);
-+		return PTR_ERR(regmap);
-+	}
++	spin_lock_irqsave(&port->lock, flags);
++	size = tty_insert_flip_string(port, chars, size);
++	if (size)
++		tty_flip_buffer_commit(buf->tail);
++	spin_unlock_irqrestore(&port->lock, flags);
 +
- 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
- 	if (!info)
- 		return -ENOMEM;
++	queue_work(system_unbound_wq, &buf->work);
++
++	return size;
++}
++
++/**
+  *	tty_buffer_init		-	prepare a tty buffer structure
+  *	@tty: tty to initialise
+  *
+--- a/include/linux/tty_flip.h
++++ b/include/linux/tty_flip.h
+@@ -39,4 +39,7 @@ static inline int tty_insert_flip_string
+ extern void tty_buffer_lock_exclusive(struct tty_port *port);
+ extern void tty_buffer_unlock_exclusive(struct tty_port *port);
  
- 	info->dev = dev;
--
--	regmap = syscon_node_to_regmap(np);
--	if (IS_ERR(regmap))
--		return dev_err_probe(dev, PTR_ERR(regmap), "cannot get regmap\n");
- 	info->regmap = regmap;
--
- 	info->data = of_device_get_match_data(dev);
- 
- 	ret = armada_37xx_pinctrl_register(pdev, info);
++int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
++		const unsigned char *chars, size_t cnt);
++
+ #endif /* _LINUX_TTY_FLIP_H */
 
 

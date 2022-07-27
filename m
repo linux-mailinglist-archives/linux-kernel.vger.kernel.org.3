@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D402582E34
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7494582E3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238533AbiG0RJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S241395AbiG0RKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241459AbiG0RIr (ORCPT
+        with ESMTP id S241487AbiG0RIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:08:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AB55A8B0;
-        Wed, 27 Jul 2022 09:40:37 -0700 (PDT)
+        Wed, 27 Jul 2022 13:08:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D127D4D153;
+        Wed, 27 Jul 2022 09:40:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C349F60D38;
-        Wed, 27 Jul 2022 16:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D272CC433C1;
-        Wed, 27 Jul 2022 16:40:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CC100CE22F9;
+        Wed, 27 Jul 2022 16:40:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8996EC433C1;
+        Wed, 27 Jul 2022 16:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940037;
-        bh=OEykdUPXVNQvb/VQCM+52YVDVEsWYbSFVHjVP5N/vg0=;
+        s=korg; t=1658940040;
+        bh=9YoCgJ40rzOqNOclYBRcgD4FzYAA8Mvm+m3wKZjwpPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=voQ18kONvvwG4sy0T0+VmJoWs1zV9WTMM7DKs7doqGdG/xzhYKRcogxhvWKThAyuM
-         uipin1FpYH+sA2U2b36m1LFSGRkSqERG7HTxi3Pw6Z9SSMJh6G2ellOESkBg+YNJUa
-         68i+c7yPSFqhK1q0NOgJ7jgySXEK0JeBR7hB5RIU=
+        b=hdnNKzkDXsiZ06lgdBBzwIcZ+EcK+3mitbxol4e0C46SAnXPmXX7rYiZQEqYlDfJm
+         HIqkwir5qJLTfRJJu5AZ8Zk/Pfq6g8HqFGRVHdbrCWd1PBC1Q55VRfg67uwfV6kEnM
+         78xJMylC+wfVxh57zGhzW6Hmf2joLIxqyiaNynqs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 083/201] i2c: cadence: Change large transfer count reset logic to be unconditional
-Date:   Wed, 27 Jul 2022 18:09:47 +0200
-Message-Id: <20220727161031.177855279@linuxfoundation.org>
+        stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 084/201] perf tests: Fix Convert perf time to TSC test for hybrid
+Date:   Wed, 27 Jul 2022 18:09:48 +0200
+Message-Id: <20220727161031.227950259@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
 References: <20220727161026.977588183@linuxfoundation.org>
@@ -55,108 +60,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit 4ca8ca873d454635c20d508261bfc0081af75cf8 ]
+[ Upstream commit deb44a6249f696106645c63c0603eab08a6122af ]
 
-Problems were observed on the Xilinx ZynqMP platform with large I2C reads.
-When a read of 277 bytes was performed, the controller NAKed the transfer
-after only 252 bytes were transferred and returned an ENXIO error on the
-transfer.
+The test does not always correctly determine the number of events for
+hybrids, nor allow for more than 1 evsel when parsing.
 
-There is some code in cdns_i2c_master_isr to handle this case by resetting
-the transfer count in the controller before it reaches 0, to allow larger
-transfers to work, but it was conditional on the CDNS_I2C_BROKEN_HOLD_BIT
-quirk being set on the controller, and ZynqMP uses the r1p14 version of
-the core where this quirk is not being set. The requirement to do this to
-support larger reads seems like an inherently required workaround due to
-the core only having an 8-bit transfer size register, so it does not
-appear that this should be conditional on the broken HOLD bit quirk which
-is used elsewhere in the driver.
+Fix by iterating the events actually created and getting the correct
+evsel for the events processed.
 
-Remove the dependency on the CDNS_I2C_BROKEN_HOLD_BIT for this transfer
-size reset logic to fix this problem.
-
-Fixes: 63cab195bf49 ("i2c: removed work arounds in i2c driver for Zynq Ultrascale+ MPSoC")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Reviewed-by: Shubhrajyoti Datta <Shubhrajyoti.datta@amd.com>
-Acked-by: Michal Simek <michal.simek@amd.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: d9da6f70eb235110 ("perf tests: Support 'Convert perf time to TSC' test for hybrid")
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Thomas Richter <tmricht@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220713123459.24145-3-adrian.hunter@intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-cadence.c | 30 +++++-------------------------
- 1 file changed, 5 insertions(+), 25 deletions(-)
+ tools/perf/tests/perf-time-to-tsc.c | 18 ++++--------------
+ 1 file changed, 4 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index 3d6f8ee355bf..630cfa4ddd46 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -388,9 +388,9 @@ static irqreturn_t cdns_i2c_slave_isr(void *ptr)
-  */
- static irqreturn_t cdns_i2c_master_isr(void *ptr)
- {
--	unsigned int isr_status, avail_bytes, updatetx;
-+	unsigned int isr_status, avail_bytes;
- 	unsigned int bytes_to_send;
--	bool hold_quirk;
-+	bool updatetx;
- 	struct cdns_i2c *id = ptr;
- 	/* Signal completion only after everything is updated */
- 	int done_flag = 0;
-@@ -410,11 +410,7 @@ static irqreturn_t cdns_i2c_master_isr(void *ptr)
- 	 * Check if transfer size register needs to be updated again for a
- 	 * large data receive operation.
- 	 */
--	updatetx = 0;
--	if (id->recv_count > id->curr_recv_count)
--		updatetx = 1;
--
--	hold_quirk = (id->quirks & CDNS_I2C_BROKEN_HOLD_BIT) && updatetx;
-+	updatetx = id->recv_count > id->curr_recv_count;
+diff --git a/tools/perf/tests/perf-time-to-tsc.c b/tools/perf/tests/perf-time-to-tsc.c
+index 7c56bc1f4cff..89d25befb171 100644
+--- a/tools/perf/tests/perf-time-to-tsc.c
++++ b/tools/perf/tests/perf-time-to-tsc.c
+@@ -20,8 +20,6 @@
+ #include "tsc.h"
+ #include "mmap.h"
+ #include "tests.h"
+-#include "pmu.h"
+-#include "pmu-hybrid.h"
  
- 	/* When receiving, handle data interrupt and completion interrupt */
- 	if (id->p_recv_buf &&
-@@ -445,7 +441,7 @@ static irqreturn_t cdns_i2c_master_isr(void *ptr)
- 				break;
+ #define CHECK__(x) {				\
+ 	while ((x) < 0) {			\
+@@ -84,18 +82,8 @@ int test__perf_time_to_tsc(struct test *test __maybe_unused, int subtest __maybe
+ 
+ 	evlist__config(evlist, &opts, NULL);
+ 
+-	evsel = evlist__first(evlist);
+-
+-	evsel->core.attr.comm = 1;
+-	evsel->core.attr.disabled = 1;
+-	evsel->core.attr.enable_on_exec = 0;
+-
+-	/*
+-	 * For hybrid "cycles:u", it creates two events.
+-	 * Init the second evsel here.
+-	 */
+-	if (perf_pmu__has_hybrid() && perf_pmu__hybrid_mounted("cpu_atom")) {
+-		evsel = evsel__next(evsel);
++	/* For hybrid "cycles:u", it creates two events */
++	evlist__for_each_entry(evlist, evsel) {
+ 		evsel->core.attr.comm = 1;
+ 		evsel->core.attr.disabled = 1;
+ 		evsel->core.attr.enable_on_exec = 0;
+@@ -141,10 +129,12 @@ int test__perf_time_to_tsc(struct test *test __maybe_unused, int subtest __maybe
+ 				goto next_event;
+ 
+ 			if (strcmp(event->comm.comm, comm1) == 0) {
++				CHECK_NOT_NULL__(evsel = evlist__event2evsel(evlist, event));
+ 				CHECK__(evsel__parse_sample(evsel, event, &sample));
+ 				comm1_time = sample.time;
  			}
- 
--			if (cdns_is_holdquirk(id, hold_quirk))
-+			if (cdns_is_holdquirk(id, updatetx))
- 				break;
- 		}
- 
-@@ -456,7 +452,7 @@ static irqreturn_t cdns_i2c_master_isr(void *ptr)
- 		 * maintain transfer size non-zero while performing a large
- 		 * receive operation.
- 		 */
--		if (cdns_is_holdquirk(id, hold_quirk)) {
-+		if (cdns_is_holdquirk(id, updatetx)) {
- 			/* wait while fifo is full */
- 			while (cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET) !=
- 			       (id->curr_recv_count - CDNS_I2C_FIFO_DEPTH))
-@@ -478,22 +474,6 @@ static irqreturn_t cdns_i2c_master_isr(void *ptr)
- 						  CDNS_I2C_XFER_SIZE_OFFSET);
- 				id->curr_recv_count = id->recv_count;
+ 			if (strcmp(event->comm.comm, comm2) == 0) {
++				CHECK_NOT_NULL__(evsel = evlist__event2evsel(evlist, event));
+ 				CHECK__(evsel__parse_sample(evsel, event, &sample));
+ 				comm2_time = sample.time;
  			}
--		} else if (id->recv_count && !hold_quirk &&
--						!id->curr_recv_count) {
--
--			/* Set the slave address in address register*/
--			cdns_i2c_writereg(id->p_msg->addr & CDNS_I2C_ADDR_MASK,
--						CDNS_I2C_ADDR_OFFSET);
--
--			if (id->recv_count > CDNS_I2C_TRANSFER_SIZE) {
--				cdns_i2c_writereg(CDNS_I2C_TRANSFER_SIZE,
--						CDNS_I2C_XFER_SIZE_OFFSET);
--				id->curr_recv_count = CDNS_I2C_TRANSFER_SIZE;
--			} else {
--				cdns_i2c_writereg(id->recv_count,
--						CDNS_I2C_XFER_SIZE_OFFSET);
--				id->curr_recv_count = id->recv_count;
--			}
- 		}
- 
- 		/* Clear hold (if not repeated start) and signal completion */
 -- 
 2.35.1
 

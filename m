@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6DB582D75
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12D1583009
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiG0Q6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
+        id S229716AbiG0RcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbiG0Q5k (ORCPT
+        with ESMTP id S242393AbiG0R3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:57:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1529C66AF2;
-        Wed, 27 Jul 2022 09:36:37 -0700 (PDT)
+        Wed, 27 Jul 2022 13:29:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A16080526;
+        Wed, 27 Jul 2022 09:47:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4032661AAD;
-        Wed, 27 Jul 2022 16:36:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC22C433D6;
-        Wed, 27 Jul 2022 16:36:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B0E5B8200D;
+        Wed, 27 Jul 2022 16:47:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0532EC433C1;
+        Wed, 27 Jul 2022 16:47:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939774;
-        bh=2Vlo7M8NSNs8mY3VMCsSnVhil6Q8QE9JRpDlIGdKv1U=;
+        s=korg; t=1658940437;
+        bh=jsF4LpQm777PxNt5/h+cNChfYSEvUrbp0KZNEszQamk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LX+ulILIHSF98W5TpKLrsNpT7wlvwvRBBaFI0+reyUXMctPTxJCMV8h7UwRW8EnbB
-         6/9O2jvGfDe/NWeFqW1tmsYe3sUt0ZMas2gfyxJWmeXpWQ1l5Jz2SwLQX1fTKH9C6K
-         ZGzqqvNEU1gEq3JNsyFKwE4jDWgP+jHwkWGbhxVc=
+        b=bo2Sp00JN+is7LRQH5e9eoHXZkOYSizB84pnapgJX/YvStm4+7Et1K4wpMpKxf2d2
+         Lk0LNMGI0BOb0f14ORtinW3MI5MvTDp/DaVrLXB8PGxvENutMbEKZwqrz87bAZuHk2
+         38FFLWE3G52RYawIPx8yvkfx7bLHw0mag7XekTvM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
-        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 5.10 100/105] tty: extract tty_flip_buffer_commit() from tty_flip_buffer_push()
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 022/158] power/reset: arm-versatile: Fix refcount leak in versatile_reboot_probe
 Date:   Wed, 27 Jul 2022 18:11:26 +0200
-Message-Id: <20220727161016.126388729@linuxfoundation.org>
+Message-Id: <20220727161022.356820953@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
+References: <20220727161021.428340041@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 716b10580283fda66f2b88140e3964f8a7f9da89 upstream.
+[ Upstream commit 80192eff64eee9b3bc0594a47381937b94b9d65a ]
 
-We will need this new helper in the next patch.
+of_find_matching_node_and_match() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Cc: Hillf Danton <hdanton@sina.com>
-Cc: 一只狗 <chennbnbnb@gmail.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220707082558.9250-1-jslaby@suse.cz
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0e545f57b708 ("power: reset: driver for the Versatile syscon reboot")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/tty_buffer.c |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/power/reset/arm-versatile-reboot.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -523,6 +523,15 @@ static void flush_to_ldisc(struct work_s
+diff --git a/drivers/power/reset/arm-versatile-reboot.c b/drivers/power/reset/arm-versatile-reboot.c
+index 08d0a07b58ef..c7624d7611a7 100644
+--- a/drivers/power/reset/arm-versatile-reboot.c
++++ b/drivers/power/reset/arm-versatile-reboot.c
+@@ -146,6 +146,7 @@ static int __init versatile_reboot_probe(void)
+ 	versatile_reboot_type = (enum versatile_reboot)reboot_id->data;
  
- }
+ 	syscon_regmap = syscon_node_to_regmap(np);
++	of_node_put(np);
+ 	if (IS_ERR(syscon_regmap))
+ 		return PTR_ERR(syscon_regmap);
  
-+static inline void tty_flip_buffer_commit(struct tty_buffer *tail)
-+{
-+	/*
-+	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
-+	 * buffer data.
-+	 */
-+	smp_store_release(&tail->commit, tail->used);
-+}
-+
- /**
-  *	tty_flip_buffer_push	-	terminal
-  *	@port: tty port to push
-@@ -538,11 +547,7 @@ void tty_flip_buffer_push(struct tty_por
- {
- 	struct tty_bufhead *buf = &port->buf;
- 
--	/*
--	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
--	 * buffer data.
--	 */
--	smp_store_release(&buf->tail->commit, buf->tail->used);
-+	tty_flip_buffer_commit(buf->tail);
- 	queue_work(system_unbound_wq, &buf->work);
- }
- EXPORT_SYMBOL(tty_flip_buffer_push);
+-- 
+2.35.1
+
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FE5583054
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38977582F59
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241604AbiG0RgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        id S241951AbiG0RZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242700AbiG0Res (ORCPT
+        with ESMTP id S241817AbiG0RX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:34:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCFE83235;
-        Wed, 27 Jul 2022 09:49:31 -0700 (PDT)
+        Wed, 27 Jul 2022 13:23:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB687B1DB;
+        Wed, 27 Jul 2022 09:46:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B988F61479;
-        Wed, 27 Jul 2022 16:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95F7C433C1;
-        Wed, 27 Jul 2022 16:49:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20668B821D6;
+        Wed, 27 Jul 2022 16:45:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E79C433D6;
+        Wed, 27 Jul 2022 16:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940554;
-        bh=dN4tTBOH5BS+WNPJLd/h4yzH04AAcMpyxHoqSYwowYQ=;
+        s=korg; t=1658940355;
+        bh=q8Ov8be4qwisSLNLiF3Apy5coHceXShTJRLQIfONrDg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tT02GkyRSNLuWFziK0ra6cuOT+HVa7YEl3jSeRfi1Kutq4X3RjLUEM/w5fjqNT3Qd
-         bJ7aUfKrLc7KAu1f2kkyMU4RJwNNOYNzbo/IS2wbQUXg/XGfFMAOmUg4DokP4ocK4n
-         ZZnfQJg3lUwWEAzKGHjiCIwuSl9XWEMAOv0AF+iM=
+        b=drQAAgXWKcq+GzrPaJx/syqcYXxegbLs1SgdInqi+UrqAC6V8bA8eRYwz8nKgJEC8
+         mkpyunXFadYyZ3KKC5EqdljZpL236vOCAS9joLGC+GQcMEq/96z/Dp6A9dP4KmkWEU
+         YDfgCBlZZQ+XTtM69BIi/jl0MAmACRoov7dwZgbM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 034/158] ip: Fix data-races around sysctl_ip_fwd_use_pmtu.
-Date:   Wed, 27 Jul 2022 18:11:38 +0200
-Message-Id: <20220727161022.845221234@linuxfoundation.org>
+        stable@vger.kernel.org, Jude Shih <shenshih@amd.com>,
+        Anson Jacob <Anson.Jacob@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 195/201] drm/amd/display: Dont lock connection_mutex for DMUB HPD
+Date:   Wed, 27 Jul 2022 18:11:39 +0200
+Message-Id: <20220727161035.852969586@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
 
-[ Upstream commit 60c158dc7b1f0558f6cadd5b50d0386da0000d50 ]
+commit d82b3266ef88dc10fe0e7031b2bd8ba7eedb7e59 upstream.
 
-While reading sysctl_ip_fwd_use_pmtu, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+[Why]
+Per DRM spec we only need to hold that lock when touching
+connector->state - which we do not do in that handler.
 
-Fixes: f87c10a8aa1e ("ipv4: introduce ip_dst_mtu_maybe_forward and protect forwarding path against pmtu spoofing")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Taking this locking introduces unnecessary dependencies with other
+threads which is bad for performance and opens up the potential for
+a deadlock since there are multiple locks being held at once.
+
+[How]
+Remove the connection_mutex lock/unlock routine and just iterate over
+the drm connectors normally. The iter helpers implicitly lock the
+connection list so this is safe to do.
+
+DC link access also does not need to be guarded since the link
+table is static at creation - we don't dynamically add or remove links,
+just streams.
+
+Fixes: e27c41d5b068 ("drm/amd/display: Support for DMUB HPD interrupt handling")
+
+Reviewed-by: Jude Shih <shenshih@amd.com>
+Acked-by: Anson Jacob <Anson.Jacob@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/ip.h | 2 +-
- net/ipv4/route.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 26fffda78cca..05fe313f72fa 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -446,7 +446,7 @@ static inline unsigned int ip_dst_mtu_maybe_forward(const struct dst_entry *dst,
- 	struct net *net = dev_net(dst->dev);
- 	unsigned int mtu;
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -668,10 +668,7 @@ void dmub_hpd_callback(struct amdgpu_dev
+ 		return;
+ 	}
  
--	if (net->ipv4.sysctl_ip_fwd_use_pmtu ||
-+	if (READ_ONCE(net->ipv4.sysctl_ip_fwd_use_pmtu) ||
- 	    ip_mtu_locked(dst) ||
- 	    !forwarding) {
- 		mtu = rt->rt_pmtu;
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index ed01063d8f30..8363e575c455 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1397,7 +1397,7 @@ u32 ip_mtu_from_fib_result(struct fib_result *res, __be32 daddr)
- 	struct fib_info *fi = res->fi;
- 	u32 mtu = 0;
+-	drm_modeset_lock(&dev->mode_config.connection_mutex, NULL);
+-
+ 	link_index = notify->link_index;
+-
+ 	link = adev->dm.dc->links[link_index];
  
--	if (dev_net(dev)->ipv4.sysctl_ip_fwd_use_pmtu ||
-+	if (READ_ONCE(dev_net(dev)->ipv4.sysctl_ip_fwd_use_pmtu) ||
- 	    fi->fib_metrics->metrics[RTAX_LOCK - 1] & (1 << RTAX_MTU))
- 		mtu = fi->fib_mtu;
+ 	drm_connector_list_iter_begin(dev, &iter);
+@@ -684,7 +681,6 @@ void dmub_hpd_callback(struct amdgpu_dev
+ 		}
+ 	}
+ 	drm_connector_list_iter_end(&iter);
+-	drm_modeset_unlock(&dev->mode_config.connection_mutex);
  
--- 
-2.35.1
-
+ }
+ 
 
 

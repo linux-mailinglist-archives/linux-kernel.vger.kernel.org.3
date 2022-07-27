@@ -2,152 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185CE582722
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650D3582726
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbiG0Mz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
+        id S233439AbiG0Mzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbiG0MzZ (ORCPT
+        with ESMTP id S233421AbiG0Mzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:55:25 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD002528D
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:55:23 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26R9R6q4007474;
-        Wed, 27 Jul 2022 12:55:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=sfEOyX4vOKyoQkguP4YsmAKm9zYOliqxQHruCHv5I3c=;
- b=mZ8mWFR+BQjYKml1oyn7PPRZ23Pb8Y1lL8NJzAG7flECqqewcxtdHFXYiyam+d8ohYZa
- RW41zi+oWl3z5aT2IDd01GCLo+QeQoupeKhYASuvVA8cvHI2PonULKKpkAs0615Yj+64
- yAmFrY2vgbouCX9T8nNQWZfYyGa4RCcF2KI3Wj+ZxV3feS+Qn66qkFHAZJyVzDgh0jRA
- 8DQTifdetoDgqGQN3+7UUVyY2Wjt4uCqqcbyh7CiXISBsYWaCbQTR0a/Rl6teOPlkx6i
- /Vz0BCFmYs6m6Younzfi+NgHTZLTMgWUBbEmhUOwbMUS8NmonMXlSpVMhrxxqY7x8dTx NA== 
-Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hk1b9rhg7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Jul 2022 12:55:15 +0000
-Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 26RCtCc9003186;
-        Wed, 27 Jul 2022 12:55:12 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 3hk4du05gg-1;
-        Wed, 27 Jul 2022 12:55:12 +0000
-Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26RCtCUW003173;
-        Wed, 27 Jul 2022 12:55:12 GMT
-Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 26RCtBde003133;
-        Wed, 27 Jul 2022 12:55:12 +0000
-Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
-        id 90C442102E3E; Wed, 27 Jul 2022 20:55:10 +0800 (CST)
-From:   Kassey Li <quic_yingangl@quicinc.com>
-To:     akpm@linux-foundation.org, vbabka@kernel.org
-Cc:     minchan@kernel.org, iamjoonsoo.kim@lge.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        quic_yingangl@quicinc.com
-Subject: [PATCH v2] mm/page_owner.c: add llseek for page_owner
-Date:   Wed, 27 Jul 2022 20:55:08 +0800
-Message-Id: <20220727125508.5154-1-quic_yingangl@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: i8KHuKGyBc9Z0gNGUD60ZxbguDa5-0iu
-X-Proofpoint-GUID: i8KHuKGyBc9Z0gNGUD60ZxbguDa5-0iu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-27_03,2022-07-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 priorityscore=1501 impostorscore=0 spamscore=0 mlxscore=0
- mlxlogscore=766 bulkscore=0 phishscore=0 clxscore=1011 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207270052
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 27 Jul 2022 08:55:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63241D0D6;
+        Wed, 27 Jul 2022 05:55:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 682D1B82153;
+        Wed, 27 Jul 2022 12:55:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C7DC433C1;
+        Wed, 27 Jul 2022 12:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658926538;
+        bh=Ueocz9L79rTNSAstAjmwQKxxm/QmHSKhgtyMys5mMjg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=lLOmrHGky8Jzx6KZ2PxRk0xU8qkIXWRfnk2nXdp4DI+g2cJwFwSr3/Gw3OX5ZgYRd
+         pnnPuuJvt9EPT2X8Z2WQ/HIe5ZS1M4/xLlyoPukzznfbPOB2wnG8DdNqunxIiVvRAq
+         9BokZvmSvlrgm1YGvMfwZAdjHRnzsQc9debL60uX2+KnhtdUc6/qZFNU7SDZ+zwDac
+         vokKiQWOwpNTOyn979afK4u9SxFqJMFWeSbhLt/Kk8t/MuewV5tTU5LVZYsFjJDB1G
+         JRGZ0Xq+Nm9pOtQ53n1jDBjptPGqPlvKatW6+0riZXXpT2Sa3HLRmh0jB8X3/9Dg8r
+         Mr2PYeZDVxZMQ==
+Message-ID: <82064e83752ee731909f4782ba85bad428ad180b.camel@kernel.org>
+Subject: Re: [PATCH] vfs: bypass may_create_in_sticky check if task has
+ CAP_FOWNER
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yongchen Yang <yoyang@redhat.com>
+Date:   Wed, 27 Jul 2022 08:55:35 -0400
+In-Reply-To: <20220727123710.tzg44xojlc3pmsiw@wittgenstein>
+References: <20220727123048.46389-1-jlayton@kernel.org>
+         <20220727123710.tzg44xojlc3pmsiw@wittgenstein>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is usage to dump a given cma region page_owner
-instead of all page's.
+On Wed, 2022-07-27 at 14:37 +0200, Christian Brauner wrote:
+> On Wed, Jul 27, 2022 at 08:30:48AM -0400, Jeff Layton wrote:
+> > NFS server is exporting a sticky directory (mode 01777) with root
+> > squashing enabled. Client has protect_regular enabled and then tries to
+> > open a file as root in that directory. File is created (with ownership
+> > set to nobody:nobody) but the open syscall returns an error.
+> >=20
+> > The problem is may_create_in_sticky, which rejects the open even though
+> > the file has already been created/opened. Bypass the checks in
+> > may_create_in_sticky if the task has CAP_FOWNER in the given namespace.
+> >=20
+> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D1976829
+> > Reported-by: Yongchen Yang <yoyang@redhat.com>
+> > Suggested-by: Christian Brauner <brauner@kernel.org>
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  fs/namei.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > index 1f28d3f463c3..170c2396ba29 100644
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -1230,7 +1230,8 @@ static int may_create_in_sticky(struct user_names=
+pace *mnt_userns,
+> >  	    (!sysctl_protected_regular && S_ISREG(inode->i_mode)) ||
+> >  	    likely(!(dir_mode & S_ISVTX)) ||
+> >  	    uid_eq(i_uid_into_mnt(mnt_userns, inode), dir_uid) ||
+> > -	    uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)))
+> > +	    uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)) ||
+> > +	    ns_capable(mnt_userns, CAP_FOWNER))
+> >  		return 0;
+>=20
+> Hm, no. You really want inode_owner_or_capable() here..
+> You need to verify that you have a mapping for the inode->i_{g,u}id in
+> question and that you're having CAP_FOWNER in the caller's userns.
+>=20
 
-This change allows to specify a ppos as start_pfn
-by fseek.
+Ok, I should be able to make that change and test it out.
 
-Any invalid ppos will be skipped, so it did not
-broken the origin dump feature.
+> I'm pretty sure we should also restrict this to the case were the caller
+> actually created the file otherwise we introduce a potential issue where
+> the caller is susceptible to data spoofing. For example, the file was
+> created by another user racing the caller's O_CREAT.
 
-Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
----
- mm/page_owner.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+That won't be sufficient to fix the testcase, I think. If a file already
+exists in the sticky dir and is owned by nobody:nobody, do we really
+want to prevent root from opening it? I wouldn't think so.
 
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index e4c6f3f1695b..f0bc75421de0 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -497,8 +497,8 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 		return -EINVAL;
- 
- 	page = NULL;
--	pfn = min_low_pfn + *ppos;
- 
-+	pfn = *ppos;
- 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
- 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
- 		pfn++;
-@@ -561,7 +561,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 			continue;
- 
- 		/* Record the next PFN to read in the file offset */
--		*ppos = (pfn - min_low_pfn) + 1;
-+		*ppos = pfn + 1;
- 
- 		return print_page_owner(buf, count, pfn, page,
- 				page_owner, handle);
-@@ -570,6 +570,21 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 	return 0;
- }
- 
-+loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
-+{
-+	loff_t retval = 0;
-+	switch (whence) {
-+		case SEEK_CUR:
-+		case SEEK_SET:
-+			file->f_pos = offset;
-+			break;
-+		default:
-+			retval = -ENXIO;
-+	}
-+
-+	return retval;
-+}
-+
- static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
- {
- 	unsigned long pfn = zone->zone_start_pfn;
-@@ -658,8 +673,11 @@ static void init_early_allocated_pages(void)
- 		init_zones_in_node(pgdat);
- }
- 
-+
-+
- static const struct file_operations proc_page_owner_operations = {
- 	.read		= read_page_owner,
-+	.llseek 	= llseek_page_owner,
- };
- 
- static int __init pageowner_init(void)
--- 
-2.17.1
-
+--=20
+Jeff Layton <jlayton@kernel.org>

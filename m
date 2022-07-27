@@ -2,199 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E3858278A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C97A58278C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiG0NVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
+        id S232983AbiG0NVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbiG0NVX (ORCPT
+        with ESMTP id S232692AbiG0NVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:21:23 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AEA2181C
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:21:21 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id q18so13711224wrx.8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:21:21 -0700 (PDT)
+        Wed, 27 Jul 2022 09:21:35 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26D725EA0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:21:32 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id s9so2140094edd.8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:21:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fJZfPqQTLXJW+Y50TjRFYN1uffyPxBOzE0RhlxpxRbg=;
-        b=aK6Gb9nW2G8o0XyM4MeB6gDJaRyv2SSwWnMlFe+8V4oxt7aSapSBnjYY6IQ3j0K6IW
-         Stf7u/uyDWkAxR6ZXMq5PNRYWYj3zVZqd48Rodgz9ajuXoQCYp+NgBhPY62lWdJMcs1r
-         njLrPYkFlcI5sGc3TqX42jxIvzDggym93FKi76jVXa2WLXF5wkHsObilLnjrt0H85n+7
-         78H2cninPD4LehBgqmxcw0afESODBBQUtrQk/b9/3/oGxu6pVIL1Ek5q7rQ3JGlolJjV
-         CH/CDmEf+Ltcf5268kMKlzNCCraCOTMLR7pAoe//u71ElqNQwSJOMUdV57A+u6qrfVLV
-         M5/w==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ULYmlOXVqjXX7HeVd/2r6q13ryXvzeR5lMbaFhgz/dI=;
+        b=mwJ5B/HanHs1g0oM8012VvvpHaBBGlXaJYcB2wtZ36mI+qNCuIL1anCeCBSe5+p9IU
+         aBGaEoWYq1KAFgSempzhxd8fhPGzFyeQuJFmqDmKMU4Tb95FH9XUtWbxXzoQmtgIrRw+
+         YJxymUcGXKjzOWyZO1heoPXOIuS6zyNQprt9Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fJZfPqQTLXJW+Y50TjRFYN1uffyPxBOzE0RhlxpxRbg=;
-        b=oG3mij66I7LF68IKqHP/39JMW4zLB56IohV0yGz0PbUsLdpFSJs5N3IMM8FLmbPsX8
-         8gvDjbjML+wgY11UsT85tCDZe5lYdBjrMS5e4A1WGJOqTdo4WliFonpy0kvCXD2XD1Yf
-         sbK26bh+oVBo62ekZF1dnVWok68xc0WASL90HormwwBIPSuPUsGMGj0nlQVuQVu7SaO9
-         fhFWABrrgak/jWqNG7En+kYsCsYdhrAEmzBqTaGc5tEeg1AMdQgVHj101CuQYonCiyH1
-         D018cvNaZMxdCqzK+5LrS/ljUsYAsc51snRYtA81XIOUizRskbb71yfH3qdqmkqyZEiA
-         LYQw==
-X-Gm-Message-State: AJIora+XY8Oza7mh723i4yubOqnOmf5PmEIs6xne910fZ1pK729MT46f
-        kc0Bt7uuoG3rsfVDKjxfw2tQPA==
-X-Google-Smtp-Source: AGRyM1vR6sT83r0KBHDkrUGN3PyKlH29h9x5nOgSZ/psItFEWxIZ1TL5bFEA4nVeYNGlWYusCtM/sQ==
-X-Received: by 2002:a05:6000:184e:b0:21e:5f7f:4e73 with SMTP id c14-20020a056000184e00b0021e5f7f4e73mr14772041wri.593.1658928080068;
-        Wed, 27 Jul 2022 06:21:20 -0700 (PDT)
-Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
-        by smtp.gmail.com with ESMTPSA id bq23-20020a5d5a17000000b0021e57963c4asm11240110wrb.77.2022.07.27.06.21.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 06:21:19 -0700 (PDT)
-Message-ID: <2cd851de-ce7b-5383-a015-101a1ac4a054@sifive.com>
-Date:   Wed, 27 Jul 2022 14:21:18 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ULYmlOXVqjXX7HeVd/2r6q13ryXvzeR5lMbaFhgz/dI=;
+        b=TtUlRg3zNlcThXDajCq1GzzTqnhlld3gLlAspkDS1QJwbv/SaEAy2YuYPv0PFxbXVW
+         8i/v3269yuv9zINbQcOZwwDAkCmlFkpwqSy3AW9GQERk9f/b97HIH5JW39oFfbp9m1ql
+         xSgHt2xsIC8g/8/3znTI6SEVahs6pzB8AmnXExwGKrj1AakOC22IVoZigsloJZEIxRZl
+         RBzn8KSVaFs8dftkQw32m6xZBtCz5Sj5CUiezVhVr/Mzmp8YFhHnusSKtsD2MjyZmLVy
+         92anzwTj6Z+f4YLoXO9NbSUKH/9A/UBccROfIfB8crzIeSRLxtSeu0P6W/pUSSwgRevN
+         kq8Q==
+X-Gm-Message-State: AJIora9qhlMvsh86gGT1zaSazAuwIjQxgb4yZRaGAawhHOKdNp4yam2w
+        huVzhK/iBwvetvMpArbRiD0JlIQs9mXykzpPy0d49A==
+X-Google-Smtp-Source: AGRyM1tqatOAwaiQnQ7oka4nkE+hxhpH+krVc2LxP7Ze9nRUK5KkGXnmKmssDISH1n2ItG/Q7j/mdwhNc9WwVQH/Doc=
+X-Received: by 2002:a05:6402:e96:b0:43a:f21f:42a0 with SMTP id
+ h22-20020a0564020e9600b0043af21f42a0mr23692787eda.382.1658928091268; Wed, 27
+ Jul 2022 06:21:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [[PATCH v2] 1/9] dt-bindings: pwm: Document Synopsys DesignWare
- snps,pwm
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>
-References: <20220725212140.741644-1-ben.dooks@sifive.com>
- <922628f6-cbb1-b563-6464-e57959bafbcd@linaro.org>
- <8bb5103d-803e-90d2-fd93-132bb2aac2d6@sifive.com>
- <6317212b-1fca-65b4-9bce-0b9f7408fdae@linaro.org>
- <1d4573fc-407a-13c2-b049-e7a060d7929b@sifive.com>
- <0f5f75c3-269d-a804-7a46-9fa7aec03245@linaro.org>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <0f5f75c3-269d-a804-7a46-9fa7aec03245@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601022814.122620-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20220601022814.122620-1-yang.lee@linux.alibaba.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 27 Jul 2022 15:21:20 +0200
+Message-ID: <CAJfpegtQqECU=-M8KomeG_6ba5OT2rPhkGXaQ9LMdjv2+PeKAw@mail.gmail.com>
+Subject: Re: [PATCH -next] ovl: Fix some kernel-doc comments
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/07/2022 13:02, Krzysztof Kozlowski wrote:
-> On 27/07/2022 12:32, Ben Dooks wrote:
->> On 26/07/2022 12:05, Krzysztof Kozlowski wrote:
->>> On 26/07/2022 12:12, Ben Dooks wrote:
->>>> On 26/07/2022 11:05, Krzysztof Kozlowski wrote:
->>>>> On 25/07/2022 23:21, Ben Dooks wrote:
->>>>>> Add documentation for the bindings for Synopsys' DesignWare PWM block
->>>>>> as we will be adding DT/platform support to the Linux driver soon.
->>>>>>
->>>>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->>>>>> --
->>>>>
->>>>> This is not proper delimiter and causes the changelog to end up in commit.
->>>>>
->>>>> Correct also wrong formatting of subject PATCH.
->>>>
->>>> I realised that once sent and forgot the cover letter.
->>>> Maybe I'll try some more post covid recovery.
->>>>
->>>>>> v2:
->>>>>> - fix #pwm-cells to be 3
->>>>>> - fix indentation and ordering issues
->>>>>> ---
->>>>>>     .../devicetree/bindings/pwm/snps,pwm.yaml     | 40 +++++++++++++++++++
->>>>>>     1 file changed, 40 insertions(+)
->>>>>>     create mode 100644 Documentation/devicetree/bindings/pwm/snps,pwm.yaml
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/pwm/snps,pwm.yaml b/Documentation/devicetree/bindings/pwm/snps,pwm.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..594085e5e26f
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/pwm/snps,pwm.yaml
->>>>>> @@ -0,0 +1,40 @@
->>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>> +# Copyright (C) 2022 SiFive, Inc.
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/pwm/snps,pwm.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: Synopsys PWM controller
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Ben Dooks <ben.dooks@sifive.com>
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: pwm.yaml#
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    const: snps,pwm
->>>>>
->>>>> This is very generic compatible. I doubt that you cover here all
->>>>> Synopsys PWM designs, past and future. You need a specific compatible.
->>>>
->>>>    From what I can get from the documentation (2.13a) there hasn't been
->>>> a huge external interface change and what has been added is all part
->>>> of synthesis time options.
->>>
->>> But you have some specific version, right? Usually these blocks are
->>> versioned, so you must include it. I would even argue that such generic
->>> compatible should not be used as fallback at all, because it is simply
->>> to generic (PWM is not some model name but common acronym),
->>
->> I suppose dw-apb-timers is the actual document name, but that's already
->> been used for the timer mode in a number of SoCs so probably isn't going
->> to be useful. dw-apb-timers-pwm might be a better prefix if snps,pwm is
->> not going to be acceptable. (Yes, the block can be built as either a
->> PWM or a generic interrupt generating timer at IP generation time)
+On Wed, 1 Jun 2022 at 04:28, Yang Li <yang.lee@linux.alibaba.com> wrote:
+>
+> Remove warnings found by running scripts/kernel-doc,
+> which is caused by using 'make W=1'.
+> fs/overlayfs/super.c:311: warning: Function parameter or member 'dentry'
+> not described in 'ovl_statfs'
+> fs/overlayfs/super.c:311: warning: Excess function parameter 'sb'
+> description in 'ovl_statfs'
+> fs/overlayfs/super.c:357: warning: Function parameter or member 'm' not
+> described in 'ovl_show_options'
+> fs/overlayfs/super.c:357: warning: Function parameter or member 'dentry'
+> not described in 'ovl_show_options'
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-The first thing I'd like to get sorted is should we rename this to
-snps,dw-apb-timers-pwm so we can rename the file and the compatible
-that goes with it.
+Applied, thanks.
 
->> As for the version numbers, we could have the -v.vv suffix for these
->> blocks, but the v2.xx log has 22 entries already and only one feature
->> for programming (which is also a configurable one so can't be just
->> enabled by default - it's the 0/100 mode flag in the control registers).
->>
->> I'm not sure what the v1.xx timers had, but I don't have access to this
->> information and we're getting these documents as second-generation so I
->> am not sure if we can get a v1.xx at-all (I suspect this is also going
->> to have a number of revisions and about 1 useful register api change
->> which would be the "new mode" double counter method which we currently
->> rely on having being implicitly enabled by the IP builder (again this
->> feature is still something that can be configured on IP genaration))
-> 
-> But why would you need v1.xx documentation?
-
-I believe the driver should cover a large part of the v1.xx cores
-as well, we just don't have any documentation for these to verify
-this.
-
->>
->> Given the configurability of the core, the version numbers might be
->> usable at some point, but it does seem to be a lot of churn for what
->> currently can be described by one boolean for the 0/100 feature that
->> might-be available. Is there a way of saying the compatible string
->> can be dw-apb-timers-pwm-2.[0-9][0-9][a-z] ?
-> 
-> I don't understand why. Aren't you documenting here only v2.13a version?
-
-The document as-such should cover everything I have a log for, we've not
-had time to test the extension for 0or100% which was introduced in 2.11a
-spec. The earliest history I have is 2.02d. I will go and see if I can
-find someone who can go look for anything earlier.
-
-As a note, it does look like all the v2.xx cores have the IP version
-register in them so we can auto-detect the version from that, at least
-for the DT/platform case.
-
-> Best regards,
-> Krzysztof
-
+Miklos

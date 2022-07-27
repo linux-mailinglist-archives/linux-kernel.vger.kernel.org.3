@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD39C582B6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC10C582EDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237695AbiG0Qct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
+        id S238161AbiG0RSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237774AbiG0QcI (ORCPT
+        with ESMTP id S230435AbiG0RRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:32:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE59752FF7;
-        Wed, 27 Jul 2022 09:26:07 -0700 (PDT)
+        Wed, 27 Jul 2022 13:17:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D2D78DED;
+        Wed, 27 Jul 2022 09:43:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58E3BB821B9;
-        Wed, 27 Jul 2022 16:25:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACF0C433D6;
-        Wed, 27 Jul 2022 16:25:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D7D7B821C6;
+        Wed, 27 Jul 2022 16:43:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B570C433D6;
+        Wed, 27 Jul 2022 16:43:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939111;
-        bh=0shjkcSBi+T8g6LRNkb44QHNKoxRXpDclFPnVHF93Kg=;
+        s=korg; t=1658940202;
+        bh=OUAQxsIyHhoQKpoTT2pFpB3kZknsg4snkdYeH8FRRwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ohJ5fksWyueltRhV5fabtn3japyvlNQj19Vg1G6kJdLMbtOl+bYmCO0dFGjbs1hhx
-         ORsALQhp2NzZ+p/Tj2pgncPGVLQ0sJpZ1FBMaGOVUZLGCAmOyMUbaajgOCI2mR6RDa
-         ov9Lsh64XD7w8sRBo5NRld/dl67n/bu1tdrbTsqs=
+        b=j/QMINbtrPXhR3jCwIODQer0XYcI1xrUdOT5EWwBmj1FImmNjfuyJ2OR5lVel2QhW
+         hBrgtQG0DTG/Vk7Oizz41aHl4qXeEnsw9XO/8mROePgK5RLnt5orMN4gKp1EuDg6KH
+         l+gk0Hrnck1mQzy0gxYHfxPSEQihbMpzrrzW8AMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hacash Robot <hacashRobot@santino.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 05/62] pinctrl: ralink: Check for null return of devm_kcalloc
+Subject: [PATCH 5.15 110/201] gpio: pca953x: use the correct range when do regmap sync
 Date:   Wed, 27 Jul 2022 18:10:14 +0200
-Message-Id: <20220727161004.385752294@linuxfoundation.org>
+Message-Id: <20220727161032.319284427@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+From: Haibo Chen <haibo.chen@nxp.com>
 
-[ Upstream commit c3b821e8e406d5650e587b7ac624ac24e9b780a8 ]
+[ Upstream commit 2abc17a93867dc816f0ed9d32021dda8078e7330 ]
 
-Because of the possible failure of the allocation, data->domains might
-be NULL pointer and will cause the dereference of the NULL pointer
-later.
-Therefore, it might be better to check it and directly return -ENOMEM
-without releasing data manually if fails, because the comment of the
-devm_kmalloc() says "Memory allocated with this function is
-automatically freed on driver detach.".
+regmap will sync a range of registers, here use the correct range
+to make sure the sync do not touch other unexpected registers.
 
-Fixes: a86854d0c599b ("treewide: devm_kzalloc() -> devm_kcalloc()")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
-Link: https://lore.kernel.org/r/20220710154922.2610876-1-williamsukatube@163.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Find on pca9557pw on imx8qxp/dxl evk board, this device support
+8 pin, so only need one register(8 bits) to cover all the 8 pins's
+property setting. But when sync the output, we find it actually
+update two registers, output register and the following register.
+
+Fixes: b76574300504 ("gpio: pca953x: Restore registers after suspend/resume cycle")
+Fixes: ec82d1eba346 ("gpio: pca953x: Zap ad-hoc reg_output cache")
+Fixes: 0f25fda840a9 ("gpio: pca953x: Zap ad-hoc reg_direction cache")
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpio/gpio-pca953x.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c b/drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c
-index ad811c0438cc..031526cb1b21 100644
---- a/drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c
-+++ b/drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c
-@@ -267,6 +267,8 @@ static int rt2880_pinmux_pins(struct rt2880_priv *p)
- 						p->func[i]->pin_count,
- 						sizeof(int),
- 						GFP_KERNEL);
-+		if (!p->func[i]->pins)
-+			return -ENOMEM;
- 		for (j = 0; j < p->func[i]->pin_count; j++)
- 			p->func[i]->pins[j] = p->func[i]->pin_first + j;
+diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
+index f334c8556a22..60b7616dd4aa 100644
+--- a/drivers/gpio/gpio-pca953x.c
++++ b/drivers/gpio/gpio-pca953x.c
+@@ -900,12 +900,12 @@ static int device_pca95xx_init(struct pca953x_chip *chip, u32 invert)
+ 	int ret;
  
+ 	ret = regcache_sync_region(chip->regmap, chip->regs->output,
+-				   chip->regs->output + NBANK(chip));
++				   chip->regs->output + NBANK(chip) - 1);
+ 	if (ret)
+ 		goto out;
+ 
+ 	ret = regcache_sync_region(chip->regmap, chip->regs->direction,
+-				   chip->regs->direction + NBANK(chip));
++				   chip->regs->direction + NBANK(chip) - 1);
+ 	if (ret)
+ 		goto out;
+ 
+@@ -1118,14 +1118,14 @@ static int pca953x_regcache_sync(struct device *dev)
+ 	 * sync these registers first and only then sync the rest.
+ 	 */
+ 	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
+-	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
++	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip) - 1);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to sync GPIO dir registers: %d\n", ret);
+ 		return ret;
+ 	}
+ 
+ 	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
+-	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
++	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip) - 1);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to sync GPIO out registers: %d\n", ret);
+ 		return ret;
+@@ -1135,7 +1135,7 @@ static int pca953x_regcache_sync(struct device *dev)
+ 	if (chip->driver_data & PCA_PCAL) {
+ 		regaddr = pca953x_recalc_addr(chip, PCAL953X_IN_LATCH, 0);
+ 		ret = regcache_sync_region(chip->regmap, regaddr,
+-					   regaddr + NBANK(chip));
++					   regaddr + NBANK(chip) - 1);
+ 		if (ret) {
+ 			dev_err(dev, "Failed to sync INT latch registers: %d\n",
+ 				ret);
+@@ -1144,7 +1144,7 @@ static int pca953x_regcache_sync(struct device *dev)
+ 
+ 		regaddr = pca953x_recalc_addr(chip, PCAL953X_INT_MASK, 0);
+ 		ret = regcache_sync_region(chip->regmap, regaddr,
+-					   regaddr + NBANK(chip));
++					   regaddr + NBANK(chip) - 1);
+ 		if (ret) {
+ 			dev_err(dev, "Failed to sync INT mask registers: %d\n",
+ 				ret);
 -- 
 2.35.1
 

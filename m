@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78F5583516
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71346583522
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbiG0WJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 18:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S234199AbiG0WJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 18:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233438AbiG0WI5 (ORCPT
+        with ESMTP id S233961AbiG0WJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 18:08:57 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ED952FEB
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:08:55 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id m123-20020a253f81000000b0066ff6484995so198287yba.22
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:08:55 -0700 (PDT)
+        Wed, 27 Jul 2022 18:09:01 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C08558CB
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:08:57 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31dfe25bd47so846867b3.18
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=zhZsxseHXW9u6Ny5ZCwSNa42vDAFAXbcGxTs3FNJMl4=;
-        b=PPsS2tosDBYu8bmWHssyH4aUAK70DygbQQRKWRmLZEsMiSTGSL2tBmGD82TX54n0tH
-         y25ALAiPKiHbf9lEVWtwLQNgeg5QrSS3JavRVEibGet44k3RN7X4FqJXeKQJmOqh5TtQ
-         GzARF0i6qsg1lxzkSMYgR6moo3R8XZCug1xPkHqdC9cATrCfln/ILVe+rjbwiZzCaKhY
-         AikT1ZoLfpSE53WZ11maIjXN0p944k66V2JJe/d4bqINTYbraFckixPw3lQI4pufC25I
-         YoiYicc6Lnx2aeti8h+9X82K8wTK1oI3IaUyHjexHAb/I9FSjdASUijcRlQ45XymQJCh
-         u8pA==
+        bh=8F+fz6+0/gUalMupUoM3UlVut6MQCtx2E2VfaCYyCYs=;
+        b=SVrzjdA/29nNMvxtMEUOAmZjsomAqykdTmkEngLitpMomnZZwE06XS4fPMaoa1387w
+         9MYE+Eu5EE80/Ys86P/8OIvtCSXzZKJt2PmnabnqXvdkKB2nVSpGibW9O4i2bv9XZKlK
+         Sd3/A7fn5Yi45H8hr9ZWe9nVMceuwvDVWBrk2BZPyP1fSktKr2dSLiY2i8s77QqB2SKh
+         X5iItT/To9rea2fQ21xTcpDJCg9aoST9nMpTL+fMVCdy8EEcZTTlAa/gwteLEHscYjRm
+         TssFkFv+wF9vvz3irksGb5nDZ9Uh83fjRFCPKpkuzoLeHkBRErJsi7U+C+JgOGed5m2K
+         58Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=zhZsxseHXW9u6Ny5ZCwSNa42vDAFAXbcGxTs3FNJMl4=;
-        b=r3oYGsFngex35TMGUcVkRt5rX9ZVH3Iea+4EM8p5Oj8u/lg19OQqV7AOO/1MLcK8Ft
-         U7ukJhsRYJKxU+aRQdPn0X+gKe0ub8UNS1hheXvCF+aPCwcHZB7E9wOwIVo/dVBEQPXm
-         OWTf0rFfoEhNFSr1PXHEtNdQXAp9D9Yk9MGX0Mj3g/plDwkrt3v6hydoFqCU0pvtrwvb
-         XMRBSzSHPH1arDsgl0yK8PIxe2gE3ghEXWWkxB9tFlbGSlwF+iQdkw8d5dHhAUc5B3u+
-         6FTqa3s0C3xryWY0/rU0YoBYLm0Rk+kLhwJv9MtWBWy2FXCg+/+feJsSzm+unwm+ynL+
-         XEwA==
-X-Gm-Message-State: AJIora9EVFOqmcrtqlM9uC9VGHzbQGLF7HUq/clrLI1KxpKluDodswRy
-        NkRDUXAUBcnZOB/irn0J6vjybZD/sJiX
-X-Google-Smtp-Source: AGRyM1sQCyHcrzza6I7JUAOu3JjWL1KLAN9tQKBIOA86rafN0aWXgwlU/J7VoSB2hMEvny0ht8dDz15N8lEp
+        bh=8F+fz6+0/gUalMupUoM3UlVut6MQCtx2E2VfaCYyCYs=;
+        b=Nsas9oQa/UPsntemIPzaCIQU15N2YL93c3Ez43bDsPXNyjldn6Kg10hLMwjsd3Aoar
+         Mj/bGr8+BXdaSl+vUjUr/mm0xzyQ8UlK2d1ZWUBVZ3pAPTQsDVIMYl/ax2+ap2hwLDj9
+         iZ88DTUkzePqLcqU6CW+RfLez7vmqY5u0xlU/PXQJVo6ZFoeh2wv7esLve0APWP1YSi5
+         aLPirSMG+Df3QmnMTi4nMLR3zuiUysAJW04fuCTGesVFbKF2Glmu6BYocUosxz6P6S9X
+         I369oBXQDn3T1LhV8pj9XGkWIP6OxGjA4QP/8SdenIQMNZcI7ENZRytxSLtVZQsIORiO
+         bQnQ==
+X-Gm-Message-State: AJIora+1nzOY0vcHFYAW368rY/iKJmzcBodtJ4BbKDgtbjOVn3XMGYVC
+        J3vsHxo/MBMclg39ndvBfyI20DjuK+34
+X-Google-Smtp-Source: AGRyM1vcNms7CX+IV4N8vvNYD0KM3NFfqflu7Gp/S+6+PQ53h+1Kq1xz56/htqhh8ihmrG7gqa22U7iGFz6u
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:882a:af57:8cb6:6f9e])
- (user=irogers job=sendgmr) by 2002:a25:c087:0:b0:673:e09d:7e9 with SMTP id
- c129-20020a25c087000000b00673e09d07e9mr1461236ybf.534.1658959734597; Wed, 27
- Jul 2022 15:08:54 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 15:08:06 -0700
+ (user=irogers job=sendgmr) by 2002:a81:5748:0:b0:31f:6587:b25 with SMTP id
+ l69-20020a815748000000b0031f65870b25mr3836694ywb.517.1658959736916; Wed, 27
+ Jul 2022 15:08:56 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 15:08:07 -0700
 In-Reply-To: <20220727220832.2865794-1-irogers@google.com>
-Message-Id: <20220727220832.2865794-5-irogers@google.com>
+Message-Id: <20220727220832.2865794-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20220727220832.2865794-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v3 04/30] perf vendor events: Update Intel alderlake
+Subject: [PATCH v3 05/30] perf vendor events: Update bonnell mapfile.csv
 From:   Ian Rogers <irogers@google.com>
 To:     perry.taylor@intel.com, caleb.biggers@intel.com,
         kshipra.bopardikar@intel.com,
@@ -85,682 +85,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update to v1.13, the metrics are based on TMA 4.4 full.
-
-Use script at:
+Align end of file whitespace with what is generated by:
 https://github.com/intel/event-converter-for-linux-perf/blob/master/download_and_gen.py
 
-to download and generate the latest events and metrics. Manually copy
-the alderlake files into perf and update mapfile.csv.
-
-Tested on a non-alderlake with 'perf test':
- 10: PMU events                                                      :
- 10.1: PMU event table sanity                                        : Ok
- 10.2: PMU event map aliases                                         : Ok
- 10.3: Parsing of PMU event table metrics                            : Ok
- 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+Fold the mapfile.csv entries together with a more complex regular
+expression. This will reduce the pmu-events.c table size.
+The files following this change are still at v4.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../arch/x86/alderlake/adl-metrics.json       |   4 +-
- .../pmu-events/arch/x86/alderlake/cache.json  |  33 +-
- .../pmu-events/arch/x86/alderlake/other.json  |  54 ++++
- .../arch/x86/alderlake/pipeline.json          | 285 +++++++++++++++++-
- .../arch/x86/alderlake/uncore-other.json      |   2 +-
- .../arch/x86/alderlake/virtual-memory.json    |  36 +++
- tools/perf/pmu-events/arch/x86/mapfile.csv    |   3 +-
- 7 files changed, 398 insertions(+), 19 deletions(-)
+ tools/perf/pmu-events/arch/x86/bonnell/cache.json          | 2 +-
+ tools/perf/pmu-events/arch/x86/bonnell/floating-point.json | 2 +-
+ tools/perf/pmu-events/arch/x86/bonnell/frontend.json       | 2 +-
+ tools/perf/pmu-events/arch/x86/bonnell/memory.json         | 2 +-
+ tools/perf/pmu-events/arch/x86/bonnell/other.json          | 2 +-
+ tools/perf/pmu-events/arch/x86/bonnell/pipeline.json       | 2 +-
+ tools/perf/pmu-events/arch/x86/bonnell/virtual-memory.json | 2 +-
+ tools/perf/pmu-events/arch/x86/mapfile.csv                 | 6 +-----
+ 8 files changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json b/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
-index f8bdf7812b51..095dd8c7f161 100644
---- a/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
-@@ -592,13 +592,13 @@
-         "Unit": "cpu_atom"
-     },
-     {
--        "BriefDescription": "Instructions per Branch (lower number means higher occurrence rate)",
-+        "BriefDescription": "Instructions per Branch (lower number means higher occurance rate)",
-         "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.ALL_BRANCHES",
-         "MetricName": "IpBranch",
-         "Unit": "cpu_atom"
-     },
-     {
--        "BriefDescription": "Instruction per (near) call (lower number means higher occurrence rate)",
-+        "BriefDescription": "Instruction per (near) call (lower number means higher occurance rate)",
-         "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.CALL",
-         "MetricName": "IpCall",
-         "Unit": "cpu_atom"
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/cache.json b/tools/perf/pmu-events/arch/x86/alderlake/cache.json
-index c6062c44ca75..887dce4dfeba 100644
---- a/tools/perf/pmu-events/arch/x86/alderlake/cache.json
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/cache.json
-@@ -505,6 +505,18 @@
-         "UMask": "0x1f",
-         "Unit": "cpu_core"
-     },
-+    {
-+        "BriefDescription": "Cache lines that have been L2 hardware prefetched but not used by demand accesses",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3",
-+        "EventCode": "0x26",
-+        "EventName": "L2_LINES_OUT.USELESS_HWPF",
-+        "PEBScounters": "0,1,2,3",
-+        "SampleAfterValue": "200003",
-+        "Speculative": "1",
-+        "UMask": "0x4",
-+        "Unit": "cpu_core"
-+    },
-     {
-         "BriefDescription": "All accesses to L2 cache[This event is alias to L2_RQSTS.REFERENCES]",
-         "CollectPEBSRecord": "2",
-@@ -722,7 +734,7 @@
-         "Unit": "cpu_core"
-     },
-     {
--        "BriefDescription": "LONGEST_LAT_CACHE.MISS",
-+        "BriefDescription": "Core-originated cacheable requests that missed L3  (Except hardware prefetches to the L3)",
-         "CollectPEBSRecord": "2",
-         "Counter": "0,1,2,3,4,5,6,7",
-         "EventCode": "0x2e",
-@@ -734,7 +746,19 @@
-         "Unit": "cpu_core"
-     },
-     {
--        "BriefDescription": "All retired load instructions.",
-+        "BriefDescription": "Core-originated cacheable requests that refer to L3 (Except hardware prefetches to the L3)",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5,6,7",
-+        "EventCode": "0x2e",
-+        "EventName": "LONGEST_LAT_CACHE.REFERENCE",
-+        "PEBScounters": "0,1,2,3,4,5,6,7",
-+        "SampleAfterValue": "100003",
-+        "Speculative": "1",
-+        "UMask": "0x4f",
-+        "Unit": "cpu_core"
-+    },
-+    {
-+        "BriefDescription": "Retired load instructions.",
-         "CollectPEBSRecord": "2",
-         "Counter": "0,1,2,3",
-         "Data_LA": "1",
-@@ -747,7 +771,7 @@
-         "Unit": "cpu_core"
-     },
-     {
--        "BriefDescription": "All retired store instructions.",
-+        "BriefDescription": "Retired store instructions.",
-         "CollectPEBSRecord": "2",
-         "Counter": "0,1,2,3",
-         "Data_LA": "1",
-@@ -1140,6 +1164,7 @@
-         "BriefDescription": "This event is deprecated. Refer to new event OFFCORE_REQUESTS_OUTSTANDING.DATA_RD",
-         "CollectPEBSRecord": "2",
-         "Counter": "0,1,2,3",
-+        "Errata": "ADL038",
-         "EventCode": "0x20",
-         "EventName": "OFFCORE_REQUESTS_OUTSTANDING.ALL_DATA_RD",
-         "PEBScounters": "0,1,2,3",
-@@ -1153,6 +1178,7 @@
-         "CollectPEBSRecord": "2",
-         "Counter": "0,1,2,3",
-         "CounterMask": "1",
-+        "Errata": "ADL038",
-         "EventCode": "0x20",
-         "EventName": "OFFCORE_REQUESTS_OUTSTANDING.CYCLES_WITH_DATA_RD",
-         "PEBScounters": "0,1,2,3",
-@@ -1178,6 +1204,7 @@
-         "BriefDescription": "OFFCORE_REQUESTS_OUTSTANDING.DATA_RD",
-         "CollectPEBSRecord": "2",
-         "Counter": "0,1,2,3",
-+        "Errata": "ADL038",
-         "EventCode": "0x20",
-         "EventName": "OFFCORE_REQUESTS_OUTSTANDING.DATA_RD",
-         "PEBScounters": "0,1,2,3",
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/other.json b/tools/perf/pmu-events/arch/x86/alderlake/other.json
-index b575275654a2..67a9c13cc71d 100644
---- a/tools/perf/pmu-events/arch/x86/alderlake/other.json
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/other.json
-@@ -125,6 +125,60 @@
-         "UMask": "0x1",
-         "Unit": "cpu_core"
-     },
-+    {
-+        "BriefDescription": "Cycles when Reservation Station (RS) is empty for the thread.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5,6,7",
-+        "EventCode": "0xa5",
-+        "EventName": "RS.EMPTY",
-+        "PEBScounters": "0,1,2,3,4,5,6,7",
-+        "SampleAfterValue": "1000003",
-+        "Speculative": "1",
-+        "UMask": "0x7",
-+        "Unit": "cpu_core"
-+    },
-+    {
-+        "BriefDescription": "Counts end of periods where the Reservation Station (RS) was empty.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5,6,7",
-+        "CounterMask": "1",
-+        "EdgeDetect": "1",
-+        "EventCode": "0xa5",
-+        "EventName": "RS.EMPTY_COUNT",
-+        "Invert": "1",
-+        "PEBScounters": "0,1,2,3,4,5,6,7",
-+        "SampleAfterValue": "100003",
-+        "Speculative": "1",
-+        "UMask": "0x7",
-+        "Unit": "cpu_core"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event RS.EMPTY_COUNT",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5,6,7",
-+        "CounterMask": "1",
-+        "EdgeDetect": "1",
-+        "EventCode": "0xa5",
-+        "EventName": "RS_EMPTY.COUNT",
-+        "Invert": "1",
-+        "PEBScounters": "0,1,2,3,4,5,6,7",
-+        "SampleAfterValue": "100003",
-+        "Speculative": "1",
-+        "UMask": "0x7",
-+        "Unit": "cpu_core"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event RS.EMPTY",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5,6,7",
-+        "EventCode": "0xa5",
-+        "EventName": "RS_EMPTY.CYCLES",
-+        "PEBScounters": "0,1,2,3,4,5,6,7",
-+        "SampleAfterValue": "1000003",
-+        "Speculative": "1",
-+        "UMask": "0x7",
-+        "Unit": "cpu_core"
-+    },
-     {
-         "BriefDescription": "XQ.FULL_CYCLES",
-         "CollectPEBSRecord": "2",
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json b/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
-index e0d1495202af..d02e078a90c9 100644
---- a/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/pipeline.json
-@@ -22,6 +22,30 @@
-         "UMask": "0xf9",
-         "Unit": "cpu_atom"
-     },
-+    {
-+        "BriefDescription": "Counts the number of retired JCC (Jump on Conditional Code) branch instructions retired, includes both taken and not taken branches.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.COND",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0x7e",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of taken JCC (Jump on Conditional Code) branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.COND_TAKEN",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfe",
-+        "Unit": "cpu_atom"
-+    },
-     {
-         "BriefDescription": "Counts the number of far branch instructions retired, includes far jump, far call and return, and interrupt call and return.",
-         "CollectPEBSRecord": "2",
-@@ -34,6 +58,54 @@
-         "UMask": "0xbf",
-         "Unit": "cpu_atom"
-     },
-+    {
-+        "BriefDescription": "Counts the number of near indirect JMP and near indirect CALL branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.INDIRECT",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xeb",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of near indirect CALL branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.INDIRECT_CALL",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfb",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_INST_RETIRED.INDIRECT_CALL",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.IND_CALL",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfb",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_INST_RETIRED.COND",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.JCC",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0x7e",
-+        "Unit": "cpu_atom"
-+    },
-     {
-         "BriefDescription": "Counts the number of near CALL branch instructions retired.",
-         "CollectPEBSRecord": "2",
-@@ -46,6 +118,66 @@
-         "UMask": "0xf9",
-         "Unit": "cpu_atom"
-     },
-+    {
-+        "BriefDescription": "Counts the number of near RET branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.NEAR_RETURN",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xf7",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_INST_RETIRED.INDIRECT",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.NON_RETURN_IND",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xeb",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of near relative CALL branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.REL_CALL",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfd",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_INST_RETIRED.NEAR_RETURN",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.RETURN",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xf7",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_INST_RETIRED.COND_TAKEN",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc4",
-+        "EventName": "BR_INST_RETIRED.TAKEN_JCC",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfe",
-+        "Unit": "cpu_atom"
-+    },
-     {
-         "BriefDescription": "Counts the total number of mispredicted branch instructions retired for all branch types.",
-         "CollectPEBSRecord": "2",
-@@ -57,10 +189,118 @@
-         "SampleAfterValue": "200003",
-         "Unit": "cpu_atom"
-     },
-+    {
-+        "BriefDescription": "Counts the number of mispredicted JCC (Jump on Conditional Code) branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.COND",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0x7e",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of mispredicted taken JCC (Jump on Conditional Code) branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.COND_TAKEN",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfe",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of mispredicted near indirect JMP and near indirect CALL branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.INDIRECT",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xeb",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of mispredicted near indirect CALL branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.INDIRECT_CALL",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfb",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_MISP_RETIRED.INDIRECT_CALL",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.IND_CALL",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfb",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_MISP_RETIRED.COND",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.JCC",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0x7e",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_MISP_RETIRED.INDIRECT",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.NON_RETURN_IND",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xeb",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of mispredicted near RET branch instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.RETURN",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xf7",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "This event is deprecated. Refer to new event BR_MISP_RETIRED.COND_TAKEN",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc5",
-+        "EventName": "BR_MISP_RETIRED.TAKEN_JCC",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xfe",
-+        "Unit": "cpu_atom"
-+    },
-     {
-         "BriefDescription": "Counts the number of unhalted core clock cycles. (Fixed event)",
-         "CollectPEBSRecord": "2",
--        "Counter": "33",
-+        "Counter": "Fixed counter 1",
-         "EventName": "CPU_CLK_UNHALTED.CORE",
-         "PEBScounters": "33",
-         "SampleAfterValue": "2000003",
-@@ -82,7 +322,7 @@
-     {
-         "BriefDescription": "Counts the number of unhalted reference clock cycles at TSC frequency. (Fixed event)",
-         "CollectPEBSRecord": "2",
--        "Counter": "34",
-+        "Counter": "Fixed counter 2",
-         "EventName": "CPU_CLK_UNHALTED.REF_TSC",
-         "PEBScounters": "34",
-         "SampleAfterValue": "2000003",
-@@ -93,7 +333,7 @@
-     {
-         "BriefDescription": "Counts the number of unhalted core clock cycles. (Fixed event)",
-         "CollectPEBSRecord": "2",
--        "Counter": "33",
-+        "Counter": "Fixed counter 1",
-         "EventName": "CPU_CLK_UNHALTED.THREAD",
-         "PEBScounters": "33",
-         "SampleAfterValue": "2000003",
-@@ -115,7 +355,7 @@
-     {
-         "BriefDescription": "Counts the total number of instructions retired. (Fixed event)",
-         "CollectPEBSRecord": "2",
--        "Counter": "32",
-+        "Counter": "Fixed counter 0",
-         "EventName": "INST_RETIRED.ANY",
-         "PEBS": "1",
-         "PEBScounters": "32",
-@@ -123,6 +363,17 @@
-         "UMask": "0x1",
-         "Unit": "cpu_atom"
-     },
-+    {
-+        "BriefDescription": "Counts the total number of instructions retired.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0xc0",
-+        "EventName": "INST_RETIRED.ANY_P",
-+        "PEBS": "1",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "2000003",
-+        "Unit": "cpu_atom"
-+    },
-     {
-         "BriefDescription": "This event is deprecated. Refer to new event LD_BLOCKS.ADDRESS_ALIAS",
-         "CollectPEBSRecord": "2",
-@@ -769,7 +1020,7 @@
-         "Unit": "cpu_core"
-     },
-     {
--        "BriefDescription": "number of branch instructions retired that were mispredicted and taken. Non PEBS",
-+        "BriefDescription": "number of branch instructions retired that were mispredicted and taken.",
-         "CollectPEBSRecord": "2",
-         "Counter": "0,1,2,3,4,5,6,7",
-         "EventCode": "0xc5",
-@@ -915,7 +1166,7 @@
-     {
-         "BriefDescription": "Reference cycles when the core is not in halt state.",
-         "CollectPEBSRecord": "2",
--        "Counter": "34",
-+        "Counter": "Fixed counter 2",
-         "EventName": "CPU_CLK_UNHALTED.REF_TSC",
-         "PEBScounters": "34",
-         "SampleAfterValue": "2000003",
-@@ -923,10 +1174,22 @@
-         "UMask": "0x3",
-         "Unit": "cpu_core"
-     },
-+    {
-+        "BriefDescription": "Reference cycles when the core is not in halt state.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5,6,7",
-+        "EventCode": "0x3c",
-+        "EventName": "CPU_CLK_UNHALTED.REF_TSC_P",
-+        "PEBScounters": "0,1,2,3,4,5,6,7",
-+        "SampleAfterValue": "2000003",
-+        "Speculative": "1",
-+        "UMask": "0x1",
-+        "Unit": "cpu_core"
-+    },
-     {
-         "BriefDescription": "Core cycles when the thread is not in halt state",
-         "CollectPEBSRecord": "2",
--        "Counter": "33",
-+        "Counter": "Fixed counter 1",
-         "EventName": "CPU_CLK_UNHALTED.THREAD",
-         "PEBScounters": "33",
-         "SampleAfterValue": "2000003",
-@@ -1124,7 +1387,7 @@
-     {
-         "BriefDescription": "Number of instructions retired. Fixed Counter - architectural event",
-         "CollectPEBSRecord": "2",
--        "Counter": "32",
-+        "Counter": "Fixed counter 0",
-         "EventName": "INST_RETIRED.ANY",
-         "PEBS": "1",
-         "PEBScounters": "32",
-@@ -1155,7 +1418,7 @@
-         "Unit": "cpu_core"
-     },
-     {
--        "BriefDescription": "Number of all retired NOP instructions.",
-+        "BriefDescription": "Retired NOP instructions.",
-         "CollectPEBSRecord": "2",
-         "Counter": "0,1,2,3,4,5,6,7",
-         "EventCode": "0xc0",
-@@ -1168,7 +1431,7 @@
-     {
-         "BriefDescription": "Precise instruction retired with PEBS precise-distribution",
-         "CollectPEBSRecord": "2",
--        "Counter": "32",
-+        "Counter": "Fixed counter 0",
-         "EventName": "INST_RETIRED.PREC_DIST",
-         "PEBS": "1",
-         "PEBScounters": "32",
-@@ -1532,7 +1795,7 @@
-     {
-         "BriefDescription": "TMA slots available for an unhalted logical processor. Fixed counter - architectural event",
-         "CollectPEBSRecord": "2",
--        "Counter": "35",
-+        "Counter": "Fixed counter 3",
-         "EventName": "TOPDOWN.SLOTS",
-         "PEBScounters": "35",
-         "SampleAfterValue": "10000003",
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json b/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-index 50de82c29944..b1ae349f5f21 100644
---- a/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-@@ -3,7 +3,7 @@
-         "BriefDescription": "This 48-bit fixed counter counts the UCLK cycles",
-         "Counter": "Fixed",
-         "CounterType": "PGMABLE",
--	"EventCode": "0xff",
-+        "EventCode": "0xff",
-         "EventName": "UNC_CLOCK.SOCKET",
-         "PerPkg": "1",
-         "Unit": "CLOCK"
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/virtual-memory.json b/tools/perf/pmu-events/arch/x86/alderlake/virtual-memory.json
-index c5676f11d863..12baf768ad8d 100644
---- a/tools/perf/pmu-events/arch/x86/alderlake/virtual-memory.json
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/virtual-memory.json
-@@ -23,6 +23,42 @@
-         "UMask": "0xe",
-         "Unit": "cpu_atom"
-     },
-+    {
-+        "BriefDescription": "Counts the number of page walks initiated by a instruction fetch that missed the first and second level TLBs.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0x85",
-+        "EventName": "ITLB_MISSES.MISS_CAUSED_WALK",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "1000003",
-+        "Speculative": "1",
-+        "UMask": "0x1",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of page walks due to an instruction fetch that miss the PDE (Page Directory Entry) cache.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0x85",
-+        "EventName": "ITLB_MISSES.PDE_CACHE_MISS",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "2000003",
-+        "Speculative": "1",
-+        "UMask": "0x80",
-+        "Unit": "cpu_atom"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of page walks completed due to instruction fetch misses to any page size.",
-+        "CollectPEBSRecord": "2",
-+        "Counter": "0,1,2,3,4,5",
-+        "EventCode": "0x85",
-+        "EventName": "ITLB_MISSES.WALK_COMPLETED",
-+        "PEBScounters": "0,1,2,3,4,5",
-+        "SampleAfterValue": "200003",
-+        "Speculative": "1",
-+        "UMask": "0xe",
-+        "Unit": "cpu_atom"
-+    },
-     {
-         "BriefDescription": "Counts the number of cycles that the head (oldest load) of the load buffer and retirement are both stalled due to a DTLB miss.",
-         "CollectPEBSRecord": "2",
+diff --git a/tools/perf/pmu-events/arch/x86/bonnell/cache.json b/tools/perf/pmu-events/arch/x86/bonnell/cache.json
+index 71653bfe7093..86582bb8aa39 100644
+--- a/tools/perf/pmu-events/arch/x86/bonnell/cache.json
++++ b/tools/perf/pmu-events/arch/x86/bonnell/cache.json
+@@ -743,4 +743,4 @@
+         "SampleAfterValue": "10000",
+         "UMask": "0x2"
+     }
+-]
+\ No newline at end of file
++]
+diff --git a/tools/perf/pmu-events/arch/x86/bonnell/floating-point.json b/tools/perf/pmu-events/arch/x86/bonnell/floating-point.json
+index f8055ff47f19..1fa347d07c98 100644
+--- a/tools/perf/pmu-events/arch/x86/bonnell/floating-point.json
++++ b/tools/perf/pmu-events/arch/x86/bonnell/floating-point.json
+@@ -258,4 +258,4 @@
+         "SampleAfterValue": "2000000",
+         "UMask": "0x2"
+     }
+-]
+\ No newline at end of file
++]
+diff --git a/tools/perf/pmu-events/arch/x86/bonnell/frontend.json b/tools/perf/pmu-events/arch/x86/bonnell/frontend.json
+index e852eb2cc878..21fe5fe229aa 100644
+--- a/tools/perf/pmu-events/arch/x86/bonnell/frontend.json
++++ b/tools/perf/pmu-events/arch/x86/bonnell/frontend.json
+@@ -88,4 +88,4 @@
+         "SampleAfterValue": "2000000",
+         "UMask": "0x1"
+     }
+-]
+\ No newline at end of file
++]
+diff --git a/tools/perf/pmu-events/arch/x86/bonnell/memory.json b/tools/perf/pmu-events/arch/x86/bonnell/memory.json
+index 2aa4c41f528e..f8b45b6fb4d3 100644
+--- a/tools/perf/pmu-events/arch/x86/bonnell/memory.json
++++ b/tools/perf/pmu-events/arch/x86/bonnell/memory.json
+@@ -151,4 +151,4 @@
+         "SampleAfterValue": "200000",
+         "UMask": "0x86"
+     }
+-]
+\ No newline at end of file
++]
+diff --git a/tools/perf/pmu-events/arch/x86/bonnell/other.json b/tools/perf/pmu-events/arch/x86/bonnell/other.json
+index 114c062e7e96..e0bdcfbfa9dc 100644
+--- a/tools/perf/pmu-events/arch/x86/bonnell/other.json
++++ b/tools/perf/pmu-events/arch/x86/bonnell/other.json
+@@ -447,4 +447,4 @@
+         "SampleAfterValue": "200000",
+         "UMask": "0xc0"
+     }
+-]
+\ No newline at end of file
++]
+diff --git a/tools/perf/pmu-events/arch/x86/bonnell/pipeline.json b/tools/perf/pmu-events/arch/x86/bonnell/pipeline.json
+index 896b738e59b6..f5123c99a7ba 100644
+--- a/tools/perf/pmu-events/arch/x86/bonnell/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/bonnell/pipeline.json
+@@ -353,4 +353,4 @@
+         "SampleAfterValue": "2000000",
+         "UMask": "0x10"
+     }
+-]
+\ No newline at end of file
++]
+diff --git a/tools/perf/pmu-events/arch/x86/bonnell/virtual-memory.json b/tools/perf/pmu-events/arch/x86/bonnell/virtual-memory.json
+index c2363b8e61b4..e8512c585572 100644
+--- a/tools/perf/pmu-events/arch/x86/bonnell/virtual-memory.json
++++ b/tools/perf/pmu-events/arch/x86/bonnell/virtual-memory.json
+@@ -121,4 +121,4 @@
+         "SampleAfterValue": "200000",
+         "UMask": "0x3"
+     }
+-]
+\ No newline at end of file
++]
 diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-index dd1d24d3cb65..2842f23db82a 100644
+index 2842f23db82a..dbd6bcbbca8b 100644
 --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
 +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -1,4 +1,5 @@
+@@ -1,13 +1,9 @@
  Family-model,Version,Filename,EventType
-+GenuineIntel-6-9[7A],v1.13,alderlake,core
+ GenuineIntel-6-9[7A],v1.13,alderlake,core
++GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
  GenuineIntel-6-(3D|47),v26,broadwell,core
  GenuineIntel-6-56,v23,broadwellde,core
  GenuineIntel-6-4F,v19,broadwellx,core
-@@ -41,8 +42,6 @@ GenuineIntel-6-6A,v1,icelakex,core
- GenuineIntel-6-6C,v1,icelakex,core
- GenuineIntel-6-86,v1,snowridgex,core
- GenuineIntel-6-96,v1,elkhartlake,core
--GenuineIntel-6-97,v1,alderlake,core
--GenuineIntel-6-9A,v1,alderlake,core
- GenuineIntel-6-8F,v1,sapphirerapids,core
- AuthenticAMD-23-([12][0-9A-F]|[0-9A-F]),v2,amdzen1,core
- AuthenticAMD-23-[[:xdigit:]]+,v1,amdzen2,core
+-GenuineIntel-6-1C,v4,bonnell,core
+-GenuineIntel-6-26,v4,bonnell,core
+-GenuineIntel-6-27,v4,bonnell,core
+-GenuineIntel-6-36,v4,bonnell,core
+-GenuineIntel-6-35,v4,bonnell,core
+ GenuineIntel-6-5C,v8,goldmont,core
+ GenuineIntel-6-7A,v1,goldmontplus,core
+ GenuineIntel-6-3C,v24,haswell,core
 -- 
 2.37.1.359.gd136c6c3e2-goog
 

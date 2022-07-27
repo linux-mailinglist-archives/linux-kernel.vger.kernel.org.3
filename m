@@ -2,247 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D201A5822D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A065822AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbiG0JKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S231350AbiG0JER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiG0JJR (ORCPT
+        with ESMTP id S231233AbiG0JEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:09:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA91A48E9C;
-        Wed, 27 Jul 2022 02:07:37 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lt7CL6ywhzkYFY;
-        Wed, 27 Jul 2022 17:05:02 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Jul 2022 17:06:22 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Jul 2022 17:06:21 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
-CC:     <pc@us.ibm.com>, <yhs@fb.com>, <andrii.nakryiko@gmail.com>,
-        <songliubraving@fb.com>, <yangjihong1@huawei.com>
-Subject: [RFC v4 17/17] perf kwork: Add workqueue trace bpf support
-Date:   Wed, 27 Jul 2022 17:03:30 +0800
-Message-ID: <20220727090330.107760-18-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20220727090330.107760-1-yangjihong1@huawei.com>
-References: <20220727090330.107760-1-yangjihong1@huawei.com>
+        Wed, 27 Jul 2022 05:04:14 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC8E474CB
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:04:13 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id r3so29232671ybr.6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:04:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p2f3kh3jqi9yjSQzKeEhCTNVhq9kV2tSI6rer8mhvNI=;
+        b=WjFzxSO2wJzIbJH4XkUpRb5mtLv5lM7tMqrUu61P+vX0mCZ/dxyDFrjHgg+qBFmghP
+         nfGkL9gbS4Vwnuud/OmpQCyB0dChfNXSYl32JihYvnsBaCCarUtHOOga4p4XSzpQttS6
+         tzpx1dwoudB1NWkAiJvbO21luJ/qSTi1mF8Ku8IMdXHKV/5OiSzbGwXEVW0QvM71M8EC
+         SeUocZhlVq/HD29CtUs1jWRlWUZg0UGiSRK1SMN0nL1eB+v5zdZz/2mSy009D7aOwqFW
+         KSeQ/Q7fVmh7VjJga5qADbHbVztwLQMIU30KVKqPo5h4nsiKuHvwDyAZGhzrWlgFzhK3
+         N3AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p2f3kh3jqi9yjSQzKeEhCTNVhq9kV2tSI6rer8mhvNI=;
+        b=dkHQlqOq/6EXahRI5El8+jCW1FhCYkn7kqTAENuhmRfqqbgvJ/rmumggjaIFaMCUHK
+         qHSgPyUd6xJxtMVKBJRJaCxPAznwfXyWbBB8g5aXr/IBkcjJGJC441CPCx9TwigOGbaS
+         e6CPtS9WFQD9sKbHJ21AoiT9yg79rmhrIT4yqBzy4vtrZBBJgl4WWzlTbkJhkMmlAqzI
+         BFiFcwkEctBfsBQ/1nSRU+UY65lZjltIjDzMCJbdI7Gcc9AMUtoXS3XddJ0saB5j2ZgH
+         uBR6uATyLQnEPCGNnvuQQLyafQHI64+ORHo5a7ip85TBFSi6Xjx30slVHsYnrOY2qkuR
+         6DyA==
+X-Gm-Message-State: AJIora9pDn+/F21UkG0MoFePKaOTFtw7QLN5aMr3XvuhZbwQrT6KYf6H
+        7vAkYbTk/AFN+045hqJcovlY8PCP7veXLzU/0wXM8Q==
+X-Google-Smtp-Source: AGRyM1tFqXVl1Wq7EQt3qviY8BvioiYzPA9jdIWLjIYucLUw/m0e/HDPSy2RNp34GiUJ0LE93SKzgQ/kW9FUP7L1iYE=
+X-Received: by 2002:a25:ba02:0:b0:670:8171:3176 with SMTP id
+ t2-20020a25ba02000000b0067081713176mr15910761ybg.61.1658912652855; Wed, 27
+ Jul 2022 02:04:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726135506.485108-1-bchihi@baylibre.com> <20220726135506.485108-2-bchihi@baylibre.com>
+ <3cb97e73-d60a-086d-83c2-1711c70057a2@collabora.com>
+In-Reply-To: <3cb97e73-d60a-086d-83c2-1711c70057a2@collabora.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 27 Jul 2022 11:03:36 +0200
+Message-ID: <CAGuA+orsPVDjKcD=nMoHNKkQd3LNP8FP+TDSCWvabmR9f19TWw@mail.gmail.com>
+Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek folder
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implements workqueue trace bpf function.
+On Wed, Jul 27, 2022 at 10:24 AM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 26/07/22 15:55, Balsam CHIHI ha scritto:
+> > Add Mediatek proprietary folder to upstream more thermal zone and cooler
+> > drivers. Relocate the original thermal controller driver to it and rename
+> > as soc_temp.c to show its purpose more clearly.
+> >
+> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> > Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > ---
+> >   drivers/thermal/Kconfig                       | 14 ++++-------
+> >   drivers/thermal/Makefile                      |  2 +-
+> >   drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
+> >   drivers/thermal/mediatek/Makefile             |  1 +
+> >   .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
+> >   5 files changed, 29 insertions(+), 11 deletions(-)
+> >   create mode 100644 drivers/thermal/mediatek/Kconfig
+> >   create mode 100644 drivers/thermal/mediatek/Makefile
+> >   rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+> >
+> > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> > index 0e5cc948373c..ecba8d6e313b 100644
+> > --- a/drivers/thermal/Kconfig
+> > +++ b/drivers/thermal/Kconfig
+> > @@ -412,16 +412,10 @@ config DA9062_THERMAL
+> >         zone.
+> >         Compatible with the DA9062 and DA9061 PMICs.
+> >
+> > -config MTK_THERMAL
+> > -     tristate "Temperature sensor driver for mediatek SoCs"
+> > -     depends on ARCH_MEDIATEK || COMPILE_TEST
+> > -     depends on HAS_IOMEM
+> > -     depends on NVMEM || NVMEM=n
+> > -     depends on RESET_CONTROLLER
+> > -     default y
+> > -     help
+> > -       Enable this option if you want to have support for thermal management
+> > -       controller present in Mediatek SoCs
+> > +menu "Mediatek thermal drivers"
+> > +depends on ARCH_MEDIATEK || COMPILE_TEST
+> > +source "drivers/thermal/mediatek/Kconfig"
+> > +endmenu
+> >
+> >   config AMLOGIC_THERMAL
+> >       tristate "Amlogic Thermal Support"
+> > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> > index def8e1a0399c..3c00e864ad55 100644
+> > --- a/drivers/thermal/Makefile
+> > +++ b/drivers/thermal/Makefile
+> > @@ -55,7 +55,7 @@ obj-y                               += st/
+> >   obj-$(CONFIG_QCOM_TSENS)    += qcom/
+> >   obj-y                               += tegra/
+> >   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> > -obj-$(CONFIG_MTK_THERMAL)    += mtk_thermal.o
+> > +obj-$(CONFIG_MTK_THERMAL)    += mediatek/
+> >   obj-$(CONFIG_GENERIC_ADC_THERMAL)   += thermal-generic-adc.o
+> >   obj-$(CONFIG_UNIPHIER_THERMAL)      += uniphier_thermal.o
+> >   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> > diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> > new file mode 100644
+> > index 000000000000..9c41e9079fc3
+> > --- /dev/null
+> > +++ b/drivers/thermal/mediatek/Kconfig
+> > @@ -0,0 +1,23 @@
+> > +config MTK_THERMAL
+> > +     tristate "MediaTek thermal drivers"
+> > +     depends on THERMAL_OF
+> > +     help
+> > +             This is the option for MediaTek thermal software
+> > +             solutions. Please enable corresponding options to
+> > +             get temperature information from thermal sensors or
+> > +             turn on throttle mechaisms for thermal mitigation.
+>
+> Sorry, I just noticed that the indentation must be fixed.
+>
+>         help
+>           This is the option .....
+>
+> Thanks,
+> Angelo
+OK, It will be fixed ASAP.
 
-Test cases:
-
-  # perf kwork -k workqueue lat -b
-  Starting trace, Hit <Ctrl+C> to stop and report
-  ^C
-    Kwork Name                     | Cpu  | Avg delay     | Count     | Max delay     | Max delay start     | Max delay end       |
-   --------------------------------------------------------------------------------------------------------------------------------
-    (w)addrconf_verify_work        | 0002 |      5.856 ms |         1 |      5.856 ms |     111994.634313 s |     111994.640169 s |
-    (w)vmstat_update               | 0001 |      1.247 ms |         1 |      1.247 ms |     111996.462651 s |     111996.463899 s |
-    (w)neigh_periodic_work         | 0001 |      1.183 ms |         1 |      1.183 ms |     111996.462789 s |     111996.463973 s |
-    (w)neigh_managed_work          | 0001 |      0.989 ms |         2 |      1.635 ms |     111996.462820 s |     111996.464455 s |
-    (w)wb_workfn                   | 0000 |      0.667 ms |         1 |      0.667 ms |     111996.384273 s |     111996.384940 s |
-    (w)bpf_prog_free_deferred      | 0001 |      0.495 ms |         1 |      0.495 ms |     111986.314201 s |     111986.314696 s |
-    (w)mix_interrupt_randomness    | 0002 |      0.421 ms |         6 |      0.749 ms |     111995.927750 s |     111995.928499 s |
-    (w)vmstat_shepherd             | 0000 |      0.374 ms |         2 |      0.385 ms |     111991.265242 s |     111991.265627 s |
-    (w)e1000_watchdog              | 0002 |      0.356 ms |         5 |      0.390 ms |     111994.528380 s |     111994.528770 s |
-    (w)vmstat_update               | 0000 |      0.231 ms |         2 |      0.365 ms |     111996.384407 s |     111996.384772 s |
-    (w)flush_to_ldisc              | 0006 |      0.165 ms |         1 |      0.165 ms |     111995.930606 s |     111995.930771 s |
-    (w)flush_to_ldisc              | 0000 |      0.094 ms |         2 |      0.095 ms |     111996.460453 s |     111996.460548 s |
-   --------------------------------------------------------------------------------------------------------------------------------
-
-  # perf kwork -k workqueue rep -b
-  Starting trace, Hit <Ctrl+C> to stop and report
-  ^C
-    Kwork Name                     | Cpu  | Total Runtime | Count     | Max runtime   | Max runtime start   | Max runtime end     |
-   --------------------------------------------------------------------------------------------------------------------------------
-    (w)e1000_watchdog              | 0002 |      0.627 ms |         2 |      0.324 ms |     112002.720665 s |     112002.720989 s |
-    (w)flush_to_ldisc              | 0007 |      0.598 ms |         2 |      0.534 ms |     112000.875226 s |     112000.875761 s |
-    (w)wq_barrier_func             | 0007 |      0.492 ms |         1 |      0.492 ms |     112000.876981 s |     112000.877473 s |
-    (w)flush_to_ldisc              | 0007 |      0.281 ms |         1 |      0.281 ms |     112005.826882 s |     112005.827163 s |
-    (w)mix_interrupt_randomness    | 0002 |      0.229 ms |         3 |      0.102 ms |     112005.825671 s |     112005.825774 s |
-    (w)vmstat_shepherd             | 0000 |      0.202 ms |         1 |      0.202 ms |     112001.504511 s |     112001.504713 s |
-    (w)bpf_prog_free_deferred      | 0001 |      0.181 ms |         1 |      0.181 ms |     112000.883251 s |     112000.883432 s |
-    (w)wb_workfn                   | 0007 |      0.130 ms |         1 |      0.130 ms |     112001.505195 s |     112001.505325 s |
-    (w)vmstat_update               | 0000 |      0.053 ms |         1 |      0.053 ms |     112001.504763 s |     112001.504815 s |
-   --------------------------------------------------------------------------------------------------------------------------------
-
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- tools/perf/util/bpf_kwork.c                | 22 +++++-
- tools/perf/util/bpf_skel/kwork_trace.bpf.c | 84 ++++++++++++++++++++++
- 2 files changed, 105 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/bpf_kwork.c b/tools/perf/util/bpf_kwork.c
-index 1d76ca499ff6..fe9b0bdbb947 100644
---- a/tools/perf/util/bpf_kwork.c
-+++ b/tools/perf/util/bpf_kwork.c
-@@ -120,11 +120,31 @@ static struct kwork_class_bpf kwork_softirq_bpf = {
- 	.get_work_name = get_work_name_from_map,
- };
- 
-+static void workqueue_load_prepare(struct perf_kwork *kwork)
-+{
-+	if (kwork->report == KWORK_REPORT_RUNTIME) {
-+		bpf_program__set_autoload(
-+			skel->progs.report_workqueue_execute_start, true);
-+		bpf_program__set_autoload(
-+			skel->progs.report_workqueue_execute_end, true);
-+	} else if (kwork->report == KWORK_REPORT_LATENCY) {
-+		bpf_program__set_autoload(
-+			skel->progs.latency_workqueue_activate_work, true);
-+		bpf_program__set_autoload(
-+			skel->progs.latency_workqueue_execute_start, true);
-+	}
-+}
-+
-+static struct kwork_class_bpf kwork_workqueue_bpf = {
-+	.load_prepare  = workqueue_load_prepare,
-+	.get_work_name = get_work_name_from_map,
-+};
-+
- static struct kwork_class_bpf *
- kwork_class_bpf_supported_list[KWORK_CLASS_MAX] = {
- 	[KWORK_CLASS_IRQ]       = &kwork_irq_bpf,
- 	[KWORK_CLASS_SOFTIRQ]   = &kwork_softirq_bpf,
--	[KWORK_CLASS_WORKQUEUE] = NULL,
-+	[KWORK_CLASS_WORKQUEUE] = &kwork_workqueue_bpf,
- };
- 
- static bool valid_kwork_class_type(enum kwork_class_type type)
-diff --git a/tools/perf/util/bpf_skel/kwork_trace.bpf.c b/tools/perf/util/bpf_skel/kwork_trace.bpf.c
-index 73a0acd6f636..82d47ef4ec70 100644
---- a/tools/perf/util/bpf_skel/kwork_trace.bpf.c
-+++ b/tools/perf/util/bpf_skel/kwork_trace.bpf.c
-@@ -166,6 +166,15 @@ static __always_inline void do_update_name(void *map,
- 		bpf_map_update_elem(map, key, name, BPF_ANY);
- }
- 
-+static __always_inline int update_timestart(void *map, struct work_key *key)
-+{
-+	if (!trace_event_match(key, NULL))
-+		return 0;
-+
-+	do_update_timestart(map, key);
-+	return 0;
-+}
-+
- static __always_inline int update_timestart_and_name(void *time_map,
- 						     void *names_map,
- 						     struct work_key *key,
-@@ -191,6 +200,21 @@ static __always_inline int update_timeend(void *report_map,
- 	return 0;
- }
- 
-+static __always_inline int update_timeend_and_name(void *report_map,
-+						   void *time_map,
-+						   void *names_map,
-+						   struct work_key *key,
-+						   char *name)
-+{
-+	if (!trace_event_match(key, name))
-+		return 0;
-+
-+	do_update_timeend(report_map, time_map, key);
-+	do_update_name(names_map, key, name);
-+
-+	return 0;
-+}
-+
- SEC("tracepoint/irq/irq_handler_entry")
- int report_irq_handler_entry(struct trace_event_raw_irq_handler_entry *ctx)
- {
-@@ -295,4 +319,64 @@ int latency_softirq_entry(struct trace_event_raw_softirq *ctx)
- 	return update_timeend(&perf_kwork_report, &perf_kwork_time, &key);
- }
- 
-+SEC("tracepoint/workqueue/workqueue_execute_start")
-+int report_workqueue_execute_start(struct trace_event_raw_workqueue_execute_start *ctx)
-+{
-+	struct work_key key = {
-+		.type = KWORK_CLASS_WORKQUEUE,
-+		.cpu  = bpf_get_smp_processor_id(),
-+		.id   = (__u64)ctx->work,
-+	};
-+
-+	return update_timestart(&perf_kwork_time, &key);
-+}
-+
-+SEC("tracepoint/workqueue/workqueue_execute_end")
-+int report_workqueue_execute_end(struct trace_event_raw_workqueue_execute_end *ctx)
-+{
-+	char name[MAX_KWORKNAME];
-+	struct work_key key = {
-+		.type = KWORK_CLASS_WORKQUEUE,
-+		.cpu  = bpf_get_smp_processor_id(),
-+		.id   = (__u64)ctx->work,
-+	};
-+	unsigned long long func_addr = (unsigned long long)ctx->function;
-+
-+	__builtin_memset(name, 0, sizeof(name));
-+	bpf_snprintf(name, sizeof(name), "%ps", &func_addr, sizeof(func_addr));
-+
-+	return update_timeend_and_name(&perf_kwork_report, &perf_kwork_time,
-+				       &perf_kwork_names, &key, name);
-+}
-+
-+SEC("tracepoint/workqueue/workqueue_activate_work")
-+int latency_workqueue_activate_work(struct trace_event_raw_workqueue_activate_work *ctx)
-+{
-+	struct work_key key = {
-+		.type = KWORK_CLASS_WORKQUEUE,
-+		.cpu  = bpf_get_smp_processor_id(),
-+		.id   = (__u64)ctx->work,
-+	};
-+
-+	return update_timestart(&perf_kwork_time, &key);
-+}
-+
-+SEC("tracepoint/workqueue/workqueue_execute_start")
-+int latency_workqueue_execute_start(struct trace_event_raw_workqueue_execute_start *ctx)
-+{
-+	char name[MAX_KWORKNAME];
-+	struct work_key key = {
-+		.type = KWORK_CLASS_WORKQUEUE,
-+		.cpu  = bpf_get_smp_processor_id(),
-+		.id   = (__u64)ctx->work,
-+	};
-+	unsigned long long func_addr = (unsigned long long)ctx->function;
-+
-+	__builtin_memset(name, 0, sizeof(name));
-+	bpf_snprintf(name, sizeof(name), "%ps", &func_addr, sizeof(func_addr));
-+
-+	return update_timeend_and_name(&perf_kwork_report, &perf_kwork_time,
-+				       &perf_kwork_names, &key, name);
-+}
-+
- char LICENSE[] SEC("license") = "Dual BSD/GPL";
--- 
-2.30.GIT
-
+Thanks,
+Balsam.

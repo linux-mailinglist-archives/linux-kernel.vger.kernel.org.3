@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C2F582B7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CBC582F33
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238122AbiG0Qdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S237715AbiG0RWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237848AbiG0QdJ (ORCPT
+        with ESMTP id S242104AbiG0RTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:33:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0418E54ACE;
-        Wed, 27 Jul 2022 09:26:31 -0700 (PDT)
+        Wed, 27 Jul 2022 13:19:47 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671185247E;
+        Wed, 27 Jul 2022 09:45:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA2F9619F6;
-        Wed, 27 Jul 2022 16:26:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E302BC433C1;
-        Wed, 27 Jul 2022 16:26:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 79AEECE2309;
+        Wed, 27 Jul 2022 16:44:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C76EC433C1;
+        Wed, 27 Jul 2022 16:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939173;
-        bh=J7u/vvB8Zs3W1i9AnlFem8HQrWzcHF81LZifj3tjOak=;
+        s=korg; t=1658940296;
+        bh=rOrmLFrxGWYV871MsyQQEIzigWMtnhgSC8ReLXbMgD0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OsNYCgOk7O0DLSisfp5DZlFUboRQtTFXBClEDtL+tikR+Y0QgwAQrWvN01jTA88ns
-         B04520Q2/JbD97EtgdAPYkuRZR7c66a9DEwO8LxTHoZBA57TBMX68kWXMWQZSwU0PM
-         h+8hv9ym/NtzQEZGm9a1l/UYbMl9wHqJrUu1WqoI=
+        b=GSOjbKE3wU4s/4uEmDrTxwG3K8jSudBzGARySogdGE83epLpnYTM4cW/w/CAsa4/S
+         EhhEIf5AtA1IQVcfZSgQhg9WwKFoMNT78yVlrWngb9i0vyZE8OjpB4tIkVUAhGMsxG
+         FebxHdrvZct/f4a98IzvROwNZqEV/vIM0SRVhFdI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 38/62] HID: multitouch: simplify the application retrieval
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 143/201] x86/mce: Deduplicate exception handling
 Date:   Wed, 27 Jul 2022 18:10:47 +0200
-Message-Id: <20220727161005.678048255@linuxfoundation.org>
+Message-Id: <20220727161033.735314528@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,126 +53,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-[ Upstream commit 7ffa13be4945b2f60dfe6c71acbc1fdcfc4629a0 ]
+[ Upstream commit e42404afc4ca856c48f1e05752541faa3587c472 ]
 
-Now that the application is simply stored in struct hid_input, we can
-overwrite it in mt_input_mapping() for the faulty egalax and have a
-simpler suffix processing in mt_input_configured()
+Prepare code for further simplification. No functional change.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lkml.kernel.org/r/20210908132525.096452100@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-multitouch.c | 72 ++++++++++++++++--------------------
- 1 file changed, 32 insertions(+), 40 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index e99286258f62..5509b09f8656 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -1332,6 +1332,13 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
- 		return mt_touch_input_mapping(hdev, hi, field, usage, bit, max,
- 					      application);
- 
-+	/*
-+	 * some egalax touchscreens have "application == DG_TOUCHSCREEN"
-+	 * for the stylus. Overwrite the hid_input application
-+	 */
-+	if (field->physical == HID_DG_STYLUS)
-+		hi->application = HID_DG_STYLUS;
-+
- 	/* let hid-core decide for the others */
- 	return 0;
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 848cfb013f58..d8da3acf1ffd 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -382,13 +382,16 @@ static int msr_to_offset(u32 msr)
+ 	return -1;
  }
-@@ -1520,14 +1527,12 @@ static int mt_input_configured(struct hid_device *hdev, struct hid_input *hi)
- 	struct mt_device *td = hid_get_drvdata(hdev);
- 	char *name;
- 	const char *suffix = NULL;
--	unsigned int application = 0;
- 	struct mt_report_data *rdata;
- 	struct mt_application *mt_application = NULL;
- 	struct hid_report *report;
- 	int ret;
  
- 	list_for_each_entry(report, &hi->reports, hidinput_list) {
--		application = report->application;
- 		rdata = mt_find_report_data(td, report);
- 		if (!rdata) {
- 			hid_err(hdev, "failed to allocate data for report\n");
-@@ -1542,46 +1547,33 @@ static int mt_input_configured(struct hid_device *hdev, struct hid_input *hi)
- 			if (ret)
- 				return ret;
- 		}
+-__visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
+-				      struct pt_regs *regs, int trapnr,
+-				      unsigned long error_code,
+-				      unsigned long fault_addr)
++static void ex_handler_msr_mce(struct pt_regs *regs, bool wrmsr)
+ {
+-	pr_emerg("MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
+-		 (unsigned int)regs->cx, regs->ip, (void *)regs->ip);
++	if (wrmsr) {
++		pr_emerg("MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
++			 (unsigned int)regs->cx, (unsigned int)regs->dx, (unsigned int)regs->ax,
++			 regs->ip, (void *)regs->ip);
++	} else {
++		pr_emerg("MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
++			 (unsigned int)regs->cx, regs->ip, (void *)regs->ip);
++	}
+ 
+ 	show_stack_regs(regs);
+ 
+@@ -396,7 +399,14 @@ __visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
+ 
+ 	while (true)
+ 		cpu_relax();
++}
+ 
++__visible bool ex_handler_rdmsr_fault(const struct exception_table_entry *fixup,
++				      struct pt_regs *regs, int trapnr,
++				      unsigned long error_code,
++				      unsigned long fault_addr)
++{
++	ex_handler_msr_mce(regs, false);
+ 	return true;
+ }
+ 
+@@ -441,17 +451,7 @@ __visible bool ex_handler_wrmsr_fault(const struct exception_table_entry *fixup,
+ 				      unsigned long error_code,
+ 				      unsigned long fault_addr)
+ {
+-	pr_emerg("MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
+-		 (unsigned int)regs->cx, (unsigned int)regs->dx, (unsigned int)regs->ax,
+-		  regs->ip, (void *)regs->ip);
 -
--		/*
--		 * some egalax touchscreens have "application == DG_TOUCHSCREEN"
--		 * for the stylus. Check this first, and then rely on
--		 * the application field.
--		 */
--		if (report->field[0]->physical == HID_DG_STYLUS) {
--			suffix = "Pen";
--			/* force BTN_STYLUS to allow tablet matching in udev */
--			__set_bit(BTN_STYLUS, hi->input->keybit);
--		}
- 	}
+-	show_stack_regs(regs);
+-
+-	panic("MCA architectural violation!\n");
+-
+-	while (true)
+-		cpu_relax();
+-
++	ex_handler_msr_mce(regs, true);
+ 	return true;
+ }
  
--	if (!suffix) {
--		switch (application) {
--		case HID_GD_KEYBOARD:
--		case HID_GD_KEYPAD:
--		case HID_GD_MOUSE:
--		case HID_DG_TOUCHPAD:
--		case HID_GD_SYSTEM_CONTROL:
--		case HID_CP_CONSUMER_CONTROL:
--		case HID_GD_WIRELESS_RADIO_CTLS:
--		case HID_GD_SYSTEM_MULTIAXIS:
--			/* already handled by hid core */
--			break;
--		case HID_DG_TOUCHSCREEN:
--			/* we do not set suffix = "Touchscreen" */
--			hi->input->name = hdev->name;
--			break;
--		case HID_DG_STYLUS:
--			/* force BTN_STYLUS to allow tablet matching in udev */
--			__set_bit(BTN_STYLUS, hi->input->keybit);
--			break;
--		case HID_VD_ASUS_CUSTOM_MEDIA_KEYS:
--			suffix = "Custom Media Keys";
--			break;
--		default:
--			suffix = "UNKNOWN";
--			break;
--		}
-+	switch (hi->application) {
-+	case HID_GD_KEYBOARD:
-+	case HID_GD_KEYPAD:
-+	case HID_GD_MOUSE:
-+	case HID_DG_TOUCHPAD:
-+	case HID_GD_SYSTEM_CONTROL:
-+	case HID_CP_CONSUMER_CONTROL:
-+	case HID_GD_WIRELESS_RADIO_CTLS:
-+	case HID_GD_SYSTEM_MULTIAXIS:
-+		/* already handled by hid core */
-+		break;
-+	case HID_DG_TOUCHSCREEN:
-+		/* we do not set suffix = "Touchscreen" */
-+		hi->input->name = hdev->name;
-+		break;
-+	case HID_DG_STYLUS:
-+		/* force BTN_STYLUS to allow tablet matching in udev */
-+		__set_bit(BTN_STYLUS, hi->input->keybit);
-+		break;
-+	case HID_VD_ASUS_CUSTOM_MEDIA_KEYS:
-+		suffix = "Custom Media Keys";
-+		break;
-+	default:
-+		suffix = "UNKNOWN";
-+		break;
- 	}
- 
- 	if (suffix) {
 -- 
 2.35.1
 

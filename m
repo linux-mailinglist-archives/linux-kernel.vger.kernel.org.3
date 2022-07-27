@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284EA582AAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BBC582AFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiG0QXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
+        id S236811AbiG0Q02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235145AbiG0QWZ (ORCPT
+        with ESMTP id S236666AbiG0QY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:22:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA004C616;
-        Wed, 27 Jul 2022 09:22:24 -0700 (PDT)
+        Wed, 27 Jul 2022 12:24:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9B24E845;
+        Wed, 27 Jul 2022 09:23:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BFD2619BF;
-        Wed, 27 Jul 2022 16:22:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4222C433C1;
-        Wed, 27 Jul 2022 16:22:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE0C6B821BB;
+        Wed, 27 Jul 2022 16:23:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51EA6C433D7;
+        Wed, 27 Jul 2022 16:23:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658938943;
-        bh=Okep6Jt9kN+VW7sygVkWdndpohFXPsorOiiSUiUZ+hg=;
+        s=korg; t=1658939000;
+        bh=r0WuzXOU/MtFRqnw6hVIfAgCFARb/edyBT/qqkSehkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ChQ7W6KZCqqJAap7GUPP/VWaoB1kEC/bdsPNCqocES1gOCthw5C9JJCMcNvcAk5Bv
-         tST07GjBqjbAcFG8O4lDmec+YkJqWEzA43zSBiDvBvpKsKBlLkNmLOyZmNOFbhhEBX
-         Ld8qIvCMshOMPK5kP9wT5Mj+kXn3jOLzytjMHvt4=
+        b=hnsOVOKhgzuklAxWR8j3f6z6PMA1jhQVOu4TTMEZ3ot9tBFc+bEXdc56LDFO1R15j
+         shnBQrqWgWSwZAupt6rHPERnY+/6V5JTndKzKx+AMy0cabnI9HfCOG9HVQHl+VUGSc
+         HAAMPhmCKbmb3hYF1KNWpScQm5mWREYmAPwfNlyc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        stable <stable@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 05/26] misc: rtsx_usb: set return value in rsp_buf alloc err path
+Subject: [PATCH 4.14 08/37] tcp: Fix a data-race around sysctl_tcp_probe_interval.
 Date:   Wed, 27 Jul 2022 18:10:34 +0200
-Message-Id: <20220727160959.355318920@linuxfoundation.org>
+Message-Id: <20220727161001.198867753@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
-References: <20220727160959.122591422@linuxfoundation.org>
+In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
+References: <20220727161000.822869853@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 2cd37c2e72449a7add6da1183d20a6247d6db111 ]
+[ Upstream commit 2a85388f1d94a9f8b5a529118a2c5eaa0520d85c ]
 
-Set return value in rsp_buf alloc error path before going to
-error handling.
+While reading sysctl_tcp_probe_interval, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!ucr->rsp_buf)
-               ^~~~~~~~~~~~~
-   drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
-           if (!ucr->rsp_buf)
-           ^~~~~~~~~~~~~~~~~~
-   drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-
-Fixes: 3776c7855985 ("misc: rtsx_usb: use separate command and response buffers")
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20220701165352.15687-1-skhan@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 05cbc0db03e8 ("ipv4: Create probe timer for tcp PMTU as per RFC4821")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/rtsx_usb.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/ipv4/tcp_output.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/rtsx_usb.c b/drivers/mfd/rtsx_usb.c
-index 134c6fbd9c50..fd859a7872a6 100644
---- a/drivers/mfd/rtsx_usb.c
-+++ b/drivers/mfd/rtsx_usb.c
-@@ -647,8 +647,10 @@ static int rtsx_usb_probe(struct usb_interface *intf,
- 		return -ENOMEM;
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 8ac23e8439c3..5e9b7dfd9d2d 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2005,7 +2005,7 @@ static inline void tcp_mtu_check_reprobe(struct sock *sk)
+ 	u32 interval;
+ 	s32 delta;
  
- 	ucr->rsp_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
--	if (!ucr->rsp_buf)
-+	if (!ucr->rsp_buf) {
-+		ret = -ENOMEM;
- 		goto out_free_cmd_buf;
-+	}
- 
- 	usb_set_intfdata(intf, ucr);
- 
+-	interval = net->ipv4.sysctl_tcp_probe_interval;
++	interval = READ_ONCE(net->ipv4.sysctl_tcp_probe_interval);
+ 	delta = tcp_jiffies32 - icsk->icsk_mtup.probe_timestamp;
+ 	if (unlikely(delta >= interval * HZ)) {
+ 		int mss = tcp_current_mss(sk);
 -- 
 2.35.1
 

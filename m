@@ -2,132 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688B658235C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC45C58235E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiG0Jky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S230109AbiG0JlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbiG0Jku (ORCPT
+        with ESMTP id S229815AbiG0JlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:40:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD729402C1;
-        Wed, 27 Jul 2022 02:40:49 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 27 Jul 2022 05:41:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A453FA20
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:41:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 10CA36601B25;
-        Wed, 27 Jul 2022 10:40:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658914848;
-        bh=/tSZBVIuOPVrLZ+Pv9GixCN2b9o+Bbox7JHQmveYKn8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CnEUNxM6sH6Za9eS1dGCEiIZSFE/trQz92dIdRmswdczzZpDwPMWmdd82JkLXKQg9
-         d8f1SHZUhha6hjj+c8J9uN97ZVzKs4nxdHNhIfA3m0lDqb1FCpKhADcsO5NK0zWFqE
-         Ko2FK6RAi31qvCOZ7keaareHRzTGqP/+Pl/Lk6SSvCbeFplKoNWh1D9auuQ0IFBWnw
-         OldnTeHWmkfh0MEk6WaS3oPRH4rtP8ev+uvGXd/6kBXOgMVku/rSKQVZTW0TGa8hKd
-         TWI3y1DXPAjxBmzAeVhPfHXyC2Er4retswk8r2bkOWDG9bVQ+i3WSAw42Wk5oFy+Mm
-         g/BZP4RD41UkA==
-Message-ID: <ce46e9b2-8e34-b6cd-d802-35b3ae66e02d@collabora.com>
-Date:   Wed, 27 Jul 2022 11:40:44 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE231B81FFA
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1CBC433C1;
+        Wed, 27 Jul 2022 09:41:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658914870;
+        bh=QPFk5LyXjXwuPDjKAAtyafwy5DsakHirnFpbMfhIawI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IfIXgJB65HnWZg6RjOxNuOgNxV6yMennna8GEwqJKo4d7Te9L7oadEfrtuSUeK3vp
+         lZeOUpcer0JohUmVvKZybOmsJRuHRswcAhNWaapszb1SosXCqe8o8xonEEJH4R4YrR
+         wt9JPaY3VFFmlNiI7EKlamvp+La7DhEKXJ8r6gv8qde8FSPIW0yVsTjGl0IXoFBx5G
+         pEZRhYetpOiWJ1AME7hobDfKw49kKSYovIVBuOar+lkioYjp7KbTqpJRKVIfWvw72e
+         G6IdxzRvXVrQDG3XFOClV7ACXkG4I78Gbi0o2oQrjXhQi3d/NchL76yFpNTR5+fikI
+         I8zVX9BkzLT8w==
+Date:   Wed, 27 Jul 2022 12:40:57 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     shaoqin.huang@intel.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Rebecca Mckeever <remckee0@gmail.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] memblock test: Modify the obsolete description in README
+Message-ID: <YuEIKdxSJcuLia15@kernel.org>
+References: <20220728001615.19099-1-shaoqin.huang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v15 07/11] drm/mediatek: Add retry to prevent misjudgment
- for sink devices
-Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
-        airlied@linux.ie
-Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
-        wenst@chromium.org, ck.hu@mediatek.com, liangxu.xu@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fbdev@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220727045035.32225-1-rex-bc.chen@mediatek.com>
- <20220727045035.32225-8-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220727045035.32225-8-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728001615.19099-1-shaoqin.huang@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/07/22 06:50, Bo-Chen Chen ha scritto:
-> For some DP dungles, we need to train more than onece to confirm that we
-> don't misjudge the status of sink device.
-
-Please fix the typos in your commit title and description.
-title: misjudgment -> misjudgement
-desc: dungles->dongles; onece->once
-
+On Wed, Jul 27, 2022 at 06:16:15PM -0600, shaoqin.huang@intel.com wrote:
+> From: Shaoqin Huang <shaoqin.huang@intel.com>
 > 
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> The VERBOSE option in Makefile has been moved, but there still have the
+> description left in README. For now, we use `-v` options when running
+> memblock test to print information, so also add some description about
+> it.
+> 
+> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
 > ---
->   drivers/gpu/drm/mediatek/mtk_dp.c | 21 ++++++++++++++++++---
->   1 file changed, 18 insertions(+), 3 deletions(-)
+>  tools/testing/memblock/README | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-> index ce817cb59445..80d7d6488105 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> @@ -42,6 +42,7 @@
->   #define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
->   #define MTK_DP_TBC_BUF_READ_START_ADDR 0x08
->   #define MTK_DP_TRAIN_DOWNSCALE_RETRY 8
-> +#define MTK_DP_TRAIN_CLEAR_RETRY 50
->   
->   struct mtk_dp_train_info {
->   	bool tps3;
-> @@ -1431,11 +1432,25 @@ static int mtk_dp_video_config(struct mtk_dp *mtk_dp)
->   
->   static int mtk_dp_training(struct mtk_dp *mtk_dp)
->   {
-> +	short max_retry = MTK_DP_TRAIN_CLEAR_RETRY;
->   	int ret;
->   
-> -	ret = mtk_dp_train_start(mtk_dp);
-> -	if (ret)
-> -		return ret;
-> +	/*
-> +	 * We do retry to confirm that we don't misjudge the sink status.
-> +	 * If it is still failed, we can confirm there are some issues for the
-> +	 * sink device.
-> +	 */
-> +	do {
-> +		ret = mtk_dp_train_start(mtk_dp);
-> +		if (!ret)
-> +			break;
-> +	} while (--max_retry);
+> diff --git a/tools/testing/memblock/README b/tools/testing/memblock/README
+> index 058146b528a5..f39cc0aa6b76 100644
+> --- a/tools/testing/memblock/README
+> +++ b/tools/testing/memblock/README
+> @@ -33,20 +33,21 @@ To run the tests, build the main target and run it:
+>  
+>  $ make && ./main
+>  
+> -A successful run produces no output. It is also possible to override different
+> -configuration parameters. For example, to include verbose output, specify the
+> -VERBOSE flag when building the main target:
+
+The description of VERBOSE build option was a logical continuation of the
+previous sentence.
+
+Instead of doing mechanical changes, please rearrange the text so it'll
+make sense.
+
+> +A successful run produces no output. It it also possible to override different
+> +configuration parameters. For example, to simulate enabled NUMA, use:
+>  
+> -$ make VERBOSE=1
+> +$ make NUMA=1
+>  
+> -This will print information about which functions are being tested and the
+> -number of test cases that passed.
+> +For the full list of options, see `make help`.
+>  
+> -To simulate enabled NUMA, use:
+> +It is also possible to pass options at run time. For example:
+>  
+> -$ make NUMA=1
+> +$ ./main -v
+>  
+> -For the full list of options, see `make help`.
+> +This will print information about which functions are being tested and the
+> +number of test cases that passed.
 > +
-> +	dev_info(mtk_dp->dev, "dp training clear retry times: %d\n",
-> +		 MTK_DP_TRAIN_CLEAR_RETRY - max_retry);
+> +For the full list of options, see `./main --help`.
+>  
+>  Project structure
+>  =================
+> -- 
+> 2.30.2
+> 
+> 
 
-dev_dbg() here.
-
-...after which,
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> +
-> +	if (!max_retry)
-> +		return -ETIMEDOUT;
->   
->   	ret = mtk_dp_video_config(mtk_dp);
->   	if (ret)
-
+-- 
+Sincerely yours,
+Mike.

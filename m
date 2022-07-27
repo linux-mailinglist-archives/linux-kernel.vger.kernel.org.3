@@ -2,253 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01AC581CF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C437581CF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 03:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240115AbiG0BPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 21:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
+        id S240122AbiG0BQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 21:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbiG0BPf (ORCPT
+        with ESMTP id S230412AbiG0BQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 21:15:35 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF06F28E30
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:15:34 -0700 (PDT)
+        Tue, 26 Jul 2022 21:16:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481CA2A261
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 18:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658884534; x=1690420534;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iEdHwVcvibDT33dBZD6VnWHZTVQ74uuyWgcoCxTOJiM=;
-  b=XiTSw+48JgqS24bh8bpBzCP84gnoIBJ1V+rtPBJha8PREWlJOiaapsCj
-   2i5kGEl6rjR2cwITHzfoKsPqPdQI40qsyM70JuMVS4Axh5cA/3ji3B50Z
-   /dmvn6jekjnVVK+TCQ4JhitMIiuY5Xm6dXMgCjz8oEu0bcHelDhX+CFrx
-   iRJOaPFKOa5pXQnbr1NTdsptw0WBrp+NfGsoDH522euaUgKjT30PlSWhS
-   YZ5TsLuyH/OWn2vVh7oQ1sGqgiAt1X8lddtUpOtcA5rfrVx9Zc/diGjSA
-   cbD5hCvoK+PfVbZ3WuwxDH0X/5U4+4RYo7ossJRvXd9mw/PhjKHSW0H5m
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="289307543"
+  t=1658884582; x=1690420582;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=iPdXmQ179/RmymAUmqn4R6JR+2WpZ7duivhKTTYWM9A=;
+  b=nMlqwcGXWscMaHmeJmokxyWYjx7WEbPBxG0GikuDB0Aflispen5gf5TZ
+   ebuC0kqt/GXyKqfL8ekssAT+Fn6d9nGrA5U0FDvx1FgFYi6ts5R8wnIqN
+   wc5wytpk16Oc24e079djixZ2O0F+Y6/ChELU4sQgxvkgsunQcTjIflNWh
+   WCEwPfofsvgq6HTyRlDo6W1uFkBl5sRbgmH2mjcIAcKdaQiopilf7ZNTZ
+   2Q49sTnWasB3LzGsbOE0FZ0MUCX6W7Na/NQz9xTbdqYQ2hEoaWhpdiD8Z
+   UqNTfCmJbWXILyA+og07qrz3FbRXCV8IkN7Emz2QRKQ7k+GfkKoB6tUsq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="267883154"
 X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="289307543"
+   d="scan'208";a="267883154"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 18:15:34 -0700
-X-ExtLoop1: 1
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 18:16:21 -0700
 X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="575754665"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 26 Jul 2022 18:15:33 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGVe8-00088k-1f;
-        Wed, 27 Jul 2022 01:15:32 +0000
-Date:   Wed, 27 Jul 2022 09:14:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [morimoto:sound2-2022-07-21-v2 47/47] sound/soc/soc-dapm.c:1560
- dapm_seq_check_event() warn: inconsistent indenting
-Message-ID: <202207270955.hN8qEXNi-lkp@intel.com>
+   d="scan'208";a="575754964"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 18:16:17 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Wei Xu <weixugc@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jvgediya.oss@gmail.com, Jagdish Gediya <jvgediya@linux.ibm.com>
+Subject: Re: [PATCH v10 1/8] mm/demotion: Add support for explicit memory tiers
+References: <20220720025920.1373558-1-aneesh.kumar@linux.ibm.com>
+        <20220720025920.1373558-2-aneesh.kumar@linux.ibm.com>
+        <87k080wmvb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <9e9ba2e4-3a87-3a79-e336-8849dad4856a@linux.ibm.com>
+Date:   Wed, 27 Jul 2022 09:16:08 +0800
+In-Reply-To: <9e9ba2e4-3a87-3a79-e336-8849dad4856a@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Tue, 26 Jul 2022 17:29:56 +0530")
+Message-ID: <87lesfuzhj.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/morimoto/linux sound2-2022-07-21-v2
-head:   9a531dde39dc408ec83ad303735743e9401be154
-commit: 9a531dde39dc408ec83ad303735743e9401be154 [47/47] hoge
-config: openrisc-randconfig-m041-20220721 (https://download.01.org/0day-ci/archive/20220727/202207270955.hN8qEXNi-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>>> diff --git a/include/linux/node.h b/include/linux/node.h
+>>> index 40d641a8bfb0..a2a16d4104fd 100644
+>>> --- a/include/linux/node.h
+>>> +++ b/include/linux/node.h
+>>> @@ -92,6 +92,12 @@ struct node {
+>>>  	struct list_head cache_attrs;
+>>>  	struct device *cache_dev;
+>>>  #endif
+>>> +	/*
+>>> +	 * For memory devices, perf_level describes
+>>> +	 * the device performance and how it should be used
+>>> +	 * while building a memory hierarchy.
+>>> +	 */
+>>> +	int perf_level;
+>> 
+>> Think again, I found that "perf_level" may be not the best abstraction
+>> of the performance of memory devices.  In concept, it's an abstraction of the memory
+>> bandwidth.  But it will not reflect the memory latency.
+>> 
+>> Instead, the previous proposed "abstract_distance" is an abstraction of
+>> the memory latency.  Per my understanding, the memory latency has more
+>> direct influence on system performance.  And because the latency of the
+>> memory device will increase if the memory accessing throughput nears its
+>> max bandwidth, so the memory bandwidth can be reflected in the "abstract
+>> distance" too.  That is, the "abstract distance" is an abstraction of
+>> the memory latency under the expected memory accessing throughput.  The
+>> "offset" to the default "abstract distance" reflects the different
+>> expected memory accessing throughput.
+>> 
+>> So, I think we need some kind of abstraction of the memory latency
+>> instead of memory bandwidth, e.g., "abstract distance".
+>> 
+>
+> I am reworking other parts of the patch set based on your feedback.
 
-smatch warnings:
-sound/soc/soc-dapm.c:1560 dapm_seq_check_event() warn: inconsistent indenting
-sound/soc/soc-dapm.c:1588 dapm_seq_run_coalesced() warn: inconsistent indenting
-sound/soc/soc-dapm.c:1651 dapm_seq_run() warn: inconsistent indenting
-sound/soc/soc-dapm.c:1958 dapm_power_widgets() warn: inconsistent indenting
-sound/soc/soc-dapm.c:2627 snd_soc_dapm_sync_unlocked() warn: inconsistent indenting
-sound/soc/soc-dapm.c:3285 snd_soc_dapm_new_widgets() warn: inconsistent indenting
-sound/soc/soc-dapm.c:3828 snd_soc_dai_link_event_pre_pmu() warn: inconsistent indenting
-sound/soc/soc-dapm.c:3926 snd_soc_dai_link_event() warn: inconsistent indenting
-sound/soc/soc-dapm.c:4461 soc_dapm_stream_event() warn: inconsistent indenting
+Thanks!
 
-vim +1560 sound/soc/soc-dapm.c
+> This part I guess we need to reach some consensus.
 
-  1523	
-  1524	static void dapm_seq_check_event(struct snd_soc_card *card,
-  1525					 struct snd_soc_dapm_widget *w, int event)
-  1526	{
-  1527		const char *ev_name;
-  1528		int power;
-  1529	
-  1530		switch (event) {
-  1531		case SND_SOC_DAPM_PRE_PMU:
-  1532			ev_name = "PRE_PMU";
-  1533			power = 1;
-  1534			break;
-  1535		case SND_SOC_DAPM_POST_PMU:
-  1536			ev_name = "POST_PMU";
-  1537			power = 1;
-  1538			break;
-  1539		case SND_SOC_DAPM_PRE_PMD:
-  1540			ev_name = "PRE_PMD";
-  1541			power = 0;
-  1542			break;
-  1543		case SND_SOC_DAPM_POST_PMD:
-  1544			ev_name = "POST_PMD";
-  1545			power = 0;
-  1546			break;
-  1547		case SND_SOC_DAPM_WILL_PMU:
-  1548			ev_name = "WILL_PMU";
-  1549			power = 1;
-  1550			break;
-  1551		case SND_SOC_DAPM_WILL_PMD:
-  1552			ev_name = "WILL_PMD";
-  1553			power = 0;
-  1554			break;
-  1555		default:
-  1556			WARN(1, "Unknown event %d\n", event);
-  1557			return;
-  1558		}
-  1559	
-> 1560	printk("-- %s : %s\n", __func__, ev_name);
-  1561		if (w->new_power != power)
-  1562			return;
-  1563	
-  1564		if (w->event && (w->event_flags & event)) {
-  1565			int ret;
-  1566	
-  1567			pop_dbg(w->dapm->dev, card->pop_time, "pop test : %s %s\n",
-  1568				w->name, ev_name);
-  1569			soc_dapm_async_complete(w->dapm);
-  1570			trace_snd_soc_dapm_widget_event_start(w, event);
-  1571			ret = w->event(w, NULL, event);
-  1572			trace_snd_soc_dapm_widget_event_done(w, event);
-  1573			if (ret < 0)
-  1574				dev_err(w->dapm->dev, "ASoC: %s: %s event failed: %d\n",
-  1575				       ev_name, w->name, ret);
-  1576		}
-  1577	}
-  1578	
-  1579	/* Apply the coalesced changes from a DAPM sequence */
-  1580	static void dapm_seq_run_coalesced(struct snd_soc_card *card,
-  1581					   struct list_head *pending)
-  1582	{
-  1583		struct snd_soc_dapm_context *dapm;
-  1584		struct snd_soc_dapm_widget *w;
-  1585		int reg;
-  1586		unsigned int value = 0;
-  1587		unsigned int mask = 0;
-> 1588	printk("-- %s : %d\n", __func__, __LINE__);
-  1589	
-  1590		w = list_first_entry(pending, struct snd_soc_dapm_widget, power_list);
-  1591		reg = w->reg;
-  1592		dapm = w->dapm;
-  1593	
-  1594		list_for_each_entry(w, pending, power_list) {
-  1595			WARN_ON(reg != w->reg || dapm != w->dapm);
-  1596			w->power = w->new_power;
-  1597	
-  1598			mask |= w->mask << w->shift;
-  1599			if (w->power)
-  1600				value |= w->on_val << w->shift;
-  1601			else
-  1602				value |= w->off_val << w->shift;
-  1603	
-  1604			pop_dbg(dapm->dev, card->pop_time,
-  1605				"pop test : Queue %s: reg=0x%x, 0x%x/0x%x\n",
-  1606				w->name, reg, value, mask);
-  1607	
-  1608			/* Check for events */
-  1609			dapm_seq_check_event(card, w, SND_SOC_DAPM_PRE_PMU);
-  1610			dapm_seq_check_event(card, w, SND_SOC_DAPM_PRE_PMD);
-  1611		}
-  1612	
-  1613		if (reg >= 0) {
-  1614			/* Any widget will do, they should all be updating the
-  1615			 * same register.
-  1616			 */
-  1617	
-  1618			pop_dbg(dapm->dev, card->pop_time,
-  1619				"pop test : Applying 0x%x/0x%x to %x in %dms\n",
-  1620				value, mask, reg, card->pop_time);
-  1621			pop_wait(card->pop_time);
-  1622			soc_dapm_update_bits(dapm, reg, mask, value);
-  1623		}
-  1624	
-  1625		list_for_each_entry(w, pending, power_list) {
-  1626			dapm_seq_check_event(card, w, SND_SOC_DAPM_POST_PMU);
-  1627			dapm_seq_check_event(card, w, SND_SOC_DAPM_POST_PMD);
-  1628		}
-  1629	}
-  1630	
-  1631	/* Apply a DAPM power sequence.
-  1632	 *
-  1633	 * We walk over a pre-sorted list of widgets to apply power to.  In
-  1634	 * order to minimise the number of writes to the device required
-  1635	 * multiple widgets will be updated in a single write where possible.
-  1636	 * Currently anything that requires more than a single write is not
-  1637	 * handled.
-  1638	 */
-  1639	static void dapm_seq_run(struct snd_soc_card *card,
-  1640		struct list_head *list, int event, bool power_up)
-  1641	{
-  1642		struct snd_soc_dapm_widget *w, *n;
-  1643		struct snd_soc_dapm_context *d;
-  1644		LIST_HEAD(pending);
-  1645		int cur_sort = -1;
-  1646		int cur_subseq = -1;
-  1647		int cur_reg = SND_SOC_NOPM;
-  1648		struct snd_soc_dapm_context *cur_dapm = NULL;
-  1649		int i;
-  1650		int *sort;
-> 1651	printk("-- %s : %d\n", __func__, __LINE__);
-  1652		if (power_up)
-  1653			sort = dapm_up_seq;
-  1654		else
-  1655			sort = dapm_down_seq;
-  1656	
-  1657		list_for_each_entry_safe(w, n, list, power_list) {
-  1658			int ret = 0;
-  1659	
-  1660			/* Do we need to apply any queued changes? */
-  1661			if (sort[w->id] != cur_sort || w->reg != cur_reg ||
-  1662			    w->dapm != cur_dapm || w->subseq != cur_subseq) {
-  1663				if (!list_empty(&pending))
-  1664					dapm_seq_run_coalesced(card, &pending);
-  1665	
-  1666				if (cur_dapm && cur_dapm->component) {
-  1667					for (i = 0; i < ARRAY_SIZE(dapm_up_seq); i++)
-  1668						if (sort[i] == cur_sort)
-  1669							snd_soc_component_seq_notifier(
-  1670								cur_dapm->component,
-  1671								i, cur_subseq);
-  1672				}
-  1673	
-  1674				if (cur_dapm && w->dapm != cur_dapm)
-  1675					soc_dapm_async_complete(cur_dapm);
-  1676	
-  1677				INIT_LIST_HEAD(&pending);
-  1678				cur_sort = -1;
-  1679				cur_subseq = INT_MIN;
-  1680				cur_reg = SND_SOC_NOPM;
-  1681				cur_dapm = NULL;
-  1682			}
-  1683	
-  1684			switch (w->id) {
-  1685			case snd_soc_dapm_pre:
-  1686				if (!w->event)
-  1687					continue;
-  1688	
+Yes.  Let's do that.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> IMHO perf_level (performance level) can indicate a combination of both latency
+> and bandwidth.
+
+"abstract distance" is based on latency, and bandwidth is reflected via
+"latency under the expected memory accessing throughput".
+
+How does perf_level indicate the combination?  Per my understanding,
+it's bandwidth based.
+
+> It is an abstract concept that indicates the performance of the
+> device. As we learn more about which device attribute makes more impact in
+> defining hierarchy, performance level will give more weightage to that specific
+> attribute. It could be write latency or bandwidth. For me, distance has a direct
+> linkage to latency because that is how we define numa distance now. Adding
+> abstract to the name is not making it more abstract than perf_level. 
+>
+> I am open to suggestions from others.  Wei Xu has also suggested perf_level name.
+> I can rename this to abstract_distance if that indicates the goal better.
+
+I'm open to naming.  But I think that it's good to define it at some
+degree instead of completely opaque stuff.  If it's latency based, then
+low value corresponds to high performance.  If it's bandwidth based,
+then low value corresponds to low performance.
+
+Hi, Wei and Johannes,
+
+What do you think about this?
+
+Best Regards,
+Huang, Ying

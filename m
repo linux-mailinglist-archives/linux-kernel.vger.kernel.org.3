@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1293F582BEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34138582C09
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbiG0Qjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        id S239391AbiG0Ql2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239370AbiG0QjN (ORCPT
+        with ESMTP id S239083AbiG0Qkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:39:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB725A2D2;
-        Wed, 27 Jul 2022 09:28:49 -0700 (PDT)
+        Wed, 27 Jul 2022 12:40:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E687950719;
+        Wed, 27 Jul 2022 09:29:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F444B821A6;
-        Wed, 27 Jul 2022 16:28:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C602CC433C1;
-        Wed, 27 Jul 2022 16:28:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4279061A1E;
+        Wed, 27 Jul 2022 16:29:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B44BC433D6;
+        Wed, 27 Jul 2022 16:29:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939328;
-        bh=fZCRhPWBOFQUBqV5FF//jX1LfJGFpbtLedILZSXCl8U=;
+        s=korg; t=1658939358;
+        bh=YijPZ68MmYjmvGcAtKwKig+KpthlQqiRwWCwNSrBIk8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qmi6dzNKf6OSxCEqJQb+bl02DlNWkf2WxwSfOHFNT5PDLMQY1LhWZCYsnzYX3QP4S
-         81geYRO94Fkn+txAyN2ju5PQIuuGFT0M8sGfBFwIdT5FUV0DDlYhu/IM58tz3QOf8a
-         5SXFXvsWiSVoTXB6dIy/RRbgsDMuihNNzI2J+Z/U=
+        b=ZRoU+TUYClnLQ5qt3Qt8/c9yw6qs6BO5HeidLTWJaOHfbCMARc8BHLqgOUh1pR95b
+         7nGWwHJ+f9aii3QCFyEnTB14ZHigyksFM9gWK//4dgDY2kdi8bw12BhhtZuYB/oANx
+         i+NRYQq9EHRHnvxtdXztCABGavQbFWwZAM5rj/4o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hacash Robot <hacashRobot@santino.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Yang Jihong <yangjihong1@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 13/87] pinctrl: ralink: Check for null return of devm_kcalloc
-Date:   Wed, 27 Jul 2022 18:10:06 +0200
-Message-Id: <20220727161009.535088850@linuxfoundation.org>
+Subject: [PATCH 5.4 14/87] perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
+Date:   Wed, 27 Jul 2022 18:10:07 +0200
+Message-Id: <20220727161009.585995386@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
 References: <20220727161008.993711844@linuxfoundation.org>
@@ -55,41 +54,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit c3b821e8e406d5650e587b7ac624ac24e9b780a8 ]
+[ Upstream commit 68e3c69803dada336893640110cb87221bb01dcf ]
 
-Because of the possible failure of the allocation, data->domains might
-be NULL pointer and will cause the dereference of the NULL pointer
-later.
-Therefore, it might be better to check it and directly return -ENOMEM
-without releasing data manually if fails, because the comment of the
-devm_kmalloc() says "Memory allocated with this function is
-automatically freed on driver detach.".
+Yang Jihing reported a race between perf_event_set_output() and
+perf_mmap_close():
 
-Fixes: a86854d0c599b ("treewide: devm_kzalloc() -> devm_kcalloc()")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
-Link: https://lore.kernel.org/r/20220710154922.2610876-1-williamsukatube@163.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+	CPU1					CPU2
+
+	perf_mmap_close(e2)
+	  if (atomic_dec_and_test(&e2->rb->mmap_count)) // 1 - > 0
+	    detach_rest = true
+
+						ioctl(e1, IOC_SET_OUTPUT, e2)
+						  perf_event_set_output(e1, e2)
+
+	  ...
+	  list_for_each_entry_rcu(e, &e2->rb->event_list, rb_entry)
+	    ring_buffer_attach(e, NULL);
+	    // e1 isn't yet added and
+	    // therefore not detached
+
+						    ring_buffer_attach(e1, e2->rb)
+						      list_add_rcu(&e1->rb_entry,
+								   &e2->rb->event_list)
+
+After this; e1 is attached to an unmapped rb and a subsequent
+perf_mmap() will loop forever more:
+
+	again:
+		mutex_lock(&e->mmap_mutex);
+		if (event->rb) {
+			...
+			if (!atomic_inc_not_zero(&e->rb->mmap_count)) {
+				...
+				mutex_unlock(&e->mmap_mutex);
+				goto again;
+			}
+		}
+
+The loop in perf_mmap_close() holds e2->mmap_mutex, while the attach
+in perf_event_set_output() holds e1->mmap_mutex. As such there is no
+serialization to avoid this race.
+
+Change perf_event_set_output() to take both e1->mmap_mutex and
+e2->mmap_mutex to alleviate that problem. Additionally, have the loop
+in perf_mmap() detach the rb directly, this avoids having to wait for
+the concurrent perf_mmap_close() to get around to doing it to make
+progress.
+
+Fixes: 9bb5d40cd93c ("perf: Fix mmap() accounting hole")
+Reported-by: Yang Jihong <yangjihong1@huawei.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Yang Jihong <yangjihong1@huawei.com>
+Link: https://lkml.kernel.org/r/YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/events/core.c | 45 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c b/drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c
-index 0ba4e4e070a9..7cfbdfb10e23 100644
---- a/drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c
-+++ b/drivers/staging/mt7621-pinctrl/pinctrl-rt2880.c
-@@ -267,6 +267,8 @@ static int rt2880_pinmux_pins(struct rt2880_priv *p)
- 						p->func[i]->pin_count,
- 						sizeof(int),
- 						GFP_KERNEL);
-+		if (!p->func[i]->pins)
-+			return -ENOMEM;
- 		for (j = 0; j < p->func[i]->pin_count; j++)
- 			p->func[i]->pins[j] = p->func[i]->pin_first + j;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 8336dcb2bd43..0a54780e0942 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -5819,10 +5819,10 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
  
+ 		if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
+ 			/*
+-			 * Raced against perf_mmap_close() through
+-			 * perf_event_set_output(). Try again, hope for better
+-			 * luck.
++			 * Raced against perf_mmap_close(); remove the
++			 * event and try again.
+ 			 */
++			ring_buffer_attach(event, NULL);
+ 			mutex_unlock(&event->mmap_mutex);
+ 			goto again;
+ 		}
+@@ -10763,14 +10763,25 @@ static int perf_copy_attr(struct perf_event_attr __user *uattr,
+ 	goto out;
+ }
+ 
++static void mutex_lock_double(struct mutex *a, struct mutex *b)
++{
++	if (b < a)
++		swap(a, b);
++
++	mutex_lock(a);
++	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
++}
++
+ static int
+ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+ {
+ 	struct ring_buffer *rb = NULL;
+ 	int ret = -EINVAL;
+ 
+-	if (!output_event)
++	if (!output_event) {
++		mutex_lock(&event->mmap_mutex);
+ 		goto set;
++	}
+ 
+ 	/* don't allow circular references */
+ 	if (event == output_event)
+@@ -10808,8 +10819,15 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+ 	    event->pmu != output_event->pmu)
+ 		goto out;
+ 
++	/*
++	 * Hold both mmap_mutex to serialize against perf_mmap_close().  Since
++	 * output_event is already on rb->event_list, and the list iteration
++	 * restarts after every removal, it is guaranteed this new event is
++	 * observed *OR* if output_event is already removed, it's guaranteed we
++	 * observe !rb->mmap_count.
++	 */
++	mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
+ set:
+-	mutex_lock(&event->mmap_mutex);
+ 	/* Can't redirect output if we've got an active mmap() */
+ 	if (atomic_read(&event->mmap_count))
+ 		goto unlock;
+@@ -10819,6 +10837,12 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+ 		rb = ring_buffer_get(output_event);
+ 		if (!rb)
+ 			goto unlock;
++
++		/* did we race against perf_mmap_close() */
++		if (!atomic_read(&rb->mmap_count)) {
++			ring_buffer_put(rb);
++			goto unlock;
++		}
+ 	}
+ 
+ 	ring_buffer_attach(event, rb);
+@@ -10826,20 +10850,13 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+ 	ret = 0;
+ unlock:
+ 	mutex_unlock(&event->mmap_mutex);
++	if (output_event)
++		mutex_unlock(&output_event->mmap_mutex);
+ 
+ out:
+ 	return ret;
+ }
+ 
+-static void mutex_lock_double(struct mutex *a, struct mutex *b)
+-{
+-	if (b < a)
+-		swap(a, b);
+-
+-	mutex_lock(a);
+-	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
+-}
+-
+ static int perf_event_set_clock(struct perf_event *event, clockid_t clk_id)
+ {
+ 	bool nmi_safe = false;
 -- 
 2.35.1
 

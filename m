@@ -2,46 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F87582FFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0876E582F3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242354AbiG0Rbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        id S235333AbiG0RXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242313AbiG0R3Y (ORCPT
+        with ESMTP id S241920AbiG0RWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:29:24 -0400
+        Wed, 27 Jul 2022 13:22:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A45A52470;
-        Wed, 27 Jul 2022 09:47:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7488D71705;
+        Wed, 27 Jul 2022 09:45:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3833B821C5;
-        Wed, 27 Jul 2022 16:47:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4403FC43470;
-        Wed, 27 Jul 2022 16:47:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87E27B8200D;
+        Wed, 27 Jul 2022 16:45:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C6BC433C1;
+        Wed, 27 Jul 2022 16:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940454;
-        bh=EEAxF3Db0LOQhyP5PX4UY1J0DpmdkZYOZ7FetD1luY0=;
+        s=korg; t=1658940336;
+        bh=tfSNXRv4yqw1SkN0l+CRvzEBIXcTpg4fxT2kkmH1BAU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uoW3JrIcaJUGlVIDKRXVdWG6TYrY3fhUIhsZSyH2kN9Fh6T2VSalNj8/EGA+3FVmR
-         HLqSn13+GsCSDT01J9ngoXMbeLoyKUhih3UJoc0z79/57hrOxTcSaDV6uC9J6k7PU9
-         hotDGvttvvF4eiv3bD1py7y0+xYCR4yYFgKOI0Wo=
+        b=mu//rNjnKv91BdkgCAHefU+0YivpM8v3XpPJ5Nq7YxppDeW8+Gv/ioZ9Q1YJ5ZHqF
+         xElVqPWpnlFEZoALFgXdtvL0BNPhbVUw4YlH/74zSE2NdIILxw4tZoQucFCY4jwXa4
+         /juvkwPC2R1Jf9YwdgX8iWwlBckFN8uwsWIxOZAI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hacash Robot <hacashRobot@santino.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 028/158] pinctrl: sunplus: Add check for kcalloc
-Date:   Wed, 27 Jul 2022 18:11:32 +0200
-Message-Id: <20220727161022.598871762@linuxfoundation.org>
+        stable@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        William Hubbs <w.d.hubbs@gmail.com>,
+        Chris Brannon <chris@the-brannons.com>,
+        Kirk Reiser <kirk@reisers.ca>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Johan Hovold <johan@kernel.org>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 5.15 189/201] tty: the rest, stop using tty_schedule_flip()
+Date:   Wed, 27 Jul 2022 18:11:33 +0200
+Message-Id: <20220727161035.599193527@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +63,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit acf50233fc979b566e3b87d329191dcd01e2a72c ]
+commit b68b914494df4f79b4e9b58953110574af1cb7a2 upstream.
 
-As the potential failure of the kcalloc(),
-it should be better to check it in order to
-avoid the dereference of the NULL pointer.
+Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
+tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). We are
+going to remove the latter (as it is used less), so call the former in
+the rest of the users.
 
-Fixes: aa74c44be19c8 ("pinctrl: Add driver for Sunplus SP7021")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
-Link: https://lore.kernel.org/r/20220710154822.2610801-1-williamsukatube@163.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Richard Henderson <rth@twiddle.net>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: William Hubbs <w.d.hubbs@gmail.com>
+Cc: Chris Brannon <chris@the-brannons.com>
+Cc: Kirk Reiser <kirk@reisers.ca>
+Cc: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Reviewed-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20211122111648.30379-3-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/sunplus/sppctl.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/alpha/kernel/srmcons.c               |    2 +-
+ drivers/accessibility/speakup/spk_ttyio.c |    4 ++--
+ drivers/s390/char/keyboard.h              |    4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pinctrl/sunplus/sppctl.c b/drivers/pinctrl/sunplus/sppctl.c
-index 3ba47040ac42..2b3335ab56c6 100644
---- a/drivers/pinctrl/sunplus/sppctl.c
-+++ b/drivers/pinctrl/sunplus/sppctl.c
-@@ -871,6 +871,9 @@ static int sppctl_dt_node_to_map(struct pinctrl_dev *pctldev, struct device_node
+--- a/arch/alpha/kernel/srmcons.c
++++ b/arch/alpha/kernel/srmcons.c
+@@ -59,7 +59,7 @@ srmcons_do_receive_chars(struct tty_port
+ 	} while((result.bits.status & 1) && (++loops < 10));
+ 
+ 	if (count)
+-		tty_schedule_flip(port);
++		tty_flip_buffer_push(port);
+ 
+ 	return count;
+ }
+--- a/drivers/accessibility/speakup/spk_ttyio.c
++++ b/drivers/accessibility/speakup/spk_ttyio.c
+@@ -88,7 +88,7 @@ static int spk_ttyio_receive_buf2(struct
  	}
  
- 	*map = kcalloc(*num_maps + nmG, sizeof(**map), GFP_KERNEL);
-+	if (*map == NULL)
-+		return -ENOMEM;
-+
- 	for (i = 0; i < (*num_maps); i++) {
- 		dt_pin = be32_to_cpu(list[i]);
- 		pin_num = FIELD_GET(GENMASK(31, 24), dt_pin);
--- 
-2.35.1
-
+ 	if (!ldisc_data->buf_free)
+-		/* ttyio_in will tty_schedule_flip */
++		/* ttyio_in will tty_flip_buffer_push */
+ 		return 0;
+ 
+ 	/* Make sure the consumer has read buf before we have seen
+@@ -312,7 +312,7 @@ static unsigned char ttyio_in(struct spk
+ 	mb();
+ 	ldisc_data->buf_free = true;
+ 	/* Let TTY push more characters */
+-	tty_schedule_flip(tty->port);
++	tty_flip_buffer_push(tty->port);
+ 
+ 	return rv;
+ }
+--- a/drivers/s390/char/keyboard.h
++++ b/drivers/s390/char/keyboard.h
+@@ -56,7 +56,7 @@ static inline void
+ kbd_put_queue(struct tty_port *port, int ch)
+ {
+ 	tty_insert_flip_char(port, ch, 0);
+-	tty_schedule_flip(port);
++	tty_flip_buffer_push(port);
+ }
+ 
+ static inline void
+@@ -64,5 +64,5 @@ kbd_puts_queue(struct tty_port *port, ch
+ {
+ 	while (*cp)
+ 		tty_insert_flip_char(port, *cp++, 0);
+-	tty_schedule_flip(port);
++	tty_flip_buffer_push(port);
+ }
 
 

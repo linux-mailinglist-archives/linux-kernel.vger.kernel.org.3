@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39D4582CB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B681F582BD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240613AbiG0QtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S239152AbiG0QiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240381AbiG0QsS (ORCPT
+        with ESMTP id S238379AbiG0Qhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:48:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355A5606BC;
-        Wed, 27 Jul 2022 09:32:22 -0700 (PDT)
+        Wed, 27 Jul 2022 12:37:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6F94F6B7;
+        Wed, 27 Jul 2022 09:28:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9DF85CE2314;
-        Wed, 27 Jul 2022 16:32:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2E7C433D6;
-        Wed, 27 Jul 2022 16:32:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 574AFB821A6;
+        Wed, 27 Jul 2022 16:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDE6C433D7;
+        Wed, 27 Jul 2022 16:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939539;
-        bh=Adbbu1OtqKpBLR7cImkQjexzh2KtnEpmmMYEVwK8/Ok=;
+        s=korg; t=1658939269;
+        bh=WtF9BKyztuDudarIy8lWa8uBbyXGJ5Wc6Q/lzCzgqR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wAqT5Rgsy9Agzam+AtWM4F6deGindjYrlnN34ldtVTAP2pNK1RdX+Mm4aPve8m7Ty
-         PYaSTzxLnK4njAtJxgi9Lm6YfF6pw8jmXZN8TjxUXciwwBp5XF/TuWM6IiWo/wowkl
-         BSkk+mnalaU2oNb2a6mx2T/3sYeWfyqySKeQmYRU=
+        b=DS17Fi1yGp4eNpQEp0DI8T0qW6A9qwfw/9nXE6BOuKVyinBMQCI2EOrEXij93JFY9
+         Eds7+shP+wYuUALflsXQjzrVtR8NSCt8+MlCbamXDLZ12uB+YKfDCzw0k7jVvt4BEG
+         QXtf+InspiSUTJ4V1bqxqfi/G12q9BWNIRcHLv2o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        Carl Vanderlip <quic_carlv@quicinc.com>
-Subject: [PATCH 5.10 017/105] PCI: hv: Fix multi-MSI to allow more than one MSI vector
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+Subject: [PATCH 5.4 10/87] serial: mvebu-uart: correctly report configured baudrate value
 Date:   Wed, 27 Jul 2022 18:10:03 +0200
-Message-Id: <20220727161012.776500218@linuxfoundation.org>
+Message-Id: <20220727161009.434828786@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 08e61e861a0e47e5e1a3fb78406afd6b0cea6b6d upstream.
+commit 4f532c1e25319e42996ec18a1f473fd50c8e575d upstream.
 
-If the allocation of multiple MSI vectors for multi-MSI fails in the core
-PCI framework, the framework will retry the allocation as a single MSI
-vector, assuming that meets the min_vecs specified by the requesting
-driver.
+Functions tty_termios_encode_baud_rate() and uart_update_timeout() should
+be called with the baudrate value which was set to hardware. Linux then
+report exact values via ioctl(TCGETS2) to userspace.
 
-Hyper-V advertises that multi-MSI is supported, but reuses the VECTOR
-domain to implement that for x86.  The VECTOR domain does not support
-multi-MSI, so the alloc will always fail and fallback to a single MSI
-allocation.
+Change mvebu_uart_baud_rate_set() function to return baudrate value which
+was set to hardware and propagate this value to above mentioned functions.
 
-In short, Hyper-V advertises a capability it does not implement.
+With this change userspace would see precise value in termios c_ospeed
+field.
 
-Hyper-V can support multi-MSI because it coordinates with the hypervisor
-to map the MSIs in the IOMMU's interrupt remapper, which is something the
-VECTOR domain does not have.  Therefore the fix is simple - copy what the
-x86 IOMMU drivers (AMD/Intel-IR) do by removing
-X86_IRQ_ALLOC_CONTIGUOUS_VECTORS after calling the VECTOR domain's
-pci_msi_prepare().
-
-5.10 backport - adds the hv_msi_prepare wrapper function
-
-Fixes: 4daace0d8ce8 ("PCI: hv: Add paravirtual PCI front-end for Microsoft Hyper-V VMs")
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Link: https://lore.kernel.org/r/1649856981-14649-1-git-send-email-quic_jhugo@quicinc.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
-Signed-off-by: Carl Vanderlip <quic_carlv@quicinc.com>
+Fixes: 68a0db1d7da2 ("serial: mvebu-uart: add function to change baudrate")
+Cc: stable <stable@kernel.org>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Link: https://lore.kernel.org/r/20220628100922.10717-1-pali@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-hyperv.c |   17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/tty/serial/mvebu-uart.c |   25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -1180,6 +1180,21 @@ static void hv_irq_mask(struct irq_data
- 	pci_msi_mask_irq(data);
+--- a/drivers/tty/serial/mvebu-uart.c
++++ b/drivers/tty/serial/mvebu-uart.c
+@@ -443,13 +443,13 @@ static void mvebu_uart_shutdown(struct u
+ 	}
  }
  
-+static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
-+			  int nvec, msi_alloc_info_t *info)
-+{
-+	int ret = pci_msi_prepare(domain, dev, nvec, info);
-+
-+	/*
-+	 * By using the interrupt remapper in the hypervisor IOMMU, contiguous
-+	 * CPU vectors is not needed for multi-MSI
-+	 */
-+	if (info->type == X86_IRQ_ALLOC_TYPE_PCI_MSI)
-+		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
-+
-+	return ret;
-+}
-+
- /**
-  * hv_irq_unmask() - "Unmask" the IRQ by setting its current
-  * affinity.
-@@ -1545,7 +1560,7 @@ static struct irq_chip hv_msi_irq_chip =
- };
+-static int mvebu_uart_baud_rate_set(struct uart_port *port, unsigned int baud)
++static unsigned int mvebu_uart_baud_rate_set(struct uart_port *port, unsigned int baud)
+ {
+ 	unsigned int d_divisor, m_divisor;
+ 	u32 brdv, osamp;
  
- static struct msi_domain_ops hv_msi_ops = {
--	.msi_prepare	= pci_msi_prepare,
-+	.msi_prepare	= hv_msi_prepare,
- 	.msi_free	= hv_msi_free,
- };
+ 	if (!port->uartclk)
+-		return -EOPNOTSUPP;
++		return 0;
+ 
+ 	/*
+ 	 * The baudrate is derived from the UART clock thanks to two divisors:
+@@ -473,7 +473,7 @@ static int mvebu_uart_baud_rate_set(stru
+ 	osamp &= ~OSAMP_DIVISORS_MASK;
+ 	writel(osamp, port->membase + UART_OSAMP);
+ 
+-	return 0;
++	return DIV_ROUND_CLOSEST(port->uartclk, d_divisor * m_divisor);
+ }
+ 
+ static void mvebu_uart_set_termios(struct uart_port *port,
+@@ -510,15 +510,11 @@ static void mvebu_uart_set_termios(struc
+ 	max_baud = 230400;
+ 
+ 	baud = uart_get_baud_rate(port, termios, old, min_baud, max_baud);
+-	if (mvebu_uart_baud_rate_set(port, baud)) {
+-		/* No clock available, baudrate cannot be changed */
+-		if (old)
+-			baud = uart_get_baud_rate(port, old, NULL,
+-						  min_baud, max_baud);
+-	} else {
+-		tty_termios_encode_baud_rate(termios, baud, baud);
+-		uart_update_timeout(port, termios->c_cflag, baud);
+-	}
++	baud = mvebu_uart_baud_rate_set(port, baud);
++
++	/* In case baudrate cannot be changed, report previous old value */
++	if (baud == 0 && old)
++		baud = tty_termios_baud_rate(old);
+ 
+ 	/* Only the following flag changes are supported */
+ 	if (old) {
+@@ -529,6 +525,11 @@ static void mvebu_uart_set_termios(struc
+ 		termios->c_cflag |= CS8;
+ 	}
+ 
++	if (baud != 0) {
++		tty_termios_encode_baud_rate(termios, baud, baud);
++		uart_update_timeout(port, termios->c_cflag, baud);
++	}
++
+ 	spin_unlock_irqrestore(&port->lock, flags);
+ }
  
 
 

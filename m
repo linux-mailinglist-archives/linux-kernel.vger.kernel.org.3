@@ -2,48 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5F4583147
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92571582E47
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242140AbiG0RyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
+        id S237196AbiG0RKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242993AbiG0Rxs (ORCPT
+        with ESMTP id S241636AbiG0RJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:53:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A969698204
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:58:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 608FDB821D8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 16:58:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 864E8C433D6;
-        Wed, 27 Jul 2022 16:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658941092;
-        bh=ilVcgb+qn9Ak0Tbt2ws0tO3d/fETMN6Hy8UtFrfFk2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xgobuzazZCLtLbhApozobUvtqyg+OhVThqnZY45gHnQ2I9bDvMnT0Ld8D+g1W2Kle
-         ok6VhW6/cy+5GwJjt5zyCBFEyf7Efx4jZn7XGjTT9C3m1UY7uE6thEkn4YRQEYPJ1N
-         KRvxUwhvGEL+5VT2bjZZYikCEarZ+RBY225F46Ek=
-Date:   Wed, 27 Jul 2022 18:40:39 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Sterba <dsterba@suse.com>
-Subject: Re: [PATCH 1/1] drivers/base/cpu: Print kernel arch
-Message-ID: <YuFqh6OrWEQsZV04@kroah.com>
-References: <20220727161135.24531-1-pvorel@suse.cz>
+        Wed, 27 Jul 2022 13:09:22 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9308374372
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:01 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id q23so14701564lfr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pixZf6AxzKsbblWkPgEa/wCEjEyv0eH7Z0aYp8YUpGU=;
+        b=vNCansP6Trr0iw18LZc9CTOYN+jcJ/hP3lk/BF0RUdZbtfbg4+HowoEuynrmouACf7
+         o04lz9lo+1IVXZtXMMJbnuK7BmlaKr2DgxuLzRhQCQjpznp8J0FkmLp4zQ2LwUkfFMtx
+         6urFZ06hO/g5AibAezm9Fi9ybD/kFR6al2ZO7slNIbPv4/cpuzQFFekqkwVBvSWv5vYs
+         +OwBIm6YiNQs7Abkj2eMLulvzgZSIYUFyb923C+ovEiC6j7W3BijHM+ZaRTid7+ou1Jt
+         Sk8bvlrPrQQwskCrr5ogokAmvMocGONqjWs48T6Pt2l5D/GVcDKT+p0pUTi9mGIN2LgH
+         aAUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pixZf6AxzKsbblWkPgEa/wCEjEyv0eH7Z0aYp8YUpGU=;
+        b=wT80Lb34pCJSOUQTdY0NSB1Y4rl9doEWptshF9tEuQ3kd1cV2YQMhbzJccPyegZlj0
+         DQAfT54TEw8+7Z5mE3ll9zlwJVd3/gAFa63WmROEoX1psTASLfAy69gcIYeRM4fPwSS+
+         IpiT8ZzS61xiChQ/10v0EjbfrDnXUisynxnZuBbgUlOc/qZZpjYFMJx/xR2vr00VgM49
+         98kR1RaUXNwDW6ckynlE6KU1PAaWXIAoI1MS7JLrCVZ59Jhlhv/NRh2FfIWY/DEnRcfP
+         Q0bigZoo9nUVj1DTJLZuTsK7lk1PKW8sv5gqcD8MAxokjyBHvB4fyGkTuvOET500curQ
+         Eybg==
+X-Gm-Message-State: AJIora9C85x6J1QssESaAUAGjiuNSPk7Hq6HeT7vK39alPUmnEWH/FYL
+        3wMA6UP9ENbvsDnEBFv/OTqq+w==
+X-Google-Smtp-Source: AGRyM1sEa8xnb9s4uf0W9nB9PCobLc+j3L3f+ElRoTRRKIH1ldBG30FknIESIJMvaO4t5rvFhQ1TEQ==
+X-Received: by 2002:a19:6408:0:b0:48a:139e:67b7 with SMTP id y8-20020a196408000000b0048a139e67b7mr7923551lfb.203.1658940059516;
+        Wed, 27 Jul 2022 09:40:59 -0700 (PDT)
+Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05651203a300b00478f174c598sm489358lfp.95.2022.07.27.09.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 09:40:58 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ASoC: dt-bindings: use spi-peripheral-props.yaml
+Date:   Wed, 27 Jul 2022 18:40:50 +0200
+Message-Id: <20220727164050.385241-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727161135.24531-1-pvorel@suse.cz>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,52 +73,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 06:11:35PM +0200, Petr Vorel wrote:
-> Print kernel architecture in /sys/devices/system/cpu/arch
-> using UTS_MACHINE, i.e. member of struct uts_namespace.machine.
-> 
-> This helps people who debug kernel with initramfs with minimal
-> environment (i.e. without coreutils or even busybox) or allow to open
-> sysfs file instead of run uname -m in high level languages.
-> 
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> ---
->  drivers/base/cpu.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+Instead of listing directly properties typical for SPI peripherals,
+reference the spi-peripheral-props.yaml schema.  This allows using all
+properties typical for SPI-connected devices, even these which device
+bindings author did not tried yet.
 
-You can't add a new sysfs file without a Documentation/ABI/ update as
-well.  Please fix that up.
+Remove the spi-* properties which now come via spi-peripheral-props.yaml
+schema, except for the cases when device schema adds some constraints
+like maximum frequency.
 
+While changing additionalProperties->unevaluatedProperties, put it in
+typical place, just before example DTS.
 
-> 
-> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> index 4c98849577d4..7c8032e3ff10 100644
-> --- a/drivers/base/cpu.c
-> +++ b/drivers/base/cpu.c
-> @@ -3,6 +3,7 @@
->   * CPU subsystem support
->   */
->  
-> +#include <generated/compile.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/init.h>
-> @@ -232,6 +233,13 @@ static ssize_t print_cpus_kernel_max(struct device *dev,
->  }
->  static DEVICE_ATTR(kernel_max, 0444, print_cpus_kernel_max, NULL);
->  
-> +static ssize_t print_cpus_arch(struct device *dev,
-> +				     struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%s\n", UTS_MACHINE);
-> +}
-> +static DEVICE_ATTR(arch, 0444, print_cpus_arch, NULL);
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-why just UTS_MACHINE?  Doesn't 'uname' show this already?  And I thought
-this was in /proc/cpuinfo but odd, it isn't...
+---
 
-Also what about the other things in compile.h?
+Technically, this depends on [1] merged to SPI tree, if we want to
+preserve existing behavior of not allowing SPI CPHA and CPOL in each of
+schemas in this patch.
 
-thanks,
+If this patch comes independently via different tree, the SPI CPHA and
+CPOL will be allowed for brief period of time, before [1] is merged.
+This will not have negative impact, just DT schema checks will be
+loosened for that period.
 
-greg k-h
+[1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
+---
+ .../devicetree/bindings/sound/adi,adau1977.yaml          | 7 ++++---
+ Documentation/devicetree/bindings/sound/wlf,wm8731.yaml  | 9 +++++----
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/sound/adi,adau1977.yaml b/Documentation/devicetree/bindings/sound/adi,adau1977.yaml
+index b80454ad97da..847b83398d3d 100644
+--- a/Documentation/devicetree/bindings/sound/adi,adau1977.yaml
++++ b/Documentation/devicetree/bindings/sound/adi,adau1977.yaml
+@@ -32,8 +32,6 @@ properties:
+   reset-gpios:
+     maxItems: 1
+ 
+-  spi-max-frequency: true
+-
+   AVDD-supply:
+     description: Analog power support for the device.
+ 
+@@ -52,7 +50,10 @@ required:
+   - compatible
+   - AVDD-supply
+ 
+-additionalProperties: false
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8731.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8731.yaml
+index e7220e8b49f0..15795f63b5a3 100644
+--- a/Documentation/devicetree/bindings/sound/wlf,wm8731.yaml
++++ b/Documentation/devicetree/bindings/sound/wlf,wm8731.yaml
+@@ -52,10 +52,6 @@ properties:
+   DCVDD-supply:
+     description: Digital core supply regulator for the DCVDD pin.
+ 
+-  spi-max-frequency: true
+-
+-additionalProperties: false
+-
+ required:
+   - reg
+   - compatible
+@@ -64,6 +60,11 @@ required:
+   - DBVDD-supply
+   - DCVDD-supply
+ 
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
++
+ examples:
+   - |
+     spi {
+-- 
+2.34.1
+

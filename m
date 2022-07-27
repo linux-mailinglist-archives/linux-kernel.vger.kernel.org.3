@@ -2,237 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D3C582E68
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0901C582F04
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241517AbiG0RMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
+        id S241706AbiG0RUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241520AbiG0RLq (ORCPT
+        with ESMTP id S236313AbiG0RSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:11:46 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBA174DC8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:42 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id p10so20409752lfd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:41:42 -0700 (PDT)
+        Wed, 27 Jul 2022 13:18:31 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA8B79EE8;
+        Wed, 27 Jul 2022 09:43:52 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso2801865pjo.1;
+        Wed, 27 Jul 2022 09:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=noZsE9hzm+1k0IDbKYcJedBCS8keQWIZ5dwJ9Bh2iyA=;
-        b=EvaFQ0LZE/erLTRglemqXFQcs3XLxjLrE10420FuIJORcU8P0nkjppHqEchtCoTdrV
-         QP3EHReO5Zj5phUAfO0cxLHKN2bfz0WwIlTvjKlOSHBNTX60u8ZOyI3BJ6DA74rpJkT0
-         8GE21IktCR/UbYLecNeeifL6SJcsv1OCP0KnhjoJWpm9vTJmfsOkimnmmVNmiKXSCjrq
-         PCIvFb2Z/9iLYQZjt4s1MFE4W9GqIdaCKe3Bj9niregePX3wluJt/DkX3AeE/2dJiwmo
-         OUqGp5MF42tU4cR9HJcR08KOXhPf/hL38/GwuPr2abMfrRWfMEMzEVdqiblUcsKeSAsU
-         1shQ==
+        bh=jLl28q0YHHTxCCA5OBtJuL5L9i48jfBj5mPfPnOXWnU=;
+        b=gTqC3mK7AhqDxoVzYGypLAHyHnuJyOHaNTyQjZSxbDDaLLMzHWR/WP9vjN+BEf7ZrN
+         Fit/pgr3trM5rPWHk48OyLLH9RgVMVbUXkIkCk+Jf8UUq7Ixq10MdWG5TqYbEOGR31nV
+         qsGV3q9SwnGIQePCh+MvO/t8bPRTd+8yYBHbLfqgUeg11NiAFrxhLg7KRX+lMGCNvMj5
+         eshRUR5CIFKYl0Q/8ArSW7i1Kc7cq0Ija+q7nd/mvYJD++RTwcjdDwoerC5TwBXLzCDS
+         jFvTidDTb5rxdGrTKSLMVxZmoCHN+DVOy2LOS3p+Gk01xSY112n3ooSyfPPZJeieGzO6
+         h1iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=noZsE9hzm+1k0IDbKYcJedBCS8keQWIZ5dwJ9Bh2iyA=;
-        b=VdjgmgJLOBNN/AXdMGaaTdFJkvMa4CPYwhme799mDlnWKrB+IRDkneZbEA6XNuQ6OD
-         Wv/mwZC1XmyjgHB9kh4VZJl3LyXFjGXR4pByskdwbgw2udKsnGl/4PAo987bxsozjvMh
-         lprv9fCP2kb74dyVXS+f8/algnJRFYHCvfvy4gzcQ5th4n0MX0YKB5MVXLRbL924o/RJ
-         Ig372HGINXVIBCBGMqxqjQeCTfTKOvpd3u/Ndam+4PnUURkNYoLRt6sRib1mKQc3hWQh
-         +bJPUDN0ahRPNqq1AnYy0Qgp9rM+MKWSSaiKxRizGOZRchga8bWtC1JWftZ9K54jtHzX
-         s1Ew==
-X-Gm-Message-State: AJIora+MPH8VQRie4XFdHu13DCj6j04VxngSalSnfqyM20xEfVF+GrCL
-        AcVCn703oqfepsx/N33gr6Kjkw==
-X-Google-Smtp-Source: AGRyM1vOxShQJVI2IuMwmQBmBYBiblwWa0oXL7CXsC4l1qkEdcyTkrYB2g5dMB9y4tgZP27svG3sNw==
-X-Received: by 2002:a05:6512:1107:b0:48a:87db:7d24 with SMTP id l7-20020a056512110700b0048a87db7d24mr6539653lfg.58.1658940094944;
-        Wed, 27 Jul 2022 09:41:34 -0700 (PDT)
-Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id i17-20020a2ea231000000b0025a67779931sm3872519ljm.57.2022.07.27.09.41.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jLl28q0YHHTxCCA5OBtJuL5L9i48jfBj5mPfPnOXWnU=;
+        b=4/ZJ/ClXYcD/5Rg5Ljcqv64J7b7yVW0c+Z7wSqsP8gxPq7iBVjlxaRGGz8+l/xSayS
+         3UIFfLis3MYfysFlQOFr81jMn2azRqjIdhJUhf8U36WkRi0ikTBom2NkQbD8z+KtA/NX
+         AvV2COgTpH3ovYsDRd2LPukSyt6ew87A+u4jJeQhDnrYhq0c19GlHrYNPYPB3xS/4lfJ
+         SCWTQsMhcP6EfIa9xz2M8WuzMaUZMhzlOTB09t6JyCk9Wb70mFMnA9U72kRpJNZ00Y7f
+         V+738uD11XhV/CXXjNKiUDjHIrJSpPEXm4asbHIcqLFKvPGOoOL6UfJ3ZXqlgNdqxi6h
+         wTbw==
+X-Gm-Message-State: AJIora+fL8jk8VZc5Mca85Aaw06XMH3UYaOhazKGrqV5If8c+d5KmnQ1
+        QmQCuxFMMT48O4I0APgyhQt7bTpvcP+FKg==
+X-Google-Smtp-Source: AGRyM1ts0wZ3ofA/neE3N1ENMf3fYKfoZeO2BR/ZDCXzFjjnHZTPpgl6A1YvRBAQn0cpHTliNUb18w==
+X-Received: by 2002:a17:90a:62ca:b0:1f2:ef43:72a1 with SMTP id k10-20020a17090a62ca00b001f2ef4372a1mr5495888pjs.217.1658940231334;
+        Wed, 27 Jul 2022 09:43:51 -0700 (PDT)
+Received: from potin-quanta.. (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id h13-20020a17090a3d0d00b001ef3f85d1aasm2030480pjc.9.2022.07.27.09.43.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 09:41:34 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
-        <jerome.pouiller@silabs.com>,
-        Adham Abozaeid <adham.abozaeid@microchip.com>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        Tony Lindgren <tony@atomide.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: wireless: use spi-peripheral-props.yaml
-Date:   Wed, 27 Jul 2022 18:41:30 +0200
-Message-Id: <20220727164130.385411-2-krzysztof.kozlowski@linaro.org>
+        Wed, 27 Jul 2022 09:43:50 -0700 (PDT)
+From:   Potin Lai <potin.lai.pt@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH v3 0/2] iio: humidity: hdc100x: add manufacturer and device ID check
+Date:   Thu, 28 Jul 2022 00:41:31 +0800
+Message-Id: <20220727164133.973930-1-potin.lai.pt@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220727164130.385411-1-krzysztof.kozlowski@linaro.org>
-References: <20220727164130.385411-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of listing directly properties typical for SPI peripherals,
-reference the spi-peripheral-props.yaml schema.  This allows using all
-properties typical for SPI-connected devices, even these which device
-bindings author did not tried yet.
+In this patch series, we move the callback from probe to probe_new, and add
+manufacturer and device ID check for hdc100x driver.
 
-Remove the spi-* properties which now come via spi-peripheral-props.yaml
-schema, except for the cases when device schema adds some constraints
-like maximum frequency.
+LINK: [v1] https://lore.kernel.org/all/20220722172035.44977-1-potin.lai.pt@gmail.com/
+LINK: [v2] https://lore.kernel.org/all/20220727064415.940690-1-potin.lai.pt@gmail.com/
 
-While changing additionalProperties->unevaluatedProperties, put it in
-typical place, just before example DTS.
+changes v1 --> v2:
+- fix typo in commit message
+- change to use probe_new
+- use device_get_match_data instead of i2c_of_match_device
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+changes v2 --> v3:
+- move probe_new part into a separate patch
+- remove unsed variable
+- remove redundant checking of matched data
 
----
+Potin Lai (2):
+  iio: humidity: hdc100x: switch to probe_new callback
+  iio: humidity: hdc100x: add manufacturer and device ID check
 
-Technically, this depends on [1] merged to SPI tree, if we want to
-preserve existing behavior of not allowing SPI CPHA and CPOL in each of
-schemas in this patch.
+ drivers/iio/humidity/hdc100x.c | 75 +++++++++++++++++++++++++++-------
+ 1 file changed, 61 insertions(+), 14 deletions(-)
 
-If this patch comes independently via different tree, the SPI CPHA and
-CPOL will be allowed for brief period of time, before [1] is merged.
-This will not have negative impact, just DT schema checks will be
-loosened for that period.
-
-[1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
----
- .../net/wireless/microchip,wilc1000.yaml      |  7 ++--
- .../bindings/net/wireless/silabs,wfx.yaml     | 15 +++------
- .../bindings/net/wireless/ti,wlcore.yaml      | 32 +++++++++----------
- 3 files changed, 25 insertions(+), 29 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-index 60de78f1bc7b..b3405f284580 100644
---- a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-+++ b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-@@ -20,8 +20,6 @@ properties:
- 
-   reg: true
- 
--  spi-max-frequency: true
--
-   interrupts:
-     maxItems: 1
- 
-@@ -51,7 +49,10 @@ required:
-   - compatible
-   - interrupts
- 
--additionalProperties: false
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+unevaluatedProperties: false
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml b/Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml
-index 76199a67d628..b35d2f3ad1ad 100644
---- a/Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml
-+++ b/Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml
-@@ -29,12 +29,6 @@ description: >
-     Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml for more
-     information.
- 
--  For SPI:
--
--    In add of the properties below, please consult
--    Documentation/devicetree/bindings/spi/spi-controller.yaml for optional SPI
--    related properties.
--
- properties:
-   compatible:
-     items:
-@@ -52,8 +46,6 @@ properties:
-       bindings.
-     maxItems: 1
- 
--  spi-max-frequency: true
--
-   interrupts:
-     description: The interrupt line. Should be IRQ_TYPE_EDGE_RISING. When SPI is
-       used, this property is required. When SDIO is used, the "in-band"
-@@ -84,12 +76,15 @@ properties:
- 
-   mac-address: true
- 
--additionalProperties: false
--
- required:
-   - compatible
-   - reg
- 
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+unevaluatedProperties: false
-+
- examples:
-   - |
-     #include <dt-bindings/gpio/gpio.h>
-diff --git a/Documentation/devicetree/bindings/net/wireless/ti,wlcore.yaml b/Documentation/devicetree/bindings/net/wireless/ti,wlcore.yaml
-index d68bb2ec1f7e..e31456730e9f 100644
---- a/Documentation/devicetree/bindings/net/wireless/ti,wlcore.yaml
-+++ b/Documentation/devicetree/bindings/net/wireless/ti,wlcore.yaml
-@@ -36,8 +36,6 @@ properties:
-       This is required when connected via SPI, and optional when connected via
-       SDIO.
- 
--  spi-max-frequency: true
--
-   interrupts:
-     minItems: 1
-     maxItems: 2
-@@ -69,20 +67,22 @@ required:
-   - compatible
-   - interrupts
- 
--if:
--  properties:
--    compatible:
--      contains:
--        enum:
--          - ti,wl1271
--          - ti,wl1273
--          - ti,wl1281
--          - ti,wl1283
--then:
--  required:
--    - ref-clock-frequency
--
--additionalProperties: false
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - ti,wl1271
-+              - ti,wl1273
-+              - ti,wl1281
-+              - ti,wl1283
-+    then:
-+      required:
-+        - ref-clock-frequency
-+
-+unevaluatedProperties: false
- 
- examples:
-   - |
 -- 
-2.34.1
+2.31.1
 

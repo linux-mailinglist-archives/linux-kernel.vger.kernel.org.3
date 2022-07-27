@@ -2,160 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8678E58355D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9552458355E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236171AbiG0WmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 18:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
+        id S236787AbiG0WnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 18:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiG0WmQ (ORCPT
+        with ESMTP id S231199AbiG0WnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 18:42:16 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F295C9D9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:42:15 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 6so50198pgb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NYAvAw9cVOoPnQbWeVJn8GPEaPKmeSC20kSm+BsfcGc=;
-        b=nAM5FKKiZyv18t23cbcc4URV/I6nC6QJ7PQksL4sN5wARqcMZ8yIgI0922LrZ1IMP8
-         QAARCHSnjO/CJzU42f0C4FqBaFKGhVUc4uMtzWtaX8tvzYyiucy5TCUKsXxqCJ+ftWgm
-         9V5kfMvXh670C9rVeodUxpSd1QLiiHvgz4eodX769O9aBtda39o8He4YF20lmFauLTnW
-         Z/cGo4E7fjVZKVlildsJoj1WlzAfEKsfj1SLNQWX5MBIOar9yfqrmFElVCkq9jLh3AxL
-         89p2GRyTJT6VjSa8QuPCLEFF9Is3sIO1SRC3SrC97M2mUqqRVO5cOk/TM3/EGaR3zUyM
-         8lbQ==
+        Wed, 27 Jul 2022 18:43:12 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38745C9DC;
+        Wed, 27 Jul 2022 15:43:11 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id b21so737qte.12;
+        Wed, 27 Jul 2022 15:43:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NYAvAw9cVOoPnQbWeVJn8GPEaPKmeSC20kSm+BsfcGc=;
-        b=Dis2G18svjTwvtYTNmXBsxlZ72B3aAxXX2qGbZvw0RFawAJlG2WIPz5EJaw3mZbc+0
-         c2rI/icSb97sSUi2O5Rs330ps+e6axheim/IVsBoksHqnhK8Eia2FzL/p2uFfvNlqKdx
-         0p2TjXGQ19R+hqbvGEUWi4IlU1M0UG7hSNbqYwFujttHrZ2w7w3aHpggr8L+fkNVBSoR
-         ik9j+wG7SDdZeAXAQ08Ctcnl+q0OV7WmtXvGrDP17hFG59548MwujWU/0usT2xv9lMg/
-         /BOZuIeNgQBNbN4/5j1pdyyFfmPEXyxvD/0kTSp7U5gKVl/OojFMVT5zEdb+jbw9vjSg
-         WIbA==
-X-Gm-Message-State: AJIora8NeARegxB4ac8idXNR4hzgJsODlwMgn4uDTRvCRA1YQKJ3C/6S
-        S2GCCAaC8lc+QWwSyIns+kFKow==
-X-Google-Smtp-Source: AGRyM1vTFkf4+0TEEy64B/IkyBMp9gDI09JYWDcoFl7iFoQjdbrkCfM8e4ZDDVK2Uv5MNT+o4rXewg==
-X-Received: by 2002:a63:e80e:0:b0:419:d02c:fc8b with SMTP id s14-20020a63e80e000000b00419d02cfc8bmr20255708pgh.385.1658961734594;
-        Wed, 27 Jul 2022 15:42:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i14-20020a17090332ce00b0016a33177d3csm14503714plr.160.2022.07.27.15.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 15:42:13 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 22:42:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [kvm-unit-tests PATCH] x86: Add tests for Guest Processor Event
- Based Sampling (PEBS)
-Message-ID: <YuG/QtIM/fvhLI/u@google.com>
-References: <20220721103549.49543-1-likexu@tencent.com>
- <20220721103549.49543-9-likexu@tencent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m0JygPca+Z1fPoiib7T7Cj4rvDSqJp8OQBczobRUF3E=;
+        b=hohLD6VNHfYjjpslfgLTnGstI5czOgE1mqUjkUThOL4N584LrC4848Pxb9eN9xYy1k
+         TkVUxKRAenZcfMoxZZC0RxXCCNav6n/GJCp4Re7WXeW3F/9GaLieluzD3XIDfatBn+bJ
+         zeTvmIsF0AP2SfsK9UoO7FEKXaw12LjZzT5m17/Xcj1PCqwZ15SFpBCIIR3UxKxjxJiM
+         +ZWVfpVZOVzg8QohAp/7odOipVeABd3VmGUxfsjuJlU4MdswjFlOpKoHfJytlqT1aZYi
+         JU7/3mHxw6QwYhIuIMvm/a3UcMsESeKWXoWvi13EAOnk3XmjtDWKk9oSdWRvk7JDD6jk
+         mp/Q==
+X-Gm-Message-State: AJIora8ExPQWphrokaFJTyFolLGWGAW/j8CAOoERtgf9NbTpHz3qag/Z
+        Ij2IPMLALSBE6sBZX/07AAgdK19zpyN/ELJdWwI=
+X-Google-Smtp-Source: AGRyM1s8ecY09zoVnNG1wuZMfVNGLiUzdFDLfLIfkkOR6vxaUMjhFfOKO+nR9N77Wr/u0hvc+k8oi+kriTCTQizF4zk=
+X-Received: by 2002:a05:622a:178c:b0:31e:f628:f4ab with SMTP id
+ s12-20020a05622a178c00b0031ef628f4abmr20992947qtk.82.1658961790864; Wed, 27
+ Jul 2022 15:43:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721103549.49543-9-likexu@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220727111954.105118-1-gpavithrasha@gmail.com> <20220727111954.105118-3-gpavithrasha@gmail.com>
+In-Reply-To: <20220727111954.105118-3-gpavithrasha@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 27 Jul 2022 15:43:00 -0700
+Message-ID: <CAM9d7chRyvYQMYaPSiem8_9wwh6+p0mgF3qMD++17QNpbWGGeg@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] perf mutex and cond: Updated files mutex.h & mutex.c
+To:     gpavithrasha@gmail.com
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022, Like Xu wrote:
-> +union perf_capabilities {
-> +	struct {
-> +		u64	lbr_format:6;
-> +		u64	pebs_trap:1;
-> +		u64	pebs_arch_reg:1;
-> +		u64	pebs_format:4;
-> +		u64	smm_freeze:1;
-> +		/*
-> +		 * PMU supports separate counter range for writing
-> +		 * values > 32bit.
-> +		 */
-> +		u64	full_width_write:1;
-> +		u64 pebs_baseline:1;
-> +		u64	perf_metrics:1;
-> +		u64	pebs_output_pt_available:1;
-> +		u64	anythread_deprecated:1;
-> +	};
-> +	u64	capabilities;
+On Wed, Jul 27, 2022 at 4:20 AM <gpavithrasha@gmail.com> wrote:
+>
+> From: pavithra <gpavithrasha@gmail.com>
+>
+> Added new struct and corresponding
+> functions to wrap usage of pthread_cond_t.
+> Added a new function for mutex_trylock-similar to
+> mutex_lock.
+>
+> Signed-off-by: pavithra <gpavithrasha@gmail.com>
+> ---
+>  tools/perf/util/mutex.c | 37 ++++++++++++++++++++++++++++++++-----
+>  tools/perf/util/mutex.h | 13 +++++++++++--
+>  2 files changed, 43 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/perf/util/mutex.c b/tools/perf/util/mutex.c
+> index b7264a1438c4..9dc37a3f374f 100644
+> --- a/tools/perf/util/mutex.c
+> +++ b/tools/perf/util/mutex.c
+> @@ -1,8 +1,8 @@
+>  #include <mutex.h>
+>  #include <pthread.h>
+>
+> -//to avoid the warning : implicit declaration of BUG_ON,
+> -//we add the following 2 headers.
+> +/*to avoid the warning : implicit declaration of BUG_ON*/
+> +/*we add the following 2 headers*/
+>  #include <linux/compiler.h>
+>  #include <linux/kernel.h>
+>
+> @@ -11,14 +11,15 @@ void mutex_init(struct mutex *mtx)
+>  pthread_mutexattr_t lock_attr;
+>  pthread_mutexattr_init(&lock_attr);
+>  pthread_mutexattr_settype(&lock_attr, PTHREAD_MUTEX_ERRORCHECK);
+> -BUG_ON(pthread_mutex_init(&mtx->lock, &lock_attr));
+> -//on success, returns 0.
+> +/*pthread_mutex_init:on success, returns 0*/
+> +BUG_ON(pthread_mutex_init(&mtx->lock, &lock_attr));
+>  pthread_mutexattr_destroy(&lock_attr);
+>  }
+>
+>  void mutex_destroy(struct mutex *mtx)
+>  {
+> -BUG_ON(pthread_mutex_destroy(&mtx->lock));     //on success, returns 0.
+> +/*pthread_mutex_destroy:on success, returns 0*/
+> +BUG_ON(pthread_mutex_destroy(&mtx->lock));
+
+Above changes should belong to the patch 1.
+
+>  }
+>
+>  void mutex_lock(struct mutex *mtx)
+> @@ -30,3 +31,29 @@ void mutex_unlock(struct mutex *mtx)
+>  {
+>  BUG_ON(pthread_mutex_unlock(&mtx->lock) != 0);
+>  }
+> +
+> +bool mutex_trylock(struct mutex *mtx)
+> +{
+> +return pthread_mutex_trylock(&mtx->lock)!=0;
+> +}
+> +
+> +void cond_wait(struct cond *cnd, struct mutex *mtx)
+> +{
+> +BUG_ON(pthread_cond_wait(&cnd->cond, &mtx->lock) != 0);
+> +}
+> +
+> +void cond_signal(struct cond *cnd)
+> +{
+> +BUG_ON(pthread_cond_signal(&cnd->cond) != 0);
+> +}
+> +
+> +void cond_init(struct cond *cnd)
+> +{
+> +pthread_condattr_t attr;
+> +
+> +pthread_condattr_init(&attr);
+> +
+> +/*pthread_cond_init:on success, returns 0*/
+> +BUG_ON(pthread_cond_init(&cnd->cond, &attr));
+
+Please be consistent with != 0.
+
+Thanks,
+Namhyung
+
+
+> +pthread_condattr_destroy(&attr);
+> +}
+> diff --git a/tools/perf/util/mutex.h b/tools/perf/util/mutex.h
+> index ab2ebb98b24a..f1b4aaa151be 100644
+> --- a/tools/perf/util/mutex.h
+> +++ b/tools/perf/util/mutex.h
+> @@ -1,15 +1,24 @@
+>  #ifndef __PERF_MUTEX_H
+> -#define _PERF_MUTEX_H
+> +#define __PERF_MUTEX_H
+>
+>  #include <pthread.h>
+> +#include <stdbool.h>
+>
+>  struct mutex {
+>  pthread_mutex_t lock;
+>  };
+>
+> +struct cond {
+> +pthread_cond_t cond;
 > +};
 > +
-> +union cpuid10_eax {
-> +        struct {
-> +                unsigned int version_id:8;
-> +                unsigned int num_counters:8;
-> +                unsigned int bit_width:8;
-> +                unsigned int mask_length:8;
-> +        } split;
-> +        unsigned int full;
-> +} pmu_eax;
-> +
-> +union cpuid10_edx {
-> +        struct {
-> +                unsigned int num_counters_fixed:5;
-> +                unsigned int bit_width_fixed:8;
-> +                unsigned int reserved:19;
-> +        } split;
-> +        unsigned int full;
-> +} pmu_edx;
-
-The generic unions are hopefully unnecessary now that helpers are provided by
-lib/x86/processor.h, e.g. for pmu_version().
-
-I would prefer to have similar helpers instead of "union perf_capabilities",
-but it's not a sticking point if helpers a signifiantly more painful to use.
-
-> +	if (!is_intel() || (pmu_eax.split.version_id < 2) ||
-> +	    !(perf.capabilities & PERF_CAP_PEBS_FORMAT) ||
-> +	    (rdmsr(MSR_IA32_MISC_ENABLE) & MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL)) {
-
-Split these up, it's really, really annoying to have to guess which one of the
-four checks failed.
-
-> +		report_skip("This platform doesn't support guest PEBS.");
-> +		return 0;
-
-This needs be be "return report_summary()", otherwise the test says pass when it
-didn't do anyting:
-
- TESTNAME=pmu_pebs TIMEOUT=90s ACCEL=kvm ./x86/run x86/pmu_pebs.flat -smp 1 -cpu host,migratable=no
- PASS pmu_pebs 
-
-wait a second...
-
-  SKIP: This platform doesn't support guest PEBS.
-
-E.g. (though if KUT can provide more information on why PERF_CAP_PEBS_FORMAT
-may not be advertised, e.g. requires ICX+?, that would be nice to have)
-
-        if (!is_intel()) {
-                report_skip("PEBS is only supported on Intel CPUs");
-                return report_summary();
-        }
-        if (pmu_version() < 2) {
-                report_skip("Architectural PMU not available");
-                return report_summary();
-        }
-        if (!(perf.capabilities & PERF_CAP_PEBS_FORMAT)) {
-                report_skip("PEBS not enumerated in PERF_CAPABILITIES");
-                return report_summary();
-        }
-        if (rdmsr(MSR_IA32_MISC_ENABLE) & MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL) {
-                report_skip("PEBS unavailable according to MISC_ENABLE");
-                return report_summary();
-        }
+>  void mutex_lock(struct mutex *mtx);
+>  void mutex_unlock(struct mutex *mtx);
+> +bool mutex_trylock(struct mutex *mtx);
+>  void mutex_init(struct mutex *mtx);
+>  void mutex_destroy(struct mutex *mtx);
+>
+> -#endif /* _PERF_MUTEX_H */
+> +void cond_wait(struct cond *cnd, struct mutex *mtx);
+> +void cond_signal(struct cond *cnd);
+> +void cond_init(struct cond *cnd);
+> +#endif /* __PERF_MUTEX_H */
+> --
+> 2.25.1
+>

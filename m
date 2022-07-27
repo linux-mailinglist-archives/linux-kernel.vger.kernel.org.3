@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148FE582EBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5A7582B49
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbiG0RQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S237491AbiG0QbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241590AbiG0RPb (ORCPT
+        with ESMTP id S237394AbiG0Qak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:15:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518155C37F;
-        Wed, 27 Jul 2022 09:43:00 -0700 (PDT)
+        Wed, 27 Jul 2022 12:30:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1DC52465;
+        Wed, 27 Jul 2022 09:25:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96EE1B821AC;
-        Wed, 27 Jul 2022 16:42:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D11C433C1;
-        Wed, 27 Jul 2022 16:42:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39175B821BE;
+        Wed, 27 Jul 2022 16:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8431DC433C1;
+        Wed, 27 Jul 2022 16:24:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940177;
-        bh=D6lvZDOlW//hEWRg9C+IUetipLsoLf/v/3N28GN55mQ=;
+        s=korg; t=1658939085;
+        bh=f/k0fSzAgfes9RARHOdIJjPc4gFYu6J7lkZW2/E9o8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nLq+Yo3k/kenBQnhpM6yd+mPMqVwcePi5EoGVDPf5WPtDuoKO58ZtZvlbrRZMHdHJ
-         o34qvx9AwR11TJI59WMgVauMEBm49V/+qRgyVjm2X1fEGpUdBRL+omCfpy7L1zA57+
-         T6X+2P7OiK3RCePNgEe/k5x1Gl3ER/8iqWnyBWqw=
+        b=W5WlQcDVqAkicLvqcyxSdd/fV/X+IHM7emjCDZamaDgh/idZdoiwJ3rAvVhzkwTkN
+         EAEjkmstXPXsv4tYPgbZ40AIsEBkHnSE3d8HMXT6HctmwFIlu+Pf7UUNw+XY3Ikfq/
+         IHYkoQ4D+iaYTED+wHubVoHusmAMW9AASOBSWxLw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 132/201] KVM: selftests: Fix target thread to be migrated in rseq_test
+        stable@vger.kernel.org, Cedric Wassenaar <cedric@bytespeed.nl>,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 10/37] net: stmmac: fix dma queue left shift overflow issue
 Date:   Wed, 27 Jul 2022 18:10:36 +0200
-Message-Id: <20220727161033.268900056@linuxfoundation.org>
+Message-Id: <20220727161001.290474773@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
+References: <20220727161000.822869853@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,92 +56,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gavin Shan <gshan@redhat.com>
+From: Junxiao Chang <junxiao.chang@intel.com>
 
-commit e923b0537d28e15c9d31ce8b38f810b325816903 upstream.
+[ Upstream commit 613b065ca32e90209024ec4a6bb5ca887ee70980 ]
 
-In rseq_test, there are two threads, which are vCPU thread and migration
-worker separately. Unfortunately, the test has the wrong PID passed to
-sched_setaffinity() in the migration worker. It forces migration on the
-migration worker because zeroed PID represents the calling thread, which
-is the migration worker itself. It means the vCPU thread is never enforced
-to migration and it can migrate at any time, which eventually leads to
-failure as the following logs show.
+When queue number is > 4, left shift overflows due to 32 bits
+integer variable. Mask calculation is wrong for MTL_RXQ_DMA_MAP1.
 
-  host# uname -r
-  5.19.0-rc6-gavin+
-  host# # cat /proc/cpuinfo | grep processor | tail -n 1
-  processor    : 223
-  host# pwd
-  /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
-  host# for i in `seq 1 100`; do \
-        echo "--------> $i"; ./rseq_test; done
-  --------> 1
-  --------> 2
-  --------> 3
-  --------> 4
-  --------> 5
-  --------> 6
-  ==== Test Assertion Failure ====
-    rseq_test.c:265: rseq_cpu == cpu
-    pid=3925 tid=3925 errno=4 - Interrupted system call
-       1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
-       2  0x0000ffffb044affb: ?? ??:0
-       3  0x0000ffffb044b0c7: ?? ??:0
-       4  0x0000000000401a6f: _start at ??:?
-    rseq CPU = 4, sched CPU = 27
+If CONFIG_UBSAN is enabled, kernel dumps below warning:
+[   10.363842] ==================================================================
+[   10.363882] UBSAN: shift-out-of-bounds in /build/linux-intel-iotg-5.15-8e6Tf4/
+linux-intel-iotg-5.15-5.15.0/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c:224:12
+[   10.363929] shift exponent 40 is too large for 32-bit type 'unsigned int'
+[   10.363953] CPU: 1 PID: 599 Comm: NetworkManager Not tainted 5.15.0-1003-intel-iotg
+[   10.363956] Hardware name: ADLINK Technology Inc. LEC-EL/LEC-EL, BIOS 0.15.11 12/22/2021
+[   10.363958] Call Trace:
+[   10.363960]  <TASK>
+[   10.363963]  dump_stack_lvl+0x4a/0x5f
+[   10.363971]  dump_stack+0x10/0x12
+[   10.363974]  ubsan_epilogue+0x9/0x45
+[   10.363976]  __ubsan_handle_shift_out_of_bounds.cold+0x61/0x10e
+[   10.363979]  ? wake_up_klogd+0x4a/0x50
+[   10.363983]  ? vprintk_emit+0x8f/0x240
+[   10.363986]  dwmac4_map_mtl_dma.cold+0x42/0x91 [stmmac]
+[   10.364001]  stmmac_mtl_configuration+0x1ce/0x7a0 [stmmac]
+[   10.364009]  ? dwmac410_dma_init_channel+0x70/0x70 [stmmac]
+[   10.364020]  stmmac_hw_setup.cold+0xf/0xb14 [stmmac]
+[   10.364030]  ? page_pool_alloc_pages+0x4d/0x70
+[   10.364034]  ? stmmac_clear_tx_descriptors+0x6e/0xe0 [stmmac]
+[   10.364042]  stmmac_open+0x39e/0x920 [stmmac]
+[   10.364050]  __dev_open+0xf0/0x1a0
+[   10.364054]  __dev_change_flags+0x188/0x1f0
+[   10.364057]  dev_change_flags+0x26/0x60
+[   10.364059]  do_setlink+0x908/0xc40
+[   10.364062]  ? do_setlink+0xb10/0xc40
+[   10.364064]  ? __nla_validate_parse+0x4c/0x1a0
+[   10.364068]  __rtnl_newlink+0x597/0xa10
+[   10.364072]  ? __nla_reserve+0x41/0x50
+[   10.364074]  ? __kmalloc_node_track_caller+0x1d0/0x4d0
+[   10.364079]  ? pskb_expand_head+0x75/0x310
+[   10.364082]  ? nla_reserve_64bit+0x21/0x40
+[   10.364086]  ? skb_free_head+0x65/0x80
+[   10.364089]  ? security_sock_rcv_skb+0x2c/0x50
+[   10.364094]  ? __cond_resched+0x19/0x30
+[   10.364097]  ? kmem_cache_alloc_trace+0x15a/0x420
+[   10.364100]  rtnl_newlink+0x49/0x70
 
-Fix the issue by passing correct parameter, TID of the vCPU thread, to
-sched_setaffinity() in the migration worker.
+This change fixes MTL_RXQ_DMA_MAP1 mask issue and channel/queue
+mapping warning.
 
-Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Gavin Shan <gshan@redhat.com>
-Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-Message-Id: <20220719020830.3479482-1-gshan@redhat.com>
-Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d43042f4da3e ("net: stmmac: mapping mtl rx to dma channel")
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216195
+Reported-by: Cedric Wassenaar <cedric@bytespeed.nl>
+Signed-off-by: Junxiao Chang <junxiao.chang@intel.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/rseq_test.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-index 4158da0da2bb..2237d1aac801 100644
---- a/tools/testing/selftests/kvm/rseq_test.c
-+++ b/tools/testing/selftests/kvm/rseq_test.c
-@@ -82,8 +82,9 @@ static int next_cpu(int cpu)
- 	return cpu;
- }
- 
--static void *migration_worker(void *ign)
-+static void *migration_worker(void *__rseq_tid)
- {
-+	pid_t rseq_tid = (pid_t)(unsigned long)__rseq_tid;
- 	cpu_set_t allowed_mask;
- 	int r, i, cpu;
- 
-@@ -106,7 +107,7 @@ static void *migration_worker(void *ign)
- 		 * stable, i.e. while changing affinity is in-progress.
- 		 */
- 		smp_wmb();
--		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-+		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask), &allowed_mask);
- 		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
- 			    errno, strerror(errno));
- 		smp_wmb();
-@@ -231,7 +232,8 @@ int main(int argc, char *argv[])
- 	vm = vm_create_default(VCPU_ID, 0, guest_code);
- 	ucall_init(vm, NULL);
- 
--	pthread_create(&migration_thread, NULL, migration_worker, 0);
-+	pthread_create(&migration_thread, NULL, migration_worker,
-+		       (void *)(unsigned long)gettid());
- 
- 	for (i = 0; !done; i++) {
- 		vcpu_run(vm, VCPU_ID);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+index e5566c121525..9b12bb3b7781 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+@@ -217,6 +217,9 @@ static void dwmac4_map_mtl_dma(struct mac_device_info *hw, u32 queue, u32 chan)
+ 	if (queue == 0 || queue == 4) {
+ 		value &= ~MTL_RXQ_DMA_Q04MDMACH_MASK;
+ 		value |= MTL_RXQ_DMA_Q04MDMACH(chan);
++	} else if (queue > 4) {
++		value &= ~MTL_RXQ_DMA_QXMDMACH_MASK(queue - 4);
++		value |= MTL_RXQ_DMA_QXMDMACH(chan, queue - 4);
+ 	} else {
+ 		value &= ~MTL_RXQ_DMA_QXMDMACH_MASK(queue);
+ 		value |= MTL_RXQ_DMA_QXMDMACH(chan, queue);
 -- 
-2.37.1
+2.35.1
 
 
 

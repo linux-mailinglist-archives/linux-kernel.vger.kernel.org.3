@@ -2,145 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E525827B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15B15827B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbiG0N3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S233819AbiG0Nbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233869AbiG0N3r (ORCPT
+        with ESMTP id S232246AbiG0Nb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:29:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38EC3AB16;
-        Wed, 27 Jul 2022 06:29:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8727DB8200B;
-        Wed, 27 Jul 2022 13:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4F9C433B5;
-        Wed, 27 Jul 2022 13:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658928579;
-        bh=RqDnTpQokIaXPiiGqAVTN0iGNn09ykWFc9ETGImEwwc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=LE4Mav+vGrqrOEhngvh7P/82ID1fpJx+65Pj0iWljgnsvWF42sCvfmKX1JDpwcd5V
-         mCCC3EBa0NOnIosAv4H4KLXta+ZvbnB34t3su/0uZO8fvuEXf7cXLfpx+cUhDTIMLt
-         ZdZ46HtFgmc/uI2X6MV8+ZghuiaMND/R1sxx3ZkzpuDU1TQuhWyVu0kXsPCmD33LIQ
-         szDLqQpQ48Wl+csARI2ecMYxPPQabRWoSA3JQuD+HKhyJIMtbdXTVLpx/L7v+3GFtz
-         Eq4H9vv9MJmx6AdDKFrlZQAPJ+Y7j/NPaaoxV+sPFWYGafJDv/bq8cBICB3ACldkQ/
-         gfAhgT2u/tIzQ==
-Message-ID: <4085e655f6f22ab185f14cfb6a0c5dee9f12b55e.camel@kernel.org>
-Subject: Re: [PATCH] vfs: bypass may_create_in_sticky check if task has
- CAP_FOWNER
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yongchen Yang <yoyang@redhat.com>
-Date:   Wed, 27 Jul 2022 09:29:37 -0400
-In-Reply-To: <20220727131649.v5iuvg2mitny2aci@wittgenstein>
-References: <20220727123048.46389-1-jlayton@kernel.org>
-         <20220727123710.tzg44xojlc3pmsiw@wittgenstein>
-         <82064e83752ee731909f4782ba85bad428ad180b.camel@kernel.org>
-         <20220727131649.v5iuvg2mitny2aci@wittgenstein>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Wed, 27 Jul 2022 09:31:29 -0400
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C050EE23;
+        Wed, 27 Jul 2022 06:31:27 -0700 (PDT)
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+        by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 26CEA43AFC;
+        Wed, 27 Jul 2022 15:31:26 +0200 (CEST)
+Date:   Wed, 27 Jul 2022 15:31:24 +0200
+From:   Stoiko Ivanov <s.ivanov@proxmox.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, bgardon@google.com,
+        Jim Mattson <jmattson@google.com>, t.lamprecht@proxmox.com
+Subject: Re: [PATCH] KVM: x86: enable TDP MMU by default
+Message-ID: <20220727153124.1afdad67@rosa.proxmox.com>
+In-Reply-To: <20dcddad9f6c8384c49f9d8ec95a826df35fc92d.camel@redhat.com>
+References: <20210726163106.1433600-1-pbonzini@redhat.com>
+        <20220726165748.76db5284@rosa.proxmox.com>
+        <ffc99463-6a61-8694-6a4e-3162580f94ee@redhat.com>
+        <20dcddad9f6c8384c49f9d8ec95a826df35fc92d.camel@redhat.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-27 at 15:16 +0200, Christian Brauner wrote:
-> On Wed, Jul 27, 2022 at 08:55:35AM -0400, Jeff Layton wrote:
-> > On Wed, 2022-07-27 at 14:37 +0200, Christian Brauner wrote:
-> > > On Wed, Jul 27, 2022 at 08:30:48AM -0400, Jeff Layton wrote:
-> > > > NFS server is exporting a sticky directory (mode 01777) with root
-> > > > squashing enabled. Client has protect_regular enabled and then trie=
-s to
-> > > > open a file as root in that directory. File is created (with owners=
-hip
-> > > > set to nobody:nobody) but the open syscall returns an error.
-> > > >=20
-> > > > The problem is may_create_in_sticky, which rejects the open even th=
-ough
-> > > > the file has already been created/opened. Bypass the checks in
-> > > > may_create_in_sticky if the task has CAP_FOWNER in the given namesp=
-ace.
-> > > >=20
-> > > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D1976829
-> > > > Reported-by: Yongchen Yang <yoyang@redhat.com>
-> > > > Suggested-by: Christian Brauner <brauner@kernel.org>
-> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > ---
-> > > >  fs/namei.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/fs/namei.c b/fs/namei.c
-> > > > index 1f28d3f463c3..170c2396ba29 100644
-> > > > --- a/fs/namei.c
-> > > > +++ b/fs/namei.c
-> > > > @@ -1230,7 +1230,8 @@ static int may_create_in_sticky(struct user_n=
-amespace *mnt_userns,
-> > > >  	    (!sysctl_protected_regular && S_ISREG(inode->i_mode)) ||
-> > > >  	    likely(!(dir_mode & S_ISVTX)) ||
-> > > >  	    uid_eq(i_uid_into_mnt(mnt_userns, inode), dir_uid) ||
-> > > > -	    uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)))
-> > > > +	    uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)) ||
-> > > > +	    ns_capable(mnt_userns, CAP_FOWNER))
-> > > >  		return 0;
-> > >=20
-> > > Hm, no. You really want inode_owner_or_capable() here..
-> > > You need to verify that you have a mapping for the inode->i_{g,u}id i=
-n
-> > > question and that you're having CAP_FOWNER in the caller's userns.
-> > >=20
-> >=20
-> > Ok, I should be able to make that change and test it out.
-> >=20
-> > > I'm pretty sure we should also restrict this to the case were the cal=
-ler
-> > > actually created the file otherwise we introduce a potential issue wh=
-ere
-> > > the caller is susceptible to data spoofing. For example, the file was
-> > > created by another user racing the caller's O_CREAT.
-> >=20
-> > That won't be sufficient to fix the testcase, I think. If a file alread=
-y
-> > exists in the sticky dir and is owned by nobody:nobody, do we really
-> > want to prevent root from opening it? I wouldn't think so.
->=20
-> Afaict, the whole stick behind the protected_regular thing in
-> may_create_in_sticky() thing is that you prevent scenarios where you can
-> be tricked into opening a file that you didn't intend to with O_CREAT.
->=20
+On Wed, 27 Jul 2022 13:22:48 +0300
+Maxim Levitsky <mlevitsk@redhat.com> wrote:
 
-Yuck. The proper way to get that protection is to use O_EXCL...
+> On Tue, 2022-07-26 at 17:43 +0200, Paolo Bonzini wrote:
+> > On 7/26/22 16:57, Stoiko Ivanov wrote:  
+> > > Hi,
+> > > 
+> > > Proxmox[0] recently switched to the 5.15 kernel series (based on the one
+> > > for Ubuntu 22.04), which includes this commit.
+> > > While it's working well on most installations, we have a few users who
+> > > reported that some of their guests shutdown with
+> > > `KVM: entry failed, hardware error 0x80000021` being logged under certain
+> > > conditions and environments[1]:
+> > > * The issue is not deterministically reproducible, and only happens
+> > >    eventually with certain loads (e.g. we have only one system in our
+> > >    office which exhibits the issue - and this only by repeatedly installing
+> > >    Windows 2k22 ~ one out of 10 installs will cause the guest-crash)
+> > > * While most reports are referring to (newer) Windows guests, some users
+> > >    run into the issue with Linux VMs as well
+> > > * The affected systems are from a quite wide range - our affected machine
+> > >    is an old IvyBridge Xeon with outdated BIOS (an equivalent system with
+> > >    the latest available BIOS is not affected), but we have
+> > >    reports of all kind of Intel CPUs (up to an i5-12400). It seems AMD CPUs
+> > >    are not affected.
+> > > 
+> > > Disabling tdp_mmu seems to mitigate the issue, but I still thought you
+> > > might want to know that in some cases tdp_mmu causes problems, or that you
+> > > even might have an idea of how to fix the issue without explicitly
+> > > disabling tdp_mmu?  
+> > 
+> > If you don't need secure boot, you can try disabling SMM.  It should not 
+> > be related to TDP MMU, but the logs (thanks!) point at an SMM entry (RIP 
+> > = 0x8000, CS base=0x7ffc2000).  
+> 
+> No doubt about it. It is the issue.
+> 
+> > 
+> > This is likely to be fixed by 
+> > https://lore.kernel.org/kvm/20220621150902.46126-1-mlevitsk@redhat.com/.
+Thanks to both of you for the quick feedback and the patches!
 
-> That's specifically also a protection for root. So say root specifies
-> O_CREAT but someone beats root to it and creates the file dumping
-> malicious data in there. The uid_eq() requirement is supposed to prevent
-> such attacks and it's a sysctl that userspace opted into.
->=20
-> We'd be relaxing that restriction quite a bit if we not just allow newly
-> created but also pre-existing file to be opened even with the CAP_FOWNER
-> requirement.
->=20
-> So the dd call should really fail if O_CREAT is passed but the file is
-> pre-existing, imho. It's a different story if dd created that file and
-> has CAP_FOWNER imho.
+We ran our reproducer with the patch-series above applied on top of
+5.19-rc8 from
+git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/kinetic
+* without the patches the issue occurred within 20 minutes,
+* with the patches applied issues did not occur for 3 hours (it usually
+  does within 1-2 hours at most)
 
-That's pretty nasty. So if I create a file as root in a sticky dir that
-doesn't exist, and then close it and try to open it again it'll fail
-with -EACCES? That's terribly confusing.
+so fwiw it seems to fix the issue on our setup.
+we'll do some more internal tests and would then make this available
+(backported to our 5.15 kernel) to our users, who are affected by this.
 
---=20
-Jeff Layton <jlayton@kernel.org>
+Kind regards,
+stoiko
+
+

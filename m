@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9642358349D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 23:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C6358348E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 23:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237165AbiG0VFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 17:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
+        id S237490AbiG0VGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 17:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237079AbiG0VEs (ORCPT
+        with ESMTP id S234317AbiG0VFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 17:04:48 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5713761112
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 14:04:09 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h8so26064791wrw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 14:04:09 -0700 (PDT)
+        Wed, 27 Jul 2022 17:05:10 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B75360698
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 14:04:17 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id v5so10797175wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 14:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Y+8gnJ68hJod6uvQUR4L1wvFSKnRgzdO4yxaDxG616M=;
-        b=x+88BBJb57JukKqCcxtbzhuJ1izDyDxxyEMwGBi9sRsQElVLfC/KEGAmf8s4wJXVFx
-         4+64HP3I1uRrT2vODAKBvbrB00FVGlVbMQU5HhvwIw9KW2F7FLLLDwgabrdAXGj+Akf6
-         8Mk3FHtwywA3nqhYXq3y9VaQaDY3VnjBdVjGEh/8kbQA7oRhPentpoLGnsMtDSV4P4Fn
-         T/puU7Lyo+pchOSrsXUAGlooCHHrODdVcPEwSdLdfPlqsZ/5sWG2ANbCdedDuweJP0/o
-         Sds9i9n0Owi80qRvI3/8FvR6sddk/85654or77qvOSty+uWQN0GEKStWAIhv2g8JLmsw
-         k1Jw==
+        bh=Mb4JyaEjxL4JDBtXDcGCWHFGP5KgiZCOnINym1JdoVI=;
+        b=13YHnvPFGlHVD3It/kAW0PC4kqnY1vTEOpiGKK/McFrXR7XO621SlHmXlO2fw7BOOg
+         4Lr85dXZoaPkOpKgj0b0uyY3fqcK1iiEc7YqZ3YXd6RbIb2OBDrqrvIwE9xSiZl3iGYL
+         3ybXBkrtAhfjlgpiFGOmFe/PMDdFN39BfJFOp6AFu2Usu/FkiICGhpR6BZFT1v1n8v3u
+         Fjb5cixwEagngCSIe4Ug3v3lsbX9G9yw4LEIPLu2z9zH33CQ5X9WbqvESwK8VolN/yLC
+         tGnwbOhpIA/ADqE9bOLpT6ad6QiDhRgb4EcqoiNoFC1c3QB/e2aDRLofIDn2e5Sf6gPd
+         cYAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Y+8gnJ68hJod6uvQUR4L1wvFSKnRgzdO4yxaDxG616M=;
-        b=LU7oYOgpjaF6E0VuN6RM24lFQgn9kDbs/VG34EELhl3cm3v/PghnADJqy1RaFdqwZh
-         mQ0DhiwK1t4ICPbqi7Yoe0XFq0ftoGs5tyJYpQD9cTfNjJJ+yUtVPqI/FgUcQYApjp+m
-         gwGkY/u4N/O+Ym3Ibf3cUN2eZLvfIC7fvPcK3ihPiNFI9W5/sfIM1o9bxVLrl2py21dX
-         Jd97qDh9VWdE+/SYobPtPkd0ds4amEFPZUZjRqgJoN2WtBIRk5cQx3jl5/N9kHW4no+e
-         QgVEIE/ve+9WQ5irS3B0mCbN0ASC0UC/VR+BaFuVGBJfR9e9mPY1Kwaa2vsX6Cc7751W
-         ay9g==
-X-Gm-Message-State: AJIora//i5EXz9hH1Nu2o5XTqK8XCyH9qxEA1YMAtgT4X5/IbGEvZYtW
-        omPVOBZykdLrR4mA5sjyrz4GUQ==
-X-Google-Smtp-Source: AGRyM1slQQd537zbhaxi6R16/WJLy9sr0CulGmuYdFM7k5O2+9TcSk2qXRezXHRFGXF3/fBRBSrJWg==
-X-Received: by 2002:a5d:6f0d:0:b0:21e:3c6f:f67c with SMTP id ay13-20020a5d6f0d000000b0021e3c6ff67cmr14497675wrb.606.1658955849378;
-        Wed, 27 Jul 2022 14:04:09 -0700 (PDT)
+        bh=Mb4JyaEjxL4JDBtXDcGCWHFGP5KgiZCOnINym1JdoVI=;
+        b=TNiNWmt0yvDbtrlS4pPy611RlKBHtTSzjYBaDeJwwyfbVjVeIn/+bkEORFWcwckpzH
+         yM0VaI3+zw45g+Dm3BM987Q1Mv5zzswUIACBgHCffV4yURyb9AB0O6K0BycjAThafVgI
+         RwcUWbp7WBGN3zFQUjg/aO+mjDqi71yaAdiU+ZPMJy7ufVmQ/79FIlJuaQG9Bbd9OOM4
+         Tsl1woboOCdosvuBp7OpnPfOVLWq1XLR0qw/pwEMi/+wCJbbw5j8siW8wSF4L/df/Jcv
+         KY/kUVNG5pCS/nb/xxjgKDI8JTmPnXkTIIa+tpeg+/wa4q0QrRzO7CP+ThzXVPHntEO5
+         t5wQ==
+X-Gm-Message-State: AJIora8jWlVBjLURBSv8SeWD7pE8G1LIT+XuWzEVn0E8VD1eItlX3yrl
+        2WOhvmcP2DZGwe9m1jcIJSbBqQ==
+X-Google-Smtp-Source: AGRyM1s71Y8IOIJenvi/rSkvm0EMO95yLxX5Nr+kSHCzocJU/To/zxNgOL/Q/7gYaRqMJ9G2Y3PPLQ==
+X-Received: by 2002:a1c:4c02:0:b0:3a3:160f:f1ec with SMTP id z2-20020a1c4c02000000b003a3160ff1ecmr4344701wmf.159.1658955851598;
+        Wed, 27 Jul 2022 14:04:11 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0])
-        by smtp.gmail.com with ESMTPSA id h6-20020a05600c350600b003a38606385esm37908wmq.3.2022.07.27.14.04.07
+        by smtp.gmail.com with ESMTPSA id h6-20020a05600c350600b003a38606385esm37908wmq.3.2022.07.27.14.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 14:04:09 -0700 (PDT)
+        Wed, 27 Jul 2022 14:04:11 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
@@ -62,17 +62,12 @@ Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
         glaroque@baylibre.com, miquel.raynal@bootlin.com,
         shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
         matthias.bgg@gmail.com, j-keerthy@ti.com,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE)
-Subject: [PATCH v3 25/32] ata/drivers/ahci_imx: Switch to new of thermal API
-Date:   Wed, 27 Jul 2022 23:02:46 +0200
-Message-Id: <20220727210253.3794069-26-daniel.lezcano@linexp.org>
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING)
+Subject: [PATCH v3 26/32] hwmon/drivers: Switch to new of thermal API
+Date:   Wed, 27 Jul 2022 23:02:47 +0200
+Message-Id: <20220727210253.3794069-27-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
 References: <20220727210253.3794069-1-daniel.lezcano@linexp.org>
@@ -94,71 +89,101 @@ tree specific and are the generic ones provided by the core code.
 Convert the ops to the thermal_zone_device_ops format and use the new
 API to register the thermal zone with these generic ops.
 
-sata_ahci_read_temperature() is used by sata_ahci_show_temp() also.
-
-So in order to change the function prototype for the get_temp ops which
-does not take a void* but a thermal_zone_device* structure, this
-function wraps the call.
-
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/ata/ahci_imx.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/hwmon/hwmon.c      | 14 +++++++-------
+ drivers/hwmon/scpi-hwmon.c | 14 +++++++-------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/ata/ahci_imx.c b/drivers/ata/ahci_imx.c
-index 79aa9f285312..b734e069034d 100644
---- a/drivers/ata/ahci_imx.c
-+++ b/drivers/ata/ahci_imx.c
-@@ -327,7 +327,7 @@ static int read_adc_sum(void *dev, u16 rtune_ctl_reg, void __iomem * mmio)
- }
- 
- /* SATA AHCI temperature monitor */
--static int sata_ahci_read_temperature(void *dev, int *temp)
-+static int __sata_ahci_read_temperature(void *dev, int *temp)
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 2e2cd79d89eb..4218750d5a66 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -151,9 +151,9 @@ static DEFINE_IDA(hwmon_ida);
+  * between hwmon and thermal_sys modules.
+  */
+ #ifdef CONFIG_THERMAL_OF
+-static int hwmon_thermal_get_temp(void *data, int *temp)
++static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
  {
- 	u16 mpll_test_reg, rtune_ctl_reg, dac_ctl_reg, read_sum;
- 	u32 str1, str2, str3, str4;
-@@ -416,6 +416,11 @@ static int sata_ahci_read_temperature(void *dev, int *temp)
+-	struct hwmon_thermal_data *tdata = data;
++	struct hwmon_thermal_data *tdata = tz->devdata;
+ 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
+ 	int ret;
+ 	long t;
+@@ -168,9 +168,9 @@ static int hwmon_thermal_get_temp(void *data, int *temp)
  	return 0;
  }
  
-+static int sata_ahci_read_temperature(struct thermal_zone_device *tz, int *temp)
-+{
-+	return __sata_ahci_read_temperature(tz->devdata, temp);
-+}
-+
- static ssize_t sata_ahci_show_temp(struct device *dev,
- 				   struct device_attribute *da,
- 				   char *buf)
-@@ -423,14 +428,14 @@ static ssize_t sata_ahci_show_temp(struct device *dev,
- 	unsigned int temp = 0;
- 	int err;
- 
--	err = sata_ahci_read_temperature(dev, &temp);
-+	err = __sata_ahci_read_temperature(dev, &temp);
- 	if (err < 0)
- 		return err;
- 
- 	return sprintf(buf, "%u\n", temp);
+-static int hwmon_thermal_set_trips(void *data, int low, int high)
++static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+ {
+-	struct hwmon_thermal_data *tdata = data;
++	struct hwmon_thermal_data *tdata = tz->devdata;
+ 	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
+ 	const struct hwmon_chip_info *chip = hwdev->chip;
+ 	const struct hwmon_channel_info **info = chip->info;
+@@ -203,7 +203,7 @@ static int hwmon_thermal_set_trips(void *data, int low, int high)
+ 	return 0;
  }
  
--static const struct thermal_zone_of_device_ops fsl_sata_ahci_of_thermal_ops = {
-+static const struct thermal_zone_device_ops fsl_sata_ahci_of_thermal_ops = {
- 	.get_temp = sata_ahci_read_temperature,
+-static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
++static const struct thermal_zone_device_ops hwmon_thermal_ops = {
+ 	.get_temp = hwmon_thermal_get_temp,
+ 	.set_trips = hwmon_thermal_set_trips,
+ };
+@@ -227,8 +227,8 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
+ 	tdata->dev = dev;
+ 	tdata->index = index;
+ 
+-	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
+-						   &hwmon_thermal_ops);
++	tzd = devm_thermal_of_zone_register(dev, index, tdata,
++					    &hwmon_thermal_ops);
+ 	if (IS_ERR(tzd)) {
+ 		if (PTR_ERR(tzd) != -ENODEV)
+ 			return PTR_ERR(tzd);
+diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+index 5187c6dd5a4f..4d75385f7d5e 100644
+--- a/drivers/hwmon/scpi-hwmon.c
++++ b/drivers/hwmon/scpi-hwmon.c
+@@ -62,9 +62,9 @@ static void scpi_scale_reading(u64 *value, struct sensor_data *sensor)
+ 	}
+ }
+ 
+-static int scpi_read_temp(void *dev, int *temp)
++static int scpi_read_temp(struct thermal_zone_device *tz, int *temp)
+ {
+-	struct scpi_thermal_zone *zone = dev;
++	struct scpi_thermal_zone *zone = tz->devdata;
+ 	struct scpi_sensors *scpi_sensors = zone->scpi_sensors;
+ 	struct scpi_ops *scpi_ops = scpi_sensors->scpi_ops;
+ 	struct sensor_data *sensor = &scpi_sensors->data[zone->sensor_id];
+@@ -121,7 +121,7 @@ scpi_show_label(struct device *dev, struct device_attribute *attr, char *buf)
+ 	return sprintf(buf, "%s\n", sensor->info.name);
+ }
+ 
+-static const struct thermal_zone_of_device_ops scpi_sensor_ops = {
++static const struct thermal_zone_device_ops scpi_sensor_ops = {
+ 	.get_temp = scpi_read_temp,
  };
  
-@@ -1131,8 +1136,8 @@ static int imx_ahci_probe(struct platform_device *pdev)
- 			ret = PTR_ERR(hwmon_dev);
- 			goto disable_clk;
- 		}
--		devm_thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
--					     &fsl_sata_ahci_of_thermal_ops);
-+		devm_thermal_of_zone_register(hwmon_dev, 0, hwmon_dev,
-+					      &fsl_sata_ahci_of_thermal_ops);
- 		dev_info(dev, "%s: sensor 'sata_ahci'\n", dev_name(hwmon_dev));
- 	}
+@@ -275,10 +275,10 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
  
+ 		zone->sensor_id = i;
+ 		zone->scpi_sensors = scpi_sensors;
+-		z = devm_thermal_zone_of_sensor_register(dev,
+-							 sensor->info.sensor_id,
+-							 zone,
+-							 &scpi_sensor_ops);
++		z = devm_thermal_of_zone_register(dev,
++						  sensor->info.sensor_id,
++						  zone,
++						  &scpi_sensor_ops);
+ 		/*
+ 		 * The call to thermal_zone_of_sensor_register returns
+ 		 * an error for sensors that are not associated with
 -- 
 2.25.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB7F582CFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284EA582AAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240761AbiG0Qwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S235303AbiG0QXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240804AbiG0QwF (ORCPT
+        with ESMTP id S235145AbiG0QWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:52:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5066454656;
-        Wed, 27 Jul 2022 09:33:53 -0700 (PDT)
+        Wed, 27 Jul 2022 12:22:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA004C616;
+        Wed, 27 Jul 2022 09:22:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E147B61A73;
-        Wed, 27 Jul 2022 16:33:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E885DC433D6;
-        Wed, 27 Jul 2022 16:33:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BFD2619BF;
+        Wed, 27 Jul 2022 16:22:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4222C433C1;
+        Wed, 27 Jul 2022 16:22:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939632;
-        bh=Vtrb3hA6GkN7VLsNOm4H7j5c2K8Sro92wFOX7ixBafA=;
+        s=korg; t=1658938943;
+        bh=Okep6Jt9kN+VW7sygVkWdndpohFXPsorOiiSUiUZ+hg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hEMKTy94Goaj3Png2da0C0zVT9pgHt5cq3edKKpFhItysiex+vmjWA8gqJxiE4nyX
-         KKL6hJ+5ABp3H6hFeMPIXjvUiLefs8ova4t5plBwB7U4s+wj1iDhHFyx1v+XOXia4k
-         jZLr+zI7ywWFxO/9d7XN1PKbJCfuBimWu7X6yEJc=
+        b=ChQ7W6KZCqqJAap7GUPP/VWaoB1kEC/bdsPNCqocES1gOCthw5C9JJCMcNvcAk5Bv
+         tST07GjBqjbAcFG8O4lDmec+YkJqWEzA43zSBiDvBvpKsKBlLkNmLOyZmNOFbhhEBX
+         Ld8qIvCMshOMPK5kP9wT5Mj+kXn3jOLzytjMHvt4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        stable <stable@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 048/105] tcp: Fix data-races around keepalive sysctl knobs.
+Subject: [PATCH 4.9 05/26] misc: rtsx_usb: set return value in rsp_buf alloc err path
 Date:   Wed, 27 Jul 2022 18:10:34 +0200
-Message-Id: <20220727161013.995516807@linuxfoundation.org>
+Message-Id: <20220727160959.355318920@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
+References: <20220727160959.122591422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,67 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit f2f316e287e6c2e3a1c5bab8d9b77ee03daa0463 ]
+[ Upstream commit 2cd37c2e72449a7add6da1183d20a6247d6db111 ]
 
-While reading sysctl_tcp_keepalive_(time|probes|intvl), they can be changed
-concurrently.  Thus, we need to add READ_ONCE() to their readers.
+Set return value in rsp_buf alloc error path before going to
+error handling.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+drivers/misc/cardreader/rtsx_usb.c:639:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!ucr->rsp_buf)
+               ^~~~~~~~~~~~~
+   drivers/misc/cardreader/rtsx_usb.c:678:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/misc/cardreader/rtsx_usb.c:639:2: note: remove the 'if' if its condition is always false
+           if (!ucr->rsp_buf)
+           ^~~~~~~~~~~~~~~~~~
+   drivers/misc/cardreader/rtsx_usb.c:622:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+
+Fixes: 3776c7855985 ("misc: rtsx_usb: use separate command and response buffers")
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220701165352.15687-1-skhan@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/tcp.h | 9 ++++++---
- net/smc/smc_llc.c | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ drivers/mfd/rtsx_usb.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 2a28e0925573..9ef9fd0677b5 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1447,21 +1447,24 @@ static inline int keepalive_intvl_when(const struct tcp_sock *tp)
- {
- 	struct net *net = sock_net((struct sock *)tp);
+diff --git a/drivers/mfd/rtsx_usb.c b/drivers/mfd/rtsx_usb.c
+index 134c6fbd9c50..fd859a7872a6 100644
+--- a/drivers/mfd/rtsx_usb.c
++++ b/drivers/mfd/rtsx_usb.c
+@@ -647,8 +647,10 @@ static int rtsx_usb_probe(struct usb_interface *intf,
+ 		return -ENOMEM;
  
--	return tp->keepalive_intvl ? : net->ipv4.sysctl_tcp_keepalive_intvl;
-+	return tp->keepalive_intvl ? :
-+		READ_ONCE(net->ipv4.sysctl_tcp_keepalive_intvl);
- }
+ 	ucr->rsp_buf = kmalloc(IOBUF_SIZE, GFP_KERNEL);
+-	if (!ucr->rsp_buf)
++	if (!ucr->rsp_buf) {
++		ret = -ENOMEM;
+ 		goto out_free_cmd_buf;
++	}
  
- static inline int keepalive_time_when(const struct tcp_sock *tp)
- {
- 	struct net *net = sock_net((struct sock *)tp);
+ 	usb_set_intfdata(intf, ucr);
  
--	return tp->keepalive_time ? : net->ipv4.sysctl_tcp_keepalive_time;
-+	return tp->keepalive_time ? :
-+		READ_ONCE(net->ipv4.sysctl_tcp_keepalive_time);
- }
- 
- static inline int keepalive_probes(const struct tcp_sock *tp)
- {
- 	struct net *net = sock_net((struct sock *)tp);
- 
--	return tp->keepalive_probes ? : net->ipv4.sysctl_tcp_keepalive_probes;
-+	return tp->keepalive_probes ? :
-+		READ_ONCE(net->ipv4.sysctl_tcp_keepalive_probes);
- }
- 
- static inline u32 keepalive_time_elapsed(const struct tcp_sock *tp)
-diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
-index ee1f0fdba085..0ef15f8fba90 100644
---- a/net/smc/smc_llc.c
-+++ b/net/smc/smc_llc.c
-@@ -1787,7 +1787,7 @@ void smc_llc_lgr_init(struct smc_link_group *lgr, struct smc_sock *smc)
- 	init_waitqueue_head(&lgr->llc_flow_waiter);
- 	init_waitqueue_head(&lgr->llc_msg_waiter);
- 	mutex_init(&lgr->llc_conf_mutex);
--	lgr->llc_testlink_time = net->ipv4.sysctl_tcp_keepalive_time;
-+	lgr->llc_testlink_time = READ_ONCE(net->ipv4.sysctl_tcp_keepalive_time);
- }
- 
- /* called after lgr was removed from lgr_list */
 -- 
 2.35.1
 

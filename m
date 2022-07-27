@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F1B582D57
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CD3582BB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240830AbiG0Qzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        id S238551AbiG0Qg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241090AbiG0QyT (ORCPT
+        with ESMTP id S237994AbiG0QfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:54:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B38550A5;
-        Wed, 27 Jul 2022 09:35:30 -0700 (PDT)
+        Wed, 27 Jul 2022 12:35:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3504E56B98;
+        Wed, 27 Jul 2022 09:27:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FBCC61A3F;
-        Wed, 27 Jul 2022 16:35:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D90FC433C1;
-        Wed, 27 Jul 2022 16:35:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 98B5FCE22FE;
+        Wed, 27 Jul 2022 16:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DFDC43470;
+        Wed, 27 Jul 2022 16:27:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939729;
-        bh=0Jadx+C+a0mw1bHyeJzABIsob/Z/w1uORvsOwJChtE4=;
+        s=korg; t=1658939230;
+        bh=Z4lk6ktUBHjRvZGmo2nriJhEHvGNUYbhpQvob/fyIIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=op31ULRHTz29ivwFoE5NSwxou32c3c6nvdy3bfUj6iDs0NCBvVBEfoDK2+GxC3CB7
-         sl20hZS5DHVcRxSXGEKbNYH5q4ZXs2dthZgrntjHrwR8mRV/9JWsZ69/z6YI3Q+ga9
-         EUIdOQTIKhiyT6xucxEDIIzuxI1GiY+wlG4AErqY=
+        b=bBQn15pzPtRUD03fi96plEisfMp8W/qiRARSuedqxwt/KBX5u8R1wl9PY0Ekyc4CW
+         LRCNmaASpctPOB0Za6TU3ez0XxHAtvjizoPgSlE325BfRHAh7SsrcsI9nw+jYQNiUA
+         Akp/Uk1F9n/JpfRRop8uTyUY6xuijR2VgcGHpOC8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 5.10 082/105] x86/bugs: Warn when "ibrs" mitigation is selected on Enhanced IBRS parts
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+        Carl Vanderlip <quic_carlv@quicinc.com>
+Subject: [PATCH 4.19 59/62] PCI: hv: Fix multi-MSI to allow more than one MSI vector
 Date:   Wed, 27 Jul 2022 18:11:08 +0200
-Message-Id: <20220727161015.389362802@linuxfoundation.org>
+Message-Id: <20220727161006.444801026@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
 
-commit eb23b5ef9131e6d65011de349a4d25ef1b3d4314 upstream.
+commit 08e61e861a0e47e5e1a3fb78406afd6b0cea6b6d upstream.
 
-IBRS mitigation for spectre_v2 forces write to MSR_IA32_SPEC_CTRL at
-every kernel entry/exit. On Enhanced IBRS parts setting
-MSR_IA32_SPEC_CTRL[IBRS] only once at boot is sufficient. MSR writes at
-every kernel entry/exit incur unnecessary performance loss.
+If the allocation of multiple MSI vectors for multi-MSI fails in the core
+PCI framework, the framework will retry the allocation as a single MSI
+vector, assuming that meets the min_vecs specified by the requesting
+driver.
 
-When Enhanced IBRS feature is present, print a warning about this
-unnecessary performance loss.
+Hyper-V advertises that multi-MSI is supported, but reuses the VECTOR
+domain to implement that for x86.  The VECTOR domain does not support
+multi-MSI, so the alloc will always fail and fallback to a single MSI
+allocation.
 
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/2a5eaf54583c2bfe0edc4fea64006656256cca17.1657814857.git.pawan.kumar.gupta@linux.intel.com
+In short, Hyper-V advertises a capability it does not implement.
+
+Hyper-V can support multi-MSI because it coordinates with the hypervisor
+to map the MSIs in the IOMMU's interrupt remapper, which is something the
+VECTOR domain does not have.  Therefore the fix is simple - copy what the
+x86 IOMMU drivers (AMD/Intel-IR) do by removing
+X86_IRQ_ALLOC_CONTIGUOUS_VECTORS after calling the VECTOR domain's
+pci_msi_prepare().
+
+4.19 backport - adds the hv_msi_prepare wrapper function.
+X86_IRQ_ALLOC_TYPE_PCI_MSI changed to X86_IRQ_ALLOC_TYPE_MSI
+(same value).
+
+Fixes: 4daace0d8ce8 ("PCI: hv: Add paravirtual PCI front-end for Microsoft Hyper-V VMs")
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
+Link: https://lore.kernel.org/r/1649856981-14649-1-git-send-email-quic_jhugo@quicinc.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Carl Vanderlip <quic_carlv@quicinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/bugs.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/pci/controller/pci-hyperv.c |   17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -931,6 +931,7 @@ static inline const char *spectre_v2_mod
- #define SPECTRE_V2_LFENCE_MSG "WARNING: LFENCE mitigation is not recommended for this CPU, data leaks possible!\n"
- #define SPECTRE_V2_EIBRS_EBPF_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS on, data leaks possible via Spectre v2 BHB attacks!\n"
- #define SPECTRE_V2_EIBRS_LFENCE_EBPF_SMT_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS+LFENCE mitigation and SMT, data leaks possible via Spectre v2 BHB attacks!\n"
-+#define SPECTRE_V2_IBRS_PERF_MSG "WARNING: IBRS mitigation selected on Enhanced IBRS CPU, this may cause unnecessary performance loss\n"
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -893,6 +893,21 @@ static void hv_irq_mask(struct irq_data
+ 	pci_msi_mask_irq(data);
+ }
  
- #ifdef CONFIG_BPF_SYSCALL
- void unpriv_ebpf_notify(int new_state)
-@@ -1371,6 +1372,8 @@ static void __init spectre_v2_select_mit
++static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
++			  int nvec, msi_alloc_info_t *info)
++{
++	int ret = pci_msi_prepare(domain, dev, nvec, info);
++
++	/*
++	 * By using the interrupt remapper in the hypervisor IOMMU, contiguous
++	 * CPU vectors is not needed for multi-MSI
++	 */
++	if (info->type == X86_IRQ_ALLOC_TYPE_MSI)
++		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
++
++	return ret;
++}
++
+ /**
+  * hv_irq_unmask() - "Unmask" the IRQ by setting its current
+  * affinity.
+@@ -1240,7 +1255,7 @@ static irq_hw_number_t hv_msi_domain_ops
  
- 	case SPECTRE_V2_IBRS:
- 		setup_force_cpu_cap(X86_FEATURE_KERNEL_IBRS);
-+		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED))
-+			pr_warn(SPECTRE_V2_IBRS_PERF_MSG);
- 		break;
- 
- 	case SPECTRE_V2_LFENCE:
+ static struct msi_domain_ops hv_msi_ops = {
+ 	.get_hwirq	= hv_msi_domain_ops_get_hwirq,
+-	.msi_prepare	= pci_msi_prepare,
++	.msi_prepare	= hv_msi_prepare,
+ 	.set_desc	= pci_msi_set_desc,
+ 	.msi_free	= hv_msi_free,
+ };
 
 

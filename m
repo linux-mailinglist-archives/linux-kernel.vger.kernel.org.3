@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B627E582CC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F0D582E4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240589AbiG0QuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S240271AbiG0RKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240643AbiG0QtJ (ORCPT
+        with ESMTP id S241664AbiG0RJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:49:09 -0400
+        Wed, 27 Jul 2022 13:09:25 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2C761735;
-        Wed, 27 Jul 2022 09:32:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90317437D;
+        Wed, 27 Jul 2022 09:41:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A3DAB8200D;
-        Wed, 27 Jul 2022 16:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72314C433D6;
-        Wed, 27 Jul 2022 16:32:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E73D7B821D2;
+        Wed, 27 Jul 2022 16:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54256C433C1;
+        Wed, 27 Jul 2022 16:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939558;
-        bh=cz+hdvCS81/1ofgS66D9vhSA5DTELGq6dMXwQkqw964=;
+        s=korg; t=1658940059;
+        bh=TJ7lSjhNZhHZWqjTPBeUQE7e2CXAbgfjDfZB53K4Vgw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jYVd2EyksE928bZo/Vh2b+ldR0GCH2eDSItd6WhweQ/Hy0g39sARLv8V2Ij1foBou
-         U5NnRcjvVmVYh5OF3yL1d/ul19Z6JhD+DrpOfkVAqkXhcIp3GxOdJyuyg+xQbrzCCW
-         GNYoCYmh5L5kcGHa/lUHiHVRiDRPyBCz2pO7+vXc=
+        b=lVwMNYB4zvlYDlqNjbHg3e8l5Ym9L8g/wy5CRZJMTHrmQ7GtFqhswREXxjd1o3mV1
+         q0ZlvFnYu9fWbBTE5lv5qg+BhcY7J0HbJVIbr5FJtyrO4BdbXLNOfWZhqFojDtSkgr
+         iR33X1wNrRJp7qBYcDia8tGo8BpVTfInUYuU18lM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: [PATCH 5.10 008/105] block: fix bounce_clone_bio for passthrough bios
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 090/201] tcp: Fix data-races around keepalive sysctl knobs.
 Date:   Wed, 27 Jul 2022 18:09:54 +0200
-Message-Id: <20220727161012.411398366@linuxfoundation.org>
+Message-Id: <20220727161031.478958779@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,77 +54,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit b90994c6ab623baf9268df9710692f14920ce9d2 upstream.
+[ Upstream commit f2f316e287e6c2e3a1c5bab8d9b77ee03daa0463 ]
 
-Now that bio_alloc_bioset does not fall back to kmalloc for a NULL
-bio_set, handle that case explicitly and simplify the calling
-conventions.
+While reading sysctl_tcp_keepalive_(time|probes|intvl), they can be changed
+concurrently.  Thus, we need to add READ_ONCE() to their readers.
 
-Based on an earlier patch from Chaitanya Kulkarni.
-
-Fixes: 3175199ab0ac ("block: split bio_kmalloc from bio_alloc_bioset")
-Reported-by: Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bounce.c |   17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ include/net/tcp.h | 9 ++++++---
+ net/smc/smc_llc.c | 2 +-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
---- a/block/bounce.c
-+++ b/block/bounce.c
-@@ -214,8 +214,7 @@ static void bounce_end_io_read_isa(struc
- 	__bounce_end_io_read(bio, &isa_page_pool);
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 3b97db2d438f..cae0c9102eda 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1469,21 +1469,24 @@ static inline int keepalive_intvl_when(const struct tcp_sock *tp)
+ {
+ 	struct net *net = sock_net((struct sock *)tp);
+ 
+-	return tp->keepalive_intvl ? : net->ipv4.sysctl_tcp_keepalive_intvl;
++	return tp->keepalive_intvl ? :
++		READ_ONCE(net->ipv4.sysctl_tcp_keepalive_intvl);
  }
  
--static struct bio *bounce_clone_bio(struct bio *bio_src, gfp_t gfp_mask,
--		struct bio_set *bs)
-+static struct bio *bounce_clone_bio(struct bio *bio_src, gfp_t gfp_mask)
+ static inline int keepalive_time_when(const struct tcp_sock *tp)
  {
- 	struct bvec_iter iter;
- 	struct bio_vec bv;
-@@ -242,8 +241,11 @@ static struct bio *bounce_clone_bio(stru
- 	 *    asking for trouble and would force extra work on
- 	 *    __bio_clone_fast() anyways.
- 	 */
--
--	bio = bio_alloc_bioset(gfp_mask, bio_segments(bio_src), bs);
-+	if (bio_is_passthrough(bio_src))
-+		bio = bio_kmalloc(gfp_mask, bio_segments(bio_src));
-+	else
-+		bio = bio_alloc_bioset(gfp_mask, bio_segments(bio_src),
-+				       &bounce_bio_set);
- 	if (!bio)
- 		return NULL;
- 	bio->bi_disk		= bio_src->bi_disk;
-@@ -294,7 +296,6 @@ static void __blk_queue_bounce(struct re
- 	unsigned i = 0;
- 	bool bounce = false;
- 	int sectors = 0;
--	bool passthrough = bio_is_passthrough(*bio_orig);
+ 	struct net *net = sock_net((struct sock *)tp);
  
- 	bio_for_each_segment(from, *bio_orig, iter) {
- 		if (i++ < BIO_MAX_PAGES)
-@@ -305,14 +306,14 @@ static void __blk_queue_bounce(struct re
- 	if (!bounce)
- 		return;
+-	return tp->keepalive_time ? : net->ipv4.sysctl_tcp_keepalive_time;
++	return tp->keepalive_time ? :
++		READ_ONCE(net->ipv4.sysctl_tcp_keepalive_time);
+ }
  
--	if (!passthrough && sectors < bio_sectors(*bio_orig)) {
-+	if (!bio_is_passthrough(*bio_orig) &&
-+	    sectors < bio_sectors(*bio_orig)) {
- 		bio = bio_split(*bio_orig, sectors, GFP_NOIO, &bounce_bio_split);
- 		bio_chain(bio, *bio_orig);
- 		submit_bio_noacct(*bio_orig);
- 		*bio_orig = bio;
- 	}
--	bio = bounce_clone_bio(*bio_orig, GFP_NOIO, passthrough ? NULL :
--			&bounce_bio_set);
-+	bio = bounce_clone_bio(*bio_orig, GFP_NOIO);
+ static inline int keepalive_probes(const struct tcp_sock *tp)
+ {
+ 	struct net *net = sock_net((struct sock *)tp);
  
- 	/*
- 	 * Bvec table can't be updated by bio_for_each_segment_all(),
+-	return tp->keepalive_probes ? : net->ipv4.sysctl_tcp_keepalive_probes;
++	return tp->keepalive_probes ? :
++		READ_ONCE(net->ipv4.sysctl_tcp_keepalive_probes);
+ }
+ 
+ static inline u32 keepalive_time_elapsed(const struct tcp_sock *tp)
+diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
+index ee1f0fdba085..0ef15f8fba90 100644
+--- a/net/smc/smc_llc.c
++++ b/net/smc/smc_llc.c
+@@ -1787,7 +1787,7 @@ void smc_llc_lgr_init(struct smc_link_group *lgr, struct smc_sock *smc)
+ 	init_waitqueue_head(&lgr->llc_flow_waiter);
+ 	init_waitqueue_head(&lgr->llc_msg_waiter);
+ 	mutex_init(&lgr->llc_conf_mutex);
+-	lgr->llc_testlink_time = net->ipv4.sysctl_tcp_keepalive_time;
++	lgr->llc_testlink_time = READ_ONCE(net->ipv4.sysctl_tcp_keepalive_time);
+ }
+ 
+ /* called after lgr was removed from lgr_list */
+-- 
+2.35.1
+
 
 

@@ -2,160 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA195827FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE235827FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbiG0Nsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S233096AbiG0Nth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbiG0Nsv (ORCPT
+        with ESMTP id S231518AbiG0Ntf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:48:51 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95F91FCF4;
-        Wed, 27 Jul 2022 06:48:48 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B95BBC0013;
-        Wed, 27 Jul 2022 13:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1658929727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7hVTCF8pQk67tXawi7VWdLqy2Z4rkLKGc7Ao9b+EOr0=;
-        b=d8plXn8Ftzl5po6NJ3IGIJUV7xErvumcSjVeOS3Zu0NgUS/wjL8mQ+fM0X2DGY+QzoJOEN
-        lv9pANU3CvU1GI5dXfrzjrEtL7GpnmszrbB5fGyoSDkhPCsJdRmnYintMHB6nCG3iU2HQ9
-        O4EkMCzTmtd4iRvkR4gM7Uu5PXXE/SgH0ve2+2gC27N09wC+eKrjRQmE1sKqRREflLDSRJ
-        WXvGUCERW1007plKridZaigY8Qlst9WHcOPvQXylNA515DJOlOsqDMt3lq7HrvKt2EY3oj
-        55fw4GW0syiPsW9DRSreAvuWJSIMVbWgTmiRXrpQ0/EASkWIaAZVq5sM2GqZyw==
-Date:   Wed, 27 Jul 2022 15:48:44 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Richard Cochran <richardcochran@gmail.com>,
-        Horatiu.Vultur@microchip.com, Allan.Nielsen@microchip.com,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next 3/6] net: lan966x: Add QUSGMII support for
- lan966x
-Message-ID: <20220727154844.3eb3c3d6@pc-10.home>
-In-Reply-To: <YoZTj69Une9aKd2C@shell.armlinux.org.uk>
-References: <20220519135647.465653-1-maxime.chevallier@bootlin.com>
-        <20220519135647.465653-4-maxime.chevallier@bootlin.com>
-        <YoZTj69Une9aKd2C@shell.armlinux.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Wed, 27 Jul 2022 09:49:35 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDA41FCF4;
+        Wed, 27 Jul 2022 06:49:33 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id os14so31635467ejb.4;
+        Wed, 27 Jul 2022 06:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=Vj2LN4XjfRsXRFnZMqSEcbIyXXU8xmtwUttCD6kAXxY=;
+        b=Tb1b90evxLS7TTWzEzwyBCgrmxz0YM5dpAy1/F866dZvLHP68FjWursIw/ySDWRemz
+         M4p37SafJefIepx9cOHQphOJBtw2M9bTQv8OPsD/TPPsfz+VmxzjGI2ZFm9kgDYQJ/3p
+         JkZeU3KPSVquIDVbBgmavOBBrpeGo29c+i4refDoKdyOcHqXGarok1ddZ30yNuzy5gE3
+         wXLQwFv7f8y7+KTAOJJUqVIl1eZNRXoz3TWP5Ii672v3E8jAQPa7yDcpaTZhDz9afU9A
+         b1quhZ3UpBdkecCrguHqvUoysqSPf7YJ2KqR5wvPjalKbW17jUg3UvnNWQ5P7AcsKO7u
+         Wruw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=Vj2LN4XjfRsXRFnZMqSEcbIyXXU8xmtwUttCD6kAXxY=;
+        b=7u3i9z4wj9FG66Z0YZCAoMoSrio1x7MtH3ZVAMaoRcv2EPuxIhSXthz3/4zkhPvf4+
+         79PAVNET6yYw4MDFl8pCPjJJpgNhOAD13pEer0n2KH6u2b5yVQhUX7LUyzsUchvXhmqX
+         IcRLBXA6L+x9C3aLqjTa1rTaZfEBQg75//FEtH8rF3SZfWbUPPSeQ316eyPNsj5mC+7t
+         hAadnHPoyVpkcQJ1dYJg8Za4fw+uaBnXDXwj+DBd2EIlefhD4d+U2HN+Tkzt6Uiu3s1d
+         iFtvl7X+NcPzmWND41FzAeF9Pcfx4qMEBM5sA3eh+Kmd/5L0YNRouQZ0Us50/1Ag3mPw
+         LUXw==
+X-Gm-Message-State: AJIora+3ISPd0DC6K6kD4XyAZo6jWabcJBmU3/PcVpdeGBaRFLrDzpgO
+        JXonHWXV1mjC6W+HTH05y8o=
+X-Google-Smtp-Source: AGRyM1smRBREMExG/t/+rSz8lLFAZH6N4BXeOwq0BEkIIiuFrZVPPHQQeV6ZdJtYMUZ1Aox16zLP9w==
+X-Received: by 2002:a17:907:d8d:b0:72f:75:9bbd with SMTP id go13-20020a1709070d8d00b0072f00759bbdmr18076377ejc.148.1658929771538;
+        Wed, 27 Jul 2022 06:49:31 -0700 (PDT)
+Received: from [10.176.234.249] ([137.201.254.41])
+        by smtp.googlemail.com with ESMTPSA id j15-20020aa7de8f000000b0043be16f5f4csm6799122edv.52.2022.07.27.06.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 06:49:30 -0700 (PDT)
+Message-ID: <94bcf58b268b1fb468f5be20d9b93bf8e5d3ce57.camel@gmail.com>
+Subject: Re: [PATCH v4 2/7] scsi: ufs: wb: Change wb_enabled condition test
+From:   Bean Huo <huobean@gmail.com>
+To:     j-young.choi@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Wed, 27 Jul 2022 15:49:29 +0200
+In-Reply-To: <20220727070522epcms2p5ad2dd21b471acee963dd58b37d35e11f@epcms2p5>
+References: <20220727070410epcms2p5206785e4d960b32dcbb6729710dab535@epcms2p5>
+         <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
+         <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p5>
+         <20220727070522epcms2p5ad2dd21b471acee963dd58b37d35e11f@epcms2p5>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Russell,
+On Wed, 2022-07-27 at 16:05 +0900, Jinyoung CHOI wrote:
+> Changed to improve readability.
+> As implemented in ufshcd_wb_togle_flush(), the conditional test is
+> modified in the same way.
+>=20
+> Reviewed-by: Avri Altman <avri.altman@wdc.com>
+> Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
 
-On Thu, 19 May 2022 15:26:23 +0100
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-
-> Hi,
-> 
-> On Thu, May 19, 2022 at 03:56:44PM +0200, Maxime Chevallier wrote:
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h index
-> > e6642083ab9e..304c784f48f6 100644 ---
-> > a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h +++
-> > b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h @@ -452,4
-> > +452,10 @@ static inline void lan_rmw(u32 val, u32 mask, struct
-> > lan966x *lan966x, gcnt, gwidth, raddr, rinst, rcnt, rwidth)); }
-> >  
-> > +static inline bool lan966x_is_qsgmii(phy_interface_t mode)
-> > +{
-> > +	return (mode == PHY_INTERFACE_MODE_QSGMII) ||
-> > +	       (mode == PHY_INTERFACE_MODE_QUSGMII);
-> > +}  
->
-> Maybe linux/phy.h should provide a helper, something like:
-> 
-> 	phy_interface_serdes_lanes()
-> 
-> that returns how many serdes lanes the interface mode uses?
-
-Sorry about the delayed answer, I was resuming the work on this, and
-realised that although a helper would be indeed great, especially for
-generic PHY drivers, it won't help much in this case since
-QSGMII/QUSGMII both use 1 serdes lane, as SGMII and such. If I'm not
-mistaken, QSGMII is SGMII clocked at 5Gbps with a specific preamble
-allowing to identify the src/dst port.
-
-We could however imagine a helper identifying the number of links, or
-lanes (or another terminology) that is carried by a given mode. I know
-that besides QSGMII for 4 ports, there exists PSGMII for 5 ports, and
-OSGMII for 8 ports, so this would definitely prove useful in the
-future.
-
-Sorry if this ends-up being a misunderstanding on the terminology,
-we're probably already talking about the same thing, but I think that
-"serdes lane" would better describe the number of physical differential
-pairs that creates the link (like, 1 for SGMII, 2 for RXAUI, 4 for XAUI
-and so on).
-
-maybe something like
-
-	phy_interface_lines() or
-	phy_interface_num_ports() or simply
-	phy_interface_lanes()
-
-> > diff --git
-> > a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-> > b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c index
-> > 38a7e95d69b4..96708352f53e 100644 ---
-> > a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c +++
-> > b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c @@
-> > -28,11 +28,18 @@ static int lan966x_phylink_mac_prepare(struct
-> > phylink_config *config, phy_interface_t iface) { struct
-> > lan966x_port *port = netdev_priv(to_net_dev(config->dev));
-> > +	phy_interface_t serdes_mode = iface;
-> >  	int err;
-> >  
-> >  	if (port->serdes) {
-> > +		/* As far as the SerDes is concerned, QUSGMII is
-> > the same as
-> > +		 * QSGMII.
-> > +		 */
-> > +		if (lan966x_is_qsgmii(iface))
-> > +			serdes_mode = PHY_INTERFACE_MODE_QSGMII;
-> > +
-> >  		err = phy_set_mode_ext(port->serdes,
-> > PHY_MODE_ETHERNET,
-> > -				       iface);
-> > +				       serdes_mode);  
-> 
-> I don't think that the ethernet MAC driver should be changing the
-> interface mode before passing it down to the generic PHY layer -
-> phy_set_mode_ext() is defined to take the phy interface mode, and any
-> aliasing of modes should really be up to the generic PHY driver not
-> the ethernet MAC driver.
-
-Indeed, I'll split the series so that we first add support for the new
-mode, and then send separate series for the generic PHY driver on one
-side, and inband extensions on the other one.
-
-Thanks,
-
-Maxime
-
-> Thanks.
-> 
-
+Reviewed-by: Bean Huo <beanhuo@micron.com>

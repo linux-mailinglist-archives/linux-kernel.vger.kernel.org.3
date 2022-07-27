@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048C2582E5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB86582CD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbiG0RLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S240623AbiG0QuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238191AbiG0RLT (ORCPT
+        with ESMTP id S240732AbiG0QtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:11:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD0374DDB;
-        Wed, 27 Jul 2022 09:41:33 -0700 (PDT)
+        Wed, 27 Jul 2022 12:49:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A1B61719;
+        Wed, 27 Jul 2022 09:32:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D14601C3;
-        Wed, 27 Jul 2022 16:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DB3C433D7;
-        Wed, 27 Jul 2022 16:41:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9A5A619BF;
+        Wed, 27 Jul 2022 16:32:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3660C433C1;
+        Wed, 27 Jul 2022 16:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940091;
-        bh=bU2/xVGvLwc56ejQkjV+akjbrJs3moE20KEfmebPPyM=;
+        s=korg; t=1658939567;
+        bh=SHk0fwewRjaoZyPCGm84OVVHt3jkU1HAF03YpkNu5AU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z6O+Aq1BZK7rj4lFS4YxwN6H2vv0R0u09UQW1joLBAdITJcsM2LElYn5n/CIaS0lc
-         9aoVBQssq1Bx6ON/e1KYwJi4apto6YxxWlPtsuQTPCAdqMzW2vUmjTzZ9PZ6Jeb84q
-         v+QMv4uyzyTs2yO/ojdkw46lq7Ysp2i2YvqAEVKk=
+        b=l1xdjcfZhlOkm/LPw7vrjN0ionug5F153AuUvAiJtr5odUiHDY8v94EYktRiiFyBn
+         7otmWWt12OscbeMvMr8jga4HHW7rx81TkTW+aZ4jxTzDKrRke+o4IdECxoFTT6AMSD
+         bQbifsn77pQNBUe6yUOTV0ZJc+JmsLdcdj1SDQXo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 100/201] tcp: Fix data-races around sysctl_tcp_fastopen_blackhole_timeout.
-Date:   Wed, 27 Jul 2022 18:10:04 +0200
-Message-Id: <20220727161031.886161020@linuxfoundation.org>
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Carl Vanderlip <quic_carlv@quicinc.com>
+Subject: [PATCH 5.10 019/105] PCI: hv: Reuse existing IRTE allocation in compose_msi_msg()
+Date:   Wed, 27 Jul 2022 18:10:05 +0200
+Message-Id: <20220727161012.867192792@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
 
-[ Upstream commit 021266ec640c7a4527e6cd4b7349a512b351de1d ]
+commit b4b77778ecc5bfbd4e77de1b2fd5c1dd3c655f1f upstream.
 
-While reading sysctl_tcp_fastopen_blackhole_timeout, it can be changed
-concurrently.  Thus, we need to add READ_ONCE() to its readers.
+Currently if compose_msi_msg() is called multiple times, it will free any
+previous IRTE allocation, and generate a new allocation.  While nothing
+prevents this from occurring, it is extraneous when Linux could just reuse
+the existing allocation and avoid a bunch of overhead.
 
-Fixes: cf1ef3f0719b ("net/tcp_fastopen: Disable active side TFO in certain scenarios")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+However, when future IRTE allocations operate on blocks of MSIs instead of
+a single line, freeing the allocation will impact all of the lines.  This
+could cause an issue where an allocation of N MSIs occurs, then some of
+the lines are retargeted, and finally the allocation is freed/reallocated.
+The freeing of the allocation removes all of the configuration for the
+entire block, which requires all the lines to be retargeted, which might
+not happen since some lines might already be unmasked/active.
+
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
+Tested-by: Dexuan Cui <decui@microsoft.com>
+Tested-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/1652282582-21595-1-git-send-email-quic_jhugo@quicinc.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Carl Vanderlip <quic_carlv@quicinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_fastopen.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/pci/controller/pci-hyperv.c |   16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/net/ipv4/tcp_fastopen.c b/net/ipv4/tcp_fastopen.c
-index 936544a4753e..6e0a8ef5e816 100644
---- a/net/ipv4/tcp_fastopen.c
-+++ b/net/ipv4/tcp_fastopen.c
-@@ -495,7 +495,7 @@ void tcp_fastopen_active_disable(struct sock *sk)
- {
- 	struct net *net = sock_net(sk);
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -1409,6 +1409,15 @@ static void hv_compose_msi_msg(struct ir
+ 	u32 size;
+ 	int ret;
  
--	if (!sock_net(sk)->ipv4.sysctl_tcp_fastopen_blackhole_timeout)
-+	if (!READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen_blackhole_timeout))
- 		return;
++	/* Reuse the previous allocation */
++	if (data->chip_data) {
++		int_desc = data->chip_data;
++		msg->address_hi = int_desc->address >> 32;
++		msg->address_lo = int_desc->address & 0xffffffff;
++		msg->data = int_desc->data;
++		return;
++	}
++
+ 	pdev = msi_desc_to_pci_dev(irq_data_get_msi_desc(data));
+ 	dest = irq_data_get_effective_affinity_mask(data);
+ 	pbus = pdev->bus;
+@@ -1418,13 +1427,6 @@ static void hv_compose_msi_msg(struct ir
+ 	if (!hpdev)
+ 		goto return_null_message;
  
- 	/* Paired with READ_ONCE() in tcp_fastopen_active_should_disable() */
-@@ -516,7 +516,8 @@ void tcp_fastopen_active_disable(struct sock *sk)
-  */
- bool tcp_fastopen_active_should_disable(struct sock *sk)
- {
--	unsigned int tfo_bh_timeout = sock_net(sk)->ipv4.sysctl_tcp_fastopen_blackhole_timeout;
-+	unsigned int tfo_bh_timeout =
-+		READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fastopen_blackhole_timeout);
- 	unsigned long timeout;
- 	int tfo_da_times;
- 	int multiplier;
--- 
-2.35.1
-
+-	/* Free any previous message that might have already been composed. */
+-	if (data->chip_data) {
+-		int_desc = data->chip_data;
+-		data->chip_data = NULL;
+-		hv_int_desc_free(hpdev, int_desc);
+-	}
+-
+ 	int_desc = kzalloc(sizeof(*int_desc), GFP_ATOMIC);
+ 	if (!int_desc)
+ 		goto drop_reference;
 
 

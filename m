@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78D5582ED1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4775582B46
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiG0RRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S237605AbiG0QbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241656AbiG0RQr (ORCPT
+        with ESMTP id S236924AbiG0Qag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:16:47 -0400
+        Wed, 27 Jul 2022 12:30:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E625C95B;
-        Wed, 27 Jul 2022 09:43:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4FA2BB07;
+        Wed, 27 Jul 2022 09:25:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E82FB60D3B;
-        Wed, 27 Jul 2022 16:43:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0053FC433D6;
-        Wed, 27 Jul 2022 16:43:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E94AD619FE;
+        Wed, 27 Jul 2022 16:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0141FC433D7;
+        Wed, 27 Jul 2022 16:25:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940194;
-        bh=c9s70STEPcpvDZalC6QpagPkoFuKsN/joFPCxLWbenc=;
+        s=korg; t=1658939105;
+        bh=cMmgLo8sVs5a68Lp4rfu0ycU74LR5qPbIhOo1hm/mhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hbh2bz42nt4zgCZunMB+YditNjuU45rZg0FT/mloBhGtFpEuP1T8HI5NdHud8craC
-         csSCTOyz3OoYFFmHDAfaAEXSp/K1Q1XR6qC+po2HVtSJ2Srciuy9NkdPJBEIE+NhcJ
-         Ql5+sCfcdfngftM7gfnjoszsGGPtiRlx5yADiLYQ=
+        b=T9r7ne1SQtQNwv66jVcM6Hf7+ywaAB9lLTaqEZcQIukkvWGcyIMdCgslzJS3j5Xkr
+         YEPYcMollR99JtKvqowuErPvlcLpZ29+LiiX6NzG7+RYSdbNxRxHCDFUDvNv8DkcWY
+         9yeub8/vP78BA1sLIzP4XC37XrifxGVBPtA5FrUw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Piotr Skajewski <piotrx.skajewski@intel.com>,
-        Marek Szlosek <marek.szlosek@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 107/201] ixgbe: Add locking to prevent panic when setting sriov_numvfs to zero
-Date:   Wed, 27 Jul 2022 18:10:11 +0200
-Message-Id: <20220727161032.187952434@linuxfoundation.org>
+Subject: [PATCH 4.19 03/62] xfrm: xfrm_policy: fix a possible double xfrm_pols_put() in xfrm_bundle_lookup()
+Date:   Wed, 27 Jul 2022 18:10:12 +0200
+Message-Id: <20220727161004.296631438@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,136 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Piotr Skajewski <piotrx.skajewski@intel.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 1e53834ce541d4fe271cdcca7703e50be0a44f8a ]
+[ Upstream commit f85daf0e725358be78dfd208dea5fd665d8cb901 ]
 
-It is possible to disable VFs while the PF driver is processing requests
-from the VF driver.  This can result in a panic.
+xfrm_policy_lookup() will call xfrm_pol_hold_rcu() to get a refcount of
+pols[0]. This refcount can be dropped in xfrm_expand_policies() when
+xfrm_expand_policies() return error. pols[0]'s refcount is balanced in
+here. But xfrm_bundle_lookup() will also call xfrm_pols_put() with
+num_pols == 1 to drop this refcount when xfrm_expand_policies() return
+error.
 
-BUG: unable to handle kernel paging request at 000000000000106c
-PGD 0 P4D 0
-Oops: 0000 [#1] SMP NOPTI
-CPU: 8 PID: 0 Comm: swapper/8 Kdump: loaded Tainted: G I      --------- -
-Hardware name: Dell Inc. PowerEdge R740/06WXJT, BIOS 2.8.2 08/27/2020
-RIP: 0010:ixgbe_msg_task+0x4c8/0x1690 [ixgbe]
-Code: 00 00 48 8d 04 40 48 c1 e0 05 89 7c 24 24 89 fd 48 89 44 24 10 83 ff
-01 0f 84 b8 04 00 00 4c 8b 64 24 10 4d 03 a5 48 22 00 00 <41> 80 7c 24 4c
-00 0f 84 8a 03 00 00 0f b7 c7 83 f8 08 0f 84 8f 0a
-RSP: 0018:ffffb337869f8df8 EFLAGS: 00010002
-RAX: 0000000000001020 RBX: 0000000000000000 RCX: 000000000000002b
-RDX: 0000000000000002 RSI: 0000000000000008 RDI: 0000000000000006
-RBP: 0000000000000006 R08: 0000000000000002 R09: 0000000000029780
-R10: 00006957d8f42832 R11: 0000000000000000 R12: 0000000000001020
-R13: ffff8a00e8978ac0 R14: 000000000000002b R15: ffff8a00e8979c80
-FS:  0000000000000000(0000) GS:ffff8a07dfd00000(0000) knlGS:00000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000000106c CR3: 0000000063e10004 CR4: 00000000007726e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <IRQ>
- ? ttwu_do_wakeup+0x19/0x140
- ? try_to_wake_up+0x1cd/0x550
- ? ixgbevf_update_xcast_mode+0x71/0xc0 [ixgbevf]
- ixgbe_msix_other+0x17e/0x310 [ixgbe]
- __handle_irq_event_percpu+0x40/0x180
- handle_irq_event_percpu+0x30/0x80
- handle_irq_event+0x36/0x53
- handle_edge_irq+0x82/0x190
- handle_irq+0x1c/0x30
- do_IRQ+0x49/0xd0
- common_interrupt+0xf/0xf
+This patch also fix an illegal address access. pols[0] will save a error
+point when xfrm_policy_lookup fails. This lead to xfrm_pols_put to resolve
+an illegal address in xfrm_bundle_lookup's error path.
 
-This can be eventually be reproduced with the following script:
+Fix these by setting num_pols = 0 in xfrm_expand_policies()'s error path.
 
-while :
-do
-    echo 63 > /sys/class/net/<devname>/device/sriov_numvfs
-    sleep 1
-    echo 0 > /sys/class/net/<devname>/device/sriov_numvfs
-    sleep 1
-done
-
-Add lock when disabling SR-IOV to prevent process VF mailbox communication.
-
-Fixes: d773d1310625 ("ixgbe: Fix memory leak when SR-IOV VFs are direct assigned")
-Signed-off-by: Piotr Skajewski <piotrx.skajewski@intel.com>
-Tested-by: Marek Szlosek <marek.szlosek@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Link: https://lore.kernel.org/r/20220715214456.2968711-1-anthony.l.nguyen@intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 80c802f3073e ("xfrm: cache bundles instead of policies for outgoing flows")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe.h       | 1 +
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c  | 3 +++
- drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c | 6 ++++++
- 3 files changed, 10 insertions(+)
+ net/xfrm/xfrm_policy.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe.h b/drivers/net/ethernet/intel/ixgbe/ixgbe.h
-index a604552fa634..c375a5d54b40 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe.h
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe.h
-@@ -770,6 +770,7 @@ struct ixgbe_adapter {
- #ifdef CONFIG_IXGBE_IPSEC
- 	struct ixgbe_ipsec *ipsec;
- #endif /* CONFIG_IXGBE_IPSEC */
-+	spinlock_t vfs_lock;
- };
- 
- static inline u8 ixgbe_max_rss_indices(struct ixgbe_adapter *adapter)
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index 750b02bb2fdc..8cb20af51ecd 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -6397,6 +6397,9 @@ static int ixgbe_sw_init(struct ixgbe_adapter *adapter,
- 	/* n-tuple support exists, always init our spinlock */
- 	spin_lock_init(&adapter->fdir_perfect_lock);
- 
-+	/* init spinlock to avoid concurrency of VF resources */
-+	spin_lock_init(&adapter->vfs_lock);
-+
- #ifdef CONFIG_IXGBE_DCB
- 	ixgbe_init_dcb(adapter);
- #endif
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-index aaebdae8b5ff..0078ae592616 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-@@ -204,10 +204,13 @@ void ixgbe_enable_sriov(struct ixgbe_adapter *adapter, unsigned int max_vfs)
- int ixgbe_disable_sriov(struct ixgbe_adapter *adapter)
- {
- 	unsigned int num_vfs = adapter->num_vfs, vf;
-+	unsigned long flags;
- 	int rss;
- 
-+	spin_lock_irqsave(&adapter->vfs_lock, flags);
- 	/* set num VFs to 0 to prevent access to vfinfo */
- 	adapter->num_vfs = 0;
-+	spin_unlock_irqrestore(&adapter->vfs_lock, flags);
- 
- 	/* put the reference to all of the vf devices */
- 	for (vf = 0; vf < num_vfs; ++vf) {
-@@ -1305,8 +1308,10 @@ static void ixgbe_rcv_ack_from_vf(struct ixgbe_adapter *adapter, u32 vf)
- void ixgbe_msg_task(struct ixgbe_adapter *adapter)
- {
- 	struct ixgbe_hw *hw = &adapter->hw;
-+	unsigned long flags;
- 	u32 vf;
- 
-+	spin_lock_irqsave(&adapter->vfs_lock, flags);
- 	for (vf = 0; vf < adapter->num_vfs; vf++) {
- 		/* process any reset requests */
- 		if (!ixgbe_check_for_rst(hw, vf))
-@@ -1320,6 +1325,7 @@ void ixgbe_msg_task(struct ixgbe_adapter *adapter)
- 		if (!ixgbe_check_for_ack(hw, vf))
- 			ixgbe_rcv_ack_from_vf(adapter, vf);
+diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+index bb1c94e20e82..3582f77bab6a 100644
+--- a/net/xfrm/xfrm_policy.c
++++ b/net/xfrm/xfrm_policy.c
+@@ -1697,8 +1697,10 @@ static int xfrm_expand_policies(const struct flowi *fl, u16 family,
+ 		*num_xfrms = 0;
+ 		return 0;
  	}
-+	spin_unlock_irqrestore(&adapter->vfs_lock, flags);
- }
+-	if (IS_ERR(pols[0]))
++	if (IS_ERR(pols[0])) {
++		*num_pols = 0;
+ 		return PTR_ERR(pols[0]);
++	}
  
- void ixgbe_disable_tx_rx(struct ixgbe_adapter *adapter)
+ 	*num_xfrms = pols[0]->xfrm_nr;
+ 
+@@ -1713,6 +1715,7 @@ static int xfrm_expand_policies(const struct flowi *fl, u16 family,
+ 		if (pols[1]) {
+ 			if (IS_ERR(pols[1])) {
+ 				xfrm_pols_put(pols, *num_pols);
++				*num_pols = 0;
+ 				return PTR_ERR(pols[1]);
+ 			}
+ 			(*num_pols)++;
 -- 
 2.35.1
 

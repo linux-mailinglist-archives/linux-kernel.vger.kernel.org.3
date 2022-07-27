@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD57583249
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578F958324D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239526AbiG0SpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S239386AbiG0SqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239416AbiG0Soy (ORCPT
+        with ESMTP id S240646AbiG0SqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:44:54 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E569BA0E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:41:23 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id j1-20020a4ab1c1000000b0043576bcb9b1so3328846ooo.10
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:41:23 -0700 (PDT)
+        Wed, 27 Jul 2022 14:46:09 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FD962A42;
+        Wed, 27 Jul 2022 10:43:05 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z18so10059795edb.10;
+        Wed, 27 Jul 2022 10:43:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VXHqyZDYmIQ3rpqxptc15nYDRULliBEgKqonht7y21s=;
-        b=KfA5hlXNMKatVFo7kjZB6fHQZh0bPOashrO56ytvMrdaUFnESzhb+pcJ+HV9wGgvTx
-         kqumxc/h9xexjEi+9nIHmPtpScepB1PhfpoECzSoYSpAq10qe+ymLX1uW2pAK2UOvYEm
-         FZrnEPUti3VwIjw5wkUf5iyeDr4pgPc56E5GeR3S363LfneRFu7x+tV5vJgSZ3f0FZhR
-         1eYYuIZpj2AwNqV/pDnzFK6pMtXYr21A/4/f90mzGYGzCJYF1OQa3omqkt0qlMyYJM78
-         hRmi6DMT/mfbpm1/hTgSJOIk9Y2FJAfWN9RFUR3WNyxsBd4pDQLjqW7OXqcT2DRmNIN/
-         9h2A==
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=C2Ju39ZLdGUdTnSwgOEZB94uWj4r/akcygfkFhuyTdA=;
+        b=iVeMmgCrZrtHa1AAHFSj5VzI8wh9aQnb0x3HAs3cA5lSln5st+kTZWbCfk4bM+Nbrt
+         7F1YufeHs69Wyu2UhGoskeRwJDm+G01f76DTt165iM0pSQZnbD/8KjSefw7uEsj3jW/H
+         kIlx1UtaAKp9OQMj74ufsLa0bDeoR1/mMjM0M7BQBiRZ9VEeW/95U5pmG6o4lJGGOfVo
+         SRzUUzAQ1Mpqs+Mb5OswjO0FRIkDprxDSmPYj1tNG8957jtIFB3SdxWPfcW1hPxpHD43
+         Dtu7PuH9D8Ha27HXj4vJPYqcJas7IY0OC5MpuHTamCppSezlaHF0TmTOSoVZ2Ig0wrkJ
+         uKkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VXHqyZDYmIQ3rpqxptc15nYDRULliBEgKqonht7y21s=;
-        b=2haRk5Yd50tNot2eCt+9q/7J35cji1sOG/rSSgiKs6pRmQoS2qyMaMARtQ6iuRNrX7
-         UrQZADsF926ToSo1osko9fNCqHK0EBG5n0aLcArRoL7zydttcGtnYLgMl9cvBPg4iBAU
-         63EIt2rH+mFXsBntQ/EajT/S5iC1y8wJdMxz1Y03/BK/5396hOMu1xI7leksO05wZ5GN
-         zBYQTZkzO1ce4VHbi+b/4JcwF0E4H1BXtXrCWar5L0Ha0tZIh8X33WJLUO2sXYJgpWxt
-         /dU5pgwN452oxm/JIRoCx4bObGQonuBtr0oOcitBQs0PFTLN/QlDu3ZeF0n4N+hqU6Kc
-         nLlw==
-X-Gm-Message-State: AJIora+nISYxUvRvg9wM/kQO4+3UNHDjUAV3nR+HTcTlJktXA+Md+Lu/
-        6OG6Gp1prvwz13VDa3dxKIiuc1ykBANJ0Led0zsJhQ==
-X-Google-Smtp-Source: AGRyM1uObxFbk/OdalJ5bp779OxgIf3N8kPgC9BFL6XJs+LvsaPS3cBTKwyifuXYvvSAj9WSxRlU6+FIFIz5WVAJV4s=
-X-Received: by 2002:a4a:6550:0:b0:435:f3e8:8d3e with SMTP id
- z16-20020a4a6550000000b00435f3e88d3emr3987894oog.13.1658943682324; Wed, 27
- Jul 2022 10:41:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220727064321.2953971-1-mw@semihalf.com> <20220727064321.2953971-7-mw@semihalf.com>
- <20220727143147.u6yd6wqslilspyhw@skbuf> <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
- <CAHp75Vfn+tfuzxU31kVxp3sMAoT=ve3tcfDv84Omm-1tqvW3+w@mail.gmail.com>
-In-Reply-To: <CAHp75Vfn+tfuzxU31kVxp3sMAoT=ve3tcfDv84Omm-1tqvW3+w@mail.gmail.com>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Wed, 27 Jul 2022 19:41:10 +0200
-Message-ID: <CAPv3WKdyFWgqfObCU=0e29BT8Lq_cQ6WMkvXCDT-DRCueDsGFw@mail.gmail.com>
-Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to fwnode_find_net_device_by_node()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=C2Ju39ZLdGUdTnSwgOEZB94uWj4r/akcygfkFhuyTdA=;
+        b=oxI99tUMEnCdLJr/zGZNUerekpw3Vgh+93OB6QFWUYDilNmBKjfe9keIvu1QNoY1ws
+         RIKJHhFHmrJKMJjDk4Mzh4uKfXxtBzWlR6l4gDoY1V0pycZ/CncarNU4AvYBdJjmcmYD
+         Ta1Ht3TRlFlTqrWYl36LU17ZqrFgk1YohTj11UjuNG4a1F96RUhAncjy2ycGXrjEEdtz
+         DLzpr7FBF9Zop2/SiJJjv9Fvyujol2WymsKKEfNDWQBDbaOxv/EQEkhDZBhxNLJcvxOg
+         FXMimEVcaplZpRZUsMzjHwLfyE74WjLhtetuJAvS3dbdgX5QUinnkXCqEGg7zcJOh5nm
+         Z3sQ==
+X-Gm-Message-State: AJIora/HmHQphDwC0b6TP30XUmxxBYkWaTXLsjtAW9GnAVcIuy91raIV
+        +hDIxm0lEoTfqNaojoaf2tU=
+X-Google-Smtp-Source: AGRyM1uKNauI17QJV0ufqjFQBZKjgQLkYqFfiUDe8XdhtEZ0bep5kJzH3x2r1J1F0TlIwkONs9YFeg==
+X-Received: by 2002:a05:6402:3514:b0:43b:d87c:7a99 with SMTP id b20-20020a056402351400b0043bd87c7a99mr23245114edd.43.1658943784036;
+        Wed, 27 Jul 2022 10:43:04 -0700 (PDT)
+Received: from [10.176.234.249] ([137.201.254.41])
+        by smtp.googlemail.com with ESMTPSA id j16-20020a50ed10000000b0043ab36d6019sm10506558eds.9.2022.07.27.10.43.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 10:43:03 -0700 (PDT)
+Message-ID: <1f8e95da0c92f92937b5455a45430c939539d524.camel@gmail.com>
+Subject: Re: [PATCH v4 4/7] scsi: ufs: wb: Add explicit flush sysfs attribute
+From:   Bean Huo <huobean@gmail.com>
+To:     j-young.choi@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Wed, 27 Jul 2022 19:43:02 +0200
+In-Reply-To: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
+References: <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
+         <20220727070410epcms2p5206785e4d960b32dcbb6729710dab535@epcms2p5>
+         <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
+         <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p5>
+         <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
+MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C5=9Br., 27 lip 2022 o 19:00 Andy Shevchenko <andy.shevchenko@gmail.com> n=
-apisa=C5=82(a):
->
-> On Wed, Jul 27, 2022 at 5:24 PM Marcin Wojtas <mw@semihalf.com> wrote:
-> > =C5=9Br., 27 lip 2022 o 16:31 Vladimir Oltean <olteanv@gmail.com> napis=
-a=C5=82(a):
-> > > On Wed, Jul 27, 2022 at 08:43:19AM +0200, Marcin Wojtas wrote:
->
-> ...
->
-> > > > +     dev =3D class_find_device(&net_class, NULL, fwnode, fwnode_fi=
-nd_parent_dev_match);
-> > >
-> > > This needs to maintain compatibility with DSA masters that have
-> > > dev->of_node but don't have dev->fwnode populated.
-> >
-> > Do you mean a situation analogous to what I addressed in:
-> > [net-next: PATCH v3 4/8] net: mvpp2: initialize port fwnode pointer
-> > ?
-> >
-> > I found indeed a couple of drivers that may require a similar change
-> > (e.g. dpaa2).
-> >
-> > IMO we have 2 options:
-> > - update these drivers
->
-> Not Vladimir here, but my 2cents that update is best and elegant, it
-> can be done even before this series.
->
+T24gV2VkLCAyMDIyLTA3LTI3IGF0IDE2OjA4ICswOTAwLCBKaW55b3VuZyBDSE9JIHdyb3RlOgo+
+IFRoZXJlIGlzIHRoZSBmb2xsb3dpbmcgcXVpcmsgdG8gYnlwYXNzICJXQiBGbHVzaCIgaW4gV3Jp
+dGUgQm9vc3Rlci4KPiAKPiDCoMKgwqDCoMKgwqDCoMKgLSBVRlNIQ0lfUVVJUktfU0tJUF9NQU5V
+QUxfV0JfRkxVU0hfQ1RSTAo+IAo+IElmIHRoaXMgcXVpcmsgaXMgbm90IHNldCwgdGhlcmUgaXMg
+bm8ga25vYiB0aGF0IGNhbiBjb250cm9sICJXQgo+IEZsdXNoIi4KCj4gCj4gVGhlcmUgYXJlIHRo
+cmVlIGZsYWdzIHRoYXQgY29udHJvbCBXcml0ZSBCb29zdGVyIEZlYXR1cmUuCj4gwqDCoMKgwqDC
+oMKgwqDCoDEuIFdCIE9OL09GRgo+IMKgwqDCoMKgwqDCoMKgwqAyLiBXQiBIaWJlcm4gRmx1c2gg
+T04vT0ZGIChpbXBsaWNpdGx5KQo+IMKgwqDCoMKgwqDCoMKgwqAzLiBXQiBGbHVzaCBPTi9PRkYg
+KGV4cGxpY2l0KQo+IAo+IFRoZSBzeXNmcyBhdHRyaWJ1dGUgdGhhdCBjb250cm9scyB0aGUgV0Ig
+d2FzIGltcGxlbWVudGVkLiAoMSkKPiAKPiBJbiB0aGUgY2FzZSBvZiAiSGliZXJuIEZsdXNoIiwg
+aXQgaXMgYWx3YXlzIGdvb2QgdG8gdHVybiBvbi4KPiBDb250cm9sIG1heSBub3QgYmUgcmVxdWly
+ZWQuICgyKQo+IAo+IEZpbmFsbHksICJGbHVzaCIgbWF5IGJlIG5lY2Vzc2FyeSBiZWNhdXNlIHRo
+ZSBBdXRvLUhpYmVybjggaXMgbm90Cj4gc3VwcG9ydGVkIGluIGEgc3BlY2lmaWMgZW52aXJvbm1l
+bnQuCj4gU28gdGhlIHN5c2ZzIGF0dHJpYnV0ZSB0aGF0IGNvbnRyb2xzIHRoaXMgaXMgbmVjZXNz
+YXJ5LiAoMykKPiAKPiBSZXZpZXdlZC1ieTogQXZyaSBBbHRtYW4gPGF2cmkuYWx0bWFuQHdkYy5j
+b20+Cj4gU2lnbmVkLW9mZi1ieTogSmlueW91bmcgQ2hvaSA8ai15b3VuZy5jaG9pQHNhbXN1bmcu
+Y29tPgo+IC0tLQouLi4KPiAKPiArc3RhdGljIHNzaXplX3Qgd2JfYnVmX2ZsdXNoX2VuX3N0b3Jl
+KHN0cnVjdCBkZXZpY2UgKmRldiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgZGV2aWNlX2F0dHJp
+YnV0ZSAqYXR0ciwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb25zdCBjaGFyICpidWYsIHNpemVfdCBjb3Vu
+dCkKPiArewo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCB1ZnNfaGJhICpoYmEgPSBkZXZfZ2V0X2Ry
+dmRhdGEoZGV2KTsKPiArwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBpbnQgd2JfYnVmX2ZsdXNoX2Vu
+Owo+ICvCoMKgwqDCoMKgwqDCoHNzaXplX3QgcmVzOwo+ICsKPiArwqDCoMKgwqDCoMKgwqBpZiAo
+dWZzaGNkX2lzX3diX2FsbG93ZWQoaGJhKSAmJgo+ICvCoMKgwqDCoMKgwqDCoMKgwqAgIShoYmEt
+PnF1aXJrcyAmIFVGU0hDSV9RVUlSS19TS0lQX01BTlVBTF9XQl9GTFVTSF9DVFJMKSkgewo+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkZXZfd2FybihkZXYsICJJdCBpcyBub3QgYWxs
+b3dlZCB0byBjb25maWd1cmUgV0IgYnVmCj4gZmx1c2ghXG4iKTsKPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FT1BOT1RTVVBQOwo+ICvCoMKgwqDCoMKgwqDCoH0KPiAr
+CkhpIEoteW91bmcsCgpJIGRvbid0IHVuZGVyc3RhbmQgaGVyZSwgaWYgVUZTSENJX1FVSVJLX1NL
+SVBfTUFOVUFMX1dCX0ZMVVNIX0NUUkwgaXMKbm90IHNldCAobWFudWFsIGZsdXNoIGlzIG5vdCBk
+aXNhYmxlKSwgc28gd2UgY2Fubm90IG1hbnVhbGx5IGZsdXNoCmJ1ZmZlcj8gb3Igc2hvdWxkIHdl
+IGNoZWNrIGlmIEF1dG8tSGliZXJuOCBpcyBzdXBwb3J0ZWQ/CgpLaW5kIHJlZ2FyZHMsCkJlYW4K
 
-In general I agree it's desired, but I'm not sure if we can catch all
-cases just by reading code or rather base on regression reports
-later...
 
-Best regards,
-Marcin

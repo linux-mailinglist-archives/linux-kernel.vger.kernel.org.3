@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C849582C8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4FD582BC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240461AbiG0Qrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S238365AbiG0Qh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240058AbiG0Qq7 (ORCPT
+        with ESMTP id S238381AbiG0Qfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:46:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE3852DFD;
-        Wed, 27 Jul 2022 09:32:00 -0700 (PDT)
+        Wed, 27 Jul 2022 12:35:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E404F67E;
+        Wed, 27 Jul 2022 09:27:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14E1AB821BA;
-        Wed, 27 Jul 2022 16:31:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62F5DC433D6;
-        Wed, 27 Jul 2022 16:31:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98A3FB821B8;
+        Wed, 27 Jul 2022 16:27:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F400EC433C1;
+        Wed, 27 Jul 2022 16:27:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939517;
-        bh=htyf8dAJwRiQSesYEE98VZHxac6Wn8C8lGyj2NnpPXs=;
+        s=korg; t=1658939274;
+        bh=ovd6V4NmZ+Qv5MuBP6kCDQrWTrx06853QQqr7hUwoBw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V6apZ4crY5cQCt0bJ4N3PUwk7XBT98FL/ho28gE+2DHOrZxEZ2P2KmtZ9KcyZ18P4
-         pO7NlrxZaFix0aCUhSdfa++EXaEn3jMuRM1CIepuYtjaLlvAxbi69Ouj81+v7iyB3W
-         a9bVghNeeQhmiS0lP5Fgy6FhhYn3mFcLwd0lOLvY=
+        b=XILHpY9w2unSD3+XAkJ3++ErUDm7Znxt4/xtxCSr960ap1Av6ZZJDJSr/kVTT6T1b
+         0OJTX29ItEl7dC7C597iFcnvaLB4AOnDJC8cK8Vm+aShKTJi0rv/zlS+5ogsan5qNP
+         LHw8JFF6+d9AvMhMepLuA9YuD7YTeHFZnaq9rVGU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Fedor Pchelkin <pchelkin@ispras.ru>
-Subject: [PATCH 5.10 010/105] net: make free_netdev() more lenient with unregistering devices
+        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 03/87] mlxsw: spectrum_router: Fix IPv4 nexthop gateway indication
 Date:   Wed, 27 Jul 2022 18:09:56 +0200
-Message-Id: <20220727161012.480155559@linuxfoundation.org>
+Message-Id: <20220727161009.141332848@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,114 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fedor Pchelkin <pchelkin@ispras.ru>
+From: Ido Schimmel <idosch@nvidia.com>
 
-From: Jakub Kicinski <kuba@kernel.org>
+commit e5ec6a2513383fe2ecc2ee3b5f51d97acbbcd4d8 upstream.
 
-commit c269a24ce057abfc31130960e96ab197ef6ab196 upstream.
+mlxsw needs to distinguish nexthops with a gateway from connected
+nexthops in order to write the former to the adjacency table of the
+device. The check used to rely on the fact that nexthops with a gateway
+have a 'link' scope whereas connected nexthops have a 'host' scope. This
+is no longer correct after commit 747c14307214 ("ip: fix dflt addr
+selection for connected nexthop").
 
-There are two flavors of handling netdev registration:
- - ones called without holding rtnl_lock: register_netdev() and
-   unregister_netdev(); and
- - those called with rtnl_lock held: register_netdevice() and
-   unregister_netdevice().
+Fix that by instead checking the address family of the gateway IP. This
+is a more direct way and also consistent with the IPv6 counterpart in
+mlxsw_sp_rt6_is_gateway().
 
-While the semantics of the former are pretty clear, the same can't
-be said about the latter. The netdev_todo mechanism is utilized to
-perform some of the device unregistering tasks and it hooks into
-rtnl_unlock() so the locked variants can't actually finish the work.
-In general free_netdev() does not mix well with locked calls. Most
-drivers operating under rtnl_lock set dev->needs_free_netdev to true
-and expect core to make the free_netdev() call some time later.
-
-The part where this becomes most problematic is error paths. There is
-no way to unwind the state cleanly after a call to register_netdevice(),
-since unreg can't be performed fully without dropping locks.
-
-Make free_netdev() more lenient, and defer the freeing if device
-is being unregistered. This allows error paths to simply call
-free_netdev() both after register_netdevice() failed, and after
-a call to unregister_netdevice() but before dropping rtnl_lock.
-
-Simplify the error paths which are currently doing gymnastics
-around free_netdev() handling.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Cc: stable@vger.kernel.org
+Fixes: 747c14307214 ("ip: fix dflt addr selection for connected nexthop")
+Fixes: 597cfe4fc339 ("nexthop: Add support for IPv4 nexthops")
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Amit Cohen <amcohen@nvidia.com>
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/8021q/vlan.c     |    4 +---
- net/core/dev.c       |   11 +++++++++++
- net/core/rtnetlink.c |   23 ++++++-----------------
- 3 files changed, 18 insertions(+), 20 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/8021q/vlan.c
-+++ b/net/8021q/vlan.c
-@@ -278,9 +278,7 @@ static int register_vlan_device(struct n
- 	return 0;
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+@@ -3871,7 +3871,7 @@ static bool mlxsw_sp_fi_is_gateway(const
+ {
+ 	const struct fib_nh *nh = fib_info_nh(fi, 0);
  
- out_free_newdev:
--	if (new_dev->reg_state == NETREG_UNINITIALIZED ||
--	    new_dev->reg_state == NETREG_UNREGISTERED)
--		free_netdev(new_dev);
-+	free_netdev(new_dev);
- 	return err;
+-	return nh->fib_nh_scope == RT_SCOPE_LINK ||
++	return nh->fib_nh_gw_family ||
+ 	       mlxsw_sp_nexthop4_ipip_type(mlxsw_sp, nh, NULL);
  }
  
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10683,6 +10683,17 @@ void free_netdev(struct net_device *dev)
- 	struct napi_struct *p, *n;
- 
- 	might_sleep();
-+
-+	/* When called immediately after register_netdevice() failed the unwind
-+	 * handling may still be dismantling the device. Handle that case by
-+	 * deferring the free.
-+	 */
-+	if (dev->reg_state == NETREG_UNREGISTERING) {
-+		ASSERT_RTNL();
-+		dev->needs_free_netdev = true;
-+		return;
-+	}
-+
- 	netif_free_tx_queues(dev);
- 	netif_free_rx_queues(dev);
- 
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -3442,26 +3442,15 @@ replay:
- 
- 	dev->ifindex = ifm->ifi_index;
- 
--	if (ops->newlink) {
-+	if (ops->newlink)
- 		err = ops->newlink(link_net ? : net, dev, tb, data, extack);
--		/* Drivers should set dev->needs_free_netdev
--		 * and unregister it on failure after registration
--		 * so that device could be finally freed in rtnl_unlock.
--		 */
--		if (err < 0) {
--			/* If device is not registered at all, free it now */
--			if (dev->reg_state == NETREG_UNINITIALIZED ||
--			    dev->reg_state == NETREG_UNREGISTERED)
--				free_netdev(dev);
--			goto out;
--		}
--	} else {
-+	else
- 		err = register_netdevice(dev);
--		if (err < 0) {
--			free_netdev(dev);
--			goto out;
--		}
-+	if (err < 0) {
-+		free_netdev(dev);
-+		goto out;
- 	}
-+
- 	err = rtnl_configure_link(dev, ifm);
- 	if (err < 0)
- 		goto out_unregister;
 
 

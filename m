@@ -2,151 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839B35824B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC66D5824C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbiG0KpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 06:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        id S231597AbiG0KsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 06:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiG0KpI (ORCPT
+        with ESMTP id S229475AbiG0KsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 06:45:08 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426F9474C2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 03:45:05 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h8so23587083wrw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 03:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5oVqAH+iWelszybMh6Ae4+JTub68D8khqQAfrWm+UrY=;
-        b=Vf9pdSjZMg3SLJ19yGuuiHBu8f0Z4m7f640uGxbOjb43MhHIpy3Z7mK4GKres7Ordp
-         SpllByUGC+tfiiifjsPpQpw2mF7ycjBIZikMFCnyNcASVp3GXdmLo9rBbu18erzVq18v
-         Uq7SPPy9krm2n8atNNVDbhZ87Gx6RlMJDlKIAWHmipUqu84MC+GBBWrH3AhnWIpVMkye
-         H2JlPBYgPFlyqHlSdraDF7pQlQzaNRup4ernzsPFtQ9iDUDYxLIH8BEFFq+9on8/jrxO
-         Rvvdsl2r9+9u3UbXW197Xm3br5AwXHApHvDIubYmQuxdVNhn73VuAV7aQUziKTSWxRx/
-         Hs0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5oVqAH+iWelszybMh6Ae4+JTub68D8khqQAfrWm+UrY=;
-        b=hOGI1MHNVG5smlO+LhF6fBNPyFOZGKEf2a8OJz0UzkKa4uWxgKPso+VqgbT1CDyyjO
-         ES0a4WAXEanQJbd5vqz7m4JnD7Cdi/74pbAEPLqwEuHM25WqL4ORIyqLJw35wc6yjXU1
-         TwASX0Xpy8sax5vTBVXwWz6yGZHv7mEv90PI/PsqyYxu+NS9okfEJMQkpUVwclgPTyv7
-         3lS6INqCG6lxQQIqEaj+X6O7ZBVaM2Ktp0tsyIgFCqFCZeXdHV2ePooK005ocMHQVim7
-         vr7bwqVFuc9lXaDTuQv9m1/JIhP/lnWyB8KRnqqvleLQsboY8DhPIeCxvT6uLxolEQn5
-         93YA==
-X-Gm-Message-State: AJIora/3uU0idZHBP8RxVneJdFxZEM/IGeDeBSLV+9tWCSbsrHqMYNwJ
-        W/M7UR4+rqYVogTfcNuudDHzrw==
-X-Google-Smtp-Source: AGRyM1uGCOaeaXOdwirAYekuOB4Lxs31AWSF1L9awJK4JKpctBf/cT7K9dLT9+RwDmyqaDaxZr91vA==
-X-Received: by 2002:a05:6000:1848:b0:21e:8fa5:e5f4 with SMTP id c8-20020a056000184800b0021e8fa5e5f4mr7738882wri.691.1658918703770;
-        Wed, 27 Jul 2022 03:45:03 -0700 (PDT)
-Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
-        by smtp.gmail.com with ESMTPSA id c3-20020a7bc003000000b003a2e7c13a3asm1877429wmb.42.2022.07.27.03.45.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 03:45:03 -0700 (PDT)
-Message-ID: <d335c1a6-ad45-994c-053f-32cdfa4cab8d@sifive.com>
-Date:   Wed, 27 Jul 2022 11:45:02 +0100
+        Wed, 27 Jul 2022 06:48:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B47BC03;
+        Wed, 27 Jul 2022 03:48:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E578E618A3;
+        Wed, 27 Jul 2022 10:48:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE9CC433C1;
+        Wed, 27 Jul 2022 10:48:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658918891;
+        bh=DRFuPn9kMjyTP06/jiDcxlM9zqpGD3R4D5kU/hYwyLk=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=URFnToo5JzEHl2i3XwSCTggjAVHJj6UFMfKWYLZhpwnkbP2iHgEjljWjwqVWO7KHE
+         FTxehimMJgfU3WB68HHKbspKpXoIrrPebG/H6vZh/HG7HDNLm3NBJtrl+oKwmepNh8
+         0LeSVct3uBjdBvyloWoMWuHfWBGr+MUXbevB8mL/C+81ZAJ0w0tuQaD45lg7rX1Ud0
+         UHG0Ao0OYe4bdAYFYqYInFfGs355tPAhhL6uEbr0gWvL63ZeRGpITgTpdomF3yJRMu
+         22B50ciqsOEKsCH1prDTWH+121e6voq2zs8auIoksskDEvtvZgI9SB2Qw9Hd5baDTN
+         R5RD4zk+EsH1A==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [[PATCH v2] 1/9] dt-bindings: pwm: Document Synopsys DesignWare
- snps,pwm
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>
-References: <20220725212140.741644-1-ben.dooks@sifive.com>
- <922628f6-cbb1-b563-6464-e57959bafbcd@linaro.org>
- <8bb5103d-803e-90d2-fd93-132bb2aac2d6@sifive.com>
- <6317212b-1fca-65b4-9bce-0b9f7408fdae@linaro.org>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <6317212b-1fca-65b4-9bce-0b9f7408fdae@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: wifi: iwlwifi: mvm: fix clang -Wformat warnings
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220711222919.2043613-1-justinstitt@google.com>
+References: <20220711222919.2043613-1-justinstitt@google.com>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Gregory Greenman <gregory.greenman@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Avraham Stern <avraham.stern@intel.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165891888198.17998.12309173336559232552.kvalo@kernel.org>
+Date:   Wed, 27 Jul 2022 10:48:07 +0000 (UTC)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 12:05, Krzysztof Kozlowski wrote:
-> On 26/07/2022 12:12, Ben Dooks wrote:
->> On 26/07/2022 11:05, Krzysztof Kozlowski wrote:
->>> On 25/07/2022 23:21, Ben Dooks wrote:
->>>> Add documentation for the bindings for Synopsys' DesignWare PWM block
->>>> as we will be adding DT/platform support to the Linux driver soon.
->>>>
->>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->>>> --
->>>
->>> This is not proper delimiter and causes the changelog to end up in commit.
->>>
->>> Correct also wrong formatting of subject PATCH.
->>
->> I realised that once sent and forgot the cover letter.
->> Maybe I'll try some more post covid recovery.
->>
->>>> v2:
->>>> - fix #pwm-cells to be 3
->>>> - fix indentation and ordering issues
->>>> ---
->>>>    .../devicetree/bindings/pwm/snps,pwm.yaml     | 40 +++++++++++++++++++
->>>>    1 file changed, 40 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/pwm/snps,pwm.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/pwm/snps,pwm.yaml b/Documentation/devicetree/bindings/pwm/snps,pwm.yaml
->>>> new file mode 100644
->>>> index 000000000000..594085e5e26f
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/pwm/snps,pwm.yaml
->>>> @@ -0,0 +1,40 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +# Copyright (C) 2022 SiFive, Inc.
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/pwm/snps,pwm.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Synopsys PWM controller
->>>> +
->>>> +maintainers:
->>>> +  - Ben Dooks <ben.dooks@sifive.com>
->>>> +
->>>> +allOf:
->>>> +  - $ref: pwm.yaml#
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: snps,pwm
->>>
->>> This is very generic compatible. I doubt that you cover here all
->>> Synopsys PWM designs, past and future. You need a specific compatible.
->>
->>   From what I can get from the documentation (2.13a) there hasn't been
->> a huge external interface change and what has been added is all part
->> of synthesis time options.
-> 
-> But you have some specific version, right? Usually these blocks are
-> versioned, so you must include it. I would even argue that such generic
-> compatible should not be used as fallback at all, because it is simply
-> to generic (PWM is not some model name but common acronym),
+Justin Stitt <justinstitt@google.com> wrote:
 
-Thank you for the feedback, forgot to say that on the original reply.
+> When building with Clang we encounter these warnings:
+> | drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1108:47: error:
+> | format specifies type 'unsigned char' but the argument has type 's16'
+> | (aka 'short') [-Werror,-Wformat] IWL_DEBUG_INFO(mvm, "\tburst index:
+> | %hhu\n", res->ftm.burst_index);
+> -
+> | drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c:1111:47: error:
+> | format specifies type 'unsigned char' but the argument has type 's32'
+> | (aka 'int') [-Werror,-Wformat] IWL_DEBUG_INFO(mvm, "\trssi spread:
+> | %hhu\n", res->ftm.rssi_spread);
+> 
+> The previous format specifier `%hhu` describes a u8 but our arguments
+> are wider than this which means bits are potentially being lost.
+> 
+> Variadic functions (printf-like) undergo default argument promotion.
+> Documentation/core-api/printk-formats.rst specifically recommends using
+> the promoted-to-type's format flag.
+> 
+> As per C11 6.3.1.1:
+> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf) `If an int
+> can represent all values of the original type ..., the value is
+> converted to an int; otherwise, it is converted to an unsigned int.
+> These are called the integer promotions.` Thus it makes sense to change
+> `%hhu` to `%d` for both instances of the warning.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Patch applied to wireless-next.git, thanks.
+
+7819b3d1dab5 wifi: iwlwifi: mvm: fix clang -Wformat warnings
 
 -- 
-Ben
+https://patchwork.kernel.org/project/linux-wireless/patch/20220711222919.2043613-1-justinstitt@google.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

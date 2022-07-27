@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2E3581E6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 05:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47153581E65
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 05:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240372AbiG0Dyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 23:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S240275AbiG0Dyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 23:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240277AbiG0DyX (ORCPT
+        with ESMTP id S240281AbiG0DyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Jul 2022 23:54:23 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648833DF1C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8483DF1D;
         Tue, 26 Jul 2022 20:54:21 -0700 (PDT)
-X-UUID: 0bd5a8fe26c345c6a08961752c790bc7-20220727
+X-UUID: 20ea57a8124e4a37825fa39a9eba4803-20220727
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:25535ba7-1875-4c7c-8e20-19d905a26053,OB:0,LO
+X-CID-O-INFO: VERSION:1.1.8,REQID:ee7c9d78-7144-49d2-89e1-f234b99e1f01,OB:0,LO
         B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
         ION:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:0f4c0cd4-912a-458b-a623-74f605a77e93,C
+X-CID-META: VersionHash:0f94e32,CLOUDID:104c0cd4-912a-458b-a623-74f605a77e93,C
         OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
         ,QS:nil,BEC:nil,COL:0
-X-UUID: 0bd5a8fe26c345c6a08961752c790bc7-20220727
+X-UUID: 20ea57a8124e4a37825fa39a9eba4803-20220727
 Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 659225891; Wed, 27 Jul 2022 11:54:13 +0800
+        with ESMTP id 1420976230; Wed, 27 Jul 2022 11:54:13 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -47,9 +47,9 @@ CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
         <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
         <stanley.chu@mediatek.com>
-Subject: [PATCH v2 3/5] scsi: ufs: ufs-mediatek: Dump more registers
-Date:   Wed, 27 Jul 2022 11:44:52 +0800
-Message-ID: <20220727034454.31892-4-stanley.chu@mediatek.com>
+Subject: [PATCH v2 4/5] scsi: ufs: ufs-mediatek: Fix performance scaling
+Date:   Wed, 27 Jul 2022 11:44:53 +0800
+Message-ID: <20220727034454.31892-5-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220727034454.31892-1-stanley.chu@mediatek.com>
 References: <20220727034454.31892-1-stanley.chu@mediatek.com>
@@ -67,38 +67,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-Dump more proprietary UFSHCI status registers for
-easier issue breakdown.
+If clk-scaling is enabled, performance scaling can be bound
+to the decision of clk-scaling to avoid unnecessary boosting.
+
+Meanwhile, fix missing initialization of pm-qos request.
 
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index b590fb267c20..ddbfcf1ab925 100644
+index ddbfcf1ab925..b2e4a9fd4be8 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1246,13 +1246,16 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+@@ -597,6 +597,12 @@ static void ufs_mtk_boost_pm_qos(struct ufs_hba *hba, bool boost)
+ 				       boost ? 0 : PM_QOS_DEFAULT_VALUE);
+ }
  
- static void ufs_mtk_dbg_register_dump(struct ufs_hba *hba)
++static void ufs_mtk_scale_perf(struct ufs_hba *hba, bool scale_up)
++{
++	ufs_mtk_boost_crypt(hba, scale_up);
++	ufs_mtk_boost_pm_qos(hba, scale_up);
++}
++
+ static void ufs_mtk_pwr_ctrl(struct ufs_hba *hba, bool on)
  {
--	ufshcd_dump_regs(hba, REG_UFS_REFCLK_CTRL, 0x4, "Ref-Clk Ctrl ");
-+	/* Dump ufshci register 0x140 ~ 0x14C */
-+	ufshcd_dump_regs(hba, REG_UFS_XOUFS_CTRL, 0x10,
-+			 "XOUFS Ctrl (0x140): ");
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+@@ -604,11 +610,11 @@ static void ufs_mtk_pwr_ctrl(struct ufs_hba *hba, bool on)
+ 	if (on) {
+ 		phy_power_on(host->mphy);
+ 		ufs_mtk_setup_ref_clk(hba, on);
+-		ufs_mtk_boost_crypt(hba, on);
+-		ufs_mtk_boost_pm_qos(hba, on);
++		if (!ufshcd_is_clkscaling_supported(hba))
++			ufs_mtk_scale_perf(hba, on);
+ 	} else {
+-		ufs_mtk_boost_pm_qos(hba, on);
+-		ufs_mtk_boost_crypt(hba, on);
++		if (!ufshcd_is_clkscaling_supported(hba))
++			ufs_mtk_scale_perf(hba, on);
+ 		ufs_mtk_setup_ref_clk(hba, on);
+ 		phy_power_off(host->mphy);
+ 	}
+@@ -832,6 +838,10 @@ static int ufs_mtk_init(struct ufs_hba *hba)
  
- 	ufshcd_dump_regs(hba, REG_UFS_EXTREG, 0x4, "Ext Reg ");
+ 	host->ip_ver = ufshcd_readl(hba, REG_UFS_MTK_IP_VER);
  
-+	/* Dump ufshci register 0x2200 ~ 0x22AC */
- 	ufshcd_dump_regs(hba, REG_UFS_MPHYCTRL,
- 			 REG_UFS_REJECT_MON - REG_UFS_MPHYCTRL + 4,
--			 "MPHY Ctrl ");
-+			 "MPHY Ctrl (0x2200): ");
++	/* Initialize pm-qos request */
++	cpu_latency_qos_add_request(&host->pm_qos_req, PM_QOS_DEFAULT_VALUE);
++	host->pm_qos_init = true;
++
+ 	goto out;
  
- 	/* Direct debugging information to REG_MTK_PROBE */
- 	ufs_mtk_dbg_sel(hba);
+ out_variant_clear:
 -- 
 2.18.0
 

@@ -2,141 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12225829EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5F05829F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233612AbiG0PrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S234278AbiG0Prm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiG0PrG (ORCPT
+        with ESMTP id S234048AbiG0Prf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:47:06 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0567922299;
-        Wed, 27 Jul 2022 08:47:05 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id c20so12904328qtw.8;
-        Wed, 27 Jul 2022 08:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rKRkz1r3/CKmoOGWsptt41HcBfvgNG2KAxM3cUlyRgg=;
-        b=VoB86KfUBj/OZpm9xIVznbBQgZc4uhxKvVqM6lBqGHVxY4BRsFuuc3xlU3sMxZvcWa
-         4b8ibsPfgRsNd5aIAwrY7NssOu/jUVv3lLJDGVPa6vRidh5+LMt14tCMnn1XwZLBFp+O
-         HQ+Tj+xaYFKZ7w8ImT5JLW2a/FZn2lAizet0UGek3kuZgKbaK7WyoezQ8YGBsO8CqdJ1
-         EjYv/CNb2NbNMBeCTv9ZteUxUViXcld1dSsU03u5kcWMpLMWMZYO0GH+RqTQJOpRT0K7
-         sWi/+E8fjLR9kw8t4Qs+GVWY5Hcq0BKNIHpf3iWNYd5XZjYbecqJl8L+vRAphnxKscDy
-         E1FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition:in-reply-to;
-        bh=rKRkz1r3/CKmoOGWsptt41HcBfvgNG2KAxM3cUlyRgg=;
-        b=HgSYz2mpjNDuCKJGm/ufh63qzUIqY/DRNRL3KZlKwA0T3pWB6POEV7c2X1MKBjZqyR
-         2Ux06PQIWQJ35+9nDVCTEgJAECLfPcueGzvsXurnNa8XxbpFQtQhqqVtVrIGYk41EDps
-         4lDPeta0NaFntZQI1bAzG9/5xUPwtPnkDw2W5DRtlW/ArEE5bPz4MvtmD5LdgHlW3PBV
-         W7sC7aOU/GmWiZpQ6qeaFXvTH4RXawJz9WnBgO+OoAWtnxDEoiWvg2yt1ALZHw8fDV/W
-         hlXAUkmc2ftgpbRBHoSRj7kqBmanPRCcJS/9kG9UJ3TaRuPznJkficrZ9jlVydG6wgTe
-         BedA==
-X-Gm-Message-State: AJIora8Y49hJ85okr9VO5yDhhrmKQjZIt2GMKTBQu3lmGDRtfUSG5GbJ
-        bwMx/CgJaJ+NyKKkEyPjRw==
-X-Google-Smtp-Source: AGRyM1syoHp48BJmUDOkb6xY/O5snpMs1dVQsCfX28eSSiv/YiQUo0sVB6pmKfpcMiJUw10Xvbbbnw==
-X-Received: by 2002:a05:622a:1316:b0:31e:f3b4:1c8c with SMTP id v22-20020a05622a131600b0031ef3b41c8cmr19396972qtk.339.1658936823961;
-        Wed, 27 Jul 2022 08:47:03 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.144.75])
-        by smtp.gmail.com with ESMTPSA id de39-20020a05620a372700b006b568bdd7d5sm14091459qkb.71.2022.07.27.08.47.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 08:47:03 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:495f:ee54:913c:d540])
-        by serve.minyard.net (Postfix) with ESMTPSA id AF322180052;
-        Wed, 27 Jul 2022 15:47:01 +0000 (UTC)
-Date:   Wed, 27 Jul 2022 10:47:00 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v1 0/2] char: ipmi: kcs: add Arbel NPCM8XX support
-Message-ID: <20220727154700.GS3834@minyard.net>
-Reply-To: minyard@acm.org
-References: <20220717121124.154734-1-tmaimon77@gmail.com>
- <20220718125155.GA40038@minyard.net>
- <CAP6Zq1haOErfj2HZkqKwXZKr3+QvWP2VYK6QQOH5cjHYJ2rV0w@mail.gmail.com>
- <20220726194708.GO3834@minyard.net>
- <CAP6Zq1hHXiZw2a6+o30N-GUhcA_ZJoYH+wZa8AzLu3NmYST+kw@mail.gmail.com>
+        Wed, 27 Jul 2022 11:47:35 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873B9491DF
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:47:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658936853; x=1690472853;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TdrfWsxQGirYo+4xG6E2Er31WG2PvMMsRbjlDcmtKfM=;
+  b=EZN8UUdqxCXUG1Rh3ytm/uCUNYy4aEr8bRPjJ2d0h+gpkkm/SWftl5Tz
+   UFLmkzJPPeKizHQLhiaT8ZvFB0Nwp5CVXkW4sOMkcozznTMCWfTdpAFd8
+   +yrjdq+WCc9WxU9RMDEs7WtHb5X1AMHvPpgqvNtgFcBFio2xasExp8/CI
+   XvtPzLDFdN8MXNyC+HMM0URiIKC3iI+V3R4V9e7To5afm0WOJXCha29Mx
+   +bRMJws3RoxbnMAF7hgu7t3EZMIT4DZnwOnsJK7oy8oIDRgSr84JgijvQ
+   w9XI2Sn0DbHMMGWzDdQc54w6V3dJphki5URr6E6mEqEczmR1XkudXmKwL
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="268038722"
+X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
+   d="scan'208";a="268038722"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 08:47:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,195,1654585200"; 
+   d="scan'208";a="576037329"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jul 2022 08:47:31 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGjFz-0008qk-0A;
+        Wed, 27 Jul 2022 15:47:31 +0000
+Date:   Wed, 27 Jul 2022 23:47:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dani Liberman <dliberman@habana.ai>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Oded Gabbay <ogabbay@kernel.org>
+Subject: [ogabbay:habanalabs-next 1/13] goya.c:undefined reference to
+ `hl_engine_data_sprintf'
+Message-ID: <202207272314.ioAxqwFe-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP6Zq1hHXiZw2a6+o30N-GUhcA_ZJoYH+wZa8AzLu3NmYST+kw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 08:39:08AM +0300, Tomer Maimon wrote:
-> Hi Corey,
-> 
-> On Tue, 26 Jul 2022 at 22:47, Corey Minyard <minyard@acm.org> wrote:
-> >
-> > On Tue, Jul 26, 2022 at 10:41:38PM +0300, Tomer Maimon wrote:
-> > > Hi Corey,
-> > >
-> > >
-> > > On Mon, 18 Jul 2022 at 15:51, Corey Minyard <minyard@acm.org> wrote:
-> > > >
-> > > > On Sun, Jul 17, 2022 at 03:11:22PM +0300, Tomer Maimon wrote:
-> > > > > This patch set adds Arbel NPCM8XX Keyboard Controller Style (KCS) support to
-> > > > > KCS NPCM driver.
-> > > > >
-> > > > > The NPCM KCS driver tested on NPCM845 evaluation board.
-> > > >
-> > > > This seems reasonable, I've pulled it into my tree.  If anyone has any
-> > > > issues with this, please respond.
-> > > >
-> > > > -corey
-> > > >
-> > > > >
-> > > > > Tomer Maimon (2):
-> > > > >   dt-bindings: ipmi: Add npcm845 compatible
-> > > > >   char: ipmi: modify NPCM KCS configuration
-> > > > >
-> > > > >  Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 5 +++--
-> > > > >  drivers/char/ipmi/Kconfig                                  | 6 +++---
-> > > > >  2 files changed, 6 insertions(+), 5 deletions(-)
-> > > > >
-> > > > > --
-> > > > > 2.33.0
-> > > > >
-> > >
-> > > Sorry but I need to do a little fix in the document file.
-> > >
-> > > Can I do it or have you already applied the patches?
-> >
-> > At this point I'd prefer a patch on top of what is there.  5.19 isn't
-> > released yet, so the window isn't open, but that will happen soon and I
-> > don't want to rebase at this point.
-> O.K. thanks,
-> I will wait until 5.19 is released and then I will send the patch.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
+head:   17bf8b54044fa4053a28e1319f7ff71cb2b89d8b
+commit: 7dc0e638a9f6d72d481ebb0ad27a11f43712a130 [1/13] habanalabs: removed seq_file parameter from is_idle asic functions
+config: csky-randconfig-r012-20220727 (https://download.01.org/0day-ci/archive/20220727/202207272314.ioAxqwFe-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=7dc0e638a9f6d72d481ebb0ad27a11f43712a130
+        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
+        git fetch --no-tags ogabbay habanalabs-next
+        git checkout 7dc0e638a9f6d72d481ebb0ad27a11f43712a130
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
 
-Oh, sorry I wasn't clear.  You can send it now, I just don't want to
-rebase what I have already.  Just a new patch on top of it, and I'll get
-it in to 5.19.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
--corey
+All errors (new ones prefixed by >>):
+
+   csky-linux-ld: csky-linux-ld: DWARF error: could not find abbrev number 83
+   drivers/misc/habanalabs/goya/goya.o: in function `goya_is_device_idle':
+>> goya.c:(.text+0x33f2): undefined reference to `hl_engine_data_sprintf'
+>> csky-linux-ld: goya.c:(.text+0x3472): undefined reference to `hl_engine_data_sprintf'
+   csky-linux-ld: goya.c:(.text+0x34fe): undefined reference to `hl_engine_data_sprintf'
+   csky-linux-ld: goya.c:(.text+0x3578): undefined reference to `hl_engine_data_sprintf'
+   csky-linux-ld: goya.c:(.text+0x35ae): undefined reference to `hl_engine_data_sprintf'
+   csky-linux-ld: drivers/misc/habanalabs/goya/goya.o:goya.c:(.text+0x35e6): more undefined references to `hl_engine_data_sprintf' follow
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

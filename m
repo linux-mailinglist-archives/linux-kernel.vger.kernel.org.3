@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3181582AA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A0C582B4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235156AbiG0QW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S237511AbiG0QbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234962AbiG0QWF (ORCPT
+        with ESMTP id S237434AbiG0Qak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:22:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7CC4B0DD;
-        Wed, 27 Jul 2022 09:22:04 -0700 (PDT)
+        Wed, 27 Jul 2022 12:30:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925252444;
+        Wed, 27 Jul 2022 09:25:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC85761995;
-        Wed, 27 Jul 2022 16:22:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090EDC433C1;
-        Wed, 27 Jul 2022 16:22:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BC85B821BC;
+        Wed, 27 Jul 2022 16:24:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C80C43141;
+        Wed, 27 Jul 2022 16:24:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658938923;
-        bh=WOj+s5vKPdoTepok1yhOUhX1S4XBseNZDgBPvkKvjHk=;
+        s=korg; t=1658939083;
+        bh=4Efy3BNZmCgFWM3LGklpsnk3qmp4e7cRajBAEfrglUY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Om9LuwHireBxHycKymkBrJ7pQt8ov8KZX8FR8OPw4n8GnylUhZ1Y4A3O4OaMKGpm4
-         uivkhJ5UmwcNvC7LzAc6vccwJ48y2rhoS6bnGKSXGP4JaZDZ6EYc4A8KBrvJ9cemul
-         wU07Kqw00zRIKMsiOsQAh4tgR575Y7zjrwpPkv/M=
+        b=yzE5klTTTA1XG3cXeLp9tC0pZh2kZ3pS3Y50iSbiHDN/AP4RT5xLqhN7jq+vOYWu5
+         uw6STeqKfHbcMPgzToJwNrwlvw/dUapw72RfXFCvsii5lAsXIKQ72UHkqKNCw7uW8m
+         R3Yjz9qursLYC5021MCkiX811jsnCst8BuPhMecw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hristo Venev <hristo@venev.name>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 16/26] be2net: Fix buffer overflow in be_get_module_eeprom
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 19/37] tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
 Date:   Wed, 27 Jul 2022 18:10:45 +0200
-Message-Id: <20220727160959.770313545@linuxfoundation.org>
+Message-Id: <20220727161001.611377422@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
-References: <20220727160959.122591422@linuxfoundation.org>
+In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
+References: <20220727161000.822869853@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,142 +53,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hristo Venev <hristo@venev.name>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit d7241f679a59cfe27f92cb5c6272cb429fb1f7ec ]
+[ Upstream commit 8b917cbe38e9b0d002492477a9fc2bfee2412ce4 ]
 
-be_cmd_read_port_transceiver_data assumes that it is given a buffer that
-is at least PAGE_DATA_LEN long, or twice that if the module supports SFF
-8472. However, this is not always the case.
+The bug is here:
+	if (!encoder) {
 
-Fix this by passing the desired offset and length to
-be_cmd_read_port_transceiver_data so that we only copy the bytes once.
+The list iterator value 'encoder' will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+is found.
 
-Fixes: e36edd9d26cf ("be2net: add ethtool "-m" option support")
-Signed-off-by: Hristo Venev <hristo@venev.name>
-Link: https://lore.kernel.org/r/20220716085134.6095-1-hristo@venev.name
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+To fix the bug, use a new variable 'iter' as the list iterator,
+while use the original variable 'encoder' as a dedicated pointer
+to point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: ec9eab097a500 ("drm/tilcdc: Add drm bridge support for attaching drm bridge drivers")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reviewed-by: Jyri Sarha <jyri.sarha@iki.fi>
+Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
+Signed-off-by: Jyri Sarha <jyri.sarha@iki.fi>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327061516.5076-1-xiam0nd.tong@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/emulex/benet/be_cmds.c   | 10 +++---
- drivers/net/ethernet/emulex/benet/be_cmds.h   |  2 +-
- .../net/ethernet/emulex/benet/be_ethtool.c    | 31 ++++++++++++-------
- 3 files changed, 25 insertions(+), 18 deletions(-)
+ drivers/gpu/drm/tilcdc/tilcdc_external.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.c b/drivers/net/ethernet/emulex/benet/be_cmds.c
-index 8887dd3abed7..619cc13ffb55 100644
---- a/drivers/net/ethernet/emulex/benet/be_cmds.c
-+++ b/drivers/net/ethernet/emulex/benet/be_cmds.c
-@@ -2291,7 +2291,7 @@ int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num, u32 *state)
- 
- /* Uses sync mcc */
- int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
--				      u8 page_num, u8 *data)
-+				      u8 page_num, u32 off, u32 len, u8 *data)
+diff --git a/drivers/gpu/drm/tilcdc/tilcdc_external.c b/drivers/gpu/drm/tilcdc/tilcdc_external.c
+index 9c8520569d31..511e178012cd 100644
+--- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
++++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
+@@ -61,11 +61,13 @@ struct drm_connector *tilcdc_encoder_find_connector(struct drm_device *ddev,
+ int tilcdc_add_component_encoder(struct drm_device *ddev)
  {
- 	struct be_dma_mem cmd;
- 	struct be_mcc_wrb *wrb;
-@@ -2325,10 +2325,10 @@ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
- 	req->port = cpu_to_le32(adapter->hba_port_num);
- 	req->page_num = cpu_to_le32(page_num);
- 	status = be_mcc_notify_wait(adapter);
--	if (!status) {
-+	if (!status && len > 0) {
- 		struct be_cmd_resp_port_type *resp = cmd.va;
+ 	struct tilcdc_drm_private *priv = ddev->dev_private;
+-	struct drm_encoder *encoder;
++	struct drm_encoder *encoder = NULL, *iter;
  
--		memcpy(data, resp->page_data, PAGE_DATA_LEN);
-+		memcpy(data, resp->page_data + off, len);
- 	}
- err:
- 	mutex_unlock(&adapter->mcc_lock);
-@@ -2419,7 +2419,7 @@ int be_cmd_query_cable_type(struct be_adapter *adapter)
- 	int status;
+-	list_for_each_entry(encoder, &ddev->mode_config.encoder_list, head)
+-		if (encoder->possible_crtcs & (1 << priv->crtc->index))
++	list_for_each_entry(iter, &ddev->mode_config.encoder_list, head)
++		if (iter->possible_crtcs & (1 << priv->crtc->index)) {
++			encoder = iter;
+ 			break;
++		}
  
- 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
--						   page_data);
-+						   0, PAGE_DATA_LEN, page_data);
- 	if (!status) {
- 		switch (adapter->phy.interface_type) {
- 		case PHY_TYPE_QSFP:
-@@ -2444,7 +2444,7 @@ int be_cmd_query_sfp_info(struct be_adapter *adapter)
- 	int status;
- 
- 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
--						   page_data);
-+						   0, PAGE_DATA_LEN, page_data);
- 	if (!status) {
- 		strlcpy(adapter->phy.vendor_name, page_data +
- 			SFP_VENDOR_NAME_OFFSET, SFP_VENDOR_NAME_LEN - 1);
-diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.h b/drivers/net/ethernet/emulex/benet/be_cmds.h
-index 09da2d82c2f0..8af11a5e49fe 100644
---- a/drivers/net/ethernet/emulex/benet/be_cmds.h
-+++ b/drivers/net/ethernet/emulex/benet/be_cmds.h
-@@ -2431,7 +2431,7 @@ int be_cmd_set_beacon_state(struct be_adapter *adapter, u8 port_num, u8 beacon,
- int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num,
- 			    u32 *state);
- int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
--				      u8 page_num, u8 *data);
-+				      u8 page_num, u32 off, u32 len, u8 *data);
- int be_cmd_query_cable_type(struct be_adapter *adapter);
- int be_cmd_query_sfp_info(struct be_adapter *adapter);
- int lancer_cmd_read_object(struct be_adapter *adapter, struct be_dma_mem *cmd,
-diff --git a/drivers/net/ethernet/emulex/benet/be_ethtool.c b/drivers/net/ethernet/emulex/benet/be_ethtool.c
-index 56db37d92937..ca7750f483f9 100644
---- a/drivers/net/ethernet/emulex/benet/be_ethtool.c
-+++ b/drivers/net/ethernet/emulex/benet/be_ethtool.c
-@@ -1345,7 +1345,7 @@ static int be_get_module_info(struct net_device *netdev,
- 		return -EOPNOTSUPP;
- 
- 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
--						   page_data);
-+						   0, PAGE_DATA_LEN, page_data);
- 	if (!status) {
- 		if (!page_data[SFP_PLUS_SFF_8472_COMP]) {
- 			modinfo->type = ETH_MODULE_SFF_8079;
-@@ -1363,25 +1363,32 @@ static int be_get_module_eeprom(struct net_device *netdev,
- {
- 	struct be_adapter *adapter = netdev_priv(netdev);
- 	int status;
-+	u32 begin, end;
- 
- 	if (!check_privilege(adapter, MAX_PRIVILEGES))
- 		return -EOPNOTSUPP;
- 
--	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
--						   data);
--	if (status)
--		goto err;
-+	begin = eeprom->offset;
-+	end = eeprom->offset + eeprom->len;
-+
-+	if (begin < PAGE_DATA_LEN) {
-+		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0, begin,
-+							   min_t(u32, end, PAGE_DATA_LEN) - begin,
-+							   data);
-+		if (status)
-+			goto err;
-+
-+		data += PAGE_DATA_LEN - begin;
-+		begin = PAGE_DATA_LEN;
-+	}
- 
--	if (eeprom->offset + eeprom->len > PAGE_DATA_LEN) {
--		status = be_cmd_read_port_transceiver_data(adapter,
--							   TR_PAGE_A2,
--							   data +
--							   PAGE_DATA_LEN);
-+	if (end > PAGE_DATA_LEN) {
-+		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A2,
-+							   begin - PAGE_DATA_LEN,
-+							   end - begin, data);
- 		if (status)
- 			goto err;
- 	}
--	if (eeprom->offset)
--		memcpy(data, data + eeprom->offset, eeprom->len);
- err:
- 	return be_cmd_status(status);
- }
+ 	if (!encoder) {
+ 		dev_err(ddev->dev, "%s: No suitable encoder found\n", __func__);
 -- 
 2.35.1
 

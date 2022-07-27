@@ -2,113 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885E4581CB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591B7581CBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240034AbiG0APh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 20:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S240041AbiG0AP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 20:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiG0APf (ORCPT
+        with ESMTP id S229458AbiG0AP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 20:15:35 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7402019C2E;
-        Tue, 26 Jul 2022 17:15:33 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b7-20020a17090a12c700b001f20eb82a08so504730pjg.3;
-        Tue, 26 Jul 2022 17:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=3RSdu/ftksH2kRInjQ7CZe/PjouCCOaY6R6ufSLyASQ=;
-        b=f41v0gASRs2LjNLebJYIoYGWdNbcVY8lv8LN8tQ+PTdDq0Urge2d0L6C8cVHnaTv8D
-         f6E7yF1xorMNuLPPljCe1JOZ4/NEU5Tlo61Yd22WX+X6U4jB9Vb4+xa8v1wiBTppAVBa
-         5NAoLJrpeou6wOHiBxpZQLxfanle34MvNySVnXsmFqkuq/TnQelZk/vodXcWx47pYw/j
-         YCyH2F2ib040lYlZU7uiiG3s0WPrizg6ocD1f60ITQ+PRZuCKu2/exloxEl9jRVXu5/o
-         QWEyEN7ToWRTmDnkNJCaXZRc7AouklgkLN36Lw2QHbZaByD5wh0suSYhrwbfc0/zNH3V
-         GWsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=3RSdu/ftksH2kRInjQ7CZe/PjouCCOaY6R6ufSLyASQ=;
-        b=qHMnplEyXBOlORIxhWCQzMkuHB6YapMQfTcJ/HJleJyVlLrwK2xF2eF1C5dhcQbfYk
-         49X163/c7czrRQEQFweGUHEr45Yy24L2CEo1h1HuZBecbUXNfBpNecd5/+HVog5sD19i
-         zx/BzCNOHbIehISh6YTzFpT0i5hzJ2X/q9zkSNEWMxBbxZW7iLGbMXQ0xhnIWJuMuxnr
-         fB3ca5rhwUwxOLu6moQtR4TRuh3PQty278Ul9unKO2G7YkRq8A2uG1oS0JqLDufY3yG4
-         S0P2Gkk8WbbDCzYs3A+7Cv3mx9LN7MsB2swzlz+o6cAhsPcc8gwLClc8isKOXXYipJrE
-         nv6A==
-X-Gm-Message-State: AJIora+d5CTFjdYIZXK1fzRKgbkrwvYiWP1fGxLbsoGseZb7J6cTlPFW
-        ZrtHUjfAJiCJqOnB0qN2T1gPF7t/7rEyOw==
-X-Google-Smtp-Source: AGRyM1u/LwAsCEZMgKu58cdfbc6X+rmkg7cqtKiuXRSrO5N9j0sBr+6aBlnWLpe1hpNWMkNbTvncBA==
-X-Received: by 2002:a17:903:110e:b0:16c:defc:a092 with SMTP id n14-20020a170903110e00b0016cdefca092mr19142661plh.143.1658880932457;
-        Tue, 26 Jul 2022 17:15:32 -0700 (PDT)
-Received: from Negi ([68.181.16.133])
-        by smtp.gmail.com with ESMTPSA id u5-20020a627905000000b005259578e8fcsm12298305pfc.181.2022.07.26.17.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 17:15:31 -0700 (PDT)
-From:   Soumya Negi <soumya.negi97@gmail.com>
-To:     Anton Altaparmakov <anton@tuxera.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Soumya Negi <soumya.negi97@gmail.com>,
-        linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        stable@vger.kernel.org
-Subject: [PATCH v2] ntfs: Ensure $Extend is a directory
-Date:   Tue, 26 Jul 2022 17:15:13 -0700
-Message-Id: <20220727001513.11902-1-soumya.negi97@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 20:15:56 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5326819C2E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2T3hUKFNgtBW8OumyrTKwgozBtxLREQ5SuTUmSurTyM=; b=Qvbv1ZKqlbGOonvYL7mDWLSOHx
+        2LeMGAHEXGQJtPNZMvoA23P7UJXDwFyqWax0qYqy9SYdaKjVihDm7p4HWTDjzNDFxXW88rpl8dxI9
+        8Hd0h9ygt82QIRfJXlbTS0MrDszmrDrHwZGM9m8g1ndAD9V15M3nKCiZ+xLgn3hkfcoKxRni9XAFW
+        P9p2zWNfr8gwQp1oNtVSm6opL9RIaGE9s9zSShCGfn9ChBZaH3uddav9SvwBa798HUsSghJ2ztto9
+        EcWeaC31Bx+P7yrXQ/tw6qDwILk7yogVPm3v3CeW0Z+QMUPz+Gq473hmJl+NE1qaZHj4zJGQwrZVp
+        9MkhKmkQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33582)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oGUiL-0004hF-9q; Wed, 27 Jul 2022 01:15:49 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oGUiH-0001iU-DX; Wed, 27 Jul 2022 01:15:45 +0100
+Date:   Wed, 27 Jul 2022 01:15:45 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Yury Norov <yury.norov@gmail.com>, Dennis Zhou <dennis@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org
+Subject: Re: Linux 5.19-rc8
+Message-ID: <YuCDscyJotkjNQcH@shell.armlinux.org.uk>
+References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
+ <20220725161141.GA1306881@roeck-us.net>
+ <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
+ <YuAm5h1B6bsrR/9q@fedora>
+ <CAHk-=wgYpJTMMxmfbpqc=JVtSK0Zj4b15G=AvEYk6vPNySDSsA@mail.gmail.com>
+ <YuAv+lV324G7pmlk@yury-laptop>
+ <CAHk-=wg2-j8zocUjurAeg_bimNz7C5h5HDEXKK6PxDmR+DaHRg@mail.gmail.com>
+ <YuBEIiLL1xZVyEFl@shell.armlinux.org.uk>
+ <CAHk-=wjpYLLoi1m0VRfVoyzGgmMiNwBhQ0XXG0VWwjskcz5Cug@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjpYLLoi1m0VRfVoyzGgmMiNwBhQ0XXG0VWwjskcz5Cug@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix Syzbot bug: kernel BUG in ntfs_lookup_inode_by_name
-https://syzkaller.appspot.com/bug?id=32cf53b48c1846ffc25a185a2e92e170d1a95d71
+On Tue, Jul 26, 2022 at 01:20:23PM -0700, Linus Torvalds wrote:
+> On Tue, Jul 26, 2022 at 12:44 PM Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > Overall, I would say it's pretty similar (some generic perform
+> > marginally better, some native perform marginally better) with the
+> > exception of find_first_bit() being much better with the generic
+> > implementation, but find_next_zero_bit() being noticably worse.
+> 
+> The generic _find_first_bit() code is actually sane and simple. It
+> loops over words until it finds a non-zero one, and then does trivial
+> calculations on that last word.
+> 
+> That explains why the generic code does so much better than your byte-wise asm.
+> 
+> In contrast, the generic _find_next_bit() I find almost offensively
+> silly - which in turn explains why your byte-wide asm does better.
+> 
+> I think the generic _find_next_bit() should actually do what the m68k
+> find_next_bit code does: handle the first special word itself, and
+> then just call find_first_bit() on the rest of it.
+> 
+> And it should *not* try to handle the dynamic "bswap and/or bit sense
+> invert" thing at all. That should be just four different (trivial)
+> cases for the first word.
 
-Check whether $Extend is a directory or not( for NTFS3.0+) while
-loading system files. If it isn't(as in the case of this bug where the
-mft record for $Extend contains a regular file), load_system_files()
-returns false.
+Here's the results for the native version converted to use word loads:
 
-Reported-by: syzbot+30b7f850c6d98ea461d2@syzkaller.appspotmail.com
-CC: stable@vger.kernel.org # 4.9+
-Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
----
-Changes since v1:
-* Added CC tag for stable
-* Formatted changelog to fit within 72 cols
+[   37.319937]
+               Start testing find_bit() with random-filled bitmap
+[   37.330289] find_next_bit:                 2222703 ns, 163781 iterations
+[   37.339186] find_next_zero_bit:            2154375 ns, 163900 iterations
+[   37.348118] find_last_bit:                 2208104 ns, 163780 iterations
+[   37.372564] find_first_bit:               17722203 ns,  16370 iterations
+[   37.737415] find_first_and_bit:          358135191 ns,  32453 iterations
+[   37.745420] find_next_and_bit:             1280537 ns,  73644 iterations
+[   37.752143]
+               Start testing find_bit() with sparse bitmap
+[   37.759032] find_next_bit:                   41256 ns,    655 iterations
+[   37.769905] find_next_zero_bit:            4148410 ns, 327026 iterations
+[   37.776675] find_last_bit:                   48742 ns,    655 iterations
+[   37.790961] find_first_bit:                7562371 ns,    655 iterations
+[   37.797743] find_first_and_bit:              47366 ns,      1 iterations
+[   37.804527] find_next_and_bit:               59924 ns,      1 iterations
 
----
- fs/ntfs/super.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+which is generally faster than the generic version, with the exception
+of the sparse find_first_bit (generic was:
+[   25.657304] find_first_bit:                7328573 ns,    656 iterations)
 
-diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
-index 5ae8de09b271..18e2902531f9 100644
---- a/fs/ntfs/super.c
-+++ b/fs/ntfs/super.c
-@@ -2092,10 +2092,15 @@ static bool load_system_files(ntfs_volume *vol)
- 	// TODO: Initialize security.
- 	/* Get the extended system files' directory inode. */
- 	vol->extend_ino = ntfs_iget(sb, FILE_Extend);
--	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino)) {
-+	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino) ||
-+	    !S_ISDIR(vol->extend_ino->i_mode)) {
-+		static const char *es1 = "$Extend is not a directory";
-+		static const char *es2 = "Failed to load $Extend";
-+		const char *es = !S_ISDIR(vol->extend_ino->i_mode) ? es1 : es2;
-+
- 		if (!IS_ERR(vol->extend_ino))
- 			iput(vol->extend_ino);
--		ntfs_error(sb, "Failed to load $Extend.");
-+		ntfs_error(sb, "%s.", es);
- 		goto iput_sec_err_out;
- 	}
- #ifdef NTFS_RW
+find_next_{,zero_}bit() in the sparse case are quite a bit faster than
+the generic code.
+
 -- 
-2.17.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85E8583027
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3838A582F5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242461AbiG0ReL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S242091AbiG0RYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238422AbiG0Rde (ORCPT
+        with ESMTP id S242029AbiG0RX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:33:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FC38244D;
-        Wed, 27 Jul 2022 09:48:51 -0700 (PDT)
+        Wed, 27 Jul 2022 13:23:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6FD7AC03;
+        Wed, 27 Jul 2022 09:45:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E993B61684;
-        Wed, 27 Jul 2022 16:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3156C433B5;
-        Wed, 27 Jul 2022 16:48:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CFB860D38;
+        Wed, 27 Jul 2022 16:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E5CC433D7;
+        Wed, 27 Jul 2022 16:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940510;
-        bh=HExVcHZTruUUfXUkliReJ0ROIBKXM0SO1OOV/4zgfhw=;
+        s=korg; t=1658940347;
+        bh=tERZppFqcEhedvwOcLJyBDztk0AV46GCOnRXiuvGQrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dau8xouMusYxpIPi18cvf+npgLLFIZHtQWyNLDJQqF9WepZT8Ozg7SIjLNpZSDl02
-         Co9YZ9dU+HvjJO5DO8sOh8OggFdEPAfS0X7FcJCui/mn/8Jc2lDkgDRjjB/PtCMDQV
-         Q5QiiNNcL2uPXmE8wKEjZaWdxynbB4cKm5Ifqmkw=
+        b=gy5SWLPIsiPgZHr/SjqoQ2yEfk2zmk2GERGX8Dv0XjGiJS0gKvgTCvPZAd+nT3X1r
+         gbam32LF303l2uW4uGf4KWITtSQoquKO8MFCEyu+4gL5M+LOqXhV4W9jVyMpIGRM2l
+         40W8th61ByYzft+O8nKLkgBg68SLywktF7+GPnFs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sasha Neftin <sasha.neftin@intel.com>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 031/158] Revert "e1000e: Fix possible HW unit hang after an s0ix exit"
-Date:   Wed, 27 Jul 2022 18:11:35 +0200
-Message-Id: <20220727161022.727044176@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Hillf Danton <hdanton@sina.com>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 5.15 192/201] tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
+Date:   Wed, 27 Jul 2022 18:11:36 +0200
+Message-Id: <20220727161035.722436889@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,124 +55,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Neftin <sasha.neftin@intel.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit 6cfa45361d3eac31ba67d7d0bbef547151450106 ]
+commit a501ab75e7624d133a5a3c7ec010687c8b961d23 upstream.
 
-This reverts commit 1866aa0d0d6492bc2f8d22d0df49abaccf50cddd.
+There is a race in pty_write(). pty_write() can be called in parallel
+with e.g. ioctl(TIOCSTI) or ioctl(TCXONC) which also inserts chars to
+the buffer. Provided, tty_flip_buffer_push() in pty_write() is called
+outside the lock, it can commit inconsistent tail. This can lead to out
+of bounds writes and other issues. See the Link below.
 
-Commit 1866aa0d0d64 ("e1000e: Fix possible HW unit hang after an s0ix
-exit") was a workaround for CSME problem to handle messages comes via H2ME
-mailbox. This problem has been fixed by patch "e1000e: Enable the GPT
-clock before sending message to the CSME".
+To fix this, we have to introduce a new helper called
+tty_insert_flip_string_and_push_buffer(). It does both
+tty_insert_flip_string() and tty_flip_buffer_commit() under the port
+lock. It also calls queue_work(), but outside the lock. See
+71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in
+pty_write) for the reasons.
 
-Fixes: 3e55d231716e ("e1000e: Add handshake with the CSME to support S0ix")
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=214821
-Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Keep the helper internal-only (in drivers' tty.h). It is not intended to
+be used widely.
+
+Link: https://seclists.org/oss-sec/2022/q2/155
+Fixes: 71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in pty_write)
+Cc: 一只狗 <chennbnbnb@gmail.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Suggested-by: Hillf Danton <hdanton@sina.com>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220707082558.9250-2-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/e1000e/hw.h      |  1 -
- drivers/net/ethernet/intel/e1000e/ich8lan.c |  4 ----
- drivers/net/ethernet/intel/e1000e/ich8lan.h |  1 -
- drivers/net/ethernet/intel/e1000e/netdev.c  | 26 ---------------------
- 4 files changed, 32 deletions(-)
+ drivers/tty/pty.c        |   14 ++------------
+ drivers/tty/tty.h        |    3 +++
+ drivers/tty/tty_buffer.c |   31 +++++++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/e1000e/hw.h b/drivers/net/ethernet/intel/e1000e/hw.h
-index 13382df2f2ef..bcf680e83811 100644
---- a/drivers/net/ethernet/intel/e1000e/hw.h
-+++ b/drivers/net/ethernet/intel/e1000e/hw.h
-@@ -630,7 +630,6 @@ struct e1000_phy_info {
- 	bool disable_polarity_correction;
- 	bool is_mdix;
- 	bool polarity_correction;
--	bool reset_disable;
- 	bool speed_downgraded;
- 	bool autoneg_wait_to_complete;
- };
-diff --git a/drivers/net/ethernet/intel/e1000e/ich8lan.c b/drivers/net/ethernet/intel/e1000e/ich8lan.c
-index e6c8e6d5234f..9466f65a6da7 100644
---- a/drivers/net/ethernet/intel/e1000e/ich8lan.c
-+++ b/drivers/net/ethernet/intel/e1000e/ich8lan.c
-@@ -2050,10 +2050,6 @@ static s32 e1000_check_reset_block_ich8lan(struct e1000_hw *hw)
- 	bool blocked = false;
- 	int i = 0;
+--- a/drivers/tty/pty.c
++++ b/drivers/tty/pty.c
+@@ -111,21 +111,11 @@ static void pty_unthrottle(struct tty_st
+ static int pty_write(struct tty_struct *tty, const unsigned char *buf, int c)
+ {
+ 	struct tty_struct *to = tty->link;
+-	unsigned long flags;
  
--	/* Check the PHY (LCD) reset flag */
--	if (hw->phy.reset_disable)
--		return true;
--
- 	while ((blocked = !(er32(FWSM) & E1000_ICH_FWSM_RSPCIPHY)) &&
- 	       (i++ < 30))
- 		usleep_range(10000, 11000);
-diff --git a/drivers/net/ethernet/intel/e1000e/ich8lan.h b/drivers/net/ethernet/intel/e1000e/ich8lan.h
-index 638a3ddd7ada..2504b11c3169 100644
---- a/drivers/net/ethernet/intel/e1000e/ich8lan.h
-+++ b/drivers/net/ethernet/intel/e1000e/ich8lan.h
-@@ -271,7 +271,6 @@
- #define I217_CGFREG_ENABLE_MTA_RESET	0x0002
- #define I217_MEMPWR			PHY_REG(772, 26)
- #define I217_MEMPWR_DISABLE_SMB_RELEASE	0x0010
--#define I217_MEMPWR_MOEM		0x1000
+-	if (tty->flow.stopped)
++	if (tty->flow.stopped || !c)
+ 		return 0;
  
- /* Receive Address Initial CRC Calculation */
- #define E1000_PCH_RAICC(_n)	(0x05F50 + ((_n) * 4))
-diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-index c64102b29862..f1729940e46c 100644
---- a/drivers/net/ethernet/intel/e1000e/netdev.c
-+++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-@@ -6991,21 +6991,8 @@ static __maybe_unused int e1000e_pm_suspend(struct device *dev)
- 	struct net_device *netdev = pci_get_drvdata(to_pci_dev(dev));
- 	struct e1000_adapter *adapter = netdev_priv(netdev);
- 	struct pci_dev *pdev = to_pci_dev(dev);
--	struct e1000_hw *hw = &adapter->hw;
--	u16 phy_data;
- 	int rc;
- 
--	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
--	    hw->mac.type >= e1000_pch_adp) {
--		/* Mask OEM Bits / Gig Disable / Restart AN (772_26[12] = 1) */
--		e1e_rphy(hw, I217_MEMPWR, &phy_data);
--		phy_data |= I217_MEMPWR_MOEM;
--		e1e_wphy(hw, I217_MEMPWR, phy_data);
--
--		/* Disable LCD reset */
--		hw->phy.reset_disable = true;
+-	if (c > 0) {
+-		spin_lock_irqsave(&to->port->lock, flags);
+-		/* Stuff the data into the input queue of the other end */
+-		c = tty_insert_flip_string(to->port, buf, c);
+-		spin_unlock_irqrestore(&to->port->lock, flags);
+-		/* And shovel */
+-		if (c)
+-			tty_flip_buffer_push(to->port);
 -	}
--
- 	e1000e_flush_lpic(pdev);
- 
- 	e1000e_pm_freeze(dev);
-@@ -7027,8 +7014,6 @@ static __maybe_unused int e1000e_pm_resume(struct device *dev)
- 	struct net_device *netdev = pci_get_drvdata(to_pci_dev(dev));
- 	struct e1000_adapter *adapter = netdev_priv(netdev);
- 	struct pci_dev *pdev = to_pci_dev(dev);
--	struct e1000_hw *hw = &adapter->hw;
--	u16 phy_data;
- 	int rc;
- 
- 	/* Introduce S0ix implementation */
-@@ -7039,17 +7024,6 @@ static __maybe_unused int e1000e_pm_resume(struct device *dev)
- 	if (rc)
- 		return rc;
- 
--	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
--	    hw->mac.type >= e1000_pch_adp) {
--		/* Unmask OEM Bits / Gig Disable / Restart AN 772_26[12] = 0 */
--		e1e_rphy(hw, I217_MEMPWR, &phy_data);
--		phy_data &= ~I217_MEMPWR_MOEM;
--		e1e_wphy(hw, I217_MEMPWR, phy_data);
--
--		/* Enable LCD reset */
--		hw->phy.reset_disable = false;
--	}
--
- 	return e1000e_pm_thaw(dev);
+-	return c;
++	return tty_insert_flip_string_and_push_buffer(to->port, buf, c);
  }
  
--- 
-2.35.1
-
+ /**
+--- a/drivers/tty/tty.h
++++ b/drivers/tty/tty.h
+@@ -111,4 +111,7 @@ static inline void tty_audit_tiocsti(str
+ 
+ ssize_t redirected_tty_write(struct kiocb *, struct iov_iter *);
+ 
++int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
++		const unsigned char *chars, size_t cnt);
++
+ #endif
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -563,6 +563,37 @@ void tty_flip_buffer_push(struct tty_por
+ EXPORT_SYMBOL(tty_flip_buffer_push);
+ 
+ /**
++ * tty_insert_flip_string_and_push_buffer - add characters to the tty buffer and
++ *	push
++ * @port: tty port
++ * @chars: characters
++ * @size: size
++ *
++ * The function combines tty_insert_flip_string() and tty_flip_buffer_push()
++ * with the exception of properly holding the @port->lock.
++ *
++ * To be used only internally (by pty currently).
++ *
++ * Returns: the number added.
++ */
++int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
++		const unsigned char *chars, size_t size)
++{
++	struct tty_bufhead *buf = &port->buf;
++	unsigned long flags;
++
++	spin_lock_irqsave(&port->lock, flags);
++	size = tty_insert_flip_string(port, chars, size);
++	if (size)
++		tty_flip_buffer_commit(buf->tail);
++	spin_unlock_irqrestore(&port->lock, flags);
++
++	queue_work(system_unbound_wq, &buf->work);
++
++	return size;
++}
++
++/**
+  *	tty_buffer_init		-	prepare a tty buffer structure
+  *	@port: tty port to initialise
+  *
 
 

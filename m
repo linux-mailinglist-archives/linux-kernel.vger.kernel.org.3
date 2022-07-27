@@ -2,111 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B290F58327A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A3C583283
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiG0SyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S232468AbiG0Szw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbiG0Sxo (ORCPT
+        with ESMTP id S233710AbiG0Szd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:53:44 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B70B63921
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:51:57 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o20-20020a17090aac1400b001f2da729979so3022720pjq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ofQJSU73p95X2wrdmZUMPm40+n8Nm3wKjXkzp0hyl7g=;
-        b=XmZYEReTJM3L7fsK9TWdOjLKfiG9/dDjYBZctld/7WfLBTg+GpLZP2jGoashiK9oHp
-         eBm/HwHa2XW04PRn2hCGJt0upBpvHEYVpCiwCg5X8G7IXxs3Cs0Qndk/EIJ4N41pWu+A
-         uj/eS/a5c+iIOwKlO+a6Ue5DQFtzabKxozxkXlq7c4Djl4nvCbCTiPJEz0IPCeP4+Pkt
-         JdbgOOGW8+EXaNOv72WVWEIDXEXNtyPuUytZlnDFRZxXNdJ1uouTqywvt6dIWUjnbgDE
-         wueqn9+4Fqyt/EdrrtSAPE1Z1/Hvx9ZgJBSj1NFEQ7ndSpcJWCcjqMPUbVbb5bZRzr/V
-         Jq9w==
+        Wed, 27 Jul 2022 14:55:33 -0400
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672A38053A;
+        Wed, 27 Jul 2022 10:54:52 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id 72so16554161pge.0;
+        Wed, 27 Jul 2022 10:54:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ofQJSU73p95X2wrdmZUMPm40+n8Nm3wKjXkzp0hyl7g=;
-        b=3dPCnXQGg0nKS9hnfehxiyOgVXGp1Dw+8wyavp5wYEqWFMT/TlSgigaLcBt13vdGFR
-         gEdRc9aFQrEHQmDqhwFXEemPXOTBvjXPu6M80e8vyclzRWBkURmf8wBsZEf8H6k0Pmcj
-         MVOVcMsXkp0Ta1PorGRcwhBoAc8UGFa0+fkYft2rNJti3f5YCuTZDbjdKZaHDlKOQF4u
-         bQdXPMobLqe5TITB1zb8o67yPy2LOSNhWRuthGQghqVqJ6NNdNk0Bfn6mHKval37hkAc
-         otwjag6hl0Wu7VIuyUteJUeMfpJj54gIAd/nYZCqDn/xpSWaoIacsbd2QUFPDoHhG6Hg
-         BR0Q==
-X-Gm-Message-State: AJIora/H4P1qN6f6JfgfiiTC2adKOGoDFSvFWqbga24yKzzM+BhThj2y
-        0O0sDmwwT92WfZ1YryTP68ymGo9f2MaKbg==
-X-Google-Smtp-Source: AGRyM1vV8JXIJhF+qJqT0Dzy5IsQQCabBg+/G8IdfcmHqMbpVts8NvQp/ObpyQrGa62H8vdRbxZsvg==
-X-Received: by 2002:a17:90a:728f:b0:1f2:4a4c:6c39 with SMTP id e15-20020a17090a728f00b001f24a4c6c39mr5912043pjg.43.1658944316853;
-        Wed, 27 Jul 2022 10:51:56 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q29-20020aa7961d000000b0052b8240840dsm14703835pfg.145.2022.07.27.10.51.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 10:51:56 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 17:51:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Hao Peng <flyingpenghao@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kvm: mmu: fix typos in struct kvm_arch
-Message-ID: <YuF7OCqZ7/57P+El@google.com>
-References: <CAPm50aKursUrDpgqLt7RT-VoSfBJswsnR2w1sVAt5mburmdd8g@mail.gmail.com>
- <CALzav=eccuGWGpBs=tp5RO_wJqQecGRwDAPi+tyPkMcYrbrPoA@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iM28l70GATLFve15qcYA6iaGMWXkiPg+C+0XFnQgM0I=;
+        b=prLxW6GwxBQPFpqB2seyxhJ/L/kOnXnZUY2V4bx5IYuf9WxwQPhgucfaaXVa8dV2kN
+         73d1B9Gk8hPgKAwE2FqkMr/JSU221ZO53ra5R6h/j3iPvicM0VFXbn7pJnvEN0qfYqK0
+         rLxdjQ555zkZ67He8gSkmSYjPJ4F5bztMx3A4rbOwHw7JfAV+Q+JrzfgdLNIxSMzctvh
+         ml6gkSWm+YGa7QZH1uGz0WN/efqXrpy8A82PhiSNdSFxwCZMFt4Z99QSHDVg6YFsa5dD
+         XuqJIJ9csjU7/vr8NOnPvFU8Nl7dzKlejGTEmaFOqFlw9/b6W3awDVSHlF5XrKtqVGOV
+         SUtg==
+X-Gm-Message-State: AJIora8vbluhEu293EAlP2hfHMoPbQCMTz/86Jsa6LXwzMQjS/SUEj7v
+        gflXL5ANsrmtHv/bQ5U+VgU=
+X-Google-Smtp-Source: AGRyM1syk/n8dXBSw+6bXNt1/MGXukbIrHHFSAc89gH3H3WBNC4VJg/AlmxyERIjInCDCpkaKnOmIQ==
+X-Received: by 2002:a05:6a00:16ca:b0:52b:cc59:9488 with SMTP id l10-20020a056a0016ca00b0052bcc599488mr22849005pfc.0.1658944491439;
+        Wed, 27 Jul 2022 10:54:51 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:a84e:2ec1:1b57:b033? ([2620:15c:211:201:a84e:2ec1:1b57:b033])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b0016be5f24aaesm11961037plh.163.2022.07.27.10.54.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 10:54:50 -0700 (PDT)
+Message-ID: <3be80a61-3002-eba1-53e2-928ffa740902@acm.org>
+Date:   Wed, 27 Jul 2022 10:54:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALzav=eccuGWGpBs=tp5RO_wJqQecGRwDAPi+tyPkMcYrbrPoA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] scsi: ufs: introduce dev_cmd_notify callback
+Content-Language: en-US
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Gyunghoon Kwon <goodjob.kwon@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+Cc:     "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20220727051046epcas2p15481688ac3b7917bed8d06ebfb0a4184@epcas2p1.samsung.com>
+ <20220727050954.118743-1-goodjob.kwon@samsung.com>
+ <DM6PR04MB65752988E971F9953913C38DFC979@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <DM6PR04MB65752988E971F9953913C38DFC979@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022, David Matlack wrote:
-> On Wed, Jul 27, 2022 at 3:58 AM Hao Peng <flyingpenghao@gmail.com> wrote:
-> >
-> > From: Peng Hao <flyingpeng@tencent.com>
-> >
-> > No 'kvmp_mmu_pages', it should be 'kvm_mmu_page'. And
-> > struct kvm_mmu_pages and struct kvm_mmu_page are different structures,
-> > here should be kvm_mmu_page.
-> > kvm_mmu_pages is defined in arch/x86/kvm/mmu/mmu.c.
-> >
-> > Signed-off-by: Peng Hao <flyingpeng@tencent.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index e8281d64a431..205a9f374e14 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1272,8 +1272,8 @@ struct kvm_arch {
-> >         bool tdp_mmu_enabled;
-> >
-> >         /*
-> > -        * List of struct kvm_mmu_pages being used as roots.
-> > -        * All struct kvm_mmu_pages in the list should have
-> > +        * List of struct kvm_mmu_page being used as roots.
-> 
-> I agree that "struct <name>s" is a bad/misleading way to make a struct
-> plural in comments. The way I prefer to do it is "<name> structs".
-> That avoids changing the <name> and still makes it clear it's plural.
+On 7/26/22 22:16, Avri Altman wrote:
+>> Some UFS host controller may need to synchronize dev command among UFS
+>> host controllers.
+>
+> You need to include at least one implementation of this vop,
+> Otherwise, its just a piece of dead code.
 
-+1, I like that approach.  FWIW, "struct kvm_mmu_pages" will likely be renamed in
-the not-too-distant future[*], but I think it's still worth changing this to follow
-David's suggestion.
-
-[*] https://lore.kernel.org/all/20220605064342.309219-13-jiangshanlai@gmail.com
++1

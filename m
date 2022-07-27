@@ -2,76 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D665827A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383AB5827A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbiG0NZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S233345AbiG0NZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbiG0NZY (ORCPT
+        with ESMTP id S232909AbiG0NZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:25:24 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD526EE26
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:25:23 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id c12so14000507ede.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kqFNbE+aXXivn44JOwD+CLf88ASFJmrA3QkI4yv/BwY=;
-        b=WZyfnrrhksvpWBLouKDJn/piW1ld+hisGQMb+xy+M/pOxZtD7PWWggX9zC42TTJP54
-         PyyYX2/7NnOKDxAunaUK4YwkRbAbB5Euo7eHuzONYuVAR/vYbMIUu5xKiWOyPNmMzmqS
-         U3dCYoS3Ps9LVJJSFl6izA265QF5NiaAjPwrU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kqFNbE+aXXivn44JOwD+CLf88ASFJmrA3QkI4yv/BwY=;
-        b=yu7tWz+ObcyZzvdyej5giC/A08tRpKJh9JY7TgACuSDmQoUV9T9pA5xEC3bi62QOel
-         egPyAspkstJRchhDK3MV5JkwPAruoZ/PpjR2hrlhi8fWmmldkCXG2n1NnQT4IKK0uZcQ
-         FoqeeXwNmUlLhNSqVZYCYdE+TKNvt/SCykTN8ATRUWdY5NCZ98ibehiLQdSYaSFefO9V
-         6JjPJT5Trq4GUH+L4+Q850+OSC04+uwcrHg6bl6wgndmVGGiwr8OaHdPorEwGDDBjKp7
-         ANa28LTHOf+FxYiF7kb+cqbMS0ofM7QggFVCZBlDISTsT+/XMltv0iz101cpM84d3kGb
-         0qKQ==
-X-Gm-Message-State: AJIora+f1a6en+YSKZxrNBXGCRaz3ItugeqDqShtztQdEH2nzpa+rpPU
-        w/NfJkm3ay6fTdatguq1A2LurJvx7eFammbibbeHXg==
-X-Google-Smtp-Source: AGRyM1s8WP3OBt1gsHtGiiinaLIF69C5+rkDudiyLGY00MyjFeImI3wdU676TNjPQ6E3FfBwfdfHBK318Wl5DfqWItU=
-X-Received: by 2002:a05:6402:e96:b0:43a:f21f:42a0 with SMTP id
- h22-20020a0564020e9600b0043af21f42a0mr23708627eda.382.1658928322262; Wed, 27
- Jul 2022 06:25:22 -0700 (PDT)
+        Wed, 27 Jul 2022 09:25:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9812FAE78
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:25:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 043FCCE219F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF7F7C433D6;
+        Wed, 27 Jul 2022 13:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658928319;
+        bh=/2rotFYdfY/ec+jauYH6arvwpgfHHTF23YN5wkahDZY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dx8kZcSzWA0zU1+8BV8WNlSpXSXZjd6fZMfb85LnVL7iRWMiN+KGmqOpnFTkJ5ltE
+         X/056Dd9glRr2gRTDtznYZwjl5GEoK1ZURWaY4nApcioBJlDvriOeqio6tRn+dLA6y
+         gysplP8WEl8YRGj3RmD1POBA5J4lb8jzJHOjATC0=
+Date:   Wed, 27 Jul 2022 15:25:16 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiho Chu <jiho.chu@samsung.com>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        yelini.jeong@samsung.com, myungjoo.ham@samsung.com
+Subject: Re: [PATCH 5/9] trinity: Add sysfs debugfs module
+Message-ID: <YuE8vEaA19iPGcfy@kroah.com>
+References: <20220725065308.2457024-1-jiho.chu@samsung.com>
+ <CGME20220725065309epcas1p413498a418cbf58570f8009ae7fd91015@epcas1p4.samsung.com>
+ <20220725065308.2457024-6-jiho.chu@samsung.com>
 MIME-Version: 1.0
-References: <20220712152318.2649819-1-williamsukatube@163.com>
-In-Reply-To: <20220712152318.2649819-1-williamsukatube@163.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 27 Jul 2022 15:25:11 +0200
-Message-ID: <CAJfpeguvvbPQnd15Ait+-EZbq9QojdL7Mp+-w7KTVwy7k3-wkA@mail.gmail.com>
-Subject: Re: [PATCH -next] ovl: clean up comparsions to NULL
-To:     williamsukatube@163.com
-Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        William Dean <williamsukatube@gmail.com>,
-        Hacash Robot <hacashRobot@santino.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725065308.2457024-6-jiho.chu@samsung.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 17:24, <williamsukatube@163.com> wrote:
->
-> From: William Dean <williamsukatube@gmail.com>
->
-> Clean up comparsions to NULL, simplify as follows:
-> if (x == NULL) -> if (!x)
+On Mon, Jul 25, 2022 at 03:53:04PM +0900, Jiho Chu wrote:
+> This patch includes debugfs and sysfs interfaces.
 
-Again, this has too little worth.  NACK.
+debugfs and sysfs are two totally different things, with different rules
+and requirements.  Split this up into at least 2 different patches and
+don't mush them all together.
 
-Thanks,
-Miklos
+Would you want to try to review 2000+ lines of this type of thing that
+does two totally different things at the same time?
+
+Also, you forgot the sysfs Documentation/ABI/ entries, which are
+required as you know.
+
+And finally, you should never do this:
+
+> +int trinity_sysfs_init(struct trinity_driver *drv)
+> +{
+> +	struct device *dev = drv_to_dev_ptr(drv);
+> +	int err;
+> +
+> +	err = sysfs_create_groups(&dev->kobj, trinity_attrs_groups);
+
+
+You just raced with userspace and lost.  Use the default groups pointer
+for your driver and all will be fine.  Makes for much smaller code that
+works properly.
+
+thanks,
+
+greg k-h

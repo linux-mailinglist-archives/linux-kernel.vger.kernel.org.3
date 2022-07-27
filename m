@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEF7582BA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB99582C31
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237988AbiG0Qf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S239590AbiG0QnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238246AbiG0QeN (ORCPT
+        with ESMTP id S238617AbiG0QnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:34:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD394F194;
-        Wed, 27 Jul 2022 09:26:58 -0700 (PDT)
+        Wed, 27 Jul 2022 12:43:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030EEBE25;
+        Wed, 27 Jul 2022 09:30:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD03D619C0;
-        Wed, 27 Jul 2022 16:26:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7DA4C433D7;
-        Wed, 27 Jul 2022 16:26:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3B28B821B7;
+        Wed, 27 Jul 2022 16:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F85EC433C1;
+        Wed, 27 Jul 2022 16:30:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939187;
-        bh=sKEh1h1g2EloXlRno4EC8xmmU1FOwVQwFsLKDWV/Ugg=;
+        s=korg; t=1658939406;
+        bh=irEaGC7QiScJXaA0VzHAwDN1ja0oXUlRZ6DH/Viu7J8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CnegrMT+n6sIhcq5izHJH4bpeixzCkzyMZX8Tzn8Yve1c1uqWWAEoLeJ2c7Q/V7qx
-         blYMar44WQFfmq9py4j+HUR7SHAFYsJ95omuv44hsx4Oz9rbd1fLP+ixJmW6/fZnjI
-         EyawGpUg6/GguYOMCcGu3XHVEXCEfrBDFHqMIY3g=
+        b=dHxzNwrqoQV3ZmsNEC12VetOAZ+PpIvNPCSxcWvZvcaab6igWPxXYy3YDj3Ec9Mj7
+         E4EUJhs1NVTxSxOTDGIvzKpHZeS7mCDOjgQxFFb7NhDrnPYulKxSGTROFs8f2xRur1
+         b5MZgge+y9SR+HhKT0RibrIXg78yeKaGRMsFMQ2E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, GUO Zihua <guozihua@huawei.com>,
         Stable@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 43/62] ima: remove the IMA_TEMPLATE Kconfig option
+Subject: [PATCH 5.4 59/87] ima: remove the IMA_TEMPLATE Kconfig option
 Date:   Wed, 27 Jul 2022 18:10:52 +0200
-Message-Id: <20220727161005.855488592@linuxfoundation.org>
+Message-Id: <20220727161011.457961979@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -103,10 +104,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 7 deletions(-)
 
 diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 5095b2e8fcee..3ec45028a8c5 100644
+index 748f3ee27b23..44b3315f3235 100644
 --- a/security/integrity/ima/Kconfig
 +++ b/security/integrity/ima/Kconfig
-@@ -68,10 +68,9 @@ choice
+@@ -69,10 +69,9 @@ choice
  	  hash, defined as 20 bytes, and a null terminated pathname,
  	  limited to 255 characters.  The 'ima-ng' measurement list
  	  template permits both larger hash digests and longer
@@ -119,7 +120,7 @@ index 5095b2e8fcee..3ec45028a8c5 100644
  	config IMA_NG_TEMPLATE
  		bool "ima-ng (default)"
  	config IMA_SIG_TEMPLATE
-@@ -81,7 +80,6 @@ endchoice
+@@ -82,7 +81,6 @@ endchoice
  config IMA_DEFAULT_TEMPLATE
  	string
  	depends on IMA
@@ -127,7 +128,7 @@ index 5095b2e8fcee..3ec45028a8c5 100644
  	default "ima-ng" if IMA_NG_TEMPLATE
  	default "ima-sig" if IMA_SIG_TEMPLATE
  
-@@ -101,15 +99,15 @@ choice
+@@ -102,15 +100,15 @@ choice
  
  	config IMA_DEFAULT_HASH_SHA256
  		bool "SHA256"

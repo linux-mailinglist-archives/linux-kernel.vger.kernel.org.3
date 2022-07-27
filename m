@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB04582D53
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B65582B3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241129AbiG0Q4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S237483AbiG0QaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241262AbiG0Qyl (ORCPT
+        with ESMTP id S237908AbiG0Q3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:54:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955D562A7F;
-        Wed, 27 Jul 2022 09:35:48 -0700 (PDT)
+        Wed, 27 Jul 2022 12:29:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D161BD;
+        Wed, 27 Jul 2022 09:25:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 012C961A97;
-        Wed, 27 Jul 2022 16:35:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B6DCC433D7;
-        Wed, 27 Jul 2022 16:35:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF724B821C4;
+        Wed, 27 Jul 2022 16:24:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDE5C433C1;
+        Wed, 27 Jul 2022 16:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939746;
-        bh=hfOuLggCpUFacgJ6Z/LvlCpugNeG7CshtVBtk70/sWo=;
+        s=korg; t=1658939077;
+        bh=bEhIf7cld2niPZDZbI/nEIeJ8wE5plv3kEKkLMSzO7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RAanYcCik8Xzu+KQWMU6mujfMHn4MC4pizTaP6dDybaGFFF3I7sOz4iYaGgDb5bmT
-         VlYvIoolEFKXDAh9N0w7/dLP9U0O71pLYOIt3ifqOLYGDK0L0K1lVxeea6wVizNI4P
-         2Qluw/8/4LExrUSmnsws/pc7g2Yh1++wBpd0fDY0=
+        b=rXuA6PgldWfbfnksfhbFR9lcR+9pmdzz0nR7ZoipCHo9RfDCMuwbWmunrfxPnsivy
+         8/fFVyyLPISdMfqhHl+fvWvI9Lvlwh03Y1emHx6QI9WLM87XXvewuLm76S1tnQoa/7
+         E2BWzS8eNAeUoBre9872qImf69gfcKs4VZCAj9pI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 057/105] iavf: Fix handling of dummy receive descriptors
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH 4.14 17/37] bpf: Make sure mac_header was set before using it
 Date:   Wed, 27 Jul 2022 18:10:43 +0200
-Message-Id: <20220727161014.374516739@linuxfoundation.org>
+Message-Id: <20220727161001.544948742@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
+References: <20220727161000.822869853@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit a9f49e0060301a9bfebeca76739158d0cf91cdf6 ]
+commit 0326195f523a549e0a9d7fd44c70b26fd7265090 upstream.
 
-Fix memory leak caused by not handling dummy receive descriptor properly.
-iavf_get_rx_buffer now sets the rx_buffer return value for dummy receive
-descriptors. Without this patch, when the hardware writes a dummy
-descriptor, iavf would not free the page allocated for the previous receive
-buffer. This is an unlikely event but can still happen.
+Classic BPF has a way to load bytes starting from the mac header.
 
-[Jesse: massaged commit message]
+Some skbs do not have a mac header, and skb_mac_header()
+in this case is returning a pointer that 65535 bytes after
+skb->head.
 
-Fixes: efa14c398582 ("iavf: allow null RX descriptors")
-Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
-Signed-off-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Existing range check in bpf_internal_load_pointer_neg_helper()
+was properly kicking and no illegal access was happening.
+
+New sanity check in skb_mac_header() is firing, so we need
+to avoid it.
+
+WARNING: CPU: 1 PID: 28990 at include/linux/skbuff.h:2785 skb_mac_header include/linux/skbuff.h:2785 [inline]
+WARNING: CPU: 1 PID: 28990 at include/linux/skbuff.h:2785 bpf_internal_load_pointer_neg_helper+0x1b1/0x1c0 kernel/bpf/core.c:74
+Modules linked in:
+CPU: 1 PID: 28990 Comm: syz-executor.0 Not tainted 5.19.0-rc4-syzkaller-00865-g4874fb9484be #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+RIP: 0010:skb_mac_header include/linux/skbuff.h:2785 [inline]
+RIP: 0010:bpf_internal_load_pointer_neg_helper+0x1b1/0x1c0 kernel/bpf/core.c:74
+Code: ff ff 45 31 f6 e9 5a ff ff ff e8 aa 27 40 00 e9 3b ff ff ff e8 90 27 40 00 e9 df fe ff ff e8 86 27 40 00 eb 9e e8 2f 2c f3 ff <0f> 0b eb b1 e8 96 27 40 00 e9 79 fe ff ff 90 41 57 41 56 41 55 41
+RSP: 0018:ffffc9000309f668 EFLAGS: 00010216
+RAX: 0000000000000118 RBX: ffffffffffeff00c RCX: ffffc9000e417000
+RDX: 0000000000040000 RSI: ffffffff81873f21 RDI: 0000000000000003
+RBP: ffff8880842878c0 R08: 0000000000000003 R09: 000000000000ffff
+R10: 000000000000ffff R11: 0000000000000001 R12: 0000000000000004
+R13: ffff88803ac56c00 R14: 000000000000ffff R15: dffffc0000000000
+FS: 00007f5c88a16700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fdaa9f6c058 CR3: 000000003a82c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+<TASK>
+____bpf_skb_load_helper_32 net/core/filter.c:276 [inline]
+bpf_skb_load_helper_32+0x191/0x220 net/core/filter.c:264
+
+Fixes: f9aefd6b2aa3 ("net: warn if mac header was not set")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220707123900.945305-1-edumazet@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_txrx.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ kernel/bpf/core.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-index 256fa07d54d5..99983f7a0ce0 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-@@ -1263,11 +1263,10 @@ static struct iavf_rx_buffer *iavf_get_rx_buffer(struct iavf_ring *rx_ring,
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -64,11 +64,13 @@ void *bpf_internal_load_pointer_neg_help
  {
- 	struct iavf_rx_buffer *rx_buffer;
+ 	u8 *ptr = NULL;
  
--	if (!size)
--		return NULL;
+-	if (k >= SKF_NET_OFF)
++	if (k >= SKF_NET_OFF) {
+ 		ptr = skb_network_header(skb) + k - SKF_NET_OFF;
+-	else if (k >= SKF_LL_OFF)
++	} else if (k >= SKF_LL_OFF) {
++		if (unlikely(!skb_mac_header_was_set(skb)))
++			return NULL;
+ 		ptr = skb_mac_header(skb) + k - SKF_LL_OFF;
 -
- 	rx_buffer = &rx_ring->rx_bi[rx_ring->next_to_clean];
- 	prefetchw(rx_buffer->page);
-+	if (!size)
-+		return rx_buffer;
++	}
+ 	if (ptr >= skb->head && ptr + size <= skb_tail_pointer(skb))
+ 		return ptr;
  
- 	/* we are reusing so sync this buffer for CPU use */
- 	dma_sync_single_range_for_cpu(rx_ring->dev,
--- 
-2.35.1
-
 
 

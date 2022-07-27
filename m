@@ -2,170 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6969B582616
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045C3582619
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbiG0MGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S232717AbiG0MH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbiG0MGj (ORCPT
+        with ESMTP id S232623AbiG0MHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:06:39 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31B5F56;
-        Wed, 27 Jul 2022 05:06:36 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4E2E35C01A0;
-        Wed, 27 Jul 2022 08:06:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 27 Jul 2022 08:06:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1658923594; x=1659009994; bh=sns5b3/QFe
-        KrteH5LAIPWxoG6sLFqTq3vrWcUhZbXYo=; b=GibnmcNO6wp3WeAyKuTE/nUCLB
-        YW50Ol+91ZDj79Zo5CIskHeaFVR8jAMN0X49kTLFWOa3a9HjROw12SLcp+WTbRWk
-        OAkgmgaftSsl5cwK5scd/mWQIJFxIcXwJ1bcX64UgyDee8EVuuwj44j05ryTguUB
-        p4DCIfXbxijwwku9KDHPm/VhzCK98td11UVKG7pSS/a7NmdUAmozFwQXu3IG1JFW
-        txl5azyk8POfhYSw+3hREMc6nZv9m7rRxqDP8J8Vajz9PGVQLBsC2PlyTMAIwkXm
-        D5yStClLg0CP5ubMKD1whxvJ0Og4wzm6jioIRQ20dGJ6ekEYdHcOyHVe+pFQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658923594; x=1659009994; bh=sns5b3/QFeKrteH5LAIPWxoG6sLF
-        qTq3vrWcUhZbXYo=; b=CPOvtjMSWfr51w9qpRc0e0LNAed6DSTlNlYhggqfevUC
-        XGfbJ7p3LwPJWqUWCd9A2SMlnM+cLnehqodde9XgZ5q7NJjPW1cPu960mZoIUu+Z
-        MLtHutev6Jg6MRHV7ZuYmcu463JoZ56rC+pIo38UBmuZ91cuktZr3PfECppTuleR
-        WMLUUJaap9ElmMQVnCox/54tVH+0yXXjJJtLkRxteSs55EAxP8C8XnXgsO6TB1WB
-        gWiOY4jExXpp8UFQ7CKeiQWNA90ehzhOO+HibWyvhBUzwZCZuwSwtUA2gssBu4Ig
-        jHUbywnvlinBSmdRzE/t7o4wYzVBt+GLMzcD049NfQ==
-X-ME-Sender: <xms:SSrhYuzCudXQOXDePTu9vd-jnHWA2c0dG9z3DmtX82aSwA_iiHLlVQ>
-    <xme:SSrhYqQivoa7jzWzw_mNC5VX8HsHDGaFeRqg7-0c9M8dAne77B8nWeOZvJglqA2F8
-    13RETjYW95OvqTKwa4>
-X-ME-Received: <xmr:SSrhYgVwpFCYbJHWnIkNSZl2pqClDE01SmH6gCdeKdXa4o7jKmy2gepA-Ejw_cRbcv9nvxuLg3wZ3U5mLd650aRxRfb9Ip_VeJjiaj4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduvddggeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:SSrhYkicJ_IGgqz6iexkhVvJotQY9PgHDYu6at83sP86XcN-jbRxig>
-    <xmx:SSrhYgD_6W9SF0CcaX5syZO4GDpQtYW869-2NL9JMz79PzcyP-mG8w>
-    <xmx:SSrhYlIvonbC6Au2J1vGXrnhrB9vVXK9few-aIOgGzwMHy05o0c_Hw>
-    <xmx:SirhYob7ea0CytTonx1V7XsjzDERI7TE34Dj8js15DQ3IuZ1nqkMsQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 27 Jul 2022 08:06:33 -0400 (EDT)
-Date:   Wed, 27 Jul 2022 14:06:31 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH RFC v3 1/8] of: Mark interconnects property supplier as
- optional
-Message-ID: <20220727120631.iefzititedahdsdt@houat>
-References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
- <20220302211100.65264-2-paul.kocialkowski@bootlin.com>
- <YiaTfsMDs7RGob2N@robh.at.kernel.org>
- <CAGETcx9u9RO_5nSp+=qgwDGY=jL_Q1hAcj+RfVN=q-H_8iuT4w@mail.gmail.com>
+        Wed, 27 Jul 2022 08:07:55 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D0C4B489
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:07:53 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id w18so8510007lje.1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=P+2FHV1UyVrnsYNntWHopzv4+MXcff3Of4ioJzVnCGI=;
+        b=AnjWDI8tr9bmZBYUFMj9WPOl3m53p4x/SYpzv83Z2ehj6b2z5tMohFMPs66mns4vtc
+         F/SNUthfL0SBnMR6A5PHNawbqprmZHCGM8GPGB15ac2wkhyNqIl1KNLdyBx61K+BAUNL
+         jocFxnN7BpnKnJ6SSfKw6fW/CS1mnG4kGf3tr9tXRV49p8zNvIPdzlwfffMHUsqkw5jR
+         vUEDwdjzBSf7aCCkIaQBkGOMv6Hh3n6kPErwGpbNTbtC015ZZXyQLxlpQDEWD0bnXXNz
+         y30vudbTCmTfC10TrgUQx+B9RbsZ6WMfh6Ukm66KrPi9H8m7J2ALrcwfnlnV1kDfRvY8
+         lKbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P+2FHV1UyVrnsYNntWHopzv4+MXcff3Of4ioJzVnCGI=;
+        b=w2PRi28RuLl91Ow7OFRh4ZPlA3xWjX97TSIhrrmzQ2p5Szg4uOXLbMOI9MvKS3b9l/
+         Q50CVLH7KtBqyYi9OmuNZJPz5f4VUkNuscBpzy30r1Z4cJGzxbz24iMdzzFnWLBc3fPv
+         mxT6CM1UthX5p9AtPB1jvXdt56st+EYRMcku/tO95dQHeKmIIk1Couv5PGYNYHTtYJGf
+         AhRp6JwoYP7goi1IH+9ZhLX9q4yGIdnM7b8K5ywbJWok1w+LQczle261N6vDafQc3vbf
+         PX5zPIsyvTtkii7oBOas3ldAMWoKnOAbYaqe5PJ7jhh7rQuDZLWalCdeKBrmwaOYnLiP
+         BXjQ==
+X-Gm-Message-State: AJIora+F6mz7vl9tIgS6fldNuX4/N462IYc8rOvMFObyWRoV/SiA50A4
+        t80i2sEGz0kMu06ISGk17K3sUg==
+X-Google-Smtp-Source: AGRyM1tefcSIkMswKYXFzdVt4s4uRUWesrNpwAbExSgtNMXR5q2dqpfuBJJUEyVR9BHyqpbYoCJv5Q==
+X-Received: by 2002:a2e:8898:0:b0:25d:fc17:5efe with SMTP id k24-20020a2e8898000000b0025dfc175efemr7083795lji.132.1658923672053;
+        Wed, 27 Jul 2022 05:07:52 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id b14-20020a2eb90e000000b0025dda2c8013sm3912287ljb.28.2022.07.27.05.07.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 05:07:51 -0700 (PDT)
+Message-ID: <372e37bf-ac90-c371-ad9e-b9c18e1cc059@linaro.org>
+Date:   Wed, 27 Jul 2022 14:07:50 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5f267h7mxg6wplag"
-Content-Disposition: inline
-In-Reply-To: <CAGETcx9u9RO_5nSp+=qgwDGY=jL_Q1hAcj+RfVN=q-H_8iuT4w@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: Add optional DT property
+ riscv,timer-can-wake-cpu
+Content-Language: en-US
+To:     Anup Patel <apatel@ventanamicro.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220727114302.302201-1-apatel@ventanamicro.com>
+ <20220727114302.302201-2-apatel@ventanamicro.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220727114302.302201-2-apatel@ventanamicro.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 27/07/2022 13:43, Anup Patel wrote:
+> We add an optional DT property riscv,timer-can-wake-cpu which if present
+> in CPU DT node then CPU timer is always powered-on and never loses context.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> index d632ac76532e..b60b64b4113a 100644
+> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> @@ -78,6 +78,12 @@ properties:
+>        - rv64imac
+>        - rv64imafdc
+>  
+> +  riscv,timer-can-wake-cpu:
+> +    type: boolean
+> +    description:
+> +      If present, the timer interrupt can wake up the CPU from
+> +      suspend/idle state.
 
---5f267h7mxg6wplag
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Isn't this a property of a timer, not CPU? IOW, your timer node should
+have "wakeup-source" property.
 
-Hi,
+Now that's actual problem: why the RISC-V timer is bound to "riscv"
+compatible, not to dedicated timer node? How is it related to actual CPU
+(not SoC)?
 
-On Mon, Mar 07, 2022 at 07:34:22PM -0800, Saravana Kannan wrote:
-> On Mon, Mar 7, 2022 at 3:21 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > +Saravana
-> >
-> > On Wed, Mar 02, 2022 at 10:10:53PM +0100, Paul Kocialkowski wrote:
-> > > In order to set their correct DMA address offset, some devices rely on
-> > > the device-tree interconnects property which identifies an
-> > > interconnect node that provides a dma-ranges property that can be used
-> > > to set said offset.
-> > >
-> > > Since that logic is all handled by the generic openfirmware and driver
-> > > code, the device-tree description could be enough to properly set
-> > > the offset.
-> > >
-> > > However the interconnects property is currently not marked as
-> > > optional, which implies that a driver for the corresponding node
-> > > must be loaded as a requirement. When no such driver exists, this
-> > > results in an endless EPROBE_DEFER which gets propagated to the
-> > > calling driver. This ends up in the driver never loading.
-> > >
-> > > Marking the interconnects property as optional makes it possible
-> > > to load the driver in that situation, since the EPROBE_DEFER return
-> > > code will no longer be propagated to the driver.
-> > >
-> > > There might however be undesirable consequences with this change,
-> > > which I do not fully grasp at this point.
->=20
-> Temporary NACK till I get a bit more time to take a closer look. I
-> really don't like the idea of making interconnects optional. IOMMUs
-> and DMAs were exceptions. Also, we kinda discuss similar issues in
-> LPC. We had some consensus on how to handle these and I noted them all
-> down with a lot of details -- let me go take a look at those notes
-> again and see if I can send a more generic patch.
->=20
-> Paul,
->=20
-> Can you point to the DTS (not DTSI) file that corresponds to this?
-> Also, if it's a builtin kernel, I'd recommend setting
-> deferred_probe_timeout=3D1 and that should take care of it too.
 
-For the record, I also encountered this today on next-20220726 with this
-device:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arc=
-h/arm/boot/dts/sun5i.dtsi#n775
-
-The driver won't probe without fw_devlink=3Doff
-
-Maxime
-
---5f267h7mxg6wplag
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYuEqRwAKCRDj7w1vZxhR
-xU7hAPwISO3g/gkHRCgtYcqZGbLJsQTjFn8UlaYIl4MsqUE71AEArjHaL+k43u3L
-IMF27kO1knwUR8duIkDbYBb49e/ZQgs=
-=h3a/
------END PGP SIGNATURE-----
-
---5f267h7mxg6wplag--
+Best regards,
+Krzysztof

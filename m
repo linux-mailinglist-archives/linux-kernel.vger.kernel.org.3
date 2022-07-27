@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A493582EA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D55582B5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbiG0RO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
+        id S237619AbiG0QcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241583AbiG0RNn (ORCPT
+        with ESMTP id S236924AbiG0Qbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:13:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1CB5B79F;
-        Wed, 27 Jul 2022 09:42:18 -0700 (PDT)
+        Wed, 27 Jul 2022 12:31:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17AD4E638;
+        Wed, 27 Jul 2022 09:25:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1914601CE;
-        Wed, 27 Jul 2022 16:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A880BC433C1;
-        Wed, 27 Jul 2022 16:42:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5220DB821B8;
+        Wed, 27 Jul 2022 16:24:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A52BAC433C1;
+        Wed, 27 Jul 2022 16:24:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940133;
-        bh=l1ue5a0jyDSRmPddXPGgCmTdqIau5TtnOYUWQww6OZo=;
+        s=korg; t=1658939097;
+        bh=xgPJVu/3HhJjbOwNte/3wNiRR32KJWwmVRAO4GAIEDo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pu33QJ+LBJ1Z6PVTe+RvOZVl8+Dep7Uz+nwWn6HD6yQi0yw9N7I+m738ACwNR/4P0
-         i8ccO6CTlTVeiRSELqmvciQPYUIleuNE16hHffdDxlfcIZ+LtotBc3/N6bf6TAt2gL
-         vUQGTvT/g8YLD7DWnLkt3tRLkPwF8sKdLJqWl3us=
+        b=jhSxmsxvAilGTDfoDPTb4bXxC/DFuvwuR70kgBr444E0YgYfupi0hWDj4PqwMFbFx
+         5o8nVZN8izJP7o2XEEnnxzNGtVZCzwDAoiIUA8pJpDEIwNZL1QSM58CxSgPTbBWeay
+         yOGeSY1vI84xZirkXyRPt/PXe+ShXGMZPaWLAzG4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 117/201] ipv4: Fix data-races around sysctl_fib_multipath_hash_policy.
+Subject: [PATCH 4.19 12/62] tcp: Fix a data-race around sysctl_tcp_probe_threshold.
 Date:   Wed, 27 Jul 2022 18:10:21 +0200
-Message-Id: <20220727161032.626425136@linuxfoundation.org>
+Message-Id: <20220727161004.661179839@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
+References: <20220727161004.175638564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +56,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 7998c12a08c97cc26660532c9f90a34bd7d8da5a ]
+[ Upstream commit 92c0aa4175474483d6cf373314343d4e624e882a ]
 
-While reading sysctl_fib_multipath_hash_policy, it can be changed
-concurrently.  Thus, we need to add READ_ONCE() to its readers.
+While reading sysctl_tcp_probe_threshold, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: bf4e0a3db97e ("net: ipv4: add support for ECMP hash policy choice")
+Fixes: 6b58e0a5f32d ("ipv4: Use binary search to choose tcp PMTU probe_size")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 2 +-
- net/ipv4/route.c                                      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ net/ipv4/tcp_output.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-index d17156c11ef8..6cdf0e232b1c 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-@@ -9588,7 +9588,7 @@ static void mlxsw_sp_mp4_hash_init(struct mlxsw_sp *mlxsw_sp,
- 	unsigned long *fields = config->fields;
- 	u32 hash_fields;
- 
--	switch (net->ipv4.sysctl_fib_multipath_hash_policy) {
-+	switch (READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_policy)) {
- 	case 0:
- 		mlxsw_sp_mp4_hash_outer_addr(config);
- 		break;
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 7f08a30256c5..ade6cb309c40 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -2048,7 +2048,7 @@ int fib_multipath_hash(const struct net *net, const struct flowi4 *fl4,
- 	struct flow_keys hash_keys;
- 	u32 mhash = 0;
- 
--	switch (net->ipv4.sysctl_fib_multipath_hash_policy) {
-+	switch (READ_ONCE(net->ipv4.sysctl_fib_multipath_hash_policy)) {
- 	case 0:
- 		memset(&hash_keys, 0, sizeof(hash_keys));
- 		hash_keys.control.addr_type = FLOW_DISSECTOR_KEY_IPV4_ADDRS;
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 02a7799c4b72..0e0f7803cf4e 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2112,7 +2112,7 @@ static int tcp_mtu_probe(struct sock *sk)
+ 	 * probing process by not resetting search range to its orignal.
+ 	 */
+ 	if (probe_size > tcp_mtu_to_mss(sk, icsk->icsk_mtup.search_high) ||
+-		interval < net->ipv4.sysctl_tcp_probe_threshold) {
++	    interval < READ_ONCE(net->ipv4.sysctl_tcp_probe_threshold)) {
+ 		/* Check whether enough time has elaplased for
+ 		 * another round of probing.
+ 		 */
 -- 
 2.35.1
 

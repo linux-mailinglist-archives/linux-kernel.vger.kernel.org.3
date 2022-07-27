@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB2E583058
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24433582F6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242558AbiG0Rgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S240168AbiG0RZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242732AbiG0Rew (ORCPT
+        with ESMTP id S237123AbiG0RYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:34:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A3983F07;
-        Wed, 27 Jul 2022 09:49:33 -0700 (PDT)
+        Wed, 27 Jul 2022 13:24:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2049D7B1E6;
+        Wed, 27 Jul 2022 09:46:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7AA1B821D2;
-        Wed, 27 Jul 2022 16:49:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3456AC433D6;
-        Wed, 27 Jul 2022 16:49:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB47E60DDB;
+        Wed, 27 Jul 2022 16:46:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E884FC433D6;
+        Wed, 27 Jul 2022 16:46:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940559;
-        bh=yO/lDs1tzTNDuRJk8SFnUSVSSqM3pggkSXFLZ0ov0Aw=;
+        s=korg; t=1658940361;
+        bh=gvB9qFkp5oTwRe9KAeYPBcwDLw972dcraVKHBnGj8A8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SIgdBk4ijfd3LABkUzBuiwoJIxSh83iEqKsCSHkJ4+bTh0xaBVDr6fcJ986yqIqDZ
-         AuYRotU+tOmhjQSMs92rY0V+q+Bcb3RMT53HdSt9p9jKc1nI5RW2H5kXAZD3uHzxNG
-         At7vletW1LWxGbCS4/hF2dDE6jGEYgSP7MNKGTH0=
+        b=UwdtsLiQoct0rlXj4k2A/OUHMDlnMeLYzm4ghbKvgwBe2DmmrMbTPsUEE1DpsF9EB
+         ny7EB7wAGTbegE31y9rwqzQGqSinXtAkLy1UroWg6f0JaVLeni7Q9L8amKE7BaMbUU
+         r76isaXs/4UXtc37uKE0ioGrWL7ONbVaVVKXdCBM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 036/158] ip: Fix data-races around sysctl_ip_nonlocal_bind.
-Date:   Wed, 27 Jul 2022 18:11:40 +0200
-Message-Id: <20220727161022.924691668@linuxfoundation.org>
+        stable@vger.kernel.org, Bernardo Meurer Costa <beme@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 5.15 197/201] x86/extable: Prefer local labels in .set directives
+Date:   Wed, 27 Jul 2022 18:11:41 +0200
+Message-Id: <20220727161035.940264257@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
 
-[ Upstream commit 289d3b21fb0bfc94c4e98f10635bba1824e5f83c ]
+commit 334865b2915c33080624e0d06f1c3e917036472c upstream.
 
-While reading sysctl_ip_nonlocal_bind, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+Bernardo reported an error that Nathan bisected down to
+(x86_64) defconfig+LTO_CLANG_FULL+X86_PMEM_LEGACY.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+    LTO     vmlinux.o
+  ld.lld: error: <instantiation>:1:13: redefinition of 'found'
+  .set found, 0
+              ^
+
+  <inline asm>:29:1: while in macro instantiation
+  extable_type_reg reg=%eax, type=(17 | ((0) << 16))
+  ^
+
+This appears to be another LTO specific issue similar to what was folded
+into commit 4b5305decc84 ("x86/extable: Extend extable functionality"),
+where the `.set found, 0` in DEFINE_EXTABLE_TYPE_REG in
+arch/x86/include/asm/asm.h conflicts with the symbol for the static
+function `found` in arch/x86/kernel/pmem.c.
+
+Assembler .set directive declare symbols with global visibility, so the
+assembler may not rename such symbols in the event of a conflict. LTO
+could rename static functions if there was a conflict in C sources, but
+it cannot see into symbols defined in inline asm.
+
+The symbols are also retained in the symbol table, regardless of LTO.
+
+Give the symbols .L prefixes making them locally visible, so that they
+may be renamed for LTO to avoid conflicts, and to drop them from the
+symbol table regardless of LTO.
+
+Fixes: 4b5305decc84 ("x86/extable: Extend extable functionality")
+Reported-by: Bernardo Meurer Costa <beme@google.com>
+Debugged-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20220329202148.2379697-1-ndesaulniers@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/inet_sock.h | 2 +-
- net/sctp/protocol.c     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/asm.h |   20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/include/net/inet_sock.h b/include/net/inet_sock.h
-index 48e4c59d85e2..2f6b715acc15 100644
---- a/include/net/inet_sock.h
-+++ b/include/net/inet_sock.h
-@@ -373,7 +373,7 @@ static inline bool inet_get_convert_csum(struct sock *sk)
- static inline bool inet_can_nonlocal_bind(struct net *net,
- 					  struct inet_sock *inet)
- {
--	return net->ipv4.sysctl_ip_nonlocal_bind ||
-+	return READ_ONCE(net->ipv4.sysctl_ip_nonlocal_bind) ||
- 		inet->freebind || inet->transparent;
- }
+--- a/arch/x86/include/asm/asm.h
++++ b/arch/x86/include/asm/asm.h
+@@ -149,24 +149,24 @@
  
-diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 35928fefae33..1a094b087d88 100644
---- a/net/sctp/protocol.c
-+++ b/net/sctp/protocol.c
-@@ -358,7 +358,7 @@ static int sctp_v4_available(union sctp_addr *addr, struct sctp_sock *sp)
- 	if (addr->v4.sin_addr.s_addr != htonl(INADDR_ANY) &&
- 	   ret != RTN_LOCAL &&
- 	   !sp->inet.freebind &&
--	   !net->ipv4.sysctl_ip_nonlocal_bind)
-+	    !READ_ONCE(net->ipv4.sysctl_ip_nonlocal_bind))
- 		return 0;
- 
- 	if (ipv6_only_sock(sctp_opt2sk(sp)))
--- 
-2.35.1
-
+ # define DEFINE_EXTABLE_TYPE_REG \
+ 	".macro extable_type_reg type:req reg:req\n"						\
+-	".set found, 0\n"									\
+-	".set regnr, 0\n"									\
++	".set .Lfound, 0\n"									\
++	".set .Lregnr, 0\n"									\
+ 	".irp rs,rax,rcx,rdx,rbx,rsp,rbp,rsi,rdi,r8,r9,r10,r11,r12,r13,r14,r15\n"		\
+ 	".ifc \\reg, %%\\rs\n"									\
+-	".set found, found+1\n"									\
+-	".long \\type + (regnr << 8)\n"								\
++	".set .Lfound, .Lfound+1\n"								\
++	".long \\type + (.Lregnr << 8)\n"							\
+ 	".endif\n"										\
+-	".set regnr, regnr+1\n"									\
++	".set .Lregnr, .Lregnr+1\n"								\
+ 	".endr\n"										\
+-	".set regnr, 0\n"									\
++	".set .Lregnr, 0\n"									\
+ 	".irp rs,eax,ecx,edx,ebx,esp,ebp,esi,edi,r8d,r9d,r10d,r11d,r12d,r13d,r14d,r15d\n"	\
+ 	".ifc \\reg, %%\\rs\n"									\
+-	".set found, found+1\n"									\
+-	".long \\type + (regnr << 8)\n"								\
++	".set .Lfound, .Lfound+1\n"								\
++	".long \\type + (.Lregnr << 8)\n"							\
+ 	".endif\n"										\
+-	".set regnr, regnr+1\n"									\
++	".set .Lregnr, .Lregnr+1\n"								\
+ 	".endr\n"										\
+-	".if (found != 1)\n"									\
++	".if (.Lfound != 1)\n"									\
+ 	".error \"extable_type_reg: bad register argument\"\n"					\
+ 	".endif\n"										\
+ 	".endm\n"
 
 

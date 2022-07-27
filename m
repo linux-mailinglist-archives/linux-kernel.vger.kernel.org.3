@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E862B5829E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E155829E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbiG0PoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S234224AbiG0Poz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiG0Pn6 (ORCPT
+        with ESMTP id S231761AbiG0Pog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:43:58 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F898481F1;
-        Wed, 27 Jul 2022 08:43:58 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id y10so1270430ili.3;
-        Wed, 27 Jul 2022 08:43:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EBPsyq8xCTUIGHkDPSsIKhxwmfJ6F+duXUDyo4llVo0=;
-        b=Dd4XhgcraxGfeXihvDttIG+3BJg7BPXpZA1zb+K7jHbf+jM4h/hfp1GdjhPONgOU7W
-         sTcBHTgNh398/wuHvboiY5Zw3z+7bfReEeinFdVnOJYDWNPrhs1YjIbKPtSLB0KQgF3v
-         P2xVKp/9laZY4RMNEABJCnhUl7JOkpcvyaxa+3G5aydbcp+eTr8znI7ditlN+1Nta57X
-         aOALgIOe5FjMl/0re01w7VtFvc6MANsI0ejePTdFXBp0kWU3mtSwcMHOfqvYz5f6UCBX
-         uCnkWmWpczUIFc0K5/ZlwnDyTbd9IZiEZVEW8Nf6CFgV+JnCbfDT+tpOc9PoGxC4xCTf
-         TRww==
-X-Gm-Message-State: AJIora9eFpBE3wkG46L7F2BztFPiRxRxK+YEZYKDHs2hWIftoJv5zXR4
-        UykbjHY34a3PsuNGvamJLA==
-X-Google-Smtp-Source: AGRyM1sP6a08WkTCUGcmRvfX3ijrTpt7NEQ6DQj6lTIcMRgPCXMgOcSJmDPAyD1mwUTjZKCujuIgzg==
-X-Received: by 2002:a92:6504:0:b0:2dd:8201:fdeb with SMTP id z4-20020a926504000000b002dd8201fdebmr3968342ilb.98.1658936637261;
-        Wed, 27 Jul 2022 08:43:57 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a20-20020a027a14000000b0033f5e8dab90sm8092861jac.143.2022.07.27.08.43.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 08:43:56 -0700 (PDT)
-Received: (nullmailer pid 2728328 invoked by uid 1000);
-        Wed, 27 Jul 2022 15:43:55 -0000
-Date:   Wed, 27 Jul 2022 09:43:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH 1/6] dt-bindings: arm: renesas: Ignore the schema for
- RISC-V arch
-Message-ID: <20220727154355.GA2723077-robh@kernel.org>
-References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Wed, 27 Jul 2022 11:44:36 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09680481F1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:44:26 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C12E13200920;
+        Wed, 27 Jul 2022 11:44:22 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 27 Jul 2022 11:44:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1658936662; x=1659023062; bh=Qm/fV3e8Bp
+        LbWEiy/4YYHnMxdCQ/aMAIZgA5gQ/Scq0=; b=J68T7KimGceRsQ04wgLX4a0ZT1
+        IhKh3ymi5ikudwQ06MBGiha2pKbbSdlIpU4n9qO78Lurnje0H9+SzkF2c/k1mIW3
+        D/C6DtW+OjpIn1TJH2Pwh4xaWWKMFWlEYosr+pshzWAjJfbQiI0W1l/sp7PZWmld
+        TXJITpZp+ThNLEAfun61Va9CJ2j1C4cbzMuw0UTpBy+H3mwoAFkrt9T87rl2D5kh
+        i8WITVWdASaA7gcYUVO1yrTxon6AVXvDAumxUW8s0WieMCtCLwlaMZeEwIRQl6XL
+        TwH1sUqJnWhof0K163TVvouT49pcMPRSv/FXk0Yz/SC8Kx6LCHrwva4xsPYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1658936662; x=1659023062; bh=Qm/fV3e8BpLbWEiy/4YYHnMxdCQ/
+        aMAIZgA5gQ/Scq0=; b=u3D1XBbTIW1xuT2qJzaDsDXXBQTfJw3UcVbz4yXmqfV4
+        q+kJBAyK/IrTqE3bGOTQj4mIV2yzKFaDUWENfvrkfrmuJ8jtkUmoftZX96L6oFks
+        KrMyqvJzbiXUcSNHT9ABzgrOuV0IQPHfgyQAFX80fmwaSLx1ZC90t8tXPdjjqnvR
+        6XJ12GrWb68cF6FtVvrQW2tvkFR1DABuroR1wM0hQkSpJgeEIq9f5JV/ob4/izAq
+        W3ixCZc2PRZAkMGKKDBmeN965HzOBKCfATHTYlfuWujICaarEEgrseMhDRPGE0Iv
+        myZgxpvIgiWyTBnpcOURlaptM5sJPaIXKpJIqw9YBA==
+X-ME-Sender: <xms:VV3hYldidI9OrTb62Pzqd-TyK_FhIuMBmjZ7vgfGyUTmjVgL7yQnuA>
+    <xme:VV3hYjMlEge85w2dofqUH6fe4y9GijMiofpMHIAbz39a8IZhMI6LvE7VDViZ3W1l_
+    C5XS69cGP-rhFGOpI4>
+X-ME-Received: <xmr:VV3hYugAisxa40cgCrpa0eZKqwJCbBdDoEcoq03cF6R3aG5tHptKJJvAgrnXpQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduvddgleefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
+    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
+    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
+    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epthihtghhohesthihtghhohdrphhiiiiirg
+X-ME-Proxy: <xmx:VV3hYu8-Vl4-oVw2vv_BZMY9q_oIPVG7uWBu674KfUcWKr5xJC5Ecg>
+    <xmx:VV3hYhtK2ymjTTZO-KkK2a_XX-Y12qObxix7ukHa8qab6pCuEDqB5A>
+    <xmx:VV3hYtFrvRLavp8iVfmHQ_1dJ8nPi5FQF630Ph_4M-F4cxCnVnzUnA>
+    <xmx:Vl3hYpIaP1qixXJnXF8BxoStj16wGRso9PUcspc26bl3J-hgj6ee0Q>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 27 Jul 2022 11:44:20 -0400 (EDT)
+Date:   Wed, 27 Jul 2022 09:44:18 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "Eric W . Biederman" <ebiederm@xmission.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [PATCH] sched: __fatal_signal_pending() should also check
+ PF_EXITING
+Message-ID: <YuFdUj5X4qckC/6g@tycho.pizza>
+References: <Ys2PwTS0qFmGNFqy@netflix>
+ <20220713175305.1327649-1-tycho@tycho.pizza>
+ <20220720150328.GA30749@mail.hallyn.com>
+ <YthsgqAZYnwHZLn+@tycho.pizza>
+ <20220721015459.GA4297@mail.hallyn.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220721015459.GA4297@mail.hallyn.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 07:06:18PM +0100, Lad Prabhakar wrote:
-> Ignore the ARM renesas.yaml schema if the board is RZ/Five SMARC EVK
-> (RISC-V arch).
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/arm/renesas.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/arm/renesas.yaml
-> index ff80152f092f..f646df1a23af 100644
-> --- a/Documentation/devicetree/bindings/arm/renesas.yaml
-> +++ b/Documentation/devicetree/bindings/arm/renesas.yaml
-> @@ -9,6 +9,15 @@ title: Renesas SH-Mobile, R-Mobile, and R-Car Platform Device Tree Bindings
->  maintainers:
->    - Geert Uytterhoeven <geert+renesas@glider.be>
->  
-> +# We want to ignore this schema if the board is of RISC-V arch
-> +select:
-> +  not:
-> +    properties:
-> +      compatible:
-> +        contains:
-> +          items:
-> +            - const: renesas,r9a07g043f01
+Hi all,
 
-As I've said, this doesn't work without tool changes I proposed.
+On Wed, Jul 20, 2022 at 08:54:59PM -0500, Serge E. Hallyn wrote:
+> Oh - I didn't either - checking the sigkill in shared signals *seems*
+> legit if they can be put there - but since you posted the new patch I
+> assumed his reasoning was clear to you.  I know Eric's busy, cc:ing Oleg
+> for his interpretation too.
 
-Rob
+Any thoughts on this?
+
+Thanks,
+
+Tycho

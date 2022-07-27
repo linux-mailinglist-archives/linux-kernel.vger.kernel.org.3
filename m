@@ -2,160 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1D85833FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 22:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CB9583408
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 22:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiG0UP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 16:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S233397AbiG0UWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 16:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiG0UPZ (ORCPT
+        with ESMTP id S229653AbiG0UWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 16:15:25 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848504F6AB;
-        Wed, 27 Jul 2022 13:15:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658952734;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=zf3hu7M3LvvEmzfKZIjNzdc/JfMNFzqSTpMxpu54JFk=;
-    b=NWM1ZklkAQkxY8sVcrnmQ6XqisOoSiNw3AKr/n8DDwn3BbXMnSTJ6IBpYBZKjtOI8e
-    CRTt13uKFhHTSE0iSIO7yEOUnGKPn0slpRIlnanx9Dz8ITIvRnbJB0BLegWv2d97cWP5
-    ImUbDxO3TlK/KLBxMhqe5OqF/ceUxqh/V+5rMNvkYGEScLj71qwsS+ZczsdC2PFPynkd
-    2IJ9dTHCtUP9WFRH/E+eWhYmV7p0QPQE6iS3QpUzpGNYr3f7xuXy/rxbrMTo+aGoYeaq
-    7ZxiJWh9If1eQ2Iy/6QGSPL9vKbkgYn3VISp3K6QkKLaXtFURBkGXoS1lwwOdXXkaCdX
-    Fc4w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::b82]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id Icb1b0y6RKCD5ow
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 27 Jul 2022 22:12:13 +0200 (CEST)
-Message-ID: <fb31bfeb-e7bc-c7f8-db2c-f8d0c531af99@hartkopp.net>
-Date:   Wed, 27 Jul 2022 22:12:13 +0200
+        Wed, 27 Jul 2022 16:22:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A9F5F9AF
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:22:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1131E61AAD
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:22:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B224EC433C1;
+        Wed, 27 Jul 2022 20:21:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658953319;
+        bh=oD9V7VnPE00dz4yqUuVgqIQpVscpbOrU9NDfS7TeMag=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Hy87mm+OftQ8pTPkrMDnGEAp7fJZ3T7ICtQs3ZOKepiXumIUL0pd/COsz2+l/K/lU
+         ZlLSw9nUR4potEC9J3baapNtpsPMh5KIXjNV31YkStKsmDwyT3/sPjzeacLOjdWLXm
+         jOIHQcGLFu95zepELiAr1Fobg/CItHVDxv4l94vrlmRL0NepvsNW/ZRErwLpoTHN4v
+         HRjTSCHi2ErRQlHH/hgXSNsZHXXx09LWf6DI2PN0kJW1tb4UCbXe3iB9//mixKPDA8
+         Ignk1QoTrTP6muB7eak/PXTPQMNqzMNBVLsJ+vlufbxHgsaN8Dcxf2VYch2c7UDMCf
+         7fSf1MmpcjvuQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     angelogioacchino.delregno@collabora.com,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>, dan.carpenter@oracle.com
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, aaronyu@google.com,
+        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220726154220.28141-1-jiaxin.yu@mediatek.com>
+References: <20220726154220.28141-1-jiaxin.yu@mediatek.com>
+Subject: Re: [PATCH] ASoC: mediatek: mt8186: remove unnecessary judgments
+Message-Id: <165895331742.3760230.5472631801057984251.b4-ty@kernel.org>
+Date:   Wed, 27 Jul 2022 21:21:57 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
- register (btr)
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, Max Staudt <max@enpas.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
- <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
- <20220727113054.ffcckzlcipcxer2c@pengutronix.de>
- <20220727192839.707a3453.max@enpas.org>
- <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-d1cc2
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 26 Jul 2022 23:42:20 +0800, Jiaxin Yu wrote:
+> The afe_priv->dai_priv[] is allocated when platform driver probe(), if it
+> failed, the ASoC platform driver probe() will return fail first.
+> Therefore, this is excessive judgment, and the condition will never be
+> established.
+> 
+> Bug report: https://www.spinics.net/lists/alsa-devel/msg145609.html
+> 
+> [...]
 
+Applied to
 
-On 27.07.22 20:24, Marc Kleine-Budde wrote:
-> On 27.07.2022 19:28:39, Max Staudt wrote:
->> On Wed, 27 Jul 2022 13:30:54 +0200
->> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->>
->>> As far as I understand, setting the btr is an alternative way to set the
->>> bitrate, right? I don't like the idea of poking arbitrary values into a
->>> hardware from user space.
->>
->> I agree with Marc here.
->>
->> This is a modification across the whole stack, specific to a single
->> device, when there are ways around.
->>
->> If I understand correctly, the CAN232 "S" command sets one of the fixed
->> bitrates, whereas "s" sets the two BTR registers. Now the question is,
->> what do BTR0/BTR1 mean, and what are they? If they are merely a divider
->> in a CAN controller's master clock, like in ELM327, then you could
->>
->>    a) Calculate the BTR values from the bitrate userspace requests, or
-> 
-> Most of the other CAN drivers write the BTR values into the register of
-> the hardware. How are these BTR values transported into the driver?
-> 
-> There are 2 ways:
-> 
-> 1) - user space configures a bitrate
->     - the kernel calculates with the "struct can_bittiming_const" [1] given
->       by driver and the CAN clock rate the low level timing parameters.
-> 
->       [1] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L47
-> 
-> 2) - user space configures low level bit timing parameter
->       (Sample point in one-tenth of a percent, Time quanta (TQ) in
->        nanoseconds, Propagation segment in TQs, Phase buffer segment 1 in
->        TQs, Phase buffer segment 2 in TQs, Synchronisation jump width in
->        TQs)
->      - the kernel calculates the Bit-rate prescaler from the given TQ and
->        CAN clock rate
-> 
-> Both ways result in a fully calculated "struct can_bittiming" [2]. The
-> driver translates this into the hardware specific BTR values and writes
-> the into the registers.
-> 
-> If you know the CAN clock and the bit timing const parameters of the
-> slcan's BTR register you can make use of the automatic BTR calculation,
-> too. Maybe the framework needs some tweaking if the driver supports both
-> fixed CAN bit rate _and_ "struct can_bittiming_const".
-> 
-> [2] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L31
-> 
->>    b) pre-calculate a huge table of possible bitrates and present them
->>       all to userspace. Sounds horrible, but that's what I did in can327,
->>       haha. Maybe I should have reigned them in a little, to the most
->>       useful values.
-> 
-> If your adapter only supports fixed values, then that's the only way to
-> go.
-> 
->>    c) just limit the bitrates to whatever seems most useful (like the
->>       "S" command's table), and let users complain if they really need
->>       something else. In the meantime, they are still free to slcand or
->>       minicom to their heart's content before attaching slcan, thanks to
->>       your backwards compatibility efforts.
-> 
-> In the early stages of the non-mainline CAN framework we had tables for
-> BTR values for some fixed bit rates, but that turned out to be not
-> scaleable.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-The Microchip CAN BUS Analyzer Tool is another example for fixed bitrates:
+Thanks!
 
-https://elixir.bootlin.com/linux/v5.18.14/source/drivers/net/can/usb/mcba_usb.c#L156
+[1/1] ASoC: mediatek: mt8186: remove unnecessary judgments
+      commit: d7bffbe9cbd3c96fe51a8482127cabf6fa1fd9b2
 
-So this might be the way to go here too ...
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Best regards,
-Oliver
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> 
->> In short, to me, this isn't a deal breaker for your patch series.
-> 
-> Marc
-> 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,166 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5DE581CCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0250F581CC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239963AbiG0Aij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 20:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
+        id S240055AbiG0A07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 20:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbiG0Aih (ORCPT
+        with ESMTP id S229458AbiG0A05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 20:38:37 -0400
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A85F3AB27;
-        Tue, 26 Jul 2022 17:38:36 -0700 (PDT)
-Received: from imladris.surriel.com ([96.67.55.152])
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1oGUss-0001dG-Cc;
-        Tue, 26 Jul 2022 20:26:42 -0400
-Message-ID: <924f1cf4b93ff3e4ff217203bd88448dfa4c0f85.camel@surriel.com>
-Subject: Re: [PATCH v3] livepatch: fix race between fork and
- klp_reverse_transition
-From:   Rik van Riel <riel@surriel.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, kernel-team@fb.com,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Breno Leitao <leitao@debian.org>
-Date:   Tue, 26 Jul 2022 20:26:41 -0400
-In-Reply-To: <20220727001040.vlqnnb4a3um46746@treble>
-References: <20220720121023.043738bb@imladris.surriel.com>
-         <YtrCqMLUqJlcoqIo@alley> <20220722150106.683f3704@imladris.surriel.com>
-         <Yt6bZo5ztnVSjLLC@alley> <20220725094919.52bcde19@imladris.surriel.com>
-         <20220727001040.vlqnnb4a3um46746@treble>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-TLgTqhyEYwEQwuZaJg5g"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 26 Jul 2022 20:26:57 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3368D3A4B4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:26:55 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h9so22210685wrm.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8Yw+cKl53wNMcfpI/MRnxnx1KIbCu6LC2VYr7vldE9s=;
+        b=CVhRJgIAzdoOMqq25qQOjSnIvOpcLPVX/EzmFfAuCwGD+WxjLsVqIVbSivJUmCeg9K
+         uDL5NHcMveoTbyzfKZiOpaVm3GHrYYVKta16Kq0iNbmbOyxHnHELviJrDmbiI0gA6E17
+         4yA+JrC7NIaCDqbggmsf246K96Z+LCAZIYXOE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Yw+cKl53wNMcfpI/MRnxnx1KIbCu6LC2VYr7vldE9s=;
+        b=6oyfUBrbHazwqd5LZvSvdXyLZJJUY3lceE68G96MWr7RRNShDo9BWNihxZE0MJNVZz
+         rDYV4MEw/7TmhQBArnQphga5Zr8B8z30BKii/A1m8hKv1U/oRe2bsdvQI1GHS2nkVDWG
+         hvntO1CY3qDrkTDK/7qTppfp6SW21CCqmaty/sjB9DL54oHe9FSaQy7B1dpyoNZwtD4Z
+         JMFwqkC1sIe7AFYPfP04KR0UyQ340/0h5GVfzQIQkFXtQ2tw4E4q48JGvbbMbwkR5blS
+         Ab9EdmhDl/X6eOcOtAIIr4XZ0DcG++u7Dg9eGiy4P4wzLEXdn979cpahCiA+cl6WnRCt
+         +H1A==
+X-Gm-Message-State: AJIora/0KmomX2UDs3mcJtsm1nOq1GwheZM+ulTG6heC/YEx7VG+urSY
+        /gNU1F/H0NwWvMkxvQeEZ3argO3AiXOC3B4VKCz5hg==
+X-Google-Smtp-Source: AGRyM1v282cuWyMIrxlKYKG+Y2hspRzqXJoTLgdsCs6bWpGyhUZ69tYSLecLQbclcK88MzyVVu8yo+0M5DtJSCxKDsI=
+X-Received: by 2002:adf:ee8f:0:b0:21e:529e:fa3b with SMTP id
+ b15-20020adfee8f000000b0021e529efa3bmr11946186wro.207.1658881613377; Tue, 26
+ Jul 2022 17:26:53 -0700 (PDT)
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220726235115.1184532-1-jrosenth@chromium.org>
+In-Reply-To: <20220726235115.1184532-1-jrosenth@chromium.org>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Tue, 26 Jul 2022 17:26:41 -0700
+Message-ID: <CAODwPW-9UPokepL_VVGuCLaWTDT7hmN9R9Z2yXABrP4g3_N4uQ@mail.gmail.com>
+Subject: Re: [PATCH] firmware: google: Implement vboot workbuf in sysfs
+To:     Jack Rosenthal <jrosenth@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sorry, this wasn't quite what I meant. I think we should definitely
+not hardcode any details about the vboot data structure layout here.
+It's already enough of a pain to keep crossystem in sync with
+different data structure versions, we absolutely don't want to have to
+keep updating that in the kernel as well.
 
---=-TLgTqhyEYwEQwuZaJg5g
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I assume that the reason you went that route seems to have been mostly
+that the lb_cbmem_ref coreboot table entry has no size field, so you
+had to infer the size from within the data structure. Thankfully, we
+don't need to use lb_cbmem_ref for this, that's somewhat of a legacy
+entry type that we're trying to phase out where it's no longer needed
+for backwards-compatibility anyway (and in fact I think we should be
+okay to remove the vboot entry there nowadays). We also have
+lb_cbmem_entry (see
+https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/master/src/lib/imd_cbmem.c#222)
+that exports info about every area in CBMEM, with address, size and
+CBMEM ID. The vboot workbuffer is CBMEM ID 0x78007343.
 
-On Tue, 2022-07-26 at 17:10 -0700, Josh Poimboeuf wrote:
-> On Mon, Jul 25, 2022 at 09:49:19AM -0400, Rik van Riel wrote:
-> > When a KLP fails to apply, klp_reverse_transition will clear the
-> > TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
-> > which are not on the task list yet.
->=20
-> This paragraph and $SUBJECT both talk about a reverse transition.=C2=A0
-> Isn't
-> it also possible to race on a normal (forward) transition?
-
-I don't know whether the race is also possible on a forward
-transition.  If the parent task has transitioned, will
-the child have, as well, by the time we reach the end of fork?
-
-I suppose the only way the parent task can transition while
-inside fork would be if none of the functions in its stack
-need to be transitioned, and at that point the child process
-would automatically be safe, too?
-
-That would make copying the KLP transition state from parent to
-child safe on a forward transition, too.
-
-Am I overlooking anything?
-
-However, we have only observed this warning on reverse transitions
-for some reason.
-
-> > Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
-> > parent to the child early on, in dup_task_struct ->
-> > setup_thread_stack.
-> >=20
-> > Much later, klp_copy_process will set child->patch_state to match
-> > that of the parent.
-> >=20
-> > However, the parent's patch_state may have been changed by KLP
-> > loading
-> > or unloading since it was initially copied over into the child.
-> >=20
-> > This results in the KLP code occasionally hitting this warning in
-> > klp_complete_transition:
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for_each_process_thread(g, t=
-ask) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 WARN_ON_ONCE(test_tsk_thread_flag(task,
-> > TIF_PATCH_PENDING));
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 task->patch_state =3D KLP_UNDEFINED;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> >=20
-> > This patch will set, or clear, the TIF_PATCH_PENDING flag in the
-> > child
-> > process depending on whether or not it is needed at the time
-> > klp_copy_process is called, at a point in copy_process where the
-> > tasklist_lock is held exclusively, preventing races with the KLP
-> > code.
->=20
-> Use imperative language, i.e. no "This patch".=C2=A0 See
-> Documentation/process/submitting-patches.rst
-> >=20
-
-Will do. I'll send a v4 tomorrow.
-
-> > The KLP code does have a few places where the state is changed
-> > without the tasklist_lock held, but those should not cause
-> > problems because klp_update_patch_state(current) cannot be
-> > called while the current task is in the middle of fork,
-> > klp_check_and_switch_task() which is called under the pi_lock,
-> > which prevents rescheduling, and manipulation of the patch
-> > state of idle tasks, which do not fork.
-> >=20
-> > This should prevent this warning from triggering again in the
-> > future.
-> >=20
->=20
-> Fixes: d83a7cb375ee ("livepatch: change to a per-task consistency
-> model")
->=20
-> > Signed-off-by: Rik van Riel <riel@surriel.com>
-> > Reported-by: Breno Leitao <leitao@debian.org>
-> > Reviewed-by: Petr Mladek <pmladek@suse.com>
->=20
-> With the above minor things fixed:
->=20
-> Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
->=20
-
---=20
-All Rights Reversed.
-
---=-TLgTqhyEYwEQwuZaJg5g
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmLghkEACgkQznnekoTE
-3oN07ggAmmLQ3eP1Up7hCtc3DjHHadiJ4XzQx3ZAXJnyNtjj7gNdHG/F6naSSrWD
-Tcqz7ArnUyaDldVKWssa4iRooRQwqdi+0IXDow4Ca1sfbvusSS3/SeofR9QcaDT7
-swok1FA82hPY+Vi8LixgDILRMTw3tPVIGihlN/isPhe07LU+KxXwuIDd7pdg7qOk
-NZLlGLaywOzqqHegFrW1vcwLjTq4QwEIIGDLwiJ7K4+U1r9s2hnMs0+74H3BafvD
-Gznj2iOasGKTKooFof0waWEPPD+z9sBuVAPLb0RAf9Q4KlAEOdRrnjpyCAfqiw7O
-mhq0eXrcvGAsIY2PvJ6j1FJ8nh7ugg==
-=e8zs
------END PGP SIGNATURE-----
-
---=-TLgTqhyEYwEQwuZaJg5g--
+I think we should just add a general driver for lb_cbmem_entry tags
+here, that uses the "id" as (part of) the device name and contains
+node to read/write the raw bytes of the buffer. Then crossystem can
+easily find the right one for vboot, and the infrastructure may also
+come in handy for other uses (or debugging) in the future.

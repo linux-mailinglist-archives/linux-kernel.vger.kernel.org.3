@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C7F582B2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F600582D30
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbiG0Q2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S240666AbiG0QzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236858AbiG0Q2Q (ORCPT
+        with ESMTP id S240873AbiG0Qwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:28:16 -0400
+        Wed, 27 Jul 2022 12:52:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE24E4E60B;
-        Wed, 27 Jul 2022 09:24:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179444F186;
+        Wed, 27 Jul 2022 09:35:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 173C3B821C3;
-        Wed, 27 Jul 2022 16:24:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648AEC433D7;
-        Wed, 27 Jul 2022 16:24:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDDA7B821B6;
+        Wed, 27 Jul 2022 16:34:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14CE2C433C1;
+        Wed, 27 Jul 2022 16:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939048;
-        bh=vRx21NnLPZl7+o4uI9ZwbPi7+raC388cP0/RK0DNuNo=;
+        s=korg; t=1658939698;
+        bh=mqU4fNaRL6L42mmZg2GeyUn27ocDm1WhEuG2Y74xeak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OPogxZDLavEGSrIs0kGpDxKHTtG1mZaDeWDmV8Gz+RblFmSqKUSvDzmPAKTTchYbl
-         /AyZE35EFssoe2cn9fmUIyXRBPyYZc+v45m0LLQRh4bKw4lF4K2uu0cKFxJq+ntVSl
-         5bMg9ekvdR9o2KHjZ8o8lImqrLqBfv60pJzHN8UI=
+        b=yWHBDoo80XLVsoDtYTADZXypn1t2yBvxEjlkRIHqg3KUm57yGK0QeSg7EklWAbB6t
+         jAaKmH38P/3VN2OFSOxr0IdlZAPjr9VG0RiyS6+6X+2MGHrpo5UodNFLy1bAELfcxc
+         9bASu3mCbGip008XSAQDNBH3GTKwPFqLohbvcsfQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Hillf Danton <hdanton@sina.com>, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 4.14 32/37] tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 072/105] tcp: Fix data-races around sysctl_tcp_slow_start_after_idle.
 Date:   Wed, 27 Jul 2022 18:10:58 +0200
-Message-Id: <20220727161002.154912200@linuxfoundation.org>
+Message-Id: <20220727161014.949395367@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161000.822869853@linuxfoundation.org>
-References: <20220727161000.822869853@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,115 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit a501ab75e7624d133a5a3c7ec010687c8b961d23 upstream.
+[ Upstream commit 4845b5713ab18a1bb6e31d1fbb4d600240b8b691 ]
 
-There is a race in pty_write(). pty_write() can be called in parallel
-with e.g. ioctl(TIOCSTI) or ioctl(TCXONC) which also inserts chars to
-the buffer. Provided, tty_flip_buffer_push() in pty_write() is called
-outside the lock, it can commit inconsistent tail. This can lead to out
-of bounds writes and other issues. See the Link below.
+While reading sysctl_tcp_slow_start_after_idle, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its readers.
 
-To fix this, we have to introduce a new helper called
-tty_insert_flip_string_and_push_buffer(). It does both
-tty_insert_flip_string() and tty_flip_buffer_commit() under the port
-lock. It also calls queue_work(), but outside the lock. See
-71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in
-pty_write) for the reasons.
-
-Keep the helper internal-only (in drivers' tty.h). It is not intended to
-be used widely.
-
-Link: https://seclists.org/oss-sec/2022/q2/155
-Fixes: 71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in pty_write)
-Cc: 一只狗 <chennbnbnb@gmail.com>
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Suggested-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220707082558.9250-2-jslaby@suse.cz
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 35089bb203f4 ("[TCP]: Add tcp_slow_start_after_idle sysctl.")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/pty.c        |   14 ++------------
- drivers/tty/tty_buffer.c |   31 +++++++++++++++++++++++++++++++
- include/linux/tty_flip.h |    3 +++
- 3 files changed, 36 insertions(+), 12 deletions(-)
+ include/net/tcp.h     | 4 ++--
+ net/ipv4/tcp_output.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/tty/pty.c
-+++ b/drivers/tty/pty.c
-@@ -111,21 +111,11 @@ static void pty_unthrottle(struct tty_st
- static int pty_write(struct tty_struct *tty, const unsigned char *buf, int c)
- {
- 	struct tty_struct *to = tty->link;
--	unsigned long flags;
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index aa46f4016245..44bfb22069c1 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1380,8 +1380,8 @@ static inline void tcp_slow_start_after_idle_check(struct sock *sk)
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	s32 delta;
  
--	if (tty->stopped)
-+	if (tty->stopped || !c)
- 		return 0;
+-	if (!sock_net(sk)->ipv4.sysctl_tcp_slow_start_after_idle || tp->packets_out ||
+-	    ca_ops->cong_control)
++	if (!READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_slow_start_after_idle) ||
++	    tp->packets_out || ca_ops->cong_control)
+ 		return;
+ 	delta = tcp_jiffies32 - tp->lsndtime;
+ 	if (delta > inet_csk(sk)->icsk_rto)
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 0cbf3d859745..ef64ee4c902a 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -1899,7 +1899,7 @@ static void tcp_cwnd_validate(struct sock *sk, bool is_cwnd_limited)
+ 		if (tp->packets_out > tp->snd_cwnd_used)
+ 			tp->snd_cwnd_used = tp->packets_out;
  
--	if (c > 0) {
--		spin_lock_irqsave(&to->port->lock, flags);
--		/* Stuff the data into the input queue of the other end */
--		c = tty_insert_flip_string(to->port, buf, c);
--		spin_unlock_irqrestore(&to->port->lock, flags);
--		/* And shovel */
--		if (c)
--			tty_flip_buffer_push(to->port);
--	}
--	return c;
-+	return tty_insert_flip_string_and_push_buffer(to->port, buf, c);
- }
- 
- /**
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -547,6 +547,37 @@ void tty_flip_buffer_push(struct tty_por
- EXPORT_SYMBOL(tty_flip_buffer_push);
- 
- /**
-+ * tty_insert_flip_string_and_push_buffer - add characters to the tty buffer and
-+ *	push
-+ * @port: tty port
-+ * @chars: characters
-+ * @size: size
-+ *
-+ * The function combines tty_insert_flip_string() and tty_flip_buffer_push()
-+ * with the exception of properly holding the @port->lock.
-+ *
-+ * To be used only internally (by pty currently).
-+ *
-+ * Returns: the number added.
-+ */
-+int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
-+		const unsigned char *chars, size_t size)
-+{
-+	struct tty_bufhead *buf = &port->buf;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+	size = tty_insert_flip_string(port, chars, size);
-+	if (size)
-+		tty_flip_buffer_commit(buf->tail);
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
-+	queue_work(system_unbound_wq, &buf->work);
-+
-+	return size;
-+}
-+
-+/**
-  *	tty_buffer_init		-	prepare a tty buffer structure
-  *	@tty: tty to initialise
-  *
---- a/include/linux/tty_flip.h
-+++ b/include/linux/tty_flip.h
-@@ -39,4 +39,7 @@ static inline int tty_insert_flip_string
- extern void tty_buffer_lock_exclusive(struct tty_port *port);
- extern void tty_buffer_unlock_exclusive(struct tty_port *port);
- 
-+int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
-+		const unsigned char *chars, size_t cnt);
-+
- #endif /* _LINUX_TTY_FLIP_H */
+-		if (sock_net(sk)->ipv4.sysctl_tcp_slow_start_after_idle &&
++		if (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_slow_start_after_idle) &&
+ 		    (s32)(tcp_jiffies32 - tp->snd_cwnd_stamp) >= inet_csk(sk)->icsk_rto &&
+ 		    !ca_ops->cong_control)
+ 			tcp_cwnd_application_limited(sk);
+-- 
+2.35.1
+
 
 

@@ -2,161 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48DC5823EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D376582412
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 12:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiG0KMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 06:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S231452AbiG0KUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 06:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiG0KMU (ORCPT
+        with ESMTP id S230159AbiG0KUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 06:12:20 -0400
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E44A625A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 03:12:19 -0700 (PDT)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
-        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1oGe1X-0065Nk-78; Wed, 27 Jul 2022 11:12:15 +0100
-Message-ID: <20a94c3c-85ed-2227-458e-60c780fd4ad7@codethink.co.uk>
-Date:   Wed, 27 Jul 2022 11:12:14 +0100
+        Wed, 27 Jul 2022 06:20:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBA1A468;
+        Wed, 27 Jul 2022 03:20:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D467661839;
+        Wed, 27 Jul 2022 10:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1269C433D6;
+        Wed, 27 Jul 2022 10:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658917246;
+        bh=zInUtRDkP0CInDHQOs4hPEp3ldGko/tXOIpnWeY7TuQ=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=JaGgQ2Zg1rB1DBHAmio7/LzXyQ5VbRV/63eZoEv2bBrCkHxhOiKb225WuOHJsaGuG
+         1wxx8zpuJ/NQrGYTCbRMl1nWDM2WcV5kKsrkf9CnLQZ3c2hjA30R2nVIA2wpihs9/l
+         nfAfDmkfVW4rZdVVgg+vOd0tJeXyr5rIx6qfB85rs35fHNKVeb10qin856M1AjEsJ7
+         D5V7f79hBT7SFeLLVVOz8ex++C0H9n8RS1e/10CThBm2IXjmpTmSAUJXPgtVKSnT8X
+         vqPFXtah9axurwYZJVxM5TFOFOOpy68/UylL2Sj+RseuD/AuvyKN2p81F8BWAnRcwt
+         MzU8FfmSL+siw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] RISC-V: Add mvendorid, marchid, and mimpid to
- /proc/cpuinfo output
-Content-Language: en-GB
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        linux-riscv@lists.infradead.org, Nikita Shubin <n.shubin@yadro.com>
-References: <20220727043829.151794-1-apatel@ventanamicro.com>
- <724f176b-02f1-b171-726f-16158c650896@codethink.co.uk>
- <CAAhSdy1tnTDv0AVyo=5FD=aE070ds6qYGGhdup+8jUqr3M66qA@mail.gmail.com>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <CAAhSdy1tnTDv0AVyo=5FD=aE070ds6qYGGhdup+8jUqr3M66qA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] wifi: wil6210: debugfs: fix uninitialized variable use in
+ `wil_write_file_wmi()`
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220724202452.61846-1-ammar.faizi@intel.com>
+References: <20220724202452.61846-1-ammar.faizi@intel.com>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Linux Wireless Mailing List <linux-wireless@vger.kernel.org>,
+        netdev Mailing List <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        kernel test robot <lkp@intel.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165891724082.18387.16489160205660897757.kvalo@kernel.org>
+Date:   Wed, 27 Jul 2022 10:20:42 +0000 (UTC)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/07/2022 11:06, Anup Patel wrote:
-> On Wed, Jul 27, 2022 at 2:25 PM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
->>
->> On 27/07/2022 05:38, Anup Patel wrote:
->>> Identifying the underlying RISC-V implementation can be important
->>> for some of the user space applications. For example, the perf tool
->>> uses arch specific CPU implementation id (i.e. CPUID) to select a
->>> JSON file describing custom perf events on a CPU.
->>>
->>> Currently, there is no way to identify RISC-V implementation so we
->>> add mvendorid, marchid, and mimpid to /proc/cpuinfo output.
->>>
->>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
->>> Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
->>> Tested-by: Nikita Shubin <n.shubin@yadro.com>
->>> ---
->>> Changes since v1:
->>>    - Use IS_ENABLED() to check CONFIG defines
->>>    - Added RB and TB tags in commit description
->>> ---
->>>    arch/riscv/kernel/cpu.c | 51 +++++++++++++++++++++++++++++++++++++++++
->>>    1 file changed, 51 insertions(+)
->>>
->>> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
->>> index fba9e9f46a8c..04bcc91c91ea 100644
->>> --- a/arch/riscv/kernel/cpu.c
->>> +++ b/arch/riscv/kernel/cpu.c
->>> @@ -3,10 +3,13 @@
->>>     * Copyright (C) 2012 Regents of the University of California
->>>     */
->>>
->>> +#include <linux/cpu.h>
->>>    #include <linux/init.h>
->>>    #include <linux/seq_file.h>
->>>    #include <linux/of.h>
->>> +#include <asm/csr.h>
->>>    #include <asm/hwcap.h>
->>> +#include <asm/sbi.h>
->>>    #include <asm/smp.h>
->>>    #include <asm/pgtable.h>
->>>
->>> @@ -64,6 +67,50 @@ int riscv_of_parent_hartid(struct device_node *node)
->>>    }
->>>
->>>    #ifdef CONFIG_PROC_FS
->>> +
->>> +struct riscv_cpuinfo {
->>> +     unsigned long mvendorid;
->>> +     unsigned long marchid;
->>> +     unsigned long mimpid;
->>> +};
->>> +static DEFINE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
->>> +
->>> +static int riscv_cpuinfo_starting(unsigned int cpu)
->>> +{
->>> +     struct riscv_cpuinfo *ci = this_cpu_ptr(&riscv_cpuinfo);
->>> +
->>> +#if IS_ENABLED(CONFIG_RISCV_SBI)
->>> +     ci->mvendorid = sbi_spec_is_0_1() ? 0 : sbi_get_mvendorid();
->>> +     ci->marchid = sbi_spec_is_0_1() ? 0 : sbi_get_marchid();
->>> +     ci->mimpid = sbi_spec_is_0_1() ? 0 : sbi_get_mimpid();
->>
->> how about:
->>
->>          if (IS_ENABLED(CONFIG_RISCV_SBI)) {
->>                  ...
->>          } ... {
->>
->> or maybe even:
->>
->>
->>          if (IS_ENABLED(CONFIG_RISCV_SBI)) {
->>                  if (sbi_spec_is_0_1()) {
->>                          ...
->>                  }
->>          } ... {
->>
->> would mean better compile coverage (at the slight exepnese of
->> having "false" sbi_spec_is_0_1() implemenation
+Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
+
+> Commit 7a4836560a61 changes simple_write_to_buffer() with memdup_user()
+> but it forgets to change the value to be returned that came from
+> simple_write_to_buffer() call. It results in the following warning:
 > 
-> Most of the sbi_xyz() functions are not available for NoMMU
-> kernel so using "if (IS_ENABLED())" results in compile error.
-
-How about defining "false" versions for no-mmu case and try
-and avoid these #if mountains?
-
->>
->>> +#elif IS_ENABLED(CONFIG_RISCV_M_MODE)
->>> +     ci->mvendorid = csr_read(CSR_MVENDORID);
->>> +     ci->marchid = csr_read(CSR_MARCHID);
->>> +     ci->mimpid = csr_read(CSR_MIMPID);
->>> +#else
->>> +     ci->mvendorid = 0;
->>> +     ci->marchid = 0;
->>> +     ci->mimpid = 0;
->>> +#endif
->>
->> Would it be easier to zero out all the fields first and then fill them
->> in if supported?
+>   warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
+>            return rc;
+>                   ^~
 > 
-> Clearing out fields before "#if" ladder results in dead assignments.
+> Remove rc variable and just return the passed in length if the
+> memdup_user() succeeds.
+> 
+> Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 7a4836560a6198d245d5732e26f94898b12eb760 ("wifi: wil6210: debugfs: fix info leak in wil_write_file_wmi()")
+> Fixes: ff974e4083341383d3dd4079e52ed30f57f376f0 ("wil6210: debugfs interface to send raw WMI command")
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-Not sure which is worse here, the #if ladder or some possibly dead
-assignments.
+Patch applied to ath-next branch of ath.git, thanks.
+
+d578e0af3a00 wifi: wil6210: debugfs: fix uninitialized variable use in `wil_write_file_wmi()`
 
 -- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
+https://patchwork.kernel.org/project/linux-wireless/patch/20220724202452.61846-1-ammar.faizi@intel.com/
 
-https://www.codethink.co.uk/privacy.html
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

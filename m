@@ -2,57 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F002E581DC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 04:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DAC581DC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 04:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240038AbiG0CzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 22:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S240066AbiG0C4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 22:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiG0CzR (ORCPT
+        with ESMTP id S233991AbiG0C4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 22:55:17 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF1C1150;
-        Tue, 26 Jul 2022 19:55:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lsz0b4Tvbz4x1W;
-        Wed, 27 Jul 2022 12:55:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658890512;
-        bh=17gluqyXS9jfy3B9QJ3z57bs8ssPCqXX0ftG48rcxA4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bJ0l6+uVnxG8wrxHA5ireEiRVTboEOzvf02LkYrtvIEECY5ABukV4W29wFZVzWwJg
-         iIa/h7M/cgMTBz7NAJq53Vh4A6Seq6R8m6XgR3htZgjDRjYAhkW78oDfnanRKdFU2q
-         bi+wUOTll7J9LrOYpp+mHOn6qeda63SoM02GZbMTwDzBnY75zQByxvRdnDXDOpGzp2
-         zTYYrmcxVoSDrqSVQK/SAlHg5eckW++J10oJjuJSb7nVBUrjmhvImzYVKC4dG6oDF0
-         3tpd8vaGfjfdCIJCB/CozD8R6WnOyUiK05SOOwgZhZX6OOZ+YvYQLkTr/WOVRsgPP1
-         XKQS0bxf+BT/Q==
-Date:   Wed, 27 Jul 2022 12:55:08 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm tree with the
- drm-misc-fixes tree
-Message-ID: <20220727125508.1991f1e7@canb.auug.org.au>
-In-Reply-To: <20220718094453.2f1a1f09@canb.auug.org.au>
-References: <20220711124742.3b151992@canb.auug.org.au>
-        <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
-        <20220718094453.2f1a1f09@canb.auug.org.au>
+        Tue, 26 Jul 2022 22:56:38 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69647357D5;
+        Tue, 26 Jul 2022 19:56:36 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id r24so11820215qtx.6;
+        Tue, 26 Jul 2022 19:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tnVUfveHENcuNsM+rkNWOjb5mSPRIjYCSwHkGzsISFw=;
+        b=jRydY8a62raCEIP2zW1yVhusvCE/TTO1NTCkdf4RwKvDeQLiePvqnyUgmBv7zW4clL
+         CSBr+mg4EKts3IKmQPJ/IoF2SQX6sAV+7dAbkip7GxNXOt1LR0MDGuSsYSe2L3NbLJ6x
+         eHT2YB4htn5rPhqC15brIJrrUwXUVuyVCR/cIP1tCW76EEoCE1OI53bIUXwFKj+nCi9D
+         PPPmw1OjptaUN/MvtZZMrkSDSKQOPqoWaJ4i2+P+xE5ge9NycFGp54q7cH4jnblfjl98
+         udZBRq4R2/5Ao/fPXkKD1qI0fXTiaEdvuZHUKkocyz/AVdiFK9cPE9s9MRwEXRPQVsuG
+         IUQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tnVUfveHENcuNsM+rkNWOjb5mSPRIjYCSwHkGzsISFw=;
+        b=AkfH6XLAJ/PXJwyZGMeLBMK8S0QWbfxyxTocDPUopbehD9ac1rWpuY7H7IN9xdErNE
+         DrFVdbVHR/qsp+saYqSTg8lI1Jeuc7OIbyF0yfVDLEmHZeQvr7zSc88o0I1KkpKgNiVv
+         N31kdJu8scXV6IS9YNHejTBoc/a2d5+GtEl3AdFTTJT4pErW6QZnXQUl5pVbUNEeFQkX
+         J5ZKnWczYpJoIDGgDiEvbmNrp9tD0Hx/h8wIrU3zJ//RX0ZbBWvUHUv6lEiQiWDFFbOk
+         3CyVi/J3lO4b7903pQ4H5J8Hrb+TPc7XXbPAB1NBcxYJpFWBhQvYCnCtZ64v7mwXioc4
+         NIkQ==
+X-Gm-Message-State: AJIora/9aZuBJszaCelLog5T4JaWtQUDRbQro1T3Ex0SHRxm7UazkJtO
+        qe82tm0HrOtJ6OWW1qnoA8JTLxaTUm/qVA==
+X-Google-Smtp-Source: AGRyM1uqOZgdEQs40Dm6b/CDZFfYTmhoxiy5GsI+RRvlYH6CyNNRrjxamqVD7fU+DhEHpXsUeQCuBA==
+X-Received: by 2002:a05:622a:287:b0:31f:32f6:1db1 with SMTP id z7-20020a05622a028700b0031f32f61db1mr13805911qtw.480.1658890595478;
+        Tue, 26 Jul 2022 19:56:35 -0700 (PDT)
+Received: from [192.168.0.9] ([198.179.6.194])
+        by smtp.gmail.com with ESMTPSA id s1-20020ac85cc1000000b0031ef67386a5sm10550688qta.68.2022.07.26.19.56.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 19:56:35 -0700 (PDT)
+Message-ID: <8a35df7d-a6cc-63e9-b207-6fbed05e32e5@gmail.com>
+Date:   Tue, 26 Jul 2022 22:56:33 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iz8zI2QfuiEyLtX1sFCVOPA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: PROBLEM: Regression likely in hid_uclogic driver breaks Huion
+ Inspiroy H640 drawing tablet
+Content-Language: en-US
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Ping Cheng <ping.cheng@wacom.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <9e16d503-2203-57ed-d6af-61fea0c3e10b@gmail.com>
+ <nycvar.YFH.7.76.2207231339500.19850@cbobk.fhfr.pm>
+ <20220724114849.GA32182@elementary> <20220725224841.GA75640@elementary>
+ <3f2e0a49-38a8-417e-1bb0-9a9f28371240@gmail.com>
+ <20220726214858.GA3202@elementary>
+From:   Stefan Hansson <newbie13xd@gmail.com>
+In-Reply-To: <20220726214858.GA3202@elementary>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,71 +82,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/iz8zI2QfuiEyLtX1sFCVOPA
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi!
 
-Hi all,
+>> Thanks for looking into this! Bisecting has been slow on my end
+>> unfortunately. I built today's linux-next (20220726) with your proposed
+>> patch below and my drawing tablet curiously still does not work as expected.
+>> The stylus works a couple of times, but eventually stops working (unlike
+>> prior where it always seemed to only work once). Do I need both your revert
+>> and this diff for it to work properly?
+> 
+> You are right, I just tested for a while with the diff applied (without
+> reverting the commit causing the issue) and after putting the pen in
+> and out proximity a fair amount of times (> 100) it stopped working.
 
-On Mon, 18 Jul 2022 09:44:53 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Mon, 11 Jul 2022 10:05:45 +0200 Christian K=C3=B6nig <christian.koenig=
-@amd.com> wrote:
-> >
-> > Am 11.07.22 um 04:47 schrieb Stephen Rothwell: =20
-> > >
-> > > Today's linux-next merge of the drm tree got a conflict in:
-> > >
-> > >    drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
-> > >
-> > > between commit:
-> > >
-> > >    925b6e59138c ("Revert "drm/amdgpu: add drm buddy support to amdgpu=
-"")
-> > >
-> > > from the drm-misc-fixes tree and commit:
-> > >
-> > >    5e3f1e7729ec ("drm/amdgpu: fix start calculation in amdgpu_vram_mg=
-r_new")
-> > >
-> > > from the drm tree.
-> > >
-> > > This is a mess :-(  I have just reverted the above revert before merg=
-in
-> > > the drm tree for today, please fix it up.   =20
-> >=20
-> > Sorry for the noise, the patch "5e3f1e7729ec ("drm/amdgpu: fix start
-> > calculation in amdgpu_vram_mgr_new")" and another one is going to be
-> > reverted from the drm tree as well.
-> >=20
-> > It's just that -fixes patches where faster than -next patches. =20
->=20
-> Here we are a week later, -rc7 has been released and as far as I can
-> tell (though I may have missed it), this is still a problem :-(
->=20
-> I am still reverting 925b6e59138c (which is now in Linus' tree).
+This part is peculiar to me. When I said "a couple of times", I really 
+meant a couple of times. For me, this issue reproduces after maybe 10 
+times at most. I have never been able to do it for anything close to 100 
+times. I wonder what's up with this disparity?
 
-Ping?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/iz8zI2QfuiEyLtX1sFCVOPA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLgqQwACgkQAVBC80lX
-0GyVWgf9GwEX6bHLApvSCJDTXCThI/pRHsnhuWITnGzfjAB8P13nwYpCxYtGxaY2
-BFoIIp+NsVqDyiN67mEqZLSX0nOYce5RJA65le0yUeIQt4lmjT+8x/xy4a7fpEIv
-ELvxfvNMpYJDwW/8ZLjc4cm3UEhaYEKIJunYZs9+mVbSTuAVakt0tpvOnZMAUowM
-8bXTbV+B3sa7MQr+Sy8hdIv2L2F8SefQhu/4jsVH6N3oecg6wT67Bo8xRnIW/qVJ
-pIlmII/5aViLcYygcPY6x2ZkLzHVJEgj9tYDdX+fvZHlUdCLEKefvXFOzJ12nMrb
-EiUUVrfmDgyyhglqcsuuskIsbN6dxQ==
-=RG5S
------END PGP SIGNATURE-----
-
---Sig_/iz8zI2QfuiEyLtX1sFCVOPA--
+Regards,
+Stefan Hansson

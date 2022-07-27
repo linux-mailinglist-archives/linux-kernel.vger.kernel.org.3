@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32241582D84
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A61F582D9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240719AbiG0Q6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S233557AbiG0RA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236298AbiG0Q6X (ORCPT
+        with ESMTP id S241336AbiG0Q7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:58:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C1467146;
-        Wed, 27 Jul 2022 09:36:48 -0700 (PDT)
+        Wed, 27 Jul 2022 12:59:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0874D68DEF;
+        Wed, 27 Jul 2022 09:37:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6A81B8200C;
-        Wed, 27 Jul 2022 16:36:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298C4C433C1;
-        Wed, 27 Jul 2022 16:36:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AA7EB821CD;
+        Wed, 27 Jul 2022 16:36:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8FD2C433D6;
+        Wed, 27 Jul 2022 16:36:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939805;
-        bh=zzTRmBX+mdkIB2l6y4mLCikYtDBJ8T+XgL98IBlYq1c=;
+        s=korg; t=1658939808;
+        bh=ZEGxTVXn2E1dxNf8JVVIRGePBuIKuNtXgQUvjIa1rms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IF4Ivt4tEHprb397k2fb2iKNqCyiymzBf07bDFW0Z9YtxgLW1aKv1LwD/cfYaA49P
-         +M0ljLJqrPlxPYNGJcCdsoCj7klvhDpwBm4HO6ci4qR5G2HQ1bVoPEWvVjLCkwoarV
-         EuUp7EHL4TJwwJVd2E40xlnmMt6Vtb6tOua2lJJY=
+        b=2UGZx9Mwc5KM1AFoCzvpV6y7E38Q2mh/de6ufrgqtQm0PhtIF0U1S/VhURLSl3ENo
+         XVZ4XNhm1X/LIvOIMK28HCVIVqCYxWzVk5R9YB94QdGOro5RNkqQw7tYP4MrwURlvS
+         XDYE4sxqGVMjVLB3b+y84F4tZ0W9WOZAEFCUqAFU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.10 094/105] x86/amd: Use IBPB for firmware calls
-Date:   Wed, 27 Jul 2022 18:11:20 +0200
-Message-Id: <20220727161015.888691679@linuxfoundation.org>
+        stable@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.10 095/105] x86/alternative: Report missing return thunk details
+Date:   Wed, 27 Jul 2022 18:11:21 +0200
+Message-Id: <20220727161015.927272635@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
 References: <20220727161012.056867467@linuxfoundation.org>
@@ -54,70 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Kees Cook <keescook@chromium.org>
 
-commit 28a99e95f55c61855983d36a88c05c178d966bb7 upstream.
+commit 65cdf0d623bedf0e069bb64ed52e8bb20105e2ba upstream.
 
-On AMD IBRS does not prevent Retbleed; as such use IBPB before a
-firmware call to flush the branch history state.
+Debugging missing return thunks is easier if we can see where they're
+happening.
 
-And because in order to do an EFI call, the kernel maps a whole lot of
-the kernel page table into the EFI page table, do an IBPB just in case
-in order to prevent the scenario of poisoning the BTB and causing an EFI
-call using the unprotected RET there.
-
-  [ bp: Massage. ]
-
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220715194550.793957-1-cascardo@canonical.com
+Link: https://lore.kernel.org/lkml/Ys66hwtFcGbYmoiZ@hirez.programming.kicks-ass.net/
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/cpufeatures.h   |    1 +
- arch/x86/include/asm/nospec-branch.h |    2 ++
- arch/x86/kernel/cpu/bugs.c           |   11 ++++++++++-
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ arch/x86/kernel/alternative.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -298,6 +298,7 @@
- #define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
- #define X86_FEATURE_RETHUNK		(11*32+14) /* "" Use REturn THUNK */
- #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
-+#define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -709,7 +709,9 @@ void __init_or_module noinline apply_ret
+ 			dest = addr + insn.length + insn.immediate.value;
  
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -298,6 +298,8 @@ do {									\
- 	alternative_msr_write(MSR_IA32_SPEC_CTRL,			\
- 			      spec_ctrl_current() | SPEC_CTRL_IBRS,	\
- 			      X86_FEATURE_USE_IBRS_FW);			\
-+	alternative_msr_write(MSR_IA32_PRED_CMD, PRED_CMD_IBPB,		\
-+			      X86_FEATURE_USE_IBPB_FW);			\
- } while (0)
+ 		if (__static_call_fixup(addr, op, dest) ||
+-		    WARN_ON_ONCE(dest != &__x86_return_thunk))
++		    WARN_ONCE(dest != &__x86_return_thunk,
++			      "missing return thunk: %pS-%pS: %*ph",
++			      addr, dest, 5, addr))
+ 			continue;
  
- #define firmware_restrict_branch_speculation_end()			\
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -1475,7 +1475,16 @@ static void __init spectre_v2_select_mit
- 	 * the CPU supports Enhanced IBRS, kernel might un-intentionally not
- 	 * enable IBRS around firmware calls.
- 	 */
--	if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
-+	if (boot_cpu_has_bug(X86_BUG_RETBLEED) &&
-+	    (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
-+	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)) {
-+
-+		if (retbleed_cmd != RETBLEED_CMD_IBPB) {
-+			setup_force_cpu_cap(X86_FEATURE_USE_IBPB_FW);
-+			pr_info("Enabling Speculation Barrier for firmware calls\n");
-+		}
-+
-+	} else if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
- 		setup_force_cpu_cap(X86_FEATURE_USE_IBRS_FW);
- 		pr_info("Enabling Restricted Speculation for firmware calls\n");
- 	}
+ 		DPRINTK("return thunk at: %pS (%px) len: %d to: %pS",
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACB6582EA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03D4582CE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236215AbiG0RPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
+        id S240629AbiG0Qvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbiG0RNy (ORCPT
+        with ESMTP id S230401AbiG0Qu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:13:54 -0400
+        Wed, 27 Jul 2022 12:50:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD1276963;
-        Wed, 27 Jul 2022 09:42:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBE861D93;
+        Wed, 27 Jul 2022 09:33:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5BD3B821BA;
-        Wed, 27 Jul 2022 16:42:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE25C433C1;
-        Wed, 27 Jul 2022 16:42:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0204B821B6;
+        Wed, 27 Jul 2022 16:33:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A050C433C1;
+        Wed, 27 Jul 2022 16:33:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940138;
-        bh=TLs54fR9ZjrgFajJSrQMbGvCC1KeHOx8HI9w8RnTpT4=;
+        s=korg; t=1658939595;
+        bh=gjjxmViAGyNqq8oecl406FORxY8ewUploZhh5IDTMK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1b+dhEhgd3QrfxOkQ1TAnGIwNO45ieCg7/VlJcc6mRi+VDPXNVu8mKaQ5UmMKquk5
-         TSdDXePBIwxllPQ13BYHtcNmZm22zCgXpoNMUvxCn1hIMB35/E6uKYv8io8CA5HGBa
-         15gOptq315507pwVtRRoSCJ6S7QjzLAOSSnc9ux0=
+        b=aEIfeRV4zwB5N0pFhih1HtjheZFoqkoFQvBGaTbzimtHnStkpFyL4CtRUWp33WhEW
+         6z0VBOQIWlt2iTXZ+ETlkQmGlvoG4qTKbU8zhlVRtnPxVthKP0nlQk52B+244TG7ct
+         oujbzXKbGYOBWrGvbLUhRDhLuw9Re/STia/DxtnU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 119/201] ip: Fix data-races around sysctl_ip_prot_sock.
+Subject: [PATCH 5.10 037/105] tcp: Fix data-races around sysctl_tcp_min_snd_mss.
 Date:   Wed, 27 Jul 2022 18:10:23 +0200
-Message-Id: <20220727161032.705219293@linuxfoundation.org>
+Message-Id: <20220727161013.585841519@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +56,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 9b55c20f83369dd54541d9ddbe3a018a8377f451 ]
+[ Upstream commit 78eb166cdefcc3221c8c7c1e2d514e91a2eb5014 ]
 
-sysctl_ip_prot_sock is accessed concurrently, and there is always a chance
-of data-race.  So, all readers and writers need some basic protection to
-avoid load/store-tearing.
+While reading sysctl_tcp_min_snd_mss, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: 4548b683b781 ("Introduce a sysctl that modifies the value of PROT_SOCK.")
+Fixes: 5f3e2bf008c2 ("tcp: add tcp_min_snd_mss sysctl")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/ip.h           | 2 +-
- net/ipv4/sysctl_net_ipv4.c | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ net/ipv4/tcp_output.c | 3 ++-
+ net/ipv4/tcp_timer.c  | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/ip.h b/include/net/ip.h
-index a0ac57af82dc..8462ced0c21e 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -352,7 +352,7 @@ static inline bool sysctl_dev_name_is_allowed(const char *name)
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 9f3eec8e7e4c..b0d49317b221 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -1720,7 +1720,8 @@ static inline int __tcp_mtu_to_mss(struct sock *sk, int pmtu)
+ 	mss_now -= icsk->icsk_ext_hdr_len;
  
- static inline bool inet_port_requires_bind_service(struct net *net, unsigned short port)
- {
--	return port < net->ipv4.sysctl_ip_prot_sock;
-+	return port < READ_ONCE(net->ipv4.sysctl_ip_prot_sock);
+ 	/* Then reserve room for full set of TCP options and 8 bytes of data */
+-	mss_now = max(mss_now, sock_net(sk)->ipv4.sysctl_tcp_min_snd_mss);
++	mss_now = max(mss_now,
++		      READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_snd_mss));
+ 	return mss_now;
  }
  
- #else
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index ead5db7e24ea..a36728277e32 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -97,7 +97,7 @@ static int ipv4_local_port_range(struct ctl_table *table, int write,
- 		 * port limit.
- 		 */
- 		if ((range[1] < range[0]) ||
--		    (range[0] < net->ipv4.sysctl_ip_prot_sock))
-+		    (range[0] < READ_ONCE(net->ipv4.sysctl_ip_prot_sock)))
- 			ret = -EINVAL;
- 		else
- 			set_local_port_range(net, range);
-@@ -123,7 +123,7 @@ static int ipv4_privileged_ports(struct ctl_table *table, int write,
- 		.extra2 = &ip_privileged_port_max,
- 	};
- 
--	pports = net->ipv4.sysctl_ip_prot_sock;
-+	pports = READ_ONCE(net->ipv4.sysctl_ip_prot_sock);
- 
- 	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
- 
-@@ -135,7 +135,7 @@ static int ipv4_privileged_ports(struct ctl_table *table, int write,
- 		if (range[0] < pports)
- 			ret = -EINVAL;
- 		else
--			net->ipv4.sysctl_ip_prot_sock = pports;
-+			WRITE_ONCE(net->ipv4.sysctl_ip_prot_sock, pports);
+diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+index 795716fd3761..953f36868369 100644
+--- a/net/ipv4/tcp_timer.c
++++ b/net/ipv4/tcp_timer.c
+@@ -173,7 +173,7 @@ static void tcp_mtu_probing(struct inet_connection_sock *icsk, struct sock *sk)
+ 		mss = tcp_mtu_to_mss(sk, icsk->icsk_mtup.search_low) >> 1;
+ 		mss = min(READ_ONCE(net->ipv4.sysctl_tcp_base_mss), mss);
+ 		mss = max(mss, net->ipv4.sysctl_tcp_mtu_probe_floor);
+-		mss = max(mss, net->ipv4.sysctl_tcp_min_snd_mss);
++		mss = max(mss, READ_ONCE(net->ipv4.sysctl_tcp_min_snd_mss));
+ 		icsk->icsk_mtup.search_low = tcp_mss_to_mtu(sk, mss);
  	}
- 
- 	return ret;
+ 	tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
 -- 
 2.35.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE538582C89
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32241582D84
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240008AbiG0Qri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S240719AbiG0Q6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240404AbiG0Qqx (ORCPT
+        with ESMTP id S236298AbiG0Q6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:46:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168775247D;
-        Wed, 27 Jul 2022 09:31:50 -0700 (PDT)
+        Wed, 27 Jul 2022 12:58:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C1467146;
+        Wed, 27 Jul 2022 09:36:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CCAB61A4F;
-        Wed, 27 Jul 2022 16:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B00C433C1;
-        Wed, 27 Jul 2022 16:31:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6A81B8200C;
+        Wed, 27 Jul 2022 16:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298C4C433C1;
+        Wed, 27 Jul 2022 16:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939509;
-        bh=smYeKmamlWhHlqS80zNjKhdEHi3FB7mA4ILpi3O5Zzk=;
+        s=korg; t=1658939805;
+        bh=zzTRmBX+mdkIB2l6y4mLCikYtDBJ8T+XgL98IBlYq1c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XM1FrO4C80moDNu+gMaG0FciS45KLeUhDNrlhmOAqs7zQXwLFjdxLD9uZgM7La90N
-         V+B1IjiMTTAdg7NqYq8dcBvPFQ0tgavFd9RDRqLsr1qlKaQvnfSpGorhTMAx7TdY55
-         WIjrfZ+96p3Gsb+AhFtUkWFYcfmGNI0/Ch/i8UX8=
+        b=IF4Ivt4tEHprb397k2fb2iKNqCyiymzBf07bDFW0Z9YtxgLW1aKv1LwD/cfYaA49P
+         +M0ljLJqrPlxPYNGJcCdsoCj7klvhDpwBm4HO6ci4qR5G2HQ1bVoPEWvVjLCkwoarV
+         EuUp7EHL4TJwwJVd2E40xlnmMt6Vtb6tOua2lJJY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Beulich <jbeulich@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.4 87/87] x86: drop bogus "cc" clobber from __try_cmpxchg_user_asm()
+        stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.10 094/105] x86/amd: Use IBPB for firmware calls
 Date:   Wed, 27 Jul 2022 18:11:20 +0200
-Message-Id: <20220727161012.576805216@linuxfoundation.org>
+Message-Id: <20220727161015.888691679@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,36 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Beulich <jbeulich@suse.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-commit 1df931d95f4dc1c11db1123e85d4e08156e46ef9 upstream.
+commit 28a99e95f55c61855983d36a88c05c178d966bb7 upstream.
 
-As noted (and fixed) a couple of times in the past, "=@cc<cond>" outputs
-and clobbering of "cc" don't work well together. The compiler appears to
-mean to reject such, but doesn't - in its upstream form - quite manage
-to yet for "cc". Furthermore two similar macros don't clobber "cc", and
-clobbering "cc" is pointless in asm()-s for x86 anyway - the compiler
-always assumes status flags to be clobbered there.
+On AMD IBRS does not prevent Retbleed; as such use IBPB before a
+firmware call to flush the branch history state.
 
-Fixes: 989b5db215a2 ("x86/uaccess: Implement macros for CMPXCHG on user addresses")
-Signed-off-by: Jan Beulich <jbeulich@suse.com>
-Message-Id: <485c0c0b-a3a7-0b7c-5264-7d00c01de032@suse.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+And because in order to do an EFI call, the kernel maps a whole lot of
+the kernel page table into the EFI page table, do an IBPB just in case
+in order to prevent the scenario of poisoning the BTB and causing an EFI
+call using the unprotected RET there.
+
+  [ bp: Massage. ]
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220715194550.793957-1-cascardo@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/uaccess.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/cpufeatures.h   |    1 +
+ arch/x86/include/asm/nospec-branch.h |    2 ++
+ arch/x86/kernel/cpu/bugs.c           |   11 ++++++++++-
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -498,7 +498,7 @@ __pu_label:							\
- 		       [ptr] "+m" (*_ptr),				\
- 		       [old] "+a" (__old)				\
- 		     : [new] ltype (__new)				\
--		     : "memory", "cc");					\
-+		     : "memory");					\
- 	if (unlikely(__err))						\
- 		goto label;						\
- 	if (unlikely(!success))						\
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -298,6 +298,7 @@
+ #define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
+ #define X86_FEATURE_RETHUNK		(11*32+14) /* "" Use REturn THUNK */
+ #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
++#define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -298,6 +298,8 @@ do {									\
+ 	alternative_msr_write(MSR_IA32_SPEC_CTRL,			\
+ 			      spec_ctrl_current() | SPEC_CTRL_IBRS,	\
+ 			      X86_FEATURE_USE_IBRS_FW);			\
++	alternative_msr_write(MSR_IA32_PRED_CMD, PRED_CMD_IBPB,		\
++			      X86_FEATURE_USE_IBPB_FW);			\
+ } while (0)
+ 
+ #define firmware_restrict_branch_speculation_end()			\
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1475,7 +1475,16 @@ static void __init spectre_v2_select_mit
+ 	 * the CPU supports Enhanced IBRS, kernel might un-intentionally not
+ 	 * enable IBRS around firmware calls.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
++	if (boot_cpu_has_bug(X86_BUG_RETBLEED) &&
++	    (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
++	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)) {
++
++		if (retbleed_cmd != RETBLEED_CMD_IBPB) {
++			setup_force_cpu_cap(X86_FEATURE_USE_IBPB_FW);
++			pr_info("Enabling Speculation Barrier for firmware calls\n");
++		}
++
++	} else if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
+ 		setup_force_cpu_cap(X86_FEATURE_USE_IBRS_FW);
+ 		pr_info("Enabling Restricted Speculation for firmware calls\n");
+ 	}
 
 

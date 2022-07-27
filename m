@@ -2,106 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E83B5828D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4813E5828DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbiG0On5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S234108AbiG0Op5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiG0Onz (ORCPT
+        with ESMTP id S234015AbiG0Opz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:43:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D9A2AE14
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:43:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 86A9820A53;
-        Wed, 27 Jul 2022 14:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658933033; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 27 Jul 2022 10:45:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A35EB4B8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658933153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=5kkS+z1gyLWQEs6DSXoLJrS0qljn+05KwBGJDeU5VgA=;
-        b=TP5m414V+6XnHdBEAv1wa65n7nsYITMHjkZv2UlZAsyg5a8vkHsQtmnscZy3ZUdsO6R7Hv
-        3tB5UIpI5HKhcC/3+yfPXC1ce7iVdDdrPrqkDluQUYPHcBhbJ+oZKNDRsly31xWRIG80gG
-        7FATyyEAGjzQpHd5pud+uVPoxPT5zWY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B87313A8E;
-        Wed, 27 Jul 2022 14:43:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id seX5FylP4WIdXAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 27 Jul 2022 14:43:53 +0000
-Date:   Wed, 27 Jul 2022 16:43:52 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     tujinjiang@bytedance.com
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH] vmscan: fix potential arbitrary pointer passed to kfree
- in unregister_shrinker
-Message-ID: <YuFPKDx90+R3Qc6v@dhcp22.suse.cz>
-References: <20220727090700.3238-1-tujinjiang@bytedance.com>
+        bh=UPwTphlEofW1gzVyQij5B8duPZwdaVcNitr1RayVqqU=;
+        b=IcX5LYesOJLmKfbHOMjFsABILoaZw4n710JmahF7dySwZENvZCyobsOPGIajqNEA6m6YpY
+        0TEQ/SSjnnCGcdIuTJ/rCtR50K6aWP51YJ1kPNWU50XN0aYH5uqqKPCMpTV5aP357U4xTn
+        l8EJMcFqzCtJxSdTwSuoH8Ah6QYVQIo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-101-jpjKzrmBMKeYdz4RzveM4A-1; Wed, 27 Jul 2022 10:45:51 -0400
+X-MC-Unique: jpjKzrmBMKeYdz4RzveM4A-1
+Received: by mail-wr1-f72.google.com with SMTP id k26-20020adfb35a000000b0021d6c3b9363so2989813wrd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:45:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UPwTphlEofW1gzVyQij5B8duPZwdaVcNitr1RayVqqU=;
+        b=KwsKN6LA1QnmFpZyzqfmdF3POTlBuTBUeXlsTlX/ACOv0L2tP3UHRFfqiYD9oXQzJz
+         Od5IDcPI5CXDmIB+Kp+Okqvk0jr+4wUV78EKZ+9Dar/1fRBu6vLbQgvdOX8dp4n2gNtY
+         KvggFJSUBm+1p/8UQmy5+198II+3kpF4E7JTuYU2h5dBmf7LO+T0xO69nbwO3QRmzx6Q
+         d3knBYSSYo78dVIrxSZrTOdO3EBFR/N+0m2tRK3WFOEJ5I+T6ONcjsykBJ1qHPmLftKU
+         nr24CVr7/aWrcHEUa2izNl6f2MdmrBYFhp+vDnd4dxFGTw3esFtVjhTFrteng0DSWI19
+         1nxA==
+X-Gm-Message-State: AJIora+wF0tYTF4qFCJ+A8ycLA8qcUZV0rK2Nbhm1rbaKtZs+GIgeS66
+        m+LhjsGfSOt0FpOmZue8qiYFzsTqMiEbe3Urktery2a+BA86Jz8vN7eCmKR4AtMOozEY7kgv0ue
+        LI3K1aQi1Yo/Ee0sX0Fp0Q9EL
+X-Received: by 2002:a05:600c:3ac4:b0:3a3:19c5:7cb2 with SMTP id d4-20020a05600c3ac400b003a319c57cb2mr3399343wms.63.1658933150782;
+        Wed, 27 Jul 2022 07:45:50 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s6EJaKWyltBC+mMZ+ewmsTuEWGKm93G14zzMdF0IwF3w4YCkILjcZ/BxC2B1sq/Pb8+8Hg6Q==
+X-Received: by 2002:a05:600c:3ac4:b0:3a3:19c5:7cb2 with SMTP id d4-20020a05600c3ac400b003a319c57cb2mr3399327wms.63.1658933150598;
+        Wed, 27 Jul 2022 07:45:50 -0700 (PDT)
+Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
+        by smtp.gmail.com with ESMTPSA id h18-20020a05600c351200b003a31df6af2esm2693291wmq.1.2022.07.27.07.45.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 07:45:50 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 16:45:48 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Matthias May <matthias.may@westermo.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, nicolas.dichtel@6wind.com,
+        eyal.birger@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2 net-next] geneve: fix TOS inheriting for ipv6
+Message-ID: <20220727144548.GB31646@pc-4.home>
+References: <20220724003741.57816-1-matthias.may@westermo.com>
+ <20220724003741.57816-3-matthias.may@westermo.com>
+ <20220725170519.GD18808@pc-4.home>
+ <712bcd84-4dbe-67a6-afa9-ddc01ea27cc8@westermo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220727090700.3238-1-tujinjiang@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <712bcd84-4dbe-67a6-afa9-ddc01ea27cc8@westermo.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc Yang Shi]
-On Wed 27-07-22 17:07:00, tujinjiang@bytedance.com wrote:
-> From: Jinjiang Tu <tujinjiang@bytedance.com>
+On Tue, Jul 26, 2022 at 06:29:56PM +0200, Matthias May wrote:
+> On 25/07/2022 19:05, Guillaume Nault wrote:
+> > On Sun, Jul 24, 2022 at 02:37:41AM +0200, Matthias May wrote:
+> > > The current code uses the RT_TOS macro to cut off the 6 DSCP
+> > > bits, down to the original 3 TOS bits.
+> > > 
+> > > Do not use this macro to get the prio for inheriting purposes.
+> > 
+> > Honestly, this patch is a bug fix and is suitable for the net tree
+> > (with appropriate 'Fixes' tag).
+> > 
+> > Ideally, we'd also fix ip6_dst_lookup_tunnel() (used by bareudp
+> > tunnels) and vxlan6_get_route().
+> > 
+> > Also, mlx5e_tc_tun_update_header_ipv6() and
+> > mlx5e_tc_tun_create_header_ipv6() both call RT_TOS() inside
+> > ip6_make_flowinfo() and certainly need to be fixed too.
+> > 
 > 
-> when shrinker is registered with SHRINKER_MEMCG_AWARE flag,
-> register_shrinker will not initialize shrinker->nr_deferred,
-> but the pointer will be passed to kfree in unregister_shrinker
-> when the shrinker is unregistered. This leads to kernel crash
-> when the shrinker object is dynamically allocated.
+> Hi Guillaume
+> How would i do that?
+> Send a v2 to net with the fixes tag on 95caf6f71a999?
+> Or just resend to net with the fixes tag on 95caf6f71a999?
+> Since there are no actual changes to the patch.
 
-Is this a real life problem? I thought shrinkers were pre-zeroed
-already. Not that we should be relying on that but it would be good to
-mention whether this is a code fortification or something that we should
-be really worried about.
+Hi Matthias,
 
-> To fix it, this patch initialize shrinker->nr_deferred at the
-> beginning of prealloc_shrinker.
+Ideally, send a patch series to net that'd removes RT_TOS() from the
+ip6_make_flowinfo() calls in geneve, vxlan and bareudp (one patch for
+each protocol, with the appropriate Fixes tag). You can add the IPv4
+patch in that series or send it separately, as you see fit.
 
-It would be great to add
-Fixes: 476b30a0949a ("mm: vmscan: don't need allocate shrinker->nr_deferred for memcg aware shrinkers")
- 
-> Signed-off-by: Jinjiang Tu <tujinjiang@bytedance.com>
-> ---
->  mm/vmscan.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index f7d9a683e3a7..06ab5a398971 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -613,6 +613,7 @@ int prealloc_shrinker(struct shrinker *shrinker)
->  	unsigned int size;
->  	int err;
->  
-> +	shrinker->nr_deferred = NULL;
->  	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
->  		err = prealloc_memcg_shrinker(shrinker);
->  		if (err != -ENOSYS)
+Alternatively you can just repost this series to net, with a proper
+Fixes tag for each patch (and I'll take care of vxlan and bareudp in
+a future series).
 
-You should be able to move it under SHRINKER_MEMCG_AWARE branch, no?
+> This kind of contradicts the statement that IPv4 and IPv6 should behave the same.
+> --> v6 would be fixed, but v4 not.
 
--- 
-Michal Hocko
-SUSE Labs
+I personally consider the current IPv4 behaviour for TOS inherit option
+to be a bug, so, in this case, we can have both IPv4 and IPv6 fixed in
+the same tree.
+
+But generally speaking, we have some divergence in how IPv4 and IPv6
+treat tos/dsfield. That's because of some historical reasons and it's
+not easy to reconciliate both implementations (because of backward
+compatibility).
+
+> BR
+> Matthias
+
+
+

@@ -2,156 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC1A582180
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED36F582193
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiG0Htl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S230011AbiG0Hx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiG0Hth (ORCPT
+        with ESMTP id S229943AbiG0Hx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:49:37 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D02E422CB;
-        Wed, 27 Jul 2022 00:49:36 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z18so8021703edb.10;
-        Wed, 27 Jul 2022 00:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=7qrKymhpLOAPYDYIFsDNUzeQR021XnkNkwlPESUcTX8=;
-        b=FY9ZK6DN7/WlouONO+X7GQTuYKV2MQxX+NxsAxG9h3cBD5XAQJUqonvfI5qp4qOB5Q
-         ym19B8AQOzTbLQmo2n2Gmx0t4SpoqBf50VL5TRiTAyTxa+i4Yj2d2+Dd2a6oqLySyJJe
-         MFvtgnnuQdxYYqDUf90lSOotu51KM13cmu9MDpbImfwBVrYDvC0X4kaO45i2IPiJgp/M
-         cvvHCP3n+c25o6DnZEyE+O3l0/lKE6l/+wtE6pAiJMSl+YHcjuNvAdwsYCRHQh5+cYOH
-         sKf7q0xFFxSLN8MHdvsFSIwT8AK/auwulCLQB/zGBG6yIAM8odehRGMp6xtMXIMaog5m
-         OOjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=7qrKymhpLOAPYDYIFsDNUzeQR021XnkNkwlPESUcTX8=;
-        b=Ag3D5HZIYniQISiOlna4J7vkAAF+vI4xdKfBMI8MJNuKf9d9w58GjGvXbN4nLGpJuw
-         mR2RlsmJfZy0sxu7A8PAnR2KddKdxyA9EiWp+KGqh+3q/EcDIUkTJqOdyofkWJRSNAz0
-         ireQXL8QUjppDlI6Bj25cCFvAdZyVU5Lws9l7sbTIzygvt0ZPW7DMbf0XWIiCf0a6xbG
-         m8ehH5LG5iMEUZ/7+z2aGeW/Qo7Rp0dW/GWlnbO8p/wqtugMRZdTPlY2CeXHRcJ/qA/1
-         AB9q51mOVEsgO55wudMJPVy6Lh0vpvC+hPZpFg0of46yxZAR0W/3KTFxw2bdXsyZPxvb
-         GGMw==
-X-Gm-Message-State: AJIora9q5Z8KammNEnru6qIOauVE1ZiGeQdoUG5By6qP4qJ2niIAb9c8
-        op8Ul5aKOz3pls+8bPO2fH2fHAZfn6NYKTGu
-X-Google-Smtp-Source: AGRyM1tXpncuFPJXAmibcjFfJyU4q/R3OQaxywdRzAQa2B0nQnvOw7ZLhPVOhUShHwVnwox3XPIyqw==
-X-Received: by 2002:a05:6402:1f01:b0:43a:239e:e65a with SMTP id b1-20020a0564021f0100b0043a239ee65amr21521389edb.428.1658908174880;
-        Wed, 27 Jul 2022 00:49:34 -0700 (PDT)
-Received: from [192.168.74.101] ([77.78.38.236])
-        by smtp.gmail.com with ESMTPSA id bt8-20020a0564020a4800b0043bba5ed21csm9698792edb.15.2022.07.27.00.49.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 00:49:34 -0700 (PDT)
-Message-ID: <79fce900-2825-45ca-44f2-9fb94b5eeed3@gmail.com>
-Date:   Wed, 27 Jul 2022 10:49:32 +0300
+        Wed, 27 Jul 2022 03:53:58 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCF7422F7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4FQRdaiEmjW2on5jtXkWdtqctpeHbZ2jbFFYhzy/xGE=; b=DoQlz2/A3iAlE2X5WpW3dTwslw
+        sTn4Y4/XG+o0XzQudWorqjNypVPPgtJc0KRB3J/aeqIcKwV5hX7bvwKz6dBTQdDTD6v17jT2inaDP
+        F+ZCHE2Petyxe5cyoZis3Aq50z55F5DulGE/rX7HAFgEXz0n5uYjUJjCg3zFlw9xwWAP5sxJqh6Rx
+        RnG77UL5sBplRhYiQi9OGtLgpi07aYKUWCo6n9VYfyJGNwGFSJ4sXTtlXohIbzRfNUKvmm5xODUZc
+        Z4U7qI7RQUohgglPFC9F2gQ5aHp/Ue2cxGEVRLwNgwyInkiuTeepHfN4dcUtPTgMjHI3VojxVip6q
+        4ABh3niw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33592)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oGbrR-00054a-4F; Wed, 27 Jul 2022 08:53:41 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oGbrL-000271-D8; Wed, 27 Jul 2022 08:53:35 +0100
+Date:   Wed, 27 Jul 2022 08:53:35 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] amba: Remove deferred device addition
+Message-ID: <YuDu/w+Z3RfEYxYN@shell.armlinux.org.uk>
+References: <20220719182010.637337-1-saravanak@google.com>
+ <20220720131221.azqfidkry3cwiarw@bogus>
+ <YtkTK3QS0PQ2LRpM@shell.armlinux.org.uk>
+ <CAGETcx8mVqX+FRiD9_PahpfQQ1CjG0FxN08pN7jgj+D4x2QjhQ@mail.gmail.com>
+ <YuDspJ4+S1BsKLOi@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: regulator: Document the PM6125 SPMI
- PMIC
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20220726181133.3262695-1-iskren.chernev@gmail.com>
- <20220726181133.3262695-2-iskren.chernev@gmail.com>
- <CAA8EJpoLMioMy61np6Y8Gn+Uhb8EvgU6bwuUyouuNcDz0XwByg@mail.gmail.com>
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-In-Reply-To: <CAA8EJpoLMioMy61np6Y8Gn+Uhb8EvgU6bwuUyouuNcDz0XwByg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuDspJ4+S1BsKLOi@kroah.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/26/22 23:36, Dmitry Baryshkov wrote:
-> On Tue, 26 Jul 2022 at 21:11, Iskren Chernev <iskren.chernev@gmail.com> wrote:
->>
->> Add support for pm6125 compatible string and add relevant supplies in QCom SPMI
->> regulator documentation.
->>
->> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
->> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+On Wed, Jul 27, 2022 at 09:43:32AM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jul 21, 2022 at 02:58:27PM -0700, Saravana Kannan wrote:
+> > On Thu, Jul 21, 2022 at 1:50 AM Russell King (Oracle)
+> > <linux@armlinux.org.uk> wrote:
+> > >
+> > > On Wed, Jul 20, 2022 at 02:12:21PM +0100, Sudeep Holla wrote:
+> > > > On Tue, Jul 19, 2022 at 11:20:10AM -0700, Saravana Kannan wrote:
+> > > > > The uevents generated for an amba device need PID and CID information
+> > > > > that's available only when the amba device is powered on, clocked and
+> > > > > out of reset. So, if those resources aren't available, the information
+> > > > > can't be read to generate the uevents. To workaround this requirement,
+> > > > > if the resources weren't available, the device addition was deferred and
+> > > > > retried periodically.
+> > > > >
+> > > > > However, this deferred addition retry isn't based on resources becoming
+> > > > > available. Instead, it's retried every 5 seconds and causes arbitrary
+> > > > > probe delays for amba devices and their consumers.
+> > > > >
+> > > > > Also, maintaining a separate deferred-probe like mechanism is
+> > > > > maintenance headache.
+> > > > >
+> > > > > With this commit, instead of deferring the device addition, we simply
+> > > > > defer the generation of uevents for the device and probing of the device
+> > > > > (because drivers needs PID and CID to match) until the PID and CID
+> > > > > information can be read. This allows us to delete all the amba specific
+> > > > > deferring code and also avoid the arbitrary probing delays.
+> > > > >
+> > > > > Cc: Rob Herring <robh@kernel.org>
+> > > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > > Cc: Saravana Kannan <saravanak@google.com>
+> > > > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > > > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > > >
+> > > > Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+> > > >
+> > > > on Juno with linux-next(which had the reported issue [1]) + this patch(which
+> > > > fixes the issue)
+> > >
+> > > Ok, but this patch needs to end up in the patch system for me to apply
+> > > it. Can someone please add "KernelVersion: 5.19-rc7" or whatever version
+> > 
+> > Where am I supposed to add that? Just somewhere in the email body?
+> > 
+> > The patch you are replying to was based on your linu-arm/for-next the
+> > day I sent it. Do you still need me to rebase it on Linus's tree?
+> > 
+> > > the patch was generated against (just the tagged version is sufficient)
+> > > somewhere in the email, and send it to patches@armlinu.org.uk.
+> > 
+> > I'll send out the same patch as is to that email. Wait, is there a
+> > typo in the domain name? Did you leave out the x by accident or is it
+> > really armlinu? I'm also getting a DNS failure for either one of those
+> > domains.
+> > 
+> > I'll wait to hear from you before I send another email.
 > 
-> The order of sign-offs seems incorrect. The sender's signature should
-> be the last one.
+> Odd, I don't see the requirement for the arm patch-bot for the amba bus
+> code anywhere in the documentation, am I missing it?
 
-Sure, will do!
+The requirement for the arm patch-bot is "patches that I apply", and
+since I'm listed as maintainer for that code...
 
->> ---
->>  .../regulator/qcom,spmi-regulator.yaml        | 19 +++++++++++++++++++
->>  1 file changed, 19 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
->> index 8b7c4af4b551..d8f18b441484 100644
->> --- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
->> +++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
->> @@ -12,6 +12,7 @@ maintainers:
->>  properties:
->>    compatible:
->>      enum:
->> +      - qcom,pm6125-regulators
->>        - qcom,pm660-regulators
->>        - qcom,pm660l-regulators
->>        - qcom,pm8004-regulators
->> @@ -106,6 +107,24 @@ required:
->>    - compatible
->>
->>  allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - qcom,pm6125-regulators
->> +    then:
->> +      properties:
->> +        vdd_l1_l7_l17_l18-supply: true
->> +        vdd_l2_l3_l4-supply: true
->> +        vdd_l5_l15_l19_l20_l21_l22-supply: true
->> +        vdd_l6_l8-supply: true
->> +        vdd_l9_l11-supply: true
->> +        vdd_l10_l13_l14-supply: true
->> +        vdd_l12_l16-supply: true
->> +        vdd_l23_l24-supply: true
->> +      patternProperties:
->> +        "^vdd_s[1-8]-supply$": true
-> 
-> Add an empty line please.
+Sorry I missed the original reply highlighting the typo. Yes, it's a
+typo (my X key was being a bit dodgy last week) and in any case,
+"armlinu.org.uk" doesn't exist in the DNS, so sending to it would fail.
+Also, every email I've sent over the last decade or more contains a
+signature that gives a URL to the patch system, and the email address
+is mentioned in its "Help" page (although there's other stuff on the
+help page that needs to be updated to current practices.)
 
-All other if-then blocks don't have newlines, shall I add one between each as
-well?
-
->>    - if:
->>        properties:
->>          compatible:
->> --
->> 2.37.1
->>
-> 
-> 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

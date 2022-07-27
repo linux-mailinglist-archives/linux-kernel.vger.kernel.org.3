@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3B8582F8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F520582F78
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiG0R1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:27:24 -0400
+        id S242138AbiG0R00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:26:26 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242117AbiG0R07 (ORCPT
+        with ESMTP id S242359AbiG0RY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:26:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090905FAE6;
-        Wed, 27 Jul 2022 09:46:54 -0700 (PDT)
+        Wed, 27 Jul 2022 13:24:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E827D1FE;
+        Wed, 27 Jul 2022 09:46:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C6B3B821AC;
-        Wed, 27 Jul 2022 16:46:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF9DC433D7;
-        Wed, 27 Jul 2022 16:46:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D32960D3B;
+        Wed, 27 Jul 2022 16:46:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BA28C433D6;
+        Wed, 27 Jul 2022 16:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940410;
-        bh=ZhxdM7jcjpWARpoyc/iCo1myCVH6FRG8l2e//X3LXSM=;
+        s=korg; t=1658940377;
+        bh=4ghA5FEC/uW3xtlrEE/rw7ykV6N69eTp+mhyE3BWyMc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VcYfgtcN+1Ek6uiyg0NNpnUbvoYLZ14G/S025CTm6TWxkyXxs8H/QxWL4XqiH0NKQ
-         r5nZUyeZC2Y7yrunX0Oy08rmofcoyvb6zz3iJtAl/u9XXYGhO7o2f/qRuS29+zgW4M
-         h7XnPfpD85X0LEf203+99f5A13+e40ZJVkqc4XHk=
+        b=n/BIgZBqlzZwvaFyiKJvGShSKKCvQs8emW65JdrrXFrnJktoDaBon8ke5dNiwZZ0V
+         s7Y3LDbuZnDSKOVHDoWDa9xt5PGkiktOyuI3akrVI2x1h0R4Vnr9Yl0SZqzX8CYb16
+         QASYuVRDLDBJ77G0kpf9KBRqFwcU5+T7NIc5lims=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Dexuan Cui <decui@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        Carl Vanderlip <quic_carlv@quicinc.com>
-Subject: [PATCH 5.18 014/158] PCI: hv: Fix multi-MSI to allow more than one MSI vector
-Date:   Wed, 27 Jul 2022 18:11:18 +0200
-Message-Id: <20220727161022.034016477@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 5.15 175/201] Bluetooth: Add bt_skb_sendmmsg helper
+Date:   Wed, 27 Jul 2022 18:11:19 +0200
+Message-Id: <20220727161035.054038988@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ upstream change 08e61e861a0e47e5e1a3fb78406afd6b0cea6b6d ]
+commit 97e4e80299844bb5f6ce5a7540742ffbffae3d97 upstream.
 
-If the allocation of multiple MSI vectors for multi-MSI fails in the core
-PCI framework, the framework will retry the allocation as a single MSI
-vector, assuming that meets the min_vecs specified by the requesting
-driver.
+This works similarly to bt_skb_sendmsg but can split the msg into
+multiple skb fragments which is useful for stream sockets.
 
-Hyper-V advertises that multi-MSI is supported, but reuses the VECTOR
-domain to implement that for x86.  The VECTOR domain does not support
-multi-MSI, so the alloc will always fail and fallback to a single MSI
-allocation.
-
-In short, Hyper-V advertises a capability it does not implement.
-
-Hyper-V can support multi-MSI because it coordinates with the hypervisor
-to map the MSIs in the IOMMU's interrupt remapper, which is something the
-VECTOR domain does not have.  Therefore the fix is simple - copy what the
-x86 IOMMU drivers (AMD/Intel-IR) do by removing
-X86_IRQ_ALLOC_CONTIGUOUS_VECTORS after calling the VECTOR domain's
-pci_msi_prepare().
-
-Fixes: 4daace0d8ce8 ("PCI: hv: Add paravirtual PCI front-end for Microsoft Hyper-V VMs")
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Link: https://lore.kernel.org/r/1649856981-14649-1-git-send-email-quic_jhugo@quicinc.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
-Signed-off-by: Carl Vanderlip <quic_carlv@quicinc.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-hyperv.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ include/net/bluetooth/bluetooth.h |   38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -614,7 +614,16 @@ static void hv_set_msi_entry_from_desc(u
- static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
- 			  int nvec, msi_alloc_info_t *info)
- {
--	return pci_msi_prepare(domain, dev, nvec, info);
-+	int ret = pci_msi_prepare(domain, dev, nvec, info);
-+
-+	/*
-+	 * By using the interrupt remapper in the hypervisor IOMMU, contiguous
-+	 * CPU vectors is not needed for multi-MSI
-+	 */
-+	if (info->type == X86_IRQ_ALLOC_TYPE_PCI_MSI)
-+		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
-+
-+	return ret;
+--- a/include/net/bluetooth/bluetooth.h
++++ b/include/net/bluetooth/bluetooth.h
+@@ -450,6 +450,44 @@ static inline struct sk_buff *bt_skb_sen
+ 	return skb;
  }
  
- /**
++/* Similar to bt_skb_sendmsg but can split the msg into multiple fragments
++ * accourding to the MTU.
++ */
++static inline struct sk_buff *bt_skb_sendmmsg(struct sock *sk,
++					      struct msghdr *msg,
++					      size_t len, size_t mtu,
++					      size_t headroom, size_t tailroom)
++{
++	struct sk_buff *skb, **frag;
++
++	skb = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
++	if (IS_ERR_OR_NULL(skb))
++		return skb;
++
++	len -= skb->len;
++	if (!len)
++		return skb;
++
++	/* Add remaining data over MTU as continuation fragments */
++	frag = &skb_shinfo(skb)->frag_list;
++	while (len) {
++		struct sk_buff *tmp;
++
++		tmp = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
++		if (IS_ERR_OR_NULL(tmp)) {
++			kfree_skb(skb);
++			return tmp;
++		}
++
++		len -= tmp->len;
++
++		*frag = tmp;
++		frag = &(*frag)->next;
++	}
++
++	return skb;
++}
++
+ int bt_to_errno(u16 code);
+ 
+ void hci_sock_set_flag(struct sock *sk, int nr);
 
 

@@ -2,147 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE793583154
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38720583162
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242150AbiG0R5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
+        id S242926AbiG0SA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238698AbiG0R51 (ORCPT
+        with ESMTP id S242831AbiG0R7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:57:27 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AAF6B247;
-        Wed, 27 Jul 2022 10:01:44 -0700 (PDT)
-Received: from zn.tnic (p200300ea970f4fe3329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:4fe3:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F050F1EC04DA;
-        Wed, 27 Jul 2022 19:01:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658941298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=RWJzFBq0WyV6tQ+ZqLZ1AEB5KdQiAYWTFZnp9js+IYk=;
-        b=E1jfg4k4GTyDy4tx4WSwNylGy++reaewl6nh/UZAIdvOu54O6BrtIP6SOogm1scyjOXkAm
-        8OhwlXGLsnG/RMNgmC8aGcjmXcdcrTMVKMEdygb4vDnz8FHsZzd0q5O65TP4M8EaAActq7
-        gUMbQ6dBJ9jj5WGbPtQGg33bagoOLwQ=
-Date:   Wed, 27 Jul 2022 19:01:34 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
- when adding it to RMP table
-Message-ID: <YuFvbm/Zck9Tr5pq@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
+        Wed, 27 Jul 2022 13:59:37 -0400
+Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com (mailrelay1-1.pub.mailoutpod1-cph3.one.com [46.30.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB5D5925F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=G1yxjX0ml7bWjfSawJ8KXkM7VbWITujIankz7OQDQDU=;
+        b=jVM4agKAWmOwyeSa7KfEytokRMEy91zpRYZ1NLJSLohJKav/IH4ouKcVky9D2m31qboTIRepA65IP
+         aebcArchP+KYFud7n8Ar/0HyY2vkibNKiEJpIVFUX593g8guc09F45+BJfD5xuesQl/ahpWRkbk2Cp
+         mVuWtKIdbOCamxgL9ES6KRDHzyT63GI38lnbMhVAsFFEC1/1nsDFjaXY5a9IwFzo033DrNWN7+fsf7
+         Jn8KtD2dNw+qizO9gksC35QEiE+M3ldYWOoKyKVkHKAjkY0FVMvXpJxdmxrAMW0QuyRudI3Q7d4hnp
+         SWjbcEdB74BUyXJj/KELhPa99Vk9iDw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=G1yxjX0ml7bWjfSawJ8KXkM7VbWITujIankz7OQDQDU=;
+        b=lDk1ZjUPf5ZpN4MXa95KlvR0P9gIsDqDNA2gITqap0cMWkMJAGeAc7mQQND/XPpzx3GziAs6twqUL
+         JCjKCq6Aw==
+X-HalOne-Cookie: 8a64bf85c0aa5d803b906c36b6265a74ceb1f174
+X-HalOne-ID: 2a675d83-0dce-11ed-a6c8-d0431ea8a283
+Received: from mailproxy2.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 2a675d83-0dce-11ed-a6c8-d0431ea8a283;
+        Wed, 27 Jul 2022 17:04:24 +0000 (UTC)
+Date:   Wed, 27 Jul 2022 19:04:23 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Lechner <david@lechnology.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Heiko Schocher <hs@denx.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: display: use spi-peripheral-props.yaml
+Message-ID: <YuFwF/sOk4svIlkK@ravnborg.org>
+References: <20220727164312.385836-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
+In-Reply-To: <20220727164312.385836-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:03:07PM +0000, Ashish Kalra wrote:
+Hi Krzysztof,
 
-> Subject: x86/sev: Invalid pages from direct map when adding it to RMP table
+On Wed, Jul 27, 2022 at 06:43:12PM +0200, Krzysztof Kozlowski wrote:
+> Instead of listing directly properties typical for SPI peripherals,
+> reference the spi-peripheral-props.yaml schema.  This allows using all
+> properties typical for SPI-connected devices, even these which device
+> bindings author did not tried yet.
+> 
+> Remove the spi-* properties which now come via spi-peripheral-props.yaml
+> schema, except for the cases when device schema adds some constraints
+> like maximum frequency.
+> 
+> While changing additionalProperties->unevaluatedProperties, put it in
+> typical place, just before example DTS.
+> 
+> The sitronix,st7735r references also panel-common.yaml and lists
+> explicitly allowed properties, thus here reference only
+> spi-peripheral-props.yaml for purpose of documenting the SPI slave
+> device and bringing spi-max-frequency type validation.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
 
-"...: Invalidate pages from the direct map when adding them to the RMP table"
+I assume this will be added to the same tree as the SPI CPHA and CPOL
+patch.
 
-> +static int restore_direct_map(u64 pfn, int npages)
-> +{
-> +	int i, ret = 0;
-> +
-> +	for (i = 0; i < npages; i++) {
-> +		ret = set_direct_map_default_noflush(pfn_to_page(pfn + i));
-
-set_memory_p() ?
-
-> +		if (ret)
-> +			goto cleanup;
-> +	}
-> +
-> +cleanup:
-> +	WARN(ret > 0, "Failed to restore direct map for pfn 0x%llx\n", pfn + i);
-
-Warn for each pfn?!
-
-That'll flood dmesg mightily.
-
-> +	return ret;
-> +}
-> +
-> +static int invalid_direct_map(unsigned long pfn, int npages)
-> +{
-> +	int i, ret = 0;
-> +
-> +	for (i = 0; i < npages; i++) {
-> +		ret = set_direct_map_invalid_noflush(pfn_to_page(pfn + i));
-
-As above, set_memory_np() doesn't work here instead of looping over each
-page?
-
-> @@ -2462,11 +2494,38 @@ static int rmpupdate(u64 pfn, struct rmpupdate *val)
->  	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
->  		return -ENXIO;
->  
-> +	level = RMP_TO_X86_PG_LEVEL(val->pagesize);
-> +	npages = page_level_size(level) / PAGE_SIZE;
-> +
-> +	/*
-> +	 * If page is getting assigned in the RMP table then unmap it from the
-> +	 * direct map.
-> +	 */
-> +	if (val->assigned) {
-> +		if (invalid_direct_map(pfn, npages)) {
-> +			pr_err("Failed to unmap pfn 0x%llx pages %d from direct_map\n",
-
-"Failed to unmap %d pages at pfn 0x... from the direct map\n"
-
-> +			       pfn, npages);
-> +			return -EFAULT;
-> +		}
-> +	}
-> +
->  	/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
->  	asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
->  		     : "=a"(ret)
->  		     : "a"(paddr), "c"((unsigned long)val)
->  		     : "memory", "cc");
-> +
-> +	/*
-> +	 * Restore the direct map after the page is removed from the RMP table.
-> +	 */
-> +	if (!ret && !val->assigned) {
-> +		if (restore_direct_map(pfn, npages)) {
-> +			pr_err("Failed to map pfn 0x%llx pages %d in direct_map\n",
-
-"Failed to map %d pages at pfn 0x... into the direct map\n"
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+	Sam

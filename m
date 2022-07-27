@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6D9582F81
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62347582D5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242056AbiG0R0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S240783AbiG0Q47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241961AbiG0RZ3 (ORCPT
+        with ESMTP id S241142AbiG0Q4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:25:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E31B7D7A5;
-        Wed, 27 Jul 2022 09:46:41 -0700 (PDT)
+        Wed, 27 Jul 2022 12:56:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4354F6A2;
+        Wed, 27 Jul 2022 09:36:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1420B821A6;
-        Wed, 27 Jul 2022 16:46:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D9EAC433B5;
-        Wed, 27 Jul 2022 16:46:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 066E861A98;
+        Wed, 27 Jul 2022 16:36:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 047CDC433D7;
+        Wed, 27 Jul 2022 16:36:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940399;
-        bh=GhYgZIgGTDUbTK6LWYbZValzjDD+lImexv1IGjxCoo8=;
+        s=korg; t=1658939763;
+        bh=4ghA5FEC/uW3xtlrEE/rw7ykV6N69eTp+mhyE3BWyMc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bcahtjh209Ui9ATS61UTeX1/MCJNXN7Ecs8jgPzXFUohoE27CG/AmmyEXxXKc5p2x
-         cj9BCqZiqp8Q5ZnttlerQEtyaTeMw7DHLvp0qb+/2l9kjmKkDX/NeY+qiHb0CUmwza
-         XXuigjrmwT0g7/SrMGR5dNFj/ViTFBLwvTKPgudY=
+        b=sDSXk35xrZ17WfmZc5MehMsSSlmlbVlp/cJnEtWXaAmLPJRBCMTdegssq0xqfbo/b
+         PFRMq1fxiXUUwwZtHZWoM0Wxk7OlWrxwQVsyLJoROPkSGP7GT6sfzWmmzxfnYCelqF
+         iqkq6IXCxIjYdUgLJvOloM/hWYA1wwcWRe3tWlWc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Subject: [PATCH 5.18 010/158] drm/scheduler: Dont kill jobs in interrupt context
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 5.10 088/105] Bluetooth: Add bt_skb_sendmmsg helper
 Date:   Wed, 27 Jul 2022 18:11:14 +0200
-Message-Id: <20220727161021.852697362@linuxfoundation.org>
+Message-Id: <20220727161015.624218001@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit 9b04369b060fd4885f728b7a4ab4851ffb1abb64 upstream.
+commit 97e4e80299844bb5f6ce5a7540742ffbffae3d97 upstream.
 
-Interrupt context can't sleep. Drivers like Panfrost and MSM are taking
-mutex when job is released, and thus, that code can sleep. This results
-into "BUG: scheduling while atomic" if locks are contented while job is
-freed. There is no good reason for releasing scheduler's jobs in IRQ
-context, hence use normal context to fix the trouble.
+This works similarly to bt_skb_sendmsg but can split the msg into
+multiple skb fragments which is useful for stream sockets.
 
-Cc: stable@vger.kernel.org
-Fixes: 542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220411221536.283312-1-dmitry.osipenko@collabora.com
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/scheduler/sched_entity.c |    6 +++---
- include/drm/gpu_scheduler.h              |    4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ include/net/bluetooth/bluetooth.h |   38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
---- a/drivers/gpu/drm/scheduler/sched_entity.c
-+++ b/drivers/gpu/drm/scheduler/sched_entity.c
-@@ -190,7 +190,7 @@ long drm_sched_entity_flush(struct drm_s
- }
- EXPORT_SYMBOL(drm_sched_entity_flush);
- 
--static void drm_sched_entity_kill_jobs_irq_work(struct irq_work *wrk)
-+static void drm_sched_entity_kill_jobs_work(struct work_struct *wrk)
- {
- 	struct drm_sched_job *job = container_of(wrk, typeof(*job), work);
- 
-@@ -207,8 +207,8 @@ static void drm_sched_entity_kill_jobs_c
- 	struct drm_sched_job *job = container_of(cb, struct drm_sched_job,
- 						 finish_cb);
- 
--	init_irq_work(&job->work, drm_sched_entity_kill_jobs_irq_work);
--	irq_work_queue(&job->work);
-+	INIT_WORK(&job->work, drm_sched_entity_kill_jobs_work);
-+	schedule_work(&job->work);
+--- a/include/net/bluetooth/bluetooth.h
++++ b/include/net/bluetooth/bluetooth.h
+@@ -450,6 +450,44 @@ static inline struct sk_buff *bt_skb_sen
+ 	return skb;
  }
  
- static struct dma_fence *
---- a/include/drm/gpu_scheduler.h
-+++ b/include/drm/gpu_scheduler.h
-@@ -28,7 +28,7 @@
- #include <linux/dma-fence.h>
- #include <linux/completion.h>
- #include <linux/xarray.h>
--#include <linux/irq_work.h>
-+#include <linux/workqueue.h>
++/* Similar to bt_skb_sendmsg but can split the msg into multiple fragments
++ * accourding to the MTU.
++ */
++static inline struct sk_buff *bt_skb_sendmmsg(struct sock *sk,
++					      struct msghdr *msg,
++					      size_t len, size_t mtu,
++					      size_t headroom, size_t tailroom)
++{
++	struct sk_buff *skb, **frag;
++
++	skb = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
++	if (IS_ERR_OR_NULL(skb))
++		return skb;
++
++	len -= skb->len;
++	if (!len)
++		return skb;
++
++	/* Add remaining data over MTU as continuation fragments */
++	frag = &skb_shinfo(skb)->frag_list;
++	while (len) {
++		struct sk_buff *tmp;
++
++		tmp = bt_skb_sendmsg(sk, msg, len, mtu, headroom, tailroom);
++		if (IS_ERR_OR_NULL(tmp)) {
++			kfree_skb(skb);
++			return tmp;
++		}
++
++		len -= tmp->len;
++
++		*frag = tmp;
++		frag = &(*frag)->next;
++	}
++
++	return skb;
++}
++
+ int bt_to_errno(u16 code);
  
- #define MAX_WAIT_SCHED_ENTITY_Q_EMPTY msecs_to_jiffies(1000)
- 
-@@ -294,7 +294,7 @@ struct drm_sched_job {
- 	 */
- 	union {
- 		struct dma_fence_cb		finish_cb;
--		struct irq_work 		work;
-+		struct work_struct 		work;
- 	};
- 
- 	uint64_t			id;
+ void hci_sock_set_flag(struct sock *sk, int nr);
 
 

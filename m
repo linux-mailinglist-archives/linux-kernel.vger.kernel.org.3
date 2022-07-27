@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A6158269F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AB45826A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 14:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbiG0Ma7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 08:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
+        id S233192AbiG0MbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 08:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233168AbiG0Mam (ORCPT
+        with ESMTP id S233179AbiG0Mam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Jul 2022 08:30:42 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECC8617C
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:30:13 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id t1so26851145lft.8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 05:30:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ps/+5VPVaYevdh/6gOs5F1hcVnusMTfNaW2Z1T8LP+A=;
-        b=aneJs51DgGyKe9+lAleeq51Nfv17XMEKNKoFAMBIFEhU+PzxuRLX7O3yCmBYWHpHGA
-         UUtuAYipA+JLfIwHYEYndPbayzRJU037rJv2XVArk57C7iO8aD92FJ1RPFTNvPaQ0WbL
-         nTahfc/XfkSTifQIxmxyejZdwUUjONq5RpnZX/w2WeXaV2AbPLFuK58K7Oer3tYocPQC
-         9MYWf6/Fe+cCzHpNc3JR6oKbgNgfqhbrPDKnzK+2njD+iRo+IEK1pScOX+9byFS3o31k
-         OXS911hCdbaxYyanxSRLF0De0Mwg9dnxElewjqurL8zRgOjTe6nZYnVJd/yQPPSN0Oz/
-         zfRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ps/+5VPVaYevdh/6gOs5F1hcVnusMTfNaW2Z1T8LP+A=;
-        b=cM5pkSZqqqXOsX7Cc/a1Ve3SUM5R49BhhN/4Q7HwP9lon4Ua7Q0c/0AJY/oE0ZrWVk
-         Gxuk55lrjl12xJfveqQEjKl//MUudpcvf2tX+6IX6pPCYYmwh/dfn1180alds9YcTDOV
-         3K6NSKxgsjdXuBdUVRImrbTSIuA5lE2J4F0ef9pBY9PS8yWba0PtxV7UibXn0HNc4ZBm
-         WK/i9cL5WcQyvxmbI4xB3LK/sFCWW8WGgBpydSoH2rmK8rDjv0C/OGfqTXbHrEJLwK++
-         gEQvOXSANZR7jOSgeUQoz5GvdEDkWIVFm3B21BDD79lbAoVMVotPHgoHoPbvYH3oiNv0
-         6yWw==
-X-Gm-Message-State: AJIora9xJH4ajN6U91cFZEGgdGkf9xrvVRv1ZsLVsji4U+BkmgxoTPhP
-        yYO25xi9j9cSn/l16p7c09wI1lRiDsRIgvVtFZ+p5Q==
-X-Google-Smtp-Source: AGRyM1usi3VvuAE9QHArHqPE+QINC2fW0qFj7SnfxJ0dIbBnMc/9ltEW0eEe8ey9YdP9hysi5LJxlZnjzcb87Fg6NAo=
-X-Received: by 2002:ac2:44af:0:b0:48a:9e9f:74e5 with SMTP id
- c15-20020ac244af000000b0048a9e9f74e5mr3058834lfm.100.1658925011234; Wed, 27
- Jul 2022 05:30:11 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68DFB1C8;
+        Wed, 27 Jul 2022 05:30:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8177611B6;
+        Wed, 27 Jul 2022 12:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 441B0C43140;
+        Wed, 27 Jul 2022 12:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658925013;
+        bh=5a/KXZKx9pWK5uArWQJKno/x/fl2ge0StJ15BZUfgFE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FAFdcpb9Y2b1X89hT0WtA15BN05osEsmfHhkkQxrvslfhd87bJiESdi4B+d74iKwv
+         iXdk88bv/4dy8jFFGNfgbhptYCJAy+5A91kG2irYzq6eKWO5cfRkWb884tYMJVQhAS
+         A6y7TvY02UnInx1SDCtdt8iIorZaEu9bHf4/fupQjjJKWPjptri1I8Mbs355+mzo24
+         WVxF7kkcWYCbZ2N2HZXLebdOaa837ftyrDzOBoC8KvciarldjBbT5ofbRsYhZ6A3XM
+         a1+mftq24oXAhJZhGoZIYf6+TlH769or0SkK9dw99gj6r8BDw14W3WBZAZpCZ1Mfli
+         JGuNuF3pSBdgQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DD4CC43142;
+        Wed, 27 Jul 2022 12:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220727114302.302201-1-apatel@ventanamicro.com>
- <20220727114302.302201-2-apatel@ventanamicro.com> <20220727121838.tpy55twdkuasjab7@bogus>
-In-Reply-To: <20220727121838.tpy55twdkuasjab7@bogus>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 27 Jul 2022 17:59:59 +0530
-Message-ID: <CAK9=C2UFgZv5T433S6EVVa+4V2Uaffg6Xq1e2zLKbdFVFYhf0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: Add optional DT property riscv,timer-can-wake-cpu
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V6] virtio-net: fix the race between refill work and close
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165892501318.3549.7310176827653095517.git-patchwork-notify@kernel.org>
+Date:   Wed, 27 Jul 2022 12:30:13 +0000
+References: <20220725072159.3577-1-jasowang@redhat.com>
+In-Reply-To: <20220725072159.3577-1-jasowang@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 5:48 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, Jul 27, 2022 at 05:13:01PM +0530, Anup Patel wrote:
-> > We add an optional DT property riscv,timer-can-wake-cpu which if present
-> > in CPU DT node then CPU timer is always powered-on and never loses context.
-> >
->
-> I don't have much idea on idle states on RISC-V but associating this
-> property in just CPU node seems like not so good idea.
->
-> This will be applicable for all CPU idle states which means you
-> can't use this even if one of the deepest idle state switches off
-> the timer.
->
-> We have local-timer-stop in each idle states node. IIRC RISC-V uses the
-> binding which is now not arm specific[0] and IIRC you moved the binding
-> yourself. Any reason why not can't be used and any specific reason for
-> needing this extra property.
+Hello:
 
-Indeed, the "local-timer-stop" property should be used. I guess,
-Allwinner D1 should use this property in idle state and we should
-not unconditionally set CLOCK_EVT_FEAT_C3STOP in the timer
-driver.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-@Samuel Holland Can you confirm that the "local-timer-stop" property
-works for Allwinner D1 ? If yes, then please send a patch to remove
-CLOCK_EVT_FEAT_C3STOP from timer driver.
+On Mon, 25 Jul 2022 15:21:59 +0800 you wrote:
+> We try using cancel_delayed_work_sync() to prevent the work from
+> enabling NAPI. This is insufficient since we don't disable the source
+> of the refill work scheduling. This means an NAPI poll callback after
+> cancel_delayed_work_sync() can schedule the refill work then can
+> re-enable the NAPI that leads to use-after-free [1].
+> 
+> Since the work can enable NAPI, we can't simply disable NAPI before
+> calling cancel_delayed_work_sync(). So fix this by introducing a
+> dedicated boolean to control whether or not the work could be
+> scheduled from NAPI.
+> 
+> [...]
 
-Regards,
-Anup
+Here is the summary with links:
+  - [V6] virtio-net: fix the race between refill work and close
+    https://git.kernel.org/netdev/net/c/5a159128faff
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

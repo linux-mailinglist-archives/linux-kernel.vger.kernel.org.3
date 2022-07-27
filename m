@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832D25829FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA03C582A00
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234145AbiG0Puf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S234193AbiG0PwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbiG0Pud (ORCPT
+        with ESMTP id S232850AbiG0PwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:50:33 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6BB1CFDA
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:50:29 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id b10so16743808pjq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:50:29 -0700 (PDT)
+        Wed, 27 Jul 2022 11:52:09 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349DB1CFDA
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:52:08 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id z25so27799463lfr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=m4nF36YaK6LuqWRuy/TneJFnRjNXCUdWKIq1pbaAqBw=;
-        b=T34Qw0WA0QGxl8jJTXdBHMds0kjs75oQlUd3VOYhqSDzN/NjbE2DQAQHimsmpbGAF0
-         g7LMjVYznfIp+nr8KGAonbUU6ypCmr8jjpTJBio1u12hpemoXkRlNypjkFbXQRnCMT50
-         J09+P81VKiCqEdf/uGSCpXTVIHMOWVQVZ8V1BeXm7ddLvAEUwkzkMI62f5CIribdmIwA
-         X2GEEZEIWHnI/hjmFUbI9QV3+M9WueiaYOdOLa2IwP/hnO44tEha1cNaqsvf4joRngy7
-         hYNiiOmxBWleCO2cKLKWvmzN3TRpVGYLlbv9/jigv1IMapsybURfVdCHKDYWp0n5J2Q1
-         GGMA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r+ha7lhBflc460y5THF4+LjZQv3BBhWbPvt660ntV4w=;
+        b=HajfvI/6l0BHtjFFyVInnth5cHgPWWwo3Mq9rUoDiz9X1M/3YvaIv8wMF0NqAPYv9E
+         yOmjV8QRRUcNgLO8UwrGvft4G7GcyUjP6Y691j2KWfT+LavcKebJoLy+TDiYJwXxwuV2
+         XZEN1g2vG1DUCxl1719eQXToHXh9X1q4wpIJ/uXF7iY8xN7ypE2dzJuC3oZmUE7S6z+f
+         /HAikeciCEZQhnAXP4SVD/PLZ3YOWZBynQvpD0RK4WU0D96zwQv9TJWvuhVrDzi7OuWI
+         Lp9lQTpV56DyqMdnfU7FaIYfnujISyLgVwnUlX3lP4n2+M9drfHz7+r+awyLXEIei0OL
+         wojw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=m4nF36YaK6LuqWRuy/TneJFnRjNXCUdWKIq1pbaAqBw=;
-        b=gpyDDwu8c3jyoo6SCZbfRYaYRdxufvn7oyYPqLcWUgE59p75WP4ngMG4+XKxOjoKYf
-         AvN49UMaDjmvRT7y4wCxI9USmY1LGjc0bzW0UCIFDFe7V0ACTL0gzhcePv0UT6i26Rvi
-         C48RjjFyFVJ2NTzoJ9el4eCwM3fdJlqBw9xbBi0EGYDhvY2beTl3JTB2BzyrhQxprmEs
-         146hpQy7H69xsSO3DIUgp3jjX5EPZf6DlPAjig680rgCW9m6yyssyde0EuOVIwWHRO+9
-         Yfk9eUGltiAtQt63PYKYer1vYUivRZ2euvzlqwGsM7ioWErSjTAxTGvy+prlV6bXb4qb
-         hNTg==
-X-Gm-Message-State: AJIora8bRLaUc6tsQd5/l5YKVWBMhQhFMb0Af/aVxkooRgY17BVsRH5J
-        Md3rndiAguVtrMizHl7da1Y4Fiy4VFnbEgEqxB0=
-X-Google-Smtp-Source: AGRyM1uh/CR06xUphU6/6hPWuZMCI/hGpzlCLGO/mAeoZhXnLqevWfE+F9NLSu3Dl4K61tq7j2OOgn6mjrCTZ2r8ETY=
-X-Received: by 2002:a17:90b:1b42:b0:1f0:447f:995c with SMTP id
- nv2-20020a17090b1b4200b001f0447f995cmr5209612pjb.200.1658937028973; Wed, 27
- Jul 2022 08:50:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r+ha7lhBflc460y5THF4+LjZQv3BBhWbPvt660ntV4w=;
+        b=QFi1KA4P+u82OqiuDoaoG/XprryUJAzfB+XJqQUSD0q48akwX8uWdKM8vqTJuS+LSO
+         lJlRIGAQ3PjqQK1tM448AtiVbFypupATbaCNoJR9sAPeBxFPJoLdToWO8j6rIMJD7fo5
+         KLfM5MBKfKzX8KEkIYuK53R8UBFsHn4PX2s7lLZn5i3RJ+Sf8CHqvu14+KEqQeX0GYrK
+         hnxyKQg8L57AidSrLawWwBWXvNcNi2t55heJbpuVFfMzT0F9HYOPKXuG0iT3o7X9WWh0
+         DSguuNxkRoHHRIe1lGNN5fpw6DE9fbgLAI+MHF3Kjn/kdUEOgn1NCLMU0ugSlXtG7tsL
+         sMPQ==
+X-Gm-Message-State: AJIora9kopVN1zgyx/MRv08DiQcI59uY/zCF6DX8F4zbatzLmb5amXkw
+        MU5VT5B3x+BZn5QMcaUvvlBrkw==
+X-Google-Smtp-Source: AGRyM1uFlGo+mQfFG/MD+0PotT2fpEV4uoMRX06vRFxHGoiB6r1NRZaNOdvd2pgdj6mnncVtzb3Ktg==
+X-Received: by 2002:ac2:4f03:0:b0:481:5092:ec8f with SMTP id k3-20020ac24f03000000b004815092ec8fmr8817640lfr.35.1658937126228;
+        Wed, 27 Jul 2022 08:52:06 -0700 (PDT)
+Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id dt9-20020a0565122a8900b0048a835a60f6sm2392163lfb.251.2022.07.27.08.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 08:52:05 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: iio: adc: ti,am3359-adc: add ti,am654-adc
+Date:   Wed, 27 Jul 2022 17:52:03 +0200
+Message-Id: <20220727155203.320929-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220727090700.3238-1-tujinjiang@bytedance.com> <YuFPKDx90+R3Qc6v@dhcp22.suse.cz>
-In-Reply-To: <YuFPKDx90+R3Qc6v@dhcp22.suse.cz>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 27 Jul 2022 08:50:16 -0700
-Message-ID: <CAHbLzkpu91gEDzep76iRT+yFxLFaTf4fn3=bmP-fs-UP4i3NEg@mail.gmail.com>
-Subject: Re: [PATCH] vmscan: fix potential arbitrary pointer passed to kfree
- in unregister_shrinker
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     tujinjiang@bytedance.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 7:43 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> [Cc Yang Shi]
+Document the ti,am654-adc compatible already used in DTS:
 
-Thanks, Michal.
+  arch/arm64/boot/dts/ti/k3-am642-evm.dtb: adc: compatible:0: 'ti,am654-adc' is not one of ['ti,am3359-adc', 'ti,am4372-adc']
 
-> On Wed 27-07-22 17:07:00, tujinjiang@bytedance.com wrote:
-> > From: Jinjiang Tu <tujinjiang@bytedance.com>
-> >
-> > when shrinker is registered with SHRINKER_MEMCG_AWARE flag,
-> > register_shrinker will not initialize shrinker->nr_deferred,
-> > but the pointer will be passed to kfree in unregister_shrinker
-> > when the shrinker is unregistered. This leads to kernel crash
-> > when the shrinker object is dynamically allocated.
->
-> Is this a real life problem? I thought shrinkers were pre-zeroed
-> already. Not that we should be relying on that but it would be good to
-> mention whether this is a code fortification or something that we should
-> be really worried about.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../devicetree/bindings/iio/adc/ti,am3359-adc.yaml    | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Yes, all memcg aware shrinkers are actually pre-zeroed. The fs
-shrinkers (embedded in super_block) are allocated by kzalloc, all
-other shrinkers are static declared. So I don't think it will cause
-any crash in real life.
+diff --git a/Documentation/devicetree/bindings/iio/adc/ti,am3359-adc.yaml b/Documentation/devicetree/bindings/iio/adc/ti,am3359-adc.yaml
+index d6f21d5cccd7..b32be24a9f98 100644
+--- a/Documentation/devicetree/bindings/iio/adc/ti,am3359-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/ti,am3359-adc.yaml
+@@ -11,9 +11,14 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - ti,am3359-adc
+-      - ti,am4372-adc
++    oneOf:
++      - enum:
++          - ti,am3359-adc
++          - ti,am4372-adc
++      - items:
++          - enum:
++              - ti,am654-adc
++          - const: ti,am3359-adc
+ 
+   '#io-channel-cells':
+     const: 1
+-- 
+2.34.1
 
->
-> > To fix it, this patch initialize shrinker->nr_deferred at the
-> > beginning of prealloc_shrinker.
->
-> It would be great to add
-> Fixes: 476b30a0949a ("mm: vmscan: don't need allocate shrinker->nr_deferred for memcg aware shrinkers")
->
-> > Signed-off-by: Jinjiang Tu <tujinjiang@bytedance.com>
-> > ---
-> >  mm/vmscan.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index f7d9a683e3a7..06ab5a398971 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -613,6 +613,7 @@ int prealloc_shrinker(struct shrinker *shrinker)
-> >       unsigned int size;
-> >       int err;
-> >
-> > +     shrinker->nr_deferred = NULL;
-> >       if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
-> >               err = prealloc_memcg_shrinker(shrinker);
-> >               if (err != -ENOSYS)
->
-> You should be able to move it under SHRINKER_MEMCG_AWARE branch, no?
->
-> --
-> Michal Hocko
-> SUSE Labs

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D01582B44
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1BC582BF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236809AbiG0Qa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S239449AbiG0Qkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbiG0Qac (ORCPT
+        with ESMTP id S239408AbiG0QkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:30:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC22205EC;
-        Wed, 27 Jul 2022 09:25:13 -0700 (PDT)
+        Wed, 27 Jul 2022 12:40:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305755A8BD;
+        Wed, 27 Jul 2022 09:29:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43401B821BB;
-        Wed, 27 Jul 2022 16:25:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82905C433C1;
-        Wed, 27 Jul 2022 16:24:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D55A619D6;
+        Wed, 27 Jul 2022 16:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A444C433D6;
+        Wed, 27 Jul 2022 16:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939099;
-        bh=bSwEOEpsY25YU1kuF2UzXaIWJQ9XzvhLMp13mR3AYZ4=;
+        s=korg; t=1658939322;
+        bh=yGjclRpTTnLqDZq3ND41LUVC58mz1G5Iu0o1J/Ct7w8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1p3wN9v3qFDmLx0y9NUH59BKB7AixQlWcOdAIHudzvqPZRGNpr9Qzmxy07jyYIOkr
-         R0XaqrxLBsbb+YcaJMpYQmnMOZZiqVr+UPDMI96qArHEd32ihb+2QOLuSPBCBYLXYk
-         wLxyffn3zCWm50zPmSav2QyRb3t9a7BGcfp4KTgo=
+        b=E2VzBTWUjWeRNvaMM4d2vhN2E5ik39NU0oGgAPmP9WnbALYC2+chPqeDuS+LcqxHJ
+         8aNows3nCGYRwGZ5gtAGR9z2IU19HypgLhbbcl0oPD1XNPVZd+5sVyqlNiV4zfbqJ3
+         YBpxNOFt7idc5+/v4/cNgg1k9YFhxZqCVyjyj8eo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 13/62] tcp: Fix a data-race around sysctl_tcp_probe_interval.
+Subject: [PATCH 5.4 29/87] net/tls: Fix race in TLS device down flow
 Date:   Wed, 27 Jul 2022 18:10:22 +0200
-Message-Id: <20220727161004.701546594@linuxfoundation.org>
+Message-Id: <20220727161010.217002253@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Tariq Toukan <tariqt@nvidia.com>
 
-[ Upstream commit 2a85388f1d94a9f8b5a529118a2c5eaa0520d85c ]
+[ Upstream commit f08d8c1bb97c48f24a82afaa2fd8c140f8d3da8b ]
 
-While reading sysctl_tcp_probe_interval, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+Socket destruction flow and tls_device_down function sync against each
+other using tls_device_lock and the context refcount, to guarantee the
+device resources are freed via tls_dev_del() by the end of
+tls_device_down.
 
-Fixes: 05cbc0db03e8 ("ipv4: Create probe timer for tcp PMTU as per RFC4821")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+In the following unfortunate flow, this won't happen:
+- refcount is decreased to zero in tls_device_sk_destruct.
+- tls_device_down starts, skips the context as refcount is zero, going
+  all the way until it flushes the gc work, and returns without freeing
+  the device resources.
+- only then, tls_device_queue_ctx_destruction is called, queues the gc
+  work and frees the context's device resources.
+
+Solve it by decreasing the refcount in the socket's destruction flow
+under the tls_device_lock, for perfect synchronization.  This does not
+slow down the common likely destructor flow, in which both the refcount
+is decreased and the spinlock is acquired, anyway.
+
+Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+Reviewed-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/tls/tls_device.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 0e0f7803cf4e..33f9a486661c 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -2030,7 +2030,7 @@ static inline void tcp_mtu_check_reprobe(struct sock *sk)
- 	u32 interval;
- 	s32 delta;
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index abb93f7343c5..2c3cf47d730b 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -94,13 +94,16 @@ static void tls_device_queue_ctx_destruction(struct tls_context *ctx)
+ 	unsigned long flags;
  
--	interval = net->ipv4.sysctl_tcp_probe_interval;
-+	interval = READ_ONCE(net->ipv4.sysctl_tcp_probe_interval);
- 	delta = tcp_jiffies32 - icsk->icsk_mtup.probe_timestamp;
- 	if (unlikely(delta >= interval * HZ)) {
- 		int mss = tcp_current_mss(sk);
+ 	spin_lock_irqsave(&tls_device_lock, flags);
++	if (unlikely(!refcount_dec_and_test(&ctx->refcount)))
++		goto unlock;
++
+ 	list_move_tail(&ctx->list, &tls_device_gc_list);
+ 
+ 	/* schedule_work inside the spinlock
+ 	 * to make sure tls_device_down waits for that work.
+ 	 */
+ 	schedule_work(&tls_device_gc_work);
+-
++unlock:
+ 	spin_unlock_irqrestore(&tls_device_lock, flags);
+ }
+ 
+@@ -191,8 +194,7 @@ static void tls_device_sk_destruct(struct sock *sk)
+ 		clean_acked_data_disable(inet_csk(sk));
+ 	}
+ 
+-	if (refcount_dec_and_test(&tls_ctx->refcount))
+-		tls_device_queue_ctx_destruction(tls_ctx);
++	tls_device_queue_ctx_destruction(tls_ctx);
+ }
+ 
+ void tls_device_free_resources_tx(struct sock *sk)
 -- 
 2.35.1
 

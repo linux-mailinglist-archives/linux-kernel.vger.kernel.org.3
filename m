@@ -2,163 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3665582599
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03E058259C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 13:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbiG0LeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 07:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S231910AbiG0Lfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 07:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiG0LeP (ORCPT
+        with ESMTP id S229604AbiG0Lfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 07:34:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E892B13CDE;
-        Wed, 27 Jul 2022 04:34:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FF94B82022;
-        Wed, 27 Jul 2022 11:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D119C433C1;
-        Wed, 27 Jul 2022 11:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658921652;
-        bh=db3UoE/JVeKIkJbNmRDPqnol/NodJCjMUZp8vPWicCs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iqBNMAw4d8h6D2FW8pNMl/xzkWqHEMCuV4bviEGmRGIT4dJ5u4m5B77JxMTp0zYwm
-         Gtrq8OUXh6pYU0QtNfK4gEEOWKBPa3Z2XD5iR4Eknd7/yviaLd2NAFsTD+5mb8ifY6
-         GeJFS4qjfrmv92fFRtlx+qu48rTzv0+RAq3cD4hFAwpIWWjx2gIrW7SrWdgEKgEw/x
-         vOJL+XTk4y2VyyrZk++kqwTei9MCpBEdJOHAFhyv3AMCOSnktC5R/PV62sRb8b6uCs
-         loqefTIB6JbzdZbTeEwyxRsIIUxXbjQ3C84er3lkzLctezVdAxMri2l5dlPmocv2BA
-         KgIDl2URQW1mQ==
-Date:   Wed, 27 Jul 2022 13:34:06 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yongchen Yang <yoyang@redhat.com>
-Subject: Re: [RFC PATCH] vfs: don't check may_create_in_sticky if the file is
- already open/created
-Message-ID: <20220727113406.ewu4kzsoo643cf66@wittgenstein>
-References: <20220726202333.165490-1-jlayton@kernel.org>
- <8e4d498a3e8ed80ada2d3da01e7503e082be31a3.camel@kernel.org>
+        Wed, 27 Jul 2022 07:35:41 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C675922BF6;
+        Wed, 27 Jul 2022 04:35:40 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id l23so31000022ejr.5;
+        Wed, 27 Jul 2022 04:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UV/mMyTMs0eKuU5zSJfJOR5cXJNS19F5GWColL/C+9o=;
+        b=gbMyepVIxYkgJ6C4UkAOdEEtHLTBRzIPPmGouJ8T8x1U9KfoFU0G1V/3SNvlShjWuq
+         iGFfLmQAMFaUmrhZ3Ufg7SH0dyy/Xq5CL9VKQnLKraKN+6QGqaFyyah6jC/wWMKjgcYT
+         UnLnRqUyJnjBfU+g+lwDHg7ffT3rjoFPKBWPuGYLRTjjCPUsiL1bjLOsxM6w1vyat43R
+         c6mDDXe/ql/JqwDk2cBZkVT049VW/dLBG3sMChsek785R7DYOMuQRX89+T+wJjtFGJP6
+         ISrTMAoZ6wSjOuEZqS0iLewdkrmuo13XhC4G5kxrQ/XWffuPzsZM8ICMx+uhYJL9HQZt
+         yjUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UV/mMyTMs0eKuU5zSJfJOR5cXJNS19F5GWColL/C+9o=;
+        b=1jhF5ONMmF3Jsl5bAY5Lxls/bT0pqnAqQJlxMFNwMwb7Ozv0vuUODyXYrxVdH+UbgM
+         GNOEysvmE8K5sIecqbGklPnxHRPiDmIwegNIngRXzothZlwNOmZbAyKdPBFND30Ou73/
+         +ATTc8+sfpne6iNH72I+7Pk9ehtkvQRukwAllM5COAJM8iXQtHqCpmzxcRRqIL1tIchO
+         IR4RbmPS2sz6qJWLZGB3DDbLjlpAcGbf6RR+TKFLkdfpUEcLyvF98zVbk4gbJQoLJty4
+         9124K/bSvTe+L90IT2oFNt4h9Sbub7X8uNEMZ0Bd1VHiUUwhOFp86M5B4vmzKt/Q8QqO
+         w87w==
+X-Gm-Message-State: AJIora/SLRQ88QRVPAyqCOMta0heVYuLdJqEHi+j/R80Id+hROwBLi/y
+        8p/x2Y/o5SOrXg6RjZVgVYQ=
+X-Google-Smtp-Source: AGRyM1skdVt9k7L0FeivBtuBGMtWwmFlYQTx/jfTpqCOcfXcp1YUv+dYPqTXd2t6WKiXFf3hJym6NQ==
+X-Received: by 2002:a17:907:7da6:b0:72f:136d:dba4 with SMTP id oz38-20020a1709077da600b0072f136ddba4mr17325350ejc.472.1658921738962;
+        Wed, 27 Jul 2022 04:35:38 -0700 (PDT)
+Received: from localhost.localdomain (c105-182.i13-27.melita.com. [94.17.105.182])
+        by smtp.googlemail.com with ESMTPSA id p25-20020aa7cc99000000b0043ca6fb7e7dsm1334056edt.68.2022.07.27.04.35.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 04:35:38 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [net-next PATCH v5 00/14] net: dsa: qca8k: code split for qca8k
+Date:   Wed, 27 Jul 2022 13:35:09 +0200
+Message-Id: <20220727113523.19742-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8e4d498a3e8ed80ada2d3da01e7503e082be31a3.camel@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 04:27:56PM -0400, Jeff Layton wrote:
-> On Tue, 2022-07-26 at 16:23 -0400, Jeff Layton wrote:
-> > NFS server is exporting a sticky directory (mode 01777) with root
-> > squashing enabled. Client has protect_regular enabled and then tries to
-> > open a file as root in that directory. File is created (with ownership
-> > set to nobody:nobody) but the open syscall returns an error.
-> > 
-> > The problem is may_create_in_sticky, which rejects the open even though
-> > the file has already been created/opened. Only call may_create_in_sticky
-> > if the file hasn't already been opened or created.
-> > 
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=1976829
-> > Reported-by: Yongchen Yang <yoyang@redhat.com>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >  fs/namei.c | 13 +++++++++----
-> >  1 file changed, 9 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/fs/namei.c b/fs/namei.c
-> > index 1f28d3f463c3..7480b6dc8d27 100644
-> > --- a/fs/namei.c
-> > +++ b/fs/namei.c
-> > @@ -3495,10 +3495,15 @@ static int do_open(struct nameidata *nd,
-> >  			return -EEXIST;
-> >  		if (d_is_dir(nd->path.dentry))
-> >  			return -EISDIR;
-> > -		error = may_create_in_sticky(mnt_userns, nd,
-> > -					     d_backing_inode(nd->path.dentry));
-> > -		if (unlikely(error))
-> > -			return error;
-> > +		if (!(file->f_mode & (FMODE_OPENED | FMODE_CREATED))) {
-> > +			error = may_create_in_sticky(mnt_userns, nd,
-> > +						d_backing_inode(nd->path.dentry));
-> > +			if (unlikely(error)) {
-> > +				printk("%s: f_mode=0x%x oflag=0x%x\n",
-> > +					__func__, file->f_mode, open_flag);
-> > +				return error;
-> > +			}
-> > +		}
-> >  	}
-> >  	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
-> >  		return -ENOTDIR;
-> 
-> I'm pretty sure this patch is the wrong approach, actually, since it
-> doesn't fix the regular (non-atomic) open codepath. Any thoughts on what
+This is needed ad ipq4019 SoC have an internal switch that is
+based on qca8k with very minor changes. The general function is equal.
 
-Hey Jeff,
+Because of this we split the driver to common and specific code.
 
-I haven't quite understood why that won't work for the regular open
-codepaths. I'm probably missing something obvious.
+As the common function needs to be moved to a different file to be
+reused, we had to convert every remaining user of qca8k_read/write/rmw
+to regmap variant.
+We had also to generilized the special handling for the ethtool_stats
+function that makes use of the autocast mib. (ipq4019 will have a
+different tagger and use mmio so it could be quicker to use mmio instead
+of automib feature)
+And we had to convert the regmap read/write to bulk implementation to
+drop the special function that makes use of it. This will be compatible
+with ipq4019 and at the same time permits normal switch to use the eth
+mgmt way to send the entire ATU table read/write in one go.
 
-> the right fix might be?
+v5:
+- Wrap function to single line/80 char
+- Cache match data even for read_switch function
+- Add additional review tag
+v4:
+- Fix compilation error with clang compiler reported by kernel
+  test bot
+v3:
+- Squash more patch to skip even more "migration patch"
+- Add new patch to cache match data in priv struct
+- Fix extra space
+- Drop unnecessary cast to qca8k_priv from void pointers
+v2:
+- Rework patch to drop dependency with bulk regmap (will be
+  converted later)
+- Split the split patch to additional patch
+- Rework autocast_mib function and move it to match data
 
-When an actual creation has taken place - and not just a lookup - then
-may_create_in_sticky() assumes that the owner of the inode matches
-current_fsuid(). That'd would also be problematic on fat or in fact on
-any fs where the actual inode->i_{g,u}id are based on e.g. uid/gid mount
-options and not on current_fsuid(), I think?
+Christian Marangi (14):
+  net: dsa: qca8k: cache match data to speed up access
+  net: dsa: qca8k: make mib autocast feature optional
+  net: dsa: qca8k: move mib struct to common code
+  net: dsa: qca8k: move qca8k read/write/rmw and reg table to common
+    code
+  net: dsa: qca8k: move qca8k bulk read/write helper to common code
+  net: dsa: qca8k: move mib init function to common code
+  net: dsa: qca8k: move port set status/eee/ethtool stats function to
+    common code
+  net: dsa: qca8k: move bridge functions to common code
+  net: dsa: qca8k: move set age/MTU/port enable/disable functions to
+    common code
+  net: dsa: qca8k: move port FDB/MDB function to common code
+  net: dsa: qca8k: move port mirror functions to common code
+  net: dsa: qca8k: move port VLAN functions to common code
+  net: dsa: qca8k: move port LAG functions to common code
+  net: dsa: qca8k: move read_switch_id function to common code
 
-So in order to improve this we would need to work around that assumption
-in some way. Either by skipping may_create_in_sticky() if the file got
-created or by adapting may_create_in_sticky().
+ drivers/net/dsa/qca/Makefile                  |    1 +
+ drivers/net/dsa/qca/{qca8k.c => qca8k-8xxx.c} | 1711 +++--------------
+ drivers/net/dsa/qca/qca8k-common.c            | 1210 ++++++++++++
+ drivers/net/dsa/qca/qca8k.h                   |  100 +
+ 4 files changed, 1549 insertions(+), 1473 deletions(-)
+ rename drivers/net/dsa/qca/{qca8k.c => qca8k-8xxx.c} (63%)
+ create mode 100644 drivers/net/dsa/qca/qca8k-common.c
 
-I only wonder whether skipping may_create_in_sticky() altogether might
-be a bit too lax. One possibility that came to my mind might be to relax
-this assumption when the file has been created and the creator has
-CAP_FOWNER.
+-- 
+2.36.1
 
-So (not compile tested or in any way) sm like:
-
-diff --git a/fs/namei.c b/fs/namei.c
-index 1f28d3f463c3..239e9f423346 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -1221,7 +1221,8 @@ int may_linkat(struct user_namespace *mnt_userns, struct path *link)
-  * Returns 0 if the open is allowed, -ve on error.
-  */
- static int may_create_in_sticky(struct user_namespace *mnt_userns,
--                               struct nameidata *nd, struct inode *const inode)
-+                               struct nameidata *nd, struct inode *const inode,
-+                               bool created)
- {
-        umode_t dir_mode = nd->dir_mode;
-        kuid_t dir_uid = nd->dir_uid;
-@@ -1230,7 +1231,9 @@ static int may_create_in_sticky(struct user_namespace *mnt_userns,
-            (!sysctl_protected_regular && S_ISREG(inode->i_mode)) ||
-            likely(!(dir_mode & S_ISVTX)) ||
-            uid_eq(i_uid_into_mnt(mnt_userns, inode), dir_uid) ||
--           uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)))
-+           uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)) ||
-+           (created &&
-+            capable_wrt_inode_uidgid(mnt_userns, inode, CAP_FOWNER)))
-                return 0;
-
-        if (likely(dir_mode & 0002) ||
-@@ -3496,7 +3499,8 @@ static int do_open(struct nameidata *nd,
-                if (d_is_dir(nd->path.dentry))
-                        return -EISDIR;
-                error = may_create_in_sticky(mnt_userns, nd,
--                                            d_backing_inode(nd->path.dentry));
-+                                            d_backing_inode(nd->path.dentry),
-+                                            (file->f_mode & FMODE_CREATED));
-                if (unlikely(error))
-                        return error;
-        }

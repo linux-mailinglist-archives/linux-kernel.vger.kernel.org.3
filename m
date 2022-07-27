@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8731C582C6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EC3582F31
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240401AbiG0QqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        id S241837AbiG0RWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240509AbiG0Qob (ORCPT
+        with ESMTP id S242019AbiG0RTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:44:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855635F110;
-        Wed, 27 Jul 2022 09:31:15 -0700 (PDT)
+        Wed, 27 Jul 2022 13:19:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F295C9C1;
+        Wed, 27 Jul 2022 09:44:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0363061A39;
-        Wed, 27 Jul 2022 16:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08706C433D6;
-        Wed, 27 Jul 2022 16:31:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0301461479;
+        Wed, 27 Jul 2022 16:44:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1322FC433B5;
+        Wed, 27 Jul 2022 16:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939474;
-        bh=13RiAq2LeTI+XWlG9cn39gAKHDTZwrE6XL+Hm4O2hfQ=;
+        s=korg; t=1658940291;
+        bh=LaAiy6oA8wRBDndG/jd576RVds9v/VmyZte9tl5TmaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bK1Gstok0x80cb0cV+h4UvYH8bA9TJBqmDZH17rvnGWtzDpdoS++Voyw8rjUfFRPV
-         NPRVJTWQ0llNDdMLcbIaYzJoMVvMRhPvCBo3PuY9FVow95YAPvQesnvmcpHWI1hO4F
-         vHwFCCqoMzG9Q1SORn9krK/3MwNqS1e+qRmnbA3Q=
+        b=JU8227mjhqPSOSgldRhf8+wRZGMTlCCvztAPqhh7Qnme6FzHt4P6QJFzPo4W48Ci+
+         6B5+l0f0YHgbYCGSp5j9Lk1dBzm+AO7GW2+uIRZVI/Uuhr50Xw7TaRiG+ZYvuqAW3u
+         jqCPu2Vh4eEi3EnWqviEVGgoL3kcqx4BIvy79EyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 51/87] tcp: Fix a data-race around sysctl_tcp_retrans_collapse.
-Date:   Wed, 27 Jul 2022 18:10:44 +0200
-Message-Id: <20220727161011.138419746@linuxfoundation.org>
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 141/201] x86/extable: Tidy up redundant handler functions
+Date:   Wed, 27 Jul 2022 18:10:45 +0200
+Message-Id: <20220727161033.656172234@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +53,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-[ Upstream commit 1a63cb91f0c2fcdeced6d6edee8d1d886583d139 ]
+[ Upstream commit 326b567f82df0c4c8f50092b9af9a3014616fb3c ]
 
-While reading sysctl_tcp_retrans_collapse, it can be changed
-concurrently.  Thus, we need to add READ_ONCE() to its reader.
+No need to have the same code all over the place.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lkml.kernel.org/r/20210908132524.963232825@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/mm/extable.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 5d9a1a498a18..97f29ece3800 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -2871,7 +2871,7 @@ static void tcp_retrans_try_collapse(struct sock *sk, struct sk_buff *to,
- 	struct sk_buff *skb = to, *tmp;
- 	bool first = true;
+diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+index e1664e9f969c..d9a1046f3a98 100644
+--- a/arch/x86/mm/extable.c
++++ b/arch/x86/mm/extable.c
+@@ -39,9 +39,8 @@ __visible bool ex_handler_fault(const struct exception_table_entry *fixup,
+ 				unsigned long error_code,
+ 				unsigned long fault_addr)
+ {
+-	regs->ip = ex_fixup_addr(fixup);
+ 	regs->ax = trapnr;
+-	return true;
++	return ex_handler_default(fixup, regs, trapnr, error_code, fault_addr);
+ }
+ EXPORT_SYMBOL_GPL(ex_handler_fault);
  
--	if (!sock_net(sk)->ipv4.sysctl_tcp_retrans_collapse)
-+	if (!READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_retrans_collapse))
- 		return;
- 	if (TCP_SKB_CB(skb)->tcp_flags & TCPHDR_SYN)
- 		return;
+@@ -76,8 +75,7 @@ __visible bool ex_handler_uaccess(const struct exception_table_entry *fixup,
+ 				  unsigned long fault_addr)
+ {
+ 	WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in user access. Non-canonical address?");
+-	regs->ip = ex_fixup_addr(fixup);
+-	return true;
++	return ex_handler_default(fixup, regs, trapnr, error_code, fault_addr);
+ }
+ EXPORT_SYMBOL(ex_handler_uaccess);
+ 
+@@ -87,9 +85,7 @@ __visible bool ex_handler_copy(const struct exception_table_entry *fixup,
+ 			       unsigned long fault_addr)
+ {
+ 	WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in user access. Non-canonical address?");
+-	regs->ip = ex_fixup_addr(fixup);
+-	regs->ax = trapnr;
+-	return true;
++	return ex_handler_fault(fixup, regs, trapnr, error_code, fault_addr);
+ }
+ EXPORT_SYMBOL(ex_handler_copy);
+ 
+@@ -103,10 +99,9 @@ __visible bool ex_handler_rdmsr_unsafe(const struct exception_table_entry *fixup
+ 		show_stack_regs(regs);
+ 
+ 	/* Pretend that the read succeeded and returned 0. */
+-	regs->ip = ex_fixup_addr(fixup);
+ 	regs->ax = 0;
+ 	regs->dx = 0;
+-	return true;
++	return ex_handler_default(fixup, regs, trapnr, error_code, fault_addr);
+ }
+ EXPORT_SYMBOL(ex_handler_rdmsr_unsafe);
+ 
+@@ -121,8 +116,7 @@ __visible bool ex_handler_wrmsr_unsafe(const struct exception_table_entry *fixup
+ 		show_stack_regs(regs);
+ 
+ 	/* Pretend that the write succeeded. */
+-	regs->ip = ex_fixup_addr(fixup);
+-	return true;
++	return ex_handler_default(fixup, regs, trapnr, error_code, fault_addr);
+ }
+ EXPORT_SYMBOL(ex_handler_wrmsr_unsafe);
+ 
 -- 
 2.35.1
 

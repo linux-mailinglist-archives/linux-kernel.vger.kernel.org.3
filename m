@@ -2,258 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283825820B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722605820BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiG0HIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
+        id S229951AbiG0HJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiG0HIp (ORCPT
+        with ESMTP id S229907AbiG0HJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:08:45 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5694F32DBF
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:08:44 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220727070842epoutp01ea0c5213085fe48392da243d4a1cd158~FnfciABer1817718177epoutp01c
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:08:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220727070842epoutp01ea0c5213085fe48392da243d4a1cd158~FnfciABer1817718177epoutp01c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1658905722;
-        bh=kE5ExXSvw6fqt9zPwb7EORYse8FtwZoVjEh3xB9n0C0=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=YEIc68ecIl0VBnlF09hJ/xYhEzUQIU7tI29juoXyIzKnN9HiFsUDfgS74DctQ76Yc
-         RAp4rsMQKrzTttsh0IClYy4Nna89DZ/3VOvuvMVgOBLrLwmAYjdUzzKLl9YygucTXQ
-         ZqSTr5B6xBIA7zFXU7t3pyKtoY+M7/uGSrq0feTA=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220727070842epcas2p11f795dedb46f6256ec7e3053fa07bf98~FnfcGHI4m2410824108epcas2p1n;
-        Wed, 27 Jul 2022 07:08:42 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Lt4d552GFz4x9QB; Wed, 27 Jul
-        2022 07:08:41 +0000 (GMT)
-X-AuditID: b6c32a47-5f7ff700000025aa-3f-62e0e479e8f9
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EF.45.09642.974E0E26; Wed, 27 Jul 2022 16:08:41 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v4 4/7] scsi: ufs: wb: Add explicit flush sysfs attribute
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
-Date:   Wed, 27 Jul 2022 16:08:41 +0900
-X-CMS-MailID: 20220727070841epcms2p5e212d617dd0f985555fa052f099013f0
+        Wed, 27 Jul 2022 03:09:39 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2256F3C8C1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:09:38 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id p10so18309525lfd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sf552mPgsYsMMY77D6I22t6pOm3pYqj+viQ1dNWKK5Y=;
+        b=EfnhCF1HreZcHUhmcuTEdf5fbkyhxucRe3fJfSFtwTZWrOY13nsmnZ+wNMgulF9/Yg
+         ZvAGrjaDWwAroarDr488fTcmkBt9bhxbVdDi4oXgdx/brzjoYGoXFXlzCFyQzm44FVwt
+         FaMhloIL+26SxhgumPbvBuklERDDB3C087quGwBo9fQ+YiXR5XdPgazPeacSV/GORF32
+         4eCNIukD7o3XxCX0j24tll/lsG+h7ZMiJ+jBIYPHvUqf5/jDj6jGF82JPPDpGuigjK4a
+         XN88b60O6GaKttciEsllHHhmPDsCd2Yg1Va+uZpx9jLMD6UDv8cflOkrZtyKMK3Ql4Gj
+         XC6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sf552mPgsYsMMY77D6I22t6pOm3pYqj+viQ1dNWKK5Y=;
+        b=pMxM1amXi+zayLSkE2SmQFuxR7XZMdoc1/eyy+J0ijEMEq053FxLwntP/+XwyZRd0X
+         DeUfTwAGfRKFEfY1WVvmuZSd+s0t+H+fykFkzILqUI4fbPiKaGZ5IiuUM1SB+Wopy2S1
+         gC7QB4ADzFUsj+k83IkzRP6OZmF9ISpnh4HpMl7d2dDW9fa2rp8r93YgdTpwhIce3CyH
+         hHyYgGb3CBjAcS4M9A9rJ4V/w2FZQQPO3yChegP1i5T9vPjc3fTukXC7ZAqe/y0x+580
+         ylVbNrH5IsWQEEII9OXCceMNoZjGnUPaGoPhHapIBOp6hl/7av3LGuD3GEpMfNn149f2
+         ArJA==
+X-Gm-Message-State: AJIora8JSVNc0rd4fChmCyI1BwrS7JjoRdjiBFeZCvaWcBK9yqm9KBlX
+        r2qsauoLFJkKiYuFuGeNKtVgCA==
+X-Google-Smtp-Source: AGRyM1uK9oExglPVaieaOMc4kk1/xZEEBcnjm26EnaG/q9CwC/wwPOx6aSi4/p5zLo9Ml3qvDo2oww==
+X-Received: by 2002:a05:6512:3045:b0:48a:7635:ff22 with SMTP id b5-20020a056512304500b0048a7635ff22mr8141679lfb.314.1658905776265;
+        Wed, 27 Jul 2022 00:09:36 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id e14-20020a2e930e000000b0025e0ca6f6b8sm674048ljh.77.2022.07.27.00.09.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 00:09:35 -0700 (PDT)
+Message-ID: <a45957f9-bb51-8774-8f2f-675fd8314698@linaro.org>
+Date:   Wed, 27 Jul 2022 09:09:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 4/4] dt-binding: perf: Add Amlogic DDR PMU
+Content-Language: en-US
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chris Healy <cphealy@gmail.com>
+References: <20220726230329.2844101-1-jiucheng.xu@amlogic.com>
+ <20220726230329.2844101-4-jiucheng.xu@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726230329.2844101-4-jiucheng.xu@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLJsWRmVeSWpSXmKPExsWy7bCmuW7lkwdJBvd2KlucfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Vi2oefzBYvD2laLLqxjcni8q45bBbd13ewWSw//o/Jgcvj8hVvj8V7XjJ5
-        TFh0gNHj+/oONo+PT2+xePRtWcXo8XmTnEf7gW6mAI6obJuM1MSU1CKF1Lzk/JTMvHRbJe/g
-        eOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoBOVFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnF
-        JbZKqQUpOQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZT9s7mArOalTMW2TVwPhAsYuRk0NC
-        wETi+vw1bF2MXBxCAjsYJTpONDF1MXJw8AoISvzdIQxSIyzgKTG78zUbiC0koCRxbs0sRpAS
-        YQEDiVu95iBhNgE9iZ9LZoCNERE4yyyx8OEUJoj5vBIz2p+yQNjSEtuXb2UEsTkF/CRa575k
-        hYhrSPxY1ssMYYtK3Fz9lh3Gfn9sPiOELSLReu8sVI2gxIOfu6HikhKHDn1lA7lHQiBfYsOB
-        QIhwjcTb5QegSvQlrnVsBDuBV8BXYuvsV2AfsgioSvRfs4IocZG49+8w2HRmAXmJ7W/nMIOU
-        MAtoSqzfpQ8xXFniyC0WmJ8aNv5mR2czC/BJdBz+CxffMe8JE0SrmsSiJiOIsIzE18Pz2Scw
-        Ks1CBPIsJGtnIaxdwMi8ilEstaA4Nz212KjAGB6tyfm5mxjB6VTLfQfjjLcf9A4xMnEwHmKU
-        4GBWEuFNiL6fJMSbklhZlVqUH19UmpNafIjRFOjficxSosn5wISeVxJvaGJpYGJmZmhuZGpg
-        riTO65WyIVFIID2xJDU7NbUgtQimj4mDU6qBye8+Q3Dxk+iDjCwvAnkOBWxa7VHkku+yKGfL
-        k2zrieWOhmyrWRb8fP58H4NvY5PsnVeW9ts3Lag087L5+oHNe2ZicHX1HcHpGlwTnzvmLYxU
-        vvp36pdW3rQ1jAev5RYltbf8nKFbvWBLUFyxhaG4zp/r22cYuXZ0/l+g4eV+bInH5EKWvOzo
-        3Xl+GpI9HE0i+9ateHV1i8PysEsi9W4ZClIFeT0qK7SF+PYsedcTqfEx/NTZtEtrc3T4lPbL
-        JjxLT9pZE2tyanP1k1mqqnd6Ledu+ngvy+ofq6PltNu21+LKN9caJemw8NZt+TpD5LDC46M/
-        GJ8uKdR1kd3NcW6K/vb3VwVX85255DTFwTxFiaU4I9FQi7moOBEAxc1ldzAEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d
-References: <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
-        <20220727070410epcms2p5206785e4d960b32dcbb6729710dab535@epcms2p5>
-        <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
-        <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p5>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is the following quirk to bypass "WB Flush" in Write Booster.
+On 27/07/2022 01:03, Jiucheng Xu wrote:
+> Add binding documentation for the Amlogic G12 series DDR
+> performance monitor unit.
+> 
+> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+> ---
+> Changes v1 -> v2:
+>   - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
+>   - Delete "model", "dmc_nr", "chann_nr" new properties
+>   - Fix compiling error
+> ---
+>  .../bindings/perf/amlogic,g12_ddr_pmu.yaml    | 45 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
 
-	- UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-If this quirk is not set, there is no knob that can control "WB Flush".
+> 
+> diff --git a/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml b/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
+> new file mode 100644
+> index 000000000000..46ef52b61492
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
+> @@ -0,0 +1,45 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/perf/amlogic,g12-ddr-pmu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic G12 DDR performance monitor
+> +
+> +maintainers:
+> +  - Jiucheng Xu <jiucheng.xu@amlogic.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
 
-There are three flags that control Write Booster Feature.
-	1. WB ON/OFF
-	2. WB Hibern Flush ON/OFF (implicitly)
-	3. WB Flush ON/OFF (explicit)
+That's not oneOf...
 
-The sysfs attribute that controls the WB was implemented. (1)
+> +      - items:
+> +          - enum:
+> +              - amlogic,g12b-ddr-pmu
+> +                amlogic,g12a-ddr-pmu
+> +                amlogic,sm1-ddr-pmu
+> +          - const: amlogic,g12-ddr-pmu
+> +
+> +  reg:
+> +    maxItems: 2
 
-In the case of "Hibern Flush", it is always good to turn on.
-Control may not be required. (2)
+You need to list and describe the items.
 
-Finally, "Flush" may be necessary because the Auto-Hibern8 is not
-supported in a specific environment.
-So the sysfs attribute that controls this is necessary. (3)
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    ddr_pmu: ddr_pmu {
+> +
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
 
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- drivers/ufs/core/ufs-sysfs.c | 45 ++++++++++++++++++++++++++++++++++++
- drivers/ufs/core/ufshcd.c    |  9 ++++----
- include/ufs/ufshcd.h         |  1 +
- 3 files changed, 51 insertions(+), 4 deletions(-)
+Code looks terrible...
 
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 0a088b47d557..e7800e49998a 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -254,6 +254,49 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 	return res < 0 ? res : count;
- }
- 
-+static ssize_t wb_buf_flush_en_show(struct device *dev,
-+				    struct device_attribute *attr,
-+				    char *buf)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", hba->dev_info.wb_buf_flush_enabled);
-+}
-+
-+static ssize_t wb_buf_flush_en_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf, size_t count)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	unsigned int wb_buf_flush_en;
-+	ssize_t res;
-+
-+	if (ufshcd_is_wb_allowed(hba) &&
-+	   !(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL)) {
-+		dev_warn(dev, "It is not allowed to configure WB buf flush!\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (kstrtouint(buf, 0, &wb_buf_flush_en))
-+		return -EINVAL;
-+
-+	if (wb_buf_flush_en != 0 && wb_buf_flush_en != 1)
-+		return -EINVAL;
-+
-+	down(&hba->host_sem);
-+	if (!ufshcd_is_user_access_allowed(hba)) {
-+		res = -EBUSY;
-+		goto out;
-+	}
-+
-+	ufshcd_rpm_get_sync(hba);
-+	res = ufshcd_wb_toggle_buf_flush(hba, wb_buf_flush_en);
-+	ufshcd_rpm_put_sync(hba);
-+out:
-+	up(&hba->host_sem);
-+	return res < 0 ? res : count;
-+}
-+
- static DEVICE_ATTR_RW(rpm_lvl);
- static DEVICE_ATTR_RO(rpm_target_dev_state);
- static DEVICE_ATTR_RO(rpm_target_link_state);
-@@ -262,6 +305,7 @@ static DEVICE_ATTR_RO(spm_target_dev_state);
- static DEVICE_ATTR_RO(spm_target_link_state);
- static DEVICE_ATTR_RW(auto_hibern8);
- static DEVICE_ATTR_RW(wb_on);
-+static DEVICE_ATTR_RW(wb_buf_flush_en);
- 
- static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_rpm_lvl.attr,
-@@ -272,6 +316,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_spm_target_link_state.attr,
- 	&dev_attr_auto_hibern8.attr,
- 	&dev_attr_wb_on.attr,
-+	&dev_attr_wb_buf_flush_en.attr,
- 	NULL
- };
- 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 52377fedae49..a8a797e0033d 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -267,7 +267,6 @@ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
- static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
- static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
- 						 bool enable);
--static void ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
- static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
- 
-@@ -5767,24 +5766,26 @@ static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
- 			__func__, enable ? "enabled" : "disabled");
- }
- 
--static void ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
-+int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
- 
- 	if (hba->dev_info.wb_buf_flush_enabled == enable)
--		return;
-+		return 0;
- 
- 	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
- 	if (ret) {
- 		dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
- 			enable ? "enable" : "disable", ret);
--		return;
-+		return ret;
- 	}
- 
- 	hba->dev_info.wb_buf_flush_enabled = enable;
- 
- 	dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
- 			__func__, enable ? "enabled" : "disabled");
-+
-+	return ret;
- }
- 
- static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 7fe1a926cd99..94bcfec98fb8 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1211,6 +1211,7 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 			     enum query_opcode desc_op);
- 
- int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
-+int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
- int ufshcd_suspend_prepare(struct device *dev);
- int __ufshcd_suspend_prepare(struct device *dev, bool rpm_ok_for_spm);
- void ufshcd_resume_complete(struct device *dev);
--- 
-2.25.1
+> +
+> +        compatible = "amlogic,g12a-ddr-pmu";
+> +        reg = <0x0 0xff638000 0x0 0x100
+> +               0x0 0xff638c00 0x0 0x100>;
+
+That's one item. You need to separate regs.
+
+
+
+Best regards,
+Krzysztof

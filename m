@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D76158300A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FE4582F34
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242371AbiG0Rb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
+        id S235930AbiG0RVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242333AbiG0R30 (ORCPT
+        with ESMTP id S241963AbiG0RTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:29:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18427FE7B;
-        Wed, 27 Jul 2022 09:47:42 -0700 (PDT)
+        Wed, 27 Jul 2022 13:19:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC28BF6B;
+        Wed, 27 Jul 2022 09:44:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9A3FB821BA;
-        Wed, 27 Jul 2022 16:47:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D167C433B5;
-        Wed, 27 Jul 2022 16:47:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCDF6B8200C;
+        Wed, 27 Jul 2022 16:44:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474CCC433D7;
+        Wed, 27 Jul 2022 16:44:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940460;
-        bh=u+VHCb/+dwB55XLu8E0kajWD5E5d65pkG7VtzbRaIRc=;
+        s=korg; t=1658940271;
+        bh=/0a/0Z9dUlo8grhA3fXLHeVFNp9BdkiWV92ue3bNBfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GE7aASv8ZGhw1lCBZKwAVzcEGc2fIFe7UfWBhQe6cU8w0A8OkluKetPdfyNGKk7rX
-         adJKssi1Ed0Tk9gOuXTXOJx6oyHQjOv3Vw/2k0cQFjogi1+oP3L/jqaQQ5LpFYMYtc
-         eAsPyqFoVDwCOS1ZD7gKZQt4UzNI0GAnUdmWWrCU=
+        b=1HJHjIsbk8dQkrOhC2KHGGm6VEbetw5o8IWzMgOiYoDJ/4g4dJDOW20n4DW7RyvUf
+         ivxPB4SDlVT3plb7Gca1/d0Dvhu+eDqJ2zZZjLcqZDaXXDWQMIOZsjFQMR5TVmRUBz
+         uW4WLkvlCkMmRDhTLSOe/Lw54c8FinYf4oeQc8do=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.18 004/158] mlxsw: spectrum_router: Fix IPv4 nexthop gateway indication
-Date:   Wed, 27 Jul 2022 18:11:08 +0200
-Message-Id: <20220727161021.619318517@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Adam Guerin <adam.guerin@intel.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 165/201] crypto: qat - add param check for RSA
+Date:   Wed, 27 Jul 2022 18:11:09 +0200
+Message-Id: <20220727161034.673218890@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ido Schimmel <idosch@nvidia.com>
+From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
 
-commit e5ec6a2513383fe2ecc2ee3b5f51d97acbbcd4d8 upstream.
+[ Upstream commit 9714061423b8b24b8afb31b8eb4df977c63f19c4 ]
 
-mlxsw needs to distinguish nexthops with a gateway from connected
-nexthops in order to write the former to the adjacency table of the
-device. The check used to rely on the fact that nexthops with a gateway
-have a 'link' scope whereas connected nexthops have a 'host' scope. This
-is no longer correct after commit 747c14307214 ("ip: fix dflt addr
-selection for connected nexthop").
-
-Fix that by instead checking the address family of the gateway IP. This
-is a more direct way and also consistent with the IPv6 counterpart in
-mlxsw_sp_rt6_is_gateway().
+Reject requests with a source buffer that is bigger than the size of the
+key. This is to prevent a possible integer underflow that might happen
+when copying the source scatterlist into a linear buffer.
 
 Cc: stable@vger.kernel.org
-Fixes: 747c14307214 ("ip: fix dflt addr selection for connected nexthop")
-Fixes: 597cfe4fc339 ("nexthop: Add support for IPv4 nexthops")
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Amit Cohen <amcohen@nvidia.com>
-Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Reviewed-by: Adam Guerin <adam.guerin@intel.com>
+Reviewed-by: Wojciech Ziemba <wojciech.ziemba@intel.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/crypto/qat/qat_common/qat_asym_algs.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
-@@ -5387,7 +5387,7 @@ static bool mlxsw_sp_fi_is_gateway(const
- {
- 	const struct fib_nh *nh = fib_info_nh(fi, 0);
- 
--	return nh->fib_nh_scope == RT_SCOPE_LINK ||
-+	return nh->fib_nh_gw_family ||
- 	       mlxsw_sp_nexthop4_ipip_type(mlxsw_sp, nh, NULL);
- }
- 
+diff --git a/drivers/crypto/qat/qat_common/qat_asym_algs.c b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+index 25bbd22085c3..947eeff181b4 100644
+--- a/drivers/crypto/qat/qat_common/qat_asym_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+@@ -656,6 +656,10 @@ static int qat_rsa_enc(struct akcipher_request *req)
+ 		req->dst_len = ctx->key_sz;
+ 		return -EOVERFLOW;
+ 	}
++
++	if (req->src_len > ctx->key_sz)
++		return -EINVAL;
++
+ 	memset(msg, '\0', sizeof(*msg));
+ 	ICP_QAT_FW_PKE_HDR_VALID_FLAG_SET(msg->pke_hdr,
+ 					  ICP_QAT_FW_COMN_REQ_FLAG_SET);
+@@ -785,6 +789,10 @@ static int qat_rsa_dec(struct akcipher_request *req)
+ 		req->dst_len = ctx->key_sz;
+ 		return -EOVERFLOW;
+ 	}
++
++	if (req->src_len > ctx->key_sz)
++		return -EINVAL;
++
+ 	memset(msg, '\0', sizeof(*msg));
+ 	ICP_QAT_FW_PKE_HDR_VALID_FLAG_SET(msg->pke_hdr,
+ 					  ICP_QAT_FW_COMN_REQ_FLAG_SET);
+-- 
+2.35.1
+
 
 

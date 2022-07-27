@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FB7582906
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324E8582908
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbiG0Ov5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S234238AbiG0Owk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbiG0Ovu (ORCPT
+        with ESMTP id S232374AbiG0Owi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:51:50 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232FD42AE9;
-        Wed, 27 Jul 2022 07:51:50 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id v185so13704330ioe.11;
-        Wed, 27 Jul 2022 07:51:50 -0700 (PDT)
+        Wed, 27 Jul 2022 10:52:38 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6D03AE6C;
+        Wed, 27 Jul 2022 07:52:37 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id fy29so31807389ejc.12;
+        Wed, 27 Jul 2022 07:52:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=erI2zpR0k4Ks6//nyC1BXQ7Uay55VcKoF/0LYTibVdQ=;
+        b=IcSC8/HDzD4sbOWkUgSbHqOh2lKueaxYTkl3zgjdqgBP08nq95dq6aeQEgaBIumLbC
+         L9Yha3oBGCuu0Cdu6jwplsBJq0nRHcxftJzRr3bqUFmkuiapr8wnHtwpJ0CV0RRVJm59
+         ZDE7OcVegkyClGVq6k+mGq5PtTsayvle6XKhCqe3diP56A7JZgTS6sasPHZT7kBNRjfI
+         f6FGZSuTf2h4mrt/Jrc17PNuU28Kz78byqqjRJIQ50cYTDDnHVGCbhDVkeWYfM5xctQ0
+         Ikajh9UaIR7KrrxDTUP9OQ4zINMoN+lby1AxLz0sma7+ekt0n+kWrEbFAaphdcSmStGT
+         8jSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=xCokfXhPR4KTF41sdrZm+RqhxEGMWVkr/Hg5KMBHFR8=;
-        b=H7KppZWnYL7txUh3Yivu8Z8ktrMODqMaki4KRP3lqpqZoGRZE0C25ZCDF5VE4zX14/
-         ujLlFL7993L/tnIIopWsa9aMRyei6SEG/266ztE5r256SlRK5c3hJyGTCNV2mi6+1yJH
-         s1esC8a9O7gj7cAXb7JrtGfZxVxMDSkGZrt16HLuim5xolnS00SzIinb6o9KxZ/Org9P
-         xr4WAqRQr/srv8u91w0bPghV43MyURbv8R95Ezh/tdpQV8xtd5Rxuyy/3sJxfVSAgyr/
-         zQBQCpaVSjbl/rd5D/OGgFeK5803nY/dwyGmICnCVtmzcaEGkObVNntreRmVWLnPrphh
-         oH6Q==
-X-Gm-Message-State: AJIora+ot8LpXgio4Ho2vExDE3fYcUMGC63N+MdboeaeULOhdeubCe62
-        2b6na9G1ePFISUVH9AA0Rr6YS4+kYg==
-X-Google-Smtp-Source: AGRyM1sdrzFHIbGmxlbzQsvgmhTb+u6PlXR7h1s1EkyZ/uFrpL41TeK9mHOW3wo0afjLUrYDMRJkHQ==
-X-Received: by 2002:a05:6638:250d:b0:340:4915:263 with SMTP id v13-20020a056638250d00b0034049150263mr9036435jat.17.1658933509322;
-        Wed, 27 Jul 2022 07:51:49 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b11-20020a026f4b000000b0033158c4a312sm7921935jae.55.2022.07.27.07.51.48
+        bh=erI2zpR0k4Ks6//nyC1BXQ7Uay55VcKoF/0LYTibVdQ=;
+        b=LJPWMicO5WodN/0YqioVbEHpEFPnna0Xm9araSvqf3jffNTDLoGr5x7vbG8ywgE/pf
+         jwz4pGw0lycTcULTU3+puBf+/CL3MFNB/0ED9BrwZn/B0vFrDUlg5cWiCJcipplC2mnm
+         Pa5Uwaj+S3W7Wcl5d5Vw4rOGaxeH1lUzSmtFn4RNhXNbkIicDRpAzwhaBbXkegFGP36R
+         q4iSh3Uwe36JgUTqcENeZQomfNOKptY2NBlIX3jwpB7DoTbeq+RNfBJIv6fIRoHFn/qY
+         RoLaimMCC5fp0JLouWmKuFOX4eRhsz1YWxeSZCeSzUVOcnWderSkYgxSxtvksclEkh/Z
+         i8OA==
+X-Gm-Message-State: AJIora+sJj53v3q1UFA8MaNb5Y2hgX2jETR4W6Duy0/Ri5ui2z8RpwWt
+        fzED5MlxPtziUatr0LbsgeY=
+X-Google-Smtp-Source: AGRyM1srkSQeaOfTH1Gvxh2ikiHKPa1E9loCVssVsNMHm+aEaHqPcqGvDt5x5UiZmnPtxp3tSnJb5g==
+X-Received: by 2002:a17:907:762a:b0:72b:394b:ebcc with SMTP id jy10-20020a170907762a00b0072b394bebccmr17919613ejc.622.1658933556167;
+        Wed, 27 Jul 2022 07:52:36 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id l17-20020a056402255100b0043c7789cf4esm2509219edb.73.2022.07.27.07.52.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 07:51:49 -0700 (PDT)
-Received: (nullmailer pid 2644092 invoked by uid 1000);
-        Wed, 27 Jul 2022 14:51:47 -0000
-Date:   Wed, 27 Jul 2022 08:51:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Cristian Pop <cristian.pop@analog.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: iio/dac: adi,ad5766: Add missing type to
- 'output-range-microvolts'
-Message-ID: <20220727145147.GA2644033-robh@kernel.org>
-References: <20220719215152.1877776-1-robh@kernel.org>
+        Wed, 27 Jul 2022 07:52:35 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 17:52:33 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v5 14/14] net: dsa: qca8k: move read_switch_id
+ function to common code
+Message-ID: <20220727145233.724nv22ljaqmnsgr@skbuf>
+References: <20220727113523.19742-1-ansuelsmth@gmail.com>
+ <20220727113523.19742-1-ansuelsmth@gmail.com>
+ <20220727113523.19742-15-ansuelsmth@gmail.com>
+ <20220727113523.19742-15-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220719215152.1877776-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220727113523.19742-15-ansuelsmth@gmail.com>
+ <20220727113523.19742-15-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 15:51:52 -0600, Rob Herring wrote:
-> 'output-range-microvolts' is missing a type definition. '-microvolts' is
-> not a standard unit (should be '-microvolt'). As the property is already
-> in use, add a type reference.
+On Wed, Jul 27, 2022 at 01:35:23PM +0200, Christian Marangi wrote:
+> The same function to read the switch id is used by drivers based on
+> qca8k family switch. Move them to common code to make them accessible
+> also by other drivers.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
->  Documentation/devicetree/bindings/iio/dac/adi,ad5766.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
 
-Applied, thanks!
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

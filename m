@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FC158228F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BD058228C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 10:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiG0I4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 04:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
+        id S231273AbiG0Izz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 04:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbiG0I4H (ORCPT
+        with ESMTP id S231245AbiG0Izs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 04:56:07 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316FB46DA9;
-        Wed, 27 Jul 2022 01:56:05 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 7so29308744ybw.0;
-        Wed, 27 Jul 2022 01:56:05 -0700 (PDT)
+        Wed, 27 Jul 2022 04:55:48 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C943D46DA4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:55:46 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id m9so19021414ljp.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 01:55:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FkB6NL9eAnr19/TQLpmTufTfbZl37uoNWuGYLlmz/8k=;
-        b=GqRkP7vFcAVq2DhhITbw1b0xfQ1uKUk6N6xmReUGdyyCKqbxM4CI7Fpe1h/97fSriA
-         UrRy2LQNlfpk8GDHsobZT9fV74fJnv2kthAwTTDtdsT/nBhhH7KEfYbGkOsujUYJr2Tv
-         eJjpGZpf7ScJwDsakDqoHDX5G2U5+pY83R03AJXK7iFTWfZJwSx1KvHpH5oNaTCAAWxw
-         3ebU6Ts11JtpSpaHodhpQ6QeJCRTkyHJnUru1Xt5fJcTpMxS3bAgePlPON50cKKwGuB/
-         QF5X14Q8ZVPhiozyWwGrZV3Q+F5tWEla7Lf29uSjyPmQzuOsaXChwzkm1evf60WcFtDT
-         GaRg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Vuv1p7jjxhoLf3pl6CxfEW9ySyiN1TFLLwtvwe+It3s=;
+        b=niNBmcan8R/3RdUV98uGLqwl8cQhwdYhfjDVALzrojVMoplHsWb16qG1S00+uIn+pf
+         dSElWqy9craRDZY9wOc/EdXgTsA8gO/vWLc2RxlSRfwmw93lmti0FRzxnkwVI4ylKUwn
+         ttgTRs8hGNe4Ns89VT8CpVajbSgwRdGkFSEO4CLZJR9PB5cYk7kmLY3lv0lsVT4DMUR6
+         mH7uxRx/N4+BlMPW4x32aDrjDassyGxG9yom4SwAvl1bwAha4RrD87jLSY1HqpYBs5i0
+         zh5bYHWoHhqwLFT/G62/x27nKtwMpH3P5pmAgdOjS6tkmLZ6RioI2tRMJHXFdynTNVhs
+         5+3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FkB6NL9eAnr19/TQLpmTufTfbZl37uoNWuGYLlmz/8k=;
-        b=2KlHkDv4UY57abJxvkBg43srqyQiE3Y3OWuWnjQ98UYZLmjrXatKo7tfiGUPDXfiNg
-         SJGHk/Qt5Hc60dEMIvqUrR0W06/9Ggl4VMwrWx1njYnGvoYMiUFnV8P5ZWk/RUkRshFk
-         KFkFcxdpgPbISXyOyBa3kNjvupRTaC+sbR+ZNVwgl+L05Hzt69SWLh0tqLkJwKP8oL9u
-         Qwcmux2I9yv9yU+Ik/inxO/kN02810pELTC+HSw2+tmtvvO55iQgOLRo9yO1DmVORfkS
-         lDz45JxehUuoZIoaNutQqHYJOrZmNdG60KFznC4sMJHHFc1nOPXO6P29se+ev7jw5rqt
-         b83w==
-X-Gm-Message-State: AJIora/niA33ivCRpofMXUuD+/fvRNcuK9ZEqGrmC+qGsRBL2sGBRGVw
-        UnuFXMwH4bd6J81ojHw1hS8Jn9Y1KJjmXWppwyY=
-X-Google-Smtp-Source: AGRyM1vxCFNIpm4r9DElzmSmhQabM1an5qQ3zyXIaUD5kyzOkB0PNy9FkUfrry+SpKtM+GOzesxYN8vcgJD352Iqfbg=
-X-Received: by 2002:a05:6902:1082:b0:670:9307:b0eb with SMTP id
- v2-20020a056902108200b006709307b0ebmr17460924ybu.335.1658912164494; Wed, 27
- Jul 2022 01:56:04 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vuv1p7jjxhoLf3pl6CxfEW9ySyiN1TFLLwtvwe+It3s=;
+        b=qUrA/xg+VjjVyIpydT3WBxvZprrnCcSWiIN80eZXgIXtIoFqsiWb0hGLd5CYNCNW3N
+         tkjgNLp2Ux3KoysJ40bQi/pd9nofRYEm1aJY4DXIhAJuzbdD2eeFEXzySXx6tri/HBkM
+         wJDqLktIdYTybO5Q3+j0lqqSuvBoWM7izvVpV5m+m1HT711aNMAc1b5DMYWWDT/1eVox
+         NHqIMn7H5Db7pg70rzKR0Y47Jb7l9v2/yww8RxVbUXlaePLcun6HfIvUuQtuhzecPoct
+         B6d2OdH+sBxlt4Q7G8tH5s7oDC8/iACVv3svMvCICQd4pdN00CywZiSrOA8tsl02sKJR
+         ASYA==
+X-Gm-Message-State: AJIora9n/2khHgfO+BChBeaZvCja532jFH66RuQLHllR8G+SQp8EGgFD
+        GXAnDxgZ+CGiJyCL1jhHHpJ3Gg==
+X-Google-Smtp-Source: AGRyM1vJCX1i6V7I89K+c9fYQSciskM0/PYxd1o/dkCWLnV5x+RZ4SBIluxK5iib8VSoabYYu9QhJg==
+X-Received: by 2002:a2e:bd13:0:b0:246:1ff8:6da1 with SMTP id n19-20020a2ebd13000000b002461ff86da1mr7256869ljq.219.1658912144950;
+        Wed, 27 Jul 2022 01:55:44 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac257c1000000b0048a8e831b38sm1610754lfo.245.2022.07.27.01.55.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 01:55:44 -0700 (PDT)
+Message-ID: <6a87ee9b-f944-ab8c-cc00-fd8bbb22cad8@linaro.org>
+Date:   Wed, 27 Jul 2022 10:55:42 +0200
 MIME-Version: 1.0
-References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <7a02225c-5c7b-f342-e29e-995d1ae0f4e3@linaro.org>
-In-Reply-To: <7a02225c-5c7b-f342-e29e-995d1ae0f4e3@linaro.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 27 Jul 2022 09:55:37 +0100
-Message-ID: <CA+V-a8vCRNb9r8o=C97DV11ZA4Uf+7rHmbO6+Gjq+q=CUuDPRA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: arm: renesas: Ignore the schema for
- RISC-V arch
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 6/6] riscv: dts: renesas: Add initial devicetree for
+ Renesas RZ/Five SoC
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Anup Patel <anup@brainfault.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220726180623.1668-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726180623.1668-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 26/07/2022 20:06, Lad Prabhakar wrote:
+> Add initial device tree for Renesas RZ/Five RISC-V CPU Core (AX45MP
+> Single).
+> 
+> Below is the list of IP blocks added in the initial SoC DTSI which can be
+> used to boot via initramfs on RZ/Five SMARC EVK:
+> - AX45MP CPU
+> - CPG
+> - PINCTRL
+> - PLIC
+> - SCIF0
+> - SYSC
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  arch/riscv/boot/dts/Makefile               |   1 +
+>  arch/riscv/boot/dts/renesas/r9a07g043.dtsi | 121 +++++++++++++++++++++
+>  2 files changed, 122 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043.dtsi
+> 
+> diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
+> index ff174996cdfd..b0ff5fbabb0c 100644
+> --- a/arch/riscv/boot/dts/Makefile
+> +++ b/arch/riscv/boot/dts/Makefile
+> @@ -3,5 +3,6 @@ subdir-y += sifive
+>  subdir-y += starfive
+>  subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
+>  subdir-y += microchip
+> +subdir-y += renesas
 
-Thank you for the review.
+What are you building there? There is no DTS.
 
-On Wed, Jul 27, 2022 at 9:51 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 26/07/2022 20:06, Lad Prabhakar wrote:
-> > Ignore the ARM renesas.yaml schema if the board is RZ/Five SMARC EVK
-> > (RISC-V arch).
->
-> Your commit msg says one, but patch ignores r9a07g043f01 which sounds
-> entirely different for non-Renesas people. Be a bit more clear.
->
-Sure will update the commit message.
-
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  Documentation/devicetree/bindings/arm/renesas.yaml | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/arm/renesas.yaml
-> > index ff80152f092f..f646df1a23af 100644
-> > --- a/Documentation/devicetree/bindings/arm/renesas.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/renesas.yaml
-> > @@ -9,6 +9,15 @@ title: Renesas SH-Mobile, R-Mobile, and R-Car Platform Device Tree Bindings
-> >  maintainers:
-> >    - Geert Uytterhoeven <geert+renesas@glider.be>
-> >
-> > +# We want to ignore this schema if the board is of RISC-V arch
-> > +select:
-> > +  not:
-> > +    properties:
-> > +      compatible:
-> > +        contains:
-> > +          items:
->
-> It is only one item, so I guess you wanted here enum.
->
-> Just like syscon is doing...
->
-Ok I will switch to enum.
-
-Cheers,
-Prabhakar
+Best regards,
+Krzysztof

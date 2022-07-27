@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4B6583523
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE85C58351C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 00:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237000AbiG0WKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 18:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S232453AbiG0WKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 18:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236193AbiG0WJT (ORCPT
+        with ESMTP id S236269AbiG0WJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 18:09:19 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9435C9C6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:09:10 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31edbd801b5so1268367b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:09:10 -0700 (PDT)
+        Wed, 27 Jul 2022 18:09:20 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A70D52FC2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:09:13 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id bu13-20020a056902090d00b00671743601f1so281278ybb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:09:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc:content-transfer-encoding;
-        bh=z+3QILxOrvOjFC8m3UEVHbWt47VsBHDF0JrBSjSC4oY=;
-        b=aOn/7Yz3LP21+pJRDXWrZbLPiGC3WAY8clWkj2mzZWXpMi/qxgmax6cxBuTGVxKcWp
-         VAf0R+ZT9WONhfYQ7ycOXZF3AxHHPEce6LWkFT5wvE5HR6+okKHl2RjkpxCQ3I4zB8iW
-         OiQkZGsh5jhLrSxWVTjcUkvj0YdAIZYR8wAwXEKufA4ci4dy/to0KXJafhrZJHuplb4d
-         eRgGi5oOdFL5JLpbOHZcQMVRh+9kdL/KxznLpwnZ8b0PmKs0cx2THyHdNbhXhViHtuG9
-         r4O+hQwdbuCWLiRAhDVBOgZWuGN6PIeFuDB1gJNiYMPbKcFgl9T14jw5C9qBmhyvk/JD
-         1ycg==
+        bh=T0bnJS27wy9tC+g6AwU4wYBQ/aygfZiM5uTYWqOBWko=;
+        b=KI2fr2v2Zom/MKLICDnDLKjTEGjyEhuRceFj5+XviYzOw0edDO5nEgJZJueComA91V
+         wkaAldjFL8QfATCbMqgHRlJnBjBoL5P5qYPKyCvB8UfM5aT817X6lZ1o7IC+ElsTBcA2
+         8/39ndYDXaOQdSoOYCf1LaLGvkTacvBfU8T0PGVgztusKMTbz1Kf3K9dP0Y+FcZO7cet
+         KDHbzgZK5x8FqC1LPn/7OzlTmPOvEG7nLZgsgMK/NSBDTXWQIg3cA9cFRsjcJ/qPl5Ek
+         LrsHn0gFCGp/Z2JYa5A3za6e5Pfhzc1a4eziMW0k2Fft93vzHz7V+66Cl7tsJ0aFsgOF
+         Z/lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc:content-transfer-encoding;
-        bh=z+3QILxOrvOjFC8m3UEVHbWt47VsBHDF0JrBSjSC4oY=;
-        b=Tkztfiw5a5muSPD3j6yaX8UHCCQ49oTY2QznF1NpzH0DwfbbYMmsINOEM8Nc8UPhQb
-         Dvr7a7VhIL26HYSi2WVZ4w1EBepNCelqqSBmg8PMtbGA3QtzG70jvM4uF9QOVYr0gD5f
-         AxXQEwqJMwwb1BX4ZUgEAZtsW2+HeaMZGxD9IfLWdRJlnevHHvIXBBlPsKQ11ZME457a
-         0o/oFm2bRkc1ipOaXJUINS9p4leXxxgl5ZKQUuQErVY2ygHTokzvITRaE/79qc9pwR/t
-         oFex1r9LhW5Dp3yTKVZgrevDPagueCIDDkCVbBVPko6ow1qVqtxlrTZnyyfZjl2RQE23
-         RGrw==
-X-Gm-Message-State: AJIora94EnK86/TjQNd5eXdNEatbqgM3mZeVRyFskwkBjFAk7k1C7a18
-        k+V7Ncl8ql3mzdpzqyeePvKuEsoIn68y
-X-Google-Smtp-Source: AGRyM1uUjGLdNUdMutWxgXcz6nKqsgxDkCSaDwxhBjlnVvoKEnuE8nbRqlc1KVLQWIwaYq6MC8jN9+D6A90Q
+        bh=T0bnJS27wy9tC+g6AwU4wYBQ/aygfZiM5uTYWqOBWko=;
+        b=BBD/wQ7vfvYLncekbythsaMNkGIUONRuND8oiBpFulQ1Rwt8MXwpBoXaSwdju/sGHt
+         oZzNcClWzMRLJQk+w8lG+tBn1ZwfnEjlXClav3TMSMwzeIHeuBe6dtmUgW6XGsjE9y4r
+         zDEK644QZq4EOYJBKT9ggS2a+5cScFl4R0my+/2TBVl61uC33gVwFPhUhz8orkUOR1Oc
+         znMFXClov7R8nD21JwWAfu1Qz+LfMulIyOnAZYV7G2LFjRgMUWBYRBz2ybzVqqJcqawg
+         dftAYsz+JnJipNkh1L9dE8texeJbe5/i8Lj4+EIvIRDYKtUqo1Bb6uE97232TXHcKRd7
+         gVqA==
+X-Gm-Message-State: AJIora+aW31pH3TcbGgcDZWujNkZQHsFjHBXbwK2vZbsBwDI/gUFV22P
+        rOLZwO96JmMMjLZxgDWpqutZl/EJj9eY
+X-Google-Smtp-Source: AGRyM1vAOsFHkuv+UdhxGPYNBdWP3QCbVnUcSAveeKYFUpir4//ErZEk6Vwx38UaHzv7iWRpeZr1XhjfL6SH
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:882a:af57:8cb6:6f9e])
- (user=irogers job=sendgmr) by 2002:a5b:74e:0:b0:66f:4c3a:2141 with SMTP id
- s14-20020a5b074e000000b0066f4c3a2141mr19895756ybq.203.1658959750160; Wed, 27
- Jul 2022 15:09:10 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 15:08:12 -0700
+ (user=irogers job=sendgmr) by 2002:a81:7457:0:b0:31e:798f:31bb with SMTP id
+ p84-20020a817457000000b0031e798f31bbmr21323283ywc.96.1658959752876; Wed, 27
+ Jul 2022 15:09:12 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 15:08:13 -0700
 In-Reply-To: <20220727220832.2865794-1-irogers@google.com>
-Message-Id: <20220727220832.2865794-11-irogers@google.com>
+Message-Id: <20220727220832.2865794-12-irogers@google.com>
 Mime-Version: 1.0
 References: <20220727220832.2865794-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v3 10/30] perf vendor events: Update Intel haswell
+Subject: [PATCH v3 11/30] perf vendor events: Update Intel haswellx
 From:   Ian Rogers <irogers@google.com>
 To:     perry.taylor@intel.com, caleb.biggers@intel.com,
         kshipra.bopardikar@intel.com,
@@ -86,42 +86,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update to v31, the metrics are based on TMA 4.4 full.
+Update to v25, the metrics are based on TMA 4.4 full.
 
 Use script at:
 https://github.com/intel/event-converter-for-linux-perf/blob/master/downloa=
 d_and_gen.py
 
 to download and generate the latest events and metrics. Manually copy
-the haswell files into perf and update mapfile.csv.
+the haswellx files into perf and update mapfile.csv.
 
-Tested on a non-haswell with 'perf test':
+Tested with 'perf test':
  10: PMU events                                                      :
  10.1: PMU event table sanity                                        : Ok
  10.2: PMU event map aliases                                         : Ok
  10.3: Parsing of PMU event table metrics                            : Ok
  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+ 90: perf all metricgroups test                                      : Ok
+ 91: perf all metrics test                                           : Fail=
+ed
+ 93: perf all PMU test                                               : Ok
+
+The test 91 failure is a pre-existing failure on the test system
+with the metric Load_Miss_Real_Latency which is fixed by
+prefixing it with --metric-no-group.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../pmu-events/arch/x86/haswell/cache.json    | 78 +++++++----------
- .../arch/x86/haswell/floating-point.json      |  2 +-
- .../pmu-events/arch/x86/haswell/frontend.json |  2 +-
- .../arch/x86/haswell/hsw-metrics.json         | 85 +++++++++++++------
- .../pmu-events/arch/x86/haswell/memory.json   | 75 ++++++----------
- .../pmu-events/arch/x86/haswell/other.json    |  2 +-
- .../pmu-events/arch/x86/haswell/pipeline.json |  9 +-
- .../arch/x86/haswell/uncore-other.json        |  7 +-
- .../arch/x86/haswell/virtual-memory.json      |  2 +-
- tools/perf/pmu-events/arch/x86/mapfile.csv    |  4 +-
- 10 files changed, 125 insertions(+), 141 deletions(-)
+ .../pmu-events/arch/x86/haswellx/cache.json   |  9 +-
+ .../arch/x86/haswellx/hsx-metrics.json        | 85 +++++++++++++------
+ .../arch/x86/haswellx/pipeline.json           |  5 --
+ .../arch/x86/haswellx/uncore-cache.json       |  8 +-
+ tools/perf/pmu-events/arch/x86/mapfile.csv    |  2 +-
+ 5 files changed, 67 insertions(+), 42 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/cache.json b/tools/perf=
-/pmu-events/arch/x86/haswell/cache.json
-index 91464cfb9615..3b0f3a264246 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/cache.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/cache.json
-@@ -556,7 +556,7 @@
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/cache.json b/tools/per=
+f/pmu-events/arch/x86/haswellx/cache.json
+index 5760ffb1eaf4..7557a203a1b6 100644
+--- a/tools/perf/pmu-events/arch/x86/haswellx/cache.json
++++ b/tools/perf/pmu-events/arch/x86/haswellx/cache.json
+@@ -20,7 +20,7 @@
+         "UMask": "0x2"
+     },
+     {
+-        "BriefDescription": "L1D miss oustandings duration in cycles",
++        "BriefDescription": "L1D miss outstanding duration in cycles",
+         "Counter": "2",
+         "CounterHTOff": "2",
+         "EventCode": "0x48",
+@@ -592,7 +592,7 @@
          "UMask": "0x20"
      },
      {
@@ -130,7 +142,7 @@ index 91464cfb9615..3b0f3a264246 100644
          "Counter": "0,1,2,3",
          "CounterHTOff": "0,1,2,3",
          "Data_LA": "1",
-@@ -564,11 +564,12 @@
+@@ -600,11 +600,12 @@
          "EventCode": "0xD0",
          "EventName": "MEM_UOPS_RETIRED.ALL_LOADS",
          "PEBS": "1",
@@ -145,7 +157,7 @@ ounts for SW prefetch uops of PREFETCHNTA or PREFETCHT0/1/2 or PREFETCHW.",
          "Counter": "0,1,2,3",
          "CounterHTOff": "0,1,2,3",
          "Data_LA": "1",
-@@ -577,6 +578,7 @@
+@@ -613,6 +614,7 @@
          "EventName": "MEM_UOPS_RETIRED.ALL_STORES",
          "L1_Hit_Indication": "1",
          "PEBS": "1",
@@ -153,415 +165,19 @@ ounts for SW prefetch uops of PREFETCHNTA or PREFETCHT0/1/2 or PREFETCHW.",
          "SampleAfterValue": "2000003",
          "UMask": "0x82"
      },
-@@ -790,20 +792,19 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch code reads hit i=
-n the L3 and the snoops to sibling cores hit in either E/S state and the li=
-ne is not forwarded",
-+        "BriefDescription": "Counts all demand & prefetch code readshit in=
- the L3 and the snoops to sibling cores hit in either E/S state and the lin=
-e is not forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_CODE_RD.L3_HIT.HIT_OTHER_CORE_N=
-O_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x04003C0244",
-+        "MSRValue": "0x4003C0244",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch code reads hit =
-in the L3 and the snoops to sibling cores hit in either E/S state and the l=
-ine is not forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch data reads hit i=
-n the L3 and the snoop to one of the sibling cores hits the line in M state=
- and the line is forwarded",
-+        "BriefDescription": "Counts all demand & prefetch data readshit in=
- the L3 and the snoop to one of the sibling cores hits the line in M state =
-and the line is forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -811,20 +812,18 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x10003C0091",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch data reads hit =
-in the L3 and the snoop to one of the sibling cores hits the line in M stat=
-e and the line is forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch data reads hit i=
-n the L3 and the snoops to sibling cores hit in either E/S state and the li=
-ne is not forwarded",
-+        "BriefDescription": "Counts all demand & prefetch data readshit in=
- the L3 and the snoops to sibling cores hit in either E/S state and the lin=
-e is not forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_DATA_RD.L3_HIT.HIT_OTHER_CORE_N=
-O_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x04003C0091",
-+        "MSRValue": "0x4003C0091",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch data reads hit =
-in the L3 and the snoops to sibling cores hit in either E/S state and the l=
-ine is not forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-@@ -837,7 +836,6 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x10003C07F7",
-         "Offcore": "1",
--        "PublicDescription": "hit in the L3 and the snoop to one of the si=
-bling cores hits the line in M state and the line is forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-@@ -848,14 +846,13 @@
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_READS.L3_HIT.HIT_OTHER_CORE_NO_=
-FWD",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x04003C07F7",
-+        "MSRValue": "0x4003C07F7",
-         "Offcore": "1",
--        "PublicDescription": "hit in the L3 and the snoops to sibling core=
-s hit in either E/S state and the line is not forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all requests hit in the L3",
-+        "BriefDescription": "Counts all requestshit in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -863,12 +860,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3F803C8FFF",
-         "Offcore": "1",
--        "PublicDescription": "Counts all requests hit in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch RFOs hit in the =
-L3 and the snoop to one of the sibling cores hits the line in M state and t=
-he line is forwarded",
-+        "BriefDescription": "Counts all demand & prefetch RFOshit in the L=
-3 and the snoop to one of the sibling cores hits the line in M state and th=
-e line is forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -876,25 +872,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x10003C0122",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch RFOs hit in the=
- L3 and the snoop to one of the sibling cores hits the line in M state and =
-the line is forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch RFOs hit in the =
-L3 and the snoops to sibling cores hit in either E/S state and the line is =
-not forwarded",
-+        "BriefDescription": "Counts all demand & prefetch RFOshit in the L=
-3 and the snoops to sibling cores hit in either E/S state and the line is n=
-ot forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_RFO.L3_HIT.HIT_OTHER_CORE_NO_FW=
-D",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x04003C0122",
-+        "MSRValue": "0x4003C0122",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch RFOs hit in the=
- L3 and the snoops to sibling cores hit in either E/S state and the line is=
- not forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand code reads hit in the L3 an=
-d the snoop to one of the sibling cores hits the line in M state and the li=
-ne is forwarded",
-+        "BriefDescription": "Counts all demand code readshit in the L3 and=
- the snoop to one of the sibling cores hits the line in M state and the lin=
-e is forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -902,25 +896,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x10003C0004",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand code reads hit in the L3 a=
-nd the snoop to one of the sibling cores hits the line in M state and the l=
-ine is forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand code reads hit in the L3 an=
-d the snoops to sibling cores hit in either E/S state and the line is not f=
-orwarded",
-+        "BriefDescription": "Counts all demand code readshit in the L3 and=
- the snoops to sibling cores hit in either E/S state and the line is not fo=
-rwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_CODE_RD.L3_HIT.HIT_OTHER_COR=
-E_NO_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x04003C0004",
-+        "MSRValue": "0x4003C0004",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand code reads hit in the L3 a=
-nd the snoops to sibling cores hit in either E/S state and the line is not =
-forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts demand data reads hit in the L3 and th=
-e snoop to one of the sibling cores hits the line in M state and the line i=
-s forwarded",
-+        "BriefDescription": "Counts demand data readshit in the L3 and the=
- snoop to one of the sibling cores hits the line in M state and the line is=
- forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -928,25 +920,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x10003C0001",
-         "Offcore": "1",
--        "PublicDescription": "Counts demand data reads hit in the L3 and t=
-he snoop to one of the sibling cores hits the line in M state and the line =
-is forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts demand data reads hit in the L3 and th=
-e snoops to sibling cores hit in either E/S state and the line is not forwa=
-rded",
-+        "BriefDescription": "Counts demand data readshit in the L3 and the=
- snoops to sibling cores hit in either E/S state and the line is not forwar=
-ded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_DATA_RD.L3_HIT.HIT_OTHER_COR=
-E_NO_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x04003C0001",
-+        "MSRValue": "0x4003C0001",
-         "Offcore": "1",
--        "PublicDescription": "Counts demand data reads hit in the L3 and t=
-he snoops to sibling cores hit in either E/S state and the line is not forw=
-arded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand data writes (RFOs) hit in t=
-he L3 and the snoop to one of the sibling cores hits the line in M state an=
-d the line is forwarded",
-+        "BriefDescription": "Counts all demand data writes (RFOs)hit in th=
-e L3 and the snoop to one of the sibling cores hits the line in M state and=
- the line is forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -954,25 +944,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x10003C0002",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand data writes (RFOs) hit in =
-the L3 and the snoop to one of the sibling cores hits the line in M state a=
-nd the line is forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand data writes (RFOs) hit in t=
-he L3 and the snoops to sibling cores hit in either E/S state and the line =
-is not forwarded",
-+        "BriefDescription": "Counts all demand data writes (RFOs)hit in th=
-e L3 and the snoops to sibling cores hit in either E/S state and the line i=
-s not forwarded",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_RFO.L3_HIT.HIT_OTHER_CORE_NO=
-_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x04003C0002",
-+        "MSRValue": "0x4003C0002",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand data writes (RFOs) hit in =
-the L3 and the snoops to sibling cores hit in either E/S state and the line=
- is not forwarded",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) code reads hit in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) code readshit in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -980,12 +968,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3F803C0040",
-         "Offcore": "1",
--        "PublicDescription": "Counts all prefetch (that bring data to LLC =
-only) code reads hit in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts prefetch (that bring data to L2) data =
-reads hit in the L3",
-+        "BriefDescription": "Counts prefetch (that bring data to L2) data =
-readshit in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -993,12 +980,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3F803C0010",
-         "Offcore": "1",
--        "PublicDescription": "Counts prefetch (that bring data to L2) data=
- reads hit in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to L2) R=
-FOs hit in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to L2) R=
-FOshit in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -1006,12 +992,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3F803C0020",
-         "Offcore": "1",
--        "PublicDescription": "Counts all prefetch (that bring data to L2) =
-RFOs hit in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts prefetch (that bring data to LLC only)=
- code reads hit in the L3",
-+        "BriefDescription": "Counts prefetch (that bring data to LLC only)=
- code readshit in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -1019,12 +1004,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3F803C0200",
-         "Offcore": "1",
--        "PublicDescription": "Counts prefetch (that bring data to LLC only=
-) code reads hit in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) data reads hit in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) data readshit in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -1032,12 +1016,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3F803C0080",
-         "Offcore": "1",
--        "PublicDescription": "Counts all prefetch (that bring data to LLC =
-only) data reads hit in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) RFOs hit in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) RFOshit in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -1045,7 +1028,6 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3F803C0100",
-         "Offcore": "1",
--        "PublicDescription": "Counts all prefetch (that bring data to LLC =
-only) RFOs hit in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-@@ -1058,4 +1040,4 @@
+@@ -1071,7 +1073,6 @@
+         "CounterHTOff": "0,1,2,3,4,5,6,7",
+         "EventCode": "0xf4",
+         "EventName": "SQ_MISC.SPLIT_LOCK",
+-        "PublicDescription": "SQ_MISC.SPLIT_LOCK",
          "SampleAfterValue": "100003",
          "UMask": "0x10"
      }
--]
-\ No newline at end of file
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/floating-point.json b/t=
-ools/perf/pmu-events/arch/x86/haswell/floating-point.json
-index 55cf5b96464e..7cf203a90a74 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/floating-point.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/floating-point.json
-@@ -100,4 +100,4 @@
-         "SampleAfterValue": "100003",
-         "UMask": "0x10"
-     }
--]
-\ No newline at end of file
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/frontend.json b/tools/p=
-erf/pmu-events/arch/x86/haswell/frontend.json
-index 0c8d5ccf1276..c45a09abe5d3 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/frontend.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/frontend.json
-@@ -301,4 +301,4 @@
-         "SampleAfterValue": "2000003",
-         "UMask": "0x1"
-     }
--]
-\ No newline at end of file
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/hsw-metrics.json b/tool=
-s/perf/pmu-events/arch/x86/haswell/hsw-metrics.json
-index 3ade2c19533e..75dc6dd9a7bc 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/hsw-metrics.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/hsw-metrics.json
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/hsx-metrics.json b/too=
+ls/perf/pmu-events/arch/x86/haswellx/hsx-metrics.json
+index c99734fd907d..5c9e008ca995 100644
+--- a/tools/perf/pmu-events/arch/x86/haswellx/hsx-metrics.json
++++ b/tools/perf/pmu-events/arch/x86/haswellx/hsx-metrics.json
 @@ -111,17 +111,11 @@
          "MetricName": "CoreIPC_SMT"
      },
@@ -725,379 +341,11 @@ he L3 cache [GB / sec]",
      {
          "BriefDescription": "Average CPU Utilization",
          "MetricExpr": "CPU_CLK_UNHALTED.REF_TSC / msr@tsc@",
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/memory.json b/tools/per=
-f/pmu-events/arch/x86/haswell/memory.json
-index 8b69493e3726..9e5a1e0966d9 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/memory.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/memory.json
-@@ -225,7 +225,7 @@
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch code reads miss =
-in the L3",
-+        "BriefDescription": "Counts all demand & prefetch code readsmiss i=
-n the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -233,25 +233,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00244",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch code reads miss=
- in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch code reads miss =
-the L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand & prefetch code readsmiss t=
-he L3 and the data is returned from local dram",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_CODE_RD.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x0100400244",
-+        "MSRValue": "0x100400244",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch code reads miss=
- the L3 and the data is returned from local dram",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch data reads miss =
-in the L3",
-+        "BriefDescription": "Counts all demand & prefetch data readsmiss i=
-n the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -259,20 +257,18 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00091",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch data reads miss=
- in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch data reads miss =
-the L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand & prefetch data readsmiss t=
-he L3 and the data is returned from local dram",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_DATA_RD.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x0100400091",
-+        "MSRValue": "0x100400091",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch data reads miss=
- the L3 and the data is returned from local dram",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-@@ -285,7 +281,6 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC007F7",
-         "Offcore": "1",
--        "PublicDescription": "miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-@@ -296,14 +291,13 @@
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_READS.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x01004007F7",
-+        "MSRValue": "0x1004007F7",
-         "Offcore": "1",
--        "PublicDescription": "miss the L3 and the data is returned from lo=
-cal dram",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all requests miss in the L3",
-+        "BriefDescription": "Counts all requestsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -311,12 +305,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC08FFF",
-         "Offcore": "1",
--        "PublicDescription": "Counts all requests miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch RFOs miss in the=
- L3",
-+        "BriefDescription": "Counts all demand & prefetch RFOsmiss in the =
-L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -324,25 +317,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00122",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch RFOs miss in th=
-e L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch RFOs miss the L3=
- and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand & prefetch RFOsmiss the L3 =
-and the data is returned from local dram",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_RFO.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x0100400122",
-+        "MSRValue": "0x100400122",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand & prefetch RFOs miss the L=
-3 and the data is returned from local dram",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand code reads miss in the L3",
-+        "BriefDescription": "Counts all demand code readsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -350,25 +341,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00004",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand code reads miss in the L3"=
-,
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand code reads miss the L3 and =
-the data is returned from local dram",
-+        "BriefDescription": "Counts all demand code readsmiss the L3 and t=
-he data is returned from local dram",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_CODE_RD.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x0100400004",
-+        "MSRValue": "0x100400004",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand code reads miss the L3 and=
- the data is returned from local dram",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts demand data reads miss in the L3",
-+        "BriefDescription": "Counts demand data readsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -376,25 +365,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00001",
-         "Offcore": "1",
--        "PublicDescription": "Counts demand data reads miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts demand data reads miss the L3 and the =
-data is returned from local dram",
-+        "BriefDescription": "Counts demand data readsmiss the L3 and the d=
-ata is returned from local dram",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_DATA_RD.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x0100400001",
-+        "MSRValue": "0x100400001",
-         "Offcore": "1",
--        "PublicDescription": "Counts demand data reads miss the L3 and the=
- data is returned from local dram",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand data writes (RFOs) miss in =
-the L3",
-+        "BriefDescription": "Counts all demand data writes (RFOs)miss in t=
-he L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -402,25 +389,23 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00002",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand data writes (RFOs) miss in=
- the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand data writes (RFOs) miss the=
- L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand data writes (RFOs)miss the =
-L3 and the data is returned from local dram",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_RFO.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
--        "MSRValue": "0x0100400002",
-+        "MSRValue": "0x100400002",
-         "Offcore": "1",
--        "PublicDescription": "Counts all demand data writes (RFOs) miss th=
-e L3 and the data is returned from local dram",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) code reads miss in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) code readsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -428,12 +413,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00040",
-         "Offcore": "1",
--        "PublicDescription": "Counts all prefetch (that bring data to LLC =
-only) code reads miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts prefetch (that bring data to L2) data =
-reads miss in the L3",
-+        "BriefDescription": "Counts prefetch (that bring data to L2) data =
-readsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -441,12 +425,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00010",
-         "Offcore": "1",
--        "PublicDescription": "Counts prefetch (that bring data to L2) data=
- reads miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to L2) R=
-FOs miss in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to L2) R=
-FOsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -454,12 +437,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00020",
-         "Offcore": "1",
--        "PublicDescription": "Counts all prefetch (that bring data to L2) =
-RFOs miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts prefetch (that bring data to LLC only)=
- code reads miss in the L3",
-+        "BriefDescription": "Counts prefetch (that bring data to LLC only)=
- code readsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -467,12 +449,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00200",
-         "Offcore": "1",
--        "PublicDescription": "Counts prefetch (that bring data to LLC only=
-) code reads miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) data reads miss in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) data readsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -480,12 +461,11 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00080",
-         "Offcore": "1",
--        "PublicDescription": "Counts all prefetch (that bring data to LLC =
-only) data reads miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) RFOs miss in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC o=
-nly) RFOsmiss in the L3",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
-         "EventCode": "0xB7, 0xBB",
-@@ -493,7 +473,6 @@
-         "MSRIndex": "0x1a6,0x1a7",
-         "MSRValue": "0x3FFFC00100",
-         "Offcore": "1",
--        "PublicDescription": "Counts all prefetch (that bring data to LLC =
-only) RFOs miss in the L3",
-         "SampleAfterValue": "100003",
-         "UMask": "0x1"
-     },
-@@ -681,4 +660,4 @@
-         "SampleAfterValue": "2000003",
-         "UMask": "0x40"
-     }
--]
-\ No newline at end of file
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/other.json b/tools/perf=
-/pmu-events/arch/x86/haswell/other.json
-index 4c6b9d34325a..7ca34f09b185 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/other.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/other.json
-@@ -40,4 +40,4 @@
-         "SampleAfterValue": "2000003",
-         "UMask": "0x1"
-     }
--]
-\ No newline at end of file
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/pipeline.json b/tools/p=
-erf/pmu-events/arch/x86/haswell/pipeline.json
-index a53f28ec9270..42f6a8100661 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json b/tools/=
+perf/pmu-events/arch/x86/haswellx/pipeline.json
+index 6165933ee1a4..42f6a8100661 100644
+--- a/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json
 @@ -1035,7 +1035,6 @@
          "CounterHTOff": "0,1,2,3,4,5,6,7",
          "EventCode": "0xA1",
@@ -1143,101 +391,61 @@ ort 6.",
          "SampleAfterValue": "2000003",
          "UMask": "0x40"
      },
-@@ -1295,11 +1290,11 @@
-         "BriefDescription": "Cycles with less than 10 actually retired uop=
-s.",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3",
--        "CounterMask": "10",
-+        "CounterMask": "16",
-         "EventCode": "0xC2",
-         "EventName": "UOPS_RETIRED.TOTAL_CYCLES",
-         "Invert": "1",
-         "SampleAfterValue": "2000003",
-         "UMask": "0x1"
-     }
--]
-\ No newline at end of file
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/uncore-other.json b/too=
-ls/perf/pmu-events/arch/x86/haswell/uncore-other.json
-index 8f2ae2891042..56c4b380dc95 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/uncore-other.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/uncore-other.json
-@@ -19,11 +19,11 @@
-         "Unit": "ARB"
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/uncore-cache.json b/to=
+ols/perf/pmu-events/arch/x86/haswellx/uncore-cache.json
+index b48833d1c170..03598904d746 100644
+--- a/tools/perf/pmu-events/arch/x86/haswellx/uncore-cache.json
++++ b/tools/perf/pmu-events/arch/x86/haswellx/uncore-cache.json
+@@ -511,7 +511,7 @@
+         "Unit": "CBO"
      },
      {
--        "BriefDescription": "Each cycle count number of all Core outgoing =
-valid entries. Such entry is defined as valid from it's allocation till fir=
-st of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohe=
-rent traffic.",
-+        "BriefDescription": "Each cycle counts number of all Core outgoing=
- valid entries. Such entry is defined as valid from its allocation till fir=
-st of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohe=
-rent traffic.",
-         "EventCode": "0x80",
-         "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
-         "PerPkg": "1",
--        "PublicDescription": "Each cycle count number of all Core outgoing=
- valid entries. Such entry is defined as valid from it's allocation till fi=
-rst of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coh=
-erent traffic.",
-+        "PublicDescription": "Each cycle counts number of all Core outgoin=
-g valid entries. Such entry is defined as valid from its allocation till fi=
-rst of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coh=
-erent traffic.",
-         "UMask": "0x01",
-         "Unit": "ARB"
+-        "BriefDescription": "AD",
++        "BriefDescription": "UNC_C_RING_SINK_STARVED.AD",
+         "Counter": "0,1,2,3",
+         "EventCode": "0x6",
+         "EventName": "UNC_C_RING_SINK_STARVED.AD",
+@@ -520,7 +520,7 @@
+         "Unit": "CBO"
      },
-@@ -34,6 +34,7 @@
-         "EventCode": "0x80",
-         "EventName": "UNC_ARB_TRK_OCCUPANCY.CYCLES_WITH_ANY_REQUEST",
-         "PerPkg": "1",
-+        "PublicDescription": "Cycles with at least one request outstanding=
- is waiting for data return from memory controller. Account for coherent an=
-d non-coherent requests initiated by IA Cores, Processor Graphics Unit, or =
-LLC.\n",
-         "UMask": "0x01",
-         "Unit": "ARB"
+     {
+-        "BriefDescription": "AK",
++        "BriefDescription": "UNC_C_RING_SINK_STARVED.AK",
+         "Counter": "0,1,2,3",
+         "EventCode": "0x6",
+         "EventName": "UNC_C_RING_SINK_STARVED.AK",
+@@ -529,7 +529,7 @@
+         "Unit": "CBO"
      },
-@@ -64,6 +65,6 @@
-         "EventName": "UNC_CLOCK.SOCKET",
-         "PerPkg": "1",
-         "PublicDescription": "This 48-bit fixed counter counts the UCLK cy=
-cles.",
--        "Unit": "NCU"
-+        "Unit": "CLOCK"
-     }
- ]
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/virtual-memory.json b/t=
-ools/perf/pmu-events/arch/x86/haswell/virtual-memory.json
-index ba3e77a9f9a0..57d2a6452fec 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/virtual-memory.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/virtual-memory.json
-@@ -481,4 +481,4 @@
-         "SampleAfterValue": "100003",
-         "UMask": "0x20"
-     }
--]
-\ No newline at end of file
-+]
+     {
+-        "BriefDescription": "IV",
++        "BriefDescription": "UNC_C_RING_SINK_STARVED.IV",
+         "Counter": "0,1,2,3",
+         "EventCode": "0x6",
+         "EventName": "UNC_C_RING_SINK_STARVED.IV",
+@@ -538,7 +538,7 @@
+         "Unit": "CBO"
+     },
+     {
+-        "BriefDescription": "BL",
++        "BriefDescription": "UNC_C_RING_SINK_STARVED.BL",
+         "Counter": "0,1,2,3",
+         "EventCode": "0x6",
+         "EventName": "UNC_C_RING_SINK_STARVED.BL",
 diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
 ents/arch/x86/mapfile.csv
-index 9a69ecc95d66..39741e24f733 100644
+index 39741e24f733..b602d2da1b89 100644
 --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
 +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -8,9 +8,7 @@ GenuineIntel-6-55-[56789ABCDEF],v1.16,cascadelakex,core
- GenuineIntel-6-96,v1.03,elkhartlake,core
+@@ -9,7 +9,7 @@ GenuineIntel-6-96,v1.03,elkhartlake,core
  GenuineIntel-6-5[CF],v13,goldmont,core
  GenuineIntel-6-7A,v1.01,goldmontplus,core
--GenuineIntel-6-3C,v24,haswell,core
--GenuineIntel-6-45,v24,haswell,core
--GenuineIntel-6-46,v24,haswell,core
-+GenuineIntel-6-(3C|45|46),v31,haswell,core
- GenuineIntel-6-3F,v17,haswellx,core
+ GenuineIntel-6-(3C|45|46),v31,haswell,core
+-GenuineIntel-6-3F,v17,haswellx,core
++GenuineIntel-6-3F,v25,haswellx,core
  GenuineIntel-6-3A,v18,ivybridge,core
  GenuineIntel-6-3E,v19,ivytown,core
+ GenuineIntel-6-2D,v20,jaketown,core
 --=20
 2.37.1.359.gd136c6c3e2-goog
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47503583050
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7054B582F6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242498AbiG0RgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
+        id S242036AbiG0RZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242615AbiG0Red (ORCPT
+        with ESMTP id S242135AbiG0RYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:34:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B7B82F94;
-        Wed, 27 Jul 2022 09:49:24 -0700 (PDT)
+        Wed, 27 Jul 2022 13:24:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F81F7B789;
+        Wed, 27 Jul 2022 09:46:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3501B821AC;
-        Wed, 27 Jul 2022 16:49:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCE3C433C1;
-        Wed, 27 Jul 2022 16:49:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A101B821C5;
+        Wed, 27 Jul 2022 16:46:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A684DC433C1;
+        Wed, 27 Jul 2022 16:46:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940562;
-        bh=ajiG2rl1RLkX8O8OZOPgAuzDpLkhQSUhjhx2O/QgZDY=;
+        s=korg; t=1658940364;
+        bh=Waml6J/VeBRBz7TwxuUTAlIY34ndmXwlkyv6V9eG/6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yaVq7aWwzY+PCct4vOLD95L2iqjfzgp8w+TZGsyy0PJIiC+lSLnx0Dy7n+eRCinCT
-         3MthOVlNk/EuEZ0kfpXlN2+ntD8q2CFtHDR9qF+Cv/GaCZMfP8mXjSya/U9S1Ks8ol
-         /YPwg7GPi4iAKyDgdFyjI8uOUwdYfefypKmwHcIY=
+        b=ztKNkuYEWiUvqUTW52jxn/84ccyrs7HMULRvc+PMdx64//zCxafCMsm2bgpgZj9MZ
+         n7KP9NR+vEY5FHAP0Ekk3YB2RQM4tAE3U236Hkrcd0LNR9N+qbaOZACkhKdFXu6t1i
+         srLGKHuNONFe6lK+KlzpgwTsrVphl9wVhw/3f7fo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 037/158] ip: Fix a data-race around sysctl_ip_autobind_reuse.
-Date:   Wed, 27 Jul 2022 18:11:41 +0200
-Message-Id: <20220727161022.956770263@linuxfoundation.org>
+        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 198/201] KVM: x86: fix typo in __try_cmpxchg_user causing non-atomicness
+Date:   Wed, 27 Jul 2022 18:11:42 +0200
+Message-Id: <20220727161035.989812551@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Maxim Levitsky <mlevitsk@redhat.com>
 
-[ Upstream commit 0db232765887d9807df8bcb7b6f29b2871539eab ]
+commit 33fbe6befa622c082f7d417896832856814bdde0 upstream.
 
-While reading sysctl_ip_autobind_reuse, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+This shows up as a TDP MMU leak when running nested.  Non-working cmpxchg on L0
+relies makes L1 install two different shadow pages under same spte, and one of
+them is leaked.
 
-Fixes: 4b01a9674231 ("tcp: bind(0) remove the SO_REUSEADDR restriction when ephemeral ports are exhausted.")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 1c2361f667f36 ("KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses")
+Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+Message-Id: <20220512101420.306759-1-mlevitsk@redhat.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/inet_connection_sock.c | 2 +-
+ arch/x86/kvm/x86.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index 1e5b53c2bb26..dfb5a2d7ad85 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -259,7 +259,7 @@ inet_csk_find_open_port(struct sock *sk, struct inet_bind_bucket **tb_ret, int *
- 		goto other_half_scan;
- 	}
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -6933,7 +6933,7 @@ static int emulator_cmpxchg_emulated(str
+ 		goto emul_write;
  
--	if (net->ipv4.sysctl_ip_autobind_reuse && !relax) {
-+	if (READ_ONCE(net->ipv4.sysctl_ip_autobind_reuse) && !relax) {
- 		/* We still have a chance to connect to different destinations */
- 		relax = true;
- 		goto ports_exhausted;
--- 
-2.35.1
-
+ 	hva = kvm_vcpu_gfn_to_hva(vcpu, gpa_to_gfn(gpa));
+-	if (kvm_is_error_hva(addr))
++	if (kvm_is_error_hva(hva))
+ 		goto emul_write;
+ 
+ 	hva += offset_in_page(gpa);
 
 

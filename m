@@ -2,181 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA665831AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28255831B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243007AbiG0SMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S239284AbiG0SNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243318AbiG0SMU (ORCPT
+        with ESMTP id S243329AbiG0SMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:12:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FF9D43C5;
-        Wed, 27 Jul 2022 10:13:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C07706199F;
-        Wed, 27 Jul 2022 17:13:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5ECC433D6;
-        Wed, 27 Jul 2022 17:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658942018;
-        bh=b8X+BFzH2iCZK+xpE2p+40Q5LRHdNFPjgm8yK8trTBQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZmIbSLODQEtBwnpYyJR64MBHHBVgsAw2puDR4tKJzEhdOLtepoIZ/BqUeX6KrOLLg
-         8FpOzqilNuaHHdd1/EjRBmvkjt8dNnaZBiA5cxGNhWSakdCGM93jtRtgr1Kyrwzrf6
-         wwHTIgtg00/qodNh4nDKe7bP3qflf227BOer7yYohQ+VRu8CL0rdOVwkcu3XkoQRge
-         EVBJ6Yc52b9ru4V2qMMN+47XZMG1x9fjhhmIlPJkpFht7gDFvty8eI+X06RNj0drLn
-         TToFETbV7rToKvGNMuGctWRlrYt5xbD9v4LiMgXxckA3R17yRYgOIiciS0BRDvrcAl
-         9T2llwmaQrtQA==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: [PATCH V8 16/16] rv/reactor: Add the panic reactor
-Date:   Wed, 27 Jul 2022 19:11:44 +0200
-Message-Id: <cc047942a83bb767f4567a16e342a707274d3734.1658940828.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1658940828.git.bristot@kernel.org>
-References: <cover.1658940828.git.bristot@kernel.org>
+        Wed, 27 Jul 2022 14:12:41 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA533D4E03
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:13:50 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id v17so6499001wrr.10
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uE7ulaFIa4kwx6F9sA1FJbL2FsEYLVhCaPdS4NQL6NE=;
+        b=QtwKvQTlpxopgXWzZwVyZVvIKkNJviXNbOV0RnVmxcomL5KudVpdpDyA1CSDdhFA9G
+         T2BeZo/R7aXJypfHA0BHqW5qwg6QxagbM97wFXBBUyEayPlbkKjBengbMDzZrTJNiRlt
+         5bMU9To9t0j4RVHI+kZIFOXuT4DzaD8Qd0ux+vsORm9LG/38eXMPL4qARLC3rNRrHkeI
+         Eq1aGKvnOIKzxQv5un9fGnIl/R661mka9aMH6KmioCvmFn996QQTBRFfiR9mM/v6f9JZ
+         EoKKOp7fnRJrJii//dBMNjshYzWlwIZj+AaU+IUbfFL36g9TQwuJn9jzCJ78DdwgJShA
+         ZjUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uE7ulaFIa4kwx6F9sA1FJbL2FsEYLVhCaPdS4NQL6NE=;
+        b=vjCG4sdjYSGzLpsdt3VJiSzpvojHVRct1CimHQfQjer6vpKG4w/7SwNPueaapWKXea
+         1b49UIfwAjvfapN/Uzrl29ECRHgcAA1R5xJXakswndTLB17xS5PkiXepysIcqjEzK5uI
+         kQdc9zubv9pF5JmRwMh84Y8f1/YLZSwS2FbZBzZLpV8uz5HeechY+HTC6ykKAlMW+hvH
+         ENImcjkaM8kBgGJn+pQ7FRBGGQYE37iTlhRMuJ25yYP57ZZrfkVYXn4uOlrsjgl3J85V
+         R+QYZt2Q43pubGh/l6v3qLs0rsSkwN3j1eTQNm3d7KJpsGxkLuHWcXc7wSgFWmoZSeOM
+         O2AA==
+X-Gm-Message-State: AJIora/2v0hcO5CEpfb0aGORbcSpze4lnjVDsr+eAx7bMU/qtv9O9Pr1
+        3tdzOeJRaTAYFJokqlLyKwWrBbLE/0V2M1mUUuKbX1BApk0=
+X-Google-Smtp-Source: AGRyM1udqAFIoaj4ByD3Een2OVlAwifQ3KzsuwTpGOnKylqZ1Z0C8XDpw7LQdGbj1RE2gZuXn/NVPGllJCdDqQuUrFc=
+X-Received: by 2002:a05:6000:1a87:b0:21d:b5b9:7666 with SMTP id
+ f7-20020a0560001a8700b0021db5b97666mr15069882wry.1.1658942028599; Wed, 27 Jul
+ 2022 10:13:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727115327.2273547-1-vschneid@redhat.com> <20220727115327.2273547-2-vschneid@redhat.com>
+In-Reply-To: <20220727115327.2273547-2-vschneid@redhat.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 28 Jul 2022 01:13:37 +0800
+Message-ID: <CAJhGHyCeraX1jcea9kt_FBC561zBgECuw5qx8TAdCG0EHnT6kA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] workqueue: Unbind workers before sending them
+ to exit()
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Tejun Heo <tj@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sample reactor that panics the system when an exception is found. This
-is useful both to capture a vmcore, or to fail-safe a critical system.
+Quick review before going to sleep.
 
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Marco Elver <elver@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Gabriele Paoloni <gpaoloni@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Clark Williams <williams@redhat.com>
-Cc: Tao Zhou <tao.zhou@linux.dev>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-trace-devel@vger.kernel.org
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- kernel/trace/rv/Kconfig         |  8 ++++++
- kernel/trace/rv/Makefile        |  1 +
- kernel/trace/rv/reactor_panic.c | 43 +++++++++++++++++++++++++++++++++
- 3 files changed, 52 insertions(+)
- create mode 100644 kernel/trace/rv/reactor_panic.c
+On Wed, Jul 27, 2022 at 7:54 PM Valentin Schneider <vschneid@redhat.com> wrote:
+>
+> It has been reported that isolated CPUs can suffer from interference due to
+> per-CPU kworkers waking up just to die.
+>
+> A surge of workqueue activity during initial setup of a latency-sensitive
+> application (refresh_vm_stats() being one of the culprits) can cause extra
+> per-CPU kworkers to be spawned. Then, said latency-sensitive task can be
+> running merrily on an isolated CPU only to be interrupted sometime later by
+> a kworker marked for death (cf. IDLE_WORKER_TIMEOUT, 5 minutes after last
+> kworker activity).
+>
+> Prevent this by affining kworkers to the wq_unbound_cpumask (which doesn't
+> contain isolated CPUs, cf. HK_TYPE_WQ) before waking them up after marking
+> them with WORKER_DIE.
+>
+> Changing the affinity does require a sleepable context, so get rid of the
+> pool->idle_timer and use a delayed_work instead.
+>
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  kernel/workqueue.c | 109 +++++++++++++++++++++++++++++++++------------
+>  1 file changed, 81 insertions(+), 28 deletions(-)
+>
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 1ea50f6be843..27642166dcc5 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -167,9 +167,9 @@ struct worker_pool {
+>         int                     nr_workers;     /* L: total number of workers */
+>         int                     nr_idle;        /* L: currently idle workers */
+>
+> -       struct list_head        idle_list;      /* L: list of idle workers */
+> -       struct timer_list       idle_timer;     /* L: worker idle timeout */
+> -       struct timer_list       mayday_timer;   /* L: SOS timer for workers */
+> +       struct list_head        idle_list;        /* L: list of idle workers */
+> +       struct delayed_work     idle_reaper_work; /* L: worker idle timeout */
+> +       struct timer_list       mayday_timer;     /* L: SOS timer for workers */
+>
+>         /* a workers is either on busy_hash or idle_list, or the manager */
+>         DECLARE_HASHTABLE(busy_hash, BUSY_WORKER_HASH_ORDER);
+> @@ -1806,8 +1806,10 @@ static void worker_enter_idle(struct worker *worker)
+>         /* idle_list is LIFO */
+>         list_add(&worker->entry, &pool->idle_list);
+>
+> -       if (too_many_workers(pool) && !timer_pending(&pool->idle_timer))
+> -               mod_timer(&pool->idle_timer, jiffies + IDLE_WORKER_TIMEOUT);
+> +       if (too_many_workers(pool) && !delayed_work_pending(&pool->idle_reaper_work))
+> +               mod_delayed_work(system_unbound_wq,
+> +                                &pool->idle_reaper_work,
+> +                                IDLE_WORKER_TIMEOUT);
 
-diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-index e82d5015e6ab..831779607e84 100644
---- a/kernel/trace/rv/Kconfig
-+++ b/kernel/trace/rv/Kconfig
-@@ -68,3 +68,11 @@ config RV_REACT_PRINTK
- 	help
- 	  Enables the printk reactor. The printk reactor emits a printk()
- 	  message if an exception is found.
-+
-+config RV_REACT_PANIC
-+	bool "Panic reactor"
-+	depends on RV_REACTORS
-+	default y
-+	help
-+	  Enables the panic reactor. The panic reactor emits a printk()
-+	  message if an exception is found and panic()s the system.
-diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
-index a13c750a35c1..963d14875b45 100644
---- a/kernel/trace/rv/Makefile
-+++ b/kernel/trace/rv/Makefile
-@@ -5,3 +5,4 @@ obj-$(CONFIG_RV_MON_WIP) += monitors/wip/wip.o
- obj-$(CONFIG_RV_MON_WWNR) += monitors/wwnr/wwnr.o
- obj-$(CONFIG_RV_REACTORS) += rv_reactors.o
- obj-$(CONFIG_RV_REACT_PRINTK) += reactor_printk.o
-+obj-$(CONFIG_RV_REACT_PANIC) += reactor_panic.o
-diff --git a/kernel/trace/rv/reactor_panic.c b/kernel/trace/rv/reactor_panic.c
-new file mode 100644
-index 000000000000..b698d05dd069
---- /dev/null
-+++ b/kernel/trace/rv/reactor_panic.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019-2022 Red Hat, Inc. Daniel Bristot de Oliveira <bristot@kernel.org>
-+ *
-+ * Panic RV reactor:
-+ *   Prints the exception msg to the kernel message log and panic().
-+ */
-+
-+#include <linux/ftrace.h>
-+#include <linux/tracepoint.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/rv.h>
-+
-+static void rv_panic_reaction(char *msg)
-+{
-+	panic(msg);
-+}
-+
-+static struct rv_reactor rv_panic = {
-+	.name = "panic",
-+	.description = "panic the system if an exception is found.",
-+	.react = rv_panic_reaction
-+};
-+
-+static int register_react_panic(void)
-+{
-+	rv_register_reactor(&rv_panic);
-+	return 0;
-+}
-+
-+static void unregister_react_panic(void)
-+{
-+	rv_unregister_reactor(&rv_panic);
-+}
-+
-+module_init(register_react_panic);
-+module_exit(unregister_react_panic);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Daniel Bristot de Oliveira");
-+MODULE_DESCRIPTION("panic rv reactor: panic if an exception is found.");
--- 
-2.35.1
+system_unbound_wq doesn't have a rescuer.
 
+A new workqueue with a rescuer needs to be created and used for
+this purpose.
+
+>
+>         /* Sanity check nr_running. */
+>         WARN_ON_ONCE(pool->nr_workers == pool->nr_idle && pool->nr_running);
+> @@ -1972,9 +1974,29 @@ static struct worker *create_worker(struct worker_pool *pool)
+>         return NULL;
+>  }
+>
+> +static void unbind_worker(struct worker *worker)
+> +{
+> +       kthread_set_per_cpu(worker->task, -1);
+> +       WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task, wq_unbound_cpumask) < 0);
+> +}
+> +
+> +static void rebind_worker(struct worker *worker, struct worker_pool *pool)
+> +{
+> +       kthread_set_per_cpu(worker->task, pool->cpu);
+> +       WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task, pool->attrs->cpumask) < 0);
+> +}
+> +
+> +static void reap_worker(struct worker *worker)
+> +{
+> +       list_del_init(&worker->entry);
+> +       unbind_worker(worker);
+> +       wake_up_process(worker->task);
+
+
+Since WORKER_DIE is set, the worker can be possible freed now
+if there is another source to wake it up.
+
+I think reverting a part of the commit 60f5a4bcf852("workqueue:
+async worker destruction") to make use of kthread_stop()
+in destroy_worker() should be a good idea.

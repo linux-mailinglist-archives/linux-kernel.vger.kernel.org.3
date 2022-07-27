@@ -2,129 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F7058331B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10149583310
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 21:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbiG0TJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 15:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S234798AbiG0TJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 15:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236265AbiG0TJK (ORCPT
+        with ESMTP id S236308AbiG0TJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 15:09:10 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9534D170
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:49:58 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-31f56c42ab5so48750637b3.10
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=anZ8ubpNYVfX+lGtJNiGuX09BswuO+VNMPfy/hAEQuE=;
-        b=pPF/J3MGwDPrIJN1OQ46lQw4OjndBN5/rUvG8gbXClIZkks5vpHHgXylHF4Dj4ZZN8
-         GL3zrZhDU5A2/S1oeNteZJPsoY5nKALHBccLWkjrFUDbKglBuHAcz5oyLGwWVC1anpeY
-         5o/FS6aiLg+Qffm7qcvdkO/OvhD5bRAWOkMEQIsC+o/eSuajBPiUh6FMwY2HgH0PtcUg
-         XIW0THvTPWZ0aB6fbU0D0wCyyLB0SMRDBRuhvyiRdmqwK93HOzmmv8hSz6OhjD/KiDDS
-         nxn5DLSXy+DFVOE8lfw7/70u4cGcrvzUm1V4ohwakL5HL7XNIYA7p6Btis5YQuazt1oN
-         sjEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=anZ8ubpNYVfX+lGtJNiGuX09BswuO+VNMPfy/hAEQuE=;
-        b=i+c64snv4OApfmSOkgGGKYRUzLWygN9zPTBCbpKyUCOEih1TjiVVfvMmgUPINFWz59
-         nn312Ms8284Bktoi1tLkPwPJRIlCtM3lkmovLe7SH1NJvAr2svjbWBPtp5bPp9wAzZ89
-         LN6Q5c4HRDnFKjdFUb105FulHPMmMH5noEIgxuCADGMPWyIH6PCf9kPOp4YixpX0LD7a
-         yHfRKF8dagx504T8lZtjQYv8snQOFHx2GrKsW2S1rVKHZiHFcmsZ9YsFVfm8H29EH+Si
-         WUBIzp0//LFFaDf+WM9nMHt5d/E2ORGjexrFRAmsHRyoe/+z+7fjs0u2hMplr8CRwmFd
-         1GIA==
-X-Gm-Message-State: AJIora/WU+tuvpLmZ/dlu4NVcNdihGT/pP4v9Ezcd6vSHT1MwJqhi7Cl
-        SuhAN7jqyKbz1n7wNLtMNztsKPHChD5eh2i4kEAM4A==
-X-Google-Smtp-Source: AGRyM1uGY1jCYvf2PBnpbq6hutZYca/PGXO+xEfI02lj4Ab9ipx58Z36alx7V96FIP2hAdQF3lzMQJedR7KZoaeohXs=
-X-Received: by 2002:a81:50d4:0:b0:31f:5f85:566a with SMTP id
- e203-20020a8150d4000000b0031f5f85566amr4520468ywb.218.1658947797362; Wed, 27
- Jul 2022 11:49:57 -0700 (PDT)
+        Wed, 27 Jul 2022 15:09:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB074F37
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 11:50:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 413E43371F;
+        Wed, 27 Jul 2022 18:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658947808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=17kigxGvW4oO2tVOPFkWCos9YzmgV9xkKWZ4CGN+uQ8=;
+        b=SLuQle99oELpYuyDPVS05yBosR0Nna4Bweo+4Gi6Mv/UYoONOi8JumrhPcY3VzENkmxmMq
+        doy/Nrp8jeVoFGb9yZ6VCnlLWx7yjX6OIKQ0bzHbOZNORvfklce/ePSBEtBHQOc+oGpP5W
+        08hD7uffxz4yxpFvuf4Ts8UBtFnzQYM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658947808;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=17kigxGvW4oO2tVOPFkWCos9YzmgV9xkKWZ4CGN+uQ8=;
+        b=xORdcup2W6obmsRjxmakMi+W4NXFxHQuW+qMb1tpttieluQXq52lcVKjnwEAAqfw0WlIVi
+        axgLzh3h0+tWF5Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ED68013ABC;
+        Wed, 27 Jul 2022 18:50:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id d8diON+I4WIVPAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 27 Jul 2022 18:50:07 +0000
+Date:   Wed, 27 Jul 2022 20:50:06 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chenglin Xu <chenglin.xu@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Subject: Re: [PATCH RFC] regulator: mt6380: Fix unused array warning
+Message-ID: <20220727205006.0ff42274@endymion.delvare>
+In-Reply-To: <YuEug/OV9H0DKnmZ@sirena.org.uk>
+References: <20220727132637.76d6073f@endymion.delvare>
+        <YuEpGTD/DbC1T9Z0@sirena.org.uk>
+        <20220727140809.0951b72d@endymion.delvare>
+        <YuEug/OV9H0DKnmZ@sirena.org.uk>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com>
-In-Reply-To: <CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 27 Jul 2022 11:49:21 -0700
-Message-ID: <CAGETcx8bGwDkPP=d2MtcY69YmTyckUSa8xAwNVOPOyTR8jPk=A@mail.gmail.com>
-Subject: Re: [next] arm: PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 11:44 PM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> Linux next arm BeagleBoard x15 device boot failed due to the
+Hi Mark,
 
-Can you point me to the dts file that corresponds to this board
-please? And if you know which devices are power domains, that'd be
-handy too. For now, I'm reverting this patch.
+On Wed, 27 Jul 2022 13:24:35 +0100, Mark Brown wrote:
+> On Wed, Jul 27, 2022 at 02:08:09PM +0200, Jean Delvare wrote:
+> > On Wed, 27 Jul 2022 13:01:29 +0100, Mark Brown wrote:  
+> 
+> > > It's helpful to keep the build coverage high.  
+> 
+> > OF does not depend on the architecture, anyone can enable it. So I
+> > can't see any problem of coverage with making drivers depend on OF.  
+> 
+> It still reduces a barrier to entry.
 
--Saravana
+Can't see how that would be a goal. By allowing randomconfig to pick
+configuration option combinations which do not make sense, we are not
+increasing coverage. That's quite the opposite. We are limited by the
+overall power of the build farm, so every test build of such a useless
+combination is a waste of resources. We'd rather use that machine time
+to test a configuration option combination which real people would be
+using, as these are the ones we care about.
 
-> following commit. The x15 did not event showed any crash log
-> on the serial console.
-> whereas, Linux mainline kernel boot pass.
->
-> Anders bisect this and found the first bad commit is
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a
-> Author: Saravana Kannan <saravanak@google.com>
-> Date:   Wed Jun 1 00:06:57 2022 -0700
->
->     PM: domains: Delete usage of driver_deferred_probe_check_state()
->
->     Now that fw_devlink=on by default and fw_devlink supports
->     "power-domains" property, the execution will never get to the point
->     where driver_deferred_probe_check_state() is called before the supplier
->     has probed successfully or before deferred probe timeout has expired.
->
->     So, delete the call and replace it with -ENODEV.
->
->     Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
->     Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->     Signed-off-by: Saravana Kannan <saravanak@google.com>
->     Link: https://lore.kernel.org/r/20220601070707.3946847-2-saravanak@google.com
->     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 739e52cd4aba..3e86772d5fac 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device
-> *dev, struct device *base_dev,
->                 mutex_unlock(&gpd_list_lock);
->                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
->                         __func__, PTR_ERR(pd));
-> -               return driver_deferred_probe_check_state(base_dev);
-> +               return -ENODEV;
->         }
->
->         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
->
->
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+> It's also that it's easier to just
+> prefer the conditional compilation pattern rather than either check to
+> see which cases is needed or have people copy an example that doesn't
+> use it when they should.
+
+In my experience, there's always a very easy way to silent a warning,
+but in most cases, that easy way is wrong because it hides the warning
+instead of fixing its cause.
+
+Very much to the point, the build farm pointed us to a combination of
+options which triggers warnings which developers had apparently never
+noticed before, which is a hint that maybe this combination is not
+something we should support in the first place. We can of course silent
+all such warnings with __maybe_unused, but that should not be our first
+choice (else we might as well stop building with -Wunused).
+
+Not only that, but in this case it might also be that we have kernel
+code that can be removed because it isn't needed. Not much, but that
+would still be a gain, methinks.
+
+I also don't think that one goal of the kernel code is to be easy to
+copy and paste without understanding what you are doing.
+
+Anyway, this is your subsystem, so the decision is yours. My patch
+removes the warning, if you are happy with it, feel free to apply it.
+
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support

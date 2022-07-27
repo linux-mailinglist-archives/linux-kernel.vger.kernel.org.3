@@ -2,74 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FB9582A05
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F46F582A09
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbiG0PyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
+        id S234320AbiG0Pyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbiG0PyJ (ORCPT
+        with ESMTP id S233607AbiG0Pyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:54:09 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D512610E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:54:07 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z18so9605417edb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hcYEJ77Wmfc9oK9k1HkYbTJDPUr0ZlLyXJF/Wi7+idY=;
-        b=IX2brodF+ENxAdppku6LCWHaq5XQtN7QRKUmnOhk7Xmearpz5MjJ57+AHX9/QLLW0u
-         P5mr/tyZYuepEEsE7UQJzgYRw2XVk1U4KUXURq4DaOFoRfCqU8tNmv76wscX+zug0xk1
-         A2NE2VburQgP26TacQ+x3Q2k6GK67k9uCC4h2M8/VvEeGZVsT+FFfEG7mMLVO9OYQgor
-         TzAwdMVBTg3g4sCQ2yhqoXL5QMt9KvDvuXKsv/qz2m4gcIxCd1K3N6cWnH7IHa/G6TKO
-         T35Uq3HPsXfL8XlMGmAoGrd60mFr/4rK6qgu17aSGkr3MYYQVXVU+iQOgOqovFjCYxXf
-         zbug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hcYEJ77Wmfc9oK9k1HkYbTJDPUr0ZlLyXJF/Wi7+idY=;
-        b=mPYcs6Cp2yCxp6ykvUnLPLc3acXzV1hBemssHRBTOXkyiMvXn3BORwhphjk9r7A8JW
-         q1K1oCxRlA6TGWOOknq0bmP73Lgr7+0dSMRiXi+XGBeJ7sFwlHRygQT844G/E23/HqsY
-         hLz4Uz/pZ6jzJhsdQmDh8YBLW2Lx5mURqoybwXRy3rH5x6+mxJSGpiFr7cx+fwomeS3n
-         JQZ9hnBkzjUpmVzamWbkmlVMcxcfjnFddWJh7szBJsPKsHSU7mgLha4vBrCd4yx3bXAr
-         aFfxIR2uSz7Jy8D+EHtUMSkET9MFUZx+QjUqNhZV73ydeplT3BhKc7165k85TnE8sfbt
-         /fNw==
-X-Gm-Message-State: AJIora/qeccIz1RXTYrBWpnp3BauLdMB5r1v5n0bSWjWJhFf2j3bFzPo
-        1h2EnkGi9T+o1dnOAgqgxqM=
-X-Google-Smtp-Source: AGRyM1vuJ6dtvrf4xPo6HhWMRBPFt2aAlGhrqJeal7+/Kwcbefs7ypWDeALzK6SahWs38lV7FK/cEQ==
-X-Received: by 2002:a05:6402:345a:b0:43c:abfe:5b75 with SMTP id l26-20020a056402345a00b0043cabfe5b75mr4462788edc.416.1658937246246;
-        Wed, 27 Jul 2022 08:54:06 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f2e:6917:2d0b:bd0c:a579:887d? (p200300c78f2e69172d0bbd0ca579887d.dip0.t-ipconnect.de. [2003:c7:8f2e:6917:2d0b:bd0c:a579:887d])
-        by smtp.gmail.com with ESMTPSA id sb12-20020a1709076d8c00b00718e4e64b7bsm7660765ejc.79.2022.07.27.08.54.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 08:54:05 -0700 (PDT)
-Message-ID: <4d1e2294-a3b7-972b-f021-cecee8779f1b@gmail.com>
-Date:   Wed, 27 Jul 2022 17:54:04 +0200
-MIME-Version: 1.0
+        Wed, 27 Jul 2022 11:54:41 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2086.outbound.protection.outlook.com [40.107.220.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027AF49B6D
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:54:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L1OGKSNpDzv9BkZjjJHg6adW1DR7O8P7gMB4Ec4o8g0EvDJuZoINaIEzHtCOlV9PRCngLTL5o0YfaftOA+O8uJ6dFUqeE5PRm0ir+2ZxEC+42H5Faih7svMQGwlSx47pGz9mX1Z0qK9+UGZiPJ5wt5FqhnJPtA0/RPs7MrxS9OIABLMtnXa+GGSzeHOBFMZyF+gNiOwpxW10iwCPWDVUPvvo+45XKMpsAdxsbVkufysPL2o+a/D7/CxSZr4mFh7YpMjY38XCkkLmfAp7448Xq6fs2hEdFDRvvukLd3ZSAfCMY8YLHXxTMBhVMNJKu/uSl5No7AMv7PFIEmKErfrnuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2Zq9C5Qg5y7VBqG3qWqoTnaOtz1AF4+PxDUGZif4V8E=;
+ b=Yds24mD8KuWc2nHa939Pmq1VJ6Pw1zaGAm8Np3WO6AIOOkqWvTAXHE7zqNx1xyfD1wFAKfR1teqFTSEauIZwr3jDQqQKBOfJ9qP7Z1LNbG9sbyEX148GCdfBGQG0TIzfHrB4Zlw1korERagiLJ5uGzbLKl5SDWS38E25KRgzasmvLejo8ngBauNCFGoovXa4uXI9fPmRQ2xEtdXLvxiaR4eeg/cyqTf36aGCiLcsSRSFz/N7/x7XVjLNqzhZHlLmWPifieJ8U42qHGKyoYA+Af/Hj7hUpocAIkHHv566+1UIcNFbJDwG9ByrEJ4xHld9+s3acYgceGsbnQRJGCJueQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Zq9C5Qg5y7VBqG3qWqoTnaOtz1AF4+PxDUGZif4V8E=;
+ b=lO4NIKX4FjUZ55IgmxueBg/hLL1tpvB2szgTEBOLRdDGDJD8p3xLzZobRXDni1Edc3iTL7i/mA9oa/pZMalJsSAsbRICn4ulGa5uIFEI4r2r7H5X0n1+w31jH+4D1orXTajgbHZc8CBqKcjbYHZ2x9sc2kyvys4yHx84AcOBtfM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+ by SN6PR12MB2798.namprd12.prod.outlook.com (2603:10b6:805:69::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Wed, 27 Jul
+ 2022 15:54:37 +0000
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::d122:1dae:8445:2e43]) by MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::d122:1dae:8445:2e43%7]) with mapi id 15.20.5458.024; Wed, 27 Jul 2022
+ 15:54:37 +0000
+Message-ID: <232fd849-51a2-7092-756f-cb34b460993b@amd.com>
+Date:   Wed, 27 Jul 2022 11:54:35 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] staging: vt6655: Rename byOrgValue to reg_value in a
- macro
+ Thunderbird/91.10.0
+Subject: Re: [PATCH -next] drm/amd/display: remove unneeded semicolon
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <cover.1658333350.git.philipp.g.hortmann@gmail.com>
- <83920d919acd7596488943182f37132e479d70f4.1658333350.git.philipp.g.hortmann@gmail.com>
- <YuDfjwHJN6n/CZ4i@kroah.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <YuDfjwHJN6n/CZ4i@kroah.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>, airlied@linux.ie
+Cc:     daniel@ffwll.ch, harry.wentland@amd.com, sunpeng.li@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220726222809.64709-1-yang.lee@linux.alibaba.com>
+From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+In-Reply-To: <20220726222809.64709-1-yang.lee@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR14CA0025.namprd14.prod.outlook.com
+ (2603:10b6:610:60::35) To MN2PR12MB2941.namprd12.prod.outlook.com
+ (2603:10b6:208:a9::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c53adb60-d0f6-403f-1c00-08da6fe84e99
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2798:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +OUhj/BHmfikOITrGxjHaU/PMQ/ng0P+DvmeNZjSo9RKSl+QhxuATjUXwBZ+DHz72KjMIRKUP+K31nWBnb4jty4eDt6rJYZkzokQcrPTx4cMC4uCvvn9xaBC3TBby0/x4iG9TKVQiVqm2l2N2hfzcQvMRXfqzJ8MGOpsHHRcm8RO4RzzIKNwoPpG9dleenbGfIv07m+hob8u527nBh//3VLLyacyuVX2GTJIhghfK8UQ2P2rQq2GEZvjQ5NniLldVRm7JKA1DU56zMBO+wmE/dbEtLsc1zvicP0kp1nkffafwbxnzj/+Ovy998tm6yQQos1ZpvUrtvllrKtUENNngJMdMTMtuCWUgv80YOajn14cDqRECNqEZyH9SUtYZjTD2alLkpnsItbU2gp1Ie1FH2xo2IMinhfKDyHcGM9TCUdiHVELBR/RqyUW8f8qOlQVZY87PmdC+n+UFYYhVxRQX0mkRaDVuyywh/499QGYDtpA1D7sfjTk2MpWDclP+6kcvsXb1CjtDG5vDCUWuCZ39CsuJr9T0DdvITbvHHM8IN/3CWLgvc1FGzxdpxqOxoBkvUrq1MLHKc25A5Q9hnxEI/E2FwazUorF0XBOLHyABNWc2oxfnJX5zsJxzDouywRK8brspb5tylMtyPpAnYsP/BiDG0m0zoGjAYxjzEh7N0W2qE9ML96gZIzvxnvIZHIxqdX+fF/Zs2B3OSDlOcNHp6yiZ/Rij6LJftqYE1V34ckDa2N8c+2RbBlVcH8uGxVGaEEuRfDg0+xPf/TYyRvIvlrHO+DUMWfxwKh6zjJgjSPeLtmAGekGE7BMHdoudwY5pLfloJX+ZCM47KfO3GLdwQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(376002)(39860400002)(346002)(136003)(8676002)(66946007)(8936002)(66556008)(66476007)(4326008)(41300700001)(5660300002)(2906002)(83380400001)(316002)(31696002)(86362001)(36756003)(38100700002)(6486002)(6506007)(6512007)(26005)(2616005)(478600001)(53546011)(31686004)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkwwRTFCVWx3aFVaeTlvZm90eWV1b3JzVU1NMVBWV09pM3hITFhxZWMvWmVF?=
+ =?utf-8?B?cnhYUm5aK2x1WVo5SmRndEN6dEV0TFZlSlNjTHEwSE9uR1dxZVV5RUxQT2oy?=
+ =?utf-8?B?dGlFRDFwZjlOUTNTKzdhY1JpRURTSDhLUVZXeWEvbk50QTZJd0RqZXJRbjZp?=
+ =?utf-8?B?S2E0Qnlwd2pnUVlZQ0xuS0ZubkdxQUJUTzBHaHlhcU5PWlpXQlpTai9VelFJ?=
+ =?utf-8?B?NW04Ky9XaHhlUFdNQWpVMEZMSGx0Vm9tRU91UE56Tjc1TG1KU0dEU1R3OE9C?=
+ =?utf-8?B?eDZINFY3anl4NHN3dXFoUzRtQm5FVFBSV29IMEZUeVdPSGdSQUlISnE5cXVp?=
+ =?utf-8?B?eFk1ZzBoWkZsZDU5N3Jrb1N5TS9RcFpBanlCYVdGb2NhbVE0bHlZeVJ6anZ3?=
+ =?utf-8?B?Y0tiUlJ6bnF4ajEveVJucGpVblRFRmJpQUdidTJ2N2UzZzFxWTFWU0VCNkdl?=
+ =?utf-8?B?OTBCSWc2d0VtekY4eW0vSnJCdGd2UE1Ua3Q5NTBZY0d6V1o4UFYvWVVoVnd4?=
+ =?utf-8?B?d3hjU1FSSmw5eVcwSGVJa25zREM5TVJCRDNIZTZRc1d5czRXWmMzM2lTUThU?=
+ =?utf-8?B?bXF2Y1dkblBDQWd1TW9hcVRFb2t3TUZGbSs3S2FCakhNN2txc0NkQVB5d2NM?=
+ =?utf-8?B?Z3doelovWFl6MFFvVmtrVWdPSld2UE9DbDhUUXJydkVwcWtwbHl3TU1rZzlt?=
+ =?utf-8?B?U3R2UUlsNzdvN0tjZXRhOEpQL1Vlb1E5WjFrZTBiNGJ1OUp5Y0tjV21GWUVO?=
+ =?utf-8?B?eUVTdkxiS2xLTUdHNTBVVUZQY1h3L25TTlp1eXZzVVhDRkJpdmoyS3c3YkJM?=
+ =?utf-8?B?eEhHMUl4WCtoeFNrMWhCWkNZblVuNGltM1hTYmVTU2FCUytDWEI3UXdDb01n?=
+ =?utf-8?B?SEZDdit2UFFKc2lkckJwcUtOcmhVMHVLVHlNeDNNMitUM1pWRktZTjhPMCtw?=
+ =?utf-8?B?NytYZGZoUllhUDA2S05tRERMSURwQlhXVWhaQ3pISFYxM1BMWVRtdnJBT29K?=
+ =?utf-8?B?Y2VsdU9wTDhBQVNDQ3R2aG9LYzBtd2JiRTlPREVVQ2R2SE1WelY2M2JKWkFV?=
+ =?utf-8?B?T0E0OFNCbnFjOWF3WUpFdEJVeTFnSExVN2Y4cURzQzdadlg3c29zZTZubnUr?=
+ =?utf-8?B?WFdsLys5cmtjT0dNUjZqa0hpYnppR2lrbFFMWkJDOGdzMXNIR2pQdWJ3ekhz?=
+ =?utf-8?B?d2g5bTUxTkZNbVpoREQxUGc1Z3NJeHIrQm9IbFBRbVE0QUFQODg5M2gvS0NG?=
+ =?utf-8?B?N0VKU1EvQWpwZWFPTEo1Wm9OYVZJZnlyNlN4eUxVTlF2bllsc21HSG92VVk4?=
+ =?utf-8?B?UktzaWo4VHM4d3JiaFR6WS8reC80cjFDN25tVUhTNTVDU0RNS3M1WkZhNTZH?=
+ =?utf-8?B?d0ZpSlFlSHNyQ2p1bmg4ekJjUjNacTFMa3hpT0MxZWM4aTAyczJoNS9hSERB?=
+ =?utf-8?B?NU51SWltcGJIT2d4bTQrczBzN011OEZ5bXFNSG9ZT1pnU0N2cHJ4OVF5QUFE?=
+ =?utf-8?B?RVk2VzEzRzJRdnlWRkJLRkw4RUNPSFJyeVc2TG4yVVowQm51RWVDUHFpeHhi?=
+ =?utf-8?B?VW1lcWN1UGx2WUJoa2Z0Z0lFNk5sblU5ZHFjRE4zNTlGSzVsd2QyUElHeDVn?=
+ =?utf-8?B?N210R1FkdUhhS25QdW9kWENxOFNWdGVrV3RyQUx1Mm1oa3c5aTVlVGdsRnZK?=
+ =?utf-8?B?d1pZVmZUdlJrcEl0NDQ4eERQS3RmUTJMYzhjdTg2cXhIUjNhN09tanl3d1lx?=
+ =?utf-8?B?SUFNb29ZRXFkYmNuU1pXVitML2ZxRVY5ZUJYcGpSMEdNa1BCWE4xRHIxd2wz?=
+ =?utf-8?B?dmtDUWU1aTRhd1AzRzg5NTBhSFdwWlJtc3M2N3BaSUpwK1ZzNHg4bDhMM2g3?=
+ =?utf-8?B?WkpCNVY5bkExamlxMUpwUisvRC8rb084NFJRUElFTTA0dllmNmxxRUU5cFN5?=
+ =?utf-8?B?UU5ZQzQzaEg3UlRjMng3dlpFQjJvWWNCUjdIbktDZUk0SHFwdHdMT3g5NVdC?=
+ =?utf-8?B?TGVkSHhNM3Y2b1dmZXN0M0QrQkJXSHJCS0M4UmgxZVNrTDFCWnFFY2x4VjRT?=
+ =?utf-8?B?UUZvWnRVeTl3U0JXUnBKamk4aThpVFhnaEU4VTYvU0RVSHVpcXFLVnYwclBy?=
+ =?utf-8?Q?IkR+3qLIIEgLlLu6iYeVlPs5m?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c53adb60-d0f6-403f-1c00-08da6fe84e99
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2022 15:54:37.0755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: POrwBhorBMG1cshBpTlhh7qK8soSMHzskoBbiFSC6+jKVGZ5MXe+Pon4ByjzdNMguphQMHjVGzd4eAhBWcaTzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2798
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,25 +127,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 08:47, Greg Kroah-Hartman wrote:
-> On Wed, Jul 20, 2022 at 06:24:32PM +0200, Philipp Hortmann wrote:
->> Fix name of a variable in a macro that uses CamelCase which is not
->> accepted by checkpatch.pl
+
+
+On 2022-07-26 18:28, Yang Li wrote:
+> Eliminate the following coccicheck warning:
+> ./drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c:2344:67-68: Unneeded semicolon
 > 
-> Why rename something you are about to delete in a later patch?
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> thanks,
-> 
-> greg k-h
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
+> index 39428488a052..ca44df4fca74 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
+> @@ -2341,7 +2341,7 @@ void dcn201_populate_dml_writeback_from_context_fpu(struct dc *dc,
+>   				dout_wb.wb_dst_width = wb_info->dwb_params.dest_width;
+>   				dout_wb.wb_dst_height = wb_info->dwb_params.dest_height;
+>   				dout_wb.wb_htaps_luma = wb_info->dwb_params.scaler_taps.h_taps;
+> -				dout_wb.wb_vtaps_luma = wb_info->dwb_params.scaler_taps.v_taps;;
+> +				dout_wb.wb_vtaps_luma = wb_info->dwb_params.scaler_taps.v_taps;
+>   				dout_wb.wb_htaps_chroma = wb_info->dwb_params.scaler_taps.h_taps_c;
+>   				dout_wb.wb_vtaps_chroma = wb_info->dwb_params.scaler_taps.v_taps_c;
+>   				dout_wb.wb_hratio = wb_info->dwb_params.cnv_params.crop_en ?
 
-I need to rename this variable. Does it matter if I do it in first or 
-last patch? When doing it first I do not have to review so much 
-checkpatch warnings.
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 
-Or is it OK to convert the macro to a function and rename the variable 
-in one patch?
+And applied to amd-staging-drm-next.
 
-thanks,
-
-Philipp
-
+Thanks
+Siqueira

@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD8958207C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 08:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A11558207D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 08:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiG0GwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 02:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S230227AbiG0GwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 02:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiG0Gvt (ORCPT
+        with ESMTP id S230137AbiG0GwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 02:51:49 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFB227B
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:51:48 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id t22so19378667lfg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:51:48 -0700 (PDT)
+        Wed, 27 Jul 2022 02:52:04 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29031024
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:52:02 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id t17so13520280lfk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:52:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KThI0uCmJ8VFeIfgHwbGO9Wzrwr+0ZhRGvJSBLZEH1w=;
-        b=CaMGf0M5o5HVCv8jgdo62PzIo8UmzAq31sWCwVXHEBwaGRITzMyV04W5lSiyOVJ5UZ
-         FrnHXbBEcUgGBlpYrfJkEiPTsTZKPetQz2YaiaKIJomcyF8s3hUJ+zaBcDUW9laYjRYl
-         yRPYY7D8Az1aJfM/hRqJbE9pw/10Pfz11RSabOAotOAbrqcmWlJAXzGXApiQeAB5d8rT
-         qmPBPR5PsOE0Sa7gZ7OFwnzE3/EN6gNtNr1kBJb0qds6UBLncqz99uDyj20YwGNn8WQ/
-         f5V45iLJea6jNVJGWnb2wxw22VcNr7j4ra60wEcWeuLXi6gBtuWU+DJ55gZJDUT9OZ2z
-         essg==
+        bh=GT9LN0318tRK8V+lMJWQAJaAZNlEVObvqSXexfzllV4=;
+        b=UmlTDtfeW3VDKjFHvkuOpaDYmOnM6rh+nohyv8VnauNAQNgBb68dKFZxIr6xcEDAmw
+         8J57ifslgRYhVaJqQf7b6XURFC4sHbEg8HHfrhThzEx3l5aDZb+Dvp0EHfNP9IDvII4j
+         4JSY7zqhjtJkNf1r+7Hu17Nk4RseiaijdrCPEL5BWrYQ8qxxTPO6NPgkSieS2HA678Cs
+         n9D/57IUgTJ+gVR2R5HSr6I3ENWWq/Cwo85J65F1UDaSLOzDinpAgmn0GAPOExQZP0mL
+         U9T2T61YB1hIty63Q1J9pG9a0V+72WzcZ0uUYijRg8fDIVFH6cRX1SC1eZYw3t/vLqwN
+         91Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=KThI0uCmJ8VFeIfgHwbGO9Wzrwr+0ZhRGvJSBLZEH1w=;
-        b=GJ1YAQdCeHUQGF2RLc9IO+T7czraEk0+Q57k7F17bjmsqz2qf0WqN8xDWGmAEDviZU
-         oUsgBI+Ol6Q0BDcvPxrIA3KbJY8LsGDcKC2Fjooy1hfWFJT0MqOewXzT1P5Fe3Guq4iR
-         ZN5ON8M1fbpxKAZ+m/ycM0RnXY3d+Oo4kIygn/b9YuZ36KB8oiMaWJWNyOAtQGJNatFZ
-         dKaYqQCVfotHsMHufvGro/ufJhqHcufZG5NGFBsBxbxjyeknFEh2iZUiQe3PTTT9YKTU
-         sdRBiikR0tOMHdDBj+qx+DezXnAupbnsVogkI6ib1oGzZPYJaVFEKIeuLNtPqDIeZOz3
-         VrbA==
-X-Gm-Message-State: AJIora/TIPJPAc5qVpA+HMx+qFnm5549c4a1HU27ACKOvqbAyht1NDQ9
-        JBjy7cCEe2w42i8xfCyUtWDpVQ==
-X-Google-Smtp-Source: AGRyM1sO/g7SO5uuuQqlIZPdHnH2W8AQ3FzlUTOdbdU5G7u13dt96c3psUBhZRx1/+tuXoYAAf0DoQ==
-X-Received: by 2002:a05:6512:1328:b0:489:e2c1:f309 with SMTP id x40-20020a056512132800b00489e2c1f309mr8515238lfu.555.1658904706689;
-        Tue, 26 Jul 2022 23:51:46 -0700 (PDT)
+        bh=GT9LN0318tRK8V+lMJWQAJaAZNlEVObvqSXexfzllV4=;
+        b=FSoKWqW1jW772on755aIGHi/X4EUE+pBLU7bikTRjXFu8L9PYYvhJ7gHwqFQxL8WwY
+         BimmoM7J4wSPML2IHX40LfXMUw7YF6NenH5VfMNDcB1BCkqRPoCpp0o1X/9Jn28L25gm
+         oeEFmZ1h7O+WDL0Mn8u1shv66TXqIjMdDH7xFQ8UjxVxcfoPwqsu9aoqP7Vt4GVG6G//
+         PqmW31v3fTVktMiiZFiT+OWX0HucTC6Kl4XTSSbsoDX6LxW1OoXc2l0/m16MzQIL3ylq
+         33ehx49NMaaQhXfIixJ35hW9aUz1a3ELCXtlhDDiVd39BrRvswtDxc4wkPd7HM46YLna
+         hg9w==
+X-Gm-Message-State: AJIora9ozZRx08IRnwwdhqMhpD9PQ14Bg/HaJqwXTsvtjn7/WlBfvYG7
+        QEx8JI/Xf+AYbWxBRJF1yS1AZQ==
+X-Google-Smtp-Source: AGRyM1so+qJ9ymSEdwmy108s1d9Dlc2EdM1pFqfwnXQFtfBLFU6LlktU0CWd6/D4IknxjViqpJMYtw==
+X-Received: by 2002:a05:6512:13a4:b0:477:a28a:2280 with SMTP id p36-20020a05651213a400b00477a28a2280mr7256491lfa.689.1658904721193;
+        Tue, 26 Jul 2022 23:52:01 -0700 (PDT)
 Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id w1-20020a05651234c100b0048aa3c9a16dsm722539lfr.255.2022.07.26.23.51.45
+        by smtp.gmail.com with ESMTPSA id q24-20020a2eb4b8000000b0025e053564f3sm1783059ljm.18.2022.07.26.23.52.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 23:51:46 -0700 (PDT)
-Message-ID: <15d40d97-e575-e1df-d96c-e58745ce7fa5@linaro.org>
-Date:   Wed, 27 Jul 2022 08:51:44 +0200
+        Tue, 26 Jul 2022 23:52:00 -0700 (PDT)
+Message-ID: <1fbc0f83-4fe6-031a-73cf-7bbe68e4d08c@linaro.org>
+Date:   Wed, 27 Jul 2022 08:51:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
 Subject: Re: [PATCH v3 1/5] ARM: qcom_defconfig: enable more Qualcomm drivers
 Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
@@ -69,9 +68,9 @@ References: <20220726150609.140472-1-krzysztof.kozlowski@linaro.org>
  <20220726150609.140472-2-krzysztof.kozlowski@linaro.org>
  <CAA8EJppMNUV0eEF7BV6=7RgQK_XUEsqcLpmf_zu0XjSRLTLQ6w@mail.gmail.com>
  <a9356472-0fef-d500-837c-ad6d9ed27b94@linaro.org>
- <YuAqOArv4hUdaG6D@gerhold.net>
+ <76bf4b19-54e8-c8cc-be71-356233b1cd57@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YuAqOArv4hUdaG6D@gerhold.net>
+In-Reply-To: <76bf4b19-54e8-c8cc-be71-356233b1cd57@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,52 +82,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 19:54, Stephan Gerhold wrote:
-> On Tue, Jul 26, 2022 at 07:30:12PM +0200, Krzysztof Kozlowski wrote:
->> On 26/07/2022 18:49, Dmitry Baryshkov wrote:
->>> On Tue, 26 Jul 2022 at 18:06, Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> Enable Qualcomm drivers:
->>>> 1. socinfo driver to provide some basic information about the
->>>>    SoC being used.
->>>> 2. Remote filesystem memory driver (used in MSM8974).
->>>> 3. RPM Power domain (used in MSM8226).
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>  arch/arm/configs/qcom_defconfig | 3 +++
->>>>  1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
->>>> index 5cd935ee148a..f02448187eac 100644
->>>> --- a/arch/arm/configs/qcom_defconfig
->>>> +++ b/arch/arm/configs/qcom_defconfig
->>>> @@ -247,12 +247,15 @@ CONFIG_QCOM_COMMAND_DB=y
->>>>  CONFIG_QCOM_GSBI=y
->>>>  CONFIG_QCOM_OCMEM=y
->>>>  CONFIG_QCOM_PM=y
->>>> +CONFIG_QCOM_RMTFS_MEM=y
->>>> +CONFIG_QCOM_RPMPD=y
->>>>  CONFIG_QCOM_SMEM=y
->>>>  CONFIG_QCOM_SMD_RPM=y
->>>>  CONFIG_QCOM_SMP2P=y
->>>>  CONFIG_QCOM_SMSM=y
->>>>  CONFIG_QCOM_RPMH=y
->>>>  CONFIG_QCOM_RPMHPD=y
->>>> +CONFIG_QCOM_SOCINFO=y
->>>
->>> please add:
->>> CONFIG_QCOM_STATS=y
->>
+On 26/07/2022 19:43, Dmitry Baryshkov wrote:
+
 >> I was considering it, but it seems none of ARMv7 DTS use it.
->>
 > 
-> Some MSM8916 boards are used on ARMv7 (due to firmware limitations)
-> and the msm8916.dtsi has it. :)
+> Argh. The driver has support for 8974 and 8084, but nobody has wired 
+> that up. I'd still suggest marking it as =y/=m. I'll send dtsi patches 
+> in parallel.
+> 
 
-OK, thanks!
-
+OK, that makes sense. I'll add it to defconfigs.
 
 Best regards,
 Krzysztof

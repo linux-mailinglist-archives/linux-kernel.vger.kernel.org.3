@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7377582D5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2BE582F38
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241018AbiG0Q42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S241768AbiG0RVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241137AbiG0QyZ (ORCPT
+        with ESMTP id S241969AbiG0RTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:54:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93CD4D4DF;
-        Wed, 27 Jul 2022 09:35:38 -0700 (PDT)
+        Wed, 27 Jul 2022 13:19:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAEE17E13;
+        Wed, 27 Jul 2022 09:44:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0EA64CE2301;
-        Wed, 27 Jul 2022 16:35:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7C0C433D6;
-        Wed, 27 Jul 2022 16:35:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 988B9B821A6;
+        Wed, 27 Jul 2022 16:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F11D3C433C1;
+        Wed, 27 Jul 2022 16:44:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939735;
-        bh=F8ZiAE7YZXuQSsyBrtT3P/GZVlUNUGHQ+fXJZiNmSOw=;
+        s=korg; t=1658940274;
+        bh=OGCj6S1xjd9XwIbJO81L93cBRcKmCDMbwE+p77sNUko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b+9fIqaS3ium9F6SOTNmgYgOOhGngfbrJnO5ZZ+NuyO++l+GnMHRYr+wNt72ttvtv
-         JBeUGadJu7euQqHTNaCgrVu5BWDDQzNmA9/UHW4k/bH7pk1gYNjgACZR2UeocKeucx
-         F/2jL20YU48f5WWkSCWee9lk8w7fq0ZDi+dr+ff8=
+        b=bsZeo27anj1n1HkU1kXIcD7cGAfzERxiglpGvldORqTskkcl9BLgHQc7fMs7e77qp
+         3OKu6A3CrOi5UXIfKp7H9/iLkIknJJpOqD7wkycTueB8Uf00/5uqGGw2L4Xg9ed7kN
+         ojJdtktSw68f8EY0idPynv03MX/vyrZ7Qa2IV1B0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
+        stable@vger.kernel.org,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Adam Guerin <adam.guerin@intel.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 084/105] drm/imx/dcss: fix unused but set variable warnings
+Subject: [PATCH 5.15 166/201] crypto: qat - add param check for DH
 Date:   Wed, 27 Jul 2022 18:11:10 +0200
-Message-Id: <20220727161015.469788131@linuxfoundation.org>
+Message-Id: <20220727161034.710630601@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang ShaoBo <bobo.shaobowang@huawei.com>
+From: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
 
-[ Upstream commit 523be44c334bc4e4c014032738dc277b8909d009 ]
+[ Upstream commit 2acbb8771f6ac82422886e63832ee7a0f4b1635b ]
 
-Fix unused but set variable warning building with `make W=1`:
+Reject requests with a source buffer that is bigger than the size of the
+key. This is to prevent a possible integer underflow that might happen
+when copying the source scatterlist into a linear buffer.
 
-drivers/gpu/drm/imx/dcss/dcss-plane.c:270:6: warning:
- variable ‘pixel_format’ set but not used [-Wunused-but-set-variable]
-  u32 pixel_format;
-      ^~~~~~~~~~~~
-
-Fixes: 9021c317b770 ("drm/imx: Add initial support for DCSS on iMX8MQ")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
-Reviewed-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20200911014414.4663-1-bobo.shaobowang@huawei.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Reviewed-by: Adam Guerin <adam.guerin@intel.com>
+Reviewed-by: Wojciech Ziemba <wojciech.ziemba@intel.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/imx/dcss/dcss-plane.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/crypto/qat/qat_common/qat_asym_algs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/imx/dcss/dcss-plane.c b/drivers/gpu/drm/imx/dcss/dcss-plane.c
-index f54087ac44d3..46a188dd02ad 100644
---- a/drivers/gpu/drm/imx/dcss/dcss-plane.c
-+++ b/drivers/gpu/drm/imx/dcss/dcss-plane.c
-@@ -268,7 +268,6 @@ static void dcss_plane_atomic_update(struct drm_plane *plane,
- 	struct dcss_plane *dcss_plane = to_dcss_plane(plane);
- 	struct dcss_dev *dcss = plane->dev->dev_private;
- 	struct drm_framebuffer *fb = state->fb;
--	u32 pixel_format;
- 	struct drm_crtc_state *crtc_state;
- 	bool modifiers_present;
- 	u32 src_w, src_h, dst_w, dst_h;
-@@ -279,7 +278,6 @@ static void dcss_plane_atomic_update(struct drm_plane *plane,
- 	if (!fb || !state->crtc || !state->visible)
- 		return;
- 
--	pixel_format = state->fb->format->format;
- 	crtc_state = state->crtc->state;
- 	modifiers_present = !!(fb->flags & DRM_MODE_FB_MODIFIERS);
- 
+diff --git a/drivers/crypto/qat/qat_common/qat_asym_algs.c b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+index 947eeff181b4..7173a2a0a484 100644
+--- a/drivers/crypto/qat/qat_common/qat_asym_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+@@ -235,6 +235,10 @@ static int qat_dh_compute_value(struct kpp_request *req)
+ 		req->dst_len = ctx->p_size;
+ 		return -EOVERFLOW;
+ 	}
++
++	if (req->src_len > ctx->p_size)
++		return -EINVAL;
++
+ 	memset(msg, '\0', sizeof(*msg));
+ 	ICP_QAT_FW_PKE_HDR_VALID_FLAG_SET(msg->pke_hdr,
+ 					  ICP_QAT_FW_COMN_REQ_FLAG_SET);
 -- 
 2.35.1
 

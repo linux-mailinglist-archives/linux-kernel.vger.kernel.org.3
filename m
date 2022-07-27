@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA61A582BD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19ABD582E51
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238997AbiG0Qi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        id S236894AbiG0RLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238729AbiG0Qhk (ORCPT
+        with ESMTP id S236728AbiG0RJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:37:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5414D80A;
-        Wed, 27 Jul 2022 09:28:21 -0700 (PDT)
+        Wed, 27 Jul 2022 13:09:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A682747A5;
+        Wed, 27 Jul 2022 09:41:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C430B61662;
-        Wed, 27 Jul 2022 16:27:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA94C433D6;
-        Wed, 27 Jul 2022 16:27:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 842AFB8200C;
+        Wed, 27 Jul 2022 16:41:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3913C43148;
+        Wed, 27 Jul 2022 16:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939277;
-        bh=o5uo9H+aQK80HuhfKYBHekHvHmapsv5dz6+d7wV1KCs=;
+        s=korg; t=1658940071;
+        bh=1pglrrwycW2z8U297nLs5MoMbieH2foR75zOwcWSSas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UY7SFRpt1ydRyZ8TedtGwRdOL4g4ZfP3SbmDcKKNEIpxqKhvelxvgrYQUjHjupd3r
-         7DkGoetRfO3IE+dXLN37xKsC+IylFBhYQYyocQH3quZKr0PmqxwOfQtHyozjjpZL7j
-         hAMn5Unkz0r3Sk7QG3RdMc62YfgXWRtZuTFuP6s0=
+        b=G7SdClG//wN0irUM0ACqgy4dJz4AMBmgsAX2imKSXf2mtGD3Jw6kJi1fCTeRdghdZ
+         jSZxF/b5/ojdKYL/rphueuptPXyGoHOOKKaOjv40lfZD8MEqlcTesYROeVCdxpFoAC
+         hhbyyGORNADG1bwYXAxHafb8qOjzNRKRND2MfQ0k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Snowberg <eric.snowberg@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        John Haxby <john.haxby@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.4 04/87] lockdown: Fix kexec lockdown bypass with ima policy
-Date:   Wed, 27 Jul 2022 18:09:57 +0200
-Message-Id: <20220727161009.182304198@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 094/201] tcp: Fix data-races around sysctl_tcp_reordering.
+Date:   Wed, 27 Jul 2022 18:09:58 +0200
+Message-Id: <20220727161031.653048318@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+References: <20220727161026.977588183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Snowberg <eric.snowberg@oracle.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 543ce63b664e2c2f9533d089a4664b559c3e6b5b upstream.
+[ Upstream commit 46778cd16e6a5ad1b2e3a91f6c057c907379418e ]
 
-The lockdown LSM is primarily used in conjunction with UEFI Secure Boot.
-This LSM may also be used on machines without UEFI.  It can also be
-enabled when UEFI Secure Boot is disabled.  One of lockdown's features
-is to prevent kexec from loading untrusted kernels.  Lockdown can be
-enabled through a bootparam or after the kernel has booted through
-securityfs.
+While reading sysctl_tcp_reordering, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-If IMA appraisal is used with the "ima_appraise=log" boot param,
-lockdown can be defeated with kexec on any machine when Secure Boot is
-disabled or unavailable.  IMA prevents setting "ima_appraise=log" from
-the boot param when Secure Boot is enabled, but this does not cover
-cases where lockdown is used without Secure Boot.
-
-To defeat lockdown, boot without Secure Boot and add ima_appraise=log to
-the kernel command line; then:
-
-  $ echo "integrity" > /sys/kernel/security/lockdown
-  $ echo "appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig" > \
-    /sys/kernel/security/ima/policy
-  $ kexec -ls unsigned-kernel
-
-Add a call to verify ima appraisal is set to "enforce" whenever lockdown
-is enabled.  This fixes CVE-2022-21505.
-
-Cc: stable@vger.kernel.org
-Fixes: 29d3c1c8dfe7 ("kexec: Allow kexec_file() with appropriate IMA policy when locked down")
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-Reviewed-by: John Haxby <john.haxby@oracle.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/integrity/ima/ima_policy.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ net/ipv4/tcp.c         |  2 +-
+ net/ipv4/tcp_input.c   | 10 +++++++---
+ net/ipv4/tcp_metrics.c |  3 ++-
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -1542,6 +1542,10 @@ bool ima_appraise_signature(enum kernel_
- 	if (id >= READING_MAX_ID)
- 		return false;
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index e22a61b2ba82..480fac19a074 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -447,7 +447,7 @@ void tcp_init_sock(struct sock *sk)
+ 	tp->snd_cwnd_clamp = ~0;
+ 	tp->mss_cache = TCP_MSS_DEFAULT;
  
-+	if (id == READING_KEXEC_IMAGE && !(ima_appraise & IMA_APPRAISE_ENFORCE)
-+	    && security_locked_down(LOCKDOWN_KEXEC))
-+		return false;
+-	tp->reordering = sock_net(sk)->ipv4.sysctl_tcp_reordering;
++	tp->reordering = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_reordering);
+ 	tcp_assign_congestion_control(sk);
+ 
+ 	tp->tsoffset = 0;
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 134e36f46e91..06802295e170 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -2131,6 +2131,7 @@ void tcp_enter_loss(struct sock *sk)
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	struct net *net = sock_net(sk);
+ 	bool new_recovery = icsk->icsk_ca_state < TCP_CA_Recovery;
++	u8 reordering;
+ 
+ 	tcp_timeout_mark_lost(sk);
+ 
+@@ -2151,10 +2152,12 @@ void tcp_enter_loss(struct sock *sk)
+ 	/* Timeout in disordered state after receiving substantial DUPACKs
+ 	 * suggests that the degree of reordering is over-estimated.
+ 	 */
++	reordering = READ_ONCE(net->ipv4.sysctl_tcp_reordering);
+ 	if (icsk->icsk_ca_state <= TCP_CA_Disorder &&
+-	    tp->sacked_out >= net->ipv4.sysctl_tcp_reordering)
++	    tp->sacked_out >= reordering)
+ 		tp->reordering = min_t(unsigned int, tp->reordering,
+-				       net->ipv4.sysctl_tcp_reordering);
++				       reordering);
 +
- 	func = read_idmap[id] ?: FILE_CHECK;
+ 	tcp_set_ca_state(sk, TCP_CA_Loss);
+ 	tp->high_seq = tp->snd_nxt;
+ 	tcp_ecn_queue_cwr(tp);
+@@ -3457,7 +3460,8 @@ static inline bool tcp_may_raise_cwnd(const struct sock *sk, const int flag)
+ 	 * new SACK or ECE mark may first advance cwnd here and later reduce
+ 	 * cwnd in tcp_fastretrans_alert() based on more states.
+ 	 */
+-	if (tcp_sk(sk)->reordering > sock_net(sk)->ipv4.sysctl_tcp_reordering)
++	if (tcp_sk(sk)->reordering >
++	    READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_reordering))
+ 		return flag & FLAG_FORWARD_PROGRESS;
  
- 	rcu_read_lock();
+ 	return flag & FLAG_DATA_ACKED;
+diff --git a/net/ipv4/tcp_metrics.c b/net/ipv4/tcp_metrics.c
+index 7029b0e98edb..a501150deaa3 100644
+--- a/net/ipv4/tcp_metrics.c
++++ b/net/ipv4/tcp_metrics.c
+@@ -428,7 +428,8 @@ void tcp_update_metrics(struct sock *sk)
+ 		if (!tcp_metric_locked(tm, TCP_METRIC_REORDERING)) {
+ 			val = tcp_metric_get(tm, TCP_METRIC_REORDERING);
+ 			if (val < tp->reordering &&
+-			    tp->reordering != net->ipv4.sysctl_tcp_reordering)
++			    tp->reordering !=
++			    READ_ONCE(net->ipv4.sysctl_tcp_reordering))
+ 				tcp_metric_set(tm, TCP_METRIC_REORDERING,
+ 					       tp->reordering);
+ 		}
+-- 
+2.35.1
+
 
 

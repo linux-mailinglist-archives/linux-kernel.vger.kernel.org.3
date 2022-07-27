@@ -2,125 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB08582964
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F67958298D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 17:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiG0PP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 11:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S232883AbiG0PYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 11:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiG0PP0 (ORCPT
+        with ESMTP id S233785AbiG0PYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:15:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39802316A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:15:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Jul 2022 11:24:13 -0400
+X-Greylist: delayed 528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Jul 2022 08:24:10 PDT
+Received: from serv108.segi.ulg.ac.be (serv108.segi.ulg.ac.be [139.165.32.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F8547B95;
+        Wed, 27 Jul 2022 08:24:09 -0700 (PDT)
+Received: from [31.133.137.93] (dhcp-895d.meeting.ietf.org [31.133.137.93])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E61D61904
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:15:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCAD4C433B5
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 15:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658934922;
-        bh=WSeVoPqh36Q6lc/inqTgm0AY0e9m4yxhb9yfDlnUI/Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R6rWLt+/yZd7RE/c0aFeQ21THpKeprus95goYPPJnCBVuhr+hN0WsSf061vuh5ePl
-         B5IOJd3rMGFJXFGy1VNL19pqkwaAnfPrQGaMwm5vXBTGapB/oGqBvVSHMMILLMOzHm
-         3Qqd4jAv9inDm3jhedOsn7k45Q+DFFmdVSZAebQzfJTYiBSfucL/kLUQOS0xPnY5XI
-         KhE1/JiQKeFKWB/G/79KhsBtE9B5UGn9mGIdQd23eSqByv7+xnByEY1oamdiSHrAir
-         OdLdjQDKT4mR/fLqtubm4RePxrp829Xf3QiB1vTKEojdrjrI3zXJPMZZqIobjlMwOI
-         CgPlZjUi/q4ug==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-10e615a36b0so1446979fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 08:15:22 -0700 (PDT)
-X-Gm-Message-State: AJIora82db/4D+HXXiv9xQLc+ty8dGBKXRs1kH6NiAUHhT63Q1AoYpDG
-        ugyzAnHDAmunr+rDZbU5WMGnwEjKgGdcYA5CJHo=
-X-Google-Smtp-Source: AGRyM1tjy6IE5hNBYjvy+u/SvmxrUKuq8Ilr3POazgyOQatfbanLbCxW1CfNLqkfknbQGCziV/CvYrGGatIsm+TxNfA=
-X-Received: by 2002:a05:6870:5b91:b0:108:374a:96b0 with SMTP id
- em17-20020a0568705b9100b00108374a96b0mr2371877oab.126.1658934921847; Wed, 27
- Jul 2022 08:15:21 -0700 (PDT)
+        by serv108.segi.ulg.ac.be (Postfix) with ESMTPSA id 76039200DF96;
+        Wed, 27 Jul 2022 17:15:15 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 serv108.segi.ulg.ac.be 76039200DF96
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uliege.be;
+        s=ulg20190529; t=1658934916;
+        bh=I848GIMG+rr1vSQNnER5ZP2Oz/37p0WtxAU9zeysw/I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kQ14gRdmvnxnQkRtSxXOGlkfGEkGd+/lwkS5LaE1/zcdeL5o9gJaxqmMh/gVTcY4U
+         msClq4fhT2aOmVaFcjnQNNkpwNcfkH+K2zE93PkazIdEnzeWsDOdFfKNltlJRTDEe7
+         jbfjoFIB2sZORqQUxpkDVP0Xb81zbBIY9Xlh3u0tQm8lsmGOUr0chyghO03PF1EXoN
+         l0PDUQNZXezrQoKNV9AkJZNc0qXxs9EKhGkH3ri+wSFKLc4NKrfQx0LpUUJ4eWAtxT
+         mc4Z4QShFTtAiq1lwPOzESKqVzlPWFIjzgMHikik5jLEqLXmsDr4ODjpvCsBMU5jdW
+         IstyOlvhX7aOg==
+Message-ID: <8810d090-3fcb-0e93-ce5d-e88abb421dba@uliege.be>
+Date:   Wed, 27 Jul 2022 11:15:13 -0400
 MIME-Version: 1.0
-References: <20220709084830.3124-1-jszhang@kernel.org>
-In-Reply-To: <20220709084830.3124-1-jszhang@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 27 Jul 2022 08:15:11 -0700
-X-Gmail-Original-Message-ID: <CAMj1kXEy7_zyDqQC_e9Rf1a8HuMBz_HbZOAP-WBzeeDVu8Mwmw@mail.gmail.com>
-Message-ID: <CAMj1kXEy7_zyDqQC_e9Rf1a8HuMBz_HbZOAP-WBzeeDVu8Mwmw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: save movk instructions in mov_q when the lower
- 16|32 bits are all zero
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] selftests: net: fix IOAM test skip return code
+Content-Language: en-US
+To:     Kleber Sacilotto de Souza <kleber.souza@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+References: <20220727093742.115882-1-kleber.souza@canonical.com>
+From:   Justin Iurman <justin.iurman@uliege.be>
+In-Reply-To: <20220727093742.115882-1-kleber.souza@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 9 Jul 2022 at 01:58, Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Currently mov_q is used to move a constant into a 64-bit register,
-> when the lower 16 or 32bits of the constant are all zero, the mov_q
-> emits one or two useless movk instructions. If the mov_q macro is used
-> in hot code path, we want to save the movk instructions as much as
-> possible. For example, when CONFIG_ARM64_MTE is 'Y' and
-> CONFIG_KASAN_HW_TAGS is 'N', the following code in __cpu_setup()
-> routine is the pontential optimization target:
->
->         /* set the TCR_EL1 bits */
->         mov_q   x10, TCR_MTE_FLAGS
->
-> Before the patch:
->         mov     x10, #0x10000000000000
->         movk    x10, #0x40, lsl #32
->         movk    x10, #0x0, lsl #16
->         movk    x10, #0x0
->
-> After the patch:
->         mov     x10, #0x10000000000000
->         movk    x10, #0x40, lsl #32
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-
-This is broken for constants that have 0xffff in the top 16 bits, as
-in that case, we will emit a MOVN/MOVK/MOVK sequence, and omitting the
-MOVKs will set the corresponding field to 0xffff not 0x0.
-
-
+On 7/27/22 11:37, Kleber Sacilotto de Souza wrote:
+> The ioam6.sh test script exits with an error code (1) when tests are
+> skipped due to lack of support from userspace/kernel or not enough
+> permissions. It should return the kselftests SKIP code instead.
+> 
+> Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
 > ---
->  arch/arm64/include/asm/assembler.h | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-> index 8c5a61aeaf8e..09f408424cae 100644
-> --- a/arch/arm64/include/asm/assembler.h
-> +++ b/arch/arm64/include/asm/assembler.h
-> @@ -568,9 +568,13 @@ alternative_endif
->         movz    \reg, :abs_g3:\val
->         movk    \reg, :abs_g2_nc:\val
->         .endif
-> +       .if ((((\val) >> 16) & 0xffff) != 0)
->         movk    \reg, :abs_g1_nc:\val
->         .endif
-> +       .endif
-> +       .if (((\val) & 0xffff) != 0)
->         movk    \reg, :abs_g0_nc:\val
-> +       .endif
->         .endm
->
->  /*
-> --
-> 2.34.1
->
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>   tools/testing/selftests/net/ioam6.sh | 12 +++++++-----
+>   1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/ioam6.sh b/tools/testing/selftests/net/ioam6.sh
+> index a2b9fad5a9a6..4ceb401da1bf 100755
+> --- a/tools/testing/selftests/net/ioam6.sh
+> +++ b/tools/testing/selftests/net/ioam6.sh
+> @@ -117,6 +117,8 @@
+>   #        | Schema Data         |                                     |
+>   #        +-----------------------------------------------------------+
+>   
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+>   
+>   ################################################################################
+>   #                                                                              #
+> @@ -211,7 +213,7 @@ check_kernel_compatibility()
+>       echo "SKIP: kernel version probably too old, missing ioam support"
+>       ip link del veth0 2>/dev/null || true
+>       ip netns del ioam-tmp-node || true
+> -    exit 1
+> +    exit $ksft_skip
+>     fi
+>   
+>     ip -netns ioam-tmp-node route add db02::/64 encap ioam6 mode inline \
+> @@ -227,7 +229,7 @@ check_kernel_compatibility()
+>            "without CONFIG_IPV6_IOAM6_LWTUNNEL?"
+>       ip link del veth0 2>/dev/null || true
+>       ip netns del ioam-tmp-node || true
+> -    exit 1
+> +    exit $ksft_skip
+>     fi
+>   
+>     ip link del veth0 2>/dev/null || true
+> @@ -752,20 +754,20 @@ nfailed=0
+>   if [ "$(id -u)" -ne 0 ]
+>   then
+>     echo "SKIP: Need root privileges"
+> -  exit 1
+> +  exit $ksft_skip
+>   fi
+>   
+>   if [ ! -x "$(command -v ip)" ]
+>   then
+>     echo "SKIP: Could not run test without ip tool"
+> -  exit 1
+> +  exit $ksft_skip
+>   fi
+>   
+>   ip ioam &>/dev/null
+>   if [ $? = 1 ]
+>   then
+>     echo "SKIP: iproute2 too old, missing ioam command"
+> -  exit 1
+> +  exit $ksft_skip
+>   fi
+>   
+>   check_kernel_compatibility
+
+LGTM, thanks.
+
+Reviewed-by: Justin Iurman <justin.iurman@uliege.be>

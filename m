@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE6C582C6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7377582D5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240325AbiG0Qpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S241018AbiG0Q42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240371AbiG0QoV (ORCPT
+        with ESMTP id S241137AbiG0QyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:44:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDA61C129;
-        Wed, 27 Jul 2022 09:31:03 -0700 (PDT)
+        Wed, 27 Jul 2022 12:54:25 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93CD4D4DF;
+        Wed, 27 Jul 2022 09:35:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5954061A24;
-        Wed, 27 Jul 2022 16:31:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 625A2C433C1;
-        Wed, 27 Jul 2022 16:31:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0EA64CE2301;
+        Wed, 27 Jul 2022 16:35:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7C0C433D6;
+        Wed, 27 Jul 2022 16:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939462;
-        bh=bFaCTNfL1lzbtcicnm51lbv1Qy3ofyJYMwpu0XKTRIA=;
+        s=korg; t=1658939735;
+        bh=F8ZiAE7YZXuQSsyBrtT3P/GZVlUNUGHQ+fXJZiNmSOw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cfY9T9El78GCFUx8WaiSuTt9OAkvtMlaZ+NMikXXS+TZELo+F1qjc4PsCdpNUMWZx
-         Q+odAOm2XG4pF9ueYEhY5mb+k+git07+Lga8szvSwwqj52Nb1ScgxOeWxd+kucNqKr
-         bSIV2xbT59QXZk3X87IbSfKcHCcJdr2lgujKk8ko=
+        b=b+9fIqaS3ium9F6SOTNmgYgOOhGngfbrJnO5ZZ+NuyO++l+GnMHRYr+wNt72ttvtv
+         JBeUGadJu7euQqHTNaCgrVu5BWDDQzNmA9/UHW4k/bH7pk1gYNjgACZR2UeocKeucx
+         F/2jL20YU48f5WWkSCWee9lk8w7fq0ZDi+dr+ff8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 5.4 77/87] Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 084/105] drm/imx/dcss: fix unused but set variable warnings
 Date:   Wed, 27 Jul 2022 18:11:10 +0200
-Message-Id: <20220727161012.193306231@linuxfoundation.org>
+Message-Id: <20220727161015.469788131@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,154 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Wang ShaoBo <bobo.shaobowang@huawei.com>
 
-commit 81be03e026dc0c16dc1c64e088b2a53b73caa895 upstream.
+[ Upstream commit 523be44c334bc4e4c014032738dc277b8909d009 ]
 
-This makes use of bt_skb_sendmmsg instead using memcpy_from_msg which
-is not considered safe to be used when lock_sock is held.
+Fix unused but set variable warning building with `make W=1`:
 
-Also make rfcomm_dlc_send handle skb with fragments and queue them all
-atomically.
+drivers/gpu/drm/imx/dcss/dcss-plane.c:270:6: warning:
+ variable ‘pixel_format’ set but not used [-Wunused-but-set-variable]
+  u32 pixel_format;
+      ^~~~~~~~~~~~
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9021c317b770 ("drm/imx: Add initial support for DCSS on iMX8MQ")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+Reviewed-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20200911014414.4663-1-bobo.shaobowang@huawei.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/rfcomm/core.c |   50 +++++++++++++++++++++++++++++++++++++-------
- net/bluetooth/rfcomm/sock.c |   50 ++++++++++----------------------------------
- 2 files changed, 55 insertions(+), 45 deletions(-)
+ drivers/gpu/drm/imx/dcss/dcss-plane.c | 2 --
+ 1 file changed, 2 deletions(-)
 
---- a/net/bluetooth/rfcomm/core.c
-+++ b/net/bluetooth/rfcomm/core.c
-@@ -553,22 +553,58 @@ struct rfcomm_dlc *rfcomm_dlc_exists(bda
- 	return dlc;
- }
+diff --git a/drivers/gpu/drm/imx/dcss/dcss-plane.c b/drivers/gpu/drm/imx/dcss/dcss-plane.c
+index f54087ac44d3..46a188dd02ad 100644
+--- a/drivers/gpu/drm/imx/dcss/dcss-plane.c
++++ b/drivers/gpu/drm/imx/dcss/dcss-plane.c
+@@ -268,7 +268,6 @@ static void dcss_plane_atomic_update(struct drm_plane *plane,
+ 	struct dcss_plane *dcss_plane = to_dcss_plane(plane);
+ 	struct dcss_dev *dcss = plane->dev->dev_private;
+ 	struct drm_framebuffer *fb = state->fb;
+-	u32 pixel_format;
+ 	struct drm_crtc_state *crtc_state;
+ 	bool modifiers_present;
+ 	u32 src_w, src_h, dst_w, dst_h;
+@@ -279,7 +278,6 @@ static void dcss_plane_atomic_update(struct drm_plane *plane,
+ 	if (!fb || !state->crtc || !state->visible)
+ 		return;
  
-+static int rfcomm_dlc_send_frag(struct rfcomm_dlc *d, struct sk_buff *frag)
-+{
-+	int len = frag->len;
-+
-+	BT_DBG("dlc %p mtu %d len %d", d, d->mtu, len);
-+
-+	if (len > d->mtu)
-+		return -EINVAL;
-+
-+	rfcomm_make_uih(frag, d->addr);
-+	__skb_queue_tail(&d->tx_queue, frag);
-+
-+	return len;
-+}
-+
- int rfcomm_dlc_send(struct rfcomm_dlc *d, struct sk_buff *skb)
- {
--	int len = skb->len;
-+	unsigned long flags;
-+	struct sk_buff *frag, *next;
-+	int len;
+-	pixel_format = state->fb->format->format;
+ 	crtc_state = state->crtc->state;
+ 	modifiers_present = !!(fb->flags & DRM_MODE_FB_MODIFIERS);
  
- 	if (d->state != BT_CONNECTED)
- 		return -ENOTCONN;
- 
--	BT_DBG("dlc %p mtu %d len %d", d, d->mtu, len);
-+	frag = skb_shinfo(skb)->frag_list;
-+	skb_shinfo(skb)->frag_list = NULL;
- 
--	if (len > d->mtu)
--		return -EINVAL;
-+	/* Queue all fragments atomically. */
-+	spin_lock_irqsave(&d->tx_queue.lock, flags);
-+
-+	len = rfcomm_dlc_send_frag(d, skb);
-+	if (len < 0 || !frag)
-+		goto unlock;
-+
-+	for (; frag; frag = next) {
-+		int ret;
-+
-+		next = frag->next;
-+
-+		ret = rfcomm_dlc_send_frag(d, frag);
-+		if (ret < 0) {
-+			kfree_skb(frag);
-+			goto unlock;
-+		}
-+
-+		len += ret;
-+	}
- 
--	rfcomm_make_uih(skb, d->addr);
--	skb_queue_tail(&d->tx_queue, skb);
-+unlock:
-+	spin_unlock_irqrestore(&d->tx_queue.lock, flags);
- 
--	if (!test_bit(RFCOMM_TX_THROTTLED, &d->flags))
-+	if (len > 0 && !test_bit(RFCOMM_TX_THROTTLED, &d->flags))
- 		rfcomm_schedule();
- 	return len;
- }
---- a/net/bluetooth/rfcomm/sock.c
-+++ b/net/bluetooth/rfcomm/sock.c
-@@ -578,47 +578,21 @@ static int rfcomm_sock_sendmsg(struct so
- 	lock_sock(sk);
- 
- 	sent = bt_sock_wait_ready(sk, msg->msg_flags);
--	if (sent)
--		goto done;
--
--	while (len) {
--		size_t size = min_t(size_t, len, d->mtu);
--		int err;
--
--		skb = sock_alloc_send_skb(sk, size + RFCOMM_SKB_RESERVE,
--				msg->msg_flags & MSG_DONTWAIT, &err);
--		if (!skb) {
--			if (sent == 0)
--				sent = err;
--			break;
--		}
--		skb_reserve(skb, RFCOMM_SKB_HEAD_RESERVE);
--
--		err = memcpy_from_msg(skb_put(skb, size), msg, size);
--		if (err) {
--			kfree_skb(skb);
--			if (sent == 0)
--				sent = err;
--			break;
--		}
--
--		skb->priority = sk->sk_priority;
--
--		err = rfcomm_dlc_send(d, skb);
--		if (err < 0) {
--			kfree_skb(skb);
--			if (sent == 0)
--				sent = err;
--			break;
--		}
--
--		sent += size;
--		len  -= size;
--	}
- 
--done:
- 	release_sock(sk);
- 
-+	if (sent)
-+		return sent;
-+
-+	skb = bt_skb_sendmmsg(sk, msg, len, d->mtu, RFCOMM_SKB_HEAD_RESERVE,
-+			      RFCOMM_SKB_TAIL_RESERVE);
-+	if (IS_ERR_OR_NULL(skb))
-+		return PTR_ERR(skb);
-+
-+	sent = rfcomm_dlc_send(d, skb);
-+	if (sent < 0)
-+		kfree_skb(skb);
-+
- 	return sent;
- }
- 
+-- 
+2.35.1
+
 
 

@@ -2,82 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8460581CC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5DE581CCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240048AbiG0A0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 20:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S239963AbiG0Aij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 20:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiG0A0E (ORCPT
+        with ESMTP id S232498AbiG0Aih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 20:26:04 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB7C32EEA;
-        Tue, 26 Jul 2022 17:26:03 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id c139so14696874pfc.2;
-        Tue, 26 Jul 2022 17:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jf6QAz2nVfnBI0fnKRxxMlR+59XYLFAdw/tdsgL99ag=;
-        b=CKBLT5/jFohLTUaBLrLSOgxvFUVtsdpSeZMrFHRS/ksGOHyZ1YaHWlBLkv8h2TEQbE
-         ZWIePDcyUiZ6MD77U5r2QS+80VwTBH9CEknw44hh2qb8TmjSpponEIz87b5GkXRnJ2Tg
-         g8yqRXnjKK0kL6ohjhee9D44xm/oEbXXpCMpcJc2HcNNhMl348Laz7Hh0zhGU0IDOZxS
-         CKtxOzc+Nyfxh78sxxD+1MU/iXJR185Sj1m5PoMm8lNRNW8T2OD+GIizRfm/vXh8aStu
-         0WIlxaU3e1OlOGhWZHlPvo8o5BuPdLfodMQBXNCiOYM7wKIGHUX1XvgrQxiS1A2JmNva
-         4eIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jf6QAz2nVfnBI0fnKRxxMlR+59XYLFAdw/tdsgL99ag=;
-        b=aHcpkkfQzW0kuHYACUEEtERHGVy+/nRyZcmrgiUsNy+ksuuDiPmSbjPzjA3eJ6Oxff
-         o/DhJBb7nNOjQRDf4w6xozl7kgI329wizrqgXn34NWcOHtq2nTrcNOTyvuYN5vWcj/Em
-         q2RFmj4SovybSmJSgjcdpLmSyYQL5+aUvbj3h6ri68CvXFKIgo5+C9S+ZXY4PVSHtxwg
-         TQ8ZL5Nw91/WDOfBBRXReNg2mD24Am1nhEx7ITqjHs2QhbgUdHmhphxcc4WVM3pluDum
-         cI791p5RCoHUGZJqOnCjDNYm5m1pABAUoSL4FEI8RxFe/CRbvz6LjtI1CCCu49tdy+wg
-         3r1g==
-X-Gm-Message-State: AJIora8lgBQuG9JyDrnEvZ8oCU/IEMS6Otn56yZ6XAK+gkOlO4UZmYIh
-        d0YZ+shRbcxOI+gfXqtgSHs=
-X-Google-Smtp-Source: AGRyM1shjcgFeFy9LM7LyrQ3tclfQT3iFtGy9QNvp9vQtiC+WiPem4Oe4Rr08rs9TIsYB7gAsSwKPw==
-X-Received: by 2002:a05:6a00:1a86:b0:52a:d419:9552 with SMTP id e6-20020a056a001a8600b0052ad4199552mr19708455pfv.70.1658881562671;
-        Tue, 26 Jul 2022 17:26:02 -0700 (PDT)
-Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
-        by smtp.gmail.com with ESMTPSA id d10-20020a170902ceca00b0016d5e4d29f8sm3898287plg.9.2022.07.26.17.26.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 17:26:01 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 17:25:59 -0700
-From:   Andrei Vagin <avagin@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Andrei Vagin <avagin@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jianfeng Tan <henry.tjf@antfin.com>,
-        Adin Scannell <ascannell@google.com>,
-        Konstantin Bogomolov <bogomolov@google.com>,
-        Etienne Perot <eperot@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 0/5] KVM/x86: add a new hypercall to execute host system
-Message-ID: <YuCGF/7sOPmSoFSa@gmail.com>
-References: <20220722230241.1944655-1-avagin@google.com>
- <Yts1tUfPxdPH5XGs@google.com>
- <CAEWA0a4hrRb5HYLqa1Q47=guY6TLsWSJ_zxNjOXXV2jCjUekUA@mail.gmail.com>
- <YuAD6qY+F2nuGm62@google.com>
+        Tue, 26 Jul 2022 20:38:37 -0400
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A85F3AB27;
+        Tue, 26 Jul 2022 17:38:36 -0700 (PDT)
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1oGUss-0001dG-Cc;
+        Tue, 26 Jul 2022 20:26:42 -0400
+Message-ID: <924f1cf4b93ff3e4ff217203bd88448dfa4c0f85.camel@surriel.com>
+Subject: Re: [PATCH v3] livepatch: fix race between fork and
+ klp_reverse_transition
+From:   Rik van Riel <riel@surriel.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, kernel-team@fb.com,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Breno Leitao <leitao@debian.org>
+Date:   Tue, 26 Jul 2022 20:26:41 -0400
+In-Reply-To: <20220727001040.vlqnnb4a3um46746@treble>
+References: <20220720121023.043738bb@imladris.surriel.com>
+         <YtrCqMLUqJlcoqIo@alley> <20220722150106.683f3704@imladris.surriel.com>
+         <Yt6bZo5ztnVSjLLC@alley> <20220725094919.52bcde19@imladris.surriel.com>
+         <20220727001040.vlqnnb4a3um46746@treble>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-TLgTqhyEYwEQwuZaJg5g"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <YuAD6qY+F2nuGm62@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,123 +52,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 03:10:34PM +0000, Sean Christopherson wrote:
-> On Tue, Jul 26, 2022, Andrei Vagin wrote:
-> > On Fri, Jul 22, 2022 at 4:41 PM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > +x86 maintainers, patch 1 most definitely needs acceptance from folks beyond KVM.
-> > >
-> > > On Fri, Jul 22, 2022, Andrei Vagin wrote:
-> > > > Another option is the KVM platform. In this case, the Sentry (gVisor
-> > > > kernel) can run in a guest ring0 and create/manage multiple address
-> > > > spaces. Its performance is much better than the ptrace one, but it is
-> > > > still not great compared with the native performance. This change
-> > > > optimizes the most critical part, which is the syscall overhead.
-> > >
-> > > What exactly is the source of the syscall overhead,
-> > 
-> > Here are perf traces for two cases: when "guest" syscalls are executed via
-> > hypercalls and when syscalls are executed by the user-space VMM:
-> > https://gist.github.com/avagin/f50a6d569440c9ae382281448c187f4e
-> > 
-> > And here are two tests that I use to collect these traces:
-> > https://github.com/avagin/linux-task-diag/commit/4e19c7007bec6a15645025c337f2e85689b81f99
-> > 
-> > If we compare these traces, we can find that in the second case, we spend extra
-> > time in vmx_prepare_switch_to_guest, fpu_swap_kvm_fpstate, vcpu_put,
-> > syscall_exit_to_user_mode.
-> 
-> So of those, I think the only path a robust implementation can actually avoid,
-> without significantly whittling down the allowed set of syscalls, is
-> syscall_exit_to_user_mode().
-> 
-> The bulk of vcpu_put() is vmx_prepare_switch_to_host(), and KVM needs to run
-> through that before calling out of KVM.  E.g. prctrl(ARCH_GET_GS) will read the
-> wrong GS.base if MSR_KERNEL_GS_BASE isn't restored.  And that necessitates
-> calling vmx_prepare_switch_to_guest() when resuming the vCPU.
-> 
-> FPU state, i.e. fpu_swap_kvm_fpstate() is likely a similar story, there's bound
-> to be a syscall that accesses user FPU state and will do the wrong thing if guest
-> state is loaded.
-> 
-> For gVisor, that's all presumably a non-issue because it uses a small set of
-> syscalls (or has guest==host state?), but for a common KVM feature it's problematic.
 
+--=-TLgTqhyEYwEQwuZaJg5g
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I think the number of system calls that touch a state that is
-intersected with KVM is very limited and we can blocklist all of them.
-Another option is to have an allow list of system calls to be sure that
-we don't miss anything.
+On Tue, 2022-07-26 at 17:10 -0700, Josh Poimboeuf wrote:
+> On Mon, Jul 25, 2022 at 09:49:19AM -0400, Rik van Riel wrote:
+> > When a KLP fails to apply, klp_reverse_transition will clear the
+> > TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
+> > which are not on the task list yet.
+>=20
+> This paragraph and $SUBJECT both talk about a reverse transition.=C2=A0
+> Isn't
+> it also possible to race on a normal (forward) transition?
 
-> 
-> > > and what alternatives have been explored?  Making arbitrary syscalls from
-> > > within KVM is mildly terrifying.
-> > 
-> > "mildly terrifying" is a good sentence in this case:). If I were in your place,
-> > I would think about it similarly.
-> > 
-> > I understand these concerns about calling syscalls from the KVM code, and this
-> > is why I hide this feature under a separate capability that can be enabled
-> > explicitly.
-> > 
-> > We can think about restricting the list of system calls that this hypercall can
-> > execute. In the user-space changes for gVisor, we have a list of system calls
-> > that are not executed via this hypercall.
-> 
-> Can you provide that list?
+I don't know whether the race is also possible on a forward
+transition.  If the parent task has transitioned, will
+the child have, as well, by the time we reach the end of fork?
 
-Here is the list that are not executed via this hypercall:
-clone, exit, exit_group, ioctl, rt_sigreturn, mmap, arch_prctl,
-sigprocmask.
+I suppose the only way the parent task can transition while
+inside fork would be if none of the functions in its stack
+need to be transitioned, and at that point the child process
+would automatically be safe, too?
 
-And here is the list of all system calls that we allow for the Sentry:
-clock_gettime, close, dup, dup3, epoll_create1, epoll_ctl, epoll_pwait,
-eventfd2, exit, exit_group, fallocate, fchmod, fcntl, fstat, fsync,
-ftruncate, futex, getcpu, getpid, getrandom, getsockopt, gettid,
-gettimeofday, ioctl, lseek, madvise, membarrier, mincore, mmap,
-mprotect, munmap, nanosleep, ppol, pread64, preadv, preadv2, pwrite64,
-pwritev, pwritev2, read, recvmsg, recvmmsg, sendmsg, sendmmsg,
-restart_syscall, rt_sigaction, rt_sigprocmask, rt_sigreturn,
-sched_yield, settimer, shutdown, sigaltstack, statx, sync_file_range,
-tee, timer_create, timer_delete, timer_settime, tgkill, utimensat,
-write, writev.
+That would make copying the KLP transition state from parent to
+child safe on a forward transition, too.
 
-> 
-> > But it has downsides:
-> > * Each sentry system call trigger the full exit to hr3.
-> > * Each vmenter/vmexit requires to trigger a signal but it is expensive.
-> 
-> Can you explain this one?  I didn't quite follow what this is referring to.
+Am I overlooking anything?
 
-In my message, there was the explanation of how the gVisor KVM platform
-works right now, and here are two points why it is slow.
+However, we have only observed this warning on reverse transitions
+for some reason.
 
-Each time when the Sentry triggers a system call, it has to switch to
-the host ring3.
+> > Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
+> > parent to the child early on, in dup_task_struct ->
+> > setup_thread_stack.
+> >=20
+> > Much later, klp_copy_process will set child->patch_state to match
+> > that of the parent.
+> >=20
+> > However, the parent's patch_state may have been changed by KLP
+> > loading
+> > or unloading since it was initially copied over into the child.
+> >=20
+> > This results in the KLP code occasionally hitting this warning in
+> > klp_complete_transition:
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for_each_process_thread(g, t=
+ask) {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 WARN_ON_ONCE(test_tsk_thread_flag(task,
+> > TIF_PATCH_PENDING));
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 task->patch_state =3D KLP_UNDEFINED;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> >=20
+> > This patch will set, or clear, the TIF_PATCH_PENDING flag in the
+> > child
+> > process depending on whether or not it is needed at the time
+> > klp_copy_process is called, at a point in copy_process where the
+> > tasklist_lock is held exclusively, preventing races with the KLP
+> > code.
+>=20
+> Use imperative language, i.e. no "This patch".=C2=A0 See
+> Documentation/process/submitting-patches.rst
+> >=20
 
+Will do. I'll send a v4 tomorrow.
 
-When the Sentry wants to switch to the guest ring0, it triggers a signal to
-fall in a signal handler. There, we have a sigcontext that we use to get
-the current thread state to resume execution in gr0, and then when the
-Sentry needs to switch back to hr3, we set the sentry state from gr0 to
-sigcontext and returns from the signal handler.
+> > The KLP code does have a few places where the state is changed
+> > without the tasklist_lock held, but those should not cause
+> > problems because klp_update_patch_state(current) cannot be
+> > called while the current task is in the middle of fork,
+> > klp_check_and_switch_task() which is called under the pi_lock,
+> > which prevents rescheduling, and manipulation of the patch
+> > state of idle tasks, which do not fork.
+> >=20
+> > This should prevent this warning from triggering again in the
+> > future.
+> >=20
+>=20
+> Fixes: d83a7cb375ee ("livepatch: change to a per-task consistency
+> model")
+>=20
+> > Signed-off-by: Rik van Riel <riel@surriel.com>
+> > Reported-by: Breno Leitao <leitao@debian.org>
+> > Reviewed-by: Petr Mladek <pmladek@suse.com>
+>=20
+> With the above minor things fixed:
+>=20
+> Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+>=20
 
-> 
-> > * It doesn't allow to support Confidential Computing (SEV-ES/SGX). The Sentry
-> >   has to be fully enclosed in a VM to be able to support these technologies.
-> 
-> Speaking of SGX, this reminds me a lot of Graphene, SCONEs, etc..., which IIRC
-> tackled the "syscalls are crazy expensive" problem by using a message queue and
-> a dedicated task outside of the enclave to handle syscalls.  Would something like
-> that work, or is having to burn a pCPU (or more) to handle syscalls in the host a
-> non-starter?
+--=20
+All Rights Reversed.
 
-Context-switching is expensive... There was a few attempts to implement
-synchronous context-switching ([1], [2]) that can help in this case,
-but even with this sort of optimizations, it is too expensive.
+--=-TLgTqhyEYwEQwuZaJg5g
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-1. https://lwn.net/Articles/824409/
-2. https://www.spinics.net/lists/linux-api/msg50417.html
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Andrei
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmLghkEACgkQznnekoTE
+3oN07ggAmmLQ3eP1Up7hCtc3DjHHadiJ4XzQx3ZAXJnyNtjj7gNdHG/F6naSSrWD
+Tcqz7ArnUyaDldVKWssa4iRooRQwqdi+0IXDow4Ca1sfbvusSS3/SeofR9QcaDT7
+swok1FA82hPY+Vi8LixgDILRMTw3tPVIGihlN/isPhe07LU+KxXwuIDd7pdg7qOk
+NZLlGLaywOzqqHegFrW1vcwLjTq4QwEIIGDLwiJ7K4+U1r9s2hnMs0+74H3BafvD
+Gznj2iOasGKTKooFof0waWEPPD+z9sBuVAPLb0RAf9Q4KlAEOdRrnjpyCAfqiw7O
+mhq0eXrcvGAsIY2PvJ6j1FJ8nh7ugg==
+=e8zs
+-----END PGP SIGNATURE-----
+
+--=-TLgTqhyEYwEQwuZaJg5g--

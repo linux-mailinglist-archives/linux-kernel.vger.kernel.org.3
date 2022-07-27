@@ -2,133 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16595827AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4D55827B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbiG0N12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
+        id S233826AbiG0N32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbiG0N11 (ORCPT
+        with ESMTP id S233358AbiG0N3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:27:27 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDAC27CFB
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:27:26 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id k1-20020a056e021a8100b002dd46be73fbso6077025ilv.6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:27:26 -0700 (PDT)
+        Wed, 27 Jul 2022 09:29:21 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D29724BD0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:29:20 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z18so9052297edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IZC9NEhf05++/nyq+KA7I22wmZBHbNz5U6HDcm4S/Gg=;
+        b=QUUOmuOPdKZaVDwP46yrsLjlhkNgx236+kyN/pzXLVNcxS/NNPOaK65eDooxwLXVTM
+         7xZlGcil5YXcGY2dQxkP9AOJCuJWaniWL+0O0w4JQqZv26KEttY1pQEwaUdLFlj5+rET
+         zt8oSojN1OGpy+0kYuNE3JOp1opZbgdI5BdAQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=/OsG81id+thzUuw3/IQ3pX805IzReT+1axT06GNhNfI=;
-        b=1UGJLKL71S+itbPZYYvgohFDZeA6cj+ZSGevBNNzqJU2O4D2qWrbI/r70S6o4Ej7m9
-         CHDOvlbCSX2Uqn5/dSZSxqpLmRp6qRGRHZllk4eKUHM0Skmh6FunIi4c4JjNWJg7esZJ
-         /tqCB6SOQ5L+PJASXLycmHGI1x6ZgY++7bjqzF6Z9NbQOBMaCdbshEzNANaEc1av1OHQ
-         59f0Jo+bPLySxTHVWT5SOQA4pSDmZo/WbYl/Xo73JUA/FtXkdrqmCeam7/GggZx9TiXb
-         z5KxvaoZrWLscglpMVBlfj+Yah+XQama87BlYDTh++kMUaYkBXGkM50O5N4JEgsOZ8st
-         YT2g==
-X-Gm-Message-State: AJIora9ZSVlgSANvz/W6wGdSfJWylFRrhPxEQYahX4vQND+weT0ftLh3
-        KIRYOn/4SI69i4lGmvMLe9HqDlaPLTQ7Bv57S/tY9mTBJeR6
-X-Google-Smtp-Source: AGRyM1vcDr5E/VcbeSSrOxrfQ9EAAueP0+rQF9ND8vTZweD2N7iLVxHEU8dKhBSn489SZE9J2y08+qOo1/skuLR+PeekVA+oB9QA
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IZC9NEhf05++/nyq+KA7I22wmZBHbNz5U6HDcm4S/Gg=;
+        b=HcGlENP/vd7Lsaiy9v3e7bD0IfE7fKFWu9D+ujnt4/iIGOitNke4s90w3y6xmHS0qs
+         VZS9enxv9NSTKE19z4CBVnYHUpsAyrlx623kaqLYizIqoX+MtTcv6yjgxahMioQ5TNT8
+         lL356+Ev1e6qPz/GDJOjS0mMVDA5qUfm5THid/I1C0z4vPwVnQaatjiqzhHrNoH+/tmI
+         NiaRTzW73wlWGFn9IGuyowQxoWuKRWAs7bhEem/ia/e5l9eMG4n8Ao5CyXGaYvNc3HAa
+         mkieVwTsPh8AKJpQCmwrR+xtYt9+PV3Y/zKWV3OynxMPqm+HCvL2KXo0PJH61igGfdwB
+         yNwg==
+X-Gm-Message-State: AJIora8kgFhDsrArLJNem9nDKpcgO0D+7xpLOVac/7M3uhRbnnt6724f
+        EOPvWCLH4jhLod9hGlnFHiJI79KDRvUU0AeUiDy9Sa2YbbtulQ==
+X-Google-Smtp-Source: AGRyM1sR1qNmR47DsRJObhi68nvBusP+p+yzQluzwv7oyanNwWa7tQ/pkPkv8OVezPa2wPPBbBHcLYo2moJEHGpHtEc=
+X-Received: by 2002:a05:6402:4247:b0:43c:12a7:6bf4 with SMTP id
+ g7-20020a056402424700b0043c12a76bf4mr13170002edb.374.1658928559169; Wed, 27
+ Jul 2022 06:29:19 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:395:b0:67b:d0c6:50cb with SMTP id
- f21-20020a056602039500b0067bd0c650cbmr8150634iov.110.1658928445836; Wed, 27
- Jul 2022 06:27:25 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 06:27:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b8d26905e4c96064@google.com>
-Subject: [syzbot] net-next test error: WARNING: ODEBUG bug in mgmt_index_removed
-From:   syzbot <syzbot+e6fedd64b4d23cc9185c@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+References: <20220713073217.2663078-1-williamsukatube@163.com>
+In-Reply-To: <20220713073217.2663078-1-williamsukatube@163.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 27 Jul 2022 15:29:07 +0200
+Message-ID: <CAJfpegt_pYg5ypOP+Epd5s=jg5K-g_drTPyOSAdy61d_-0PPiA@mail.gmail.com>
+Subject: Re: [PATCH] ovl: Fix a potential memory leak for kstrdup()
+To:     williamsukatube@163.com
+Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 13 Jul 2022 at 09:33, <williamsukatube@163.com> wrote:
+>
+> From: William Dean <williamsukatube@gmail.com>
+>
+> kfree() is missing on an error path to free the memory
+> allocated by kstrdup():
+>
+> config->redirect_mode = kstrdup(ovl_redirect_mode_def(), GFP_KERNEL);
+>
+> So it is better to free it via kfree(config->redirect_mode).
 
-syzbot found the following issue on:
+Will be freed in ovl_free_fs().
 
-HEAD commit:    5ffcba41de55 Merge branch 'smc-updates'
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ca0752080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c904647431ba900b
-dashboard link: https://syzkaller.appspot.com/bug?extid=e6fedd64b4d23cc9185c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e6fedd64b4d23cc9185c@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-ODEBUG: assert_init not available (active state 0) object type: timer_list hint: 0x0
-WARNING: CPU: 0 PID: 3610 at lib/debugobjects.c:502 debug_print_object+0x16e/0x250 lib/debugobjects.c:502
-Modules linked in:
-CPU: 0 PID: 3610 Comm: syz-executor.0 Not tainted 5.19.0-rc7-syzkaller-01937-g5ffcba41de55 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:502
-Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 60 88 48 8a 4c 89 ee 48 c7 c7 40 7c 48 8a e8 fe e8 36 05 <0f> 0b 83 05 75 b3 db 09 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
-RSP: 0018:ffffc9000427f6e0 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000000000
-RDX: ffff88807d233b00 RSI: ffffffff8160d9c8 RDI: fffff5200084fece
-RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: ffffffff89eed480
-R13: ffffffff8a4882c0 R14: ffffffff8169b640 R15: 1ffff9200084fee7
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c00074d000 CR3: 000000001cceb000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- debug_object_assert_init lib/debugobjects.c:892 [inline]
- debug_object_assert_init+0x1f4/0x2e0 lib/debugobjects.c:863
- debug_timer_assert_init kernel/time/timer.c:792 [inline]
- debug_assert_init kernel/time/timer.c:837 [inline]
- del_timer+0x6d/0x110 kernel/time/timer.c:1257
- try_to_grab_pending+0x6d/0xd0 kernel/workqueue.c:1275
- __cancel_work_timer+0xa6/0x570 kernel/workqueue.c:3121
- mgmt_index_removed+0x187/0x2e0 net/bluetooth/mgmt.c:8940
- hci_unregister_dev+0x467/0x550 net/bluetooth/hci_core.c:2688
- vhci_release+0x7c/0xf0 drivers/bluetooth/hci_vhci.c:568
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xade/0x29d0 kernel/exit.c:795
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- get_signal+0x2542/0x2600 kernel/signal.c:2857
- arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f443528a677
-Code: Unable to access opcode bytes at RIP 0x7f443528a64d.
-RSP: 002b:00007ffc080f4ed8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: ffffffffffffffea RBX: 0000000000000003 RCX: 00007f443528a677
-RDX: 00007ffc080f4fac RSI: 000000000000000a RDI: 00007ffc080f4fa0
-RBP: 00007ffc080f4fa0 R08: 00000000ffffffff R09: 00007ffc080f4d70
-R10: 0000555556dcc853 R11: 0000000000000246 R12: 00007f44352e22a6
-R13: 00007ffc080f6060 R14: 0000555556dcc810 R15: 00007ffc080f60a0
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks,
+Miklos

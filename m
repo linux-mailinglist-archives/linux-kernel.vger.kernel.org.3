@@ -2,66 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC0858209E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E355820A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiG0HAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
+        id S229537AbiG0HET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiG0G7q (ORCPT
+        with ESMTP id S229447AbiG0HEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 02:59:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BEA3AE7D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 23:59:42 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lt4LB12crzWfnZ;
-        Wed, 27 Jul 2022 14:55:46 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Jul 2022 14:59:34 +0800
-Subject: Re: [PATCH v2] mm: memory-failure: convert to pr_fmt()
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220727032511.145506-1-wangkefeng.wang@huawei.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <3daa0012-c802-e0b7-e7a5-faa2dfb7c142@huawei.com>
-Date:   Wed, 27 Jul 2022 14:59:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20220727032511.145506-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+        Wed, 27 Jul 2022 03:04:15 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B871C904
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:04:14 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220727070411epoutp04204b99bf254240ab343593dccdd2ce3e~Fnbgk7wf-1980619806epoutp04A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:04:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220727070411epoutp04204b99bf254240ab343593dccdd2ce3e~Fnbgk7wf-1980619806epoutp04A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1658905452;
+        bh=LXR6+O3eDWHctBCVff2wddft4H7hjY69vVRu/Mki4Uk=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=QYkW1oEC1f49N7wxkZz+zBS5+Mz2yeg6VKgswL8Ja2kaGeaFn1/zPEbtryg2Gmi44
+         /qHvhsGIFrZiFIi+2MlvZmoA1sq1IgTLtuzb99uDPyTdBFt6OUNc+sP2YoSwphMzGT
+         i/Xfm13WV6g3nf+FDjA7nNNS2CktWq0/EdT0uORo=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220727070411epcas2p2bf17ee8cd775ee25c08011dd302627c6~FnbgLo7RU0217702177epcas2p2J;
+        Wed, 27 Jul 2022 07:04:11 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lt4Wt6znRz4x9Q1; Wed, 27 Jul
+        2022 07:04:10 +0000 (GMT)
+X-AuditID: b6c32a45-471ff700000025c2-c9-62e0e36a7e60
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        ED.0B.09666.A63E0E26; Wed, 27 Jul 2022 16:04:10 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v4 1/7] scsi: ufs: wb: Move ufshcd_is_wb_allowed() to callee
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220727070410epcms2p5206785e4d960b32dcbb6729710dab535@epcms2p5>
+Date:   Wed, 27 Jul 2022 16:04:10 +0900
+X-CMS-MailID: 20220727070410epcms2p5206785e4d960b32dcbb6729710dab535
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmuW7W4wdJBh+eWVicfLKGzeLBvG1s
+        Fi9/XmWzOPiwk8Vi2oefzBYvD2laLLqxjcni8q45bBbd13ewWSw//o/Jgcvj8hVvj8V7XjJ5
+        TFh0gNHj+/oONo+PT2+xePRtWcXo8XmTnEf7gW6mAI6obJuM1MSU1CKF1Lzk/JTMvHRbJe/g
+        eOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoBOVFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnF
+        JbZKqQUpOQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZ/9+9YS5o56k4+nIdawNjI1cXIyeH
+        hICJxNp1O5m7GLk4hAR2MEq0X5vB3sXIwcErICjxd4cwSI2wgI/EoUWb2UFsIQEliXNrZjGC
+        lAgLGEjc6jUHCbMJ6En8XDKDDWSMiMBZZomFD6cwQcznlZjR/pQFwpaW2L58KyOIzSngJ/Fq
+        yl5GiLiGxI9lvcwQtqjEzdVv2WHs98fmQ9WISLTeOwtVIyjx4OduqLikxKFDX9lA7pEQyJfY
+        cCAQIlwj8Xb5AagSfYlrHRvBTuAV8JU4fPEnG4jNIqAqcW/2K6gaF4nN61rAbGYBeYntb+cw
+        g4xkFtCUWL9LH2K6ssSRWywwTzVs/M2OzmYW4JPoOPwXLr5j3hMmiFY1iUVNRhBhGYmvh+ez
+        T2BUmoUI5VlI1s5CWLuAkXkVo1hqQXFuemqxUYEhPGKT83M3MYJTqpbrDsbJbz/oHWJk4mA8
+        xCjBwawkwpsQfT9JiDclsbIqtSg/vqg0J7X4EKMp0MMTmaVEk/OBST2vJN7QxNLAxMzM0NzI
+        1MBcSZzXK2VDopBAemJJanZqakFqEUwfEwenVAOTEu+Sre+sPI+fv5xv67U5zsp1hWdm6YHp
+        7zQj1R4s6WJyLv4pf6FysZP1Z7uaFbz5lQwlsUuyE/qN/iUETJ8o/aNB0TJU0PWcPkfuQTFh
+        V0bm9LSJ8h1X922I/PdPQPZVQqV5w3GbO0FzuhrXyG7X/Hbm0anZmbOz16y9wHs6NuWsXCrb
+        6+kz9324fCSwZP6GBTHMlamZ72cHTF17L+5OWZuojKxZ8o2VHfHZcesslUJfhc9Yquz4b2q1
+        0Q7DXytDlxf0zeQRXRMfMKHbOs9p8qJZu/z2P26Z1P3Ma2vIE1Z/lyjfjtA3fe9s17Cwl/ua
+        nNkcFMY+mTU5fq53zJfoObHVW1u+x7TvdV31o0CJpTgj0VCLuag4EQDEvCr+MgQAAA==
+DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CMS-RootMailID: 20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d
+References: <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
+        <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p5>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/27 11:25, Kefeng Wang wrote:
-> Use pr_fmt to prefix all pr_<level> output, but unpoison_memory()
-> and soft_offline_page() are used by error injection, which have
-> own prefixes like "Unpoison:" and "soft offline:", meanwhile,
-> soft_offline_page() could be used by memory hotremove, so undef
-> pr_fmt before unpoison_pr_info definition to keep the original
-> output for them.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+The condition test is performed for each function calling
+__ufshcd_wb_toggle().
+By modifying the position, it removes the code redundancy and prevents
+the test from being missing in the caller function.
 
-Looks good to me. Thanks.
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+---
+ drivers/ufs/core/ufshcd.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 8f11f118c30e..a3bdf9986511 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -5722,6 +5722,9 @@ static int __ufshcd_wb_toggle(struct ufs_hba *hba, bool set, enum flag_idn idn)
+ 	enum query_opcode opcode = set ? UPIU_QUERY_OPCODE_SET_FLAG :
+ 				   UPIU_QUERY_OPCODE_CLEAR_FLAG;
+ 
++	if (!ufshcd_is_wb_allowed(hba))
++		return -EPERM;
++
+ 	index = ufshcd_wb_get_query_index(hba);
+ 	return ufshcd_query_flag_retry(hba, opcode, idn, index, NULL);
+ }
+@@ -5730,9 +5733,6 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+ {
+ 	int ret;
+ 
+-	if (!ufshcd_is_wb_allowed(hba))
+-		return 0;
+-
+ 	if (!(enable ^ hba->dev_info.wb_enabled))
+ 		return 0;
+ 
+@@ -5769,8 +5769,7 @@ static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
+ {
+ 	int ret;
+ 
+-	if (!ufshcd_is_wb_allowed(hba) ||
+-	    hba->dev_info.wb_buf_flush_enabled == enable)
++	if (hba->dev_info.wb_buf_flush_enabled == enable)
+ 		return;
+ 
+ 	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
+-- 
+2.25.1

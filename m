@@ -2,82 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1621D582808
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B243358280B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbiG0N4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
+        id S232541AbiG0N5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiG0N4K (ORCPT
+        with ESMTP id S232079AbiG0N5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:56:10 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CB7BC27;
-        Wed, 27 Jul 2022 06:56:08 -0700 (PDT)
-Date:   Wed, 27 Jul 2022 15:56:03 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1658930166;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R7BSP6lgLmU+GFwcCkarvv2oJomnIPaQ62Slz1uYejA=;
-        b=CS8tOTTw8N//Cwkjyu3Urhp4VM7oxbSFgmPiPyOswnYJ1k7UlGTDdvPQftFPfgEprtdtlT
-        qm9XXfe9hVhaCgCThgl6EID6ZzdbZ955wU6oL/ycnNYMWECsdc3NPmzSq1aDwGWTzGZsR0
-        3v4XtZflhTMRtDLCWwBIQDDjxDdgy/Q=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Andrew Jones <andrew.jones@linux.dev>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Marc Orr <marcorr@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [RFC V1 08/10] KVM: selftests: Make ucall work with encrypted
- guests
-Message-ID: <20220727135603.ld5torjrn4gatjb4@kamzik>
-References: <20220715192956.1873315-1-pgonda@google.com>
- <20220715192956.1873315-10-pgonda@google.com>
- <20220719154330.wnwnu23gagcya3o7@kamzik>
- <CAMkAt6rFO6J5heuwocmvb_wstOOwsf9WooXu9iEUOvK0wEDAhw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMkAt6rFO6J5heuwocmvb_wstOOwsf9WooXu9iEUOvK0wEDAhw@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Jul 2022 09:57:16 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5BFE086;
+        Wed, 27 Jul 2022 06:57:15 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id n138so13613827iod.4;
+        Wed, 27 Jul 2022 06:57:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=nxMgZBBSR6x/A2wREjFjHPIdimpL4MklUGMoEuhSaos=;
+        b=Cs9atv1Eb0HZy8Hsrh4lUPfmCXNmMYTq2PCAjGTUo8G+YOdhbJgT2VyHAnupRLKfhN
+         gv27WoJHaLPVAh8nS+1pg63wU7/eJ9nCZwqNbtn4kpKqKrlrxJi4FEy3Y2ACfqvUJVE+
+         bZlA3w4pDnJcy6xA75CItNHV1UyEInNsOps2+VpOkGmPvpxF9p9iL2390SJzEavDsH+A
+         DSesqQuz0KHpAQ/mVRq/l8C+IfggFcdjGjTAKvlxcrXICa9bn/f6QWANc2rKghEFP17G
+         pUjDHwp8+LOiH83YnU5W2gDNZxRGB9Bdci4TQtKn6CzMtxjKw8yokRstEkZLm4Wm44LK
+         8nag==
+X-Gm-Message-State: AJIora89NpM2Bcr8ASpcPz5Omx1eHK6FhibwPAx3+mgnoc1/PltmKY6P
+        N4g1wbB4Z32dle72Ao3DBQ==
+X-Google-Smtp-Source: AGRyM1tHbCtjpdAaPcSBOs8s5kywKzBslsKMi9tkX5yfFmADwm1Ig7XSyaEXUjPOYisj2Gy3/SdZTg==
+X-Received: by 2002:a5d:9c56:0:b0:67b:e426:a514 with SMTP id 22-20020a5d9c56000000b0067be426a514mr7760929iof.71.1658930234178;
+        Wed, 27 Jul 2022 06:57:14 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id n11-20020a056638110b00b0033a29ec646dsm7738293jal.4.2022.07.27.06.57.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 06:57:13 -0700 (PDT)
+Received: (nullmailer pid 2552038 invoked by uid 1000);
+        Wed, 27 Jul 2022 13:57:12 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Hui Liu <hui.liu@mediatek.com>
+Cc:     linux-gpio@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jianguo.zhang@mediatek.com, sean.wang@mediatek.com,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
+        zhiyong.tao@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com
+In-Reply-To: <20220727102140.6676-2-hui.liu@mediatek.com>
+References: <20220727102140.6676-1-hui.liu@mediatek.com> <20220727102140.6676-2-hui.liu@mediatek.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: add support for MediaTek mt8188
+Date:   Wed, 27 Jul 2022 07:57:12 -0600
+Message-Id: <1658930232.177263.2552037.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 07:38:29AM -0600, Peter Gonda wrote:
-> On Tue, Jul 19, 2022 at 9:43 AM Andrew Jones <andrew.jones@linux.dev> wrote:
-> > I'm not a big fan of mixing the concept of encrypted guests into ucalls. I
-> > think we should have two types of ucalls, those have a uc pool in memory
-> > shared with the host and those that don't. Encrypted guests pick the pool
-> > version.
+On Wed, 27 Jul 2022 18:21:39 +0800, Hui Liu wrote:
+> From: "Hui.Liu" <hui.liu@mediatek.com>
 > 
-> Sean suggested this version where encrypted guests and normal guests
-> used the same ucall macros/functions. I am fine with adding a second
-> interface for encrypted VM ucall, do you think macros like
-> ENCRYPTED_GUEST_SYNC, ENCRYPTED_GUEST_ASSERT, and
-> get_encrypted_ucall() ?
->
+> Add pinctrl function header file and binding document for mt8188.
+> 
+> Signed-off-by: Hui.Liu <hui.liu@mediatek.com>
+> ---
+>  .../pinctrl/mediatek,mt8188-pinctrl.yaml      |  238 +++
+>  .../pinctrl/mediatek,mt8188-pinfunc.h         | 1280 +++++++++++++++++
+>  2 files changed, 1518 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
+>  create mode 100644 include/dt-bindings/pinctrl/mediatek,mt8188-pinfunc.h
+> 
 
-It's fine to add new functionality to ucall in order to keep the
-interfaces the same, except for initializing with some sort of indication
-that the "uc pool" version is needed. I just don't like all the references
-to encrypted guests inside ucall. ucall should implement uc pools without
-the current motivation for uc pools creeping into its implementation.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thanks,
-drew
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/pinctrl/mediatek,mt8188-pinctrl.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.example.dtb: pinctrl@10005000: spi0-pins:pins-spi:bias-pull-up: More than one condition true in oneOf schema:
+	{'oneOf': [{'items': [{'items': [{'enum': [100, 101, 102, 103]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {},
+	           {'items': [{'items': [{'enum': [200,
+	                                           201,
+	                                           202,
+	                                           203,
+	                                           204,
+	                                           205,
+	                                           206,
+	                                           207]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {},
+	           {'items': [{'items': [{'enum': [1000,
+	                                           1500,
+	                                           2000,
+	                                           3000,
+	                                           4000,
+	                                           5000,
+	                                           10000,
+	                                           75000]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {}]}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.example.dtb: pinctrl@10005000: spi0-pins:pins-spi-mi:bias-pull-down: More than one condition true in oneOf schema:
+	{'oneOf': [{'items': [{'items': [{'enum': [100, 101, 102, 103]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {},
+	           {'items': [{'items': [{'enum': [200,
+	                                           201,
+	                                           202,
+	                                           203,
+	                                           204,
+	                                           205,
+	                                           206,
+	                                           207]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {},
+	           {'items': [{'items': [{'enum': [75000, 5000]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {}]}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.example.dtb: pinctrl@10005000: i2c0-pins:pins:bias-pull-down: More than one condition true in oneOf schema:
+	{'oneOf': [{'items': [{'items': [{'enum': [100, 101, 102, 103]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {},
+	           {'items': [{'items': [{'enum': [200,
+	                                           201,
+	                                           202,
+	                                           203,
+	                                           204,
+	                                           205,
+	                                           206,
+	                                           207]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {},
+	           {'items': [{'items': [{'enum': [75000, 5000]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {}]}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.example.dtb: pinctrl@10005000: i2c1-pins:pins:bias-pull-up: More than one condition true in oneOf schema:
+	{'oneOf': [{'items': [{'items': [{'enum': [100, 101, 102, 103]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {},
+	           {'items': [{'items': [{'enum': [200,
+	                                           201,
+	                                           202,
+	                                           203,
+	                                           204,
+	                                           205,
+	                                           206,
+	                                           207]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {},
+	           {'items': [{'items': [{'enum': [1000,
+	                                           1500,
+	                                           2000,
+	                                           3000,
+	                                           4000,
+	                                           5000,
+	                                           10000,
+	                                           75000]}],
+	                       'maxItems': 1,
+	                       'minItems': 1,
+	                       'type': 'array'}],
+	            'maxItems': 1,
+	            'minItems': 1,
+	            'type': 'array'},
+	           {}]}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

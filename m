@@ -2,79 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1D5582129
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D0358212E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 09:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiG0Heb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 03:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
+        id S230336AbiG0HgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 03:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiG0He2 (ORCPT
+        with ESMTP id S229680AbiG0HgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:34:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2DD422CC;
-        Wed, 27 Jul 2022 00:34:28 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8D2CA6601ABE;
-        Wed, 27 Jul 2022 08:34:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658907267;
-        bh=6ps4uQowS8HpISETXvtaiicTxwDeXzdtMPrNeVaDsvk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ToEX/wUgUB/m4F2DIP7ruKo6y+qjdkYa3nKiNumxyrfxYQSnZRpIz57UFxXNkTLv5
-         v50V4KAS4HbXimDKUYXObvJj6LL8dZ9oJjvbuDppd7NCUxdNqEdcvjqaVaPyUwJBhN
-         UMTLo7HkUIKVdTAhY+eEO+wlI5NTIy5vPMb+ZsowOCqcP9mz7KqIb5snaUuKekZHD8
-         3fFhkvQsKj72T1eQ/tDhsD8IiKZcCW7Z2X70QNpxh6ZSu6TbZMzYm4d8CIhhTKaeI8
-         mirvQmENKSZujpqyBvi22L7EDKvF/Fbo1sC7eOMcjp+mQmhkgSUhNcCDWxbm85GTTj
-         4rB8vRSImBbaw==
-Message-ID: <47f90532-c115-61ad-1203-5658430b6a7a@collabora.com>
-Date:   Wed, 27 Jul 2022 09:34:24 +0200
+        Wed, 27 Jul 2022 03:36:23 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5017F21278
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:36:22 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id l3so12722962qkl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 00:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=streamunlimited.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=rO4phdManN60SPf1W9WiyPdt9raYFpN1OI/PcK1NnQ0=;
+        b=uf7lDkpVYO56NWMPL08t3bV7ykOUYmDaRNEf57tqkkhLMFpNUwzcla0Lokoe8tkjv6
+         GY7TYiWRZHqk7bMBMb76LrdFBYz0PHG29omXVyfilS5Kj7k2Y34QjUeFMx9v5Rx6hD86
+         OatRJqn2LPFVr9JyH10I7+SY5t911D/Yjk6Sc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rO4phdManN60SPf1W9WiyPdt9raYFpN1OI/PcK1NnQ0=;
+        b=FrPTfO7oI8wv5FilmgdG60e2rKeF/ueZAgcHYyfHav6A6GTj7BN3PsN56io5iMIQPM
+         Sm7Z3FJ3EWE9nLrVCa6b/e7GJYssEKE2MTk9xqwf8BA9XNL9syUNbrXMg609xQpmpOxN
+         phDkQ3djaSGcyVlZYQVJp2MzwsL2/oMIF5irA4UR9dDIYLfn8aX83LtHsxFims+3S78r
+         1rRvIQO42gyCfJiF+j2SdJ9eIzsm9v5CtLZEU/POYCkZYjgO3Y1SNuwqV/Qf7AMcdoKm
+         2OISNzvLaXPl0JZERKBpwtNnRxbqL9gdK+hx9PWXij13tz5F3lr7n8uIi9kLiwvxZ8HN
+         BH6A==
+X-Gm-Message-State: AJIora8A5yVcr7cLaTmZuqP+jGsXqi9Zfi72r/Y3KUmiH43G/JcbsCr9
+        cI45+thJwHTm+mbPJlWm+xIxWg==
+X-Google-Smtp-Source: AGRyM1tTVXmc9JrwYNXN2698PGpq5P5gj2i9zaPSZqNDeI8sJMebG7pGAmT8yx65QQjJq/P/t8m5dQ==
+X-Received: by 2002:a05:620a:2552:b0:6b4:8dbf:8992 with SMTP id s18-20020a05620a255200b006b48dbf8992mr15785127qko.109.1658907381478;
+        Wed, 27 Jul 2022 00:36:21 -0700 (PDT)
+Received: from localhost.localdomain (vpn.streamunlimited.com. [91.114.0.140])
+        by smtp.gmail.com with ESMTPSA id x22-20020ac86b56000000b0031f4007dd92sm2709526qts.89.2022.07.27.00.36.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 00:36:21 -0700 (PDT)
+From:   Peter Suti <peter.suti@streamunlimited.com>
+To:     chuansheng.liu@intel.com, dan.carpenter@oracle.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Peter Suti <peter.suti@streamunlimited.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] staging: fbtft: core: set smem_len before fb_deferred_io_init call
+Date:   Wed, 27 Jul 2022 09:35:50 +0200
+Message-Id: <20220727073550.1491126-1-peter.suti@streamunlimited.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YuDlfLeossnntH/C@kroah.com>
+References: <YuDlfLeossnntH/C@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 5/7] Input: mt6779-keypad - support double keys matrix
-Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Fabien Parent <parent.f@gmail.com>
-References: <20220720-mt8183-keypad-v2-0-6d42c357cb76@baylibre.com>
- <20220720-mt8183-keypad-v2-5-6d42c357cb76@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220720-mt8183-keypad-v2-5-6d42c357cb76@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/07/22 14:56, Mattijs Korpershoek ha scritto:
-> MediaTek keypad has 2 modes of detecting key events:
-> - single key: each (row, column) can detect one key
-> - double key: each (row, column) is a group of 2 keys
-> 
-> Double key support exists to minimize cost, since it reduces the number
-> of pins required for physical keys.
-> 
-> Double key is configured by setting BIT(0) of the KP_SEL register.
-> 
-> Enable double key matrix support based on the mediatek,keys-per-group
-> device tree property.
-> 
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+The fbtft_framebuffer_alloc() calls fb_deferred_io_init() before
+initializing info->fix.smem_len.  It is set to zero by the
+framebuffer_alloc() function.  It will trigger a WARN_ON() at the
+start of fb_deferred_io_init() and the function will not do anything.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fixes: 856082f021a2 ("fbdev: defio: fix the pagelist corruption")
+
+Signed-off-by: Peter Suti <peter.suti@streamunlimited.com>
+---
+ V2 -> V3: Add patch changelog 
+ V1 -> V2: Change commit message and base on top of linux-next
+
+ drivers/staging/fbtft/fbtft-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
+index 9b3eaed80cdd..afaba94d1d1c 100644
+--- a/drivers/staging/fbtft/fbtft-core.c
++++ b/drivers/staging/fbtft/fbtft-core.c
+@@ -654,7 +654,6 @@ struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
+ 	fbdefio->delay =            HZ / fps;
+ 	fbdefio->sort_pagereflist = true;
+ 	fbdefio->deferred_io =      fbtft_deferred_io;
+-	fb_deferred_io_init(info);
+ 
+ 	snprintf(info->fix.id, sizeof(info->fix.id), "%s", dev->driver->name);
+ 	info->fix.type =           FB_TYPE_PACKED_PIXELS;
+@@ -665,6 +664,7 @@ struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
+ 	info->fix.line_length =    width * bpp / 8;
+ 	info->fix.accel =          FB_ACCEL_NONE;
+ 	info->fix.smem_len =       vmem_size;
++	fb_deferred_io_init(info);
+ 
+ 	info->var.rotate =         pdata->rotate;
+ 	info->var.xres =           width;
+-- 
+2.25.1
 

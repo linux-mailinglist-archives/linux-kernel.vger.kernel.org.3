@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D650582C4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507C1582D2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239889AbiG0Qox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S240872AbiG0QzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbiG0Qnt (ORCPT
+        with ESMTP id S240878AbiG0Qwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:43:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5A81C12C;
-        Wed, 27 Jul 2022 09:30:38 -0700 (PDT)
+        Wed, 27 Jul 2022 12:52:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDFC4F195;
+        Wed, 27 Jul 2022 09:35:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D45FAB821BE;
-        Wed, 27 Jul 2022 16:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E5AC433C1;
-        Wed, 27 Jul 2022 16:30:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07CBB61A8E;
+        Wed, 27 Jul 2022 16:35:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D61DC433C1;
+        Wed, 27 Jul 2022 16:35:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939429;
-        bh=exjTbktyQ2L4qT7er/q8xnaoToLGPnYfi4azjwuWwgg=;
+        s=korg; t=1658939701;
+        bh=N82dgvAglJ4M4Ksvsddt8SaTUuvmWw/6BGAlwdbH6co=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VY7p758gGcuC0bzJlPL+QbaMVE3akIZvepNOAJN9RXeXpDQHcXkVQBbE3bz4hERDm
-         gHUbh4DqzR6tukVXrc+TpEvkRSrgUJjBAN2YyFfzFaNkkYhhYEYgjUSF9Cn/2sF/Tc
-         UUc9jPAyz2rpxmYCy7M1aKx7LU89oOhk3mXTp7Ls=
+        b=piE3Fj4uWU1vrTqAXC1HYb1pZftTbnm6g5PjyY9vyTe4m8upVJfux/KkrL/jRB/XQ
+         YtA+WhxCNzJ5FTX9NQj8gln4S00dCpAnSlpjaf7Ucg0sRwtoxfWPGRATkQ/YUxQ/9S
+         chjzGdxdV5wgZTq8MSdezNbFeyrIaMoP8jeUXopg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 66/87] locking/refcount: Consolidate REFCOUNT_{MAX,SATURATED} definitions
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 073/105] tcp: Fix a data-race around sysctl_tcp_retrans_collapse.
 Date:   Wed, 27 Jul 2022 18:10:59 +0200
-Message-Id: <20220727161011.721547216@linuxfoundation.org>
+Message-Id: <20220727161014.986231914@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,64 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Will Deacon <will@kernel.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 65b008552469f1c37f5e06e0016924502e40b4f5 ]
+[ Upstream commit 1a63cb91f0c2fcdeced6d6edee8d1d886583d139 ]
 
-The definitions of REFCOUNT_MAX and REFCOUNT_SATURATED are the same,
-regardless of CONFIG_REFCOUNT_FULL, so consolidate them into a single
-pair of definitions.
+While reading sysctl_tcp_retrans_collapse, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its reader.
 
-Signed-off-by: Will Deacon <will@kernel.org>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Hanjun Guo <guohanjun@huawei.com>
-Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc: Elena Reshetova <elena.reshetova@intel.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20191121115902.2551-8-will@kernel.org
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/refcount.h | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ net/ipv4/tcp_output.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/refcount.h b/include/linux/refcount.h
-index 1cd0a876a789..757d4630115c 100644
---- a/include/linux/refcount.h
-+++ b/include/linux/refcount.h
-@@ -22,6 +22,8 @@ typedef struct refcount_struct {
- } refcount_t;
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index ef64ee4c902a..9b67c61576e4 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3100,7 +3100,7 @@ static void tcp_retrans_try_collapse(struct sock *sk, struct sk_buff *to,
+ 	struct sk_buff *skb = to, *tmp;
+ 	bool first = true;
  
- #define REFCOUNT_INIT(n)	{ .refs = ATOMIC_INIT(n), }
-+#define REFCOUNT_MAX		INT_MAX
-+#define REFCOUNT_SATURATED	(INT_MIN / 2)
- 
- enum refcount_saturation_type {
- 	REFCOUNT_ADD_NOT_ZERO_OVF,
-@@ -57,9 +59,6 @@ static inline unsigned int refcount_read(const refcount_t *r)
- #ifdef CONFIG_REFCOUNT_FULL
- #include <linux/bug.h>
- 
--#define REFCOUNT_MAX		INT_MAX
--#define REFCOUNT_SATURATED	(INT_MIN / 2)
--
- /*
-  * Variant of atomic_t specialized for reference counts.
-  *
-@@ -300,10 +299,6 @@ static inline void refcount_dec(refcount_t *r)
- 		refcount_warn_saturate(r, REFCOUNT_DEC_LEAK);
- }
- #else /* CONFIG_REFCOUNT_FULL */
--
--#define REFCOUNT_MAX		INT_MAX
--#define REFCOUNT_SATURATED	(INT_MIN / 2)
--
- # ifdef CONFIG_ARCH_HAS_REFCOUNT
- #  include <asm/refcount.h>
- # else
+-	if (!sock_net(sk)->ipv4.sysctl_tcp_retrans_collapse)
++	if (!READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_retrans_collapse))
+ 		return;
+ 	if (TCP_SKB_CB(skb)->tcp_flags & TCPHDR_SYN)
+ 		return;
 -- 
 2.35.1
 

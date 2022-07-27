@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3F3582B71
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E90A582D28
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237973AbiG0QdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S240969AbiG0Qxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237778AbiG0Qcs (ORCPT
+        with ESMTP id S240747AbiG0QwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:32:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415E953D04;
-        Wed, 27 Jul 2022 09:26:20 -0700 (PDT)
+        Wed, 27 Jul 2022 12:52:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAE254AF4;
+        Wed, 27 Jul 2022 09:34:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CBC2B821BF;
-        Wed, 27 Jul 2022 16:26:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC04FC433C1;
-        Wed, 27 Jul 2022 16:26:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0994C619BF;
+        Wed, 27 Jul 2022 16:34:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169DBC433C1;
+        Wed, 27 Jul 2022 16:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939179;
-        bh=ZNOEerogwL3QPkDGQqI5U5SJ+ivJ/Zl/Vr1t0W0P1UI=;
+        s=korg; t=1658939669;
+        bh=a+Cd7fUiy1DMlX4dr9s9V7wAI3ptmLLiPb2+40UkUfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G4jXdI5fpZELXJPRlxVcY1Kwm//Nyt1foA6OLCc0vlafc45RlzNHVn7wCahCqz1tP
-         bdYFfm0ZGkwx3DPVBJuP0NHGjsef3I+CHvxsbEJZxYCNWZ61tGWnHdNQeAK1H2Ya+6
-         Tx6tMwEXN4ocjuGfnKD7Y5sUmc8uWrJEdYciowFY=
+        b=VKExEWdQVoxGZuz0YDvLym3z51iETf+ulV//7OUl3cmJ+rCPkewu1CFuNmWtgp62m
+         K1KUQ/fGghwM82u3Uv3PODSxjJEayoSZe3zRF+xQABGQY5dyNFp9SwyOGo25sT3sGM
+         zz5CXwszxMms7NSKc6mwZRIwa5N3ln6dgUBre2LY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Matthias Fend <Matthias.Fend@wolfvision.net>
-Subject: [PATCH 4.19 40/62] HID: multitouch: add support for the Smart Tech panel
+        stable@vger.kernel.org, Hristo Venev <hristo@venev.name>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 063/105] be2net: Fix buffer overflow in be_get_module_eeprom
 Date:   Wed, 27 Jul 2022 18:10:49 +0200
-Message-Id: <20220727161005.764401878@linuxfoundation.org>
+Message-Id: <20220727161014.604612578@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+References: <20220727161012.056867467@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,145 +54,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+From: Hristo Venev <hristo@venev.name>
 
-[ Upstream commit 69ecd44d68a7bf4caeda39825af720362db69233 ]
+[ Upstream commit d7241f679a59cfe27f92cb5c6272cb429fb1f7ec ]
 
-This panel is not very friendly to us:
-it exposes multiple multitouch collections, some of them being of
-logical application stylus.
+be_cmd_read_port_transceiver_data assumes that it is given a buffer that
+is at least PAGE_DATA_LEN long, or twice that if the module supports SFF
+8472. However, this is not always the case.
 
-Usually, a device has only one report per application, and that is
-what I assumed in commit 8dfe14b3b47f ("HID: multitouch: ditch mt_report_id")
+Fix this by passing the desired offset and length to
+be_cmd_read_port_transceiver_data so that we only copy the bytes once.
 
-To avoid breaking all working device, add a new class and a new quirk
-for that situation.
-
-Reported-and-tested-by: Matthias Fend <Matthias.Fend@wolfvision.net>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Fixes: e36edd9d26cf ("be2net: add ethtool "-m" option support")
+Signed-off-by: Hristo Venev <hristo@venev.name>
+Link: https://lore.kernel.org/r/20220716085134.6095-1-hristo@venev.name
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-multitouch.c | 34 ++++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/emulex/benet/be_cmds.c   | 10 +++---
+ drivers/net/ethernet/emulex/benet/be_cmds.h   |  2 +-
+ .../net/ethernet/emulex/benet/be_ethtool.c    | 31 ++++++++++++-------
+ 3 files changed, 25 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 1c4426c60972..ce027eda9b17 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -72,6 +72,7 @@ MODULE_LICENSE("GPL");
- #define MT_QUIRK_STICKY_FINGERS		BIT(16)
- #define MT_QUIRK_ASUS_CUSTOM_UP		BIT(17)
- #define MT_QUIRK_WIN8_PTP_BUTTONS	BIT(18)
-+#define MT_QUIRK_SEPARATE_APP_REPORT	BIT(19)
+diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.c b/drivers/net/ethernet/emulex/benet/be_cmds.c
+index 649c5c429bd7..1288b5e3d220 100644
+--- a/drivers/net/ethernet/emulex/benet/be_cmds.c
++++ b/drivers/net/ethernet/emulex/benet/be_cmds.c
+@@ -2287,7 +2287,7 @@ int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num, u32 *state)
  
- #define MT_INPUTMODE_TOUCHSCREEN	0x02
- #define MT_INPUTMODE_TOUCHPAD		0x03
-@@ -107,6 +108,7 @@ struct mt_usages {
- struct mt_application {
- 	struct list_head list;
- 	unsigned int application;
-+	unsigned int report_id;
- 	struct list_head mt_usages;	/* mt usages list */
- 
- 	__s32 quirks;
-@@ -207,6 +209,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
- #define MT_CLS_VTL				0x0110
- #define MT_CLS_GOOGLE				0x0111
- #define MT_CLS_RAZER_BLADE_STEALTH		0x0112
-+#define MT_CLS_SMART_TECH			0x0113
- 
- #define MT_DEFAULT_MAXCONTACT	10
- #define MT_MAX_MAXCONTACT	250
-@@ -357,6 +360,12 @@ static const struct mt_class mt_classes[] = {
- 			MT_QUIRK_CONTACT_CNT_ACCURATE |
- 			MT_QUIRK_WIN8_PTP_BUTTONS,
- 	},
-+	{ .name = MT_CLS_SMART_TECH,
-+		.quirks = MT_QUIRK_ALWAYS_VALID |
-+			MT_QUIRK_IGNORE_DUPLICATES |
-+			MT_QUIRK_CONTACT_CNT_ACCURATE |
-+			MT_QUIRK_SEPARATE_APP_REPORT,
-+	},
- 	{ }
- };
- 
-@@ -513,8 +522,9 @@ static struct mt_usages *mt_allocate_usage(struct hid_device *hdev,
- }
- 
- static struct mt_application *mt_allocate_application(struct mt_device *td,
--						      unsigned int application)
-+						      struct hid_report *report)
+ /* Uses sync mcc */
+ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+-				      u8 page_num, u8 *data)
++				      u8 page_num, u32 off, u32 len, u8 *data)
  {
-+	unsigned int application = report->application;
- 	struct mt_application *mt_application;
+ 	struct be_dma_mem cmd;
+ 	struct be_mcc_wrb *wrb;
+@@ -2321,10 +2321,10 @@ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+ 	req->port = cpu_to_le32(adapter->hba_port_num);
+ 	req->page_num = cpu_to_le32(page_num);
+ 	status = be_mcc_notify_wait(adapter);
+-	if (!status) {
++	if (!status && len > 0) {
+ 		struct be_cmd_resp_port_type *resp = cmd.va;
  
- 	mt_application = devm_kzalloc(&td->hdev->dev, sizeof(*mt_application),
-@@ -539,6 +549,7 @@ static struct mt_application *mt_allocate_application(struct mt_device *td,
- 	mt_application->scantime = DEFAULT_ZERO;
- 	mt_application->raw_cc = DEFAULT_ZERO;
- 	mt_application->quirks = td->mtclass.quirks;
-+	mt_application->report_id = report->id;
- 
- 	list_add_tail(&mt_application->list, &td->applications);
- 
-@@ -546,19 +557,23 @@ static struct mt_application *mt_allocate_application(struct mt_device *td,
- }
- 
- static struct mt_application *mt_find_application(struct mt_device *td,
--						  unsigned int application)
-+						  struct hid_report *report)
- {
-+	unsigned int application = report->application;
- 	struct mt_application *tmp, *mt_application = NULL;
- 
- 	list_for_each_entry(tmp, &td->applications, list) {
- 		if (application == tmp->application) {
--			mt_application = tmp;
--			break;
-+			if (!(td->mtclass.quirks & MT_QUIRK_SEPARATE_APP_REPORT) ||
-+			    tmp->report_id == report->id) {
-+				mt_application = tmp;
-+				break;
-+			}
- 		}
+-		memcpy(data, resp->page_data, PAGE_DATA_LEN);
++		memcpy(data, resp->page_data + off, len);
  	}
+ err:
+ 	mutex_unlock(&adapter->mcc_lock);
+@@ -2415,7 +2415,7 @@ int be_cmd_query_cable_type(struct be_adapter *adapter)
+ 	int status;
  
- 	if (!mt_application)
--		mt_application = mt_allocate_application(td, application);
-+		mt_application = mt_allocate_application(td, report);
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		switch (adapter->phy.interface_type) {
+ 		case PHY_TYPE_QSFP:
+@@ -2440,7 +2440,7 @@ int be_cmd_query_sfp_info(struct be_adapter *adapter)
+ 	int status;
  
- 	return mt_application;
- }
-@@ -575,7 +590,7 @@ static struct mt_report_data *mt_allocate_report_data(struct mt_device *td,
- 		return NULL;
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		strlcpy(adapter->phy.vendor_name, page_data +
+ 			SFP_VENDOR_NAME_OFFSET, SFP_VENDOR_NAME_LEN - 1);
+diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.h b/drivers/net/ethernet/emulex/benet/be_cmds.h
+index c30d6d6f0f3a..9e17d6a7ab8c 100644
+--- a/drivers/net/ethernet/emulex/benet/be_cmds.h
++++ b/drivers/net/ethernet/emulex/benet/be_cmds.h
+@@ -2427,7 +2427,7 @@ int be_cmd_set_beacon_state(struct be_adapter *adapter, u8 port_num, u8 beacon,
+ int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num,
+ 			    u32 *state);
+ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
+-				      u8 page_num, u8 *data);
++				      u8 page_num, u32 off, u32 len, u8 *data);
+ int be_cmd_query_cable_type(struct be_adapter *adapter);
+ int be_cmd_query_sfp_info(struct be_adapter *adapter);
+ int lancer_cmd_read_object(struct be_adapter *adapter, struct be_dma_mem *cmd,
+diff --git a/drivers/net/ethernet/emulex/benet/be_ethtool.c b/drivers/net/ethernet/emulex/benet/be_ethtool.c
+index 99cc1c46fb30..d90bf457e49c 100644
+--- a/drivers/net/ethernet/emulex/benet/be_ethtool.c
++++ b/drivers/net/ethernet/emulex/benet/be_ethtool.c
+@@ -1338,7 +1338,7 @@ static int be_get_module_info(struct net_device *netdev,
+ 		return -EOPNOTSUPP;
  
- 	rdata->report = report;
--	rdata->application = mt_find_application(td, report->application);
-+	rdata->application = mt_find_application(td, report);
+ 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   page_data);
++						   0, PAGE_DATA_LEN, page_data);
+ 	if (!status) {
+ 		if (!page_data[SFP_PLUS_SFF_8472_COMP]) {
+ 			modinfo->type = ETH_MODULE_SFF_8079;
+@@ -1356,25 +1356,32 @@ static int be_get_module_eeprom(struct net_device *netdev,
+ {
+ 	struct be_adapter *adapter = netdev_priv(netdev);
+ 	int status;
++	u32 begin, end;
  
- 	if (!rdata->application) {
- 		devm_kfree(&td->hdev->dev, rdata);
-@@ -1571,6 +1586,9 @@ static int mt_input_configured(struct hid_device *hdev, struct hid_input *hi)
- 	case HID_VD_ASUS_CUSTOM_MEDIA_KEYS:
- 		suffix = "Custom Media Keys";
- 		break;
-+	case HID_DG_PEN:
-+		suffix = "Stylus";
-+		break;
- 	default:
- 		suffix = "UNKNOWN";
- 		break;
-@@ -2038,6 +2056,10 @@ static const struct hid_device_id mt_devices[] = {
- 		HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
- 			USB_VENDOR_ID_SYNAPTICS, 0x8323) },
+ 	if (!check_privilege(adapter, MAX_PRIVILEGES))
+ 		return -EOPNOTSUPP;
  
-+	/* Smart Tech panels */
-+	{ .driver_data = MT_CLS_SMART_TECH,
-+		MT_USB_DEVICE(0x0b8c, 0x0092)},
+-	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
+-						   data);
+-	if (status)
+-		goto err;
++	begin = eeprom->offset;
++	end = eeprom->offset + eeprom->len;
 +
- 	/* Stantum panels */
- 	{ .driver_data = MT_CLS_CONFIDENCE,
- 		MT_USB_DEVICE(USB_VENDOR_ID_STANTUM_STM,
++	if (begin < PAGE_DATA_LEN) {
++		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0, begin,
++							   min_t(u32, end, PAGE_DATA_LEN) - begin,
++							   data);
++		if (status)
++			goto err;
++
++		data += PAGE_DATA_LEN - begin;
++		begin = PAGE_DATA_LEN;
++	}
+ 
+-	if (eeprom->offset + eeprom->len > PAGE_DATA_LEN) {
+-		status = be_cmd_read_port_transceiver_data(adapter,
+-							   TR_PAGE_A2,
+-							   data +
+-							   PAGE_DATA_LEN);
++	if (end > PAGE_DATA_LEN) {
++		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A2,
++							   begin - PAGE_DATA_LEN,
++							   end - begin, data);
+ 		if (status)
+ 			goto err;
+ 	}
+-	if (eeprom->offset)
+-		memcpy(data, data + eeprom->offset, eeprom->len);
+ err:
+ 	return be_cmd_status(status);
+ }
 -- 
 2.35.1
 

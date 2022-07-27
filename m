@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F0358277A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5C658277E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbiG0NQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S233786AbiG0NRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiG0NQa (ORCPT
+        with ESMTP id S233524AbiG0NRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:16:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B717275C7
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:16:27 -0700 (PDT)
+        Wed, 27 Jul 2022 09:17:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9705124BD4;
+        Wed, 27 Jul 2022 06:16:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07124B82161
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 13:16:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C629C433C1;
-        Wed, 27 Jul 2022 13:16:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57DC4B82161;
+        Wed, 27 Jul 2022 13:16:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68931C433C1;
+        Wed, 27 Jul 2022 13:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658927784;
-        bh=d015WWD978FefY4+Y7ek4uzxFKSzSvYYzug/WMJZIB4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lLe8Qbf52ipNg/TZlwRbzRJ6xJUo/j9sYuRxMEeo3MIg0duTv/rJpdy9WiqG5CCwn
-         f+90PfFvE6Hky9oKdXVUXVkyNd+CgOB/q+gXrhPHRpGrLfW6srU8CZGpMIrj8zVGPX
-         rRa1E5fSBPx+kBT8vwMJ/EYS85hhIZLtioYFoBJ3JbwvFheCSeDzwdn7PUg7jMzY5f
-         U32/mFB+iS0W5c4zrRJ6Mm8Rvz3B60ucSIkCxr46K6sx2pt2nx5RRbxq8ZgukGkiT2
-         EsQSItZqC8LGCL9/IGR9h/WyRx4FLTXr/+sV1qVQn2KmYYFAVs1TcV4gpfYUtRceSV
-         aMi4GrNWGTP5w==
-Received: by pali.im (Postfix)
-        id 4CBA37C3; Wed, 27 Jul 2022 15:16:22 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: armada-38x: Add gpio-ranges for pin muxing
-Date:   Wed, 27 Jul 2022 15:16:19 +0200
-Message-Id: <20220727131619.3056-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        s=k20201202; t=1658927814;
+        bh=bXibaKQwkhVPdOvQHlH1Vr9gIqIbV8DAaqOn9Igp/8c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RkXRIvsft9CQwB8iSIAU8dd2caayGhHrKlyyZNg7ALLvhL/OIVOBFCFWvdpljRW78
+         tnsn3+ZQMAbduburizts0Ldtc6C2gcdxNEwhug7bT3geezPoCXlpP8f4KsjMXtdHb1
+         5srCP/YIyDpb5Vpj3JfThu7kRY/wuup+Ntgz8WVazclVCnmRgsqwIjSrErLkQJ8WA3
+         LU1kDT2R/g1YOqGqb3EBcbWk3FD1XS/NAWc7m8x1g+iFAMTLQfKlkCqoiPeoL419PD
+         7+Mr0o+SnaTHP9cgxp5iymzksAp2ZM8ebtW1XZCiW4DD3A3fYB4ngq4khUi0whccTW
+         5BEHrwwzTrjow==
+Date:   Wed, 27 Jul 2022 15:16:49 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yongchen Yang <yoyang@redhat.com>
+Subject: Re: [PATCH] vfs: bypass may_create_in_sticky check if task has
+ CAP_FOWNER
+Message-ID: <20220727131649.v5iuvg2mitny2aci@wittgenstein>
+References: <20220727123048.46389-1-jlayton@kernel.org>
+ <20220727123710.tzg44xojlc3pmsiw@wittgenstein>
+ <82064e83752ee731909f4782ba85bad428ad180b.camel@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <82064e83752ee731909f4782ba85bad428ad180b.camel@kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,34 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIOs are configured by pinmux driver, so add corresponding references.
+On Wed, Jul 27, 2022 at 08:55:35AM -0400, Jeff Layton wrote:
+> On Wed, 2022-07-27 at 14:37 +0200, Christian Brauner wrote:
+> > On Wed, Jul 27, 2022 at 08:30:48AM -0400, Jeff Layton wrote:
+> > > NFS server is exporting a sticky directory (mode 01777) with root
+> > > squashing enabled. Client has protect_regular enabled and then tries to
+> > > open a file as root in that directory. File is created (with ownership
+> > > set to nobody:nobody) but the open syscall returns an error.
+> > > 
+> > > The problem is may_create_in_sticky, which rejects the open even though
+> > > the file has already been created/opened. Bypass the checks in
+> > > may_create_in_sticky if the task has CAP_FOWNER in the given namespace.
+> > > 
+> > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=1976829
+> > > Reported-by: Yongchen Yang <yoyang@redhat.com>
+> > > Suggested-by: Christian Brauner <brauner@kernel.org>
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  fs/namei.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/fs/namei.c b/fs/namei.c
+> > > index 1f28d3f463c3..170c2396ba29 100644
+> > > --- a/fs/namei.c
+> > > +++ b/fs/namei.c
+> > > @@ -1230,7 +1230,8 @@ static int may_create_in_sticky(struct user_namespace *mnt_userns,
+> > >  	    (!sysctl_protected_regular && S_ISREG(inode->i_mode)) ||
+> > >  	    likely(!(dir_mode & S_ISVTX)) ||
+> > >  	    uid_eq(i_uid_into_mnt(mnt_userns, inode), dir_uid) ||
+> > > -	    uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)))
+> > > +	    uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)) ||
+> > > +	    ns_capable(mnt_userns, CAP_FOWNER))
+> > >  		return 0;
+> > 
+> > Hm, no. You really want inode_owner_or_capable() here..
+> > You need to verify that you have a mapping for the inode->i_{g,u}id in
+> > question and that you're having CAP_FOWNER in the caller's userns.
+> > 
+> 
+> Ok, I should be able to make that change and test it out.
+> 
+> > I'm pretty sure we should also restrict this to the case were the caller
+> > actually created the file otherwise we introduce a potential issue where
+> > the caller is susceptible to data spoofing. For example, the file was
+> > created by another user racing the caller's O_CREAT.
+> 
+> That won't be sufficient to fix the testcase, I think. If a file already
+> exists in the sticky dir and is owned by nobody:nobody, do we really
+> want to prevent root from opening it? I wouldn't think so.
 
-Fixes: 0d3d96ab0059 ("ARM: mvebu: add Device Tree description of the Armada 380/385 SoCs")
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- arch/arm/boot/dts/armada-38x.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Afaict, the whole stick behind the protected_regular thing in
+may_create_in_sticky() thing is that you prevent scenarios where you can
+be tricked into opening a file that you didn't intend to with O_CREAT.
 
-diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dts/armada-38x.dtsi
-index a176898944f7..1590143c52c8 100644
---- a/arch/arm/boot/dts/armada-38x.dtsi
-+++ b/arch/arm/boot/dts/armada-38x.dtsi
-@@ -298,6 +298,7 @@
- 				reg-names = "gpio", "pwm";
- 				ngpios = <32>;
- 				gpio-controller;
-+				gpio-ranges = <&pinctrl 0 0 32>;
- 				#gpio-cells = <2>;
- 				#pwm-cells = <2>;
- 				interrupt-controller;
-@@ -316,6 +317,7 @@
- 				reg-names = "gpio", "pwm";
- 				ngpios = <28>;
- 				gpio-controller;
-+				gpio-ranges = <&pinctrl 0 32 28>;
- 				#gpio-cells = <2>;
- 				#pwm-cells = <2>;
- 				interrupt-controller;
--- 
-2.20.1
+That's specifically also a protection for root. So say root specifies
+O_CREAT but someone beats root to it and creates the file dumping
+malicious data in there. The uid_eq() requirement is supposed to prevent
+such attacks and it's a sysctl that userspace opted into.
 
+We'd be relaxing that restriction quite a bit if we not just allow newly
+created but also pre-existing file to be opened even with the CAP_FOWNER
+requirement.
+
+So the dd call should really fail if O_CREAT is passed but the file is
+pre-existing, imho. It's a different story if dd created that file and
+has CAP_FOWNER imho.

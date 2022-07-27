@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD119582CFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17FF582ABE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240881AbiG0Qwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
+        id S235415AbiG0QXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240775AbiG0QwM (ORCPT
+        with ESMTP id S235290AbiG0QWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:52:12 -0400
+        Wed, 27 Jul 2022 12:22:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E1854667;
-        Wed, 27 Jul 2022 09:34:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02124C63E;
+        Wed, 27 Jul 2022 09:22:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E81C61A3F;
-        Wed, 27 Jul 2022 16:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02B5C433D7;
-        Wed, 27 Jul 2022 16:34:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 164AB619CF;
+        Wed, 27 Jul 2022 16:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2147CC433C1;
+        Wed, 27 Jul 2022 16:22:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939641;
-        bh=RUd5dWlWT5NpwVFbuDCpuP3rASZUwSAnYpaVibavCDI=;
+        s=korg; t=1658938951;
+        bh=NMyaYYWxf/ULHaECuZCZVydUJ95hFLVj6k8iREKs9Xg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TK1gdXgHDDHDXOznamLlLu6TROy0LQ8fp1Pahz6m14vMXJ+7SBgjmblNAz69R52IA
-         DY2V/1hE30LZzYB8n8gSdtQo2kNwFWoHSIplr4KTpn23eJayaVdaBk/haQpZCkSAYT
-         dIEYhR+/Os3SM6PGUmpgl847WQCDoF1bi6b873VA=
+        b=SlI3SD5N8pldrlS7O5G/iNvRXrvMLFs0SC0CJmWtbxwZMKKWgl1RVlGkh7sn+ljHL
+         Lv1roMvpkmC4kYb/azzFNprUVMaeD9jeyCWQNoLnjQVDrFvCuah7Em/aHwIEf0oe7y
+         fADbOrim+a1rmoSZcMCyfgBa/KPPWEK5QOX1q9Ww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Yang Jihong <yangjihong1@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 051/105] tcp: Fix data-races around some timeout sysctl knobs.
+Subject: [PATCH 4.9 08/26] perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
 Date:   Wed, 27 Jul 2022 18:10:37 +0200
-Message-Id: <20220727161014.145255276@linuxfoundation.org>
+Message-Id: <20220727160959.472445849@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
+In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
+References: <20220727160959.122591422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,117 +54,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit 39e24435a776e9de5c6dd188836cf2523547804b ]
+[ Upstream commit 68e3c69803dada336893640110cb87221bb01dcf ]
 
-While reading these sysctl knobs, they can be changed concurrently.
-Thus, we need to add READ_ONCE() to their readers.
+Yang Jihing reported a race between perf_event_set_output() and
+perf_mmap_close():
 
-  - tcp_retries1
-  - tcp_retries2
-  - tcp_orphan_retries
-  - tcp_fin_timeout
+	CPU1					CPU2
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+	perf_mmap_close(e2)
+	  if (atomic_dec_and_test(&e2->rb->mmap_count)) // 1 - > 0
+	    detach_rest = true
+
+						ioctl(e1, IOC_SET_OUTPUT, e2)
+						  perf_event_set_output(e1, e2)
+
+	  ...
+	  list_for_each_entry_rcu(e, &e2->rb->event_list, rb_entry)
+	    ring_buffer_attach(e, NULL);
+	    // e1 isn't yet added and
+	    // therefore not detached
+
+						    ring_buffer_attach(e1, e2->rb)
+						      list_add_rcu(&e1->rb_entry,
+								   &e2->rb->event_list)
+
+After this; e1 is attached to an unmapped rb and a subsequent
+perf_mmap() will loop forever more:
+
+	again:
+		mutex_lock(&e->mmap_mutex);
+		if (event->rb) {
+			...
+			if (!atomic_inc_not_zero(&e->rb->mmap_count)) {
+				...
+				mutex_unlock(&e->mmap_mutex);
+				goto again;
+			}
+		}
+
+The loop in perf_mmap_close() holds e2->mmap_mutex, while the attach
+in perf_event_set_output() holds e1->mmap_mutex. As such there is no
+serialization to avoid this race.
+
+Change perf_event_set_output() to take both e1->mmap_mutex and
+e2->mmap_mutex to alleviate that problem. Additionally, have the loop
+in perf_mmap() detach the rb directly, this avoids having to wait for
+the concurrent perf_mmap_close() to get around to doing it to make
+progress.
+
+Fixes: 9bb5d40cd93c ("perf: Fix mmap() accounting hole")
+Reported-by: Yang Jihong <yangjihong1@huawei.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Yang Jihong <yangjihong1@huawei.com>
+Link: https://lkml.kernel.org/r/YsQ3jm2GR38SW7uD@worktop.programming.kicks-ass.net
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/tcp.h     |  3 ++-
- net/ipv4/tcp.c        |  2 +-
- net/ipv4/tcp_output.c |  2 +-
- net/ipv4/tcp_timer.c  | 10 +++++-----
- 4 files changed, 9 insertions(+), 8 deletions(-)
+ kernel/events/core.c | 45 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 14 deletions(-)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 9ef9fd0677b5..da75513a77d4 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1477,7 +1477,8 @@ static inline u32 keepalive_time_elapsed(const struct tcp_sock *tp)
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 2466e2ae54dc..58ef731d52c7 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -5291,10 +5291,10 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
  
- static inline int tcp_fin_time(const struct sock *sk)
- {
--	int fin_timeout = tcp_sk(sk)->linger2 ? : sock_net(sk)->ipv4.sysctl_tcp_fin_timeout;
-+	int fin_timeout = tcp_sk(sk)->linger2 ? :
-+		READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_fin_timeout);
- 	const int rto = inet_csk(sk)->icsk_rto;
- 
- 	if (fin_timeout < (rto << 2) - (rto >> 1))
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 5582b05d0638..6cd5ce3eac0c 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3727,7 +3727,7 @@ static int do_tcp_getsockopt(struct sock *sk, int level,
- 	case TCP_LINGER2:
- 		val = tp->linger2;
- 		if (val >= 0)
--			val = (val ? : net->ipv4.sysctl_tcp_fin_timeout) / HZ;
-+			val = (val ? : READ_ONCE(net->ipv4.sysctl_tcp_fin_timeout)) / HZ;
- 		break;
- 	case TCP_DEFER_ACCEPT:
- 		val = retrans_to_secs(icsk->icsk_accept_queue.rskq_defer_accept,
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index b58697336bd4..e7348e70e6e3 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -4092,7 +4092,7 @@ void tcp_send_probe0(struct sock *sk)
- 
- 	icsk->icsk_probes_out++;
- 	if (err <= 0) {
--		if (icsk->icsk_backoff < net->ipv4.sysctl_tcp_retries2)
-+		if (icsk->icsk_backoff < READ_ONCE(net->ipv4.sysctl_tcp_retries2))
- 			icsk->icsk_backoff++;
- 		timeout = tcp_probe0_when(sk, TCP_RTO_MAX);
- 	} else {
-diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
-index da92c5d70b70..e20fd86a2a89 100644
---- a/net/ipv4/tcp_timer.c
-+++ b/net/ipv4/tcp_timer.c
-@@ -143,7 +143,7 @@ static int tcp_out_of_resources(struct sock *sk, bool do_reset)
-  */
- static int tcp_orphan_retries(struct sock *sk, bool alive)
- {
--	int retries = sock_net(sk)->ipv4.sysctl_tcp_orphan_retries; /* May be zero. */
-+	int retries = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_orphan_retries); /* May be zero. */
- 
- 	/* We know from an ICMP that something is wrong. */
- 	if (sk->sk_err_soft && !alive)
-@@ -242,14 +242,14 @@ static int tcp_write_timeout(struct sock *sk)
- 		retry_until = icsk->icsk_syn_retries ? : net->ipv4.sysctl_tcp_syn_retries;
- 		expired = icsk->icsk_retransmits >= retry_until;
- 	} else {
--		if (retransmits_timed_out(sk, net->ipv4.sysctl_tcp_retries1, 0)) {
-+		if (retransmits_timed_out(sk, READ_ONCE(net->ipv4.sysctl_tcp_retries1), 0)) {
- 			/* Black hole detection */
- 			tcp_mtu_probing(icsk, sk);
- 
- 			__dst_negative_advice(sk);
+ 		if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
+ 			/*
+-			 * Raced against perf_mmap_close() through
+-			 * perf_event_set_output(). Try again, hope for better
+-			 * luck.
++			 * Raced against perf_mmap_close(); remove the
++			 * event and try again.
+ 			 */
++			ring_buffer_attach(event, NULL);
+ 			mutex_unlock(&event->mmap_mutex);
+ 			goto again;
  		}
+@@ -9542,14 +9542,25 @@ static int perf_copy_attr(struct perf_event_attr __user *uattr,
+ 	goto out;
+ }
  
--		retry_until = net->ipv4.sysctl_tcp_retries2;
-+		retry_until = READ_ONCE(net->ipv4.sysctl_tcp_retries2);
- 		if (sock_flag(sk, SOCK_DEAD)) {
- 			const bool alive = icsk->icsk_rto < TCP_RTO_MAX;
++static void mutex_lock_double(struct mutex *a, struct mutex *b)
++{
++	if (b < a)
++		swap(a, b);
++
++	mutex_lock(a);
++	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
++}
++
+ static int
+ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+ {
+ 	struct ring_buffer *rb = NULL;
+ 	int ret = -EINVAL;
  
-@@ -380,7 +380,7 @@ static void tcp_probe_timer(struct sock *sk)
- 		 msecs_to_jiffies(icsk->icsk_user_timeout))
- 		goto abort;
+-	if (!output_event)
++	if (!output_event) {
++		mutex_lock(&event->mmap_mutex);
+ 		goto set;
++	}
  
--	max_probes = sock_net(sk)->ipv4.sysctl_tcp_retries2;
-+	max_probes = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_retries2);
- 	if (sock_flag(sk, SOCK_DEAD)) {
- 		const bool alive = inet_csk_rto_backoff(icsk, TCP_RTO_MAX) < TCP_RTO_MAX;
+ 	/* don't allow circular references */
+ 	if (event == output_event)
+@@ -9587,8 +9598,15 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+ 	    event->pmu != output_event->pmu)
+ 		goto out;
  
-@@ -585,7 +585,7 @@ void tcp_retransmit_timer(struct sock *sk)
++	/*
++	 * Hold both mmap_mutex to serialize against perf_mmap_close().  Since
++	 * output_event is already on rb->event_list, and the list iteration
++	 * restarts after every removal, it is guaranteed this new event is
++	 * observed *OR* if output_event is already removed, it's guaranteed we
++	 * observe !rb->mmap_count.
++	 */
++	mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
+ set:
+-	mutex_lock(&event->mmap_mutex);
+ 	/* Can't redirect output if we've got an active mmap() */
+ 	if (atomic_read(&event->mmap_count))
+ 		goto unlock;
+@@ -9598,6 +9616,12 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+ 		rb = ring_buffer_get(output_event);
+ 		if (!rb)
+ 			goto unlock;
++
++		/* did we race against perf_mmap_close() */
++		if (!atomic_read(&rb->mmap_count)) {
++			ring_buffer_put(rb);
++			goto unlock;
++		}
  	}
- 	inet_csk_reset_xmit_timer(sk, ICSK_TIME_RETRANS,
- 				  tcp_clamp_rto_to_user_timeout(sk), TCP_RTO_MAX);
--	if (retransmits_timed_out(sk, net->ipv4.sysctl_tcp_retries1 + 1, 0))
-+	if (retransmits_timed_out(sk, READ_ONCE(net->ipv4.sysctl_tcp_retries1) + 1, 0))
- 		__sk_dst_reset(sk);
  
- out:;
+ 	ring_buffer_attach(event, rb);
+@@ -9605,20 +9629,13 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+ 	ret = 0;
+ unlock:
+ 	mutex_unlock(&event->mmap_mutex);
++	if (output_event)
++		mutex_unlock(&output_event->mmap_mutex);
+ 
+ out:
+ 	return ret;
+ }
+ 
+-static void mutex_lock_double(struct mutex *a, struct mutex *b)
+-{
+-	if (b < a)
+-		swap(a, b);
+-
+-	mutex_lock(a);
+-	mutex_lock_nested(b, SINGLE_DEPTH_NESTING);
+-}
+-
+ static int perf_event_set_clock(struct perf_event *event, clockid_t clk_id)
+ {
+ 	bool nmi_safe = false;
 -- 
 2.35.1
 

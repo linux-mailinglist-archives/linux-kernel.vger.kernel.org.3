@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E05582C33
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF569582AE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240045AbiG0Qnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S235791AbiG0QYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239761AbiG0QnP (ORCPT
+        with ESMTP id S235679AbiG0QXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:43:15 -0400
+        Wed, 27 Jul 2022 12:23:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096365072E;
-        Wed, 27 Jul 2022 09:30:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD014D81E;
+        Wed, 27 Jul 2022 09:23:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8343B821C8;
-        Wed, 27 Jul 2022 16:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5751C433D6;
-        Wed, 27 Jul 2022 16:30:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42B42B821B8;
+        Wed, 27 Jul 2022 16:22:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85FA3C43470;
+        Wed, 27 Jul 2022 16:22:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939412;
-        bh=4n3VmcxWedC1r5TGuxLLFmXPpspP/C7qwPpncEwq+aU=;
+        s=korg; t=1658938974;
+        bh=XtGu8TE7CovI0KYOLPZ54gTgLYD3hr7Az98aZLAAFW4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=goowL7LZcG0X5Upud81b7xmsz4Jh6owBihXOBhEk9XCpBKJWFkpq57BWCBvjYzv8/
-         fJjA75FF8koyEdhO8LIZI5pALOlp4IvP1FZQx69F+kQPmL9OgRSZ4qd7rIoawiQTdk
-         SysmjncRjiSAwsk3rOkg0683c5mf5FGAl4wYTFCY=
+        b=dHm6dllLulQTTGRUexeQIOKnHk0t6fj5sSJW5VEJoAk85LBXF6X5atvl0vboh9GTp
+         LaohSAd/H9jxEG9ePBYbGa+/rVenUt5sO+Mtzsq9mncVnWwZNVKKTYlusaN1VgGKTg
+         n5FnDIC7lrqm1kqE92sgO3TW7HL3BNFGpyPMj5VQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 61/87] locking/refcount: Ensure integer operands are treated as signed
-Date:   Wed, 27 Jul 2022 18:10:54 +0200
-Message-Id: <20220727161011.522539778@linuxfoundation.org>
+        stable@vger.kernel.org, Jose Alonso <joalonsof@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.9 26/26] net: usb: ax88179_178a needs FLAG_SEND_ZLP
+Date:   Wed, 27 Jul 2022 18:10:55 +0200
+Message-Id: <20220727161000.160421507@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
+References: <20220727160959.122591422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,125 +53,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Will Deacon <will@kernel.org>
+From: Jose Alonso <joalonsof@gmail.com>
 
-[ Upstream commit 97a1420adf0cdf0cf6f41bab0b2acf658c96b94b ]
+commit 36a15e1cb134c0395261ba1940762703f778438c upstream.
 
-In preparation for changing the saturation point of REFCOUNT_FULL to
-INT_MIN/2, change the type of integer operands passed into the API
-from 'unsigned int' to 'int' so that we can avoid casting during
-comparisons when we don't want to fall foul of C integral conversion
-rules for signed and unsigned types.
+The extra byte inserted by usbnet.c when
+ (length % dev->maxpacket == 0) is causing problems to device.
 
-Since the kernel is compiled with '-fno-strict-overflow', we don't need
-to worry about the UB introduced by signed overflow here. Furthermore,
-we're already making heavy use of the atomic_t API, which operates
-exclusively on signed types.
+This patch sets FLAG_SEND_ZLP to avoid this.
 
-Signed-off-by: Will Deacon <will@kernel.org>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Hanjun Guo <guohanjun@huawei.com>
-Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc: Elena Reshetova <elena.reshetova@intel.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20191121115902.2551-3-will@kernel.org
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Tested with: 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+
+Problems observed:
+======================================================================
+1) Using ssh/sshfs. The remote sshd daemon can abort with the message:
+   "message authentication code incorrect"
+   This happens because the tcp message sent is corrupted during the
+   USB "Bulk out". The device calculate the tcp checksum and send a
+   valid tcp message to the remote sshd. Then the encryption detects
+   the error and aborts.
+2) NETDEV WATCHDOG: ... (ax88179_178a): transmit queue 0 timed out
+3) Stop normal work without any log message.
+   The "Bulk in" continue receiving packets normally.
+   The host sends "Bulk out" and the device responds with -ECONNRESET.
+   (The netusb.c code tx_complete ignore -ECONNRESET)
+Under normal conditions these errors take days to happen and in
+intense usage take hours.
+
+A test with ping gives packet loss, showing that something is wrong:
+ping -4 -s 462 {destination}	# 462 = 512 - 42 - 8
+Not all packets fail.
+My guess is that the device tries to find another packet starting
+at the extra byte and will fail or not depending on the next
+bytes (old buffer content).
+======================================================================
+
+Signed-off-by: Jose Alonso <joalonsof@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/refcount.h | 14 +++++++-------
- lib/refcount.c           |  6 +++---
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ drivers/net/usb/ax88179_178a.c |   14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/refcount.h b/include/linux/refcount.h
-index 79f62e8d2256..89066a1471dd 100644
---- a/include/linux/refcount.h
-+++ b/include/linux/refcount.h
-@@ -28,7 +28,7 @@ typedef struct refcount_struct {
-  * @r: the refcount
-  * @n: value to which the refcount will be set
-  */
--static inline void refcount_set(refcount_t *r, unsigned int n)
-+static inline void refcount_set(refcount_t *r, int n)
- {
- 	atomic_set(&r->refs, n);
- }
-@@ -44,13 +44,13 @@ static inline unsigned int refcount_read(const refcount_t *r)
- 	return atomic_read(&r->refs);
- }
- 
--extern __must_check bool refcount_add_not_zero_checked(unsigned int i, refcount_t *r);
--extern void refcount_add_checked(unsigned int i, refcount_t *r);
-+extern __must_check bool refcount_add_not_zero_checked(int i, refcount_t *r);
-+extern void refcount_add_checked(int i, refcount_t *r);
- 
- extern __must_check bool refcount_inc_not_zero_checked(refcount_t *r);
- extern void refcount_inc_checked(refcount_t *r);
- 
--extern __must_check bool refcount_sub_and_test_checked(unsigned int i, refcount_t *r);
-+extern __must_check bool refcount_sub_and_test_checked(int i, refcount_t *r);
- 
- extern __must_check bool refcount_dec_and_test_checked(refcount_t *r);
- extern void refcount_dec_checked(refcount_t *r);
-@@ -79,12 +79,12 @@ extern void refcount_dec_checked(refcount_t *r);
- # ifdef CONFIG_ARCH_HAS_REFCOUNT
- #  include <asm/refcount.h>
- # else
--static inline __must_check bool refcount_add_not_zero(unsigned int i, refcount_t *r)
-+static inline __must_check bool refcount_add_not_zero(int i, refcount_t *r)
- {
- 	return atomic_add_unless(&r->refs, i, 0);
- }
- 
--static inline void refcount_add(unsigned int i, refcount_t *r)
-+static inline void refcount_add(int i, refcount_t *r)
- {
- 	atomic_add(i, &r->refs);
- }
-@@ -99,7 +99,7 @@ static inline void refcount_inc(refcount_t *r)
- 	atomic_inc(&r->refs);
- }
- 
--static inline __must_check bool refcount_sub_and_test(unsigned int i, refcount_t *r)
-+static inline __must_check bool refcount_sub_and_test(int i, refcount_t *r)
- {
- 	return atomic_sub_and_test(i, &r->refs);
- }
-diff --git a/lib/refcount.c b/lib/refcount.c
-index 48b78a423d7d..719b0bc42ab1 100644
---- a/lib/refcount.c
-+++ b/lib/refcount.c
-@@ -61,7 +61,7 @@
-  *
-  * Return: false if the passed refcount is 0, true otherwise
-  */
--bool refcount_add_not_zero_checked(unsigned int i, refcount_t *r)
-+bool refcount_add_not_zero_checked(int i, refcount_t *r)
- {
- 	unsigned int new, val = atomic_read(&r->refs);
- 
-@@ -101,7 +101,7 @@ EXPORT_SYMBOL(refcount_add_not_zero_checked);
-  * cases, refcount_inc(), or one of its variants, should instead be used to
-  * increment a reference count.
-  */
--void refcount_add_checked(unsigned int i, refcount_t *r)
-+void refcount_add_checked(int i, refcount_t *r)
- {
- 	WARN_ONCE(!refcount_add_not_zero_checked(i, r), "refcount_t: addition on 0; use-after-free.\n");
- }
-@@ -180,7 +180,7 @@ EXPORT_SYMBOL(refcount_inc_checked);
-  *
-  * Return: true if the resulting refcount is 0, false otherwise
-  */
--bool refcount_sub_and_test_checked(unsigned int i, refcount_t *r)
-+bool refcount_sub_and_test_checked(int i, refcount_t *r)
- {
- 	unsigned int new, val = atomic_read(&r->refs);
- 
--- 
-2.35.1
-
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1703,7 +1703,7 @@ static const struct driver_info ax88179_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1716,7 +1716,7 @@ static const struct driver_info ax88178a
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1729,7 +1729,7 @@ static const struct driver_info cypress_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1742,7 +1742,7 @@ static const struct driver_info dlink_du
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1755,7 +1755,7 @@ static const struct driver_info sitecom_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1768,7 +1768,7 @@ static const struct driver_info samsung_
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
+@@ -1781,7 +1781,7 @@ static const struct driver_info lenovo_i
+ 	.link_reset = ax88179_link_reset,
+ 	.reset = ax88179_reset,
+ 	.stop = ax88179_stop,
+-	.flags = FLAG_ETHER | FLAG_FRAMING_AX,
++	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_SEND_ZLP,
+ 	.rx_fixup = ax88179_rx_fixup,
+ 	.tx_fixup = ax88179_tx_fixup,
+ };
 
 

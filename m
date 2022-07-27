@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B258582B72
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E41582C03
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238075AbiG0QdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 12:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S239405AbiG0QlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237598AbiG0Qcv (ORCPT
+        with ESMTP id S239363AbiG0Qkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:32:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307775466C;
-        Wed, 27 Jul 2022 09:26:25 -0700 (PDT)
+        Wed, 27 Jul 2022 12:40:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C008B501AE;
+        Wed, 27 Jul 2022 09:29:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2199EB821C6;
-        Wed, 27 Jul 2022 16:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746ADC433C1;
-        Wed, 27 Jul 2022 16:25:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B231619FF;
+        Wed, 27 Jul 2022 16:29:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CC8C433D6;
+        Wed, 27 Jul 2022 16:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658939130;
-        bh=BBk1kyASzUYpYQ+fLeaHuVmb7y3xxhjn1vuem2RYH+c=;
+        s=korg; t=1658939355;
+        bh=5AXRbgbAlR8mXXL/6o4SYWYsIuY2c56h7/LdvuOFNFA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iybAJG7TTS49BdnPcZ1YWLvZN7FhvYSiNEGk7k9RUoiibTLLKgioLHrulUv48pBeo
-         rz1jfxhdfudXuBMxnrALPGabUCo9jdwUDKcFPDiKQXTKV1UDk1aJ5QOLCPhiLinlsZ
-         bHdji69jmPMmjI24UCtJTGhDhaOahzg2b3brWavU=
+        b=FRFIJ0xRGjKEdeez5M6Ut4I68erQeNNE0GHyA57vVMUg4pNsAUTkViAkykylNZChj
+         VtN+V7lY7oRp0dxv2uHGu7E8sLIBziYW10vgtNfIM/LR5af9JcPAVJQraMjQcCKer7
+         gCXR3JvC/0w4mu3+Ws1RntDLHBZoivU4NBdHojxM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hristo Venev <hristo@venev.name>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org,
+        Dawid Lukwinski <dawid.lukwinski@intel.com>,
+        Jan Sokolowski <jan.sokolowski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 24/62] be2net: Fix buffer overflow in be_get_module_eeprom
+Subject: [PATCH 5.4 40/87] i40e: Fix erroneous adapter reinitialization during recovery process
 Date:   Wed, 27 Jul 2022 18:10:33 +0200
-Message-Id: <20220727161005.139756517@linuxfoundation.org>
+Message-Id: <20220727161010.669552423@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+References: <20220727161008.993711844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,142 +58,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hristo Venev <hristo@venev.name>
+From: Dawid Lukwinski <dawid.lukwinski@intel.com>
 
-[ Upstream commit d7241f679a59cfe27f92cb5c6272cb429fb1f7ec ]
+[ Upstream commit f838a63369818faadec4ad1736cfbd20ab5da00e ]
 
-be_cmd_read_port_transceiver_data assumes that it is given a buffer that
-is at least PAGE_DATA_LEN long, or twice that if the module supports SFF
-8472. However, this is not always the case.
+Fix an issue when driver incorrectly detects state
+of recovery process and erroneously reinitializes interrupts,
+which results in a kernel error and call trace message.
 
-Fix this by passing the desired offset and length to
-be_cmd_read_port_transceiver_data so that we only copy the bytes once.
+The issue was caused by a combination of two factors:
+1. Assuming the EMP reset issued after completing
+firmware recovery means the whole recovery process is complete.
+2. Erroneous reinitialization of interrupt vector after detecting
+the above mentioned EMP reset.
 
-Fixes: e36edd9d26cf ("be2net: add ethtool "-m" option support")
-Signed-off-by: Hristo Venev <hristo@venev.name>
-Link: https://lore.kernel.org/r/20220716085134.6095-1-hristo@venev.name
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes (1) by changing how recovery state change is detected
+and (2) by adjusting the conditional expression to ensure using proper
+interrupt reinitialization method, depending on the situation.
+
+Fixes: 4ff0ee1af016 ("i40e: Introduce recovery mode support")
+Signed-off-by: Dawid Lukwinski <dawid.lukwinski@intel.com>
+Signed-off-by: Jan Sokolowski <jan.sokolowski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220715214542.2968762-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/emulex/benet/be_cmds.c   | 10 +++---
- drivers/net/ethernet/emulex/benet/be_cmds.h   |  2 +-
- .../net/ethernet/emulex/benet/be_ethtool.c    | 31 ++++++++++++-------
- 3 files changed, 25 insertions(+), 18 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_main.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.c b/drivers/net/ethernet/emulex/benet/be_cmds.c
-index 1e9d882c04ef..a4a448d97451 100644
---- a/drivers/net/ethernet/emulex/benet/be_cmds.c
-+++ b/drivers/net/ethernet/emulex/benet/be_cmds.c
-@@ -2291,7 +2291,7 @@ int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num, u32 *state)
- 
- /* Uses sync mcc */
- int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
--				      u8 page_num, u8 *data)
-+				      u8 page_num, u32 off, u32 len, u8 *data)
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+index 05442bbc218c..0610d344fdbf 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -10068,7 +10068,7 @@ static int i40e_reset(struct i40e_pf *pf)
+  **/
+ static void i40e_rebuild(struct i40e_pf *pf, bool reinit, bool lock_acquired)
  {
- 	struct be_dma_mem cmd;
- 	struct be_mcc_wrb *wrb;
-@@ -2325,10 +2325,10 @@ int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
- 	req->port = cpu_to_le32(adapter->hba_port_num);
- 	req->page_num = cpu_to_le32(page_num);
- 	status = be_mcc_notify_wait(adapter);
--	if (!status) {
-+	if (!status && len > 0) {
- 		struct be_cmd_resp_port_type *resp = cmd.va;
+-	int old_recovery_mode_bit = test_bit(__I40E_RECOVERY_MODE, pf->state);
++	const bool is_recovery_mode_reported = i40e_check_recovery_mode(pf);
+ 	struct i40e_vsi *vsi = pf->vsi[pf->lan_vsi];
+ 	struct i40e_hw *hw = &pf->hw;
+ 	i40e_status ret;
+@@ -10076,13 +10076,11 @@ static void i40e_rebuild(struct i40e_pf *pf, bool reinit, bool lock_acquired)
+ 	int v;
  
--		memcpy(data, resp->page_data, PAGE_DATA_LEN);
-+		memcpy(data, resp->page_data + off, len);
- 	}
- err:
- 	mutex_unlock(&adapter->mcc_lock);
-@@ -2419,7 +2419,7 @@ int be_cmd_query_cable_type(struct be_adapter *adapter)
- 	int status;
+ 	if (test_bit(__I40E_EMP_RESET_INTR_RECEIVED, pf->state) &&
+-	    i40e_check_recovery_mode(pf)) {
++	    is_recovery_mode_reported)
+ 		i40e_set_ethtool_ops(pf->vsi[pf->lan_vsi]->netdev);
+-	}
  
- 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
--						   page_data);
-+						   0, PAGE_DATA_LEN, page_data);
- 	if (!status) {
- 		switch (adapter->phy.interface_type) {
- 		case PHY_TYPE_QSFP:
-@@ -2444,7 +2444,7 @@ int be_cmd_query_sfp_info(struct be_adapter *adapter)
- 	int status;
+ 	if (test_bit(__I40E_DOWN, pf->state) &&
+-	    !test_bit(__I40E_RECOVERY_MODE, pf->state) &&
+-	    !old_recovery_mode_bit)
++	    !test_bit(__I40E_RECOVERY_MODE, pf->state))
+ 		goto clear_recovery;
+ 	dev_dbg(&pf->pdev->dev, "Rebuilding internal switch\n");
  
- 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
--						   page_data);
-+						   0, PAGE_DATA_LEN, page_data);
- 	if (!status) {
- 		strlcpy(adapter->phy.vendor_name, page_data +
- 			SFP_VENDOR_NAME_OFFSET, SFP_VENDOR_NAME_LEN - 1);
-diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.h b/drivers/net/ethernet/emulex/benet/be_cmds.h
-index e8b43cf44b6f..f6f9c51a7d47 100644
---- a/drivers/net/ethernet/emulex/benet/be_cmds.h
-+++ b/drivers/net/ethernet/emulex/benet/be_cmds.h
-@@ -2431,7 +2431,7 @@ int be_cmd_set_beacon_state(struct be_adapter *adapter, u8 port_num, u8 beacon,
- int be_cmd_get_beacon_state(struct be_adapter *adapter, u8 port_num,
- 			    u32 *state);
- int be_cmd_read_port_transceiver_data(struct be_adapter *adapter,
--				      u8 page_num, u8 *data);
-+				      u8 page_num, u32 off, u32 len, u8 *data);
- int be_cmd_query_cable_type(struct be_adapter *adapter);
- int be_cmd_query_sfp_info(struct be_adapter *adapter);
- int lancer_cmd_read_object(struct be_adapter *adapter, struct be_dma_mem *cmd,
-diff --git a/drivers/net/ethernet/emulex/benet/be_ethtool.c b/drivers/net/ethernet/emulex/benet/be_ethtool.c
-index d1905d50c26c..1c1ac3488da2 100644
---- a/drivers/net/ethernet/emulex/benet/be_ethtool.c
-+++ b/drivers/net/ethernet/emulex/benet/be_ethtool.c
-@@ -1342,7 +1342,7 @@ static int be_get_module_info(struct net_device *netdev,
- 		return -EOPNOTSUPP;
+@@ -10109,13 +10107,12 @@ static void i40e_rebuild(struct i40e_pf *pf, bool reinit, bool lock_acquired)
+ 	 * accordingly with regard to resources initialization
+ 	 * and deinitialization
+ 	 */
+-	if (test_bit(__I40E_RECOVERY_MODE, pf->state) ||
+-	    old_recovery_mode_bit) {
++	if (test_bit(__I40E_RECOVERY_MODE, pf->state)) {
+ 		if (i40e_get_capabilities(pf,
+ 					  i40e_aqc_opc_list_func_capabilities))
+ 			goto end_unlock;
  
- 	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
--						   page_data);
-+						   0, PAGE_DATA_LEN, page_data);
- 	if (!status) {
- 		if (!page_data[SFP_PLUS_SFF_8472_COMP]) {
- 			modinfo->type = ETH_MODULE_SFF_8079;
-@@ -1360,25 +1360,32 @@ static int be_get_module_eeprom(struct net_device *netdev,
- {
- 	struct be_adapter *adapter = netdev_priv(netdev);
- 	int status;
-+	u32 begin, end;
- 
- 	if (!check_privilege(adapter, MAX_PRIVILEGES))
- 		return -EOPNOTSUPP;
- 
--	status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0,
--						   data);
--	if (status)
--		goto err;
-+	begin = eeprom->offset;
-+	end = eeprom->offset + eeprom->len;
-+
-+	if (begin < PAGE_DATA_LEN) {
-+		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A0, begin,
-+							   min_t(u32, end, PAGE_DATA_LEN) - begin,
-+							   data);
-+		if (status)
-+			goto err;
-+
-+		data += PAGE_DATA_LEN - begin;
-+		begin = PAGE_DATA_LEN;
-+	}
- 
--	if (eeprom->offset + eeprom->len > PAGE_DATA_LEN) {
--		status = be_cmd_read_port_transceiver_data(adapter,
--							   TR_PAGE_A2,
--							   data +
--							   PAGE_DATA_LEN);
-+	if (end > PAGE_DATA_LEN) {
-+		status = be_cmd_read_port_transceiver_data(adapter, TR_PAGE_A2,
-+							   begin - PAGE_DATA_LEN,
-+							   end - begin, data);
- 		if (status)
- 			goto err;
- 	}
--	if (eeprom->offset)
--		memcpy(data, data + eeprom->offset, eeprom->len);
- err:
- 	return be_cmd_status(status);
- }
+-		if (test_bit(__I40E_RECOVERY_MODE, pf->state)) {
++		if (is_recovery_mode_reported) {
+ 			/* we're staying in recovery mode so we'll reinitialize
+ 			 * misc vector here
+ 			 */
 -- 
 2.35.1
 

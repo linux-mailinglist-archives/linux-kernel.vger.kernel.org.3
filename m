@@ -2,168 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311BC5831CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD9F5831D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbiG0SRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        id S243421AbiG0STM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234474AbiG0SQ6 (ORCPT
+        with ESMTP id S243398AbiG0SSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:16:58 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD399D54;
-        Wed, 27 Jul 2022 10:17:21 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BBFC7240008;
-        Wed, 27 Jul 2022 17:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1658942240;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pD+6JsLJZ79rYHRmRP+N5CK2RU/2PPAI0GVGYlpGjrI=;
-        b=MHkMXCFzwyOhigfD3fOn/vHnUXWQXKZE5lLCgbSY5U8ix16n/ghnZwBhOS+nVxy+zcd+YN
-        xh2QTLt6dA0cersxQauh43bC5S5ngrf5x7/qiIb1WaMuZKUlzVkvb7PBPbmWhBxLiMVUxh
-        4vs3wo7kGjJTOvyzsbgyvSyzTnCsjcPkaJ9ir6lo1FIHgqCXrqYJJWMBzDVP46DKWB/KiA
-        S1ScOD4yFDYf4mWZmcX8xXjEeD6XeU11fhenGaq4gmuMlYH02ehjR6RSXRS/Pt0h7mrx3V
-        BqNqd25Nx4wU99qo0qnilMKa2h9JHH++LS03z8YvKbw3F90k0scqinCZzjnxYw==
-Date:   Wed, 27 Jul 2022 19:17:15 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Rob Herring <robh@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH RFC v3 1/8] of: Mark interconnects property supplier as
- optional
-Message-ID: <YuFzG9SykSHw1bVe@aptenodytes>
-References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
- <20220302211100.65264-2-paul.kocialkowski@bootlin.com>
- <YiaTfsMDs7RGob2N@robh.at.kernel.org>
- <CAGETcx9u9RO_5nSp+=qgwDGY=jL_Q1hAcj+RfVN=q-H_8iuT4w@mail.gmail.com>
- <20220727120631.iefzititedahdsdt@houat>
- <CAGETcx_o=L+Ku9CPGbQW2wS15etvi+ofkKZ0K=C7imP4=JcXeQ@mail.gmail.com>
+        Wed, 27 Jul 2022 14:18:52 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F23796BD
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:18:39 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id f65so16428626pgc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:18:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WWCmALyIfyfxZcOwM+WnJXH5fX1Oapc9tMvQ2tyZ/gA=;
+        b=RUGgbOZZiX9cKnAXmZSPCy70hMCEU8askQzkDRUlKVRVAodzICC7cgYAtYsie3UFzj
+         L3TePliA+yGPcmjr9x0ihXFmgK0+p4Z3HIkfxhwXrqOWNp0iGDI0M7axOhthf2bDWtJ4
+         fBf6wfG0P3yVO8lG6QMrjVT4qbsz6kbB6X+qRNG2/qP73aP5H0otgk4wulFpir6yq5tz
+         PEN2viguJ7e1Q/BwDt8QZmdhSyl6gW9R07YA2Tnh+ksZj3osBIQsfKJL1SPw2Ow8ScZK
+         6Z3t+/LppY9MZsKP3phkfXXWV7Kqz0/JNYxDVQQDkmyopr9z6n707dy7026MIwcW3iHy
+         5WCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WWCmALyIfyfxZcOwM+WnJXH5fX1Oapc9tMvQ2tyZ/gA=;
+        b=uRzg3jbkNBzeQjqGbZ01e3iL/G+PDusOkeEnkaigWxxUaXKdsImb6T2bK12n39FW9j
+         6/JqMpaOlA3wdoLewJPD2bbCXVQgBgCV+K0qHDmPgciCd+2ZZ/ct0U/GkCsKgWtl3D/b
+         3e6ltN40p8jdUoynypw53PWNNQvxVs8lZRg6d0G9deUCdtbAPGD+GzYuFICKSzKzSLGX
+         Y+teLt1y4fTNqixIFdc8VxxqM+khfsZ5wGoFqt7QeIigUOYtsTxRPM+/7WjrxMIOCp7K
+         rYfyQiHHVCrkm54Fiz963lLWJ2ncerEDYLtYgIlLhf5ORQ6KEYA2fAINn8rTkYN24HGO
+         Rf6w==
+X-Gm-Message-State: AJIora/MS8PZIgY16I96DHYAe61xXGS6vJN0reXu3xohdDC6PhZRJgUS
+        v3N/oMqRintlS+JTUpgtLoyRwA==
+X-Google-Smtp-Source: AGRyM1v6W5TTmMy+3aH01G2tHhgfhxx5mBK5jrf+PdOXn2Kww1Zmm2jC4Vo9LZW2r3fOUH6xPga6Jw==
+X-Received: by 2002:a05:6a00:130a:b0:52c:5932:7160 with SMTP id j10-20020a056a00130a00b0052c59327160mr1898840pfu.19.1658942318560;
+        Wed, 27 Jul 2022 10:18:38 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id n59-20020a17090a5ac100b001f2b0f8e047sm2081502pji.27.2022.07.27.10.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 10:18:37 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 11:18:36 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Chris Lew <quic_clew@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] rpmsg: char: Add support to use rpmsg_rx_done
+Message-ID: <20220727171836.GB199805@p14s>
+References: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
+ <1654651005-15475-3-git-send-email-quic_clew@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YI4hFKeTpPz6LydI"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGETcx_o=L+Ku9CPGbQW2wS15etvi+ofkKZ0K=C7imP4=JcXeQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1654651005-15475-3-git-send-email-quic_clew@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 07, 2022 at 06:16:43PM -0700, Chris Lew wrote:
+> Add support into the rpmsg char driver to skip copying the data into an
+> skb if the endpoint supports rpmsg_rx_done. If the endpoint supports
+> the rx_done operation, allocate a zero sized skb and set the data to
+> the buffer returned in the rx callback. When the packet is read from
+> the character device, release the memory by calling rpmsg_rx_done().
+> 
+> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
+> ---
+>  drivers/rpmsg/rpmsg_char.c | 50 ++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 48 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index b6183d4f62a2..be62ddcf356c 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -91,8 +91,8 @@ int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+>  }
+>  EXPORT_SYMBOL(rpmsg_chrdev_eptdev_destroy);
+>  
+> -static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
+> -			void *priv, u32 addr)
+> +static int rpmsg_ept_copy_cb(struct rpmsg_device *rpdev, void *buf, int len,
+> +			     void *priv, u32 addr)
+>  {
+>  	struct rpmsg_eptdev *eptdev = priv;
+>  	struct sk_buff *skb;
+> @@ -113,6 +113,43 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
+>  	return 0;
+>  }
+>  
+> +static int rpmsg_ept_no_copy_cb(struct rpmsg_device *rpdev, void *buf, int len,
+> +				void *priv, u32 addr)
+> +{
+> +	struct rpmsg_eptdev *eptdev = priv;
+> +	struct sk_buff *skb;
+> +
+> +	skb = alloc_skb(0, GFP_ATOMIC);
+> +	if (!skb)
+> +		return -ENOMEM;
+> +
+> +	skb->head = buf;
+> +	skb->data = buf;
+> +	skb_reset_tail_pointer(skb);
+> +	skb_set_end_offset(skb, len);
+> +	skb_put(skb, len);
+> +
 
---YI4hFKeTpPz6LydI
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I was worried about all that open ended code but looking at the sk_buff API I
+don't think it is possible to do otherwise.  As such:
 
-Hi,
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-On Wed 27 Jul 22, 09:06, Saravana Kannan wrote:
-> On Wed, Jul 27, 2022 at 5:06 AM Maxime Ripard <maxime@cerno.tech> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Mar 07, 2022 at 07:34:22PM -0800, Saravana Kannan wrote:
-> > > On Mon, Mar 7, 2022 at 3:21 PM Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > +Saravana
-> > > >
-> > > > On Wed, Mar 02, 2022 at 10:10:53PM +0100, Paul Kocialkowski wrote:
-> > > > > In order to set their correct DMA address offset, some devices re=
-ly on
-> > > > > the device-tree interconnects property which identifies an
-> > > > > interconnect node that provides a dma-ranges property that can be=
- used
-> > > > > to set said offset.
-> > > > >
-> > > > > Since that logic is all handled by the generic openfirmware and d=
-river
-> > > > > code, the device-tree description could be enough to properly set
-> > > > > the offset.
-> > > > >
-> > > > > However the interconnects property is currently not marked as
-> > > > > optional, which implies that a driver for the corresponding node
-> > > > > must be loaded as a requirement. When no such driver exists, this
-> > > > > results in an endless EPROBE_DEFER which gets propagated to the
-> > > > > calling driver. This ends up in the driver never loading.
-> > > > >
-> > > > > Marking the interconnects property as optional makes it possible
-> > > > > to load the driver in that situation, since the EPROBE_DEFER retu=
-rn
-> > > > > code will no longer be propagated to the driver.
-> > > > >
-> > > > > There might however be undesirable consequences with this change,
-> > > > > which I do not fully grasp at this point.
-> > >
-> > > Temporary NACK till I get a bit more time to take a closer look. I
-> > > really don't like the idea of making interconnects optional. IOMMUs
-> > > and DMAs were exceptions. Also, we kinda discuss similar issues in
-> > > LPC. We had some consensus on how to handle these and I noted them all
-> > > down with a lot of details -- let me go take a look at those notes
-> > > again and see if I can send a more generic patch.
-> > >
-> > > Paul,
-> > >
-> > > Can you point to the DTS (not DTSI) file that corresponds to this?
-> > > Also, if it's a builtin kernel, I'd recommend setting
-> > > deferred_probe_timeout=3D1 and that should take care of it too.
-> >
-> > For the record, I also encountered this today on next-20220726 with this
-> > device:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/arch/arm/boot/dts/sun5i.dtsi#n775
-> >
-> > The driver won't probe without fw_devlink=3Doff
->=20
-> Really? I basically ended up doing what I mentioned in my original
-> reply. next-20220726 should have my changes that'll make sure
-> fw_devlink doesn't block any probe (it'll still try to create as many
-> device links as possible) after 10s (default deferred probe timeout).
-> Can you try to find more info on why it's not probing?
-> <debugfs>/devices_deferred should give more details.
 
-By the way last time I checked the initial issue that I reported appeared t=
-o be
-fixed by the patch (Extend deferred probe timeout on driver registration).
-
-Cheers,
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---YI4hFKeTpPz6LydI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmLhcxsACgkQ3cLmz3+f
-v9FD3Qf/f9BJLCBNeLkg1/FJs/uq8AROdDgAOOIp6h0jojREfp9mzOJZLiwolT2a
-cibrCYabq1rvssN9wI0S5i57IRa3ZcUEdZTu8th5zLPMKv96o0iFcp0DjoAQ1K2A
-mvhRcdI7q6tFhAEMoDbJjmRg1qCpCMpVmW0B+PQcafq5K2y0TpnxLjeEUdRrmjxY
-M8Ddn1Ui6Ymne0Rj3Io4f4jxDIm5WQTFk+iYA6OcaA490loeYI9CfvCqx8NDyJF+
-1e92FYkmpTyvgi48Diqs2k7VGooJ1pjsMVYqlFAtz3DYFUh/i/nCaVAk6RNOicqU
-Dz0DKgon9pUOsbZjFCSd6jiWpjTu9Q==
-=ncXW
------END PGP SIGNATURE-----
-
---YI4hFKeTpPz6LydI--
+> +	spin_lock(&eptdev->queue_lock);
+> +	skb_queue_tail(&eptdev->queue, skb);
+> +	spin_unlock(&eptdev->queue_lock);
+> +
+> +	/* wake up any blocking processes, waiting for new data */
+> +	wake_up_interruptible(&eptdev->readq);
+> +
+> +	return RPMSG_DEFER;
+> +}
+> +
+> +static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
+> +			void *priv, u32 addr)
+> +{
+> +	struct rpmsg_eptdev *eptdev = priv;
+> +	rpmsg_rx_cb_t cb;
+> +
+> +	cb = (eptdev->ept->rx_done) ? rpmsg_ept_no_copy_cb : rpmsg_ept_copy_cb;
+> +
+> +	return cb(rpdev, buf, len, priv, addr);
+> +}
+> +
+>  static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
+>  {
+>  	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
+> @@ -210,6 +247,15 @@ static ssize_t rpmsg_eptdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>  	if (copy_to_iter(skb->data, use, to) != use)
+>  		use = -EFAULT;
+>  
+> +	if (eptdev->ept->rx_done) {
+> +		rpmsg_rx_done(eptdev->ept, skb->data);
+> +		/*
+> +		 * Data memory is freed by rpmsg_rx_done(), reset the skb data
+> +		 * pointers so kfree_skb() does not try to free a second time.
+> +		 */
+> +		skb->head = NULL;
+> +		skb->data = NULL;
+> +	}
+>  	kfree_skb(skb);
+>  
+>  	return use;
+> -- 
+> 2.7.4
+> 

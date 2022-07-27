@@ -2,200 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6115828E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79AD5828E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 16:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiG0OrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 10:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S234117AbiG0Oqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 10:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbiG0Oqz (ORCPT
+        with ESMTP id S233343AbiG0Oqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 10:46:55 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC607B864;
-        Wed, 27 Jul 2022 07:46:52 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26REkloG060208;
-        Wed, 27 Jul 2022 09:46:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1658933207;
-        bh=HH6/A4QoVI8XrsWuyUxunANjj1kmDchZTOuwiRXvt28=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=C1SmbkDzzwGA99K2o2okRLj5ajVawdFRhYCdCepWsYspmqgfOFAiz/T9DtlSouHYg
-         g/q7use3savg0toOu4QdSTzTUproUv7wDv3DRkvZ3uC5PQ0rmrUd3phzMCmWBwspR0
-         jmT7nNYXUZfyqj49CS/8v0SkB79HWKnHEyF9QXvg=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26REkl60069165
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 Jul 2022 09:46:47 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
- Jul 2022 09:46:47 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 27 Jul 2022 09:46:47 -0500
-Received: from [10.24.69.12] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 26REkfdN035172;
-        Wed, 27 Jul 2022 09:46:42 -0500
-Message-ID: <df8b6249-93af-a323-3518-a1e0106b5c03@ti.com>
-Date:   Wed, 27 Jul 2022 20:16:39 +0530
+        Wed, 27 Jul 2022 10:46:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 502C21EC68
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 07:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658933208;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xuFpOaXJaj/gAOk0ci5YpbcXaLPN1T4Ab/tSiyAfQzA=;
+        b=EzTr3jpc6kPxoCbFYwAUEIoTfmrZOPhUUPijqNTdlS4XG0drK/IpPrBBEKb9oGO1+2mqAH
+        801GwC4ADlWLPSJI6PVhdvJLNkGpehL9h9uvdOL4wO+86rsYKrMeC/BN4x/5yc3wboTFqV
+        QPuN/3Ucva3NTvp5b16GaAKmPanQ338=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-zjaeplmAPJ668snlUMnWUQ-1; Wed, 27 Jul 2022 10:46:42 -0400
+X-MC-Unique: zjaeplmAPJ668snlUMnWUQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2FA543C10222;
+        Wed, 27 Jul 2022 14:46:42 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E06FA1415121;
+        Wed, 27 Jul 2022 14:46:40 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <1822b768504.1d4e377e236061.5518350412857967240@siddh.me>
+References: <1822b768504.1d4e377e236061.5518350412857967240@siddh.me> <20220723135447.199557-1-code@siddh.me> <Ytv/4Tljvlt0PJ2r@kroah.com>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     dhowells@redhat.com, "Greg KH" <gregkh@linuxfoundation.org>,
+        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "linux-security-modules" <linux-security-module@vger.kernel.org>,
+        "linux-kernel-mentees" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "syzbot+c70d87ac1d001f29a058" 
+        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
+Subject: Re: [PATCH] kernel/watch_queue: Make pipe NULL while clearing watch_queue
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dma: ti: k3-udma: Reset UDMA_CHAN_RT byte counters to
- prevent overflow
-Content-Language: en-US
-To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
-        <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <p.yadav@ti.com>,
-        <j-keerthy@ti.com>, <m-khayami@ti.com>, <stanley_liu@ti.com>
-References: <20220704111325.636-1-vaishnav.a@ti.com>
- <ad6dcdb8-8d4d-6f8b-38de-be2756a39028@gmail.com>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <ad6dcdb8-8d4d-6f8b-38de-be2756a39028@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3558069.1658933200.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 27 Jul 2022 15:46:40 +0100
+Message-ID: <3558070.1658933200@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter, Vinod,
+Siddh Raman Pant <code@siddh.me> wrote:
 
-On 09/07/22 11:50, Péter Ujfalusi wrote:
-> 
-> 
-> On 7/4/22 14:13, Vaishnav Achath wrote:
->> UDMA_CHAN_RT_*BCNT_REG stores the real-time channel bytecount statistics.
->> These registers are 32-bit hardware counters and the driver uses these
->> counters to monitor the operational progress status for a channel, when
->> transferring more than 4GB of data it was observed that these counters
->> overflow and completion calculation of a operation gets affected and the
->> transfer hangs indefinitely.
->>
->> This commit adds changes to decrease the byte count for every complete
->> transaction so that these registers never overflow and the proper byte
->> count statistics is maintained for ongoing transaction by the RT counters.
->>
->> Earlier uc->bcnt used to maintain a count of the completed bytes at driver
->> side, since the RT counters maintain the statistics of current transaction
->> now, the maintenance of uc->bcnt is not necessary.
-> 
-> Thanks for the patch,
-> 
->> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
->> ---
->>   drivers/dma/ti/k3-udma.c | 27 +++++++++++++++++++--------
->>   1 file changed, 19 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
->> index 2f0d2c68c93c..0f91a3e47c19 100644
->> --- a/drivers/dma/ti/k3-udma.c
->> +++ b/drivers/dma/ti/k3-udma.c
->> @@ -300,8 +300,6 @@ struct udma_chan {
->>   
->>   	struct udma_tx_drain tx_drain;
->>   
->> -	u32 bcnt; /* number of bytes completed since the start of the channel */
->> -
->>   	/* Channel configuration parameters */
->>   	struct udma_chan_config config;
->>   
->> @@ -757,6 +755,22 @@ static void udma_reset_rings(struct udma_chan *uc)
->>   	}
->>   }
->>   
->> +static void udma_decrement_byte_counters(struct udma_chan *uc, u32 val)
->> +{
->> +	if (uc->tchan) {
->> +		udma_tchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
->> +		udma_tchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
->> +		if (!uc->bchan)
->> +			udma_tchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
->> +	}
->> +
->> +	if (uc->rchan) {
->> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
->> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
->> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
->> +	}
-> 
-> In case of MEM_TO_MEM (or the not implemented DEV_TO_DEV) we use the
-> tchan's counter for position tracking, but we have the pair anyways (UDMA).
-> if ((uc->desc->dir == DMA_DEV_TO_MEM)
-> 	rchan bcnt reset
-> else
-> 	tchan bcnt reset
-> 
->> +}
->> +
->>   static void udma_reset_counters(struct udma_chan *uc)
->>   {
->>   	u32 val;
->> @@ -790,8 +804,6 @@ static void udma_reset_counters(struct udma_chan *uc)
->>   		val = udma_rchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
->>   		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
->>   	}
->> -
->> -	uc->bcnt = 0;
->>   }
->>   
->>   static int udma_reset_chan(struct udma_chan *uc, bool hard)
->> @@ -1115,8 +1127,8 @@ static void udma_check_tx_completion(struct work_struct *work)
->>   		if (uc->desc) {
->>   			struct udma_desc *d = uc->desc;
->>   
->> -			uc->bcnt += d->residue;
->>   			udma_start(uc);
->> +			udma_decrement_byte_counters(uc, d->residue);
-> 
-> Why not before udma_start()?
-Thank you for your review and feedback, I have updated the addressed items in
-V2, Sorry for the delay in responding.
-V2: https://patchwork.kernel.org/project/linux-dmaengine/patch/20220727140837.25877-1-vaishnav.a@ti.com/
-> 
->>   			vchan_cookie_complete(&d->vd);
->>   			break;
->>   		}
->> @@ -1168,8 +1180,8 @@ static irqreturn_t udma_ring_irq_handler(int irq, void *data)
->>   				vchan_cyclic_callback(&d->vd);
->>   			} else {
->>   				if (udma_is_desc_really_done(uc, d)) {
->> -					uc->bcnt += d->residue;
->>   					udma_start(uc);
->> +					udma_decrement_byte_counters(uc, d->residue);
->>   					vchan_cookie_complete(&d->vd);
->>   				} else {
->>   					schedule_delayed_work(&uc->tx_drain.work,
->> @@ -1204,7 +1216,7 @@ static irqreturn_t udma_udma_irq_handler(int irq, void *data)
->>   			vchan_cyclic_callback(&d->vd);
->>   		} else {
->>   			/* TODO: figure out the real amount of data */
->> -			uc->bcnt += d->residue;
->> +			udma_decrement_byte_counters(uc, d->residue);
->>   			udma_start(uc);
->>   			vchan_cookie_complete(&d->vd);
->>   		}
->> @@ -3809,7 +3821,6 @@ static enum dma_status udma_tx_status(struct dma_chan *chan,
->>   			bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_BCNT_REG);
->>   		}
->>   
->> -		bcnt -= uc->bcnt;
->>   		if (bcnt && !(bcnt % uc->desc->residue))
->>   			residue = 0;
->>   		else
-> 
+> Greg KH <gregkh@linuxfoundation.org> wrote:
 
--- 
-Thanks and Regards,
-Vaishnav
+> > > -	spin_unlock_bh(&wqueue->lock);
+> > >  	rcu_read_unlock();
+> >
+> > Also you now have a spinlock held when calling rcu_read_unlock(), are
+> > you sure that's ok?
+
+Worse, we have softirqs disabled still, which might cause problems for
+rcu_read_unlock()?
+
+> We logically should not do write operations in a read critical section, =
+so the
+> nulling of `wqueue->pipe->watch_queue` should happen after rcu_read_unlo=
+ck().
+> Also, since we already have a spinlock, we can use it to ensure the null=
+ing.
+> So I think it is okay.
+
+Read/write locks are perhaps misnamed in this sense; they perhaps should b=
+e
+shared/exclusive.  But, yes, we *can* do certain write operations with the
+lock held - if we're careful.  Locks are required if we need to pairs of
+related memory accesses; if we're only making a single non-dependent write=
+,
+then we don't necessarily need a write lock.
+
+However, you're referring to RCU read lock.  That's a very special lock th=
+at
+has to do with maintenance of persistence of objects without taking any ot=
+her
+lock.  The moment you drop that lock, anything you accessed under RCU prot=
+ocol
+rules should be considered to have evaporated.
+
+Think of it more as a way to have a deferred destructor/deallocator.
+
+So I would do:
+
++
++	/* Clearing the watch queue, so we should clean the associated pipe. */
++	if (wqueue->pipe) {
++		wqueue->pipe->watch_queue =3D NULL;
++		wqueue->pipe =3D NULL;
++	}
++
+	spin_unlock_bh(&wqueue->lock);
+ 	rcu_read_unlock();
+ }
+
+However, since you're now changing wqueue->pipe whilst a notification is b=
+eing
+posted, you need a barrier in post_one_notification() to prevent the compi=
+ler
+from reloading the value:
+
+	struct pipe_inode_info *pipe =3D READ_ONCE(wqueue->pipe);
+
+David
+

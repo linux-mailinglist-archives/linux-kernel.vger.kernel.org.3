@@ -2,57 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BE458316A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E80F058316E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 20:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242951AbiG0SFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 14:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        id S242922AbiG0SGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 14:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242831AbiG0SFY (ORCPT
+        with ESMTP id S233304AbiG0SFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:05:24 -0400
-Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAF7D501A2;
-        Wed, 27 Jul 2022 10:09:33 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 839EDFFCE8;
-        Wed, 27 Jul 2022 17:09:31 +0000 (UTC)
-Date:   Wed, 27 Jul 2022 19:09:28 +0200
-From:   Max Staudt <max@enpas.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v3 3/9] can: slcan: remove legacy infrastructure
-Message-ID: <20220727190928.79ad62cf.max@enpas.org>
-In-Reply-To: <20220726210217.3368497-4-dario.binacchi@amarulasolutions.com>
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
-        <20220726210217.3368497-4-dario.binacchi@amarulasolutions.com>
+        Wed, 27 Jul 2022 14:05:51 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512B0E1D
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:10:10 -0700 (PDT)
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EF95D3F130
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 17:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1658941809;
+        bh=NfXH6hm4kgWIqx0lHEWq8VeginCP4cCI5Cn5JdXlLaM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=tGx85FlJbMx/NopN2zZf2DEo6FFjoa26sQXXnFfG/CtVDTwRs3VUz3viDJ51vqVq6
+         zywaHuvX6EuqthEKW4VGVlQqYqOHlitXnqhZhDcTQXYchYmuYiTPp2j0QDGPNN2nJ+
+         S5viq+aMu97MTvzZFlQ8iFBs3+4I+Djf+EBLBxInBwtjtRbwdFqThVrRsWpoKHv33D
+         A5lk0L46ipkmXQic3apIQqqwVw0iJGWanbpr62yvgsimHfiN6zeXxonc20VPF3RV/T
+         7howBfU3WJ8++cHB74PoRhQsec/nLI3eHqZmIyL2twzTbFdewbyLg7mZJQ8dQ7z8RX
+         R3c5SSzL+S8IQ==
+Received: by mail-ot1-f72.google.com with SMTP id a13-20020a05683012cd00b0061c9b55da16so8872163otq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 10:10:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NfXH6hm4kgWIqx0lHEWq8VeginCP4cCI5Cn5JdXlLaM=;
+        b=2BdKTC+fKLvLsh/EVhu7o4Py2qdgbph2tarBBDF7OaSCO8BBDtNm7kkACHuNeteQOb
+         2JcLFr8OB1nbX11d7VTqHDonrOlwZDaFRM8qdEt5nBLAOO9qn7utVHXwmc/cupjEXmlB
+         bzDeJdGJmYmmJCTO8Jmuj/w8A5JBnlQpTxC4+9HeYqBDKUnjwj/G7JCR5jVwm4aEWoJt
+         Bl4XeAWjpE4xhidr5dYrFgIx6j4R8x8/+WwzbHjtnA84a2b/qDkYadL2wW3+0+Tdl3KV
+         n2zHqYdsxi5HXF3FrsgZW3rhkpYpKRRBacUL+5lNWOWW/OJd/lJRIfN4MheFAGbusU3u
+         HOww==
+X-Gm-Message-State: AJIora/J5c7gqTaWZllOV/IeJUuYaLJX62FfVk4MuxOKGhY71VZZe2sC
+        3HAYuBUSw8e062EEyfaYoyWLIa190QBYwY8Uf+1OHxVrVy7HmvzW8zTWgXAz0C7NVH83zH2iUGn
+        +yLLLvMO9nAfhYEVeDX/meBclYW94GS7OliQqkwGZlYaTHWo6VPgNRwyb/w==
+X-Received: by 2002:a05:6870:33a5:b0:f5:febe:1b27 with SMTP id w37-20020a05687033a500b000f5febe1b27mr2482232oae.229.1658941805734;
+        Wed, 27 Jul 2022 10:10:05 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tFs8/+IsuCBrPeiaHAaQOq1C18vqr44g3q6xAFKThuVPaHngeo+zLgMOlOfj5HA0v7cyP6dgeCDdgi+1tvU2o=
+X-Received: by 2002:a05:6870:33a5:b0:f5:febe:1b27 with SMTP id
+ w37-20020a05687033a500b000f5febe1b27mr2482201oae.229.1658941805415; Wed, 27
+ Jul 2022 10:10:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722022416.137548-1-mfo@canonical.com> <CAK7LNAR=7zgOiqTD9okXfZXroFH1yagMFsRuq0G-z6OfSUPLQg@mail.gmail.com>
+In-Reply-To: <CAK7LNAR=7zgOiqTD9okXfZXroFH1yagMFsRuq0G-z6OfSUPLQg@mail.gmail.com>
+From:   Mauricio Faria de Oliveira <mfo@canonical.com>
+Date:   Wed, 27 Jul 2022 14:09:53 -0300
+Message-ID: <CAO9xwp2X+qOB4PNp-TAoqgwt-CJ68HXXgoHWb81=BsON0yK3Eg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/6] Introduce "sysctl:" module aliases
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dario,
+Hey Masahiro,
 
-This looks good to me now.
+Thanks for looking into this!
 
-Thank you for cleaning up the legacy code :)
+On Tue, Jul 26, 2022 at 6:04 AM Masahiro Yamada <masahiroy@kernel.org> wrot=
+e:
+[...]
+> > I have tested it on x86_64 with next-20220721, and it looks correct
+> > ('modprobe sysctl:nf_conntrack_max' works; other aliases there; see bel=
+ow).
+[...]
+
+> I see two locations for the "fib_multipath_hash_fields" parameter
+> for example.
+>
+> #  find /proc/sys/ -name fib_multipath_hash_fields
+> /proc/sys/net/ipv4/fib_multipath_hash_fields
+> /proc/sys/net/ipv6/fib_multipath_hash_fields
+>
+>
+> If I run
+>
+>    modprobe sysctl:fib_multipath_hash_fields
+>
+> Which one will be loaded, net/ipv4/sysctl_net_ipv4.c
+> or ipv6/sysctl_net_ipv6.c ?
+>
+> Of course, IPv4 is always built-in, so ipv6.ko will be loaded in this cas=
+e.
+> But, let's think. The basename is not enough to identify
+> which code resulted in that sysctl property.
+> The PCI vendor/device ID is meant to be unique. That's the difference.
+>
+>
+> You may argue the full path is globally unique, so
+>
+>   modprobe  sysctl:net/ipv6/fib_multipath_hash_fields
+>
+> should work, but that may not be so feasible to implement
+> because not all file paths are static.
+>
+>
+> On my machine:
+>
+> # find  /proc/sys  -name  forwarding
+> /proc/sys/net/ipv4/conf/all/forwarding
+> /proc/sys/net/ipv4/conf/br-22440b7735e7/forwarding
+> /proc/sys/net/ipv4/conf/br-3e8284a56053/forwarding
+> /proc/sys/net/ipv4/conf/br-9b27f0f9e130/forwarding
+> /proc/sys/net/ipv4/conf/br-bc5fbfa838fc/forwarding
+> /proc/sys/net/ipv4/conf/br-ca51e25e8af8/forwarding
+> /proc/sys/net/ipv4/conf/default/forwarding
+> /proc/sys/net/ipv4/conf/docker0/forwarding
+> /proc/sys/net/ipv4/conf/lo/forwarding
+> /proc/sys/net/ipv4/conf/lxcbr0/forwarding
+> /proc/sys/net/ipv4/conf/veth6e3e4b8/forwarding
+> /proc/sys/net/ipv4/conf/virbr0/forwarding
+> /proc/sys/net/ipv4/conf/vpn0/forwarding
+> /proc/sys/net/ipv4/conf/wlp0s20f3/forwarding
+> /proc/sys/net/ipv6/conf/all/forwarding
+> /proc/sys/net/ipv6/conf/br-22440b7735e7/forwarding
+> /proc/sys/net/ipv6/conf/br-3e8284a56053/forwarding
+> /proc/sys/net/ipv6/conf/br-9b27f0f9e130/forwarding
+> /proc/sys/net/ipv6/conf/br-bc5fbfa838fc/forwarding
+> /proc/sys/net/ipv6/conf/br-ca51e25e8af8/forwarding
+> /proc/sys/net/ipv6/conf/default/forwarding
+> /proc/sys/net/ipv6/conf/docker0/forwarding
+> /proc/sys/net/ipv6/conf/lo/forwarding
+> /proc/sys/net/ipv6/conf/lxcbr0/forwarding
+> /proc/sys/net/ipv6/conf/veth6e3e4b8/forwarding
+> /proc/sys/net/ipv6/conf/virbr0/forwarding
+> /proc/sys/net/ipv6/conf/vpn0/forwarding
+> /proc/sys/net/ipv6/conf/wlp0s20f3/forwarding
+>
+>
+> I do not know how to do it correctly.
+
+Good point. So, these are actually 2 similar, but subtly different cases.
+
+1) Multiple sysctl entries with identical procname in the _same_
+module (e.g., forwarding in either ipv4/ipv6).
+
+This should be fine, as the same module is backing the entries.
+
+2) Multiple sysctl entries with identical procname in _different_
+modules (e.g., forwarding in both ipv4/ipv6).
+
+This would load all the different modules, per modprobe's behavior.
+
+Note that a similar case exists with PCI IDs too: alternative device driver=
+s;
+and a way is to define which module to choose/ignore, as in modprobe.d(5).
+(e.g., alias a particular, duplicated sysctl entry to the chosen
+module/ignored).
+
+Sure enough, this isn't efficient, and a kernel-only approach is required.
+
+I'd say it's possible to compromise with a wildcard (e.g., sysctl:*/procnam=
+e),
+so the user/tool knows it's not necessarily unique -- this can be done now.
+
+For some uniqueness, I guess we could add the static parts of the path
+(as you mentioned, not all parts of the path are static) in some field(s)
+in the alias (similar to PCI IDs, as well), and introduce logic in modprobe
+to match closer it multiple modules are found.
+
+This would likely need some of the plumbing I mentioned below, between
+the syscl register functions and module macros, I guess; so it'd be new.
+
+But for an initial implementation, maybe the compromise above is fine?
+
+(ie, that if only the basename or '*/basename' is specified you may get
+more modules loaded (and will get the sysctl asked!), but that you can
+configure appropriately with modprobe.d if needed.)
+
+Thanks,
+Mauricio
 
 
-Reviewed-by: Max Staudt <max@enpas.org>
+
+>
+>
+>
+>
+> >
+> > I plan to test other archs by cross-building 'allmodconfig' and checkin=
+g
+> > the .mod.c files and modpost output (eg, warnings) for no changes at al=
+l,
+> > and nf_conntrack.mod.c for expected sysctl aliases. [based on feedback.=
+]
+> > (i.e., changes didn't break modpost, and ELF code works on other archs.=
+)
+> >
+> > Happy to receive suggestions to improve test coverage and functionality=
+.
+> >
+> > I didn't look much at auto-registration with modpost using the register
+> > functions for sysctl, but it seems it would need plumbing, if possible.
+> >
+> > Let's see review/feedback on the basics first.
+> >
+> > thanks,
+> > Mauricio
+> >
+> > ...
+> >
+> > Some context.
+> >
+> > Even though that issue might be expected and obvious, its consequences
+> > sometimes are not.
+> >
+> > An example is the nf_conntrack_max value, that in busy gateways/routers
+> > /cloud deployments can affect performance and functionality more subtly=
+,
+> > or even fill the kernel log non-stop with 'table full, dropping packet'=
+,
+> > if a value greater than the default value is not used.
+> >
+> > The current solution (workaround, arguably) for this is to include such
+> > modules in /etc/modules (or in /etc/modules-load.d/*.conf with systemd)=
+,
+> > which loads them before an userspace tool (procps's sysctl or systemd's
+> > systemd-sysctl{,.service}) runs, so /proc/sys/... exists when it runs.
+> >
+> > ...
+> >
+> > That is simple, indeed, but comes w/ technical debt. (ugly stuff warnin=
+g!)
+> >
+> > Now there are many _different_ pieces of code that use the _same_ modul=
+e
+> > doing that (eg, deployment tools/scripts for openstack nova and neutron=
+,
+> > firewalls, and maybe more).
+> >
+> > And sometimes when components are split or deployed to different nodes
+> > it turns out that in the next reboot we figure (through an issue) that
+> > some component did set /etc/sysctl.conf but not /etc/modules.conf, or
+> > relied in the ex-colocated component doing that.
+> >
+> > This has generated several one-off fixes at this point in some projects=
+.
+> > (I have submitted one of those, actually, a while ago.)
+> >
+> > Also, some of those fixes (or original code) put 'nf_conntrack_ipv{4,6}=
+'
+> > in /etc/modules, getting 'nf_conntrack' loaded via module dependencies
+> > (maybe it was the right module for them at the time, for some reason).
+> >
+> > So, that component (or a colocated component) got nf_conntrack.ko too.
+> >
+> > *BUT* after an upgrade from Ubuntu 18.04 (4.15-based kernel) to 20.04
+> > (5.4-based kernel), the nf_conntrack_ipv{4,6}.ko modules do not exist
+> > anymore, and now nf_conntrack.ko is no longer loaded, and the sysctl
+> > nf_conntrack_max is no longer applied. (Someone had to figure it out.)
+> >
+> > And now maybe we'd need release/kernel-version checks in scripts that
+> > use the workaround of /etc/modules for /etc/sysctl.conf configuration.
+> >
+> > (Yes, it was ugly stuff.)
+> >
+> > ...
+> >
+> > Well, this last point seemed like "ok, that's enough; we can do better.=
+"
+> >
+> > I'm not sure this approach is "better" in all reasons, but hopefully it
+> > might help starting something that is. =F0=9F=99=8F
+> >
+> > cheers,
+> > Mauricio
+> >
+> > ...
+> >
+> > Tests:
+> >
+> >     $ cat /proc/sys/kernel/modprobe_sysctl_alias
+> >     1
+> >
+> >     $ cat /proc/sys/net/netfilter/nf_conntrack_max
+> >     cat: /proc/sys/net/netfilter/nf_conntrack_max: No such file or dire=
+ctory
+> >
+> >     $ lsmod | grep nf_conntrack
+> >     $
+> >
+> >     $ sudo modprobe sysctl:nf_conntrack_max
+> >
+> >     $ cat /proc/sys/net/netfilter/nf_conntrack_max
+> >     262144
+> >
+> >     $ lsmod | grep nf_conntrack
+> >     nf_conntrack          110592  0
+> >     nf_defrag_ipv6         20480  1 nf_conntrack
+> >     nf_defrag_ipv4         16384  1 nf_conntrack
+> >
+> >     $ modinfo nf_conntrack | grep ^alias:
+> >     alias:          nf_conntrack-10
+> >     alias:          nf_conntrack-2
+> >     alias:          ip_conntrack
+> >     alias:          sysctl:nf_conntrack_icmpv6_timeout
+> >     alias:          sysctl:nf_conntrack_icmp_timeout
+> >     alias:          sysctl:nf_conntrack_udp_timeout_stream
+> >     alias:          sysctl:nf_conntrack_udp_timeout
+> >     alias:          sysctl:nf_conntrack_tcp_max_retrans
+> >     alias:          sysctl:nf_conntrack_tcp_ignore_invalid_rst
+> >     alias:          sysctl:nf_conntrack_tcp_be_liberal
+> >     alias:          sysctl:nf_conntrack_tcp_loose
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_unacknowledged
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_max_retrans
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_close
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_time_wait
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_last_ack
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_close_wait
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_fin_wait
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_established
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_syn_recv
+> >     alias:          sysctl:nf_conntrack_tcp_timeout_syn_sent
+> >     alias:          sysctl:nf_conntrack_generic_timeout
+> >     alias:          sysctl:nf_conntrack_helper
+> >     alias:          sysctl:nf_conntrack_acct
+> >     alias:          sysctl:nf_conntrack_expect_max
+> >     alias:          sysctl:nf_conntrack_log_invalid
+> >     alias:          sysctl:nf_conntrack_checksum
+> >     alias:          sysctl:nf_conntrack_buckets
+> >     alias:          sysctl:nf_conntrack_count
+> >     alias:          sysctl:nf_conntrack_max
+> >
+> >     $ modinfo r8169 | grep ^alias:
+> >     alias:          pci:v000010ECd00003000sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00008125sv*sd*bc*sc*i*
+> >     alias:          pci:v00000001d00008168sv*sd00002410bc*sc*i*
+> >     alias:          pci:v00001737d00001032sv*sd00000024bc*sc*i*
+> >     alias:          pci:v000016ECd00000116sv*sd*bc*sc*i*
+> >     alias:          pci:v00001259d0000C107sv*sd*bc*sc*i*
+> >     alias:          pci:v00001186d00004302sv*sd*bc*sc*i*
+> >     alias:          pci:v00001186d00004300sv*sd*bc*sc*i*
+> >     alias:          pci:v00001186d00004300sv00001186sd00004B10bc*sc*i*
+> >     alias:          pci:v000010ECd00008169sv*sd*bc*sc*i*
+> >     alias:          pci:v000010FFd00008168sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00008168sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00008167sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00008162sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00008161sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00008136sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00008129sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00002600sv*sd*bc*sc*i*
+> >     alias:          pci:v000010ECd00002502sv*sd*bc*sc*i*
+> >
+> > Mauricio Faria de Oliveira (6):
+> >   modpost: factor out elf/arch-specific code from section_rel[a]()
+> >   modpost: deduplicate section_rel[a]()
+> >   sysctl, mod_devicetable: shadow struct ctl_table.procname for
+> >     file2alias
+> >   module, modpost: introduce support for MODULE_SYSCTL_TABLE
+> >   netfilter: conntrack: use MODULE_SYSCTL_TABLE
+> >   sysctl: introduce /proc/sys/kernel/modprobe_sysctl_alias
+> >
+> >  fs/proc/proc_sysctl.c                   |  27 ++++
+> >  include/linux/mod_devicetable.h         |  25 ++++
+> >  include/linux/module.h                  |   8 ++
+> >  include/linux/sysctl.h                  |  11 +-
+> >  kernel/sysctl.c                         |  10 ++
+> >  net/netfilter/nf_conntrack_standalone.c |   4 +
+> >  scripts/mod/devicetable-offsets.c       |   3 +
+> >  scripts/mod/file2alias.c                | 111 +++++++++++++++
+> >  scripts/mod/modpost.c                   | 178 +++++++++++++-----------
+> >  scripts/mod/modpost.h                   |   3 +
+> >  10 files changed, 296 insertions(+), 84 deletions(-)
+> >
+> > --
+> > 2.25.1
+> >
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
+
+
+
+--
+Mauricio Faria de Oliveira

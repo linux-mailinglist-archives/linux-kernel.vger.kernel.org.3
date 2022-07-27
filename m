@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493B9581CCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B689B581CD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 02:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240084AbiG0Ajr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 20:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
+        id S240092AbiG0Aol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 20:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240078AbiG0Ajn (ORCPT
+        with ESMTP id S229643AbiG0Aog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 20:39:43 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8AE3AB37;
-        Tue, 26 Jul 2022 17:39:41 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y9so14675781pff.12;
-        Tue, 26 Jul 2022 17:39:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mn4mZGsZDMSKfZTb6AER+YiLIYXnjjMoa26anY5HGMs=;
-        b=dJlFuWbQ05X08BQz3811oG9mFM+n3+agpjtO1jg7KYkcvOV07jHfPLrBTu53WWRLVz
-         bs4wx6irFMwxxlbPMjSB5UK3y6kkLAaBT4+3EmVy2GcTJiaL2R52XrzBP1+j3Z1/7+PZ
-         2bA/bNFC7wj3KMhHN21FV1Bn2KLe9efu5NGkdyI47aL64+Ol/wbzOri23Lz5GDvnqqja
-         QL+UpuzJOtJDfgvndyq91C11/gF0oShvM4/FSBRsBXwV8DEOgoUU/8Q6eoieB4LMufTy
-         3WGSL0hqC5b74o7swQ5Hrqlay+dw6YXyBijfnvRnt9rm8/Wmb/5XUwro9C8NFfa+4dGK
-         7FPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mn4mZGsZDMSKfZTb6AER+YiLIYXnjjMoa26anY5HGMs=;
-        b=iJzh5fgWb/Y9KfoQWoaq4u7waIXCgiitIUbxCx5ijTayYMCvsPBZeBqzqFV3Ddil3D
-         xLFAyJiXe0qeulNMxpGKGth3+HBXTn7rDL4vcgtFC5xuwhcfrd08qw7viOpVGKdgGfNm
-         Fj5jDApddkO+ot9vUM+fDjAdX/eqm8/mLlChlsnGwdB0lLfQ3u5xtAcy/B9R5zXYyt4/
-         HG0w52EnIXhPE/sWoC/azzgOrA5GSStomfFSpKrYeUqmX6mFPMw9HUkKDfd4FmQQBKn7
-         AOb+jv+ImdY2IpwADzJ3cP5ONeqY9dsw88j4a1Y+1R159SsuSev+wtUKMD0Jf4B4w/qZ
-         2VSw==
-X-Gm-Message-State: AJIora9u4UBYdLdXbkP+NCun7yLo8G4in8GYEWbQQpg68WDCivmbJAH0
-        C83l1SZWxWg1p2r3yNGNBRAXz0HEIL0DCQ==
-X-Google-Smtp-Source: AGRyM1tgohxIsG+pNdz9ifuAEth9RL4RrVbXVDGd7SsMood2egCs9M31XI8dTrhAWUQFqAq89IIFJQ==
-X-Received: by 2002:a63:4f06:0:b0:41a:529b:b47b with SMTP id d6-20020a634f06000000b0041a529bb47bmr16426863pgb.243.1658882380893;
-        Tue, 26 Jul 2022 17:39:40 -0700 (PDT)
-Received: from localhost ([192.55.54.49])
-        by smtp.gmail.com with ESMTPSA id gb7-20020a17090b060700b001ef9659d711sm188758pjb.48.2022.07.26.17.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 17:39:40 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 17:39:38 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH v7 011/102] KVM: TDX: Initialize TDX module when loading
- kvm_intel.ko
-Message-ID: <20220727003938.GG1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <d933e5f16ff8cb58020f1479b7af35196f0ef61e.1656366338.git.isaku.yamahata@intel.com>
- <81ea5068b890400ca4064781f7d2221826701020.camel@intel.com>
- <20220712004640.GD1379820@ls.amr.corp.intel.com>
- <d495a777f31df86271f1c4511b2f521adfa867d1.camel@intel.com>
+        Tue, 26 Jul 2022 20:44:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAF3286C7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 17:44:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658882674; x=1690418674;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YX10oloxAvyKxW08wf2eEZMGJSafvzOo6ATwL/KJXd4=;
+  b=jshSWNSX2oEAnpf43Y1gEnUJZOA1Qun50ZXSglBFbYXNsQ2wXLd+I7Lh
+   VCAHVlyq7OmcSdNxchiuL+lYppeWqNydw1srxdKqty90+FhGbmzHCGWn/
+   esdXxIV9+ipvnn5vYC5NmFVZjP/U0fupzbosTSut4QyW3FqhMvYazyiUD
+   0OlnZg0sbJ2l21Q+mTej45wzRs48Tvyq3/etaYcfK9yT3GuTBnWuWfTz8
+   /z5z4/AJU4srASH68zZovlhYXTdQf/ZuEEVhvhAu9eWUPJJOVLjGYzLO2
+   Mnkvd5k/zR6mZjubHw3/cnC4+ZrZdM867yfS7yiykpT23Ktdv/+KpHe5J
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="352105189"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="352105189"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 17:44:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="575745469"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Jul 2022 17:44:31 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGVA7-00086g-0o;
+        Wed, 27 Jul 2022 00:44:31 +0000
+Date:   Wed, 27 Jul 2022 08:44:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Subject: [deller-fbdev:for-next 22/22] drivers/video/fbdev/simplefb.c:426:6:
+ error: use of undeclared identifier 'num_registered_fb'; did you mean
+ 'WB_registered'?
+Message-ID: <202207270857.mo9oRcRE-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d495a777f31df86271f1c4511b2f521adfa867d1.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,68 +64,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 01:13:10PM +1200,
-Kai Huang <kai.huang@intel.com> wrote:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git for-next
+head:   96eed011e2413fc83f14632e8782f60b76b34a50
+commit: 96eed011e2413fc83f14632e8782f60b76b34a50 [22/22] video: fbdev: Make registered_fb[] private to fbmem.c
+config: arm64-randconfig-r003-20220724 (https://download.01.org/0day-ci/archive/20220727/202207270857.mo9oRcRE-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?id=96eed011e2413fc83f14632e8782f60b76b34a50
+        git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
+        git fetch --no-tags deller-fbdev for-next
+        git checkout 96eed011e2413fc83f14632e8782f60b76b34a50
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/video/fbdev/
 
-> >     To use TDX functionality, TDX module needs to be loaded and initialized.
-> >     This patch is to call a function, tdx_init(), when loading kvm_intel.ko.
-> 
-> Could you add explain why we need to init TDX module when loading KVM module?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Makes sense. Added a paragraph for it.
+All errors (new ones prefixed by >>):
+
+>> drivers/video/fbdev/simplefb.c:426:6: error: use of undeclared identifier 'num_registered_fb'; did you mean 'WB_registered'?
+           if (num_registered_fb > 0) {
+               ^~~~~~~~~~~~~~~~~
+               WB_registered
+   include/linux/backing-dev-defs.h:25:2: note: 'WB_registered' declared here
+           WB_registered,          /* bdi_register() was done */
+           ^
+   1 error generated.
 
 
-> >     Add a hook, kvm_arch_post_hardware_enable_setup, to module initialization
-> >     while hardware is enabled, i.e. after hardware_enable_all() and before
-> >     hardware_disable_all().  Because TDX requires all present CPUs to enable
-> >     VMX (VMXON).
-> 
-> Please explicitly say it is a replacement of the default __weak version, so
-> people can know there's already a default one.  Otherwise people may wonder why
-> this isn't called in this patch (i.e. I skipped patch 03 as it looks not
-> directly related to TDX).
-> 
-> That being said, why cannot you send out that patch separately but have to
-> include it into TDX series?
-> 
-> Looking at it, the only thing that is related to TDX is an empty
-> kvm_arch_post_hardware_enable_setup() with a comment saying TDX needs to do
-> something there.  This logic has nothing to do with the actual job in that
-> patch. 
-> 
-> So why cannot we introduce that __weak version in this patch, so that the rest
-> of it can be non-TDX related at all and can be upstreamed separately?
+vim +426 drivers/video/fbdev/simplefb.c
 
-The patch that adds weak kvm_arch_post_hardware_enable_setup() doesn't make
-sense without the hook because it only enable_hardware and then disable hardware
-immediately.
-The patch touches multiple kvm arch.  and I split out TDX specific part in this
-patch.  Ideally those two patch should be near. But I move it early to draw
-attention for reviewers from multiple kvm arch.
+814740e759afe9 drivers/video/fbdev/simplefb.c Chen-Yu Tsai             2015-11-17  412  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  413  static int simplefb_probe(struct platform_device *pdev)
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  414  {
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  415  	int ret;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  416  	struct simplefb_params params;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  417  	struct fb_info *info;
+1270be4a4fb852 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  418  	struct simplefb_par *par;
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  419  	struct resource *res, *mem;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  420  
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  421  	/*
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  422  	 * Generic drivers must not be registered if a framebuffer exists.
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  423  	 * If a native driver was probed, the display hardware was already
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  424  	 * taken and attempting to use the system framebuffer is dangerous.
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  425  	 */
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11 @426  	if (num_registered_fb > 0) {
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  427  		dev_err(&pdev->dev,
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  428  			"simplefb: a framebuffer is already registered\n");
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  429  		return -EINVAL;
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  430  	}
+fb561bf9abde49 drivers/video/fbdev/simplefb.c Javier Martinez Canillas 2021-11-11  431  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  432  	if (fb_get_options("simplefb", NULL))
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  433  		return -ENODEV;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  434  
+5ef76da644bf34 drivers/video/simplefb.c       David Herrmann           2013-08-02  435  	ret = -ENODEV;
+129f1be4b9357a drivers/video/simplefb.c       Jingoo Han               2013-09-17  436  	if (dev_get_platdata(&pdev->dev))
+5ef76da644bf34 drivers/video/simplefb.c       David Herrmann           2013-08-02  437  		ret = simplefb_parse_pd(pdev, &params);
+5ef76da644bf34 drivers/video/simplefb.c       David Herrmann           2013-08-02  438  	else if (pdev->dev.of_node)
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  439  		ret = simplefb_parse_dt(pdev, &params);
+5ef76da644bf34 drivers/video/simplefb.c       David Herrmann           2013-08-02  440  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  441  	if (ret)
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  442  		return ret;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  443  
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  444  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  445  	if (!res) {
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  446  		dev_err(&pdev->dev, "No memory resource\n");
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  447  		return -EINVAL;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  448  	}
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  449  
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  450  	mem = request_mem_region(res->start, resource_size(res), "simplefb");
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  451  	if (!mem) {
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  452  		/*
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  453  		 * We cannot make this fatal. Sometimes this comes from magic
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  454  		 * spaces our resource handlers simply don't know about. Use
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  455  		 * the I/O-memory resource as-is and try to map that instead.
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  456  		 */
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  457  		dev_warn(&pdev->dev, "simplefb: cannot reserve video memory at %pR\n", res);
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  458  		mem = res;
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  459  	}
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  460  
+1270be4a4fb852 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  461  	info = framebuffer_alloc(sizeof(struct simplefb_par), &pdev->dev);
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  462  	if (!info) {
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  463  		ret = -ENOMEM;
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  464  		goto error_release_mem_region;
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  465  	}
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  466  	platform_set_drvdata(pdev, info);
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  467  
+1270be4a4fb852 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  468  	par = info->par;
+1270be4a4fb852 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  469  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  470  	info->fix = simplefb_fix;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  471  	info->fix.smem_start = mem->start;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  472  	info->fix.smem_len = resource_size(mem);
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  473  	info->fix.line_length = params.stride;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  474  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  475  	info->var = simplefb_var;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  476  	info->var.xres = params.width;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  477  	info->var.yres = params.height;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  478  	info->var.xres_virtual = params.width;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  479  	info->var.yres_virtual = params.height;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  480  	info->var.bits_per_pixel = params.format->bits_per_pixel;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  481  	info->var.red = params.format->red;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  482  	info->var.green = params.format->green;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  483  	info->var.blue = params.format->blue;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  484  	info->var.transp = params.format->transp;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  485  
+df0960ab2d9554 drivers/video/simplefb.c       David Herrmann           2013-08-02  486  	info->apertures = alloc_apertures(1);
+df0960ab2d9554 drivers/video/simplefb.c       David Herrmann           2013-08-02  487  	if (!info->apertures) {
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  488  		ret = -ENOMEM;
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  489  		goto error_fb_release;
+df0960ab2d9554 drivers/video/simplefb.c       David Herrmann           2013-08-02  490  	}
+df0960ab2d9554 drivers/video/simplefb.c       David Herrmann           2013-08-02  491  	info->apertures->ranges[0].base = info->fix.smem_start;
+df0960ab2d9554 drivers/video/simplefb.c       David Herrmann           2013-08-02  492  	info->apertures->ranges[0].size = info->fix.smem_len;
+df0960ab2d9554 drivers/video/simplefb.c       David Herrmann           2013-08-02  493  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  494  	info->fbops = &simplefb_ops;
+df0960ab2d9554 drivers/video/simplefb.c       David Herrmann           2013-08-02  495  	info->flags = FBINFO_DEFAULT | FBINFO_MISC_FIRMWARE;
+9e210be68a396d drivers/video/simplefb.c       David Herrmann           2013-10-02  496  	info->screen_base = ioremap_wc(info->fix.smem_start,
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  497  				       info->fix.smem_len);
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  498  	if (!info->screen_base) {
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  499  		ret = -ENOMEM;
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  500  		goto error_fb_release;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  501  	}
+1270be4a4fb852 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  502  	info->pseudo_palette = par->palette;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  503  
+a3accfd70e166a drivers/video/fbdev/simplefb.c Hans de Goede            2017-01-11  504  	ret = simplefb_clocks_get(par, pdev);
+fc219bfd5b2e48 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  505  	if (ret < 0)
+fc219bfd5b2e48 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  506  		goto error_unmap;
+fc219bfd5b2e48 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  507  
+a3accfd70e166a drivers/video/fbdev/simplefb.c Hans de Goede            2017-01-11  508  	ret = simplefb_regulators_get(par, pdev);
+814740e759afe9 drivers/video/fbdev/simplefb.c Chen-Yu Tsai             2015-11-17  509  	if (ret < 0)
+814740e759afe9 drivers/video/fbdev/simplefb.c Chen-Yu Tsai             2015-11-17  510  		goto error_clocks;
+814740e759afe9 drivers/video/fbdev/simplefb.c Chen-Yu Tsai             2015-11-17  511  
+a3accfd70e166a drivers/video/fbdev/simplefb.c Hans de Goede            2017-01-11  512  	simplefb_clocks_enable(par, pdev);
+a3accfd70e166a drivers/video/fbdev/simplefb.c Hans de Goede            2017-01-11  513  	simplefb_regulators_enable(par, pdev);
+a3accfd70e166a drivers/video/fbdev/simplefb.c Hans de Goede            2017-01-11  514  
+5269a618eec7f8 drivers/video/fbdev/simplefb.c Peter Robinson           2020-12-28  515  	dev_info(&pdev->dev, "framebuffer at 0x%lx, 0x%x bytes\n",
+5269a618eec7f8 drivers/video/fbdev/simplefb.c Peter Robinson           2020-12-28  516  			     info->fix.smem_start, info->fix.smem_len);
+9f192a92286c41 drivers/video/simplefb.c       Tom Gundersen            2013-09-07  517  	dev_info(&pdev->dev, "format=%s, mode=%dx%dx%d, linelength=%d\n",
+9f192a92286c41 drivers/video/simplefb.c       Tom Gundersen            2013-09-07  518  			     params.format->name,
+9f192a92286c41 drivers/video/simplefb.c       Tom Gundersen            2013-09-07  519  			     info->var.xres, info->var.yres,
+9f192a92286c41 drivers/video/simplefb.c       Tom Gundersen            2013-09-07  520  			     info->var.bits_per_pixel, info->fix.line_length);
+9f192a92286c41 drivers/video/simplefb.c       Tom Gundersen            2013-09-07  521  
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  522  	if (mem != res)
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  523  		par->mem = mem; /* release in clean-up handler */
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  524  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  525  	ret = register_framebuffer(info);
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  526  	if (ret < 0) {
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  527  		dev_err(&pdev->dev, "Unable to register simplefb: %d\n", ret);
+814740e759afe9 drivers/video/fbdev/simplefb.c Chen-Yu Tsai             2015-11-17  528  		goto error_regulators;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  529  	}
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  530  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  531  	dev_info(&pdev->dev, "fb%d: simplefb registered!\n", info->node);
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  532  
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  533  	return 0;
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  534  
+814740e759afe9 drivers/video/fbdev/simplefb.c Chen-Yu Tsai             2015-11-17  535  error_regulators:
+814740e759afe9 drivers/video/fbdev/simplefb.c Chen-Yu Tsai             2015-11-17  536  	simplefb_regulators_destroy(par);
+fc219bfd5b2e48 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  537  error_clocks:
+fc219bfd5b2e48 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  538  	simplefb_clocks_destroy(par);
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  539  error_unmap:
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  540  	iounmap(info->screen_base);
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  541  error_fb_release:
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  542  	framebuffer_release(info);
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  543  error_release_mem_region:
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  544  	if (mem != res)
+748bd5873d1a6f drivers/video/fbdev/simplefb.c Thomas Zimmermann        2022-01-25  545  		release_mem_region(mem->start, resource_size(mem));
+bf2fda157a9ab5 drivers/video/fbdev/simplefb.c Luc Verhaegen            2014-11-14  546  	return ret;
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  547  }
+26549c8d36a64d drivers/video/simplefb.c       Stephen Warren           2013-05-24  548  
 
-Here is the updated version.
+:::::: The code at line 426 was first introduced by commit
+:::::: fb561bf9abde49f7e00fdbf9ed2ccf2d86cac8ee fbdev: Prevent probing generic drivers if a FB is already registered
 
-    KVM: TDX: Initialize the TDX module when loading the KVM intel kernel module
-    
-    To use TDX, the TDX module needs to be loaded and initialized.  This patch
-    is to call a function to initialize the TDX module when loading KVM intel
-    kernel module.
-    
-    There are several options on when to initialize the TDX module.  A.)
-    kernel boot time as builtin, B.) kernel module loading time, C.) the first
-    guest TD creation time.  B.) was chosen.  A.) causes unnecessary overhead
-    (boot time and memory) even when TDX isn't used.  With C.), a user may hit
-    an error of the TDX initialization when trying to create the first guest
-    TD.  The machine that fails to initialize the TDX module can't boot any
-    guest TD further.  Such failure is undesirable.  B.) has a good balance
-    between them.
-    
-    Add a hook, kvm_arch_post_hardware_enable_setup, to module initialization
-    while hardware is enabled, i.e. after hardware_enable_all() and before
-    hardware_disable_all().  Because TDX requires all present CPUs to enable
-    VMX (VMXON).  The x86 specific kvm_arch_post_hardware_enable_setup overrides
-    the existing weak symbol of kvm_arch_post_hardware_enable_setup which is
-    called at the KVM module initialization.
+:::::: TO: Javier Martinez Canillas <javierm@redhat.com>
+:::::: CC: Javier Martinez Canillas <javierm@redhat.com>
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+0-DAY CI Kernel Test Service
+https://01.org/lkp

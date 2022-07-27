@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA9C5822F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BF85822F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 11:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiG0JUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 05:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        id S231657AbiG0JUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 05:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiG0JUF (ORCPT
+        with ESMTP id S231667AbiG0JU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:20:05 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08D937FB7;
-        Wed, 27 Jul 2022 02:20:04 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id h8so23307133wrw.1;
-        Wed, 27 Jul 2022 02:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6GV9r+xMhkzrix1zVwuoFAT+2lz1nxuiG9jX5dFRLKs=;
-        b=jBli6wkJvQPrlTu9I8L+7p+WAj9MTjQl4w5ECDX5sx3eT2wtgzR6bvLDoHk0lyZdCt
-         gonJKGM73VpyIANTBCwXOcgi7mT1+Y6P2CkLcessQmvcQYdW2V3HB4d/rX/MSYStA5i1
-         snT/HQWrN8Ep6AR+ITz8QEd2DP6uuEmblbehyVhnxwFb0p0iolZiKLtVzJexu7xvRLxA
-         vdI5B6RoEFwOl5TaBfcmhMk7phrzjekKTjPkyaHE8lizwcSYTUJMhzizGoKXpuWAqPLf
-         2lgDlMaQeYLxq63+shVdWeKAfaamT9G47fztwMlDbz41Y+RUIUXqznkc01t6W/WrpHTk
-         u7Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6GV9r+xMhkzrix1zVwuoFAT+2lz1nxuiG9jX5dFRLKs=;
-        b=smaTSizG3aGUHe3fRagmbG++XVboZ1MCTN+k/WLXrq4njd6Q4EcrcdklHlBT8ctSzG
-         8xv09dSaTLCJR9EtYkXiXe2nVrISVa4i2LTJDCfaavDcZAJyIdIUOh/QnMsuWGABrDBl
-         WBeuPTo1b0ML59AUmIjNV3oWyzcWZqQR/AXb0yO0t4UPcGYQzN524WUDxvjIkF3p14Kn
-         5ywTInEg6n95PJHbGdEECkrWR077383XGDSn1XfT0CwV4hYxjnhTEq+/mEPjr5MHQHqL
-         FllUAHQkeUlnKcWFf78V28Y9iQwALE8QoECVKuq+107g3lk0hqRQBKGgMLYAMUprhUVC
-         DfDA==
-X-Gm-Message-State: AJIora9AsCPmzlqwq3ROeDZ/BttIobBJuxnidSgW9HxidDmSp0zRlV8Y
-        nAkPTSY8Lb6WAo4+cETNrRg=
-X-Google-Smtp-Source: AGRyM1thbs/2gKvh2iI5ibtm/dj3VoLVCC5dmvTSrymmc9mjWk+zXeucjYFrY4JIWFWw8/FbSV05zA==
-X-Received: by 2002:a5d:64ec:0:b0:21e:92fe:ac77 with SMTP id g12-20020a5d64ec000000b0021e92feac77mr7032343wri.24.1658913602956;
-        Wed, 27 Jul 2022 02:20:02 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::22ef? ([2620:10d:c092:600::2:5b44])
-        by smtp.gmail.com with ESMTPSA id bi26-20020a05600c3d9a00b003a2eacc8179sm1740076wmb.27.2022.07.27.02.20.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 02:20:02 -0700 (PDT)
-Message-ID: <e4f4c89c-cdc5-2a37-c087-1c356a2a425a@gmail.com>
-Date:   Wed, 27 Jul 2022 10:18:56 +0100
+        Wed, 27 Jul 2022 05:20:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F5013E93
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 02:20:26 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lt7Vx6bLyzmVBd;
+        Wed, 27 Jul 2022 17:18:33 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Jul 2022 17:20:13 +0800
+Subject: Re: [RFC PATCH v4 4/8] hugetlbfs: catch and handle truncate racing
+ with page faults
+To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220706202347.95150-1-mike.kravetz@oracle.com>
+ <20220706202347.95150-5-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <ee6af38d-f797-a64f-e5c4-78bad3753aca@huawei.com>
+Date:   Wed, 27 Jul 2022 17:20:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next v5 27/27] selftests/io_uring: test zerocopy send
+In-Reply-To: <20220706202347.95150-5-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     dust.li@linux.alibaba.com, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
-        kernel-team@fb.com
-References: <cover.1657643355.git.asml.silence@gmail.com>
- <03d5ec78061cf52db420f88ed0b48eb8f47ce9f7.1657643355.git.asml.silence@gmail.com>
- <20220727080101.GA14576@linux.alibaba.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20220727080101.GA14576@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,25 +66,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 09:01, dust.li wrote:
-
->> +static void do_test(int domain, int type, int protocol)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < IP_MAXPACKET; i++)
->> +		payload[i] = 'a' + (i % 26);
->> +	do_tx(domain, type, protocol);
->> +}
->> +
->> +static void usage(const char *filepath)
->> +{
->> +	error(1, 0, "Usage: %s [-f] [-n<N>] [-z0] [-s<payload size>] "
->> +		    "(-4|-6) [-t<time s>] -D<dst_ip> udp", filepath);
+On 2022/7/7 4:23, Mike Kravetz wrote:
+> Most hugetlb fault handling code checks for faults beyond i_size.
+> While there are early checks in the code paths, the most difficult
+> to handle are those discovered after taking the page table lock.
+> At this point, we have possibly allocated a page and consumed
+> associated reservations and possibly added the page to the page cache.
 > 
-> A small flaw, the usage here doesn't match the real options in parse_opts().
+> When discovering a fault beyond i_size, be sure to:
+> - Remove the page from page cache, else it will sit there until the
+>   file is removed.
+> - Do not restore any reservation for the page consumed.  Otherwise
+>   there will be an outstanding reservation for an offset beyond the
+>   end of file.
+> 
+> The 'truncation' code in remove_inode_hugepages must deal with fault
+> code potentially removing a page/folio from the cache after the page was
+> returned by filemap_get_folios and before locking the page.  This can be
+> discovered by a change in folio_mapping() after taking folio lock.  In
+> addition, this code must deal with fault code potentially consuming
+> and returning reservations.  To synchronize this, remove_inode_hugepages
+> will now take the fault mutex for ALL indices in the hole or truncated
+> range.  In this way, it KNOWS fault code has finished with the page/index
+> OR fault code will see the updated file size.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
 
-Indeed. I'll adjust it, thanks!
+<snip>
 
--- 
-Pavel Begunkov
+> @@ -5606,8 +5610,10 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+>  
+>  	ptl = huge_pte_lock(h, mm, ptep);
+>  	size = i_size_read(mapping->host) >> huge_page_shift(h);
+> -	if (idx >= size)
+> +	if (idx >= size) {
+> +		beyond_i_size = true;
+
+Thanks for your patch. There is one question:
+
+Since races between hugetlb pagefault and truncate is guarded by hugetlb_fault_mutex,
+do we really need to check it again after taking the page table lock?
+
+BTW: I will learn more about this series when I have enough time. Thanks for your work. :)

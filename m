@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1882A582D97
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7C7582DF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbiG0RAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S241206AbiG0RFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241252AbiG0Q7U (ORCPT
+        with ESMTP id S241309AbiG0REC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 12:59:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD4E67CAB
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:37:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658939837; x=1690475837;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/Xu6IgGf7EmqEfszrQvOKIjQaHODWfI38AJXg11+tcA=;
-  b=LdcmHtpdDxppgPmOvqfnDo1TKA+q+7C9clzYiQcZURl4uiD2ZmTq1jZS
-   QPU4r3tVPvYmvTX5zyZgJwhtdqp+gfAz571lB6EP/DfVF9Kbw8KEoEgFt
-   cNl2LpvwIEVKofPrz/HzWT3fDojCzWpHFR8pyHL1/y3wsNPntzU+cCaZH
-   A+SYsGco5TxJ/FRjC99zt1WkOw8HnIGoDYXNDoJMu7kYzw/iot5w8GRkR
-   hSdGDi0Lrn0sNKmNeoEpaSYY8rUgIpVU3TFTXF3aKya3UgL2DnFLVNx+g
-   7fBPAC6I1Hr7SbLaclyVFD/iaOvDSVVby4Aic6H2J8NRcWaL/W+NnST6Q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="352279806"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="352279806"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 09:36:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="628450023"
-Received: from lgumar-mobl.amr.corp.intel.com (HELO [10.209.151.195]) ([10.209.151.195])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 09:36:44 -0700
-Message-ID: <69713155-39b0-5492-4966-73dfdacd1fc1@linux.intel.com>
-Date:   Wed, 27 Jul 2022 11:36:43 -0500
+        Wed, 27 Jul 2022 13:04:02 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A9E6E2DB;
+        Wed, 27 Jul 2022 09:38:55 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id va17so32548539ejb.0;
+        Wed, 27 Jul 2022 09:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ipHXah2drN1ztV/qFRrJg6iGYe+5yo1q7EilyB1MV54=;
+        b=oscMZj9/5l585E43z0ceX2e56hA2FeFafLwYq+rT+Ga/38O31b7pw7AGdOgnlZCp3K
+         KVeQTolwwmIlNdtz4GHcfpJjZKw/4iO5bdg5qeelrYcx/gMCt6iIxx8D1u0ero2+UL1t
+         0tLlPdNQqlhzabFWy+a36q0lF5Dy0Kl2cmhyPwiB9ECqMitHRnP0/GaIF1DuOf17JhfP
+         ddSeKX6lSCBtYqbW4BLqH714Ag6yJJ4h00CzNdX+MTtbHyQBHSW9kgiPLuWsh0L5ASre
+         pdZkE1eiS6EZefEJsJDmVZ54HEB6Z6Qu21b0QFEGFuL7cltLcEtySNnQgTN7ik0XHurF
+         OmZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ipHXah2drN1ztV/qFRrJg6iGYe+5yo1q7EilyB1MV54=;
+        b=k4eZ3w8QbwZx0zTJrSFZ7VwCT/qSzO1+iYL1xH3hkopJ4zTE3zjatKAQcFvyUqscz+
+         ux0N9Re626F2JnAQeLkqA88bF5/9Cy+4xWilWe6QJZUM/E+z/IDuaxjBIs5So29p3Wja
+         r/FBlAUyMcqQIPIIGacrhy2qEutWe/uMFZ9jLJJLiANN45VWs9LGhPD9qiij+hz3wyLn
+         olvs2RVzQ557j06+JTX6ojKecQfwVV655tOpbMQ7TERn/KPuIMPTRUOUS9q3/LjqlWzs
+         MGtEc/73hA/G8PnP8il1mmbrjWruhaIq91yFCsuq1P6JpJpdELjkjZdH9lCLN+r/Uv+p
+         MdlA==
+X-Gm-Message-State: AJIora8CQl2Ds7umt5c5sC0hwz124Ee1xHs3Jkh34otMLDtzfxcMzGVs
+        Xe8r9QMLPCrglQLPGoCmGd4=
+X-Google-Smtp-Source: AGRyM1uDjvm2zAG/PSoErEmq90918CkkiQuU0zpUrVSOeP2VeZuH8ZgY0NMtTfmAPNs8g2BkXZVpyw==
+X-Received: by 2002:a17:907:a40b:b0:72b:64e3:4c5e with SMTP id sg11-20020a170907a40b00b0072b64e34c5emr18516200ejc.612.1658939932706;
+        Wed, 27 Jul 2022 09:38:52 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id fu3-20020a170907b00300b0072f47838640sm7803355ejc.71.2022.07.27.09.38.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 09:38:51 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 19:38:48 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to
+ fwnode_find_net_device_by_node()
+Message-ID: <20220727163848.f4e2b263zz3vl2hc@skbuf>
+References: <20220727064321.2953971-1-mw@semihalf.com>
+ <20220727064321.2953971-7-mw@semihalf.com>
+ <20220727143147.u6yd6wqslilspyhw@skbuf>
+ <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2] ASoC: Intel: cirrus-common: Use UID to map correct amp
- to prefix
-Content-Language: en-US
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Brent Lu <brent.lu@intel.com>, xliu <xiang.liu@cirrus.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-References: <20220727160051.3373125-1-sbinding@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220727160051.3373125-1-sbinding@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 27, 2022 at 05:18:16PM +0200, Marcin Wojtas wrote:
+> Do you mean a situation analogous to what I addressed in:
+> [net-next: PATCH v3 4/8] net: mvpp2: initialize port fwnode pointer
+> ?
 
+Not sure if "analogous" is the right word. My estimation is that the
+overwhelmingly vast majority of DSA masters can be found by DSA simply
+due to the SET_NETDEV_DEV() call that the Ethernet drivers need to make
+anyway.  I see that mvpp2 also needed commit c4053ef32208 ("net: mvpp2:
+initialize port of_node pointer"), but that isn't needed in general, and
+I can't tell you exactly why it is needed there, I don't know enough
+about the mvpp2 driver.
 
+> I found indeed a couple of drivers that may require a similar change
+> (e.g. dpaa2).
 
-> +/*
-> + * Expected UIDs are integers (stored as strings).
-> + * UID Mapping is fixed:
-> + * UID 0x0 -> WL
-> + * UID 0x1 -> WR
-> + * UID 0x2 -> TL
-> + * UID 0x3 -> TR
-> + * Note: If there are less than 4 Amps, UIDs still map to WL/WR/TL/TR. Dynamic code will only create
-> + * dai links for UIDs which exist, and ignore non-existant ones.
+There I can tell you why the dpaa2-mac code mangles with net_dev->dev.of_node,
+but I'd rather not go into an explanation that essentially doesn't matter.
+The point is that you'd be mistaken to think that only the drivers which
+touch the net device's ->dev->of_node are the ones that need updating
+for your series to not cause regressions.
 
-is this intentional to support all variations of 1,2,3 and 4 amplifiers
-being present?
+> IMO we have 2 options:
+> - update these drivers
+> - add some kind of fallback? If yes, I am wondering about an elegant
+> solution - maybe add an extra check inside
+> fwnode_find_parent_dev_match?
+> 
+> What would you suggest?
 
-Or is the intent to really support 2 or 4?
-
-> + * Return number of codecs found.
-> + */
-> +static int cs35l41_compute_codec_conf(void)
-> +{
-> +	const char * const uid_strings[] = { "0", "1", "2", "3" };
-> +	unsigned int uid, sz = 0;
-> +	struct acpi_device *adev;
-> +	struct device *physdev;
-> +
-> +	for (uid = 0; uid < CS35L41_MAX_AMPS; uid++) {
-> +		adev = acpi_dev_get_first_match_dev(CS35L41_HID, uid_strings[uid], -1);
-> +		if (!adev) {
-> +			pr_warn("Cannot find match for HID %s UID %u (%s)\n", CS35L41_HID, uid,
-> +				cs35l41_name_prefixes[uid]);
-
-A warning is a bit strong if some valid configurations don't expose all
-4 codecs.
-
-> +			continue;
-> +		}
-> +		physdev = get_device(acpi_get_first_physical_node(adev));
-> +		cs35l41_components[sz].name = dev_name(physdev);
-> +		cs35l41_components[sz].dai_name = CS35L41_CODEC_DAI;
-> +		cs35l41_codec_conf[sz].dlc.name = dev_name(physdev);
-> +		cs35l41_codec_conf[sz].name_prefix = cs35l41_name_prefixes[uid];
-> +		acpi_dev_put(adev);
-> +		sz++;
-> +	}
-> +	return sz;
+Fixing fwnode_find_parent_dev_match(), of course. This change broke DSA
+on my LS1028A system (master in drivers/net/ethernet/freescale/enetc/)
+and LS1021A (master in drivers/net/ethernet/freescale/gianfar.c).

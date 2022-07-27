@@ -2,133 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59CC582F50
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65349582A6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 18:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242045AbiG0RXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
+        id S234847AbiG0QLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 12:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242008AbiG0RW6 (ORCPT
+        with ESMTP id S234784AbiG0QLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:22:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD197AB02;
-        Wed, 27 Jul 2022 09:45:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Jul 2022 12:11:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2444B489
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 09:11:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94F5561561;
-        Wed, 27 Jul 2022 16:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB81C433D6;
-        Wed, 27 Jul 2022 16:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940339;
-        bh=vTiLwE0dkZkmLTjWT9JEPftwV50J2xM5ZrnPnwkywy0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PiXj7e11cQ0bu71s/SvF0X2mnysvYsu5smg0vZntc3reH+/zyoj/03VrjciUf6r4/
-         3ZVlFZxetjyW+Di9PI/5bAulembE1AQTri5gzZxaRnQmRdMOjhBJRJ2S8633dqlydn
-         Fobs72vv5Assl9KS+YmuNPi9beTBHzr5OJgpiwgU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 07B0220B50;
+        Wed, 27 Jul 2022 16:11:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1658938301; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=3mt4s6TRQ/5aagVzKEJ+zgYn0F6bDFqIRsrNqODGf7E=;
+        b=NtaPEGWzhlotMBwyFZD3iTRpfGUTIWmOn2DW54OX/U4/D1K7gncI+DGSSzAJhCqf2znPks
+        NAmwroaUvltAclyAEq0puEVsYcRPht59KEvge6L15u7RMchlaUndiVIZQ+EbriXWCzzPSo
+        j+oDzlYqTPoYJBHBQyd/u6bX0iANnIk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1658938301;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=3mt4s6TRQ/5aagVzKEJ+zgYn0F6bDFqIRsrNqODGf7E=;
+        b=LqPsR8ORFCwSPJ4gIbI3UO7UVOpEHStpGqXPanRx4WXmJOTOYGCxK/cT0t4QvRUyaCCBd+
+        uTT2UZUYTkGIdZAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C852113ABC;
+        Wed, 27 Jul 2022 16:11:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QXDvLrxj4WLLAQAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Wed, 27 Jul 2022 16:11:40 +0000
+From:   Petr Vorel <pvorel@suse.cz>
 To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 5.15 190/201] tty: drop tty_schedule_flip()
-Date:   Wed, 27 Jul 2022 18:11:34 +0200
-Message-Id: <20220727161035.639661748@linuxfoundation.org>
+Cc:     Petr Vorel <pvorel@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 1/1] drivers/base/cpu: Print kernel arch
+Date:   Wed, 27 Jul 2022 18:11:35 +0200
+Message-Id: <20220727161135.24531-1-pvorel@suse.cz>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+Print kernel architecture in /sys/devices/system/cpu/arch
+using UTS_MACHINE, i.e. member of struct uts_namespace.machine.
 
-commit 5db96ef23bda6c2a61a51693c85b78b52d03f654 upstream.
+This helps people who debug kernel with initramfs with minimal
+environment (i.e. without coreutils or even busybox) or allow to open
+sysfs file instead of run uname -m in high level languages.
 
-Since commit a9c3f68f3cd8d (tty: Fix low_latency BUG) in 2014,
-tty_flip_buffer_push() is only a wrapper to tty_schedule_flip(). All
-users were converted in the previous patches, so remove
-tty_schedule_flip() completely while inlining its body into
-tty_flip_buffer_push().
-
-One less exported function.
-
-Reviewed-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20211122111648.30379-4-jslaby@suse.cz
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
 ---
- drivers/tty/tty_buffer.c |   30 ++++++++----------------------
- include/linux/tty_flip.h |    1 -
- 2 files changed, 8 insertions(+), 23 deletions(-)
+ drivers/base/cpu.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---- a/drivers/tty/tty_buffer.c
-+++ b/drivers/tty/tty_buffer.c
-@@ -403,27 +403,6 @@ int __tty_insert_flip_char(struct tty_po
- EXPORT_SYMBOL(__tty_insert_flip_char);
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index 4c98849577d4..7c8032e3ff10 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -3,6 +3,7 @@
+  * CPU subsystem support
+  */
  
- /**
-- *	tty_schedule_flip	-	push characters to ldisc
-- *	@port: tty port to push from
-- *
-- *	Takes any pending buffers and transfers their ownership to the
-- *	ldisc side of the queue. It then schedules those characters for
-- *	processing by the line discipline.
-- */
--
--void tty_schedule_flip(struct tty_port *port)
--{
--	struct tty_bufhead *buf = &port->buf;
--
--	/* paired w/ acquire in flush_to_ldisc(); ensures
--	 * flush_to_ldisc() sees buffer data.
--	 */
--	smp_store_release(&buf->tail->commit, buf->tail->used);
--	queue_work(system_unbound_wq, &buf->work);
--}
--EXPORT_SYMBOL(tty_schedule_flip);
--
--/**
-  *	tty_prepare_flip_string		-	make room for characters
-  *	@port: tty port
-  *	@chars: return pointer for character write area
-@@ -567,7 +546,14 @@ static void flush_to_ldisc(struct work_s
- 
- void tty_flip_buffer_push(struct tty_port *port)
- {
--	tty_schedule_flip(port);
-+	struct tty_bufhead *buf = &port->buf;
-+
-+	/*
-+	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
-+	 * buffer data.
-+	 */
-+	smp_store_release(&buf->tail->commit, buf->tail->used);
-+	queue_work(system_unbound_wq, &buf->work);
++#include <generated/compile.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/init.h>
+@@ -232,6 +233,13 @@ static ssize_t print_cpus_kernel_max(struct device *dev,
  }
- EXPORT_SYMBOL(tty_flip_buffer_push);
+ static DEVICE_ATTR(kernel_max, 0444, print_cpus_kernel_max, NULL);
  
---- a/include/linux/tty_flip.h
-+++ b/include/linux/tty_flip.h
-@@ -17,7 +17,6 @@ extern int tty_insert_flip_string_fixed_
- extern int tty_prepare_flip_string(struct tty_port *port,
- 		unsigned char **chars, size_t size);
- extern void tty_flip_buffer_push(struct tty_port *port);
--void tty_schedule_flip(struct tty_port *port);
- int __tty_insert_flip_char(struct tty_port *port, unsigned char ch, char flag);
++static ssize_t print_cpus_arch(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%s\n", UTS_MACHINE);
++}
++static DEVICE_ATTR(arch, 0444, print_cpus_arch, NULL);
++
+ /* arch-optional setting to enable display of offline cpus >= nr_cpu_ids */
+ unsigned int total_cpus;
  
- static inline int tty_insert_flip_char(struct tty_port *port,
-
+@@ -464,6 +472,7 @@ static struct attribute *cpu_root_attrs[] = {
+ 	&cpu_attrs[1].attr.attr,
+ 	&cpu_attrs[2].attr.attr,
+ 	&dev_attr_kernel_max.attr,
++	&dev_attr_arch.attr,
+ 	&dev_attr_offline.attr,
+ 	&dev_attr_isolated.attr,
+ #ifdef CONFIG_NO_HZ_FULL
+-- 
+2.37.1
 

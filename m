@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC76E582F47
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA552582FF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 19:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241641AbiG0RWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 13:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
+        id S242329AbiG0RbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 13:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241848AbiG0RUy (ORCPT
+        with ESMTP id S241977AbiG0R21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 13:20:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BC45F110;
-        Wed, 27 Jul 2022 09:45:25 -0700 (PDT)
+        Wed, 27 Jul 2022 13:28:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854717FE51;
+        Wed, 27 Jul 2022 09:47:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8A3B821D4;
-        Wed, 27 Jul 2022 16:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9504C433C1;
-        Wed, 27 Jul 2022 16:45:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDDDC60DDB;
+        Wed, 27 Jul 2022 16:47:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E662BC433D6;
+        Wed, 27 Jul 2022 16:47:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658940322;
-        bh=MxIqrIPmkawLpmAgdInOx6a9yL6SrBN/IMRL0oRRGK8=;
+        s=korg; t=1658940443;
+        bh=wNWaaf9ZVTOkTXZushfipplNyncTlNCML5XFMyU0joc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UJNMiQE9V9mvm9y0uGs2s8kkY/DBmF7XSbQGPTlzjDv8x04KAWZUEgZFfcVstQFXU
-         yt11ojcdAtTXNb09uwJcUgI8RC8CmSSZxZlgNofJGs/1pmU04DjEnOhekA3oHIsDyV
-         DDdFd3xvv9ig2gopy3L2oxCCeIpSnh21bwN3v1JQ=
+        b=dxpKXnzCYhPCkpwESwpX41NT6KQS6sjKYyfjQaUrHMB2j7xEU1n8Mi7rFq975TqKT
+         /vuY7zDh4L8auHj8YCUlmdsf7WDnMNBZMSChDNdVmv6UXV1R0O6hzmvbPXb5j+eYxc
+         JRNd6aNHQ36Z09gk0SLpeP+RHmWq4cDr/nviVUhY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom St Denis <tom.stdenis@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: [PATCH 5.15 184/201] drm/amd/display: Fix surface optimization regression on Carrizo
+        stable@vger.kernel.org, Mustafa Ismail <mustafa.ismail@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 024/158] RDMA/irdma: Fix sleep from invalid context BUG
 Date:   Wed, 27 Jul 2022 18:11:28 +0200
-Message-Id: <20220727161035.401781717@linuxfoundation.org>
+Message-Id: <20220727161022.437017263@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
+In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
+References: <20220727161021.428340041@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+From: Mustafa Ismail <mustafa.ismail@intel.com>
 
-commit 62e5a7e2333a9f5395f6a9db766b7b06c949fe7a upstream.
+[ Upstream commit cc0315564d6eec91c716d314b743321be24c70b3 ]
 
-[Why]
-DCE legacy optimization path isn't well tested under new DC optimization
-flow which can result in underflow occuring when initializing X11 on
-Carrizo.
+Taking the qos_mutex to process RoCEv2 QP's on netdev events causes a
+kernel splat.
 
-[How]
-Retain the legacy optimization flow for DCE and keep the new one for DCN
-to satisfy optimizations being correctly applied for ASIC that can
-support it.
+Fix this by removing the handling for RoCEv2 in
+irdma_cm_teardown_connections that uses the mutex. This handling is only
+needed for iWARP to avoid having connections established while the link is
+down or having connections remain functional after the IP address is
+removed.
 
-Fixes: 34316c1e561db0 ("drm/amd/display: Optimize bandwidth on following fast update")
-Reported-by: Tom St Denis <tom.stdenis@amd.com>
-Tested-by: Tom St Denis <tom.stdenis@amd.com>
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: Mario Limonciello <Mario.Limonciello@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  BUG: sleeping function called from invalid context at kernel/locking/mutex.
+  Call Trace:
+  kernel: dump_stack+0x66/0x90
+  kernel: ___might_sleep.cold.92+0x8d/0x9a
+  kernel: mutex_lock+0x1c/0x40
+  kernel: irdma_cm_teardown_connections+0x28e/0x4d0 [irdma]
+  kernel: ? check_preempt_curr+0x7a/0x90
+  kernel: ? select_idle_sibling+0x22/0x3c0
+  kernel: ? select_task_rq_fair+0x94c/0xc90
+  kernel: ? irdma_exec_cqp_cmd+0xc27/0x17c0 [irdma]
+  kernel: ? __wake_up_common+0x7a/0x190
+  kernel: irdma_if_notify+0x3cc/0x450 [irdma]
+  kernel: ? sched_clock_cpu+0xc/0xb0
+  kernel: irdma_inet6addr_event+0xc6/0x150 [irdma]
+
+Fixes: 146b9756f14c ("RDMA/irdma: Add connection manager")
+Signed-off-by: Mustafa Ismail <mustafa.ismail@intel.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc.c |   15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/irdma/cm.c | 50 --------------------------------
+ 1 file changed, 50 deletions(-)
 
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -2979,8 +2979,13 @@ void dc_commit_updates_for_stream(struct
- 			if (new_pipe->plane_state && new_pipe->plane_state != old_pipe->plane_state)
- 				new_pipe->plane_state->force_full_update = true;
- 		}
--	} else if (update_type == UPDATE_TYPE_FAST) {
--		/* Previous frame finished and HW is ready for optimization. */
-+	} else if (update_type == UPDATE_TYPE_FAST && dc_ctx->dce_version >= DCE_VERSION_MAX) {
-+		/*
-+		 * Previous frame finished and HW is ready for optimization.
-+		 *
-+		 * Only relevant for DCN behavior where we can guarantee the optimization
-+		 * is safe to apply - retain the legacy behavior for DCE.
-+		 */
- 		dc_post_update_surfaces_to_stream(dc);
+diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
+index 638bf4a1ed94..646fa8677490 100644
+--- a/drivers/infiniband/hw/irdma/cm.c
++++ b/drivers/infiniband/hw/irdma/cm.c
+@@ -4231,10 +4231,6 @@ void irdma_cm_teardown_connections(struct irdma_device *iwdev, u32 *ipaddr,
+ 	struct irdma_cm_node *cm_node;
+ 	struct list_head teardown_list;
+ 	struct ib_qp_attr attr;
+-	struct irdma_sc_vsi *vsi = &iwdev->vsi;
+-	struct irdma_sc_qp *sc_qp;
+-	struct irdma_qp *qp;
+-	int i;
+ 
+ 	INIT_LIST_HEAD(&teardown_list);
+ 
+@@ -4251,52 +4247,6 @@ void irdma_cm_teardown_connections(struct irdma_device *iwdev, u32 *ipaddr,
+ 			irdma_cm_disconn(cm_node->iwqp);
+ 		irdma_rem_ref_cm_node(cm_node);
  	}
- 
-@@ -3039,6 +3044,12 @@ void dc_commit_updates_for_stream(struct
- 		}
- 	}
- 
-+	/* Legacy optimization path for DCE. */
-+	if (update_type >= UPDATE_TYPE_FULL && dc_ctx->dce_version < DCE_VERSION_MAX) {
-+		dc_post_update_surfaces_to_stream(dc);
-+		TRACE_DCE_CLOCK_STATE(&context->bw_ctx.bw.dce);
-+	}
-+
- 	return;
- 
+-	if (!iwdev->roce_mode)
+-		return;
+-
+-	INIT_LIST_HEAD(&teardown_list);
+-	for (i = 0; i < IRDMA_MAX_USER_PRIORITY; i++) {
+-		mutex_lock(&vsi->qos[i].qos_mutex);
+-		list_for_each_safe (list_node, list_core_temp,
+-				    &vsi->qos[i].qplist) {
+-			u32 qp_ip[4];
+-
+-			sc_qp = container_of(list_node, struct irdma_sc_qp,
+-					     list);
+-			if (sc_qp->qp_uk.qp_type != IRDMA_QP_TYPE_ROCE_RC)
+-				continue;
+-
+-			qp = sc_qp->qp_uk.back_qp;
+-			if (!disconnect_all) {
+-				if (nfo->ipv4)
+-					qp_ip[0] = qp->udp_info.local_ipaddr[3];
+-				else
+-					memcpy(qp_ip,
+-					       &qp->udp_info.local_ipaddr[0],
+-					       sizeof(qp_ip));
+-			}
+-
+-			if (disconnect_all ||
+-			    (nfo->vlan_id == (qp->udp_info.vlan_tag & VLAN_VID_MASK) &&
+-			     !memcmp(qp_ip, ipaddr, nfo->ipv4 ? 4 : 16))) {
+-				spin_lock(&iwdev->rf->qptable_lock);
+-				if (iwdev->rf->qp_table[sc_qp->qp_uk.qp_id]) {
+-					irdma_qp_add_ref(&qp->ibqp);
+-					list_add(&qp->teardown_entry,
+-						 &teardown_list);
+-				}
+-				spin_unlock(&iwdev->rf->qptable_lock);
+-			}
+-		}
+-		mutex_unlock(&vsi->qos[i].qos_mutex);
+-	}
+-
+-	list_for_each_safe (list_node, list_core_temp, &teardown_list) {
+-		qp = container_of(list_node, struct irdma_qp, teardown_entry);
+-		attr.qp_state = IB_QPS_ERR;
+-		irdma_modify_qp_roce(&qp->ibqp, &attr, IB_QP_STATE, NULL);
+-		irdma_qp_rem_ref(&qp->ibqp);
+-	}
  }
+ 
+ /**
+-- 
+2.35.1
+
 
 

@@ -2,82 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C35582796
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3DE58279E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 15:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiG0NYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 09:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33530 "EHLO
+        id S233255AbiG0NYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 09:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbiG0NYH (ORCPT
+        with ESMTP id S232909AbiG0NYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 09:24:07 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ECA2D1FB
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:24:07 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id bp15so31479035ejb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 06:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FHMkpB5t7hmbPWWLKlbDM5K2ZorzaQLbHtU4+jaalmQ=;
-        b=oddts4B12U+6PCzk4eaFHpzKf0/AWjqXcJsh2FsYPvng1kZorzMkNff/nvoIyfbZMH
-         oKMKGa9FPYuHC6KVm4My/G0pVyfXO17wO2s1Etx2EMTXxL3/TGQdmuYb59Z/pXnrU9xO
-         YBw1URWs1cQ8zFuef52zRvSdb8Bvr26tmTZ3Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FHMkpB5t7hmbPWWLKlbDM5K2ZorzaQLbHtU4+jaalmQ=;
-        b=hDRz76UGK74+6nE7uEpfjdPSwwYFr8m9XbWpZjn9OlAqVLbZ7MYyuAx6bGoh2vV2vv
-         vlcG5LLDBXnv9XuR2G9L9kAP3EZku38Iu0sSJHiR7eroLWNSve5u9ZrS/uG9/pH0pkjU
-         siBEw+4Z0RhkX+jHZ8+bIu+KlEp4YpR+L/vB/R2YxDAdEAhlwEHLyTRgx0SN0PNkJlmr
-         r+Ba14x2g2PYN9HdaxildwjXbrkmmri5cAZNZtYeI3AK8lOeFKY8Dx/Qr6Jo9+CKWRNS
-         ar6e39P9M9fdYZqtCu8osgc78Nh3sodZUZ+xlWi48+1dPn6zdcEyDFPIcOAMHQ69SJKJ
-         7IfA==
-X-Gm-Message-State: AJIora8VViruofA4yy5yd8ukjgKhoBk6jFsuLrPL1tQy7qPtUhQ4GYGW
-        1FBVnR7dJZM0e3gEnEjibO1KS52rCtfcmIxNv/8+Lw==
-X-Google-Smtp-Source: AGRyM1uJuZCTUizUZkLY1fl9uNE3WAVaWRFsoUax4sRn1yFc1O3sJwP8uWV2lS+qNxCZkgECeYMKGj9UHQ+DlXPTFy8=
-X-Received: by 2002:a17:907:2854:b0:72b:7daf:cc0d with SMTP id
- el20-20020a170907285400b0072b7dafcc0dmr17709950ejc.524.1658928245376; Wed, 27
- Jul 2022 06:24:05 -0700 (PDT)
+        Wed, 27 Jul 2022 09:24:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAD9631DE0;
+        Wed, 27 Jul 2022 06:24:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF8F315BF;
+        Wed, 27 Jul 2022 06:24:45 -0700 (PDT)
+Received: from bogus (unknown [10.57.11.51])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 969513F73B;
+        Wed, 27 Jul 2022 06:24:41 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 14:24:37 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+Message-ID: <20220727132437.pjob3z2nyxsuxgam@bogus>
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <20220726143005.wt4be7yo7sbd3xut@bogus>
+ <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
+ <20220726154138.74avqs6iqlzqpzjk@bogus>
+ <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
+ <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
+ <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
 MIME-Version: 1.0
-References: <20220712110933.2646293-1-williamsukatube@163.com>
-In-Reply-To: <20220712110933.2646293-1-williamsukatube@163.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 27 Jul 2022 15:23:54 +0200
-Message-ID: <CAJfpegsBbRaqG3UeVhiXhPsFX-6kZf+OGT9Rxu93vSfoepgbfw@mail.gmail.com>
-Subject: Re: [PATCH -next] ovl: Fix spelling mistakes and cleanup code
-To:     williamsukatube@163.com
-Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        William Dean <williamsukatube@gmail.com>,
-        Hacash Robot <hacashRobot@santino.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 13:10, <williamsukatube@163.com> wrote:
+On Wed, Jul 27, 2022 at 03:03:49PM +0200, Maximilian Luz wrote:
 >
-> From: William Dean <williamsukatube@gmail.com>
+> Is there really a good way around it?
+
+Yes rely on the firmware preferably auto discover, if that is not an option,
+how about query. It seem to be working in your case.
+
+> As far as I can see the alternative (especially for the apps that
+> need to be loaded manually) is hard-coding everything in the driver.
+> Which IMHO just spreads device specific information everywhere.
 >
-> First, fix follow spelling misktakes:
->         decendant  ==> descendant
->         indentify  ==> identify
 
-I will accept a patch fixing typos, but...
+It may not be too bad compared to putting loads of firmware details
+in the DT. What happens if you get a firmware upgrade with changed
+number of firmware entities or even if the names are changed.
 
-> Second, delete extra blank line and add blank line where
-> appropriate to make code format more standardized.
+Are these name user ABI in a way that they won't be changed ? Generally
+these entities tend to use UUID and the name you have might get changed.
 
-...not this.
+I would ideally prefer even the name to be supplied from the userspace.
+In this particular case, make this a driver and have the name as the
+parameter. If the secure side services are used by some non-secure
+applications, then you will need to have a user-interface which means
+you can get the named from the userspace. No need to change the driver
+in either case. Please let me know if I am missing anything to consider
+here.
 
-Thanks,
-Miklos
+> Also: Let's use the TPM app as example. If that would be a SPI or I2C
+> device, you'd model it in the DT. Just because it's a hardware device
+> that's accessible via SCM/firmware you now don't?
+>
+
+Not sure if I understand the comparison here. But if there is some device
+that is access restricted but needs to be accessed and has mechanism to
+access, then you would model it as device in DT.
+
+But the one $subject is addressing looks pure software and doesn't make
+sense to model in DT IMO.
+
+> If I were absolutely certain that there is a reliable mechanism to
+> detect these apps, I'd agree with having a driver to instantiate those
+> devices. But I am not.
+>
+
+You did say you use some query API to check this. I haven't seen the driver,
+so relying on what you said earlier.
+
+--
+Regards,
+Sudeep

@@ -2,146 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCEA5847EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A36F5847F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbiG1WCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S231487AbiG1WF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiG1WCI (ORCPT
+        with ESMTP id S229608AbiG1WFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:02:08 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BC665578
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:02:04 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 204so4253773yba.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:02:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KKJMz2p0fMbqbmhUA2NRK8taNgQHWFCPCykk0R/nVkQ=;
-        b=BIAqjFwuvscZyaQvaO2Pp5Tm2K8Fcr9ETnXvpU5e3wVsse21Jc6+b/sSURRzcM4QRX
-         f+AUZdMnE7et9mw5oGUM8bOIP7AqPCPEFZ5JFqKRH4odWmwDZ0FjP8rMMLUG8y3aCwAh
-         lwgedBwQkhfs5enr6DiCZ/gKqdYfyYsGa6781lN44ppqnMvdnKWZaI1L0KYuIh0w3h/W
-         Ex4VAWe01YlKol56ws7q0/gUwiDhufvbMAS97qfg8YmOtZ7iNvuxcaVvr0OuapoWpqSG
-         zk5SMyBnMxjyNUeOtF5G284TFqrCbKyKwnrUsp1SvrzycKfu/wMWOIfliAogPsiP7m2l
-         e2ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KKJMz2p0fMbqbmhUA2NRK8taNgQHWFCPCykk0R/nVkQ=;
-        b=W4w+phImbkmBtpFkWe4qURiqq7EL0i6SCAQcUasWEcTtZcWpxTb466Krzn0LUm+lSS
-         A+5lr7bWXM/d7bNH84/2iAkdBmIA608gD0bUHUGBo60Cex3do225dX7a5FKc5Pw15TDN
-         4NwJyOX2BGh1zr/yQvshRUgjGvRmF/vQd5c20394wNxSNO8G6lkO9YzfpI1JEqgMaiJx
-         i1vbv8MnWdSyBVfBOhz9n40dsjenpeDjX1vW+niVIVnoLUcm6vEv0cKUpAwXokateiCo
-         UYRcRt07sjpQwkmKdvD4z7xJFzSu3ZbgN9d3QVFaoRH9cbjCiybYGiwCzmsrdRgPLmBn
-         xjzw==
-X-Gm-Message-State: ACgBeo1WbqGWQuD11ccWxHbCYAgw/j0IAcec0NQR3o9svlEoc0lOdOcl
-        iS6LqPBM1eRJnNtVY6D7IAenlUJRLNBwCuHmKbtaNQ==
-X-Google-Smtp-Source: AA6agR6CsM1GKbxoIN8NWcO7GQfLofiour4J2FuUY6Juif22kb1aJ6rJGRSLyGPjmgf+UOW6vfxySZ2NKkNcgLC9zMk=
-X-Received: by 2002:a05:6902:128d:b0:670:9009:f859 with SMTP id
- i13-20020a056902128d00b006709009f859mr549949ybu.321.1659045723977; Thu, 28
- Jul 2022 15:02:03 -0700 (PDT)
+        Thu, 28 Jul 2022 18:05:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2953C25598
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659045953;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=euZx/SQe2yHV3CiDDtxNmZWBbm4QMeS2RXInUMDOAqU=;
+        b=WJpYtxweu6o041y0ZSHsKruRqHeT6Ae1e0s/bclUXGBdrmE+xR30ZKOCg5BgPm924OmhCH
+        NS7vmuAEWcwNqvOOaopQqSbEnnpGAJ/SgraKVixCUkeMcKvrC+WqitHd9qu9rToeNJvgLf
+        SkExXtokJrKSKbmz/zIQ+SsNVEhjcKk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-480-TPm2dwFYOJizJLozVZIGCA-1; Thu, 28 Jul 2022 18:05:48 -0400
+X-MC-Unique: TPm2dwFYOJizJLozVZIGCA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5D362381078F;
+        Thu, 28 Jul 2022 22:05:48 +0000 (UTC)
+Received: from emerald.redhat.com (unknown [10.22.8.94])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B60E40C1288;
+        Thu, 28 Jul 2022 22:05:47 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     nouveau@lists.freedesktop.org
+Cc:     Christoph Hellwig <hch@lst.de>, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA
+        GEFORCE/QUADRO GPUS), linux-kernel@vger.kernel.org (open list)
+Subject: [RFC] drm/nouveau/ttm: Stop calling into swiotlb
+Date:   Thu, 28 Jul 2022 18:05:44 -0400
+Message-Id: <20220728220545.163763-1-lyude@redhat.com>
 MIME-Version: 1.0
-References: <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
- <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
- <20220718172159.4vwjzrfthelovcty@black.fi.intel.com> <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
- <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
- <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic> <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
- <YtcgxxMyFTReuuRw@zn.tnic> <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
- <YtcnQbiRgZPtR+rQ@zn.tnic> <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
- <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com>
- <ffb4ae72-7fd4-d2a0-df10-3969cf8ca07f@intel.com> <CAMj1kXHEc=vEt=CtfdiPEsUe2i8QogAi+jvtY6h1awo7GZ-nRg@mail.gmail.com>
-In-Reply-To: <CAMj1kXHEc=vEt=CtfdiPEsUe2i8QogAi+jvtY6h1awo7GZ-nRg@mail.gmail.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Thu, 28 Jul 2022 15:01:52 -0700
-Message-ID: <CAAH4kHYGZ179eYREi-YcYNd4Xd8gTPa2WX0iphr=Kiz6-A7hnQ@mail.gmail.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>, Marc Orr <marcorr@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> What I strongly object to is inventing a new bespoke way for the
-> firmware to make inferences about the capabilities of the image by
-> inspecting fields in the file representation of the image (which is
-> not guaranteed by EFI to be identical to its in-memory representation,
-> as, e.g., the PE/COFF header could be omitted by a loader without
-> violating the spec)
->
-> As for the intermediate thing: yes, that would be a valuable thing to
-> have in OVMF (and I will gladly take EDK2 patches that implement
-> this). However, I'm not sure how you decide whether or not this thing
-> should be active or not, doesn't that just move the problem around?
+Per the request of some of the DMA folks, some of the swiotlb helpers are
+being sunset in favor of better alternatives that don't involve layer
+mixing. Since it seems like we can actually replace the one thing we use
+swiotlb for pretty easily, e.g. checking whether or not we are capable of
+coherent allocations using is_swiotlb_active().
 
-This does just move the problem around, but it makes correct behavior
-the default instead of silently ignoring most of the VM's memory and
-booting regularly. I have the driver mostly written to change the
-behavior to accept all by default unless a driver has been installed
-to set a particular boolean to make it not. Still that's yet another
-thing as you say.
+So, let's do this by replacing is_swiotlb_active() with our own
+nouveau_drm_use_coherent_gpu_mapping() helper.
 
-I agree with everyone that this situation just stinks. "Can't you just
-boot it?" was asked before, and yes we can, but at the scale of a CSP
-managing anybody's image uploads, that not-insignificant cost has to
-be paid by someone. It's a hard problem to route the image to the
-right kind of machine that's expected to be able to run it... it's a
-big ol' mess.
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: Christoph Hellwig <hch@lst.de>
+---
 
-One thing is for sure: these patches shouldn't be blocked by the "how
-do we detect it" question. I'm glad to see so much engagement with
-this problem, but I fear I might have delayed its progress towards a
-merge. I know AMD has a follow-up to add SEV-SNP accept_memory support
-to finish this all up.
+Hey! This is the patch that I came up with, but as the folks involved
+with this thread can probably tell I'm not entirely sure this is
+correct?
 
-I'll try to get the ear of all the distributions that are tracking
-towards providing SEV-SNP-supported images for CSPs to get them on the
-release that includes these patches. I'll also see about upstreaming
-that EFI driver and EDK2 changes in case there's a slip in the kernel
-release and we need this workaround.
---
--Dionna Glaze, PhD (she/her)
+Also, someone more knowledgeable about mm with nouveau should probably
+verify this as well
+
+ drivers/gpu/drm/nouveau/nouveau_ttm.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nouveau_ttm.c b/drivers/gpu/drm/nouveau/nouveau_ttm.c
+index 85f1f5a0fe5d..ab7ccba1d601 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_ttm.c
++++ b/drivers/gpu/drm/nouveau/nouveau_ttm.c
+@@ -24,7 +24,6 @@
+  */
+ 
+ #include <linux/limits.h>
+-#include <linux/swiotlb.h>
+ 
+ #include <drm/ttm/ttm_range_manager.h>
+ 
+@@ -241,7 +240,6 @@ nouveau_ttm_init(struct nouveau_drm *drm)
+ 	struct nvkm_pci *pci = device->pci;
+ 	struct nvif_mmu *mmu = &drm->client.mmu;
+ 	struct drm_device *dev = drm->dev;
+-	bool need_swiotlb = false;
+ 	int typei, ret;
+ 
+ 	ret = nouveau_ttm_init_host(drm, 0);
+@@ -276,14 +274,11 @@ nouveau_ttm_init(struct nouveau_drm *drm)
+ 		drm->agp.cma = pci->agp.cma;
+ 	}
+ 
+-#if IS_ENABLED(CONFIG_SWIOTLB) && IS_ENABLED(CONFIG_X86)
+-	need_swiotlb = is_swiotlb_active(dev->dev);
+-#endif
+-
+ 	ret = ttm_device_init(&drm->ttm.bdev, &nouveau_bo_driver, drm->dev->dev,
+-				  dev->anon_inode->i_mapping,
+-				  dev->vma_offset_manager, need_swiotlb,
+-				  drm->client.mmu.dmabits <= 32);
++			      dev->anon_inode->i_mapping,
++			      dev->vma_offset_manager,
++			      nouveau_drm_use_coherent_gpu_mapping(drm),
++			      drm->client.mmu.dmabits <= 32);
+ 	if (ret) {
+ 		NV_ERROR(drm, "error initialising bo driver, %d\n", ret);
+ 		return ret;
+-- 
+2.35.3
+

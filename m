@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FC95837AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3785837AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237983AbiG1Dog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 23:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
+        id S238095AbiG1Dos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 23:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234735AbiG1Dob (ORCPT
+        with ESMTP id S237282AbiG1Doc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 23:44:31 -0400
+        Wed, 27 Jul 2022 23:44:32 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637AE5C37A
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0819237F7
         for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1658979870; x=1690515870;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZUk6ls7YozWTVZQspFCgv0sPDDtiMSqmqSKOfdpozRE=;
-  b=cYvsMvIqzMwwiv60FjhZ7OzREbuPzWO4f8mwOPRTq8OqK/olMhys6pms
-   SM0kziL1O3uP40PilX5EAC2tMtdZ4y+Yq9XZE9PHm3e+EpJLvHacO60Mw
-   JVTwy+dtzQdZOxJFx/OPGEFN4cBgIbzNWB275Pp+VbbUWSUK/pClonPtT
-   sCs4JplYwI+qDz7euWGQMAo7uJYCpmvfr8ztCWwz64L8T39QHHlaFLXc1
-   TeEK3YznW4j3CEBW+hjL6jibKeHaZGDf03X1tgPS5rk1yfuTH9cnKxsjR
-   AVqQ+iFaknpJGirDVPJYIzci9DTrA2yC1JkzLl17Fp8ctgKPpDTyNtAmB
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="275292803"
+  bh=C5Rrok48VPOQeWvMWINZH+IgbNSJ+qjOaUdcyANRJcU=;
+  b=Efvu8/C30roHnfUvjzLXCYPMGYDm0bY5LVlU7iNz10GmEv2eKxfH0bbd
+   VsPNo2xlfzW4yKDPyf5Gjm+u+9UcE0lzXpfiTRFAbhkGXzDSv2M7MY+PM
+   9uVyi/Y19qeB7+9EN0YLX9Kmu/HwJz5I+GS9pLCfuLBR3W1Az1QFNejwW
+   AFr6KmIYnstLgV/qBfVtEQaHqTFHRk13sGhRLIkatasgCoM66WhjORz45
+   qBPYPvCFTYv0aB2DLQuL0gS3QD4esvbGMkhRoB+D7Zauq1Rjbs+KiuSN8
+   jNUgOcEbPv6lN1L1nCGE01LoLM2gWx0nb2j++BGPUgSWtJDsvEsTwoGoy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="275292804"
 X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="275292803"
+   d="scan'208";a="275292804"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 20:44:30 -0700
 X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="600676733"
+   d="scan'208";a="600676736"
 Received: from hurleyst-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.106.108])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 20:44:29 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 20:44:30 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -54,13 +54,14 @@ Cc:     "H . Peter Anvin" <hpa@zytor.com>,
         marcelo.cerri@canonical.com, tim.gardner@canonical.com,
         khalid.elmously@canonical.com, philip.cox@canonical.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v9 1/6] x86/tdx: Add TDX Guest attestation interface driver
-Date:   Wed, 27 Jul 2022 20:44:15 -0700
-Message-Id: <20220728034420.648314-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v9 2/6] selftests: tdx: Test GetReport TDX attestation feature
+Date:   Wed, 27 Jul 2022 20:44:16 -0700
+Message-Id: <20220728034420.648314-3-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -72,340 +73,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In TDX guest, attestation is used to verify the trustworthiness of a TD
-to other entities before provisioning secrets to the TD.
+In TDX guest, attestation is used to verify the trustworthiness of a
+TD. During the TD bring-up, Intel TDX module measures and records the
+initial contents and configuration of TD, and at runtime, TD software
+uses runtime measurement registers (RMTRs) to measure and record
+details related to kernel image, command line params, ACPI tables,
+initrd, etc. At TD runtime, Intel SGX attestation infrastructure is
+re-used to attest to these measurement data.
 
-During the TD launch, the initial contents and configuration of the TD
-are recorded by the Intel TDX module in build time measurement register
-(MRTD). It is a SHA384 digest created using data from TD private pages(
-including TD firmware) and the configuration of the TD.
+First step in the TDX attestation process is to get the TDREPORT data.
+It is fixed size data structure generated by the TDX module which
+includes the above mentioned measurements data, a MAC to protect the
+integerity of the TDREPORT, and a 64-Byte of user specified data passed
+during TDREPORT request which can uniquely identify the TDREPORT.
 
-After TD build, run-time measurement registers (RTMRs)  can be used by
-the guest TD software to extend the TD measurements. TDX supports 4
-RTMR registers, and TDG.MR.RTMR.EXTEND TDCALL is used to update the
-RTMR registers securely. RTMRs are mainly used to record measurements
-related to sections like the kernel image, command line parameters,
-initrd, ACPI tables, firmware data, configuration firmware volume (CFV)
-of TDVF, etc. For more details, please refer to TDX Virtual Firmware
-design specification, sec titled "TD Measurement".
+Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
+get the TDREPORT from the user space.
 
-At TD runtime, the Intel TDX module reuses the Intel SGX attestation
-infrastructure to provide support for attesting to these measurements
-as described below.
-
-The attestation process consists of two steps: TDREPORT generation and
-Quote generation.
-
-TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
-the TDX module which contains TD-specific information (such as TD
-measurements), platform security version, and the MAC to protect the
-integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
-get the TDREPORT from the TDX module. A user-provided 64-Byte
-REPORTDATA is used as input and included in the TDREPORT. Typically it
-can be some nonce provided by attestation service so the TDREPORT can
-be verified uniquely. More details about TDREPORT can be found in
-Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
-
-TDREPORT can only be verified on local platform as the MAC key is bound
-to the platform. To support remote verification of the TDREPORT, TDX
-leverages Intel SGX Quote Enclave (QE) to verify the TDREPORT locally
-and convert it to a remote verifiable Quote.
-
-After getting the TDREPORT, the second step of the attestation process
-is to send it to the QE to generate the Quote. TDX doesn't support SGX
-inside the TD, so the QE can be deployed in the host, or in another
-legacy VM with SGX support. How to send the TDREPORT to QE and receive
-the Quote is implementation and deployment specific.
-
-Implement a basic TD guest misc driver to allow TD userspace to get the
-TDREPORT. The TD userspace attestation software can get the TDREPORT
-and then choose whatever communication channel available (i.e. vsock
-or hypercall) to send the TDREPORT to QE and receive the Quote.
-
-Also note that explicit access permissions are not enforced in this
-driver because the quote and measurements are not a secret. However
-the access permissions of the device node can be used to set any
-desired access policy. The udev default is usually root access
-only.
-
-Operations like getting TDREPORT or Quote generation involves sending
-a blob of data as input and getting another blob of data as output. It
-was considered to use a sysfs interface for this, but it doesn't fit
-well into the standard sysfs model for configuring values. It would be
-possible to do read/write on files, but it would need multiple file
-descriptors, which would be somewhat messy. IOCTLs seems to be the best
-fitting and simplest model for this use case. This is similar to AMD
-SEV platform, which also uses IOCTL interface to support attestation.
+Add a kernel selftest module to test this ABI and verify the validity
+of generated TDREPORT.
 
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Acked-by: Kai Huang <kai.huang@intel.com>
-Acked-by: Wander Lairson Costa <wander@redhat.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- arch/x86/coco/tdx/Makefile      |  2 +-
- arch/x86/coco/tdx/attest.c      | 81 +++++++++++++++++++++++++++++++++
- arch/x86/coco/tdx/tdx.c         | 55 ++++++++++++++++++++++
- arch/x86/coco/tdx/tdx.h         |  9 ++++
- arch/x86/include/uapi/asm/tdx.h | 51 +++++++++++++++++++++
- 5 files changed, 197 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/coco/tdx/attest.c
- create mode 100644 arch/x86/coco/tdx/tdx.h
- create mode 100644 arch/x86/include/uapi/asm/tdx.h
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/tdx/Makefile          |   7 +
+ tools/testing/selftests/tdx/tdx_attest_test.c | 160 ++++++++++++++++++
+ 3 files changed, 168 insertions(+)
+ create mode 100644 tools/testing/selftests/tdx/Makefile
+ create mode 100644 tools/testing/selftests/tdx/tdx_attest_test.c
 
-diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
-index 46c55998557d..d2db3e6770e5 100644
---- a/arch/x86/coco/tdx/Makefile
-+++ b/arch/x86/coco/tdx/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--obj-y += tdx.o tdcall.o
-+obj-y += tdx.o tdcall.o attest.o
-diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index de11992dc577..807a839d69c4 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -69,6 +69,7 @@ TARGETS += sync
+ TARGETS += syscall_user_dispatch
+ TARGETS += sysctl
+ TARGETS += tc-testing
++TARGETS += tdx
+ TARGETS += timens
+ ifneq (1, $(quicktest))
+ TARGETS += timers
+diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
 new file mode 100644
-index 000000000000..46a2f3612753
+index 000000000000..281db209f9d6
 --- /dev/null
-+++ b/arch/x86/coco/tdx/attest.c
-@@ -0,0 +1,81 @@
++++ b/tools/testing/selftests/tdx/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++
++CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
++
++TEST_GEN_PROGS := tdx_attest_test
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/tdx/tdx_attest_test.c b/tools/testing/selftests/tdx/tdx_attest_test.c
+new file mode 100644
+index 000000000000..7155cc751eaa
+--- /dev/null
++++ b/tools/testing/selftests/tdx/tdx_attest_test.c
+@@ -0,0 +1,160 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * attest.c - TDX attestation feature support.
++ * Test TDX attestation feature
 + *
-+ * Implements attestation related IOCTL handlers.
++ * Copyright (C) 2022 Intel Corporation. All rights reserved.
 + *
-+ * Copyright (C) 2022 Intel Corporation
-+ *
++ * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 + */
 +
-+#include <linux/mm.h>
-+#include <linux/io.h>
-+#include <asm/tdx.h>
 +
-+#include "tdx.h"
++#include <errno.h>
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/ioctl.h>
++#include <sys/time.h>
++#include <sys/types.h>
++#include <time.h>
++#include <unistd.h>
 +
-+/* TDREPORT module call leaf ID */
-+#define TDX_GET_REPORT			4
++#include "../kselftest_harness.h"
++#include "../../../../arch/x86/include/uapi/asm/tdx.h"
 +
-+long tdx_get_report(void __user *argp)
-+{
-+	u8 *reportdata = NULL, *tdreport = NULL;
-+	struct tdx_report_req req;
-+	long ret;
++#define devname         "/dev/tdx-guest"
++#define HEX_DUMP_SIZE	8
 +
-+	/* Copy request struct from the user buffer */
-+	if (copy_from_user(&req, argp, sizeof(req)))
-+		return -EFAULT;
-+
-+	/*
-+	 * Per TDX Module 1.0 specification, section titled
-+	 * "TDG.MR.REPORT", REPORTDATA and TDREPORT length
-+	 * is fixed as TDX_REPORTDATA_LEN and TDX_REPORT_LEN.
-+	 */
-+	if (req.rpd_len != TDX_REPORTDATA_LEN || req.tdr_len != TDX_REPORT_LEN)
-+		return -EINVAL;
-+
-+	/* Allocate kernel buffers for REPORTDATA and TDREPORT */
-+	reportdata = kzalloc(req.rpd_len, GFP_KERNEL);
-+	if (!reportdata) {
-+		ret = -ENOMEM;
-+		goto report_failed;
-+	}
-+
-+	tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
-+	if (!tdreport) {
-+		ret = -ENOMEM;
-+		goto report_failed;
-+	}
-+
-+
-+	/* Copy REPORTDATA from user to kernel buffer */
-+	if (copy_from_user(reportdata, (void *)req.reportdata, req.rpd_len)) {
-+		ret = -EFAULT;
-+		goto report_failed;
-+	}
-+
-+	/*
-+	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
-+	 *
-+	 * Get the TDREPORT using REPORTDATA as input. Refer to
-+	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
-+	 * Specification for detailed information.
-+	 */
-+	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
-+				virt_to_phys(reportdata), req.subtype,
-+				0, NULL);
-+	if (ret) {
-+		ret = -EIO;
-+		goto report_failed;
-+	}
-+
-+	/* Copy TDREPORT data back to the user buffer */
-+	if (copy_to_user((void *)req.tdreport, tdreport, req.tdr_len))
-+		ret = -EFAULT;
-+
-+report_failed:
-+	kfree(reportdata);
-+	kfree(tdreport);
-+	return ret;
-+}
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 928dcf7a20d9..205f98f42da8 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -5,6 +5,9 @@
- #define pr_fmt(fmt)     "tdx: " fmt
- 
- #include <linux/cpufeature.h>
-+#include <linux/miscdevice.h>
-+#include <linux/mm.h>
-+#include <linux/io.h>
- #include <asm/coco.h>
- #include <asm/tdx.h>
- #include <asm/vmx.h>
-@@ -12,6 +15,8 @@
- #include <asm/insn-eval.h>
- #include <asm/pgtable.h>
- 
-+#include "tdx.h"
-+
- /* TDX module Call Leaf IDs */
- #define TDX_GET_INFO			1
- #define TDX_GET_VEINFO			3
-@@ -34,6 +39,10 @@
- #define VE_GET_PORT_NUM(e)	((e) >> 16)
- #define VE_IS_IO_STRING(e)	((e) & BIT(4))
- 
-+#define DRIVER_NAME	"tdx-guest"
-+
-+static struct miscdevice tdx_misc_dev;
-+
- /*
-  * Wrapper for standard use of __tdx_hypercall with no output aside from
-  * return code.
-@@ -775,3 +784,49 @@ void __init tdx_early_init(void)
- 
- 	pr_info("Guest detected\n");
- }
-+
-+static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
-+			    unsigned long arg)
-+{
-+	void __user *argp = (void __user *)arg;
-+	long ret = -EINVAL;
-+
-+	switch (cmd) {
-+	case TDX_CMD_GET_REPORT:
-+		ret = tdx_get_report(argp);
-+		break;
-+	default:
-+		pr_debug("cmd %d not supported\n", cmd);
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct file_operations tdx_guest_fops = {
-+	.owner		= THIS_MODULE,
-+	.unlocked_ioctl	= tdx_guest_ioctl,
-+	.llseek		= no_llseek,
-+};
-+
-+static int __init tdx_guest_init(void)
-+{
-+	int ret;
-+
-+	/* Make sure we are in a valid TDX platform */
-+	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-+		return -EIO;
-+
-+	tdx_misc_dev.name = DRIVER_NAME;
-+	tdx_misc_dev.minor = MISC_DYNAMIC_MINOR;
-+	tdx_misc_dev.fops = &tdx_guest_fops;
-+
-+	ret = misc_register(&tdx_misc_dev);
-+	if (ret) {
-+		pr_err("misc device registration failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+device_initcall(tdx_guest_init)
-diff --git a/arch/x86/coco/tdx/tdx.h b/arch/x86/coco/tdx/tdx.h
-new file mode 100644
-index 000000000000..67231d6d1027
---- /dev/null
-+++ b/arch/x86/coco/tdx/tdx.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __X86_COCO_TDX_H__
-+#define __X86_COCO_TDX_H__
-+
-+#include <uapi/asm/tdx.h>
-+
-+long tdx_get_report(void __user *argp);
-+
-+#endif /* __X86_COCO_TDX_H__ */
-diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
-new file mode 100644
-index 000000000000..20db8081772b
---- /dev/null
-+++ b/arch/x86/include/uapi/asm/tdx.h
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_ASM_X86_TDX_H
-+#define _UAPI_ASM_X86_TDX_H
-+
-+#include <linux/types.h>
-+#include <linux/ioctl.h>
-+
-+/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
-+#define TDX_REPORTDATA_LEN		64
-+
-+/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
-+#define TDX_REPORT_LEN			1024
-+
-+/**
-+ * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
-+ *
-+ * @subtype        : Subtype of TDREPORT (fixed as 0 by TDX Module
-+ *                   specification, but added a parameter to handle
-+ *                   future extension).
-+ * @reportdata     : User-defined REPORTDATA to be included into
-+ *                   TDREPORT. Typically it can be some nonce
-+ *                   provided by attestation service, so the
-+ *                   generated TDREPORT can be uniquely verified.
-+ * @rpd_len        : Length of the REPORTDATA (fixed as 64 bytes by
-+ *                   the TDX Module specification, but parameter is
-+ *                   added to handle future extension).
-+ * @tdreport       : TDREPORT output from TDCALL[TDG.MR.REPORT].
-+ * @tdr_len        : Length of the TDREPORT (fixed as 1024 bytes by
-+ *                   the TDX Module specification, but a parameter
-+ *                   is added to accommodate future extension).
-+ *
-+ * Used in TDX_CMD_GET_REPORT IOCTL request.
++/*
++ * struct td_info - It contains the measurements and initial configuration of
++ * the TD that was locked at initialization and a set of measurement
++ * registers that are run-time extendable. These values are copied from the
++ * TDCS by the TDG.MR.REPORT function.
 + */
-+struct tdx_report_req {
-+	__u8  subtype;
-+	__u64 reportdata;
-+	__u32 rpd_len;
-+	__u64 tdreport;
-+	__u32 tdr_len;
++struct td_info {
++	/* TD attributes (like debug, spet_disable, etc) */
++	__u8 attr[8];
++	__u64 xfam;
++	/* Measurement registers */
++	__u64 mrtd[6];
++	__u64 mrconfigid[6];
++	__u64 mrowner[6];
++	__u64 mrownerconfig[6];
++	/* Runtime measurement registers */
++	__u64 rtmr[24];
++	__u64 reserved[14];
 +};
 +
 +/*
-+ * TDX_CMD_GET_REPORT - Get TDREPORT using TDCALL[TDG.MR.REPORT]
-+ *
-+ * Return 0 on success, -EIO on TDCALL execution failure, and
-+ * standard errno on other general error cases.
-+ *
++ * Trusted Execution Environment (TEE) report (TDREPORT_STRUCT) type,
++ * sub type and version..
 + */
-+#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, __u64)
++struct tdreport_type {
++	/* 0 - SGX, 81 -TDX, rest are reserved */
++	__u8 type;
++	/* Default value is 0 */
++	__u8 sub_type;
++	/* Default value is 0 */
++	__u8 version;
++	__u8 reserved;
++};
 +
-+#endif /* _UAPI_ASM_X86_TDX_H */
++/*
++ * struct reportmac - First field in the TEE report structure
++ * (TRDREPORT_STRUCT). It is common to Intel’s TEE's e.g., SGX and TDX.
++ * It is MAC-protected and contains hashes of the remainder of the report
++ * structure which includes the TEE’s measurements, and where applicable,
++ * the measurements of additional TCB elements not reflected in CPUSVN –
++ * e.g., a SEAM’s measurements.
++ */
++struct reportmac {
++	struct tdreport_type type;
++	__u8 reserved1[12];
++	/* CPU security version */
++	__u8 cpu_svn[16];
++	/* SHA384 hash of TEE TCB INFO */
++	__u8 tee_tcb_info_hash[48];
++	/* SHA384 hash of TDINFO_STRUCT */
++	__u8 tee_td_info_hash[48];
++	/* User defined unique data passed in TDG.MR.REPORT request */
++	__u8 reportdata[64];
++	__u8 reserved2[32];
++	__u8 mac[32];
++};
++
++struct tee_tcb_info {
++	__u8 data[239];
++};
++
++struct tdreport_data {
++	struct reportmac _reportmac;
++	struct tee_tcb_info _tcb_info;
++	__u8 reserved[17];
++	struct td_info _tdinfo;
++};
++
++#ifdef DEBUG
++static void print_array_hex(const char *title, const char *prefix_str,
++		const void *buf, int len)
++{
++	const __u8 *ptr = buf;
++	int i, rowsize = HEX_DUMP_SIZE;
++
++	if (!len || !buf)
++		return;
++
++	printf("\t\t%s", title);
++
++	for (i = 0; i < len; i++) {
++		if (!(i % rowsize))
++			printf("\n%s%.8x:", prefix_str, i);
++		printf(" %.2x", ptr[i]);
++	}
++
++	printf("\n");
++}
++#endif
++
++TEST(verify_report)
++{
++	__u8 reportdata[TDX_REPORTDATA_LEN];
++	struct tdreport_data *tdr_data;
++	__u8 tdreport[TDX_REPORT_LEN];
++	struct tdx_report_req req;
++	int devfd, i;
++
++	devfd = open(devname, O_RDWR | O_SYNC);
++
++	ASSERT_LT(0, devfd);
++
++	/* Generate sample report data */
++	for (i = 0; i < TDX_REPORTDATA_LEN; i++)
++		reportdata[i] = i;
++
++	/* Initialize IOCTL request */
++	req.subtype     = 0;
++	req.reportdata  = (__u64)reportdata;
++	req.rpd_len     = TDX_REPORTDATA_LEN;
++	req.tdreport    = (__u64)tdreport;
++	req.tdr_len     = TDX_REPORT_LEN;
++
++	/* Get TDREPORT */
++	ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
++
++	tdr_data = (struct tdreport_data *)tdreport;
++
++#ifdef DEBUG
++	print_array_hex("\n\t\tTDX report data\n", "", reportdata,
++			sizeof(reportdata));
++
++	print_array_hex("\n\t\tTDX tdreport data\n", "", &tdreport,
++			sizeof(tdreport));
++#endif
++
++	/* Make sure TDREPORT data includes the REPORTDATA passed */
++	ASSERT_EQ(0, memcmp(&tdr_data->_reportmac.reportdata[0], reportdata,
++				sizeof(reportdata)));
++
++	ASSERT_EQ(0, close(devfd));
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.25.1
 

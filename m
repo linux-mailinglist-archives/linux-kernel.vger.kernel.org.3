@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A6858455C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C22C584559
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbiG1SBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 14:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S232576AbiG1SDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 14:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiG1SBr (ORCPT
+        with ESMTP id S230248AbiG1SDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 14:01:47 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E9970E5F;
-        Thu, 28 Jul 2022 11:01:46 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id v3so2315602wrp.0;
-        Thu, 28 Jul 2022 11:01:46 -0700 (PDT)
+        Thu, 28 Jul 2022 14:03:02 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DEB74CDD
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:03:01 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id o8so864436ils.6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:03:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ugG0AkDTwXcDf7jBLOwWXze+C4ZynRnQwUWaQUR23Ys=;
-        b=b/I4rsfa8kUBcAm8R78E29ui4/MMKpjt9jVqTyV2b7BLIwreSmyDNdawoWsmrDfYkS
-         dwJPXxX2+UD8F+1GyrfzAQcJ6clzAY2aZDFq0gltcENbLihToJsBtghvbWob9xmnNziU
-         C84lj0ZiqVPXAsfruESW8hee7hrNK75gpox3z9Rq6bCmqATenken2lJeAwovcFpK4oyT
-         rcTbkxKHuHVVTe2TjQtve8OmGlfMAjeJykPa6b03fMhsA4Xju9+Sn+fNuhCOenuHDXUO
-         lCTjgMLDD57X+xYhwOQkUZaz/ODzM5t8tk9nxhEK5EOD4nqBRA0naZ1YDqvR2ff90U0F
-         E1dQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=XQkz3l4blJBLiLTAjl/FZyXziCJMNBNV1rmuyDfw/84=;
+        b=BWliJSmnkQgO1y3ePZSHGzOW819Z/V1OguHLXGggxZWhKNm55DHUsml+ThMzNhzOdh
+         vkr3lk2sS2oz5ngv2VEHI4+/FxQ0PVENUGmTlYd00kOI+6sTX59cPRGArtvNTjBOHE8M
+         09INeJeAlX/eLh8oElv/6kJRafViJJorq0V8cIUiaG5nedEHIPfigzKGbCjPgnfjdSUf
+         ovj+4IJPGd7CBXRq02R1XJmA07OldnqT7++nToBxEFN0utNb4teZ6yFTaSWIxzEUdeUC
+         NzlQiNAvW88RN5r5eXQkwlecNPzATnJpbU4o+N35A7BQgwY7X3y+SoDniYlpG3WvG5/B
+         ItgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ugG0AkDTwXcDf7jBLOwWXze+C4ZynRnQwUWaQUR23Ys=;
-        b=LbAq6vLH7zQ3HurhN3ePl2GdH9jnMCOi5qJCUqeNa2cH40LICa4a2MRgS9Pf9C3FSA
-         erd4qsMfNhpruPNIodCsr7I4ZMFntEYTt9ETfW/MziiwDTv8KHqg/lvO/lIrpyQCKqh7
-         91IkKaZiENpic4h19BGTt5T2fhZgH+LjUqSCt7xqhS1LDBMdbik9FoGkX4TeaMBMe5Zh
-         7Q++Ge4xmgE4x1Pu18x7aRE3pTwZNABx3USQl2aLJgiZG/kmt2vrSjCs7F5wHkzCyhWD
-         9YrNOmIxIVrEL8cUUrBp8MRnRPlUkm31EuchlCEoE2aWQzyl67GvG/94bSQ1PhN9N+Rb
-         phtw==
-X-Gm-Message-State: ACgBeo2kxswCRjknY2ycC+sUtBESIP3uRIBPBrfkISDJaAWWMalq5dAf
-        uqxd3UVxlsRah6cGzTS3xIM=
-X-Google-Smtp-Source: AA6agR6wkLpMPC1SPg1uZ+xP94dDmp9Ft06Wg4y3tbnEre1LHV+fGClqpmw1g49LZRrUuUIlhUobSQ==
-X-Received: by 2002:a5d:4dcc:0:b0:21e:e644:6af8 with SMTP id f12-20020a5d4dcc000000b0021ee6446af8mr69181wru.219.1659031304843;
-        Thu, 28 Jul 2022 11:01:44 -0700 (PDT)
-Received: from localhost.localdomain ([105.235.128.60])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003a2d6f26babsm2154340wms.3.2022.07.28.11.01.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 11:01:44 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        phone-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: msm8996-xiaomi-*: Add LEDs
-Date:   Thu, 28 Jul 2022 19:01:20 +0100
-Message-Id: <20220728180120.97968-1-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.37.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=XQkz3l4blJBLiLTAjl/FZyXziCJMNBNV1rmuyDfw/84=;
+        b=DYvfqqaGhMeS6amcuBcW9nbAFhcG6/+73JHHiC4N1m85TFlw1ny4o2Qn+21qXju8Mj
+         9gukvJPyeDO166WPmjo4QPTvnaajTO1hQxbOAJ08lb5z6eJg3cxUn7b8bHqxVqKj28do
+         34ZaBt188ulRZec0HC8jSdWURM49i91yXBtL8x9QYM7EwfiviNCYu23GnOdCY8kIED7l
+         gr3p+Ddx5lZIfo2Kk2l/MXnlaoZacat6CPDCJxANJf/RiM8qYW4deIqKHuMjP//4aSuM
+         7+Sz4CShC20J88xU3umjhlaC2B9Kt08lSztcRlTRyEdsIU18LSrA8or0I0X8zeXm+dmV
+         Q3JQ==
+X-Gm-Message-State: AJIora+7x7TiQ4W7/Blab4CceZDsiUFzX7EKlmsLt+sd0hS6K9Ir370J
+        OyDOvcBUSXea5TFh/P/OwKJ+qcO6Mx9gtJZzsYwsZrBrelzhcw==
+X-Google-Smtp-Source: AGRyM1u5vV09nMNJatCWQHOe4HEUu9U9TIZS3YYzjBpgCOgDMpq9ET02MUTl02EsdHfb2aifCksbzWj1BkdeL8Z3cOA=
+X-Received: by 2002:a05:6e02:1091:b0:2dd:f304:5a50 with SMTP id
+ r17-20020a056e02109100b002ddf3045a50mr1630335ilj.146.1659031381251; Thu, 28
+ Jul 2022 11:03:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220728121949.20985-1-linmiaohe@huawei.com> <20220728121949.20985-3-linmiaohe@huawei.com>
+ <CAHS8izNM8aPdus_EVygtug+8b6CUNozz_se+mpqRe7SUZEcOwQ@mail.gmail.com>
+In-Reply-To: <CAHS8izNM8aPdus_EVygtug+8b6CUNozz_se+mpqRe7SUZEcOwQ@mail.gmail.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 28 Jul 2022 11:02:50 -0700
+Message-ID: <CAHS8izML04ujw1+1622JPQjKH0RHt0zHSEQvbLXZaZ1edfF=bQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] hugetlb_cgroup: remove unneeded header file
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,147 +68,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
+On Thu, Jul 28, 2022 at 10:45 AM Mina Almasry <almasrymina@google.com> wrote:
+>
+> On Thu, Jul 28, 2022 at 5:20 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+> >
+> > The header file slab.h is unneeded now. Remove it.
+> >
+> > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>
+> Acked-by: Mina Almasry <almasrymina@google.com>
+>
 
-Add LEDs found on the Xiaomi MSM8996 devices. The devices share
-a status RGB LED mounted on the front, as well as a PWM-driven
-IR LED for remote control (sometimes known as an IR blaster).
-The Mi Note 2 has an additional pair of white LEDs used as backlights
-for the touchkeys driven by the PM8994 LPG block.
+Actually, sorry, but this file calls kzalloc_node() which comes from
+linux/slab.h, no? Can we keep the include then? slab.h is probably
+included by other include files but for clarity it's better that
+hugetlb_cgroup.c to include slab.h if it is calling functions declared
+there.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- .../boot/dts/qcom/msm8996-xiaomi-common.dtsi  | 54 +++++++++++++++++++
- .../boot/dts/qcom/msm8996-xiaomi-scorpio.dts  | 30 +++++++++++
- 2 files changed, 84 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-index 627649979891..ef9a8aa9c2b9 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-@@ -58,6 +58,14 @@ key-dome {
- 		};
- 	};
- 
-+	irled {
-+		compatible = "pwm-ir-tx";
-+		pwms = <&pm8994_lpg 1 1000000>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&irled_default>;
-+	};
-+
- 	reserved-memory {
- 		memory@88800000 {
- 			reg = <0x0 0x88800000 0x0 0x1400000>;
-@@ -297,6 +305,41 @@ &pm8994_resin {
- 	linux,code = <KEY_VOLUMEDOWN>;
- };
- 
-+&pm8994_lpg {
-+	status = "okay";
-+
-+	qcom,power-source = <1>;
-+};
-+
-+&pmi8994_lpg {
-+	status = "okay";
-+
-+	qcom,power-source = <1>;
-+
-+	multi-led {
-+		color = <LED_COLOR_ID_RGB>;
-+		function = LED_FUNCTION_STATUS;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		led@1 {
-+			reg = <1>;
-+			color = <LED_COLOR_ID_BLUE>;
-+		};
-+
-+		led@2 {
-+			reg = <2>;
-+			color = <LED_COLOR_ID_GREEN>;
-+		};
-+
-+		led@3 {
-+			reg = <3>;
-+			color = <LED_COLOR_ID_RED>;
-+		};
-+	};
-+};
-+
- &slpi_pil {
- 	status = "okay";
- 
-@@ -608,6 +651,17 @@ vdd_gfx: s2 {
- };
- 
- &pm8994_gpios {
-+	irled_default: irled-default {
-+		pinconf {
-+			pins = "gpio5";
-+			function = PMIC_GPIO_FUNC_FUNC1;
-+			output-low;
-+			qcom,drive-strength = <PMIC_GPIO_STRENGTH_HIGH>;
-+			power-source = <PM8994_GPIO_S4>;
-+			bias-disable;
-+		};
-+	};
-+
- 	wlan_en_default: wlan-en-state {
- 		pins = "gpio8";
- 		function = PMIC_GPIO_FUNC_NORMAL;
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-index 30a9e4bed4af..0b47a659cc38 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-@@ -116,6 +116,25 @@ &mss_pil {
- 			"qcom/msm8996/scorpio/modem.mbn";
- };
- 
-+&pm8994_lpg {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&keypad_default>;
-+
-+	led@3 {
-+		reg = <3>;
-+		color = <LED_COLOR_ID_WHITE>;
-+		function = LED_FUNCTION_KBD_BACKLIGHT;
-+		function-enumerator = <1>;
-+	};
-+
-+	led@6 {
-+		reg = <6>;
-+		color = <LED_COLOR_ID_WHITE>;
-+		function = LED_FUNCTION_KBD_BACKLIGHT;
-+		function-enumerator = <0>;
-+	};
-+};
-+
- &q6asmdai {
- 	dai@0 {
- 		reg = <0>;
-@@ -258,6 +277,17 @@ &pm8994_gpios {
- 		"PMIC_SLB",		/* GPIO_20 */
- 		"UIM_BATT_ALARM",	/* GPIO_21 */
- 		"NC";			/* GPIO_22 */
-+
-+	keypad_default: keypad-default {
-+		pinconf {
-+			pins = "gpio7", "gpio10";
-+			function = PMIC_GPIO_FUNC_FUNC1;
-+			output-low;
-+			qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
-+			power-source = <PM8994_GPIO_S4>;
-+			bias-disable;
-+		};
-+	};
- };
- 
- &pm8994_mpps {
--- 
-2.37.1
-
+> > ---
+> >  mm/hugetlb_cgroup.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
+> > index d16eb00c947d..99e9a367e1e5 100644
+> > --- a/mm/hugetlb_cgroup.c
+> > +++ b/mm/hugetlb_cgroup.c
+> > @@ -19,7 +19,6 @@
+> >
+> >  #include <linux/cgroup.h>
+> >  #include <linux/page_counter.h>
+> > -#include <linux/slab.h>
+> >  #include <linux/hugetlb.h>
+> >  #include <linux/hugetlb_cgroup.h>
+> >
+> > --
+> > 2.23.0
+> >

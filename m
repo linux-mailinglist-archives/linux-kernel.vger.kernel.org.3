@@ -2,160 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B8D584395
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA3D58439D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbiG1Pvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
+        id S232060AbiG1PxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiG1Pvw (ORCPT
+        with ESMTP id S229539AbiG1PxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:51:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA37B2FFF2;
-        Thu, 28 Jul 2022 08:51:50 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E145C6601B38;
-        Thu, 28 Jul 2022 16:51:48 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659023509;
-        bh=nI5LpKShenHgPTD6bJf1SzWZXrJS0BX0gmqnjEX+i7w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UG7DkYETX6GEoZQvkA3B/J4GAGt8vLnuOJLdAmjjdHy2J0r/757BpDxP+9t+VGDxG
-         PDMf3D+K/lChMrZXhpFnX873iwOtlED+V0vk6vDSbtIA1XxvQyIwj9jc9uglA2AwgV
-         y5mwcizu7aBPJvnMd7yYfGPgBpPV2xCemQ3cWBBr3Ct7AFUoLod3btfQXEQXexVPb7
-         /SomR4/cxboHfP3aYRYXwYyooCg9MWMwSSVneWAVwJdsuLVSMiWnomqYPm0anCoADG
-         ggpWVS0+KLMbh47c3SDwMMkqZuffVHBDHYbw9kUlWM3qK+W357oQ7sL1zof/W/M9Ng
-         kxH6YMxuokrQg==
-Message-ID: <689b439f-531b-9b3d-2e48-b7b83c50b3dd@collabora.com>
-Date:   Thu, 28 Jul 2022 17:51:46 +0200
+        Thu, 28 Jul 2022 11:53:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A25C46BD42
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659023594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=CR7W8yzle9Zr6nPa3nWK0fbYLGoAXfhatxVa3PcQEOnfHlNL3N53sWk0hiH4MWKad2nh/E
+        59aZW5AU9W/hgptHHpgeQw4+ldnMUlsMdGVabDM7mZ3/SxURgQ2T3beFYGdHEKh15RzRVf
+        tcMTGMmYbZItnL/Ao9Gtk3TtkXVvOrw=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-244-olAj2n4-PheOrD8EZVlfTA-1; Thu, 28 Jul 2022 11:53:13 -0400
+X-MC-Unique: olAj2n4-PheOrD8EZVlfTA-1
+Received: by mail-ej1-f70.google.com with SMTP id hr24-20020a1709073f9800b0072b57c28438so766737ejc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:53:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=gyf9fVMSna5FqvCLa0eVQaK9tfxJhwwolZ/piTAhqHXbeQrU33VVhDqI4NN9ZD7s2U
+         Y2t9hYq4kr5BhIA5p/XrQsHVKz97QzYdbe7FhuQxQGFfhlOf2PH10Asyu+VNzMKMhVa8
+         RZsCoILsxkGv7tOD51VVdldOIdmYdGQ/iy+6Cafb7r2iWXq7FUIfirO7QeJYzUGO3rZz
+         8OkFsN+9KwviMT86NGAkHCQXGLPvkw8F+owMJbmcmYqYeLRv566F1Smv7IHeUcaXARRY
+         agYJRYumJLqJb7VSyYONY2i3biayQsRnQci/idaEWqMReFfBkegU/j6b8im57oFKLWwp
+         ZA8Q==
+X-Gm-Message-State: AJIora+0UzkPQnkXwtyFSt7bHbR7sshdXHf9Rx8pWWhulsfE5fldI8Nq
+        rFhIjkj9H3H85wditxhEqgzD8V3RSSMHctUJLrN1JoHgwyODdHWEcc2LvSr3wXus79VhEaO/QPn
+        Ilzf5rSHRXi/Rk5X5pz2GgOj0
+X-Received: by 2002:a05:6402:11c9:b0:43b:b905:cb88 with SMTP id j9-20020a05640211c900b0043bb905cb88mr28005157edw.102.1659023591967;
+        Thu, 28 Jul 2022 08:53:11 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uQ0WGkcljQ8+LQm9jJHKMMx05xV2P+kXpPzT5FmSEfnOq9qHwys5h+KfxqBoBs5xEkKeffGQ==
+X-Received: by 2002:a05:6402:11c9:b0:43b:b905:cb88 with SMTP id j9-20020a05640211c900b0043bb905cb88mr28005135edw.102.1659023591576;
+        Thu, 28 Jul 2022 08:53:11 -0700 (PDT)
+Received: from goa-sendmail ([93.56.169.184])
+        by smtp.gmail.com with ESMTPSA id a12-20020a170906368c00b0072af890f52dsm548037ejc.88.2022.07.28.08.53.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 08:53:10 -0700 (PDT)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Jarkko Sakkinen <jarkko@profian.com>
+Cc:     stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer : X86 ARCHITECTURE 32-BIT AND 64-BIT" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "open list : KERNEL VIRTUAL MACHINE FOR X86 KVM/x86" 
+        <kvm@vger.kernel.org>,
+        "open list : X86 ARCHITECTURE 32-BIT AND 64-BIT" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KVM: x86/mmu: Fix incorrect use of CONFIG_RETPOLINE
+Date:   Thu, 28 Jul 2022 17:53:07 +0200
+Message-Id: <20220728155307.277425-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220728000221.19088-1-jarkko@profian.com>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] arm64: dts: mt8173-oak: Switch to SMC watchdog
-Content-Language: en-US
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eizan Miyamoto <eizan@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-References: <20220727094034.1372745-1-treapking@chromium.org>
- <c455adea-2d18-60af-7175-a4e283e3dcb8@collabora.com>
- <CAEXTbpc7W40-vYcTVTNo7ikQ-n0O246AsbPntNb4q2nBErYVQw@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAEXTbpc7W40-vYcTVTNo7ikQ-n0O246AsbPntNb4q2nBErYVQw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/07/22 17:39, Pin-yen Lin ha scritto:
-> On Thu, Jul 28, 2022 at 7:21 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 27/07/22 11:40, Pin-yen Lin ha scritto:
->>> Switch to SMC watchdog because we need direct control of HW watchdog
->>> registers from kernel. The corresponding firmware was uploaded in
->>> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405.
->>>
->>> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
->>> ---
->>>
->>> Changes in v2:
->>> - Move the modifications to mt8173-elm.dtsi and add some comments.
->>>
->>>    arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 12 ++++++++++++
->>>    1 file changed, 12 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
->>> index e21feb85d822..b2269770abc3 100644
->>> --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
->>> @@ -161,6 +161,18 @@ hdmi_connector_in: endpoint {
->>>                        };
->>>                };
->>>        };
->>> +
->>> +     soc {
->>> +             /*
->>> +              * Disable the original MMIO watch dog and switch to the SMC watchdog,
->>> +              * which operates on the same MMIO.
->>> +              */
->>> +             /delete-node/ watchdog@10007000;
->>
->> Unfortunately, we're not quite there yet.
->> The comment is fine, but...
->>
->> There's no need to /delete-node/: you can just do it like
->>
->> /*
->>    * Disable the original MMIO watch dog and switch to the SMC watchdog,
->>    * which operates on the same MMIO.
->>    */
->> &watchdog {
->>          status = "disabled";
->> };
->>
->> and...
->>
->>> +
->>> +             watchdog {
->>
->> This isn't addressable, hence it belongs to the root node, not to soc.
->> If you did that because of naming issues, I would propose to call it
->> smc-watchdog instead of watchdog.
->>
->>
->>> +                     compatible = "arm,smc-wdt";
->>
-> Thanks for the suggestion. I'll modify it accordingly in v3.
-> 
->> P.S.: No timeout-sec?
-> 
-> The example in the binding file has a timeout-sec property, but it is
-> not defined in the binding nor used in the driver...
-> The driver seems to talk with the firmware to get a timeout value[1]
-> instead of reading it from the devicetree.
-> 
+Queued, thanks.
 
-Oh. I admit I trusted the binding blindly, didn't check the actual driver code.
+Paolo
 
-On a note, we should check why is that binding partially wrong and eventually
-fix it (remove the property), or add the capability to the driver, but feel free
-to ignore that for now, as this is not relevant for the context of this specific
-change that you're trying to do here.
-
-P.S.: I just noticed that the commit title is also wrong. s/mt8173-oak/mt8173-elm/g
-
-Waiting for a v3!
-
-
-> [1]: https://elixir.bootlin.com/linux/latest/source/drivers/watchdog/arm_smc_wdt.c#L138
->>
->> Regards,
->> Angelo
->>
->>> +             };
->>> +     };
->>>    };
->>>
->>>    &mfg_async {
->>>
->>
 

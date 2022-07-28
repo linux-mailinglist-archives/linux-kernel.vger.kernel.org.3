@@ -2,157 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C885842F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12ADA5842F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbiG1PUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
+        id S232458AbiG1PVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiG1PUq (ORCPT
+        with ESMTP id S232204AbiG1PVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:20:46 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C112F10553;
-        Thu, 28 Jul 2022 08:20:45 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5757B2223A;
-        Thu, 28 Jul 2022 17:20:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1659021644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fFIZqjl9Xdeou0OpLXOqWAWk/6YIgnLvQdwC0/Dd+kA=;
-        b=c9bZrRryhARl4VvYznHahJwHAkssHnSxppxqzXpUo0vDDKYpYPITReS0Ir2w+PcaBOHolK
-        suD158OeL9MLCdyWxDwqyo0zJwCmVu7Sqa9KNcu2Xkvyfgt01jJXFKb+2wPJ6RZO1g6OLg
-        JqnUOcb4ULqO9Tmc8l7KKcsFfF5tqCM=
-From:   Michael Walle <michael@walle.cc>
-To:     Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Walle <mwalle@kernel.org>
-Subject: [PATCH] wilc1000: fix DMA on stack objects
-Date:   Thu, 28 Jul 2022 17:20:37 +0200
-Message-Id: <20220728152037.386543-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Thu, 28 Jul 2022 11:21:45 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F89361B0C;
+        Thu, 28 Jul 2022 08:21:43 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id p5so2580675edi.12;
+        Thu, 28 Jul 2022 08:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xzlenXkL6gjd6fcYEpmVquteo43qcjfw6HpoMyUOvUw=;
+        b=QAXyGpnsjoLWG2bKOX3OeePe+kYWr6zPiEWyrp7Yq6xsnZpYRup7/v6/HH9GwA2Zam
+         zpiya57E/EDW//EutfcbezUhFB3sjx+r/KS1LWXaZmHj50qsHcGRusox3nTcZz8sjo2G
+         Lu62r9EbU4sQNhDvqLOd4OJxcZJ6sbB0knrpJ+HfEykIcZEvhRTd2wFzXX2J3A/loiiD
+         hvugu8yPKbGT9vc1WC/nRPnDyAXlRI9HB/WqPkZaJ6j7PQp4B+nRa/xHH7W4qSYBF0V0
+         c8kuf9bljP8iWWhMpOdEDADTmQm+fY/uE/BaJfhwgX4umo6ZNDc0Ov2wkskBTbTvWPIz
+         Nixw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xzlenXkL6gjd6fcYEpmVquteo43qcjfw6HpoMyUOvUw=;
+        b=S93N5iOow8yaVMW9YcGKuOn1HyFmBvORafsQGBx/dFeU2NXp2V+LO9qUuQ5LGnfqVC
+         3s5fnsNXlc33FPxynOAWvyf/7J9tugy3oAo1xW/Y6jts5fkQ7zkNJ53TVC1vMlrfEUPD
+         urxzOzVLolld/n2h2IyjuXFjr6Xm8RPIWWRVxP2m6l9XqzpnPnj3ZXbroa+TZb0GeDlT
+         dKxrB0iXAhmaAJyYPNWxjKWi6kFutcC1KU4TFAGzMlxeiUjiI6Wyoqbb2G2xIO+cAJ3L
+         +ZpyN7KWCf7kYpa74U7QwAzq7MmopwRcT42iqzDjC4ZXNXeN5Z2KGEgMVkOG8lwb2qu4
+         ZO7w==
+X-Gm-Message-State: AJIora+EAUXVar7CVF0HUcMJnMm4yUtZhiNRC3MJAc4KSjPM0+rAW7qO
+        aVfYxh1RyI67Ol89AYTG4+lblZcMPgw=
+X-Google-Smtp-Source: AGRyM1v+zkfjHJTcyRUTLSz/L0oSXD7ouc+QqqcvHyPlzs+kZtr+qnwE7m9gwkqzyYwAIQEDpJ9PVw==
+X-Received: by 2002:a05:6402:294c:b0:43a:91a9:a691 with SMTP id ed12-20020a056402294c00b0043a91a9a691mr28325239edb.182.1659021701205;
+        Thu, 28 Jul 2022 08:21:41 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c001-5600-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c001:5600::e63])
+        by smtp.googlemail.com with ESMTPSA id e20-20020a170906315400b0072a881b21d8sm525006eje.119.2022.07.28.08.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 08:21:40 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bert@biot.com, sander@svanheule.net,
+        mail@birger-koblitz.de,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 0/2] spi: realtek-rtl: two small improvements
+Date:   Thu, 28 Jul 2022 17:21:16 +0200
+Message-Id: <20220728152118.1429161-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <mwalle@kernel.org>
+This is a successor to my single patch [0] "spi: realtek-rtl: Fix
+clearing some register bits"
 
-Sometimes wilc_sdio_cmd53() is called with addresses pointing to an
-object on the stack. E.g. wilc_sdio_write_reg() will call it with an
-address pointing to one of its arguments. Detect whether the buffer
-address is not DMA-able in which case a bounce buffer is used. The bounce
-buffer itself is protected from parallel accesses by sdio_claim_host().
+Changes since v1 at [0]:
+- Added new patch to enable compile testing for the spi-realtek-rtl
+  driver. This makes it easier to verify coding style changes (such as
+  patch #2 in this series) where the binary result is not supposed to
+  change.
+- Updated the original patch to drop the RTL_SPI_SFCSR_CS change as
+  it's not fully clear why that code is written as-is (and due to
+  lack of hardware I am unable to runtime test the changes). Also
+  move the ~ operator from the RTL_SPI_SFCSR_LEN_MASK definition to
+  the place where it's used. Thanks to Sander for spotting the mistake
+  in my initial patch!
 
-Fixes: 5625f965d764 ("wilc1000: move wilc driver out of staging")
-Signed-off-by: Michael Walle <mwalle@kernel.org>
----
-The bug itself probably goes back way more, but I don't know if it makes
-any sense to use an older commit for the Fixes tag. If so, please suggest
-one.
 
-The bug leads to an actual error on an imx8mn SoC with 1GiB of RAM. But the
-error will also be catched by CONFIG_DEBUG_VIRTUAL:
-[    9.817512] virt_to_phys used for non-linear address: (____ptrval____) (0xffff80000a94bc9c)
+[0] https://lore.kernel.org/lkml/78673dc7438a03bf9ed0103a935abf0172f146ce.camel@svanheule.net/T/
 
- .../net/wireless/microchip/wilc1000/sdio.c    | 28 ++++++++++++++++---
- 1 file changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/sdio.c b/drivers/net/wireless/microchip/wilc1000/sdio.c
-index 7962c11cfe84..e988bede880c 100644
---- a/drivers/net/wireless/microchip/wilc1000/sdio.c
-+++ b/drivers/net/wireless/microchip/wilc1000/sdio.c
-@@ -27,6 +27,7 @@ struct wilc_sdio {
- 	bool irq_gpio;
- 	u32 block_size;
- 	int has_thrpt_enh3;
-+	u8 *dma_buffer;
- };
- 
- struct sdio_cmd52 {
-@@ -89,6 +90,9 @@ static int wilc_sdio_cmd52(struct wilc *wilc, struct sdio_cmd52 *cmd)
- static int wilc_sdio_cmd53(struct wilc *wilc, struct sdio_cmd53 *cmd)
- {
- 	struct sdio_func *func = container_of(wilc->dev, struct sdio_func, dev);
-+	struct wilc_sdio *sdio_priv = wilc->bus_data;
-+	bool need_bounce_buf = false;
-+	u8 *buf = cmd->buffer;
- 	int size, ret;
- 
- 	sdio_claim_host(func);
-@@ -100,12 +104,20 @@ static int wilc_sdio_cmd53(struct wilc *wilc, struct sdio_cmd53 *cmd)
- 	else
- 		size = cmd->count;
- 
-+	if ((!virt_addr_valid(buf) || object_is_on_stack(buf)) &&
-+	    !WARN_ON_ONCE(size > WILC_SDIO_BLOCK_SIZE)) {
-+		need_bounce_buf = true;
-+		buf = sdio_priv->dma_buffer;
-+	}
-+
- 	if (cmd->read_write) {  /* write */
--		ret = sdio_memcpy_toio(func, cmd->address,
--				       (void *)cmd->buffer, size);
-+		if (need_bounce_buf)
-+			memcpy(buf, cmd->buffer, size);
-+		ret = sdio_memcpy_toio(func, cmd->address, buf, size);
- 	} else {        /* read */
--		ret = sdio_memcpy_fromio(func, (void *)cmd->buffer,
--					 cmd->address,  size);
-+		ret = sdio_memcpy_fromio(func, buf, cmd->address, size);
-+		if (need_bounce_buf)
-+			memcpy(cmd->buffer, buf, size);
- 	}
- 
- 	sdio_release_host(func);
-@@ -127,6 +139,12 @@ static int wilc_sdio_probe(struct sdio_func *func,
- 	if (!sdio_priv)
- 		return -ENOMEM;
- 
-+	sdio_priv->dma_buffer = kzalloc(WILC_SDIO_BLOCK_SIZE, GFP_KERNEL);
-+	if (!sdio_priv->dma_buffer) {
-+		ret = -ENOMEM;
-+		goto free;
-+	}
-+
- 	ret = wilc_cfg80211_init(&wilc, &func->dev, WILC_HIF_SDIO,
- 				 &wilc_hif_sdio);
- 	if (ret)
-@@ -160,6 +178,7 @@ static int wilc_sdio_probe(struct sdio_func *func,
- 	irq_dispose_mapping(wilc->dev_irq_num);
- 	wilc_netdev_cleanup(wilc);
- free:
-+	kfree(sdio_priv->dma_buffer);
- 	kfree(sdio_priv);
- 	return ret;
- }
-@@ -171,6 +190,7 @@ static void wilc_sdio_remove(struct sdio_func *func)
- 
- 	clk_disable_unprepare(wilc->rtc_clk);
- 	wilc_netdev_cleanup(wilc);
-+	kfree(sdio_priv->dma_buffer);
- 	kfree(sdio_priv);
- }
- 
+Martin Blumenstingl (2):
+  spi: realtek-rtl: Add compile testing support
+  spi: realtek-rtl: Improve readability when clearing the size mask
+
+ drivers/spi/Kconfig           | 9 +++++++++
+ drivers/spi/Makefile          | 2 +-
+ drivers/spi/spi-realtek-rtl.c | 4 ++--
+ 3 files changed, 12 insertions(+), 3 deletions(-)
+
 -- 
-2.30.2
+2.37.1
 

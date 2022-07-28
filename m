@@ -2,182 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DE3583722
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F590583724
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbiG1Cnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 22:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S235682AbiG1CpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 22:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiG1Cnp (ORCPT
+        with ESMTP id S234011AbiG1CpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 22:43:45 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF47242AEA;
-        Wed, 27 Jul 2022 19:43:43 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LtZcL5b36zWflC;
-        Thu, 28 Jul 2022 10:39:46 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Jul 2022 10:43:41 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Jul 2022 10:43:40 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v2] rcu: Display registers of self-detected stall as far as possible
-Date:   Thu, 28 Jul 2022 10:43:27 +0800
-Message-ID: <20220728024327.1202-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        Wed, 27 Jul 2022 22:45:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B9842AEA
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 19:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658976299; x=1690512299;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ah3X23tMVoVqGE9nPkCAsbxZjxK8SCUwElbqAG3Zw8g=;
+  b=O7qhqpbrGm4OJZ1Ak836avf/jkmzWsqLfgX7ZzX8Aurke+zqnZNKeKoa
+   ZzQ9RxwKvV+3iikGNKALURhZ9XW3XMoqQYIhH2/cnct+LcH1HhOKwJGpW
+   pRpZ0EmyMEGFZdrixNWgjzuOvTeTQAbJKpw/jvO8XDC6TTMvBVjPpznpy
+   YTX/9TdYOVGu+2BKAAE9AmvFtwS+eeWvAfS3a7QB8FpnRu5JuQhfnY8gh
+   XIN/VxQefLcUX6gLt7qjQpf9OL3F7oU+Bzw1hcUZz8ZpG6Gax9cXzQfzR
+   h1Zcxi6rhRjSz5L3d0ZvSnJkzNvSrhqFMyKGQ7R0nII2/EBrUMSIZL3Ew
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="271443873"
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="271443873"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 19:44:59 -0700
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="633447834"
+Received: from lingc1-mobl.ccr.corp.intel.com (HELO [10.249.173.21]) ([10.249.173.21])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 19:44:54 -0700
+Message-ID: <cf370e4a-9391-4dd3-1e0a-3c7ea70d9ed2@linux.intel.com>
+Date:   Thu, 28 Jul 2022 10:44:52 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
+ interface
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
+ <20220705050710.2887204-5-baolu.lu@linux.intel.com>
+ <20220723141118.GD79279@nvidia.com>
+ <686b137f-232a-2a78-beb0-e4373bd20959@linux.intel.com>
+ <20220725144005.GE3747@nvidia.com>
+ <6da27a6b-b580-4ba4-24c8-ebdfb2d9345d@linux.intel.com>
+ <20220726135722.GC4438@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220726135722.GC4438@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For architectures that do not support NMI interrupts, registers is not
-printed when rcu stall is self-detected. However, this information is
-useful for analyzing the root cause of the fault. Fortunately, the rcu
-stall is always detected in the tick interrupt handler. So we can take
-it through get_irq_regs() and display it through show_regs(). Further,
-show_regs() unwind the call trace based on 'regs', the worthless call
-trace associated with tick handling will be omitted, this helps us to
-focus more on the problem.
+On 2022/7/26 21:57, Jason Gunthorpe wrote:
+> On Tue, Jul 26, 2022 at 02:23:26PM +0800, Baolu Lu wrote:
+>> On 2022/7/25 22:40, Jason Gunthorpe wrote:
+>>> On Sun, Jul 24, 2022 at 03:03:16PM +0800, Baolu Lu wrote:
+>>>
+>>>> How about rephrasing this part of commit message like below:
+>>>>
+>>>> Some buses, like PCI, route packets without considering the PASID value.
+>>>> Thus a DMA target address with PASID might be treated as P2P if the
+>>>> address falls into the MMIO BAR of other devices in the group. To make
+>>>> things simple, these interfaces only apply to devices belonging to the
+>>>> singleton groups.
+>>>
+>>>> Considering that the PCI bus supports hot-plug, even a device boots with
+>>>> a singleton group, a later hot-added device is still possible to share
+>>>> the group, which breaks the singleton group assumption. In order to
+>>>> avoid this situation, this interface requires that the ACS is enabled on
+>>>> all devices on the path from the device to the host-PCI bridge.
+>>>
+>>> But ACS directly fixes the routing issue above
+>>>
+>>> This entire explanation can be recast as saying we block PASID
+>>> attachment in all cases where the PCI fabric is routing based on
+>>> address. ACS disables that.
+>>>
+>>> Not sure it even has anything to do with hotplug or singleton??
+>>
+>> Yes, agreed. I polished this patch like below. Does it look good to you?
+>>
+>> iommu: Add attach/detach_dev_pasid iommu interface
+>>
+>> Attaching an IOMMU domain to a PASID of a device is a generic operation
+>> for modern IOMMU drivers which support PASID-granular DMA address
+>> translation. Currently visible usage scenarios include (but not limited):
+>>
+>>   - SVA (Shared Virtual Address)
+>>   - kernel DMA with PASID
+>>   - hardware-assist mediated device
+>>
+>> This adds a pair of domain ops for this purpose and adds the interfaces
+>> for device drivers to attach/detach a domain to/from a {device,
+>> PASID}.
+> 
+>> The PCI bus routes packets without considering the PASID value.
+> 
+> More like:
+> 
+> Some configurations of the PCI fabric will route device originated TLP
+> packets based on memory address, and these configurations are
+> incompatible with PASID as the PASID packets form a distinct address
+> space. For instance any configuration where switches are present
+> without ACS is incompatible with PASID.
 
-This is an example on arm64:
-[   27.501721] rcu: INFO: rcu_preempt self-detected stall on CPU
-[   27.502238] rcu:     0-....: (1250 ticks this GP) idle=4f7/1/0x4000000000000000 softirq=2594/2594 fqs=619
-[   27.502632]  (t=1251 jiffies g=2989 q=29 ncpus=4)
-[   27.503845] CPU: 0 PID: 306 Comm: test0 Not tainted 5.19.0-rc7-00009-g1c1a6c29ff99-dirty #46
-[   27.504732] Hardware name: linux,dummy-virt (DT)
-[   27.504947] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   27.504998] pc : arch_counter_read+0x18/0x24
-[   27.505301] lr : arch_counter_read+0x18/0x24
-[   27.505328] sp : ffff80000b29bdf0
-[   27.505345] x29: ffff80000b29bdf0 x28: 0000000000000000 x27: 0000000000000000
-[   27.505475] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-[   27.505553] x23: 0000000000001f40 x22: ffff800009849c48 x21: 000000065f871ae0
-[   27.505627] x20: 00000000000025ec x19: ffff80000a6eb300 x18: ffffffffffffffff
-[   27.505654] x17: 0000000000000001 x16: 0000000000000000 x15: ffff80000a6d0296
-[   27.505681] x14: ffffffffffffffff x13: ffff80000a29bc18 x12: 0000000000000426
-[   27.505709] x11: 0000000000000162 x10: ffff80000a2f3c18 x9 : ffff80000a29bc18
-[   27.505736] x8 : 00000000ffffefff x7 : ffff80000a2f3c18 x6 : 00000000759bd013
-[   27.505761] x5 : 01ffffffffffffff x4 : 0002dc6c00000000 x3 : 0000000000000017
-[   27.505787] x2 : 00000000000025ec x1 : ffff80000b29bdf0 x0 : 0000000075a30653
-[   27.505937] Call trace:
-[   27.506002]  arch_counter_read+0x18/0x24
-[   27.506171]  ktime_get+0x48/0xa0
-[   27.506207]  test_task+0x70/0xf0
-[   27.506227]  kthread+0x10c/0x110
-[   27.506243]  ret_from_fork+0x10/0x20
+This description reads more accurate and professional. Thank you! I will
+update the patch with this.
 
-The old output is as follows:
-[   27.944550] rcu: INFO: rcu_preempt self-detected stall on CPU
-[   27.944980] rcu:     0-....: (1249 ticks this GP) idle=cbb/1/0x4000000000000000 softirq=2610/2610 fqs=614
-[   27.945407]  (t=1251 jiffies g=2681 q=28 ncpus=4)
-[   27.945731] Task dump for CPU 0:
-[   27.945844] task:test0           state:R  running task     stack:    0 pid:  306 ppid:     2 flags:0x0000000a
-[   27.946073] Call trace:
-[   27.946151]  dump_backtrace.part.0+0xc8/0xd4
-[   27.946378]  show_stack+0x18/0x70
-[   27.946405]  sched_show_task+0x150/0x180
-[   27.946427]  dump_cpu_task+0x44/0x54
-[   27.947193]  rcu_dump_cpu_stacks+0xec/0x130
-[   27.947212]  rcu_sched_clock_irq+0xb18/0xef0
-[   27.947231]  update_process_times+0x68/0xac
-[   27.947248]  tick_sched_handle+0x34/0x60
-[   27.947266]  tick_sched_timer+0x4c/0xa4
-[   27.947281]  __hrtimer_run_queues+0x178/0x360
-[   27.947295]  hrtimer_interrupt+0xe8/0x244
-[   27.947309]  arch_timer_handler_virt+0x38/0x4c
-[   27.947326]  handle_percpu_devid_irq+0x88/0x230
-[   27.947342]  generic_handle_domain_irq+0x2c/0x44
-[   27.947357]  gic_handle_irq+0x44/0xc4
-[   27.947376]  call_on_irq_stack+0x2c/0x54
-[   27.947415]  do_interrupt_handler+0x80/0x94
-[   27.947431]  el1_interrupt+0x34/0x70
-[   27.947447]  el1h_64_irq_handler+0x18/0x24
-[   27.947462]  el1h_64_irq+0x64/0x68                       <--- the above backtrace is worthless
-[   27.947474]  arch_counter_read+0x18/0x24
-[   27.947487]  ktime_get+0x48/0xa0
-[   27.947501]  test_task+0x70/0xf0
-[   27.947520]  kthread+0x10c/0x110
-[   27.947538]  ret_from_fork+0x10/0x20
+> 
+>> +	/*
+>> +	 * Block PASID attachment in all cases where the PCI fabric is
+>> +	 * routing based on address. ACS disables it.
+>> +	 */
+>> +	if (dev_is_pci(dev) &&
+>> +	    !pci_acs_path_enabled(to_pci_dev(dev), NULL, REQ_ACS_FLAGS))
+>> +		return -ENODEV;
+> 
+> I would probably still put this in a function just to be clear, and
+> probably even a PCI layer funcion 'pci_is_pasid_supported' that
+> clearly indicates that the fabric path can route a PASID packet
+> without mis-routing it.
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/rcu/tree_stall.h | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+Fair enough. Let's keep this in iommu for now and leave the possible
+merging in PCI subsystem a future task.
 
-v1 --> v2:
-Fix C99 build warning:
-kernel/rcu/tree_stall.h:358:10: error: call to undeclared function 'get_irq_regs';
-ISO C99 and later do not support implicit function declarations
+> 
+> If the fabric routes PASID properly then groups are not an issue - all
+> agree on this?
 
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index a001e1e7a99269c..23bfd755c3f6e5b 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/kvm_para.h>
-+#include <asm/irq_regs.h>
- 
- //////////////////////////////////////////////////////////////////////////////
- //
-@@ -350,6 +351,21 @@ static int rcu_print_task_stall(struct rcu_node *rnp, unsigned long flags)
- }
- #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
- 
-+static void rcu_dump_cpu_task(int cpu)
-+{
-+	if (cpu == smp_processor_id() && in_irq()) {
-+		struct pt_regs *regs;
-+
-+		regs = get_irq_regs();
-+		if (regs) {
-+			show_regs(regs);
-+			return;
-+		}
-+	}
-+
-+	dump_cpu_task(cpu);
-+}
-+
- /*
-  * Dump stacks of all tasks running on stalled CPUs.  First try using
-  * NMIs, but fall back to manual remote stack tracing on architectures
-@@ -369,7 +385,7 @@ static void rcu_dump_cpu_stacks(void)
- 				if (cpu_is_offline(cpu))
- 					pr_err("Offline CPU %d blocking current GP.\n", cpu);
- 				else if (!trigger_single_cpu_backtrace(cpu))
--					dump_cpu_task(cpu);
-+					rcu_dump_cpu_task(cpu);
- 			}
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 	}
--- 
-2.25.1
+I still think the singleton group is required, but it's not related to
+the PCI fabric routing discussed here.
 
+We have a single array for PASIDs in the iommu group. All devices
+sitting in the group should share a single PASID namespace. However both
+the translation structures for IOMMU hardware or the device drivers can
+only adapt to per-device PASID namespace. Hence, it's reasonable to
+require the singleton group.
+
+Best regards,
+baolu

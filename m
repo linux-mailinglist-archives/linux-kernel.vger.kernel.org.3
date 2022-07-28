@@ -2,157 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F52583C86
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BA3583C89
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236345AbiG1KuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S236509AbiG1KvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236532AbiG1KuK (ORCPT
+        with ESMTP id S236077AbiG1KvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:50:10 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927865A2EA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:50:04 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26S84P8O013301;
-        Thu, 28 Jul 2022 05:49:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=DRVfCCRNsnENGtq2cW3SlRNLo38VF3FslJXOnUBH2UI=;
- b=O3/dbz7qB27x+Zq9tOBxX5vHJ6WO2OynJc6HdqSDPj282EG1rRyx523RxjJExlk8fhWY
- RVYDG/HxmFU0NByOqX3EHJmI79rU6OmPMZSCKDx+XcQpRr5uzpAWzIxWAaZrxXfhyHmA
- WBBTi//v2uGinHVxf4jWy0v/ksD3UFySA8iKhjC+UyWOfWD+WgFef4rkyTEiRNBPcTuf
- Hm2jSxt9SV1BCVgvSzyZ5lnZojUvVF67NlqZMPqRU4BVw8TAHns6kksMVaY6nWbutZd4
- DcorerWFgWvq84c57GTjfOkiNimS23qEVZcgVd16drzFXLkItZHlvEw79bfkHiF4mXid dQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3hgddp6dba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Jul 2022 05:49:59 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Thu, 28 Jul
- 2022 05:49:58 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.9 via Frontend
- Transport; Thu, 28 Jul 2022 05:49:58 -0500
-Received: from [198.90.251.95] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 266D72C5;
-        Thu, 28 Jul 2022 10:49:58 +0000 (UTC)
-Message-ID: <85bb9c36-33e9-c3e2-1838-9ef45311669b@opensource.cirrus.com>
-Date:   Thu, 28 Jul 2022 11:49:57 +0100
+        Thu, 28 Jul 2022 06:51:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAF022B12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:51:06 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oH16U-0001Zj-4S; Thu, 28 Jul 2022 12:50:54 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CE0EABCC4F;
+        Thu, 28 Jul 2022 10:50:51 +0000 (UTC)
+Date:   Thu, 28 Jul 2022 12:50:49 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
+ register (btr)
+Message-ID: <20220728105049.43gbjuctezxzmm4j@pengutronix.de>
+References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
+ <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
+ <20220727113054.ffcckzlcipcxer2c@pengutronix.de>
+ <20220727192839.707a3453.max@enpas.org>
+ <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
+ <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
+ <20220728090228.nckgpmfe7rpnfcyr@pengutronix.de>
+ <CABGWkvoYR67MMmqZ6bRLuL3szhVb-gMwuAy6Z4YMkaG0yw6Sdg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] component: try_module_get() to prevent unloading while in
- use
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <rafael@kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-References: <20220725160859.1274472-1-rf@opensource.cirrus.com>
- <Yt7cT66p0Bn+aXn5@kroah.com>
- <4165774b-2b96-83d1-67eb-f7c49dd8041e@opensource.cirrus.com>
- <YuAkQtik4ud6xw8L@kroah.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <YuAkQtik4ud6xw8L@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: naVEaElw3sYTSuWtQs-l5VtxEAuGjdDA
-X-Proofpoint-ORIG-GUID: naVEaElw3sYTSuWtQs-l5VtxEAuGjdDA
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uchmzozxirr27riu"
+Content-Disposition: inline
+In-Reply-To: <CABGWkvoYR67MMmqZ6bRLuL3szhVb-gMwuAy6Z4YMkaG0yw6Sdg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/2022 18:28, Greg KH wrote:
-> On Tue, Jul 26, 2022 at 11:32:28AM +0100, Richard Fitzgerald wrote:
->> On 25/07/2022 19:09, Greg KH wrote:
->>> On Mon, Jul 25, 2022 at 05:08:59PM +0100, Richard Fitzgerald wrote:
->>>> Call try_module_get() on a component before attempting to call its
->>>> bind() function, to ensure that a loadable module cannot be
->>>> unloaded while we are executing its bind().
->>>
->>> How can bind be called while the module is unloaded?
->>>
->>
->> I didn't say it could. What I said is "unloaded while we are executing
->> its bind()". Maybe that's already guaranteed to be safe somehow. It's
->> actually the problem below that I was trying to fix but placing the
->> try_module_get() before the bind() rather than after bind() seemed a
->> trivial extra safety.
-> 
-> It should be safe, bind() can't race with module remove as the driver
-> core locks will handle this.
-> 
->>>> If the bind is successful the module_put() is called only after it
->>>> has been unbound. This ensures that the module cannot be unloaded
->>>> while it is in use as an aggregate device.
->>>
->>> That's almost never the correct thing to do, what problem is this
->>> solving?
->>>
->>
->> What I see is that when a loadable module has been made part of an
->> aggregate it is still possible to rmmod'd it.
->>
->> An alternative workaround would be for the parent to softdep to every
->> driver that _might_ provide the aggregated components. Softdeps aren't
->> unusual (we use it in some drivers that are directly related but don't
->> directly link into each other). But to me this feels like a hack when
->> used with the component framework - isn't the idea that the parent
->> doesn't know (or doesn't need to know) which drivers will be aggregated?
->> Wouldn't it be better that when a component driver is bound into an
->> aggregate its module is automatically marked in-use?
->>
->> If there's a better way to mark the module in-use while is it bound
->> into an aggregate, let me know and I'll look at implementing it.
-> 
-> No module references should be incremented if a device is bound to a
-> driver, that's the old (1990's) way of thinking.  If a module wants to
-> be unloaded, let it, and clean up everything that it was
-> controlling/talking to before the module remove is finished.
-> 
-> That's the way all busses should be working, you don't increment a
-> module count when a driver binds to a device, otherwise how would you
-> unload a module that was being used at all?
-> 
-> So just remove the components controlled by the module properly when it
-> is removed and all should be good.
-> 
-> Do you have example code in the kernel tree today that does not properly
-> do this?  Why not just fix that instead?
-> 
 
-The actual code I'm working on isn't upstream yet, but it's a derivative
-of the way these two interoperate:
-  sound/pci/hda/patch_realtek
-  sound/pci/hda/cs35l41_hda.c
+--uchmzozxirr27riu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In these systems the host audio interface is HDA but the amps are not
-HDA devices. Audio goes through the Realtek HDA codec to the amp but
-the amp is on a different bus (i2c or spi). The modules in the HDA stack
-all get marked as in-use, but the amp driver doesn't. So if it's
-unloaded the audio system is left in a limbo state where ALSA and the
-HDA stack are still up but the amp driver code has gone.
+On 28.07.2022 12:23:04, Dario Binacchi wrote:
+> > > Does it make sense to use the device tree
+> >
+> > The driver doesn't support DT and DT only works for static serial
+> > interfaces.
 
-However I realised that my try_module_get() isn't a fix anyway.
-It's claiming use of the module implementing the component but not
-of the bus that owns that module. I assume that's what you were
-referring to by having to deal with an unload instead of trying to
-prevent the unload.
+Have you seen my remarks about Device Tree?
 
-(And yes, I'm aware that in that patch_realtek.c it's missing
-locking around the shared struct to prevent it being accessed during a
-bind and unbind.)
+> > > to provide the driver with those
+> > > parameters required for the automatic calculation of the BTR (clock r=
+ate,
+> > > struct can_bittiming_const, ...) that depend on the connected
+> > > controller?
+> >
+> > The device tree usually says it's a CAN controller compatible to X and
+> > the following clock(s) are connected. The driver for CAN controller X
+> > knows the bit timing const. Some USB CAN drivers query the bit timing
+> > const from the USB device.
+> >
+> > > In this way the solution should be generic and therefore scalable. I
+> > > think we should also add some properties to map the calculated BTR
+> > > value on the physical register of the controller.
+> >
+> > The driver knows how to map the "struct can_bittiming" to the BTR
+> > register values of the hardware.
+> >
+> > What does the serial protocol say to the BTR values? Are these standard
+> > SJA1000 layout with 8 MHz CAN clock or are those adapter specific?
+>=20
+> I think they are adapter specific.
 
-> thanks,
-> 
-> greg k-h
+The BTR values depend on the used CAN controller, the clock rate, and on
+the firmware, if it supports BTR at all.
+
+> This is  what the can232_ver3_Manual.pdf reports:
+>=20
+> sxxyy[CR]         Setup with BTR0/BTR1 CAN bit-rates where xx and yy is a=
+ hex
+>                          value. This command is only active if the CAN
+> channel is closed.
+>=20
+> xx     BTR0 value in hex
+> yy     BTR1 value in hex
+>=20
+> Example:            s031C[CR]
+>                            Setup CAN with BTR0=3D0x03 & BTR1=3D0x1C
+>                            which equals to 125Kbit.
+>=20
+> But I think the example is misleading because IMHO it depends on the
+> adapter's controller (0x31C -> 125Kbit).
+
+I think the BTR in can232_ver3_Manual.pdf is compatible to a sja1000
+controller with 8 MHz ref clock. See:
+
+| Bit timing parameters for sja1000 with 8.000000 MHz ref clock using algo =
+'v4.8'
+|  nominal                                  real  Bitrt    nom   real  SampP
+|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  Erro=
+r   BTR0 BTR1
+|  1000000    125   2    3    2   1   1  1000000   0.0%  75.0%  75.0%   0.0=
+%   0x00 0x14
+|   800000    125   3    4    2   1   1   800000   0.0%  80.0%  80.0%   0.0=
+%   0x00 0x16
+|   500000    125   6    7    2   1   1   500000   0.0%  87.5%  87.5%   0.0=
+%   0x00 0x1c
+|   250000    250   6    7    2   1   2   250000   0.0%  87.5%  87.5%   0.0=
+%   0x01 0x1c
+|   125000    500   6    7    2   1   4   125000   0.0%  87.5%  87.5%   0.0=
+%   0x03 0x1c        <---
+|   100000    625   6    7    2   1   5   100000   0.0%  87.5%  87.5%   0.0=
+%   0x04 0x1c
+|    50000   1250   6    7    2   1  10    50000   0.0%  87.5%  87.5%   0.0=
+%   0x09 0x1c
+|    20000   3125   6    7    2   1  25    20000   0.0%  87.5%  87.5%   0.0=
+%   0x18 0x1c
+|    10000   6250   6    7    2   1  50    10000   0.0%  87.5%  87.5%   0.0=
+%   0x31 0x1c
+
+> > > Or, use the device tree to extend the bittates supported by the contr=
+oller
+> > > to the fixed ones (struct can_priv::bitrate_const)?
+> >
+> > The serial protocol defines fixed bit rates, no need to describe them in
+> > the DT:
+> >
+> > |           0            10 Kbit/s
+> > |           1            20 Kbit/s
+> > |           2            50 Kbit/s
+> > |           3           100 Kbit/s
+> > |           4           125 Kbit/s
+> > |           5           250 Kbit/s
+> > |           6           500 Kbit/s
+> > |           7           800 Kbit/s
+> > |           8          1000 Kbit/s
+> >
+> > Are there more bit rates?
+>=20
+> No, the manual can232_ver3_Manual.pdf does not contain any others.
+>=20
+> What about defining a device tree node for the slcan (foo adapter):
+>=20
+> slcan {
+>     compatible =3D "can,slcan";
+>                                      /* bit rate btr0btr1 */
+>     additional-bitrates =3D < 33333  0x0123
+>                                         80000  0x4567
+>                                         83333  0x89ab
+>                                       150000 0xcd10
+>                                       175000 0x2345
+>                                       200000 0x6789>
+> };
+>=20
+> So that the can_priv::bitrate_cons array (dynamically created) will
+> contain the bitrates
+>            10000,
+>            20000,
+>            50000,
+>          100000,
+>          125000,
+>          250000,
+>          500000,
+>          800000,
+>         1000000 /* end of standards bitrates,  use S command */
+>            33333,  /* use s command, btr 0x0123 */
+>            80000,  /* use s command, btr 0x4567 */
+>            83333,  /* use s command, btr 0x89ab */
+>          150000,  /* use s command, btr 0xcd10 */
+>          175000, /* use s command, btr 0x2345 */
+>          200000  /* use s command, btr 0x6789 */
+> };
+>=20
+> So if a standard bitrate is requested, the S command is used,
+> otherwise the s command with the associated btr.
+
+That would be an option. For proper DT support, the driver needs to be
+extended to support serdev. But DT only supports "static" devices.
+
+But if you can calculate BTR values you know the bit timing constants
+(and frequency) and then it's better to have the bit timing in the
+driver so that arbitrary bit rates can be calculated by the kernel.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--uchmzozxirr27riu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLiagcACgkQrX5LkNig
+012fRAf/UPtRjnojGE75hAHeJLUPRk9CLvLZvjAaSg6D3Q+owJdNJ71fQuwrpXYA
+1ji3HH97/G8hkTfNFHYfOzuNa7CFaeSUQEoMcjDkRlKthxdgG2tSARk3UeySPDqd
+gdr1taEcID+6iL/rp95cv86mtngg/z4qLRbmFa3T56KTpzfIq/oBVVdgT+uAhrep
+uEWkO+4SAr0SdfXpsR973ykdKmbEtRliPXQJR8j7ByxARJNATKD8AZxfuQnxDkE5
+Ig+vGqHPHrR36iYlmLO9+1fskAt08wfKXObZ/D06dTRyBcZoKakJ0baEWYtf0VR7
+ZcCG1ClWGyWwCXKPUg0KF9bgUB02mg==
+=6G3L
+-----END PGP SIGNATURE-----
+
+--uchmzozxirr27riu--

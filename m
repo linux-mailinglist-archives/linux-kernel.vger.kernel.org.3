@@ -2,102 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1A05846F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989905846E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiG1UHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S231459AbiG1UML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiG1UHB (ORCPT
+        with ESMTP id S230060AbiG1UMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:07:01 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3E57479D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:06:59 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id m8so3485248edd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:06:59 -0700 (PDT)
+        Thu, 28 Jul 2022 16:12:06 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACA074E0C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:12:05 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id q16so2373026pgq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:12:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=b99vshAhGChh3A9VDnm6KS29Pg4yAPwV39WCn0DHyEw=;
-        b=j/cVnyPJc3NbVdA6KozIiXB7d1QQk+XXmRNE0ZX9Jr5ze1E0ZnY/NdUc8lE2pzXYHK
-         T0jUhZs+w+0Rdv0Ke7Ah2OmBDArPN9qCD2CvffXu2uKVOU1h8HOBkyCChfnrD2nfS7e1
-         g1n0sndpcyCYQLwBxOrKsGhccrjtnd+evojNk=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=EplIlrIeqL3qzFgDUGxCxRqOfq3c4zp3SLt5PE7mwGU=;
+        b=W1MroCyit8k2GJt5siN1t1/3CC0b3RU0K4uhewMrN4VENd5nCC/xUkSSW/labnEngm
+         EbpKboOZXG/G30FXhtu8p7X3zS3WEl6xSOO3rqi+/Abt5c/YVgow09Q85Xn7up7TwlyK
+         dUCeZCwZKFnCb8d95f97S99XoOSqMUvxu5xebBv29M+++v2YlNFp4WWACtcDoEP5Mik0
+         0JUf9sXG7v7Q8p1dlPRRsreuYMKiCPCJ0ARFjIU85WPUeAZPV5tbynXC1q2J9kwyP2gw
+         Yrl0oadQB6gF1iKWkvzuUkTrBejb6f0KyRML3Cm7Ye55dCra8csNTlX25/WV1/9AAswE
+         Y+sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=b99vshAhGChh3A9VDnm6KS29Pg4yAPwV39WCn0DHyEw=;
-        b=ecpDhkPJ5rpMUH6QIMBE0FNkMgGGzC+UfXoFQmfCHBXSt0KNWRjaXhkLjfBAl6fHRF
-         Shk7B7ojt/l0QVvQyAtnZ+9Eo4rDKqZVDzBAz8q3i+5IsM/yuyNLrz/Xf8SntMCuQmiw
-         Ne++LQe0e1GOUwqBrsz3mVAyIROpZONWAVQzCe172kW3t5peikdm6/An2tvIFNKpN1+g
-         /nFZSyXtItC4j5t7RaaU0uKQ0qR0loVlF8lQmjtmWuqgsIPzzt1vGF7ujjUcCQYp/vz9
-         yYJCNw1SqbvW9+2lV7xeRLwR6wJGXBgrq8XJ7xPMKxubEIchBkJMkrAJKL5GB50GgHxh
-         kxvA==
-X-Gm-Message-State: AJIora9Ji7DQxd3dbnhfYt27biNpsJdfrUhhtja+txjJXZeEmmCME8Ao
-        kACANxd1FTYPRAyXBD8sm0As1NkEW5i7luq2
-X-Google-Smtp-Source: AGRyM1vA1NKL4rGiriN/ma0xZX/Zn6+WIfLIBRd6uXH0MLcGGOuUj/c8cvX1esKrKRNyDnSVLHQBPw==
-X-Received: by 2002:a05:6402:27ca:b0:43c:2a52:a90f with SMTP id c10-20020a05640227ca00b0043c2a52a90fmr557907ede.328.1659038817755;
-        Thu, 28 Jul 2022 13:06:57 -0700 (PDT)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id ee24-20020a056402291800b0043b7917b1a4sm1235159edb.43.2022.07.28.13.06.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 13:06:56 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so3163104wme.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:06:56 -0700 (PDT)
-X-Received: by 2002:a05:600c:1e0f:b0:3a3:191c:a3c8 with SMTP id
- ay15-20020a05600c1e0f00b003a3191ca3c8mr292036wmb.151.1659038816119; Thu, 28
- Jul 2022 13:06:56 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=EplIlrIeqL3qzFgDUGxCxRqOfq3c4zp3SLt5PE7mwGU=;
+        b=3usNi/a0zVAoR5uJ4ZMFZbE1Qp/KskZETnvvRO1P5HcLABhCUc83zGgk53SF/rL9vg
+         mdBoE5dhQ9sN6gtNFYPoB//T6DfJa3YL64YDhBk/A5RV9oOKPxEGHmuBl7rUUTHT3l4Y
+         nF8nTygUmXEAEsPSXTpWdivbuIaetqBycV1ArxeN8GR9wrcXbPJsOMGwZSBAADxeKIA8
+         3mpcKNkPXt0FWPHCVv3zu2dsOMNuPoP8WniGvmTBGU8GKyZqnOCkqyDhhZ2vnx6rVMma
+         kdh2CKNEGZ9yNCQSHvuzalTpO6B9fF6vJUW8D5gWHx8SU8irgGhXkLnQDMuPunADHTE+
+         jtYw==
+X-Gm-Message-State: AJIora9E/zcP55XvDMxIjeT4VFgTYcsAk41Owa00u/uqKi5RlDkd/MdB
+        FMxpisvRkXxaBbSFwn0NyJ83EQ==
+X-Google-Smtp-Source: AGRyM1swxpHg/ylzgZI9N9Nyjv0QqP/u1muA/l/hbanPTx+q8x8AesqG46mq+DEpIp9m4pEpUedsIg==
+X-Received: by 2002:a05:6a00:1c54:b0:52b:a70e:8207 with SMTP id s20-20020a056a001c5400b0052ba70e8207mr227874pfw.48.1659039124699;
+        Thu, 28 Jul 2022 13:12:04 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id rv2-20020a17090b2c0200b001f280153b4dsm4296251pjb.47.2022.07.28.13.12.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 13:12:03 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 20:11:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v7 041/102] KVM: VMX: Introduce test mode related to EPT
+ violation VE
+Message-ID: <YuLtj4/pgUZBc6f9@google.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <cadf3221e3f7b911c810f15cfe300dd5337a966d.1656366338.git.isaku.yamahata@intel.com>
+ <52915310c9118a124da2380daf3d753a818de05e.camel@intel.com>
+ <20220719144936.GX1379820@ls.amr.corp.intel.com>
+ <9945dbf586d8738b7cf0af53bfb760da9eb9e882.camel@intel.com>
+ <20220727233955.GC3669189@ls.amr.corp.intel.com>
+ <af9e3b06ba9e16df4bfd768dfdd78f2e0277cbe5.camel@intel.com>
 MIME-Version: 1.0
-References: <20220728105005.v2.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
-In-Reply-To: <20220728105005.v2.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 28 Jul 2022 13:06:42 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U=BbNDW3R0bRoJNrOz61KSop4NorP-6QQKYHVu5wnTMw@mail.gmail.com>
-Message-ID: <CAD=FV=U=BbNDW3R0bRoJNrOz61KSop4NorP-6QQKYHVu5wnTMw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: document zoglin board
-To:     Bob Moragues <moragues@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh@kernel.org>,
-        Bob Moragues <moragues@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af9e3b06ba9e16df4bfd768dfdd78f2e0277cbe5.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jul 28, 2022, Kai Huang wrote:
+> On Wed, 2022-07-27 at 16:39 -0700, Isaku Yamahata wrote:
+> > On Wed, Jul 20, 2022 at 05:13:08PM +1200,
+> > Kai Huang <kai.huang@intel.com> wrote:
+> > 
+> > > On Tue, 2022-07-19 at 07:49 -0700, Isaku Yamahata wrote:
+> > > > On Fri, Jul 08, 2022 at 02:23:43PM +1200,
+> > > > Kai Huang <kai.huang@intel.com> wrote:
+> > > > 
+> > > > > On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
+> > > > > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > > > > 
+> > > > > > To support TDX, KVM is enhanced to operate with #VE.  For TDX, KVM programs
+> > > > > > to inject #VE conditionally and set #VE suppress bit in EPT entry.  For VMX
+> > > > > > case, #VE isn't used.  If #VE happens for VMX, it's a bug.  To be
+> > > > > > defensive (test that VMX case isn't broken), introduce option
+> > > > > > ept_violation_ve_test and when it's set, set error.
+> > > > > 
+> > > > > I don't see why we need this patch.  It may be helpful during your test, but why
+> > > > > do we need this patch for formal submission?
+> > > > > 
+> > > > > And for a normal guest, what prevents one vcpu from sending #VE IPI to another
+> > > > > vcpu?
+> > > > 
+> > > > Paolo suggested it as follows.  Maybe it should be kernel config.
+> > > > (I forgot to add suggested-by. I'll add it)
+> > > > 
+> > > > https://lore.kernel.org/lkml/84d56339-4a8a-6ddb-17cb-12074588ba9c@redhat.com/
+> > > > 
+> > > > > 
+> > > 
+> > > OK.  But can we assume a normal guest won't sending #VE IPI?
+> > 
+> > Theoretically nothing prevents that.  I wouldn't way "normal".
+> > Anyway this is off by default.
+> 
+> I don't think whether it is on or off by default matters.
 
-On Thu, Jul 28, 2022 at 10:51 AM Bob Moragues <moragues@chromium.org> wrote:
->
-> From: Bob Moragues <moragues@chromium.org>
->
-> Zoglin is a Hoglin Chromebook with SPI Flash reduced from 64MB to 8MB.
-> Zoglin is identical to Hoglin except for the SPI Flash.
-> The actual SPI Flash is dynamically probed at and not specified in DTS.
->
-> Signed-off-by: Bob Moragues <moragues@chromium.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Bob Moragues <moragues@google.com>
+It matters in the sense that the module param is intended purely for testing, i.e.
+there's zero reason to ever enable it in production.  That changes what is and
+wasn't isn't a reasonable response to an unexpected #VE.
 
-Something is still messed up with the way you're sending this. You
-don't want the extra Signed-off-by here. Maybe try again for v3?
+> If it can happen legitimately in the guest, it doesn't look right to print
+> out something like below:
+> 
+> 	pr_err("VMEXIT due to unexpected #VE.\n");
 
--Doug
+Agreed.  In this particular case I think the right approach is to treat an
+unexpected #VE as a fatal KVM bug.  Yes, disabling EPT violation #VEs would likely
+allow the guest to live, but as above the module param should never be enabled in
+production.  And if we get a #VE with the module param disabled, then KVM is truly
+in the weeds and killing the VM is the safe option.
+
+E.g. something like
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 4fd25e1d6ec9..54b9cb56f6e2 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -5010,6 +5010,9 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
+        if (is_invalid_opcode(intr_info))
+                return handle_ud(vcpu);
+
++       if (KVM_BUG_ON(is_ve_fault(intr_info), vcpu->kvm))
++               return -EIO;
++
+        error_code = 0;
+        if (intr_info & INTR_INFO_DELIVER_CODE_MASK)
+                error_code = vmcs_read32(VM_EXIT_INTR_ERROR_CODE);

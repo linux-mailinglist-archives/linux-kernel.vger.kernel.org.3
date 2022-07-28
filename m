@@ -2,176 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46BD5838C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F42255838D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232767AbiG1Gcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        id S232724AbiG1GgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 02:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiG1Gck (ORCPT
+        with ESMTP id S229682AbiG1GgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:32:40 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F5B50197;
-        Wed, 27 Jul 2022 23:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658989959; x=1690525959;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RK0HAmV0bkXD+BBB3t8pfYAFUKXxk01BYq1b2equMoE=;
-  b=K6h6dY1BDvaJ93GlUDIcZOXobIMpGNyx5ncS3SEzkLkbxwgwbe98Hj9O
-   jhVd34jTpAsaM9gjMK7fLJMvIpMKqmsrjfTMRWPe88ue7mo70RF7T/vgr
-   D/sbV1g6QWhtvEWR5gdSA092aEJs/O+SSuCKFYdoattnGetnIrnytd7Ic
-   UvM2ScDZhJMWqRTLkXuv3YDTvt7fN8NBFPMYHYyXnx7nOoRWbvQW4d8LQ
-   zg1CVswWxrzaQOdH0pfBQrsUEws9u9OmYw9nQ7GcHqrUfLaTwgpJfW/N6
-   a2fuluyZRTHT8VF022/wNPPP77/7Q3WczsPHM7dXi1FBRr4khhlYac49M
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="350139609"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="350139609"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 23:32:39 -0700
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="659570540"
-Received: from maurocar-mobl2.ger.corp.intel.com (HELO maurocar-mobl2) ([10.249.36.196])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 23:32:35 -0700
-Date:   Thu, 28 Jul 2022 08:32:32 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     stable@vger.kernel.org,
-        Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= 
-        <thomas.hellstrom@linux.intel.com>, linux-media@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Matthew Auld <matthew.auld@intel.com>
-Subject: Re: [Intel-gfx] [PATCH v2 06/21] drm/i915/gt: Batch TLB
- invalidations
-Message-ID: <20220728083232.352f80cf@maurocar-mobl2>
-In-Reply-To: <d2337b73-ae34-3dd3-afa3-85c77dc2135e@linux.intel.com>
-References: <cover.1657800199.git.mchehab@kernel.org>
-        <9f535a97f32320a213a619a30c961ba44b595453.1657800199.git.mchehab@kernel.org>
-        <567823d5-57ba-30db-dd64-de609df4d8c5@linux.intel.com>
-        <20220727134836.7f7b5fab@maurocar-mobl2>
-        <d2337b73-ae34-3dd3-afa3-85c77dc2135e@linux.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 28 Jul 2022 02:36:15 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5004A53D06
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:36:14 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id c131so1785471ybf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pUUY1/m9+7HRXnB9jDKYnmw1m+gsNorqO+vRcx+LMJY=;
+        b=nvfafRvrKAraORSdu+1C6Xh5aHA1yz1+2dU+Rya+Xu5DX52aP91mdTywZybyHdOz+r
+         UUX1b5sm4H3TBmOwW3/T1LRr8DuvKZVn6oSFAPx3OSbwkfeZhNDSsp7X54L68axMM8mG
+         auNXdHwUhKO2pZ/l+8gwrOkL2jqGy7LCZvcDKoeqJi2TlX4PQfc5JRSV6pTcoXXL8AUy
+         omhOsJWk9ayB5O6pj555W92PovgNhHnb0j0hvEH+HDLSUf6dIEvsWcNLLPs31PS3NCFX
+         X2iNUKdJHTN//Uswws22x1NJ2Atpxv+5oBXWp4RLekbJOUfQZoIJq3uehe0GWsZ1+i+g
+         Qesg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pUUY1/m9+7HRXnB9jDKYnmw1m+gsNorqO+vRcx+LMJY=;
+        b=R4woz5OI0LKy/CiWQ0knV+8iekbU+gfCvv5LHig6vaxQFnQOhnsYKCWSX8a5SqxYTe
+         Ei6DpyRFN5YWeJu12EnkyTw9LUShAdwsp0GWPLvTk9LeHB0TOMJFPIcrB5f9RzqisVOP
+         kQlJA35k5cDaVzRJkNIwDo5bw+gbb/iJtFXAfIVRk7TuUwrP7/vfNXxa3Y1bWUlei9CA
+         NZNeeLzYcGeXNh86TH/VAVEw3Q0eGPjg48A9XaQRRbRDoLYCWvn1+guksUAv8hD/Od9q
+         FPbXZuaI+J9GhL63FnqJlHyYX6zZKcRh4IZ5szwsPMge56n7Xlnpm5L7ojh4UgAakXEa
+         ee5Q==
+X-Gm-Message-State: AJIora/MNJ7Z9kyuOdDG/bAOhu1S62M0f4gKuujvcB88ZS4d3Qk21Ry3
+        3di3ti1G8qNRHhuZkB+luQ+rRj+1VxCLVQ32o82O
+X-Google-Smtp-Source: AGRyM1uFHWzndaowSIphhB+gGC2rtHX8jCfsRWDss3omccRLbvby7X2uvNMtXxfhASuJ/UU42RQSY4+UfGO+VjJ5DSg=
+X-Received: by 2002:a25:5f51:0:b0:676:3753:ea26 with SMTP id
+ h17-20020a255f51000000b006763753ea26mr347281ybm.649.1658990173390; Wed, 27
+ Jul 2022 23:36:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728032000.127-1-xieyongji@bytedance.com> <20220728032000.127-6-xieyongji@bytedance.com>
+ <CACGkMEuN0zqyLQ6vD7MvjAhtJVvmMhsn_T4b5ww0vviwq5hBrg@mail.gmail.com>
+In-Reply-To: <CACGkMEuN0zqyLQ6vD7MvjAhtJVvmMhsn_T4b5ww0vviwq5hBrg@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Thu, 28 Jul 2022 14:36:02 +0800
+Message-ID: <CACycT3uYFWvmdJ1MzQZv=L7N0WzEiFvx5wJX+OwM1ew5Z0w0jw@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] vduse: Support querying information of IOVA regions
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 13:56:50 +0100
-Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+On Thu, Jul 28, 2022 at 1:58 PM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Thu, Jul 28, 2022 at 11:20 AM Xie Yongji <xieyongji@bytedance.com> wrote:
+> >
+> > This introduces a new ioctl: VDUSE_IOTLB_GET_INFO to
+> > support querying some information of IOVA regions.
+> >
+> > Now it can be used to query whether the IOVA region
+> > supports userspace memory registration.
+> >
+> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > ---
+> >  drivers/vdpa/vdpa_user/vduse_dev.c | 39 ++++++++++++++++++++++++++++++
+> >  include/uapi/linux/vduse.h         | 24 ++++++++++++++++++
+> >  2 files changed, 63 insertions(+)
+> >
+> > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > index eedff0a3885a..e820c37dcba8 100644
+> > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > @@ -1228,6 +1228,45 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+> >                                            umem.size);
+> >                 break;
+> >         }
+> > +       case VDUSE_IOTLB_GET_INFO: {
+> > +               struct vduse_iova_info info;
+> > +               struct vhost_iotlb_map *map;
+> > +               struct vduse_iova_domain *domain = dev->domain;
+> > +
+> > +               ret = -EFAULT;
+> > +               if (copy_from_user(&info, argp, sizeof(info)))
+> > +                       break;
+> > +
+> > +               ret = -EINVAL;
+> > +               if (info.start > info.last)
+> > +                       break;
+> > +
+> > +               if (!is_mem_zero((const char *)info.reserved,
+> > +                                sizeof(info.reserved)))
+> > +                       break;
+> > +
+> > +               spin_lock(&domain->iotlb_lock);
+> > +               map = vhost_iotlb_itree_first(domain->iotlb,
+> > +                                             info.start, info.last);
+> > +               if (map) {
+> > +                       info.start = map->start;
+> > +                       info.last = map->last;
+> > +                       info.capability = 0;
+> > +                       if (domain->bounce_map && map->start >= 0 &&
+> > +                           map->last < domain->bounce_size)
+> > +                               info.capability |= VDUSE_IOVA_CAP_UMEM;
+> > +               }
+> > +               spin_unlock(&domain->iotlb_lock);
+> > +               if (!map)
+> > +                       break;
+> > +
+> > +               ret = -EFAULT;
+> > +               if (copy_to_user(argp, &info, sizeof(info)))
+> > +                       break;
+> > +
+> > +               ret = 0;
+> > +               break;
+> > +       }
+> >         default:
+> >                 ret = -ENOIOCTLCMD;
+> >                 break;
+> > diff --git a/include/uapi/linux/vduse.h b/include/uapi/linux/vduse.h
+> > index 9885e0571f09..11bd48c72c6c 100644
+> > --- a/include/uapi/linux/vduse.h
+> > +++ b/include/uapi/linux/vduse.h
+> > @@ -233,6 +233,30 @@ struct vduse_iova_umem {
+> >  /* De-register the userspace memory. Caller should set iova and size field. */
+> >  #define VDUSE_IOTLB_DEREG_UMEM _IOW(VDUSE_BASE, 0x19, struct vduse_iova_umem)
+> >
+> > +/**
+> > + * struct vduse_iova_info - information of one IOVA region
+> > + * @start: start of the IOVA region
+> > + * @last: last of the IOVA region
+> > + * @capability: capability of the IOVA regsion
+> > + * @reserved: for future use, needs to be initialized to zero
+> > + *
+> > + * Structure used by VDUSE_IOTLB_GET_INFO ioctl to get information of
+> > + * one IOVA region.
+> > + */
+> > +struct vduse_iova_info {
+> > +       __u64 start;
+> > +       __u64 last;
+> > +#define VDUSE_IOVA_CAP_UMEM (1 << 0)
+> > +       __u64 capability;
+> > +       __u64 reserved[3];
+> > +};
+> > +
+> > +/*
+> > + * Find the first IOVA region that overlaps with the range [start, last]
+>
+> So the code is actually find the IOVA region that is the super range
+> of [start, last] instead of overlap:
+>
 
-> > Because vma_invalidate_tlb() basically stores a TLB seqno, but the
-> > actual invalidation is deferred to when the pages are unset, at
-> > __i915_gem_object_unset_pages().
-> > 
-> > So, what happens is:
-> > 
-> > - on VMA sync mode, the need to invalidate TLB is marked at
-> >    __vma_put_pages(), before VMA unbind;
-> > - on async, this is deferred to happen at ppgtt_unbind_vma(), where
-> >    it marks the need to invalidate TLBs.
-> > 
-> > On both cases, __i915_gem_object_unset_pages() is called later,
-> > when the driver is ready to unmap the page.  
-> 
-> Sorry still not clear to me why is the patch moving marking of the need 
-> to invalidate (regardless if it a bit like today, or a seqno like in 
-> this patch) from bind to unbind?
-> 
-> What if the seqno was stored in i915_vma_bind, where the bit is set 
-> today, and all the hunks which touch the unbind and evict would 
-> disappear from the patch. What wouldn't work in that case, if anything?
+This is achieved by vhost_iotlb_itree_first(). And can't the super
+range of [start,last] be considered overlapping?
 
-Ah, now I see your point.
+>
+> > +                       if (domain->bounce_map && map->start >= 0 &&
+> > +                           map->last < domain->bounce_size)
+> > +                               info.capability |= VDUSE_IOVA_CAP_UMEM;
+>
+> Which part is wrong?
+>
 
-I can't see any sense on having a sequence number at VMA bind, as the
-unbind order can be different. The need of doing a full TLB invalidation
-or not depends on the unbind order.
+We will first call vhost_iotlb_itree_first() which will find the first
+IOVA region that overlaps with the range [start, last]. Then the flag
+will only be set if the IOVA region is within the bounce range.
 
-The way the current algorithm works is that drm_i915_gem_object can be
-created on any order, and, at unbind/evict, they receive a seqno.
-
-The seqno is incremented at intel_gt_invalidate_tlb():
-
-    void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno)
-    {
-	with_intel_gt_pm_if_awake(gt, wakeref) {
-		mutex_lock(&gt->tlb.invalidate_lock);
-		if (tlb_seqno_passed(gt, seqno))
-				goto unlock;
-
-		mmio_invalidate_full(gt);
-
-		write_seqcount_invalidate(&gt->tlb.seqno);	// increment seqno
-		
-
-So, let's say 3 objects were created, on this order:
-
-	obj1
-	obj2
-	obj3
-
-They would be unbind/evict on a different order. On that time, 
-the mm.tlb will be stamped with a seqno, using the number from the
-last TLB flush, plus 1.
-
-As different threads can be used to handle TLB flushes, let's imagine
-two threads (just for the sake of having an example). On such case,
-what we would have is:
-
-seqno		Thread 0			Thread 1
-
-seqno=2		unbind/evict event
-		obj3.mm.tlb = seqno | 1
-seqno=2		unbind/evict event
-		obj1.mm.tlb = seqno | 1
-						__i915_gem_object_unset_pages() 
-						called for obj3, TLB flush happened,
-						invalidating both obj1 and obj2.
-						seqno += 2					
-seqno=4		unbind/evict event
-		obj1.mm.tlb = seqno | 1
-						__i915_gem_object_unset_pages()
-						called for obj1, don't flush.
-...
-						__i915_gem_object_unset_pages() called for obj2, TLB flush happened
-						seqno += 2
-seqno=6
-
-So, basically the seqno is used to track when the object data stopped
-being updated, because of an unbind/evict event, being later used by
-intel_gt_invalidate_tlb() when called from __i915_gem_object_unset_pages(),
-in order to check if a previous invalidation call was enough to invalidate
-the object, or if a new call is needed.
-
-Now, if seqno is stored at bind, data can still leak, as the assumption
-made by intel_gt_invalidate_tlb() that the data stopped being used at
-seqno is not true anymore.
-
-Still, I agree that this logic is complex and should be better 
-documented. So, if you're now OK with this patch, I'll add the above
-explanation inside a kernel-doc comment.
-
-Regards,
-Mauro
+Thanks,
+Yongji

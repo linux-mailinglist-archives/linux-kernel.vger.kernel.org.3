@@ -2,47 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB92583ED7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FE6583ED9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238550AbiG1M3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S235022AbiG1M35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237660AbiG1M3E (ORCPT
+        with ESMTP id S231272AbiG1M3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:29:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31E4161734;
-        Thu, 28 Jul 2022 05:29:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72FFE106F;
-        Thu, 28 Jul 2022 05:29:04 -0700 (PDT)
-Received: from [10.1.31.137] (e127744.cambridge.arm.com [10.1.31.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 709313F73B;
-        Thu, 28 Jul 2022 05:29:02 -0700 (PDT)
-Subject: Re: [PATCH] perf/tests: Fix test case 95 on s390 and use same event
-To:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, james.clark@arm.com
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-References: <20220727141439.712582-1-tmricht@linux.ibm.com>
- <3dc28d5e-46ce-fd33-82c1-4e27b60dfef0@arm.com>
- <550e7e9f-19cb-0b1f-fd3e-f0d958b4e75b@linux.ibm.com>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <3cb2c002-e4e3-c7b4-148d-5e2d0c406b84@arm.com>
-Date:   Thu, 28 Jul 2022 13:28:51 +0100
+        Thu, 28 Jul 2022 08:29:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB0F76BC09
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659011393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DVcjc9aGp+5z1mxJ4Ml6zvFn8nDWG68bHV4wWJvB5yk=;
+        b=MswelC7M4GcWI/rqW5n3b9dIRIqJVwdEwopXoKHcKyfY5+LAdZ6Z84YQAgAErQnZLgMGvP
+        Y0Rx3fcMz0nODP+5Btyvhl13JK/ZilFuP7oSVc5I8D+Oz5JV91qLiZDVHo2DRd81QTjrGV
+        N3PRWLk9xbaZohNZn3M3v6hmq4rYW1I=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-308-emypzbQePM-mEpIAGhK1fw-1; Thu, 28 Jul 2022 08:29:52 -0400
+X-MC-Unique: emypzbQePM-mEpIAGhK1fw-1
+Received: by mail-oi1-f197.google.com with SMTP id r24-20020a056808211800b0033a6f896c8aso674785oiw.18
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:29:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=DVcjc9aGp+5z1mxJ4Ml6zvFn8nDWG68bHV4wWJvB5yk=;
+        b=eINBrU64V2ftB6g1+/lS9R/H1DGHos4S1bP0GfqgUEVzyApfoP+FllkGTmqecMZA/L
+         bWQzeBIpzkASsH+DDjsWAzgYkx+4ZFRwNjr8GxfwuqBDjeoxBhWJW6JsHxeOFZpYt0YB
+         urU2dB8u724AUfsE1s0k790D0YuTcILwJNQoUge1/ECSFojKpH619rgizZSeHxkP3dEs
+         Zkv0UC0PleW6GNQ7X/zpgEFCa6TqjlWpphTVG9zfKfdCCV+hQHc2bZQ6nzHwSA4Yr1sU
+         FimScniTuJI40syN85hIMZwhqwO58dbHWJfbyg0xBUvq66/hBQhRmczEQw1CXaRkGgMu
+         B6Xw==
+X-Gm-Message-State: AJIora9joZNm6u/VuFdVGB3AMoC58Va1G9Q2f6EuSfrMR5S8Drwcn41Q
+        uADT1wClknj4tn7VZZuv5mW2rETZ1rZgRAI9BYjTCTpQlj08mu4ySrVrf90wjBEPqmkg7Zolfs9
+        R9N6JI4eEf8PwK9h8oF50NZjNzT5gpK+W3CZOA8yCDGjP+BAbVyFgV9HvE6mdIF2A+6SPTpY=
+X-Received: by 2002:a4a:a981:0:b0:435:bd5a:7e5f with SMTP id w1-20020a4aa981000000b00435bd5a7e5fmr9218539oom.76.1659011391709;
+        Thu, 28 Jul 2022 05:29:51 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uFGMuinIsJqCT9rk8zdxkHpWjdWvhZVScblBpoUcod9Lk+uEhgVp6FLm1lfVIiviIN1kkv9w==
+X-Received: by 2002:a4a:a981:0:b0:435:bd5a:7e5f with SMTP id w1-20020a4aa981000000b00435bd5a7e5fmr9218527oom.76.1659011391465;
+        Thu, 28 Jul 2022 05:29:51 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056830000500b00616c46f6daasm226415otp.31.2022.07.28.05.29.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 05:29:50 -0700 (PDT)
+Subject: Re: [PATCH] fpga: microchip-spi: add missing module author entry
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220728075012.3136914-1-conor.dooley@microchip.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <53f6e675-1fc5-fb17-ce6f-aa952d61132f@redhat.com>
+Date:   Thu, 28 Jul 2022 05:29:48 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <550e7e9f-19cb-0b1f-fd3e-f0d958b4e75b@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20220728075012.3136914-1-conor.dooley@microchip.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,53 +84,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 28/07/2022 13:20, Thomas Richter wrote:
-> On 7/28/22 11:25, German Gomez wrote:
->> Thanks for the fix, Thomas
->>
->> On 27/07/2022 15:14, Thomas Richter wrote:
->>> On linux-next tree perf test 95 was added recently.
->>> s390 does not support branch sampling at all and the test case fails
->>> despite for checking branch support before hand.
->>> The check for support of branching
->>> uses the software event named dummy, as seen in the line:
->>>
->>>  perf record -b -o- -e dummy -B true > /dev/null 2>&1 || exit 2
->> Just curious, do you know why the command succeeds in this platform (and
->> potentially others)?
->>
->> I got the idea of using "dummy" from [1] but only tested on arm64 and
->> x86. I thought the platforms would reject it if -b was not implemented
->> regardless of the event. Did I misunderstand the use of dummy?
->>
->> Thanks,
->> German
->>
->> [1] https://lore.kernel.org/all/20220617073840.GA45710@leoy-ThinkPad-X240s/
->>
-> Well, dummy is a predefined event of type software, you see that when you add
-> some -v options as in 
-> # perf record -e dummy -vvv
-> DEBUGINFOD_URLS=
-> Using CPUID IBM,3931,704,A01,3.7,002f
-> nr_cblocks: 0
-> affinity: SYS
-> mmap flush: 1
-> comp level: 0
-> ------------------------------------------------------------
-> perf_event_attr:
->   type                             1      <----------- type 1 is software
->   size                             128
->   config                           0x9
->   { sample_period, sample_freq }   4000
+On 7/28/22 12:50 AM, Conor Dooley wrote:
+> Add the missing MODULE_AUTHOR entry for the Microchip spi-slave FPGA
+> programming driver.
 >
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Tom Rix <trix@redhat.com>
+> ---
+>   drivers/fpga/microchip-spi.c | 1 +
+>   1 file changed, 1 insertion(+)
 >
-> So this event is never sent to an hardware PMU (which would have type 0) and thus
-> mostly succeeds where as the perf record command without event uses default
-> event cycles. And that one is sent to hardware PMU on s390...
+> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> index bd284c7b8dc9..7436976ea904 100644
+> --- a/drivers/fpga/microchip-spi.c
+> +++ b/drivers/fpga/microchip-spi.c
+> @@ -395,4 +395,5 @@ static struct spi_driver mpf_driver = {
+>   module_spi_driver(mpf_driver);
+>   
+>   MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
+> +MODULE_AUTHOR("Ivan Bornyakov <i.bornyakov@metrotek.ru>");
+>   MODULE_LICENSE("GPL");
 
-Thanks for explaining! My bad for missing this.
-
-Acked-by: German Gomez <german.gomez@arm.com>
-
->

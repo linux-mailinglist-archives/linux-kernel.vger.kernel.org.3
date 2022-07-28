@@ -2,200 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D6D584000
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FCA583F55
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbiG1NcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S236650AbiG1M4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbiG1NcO (ORCPT
+        with ESMTP id S229995AbiG1M4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:32:14 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACD452FCE;
-        Thu, 28 Jul 2022 06:32:13 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id o12so1947380pfp.5;
-        Thu, 28 Jul 2022 06:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hMv9KlIa0pFgExAgCxphjWJ/W44z6y3JYucXOnlse+8=;
-        b=GiuVWSnFmvnh0lbRvy/eIzxaWGkIt3vYa/XBOGeNxWoS8K0WsJmPd5DJZALJ+jnYCu
-         gOzPHPkPFMhu9B9NuFIJnPvyY+Ozh+nDS/uUKGUXrX6201Mrl2qkkRcUoaAM54yE6D3/
-         Cn++8S6WcAAT8ARHz2In1ILxGCn1RHyRBWhTbVPRtURipA/KeKN5W10ZqAMORAQUDBvR
-         hZhx5fj0kjlQLDjUdrQGhYVdcaH4jtl088Ul6504hq5269toQ8MFQuPbH8cUMkblfUn/
-         /myz5vvQbyN9iYG0RE+sjxfCzQebDOiZoNchIc71xDFU+v/lrXVaFOyUV6nYYmaVjxWP
-         FFpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hMv9KlIa0pFgExAgCxphjWJ/W44z6y3JYucXOnlse+8=;
-        b=jWVCx4OYCQ0Xj15k8/gWtND0wg5DgYewkV+hVkr3X3Z+P7559A4jKYSbU61X2CDyr/
-         GDzespzzsqBtNRFAapisuViNM7e+Pg9uGQG9uWdR1ULmN3bCalFoxmtGF5r6Uuxyr0WM
-         lUvtXOiSweLMgTsacrVJjURZh4hFpHnWvgFh6+sbhykgAepruj5dkfKqg0D1waOayLKA
-         nIhMWcC04IS52ljM62k4SW5mZUi3544pcbXxKi+Y6CwJPriIe7OVFWEB2oMzWLmJWUsv
-         ACzT/WruG5InsXUi7FAJfZtk5LeQHZbSeXr2FgqkySjwHLX4bABVZs7jHXbDsGddA1tc
-         0Xqg==
-X-Gm-Message-State: AJIora/h/hW8Quf81/1OHBQNOXpcY6Nfmdlyei7KMxtco30DVrdrNRMi
-        H50R0LFMVlPk2cmE926QncE=
-X-Google-Smtp-Source: AGRyM1t5tZrDrBCpShCUQY/z8SGnrUqSlYqy8Cm0PDxJdDp2NBn1uKZCU+3MsZDtazPX10S0SsenPQ==
-X-Received: by 2002:a63:5650:0:b0:41a:dfa4:bdee with SMTP id g16-20020a635650000000b0041adfa4bdeemr19709607pgm.515.1659015131210;
-        Thu, 28 Jul 2022 06:32:11 -0700 (PDT)
-Received: from localhost.localdomain (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id u188-20020a6379c5000000b00419b128cf98sm928474pgc.54.2022.07.28.06.32.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 06:32:10 -0700 (PDT)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH v5 2/2] iio: humidity: hdc100x: add manufacturer and device ID check
-Date:   Thu, 28 Jul 2022 12:54:35 +0000
-Message-Id: <20220728125435.3336618-3-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
-References: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
+        Thu, 28 Jul 2022 08:56:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A452F46DAC
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:56:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42671B82445
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 12:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1151C433D6;
+        Thu, 28 Jul 2022 12:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659012988;
+        bh=VrARDON6MbbsGtnH+7r+BZjRFSap/yVpLEOwumEtuAQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S59vQ7Z9gA8wdVLPDSCycoXdtrLb9uTdzJ0uF35hf5YoD/AVjT3eLxX7F9hc4isVK
+         Z8h23/W0nPWIWXzOSS7uFHMKruxJGUgMrKPCeNhX2ph0B2rDlQc1b7MqBDVhMPKG0y
+         WTlCqRKJkU2+74A3l200mVLrzBAcUr2X8KcAKIO0rQAUSoEdEWlfqPZhIE6xSLpeEW
+         FtTBJNrRHXdtlqPTlTTM3clgYNVd2S2IR7h1Xae9mzGcPy4KASpnF4Jld95DKcURSk
+         QECj85NpuHcLj0rDCWp/jFdAtNaDX35hQpnEXBz+ZPaiNhmI1s1AGgo/LDuU0t8u1s
+         Qmzto7H8wH1zw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oH34D-0000Bz-Pr; Thu, 28 Jul 2022 14:56:42 +0200
+Date:   Thu, 28 Jul 2022 14:56:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH] irqdomain: Fix mapping-creation race
+Message-ID: <YuKHiZuNvN+K9NCc@hovoldconsulting.com>
+References: <20220728092710.21190-1-johan+linaro@kernel.org>
+ <87wnbxwj94.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wnbxwj94.wl-maz@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add manufacturer and device ID checking during probe, and skip the
-checking if chip model not supported.
+On Thu, Jul 28, 2022 at 12:48:23PM +0100, Marc Zyngier wrote:
+> On Thu, 28 Jul 2022 10:27:10 +0100,
+> Johan Hovold <johan+linaro@kernel.org> wrote:
+> > 
+> > Parallel probing (e.g. due to asynchronous probing) of devices that share
+> > interrupts can currently result in two mappings for the same hardware
+> > interrupt to be created.
+> 
+> And I thought nobody would be using shared interrupts anymore. Turns
+> out people are still building braindead HW... :-/
+> 
+> > 
+> > Add a serialising mapping mutex so that looking for an existing mapping
+> > before creating a new one is done atomically.
+> > 
+> > Note that serialising the lookup and creation in
+> > irq_create_mapping_affinity() would have been enough to prevent the
+> > duplicate mapping, but that could instead cause
+> > irq_create_fwspec_mapping() to fail when there is a race.
+> > 
+> > Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
+> > Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
+> > Cc: Dmitry Torokhov <dtor@chromium.org>
+> > Cc: Jon Hunter <jonathanh@nvidia.com>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >  kernel/irq/irqdomain.c | 46 +++++++++++++++++++++++++++++++-----------
+> >  1 file changed, 34 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> > index 8fe1da9614ee..d263a7dd4170 100644
+> > --- a/kernel/irq/irqdomain.c
+> > +++ b/kernel/irq/irqdomain.c
+> > @@ -22,6 +22,7 @@
+> >  
+> >  static LIST_HEAD(irq_domain_list);
+> >  static DEFINE_MUTEX(irq_domain_mutex);
+> > +static DEFINE_MUTEX(irq_mapping_mutex);
+> 
+> I'd really like to avoid a global mutex. At the very least this should
+> be a per-domain mutex, otherwise this will serialise a lot more than
+> what is needed.
 
-Supported:
-- HDC1000
-- HDC1010
-- HDC1050
-- HDC1080
+Yeah, I considered that too, but wanted to get your comments on this
+first.
 
-Not supported:
-- HDC1008
+Also note that the likewise global irq_domain_mutex (and
+sparse_irq_lock) are taken in some of these paths so perhaps using finer
+locking won't actually matter that much as this is mostly for parallel
+probing.
 
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
----
- drivers/iio/humidity/hdc100x.c | 67 ++++++++++++++++++++++++++++------
- 1 file changed, 56 insertions(+), 11 deletions(-)
+> >  
+> >  static struct irq_domain *irq_default_domain;
+> >  
+> > @@ -669,7 +670,7 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
+> >  #endif
+> >  
+> >  /**
+> > - * irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
+> > + * __irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
+> >   * @domain: domain owning this hardware interrupt or NULL for default domain
+> >   * @hwirq: hardware irq number in that domain space
+> >   * @affinity: irq affinity
+> > @@ -679,9 +680,9 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
+> >   * If the sense/trigger is to be specified, set_irq_type() should be called
+> >   * on the number returned from that call.
+> >   */
+> 
+> This comment should be moved to the exported function, instead of
+> documenting something that nobody can call...
 
-diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
-index 0d514818635cb..31f18cc1cf63c 100644
---- a/drivers/iio/humidity/hdc100x.c
-+++ b/drivers/iio/humidity/hdc100x.c
-@@ -34,6 +34,23 @@
- #define HDC100X_REG_CONFIG_ACQ_MODE		BIT(12)
- #define HDC100X_REG_CONFIG_HEATER_EN		BIT(13)
+Yes, of course. I looked at the kernel doc for another
+double-underscore-prefixed function, but those are all exported.
  
-+#define HDC100X_REG_MFR_ID	0xFE
-+#define HDC100X_REG_DEV_ID	0xFF
-+
-+#define HDC100X_MFR_ID	0x5449
-+
-+struct hdc100x_chip_data {
-+	bool support_mfr_check;
-+};
-+
-+static const struct hdc100x_chip_data hdc100x_chip_data = {
-+	.support_mfr_check	= true,
-+};
-+
-+static const struct hdc100x_chip_data hdc1008_chip_data = {
-+	.support_mfr_check	= false,
-+};
-+
- struct hdc100x_data {
- 	struct i2c_client *client;
- 	struct mutex lock;
-@@ -351,8 +368,32 @@ static const struct iio_info hdc100x_info = {
- 	.attrs = &hdc100x_attribute_group,
- };
- 
-+static int hdc100x_read_mfr_id(struct i2c_client *client)
-+{
-+	return i2c_smbus_read_word_swapped(client, HDC100X_REG_MFR_ID);
-+}
-+
-+static int hdc100x_read_dev_id(struct i2c_client *client)
-+{
-+	return i2c_smbus_read_word_swapped(client, HDC100X_REG_DEV_ID);
-+}
-+
-+static bool is_valid_hdc100x(struct i2c_client *client)
-+{
-+	int mfr_id, dev_id;
-+
-+	mfr_id = hdc100x_read_mfr_id(client);
-+	dev_id = hdc100x_read_dev_id(client);
-+	if (mfr_id == HDC100X_MFR_ID &&
-+	   (dev_id == 0x1000 || dev_id == 0x1050))
-+		return true;
-+
-+	return false;
-+}
-+
- static int hdc100x_probe(struct i2c_client *client)
- {
-+	const struct hdc100x_chip_data *chip_data;
- 	struct iio_dev *indio_dev;
- 	struct hdc100x_data *data;
- 	int ret;
-@@ -361,6 +402,10 @@ static int hdc100x_probe(struct i2c_client *client)
- 				     I2C_FUNC_SMBUS_BYTE | I2C_FUNC_I2C))
- 		return -EOPNOTSUPP;
- 
-+	chip_data = device_get_match_data(&client->dev);
-+	if (chip_data->support_mfr_check && !is_valid_hdc100x(client))
-+		return -EINVAL;
-+
- 	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
- 	if (!indio_dev)
- 		return -ENOMEM;
-@@ -396,22 +441,22 @@ static int hdc100x_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id hdc100x_id[] = {
--	{ "hdc100x", 0 },
--	{ "hdc1000", 0 },
--	{ "hdc1008", 0 },
--	{ "hdc1010", 0 },
--	{ "hdc1050", 0 },
--	{ "hdc1080", 0 },
-+	{ "hdc100X", (kernel_ulong_t)&hdc100x_chip_data },
-+	{ "hdc1000", (kernel_ulong_t)&hdc100x_chip_data },
-+	{ "hdc1008", (kernel_ulong_t)&hdc1008_chip_data },
-+	{ "hdc1010", (kernel_ulong_t)&hdc100x_chip_data },
-+	{ "hdc1050", (kernel_ulong_t)&hdc100x_chip_data },
-+	{ "hdc1080", (kernel_ulong_t)&hdc100x_chip_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, hdc100x_id);
- 
- static const struct of_device_id hdc100x_dt_ids[] = {
--	{ .compatible = "ti,hdc1000" },
--	{ .compatible = "ti,hdc1008" },
--	{ .compatible = "ti,hdc1010" },
--	{ .compatible = "ti,hdc1050" },
--	{ .compatible = "ti,hdc1080" },
-+	{ .compatible = "ti,hdc1000", .data = &hdc100x_chip_data },
-+	{ .compatible = "ti,hdc1008", .data = &hdc1008_chip_data },
-+	{ .compatible = "ti,hdc1010", .data = &hdc100x_chip_data },
-+	{ .compatible = "ti,hdc1050", .data = &hdc100x_chip_data },
-+	{ .compatible = "ti,hdc1080", .data = &hdc100x_chip_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, hdc100x_dt_ids);
--- 
-2.31.1
+> > -unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+> > -				       irq_hw_number_t hwirq,
+> > -				       const struct irq_affinity_desc *affinity)
+> > +static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
+> > +						  irq_hw_number_t hwirq,
+> > +						  const struct irq_affinity_desc *affinity)
+> >  {
+> >  	struct device_node *of_node;
+> >  	int virq;
+> > @@ -724,6 +725,19 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+> >  
+> >  	return virq;
+> >  }
+> > +
+> > +unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+> > +					 irq_hw_number_t hwirq,
+> > +					 const struct irq_affinity_desc *affinity)
+> > +{
+> > +	unsigned int virq;
+> > +
+> > +	mutex_lock(&irq_mapping_mutex);
+> > +	virq = __irq_create_mapping_affinity(domain, hwirq, affinity);
+> > +	mutex_unlock(&irq_mapping_mutex);
+> > +
+> > +	return virq;
+> > +}
+> >  EXPORT_SYMBOL_GPL(irq_create_mapping_affinity);
+> >  
+> >  static int irq_domain_translate(struct irq_domain *d,
+> > @@ -789,6 +803,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+> >  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
+> >  		type &= IRQ_TYPE_SENSE_MASK;
+> >  
+> > +	mutex_lock(&irq_mapping_mutex);
+> > +
+> >  	/*
+> >  	 * If we've already configured this interrupt,
+> >  	 * don't do it again, or hell will break loose.
+> > @@ -801,7 +817,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+> >  		 * interrupt number.
+> >  		 */
+> >  		if (type == IRQ_TYPE_NONE || type == irq_get_trigger_type(virq))
+> > -			return virq;
+> > +			goto out;
+> >  
+> >  		/*
+> >  		 * If the trigger type has not been set yet, then set
+> > @@ -810,26 +826,26 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+> >  		if (irq_get_trigger_type(virq) == IRQ_TYPE_NONE) {
+> >  			irq_data = irq_get_irq_data(virq);
+> >  			if (!irq_data)
+> > -				return 0;
+> > +				goto err;
+> >  
+> >  			irqd_set_trigger_type(irq_data, type);
+> > -			return virq;
+> > +			goto out;
+> >  		}
+> >  
+> >  		pr_warn("type mismatch, failed to map hwirq-%lu for %s!\n",
+> >  			hwirq, of_node_full_name(to_of_node(fwspec->fwnode)));
+> > -		return 0;
+> > +		goto err;
+> >  	}
+> >  
+> >  	if (irq_domain_is_hierarchy(domain)) {
+> >  		virq = irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, fwspec);
+> >  		if (virq <= 0)
+> > -			return 0;
+> > +			goto err;
+> >  	} else {
+> >  		/* Create mapping */
+> > -		virq = irq_create_mapping(domain, hwirq);
+> > +		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
+> 
+> This rechecks for the existence of the mapping. Surely we can do a bit
+> better by rejigging this (admittedly bitrotting) code.
 
+I'm sure we can. Should I try to fix the race first with a patch like
+this one that can potentially be backported, and then see what I can do
+about cleaning this up?
+
+After all it has looked like this for the past eight years since when
+this code was first merged.
+
+Johan

@@ -2,184 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4686F583B6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40633583B6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235673AbiG1JlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S235296AbiG1JlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235617AbiG1JlD (ORCPT
+        with ESMTP id S235617AbiG1JlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:41:03 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE4617E16
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:41:00 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ez10so2151744ejc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:41:00 -0700 (PDT)
+        Thu, 28 Jul 2022 05:41:10 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB16E21E37;
+        Thu, 28 Jul 2022 02:41:09 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id o15so2364737yba.10;
+        Thu, 28 Jul 2022 02:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XaNvgy+1H36IRcM7AA2Xwbajk022czzMS+90Wa7oW3M=;
-        b=jYblao2xdRWipW13vVnDXLltc7VXnm/RC3o0aLU683Pl8BYeecapjUqIUXfmwUlSGu
-         /tHklsM0PqVfgQztSY7YHwNFbEIJbxSbgpS/MVp8jW5YJi68UwJWUqTX8zSRnVW7Kvrw
-         fEwcApWEUezdfwtmeq9M1XdsbUcptaD6kAG6DzTHVFkSI9LizFFn8DwbwBlwIZUBJju0
-         7/BxwtxtWDP9NgNzhz276eg9swjzDPOiJDNs03x43fS6CIwgkluj9fowZY2+/3Mzbaca
-         Ji6fmqdpLjGZaVPwdzt6gPeWdG8mJM5Lzr4PVMpQvPkPstgD9htaFc4x9i2kmamB1IH+
-         LP8w==
+         :cc;
+        bh=UG+9vtgWnJhp082ZzldcRuAAtoKhL/O1VbY14YM11t4=;
+        b=cq3FItztKYYb8ycxcVrruwq8/F/HSKRUYcTwAkyFy56HZT1hDe+0dDR3L5R1Bw/Les
+         IJ2jCIZxPfugq7TLwa0uTSXFJ31RNLT4MzRIsnWf49wu6DcJ1zN2V858oyerN0hH1UAJ
+         voIF39GTgD7wNgtjhAvg3fPuHSRCvMc3jGuhJ9ylz4mMFzkmh7D+daLhHqG7Wpul/Jvi
+         XzvZSaEjV53ytowjJkxwcDtk/ZCb6DUSt5vWdUH7PvBdwTrPJLgSy/eKc9Pj4+j2hOx/
+         twd13v9y9bnsrw7YSzK+KMrmevX0aCzf+biXajiPJqzteq0VnHgIDv+a6gsw3qVg0k/H
+         0qkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XaNvgy+1H36IRcM7AA2Xwbajk022czzMS+90Wa7oW3M=;
-        b=mzxLuvlPuI3r+IbRNTDe8jnmj0odFpLmrW+etCVab2hYVsLx7hwI/WbTHsSC6yI9Ne
-         s1KYV4NEmQQuugU/hxm5HeCGB7kq9uNvZixPUHvBAT/hQm02qLjwn5UjV/m7h+NpMZOZ
-         lrsC6erDHxduqfaTxE6zxL1QA85tFy1PSGES4dDMZ0dauwIb+1ucojcIZ5lUYGx22WSN
-         TU+Pk11iLE3wA99Ob+fPuBdR6IqsyWCQ52Y6fuEI9xmV9YYheE6hXMwR2O0GoMmI+QHU
-         2MqyOIWyisUD4zeVeaMsMkpYiyIBeE1g3WgvsRqrqp9X6tZG41nlr85pEXD7U+fbqd6q
-         M0UQ==
-X-Gm-Message-State: AJIora+bqzBTX6Zcj0hezSIOubB3gIhhg/VvlVDBra7C7eQmZj+VhnsI
-        t5KTCDzhGhbxfDDAs/CYPny56w+AEcFj8072F7JVHbEZtp52ag==
-X-Google-Smtp-Source: AGRyM1tOQ8M/osYWnQJOErj/AI1B/ST5/0zrasMiZKcmBcOAqVuS7XX8VMqPl6GEd1Vqevy6Uiim30H4iKNYfTmKuQY=
-X-Received: by 2002:a17:906:7b88:b0:72f:d080:415 with SMTP id
- s8-20020a1709067b8800b0072fd0800415mr16027088ejo.169.1659001259232; Thu, 28
- Jul 2022 02:40:59 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=UG+9vtgWnJhp082ZzldcRuAAtoKhL/O1VbY14YM11t4=;
+        b=lRVhIPUbG6X7b1zn6gyeoZh8fK3zjZlwc5Qkc+luS+3aqzkClcf8+fO1xBExYzhNVd
+         IWDwon+33IeCk6w7/steaF7i1e6WvDWDn61R20cgT2ML/53cz3nnqMWcpReVqiBAWLp2
+         PgIWhlZgygzY+38g+FLzRdIhqmEv/NfuXQZBLRJWlxvCOFSacP5qCaTbQKW+qMD4pRDr
+         QeRYNAMQzlbhgeBEuBz8jVmP31CX2ReWTdFtnfr0gdNcpYY1TmwJbbY16v5dNqBfs8x+
+         fX6GEEx/RJaB9OmGOWFv4xz3LfruWGUVXTNOqKYTBptMX6Ri4mijRKStnX96R2U9xfL+
+         qp0g==
+X-Gm-Message-State: AJIora+pJ/1EC0k4fR7dYXyTX2ayP1wS7wu7Kz2MQri/3cQ8aiNUpu9I
+        aHilH+9ae+W7e4/cu4lQqnU4dnmX0xJ6BeNskHQ=
+X-Google-Smtp-Source: AGRyM1t9Ez2dflKZy3BCCWSd+3wth+XMrDuf/Aa1io7G9hyoxwDLmlPmMz3BOPSswTMx/lj4uEQyXMJjlNx9jWVKO/Y=
+X-Received: by 2002:a25:22d5:0:b0:669:dd4:c67e with SMTP id
+ i204-20020a2522d5000000b006690dd4c67emr20467132ybi.129.1659001269135; Thu, 28
+ Jul 2022 02:41:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220727161008.993711844@linuxfoundation.org>
-In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 28 Jul 2022 15:10:47 +0530
-Message-ID: <CA+G9fYveB+NVVi0+-u5=hT-5gm2f-deCiQ3wG5NbCPL6VWXUqQ@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/87] 5.4.208-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220728091043.1896158-1-zengjx95@gmail.com>
+In-Reply-To: <20220728091043.1896158-1-zengjx95@gmail.com>
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Thu, 28 Jul 2022 15:10:58 +0530
+Message-ID: <CAOh2x=kfFtT9LzqZzkkb_J7oLGmBOt0PP_YfcjqD98TEcGGJhA@mail.gmail.com>
+Subject: Re: [PATCH] rtc: rtc-spear: set range max
+To:     Zeng Jingxiang <zengjx95@gmail.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeng Jingxiang <linuszeng@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 at 21:58, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu, Jul 28, 2022 at 2:49 PM Zeng Jingxiang <zengjx95@gmail.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.4.208 release.
-> There are 87 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> From: Zeng Jingxiang <linuszeng@tencent.com>
 >
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
+> In the commit f395e1d3b28d7c2c67b73bd467c4fb79523e1c65
+
+Please add this as fixes tag.
+
+> ("rtc: spear: set range"), the value of
+> RTC_TIMESTAMP_END_9999 was incorrectly set to range_min.
+> 390     config->rtc->range_min = RTC_TIMESTAMP_BEGIN_0000;
+> 391     config->rtc->range_max = RTC_TIMESTAMP_END_9999;
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.208-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Signed-off-by: Zeng Jingxiang <linuszeng@tencent.com>
+> ---
+>  drivers/rtc/rtc-spear.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> thanks,
+> diff --git a/drivers/rtc/rtc-spear.c b/drivers/rtc/rtc-spear.c
+> index d4777b01ab22..736fe535cd45 100644
+> --- a/drivers/rtc/rtc-spear.c
+> +++ b/drivers/rtc/rtc-spear.c
+> @@ -388,7 +388,7 @@ static int spear_rtc_probe(struct platform_device *pdev)
 >
-> greg k-h
+>         config->rtc->ops = &spear_rtc_ops;
+>         config->rtc->range_min = RTC_TIMESTAMP_BEGIN_0000;
+> -       config->rtc->range_min = RTC_TIMESTAMP_END_9999;
+> +       config->rtc->range_max = RTC_TIMESTAMP_END_9999;
+>
+>         status = devm_rtc_register_device(config->rtc);
+>         if (status)
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.4.208-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 048552f118bf6191e9f2eb6f21b0c12f04f8f4dd
-* git describe: v5.4.207-88-g048552f118bf
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
-07-88-g048552f118bf
-
-## Test Regressions (compared to v5.4.207)
-No test regressions found.
-
-## Metric Regressions (compared to v5.4.207)
-No metric regressions found.
-
-## Test Fixes (compared to v5.4.207)
-No test fixes found.
-
-## Metric Fixes (compared to v5.4.207)
-No metric fixes found.
-
-## Test result summary
-total: 123475, pass: 110463, fail: 392, skip: 11618, xfail: 1002
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 307 total, 307 passed, 0 failed
-* arm64: 61 total, 57 passed, 4 failed
-* i386: 28 total, 26 passed, 2 failed
-* mips: 45 total, 45 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 55 total, 53 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>

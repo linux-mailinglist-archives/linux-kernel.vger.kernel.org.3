@@ -2,59 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886C6584458
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B99858445C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiG1Qqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S229763AbiG1QuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 12:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiG1Qqe (ORCPT
+        with ESMTP id S229498AbiG1QuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:46:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A9542AE8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:46:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659026793; x=1690562793;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AS5n6hugPL/5ZECWTaAmC48T1RB2vebY4lHpq3xywLw=;
-  b=j1fqd9plf43e9SRB3syqSAt/2OMsKmiIms9rpdqUfeIGKctO1vYXQupf
-   U22oLS9OvD6hcyS5idXFkvw+Oh6exn6Ap4SALdHb2AkNkOf7UFH5j14PZ
-   mRBuMGyXrH9kExR3evrC3jfjNpvb3P+wFalvFI2B1E1rS94RtMmEicYEV
-   V5bXZcFg+leodaNKmsBLzudtf3+/ZNmuMnxOJMZ+U8hkvC3h2gN7HOtOc
-   QK0qhJ86PLs/BTvYknGcHnbYgWsNF4jcojQJk1rhQyM67fMZPFKasIukR
-   oBdPbllx5hEZ8SLQZ2/HErxqkUze0dk8aymbP2yLX3hfFx8z+/X6vKRLj
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="268943511"
-X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
-   d="scan'208";a="268943511"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 09:46:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
-   d="scan'208";a="576550226"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2022 09:46:31 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oH6ed-000ANz-0f;
-        Thu, 28 Jul 2022 16:46:31 +0000
-Date:   Fri, 29 Jul 2022 00:46:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Garnier <thgarnie@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>
-Subject: [jsarha:topic/chromeos-4.19-s0ix 7414/9999]
- security/container/process.c:44:31: error: 'struct linux_binprm' has no
- member named 'vma'
-Message-ID: <202207290033.VXKH5hwO-lkp@intel.com>
+        Thu, 28 Jul 2022 12:50:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 990C21CE
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659027005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kIy76qh/yn6fLhiFpSUVtVzXiaOXTimgQYvl1mAlPk8=;
+        b=izCOrgwX+vubwJogOZbdPORq/zVRGFxL1KvCRJypQH5E3BE541Tu8S/40Vp3HI8khUEmwG
+        VvrsAEJA3necD53s72ICswVda39IiiZQ6zmz4n/8oUwz4NaFa8k6DszEhFCNLUFFdIEX0p
+        rAQuDAjsSvRbUBiTueQJkIaZsXknUNU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-486-9i0KJamRNYOyoCsuOlje2w-1; Thu, 28 Jul 2022 12:50:04 -0400
+X-MC-Unique: 9i0KJamRNYOyoCsuOlje2w-1
+Received: by mail-wr1-f70.google.com with SMTP id h18-20020adfaa92000000b0021ec200d50fso576903wrc.14
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:50:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=kIy76qh/yn6fLhiFpSUVtVzXiaOXTimgQYvl1mAlPk8=;
+        b=4LIttzm3MYqL5ViMyfHgbMZtPFYGcSoednYv0QFo7dpmdv/Ey5p1VCG8vcwZWEVweR
+         UrD06eTcJkaP4EhzT/eSByNxCDbpazBIHqwiDAqOop3jG3SGNZGAO4At4dZtB/0Vv5rq
+         VEUJZyL5y8RnR3TOHsoIXNjU1tnAHaWbgKpfWbSy3nU3nFv1WHEcHwUzV/sevnQHwiSy
+         foeY6Bkqg8H8o27/kxPwFkSkdexC/2h2clZdIFeUEROnVOzH5+Nw6yjDu8AxBBwZUTN0
+         sg3WgQm7ImYpJYr/Kvk8G2+otAd1Tz+/HFjyMuGSnFQpb2Cl0QCYRrn6ArzegWlpc3m8
+         v3uA==
+X-Gm-Message-State: AJIora9rwf+Cp0Yf0OWk+CaKlKwvubFqkVM06iKcNqlkMbk687hrwUlT
+        QzON9JSk07prhrKS/QbvCCEec7qfDJdcl4tJc5kLHqDawZmiMPFbis4b1mz5/hcRieJOH169AHX
+        UsSgl6FlLVYILc91yE/8qdPNlY6dLA6z73id0MstrmQjdoM+pJHR0FvKmGcUK+uoNxwXU1jWOzT
+        eq
+X-Received: by 2002:a5d:6e88:0:b0:21a:3403:9aa0 with SMTP id k8-20020a5d6e88000000b0021a34039aa0mr18752415wrz.379.1659027002895;
+        Thu, 28 Jul 2022 09:50:02 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sV2ZxJpo254QMEOwrfsEQMmSwY/r9IAoxCasnNvv82dZ0NXLiauf6oEhaA7uerPugkOgzuag==
+X-Received: by 2002:a5d:6e88:0:b0:21a:3403:9aa0 with SMTP id k8-20020a5d6e88000000b0021a34039aa0mr18752393wrz.379.1659027002687;
+        Thu, 28 Jul 2022 09:50:02 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id k11-20020a05600c0b4b00b003a37d8b864esm1648515wmr.30.2022.07.28.09.50.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 09:50:02 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Waiman Long <longman@redhat.com>,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
+ affinity was explicitly set
+In-Reply-To: <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
+References: <20220728005815.1715522-1-longman@redhat.com>
+ <20220728144420.GA27407@blackbody.suse.cz>
+ <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
+Date:   Thu, 28 Jul 2022 17:50:01 +0100
+Message-ID: <xhsmhbkt9dvwm.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,109 +90,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: 92dff21f44ad18e109b6e086a29141fe474b3782 [7414/9999] CHROMIUM: security: Container Monitoring LSM
-config: sh-randconfig-c041-20220728 (https://download.01.org/0day-ci/archive/20220729/202207290033.VXKH5hwO-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/92dff21f44ad18e109b6e086a29141fe474b3782
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
-        git checkout 92dff21f44ad18e109b6e086a29141fe474b3782
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash security/container/
+On 28/07/22 10:59, Waiman Long wrote:
+> On 7/28/22 10:44, Michal Koutn=C3=BD wrote:
+>> This should apply only to tasks that were extracted out of the root
+>> cgroup, no? (OK, those are all processes practically.)
+> The reset is done on all cgroups in a particular subtree. In the case of
+> cgroup root, it is all the processes in the system.
+>>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I've been briefly playing with this, tasks in the cgroup root don't seem
+affected on my end (QEMU + buildroot + latest tip/sched/core):
 
-All errors (new ones prefixed by >>):
+  $ mount -t cgroup2 none /sys/fs/cgroup
+  $ /root/loop.sh &
+  $ PID=3D$!
+  $ taskset -pc 2-3 $PID
+  pid 177's current affinity list: 0-3
+  pid 177's new affinity list: 2,3
+  $ echo +cpuset > /sys/fs/cgroup/cgroup.subtree_control
+  $ taskset -pc $PID
+  pid 177's current affinity list: 2,3
 
-   security/container/process.c: In function 'kmap_argument_stack':
->> security/container/process.c:44:31: error: 'struct linux_binprm' has no member named 'vma'
-      44 |         count = vma_pages(bprm->vma);
-         |                               ^~
-   In file included from include/linux/kernel.h:10,
-                    from security/container/monitor.h:10,
-                    from security/container/process.c:8:
-   security/container/process.c: In function 'kunmap_argument_stack':
-   security/container/process.c:93:34: error: 'struct linux_binprm' has no member named 'vma'
-      93 |         if (likely(vma_pages(bprm->vma) == 1)) {
-         |                                  ^~
-   include/linux/compiler.h:76:45: note: in definition of macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   security/container/process.c: In function 'encode_current_argv':
-   security/container/process.c:150:43: error: 'struct linux_binprm' has no member named 'vma'
-     150 |         unsigned long end = vma_pages(bprm->vma) * PAGE_SIZE;
-         |                                           ^~
-   security/container/process.c: In function 'encode_current_envp':
-   security/container/process.c:234:43: error: 'struct linux_binprm' has no member named 'vma'
-     234 |         unsigned long end = vma_pages(bprm->vma) * PAGE_SIZE;
-         |                                           ^~
-   security/container/process.c: At top level:
-   security/container/process.c:367:5: warning: no previous prototype for 'csm_set_contid' [-Wmissing-prototypes]
-     367 | u64 csm_set_contid(struct task_struct *task)
-         |     ^~~~~~~~~~~~~~
+However tasks extracted out as mentioned by Michal definitely are:
 
+  $ mount -t cgroup2 none /sys/fs/cgroup
+  $ /root/loop.sh &
+  $ PID=3D$!
+  $ taskset -pc 2-3 $PID
+  pid 172's current affinity list: 0-3
+  pid 172's new affinity list: 2,3
+  $ mkdir /sys/fs/cgroup/foobar
+  $ echo $PID > /sys/fs/cgroup/foobar/cgroup.procs
+  $ taskset -pc $PID
+  pid 172's current affinity list: 2,3
+  $ echo +cpuset > /sys/fs/cgroup/cgroup.subtree_control
+  $ taskset -pc $PID
+  pid 172's current affinity list: 0-3
 
-vim +44 security/container/process.c
+IIUC this is just what happens anytime a task gets migrated to a new
+cpuset. Initially loop.sh remains attached to the root cpuset, and the echo
++cpuset migrates it to the /foobar one.
 
-    34	
-    35	static void *kmap_argument_stack(struct linux_binprm *bprm, void **ctx)
-    36	{
-    37		char *argv;
-    38		int err;
-    39		unsigned long i, pos, count;
-    40		void *map;
-    41		struct page *page;
-    42	
-    43		/* vma_pages() returns the number of pages reserved for the stack */
-  > 44		count = vma_pages(bprm->vma);
-    45	
-    46		if (likely(count == 1)) {
-    47			err = get_user_pages_remote(current, bprm->mm, bprm->p, 1,
-    48						    FOLL_FORCE, &page, NULL, NULL);
-    49			if (err != 1)
-    50				return NULL;
-    51	
-    52			argv = kmap(page);
-    53			*ctx = page;
-    54		} else {
-    55			/*
-    56			 * If more than one pages is needed, copy all of them to a set
-    57			 * of pages. Parsing the argument across kmap pages in different
-    58			 * addresses would make it impractical.
-    59			 */
-    60			argv = vmalloc(count * PAGE_SIZE);
-    61			if (!argv)
-    62				return NULL;
-    63	
-    64			for (i = 0; i < count; i++) {
-    65				pos = ALIGN_DOWN(bprm->p, PAGE_SIZE) + i * PAGE_SIZE;
-    66				err = get_user_pages_remote(current, bprm->mm, pos, 1,
-    67							    FOLL_FORCE, &page, NULL,
-    68							    NULL);
-    69				if (err <= 0) {
-    70					vfree(argv);
-    71					return NULL;
-    72				}
-    73	
-    74				map = kmap(page);
-    75				memcpy(argv + i * PAGE_SIZE, map, PAGE_SIZE);
-    76				kunmap(page);
-    77				put_page(page);
-    78			}
-    79			*ctx = bprm;
-    80		}
-    81	
-    82		return argv;
-    83	}
-    84	
+Does that match what you're seeing?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

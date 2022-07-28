@@ -2,236 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B55584720
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5DF584725
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiG1Unc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S232051AbiG1Uop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiG1Una (ORCPT
+        with ESMTP id S229620AbiG1Uon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:43:30 -0400
-Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61016BD74;
-        Thu, 28 Jul 2022 13:43:28 -0700 (PDT)
-Received: from [10.2.12.24] (unknown [10.2.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by 7of9.schinagl.nl (Postfix) with ESMTPSA id B88AF185B6D2;
-        Thu, 28 Jul 2022 22:43:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
-        t=1659041006; bh=qJaWk8qC2P2wd1+jPTHWOuz/2sxRSrXZLFhJIMpTHm4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=EroUtAL77q6ozM32v6QihqjYwnlGD/YWR3ydh2DoDZb6khRDKrt8oR/70Dax/B6h4
-         MnAp2seHAt+egV3r9YtsQWz0XrsEmbgwgr3sUXV1gYzo7va2AFlg8e4aYx47gBqAUs
-         JxxGKSaLyNNZ33UBE3epA+HUcsfYCDSjx4porpds=
-Message-ID: <a4803f2e-2e46-1c7d-0e89-96f5cbb0ad11@schinagl.nl>
-Date:   Thu, 28 Jul 2022 22:43:26 +0200
+        Thu, 28 Jul 2022 16:44:43 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8603F6D2CD;
+        Thu, 28 Jul 2022 13:44:42 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a7-20020a17090a008700b001f325db8b90so1855166pja.0;
+        Thu, 28 Jul 2022 13:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=zEBR1Ky5G7KTNBelOELZjj3LDNqMPsUpTpOuJi2OqTg=;
+        b=Vm+WbZZse7CT3sDU0lYolZ3mhefbqlwbQBYN/UAU0F8JiRqHSZBzfnSWzucq+4hhLu
+         j6+ozXndQXd9WCCaXO9a9sMcuHjAzyJARs8DgbvUB+rQCPAzUHX1MbNIvEkpCHpe3kHt
+         jjhHOhd+pYA+XbD5JbQMjo8hBGEKm5UexIvk+V6w+d31/y/N8kFiOrLATmyGCpAKR9l+
+         /kONg+NMwMVyPs1zhKcCtCaTKxyytjwAGNTkJLazYcpBTcf9vuVFqUfH5CqlpQYeRVEv
+         6b3oOuWAg8y8eJK0iT5VmtqkI4k5V4l+j7tD/Bpn9BaNjwmjEoe9DWTPcptFk6atOUGy
+         tQ0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=zEBR1Ky5G7KTNBelOELZjj3LDNqMPsUpTpOuJi2OqTg=;
+        b=hvJs46aqdyRxM5xywlZB0Z1UOxJ3vtiZ3SGR7SRQPH+T1bO24TugivD8U13N3Bt2nw
+         zPLmBDZ9IhFPS82raMzBEc17TNE37OPfBLsraZs+uwWZVGXk0mAxfu+zo+MjcnoR55zk
+         V7Lr6NtXeBS+2dgoOby2q2908FypC65SIU8x2CkBygebKFCrHqZxJoV0osGLNeWud1W2
+         ACeraJBJIK3jSg0xCfZ8sdgAMV2gnxfGQ5ULK5fzVWiYFyQKyBKIwQDlcLdp1yI5YLTn
+         jREZkNHi3i6QJQb9QYG8y8bEAiWeBeynYDETogGVGtKJzjJFePlfcC0I7XyAMPTghlU6
+         hXTA==
+X-Gm-Message-State: ACgBeo1o56zImgD0GzelgCeOBAV/40rO3x4p5vzX3aXvo7303YC8P5tN
+        sFxJwKvYoh0b1jhibOczv6b6CuI95b0=
+X-Google-Smtp-Source: AA6agR4NJeonS2cJ+HFzH46XzQhbj1kWHezl9LtVmnH3LAN8Irv0cfx9aEAoLWt/4l0BVJaaN5vHHQ==
+X-Received: by 2002:a17:90b:3a84:b0:1f2:8d9d:46f3 with SMTP id om4-20020a17090b3a8400b001f28d9d46f3mr1172274pjb.174.1659041081677;
+        Thu, 28 Jul 2022 13:44:41 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:23b6])
+        by smtp.gmail.com with ESMTPSA id d70-20020a621d49000000b0052ab9f1fe45sm1180234pfd.120.2022.07.28.13.44.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 13:44:40 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 28 Jul 2022 10:44:38 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
+ affinity was explicitly set
+Message-ID: <YuL1NijxSEv2xadk@slm.duckdns.org>
+References: <20220728005815.1715522-1-longman@redhat.com>
+ <YuLF+xXaCzwWi2BR@slm.duckdns.org>
+ <1ae1cc6c-dca9-4958-6b22-24a5777c5e8d@redhat.com>
+ <YuLdX7BYGvo57LNU@slm.duckdns.org>
+ <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 00/13] [RFC] Rust support
-Content-Language: nl
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20210414184604.23473-1-ojeda@kernel.org>
- <fae4873e-2ff9-df35-0ab9-34bf4417b717@schinagl.nl>
- <CANiq72mRxM-7griYF+0FWqYoSoNL8ad=L-i6a2-GsaCeb0C6qQ@mail.gmail.com>
- <ba8cb315-9d73-2f45-8bf9-d9473d369dca@schinagl.nl>
- <CANiq72kz+Txauo+103_-fN_J8PhhCdJUH5XepShUQmJzW6a4tA@mail.gmail.com>
- <5c0bb1db-5589-32ca-ac22-4aafb3c15751@schinagl.nl>
- <20220728112114.0000003a@garyguo.net>
-From:   Olliver Schinagl <oliver+list@schinagl.nl>
-In-Reply-To: <20220728112114.0000003a@garyguo.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Gary,
+Hello,
 
-On 28-07-2022 12:21, Gary Guo wrote:
-> Hi Olliver,
+On Thu, Jul 28, 2022 at 03:21:26PM -0400, Waiman Long wrote:
+> On 7/28/22 15:02, Tejun Heo wrote:
+> > On Thu, Jul 28, 2022 at 02:57:28PM -0400, Waiman Long wrote:
+> > > There can be a counter argument that if a user found out that there is not
+> > > enough cpus in a cpuset to meet its performance target, one can always
+> > > increase the number of cpus in the cpuset. Generalizing this behavior to all
+> > > the tasks irrespective if they have explicitly set cpus affinity before will
+> > > disallow this use case.
+> > This is nasty.
 > 
-> On Wed, 27 Jul 2022 10:05:31 +0200
-> Olliver Schinagl <oliver+list@schinagl.nl> wrote:
-> 
->> Consitency is absolutly important! Zero argument there. My argument
->> is, the consistency should be within the kernel tree, not 'but the
->> rest of the world is using style X/Y/Z, lets be consistent with that.
->> In an utopia, maybe, but the real world doesn't work that way, sadly.
->> So in an attempt to standardize (rustfmt) they just "invented" a new
->> standard. Which btw is common, we see this happening every so often,
->> right?
-> 
-> Difference languages have different characteristics and I don't think
-> it's necessarily good (and often isn't) to blindly apply coding style
-> of one language onto another. So I don't see rustfmt as "inventing yet
-> another standard" really, because there aren't many conflicting coding
-> style standards in Rust world; almost everyone just settled on using
-> rustfmt, mostly using the default, maybe with a few small
-> project-specific configuration tweaks.
-I was mostly arguing about a) lets look at this and b) having said 
-configuration tweaks, rather then blindly (pun not really intended) 
-going with rust's defaults :)
+> That is a nasty example, I know. There may be users depending on the
+> existing behavior even if they don't know it. So I am a bit hesitant to
+> change the default behavior like that. On the other hand, tasks that have
+> explicitly set its cpu affinity certainly don't want to have unexpected
+> change to that.
 
-> 
-> A small example for C and Rust differences:
-> 
-> Rust requires braces around branches of if expression, and C doesn't.
-> So in kernel coding style you often have:
-> 
-> 	if (condition) do_something();
-> 
-> Or
-> 
-> 	if (condition)
-> 		do_something();
-> 
-> But in Rust it will be:
-> 
-> 	if condition {
-> 	    do_something();
-> 	}
-So kernel style kind of says 'no braces around single statements'; but 
-if your rust compiler doesn't allow this; well then there's nothing to 
-do. You could even argue to update the kernel C style on this to make it 
-consistent again. BUT, this inconsistency makes it cognative 'hard'. If 
-this if a C or a rust function? for example during a review. During 
-authoring, when writing both C and rust code (due to nececity, not 
-constant context switching) you cognitivly constantly have to go 
-back/foward. While I'm sure there's people here that can do this all day 
-without problem, some of of find this harder then needs to be. Hence the 
-request to _try_ to keep consistency within the kernel tree.
+Yeah, I hear you. I'm on the same page.
 
+> > The real solution here is separating out what user requested
+> > and the mask that cpuset (or cpu hotplug) needs to apply on top. ie.
+> > remember what the user requested in a separate cpumask and compute the
+> > intersection into p->cpus_maks whenever something changes and apply
+> > fallbacks on that final mask. Multiple parties updating the same variable is
+> > never gonna lead to anything consistent and we're patching up for whatever
+> > the immediate use case seems to need at the moment. That said, I'm not
+> > necessarily against patching it up but if you're interested in delving into
+> > it deeper, that'd be great.
 > 
-> That's just an example of one control flow constructions. There are
-> differences between Rust match and C switch, etc. Rust's official
-> coding style takes properties of Rust into consideration, so in many
-> regards it's a more suitable coding style for Rust code in kernel, then
-> applying kernel's C coding standard directly on kernel's Rust code.
-> 
-> Your earlier email in the thread also mentions about indentation, and I
-> have a few things to point out as well.
-> 
-> First, Rust code typically requires more levels of indentation than C
-> code. For example, many functions might be methods and they are inside
-> an impl block, which creates one extra level of indentation.
-> Statements inside match arms' block are two levels more indented than
-> the match statement itself, as opposed to C's switch (as kernel coding
-> style doesn't indent the case labels). As a result, 8 spaces for 1 level
-> can be a bit excessive for Rust code, and thus the 4 space indentation
-> used in rustfmt default.
-> 
-> Secondly, I don't think the argument about tabs being customisable
-> holds; in kernel coding style tabs are strictly 8 characters. For line
-Sure, this rule implies that for alignment, tabs should be set to 8 so 
-things align nicely. However, nobody forces people to set their editor 
-to 8 character width. Not doing so, doesn't break anything. At worst, 
-you may commit something that is poorly aligned (but we _should_ be 
-using tabs to indent, spaces to align anyway :p, tab == indent has meaning).
+> I believe the current code is already restricting what cpu affinity that a
+> user can request by limiting to those allowed by the current cpuset. Hotplug
+> is another issue that may need to be addressed. I will update my patch to
+> make it handle hotplug in a more graceful way.
 
-With non-tab indentation, this is no longer really possible, or at 
-least, editors haven't solved that problem yet, as it tends to still 
-break (due to the mixing of indentation and alignment using a single 
-character). Maybe once we have AI and ML in our editors though :p
+So, the patch you proposed is making the code remember one special aspect of
+user requested configuration - whether it configured it or not, and trying
+to preserve that particular state as cpuset state changes. It addresses the
+immediate problem but it is a very partial approach. Let's say a task wanna
+be affined to one logical thread of each core and set its mask to 0x5555.
+Now, let's say cpuset got enabled and enforced 0xff and affined the task to
+0xff. After a while, the cgroup got more cpus allocated and its cpuset now
+has 0xfff. Ideally, what should happen is the task now having the effective
+mask of 0x555. In practice, tho, it either would get 0xf55 or 0x55 depending
+on which way we decide to misbehave.
 
-> continuation it's not uncommon to use a series of tabs followed by a
-> few spaces, e.g.
-> 
-> 	int function_name(int first_argument,
-> 	< tab  >< tab  >..int second_argument)
-> 
-> changing tab into 4 spaces will break the layout. (and I'll not go into
-> well-known reasons about non-4-space-tab messing up code in terminal
-> etc).
-> 
->> Copy/pasting is known to cause bugs. There's actually research from
->> NASA on that. Code-reuse (libraries/functions) are not bad. But
->> (worst kind of example) copy paste from stack-overflow, or
->> copy/pasting stuff without actually looking at the content and
->> forgetting to rename something, causes bugs. Why is this relevant?
->> The whole 'lets be consistent with the rust codebase of the wrold'
->> argument. E.g. if everybody uses the same style (which is idealistic
->> and great) then copy/pasting becomes consistent. Where I say, try to
->> be careful when copy/pasting code.
-> 
-> When we vendor in code as a whole (e.g. like we currently do for
-> alloc crate), it is proper code reuse. With different coding style the
-> vendored code either diverges from upstream (which makes upstreaming
-> much more difficult) or diverge from rest of kernel's Rust code base.
-Very fair point of course. Though really, we should fix the upstream 
-rust preferred format, but there it was already stated, that 'too bad, 
-sorry' which from a developer point of view is fine, your project, your 
-choice. From a disabilities point of view, sucks of course.
+Thanks.
 
-> 
->> But if that is the case, why not try to follow the kernels existing
->> code-style as close as possible with the rust-fmt configuration? I
->> know code-style has been discussed a few times over the decades; but
->> not many changes have been done, surely, if there's some codestyle
->> changes that are best for the kernel, they would have been 'advised'?
->> '4 space indents are better then 8-size tabs, on new code, try to use
->> them' for example :p
-> 
-> You do realize that you are creating a new coding style by doing this,
-> right? It feels like creating problems rather than solving problems.
-> 
-> My personal feeling is that it's easier for me to adapt to different
-> coding style when switching between languages, but it's rather awkward
-> for me when trying to use different coding styles with the same
-> language. I find myself no problem switching between 2 spaces when
-> coding JavaScript to 4 spaces when coding Rust to 8 spaces(tab) when
-> coding C, but it's rather painful to switch between C projects with
-> different coding styles. I certainly don't want to switch between Rust
-> projects with vastly different coding styles.
-And I'm happy for you that you can easily take in 2 and 4 spaces. For 
-me, it is extremly hard to read. So it's not a 'personal preference' 
-thing. But I suggest to read the earlier posted links, where others at 
-length explain it as well, how it is like to feel excluded becaues its 
-just hard to read.
-
-> 
->> But why? Why should we not be consistent with the kernels' code-base
->> (while yes, that is not rust, but C, but we can follow the same
->> style?)
-> 
-> Difference languages have different characteristics, and one size
-> doesn't fit them all :)
-I'm not even arguing this at all :)
-
-I think the biggest issues i'm speaking of really are the braces and the 
-spaces really, where the braces can be argued for/against, it's 
-cognitive harder, but can be dealth with (and we can expect 
-inconsitencies; but the sapces vs tabs thing, personal configuration vs 
-forced with is the point I was trying to raise.
-
-As said before, 'every building is different, some offer wheelchair 
-ramps, others do' kind of point, not like 'this building is red, and 
-that one is blue, and not every color fits all :p
-
-> 
->> Sadly, I've seen so much vendor code (yeah, I know) which doesn't
->> even have consistency in their own files ...
-> 
-> That's very true. So when all other Rust code currently follow
-> (roughly) the same coding style and this situation doesn't currently
-> exist, let's not make it worse...
-> 
-> Best,
-> Gary
-
+-- 
+tejun

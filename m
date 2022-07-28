@@ -2,199 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548AA5838FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD63A5838FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbiG1GsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
+        id S231653AbiG1Gud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 02:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbiG1GsL (ORCPT
+        with ESMTP id S233616AbiG1Gu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:48:11 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E8F58B78
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:48:09 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id h125so1440775oif.8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HgwlQG4Lhx8whx7o14FpfCX9iHMs/wtL+rv0oLousaM=;
-        b=Lp+CwaWO4nw6MMzfwGVjyhC14OxkQxYBsfkzHny0qQnxwHloJEKmoVOZZGAnkpqHIo
-         uPz7OhI2Ic2ymiyTnvboWdPU590QzG5fUzNr+WKNARr+TzbLjGgFWQ/p7hUrFF8nFmel
-         lVePTIE766U+suinIq5Dr+2BJyEjSSWTtii+TZy7gpNA7A2yhvSCuVG68jZotyQuPM5N
-         5wvHmRNNkYHFFUKJazcwGEdIiwB8YuXKJ4tqQl+mQwb83tv7ycMPIqg50Kqc75VENa0M
-         /kinDCpvUbgdEsMvqGP72oKu3x5tXmULOSw37vS4i1lRdAYXdBZaVrY0dtx/bE8ljZ6s
-         ts7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HgwlQG4Lhx8whx7o14FpfCX9iHMs/wtL+rv0oLousaM=;
-        b=Sia2EJIkD/TYrwFtiCRRSN4r17vf6NLfX4USt27NdkQdSKstvvyRVcScuV/CXQE5sM
-         C4ahlqnMQHYttf17AcF4L5g4pN/gMNglRunSLNIVpRVpRvuDMBAI3fYuWWLT3s809hmD
-         9jUJrDm3vww9Om+PZOyyfMbj3z6pDMd00wSiGFZ92K8YI1qisX77wmhUgYkwEUgWBho8
-         VzYeaexnK8x/oRh+69Cn/CZ8DFUjMwLgya66JCIVsmJFI0p8Yu4FTIVnosBCxSRcYbGU
-         Y/JEt0mqW3h6LcZ0NOlDczxgUkPtOARRTRr/HLhKbKhwGNeyi4dQpFLaOFSvbamURTyn
-         5UmA==
-X-Gm-Message-State: AJIora/hz726xdCMpatflD1Qf4qfOQ5yxlyv7mVnjh/FN900jC50LALD
-        E7mbZCiZsF6+YwjY+2sA1yRAMZi7HZl4wSQzt7H31g==
-X-Google-Smtp-Source: AGRyM1thjZdUodZ96oXemTgQ1CJj0swEyhRb1esz/G34MlrxNe5eFkNSWTLvfNptPZrVZ1gJ5qWeseaVefgcm/2KvEU=
-X-Received: by 2002:aca:ba86:0:b0:33a:c6f7:3001 with SMTP id
- k128-20020acaba86000000b0033ac6f73001mr3375710oif.5.1658990889029; Wed, 27
- Jul 2022 23:48:09 -0700 (PDT)
+        Thu, 28 Jul 2022 02:50:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DF0501AD;
+        Wed, 27 Jul 2022 23:50:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0466F61AF0;
+        Thu, 28 Jul 2022 06:50:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A882C433C1;
+        Thu, 28 Jul 2022 06:50:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658991027;
+        bh=QnsMv5n+oml6tSg5a/IL8irjZHBGgpq3vTxxpSrgmyM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JNwkeX23cHuQPEH1YLhh/+Euq7sDWwhTOpZbWzB9peOm6q1x0p2o0/6XLOaPcKVmi
+         MjihxSxsd0GH8SACQVQZSsz0KFfJ1F7bzRG8oqrPVY0YmyMcjOavyBy4r6DPR+L9Xg
+         WVo9XoYMn1Em0QQbB+31BFFXH8y5HABBnj06DBfg=
+Date:   Thu, 28 Jul 2022 08:50:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] ufs: core: print capabilities in controller's sysfs node
+Message-ID: <YuIxsD+ExIF8QYEx@kroah.com>
+References: <20220728144710.1.Id612b86fd30936dfd4c456b3341547c15cecf321@changeid>
 MIME-Version: 1.0
-References: <20220727064321.2953971-1-mw@semihalf.com> <20220727064321.2953971-7-mw@semihalf.com>
- <20220727143147.u6yd6wqslilspyhw@skbuf> <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
- <20220727163848.f4e2b263zz3vl2hc@skbuf> <CAPv3WKe+e6sFd6+7eoZbA2iRTPhBorD+mk6W+kJr-f9P8SFh+w@mail.gmail.com>
- <20220727211112.kcpbxbql3tw5q5sx@skbuf>
-In-Reply-To: <20220727211112.kcpbxbql3tw5q5sx@skbuf>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Thu, 28 Jul 2022 08:47:58 +0200
-Message-ID: <CAPv3WKcc2i6HsraP3OSrFY0YiBOAHwBPxJUErg_0p7mpGjn3Ug@mail.gmail.com>
-Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to fwnode_find_net_device_by_node()
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728144710.1.Id612b86fd30936dfd4c456b3341547c15cecf321@changeid>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C5=9Br., 27 lip 2022 o 23:11 Vladimir Oltean <olteanv@gmail.com> napisa=C5=
-=82(a):
->
-> On Wed, Jul 27, 2022 at 07:40:00PM +0200, Marcin Wojtas wrote:
-> > SET_NETDEV_DEV() fills net_device->dev.parent with &pdev->dev
-> > and in most cases it is sufficient apparently it is sufficient for
-> > fwnode_find_parent_dev_match (at least tests with mvneta case proves
-> > it's fine).
->
-> Indeed, mvneta works, which is a plain old platform device that hasn't
-> even been converted to fwnode, so why don't the others?
->
-> Well, as it turns out, it's one of the cases where I spoke to soon,
-> thinking I knew what was the problem why probing failed, before actually
-> debugging.
->
-> I thought there was no dmesg output from DSA at all, which would have
-> indicated an eternal -EPROBE_DEFER situation. But there's one tiny line
-> I had overlooked:
->
-> [    5.094013] mscc_felix 0000:00:00.5: error -EINVAL: Failed to register=
- DSA switch
->
-> This comes from here:
->
-> static int dsa_port_parse_fw(struct dsa_port *dp, struct fwnode_handle *f=
-wnode)
-> {
->         struct fwnode_handle *ethernet =3D fwnode_find_reference(fwnode, =
-"ethernet", 0);
->         bool link =3D fwnode_property_present(fwnode, "link");
->         const char *name =3D NULL;
->         int ret;
->
->         ret =3D fwnode_property_read_string(fwnode, "label", &name);
-> //      if (ret)
-> //              return ret;
->
->         dp->fwnode =3D fwnode;
->
-> The 'label' property of a port was optional, you've made it mandatory by =
-accident.
-> It is used only by DSA drivers that register using platform data.
+On Thu, Jul 28, 2022 at 02:49:25PM +1000, Daniil Lunev wrote:
+> Allows userspace to check supported by the controller/device
+> functionality, e.g. write booster.
+> 
+> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
-Thanks for spotting that, I will make it optional again.
+You have to also document this in Documentation/ABI/ when you add a new
+sysfs file.  Please do so here.
 
->
-> (side note, I can't believe you actually have a 'label' property for the
-> CPU port and how many people are in the same situation as you; you know
-> it isn't used for anything, right? how do we stop the cargo cult?)
->
+thanks,
 
-Well, given these results:
-~/git/linux : git grep 'label =3D \"cpu\"' arch/arm/boot/dts/ | wc -l
-79
-~/git/linux : git grep 'label =3D \"cpu\"' arch/arm64/boot/dts/ | wc -l
-14
-
-It's not a surprise I also have it defined in the platforms I test. I
-agree it doesn't serve any purpose in terms of creating the devices in
-DSA with DT, but it IMO increases readability of the description at
-least.
-
-> > Can you please check applying following diff:
-> >
-> > --- a/drivers/base/property.c
-> > +++ b/drivers/base/property.c
-> > @@ -695,20 +695,22 @@ EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
-> >   * The routine can be used e.g. as a callback for class_find_device().
-> >   *
-> >   * Returns: %1 - match is found
-> >   *          %0 - match not found
-> >   */
-> >  int fwnode_find_parent_dev_match(struct device *dev, const void *data)
-> >  {
-> >         for (; dev; dev =3D dev->parent) {
-> >                 if (device_match_fwnode(dev, data))
-> >                         return 1;
-> > +               else if (device_match_of_node(dev, to_of_node(data))
-> > +                       return 1;
-> >         }
-> >
-> >         return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(fwnode_find_parent_dev_match);
->
-> So, nothing to do with device_match_fwnode() failing, that would have
-> been strange, come to think about it. Sorry for the noise here.
->
-
-Great, thank you for confirmation.
-
-> But looking at the deeper implementation of dev_fwnode() as:
->
-> struct fwnode_handle *dev_fwnode(struct device *dev)
-> {
->         return IS_ENABLED(CONFIG_OF) && dev->of_node ?
->                 of_fwnode_handle(dev->of_node) : dev->fwnode;
-> }
->
-> I wonder, why did you have to modify mvpp2? It looks at dev->of_node
-> prior to returning dev->fwnode. It should work.
-
-When I boot with ACPI, the dev->of_node becomes NULL. With DT it's fine as-=
-is.
-
-Best regards,
-Marcin
+greg k-h

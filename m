@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A943584827
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8C3584833
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbiG1WVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S232240AbiG1WZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiG1WU4 (ORCPT
+        with ESMTP id S229570AbiG1WZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:20:56 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3981D78DEA;
-        Thu, 28 Jul 2022 15:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=alEH1WwUjVCElaffThQK0Suy1kY+uR7uRYgblI7vhIY=; b=Op
-        Ms15cG37Mp5ahueu4ZFT91aBVuu61pybdt4tWRkuIM7bySs4MdBR1kl6u2Hx9+D0dgGNWDIk3n+aY
-        wrMBqy8YSvxCbb1efxfD+jbOnArPvuG/95X11McX1vgHmmJpb8cGMctPOLCXLZ2xJS2FYKG/FVwAQ
-        BGL4OVrAPmrgMCM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oHBsA-00Bqex-7A; Fri, 29 Jul 2022 00:20:50 +0200
-Date:   Fri, 29 Jul 2022 00:20:50 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to
- fwnode_find_net_device_by_node()
-Message-ID: <YuMLwlqfhQoaNh6K@lunn.ch>
-References: <20220727064321.2953971-7-mw@semihalf.com>
- <20220727143147.u6yd6wqslilspyhw@skbuf>
- <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
- <20220727163848.f4e2b263zz3vl2hc@skbuf>
- <CAPv3WKe+e6sFd6+7eoZbA2iRTPhBorD+mk6W+kJr-f9P8SFh+w@mail.gmail.com>
- <20220727211112.kcpbxbql3tw5q5sx@skbuf>
- <CAPv3WKcc2i6HsraP3OSrFY0YiBOAHwBPxJUErg_0p7mpGjn3Ug@mail.gmail.com>
- <20220728195607.co75o3k2ggjlszlw@skbuf>
- <YuLvFQiZP6qmWcME@lunn.ch>
- <CAPv3WKeD_ZXeH-Y_YP91Ba6nZagzBVPoWbmFE8WtRw-NYxdEaA@mail.gmail.com>
+        Thu, 28 Jul 2022 18:25:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A8E22E6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:25:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659047106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ndVyxggE9NRkNXPrTefS8i3sDBY7mXSC7xSnt5hqVcI=;
+        b=BhMPx08NbcnmQVd20DJoJ7Y+dmBDIkx2Sjl1IlNf1Wd7RN3XzZKktyH7PzDB6GcJXhYQqU
+        YLaF26YEHaAEmOElQBc8g/YzqGEAJ0Lfr5oy5nRI/IjJVficThsvWCoVhmjZXnzBeSaOZA
+        oZpTL7ATb+lzmJsTXBMoYMvpcOQVYGQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-BmZ2ypaBMZquZ26djS_LZA-1; Thu, 28 Jul 2022 18:25:02 -0400
+X-MC-Unique: BmZ2ypaBMZquZ26djS_LZA-1
+Received: by mail-wm1-f69.google.com with SMTP id 131-20020a1c0289000000b003a3497306a8so1742196wmc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:25:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ndVyxggE9NRkNXPrTefS8i3sDBY7mXSC7xSnt5hqVcI=;
+        b=2beK1srR4Lw3SHcQh8t+Rt5qgU5qfAt7cAyzB0SYm/Rejx5e69C7qn1R7vkdfSwLBy
+         w+Xx1A36WCySobHs6YFuxpcv4QgqbgE33Hki06OjJziKP6Kro60WLsjkPCe+fGB6LFA5
+         L41ie9g/Ho2+WLJhMqzkEmhaC9yWExLygJII7JNp1Ynml1NMAqcG5jlb0ZPvycnatS24
+         RhI86hiQrKElYyB+8+SEWPXhDMIhimRIxsidT5DOyeLQgBlCWho5QyVsA286VOMLnJMU
+         sZ32ihihuo3K40Db2F28yLBZbU1BZWwzaJEK3PTkO+og7ygJO/FhNIwJ4nT7MB551Pcp
+         Krnw==
+X-Gm-Message-State: ACgBeo26BFvESDJuxLXwzRBkmgJcQtdM7MQAYMFIEwkYgYYrHpDsybMg
+        feUwyQHyG7vqWgFr/EGYmWTcyMnZ0kPE48pW4FaOVmjPDp31p8xJLidYj1MEg+If1m2k5+HFwK7
+        gIQMnm86LG+GrUl+KMeWL6y7v
+X-Received: by 2002:adf:fb43:0:b0:21a:22eb:da43 with SMTP id c3-20020adffb43000000b0021a22ebda43mr536575wrs.347.1659047101750;
+        Thu, 28 Jul 2022 15:25:01 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6Q9rKQXjFh0ctRsdAdZhnqZ3N2P/1jov3HzMQFk5kNK/RNIbPCnkKzM1LTMgw0NuP7UzQJXA==
+X-Received: by 2002:adf:fb43:0:b0:21a:22eb:da43 with SMTP id c3-20020adffb43000000b0021a22ebda43mr536558wrs.347.1659047101267;
+        Thu, 28 Jul 2022 15:25:01 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id a6-20020a5d53c6000000b0021ea5b1c781sm2112257wrw.49.2022.07.28.15.25.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 15:25:00 -0700 (PDT)
+Message-ID: <62ac29cb-3270-a810-bad1-3692da448016@redhat.com>
+Date:   Fri, 29 Jul 2022 00:24:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPv3WKeD_ZXeH-Y_YP91Ba6nZagzBVPoWbmFE8WtRw-NYxdEaA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 09/25] KVM: VMX: nVMX: Support TSC scaling and
+ PERF_GLOBAL_CTRL with enlightened VMCS
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+ <20220714091327.1085353-10-vkuznets@redhat.com> <YtnMIkFI469Ub9vB@google.com>
+ <48de7ea7-fc1a-6a83-3d6f-e04d26ea2f05@redhat.com>
+ <Yt7ehL0HfR3b97FQ@google.com>
+ <870d507d-a516-5601-4d21-2bfd571cf008@redhat.com>
+ <YuMKBzeB2cE/NZ2K@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YuMKBzeB2cE/NZ2K@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 11:23:31PM +0200, Marcin Wojtas wrote:
-> czw., 28 lip 2022 o 22:18 Andrew Lunn <andrew@lunn.ch> napisał(a):
-> >
-> > > The 'label' thing is actually one of the things that I'm seriously
-> > > considering skipping parsing if this is an ACPI system, simply because
-> > > best practices are different today than they were when the OF bindings
-> > > were created.
-> >
-> > Agreed. We want the ACPI binding to learn from what has worked and not
-> > worked in DT. We should clean up some of the historical mess. And
-> > enforce things we don't in DT simply because there is too much
-> > history.
-> >
-> > So a straight one to one conversion is not going to happen.
-> 
-> I understand your standpoint - there is a long history, possible
-> clean-ups, backward compatibility considerations, etc. that should not
-> be zero-day baggage of ACPI. Otoh, we don't need to be worried about
-> the ACPI binding too much now - as agreed it was removed from this
-> series, beginning from v2. IMO it may be better to return to that once
-> the ACPI Spec is updated with the MDIOSerialBus and the patches are
-> resubmitted on whatever shape of the DSA subsystem is established
-> within the next weeks/months from now.
-> 
-> In v1 we discussed also the resubmission of the non-ACPI-related
-> patches, which would pave the way to dropping the explicit OF_
-> dependency in the DSA and moving to a generic hardware description
-> kernel API - without any functional change.
+On 7/29/22 00:13, Sean Christopherson wrote:
+> The only flaw in this is if KVM gets handed a CPUID model that enumerates support
+> for 2025 (or whenever the next update comes) but not 2022.  Hmm, though if Microsoft
+> defines each new "version" as a full superset, then even that theoretical bug goes
+> away.  I'm happy to be optimistic for once and give this a shot.  I definitely like
+> that it makes it easier to see the deltas between versions.
 
-Ideally, we want to keep all the ugly DT stuff in DT. We want to
-ensure that any "generic hardware description kernel API" does not
-inherit all the ugly DT stuff.
+Okay, I have queued the series but I still haven't gone through all the 
+comments.  So this will _not_ be in the 5.21 pull request.
 
-ACPI and DT are different things, so i don't see why they need to
-share code.
+The first patch also needs a bit more thought to figure out the impact 
+on userspace and whether we can consider syndbg niche enough to not care.
 
-      Andrew
+Paolo
+

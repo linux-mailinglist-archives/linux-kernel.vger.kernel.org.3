@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF035843D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7B65843DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiG1QMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S231764AbiG1QM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 12:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbiG1QMS (ORCPT
+        with ESMTP id S231853AbiG1QMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:12:18 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726484505D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:12:17 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id q3so1739600qvp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:12:17 -0700 (PDT)
+        Thu, 28 Jul 2022 12:12:20 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35FD6D2D6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:12:18 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id mn11so1721975qvb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BevssIEixB8bWfQySBHmZ4Jr0wRcQugiruyrYaaCWJ8=;
-        b=aqCxrokHPzJf/bvyCgVsYDOmal6oumiqBBhE8LXg+LXcDB3wZ8pVqTIxHezMIrHblX
-         mU3opnlsYpTKfi6wbXPxddV52RZ7Nj/5Us0B6PVYHqROQD1SLBzw0Q4QppFPFyClN/Ss
-         2lu6wT6NgOiUwMdaTCna1KAvD0FmAy1sBIpMT0+v1NSDK/4TaBLTRF+awv4QmkJhhlvp
-         RBiOHVKW4RaYv/dsXyvdjR5RPFWWMFB7bBpkqTJTCLEKONfzNBtWtKbMBjEJ/zLXhySY
-         EIaD8QjOpGQBt7aWDtrioPSqpAa7p/gwiKKzuKJOSuBgTdbPCcLdg0DfMWXuRW7I5lfw
-         NWwg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Hcao3mS9A68A4ygDFBhvxMbZZ8matHzGnHuIbBLuhfU=;
+        b=Jt6CsrspqbmJuU7v5pdYKf8Qf1xLBwR83W9TWQE4Zt2kFGYZu0FBW9HDonEdJ5VO8t
+         t+zbRfRtVdAxZ5BEI3NPWR4aqmEFN0qLvM1bZAkBOXfDa+uVnRl2wVvd1zyLkHU0iEA/
+         kxxdq7UaQxyNVvw1pO/l4nEz6YyCBR740FjDcDvHKuNdzXNWWsO0ZtycbbofpalgVTJv
+         MczIaKEcwK3PhwPZE0PcCHNwI5OojUe0hF39w4UCno0AsrG9KlF7rhfNMjvckJoOzF0i
+         q/q97yyOCEVOjCT3zxvohmE2+9ujvII8mg0A/93Zv1JynHpjzWAFMcnZRSW3uUTbveuj
+         vyZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BevssIEixB8bWfQySBHmZ4Jr0wRcQugiruyrYaaCWJ8=;
-        b=TLuX6ZpSkO8shTVhWH4JFzK5aUQtCskMZiokGfh6slpTsMgrasmya1UzVhNbFZ1nHq
-         OaSY0vheE7qrz0/7+nHk1q+Alrd2xtgHPKkXxuK3lHi3MGzO1xW48wMZw3tYnPQIjQzF
-         HZ8fqooCuHQ6fvWkU3CLWpr+TP4VeZ4fEzLo+l31+nX2x4VZie2zDSsb6O3NZ+fo8O7c
-         79/iLrYagot2o/Jg3UBaySiB1NbarRJac8yrZGE1rQy6YDtuy8uwkop7QSSMkgpDtVQS
-         9qGTktuhuyOKMB0WSl9lx6BmF+3cb4w+gNChhag4vXA2EJVuw1gPEMohgeO6s5xfN5uM
-         +X1A==
-X-Gm-Message-State: AJIora81eDJp+etFqlaSwtI3KkV0ie5j55ZKwLc8nYPPoQzY12S1Cy6J
-        SqYpM3uZUwKgfzRFXOhUkr9xVo4Q2XQ=
-X-Google-Smtp-Source: AGRyM1uUdPTZi343IiPW1iPumrhWdEfIibVUWCoheq11I99V3X31FRTWuGSzlD5xoRrUH1zcWlD+oA==
-X-Received: by 2002:a05:6214:1c4f:b0:473:7909:85e2 with SMTP id if15-20020a0562141c4f00b00473790985e2mr25147548qvb.69.1659024736342;
-        Thu, 28 Jul 2022 09:12:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Hcao3mS9A68A4ygDFBhvxMbZZ8matHzGnHuIbBLuhfU=;
+        b=US1Y8htE/4IWk51c9EDrHPkCw0yamPL6O5n7qlSWRB3e7nVnIpDXRleaquHSaXeYtQ
+         MMwPnuOxpWaWcG+3gv573CivV6uaoVWT577j/HUWBp0Dc04mfV/kblD2SAy7QlINxoDq
+         CSrBC8Fzc2VXXLVr9xUbQ6/xYH2yde4G0oxJ6RqMXQM/cLgIV7HfFfLo7cvPPMmGZBO4
+         JQhonU17cbj4AY8QfMJZkbP2Te1jqGzjLPoqgsxN7Mw0cv9aKc5Fo7pdqP5gEP590wO1
+         m0TtlpKDsqPI/5jaP+uIlaQLbHq1uF3KpVQ3SUx2UfU2razkCJb8xdQNhVMvEDHIW4rn
+         nK9w==
+X-Gm-Message-State: AJIora86mUpFFMBbNh4NOp+ybagII0OgAE1I/KXcXV6I9urE3MY4zdvh
+        qkGzOzcPBHq9rgFpanPxG3g=
+X-Google-Smtp-Source: AGRyM1sJ1mwSx9Wpq11csum70XnEQlfimGA6PespiIrUdiD2AailNKiMaUYAXZLhCnOHhgNNZ9lKxw==
+X-Received: by 2002:a0c:f04f:0:b0:474:499:5000 with SMTP id b15-20020a0cf04f000000b0047404995000mr8812048qvl.125.1659024737956;
+        Thu, 28 Jul 2022 09:12:17 -0700 (PDT)
 Received: from localhost ([2601:4c1:c100:1230:b984:ba52:c3cf:cb5e])
-        by smtp.gmail.com with ESMTPSA id t22-20020ac87396000000b0031ec44aa37bsm629225qtp.93.2022.07.28.09.12.15
+        by smtp.gmail.com with ESMTPSA id y7-20020a05620a44c700b006af039ff090sm755694qkp.97.2022.07.28.09.12.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 09:12:15 -0700 (PDT)
+        Thu, 28 Jul 2022 09:12:17 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -59,10 +59,12 @@ To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Alexey Klimov <aklimov@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 0/5] lib/find: optimize find_bit() functions
-Date:   Thu, 28 Jul 2022 09:12:03 -0700
-Message-Id: <20220728161208.865420-1-yury.norov@gmail.com>
+Subject: [PATCH 1/5] lib/find_bit: rename "le" to "need_swab" in __find_next_bit()
+Date:   Thu, 28 Jul 2022 09:12:04 -0700
+Message-Id: <20220728161208.865420-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220728161208.865420-1-yury.norov@gmail.com>
+References: <20220728161208.865420-1-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,29 +77,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the recent discussion [1], it was noticed that find_next_bit()
-functions may be improved by adding wrappers around common
-__find_next_bit(). 
+The parameter is used to swap bytes on BE machines when searching for
+bits in little-endian bitmaps. On LE machines this parameter is 0, which
+misleads readers.
 
-I tried that trick; and although it doesn't affect performance
-significantly, as reported by find_bit_benchmark, there's ~2.5K
-decrease in image size.
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ lib/find_bit.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-find_first_bit() is reworked accordingly.
-
-[1] https://lkml.org/lkml/2022/7/25/830
-
-Yury Norov (5):
-  lib/find_bit: rename le to need_swab in __find_next_bit()
-  lib/find_bit: optimize find_next_bit() functions
-  lib/find_bit: unify _find_first_{,and,zero}_bit implementations
-  lib/find_bit: create find_first_zero_bit_le()
-  lib/find_bit: re-use __find_first_bit() in __find_next_bit()
-
- include/linux/find.h |  45 +++++++++----
- lib/find_bit.c       | 155 +++++++++++++++++++++++++++++--------------
- 2 files changed, 138 insertions(+), 62 deletions(-)
-
+diff --git a/lib/find_bit.c b/lib/find_bit.c
+index 1b8e4b2a9cba..04c142acfc40 100644
+--- a/lib/find_bit.c
++++ b/lib/find_bit.c
+@@ -31,7 +31,7 @@
+  */
+ unsigned long _find_next_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long nbits,
+-		unsigned long start, unsigned long invert, unsigned long le)
++		unsigned long start, unsigned long invert, bool need_swab)
+ {
+ 	unsigned long tmp, mask;
+ 
+@@ -45,7 +45,7 @@ unsigned long _find_next_bit(const unsigned long *addr1,
+ 
+ 	/* Handle 1st word. */
+ 	mask = BITMAP_FIRST_WORD_MASK(start);
+-	if (le)
++	if (need_swab)
+ 		mask = swab(mask);
+ 
+ 	tmp &= mask;
+@@ -63,7 +63,7 @@ unsigned long _find_next_bit(const unsigned long *addr1,
+ 		tmp ^= invert;
+ 	}
+ 
+-	if (le)
++	if (need_swab)
+ 		tmp = swab(tmp);
+ 
+ 	return min(start + __ffs(tmp), nbits);
 -- 
 2.34.1
 

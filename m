@@ -2,128 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E4E583B26
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE724583B29
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235416AbiG1JWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S235435AbiG1JXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiG1JWW (ORCPT
+        with ESMTP id S234026AbiG1JXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:22:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821B86564A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:22:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 373DE20FE4;
-        Thu, 28 Jul 2022 09:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659000140; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KaNe8gfPDt7QKa5VYJW3wDvL8W+QWbWKq376KcUEzZY=;
-        b=iclC+NarXfrqAALECZsO27bElHgeJdsCms/hrJHvEBkSkmzA/qXQ6v8PuZCunIHXDVPlNc
-        cFqhoLd7krt4NogKAc3DC1OlWGUkpN/Y/NQHWqXAf2AtpNtc8sJg6tSZa9I7jMgLyMjQyF
-        tXel9lVrJAnSRhXjWcpA1xv122NLLKE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659000140;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KaNe8gfPDt7QKa5VYJW3wDvL8W+QWbWKq376KcUEzZY=;
-        b=TBA2lHorOFAxGy+f8DPe3tvJL1GIVeEHMUj+A4a7hinopwHx8pN530VmqjBXuI10NHMQKf
-        9pRc21bXEU05upAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0351513A7E;
-        Thu, 28 Jul 2022 09:22:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id M725OktV4mIuSwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 28 Jul 2022 09:22:19 +0000
-Date:   Thu, 28 Jul 2022 11:22:16 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Chenglin Xu <chenglin.xu@mediatek.com>
-Subject: [PATCH] soc: mediatek: Let PMIC Wrapper and SCPSYS depend on OF
-Message-ID: <20220728112216.13b10689@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Thu, 28 Jul 2022 05:23:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50E476566A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659000217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MUUHnK3mGjBTIixFdMqpioqDxoaunFSmdGJUDWVh8gY=;
+        b=fy1hI5tSguC+KnHazRGc9PMlA76Hnp/gem56+vEykEjR6jl0qyZSW6nOdffaHoiHUmYlkJ
+        CnYIJQVVzo5eOo0Yuvj4r4QE688Vto0tsyzpx9iBmzmAsfrVtOqTvGaW0WK2OW12wjv4+Q
+        FhnQAVt3HCmWULavUgBkvUheA+e+238=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-tAaXZ2XBPQa1vbNrIsQVkw-1; Thu, 28 Jul 2022 05:23:35 -0400
+X-MC-Unique: tAaXZ2XBPQa1vbNrIsQVkw-1
+Received: by mail-wm1-f70.google.com with SMTP id n19-20020a05600c3b9300b003a314062cf4so2367197wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:23:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=MUUHnK3mGjBTIixFdMqpioqDxoaunFSmdGJUDWVh8gY=;
+        b=L9xo3ADhYs8wYfTYicGrsKgoKkZSYn6F/F19E4N9lQvRNuqmRVNuSqONpqZ+0eIbcB
+         XptMdl9vbFoEQ8rGlU6V6fJRSWu+s6KAHoqq5qxv5W9FrSQQ9D280+h+fJvZ9zDAeSaD
+         KRU+9736E5IFFuAoQodjji4Hr8oinlsP5N9o+/RM35jSX293Zb59bWH0Wgj+KJCH3W9e
+         pNfVazMzdJoOfgTxyntx12mXjZvIxOIpt/uMccQnk0LN9q2zNDNeZtzxTqEBB8vkYT53
+         iZGKS6qtVzjkhr5C4jnniDrlqPs2Tids8zIwjduOsoBmPCFsWlidmW1VCgHKjgzjzrLk
+         fqnw==
+X-Gm-Message-State: AJIora9wKLZ8NPKM7xXc8uCLT2e8KiHcyTURYG+hdluj05ped3j4kJAM
+        LzKGc8DnBOdJjAE5jiuUbHTyWVOO5Ctk7bayYfzg229NeVM0reIVOYPMLrf42h48LfMnymG4UvU
+        Y9Iwndbb1jy/oqBtzDuxFKaaL
+X-Received: by 2002:a05:600c:3510:b0:3a3:34e7:cfc8 with SMTP id h16-20020a05600c351000b003a334e7cfc8mr6168706wmq.164.1659000214724;
+        Thu, 28 Jul 2022 02:23:34 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v68N2cLgOVDHlO2BHTuQI5rx78/bTHvWixAJqi4+qCUXnGL4+jti75UpEFTdiWn82+6TUIgA==
+X-Received: by 2002:a05:600c:3510:b0:3a3:34e7:cfc8 with SMTP id h16-20020a05600c351000b003a334e7cfc8mr6168689wmq.164.1659000214387;
+        Thu, 28 Jul 2022 02:23:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:7b00:9c4:744b:b126:3a28? (p200300cbc7047b0009c4744bb1263a28.dip0.t-ipconnect.de. [2003:cb:c704:7b00:9c4:744b:b126:3a28])
+        by smtp.gmail.com with ESMTPSA id w13-20020adfee4d000000b0021f0af83142sm254643wro.91.2022.07.28.02.23.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 02:23:33 -0700 (PDT)
+Message-ID: <6492e852-8acf-95a9-a3a0-8ce8bbaf46d6@redhat.com>
+Date:   Thu, 28 Jul 2022 11:23:33 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm: Re-allow pinning of zero pfns
+Content-Language: en-US
+To:     Alistair Popple <apopple@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        akpm@linux-foundation.org, minchan@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, paulmck@kernel.org,
+        jhubbard@nvidia.com, joaodias@google.com
+References: <165490039431.944052.12458624139225785964.stgit@omen>
+ <bb120b4a-e6f6-de81-35f0-9803acf9b0be@redhat.com>
+ <20220615155659.GA7684@nvidia.com>
+ <cb7efb0f-5537-5ce4-7aec-bb10ea81d5de@redhat.com>
+ <20220623142139.462a0841.alex.williamson@redhat.com>
+ <20220623204712.GG4147@nvidia.com> <87a6a2zyxk.fsf@nvdebian.thelocal>
+ <20220624013415.GI4147@nvidia.com> <874k0ax1s0.fsf@nvdebian.thelocal>
+ <878rodvcty.fsf@nvdebian.thelocal>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <878rodvcty.fsf@nvdebian.thelocal>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the following configuration options:
-CONFIG_OF is not set
-CONFIG_MTK_PMIC_WRAP=3Dy
-CONFIG_MTK_SCPSYS=3Dy
-we get the following build warnings:
+On 28.07.22 10:45, Alistair Popple wrote:
+> 
+> Looks like the original patch might need rebasing. I am about to post a
+> clean-up for the tortured logic in check_and_migrate_movable_pages() so
+> can incorporate it there, but I'm wondering what the consensus was for
+> pinning of zero pfn?
 
-  CC      drivers/soc/mediatek/mtk-pmic-wrap.o
-drivers/soc/mediatek/mtk-pmic-wrap.c:2138:34: warning: =E2=80=98of_pwrap_ma=
-tch_tbl=E2=80=99 defined but not used [-Wunused-const-variable=3D]
-drivers/soc/mediatek/mtk-pmic-wrap.c:1953:34: warning: =E2=80=98of_slave_ma=
-tch_tbl=E2=80=99 defined but not used [-Wunused-const-variable=3D]
-  CC      drivers/soc/mediatek/mtk-scpsys.o
-drivers/soc/mediatek/mtk-scpsys.c:1084:34: warning: =E2=80=98of_scpsys_matc=
-h_tbl=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+We have to keep it working right now, but in most cases (inside
+MAP_PRIVATE regions) it's shaky and undesired.
 
-Looking at the code, both drivers can only bind to OF-defined device
-nodes, so these drivers are useless without OF and should therefore
-depend on it.
+> 
+> Currently my clean-up will result in PUP returning an error for the zero
+> pfn rather than looping indefinitely in the kernel. However it wasn't
+> clear from this thread if returning an error is ok, or if R/O pinning
+> of the zero pfn should succeed?
 
-Developers or QA teams who wish to test-build the code can still do
-so by enabling CONFIG_OF, which is available on all architectures and
-has no dependencies.
+I'm working on proper COW breaking in MAP_PRIVATE mappings, which will,
+for example, unshare the shared zeropage and properly replace it by
+exclusive anon pages first in the FOLL_LONGTERM case.
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202207240252.ZY5hSCNB-lkp@intel.com/
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: Chenglin Xu <chenglin.xu@mediatek.com>
----
- drivers/soc/mediatek/Kconfig |    2 ++
- 1 file changed, 2 insertions(+)
+-- 
+Thanks,
 
---- linux-5.18.orig/drivers/soc/mediatek/Kconfig	2022-05-22 21:52:31.000000=
-000 +0200
-+++ linux-5.18/drivers/soc/mediatek/Kconfig	2022-07-28 10:59:55.025131145 +=
-0200
-@@ -37,6 +37,7 @@ config MTK_INFRACFG
- config MTK_PMIC_WRAP
- 	tristate "MediaTek PMIC Wrapper Support"
- 	depends on RESET_CONTROLLER
-+	depends on OF
- 	select REGMAP
- 	help
- 	  Say yes here to add support for MediaTek PMIC Wrapper found
-@@ -46,6 +47,7 @@ config MTK_PMIC_WRAP
- config MTK_SCPSYS
- 	bool "MediaTek SCPSYS Support"
- 	default ARCH_MEDIATEK
-+	depends on OF
- 	select REGMAP
- 	select MTK_INFRACFG
- 	select PM_GENERIC_DOMAINS if PM
+David / dhildenb
 
-
---=20
-Jean Delvare
-SUSE L3 Support

@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4268A5847D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A906D5847D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiG1VsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 17:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S230132AbiG1Vts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 17:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiG1VsN (ORCPT
+        with ESMTP id S229997AbiG1Vtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 17:48:13 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DCE550A5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:48:12 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z15so3752806edc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:48:12 -0700 (PDT)
+        Thu, 28 Jul 2022 17:49:46 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F3856BB2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:49:44 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id s9so3762395edd.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:49:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=96laK3X9C3HRNTHwHkJ/JwZirLHA0u1Wc3B+YkpYnbk=;
-        b=dwGp1I6EVE9BIy633N3+06sVbzUdtGVoRiYhkuozOlTlbau/f2pEglaX1R7+dsByqT
-         engBs/RHc9QlFai8NY3/kFpFsoGgjOWsOVz3WpfAHHD+/6AdSDu5yQGx3Qus4XIQufAd
-         eGX++gEOJCCFMUw5AnUlbLqBp473kx5spGSIM=
+        bh=40gu5u7tBPIakSFyQ1m/t0Td9u6SRRjNaadPqP/jZYI=;
+        b=Hf0dXQ1crSt6UjG6GCNAanYtmoH5RFrL3ms3meTf4tP7XcBC/a5R5s6JcGVLvIEUsy
+         a/RaIlwv6SuFOkY1vJ/GYSoL0unFvjIf14SqAn44HnV/6DrRbJPZUstQ7gZmvYZmld2G
+         +5unsNt9gMtZ03Cups9Dzi/s9o2Pzpt3RqSuI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=96laK3X9C3HRNTHwHkJ/JwZirLHA0u1Wc3B+YkpYnbk=;
-        b=SU7iefazUQ/kv0L3s/qEF9D2T2Xc401NFr5YsDJPTcQLiBn5fz4ZwOA4VGgWNUYVJF
-         xcdARtd8j9jaA4fAW6j+45K2wSJ7++C+y8umukRvajW0XLiXcKuA6dg5QDqBVZ3iJGFb
-         vTPpsmudKYV9tKqeIbx2tXCFo9rpt0E4HghIRdhK4Uztu8s8CM5T7z7vTCAN11OHzFvT
-         cBB3J2iKRLcKyKSJGD18WD0OrwpQQmOWUfgVKECjYzuuf7GRUOOyPi2OUdVtkfay5h0o
-         EERNRl8ROYuklgbTSII1u8BTWM1B6anJoZ0WLriAYrb7N8Gwi8mmNlhWOC2fpKue3TPq
-         tg5A==
-X-Gm-Message-State: AJIora/PyhIf7d9Pd9n3TJSrjof46OZhbVeHcA+7WUt/exrc72cANRiB
-        j+pYaK2zRLm0ok1/PE+POF+Fl+VCQmALSpfq
-X-Google-Smtp-Source: AGRyM1vuirjv/pEKWOoWHNpKiUX7f0KeemKhj4cw+g1JFUs2CzTqwrun12WGeuYepEblI65UXDN6TQ==
-X-Received: by 2002:aa7:cd84:0:b0:43c:532b:65e9 with SMTP id x4-20020aa7cd84000000b0043c532b65e9mr929584edv.330.1659044891143;
-        Thu, 28 Jul 2022 14:48:11 -0700 (PDT)
+        bh=40gu5u7tBPIakSFyQ1m/t0Td9u6SRRjNaadPqP/jZYI=;
+        b=0gZd3l02gHbqTIAQ6cDewhhlduQ3nAhXNYlwl4uIbrWshAjK2OJjMXAtui6POqH7Ph
+         rDmHCzNJrsMFfnZl7HUm0z+TeGU36u26B69GXnsZLD8FG28PTh6wWq7G7wRfzuoD3Nxq
+         NcxAnFO6tQg59I6pSemK9V+xGx6nhPMj6W/51GdLqPfp7LdnV8Kax34Y2No5EeUb7Pek
+         6alcvL1IYpUBGt+KhA2SpffT55EdWDxEiRbmTl+JnSwPFbzpLmXsRTrBAWu+hQzgIJPG
+         +L1g4pIHgQ6tSKoOuNWcwC+48nyD27D0Ev2lGsc6Hgf6PZn14ooRKFFSf5SR+H2igR0U
+         /drg==
+X-Gm-Message-State: AJIora8UzrWfTL16n5AqBgFi0OgoHDUy6Nk7sWitflV0hpeAZt4Q+vNr
+        GmS8j9P9s6zZoU/Nwa7KIaB4y9Kv+79oAPUH
+X-Google-Smtp-Source: AGRyM1s1JjJJcQnLdgDc+e7KW6pt6Vjqrl9z7F3bZDVDoy/3+qjb0irbNgKt/FOOWuvCOq3HJY591w==
+X-Received: by 2002:a05:6402:27cf:b0:43a:de0b:9a82 with SMTP id c15-20020a05640227cf00b0043ade0b9a82mr878312ede.427.1659044982532;
+        Thu, 28 Jul 2022 14:49:42 -0700 (PDT)
 Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id uz12-20020a170907118c00b0072aed3b2158sm851453ejb.45.2022.07.28.14.48.08
+        by smtp.gmail.com with ESMTPSA id u16-20020a056402065000b0043ab81e4230sm1362953edx.50.2022.07.28.14.49.41
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 14:48:09 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id n185so1673612wmn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:48:08 -0700 (PDT)
-X-Received: by 2002:a05:600c:2e48:b0:3a3:1ce3:3036 with SMTP id
- q8-20020a05600c2e4800b003a31ce33036mr776502wmf.188.1659044887677; Thu, 28 Jul
- 2022 14:48:07 -0700 (PDT)
+        Thu, 28 Jul 2022 14:49:41 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id i10-20020a1c3b0a000000b003a2fa488efdso1025173wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:49:41 -0700 (PDT)
+X-Received: by 2002:a05:600c:21d7:b0:3a3:2088:bbc6 with SMTP id
+ x23-20020a05600c21d700b003a32088bbc6mr798181wmj.68.1659044980827; Thu, 28 Jul
+ 2022 14:49:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220728143215.v3.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
-In-Reply-To: <20220728143215.v3.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 28 Jul 2022 14:47:54 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U2U5drgkUP57_hszWT+OEKhqcySOAog00NQ09AhtQ8Qg@mail.gmail.com>
-Message-ID: <CAD=FV=U2U5drgkUP57_hszWT+OEKhqcySOAog00NQ09AhtQ8Qg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm: qcom: document zoglin board
-To:     Bob Moragues <moragues@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20220728161208.865420-1-yury.norov@gmail.com> <CAHk-=wiFJboHXZEXtMhDcHbEYXujTiDxkGbpONC=DJA7dJG6nw@mail.gmail.com>
+In-Reply-To: <CAHk-=wiFJboHXZEXtMhDcHbEYXujTiDxkGbpONC=DJA7dJG6nw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 28 Jul 2022 14:49:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgga5hrg5qgm4UwuOCjgBrobhZcdKTr1AFU7WSWgVKKZQ@mail.gmail.com>
+Message-ID: <CAHk-=wgga5hrg5qgm4UwuOCjgBrobhZcdKTr1AFU7WSWgVKKZQ@mail.gmail.com>
+Subject: Re: [PATCH 0/5] lib/find: optimize find_bit() functions
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Jul 28, 2022 at 2:33 PM Bob Moragues <moragues@chromium.org> wrote:
+On Thu, Jul 28, 2022 at 11:49 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Zoglin is a Hoglin Chromebook with SPI Flash reduced from 64MB to 8MB.
-> Zoglin is identical to Hoglin except for the SPI Flash.
-> The actual SPI Flash is dynamically probed at and not specified in DTS.
->
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Bob Moragues <moragues@chromium.org>
+> It builds for me and seems to generate reasonable code, although I
+> notice that clang messes up the "__ffs()" inline asm and forces the
+> source into memory.
 
-A nit from my point of view is that I would have expected your
-Signed-off-by to be the first tag. As I understand it the tags are
-usually supposed to be a top-to-bottom history of what happened. You
-signed off on the patch and then people added reviews / acks. I don't
-personally think this is important enough to spin a v4 for, though the
-last word would be Bjorn.
+I have created a llvm issue for this at
 
-> ---
->
-> Changes in v3:
-> - Fixed Author
-> - Fixed duplicate Signed-off-by
+        https://github.com/llvm/llvm-project/issues/56789
 
-Technically this should have been:
+and while I noticed this while looking at the rather odd code
+generation for the bit finding functions, it seems to be a general
+issue with clang inline asm.
 
-Changes in v3:
-- Really really fixed Signed-off-by
+It looks like any instruction that takes a mod/rm input (so a register
+or memory) will always force the thing to be in memory. Which is very
+pointless in itself, but it actually causes some functions to have a
+stack frame that they wouldn't otherwise need or want. So it actually
+has secondary downsides too.
 
-Changes in v2:
-- Fixed Author
-- Fixed duplicate Signed-off-by
+And yes, that particular case could be solved with __builtin_ctzl(),
+which seems to DTRT. But that uses plain bsf, and we seem to really
+want tzcnt ("rep bsf") here, although I didn't check why (the comment
+explicitly says "Undefined if no bit exists", which is the main
+difference between bsf and tzcnt).
 
-...but that's also not really worth spinning for.
+I _think_ it's because tzcnt is faster when it exists exactly because
+it always writes the destination, so 'bsf' is actually the inferior
+op, and clang shouldn't generate it.
 
-I think this looks good now. Though unofficial (and not stable git
-hashes), I've been trying to keep track of some patches during this
-dead time till -rc1. I've put your two patches here:
+But the "rm" thing exists elsewhere too, and I just checked - this
+same issue seems to happen with "g" too (ie "any general integer
+input").
 
-https://github.com/dianders/kernel-staging/commits/qcom/arm64-staging
-
--Doug
+                      Linus

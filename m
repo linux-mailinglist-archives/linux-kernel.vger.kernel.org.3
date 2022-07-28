@@ -2,79 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120E258436F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE444584323
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbiG1Pnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S231164AbiG1Pfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiG1Pni (ORCPT
+        with ESMTP id S229449AbiG1Pff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:43:38 -0400
-X-Greylist: delayed 623 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Jul 2022 08:43:34 PDT
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [202.47.80.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7604B4AE;
-        Thu, 28 Jul 2022 08:43:34 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 0995A36E512B;
-        Thu, 28 Jul 2022 22:33:02 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id oBnTXIv5G2bF; Thu, 28 Jul 2022 22:33:00 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 6FB9236E5119;
-        Thu, 28 Jul 2022 22:32:59 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mailgate.kemenperin.go.id 6FB9236E5119
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kemenperin.go.id;
-        s=3298A942-BBC6-11E3-B333-483736368EC2; t=1659022379;
-        bh=uOhJOXArDjsoRVYImbt149tZMvqAHQKsDAdZX6+eFZQ=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=W9f1EPX40+ZX9O1aigOTRCX0fUsD5Kdubj7kYZ7o9zaEMp+xXv+kj5Tj6e5jmYQ1w
-         3XuBK7TqjDMpH38Az5O07oIN3Ao9VI3+8qk90WFl5l9m8qi9xuHuSTKpOhU5vE3pxo
-         JrDm61wzR17Z7kX5iuUrlWOEZ0Njem36Z/hKrl7A=
-X-Virus-Scanned: amavisd-new at kemenperin.go.id
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wGPIkVvkFL1E; Thu, 28 Jul 2022 22:32:59 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [10.1.0.89])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id C2BD736E5113;
-        Thu, 28 Jul 2022 22:32:50 +0700 (WIB)
-Date:   Thu, 28 Jul 2022 22:32:50 +0700 (WIB)
-From:   Gc Credit International Consultant <trisna.aulia@kemenperin.go.id>
-Reply-To: Gc Credit International Consultant 
-          <info@gccreditinternationalconsultancy.com>
-Message-ID: <1839418311.1756947.1659022370706.JavaMail.zimbra@kemenperin.go.id>
-Subject: =?utf-8?Q?=E2=80=8B=E2=80=8BBrauchen_Sie_einen_Kredit=3F?=
+        Thu, 28 Jul 2022 11:35:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70D2B20F66
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659022533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x2lk2hqDKcE3DDLOhqbpwiGyywL02+HBUzoqQOKIEfY=;
+        b=iCb5vOn5wMdFQEJyCuwcxsij+ENGJzjsShHIrtCq51UbVEWpUvb/+PXU2CvyME+GjjnSse
+        Mc/bGkzZSWo8iYbuNUl4+V0mhZpH3/3klJlwe9DaDIUGVtc9LyxAv++dSoqlIwyUFT4/jS
+        h+0GeorFyY017SFid/rwWmdO7s99eLU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-557-PA64DZPlMt2YhMyv00gn8g-1; Thu, 28 Jul 2022 11:35:28 -0400
+X-MC-Unique: PA64DZPlMt2YhMyv00gn8g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1473E8037B5;
+        Thu, 28 Jul 2022 15:35:28 +0000 (UTC)
+Received: from [10.22.9.86] (unknown [10.22.9.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 91DDB2166B26;
+        Thu, 28 Jul 2022 15:35:26 +0000 (UTC)
+Message-ID: <a252d963-aedd-c9fe-e507-2b8fea8d375d@redhat.com>
+Date:   Thu, 28 Jul 2022 11:35:26 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.1.0.89]
-Thread-Index: obVCXeBQbQ8a3ez4p/Kbv/ZOd8Wq/Q==
-Thread-Topic: =?utf-8?B?4oCL4oCLQnJhdWNoZW4=?= Sie einen Kredit?
-X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,MISSING_HEADERS,
-        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
+ affinity was explicitly set
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220728005815.1715522-1-longman@redhat.com>
+ <20220728144420.GA27407@blackbody.suse.cz>
+ <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
+ <20220728152355.GB25894@blackbody.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220728152355.GB25894@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/28/22 11:23, Michal Koutný wrote:
+> On Thu, Jul 28, 2022 at 10:59:01AM -0400, Waiman Long <longman@redhat.com> wrote:
+>> Cgroup v1 doesn't have this problem.
+> v1 analogy would be:
+>
+> 	echo 2-3 >$dst/cpuset.cpus
+> 	# job runs in $dst
+> 	# one task T in $dst sets affinity just to one cpu
+> 	# I rethink my config, I want to allow $dst more space
+> 	echo 2-5 >$dst/cpuset.cpus
+>
+> Most tasks in $dst happily utilize the new cpus but it breaks affinity
+> for T -- this must have been broken since ever.
+>
+> (Or I'd argue that per-thread affinities are just recommendations, if I
+> have a task for nohz CPU, I should enforce its placement with cpuset
+> from the beginning.)
 
+I should have clarified that what I meant is systemd on a cgroup v1 
+environment doesn't cause this cpu list reset to happen. It doesn't mean 
+that cgroup v1 has no similar problem. Sorry for the confusion.
 
-Brauchen Sie einen Kredit?
-Kreditlimit: =E2=82=AC/$10.000,00 bis =E2=82=AC/$50.000.000,00=20
-J=C3=A4hrlicher Zinssatz: 1%
-Geben Sie unten Ihre Daten ein, um Ihren Kreditantrag zu bearbeiten.
-Ihr vollst=C3=A4ndiger Name, Darlehensbetrag, Darlehensdauer und Darlehensz=
-weck.
-F=C3=BCr weitere Informationen kontaktieren Sie uns bitte unter dieser E-Ma=
-il:
-info@gccreditinternationalconsultancy.com
+Cheers,
+Longman
 
-Management
-Gc Credit Internationale Beratung

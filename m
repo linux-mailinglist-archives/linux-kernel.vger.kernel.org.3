@@ -2,65 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C04A58431C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2470358431E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiG1Pa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S231789AbiG1Pbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiG1Pax (ORCPT
+        with ESMTP id S229862AbiG1Pbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:30:53 -0400
-Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC422BB0F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:30:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1659022234; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=ZKO3kS9nX3NIiXt/OTnPUDv4Om6OUQ7uQSA069nlffAFhZVKjSFAZLyPWq68AnZ1lepg7GV0/DKovJ1p/rpHT0XXe4R7rQxNoHB+7mFqsAThtVVJ01Kuc2375WCw1S2miUvBlAoMJ54uJQqfo2tVUq+gB9j/1Qa9EsCFhuDqgMI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1659022234; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=DolUpRiughPORTgVS7n95UsCu0htJgsF8Zk4DvggZ/k=; 
-        b=QOtnrFuQemRSap1Cd9Z8QRqKI7GrIUNizxxMNRrtlGi/HuCBAQR6MaXVdBb1KyuaB23lbHzo2PidaEltuvdwdwdfQG9/huHa+DHVCuNnNHYgkKKNxUChZgZu5ahUWzW4MDWWx665pTBHHlkQrhFvhmQYLh/p6Ine5QeNAZOYKhY=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659022234;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=DolUpRiughPORTgVS7n95UsCu0htJgsF8Zk4DvggZ/k=;
-        b=P4lImngD7Mjo6TAxuwVN2oGGEeb+L1b34mUlsZOH5A/vFNhPIQKIUM87fnqULic7
-        WTozxvKsw0Qk6t+RFgXCLVy1j4viqqHJS64mnIlaildLIz7DDtSk2MINWpOcOIxA9yd
-        INJErl43VNAzK1IAUBPRanUCsBxOt96CHRItv8IM=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1659022222821661.393770909466; Thu, 28 Jul 2022 21:00:22 +0530 (IST)
-Date:   Thu, 28 Jul 2022 21:00:22 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "syzbot" <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
-Cc:     "christophe.jaillet" <christophe.jaillet@wanadoo.fr>,
-        "dhowells" <dhowells@redhat.com>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "syzkaller-bugs" <syzkaller-bugs@googlegroups.com>
-Message-ID: <182456e25c7.cd7fb4c79569.3198675383666226894@siddh.me>
-In-Reply-To: <00000000000046e89e05e4851ee1@google.com>
-References: <00000000000046e89e05e4851ee1@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in post_one_notification
+        Thu, 28 Jul 2022 11:31:42 -0400
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892FD61DA9;
+        Thu, 28 Jul 2022 08:31:41 -0700 (PDT)
+Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
+        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1oH5Tr-006dKi-BO; Thu, 28 Jul 2022 16:31:19 +0100
+Message-ID: <0d644682-094d-6151-aa2f-86552c8f9a87@codethink.co.uk>
+Date:   Thu, 28 Jul 2022 16:31:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RESEND v4 03/15] PCI: dwc: Convert to using native IP-core
+ versions representation
+Content-Language: en-GB
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20220728152418.GA302516@bhelgaas>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20220728152418.GA302516@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: https://github.com/siddhpant/linux.git post_one_notification
+On 28/07/2022 16:24, Bjorn Helgaas wrote:
+> On Fri, Jun 24, 2022 at 05:39:35PM +0300, Serge Semin wrote:
+>> Since DWC PCIe v4.70a the controller version can be read from the
+>> PORT_LOGIC.PCIE_VERSION_OFF register. Version is represented in the FourCC
+>> format [1]. It's standard versioning approach for the Synopsys DWC
+>> IP-cores. Moreover some of the DWC kernel drivers already make use of it
+>> to fixup version-dependent functionality (See DWC USB3, Stmicro STMMAC or
+>> recent DW SPI driver).
+> 
+> These references to other drivers might be useful, but without a
+> function name or file name, I can't easily find them.
+> 
+>> In order to preserve the standard version
+>> representation and prevent the data conversion back and forth, we suggest
+>> to preserve the native version representation in the DWC PCIe driver too
+>> in the same way as it has already been done in the rest of the DWC
+>> drivers. IP-core version reading from the CSR will be introduced in the
+>> next commit together with a simple macro-based API to use it.
+>>
+>> [1] https://en.wikipedia.org/wiki/FourCC
+> 
 
+I'm currently looking at a OF based dw-apb-timers-pwm driver, so also
+would like to follow this.
+
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
+
+https://www.codethink.co.uk/privacy.html

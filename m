@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D0E584561
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9A9584568
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbiG1RvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S232999AbiG1Rvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbiG1RvR (ORCPT
+        with ESMTP id S232925AbiG1Rvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:51:17 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEC22A428;
-        Thu, 28 Jul 2022 10:51:16 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id y197so1907259iof.12;
-        Thu, 28 Jul 2022 10:51:16 -0700 (PDT)
+        Thu, 28 Jul 2022 13:51:38 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42B574CDB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:51:34 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso1436995wmq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CXMRCPg/c9Nbak8x8/xFoJWKumOKkUty3hELsz55Pu4=;
-        b=FYGlUeNsJv/aOwTaXwRqilYn7rkz6D+rKHHRH0+kTu65hoygCWrHbrV13KL82jB2VN
-         5A+VFSdmQmPzv/5f/zS4lTrqI+xaqgXDXTFl8wPicp7/jpcHEsUYqu+wMqE9YuuNZdKU
-         x0i7Sp9NnXksHyYfg3/s3uET3iCfTQWNhWjUK9ttTQR7qOl7bvprRHGHeMzJW/YuoPPQ
-         H+ArPcg4A6LjUgxQ8xZP8I9NxKCQPQkYLXL0yDG7/0AeSoqiGz2qtrN6KRxDE9sh7Ck4
-         2NCT5T7MIS8whMj8NfQvnaOhgqCOVlV+bd/8MFVzIGYBRIWCt5xTWp5j4vAuStZJS8t+
-         5GdQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DRglWFr4DTWj8W0OlEgwT2U+TB7+T+ug/9NREhYgClQ=;
+        b=2a8KnT+wEv/LQYe1L9vxUSd6YePQZGg78VnMEwFZPOOwMIm05BJMJTv+a5E0pLMzUT
+         FfX68p2a9++nXOP6D3JrKBeFsgr8M3KnrTsbp41ycnoLEVeQy0G5O3+VwEzE8UjDxf8j
+         4UESLOOiKh9SRnwhPWKO0+lnUR0NRynHbYQO2fknvBm2H/86AtAJOYrguLqn9TYHWnJq
+         NrYo0rXe2cfiCaZqpFLnuWIWWGcih4c7w/0n1D6IMBzpuMQo/x295e+uI0doasO6KqQR
+         Zjk68J9aAy4ZliKhIR4gSZ5vNAdkpJGmg+AJ5L33wQwqCKk3LdnKJmtZZlEyeYapt4i9
+         R9lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CXMRCPg/c9Nbak8x8/xFoJWKumOKkUty3hELsz55Pu4=;
-        b=nLXJF8l1nFIp/fuZPFOJYL1bgHAL9LJMa+hUubtuE/KYEl8/0ttYmtrBOA1CRmHtAO
-         Dcou9uiAlSrl73jH2bcyeF8Mw/XSeN6FYdtx4Xez74Ech7nFY3jEeFuq5wGLaCHVxS3/
-         DK/2qNthkifaQZMjLm9QHtaI8XqYNCvoPCccj7ItgnhbJACcfdM0IAV17dAuXV/r2NOs
-         byuAfPzR+bcu79sAhlnrq2fy1GSCYZ+pUdDBjytiObUfRySovaVl2XbtNbriUwJ8JASw
-         IchUnVSJYTF4W9QJ24SCAij+q68yQ3a+Xu7CCTYeobKOfJKbN6RmbdIqOaf6CwykSyAl
-         6eDQ==
-X-Gm-Message-State: AJIora+0XS+Q6OHgPW6c4A3Wzi366YiV/8+GhYL4KU0mhseViiZHNtof
-        SICRsdniVHj2vrPWezBLrg3+6KBF7KkuRw==
-X-Google-Smtp-Source: AGRyM1vFETi9nJb7BXr+m3gG0v2Nk7JjG5f7nXxam3ehi4VvlChzhQxwDFSQHin/MyhxElBORWV+kg==
-X-Received: by 2002:a05:6602:2dc4:b0:648:adac:bae8 with SMTP id l4-20020a0566022dc400b00648adacbae8mr9885180iow.9.1659030675553;
-        Thu, 28 Jul 2022 10:51:15 -0700 (PDT)
-Received: from localhost.localdomain ([2601:249:600:388b::2253:8b11])
-        by smtp.gmail.com with ESMTPSA id a12-20020a02ac0c000000b0033e72ec9d93sm621487jao.145.2022.07.28.10.51.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DRglWFr4DTWj8W0OlEgwT2U+TB7+T+ug/9NREhYgClQ=;
+        b=be983GBVozHCfvwa+O9P9+LCPnqim2qM1draCB3trsQAbOsAiURN3RK9OwgsiDZiVz
+         mphSZNIYj/Rb5yNg2lHk6Rtx+//k6oV/Lzb7aFhZePly2qOgbJY87idXD+1x3T2tSIAv
+         lVvombnp5mbjNrXhr1nTYI/Bs8eF9DIzZFssCODx3BS5oVLd8LN2dP1QtM5brkKReTCl
+         v9ScO+paCJnCWx4qgJRNpUXIerYHJPVDsUeD+K/IGw2JzfdTEu9xyxKQn4QnJm5zO9Rz
+         grl8DtrRK+qx0//jfuZeHSbJQPJzHsMYUNvZKi44J9NOUtyYQtuGVeRB64jfZfZKu1fY
+         VgPQ==
+X-Gm-Message-State: AJIora/lpfJPkJne4Au6UDTirMZEgE37Z3xyRVNEvZT3uXEPBCV7aADM
+        Lcx/6GaxSabBkxiqiITnJbUPDw==
+X-Google-Smtp-Source: AGRyM1tuM+lYq5TgHTKJ5iYFPZRPwmXdTjOFOxn1iT6jEyOBu1VwJ1R9H7NC6R9lj+2puxxsmD/t7g==
+X-Received: by 2002:a05:600c:240a:b0:3a3:5452:4262 with SMTP id 10-20020a05600c240a00b003a354524262mr25238wmp.86.1659030693374;
+        Thu, 28 Jul 2022 10:51:33 -0700 (PDT)
+Received: from localhost.localdomain (33.169.185.81.rev.sfr.net. [81.185.169.33])
+        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b003a3442f1229sm8274027wmq.29.2022.07.28.10.51.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 10:51:14 -0700 (PDT)
-From:   Josh Kilmer <srjek2@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, Josh Kilmer <srjek2@gmail.com>
-Subject: [PATCH v2 RESEND] hid: asus: ROG NKey: Ignore portion of 0x5a report
-Date:   Thu, 28 Jul 2022 12:51:11 -0500
-Message-Id: <20220728175111.18769-1-srjek2@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <CAMXW6=97T1tzT=FSyzZN6jBAKgzUDOjqRoH-FMAPLHk1gsD=mA@mail.gmail.com>
-References: <CAMXW6=97T1tzT=FSyzZN6jBAKgzUDOjqRoH-FMAPLHk1gsD=mA@mail.gmail.com>
+        Thu, 28 Jul 2022 10:51:32 -0700 (PDT)
+From:   Julien Panis <jpanis@baylibre.com>
+To:     jic23@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mranostay@ti.com, Julien Panis <jpanis@baylibre.com>
+Subject: [PATCH v3 0/2] ECAP support on TI AM62x SoC
+Date:   Thu, 28 Jul 2022 19:51:22 +0200
+Message-Id: <20220728175124.468461-1-jpanis@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On an Asus G513QY, of the 5 bytes in a 0x5a report, only the first byte
-is a meaningful keycode. The other bytes are zeroed out or hold garbage
-from the last packet sent to the keyboard.
+The Enhanced Capture (ECAP) module can be used to timestamp events
+detected on signal input pin. It can be used for time measurements
+of pulse train signals.
 
-This patch fixes up the report descriptor for this event so that the
-general hid code will only process 1 byte for keycodes, avoiding
-spurious key events and unmapped Asus vendor usagepage code warnings.
+ECAP module includes 4 timestamp capture registers. For all 4 sequenced
+timestamp capture events (0->1->2->3->0->...), edge polarity (falling/rising
+edge) can be selected. Moreover, input signal can be prescaled.
 
-Signed-off-by: Josh Kilmer <srjek2@gmail.com>
----
- drivers/hid/hid-asus.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+This driver leverages IIO subsystem to :
+- select edge polarity for all 4 capture events (event mode)
+- log both event index and timestamp for each capture event
+Event polarity, event indexes, and timestamps give all the information
+about the input pulse train. Further information can easily be computed :
+period and/or duty cycle if frequency is constant, elapsed time between
+pulses, etc...
 
-diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
-index 08c9a9a60ae4..b59c3dafa6a4 100644
---- a/drivers/hid/hid-asus.c
-+++ b/drivers/hid/hid-asus.c
-@@ -1212,6 +1212,13 @@ static __u8 *asus_report_fixup(struct hid_device *hdev, __u8 *rdesc,
- 		rdesc = new_rdesc;
- 	}
- 
-+	if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD &&
-+			*rsize == 331 && rdesc[190] == 0x85 && rdesc[191] == 0x5a &&
-+			rdesc[204] == 0x95 && rdesc[205] == 0x05) {
-+		hid_info(hdev, "Fixing up Asus N-KEY keyb report descriptor\n");
-+		rdesc[205] = 0x01;
-+	}
-+
- 	return rdesc;
- }
- 
+Modifications since v2:
+	- Fix yaml file name
+	- Remove unnecessary node in yaml 'examples' section
+	- Remove unnecessary error messages in probe function
+
+Userspace commands :
+	cd /sys/devices/platform/bus@f0000/23120000.capture/iio\:device2/
+
+	# Configure/Enable data buffers
+	echo 1 > scan_elements/in_index_en
+	echo 1 > scan_elements/in_timestamp_en
+	echo 100 > buffer/length
+	echo 1 > buffer/enable
+
+	# Set event mode in range [0 ; 15]
+	# One bit for each CAPx register : 1 = falling edge / 0 = rising edge
+	# e.g. mode = 13 = 0xd = 0b1101
+	# -> falling edge for CAP1-3-4 / rising edge for CAP2
+	echo 13 > events/change_falling_value
+
+	# Run ECAP
+	echo 1 > en
+
+	# Get the number of available data
+	cat buffer/data_available
+
+	# Read data
+	hexdump -v /dev/iio\:device2
+
+	# Stop ECAP
+	echo 0 > en
+
+Julien Panis (2):
+  dt-binding: iio: time: add ti,am62-ecap-capture.yaml
+  iio: time: capture-tiecap: capture driver support for ECAP
+
+ .../iio/time/ti,am62-ecap-capture.yaml        |  61 +++
+ drivers/iio/Kconfig                           |   1 +
+ drivers/iio/Makefile                          |   1 +
+ drivers/iio/time/Kconfig                      |  22 +
+ drivers/iio/time/Makefile                     |   6 +
+ drivers/iio/time/capture-tiecap.c             | 517 ++++++++++++++++++
+ 6 files changed, 608 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/time/ti,am62-ecap-capture.yaml
+ create mode 100644 drivers/iio/time/Kconfig
+ create mode 100644 drivers/iio/time/Makefile
+ create mode 100644 drivers/iio/time/capture-tiecap.c
+
 -- 
-2.35.1
+2.25.1
 

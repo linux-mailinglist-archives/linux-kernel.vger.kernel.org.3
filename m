@@ -2,243 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BA3583C89
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6B2583C8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbiG1KvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S236368AbiG1Kvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236077AbiG1KvH (ORCPT
+        with ESMTP id S236044AbiG1Kvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:51:07 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAF022B12
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:51:06 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oH16U-0001Zj-4S; Thu, 28 Jul 2022 12:50:54 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CE0EABCC4F;
-        Thu, 28 Jul 2022 10:50:51 +0000 (UTC)
-Date:   Thu, 28 Jul 2022 12:50:49 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
- register (btr)
-Message-ID: <20220728105049.43gbjuctezxzmm4j@pengutronix.de>
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
- <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
- <20220727113054.ffcckzlcipcxer2c@pengutronix.de>
- <20220727192839.707a3453.max@enpas.org>
- <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
- <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
- <20220728090228.nckgpmfe7rpnfcyr@pengutronix.de>
- <CABGWkvoYR67MMmqZ6bRLuL3szhVb-gMwuAy6Z4YMkaG0yw6Sdg@mail.gmail.com>
+        Thu, 28 Jul 2022 06:51:48 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D4122B12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:51:47 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F25036601B41;
+        Thu, 28 Jul 2022 11:51:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659005506;
+        bh=R6DrP5mpef+w1XUFgkLzJ6U/ghoD03zA8Xf+MFNAOAc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=O73i4vDmw3pkVFHoi2sCJzIHc90Z2PqAvwnwQU6y6MIDHezyqaqxaNaXEaoz7d42H
+         PcE7/+TcEbnr59TJ7f77zNp9WnMXONANeLrzZhhEtrZM6vBLxZsDYK6pia2JSg69eB
+         JQezS3cUHtJ+yt9bTSwn/JeqWNaEtDv+1YOu7QbB26KtowyQjzx+uuFtis0UkzI3yF
+         FYOz4hQiCIoHTThla09KbbwvUxhR4i4uAOwZ9sdHLfBuJTSRVVGCVcTvz9kbhIuTB1
+         U2YFdZaXSGEp1UualKor4uQhTeiq3+p5sXdOLmteMIie+iz1jaz6xWx2Yj5LowSfdo
+         A9Hz0795WCg7A==
+Message-ID: <98eccbdd-3446-f44d-9278-79a4a60c1c18@collabora.com>
+Date:   Thu, 28 Jul 2022 12:51:44 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uchmzozxirr27riu"
-Content-Disposition: inline
-In-Reply-To: <CABGWkvoYR67MMmqZ6bRLuL3szhVb-gMwuAy6Z4YMkaG0yw6Sdg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] soc: mediatek: Let PMIC Wrapper and SCPSYS depend on OF
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Chenglin Xu <chenglin.xu@mediatek.com>
+References: <20220728112216.13b10689@endymion.delvare>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220728112216.13b10689@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 28/07/22 11:22, Jean Delvare ha scritto:
+> With the following configuration options:
+> CONFIG_OF is not set
+> CONFIG_MTK_PMIC_WRAP=y
+> CONFIG_MTK_SCPSYS=y
+> we get the following build warnings:
+> 
+>    CC      drivers/soc/mediatek/mtk-pmic-wrap.o
+> drivers/soc/mediatek/mtk-pmic-wrap.c:2138:34: warning: ‘of_pwrap_match_tbl’ defined but not used [-Wunused-const-variable=]
+> drivers/soc/mediatek/mtk-pmic-wrap.c:1953:34: warning: ‘of_slave_match_tbl’ defined but not used [-Wunused-const-variable=]
+>    CC      drivers/soc/mediatek/mtk-scpsys.o
+> drivers/soc/mediatek/mtk-scpsys.c:1084:34: warning: ‘of_scpsys_match_tbl’ defined but not used [-Wunused-const-variable=]
+> 
+> Looking at the code, both drivers can only bind to OF-defined device
+> nodes, so these drivers are useless without OF and should therefore
+> depend on it.
+> 
 
---uchmzozxirr27riu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello Jean,
 
-On 28.07.2022 12:23:04, Dario Binacchi wrote:
-> > > Does it make sense to use the device tree
-> >
-> > The driver doesn't support DT and DT only works for static serial
-> > interfaces.
+I would prefer that you solve this warning by removing of_match_ptr() from both
+drivers instead.
 
-Have you seen my remarks about Device Tree?
+Regards,
+Angelo
 
-> > > to provide the driver with those
-> > > parameters required for the automatic calculation of the BTR (clock r=
-ate,
-> > > struct can_bittiming_const, ...) that depend on the connected
-> > > controller?
-> >
-> > The device tree usually says it's a CAN controller compatible to X and
-> > the following clock(s) are connected. The driver for CAN controller X
-> > knows the bit timing const. Some USB CAN drivers query the bit timing
-> > const from the USB device.
-> >
-> > > In this way the solution should be generic and therefore scalable. I
-> > > think we should also add some properties to map the calculated BTR
-> > > value on the physical register of the controller.
-> >
-> > The driver knows how to map the "struct can_bittiming" to the BTR
-> > register values of the hardware.
-> >
-> > What does the serial protocol say to the BTR values? Are these standard
-> > SJA1000 layout with 8 MHz CAN clock or are those adapter specific?
->=20
-> I think they are adapter specific.
+> Developers or QA teams who wish to test-build the code can still do
+> so by enabling CONFIG_OF, which is available on all architectures and
+> has no dependencies.
+> 
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/all/202207240252.ZY5hSCNB-lkp@intel.com/
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: Chenglin Xu <chenglin.xu@mediatek.com>
+> ---
+>   drivers/soc/mediatek/Kconfig |    2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> --- linux-5.18.orig/drivers/soc/mediatek/Kconfig	2022-05-22 21:52:31.000000000 +0200
+> +++ linux-5.18/drivers/soc/mediatek/Kconfig	2022-07-28 10:59:55.025131145 +0200
+> @@ -37,6 +37,7 @@ config MTK_INFRACFG
+>   config MTK_PMIC_WRAP
+>   	tristate "MediaTek PMIC Wrapper Support"
+>   	depends on RESET_CONTROLLER
+> +	depends on OF
+>   	select REGMAP
+>   	help
+>   	  Say yes here to add support for MediaTek PMIC Wrapper found
+> @@ -46,6 +47,7 @@ config MTK_PMIC_WRAP
+>   config MTK_SCPSYS
+>   	bool "MediaTek SCPSYS Support"
+>   	default ARCH_MEDIATEK
+> +	depends on OF
+>   	select REGMAP
+>   	select MTK_INFRACFG
+>   	select PM_GENERIC_DOMAINS if PM
+> 
 
-The BTR values depend on the used CAN controller, the clock rate, and on
-the firmware, if it supports BTR at all.
 
-> This is  what the can232_ver3_Manual.pdf reports:
->=20
-> sxxyy[CR]         Setup with BTR0/BTR1 CAN bit-rates where xx and yy is a=
- hex
->                          value. This command is only active if the CAN
-> channel is closed.
->=20
-> xx     BTR0 value in hex
-> yy     BTR1 value in hex
->=20
-> Example:            s031C[CR]
->                            Setup CAN with BTR0=3D0x03 & BTR1=3D0x1C
->                            which equals to 125Kbit.
->=20
-> But I think the example is misleading because IMHO it depends on the
-> adapter's controller (0x31C -> 125Kbit).
-
-I think the BTR in can232_ver3_Manual.pdf is compatible to a sja1000
-controller with 8 MHz ref clock. See:
-
-| Bit timing parameters for sja1000 with 8.000000 MHz ref clock using algo =
-'v4.8'
-|  nominal                                  real  Bitrt    nom   real  SampP
-|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  Erro=
-r   BTR0 BTR1
-|  1000000    125   2    3    2   1   1  1000000   0.0%  75.0%  75.0%   0.0=
-%   0x00 0x14
-|   800000    125   3    4    2   1   1   800000   0.0%  80.0%  80.0%   0.0=
-%   0x00 0x16
-|   500000    125   6    7    2   1   1   500000   0.0%  87.5%  87.5%   0.0=
-%   0x00 0x1c
-|   250000    250   6    7    2   1   2   250000   0.0%  87.5%  87.5%   0.0=
-%   0x01 0x1c
-|   125000    500   6    7    2   1   4   125000   0.0%  87.5%  87.5%   0.0=
-%   0x03 0x1c        <---
-|   100000    625   6    7    2   1   5   100000   0.0%  87.5%  87.5%   0.0=
-%   0x04 0x1c
-|    50000   1250   6    7    2   1  10    50000   0.0%  87.5%  87.5%   0.0=
-%   0x09 0x1c
-|    20000   3125   6    7    2   1  25    20000   0.0%  87.5%  87.5%   0.0=
-%   0x18 0x1c
-|    10000   6250   6    7    2   1  50    10000   0.0%  87.5%  87.5%   0.0=
-%   0x31 0x1c
-
-> > > Or, use the device tree to extend the bittates supported by the contr=
-oller
-> > > to the fixed ones (struct can_priv::bitrate_const)?
-> >
-> > The serial protocol defines fixed bit rates, no need to describe them in
-> > the DT:
-> >
-> > |           0            10 Kbit/s
-> > |           1            20 Kbit/s
-> > |           2            50 Kbit/s
-> > |           3           100 Kbit/s
-> > |           4           125 Kbit/s
-> > |           5           250 Kbit/s
-> > |           6           500 Kbit/s
-> > |           7           800 Kbit/s
-> > |           8          1000 Kbit/s
-> >
-> > Are there more bit rates?
->=20
-> No, the manual can232_ver3_Manual.pdf does not contain any others.
->=20
-> What about defining a device tree node for the slcan (foo adapter):
->=20
-> slcan {
->     compatible =3D "can,slcan";
->                                      /* bit rate btr0btr1 */
->     additional-bitrates =3D < 33333  0x0123
->                                         80000  0x4567
->                                         83333  0x89ab
->                                       150000 0xcd10
->                                       175000 0x2345
->                                       200000 0x6789>
-> };
->=20
-> So that the can_priv::bitrate_cons array (dynamically created) will
-> contain the bitrates
->            10000,
->            20000,
->            50000,
->          100000,
->          125000,
->          250000,
->          500000,
->          800000,
->         1000000 /* end of standards bitrates,  use S command */
->            33333,  /* use s command, btr 0x0123 */
->            80000,  /* use s command, btr 0x4567 */
->            83333,  /* use s command, btr 0x89ab */
->          150000,  /* use s command, btr 0xcd10 */
->          175000, /* use s command, btr 0x2345 */
->          200000  /* use s command, btr 0x6789 */
-> };
->=20
-> So if a standard bitrate is requested, the S command is used,
-> otherwise the s command with the associated btr.
-
-That would be an option. For proper DT support, the driver needs to be
-extended to support serdev. But DT only supports "static" devices.
-
-But if you can calculate BTR values you know the bit timing constants
-(and frequency) and then it's better to have the bit timing in the
-driver so that arbitrary bit rates can be calculated by the kernel.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---uchmzozxirr27riu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLiagcACgkQrX5LkNig
-012fRAf/UPtRjnojGE75hAHeJLUPRk9CLvLZvjAaSg6D3Q+owJdNJ71fQuwrpXYA
-1ji3HH97/G8hkTfNFHYfOzuNa7CFaeSUQEoMcjDkRlKthxdgG2tSARk3UeySPDqd
-gdr1taEcID+6iL/rp95cv86mtngg/z4qLRbmFa3T56KTpzfIq/oBVVdgT+uAhrep
-uEWkO+4SAr0SdfXpsR973ykdKmbEtRliPXQJR8j7ByxARJNATKD8AZxfuQnxDkE5
-Ig+vGqHPHrR36iYlmLO9+1fskAt08wfKXObZ/D06dTRyBcZoKakJ0baEWYtf0VR7
-ZcCG1ClWGyWwCXKPUg0KF9bgUB02mg==
-=6G3L
------END PGP SIGNATURE-----
-
---uchmzozxirr27riu--
+-- 

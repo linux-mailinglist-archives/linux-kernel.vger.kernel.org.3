@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B4B583E6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579CA583E93
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237810AbiG1MPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S236769AbiG1MVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235511AbiG1MPP (ORCPT
+        with ESMTP id S238371AbiG1MU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:15:15 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C6A22B0D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:15:12 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 28 Jul 2022 08:20:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386436BC39;
+        Thu, 28 Jul 2022 05:20:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 130482223A;
-        Thu, 28 Jul 2022 14:15:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1659010509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 34E8F372EC;
+        Thu, 28 Jul 2022 12:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659010847;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+iB+y4UmlKWdeQTVxa4fIZkk162vSuzYY7Z6Mms0feo=;
-        b=eRYFdqz2fx5llgTDNvLBmUKDpRFg4BwptGeeBb26uAvHV/QilbqJXphE7otOcrQ82AQjxy
-        xaRsiheInsQF2bmrQfMCW7gBfdU6iwAJcjYMEG41hrMclA9veRA4L/LoTBT6sMeCzVryPu
-        YHUKvG/o5oxz8yDT7EtrFnI47U8L9go=
+        bh=RCAW+pbfUR2hVcHVMffOWUnXziugm9XBYRvhJy477A0=;
+        b=cMRYfjiF85Ju7aoXKWebUfzKaaxAh4M92EX4IXjucc3NE4stUbOAL3sAN10XyEuDhvTtgO
+        mudPs9ipMIYBpXlV+jQdTqtruaGzgaxYxp1RcNuMgNgA73mumpqM1MNAHd1tMYeuLRWsAQ
+        OS2DF90UakFMEaNlkwCwJSHIoWq8iLc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659010847;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RCAW+pbfUR2hVcHVMffOWUnXziugm9XBYRvhJy477A0=;
+        b=X4PURyY8PyuTCefkGj2BlbcoYaTtFZE8nrFKK4Di4OURQ/j61s4hh92pzXeOY3sXOVopOF
+        yqWvufOot5YtS3Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA18113A7E;
+        Thu, 28 Jul 2022 12:20:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4b3zLx5/4mKbJgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Thu, 28 Jul 2022 12:20:46 +0000
+Date:   Thu, 28 Jul 2022 14:15:48 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Pankaj Raghav <p.raghav@samsung.com>
+Cc:     damien.lemoal@opensource.wdc.com, hch@lst.de, axboe@kernel.dk,
+        snitzer@kernel.org, Johannes.Thumshirn@wdc.com,
+        matias.bjorling@wdc.com, gost.dev@samsung.com,
+        linux-kernel@vger.kernel.org, hare@suse.de,
+        linux-block@vger.kernel.org, pankydev8@gmail.com,
+        bvanassche@acm.org, jaegeuk@kernel.org, dm-devel@redhat.com,
+        linux-nvme@lists.infradead.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH v8 07/11] dm-zoned: ensure only power of 2 zone sizes are
+ allowed
+Message-ID: <20220728121548.GE13489@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Pankaj Raghav <p.raghav@samsung.com>,
+        damien.lemoal@opensource.wdc.com, hch@lst.de, axboe@kernel.dk,
+        snitzer@kernel.org, Johannes.Thumshirn@wdc.com,
+        matias.bjorling@wdc.com, gost.dev@samsung.com,
+        linux-kernel@vger.kernel.org, hare@suse.de,
+        linux-block@vger.kernel.org, pankydev8@gmail.com,
+        bvanassche@acm.org, jaegeuk@kernel.org, dm-devel@redhat.com,
+        linux-nvme@lists.infradead.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+References: <20220727162245.209794-1-p.raghav@samsung.com>
+ <CGME20220727162253eucas1p1a5912e0494f6918504cc8ff15ad5d31f@eucas1p1.samsung.com>
+ <20220727162245.209794-8-p.raghav@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 28 Jul 2022 14:15:05 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     pratyush@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH] mtd: spi-nor: core: Add an error message when failing to
- exit the 4-byte address mode
-In-Reply-To: <20220728030159.68680-1-tudor.ambarus@microchip.com>
-References: <20220728030159.68680-1-tudor.ambarus@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <27c95d5e17906f5e45c04cec7c1bda9d@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220727162245.209794-8-p.raghav@samsung.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jul 27, 2022 at 06:22:41PM +0200, Pankaj Raghav wrote:
+> --- a/drivers/md/dm-zoned-target.c
+> +++ b/drivers/md/dm-zoned-target.c
+> @@ -792,6 +792,10 @@ static int dmz_fixup_devices(struct dm_target *ti)
+>  				return -EINVAL;
+>  			}
+>  			zone_nr_sectors = bdev_zone_sectors(bdev);
+> +			if (!is_power_of_2(zone_nr_sectors)) {
+> +				ti->error = "Zone size is not power of 2";
 
-Am 2022-07-28 05:01, schrieb Tudor Ambarus:
-> Add an error message when failing to exit the 4-byte address mode. Do 
-> not
-> stop the execution and go through the spi_nor_soft_reset() method if 
-> used,
-> in the hope that the flash will default to 3-byte address mode after 
-> the
-> reset.
-> 
-> Suggested-by: Pratyush Yadav <p.yadav@ti.com>
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
->  drivers/mtd/spi-nor/core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index f2c64006f8d7..1cdbdad97136 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -2841,7 +2841,8 @@ void spi_nor_restore(struct spi_nor *nor)
->  	/* restore the addressing mode */
->  	if (nor->addr_nbytes == 4 && !(nor->flags & SNOR_F_4B_OPCODES) &&
->  	    nor->flags & SNOR_F_BROKEN_RESET)
-> -		nor->params->set_4byte_addr_mode(nor, false);
-> +		if (nor->params->set_4byte_addr_mode(nor, false))
-> +			dev_err(nor->dev, "Failed to exit 4-byte address mode\n");
+This could print what's the value of zone_nr_sectors
 
-Could we stick to the ususal pattern:
+> +				return -EINVAL;
+> +			}
+>  			zoned_dev->zone_nr_sectors = zone_nr_sectors;
+>  			zoned_dev->nr_zones = bdev_nr_zones(bdev);
+>  		}
+> @@ -804,6 +808,10 @@ static int dmz_fixup_devices(struct dm_target *ti)
+>  			return -EINVAL;
+>  		}
+>  		zoned_dev->zone_nr_sectors = bdev_zone_sectors(bdev);
+> +		if (!is_power_of_2(zoned_dev->zone_nr_sectors)) {
+> +			ti->error = "Zone size is not power of 2";
 
-ret = func()
-if (ret)
-    err("blubb (%d)", ret);
+Same
 
-I know it is more lines but imho it makes the code much more readable.
-And that way you could also print the error code. You could also use
-dev_err("bla (%pe)\n", ERR_PTR(ret));
-
--michael
+> +			return -EINVAL;
+> +		}
+>  		zoned_dev->nr_zones = bdev_nr_zones(bdev);
+>  	}
+>  
+> -- 
+> 2.25.1

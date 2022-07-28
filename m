@@ -2,69 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E671E5837C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AECA5837A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbiG1D4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 23:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
+        id S236208AbiG1DkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 23:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiG1D4n (ORCPT
+        with ESMTP id S231247AbiG1DkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 23:56:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C76481FF
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:56:42 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z22so671862edd.6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=89cQYoQQ7JVoZPEZvY+m6QaTS5rutXILVa1TKYLXWdA=;
-        b=ni5FbjN1qo1IcwXc0V6jy4L1VolTDNx9NxXUNOxtd+C5QHAkL/v2mFJcLSuZ91Avus
-         6BownTzDkI2RA95Rvu3CJqUDx+0GrXOOiU6vemDC9npkFirDi2n0YFuoJD3fMmmz4VFL
-         ACizRnHI/KQAxhhoQHyOKqVNuyXAYbalzQQXGIJCiovZdzLd7zXSD81Q/FAvJJTddZ7T
-         RdTqY4IdQS8VamfwfO9ePWI5WEVxh0xMyyuZ/OFbW7HkURa7XUiAvrlafBC+d5TjiNP1
-         MwAG5hUjRxUrLxmYvWfRcJEAOqArv96RA9sh3wFPBtqZvBZ9sKgbFwjsf6EkJR8E5WaN
-         1Opg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=89cQYoQQ7JVoZPEZvY+m6QaTS5rutXILVa1TKYLXWdA=;
-        b=ny9ELyxcYVVZj6lPM5BNTPhDs3GFErgr1fiOi4TCW0NXzbNicruSmuJK6+pZEBK9bg
-         FhlLIidSg2FBzt8eIJUoosFmdFsHe+p59qF1+bs3S1p57oIAdcjPP7IZ79K2cUq37PQ9
-         OgoUSkQ5CdWCmY3bO9dH5tjGN/QyC3MSGE4QyE7mKrcsBnJwXYTLSRtBVIG5QVYr4BU1
-         sYPJRn2mMBdHcPiXqQQOym1LZqSnd+E9AhhVADvj4UNdzHFm3BnL56ibMryeU5ik274D
-         AcVk4RZpoLVcCa6B5xBBM2IUKY+dGza6Kitz8BKJHv9FpDjVLAV9NN6r4qaHJFyaPPLM
-         bXtA==
-X-Gm-Message-State: AJIora/+Eh2ygrX39F6SRl9x+LHXkq3e9Fhf+hvUBjZ1vfUhF/ja7qBc
-        PGkaFS9qHQwTThb1IVO4LxzpkqcbuKgH5q4F1Xg=
-X-Google-Smtp-Source: AGRyM1u7dJsyxJCRo/V6Dl4LAU1JVfq9c+j1rRuqYJvCJODT7OQYqZytRXwXmzqpKR1zZXpv5dFnUlpQBRwYXrl2J+c=
-X-Received: by 2002:a05:6402:249b:b0:43c:8ce6:8890 with SMTP id
- q27-20020a056402249b00b0043c8ce68890mr8391507eda.74.1658980601132; Wed, 27
- Jul 2022 20:56:41 -0700 (PDT)
+        Wed, 27 Jul 2022 23:40:17 -0400
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2611863FB;
+        Wed, 27 Jul 2022 20:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=OWL50
+        Trspqxmk9IY0VQ8b5aq34QuyRnC8h+e5TH14Oo=; b=DRDGAfivuYNqQy+6DkKBX
+        UCRW3g6XnhKnqGkEbXkacHmTGU3q7dLZjD1hhzA3sDLmfoHOFY0LdWIMB2wdVl8w
+        /uCvJ1DtWQfQbLfO6u5+kLOdgHZ5mm4P2HY2+AehK7fEzbrhCZenWwrqhfmr8sdG
+        fHsassUkgKrMT2FJmXg66E=
+Received: from localhost.localdomain (unknown [221.222.55.182])
+        by smtp5 (Coremail) with SMTP id HdxpCgB3_vL3BOJivq50Qw--.25809S4;
+        Thu, 28 Jul 2022 11:40:02 +0800 (CST)
+From:   Wentao_Liang <Wentao_Liang_g@163.com>
+To:     song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wentao_Liang <Wentao_Liang_g@163.com>
+Subject: [PATCH] drivers:md:fix a potential use-after-free bug
+Date:   Thu, 28 Jul 2022 19:39:19 +0800
+Message-Id: <20220728113919.7985-1-Wentao_Liang_g@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220701185303.284082-1-dakr@redhat.com> <1c0cbab1-f920-3565-f326-189cbac56da0@redhat.com>
-In-Reply-To: <1c0cbab1-f920-3565-f326-189cbac56da0@redhat.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Thu, 28 Jul 2022 13:56:30 +1000
-Message-ID: <CAPM=9tyJNMgupHLyNZDLmXW+UC9+pc-C2Mt+qjuLUAkVfRrvuA@mail.gmail.com>
-Subject: Re: [PATCH 00/10] drm: use idr_init_base() over idr_init() if applicable
-To:     Danilo Krummrich <dakr@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc:     Dave Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "Koenig, Christian" <christian.koenig@amd.com>,
-        Eric Anholt <emma@anholt.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgB3_vL3BOJivq50Qw--.25809S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWrtFyDtw4kXFWUKFWxXF1kKrg_yoW8Jryfpa
+        yrAF43ZryDWFn8tFZxZFZ7XF1FkayaqrZ7KFWvgw1fu3W5XryIkw43tFy8tr4Dtr4Fk3yr
+        Zw1qgw15Wr1UKFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UvoGdUUUUU=
+X-Originating-IP: [221.222.55.182]
+X-CM-SenderInfo: xzhq3t5rboxtpqjbwqqrwthudrp/xtbBORJML1-POqlVoQAAs-
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,20 +51,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 at 00:24, Danilo Krummrich <dakr@redhat.com> wrote:
->
-> Hi Laurent,
->
-> On 7/1/22 20:52, dakr@redhat.com wrote:
-> > From: Danilo Krummrich <dakr@redhat.com>
-> >
-> > This patch series initializes IDRs with idr_init_base(&idr, 1) rather than
-> > idr_init(&idr) in case for the particular IDR no IDs < 1 are ever requested -
-> > this avoids unnecessary tree walks.
-> >
-> Guess this would go through drm-misc too?
+In line 2884, "raid5_release_stripe(sh);" drops the reference to sh and
+may cause sh to be released. However, sh is subsequently used in lines
+2886 "if (sh->batch_head && sh != sh->batch_head)". This may result in an
+use-after-free bug.
 
-Could someone from the misc team pick this up, Danilo doesn't have
-commit rights yet.
+It can be fixed by moving "raid5_release_stripe(sh);" to the bottom of
+the function.
 
-Dave.
+The bug has been confirmed by Song on 2021-08-14. Now, I resend this
+patch with my real name. I hope the patch can be updated in a near
+future.
+
+Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
+---
+ drivers/md/raid5.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 5d09256d7f81..93fcbeac5096 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -2881,10 +2881,10 @@ static void raid5_end_write_request(struct bio *bi)
+ 	if (!test_and_clear_bit(R5_DOUBLE_LOCKED, &sh->dev[i].flags))
+ 		clear_bit(R5_LOCKED, &sh->dev[i].flags);
+ 	set_bit(STRIPE_HANDLE, &sh->state);
+-	raid5_release_stripe(sh);
+ 
+ 	if (sh->batch_head && sh != sh->batch_head)
+ 		raid5_release_stripe(sh->batch_head);
++	raid5_release_stripe(sh);
+ }
+ 
+ static void raid5_error(struct mddev *mddev, struct md_rdev *rdev)
+-- 
+2.25.1
+

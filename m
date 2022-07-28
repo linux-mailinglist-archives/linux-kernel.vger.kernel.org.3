@@ -2,137 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E14F5839E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AFF5839F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234919AbiG1H6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
+        id S234948AbiG1IAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234371AbiG1H6t (ORCPT
+        with ESMTP id S234371AbiG1IAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:58:49 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8B550738;
-        Thu, 28 Jul 2022 00:58:47 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LtjZx28shz67xvP;
-        Thu, 28 Jul 2022 15:54:01 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Jul 2022 09:58:45 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 28 Jul 2022 09:58:45 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Joe Burton <jevburton.kernel@gmail.com>
-CC:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Joe Burton <jevburton@google.com>
-Subject: RE: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-Thread-Topic: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-Thread-Index: AQHYm6d/RXaIdRF8qEmfFsB1DNrrP62SwR6AgAC2uWA=
-Date:   Thu, 28 Jul 2022 07:58:44 +0000
-Message-ID: <03011a0506e8474db73c8c1fa9ec0786@huawei.com>
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
- <CAEf4BzbWpQS6js5LfS80PkqwDwcLc+NgzfqqUTG-CkLP16shCg@mail.gmail.com>
-In-Reply-To: <CAEf4BzbWpQS6js5LfS80PkqwDwcLc+NgzfqqUTG-CkLP16shCg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.81.203.37]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 28 Jul 2022 04:00:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8574D1AA;
+        Thu, 28 Jul 2022 01:00:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20BC061B76;
+        Thu, 28 Jul 2022 08:00:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C4E6C433B5;
+        Thu, 28 Jul 2022 08:00:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658995205;
+        bh=lFSo0dPChDzCA+CL3JRhP7qk+LmcyQGLwzN+RJydslE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aIESL2Ff9ikVd/LI/GV1EcwPfBzp/nBjn/08hdZAleADwx2KfC1cxm0x+NXTZBe8S
+         6/yC/KDct4XyRX5cFZvp4bUorbjWep5bs95h8ZKifEQ9YIUpKTPrxT/Ig9fQ5H+22A
+         beOGCTx7e1uN6fEwuTHSy6/JXVlIBBq6E8xB53l1r9VEORX5vamlfvrtsMR2pXueWp
+         QT6vxRuhb2MWP0ShpUz9YALBtPQNSg2WFZFHoMEls0F5czf1dryIgZMfRiP8Lo//vO
+         9GvA3LveK0vRNi5MX1toOba8RhEvPWWmoZqLw66aaFYrHcjX/1oSjRo6Kq50lkbL1x
+         pIB4qDFN9cIpg==
+Date:   Thu, 28 Jul 2022 11:00:02 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-sgx@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/sgx: Ignore OpenSSL 3.0 deprecated functions
+ warning
+Message-ID: <YuJCAhfQklzVQJGh@kernel.org>
+References: <20220721194041.43970-1-kristen@linux.intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721194041.43970-1-kristen@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBBbmRyaWkgTmFrcnlpa28gW21haWx0bzphbmRyaWkubmFrcnlpa29AZ21haWwuY29t
-XQ0KPiBTZW50OiBUaHVyc2RheSwgSnVseSAyOCwgMjAyMiAxOjAzIEFNDQo+IE9uIFR1ZSwgSnVs
-IDE5LCAyMDIyIGF0IDEyOjQwIFBNIEpvZSBCdXJ0b24gPGpldmJ1cnRvbi5rZXJuZWxAZ21haWwu
-Y29tPg0KPiB3cm90ZToNCj4gPg0KPiA+IEZyb206IEpvZSBCdXJ0b24gPGpldmJ1cnRvbkBnb29n
-bGUuY29tPg0KPiA+DQo+ID4gQWRkIGFuIGV4dGVuc2libGUgdmFyaWFudCBvZiBicGZfb2JqX2dl
-dCgpIGNhcGFibGUgb2Ygc2V0dGluZyB0aGUNCj4gPiBgZmlsZV9mbGFnc2AgcGFyYW1ldGVyLg0K
-PiA+DQo+ID4gVGhpcyBwYXJhbWV0ZXIgaXMgbmVlZGVkIHRvIGVuYWJsZSB1bnByaXZpbGVnZWQg
-YWNjZXNzIHRvIEJQRiBtYXBzLg0KPiA+IFdpdGhvdXQgYSBtZXRob2QgbGlrZSB0aGlzLCB1c2Vy
-cyBtdXN0IG1hbnVhbGx5IG1ha2UgdGhlIHN5c2NhbGwuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBKb2UgQnVydG9uIDxqZXZidXJ0b25AZ29vZ2xlLmNvbT4NCj4gPiAtLS0NCj4gPiAgdG9vbHMv
-bGliL2JwZi9icGYuYyAgICAgIHwgMTAgKysrKysrKysrKw0KPiA+ICB0b29scy9saWIvYnBmL2Jw
-Zi5oICAgICAgfCAgOSArKysrKysrKysNCj4gPiAgdG9vbHMvbGliL2JwZi9saWJicGYubWFwIHwg
-IDEgKw0KPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDIwIGluc2VydGlvbnMoKykNCj4gPg0KPiANCj4g
-SSBhZ3JlZSB0aGF0IGJwZl9vYmpfZ2V0X29wdHMgc2hvdWxkIGJlIHNlcGFyYXRlIGZyb20gYnBm
-X2dldF9mZF9vcHRzLg0KPiBKdXN0IGJlY2F1c2UgYm90aCBjdXJyZW50bHkgaGF2ZSBmaWxlX2Zs
-YWdzIGluIHRoZW0gZG9lc24ndCBtZWFuIHRoYXQNCj4gdGhleSBzaG91bGQvd2lsbCBhbHdheXMg
-c3RheSBpbiBzeW5jLiBTbyB0d28gc2VwYXJhdGUgb3B0cyBmb3IgdHdvDQo+IHNlcGFyYXRlIEFQ
-SXMgbWFrZXMgc2Vuc2UgdG8gbWUuDQo+IA0KPiBTbyBJJ2QgYWNjZXB0IHRoaXMgcGF0Y2gsIGJ1
-dCBwbGVhc2Ugc2VlIGEgZmV3IHNtYWxsIHRoaW5ncyBiZWxvdyBhbmQNCj4gc2VuZCB2My4gVGhh
-bmtzIQ0KDQpTaG91bGQgbWFwX3BhcnNlX2ZkcygpIGFjY2VwdCB0d28gb3B0cywgb3IganVzdCB0
-aGUgZmxhZ3MNCnRvIGJlIHNldCBvbiBsb2NhbGx5LWRlZmluZWQgdmFyaWFibGVzPw0KDQpUaGFu
-a3MNCg0KUm9iZXJ0bw0KDQo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL2xpYi9icGYvYnBmLmMgYi90
-b29scy9saWIvYnBmL2JwZi5jDQo+ID4gaW5kZXggNWViMGRmOTBlYjJiLi41YWNiMGU4YmQxM2Mg
-MTAwNjQ0DQo+ID4gLS0tIGEvdG9vbHMvbGliL2JwZi9icGYuYw0KPiA+ICsrKyBiL3Rvb2xzL2xp
-Yi9icGYvYnBmLmMNCj4gPiBAQCAtNTc4LDEyICs1NzgsMjIgQEAgaW50IGJwZl9vYmpfcGluKGlu
-dCBmZCwgY29uc3QgY2hhciAqcGF0aG5hbWUpDQo+ID4gIH0NCj4gPg0KPiA+ICBpbnQgYnBmX29i
-al9nZXQoY29uc3QgY2hhciAqcGF0aG5hbWUpDQo+ID4gK3sNCj4gPiArICAgICAgIExJQkJQRl9P
-UFRTKGJwZl9vYmpfZ2V0X29wdHMsIG9wdHMpOw0KPiANCj4gaWYgeW91IHdlcmUgZG9pbmcgaXQg
-dGhpcyB3YXksIGhlcmUgc2hvdWxkIGJlIGFuIGVtcHR5IGxpbmUuIEJ1dA0KPiByZWFsbHkgeW91
-IGNhbi9zaG91bGQganVzdCBwYXNzIE5VTEwgaW5zdGVhZCBvZiBvcHRzIGluIHRoaXMgY2FzZS4N
-Cj4gDQo+ID4gKyAgICAgICByZXR1cm4gYnBmX29ial9nZXRfb3B0cyhwYXRobmFtZSwgJm9wdHMp
-Ow0KPiA+ICt9DQo+ID4gKw0KPiA+ICtpbnQgYnBmX29ial9nZXRfb3B0cyhjb25zdCBjaGFyICpw
-YXRobmFtZSwgY29uc3Qgc3RydWN0IGJwZl9vYmpfZ2V0X29wdHMNCj4gKm9wdHMpDQo+ID4gIHsN
-Cj4gPiAgICAgICAgIHVuaW9uIGJwZl9hdHRyIGF0dHI7DQo+ID4gICAgICAgICBpbnQgZmQ7DQo+
-ID4NCj4gPiArICAgICAgIGlmICghT1BUU19WQUxJRChvcHRzLCBicGZfb2JqX2dldF9vcHRzKSkN
-Cj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIGxpYmJwZl9lcnIoLUVJTlZBTCk7DQo+ID4gKw0K
-PiA+ICAgICAgICAgbWVtc2V0KCZhdHRyLCAwLCBzaXplb2YoYXR0cikpOw0KPiA+ICAgICAgICAg
-YXR0ci5wYXRobmFtZSA9IHB0cl90b191NjQoKHZvaWQgKilwYXRobmFtZSk7DQo+ID4gKyAgICAg
-ICBhdHRyLmZpbGVfZmxhZ3MgPSBPUFRTX0dFVChvcHRzLCBmaWxlX2ZsYWdzLCAwKTsNCj4gPg0K
-PiA+ICAgICAgICAgZmQgPSBzeXNfYnBmX2ZkKEJQRl9PQkpfR0VULCAmYXR0ciwgc2l6ZW9mKGF0
-dHIpKTsNCj4gPiAgICAgICAgIHJldHVybiBsaWJicGZfZXJyX2Vycm5vKGZkKTsNCj4gPiBkaWZm
-IC0tZ2l0IGEvdG9vbHMvbGliL2JwZi9icGYuaCBiL3Rvb2xzL2xpYi9icGYvYnBmLmgNCj4gPiBp
-bmRleCA4OGE3Y2M0YmQ3NmYuLmYzMWI0OTNiNWY5YSAxMDA2NDQNCj4gPiAtLS0gYS90b29scy9s
-aWIvYnBmL2JwZi5oDQo+ID4gKysrIGIvdG9vbHMvbGliL2JwZi9icGYuaA0KPiA+IEBAIC0yNzAs
-OCArMjcwLDE3IEBAIExJQkJQRl9BUEkgaW50IGJwZl9tYXBfdXBkYXRlX2JhdGNoKGludCBmZCwg
-Y29uc3QNCj4gdm9pZCAqa2V5cywgY29uc3Qgdm9pZCAqdmFsdWVzDQo+ID4gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgX191MzIgKmNvdW50LA0KPiA+ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIGNvbnN0IHN0cnVjdCBicGZfbWFwX2JhdGNoX29wdHMgKm9w
-dHMpOw0KPiA+DQo+ID4gK3N0cnVjdCBicGZfb2JqX2dldF9vcHRzIHsNCj4gPiArICAgICAgIHNp
-emVfdCBzejsgLyogc2l6ZSBvZiB0aGlzIHN0cnVjdCBmb3IgZm9yd2FyZC9iYWNrd2FyZCBjb21w
-YXRpYmlsaXR5ICovDQo+ID4gKw0KPiA+ICsgICAgICAgX191MzIgZmlsZV9mbGFnczsNCj4gDQo+
-IHBsZWFzZSBhZGQgc2l6ZV90IDowOyB0byBhdm9pZCBub24temVyby1pbml0aWFsaXplZCBwYWRk
-aW5nICAod2UgZG8gaXQNCj4gaW4gYSBsb3Qgb2Ygb3RoZXIgb3B0cyBzdHJ1Y3RzKQ0KPiANCj4g
-DQo+ID4gK307DQo+ID4gKyNkZWZpbmUgYnBmX29ial9nZXRfb3B0c19fbGFzdF9maWVsZCBmaWxl
-X2ZsYWdzDQo+ID4gKw0KPiA+ICBMSUJCUEZfQVBJIGludCBicGZfb2JqX3BpbihpbnQgZmQsIGNv
-bnN0IGNoYXIgKnBhdGhuYW1lKTsNCj4gPiAgTElCQlBGX0FQSSBpbnQgYnBmX29ial9nZXQoY29u
-c3QgY2hhciAqcGF0aG5hbWUpOw0KPiA+ICtMSUJCUEZfQVBJIGludCBicGZfb2JqX2dldF9vcHRz
-KGNvbnN0IGNoYXIgKnBhdGhuYW1lLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgY29uc3Qgc3RydWN0IGJwZl9vYmpfZ2V0X29wdHMgKm9wdHMpOw0KPiA+DQo+ID4gIHN0cnVj
-dCBicGZfcHJvZ19hdHRhY2hfb3B0cyB7DQo+ID4gICAgICAgICBzaXplX3Qgc3o7IC8qIHNpemUg
-b2YgdGhpcyBzdHJ1Y3QgZm9yIGZvcndhcmQvYmFja3dhcmQgY29tcGF0aWJpbGl0eSAqLw0KPiA+
-IGRpZmYgLS1naXQgYS90b29scy9saWIvYnBmL2xpYmJwZi5tYXAgYi90b29scy9saWIvYnBmL2xp
-YmJwZi5tYXANCj4gPiBpbmRleCAwNjI1YWRiOWU4ODguLjExOWU2ZTFlYTdmMSAxMDA2NDQNCj4g
-PiAtLS0gYS90b29scy9saWIvYnBmL2xpYmJwZi5tYXANCj4gPiArKysgYi90b29scy9saWIvYnBm
-L2xpYmJwZi5tYXANCj4gPiBAQCAtMzU1LDYgKzM1NSw3IEBAIExJQkJQRl8wLjguMCB7DQo+ID4N
-Cj4gPiAgTElCQlBGXzEuMC4wIHsNCj4gPiAgICAgICAgIGdsb2JhbDoNCj4gPiArICAgICAgICAg
-ICAgICAgYnBmX29ial9nZXRfb3B0czsNCj4gPiAgICAgICAgICAgICAgICAgYnBmX3Byb2dfcXVl
-cnlfb3B0czsNCj4gPiAgICAgICAgICAgICAgICAgYnBmX3Byb2dyYW1fX2F0dGFjaF9rc3lzY2Fs
-bDsNCj4gPiAgICAgICAgICAgICAgICAgYnRmX19hZGRfZW51bTY0Ow0KPiA+IC0tDQo+ID4gMi4z
-Ny4wLjE3MC5nNDQ0ZDFlYWJkMC1nb29nDQo+ID4NCg==
+On Thu, Jul 21, 2022 at 12:40:40PM -0700, Kristen Carlson Accardi wrote:
+> OpenSSL 3.0 deprecates some of the functions used in the SGX
+> selftests, causing build errors on new distros. For now ignore
+> the warnings until support for the functions is no longer
+> available.
+> 
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> ---
+>  tools/testing/selftests/sgx/sigstruct.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> index 50c5ab1aa6fa..bb191b70141a 100644
+> --- a/tools/testing/selftests/sgx/sigstruct.c
+> +++ b/tools/testing/selftests/sgx/sigstruct.c
+> @@ -17,6 +17,9 @@
+>  #include "defines.h"
+>  #include "main.h"
+>  
+> +/* OpenSSL 3.0 has deprecated some functions. For now just ignore the warnings. */
+
+Perhaps, even prefix with "FIXME:" prefix?
+
+> +#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+> +
+>  struct q1q2_ctx {
+>  	BN_CTX *bn_ctx;
+>  	BIGNUM *m;
+> -- 
+> 2.36.1
+> 
+
+BR, Jarkko

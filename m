@@ -2,216 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FE6583748
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D110A58374B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234850AbiG1DHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 23:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S237789AbiG1DHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 23:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237448AbiG1DHF (ORCPT
+        with ESMTP id S237618AbiG1DH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 23:07:05 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08BD5B7B7
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658977618; x=1690513618;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Ii8Che1co717PO8dcd3SIGgzrQPTZTmTAl+Q8XfWFtk=;
-  b=eB510rzDKd6nNbn2U2x9YgPoyrBqDh6kta1yaScmlyp1kX1fcVurfH+h
-   sV745yd04cb2Ei/S1IghlEjI52INCaFLJ22v+g0uAjW1oq98+dW11JhsJ
-   /Bmt3TFt03HMdcOJ+UnBHnx9W7d9RW10iWfVV5cwHRUpzUX36nnk6jM/y
-   F3Y8H5WgSx/dkI/54hPrhrabwl2q+OLkJEb6Ajl+AXdjo0/UK7qnvkZ4/
-   9jtLFwb3DfBVKi6es8GrFwU2PHMi4M/3eV7HWsYlyRXhpD/eXFRic/Iul
-   aGN0GcjEdqcUc5s5lUFRJ3JO2HMnKydt1uLopNi5lhWyGI1q6EueljRXx
+        Wed, 27 Jul 2022 23:07:26 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17045C360
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1658977643; x=1690513643;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XVQ7CO6TM7Kcq25ho/AaV+rwZ8tMT1r4ApMmxYvb8s4=;
+  b=psp1OIvN15/6grYp/HceTriACPNBvo4hgQ9/CrIAfxrTqNTz9OViiF/J
+   7S5jFaWLy6Ny1IU2g83n8yLE2a5sL+T2m2R4/E9nfu5cLQA3E3PiF5cVK
+   kTfGd/QzZzb1LkozrzZh4gnp/QU+6n7DMC76hZkz3+H5HJUD4G+0ZWxuv
+   T102EICh+HKzOYjPgaaRo+J8rNzqt4NGlZUdTNYMnGCQD+YVp9Z/3nSP6
+   hyeF/9Usg6v8wWB/u543hMkGKpBTaSYCOfKVsKnt2ds4cl2mzWaBgudHG
+   WneQF0ZMrdyoUkXZtThIQtTXWW+YYhaRaop9CkUbRuIMdi/AEc5L7CjUE
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="352403247"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="352403247"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 20:06:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="604388062"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Jul 2022 20:06:55 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 27 Jul 2022 20:06:55 -0700
-Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 27 Jul 2022 20:06:54 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Wed, 27 Jul 2022 20:06:54 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Wed, 27 Jul 2022 20:06:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cG/A8OuoA0JVpxkr7cDLozcm/xmCnOXBaJSfr89VeP6MsZGkUl5XFM5P3yh5Erh9DogDGJyNPlFuXBd8CIWhC6YvoqS0pM/DcjwVRzbQkpe2R8nzkYH8C8JFWtIPtZB2aLKq6oNc5EWghlRXokQufRFNdnN91b0LtH+wpi4hfI12DJs35TwLfkSDb7ilKih64gZcYpSQn99in+1c6UBGXPaV3I14sw3TBtsn+6+TVO0c3+5Oey8P0isqMejRlQ+PlmJ+2B9Q7yKMD9DuOGcWQbK+nj+i0QGaK0HV78iGqOqSzT1znmv48oG6eZK5UX23+XEJgIQIDNT8ZrpkGWlatA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=saOjpPXrWdM8Zfh/ZPchMoCiqS/n1EN4XfWmC3S0i1o=;
- b=LuauxbC4uhAnYqL5Cx4dXlsnTjt8H2gvWrRfXdQpFgLfipMpMaeA8I1CzSZj1/+U46xppyKPwl7Tm8ab8USIRrCgCz2Wfj23ZsGa+Li6Lrsq8XI6e/laioi0RlgHXvYKuOhot61LXyRMhjfEzviC6rn/TjxxTmfIKGJKdR6+ex5O8u+zc+KmfFfvTzv21S07Buh4Sa6f1lLrZ04D32OXsgnuDXPuNHpMZ4mPGNJmRKJ2Npl3MG30dgUnsbcmy+T9bYOLpm9lEkeGBM0bJWqptDiW4EIr/s8Yur/eG50m0ghWr47sy1kULfFVHwLMaULjsndA1XMT8ylTGQGQ+rR1IA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BL0PR11MB3315.namprd11.prod.outlook.com (2603:10b6:208:6c::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Thu, 28 Jul
- 2022 03:06:47 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c%2]) with mapi id 15.20.5458.025; Thu, 28 Jul 2022
- 03:06:47 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        "Zhu, Tony" <tony.zhu@intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.org>
-Subject: RE: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
- interface
-Thread-Topic: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
- interface
-Thread-Index: AQHYkC3GvF//WyZOvUaTLdl04LC2Cq2MG8sAgAEavgCAAhH3gIABB5EAgAB+1ACAANqooIAAlRyAgAD5zPA=
-Date:   Thu, 28 Jul 2022 03:06:47 +0000
-Message-ID: <BN9PR11MB52766C3D37FA985DEBDC30C78C969@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-5-baolu.lu@linux.intel.com>
- <20220723141118.GD79279@nvidia.com>
- <686b137f-232a-2a78-beb0-e4373bd20959@linux.intel.com>
- <20220725144005.GE3747@nvidia.com>
- <6da27a6b-b580-4ba4-24c8-ebdfb2d9345d@linux.intel.com>
- <20220726135722.GC4438@nvidia.com>
- <BN9PR11MB5276974ABA5981A7361953708C979@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220727115339.GM4438@nvidia.com>
-In-Reply-To: <20220727115339.GM4438@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c75f3671-84a9-4cf7-6b33-08da70463582
-x-ms-traffictypediagnostic: BL0PR11MB3315:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9mDJyuAf5J++vrm74jlyczYUMhiMwnMn4vmmCtxEBIHxDE4wT9sSQ/VEneqoigupKFczRvFCCPs1h2LJ8xjQt/7ZJ6SJjMrQnqZzKrjpH6GZYFht4TQDrjjCAKB08SRQHYHj4NrkdHBV70+RMFVUfgWa7j0m+NMaBdDwghn84v3br1AqxLSuJv3kj00IdpA+cY5FPo4KIwMKdUCJuSl+nUOelLvt4AVlqvyy2nmsUvvxiQowXbfmLHnwsUuztdiuowZuoL2yAIMOUCYbYI7PE+Y1lhqPreR6FGoWXLmLyQSyP2IIXI7PZU6/PfCTaSc8/l1SggEUj5IfQ0gpJFos5sO4YcJCyXn6Cg/YT5LRugNx47Ytdy9levpz5rm1vBifjwUhokFS1B+SOJEngB823txbvTfslpqtXCtiV4OUYC3D+O+YpLUAK6G23v8/v3CZ0ppFxf7PxF5WW8ifv+Ck8ALN/kNlYOXhp3EPQuOgdmFRFE23klSbXYu6VUs3rXuMj8lA0KeO9tYvkqK3f5tlWMvLtl+miU9isd5dMJm+UCi2P4NfpcKYJ99ryIv/Wc2ov3trR4MRzJtzT7wWJZUaC9oZIk0hXpJJZK16gDEU5sKTnWoG9yIti+pNAXpnMivI8oaW7XlTsQgxSCh8ar7TfLnzAAd8+JQ1C+/xOvqMUAmPmti3x7gVof5NxJO8zuIz+x3jbd+JYnxSHU3Cl7wvLY5AY5pHpVYxf4Djm0rKPwUy4EKwoIsvTO74TW8lhSU8l85Vd3yy/KbUiQmajquuL2bAhbfjM8CIU9aiI6jHj8IGDz5meJolsY2787eyxwn2
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(396003)(346002)(376002)(39860400002)(136003)(122000001)(5660300002)(38100700002)(41300700001)(38070700005)(52536014)(7416002)(8936002)(71200400001)(478600001)(66946007)(66476007)(66556008)(76116006)(4326008)(64756008)(83380400001)(66446008)(8676002)(316002)(82960400001)(53546011)(7696005)(6506007)(6916009)(54906003)(186003)(9686003)(26005)(86362001)(2906002)(55016003)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?c3vAGjOVXK0XjIx1t4JTCIOjN9jQDRR6DfdI39/oPSo5+/KJwBT8PHXFVnqB?=
- =?us-ascii?Q?RGgwUbpPkBUuXDlDjvek9nQnL8xICIDVosPJvbx31R8B/nnbwKg8W4AetepM?=
- =?us-ascii?Q?VcBYeVx1pzIb5c4leDHhFBCZsOQDsSrNMcyLn46hUxi0J7nj0uxbk1lhfsQE?=
- =?us-ascii?Q?wQ277rO/M4mCWd6KOOCQj1qJivx8LxdEd9gnkV+4zaG2/hKeS1X7zq7ufQPb?=
- =?us-ascii?Q?sPSX0HXquvpzdktQ6m98LPVC57TaJNcpxUgYP1FLqIN5k1z3ZM0WLbDOvrH3?=
- =?us-ascii?Q?7pNu1kqRy7pM9tgW63/82ftMMGo2tuZKdQIPgvFcB5gAsWGbFNh+tJ1RQKEk?=
- =?us-ascii?Q?bbV/9MJUTPifPjwdokEdQGTtlPpcJjGCo7EGJOiRAaeIDcRFfSFxKokDl/iv?=
- =?us-ascii?Q?l+s1dQT7TXqDEsO7L+TNpfxmjvTZ3PEiyQx8zYrd9cMO+Jt2inc052jNXomR?=
- =?us-ascii?Q?n9bEJj9fsXEK9f86GW/jG4MVzeOkfm/wyVIUfezJSNbr1IsXLdzz4tCHuBi/?=
- =?us-ascii?Q?xaPc02G9PfwE1ew0ENwiI0k0VMFyituNZtOlkCowKrs7UZgkS7+XH7YkFmsA?=
- =?us-ascii?Q?4/yfoF4dt7j+8BfBLejH3xK0N7vwd9g63BYqlKA9M0wBIulwerDWxZQwInHp?=
- =?us-ascii?Q?pA4nbBDppUzz1PTuPztmAlaSxOAOCUCLn578mvAzL0MGkNIGXTVk9Q2oDqla?=
- =?us-ascii?Q?THFXgqZCeOimGL4KIvxt/LwESR6K/WSc4HTQo091sVVeO5ouq4+9aqexGy8r?=
- =?us-ascii?Q?brBehSG9R5kaZRe2L+hZZFxHhE2QFjZ7d4sYVkNoQpGzU/GUFqhSpe+/HAiQ?=
- =?us-ascii?Q?erbgSICbr28azPw6vZaN7YnyZZF51E8i+tTS3b9SiBdRDu/KFQLUHmTirIlJ?=
- =?us-ascii?Q?yoY/Yz0M9fWYv29w/TL9BLug1Z6bWduGr+HLTCRMD+i4kvBVOkjv9+sel5oe?=
- =?us-ascii?Q?Oihaf+wP6PANjdiKHYtWPDXOoiYjgbkgmB9xK1fscwtMn66EMBea6HMzRI7N?=
- =?us-ascii?Q?MpdjZ4U9PHtv3fHKsJBgmuhyf0HCmktWRGScSp59dp0pk448fyvpj1F0rHPl?=
- =?us-ascii?Q?mmtFLKFAs0G3o0HjsncpBerayJrA8ZCBDQztMBCHjeHjrEYvfwb3s44ARj4t?=
- =?us-ascii?Q?NCeizJfn7mEYsJj5Y78gGNGb45svXwQN106+/LNCQ5SaG1eQ3zKMu+8LEbWh?=
- =?us-ascii?Q?iGYExfWtfxerfcIxYTpYM6JXbLZMWcC90HhIeVasYTAWyry6UWYs2Y/ABJI1?=
- =?us-ascii?Q?IqmtlwdC67YZJIv1HU341mqtoeKejqi2vd0vNoErDZrxC3h0uWl156wh+dHQ?=
- =?us-ascii?Q?V8YXjy0wcb3ml9M0cA53I4oW9BAWw0X55FaXg98YvH3ogL8kl1DfT6jNBc9I?=
- =?us-ascii?Q?kZRsGfyoitxjACvXw/rAlrrV8VrI9JoH+wbFNRK79elzoAHWCZEl71QPKTW7?=
- =?us-ascii?Q?AJr0HyU3OkrGFoYFi5NGxgsX7WOBpL1Vi9x3U6OrFlqgmDHYY87dpaTkYwR/?=
- =?us-ascii?Q?pzvRzaaAQyNEti6EZYoKafclpWg+ukIhmrpjCIU02E+7dnA4bBVw0gPejXeb?=
- =?us-ascii?Q?N14/2rQi7Ks8Gg4EDIjawoPWHiAIkw5Q7AyEWRsp?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+X-IronPort-AV: E=Sophos;i="5.93,196,1654531200"; 
+   d="scan'208";a="207108096"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jul 2022 11:07:21 +0800
+IronPort-SDR: 7YCrUsP1LccRZXYNc2h8mH6ryev6T+2QkDljdyU5CgyWTCuCmtqKd8SAydvYJ73LcZXLRE5amE
+ rjUiVUyXoEO0t++4nZcEwM3nq3cBKQfzOaYfqc0+g6qXKBJfbAFpcQZCsSP6vohIh/s0jwj9PJ
+ T11r9J8MX9Vui9shxXRBY02P583+r4qBEVpfyslDqYaxxZZte0mzn5bdCX5mJpq7DL9RJoKRLZ
+ btQthxVnfaIVS9hMqKfY1behbGzzXvnBGd1EZw1a71wG985SevJ7YtbP3bBYQxvOkJ1vqNHEXi
+ OqDzS8OMYk+Zp2iO0HglF0hR
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jul 2022 19:28:34 -0700
+IronPort-SDR: +DsFMAtu1eZb5uwYcClVos77GIe8K05CiXy+ZL6nX8+vqKSYcCqqFs8890IfI8Qbyz8Z1eLwIA
+ ME2lh6v6eOncy0WZ3hO3sRoBvAzJjEXQNO+xptrucdjBr0EHEUXxs9Q7fTH5mPTGi4Dfe4tlk9
+ 2bJhCZktYWLmFd/4bY4QT4RPIbUUXM7CMfknzrkPldthN6e0w3JFjUQ2k6dtNgY4xQ+x1BkNIR
+ OpNvBSW5jaEwRbPIrJM8xOnb6I+Bgm34nFR2NrhEFeOAvILUlFm/fzfGbsIVjprnxTaErL5BP1
+ pdg=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jul 2022 20:07:23 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LtbDB0fbRz1Rwqy
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:07:22 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1658977639; x=1661569640; bh=XVQ7CO6TM7Kcq25ho/AaV+rwZ8tMT1r4ApM
+        mxYvb8s4=; b=KF+46DCLR29I7XcTg4uAsuqNoJ8ZrRXpVhXrcnM1xkf+E1tw0eF
+        aMEUpduro4enrX6tvo/V76NemgnAjHhSQQyn2+dTMCSmRwGVfcG3o36q40kc3vVw
+        MIX9RFspo1BTsACO6vrm0T8UPjnry4+8VLy9g1ysAkUV6w9kVL9GD73m0F8175YM
+        O5+yYAoLPu8JC0Z6EnPMAgWn+n7CDSCxxkubU2+kqOWoeb1CJgvkfXKlWXt150Nb
+        7AAqLMZF9nUcGChBh0CtkxHSzjkROKNFFEav2Na0ptvNr5CToz2jhy7/56dOkdFo
+        pATv47ohrVjfWzvC/5jqn+A2uZaC67sYpcA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Cv1PNH9IWk10 for <linux-kernel@vger.kernel.org>;
+        Wed, 27 Jul 2022 20:07:19 -0700 (PDT)
+Received: from [10.225.163.14] (unknown [10.225.163.14])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LtbD46Qd4z1RtVk;
+        Wed, 27 Jul 2022 20:07:16 -0700 (PDT)
+Message-ID: <e9663c20-65d5-48f5-3fe1-e3a8f5ab3214@opensource.wdc.com>
+Date:   Thu, 28 Jul 2022 12:07:15 +0900
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c75f3671-84a9-4cf7-6b33-08da70463582
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jul 2022 03:06:47.3795
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KcpuqboWUUW78uZIyx730rx4cS4xu2aUwQ7jj16wDqQ+vdPIMW/aDW+5edc9/jFIJtUX7ag4p/05IEwrI3crkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3315
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 02/11] block: allow blk-zoned devices to have
+ non-power-of-2 zone size
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de, axboe@kernel.dk,
+        snitzer@kernel.org, Johannes.Thumshirn@wdc.com
+Cc:     matias.bjorling@wdc.com, gost.dev@samsung.com,
+        linux-kernel@vger.kernel.org, hare@suse.de,
+        linux-block@vger.kernel.org, pankydev8@gmail.com,
+        bvanassche@acm.org, jaegeuk@kernel.org, dm-devel@redhat.com,
+        linux-nvme@lists.infradead.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+References: <20220727162245.209794-1-p.raghav@samsung.com>
+ <CGME20220727162248eucas1p2ff8c3c2b021bedcae3960024b4e269e9@eucas1p2.samsung.com>
+ <20220727162245.209794-3-p.raghav@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220727162245.209794-3-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Wednesday, July 27, 2022 7:54 PM
->=20
-> On Wed, Jul 27, 2022 at 03:20:25AM +0000, Tian, Kevin wrote:
-> > > From: Jason Gunthorpe <jgg@nvidia.com>
-> > > Sent: Tuesday, July 26, 2022 9:57 PM
-> > >
-> > > On Tue, Jul 26, 2022 at 02:23:26PM +0800, Baolu Lu wrote:
-> > > > On 2022/7/25 22:40, Jason Gunthorpe wrote:
-> > > > > On Sun, Jul 24, 2022 at 03:03:16PM +0800, Baolu Lu wrote:
-> > > > >
-> > > > +	 * Block PASID attachment in all cases where the PCI fabric is
-> > > > +	 * routing based on address. ACS disables it.
-> > > > +	 */
-> > > > +	if (dev_is_pci(dev) &&
-> > > > +	    !pci_acs_path_enabled(to_pci_dev(dev), NULL, REQ_ACS_FLAGS))
-> > > > +		return -ENODEV;
-> > >
-> > > I would probably still put this in a function just to be clear, and
-> > > probably even a PCI layer funcion 'pci_is_pasid_supported' that
-> > > clearly indicates that the fabric path can route a PASID packet
-> > > without mis-routing it.
-> >
-> > But there is no single line in above check related to PASID...
->=20
-> The question to answer here is if the device/fabric supports PASID,
-> and on PCI that requires ACS on any switches. IMHO that is a PCI layer
-> question and perhaps we shouldn't even succeed pci_enable_pasid() if
-> ACS isn't on.
+On 7/28/22 01:22, Pankaj Raghav wrote:
+> Checking if a given sector is aligned to a zone is a common
+> operation that is performed for zoned devices. Add
+> bdev_is_zone_start helper to check for this instead of opencoding it
 
-Yes, this sounds a better approach than inventing another function
-for iommu core to check.
+The patch actually introduces bdev_is_zone_aligned(). I agree with Bart
+that bdev_is_zone_start() is a better name.
 
->=20
-> Then we don't need this weirdo check in the core iommu code at all.
->=20
+> everywhere.
+> 
+> Convert the calculations on zone size to be generic instead of relying on
+> power_of_2 based logic in the block layer using the helpers wherever
 
-and then we could also move group->pasid_array to device->pasid_array
-with this approach. Though the end result doesn't change i.e. still only
-the singleton group can enable pasid the iommu core can just stick to
-the device manner now.
+s/based logic/arithmetics
+
+> possible.
+> 
+> The only hot path affected by this change for power_of_2 zoned devices
+> is in blk_check_zone_append() but bdev_is_zone_start() helper is
+> used to optimize the calculation for po2 zone sizes. Note that the append
+> path cannot be accessed by direct raw access to the block device but only
+> through a filesystem abstraction.
+
+And so what ? What is the point here ?
+
+> 
+> Finally, allow non power of 2 zoned devices provided that their zone
+
+Please spell things out clearly: ...allow zoned devices with a zone size
+that is not a power of 2 number of sectors...
+
+> capacity and zone size are equal. The main motivation to allow non
+> power_of_2 zoned device is to remove the unmapped LBA between zcap and
+> zsze for devices that cannot have a power_of_2 zcap.
+
+zcap, zsze are nvme field names. Please phrase these in plain english to
+clarify.
+
+> 
+> To make this work bdev_get_queue(), bdev_zone_sectors() and
+> bdev_is_zoned() are moved earlier without modifications.
+
+"moved earlier" -> declared earlier in xxx.h ?
+
+> 
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> ---
+>  block/blk-core.c       |  2 +-
+>  block/blk-zoned.c      | 24 +++++++++---
+>  include/linux/blkdev.h | 84 ++++++++++++++++++++++++++++++------------
+>  3 files changed, 79 insertions(+), 31 deletions(-)
+> 
+> diff --git a/block/blk-core.c b/block/blk-core.c
+> index 3d286a256d3d..1f7e9a90e198 100644
+> --- a/block/blk-core.c
+> +++ b/block/blk-core.c
+> @@ -570,7 +570,7 @@ static inline blk_status_t blk_check_zone_append(struct request_queue *q,
+>  		return BLK_STS_NOTSUPP;
+>  
+>  	/* The bio sector must point to the start of a sequential zone */
+> -	if (bio->bi_iter.bi_sector & (bdev_zone_sectors(bio->bi_bdev) - 1) ||
+> +	if (!bdev_is_zone_aligned(bio->bi_bdev, bio->bi_iter.bi_sector) ||
+>  	    !bio_zone_is_seq(bio))
+>  		return BLK_STS_IOERR;
+>  
+> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
+> index dce9c95b4bcd..a01a231ad328 100644
+> --- a/block/blk-zoned.c
+> +++ b/block/blk-zoned.c
+> @@ -285,10 +285,10 @@ int blkdev_zone_mgmt(struct block_device *bdev, enum req_op op,
+>  		return -EINVAL;
+>  
+>  	/* Check alignment (handle eventual smaller last zone) */
+> -	if (sector & (zone_sectors - 1))
+> +	if (!bdev_is_zone_aligned(bdev, sector))
+>  		return -EINVAL;
+>  
+> -	if ((nr_sectors & (zone_sectors - 1)) && end_sector != capacity)
+> +	if (!bdev_is_zone_aligned(bdev, nr_sectors) && end_sector != capacity)
+>  		return -EINVAL;
+>  
+>  	/*
+> @@ -486,14 +486,26 @@ static int blk_revalidate_zone_cb(struct blk_zone *zone, unsigned int idx,
+>  	 * smaller last zone.
+>  	 */
+>  	if (zone->start == 0) {
+> -		if (zone->len == 0 || !is_power_of_2(zone->len)) {
+> -			pr_warn("%s: Invalid zoned device with non power of two zone size (%llu)\n",
+> -				disk->disk_name, zone->len);
+> +		if (zone->len == 0) {
+> +			pr_warn("%s: Invalid zone size", disk->disk_name);
+
+You removed the zone size value print, so please update the message to
+something like:
+
+pr_warn("%s: Invalid zero zone size", disk->disk_name);
+
+> +			return -ENODEV;
+> +		}
+> +
+> +		/*
+> +		 * Non power-of-2 zone size support was added to remove the
+> +		 * gap between zone capacity and zone size. Though it is technically
+> +		 * possible to have gaps in a non power-of-2 device, Linux requires
+> +		 * the zone size to be equal to zone capacity for non power-of-2
+> +		 * zoned devices.
+> +		 */
+> +		if (!is_power_of_2(zone->len) && zone->capacity < zone->len) {
+> +			pr_warn("%s: Invalid zone capacity for non power of 2 zone size",
+> +				disk->disk_name);
+
+As Bart suggested, please print the zone capacity and zone size values.
+
+>  			return -ENODEV;
+>  		}
+>  
+>  		args->zone_sectors = zone->len;
+> -		args->nr_zones = (capacity + zone->len - 1) >> ilog2(zone->len);
+> +		args->nr_zones = div64_u64(capacity + zone->len - 1, zone->len);
+
+		args->nr_zones = disk_zone_no(disk, capacity);
+
+>  	} else if (zone->start + args->zone_sectors < capacity) {
+>  		if (zone->len != args->zone_sectors) {
+>  			pr_warn("%s: Invalid zoned device with non constant zone size\n",
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index 85b832908f28..1be805223026 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -634,6 +634,11 @@ static inline bool queue_is_mq(struct request_queue *q)
+>  	return q->mq_ops;
+>  }
+>  
+> +static inline struct request_queue *bdev_get_queue(struct block_device *bdev)
+> +{
+> +	return bdev->bd_queue;	/* this is never NULL */
+> +}
+> +
+>  #ifdef CONFIG_PM
+>  static inline enum rpm_status queue_rpm_status(struct request_queue *q)
+>  {
+> @@ -665,6 +670,25 @@ static inline bool blk_queue_is_zoned(struct request_queue *q)
+>  	}
+>  }
+>  
+> +static inline bool bdev_is_zoned(struct block_device *bdev)
+> +{
+> +	struct request_queue *q = bdev_get_queue(bdev);
+> +
+> +	if (q)
+> +		return blk_queue_is_zoned(q);
+> +
+> +	return false;
+> +}
+> +
+> +static inline sector_t bdev_zone_sectors(struct block_device *bdev)
+> +{
+> +	struct request_queue *q = bdev_get_queue(bdev);
+> +
+> +	if (!blk_queue_is_zoned(q))
+> +		return 0;
+> +	return q->limits.chunk_sectors;
+> +}
+> +
+>  #ifdef CONFIG_BLK_DEV_ZONED
+>  static inline unsigned int disk_nr_zones(struct gendisk *disk)
+>  {
+> @@ -684,6 +708,30 @@ static inline unsigned int disk_zone_no(struct gendisk *disk, sector_t sector)
+>  	return div64_u64(sector, zone_sectors);
+>  }
+>  
+> +static inline sector_t bdev_offset_from_zone_start(struct block_device *bdev,
+> +						   sector_t sec)
+> +{
+> +	sector_t zone_sectors = bdev_zone_sectors(bdev);
+> +	u64 remainder = 0;
+> +
+> +	if (!bdev_is_zoned(bdev))
+> +		return 0;
+> +
+> +	if (is_power_of_2(zone_sectors))
+> +		return sec & (zone_sectors - 1);
+> +
+> +	div64_u64_rem(sec, zone_sectors, &remainder);
+> +	return remainder;
+> +}
+> +
+> +static inline bool bdev_is_zone_aligned(struct block_device *bdev, sector_t sec)
+> +{
+> +	if (!bdev_is_zoned(bdev))
+> +		return false;
+
+This is checked in bdev_offset_from_zone_start(). No need to add it again
+here.
+
+> +
+> +	return bdev_offset_from_zone_start(bdev, sec) == 0;
+> +}
+> +
+>  static inline bool disk_zone_is_seq(struct gendisk *disk, sector_t sector)
+>  {
+>  	if (!blk_queue_is_zoned(disk->queue))
+> @@ -728,6 +776,18 @@ static inline unsigned int disk_zone_no(struct gendisk *disk, sector_t sector)
+>  {
+>  	return 0;
+>  }
+> +
+> +static inline sector_t bdev_offset_from_zone_start(struct block_device *bdev,
+> +						   sector_t sec)
+> +{
+> +	return 0;
+> +}
+
+This one is not used when CONFIG_BLK_DEV_ZONED is not set. No need to
+define it.
+
+> +
+> +static inline bool bdev_is_zone_aligned(struct block_device *bdev, sector_t sec)
+> +{
+> +	return false;
+> +}
+> +
+>  static inline unsigned int bdev_max_open_zones(struct block_device *bdev)
+>  {
+>  	return 0;
+> @@ -891,11 +951,6 @@ int bio_poll(struct bio *bio, struct io_comp_batch *iob, unsigned int flags);
+>  int iocb_bio_iopoll(struct kiocb *kiocb, struct io_comp_batch *iob,
+>  			unsigned int flags);
+>  
+> -static inline struct request_queue *bdev_get_queue(struct block_device *bdev)
+> -{
+> -	return bdev->bd_queue;	/* this is never NULL */
+> -}
+> -
+>  /* Helper to convert BLK_ZONE_ZONE_XXX to its string format XXX */
+>  const char *blk_zone_cond_str(enum blk_zone_cond zone_cond);
+>  
+> @@ -1295,25 +1350,6 @@ static inline enum blk_zoned_model bdev_zoned_model(struct block_device *bdev)
+>  	return BLK_ZONED_NONE;
+>  }
+>  
+> -static inline bool bdev_is_zoned(struct block_device *bdev)
+> -{
+> -	struct request_queue *q = bdev_get_queue(bdev);
+> -
+> -	if (q)
+> -		return blk_queue_is_zoned(q);
+> -
+> -	return false;
+> -}
+> -
+> -static inline sector_t bdev_zone_sectors(struct block_device *bdev)
+> -{
+> -	struct request_queue *q = bdev_get_queue(bdev);
+> -
+> -	if (!blk_queue_is_zoned(q))
+> -		return 0;
+> -	return q->limits.chunk_sectors;
+> -}
+> -
+>  static inline int queue_dma_alignment(const struct request_queue *q)
+>  {
+>  	return q ? q->dma_alignment : 511;
+
+
+-- 
+Damien Le Moal
+Western Digital Research

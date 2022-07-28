@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A333584310
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FD758430E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbiG1P1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S231621AbiG1P1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbiG1P1Q (ORCPT
+        with ESMTP id S230180AbiG1P1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:27:16 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B5866ACE;
-        Thu, 28 Jul 2022 08:27:15 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2ef5380669cso23033577b3.9;
-        Thu, 28 Jul 2022 08:27:15 -0700 (PDT)
+        Thu, 28 Jul 2022 11:27:11 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8827752460
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:27:10 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id f7so2404063pjp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:27:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m19x5GgjL6UYGLO5pGx+8cW4vPm+cyuRwfchr+o3/60=;
-        b=U/+D8kzsAw3UK/Iwl6REQhCOogRmlIHGFdJTCCvWXrAGuSS1hVTCnI0IZCaNzGtWAU
-         X422BlF1rZOBOF1ORYEoCk/qne9c0/vIp7lJHTVGsuNkGIBCO/OgC5/ONGZixI4Fq5WU
-         mQ/7CIERcEBOtXaWty87xojbkmPny2NkG4c9niiqSdrw+ZuY2gC6Rhkr0rUaKryvmH+Z
-         CREykZ2FRMgsZYixDxhNd0x+S3WobSTQxkWQLwZF1UD8uDC1Ed7I49SulcfoL3Q6U6Dp
-         LYPtoVu9GLjlKCWZCtXZZc9ABkSjzFQYTBdXf7KAT65iZZfnqtHov5VkBCzc6pZq3rcR
-         jdHA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=csSpCZse6HkYpD0alLhYtbnpKIryDbXXSRH4Zixe2I0=;
+        b=DkCdzxLK5NMyhbrRcX2IZyC+qb3fASA7xm+FklYTyIR9i/BtuJCrGtnZ+AdUf0X0wm
+         hGWnJ2oNm7620mgjU+M3EsIbnX9EOpgInxnyAH4HoQucT4UJh+HDjoWAUyeJ+WsbPayP
+         jWsjtVh/hMHN7ORsq0XS+MXrT4EbO9ByEAyycoW2W6ogA76kfiecl+tobRog/ZwdtR2/
+         ZUKCtjOm4My2QJZRlWG8SmorApa8fR3ZFp9TTfOaJgn7R78s1zs/vAHZzkhtK8vr7Q5g
+         b15cKKmG3mRaTCY3npAWbsJ0rBfv8LLQAzK9L8QPC/UxuKQr6Xu/7Ssu/zmG2oXqHLEn
+         WVyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m19x5GgjL6UYGLO5pGx+8cW4vPm+cyuRwfchr+o3/60=;
-        b=PRd9HsgJvlRbfimt9qTZr4+XjcVdTdJe3AOtg3pnHuHJKxOi/LKq5rkmUJrOF9n8kV
-         sOPZKHN62zYo6p3aAZC20YO4pf+yJ5R6wxeJwAsK+UV8ioAnGvgMo/1S3cDAn6/qVx8a
-         6qz9fen7+92648ij1i06YP6ykkQHRySXYYuqIeTtxIBYBFt6hp4aNPmPz8s88yFR67Bh
-         p5eO1Y/aRG3lCOx09KMwcmfkKsKDnyGQYlLMB/GyRDYCMvmVp9/c6K1GP1KcPFSy//pB
-         H6jGD0OEPlu0BiKwXhafwr8wyKrwtKbQTY/PZ8JTXuBRf55ZDw/mriWppeq1nd+dGFYG
-         MyEw==
-X-Gm-Message-State: AJIora8EmFcnc3gfztU/1q6cmil2ZyXsoDeT8SwyaKFSPIrsNtFHosny
-        eEg0iWS9RShXhNZH1om8MvC0+GgL5kBM2BA23K2diMaKdG4=
-X-Google-Smtp-Source: AGRyM1tLnqiPHDgHJROI4wdiF5Op1SZz/4SPA1Y7Or2IbhRW1yMX0efRCNxRKiA/eHsCKQeXMJlhUgmdu27oz8AfVOs=
-X-Received: by 2002:a81:6ed4:0:b0:31f:611d:92d1 with SMTP id
- j203-20020a816ed4000000b0031f611d92d1mr7781654ywc.36.1659022034388; Thu, 28
- Jul 2022 08:27:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=csSpCZse6HkYpD0alLhYtbnpKIryDbXXSRH4Zixe2I0=;
+        b=I9ko0nWxE/l8Uzo8E1aWMl0KhfhOd2zNUIgjsBpDmiO4sSxTDzqbx7fUYiQ2B7E5Nh
+         ia4Rs/6SSzDiSNJMvKLzOL/+BL06kvLe3lExiZ43nTv2+Bd/sUdRiu2hTgA/fM0IJm6q
+         LhLPwbajFxe9E5FW2yvFh+oJAC8YvT5Dc9JRbiJeHAqAa9sPUxdxQK9j7ELsDJz59JK0
+         vRY3xE3sKLnwJcTWSOaqtj7iCnOhlNijozbAS4KY1rHudZKYaFyjhptFuqdVV7IJsuXU
+         rBtJQxx7m1Svgc6t3gLSE1nZv1KxjKmzUlNqfJh3hqb7Ojc3iYAo/pNi66aj4FjyoQAp
+         Y5kw==
+X-Gm-Message-State: AJIora9iqO7hRg1gbkq+T1+JVHvJkuC6miAZHvvOU+qIpWw5SXLFT30K
+        nvedWQh0wL9MmYfz7damJKd00Ayzi656bA==
+X-Google-Smtp-Source: AGRyM1sSrhEeTcGBug/hRwN/UzMJ5vxfJ6sRHheRoPfJs89jT56gNZ6MA6i+bGEizG7IcFl0eZ8aig==
+X-Received: by 2002:a17:902:ea07:b0:16c:1efb:916e with SMTP id s7-20020a170902ea0700b0016c1efb916emr26478459plg.25.1659022029899;
+        Thu, 28 Jul 2022 08:27:09 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h14-20020a056a00000e00b005255263a864sm881752pfk.169.2022.07.28.08.27.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 08:27:09 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:27:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] KVM: x86: Refresh PMU after writes to
+ MSR_IA32_PERF_CAPABILITIES
+Message-ID: <YuKqyTvbVx2UyP2w@google.com>
+References: <20220727233424.2968356-1-seanjc@google.com>
+ <20220727233424.2968356-2-seanjc@google.com>
+ <271bddfa-9e48-d5f6-6147-af346d7946bf@gmail.com>
 MIME-Version: 1.0
-References: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com> <be60acab-7dfe-6841-b176-4bd1e875d52e@birger-koblitz.de>
-In-Reply-To: <be60acab-7dfe-6841-b176-4bd1e875d52e@birger-koblitz.de>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 28 Jul 2022 17:27:03 +0200
-Message-ID: <CAFBinCB6bJbK2sx+oyCjo97Sv2=ywnCi_4v+E76f78DYMNqJkg@mail.gmail.com>
-Subject: Re: [PATCH RFC v1] spi: realtek-rtl: Fix clearing some register bits
-To:     Birger Koblitz <mail@birger-koblitz.de>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bert@biot.com, sander@svanheule.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <271bddfa-9e48-d5f6-6147-af346d7946bf@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,34 +74,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Birger,
+On Thu, Jul 28, 2022, Like Xu wrote:
+> On 28/7/2022 7:34 am, Sean Christopherson wrote:
+> > Refresh the PMU if userspace modifies MSR_IA32_PERF_CAPABILITIES.  KVM
+> > consumes the vCPU's PERF_CAPABILITIES when enumerating PEBS support, but
+> > relies on CPUID updates to refresh the PMU.  I.e. KVM will do the wrong
+> > thing if userspace stuffs PERF_CAPABILITIES _after_ setting guest CPUID.
+> 
+> Unwise userspace should reap its consequences if it does not break KVM or host.
 
-(sorry for replying late, I missed your mail)
+I don't think this is a case of userspace being weird or unwise.  IMO, setting
+CPUID before MSRs is perfectly logical and intuitive.
 
-On Mon, Jul 25, 2022 at 10:19 PM Birger Koblitz <mail@birger-koblitz.de> wrote:
-[...]
-> > I stumbled across this while reading the driver. This patch is untested
-> > because I don't have any hardware with this controller.
-> I believe your fix is correct. In the meantime, more information has been
-> learned about this hardware, in particular, newer SoC versions and the possibility
-> to have parallel IO and hardware which uses different chip selects.
-As Sander pointed out (thanks again!) there's actually an issue with my patch.
-I just sent v2 with a fix for RTL_SPI_SFCSR_LEN_MASK.
+> When a guest feature can be defined/controlled by multiple KVM APIs entries,
+> (such as SET_CPUID2, msr_feature, KVM_CAP, module_para), should KVM
+> define the priority of these APIs (e.g. whether they can override each other) ?
 
-> I came up with the following patch for supporting this, and it achieves
-> what you also propose:
-> https://github.com/bkobl/openwrt/blob/rtl8214qf_merge/target/linux/realtek/patches-5.10/317-spi-cs-support-for-spi-realtek-rtl.patch
-> It is still is a bit rough, reading it I immediately saw 2 things that
-> would need to be fixed, but it also improves e.g. that RTL_SPI_SFCSR
-> is now configured independently of what u-boot did to it.
-Your patch actually addresses an issue which I have seen with RTL_SPI_SFCSR_CS.
-Since you seem to have boards with these Realtek SoCs: could you
-please clean up your patch and upstream it (splitting into smaller
-patches if/where needed)? That would be a win-win: upstream gains
-improved SPI support and I won't be confused the next time I look at
-the spi-realtek-rtl driver.
+KVM does have "rules" in the sense that it has an established ABI for things
+like KVM_CAP and module params, though documentation may be lacking in some cases.
+The CPUID and MSR ioctls don't have a prescribe ordering though.
 
+> Removing this ambiguity ensures consistency in the architecture and behavior
+> of all KVM features.
 
-Thank you!
-Best regards,
-Martin
+Agreed, but the CPUID and MSR ioctls (among many others) have existed for quite
+some time.  KVM likely can't retroactively force a specific order without breaking
+one userspace or another.
+
+> Any further performance optimizations can be based on these finalized values
+> as you do.
+> 
+> > 
+> > Opportunistically fix a curly-brace indentation.
+> > 
+> > Fixes: c59a1f106f5c ("KVM: x86/pmu: Add IA32_PEBS_ENABLE MSR emulation for extended PEBS")
+> > Cc: Like Xu <like.xu.linux@gmail.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >   arch/x86/kvm/x86.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 5366f884e9a7..362c538285db 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -3543,9 +3543,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+> >   			return 1;
+> >   		vcpu->arch.perf_capabilities = data;
+> > -
+> > +		kvm_pmu_refresh(vcpu);
+> 
+> I had proposed this diff but was met with silence.
+
+My apologies, I either missed it or didn't connect the dots.

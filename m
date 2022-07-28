@@ -2,105 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297A1583FB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF33583FB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238313AbiG1NNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
+        id S238100AbiG1NOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235641AbiG1NNs (ORCPT
+        with ESMTP id S236620AbiG1NOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:13:48 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD861BEBA;
-        Thu, 28 Jul 2022 06:13:47 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10e615a36b0so741862fac.1;
-        Thu, 28 Jul 2022 06:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Fntp37A2ZM1jsqUQe1WOs9WjI9pqp0FHO+6vN3U6LqQ=;
-        b=b5w5Cwcx5OFpChR9iMqoHlJh3IwH7nOBr7Jz7dIsSpDXaeg5b/R+xuHTgB0eW+Mxbb
-         ymhdjRh1qwqk/QDdIFBtnMiQRSc5OF7ApKptouc1rTOjP1Sl/2xQ43A4Vd75RmdL6U/w
-         Nd2Y6SEgEnKqHet7lShrb1iS5osP47SktKgHNmldEnqpAzqpvEY1SKtwvQ6Y1RJZCEnp
-         4oD+yPPn9yt9F44wWcolIgnf2Cvkiq4Ie7UbNAu1LIu+2D18es8PtcVgAsLDMMXns/K4
-         V5KkVvlyBwn2hAfoplrei/1F4iH8YSoPAkl4I8zLqDbAdGOW7/7ljQeFeXUcXX6z4Ge6
-         R2Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Fntp37A2ZM1jsqUQe1WOs9WjI9pqp0FHO+6vN3U6LqQ=;
-        b=gEvl4W5E3JhHUaaAOVMuRw6SlUBM2f0oXNnxeCe+m1cKhdwcyDJ0cKrrGmf2zhv9N6
-         hrhd8pb3wmQm1dlvZpD276brT8tLolviIgrayaBfSbyj+Mgh8oq7XW6Zv5XaFhRVlDvX
-         lMuZY0JJT9rIMAmVBLv936TrGzXMxO/L5EXGEw8PtWWC72LE3GnzmZb0LJrzvf4RecvU
-         9MGZGTIwSwxmS7GdNCN69pkgY75eSZBvxPZhSyOpR2eLnx7gRgZlf8v6uuaiwc9grKlR
-         jA8LRVvkmVIKZlNKCwLfrwIbjbdFnajKX+1DCip95qIAwu1q/X6egLOPH9a5EFOOxY75
-         pnjA==
-X-Gm-Message-State: AJIora84KgXan1v85HZleyLUSsHUR4T9cohTD8nHrhZ4uoxsbfqi93pU
-        IQhQbRiJGQMh7v1P262IVjo=
-X-Google-Smtp-Source: AGRyM1t2Zl5X7crOLnFNQi+wEs0/Tm3JLWQMclWfAMvhKQDuTS/N+M0+a7PgcOTO2EzAX+TTxwzJhQ==
-X-Received: by 2002:a05:6870:d0cd:b0:10e:d6:a10f with SMTP id k13-20020a056870d0cd00b0010e00d6a10fmr4674230oaa.179.1659014026310;
-        Thu, 28 Jul 2022 06:13:46 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q22-20020a056870e61600b000f2455e26acsm374808oag.48.2022.07.28.06.13.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 06:13:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fa5fd00e-d71f-da29-0242-058026f90128@roeck-us.net>
-Date:   Thu, 28 Jul 2022 06:13:42 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.15 000/201] 5.15.58-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220727161026.977588183@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 09:14:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECF82CC8B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:14:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17C1DB82444
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:14:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C123EC433C1;
+        Thu, 28 Jul 2022 13:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659014066;
+        bh=zXjDJxQ311o3IVYcPBceCf8E6XYgNC1pAoh4HZnuioE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T8SMEHy5uY7dVQ7QwcGeWG1wcpquH+oxSmFvuL8AmgememDdM+ytjbKYqhY1hExaF
+         3KbV0HGxfE/p4Nqu9YGSH0LoeI33q+r75gmwvG3gC33FNhT4joEtCpSchazW1+HiBB
+         /x/xUvhmMKO66LOaA3gDCafvRutA/uBUprp7CjzkLG08QSZGETPZ0YTV+pa/wk6rSG
+         Hre1WvwCqKik/qXRxbVFU6vcvcAiV8/L6luHG8JbzC8u1g5cq2QsF9lVIXqXfICLkv
+         KPepuDBo4v84OWqVsRkIHat340RosZFO9MBFq3Lqw4gMz4crEXY4bYKO/BPKYFmwCv
+         AD9SjQ5YUvYFg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oH3LM-00Afg5-Bh;
+        Thu, 28 Jul 2022 14:14:24 +0100
+Date:   Thu, 28 Jul 2022 14:14:24 +0100
+Message-ID: <87v8rhwf9r.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH] irqdomain: Fix mapping-creation race
+In-Reply-To: <YuKHiZuNvN+K9NCc@hovoldconsulting.com>
+References: <20220728092710.21190-1-johan+linaro@kernel.org>
+        <87wnbxwj94.wl-maz@kernel.org>
+        <YuKHiZuNvN+K9NCc@hovoldconsulting.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: johan@kernel.org, johan+linaro@kernel.org, tglx@linutronix.de, gregkh@linuxfoundation.org, robh@kernel.org, linux-kernel@vger.kernel.org, dtor@chromium.org, jonathanh@nvidia.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 09:08, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.58 release.
-> There are 201 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, 28 Jul 2022 13:56:41 +0100,
+Johan Hovold <johan@kernel.org> wrote:
 > 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
+> On Thu, Jul 28, 2022 at 12:48:23PM +0100, Marc Zyngier wrote:
+> > On Thu, 28 Jul 2022 10:27:10 +0100,
+> > Johan Hovold <johan+linaro@kernel.org> wrote:
+> > > 
+> > > Parallel probing (e.g. due to asynchronous probing) of devices that share
+> > > interrupts can currently result in two mappings for the same hardware
+> > > interrupt to be created.
+> > 
+> > And I thought nobody would be using shared interrupts anymore. Turns
+> > out people are still building braindead HW... :-/
+> > 
+> > > 
+> > > Add a serialising mapping mutex so that looking for an existing mapping
+> > > before creating a new one is done atomically.
+> > > 
+> > > Note that serialising the lookup and creation in
+> > > irq_create_mapping_affinity() would have been enough to prevent the
+> > > duplicate mapping, but that could instead cause
+> > > irq_create_fwspec_mapping() to fail when there is a race.
+> > > 
+> > > Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
+> > > Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
+> > > Cc: Dmitry Torokhov <dtor@chromium.org>
+> > > Cc: Jon Hunter <jonathanh@nvidia.com>
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > >  kernel/irq/irqdomain.c | 46 +++++++++++++++++++++++++++++++-----------
+> > >  1 file changed, 34 insertions(+), 12 deletions(-)
+> > > 
+> > > diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> > > index 8fe1da9614ee..d263a7dd4170 100644
+> > > --- a/kernel/irq/irqdomain.c
+> > > +++ b/kernel/irq/irqdomain.c
+> > > @@ -22,6 +22,7 @@
+> > >  
+> > >  static LIST_HEAD(irq_domain_list);
+> > >  static DEFINE_MUTEX(irq_domain_mutex);
+> > > +static DEFINE_MUTEX(irq_mapping_mutex);
+> > 
+> > I'd really like to avoid a global mutex. At the very least this should
+> > be a per-domain mutex, otherwise this will serialise a lot more than
+> > what is needed.
 > 
+> Yeah, I considered that too, but wanted to get your comments on this
+> first.
+> 
+> Also note that the likewise global irq_domain_mutex (and
+> sparse_irq_lock) are taken in some of these paths so perhaps using finer
+> locking won't actually matter that much as this is mostly for parallel
+> probing.
 
-Building i386:allyesconfig ... failed
---------------
-Error log:
-In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/os_types.h:37,
-                  from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services_types.h:29,
-                  from drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:29:
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'dm_dmub_outbox1_low_irq':
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:761:51: error: format '%ld' expects argument of type 'long int', but argument 3 has type 'unsigned int'
+It will be a good opportunity to make the locking suck a bit less,
+like in irq_domain_associate().
 
-Needs commit 655c167edc8c26 ("drm/amd/display: Fix wrong format specifier
-in amdgpu_dm.c").
+> > >  	} else {
+> > >  		/* Create mapping */
+> > > -		virq = irq_create_mapping(domain, hwirq);
+> > > +		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
+> > 
+> > This rechecks for the existence of the mapping. Surely we can do a bit
+> > better by rejigging this (admittedly bitrotting) code.
+> 
+> I'm sure we can. Should I try to fix the race first with a patch like
+> this one that can potentially be backported, and then see what I can do
+> about cleaning this up?
+> 
+> After all it has looked like this for the past eight years since when
+> this code was first merged.
 
-Guenter
+No, let's put the code in shape *first*, then add work on the locking,
+as it should make the patch simpler. Backports aren't my concern,
+really.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5335848CF
+	by mail.lfdr.de (Postfix) with ESMTP id 329135848CE
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233351AbiG1Xw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 19:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S233657AbiG1XxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 19:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiG1Xwu (ORCPT
+        with ESMTP id S231925AbiG1Xwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 28 Jul 2022 19:52:50 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABB2071731;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA10272ECF;
         Thu, 28 Jul 2022 16:52:49 -0700 (PDT)
 Received: from localhost.localdomain (unknown [76.135.27.191])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1622920FE9AF;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 47EC520FE9B1;
         Thu, 28 Jul 2022 16:52:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1622920FE9AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 47EC520FE9B1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1659052369;
-        bh=HaSDfOxma22GjtN+QHmKmuwb7fowkhGpnjJEeEWHD1I=;
+        bh=5eRwg6MlWo573EnBgxRRM6VTU+gEpz5q8Hd5iRDGIg8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IDSBV9uuzKRNHwoO6GlvQi96BtvNyXgAz4hmeQ3SoHWgTlhfTdVOS1Tcj3L40RsuS
-         IQlildg0Z9sasvdYcs1qs+LO4imtcTyDrfiiSg3vF8wdJGdQB/mmCY95ZE72uT/N9i
-         Pg5GTptIYrD96jUTKpbPcrY3PggMGZEadWDT4Wus=
+        b=cuSi9laXedSlBVsCx5ELVW8t2t4+PyF4tx4kgYARfCeMYRJmgknvB0VRD1XuEntk+
+         PlXqDY49fBlhGFDXqHja2dmL3Lcm+nIzS/9WSGlAspf0JWhxH3ZeDc+UNe/Ni4YAuI
+         QF/jycic2z6seY8Snc6VGYnfZcFZr4csqgN93ig8=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         mathieu.desnoyers@efficios.com
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 6/7] tracing/user_events: Enable setting event limit within namespace
-Date:   Thu, 28 Jul 2022 16:52:40 -0700
-Message-Id: <20220728235241.2249-7-beaub@linux.microsoft.com>
+Subject: [RFC PATCH v2 7/7] tracing/user_events: Add self-test for namespace integration
+Date:   Thu, 28 Jul 2022 16:52:41 -0700
+Message-Id: <20220728235241.2249-8-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220728235241.2249-1-beaub@linux.microsoft.com>
 References: <20220728235241.2249-1-beaub@linux.microsoft.com>
@@ -48,144 +48,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When granting non-admin users the ability to register and write data to
-user events they should have a limit imposed. Using the namespace
-options file, operators can change the limit of the events that are
-allowed to be created.
-
-There is also a new line in the user_events_status file to let users
-know the current limit (and to ask the operator for more if required).
-
-For example, to limit the namespace to only 256 events:
-echo user_events_limit=256 > options
-
-From within the namespace root:
-cat user_events_status
-...
-Limit: 256
+Tests to ensure namespace cases are working correctly. Ensures that
+namespaces work as before for status/write cases and validates removing
+a namespace with open files, tracing enabled, etc.
 
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 ---
- kernel/trace/trace_events_user.c | 57 +++++++++++++++++++++++++++++---
- 1 file changed, 52 insertions(+), 5 deletions(-)
+ .../selftests/user_events/ftrace_test.c       | 150 ++++++++++++++++++
+ 1 file changed, 150 insertions(+)
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 9694eee27956..1dc88bbd04f9 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -41,6 +41,7 @@
- #define MAX_PAGES (1 << MAX_PAGE_ORDER)
- #define MAX_BYTES (MAX_PAGES * PAGE_SIZE)
- #define MAX_EVENTS (MAX_BYTES * 8)
-+#define MAX_LIMIT (MAX_EVENTS - 1)
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index 404a2713dcae..5d384c1b31c4 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -22,6 +22,16 @@ const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_e
+ const char *trace_file = "/sys/kernel/debug/tracing/trace";
+ const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
  
- /* Limit how long of an event name plus args within the subsystem. */
- #define MAX_EVENT_DESC 512
-@@ -85,6 +86,7 @@ struct user_event_group {
- 	DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
- 	refcount_t refcnt;
- 	int id;
-+	int reg_limit;
- };
- 
- static DEFINE_HASHTABLE(group_table, 8);
-@@ -252,6 +254,13 @@ static struct user_event_group *user_event_group_create(const char *name,
- 			goto error;
- 	}
- 
-+	/*
-+	 * Register limit is based on available events:
-+	 * The ABI states event 0 is reserved, so the real max is the amount
-+	 * of bits in the bitmap minus 1 (the reserved event slot).
-+	 */
-+	group->reg_limit = MAX_LIMIT;
++const char *namespace_dir = "/sys/kernel/debug/tracing/namespaces/self_test";
++const char *ns_data_file = "/sys/kernel/debug/tracing/namespaces/self_test/"
++			   "root/user_events_data";
++const char *ns_status_file = "/sys/kernel/debug/tracing/namespaces/self_test/"
++			     "root/user_events_status";
++const char *ns_enable_file = "/sys/kernel/debug/tracing/events/"
++			     "user_events.self_test/__test_event/enable";
++const char *ns_options_file = "/sys/kernel/debug/tracing/namespaces/self_test/"
++			      "options";
 +
- 	group->pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
- 
- 	if (!group->pages)
-@@ -1276,8 +1285,7 @@ static int user_event_parse(struct user_event_group *group, char *name,
- 			    char *args, char *flags,
- 			    struct user_event **newuser)
+ static inline int status_check(char *status_page, int status_bit)
  {
--	int ret;
--	int index;
-+	int ret, index, limit;
- 	u32 key;
- 	struct user_event *user;
- 
-@@ -1296,9 +1304,16 @@ static int user_event_parse(struct user_event_group *group, char *name,
- 		return 0;
- 	}
- 
--	index = find_first_zero_bit(group->page_bitmap, MAX_EVENTS);
-+	/*
-+	 * 0 is a reserved bit, so the real limit needs to be one higher.
-+	 * An example of this is a limit of 1, bit 0 is always set. To make
-+	 * this work, the limit must be 2 in this case (bit 1 will be set).
-+	 */
-+	limit = min(group->reg_limit + 1, (int)MAX_EVENTS);
-+
-+	index = find_first_zero_bit(group->page_bitmap, limit);
- 
--	if (index == MAX_EVENTS)
-+	if (index == limit)
- 		return -EMFILE;
- 
- 	user = kzalloc(sizeof(*user), GFP_KERNEL);
-@@ -1831,6 +1846,7 @@ static int user_seq_show(struct seq_file *m, void *p)
- 	seq_printf(m, "Active: %d\n", active);
- 	seq_printf(m, "Busy: %d\n", busy);
- 	seq_printf(m, "Max: %ld\n", MAX_EVENTS);
-+	seq_printf(m, "Limit: %d\n", group->reg_limit);
- 
- 	return 0;
- }
-@@ -2010,13 +2026,44 @@ static int user_event_ns_remove(struct trace_namespace *ns)
- 	return ret;
+ 	return status_page[status_bit >> 3] & (1 << (status_bit & 7));
+@@ -160,6 +170,53 @@ static int check_print_fmt(const char *event, const char *expected)
+ 	return strcmp(print_fmt, expected);
  }
  
-+#define NS_EVENT_LIMIT_PREFIX "user_events_limit="
++FIXTURE(ns) {
++	int status_fd;
++	int data_fd;
++	int enable_fd;
++	int options_fd;
++};
 +
- static int user_event_ns_parse(struct trace_namespace *ns, const char *command)
- {
--	return -ECANCELED;
-+	struct user_event_group *group = user_event_group_find(ns->id);
-+	int len, value, ret = -ECANCELED;
-+
-+	if (!group)
-+		return -ECANCELED;
-+
-+	len = str_has_prefix(command, NS_EVENT_LIMIT_PREFIX);
-+	if (len && !kstrtouint(command + len, 0, &value)) {
-+		if (value <= 0 || value > MAX_LIMIT) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		group->reg_limit = value;
-+		ret = 0;
-+		goto out;
++FIXTURE_SETUP(ns) {
++	if (mkdir(namespace_dir, 770)) {
++		ASSERT_EQ(EEXIST, errno);
 +	}
-+out:
-+	user_event_group_release(group);
 +
-+	return ret;
++	self->status_fd = open(ns_status_file, O_RDONLY);
++	ASSERT_NE(-1, self->status_fd);
++
++	self->data_fd = open(ns_data_file, O_RDWR);
++	ASSERT_NE(-1, self->data_fd);
++
++	self->options_fd = open(ns_options_file, O_RDWR);
++	ASSERT_NE(-1, self->options_fd);
++
++	self->enable_fd = -1;
++}
++
++FIXTURE_TEARDOWN(ns) {
++	if (self->status_fd != -1)
++		close(self->status_fd);
++
++	if (self->data_fd != -1)
++		close(self->data_fd);
++
++	if (self->options_fd != -1)
++		close(self->options_fd);
++
++	if (self->enable_fd != -1) {
++		write(self->enable_fd, "0", sizeof("0"));
++		close(self->enable_fd);
++		self->enable_fd = -1;
++	}
++
++	ASSERT_EQ(0, clear());
++
++	if (rmdir(namespace_dir)) {
++		ASSERT_EQ(ENOENT, errno);
++	}
++}
++
+ FIXTURE(user) {
+ 	int status_fd;
+ 	int data_fd;
+@@ -477,6 +534,99 @@ TEST_F(user, print_fmt) {
+ 	ASSERT_EQ(0, ret);
  }
  
- static int user_event_ns_show(struct trace_namespace *ns, struct seq_file *m)
++TEST_F(ns, namespaces) {
++	struct user_reg reg = {0};
++	struct iovec io[3];
++	__u32 field1, field2;
++	int before = 0, after = 0;
++	int page_size = sysconf(_SC_PAGESIZE);
++	char *status_page;
++
++	reg.size = sizeof(reg);
++	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
++
++	field1 = 1;
++	field2 = 2;
++
++	io[0].iov_base = &reg.write_index;
++	io[0].iov_len = sizeof(reg.write_index);
++	io[1].iov_base = &field1;
++	io[1].iov_len = sizeof(field1);
++	io[2].iov_base = &field2;
++	io[2].iov_len = sizeof(field2);
++
++	/* Limit to 1 event */
++	ASSERT_NE(-1, write(self->options_fd,
++			    "user_events_limit=1\n",
++			    sizeof("user_events_limit=1\n") - 1));
++
++	/* Register should work */
++	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
++	ASSERT_EQ(0, reg.write_index);
++	ASSERT_NE(0, reg.status_bit);
++
++	status_page = mmap(NULL, page_size, PROT_READ, MAP_SHARED,
++			   self->status_fd, 0);
++
++	/* MMAP should work and be zero'd */
++	ASSERT_NE(MAP_FAILED, status_page);
++	ASSERT_NE(NULL, status_page);
++	ASSERT_EQ(0, status_check(status_page, reg.status_bit));
++
++	/* Enable event (start tracing) */
++	self->enable_fd = open(ns_enable_file, O_RDWR);
++	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
++
++	/* Event should now be enabled */
++	ASSERT_NE(0, status_check(status_page, reg.status_bit));
++
++	/* Write should make it out to ftrace buffers */
++	before = trace_bytes();
++	ASSERT_NE(-1, writev(self->data_fd, (const struct iovec *)io, 3));
++	after = trace_bytes();
++	ASSERT_GT(after, before);
++
++	/* Register above limit should fail */
++	reg.name_args = (__u64)"__test_event_nope u32 field1; u32 field2";
++	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
++	ASSERT_EQ(EMFILE, errno);
++
++	/* Removing namespace while files open should fail */
++	ASSERT_EQ(-1, rmdir(namespace_dir));
++
++	close(self->options_fd);
++	self->options_fd = -1;
++
++	/* Removing namespace while files open should fail */
++	ASSERT_EQ(-1, rmdir(namespace_dir));
++
++	close(self->status_fd);
++	self->status_fd = -1;
++
++	/* Removing namespace while files open should fail */
++	ASSERT_EQ(-1, rmdir(namespace_dir));
++
++	close(self->data_fd);
++	self->data_fd = -1;
++
++	/* Removing namespace while mmaps are open should fail */
++	ASSERT_EQ(-1, rmdir(namespace_dir));
++
++	/* Unmap */
++	ASSERT_EQ(0, munmap(status_page, page_size));
++
++	/* Removing namespace with no files but tracing should fail */
++	ASSERT_EQ(-1, rmdir(namespace_dir));
++
++	/* Disable event (stop tracing) */
++	ASSERT_NE(-1, write(self->enable_fd, "0", sizeof("0")))
++	close(self->enable_fd);
++	self->enable_fd = -1;
++
++	/* Removing namespace should now work */
++	ASSERT_EQ(0, rmdir(namespace_dir));
++}
++
+ int main(int argc, char **argv)
  {
-+	struct user_event_group *group = user_event_group_find(ns->id);
-+
-+	if (!group)
-+		return 0;
-+
-+	seq_printf(m, "%s%d\n", NS_EVENT_LIMIT_PREFIX, group->reg_limit);
-+
-+	user_event_group_release(group);
-+
- 	return 0;
- }
- 
+ 	return test_harness_run(argc, argv);
 -- 
 2.25.1
 

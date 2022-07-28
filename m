@@ -2,181 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A324A583BC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB7F583BCB
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235760AbiG1KIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
+        id S235038AbiG1KJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235038AbiG1KIt (ORCPT
+        with ESMTP id S235884AbiG1KJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:08:49 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86959A192
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:08:48 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id j22so2337760ejs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:08:48 -0700 (PDT)
+        Thu, 28 Jul 2022 06:09:41 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D928354665
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:09:39 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id bf9so2087548lfb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5S5jjFPg+8R+2tlByEvVLuWXp3ngjrRt0G1NZh8FJZ0=;
-        b=F/g+jqgAKlBrdUUtnu0gPvO/qG+p5hslWLrHNAI/JSnPX6M/qeN9YXQNt8ck7HWTja
-         XXzBJsyDpFPIW/F+DhNc/oAWtWe5EPKvHkB+XwusEp/cc9Am5DH5OpBOX9Lq762epyeA
-         lFZ8jKJ2jo8kdG5VvfVtfR7fAFW94/JtGDW96z9T4QeJ35VMWfsimUV8GmZ1r1i0ZiTD
-         JnFyaG23Hzz10dLJxnDeisAvcLR/8gXfL7Ah4oW+03ntifAhKZhGdQ4+ulRND9AbwpPX
-         SRqYDiR934OiEE6nt1gAxsLUbNESTub2G63fWxcQOHMzHEXWbB+x7GgfoeQ3AyEOwFrR
-         kkFw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=BUqatnFwzy7O1x1Y7oCnQMez3coEtfR7Z07+z2mqDIM=;
+        b=E/+uSTOSDSMvIY911TS6NsLjCU2k5JY7OTPnQwHkFPfSSxSmQGgjn1sEpME7hms5ZR
+         udL2kU6KX8ZxUX99L46psZjfg3TT5nvmXLXWfHc/d9bggduvWGgRDkWgumNGS/Zel5fu
+         ZEqZRpZD4u5xuxoz/bZkGwJstGQrFfUmURRspcm4jdU8imSn92Rudp12WY0adZGvFzNE
+         4eRsD29SasU+m/xUUqqfrrZRIiCJj/8fE/P3bZ4dgAfc+jVo/OhicYsvtKdLZas86Gcg
+         zgnuxQQg71FxjYslCFtwEdvfHAtPgvytwVUXUgeMWsVTG0lwxUyOGrMutbMuFr9rlSuX
+         /Hyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5S5jjFPg+8R+2tlByEvVLuWXp3ngjrRt0G1NZh8FJZ0=;
-        b=KiCWenPYp5FA+zKVNPTUnLtdtTK1N7p5S6VxFb7vUzJ30P23NIyV69d3CIKZ1Eefq0
-         Gd9cG29hdOjgZepj2CQxMVj9cZtenbzYez/7qttj/7Lg2C66Dz6dpDdotJMCb/36168V
-         dZeo/RSIl5aF7YxvtyG8BJaLrE/amRurfmi3QEmFjxBAu1KRy5z+1DtISkj/uo9SVp14
-         YoF2AWvmWDXyclcbh7/CJd4Zb5iwncWKPx1/+cxX0paVDZMAe4LiT1Lb7rwWfpsritNn
-         gywkd8H6P/9jxzi4H6dinFMHeTmyBIF5jSK+8sBR+pDSimR/EgfqWur6Y//rpPv28KEW
-         Vncw==
-X-Gm-Message-State: AJIora97J9gJoPkjqKiAMB3suNSbAkqQDoDWEJwKLQ7gDpqjpWbylSi5
-        soc51eoVDpn4z2v5B2C71Nd06/RAVb06UwQhCg3XOA==
-X-Google-Smtp-Source: AGRyM1sTtDrve8cAvAXLCI6yux5bsYlH/3R7hC8AA1P2GwKoIDZOgZ28ICjw2wM9HQpi2Ahx7jpKhJPSk0dbGwX1XeI=
-X-Received: by 2002:a17:907:7294:b0:72b:1ae:9c47 with SMTP id
- dt20-20020a170907729400b0072b01ae9c47mr20587494ejc.253.1659002926982; Thu, 28
- Jul 2022 03:08:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BUqatnFwzy7O1x1Y7oCnQMez3coEtfR7Z07+z2mqDIM=;
+        b=FwmIVhdq91u0La8eGsf8lTD5bAJroPJgImSEkTe0NGEkAo2HmaqvFlP2dr4xRoy8zj
+         9L85cA+e/GMfq9GKvp1eKIfMXAFOpaeJtDtMrU/HQS0mOXfmAwAz8NPCTTQ9R3yFRrzq
+         uRQdSHP42ne4A4Wdqyts43LLxtntj2gnU1xDeQloQ8XuC0N+eyCuiDP+FoKTzUnyqOAE
+         d7Nz9kl7jE7d7CYwCjRBIOQhlOAsOpQygH1ZZetovg77VOoz6ETARNCu5xRSP4/ErSN1
+         e3jB97W2niXLXWSGiij9Obtc1V4m4FHYpbB4AE/LzIteR/HvOnAoBZ0xTZ3heH5PDQ1l
+         Jvgg==
+X-Gm-Message-State: AJIora9ZhQoj9qEmqwtBTtHSt6x3waRuiR9HGz/FpXXw5BzHRzTEpVmo
+        riMdNzeIbt+dFIZyQoyOidAGRA==
+X-Google-Smtp-Source: AGRyM1vweiBCNpCytMP732q5tdxS2gLMfJ+RJ+bhKD3ocWCdE4ymh77QcXFo4IWFINCqGpkFYitrnw==
+X-Received: by 2002:a05:6512:b21:b0:47f:752a:c140 with SMTP id w33-20020a0565120b2100b0047f752ac140mr9193515lfu.349.1659002977983;
+        Thu, 28 Jul 2022 03:09:37 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id 10-20020ac25f0a000000b0048137a6486bsm125870lfq.228.2022.07.28.03.09.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 03:09:37 -0700 (PDT)
+Message-ID: <39395257-703b-a5e9-17c3-80f79f67fdc7@linaro.org>
+Date:   Thu, 28 Jul 2022 12:09:35 +0200
 MIME-Version: 1.0
-References: <20220727160959.122591422@linuxfoundation.org>
-In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 28 Jul 2022 15:38:35 +0530
-Message-ID: <CA+G9fYuhNz64Ov4yqz-YSP8KjHY=vdyTRcfDdKuc02Y-LJESMA@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/26] 4.9.325-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
+ controller bindings
+Content-Language: en-US
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220728054202.6981-1-yu.tu@amlogic.com>
+ <20220728054202.6981-2-yu.tu@amlogic.com>
+ <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
+ <74cd833a-4773-eeb0-80aa-75ea1cdc093e@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <74cd833a-4773-eeb0-80aa-75ea1cdc093e@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 at 21:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.325 release.
-> There are 26 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.325-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 28/07/2022 12:05, Yu Tu wrote:
+> Hi Krzysztof,
+> 	Thanks for your reply.
+> 
+> On 2022/7/28 16:41, Krzysztof Kozlowski wrote:
+>> [ EXTERNAL EMAIL ]
+>>
+>> On 28/07/2022 07:42, Yu Tu wrote:
+>>> Add new clock controller compatible and dt-bindings header for the
+>>> Everything-Else domain of the S4 SoC.
+>>>
+>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>
+>>
+>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index c1abc53f9e91..f872d0c0c253 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
+>>>   F:	drivers/clk/meson/
+>>>   F:	include/dt-bindings/clock/gxbb*
+>>>   F:	include/dt-bindings/clock/meson*
+>>> +F:	include/dt-bindings/clock/s4-clkc.h
+>>>   
+>>>   ARM/Amlogic Meson SoC Crypto Drivers
+>>>   M:	Corentin Labbe <clabbe@baylibre.com>
+>>> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
+>>> new file mode 100644
+>>> index 000000000000..b686c8877419
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/clock/s4-clkc.h
+>>
+>> Filename with vendor prefix, so:
+>> amlogic,s4-clkc.h
+> It's fine with me. It's mainly Jerome's opinion.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+To clarify: I understand such naming might bring inconsistency, but we
+want to bring some order in the bindings directories. They keep growing
+and at some point the model names might start conflicting.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-## Build
-* kernel: 4.9.325-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.9.y
-* git commit: f3e4570fb8c30c0abe735f2a6b0601cb82660ecc
-* git describe: v4.9.324-27-gf3e4570fb8c3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
-24-27-gf3e4570fb8c3
-
-## Test Regressions (compared to v4.9.324)
-No test regressions found.
-
-## Metric Regressions (compared to v4.9.324)
-No metric regressions found.
-
-## Test Fixes (compared to v4.9.324)
-No test fixes found.
-
-## Metric Fixes (compared to v4.9.324)
-No metric fixes found.
-
-## Test result summary
-total: 68055, pass: 60210, fail: 223, skip: 6314, xfail: 1308
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 254 total, 249 passed, 5 failed
-* arm64: 50 total, 43 passed, 7 failed
-* i386: 26 total, 25 passed, 1 failed
-* mips: 30 total, 30 passed, 0 failed
-* parisc: 12 total, 0 passed, 12 failed
-* powerpc: 36 total, 16 passed, 20 failed
-* s390: 12 total, 9 passed, 3 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 45 total, 44 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Krzysztof

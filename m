@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B720B58433C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564C4584367
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbiG1Pk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S231977AbiG1PnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiG1PkZ (ORCPT
+        with ESMTP id S229775AbiG1PnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:40:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27CF4E61E
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:40:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5914E61BCE
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79CEC433C1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659022822;
-        bh=PnLRe8DPgb5C0NP0/UiXF6v21WnJVk8lR9e0zQ/5llA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Dh+X8XvXY5meH2t+/EOJBb8EJ05RtHBrDLsCrwBS8rt3FBD+c9WjR0aaUsBDuGf2Q
-         KVrRL7R2jBOVPbvBzGTP56dozkT+STgpgCKGAJ4HIeA+CFj+qrergLUicqU28RRi0v
-         3LgnRqgiGBkn3yU+0PpvxL2sflnNS3c/4IhRrbWPIT0Go/3phVSrC9IlGmrLPQJJFG
-         mfZZjbFHJJxg+9A4JQ7nNmz33aFvnW/yWrzijC3jsc18C1LZA1PS41yEV9Pv94XTnL
-         rA/r84vZ0ypnHZCUXYT+gBkffTzI2Ku5CSOwOQcFroD7Mcy9ddSBVAwEFQtmQrF90H
-         IH0e717VUbCbw==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-f2a4c51c45so2749727fac.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:40:22 -0700 (PDT)
-X-Gm-Message-State: AJIora/foIS3MmSBJjSq3RRSlcZohHL3ScWEZdZTEQ5+0VoQqhKhft/C
-        fkcpF9BBSoB4xwDg+qUqMVjEsHXexNZJ6tjQwxc=
-X-Google-Smtp-Source: AGRyM1u4gYleexKCkLgdyIM/RvOWOKlFlOBMtqt7iI88zBRdD9Ur32A2D/5F/TDRxWlg2MT+HljQbgOG3xn7at7tM2g=
-X-Received: by 2002:a05:6870:a90a:b0:10d:9e83:98a6 with SMTP id
- eq10-20020a056870a90a00b0010d9e8398a6mr17264oab.228.1659022821818; Thu, 28
- Jul 2022 08:40:21 -0700 (PDT)
+        Thu, 28 Jul 2022 11:43:13 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACA069F2E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:43:12 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a7-20020a17090a008700b001f325db8b90so1111313pja.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OvVirUwva7iitmCWZI9gOg8g2CWki9PsaWOed+nTpOU=;
+        b=AiRFPHaA7gZOYNc69ZY96d8VhlOkMnaDNRHXUPXYvDABBFKi+J5uw7z/ofo7pXx+kZ
+         OLkNhH6Kgd3V69r4I7YmRLT/Tjia4T46btmtB1dIkIw28Vis+01PIRvIPlJitO/FwFw/
+         1U1P8H0p3NMJKHx+U00LYiF/H6ovjadOyBh9jbw5EV0yzAp2mhazixc661ahs+T9PIG2
+         PLxkwjYXNKIM7s/70lnmsJ6WXvH8uJuhEARVWaFT4vFEvklLelKE8IPxtg2ZlI3gWFrm
+         WLZJK2MpAbAObHMb4Zc+gAO/fwqAEfWJaGvKTCbie4uhrbeJl0J8pMdvZBKF8ZOaLOct
+         J5WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OvVirUwva7iitmCWZI9gOg8g2CWki9PsaWOed+nTpOU=;
+        b=R1ITWPZcMUgXIBieaacELWFCwUbFw1ORUavMulh6p99b+Wr3jeROYloYxEA5AEgghE
+         MsSw0UvEA/5T9Ziev5MEAWVvW52+KvvbdjkMphyYWSDRcRcFz+37lV2aM4HJzhn9txrC
+         Rt3B1oKo1zAm9e3/JZI5oeOp+08hld5J+YlQfdnzELTtj4WlDW6ytiOOS71MyNFLnumY
+         raBCaSKVuvkUa9y11WR7eQOKlx+Dfg/RmnAK/9JQTx6ohIeS+OHQPQ10N3I8Rb4AJlkj
+         f8gPzt/C9XfIjc4Z01BjURm71+18WyW9tVR5qupRZ+0ve5rLN3Lzho5w+IzyuKbVmttz
+         fy2g==
+X-Gm-Message-State: AJIora90DntX7jqRhZ4qtjPwSPo+zGdqyN93qdKWiIIvO74C1ur8INH7
+        sb0oVQTC6xWf8UV35NG3/d+yGMZpghXHlg==
+X-Google-Smtp-Source: AGRyM1sH1quS5prsBUI9o3IRDsm8cA8ZRJf5b7TYuFSboXNv9OrkXcNXF6d6uc0XJRCyRVNDWZAZfg==
+X-Received: by 2002:a17:902:d483:b0:16d:6d17:1695 with SMTP id c3-20020a170902d48300b0016d6d171695mr20600840plg.73.1659022992223;
+        Thu, 28 Jul 2022 08:43:12 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q17-20020aa78431000000b0052badc0f3d7sm947704pfn.50.2022.07.28.08.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 08:43:11 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:43:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: Possible 5.19 regression for systems with 52-bit physical
+ address support
+Message-ID: <YuKuiyFFFY3QbZ3z@google.com>
+References: <20220728134430.ulykdplp6fxgkyiw@amd.com>
+ <20220728135320.6u7rmejkuqhy4mhr@amd.com>
+ <YuKjsuyM7+Gbr2nw@google.com>
 MIME-Version: 1.0
-References: <20220709084830.3124-1-jszhang@kernel.org> <CAMj1kXEy7_zyDqQC_e9Rf1a8HuMBz_HbZOAP-WBzeeDVu8Mwmw@mail.gmail.com>
- <YuKh2pmJC6/17Riy@xhacker> <YuKokvBjDxATePpH@xhacker>
-In-Reply-To: <YuKokvBjDxATePpH@xhacker>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 28 Jul 2022 08:40:10 -0700
-X-Gmail-Original-Message-ID: <CAMj1kXFQ86TgA-tUM4C5-LryDiry4w0uDo=TNdBPOiJvT1UXcQ@mail.gmail.com>
-Message-ID: <CAMj1kXFQ86TgA-tUM4C5-LryDiry4w0uDo=TNdBPOiJvT1UXcQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: save movk instructions in mov_q when the lower
- 16|32 bits are all zero
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuKjsuyM7+Gbr2nw@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 08:26, Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> On Thu, Jul 28, 2022 at 10:49:02PM +0800, Jisheng Zhang wrote:
-> > On Wed, Jul 27, 2022 at 08:15:11AM -0700, Ard Biesheuvel wrote:
-> > > On Sat, 9 Jul 2022 at 01:58, Jisheng Zhang <jszhang@kernel.org> wrote:
-> > > >
-> > > > Currently mov_q is used to move a constant into a 64-bit register,
-> > > > when the lower 16 or 32bits of the constant are all zero, the mov_q
-> > > > emits one or two useless movk instructions. If the mov_q macro is used
-> > > > in hot code path, we want to save the movk instructions as much as
-> > > > possible. For example, when CONFIG_ARM64_MTE is 'Y' and
-> > > > CONFIG_KASAN_HW_TAGS is 'N', the following code in __cpu_setup()
-> > > > routine is the pontential optimization target:
-> > > >
-> > > >         /* set the TCR_EL1 bits */
-> > > >         mov_q   x10, TCR_MTE_FLAGS
-> > > >
-> > > > Before the patch:
-> > > >         mov     x10, #0x10000000000000
-> > > >         movk    x10, #0x40, lsl #32
-> > > >         movk    x10, #0x0, lsl #16
-> > > >         movk    x10, #0x0
-> > > >
-> > > > After the patch:
-> > > >         mov     x10, #0x10000000000000
-> > > >         movk    x10, #0x40, lsl #32
-> > > >
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > >
-> > > This is broken for constants that have 0xffff in the top 16 bits, as
-> > > in that case, we will emit a MOVN/MOVK/MOVK sequence, and omitting the
-> > > MOVKs will set the corresponding field to 0xffff not 0x0.
-> >
-> > Thanks so much for this hint. I think you are right about the 0xffff in
-> > top 16bits case.
-> >
->
-> the patch breaks below usage case:
-> mov_q x0, 0xffffffff00000000
->
-> I think the reason is mov_q starts from high bits, if we change the
-> macro to start from LSB, then that could solve the breakage. But this
-> needs a rewrite of mov_q
+On Thu, Jul 28, 2022, Sean Christopherson wrote:
+> On Thu, Jul 28, 2022, Michael Roth wrote:
+> > On Thu, Jul 28, 2022 at 08:44:30AM -0500, Michael Roth wrote:
+> Different approach.  To fix the bug with enable_mmio_caching not being set back to
+> true when a vendor-specific mask allows caching, I believe the below will do the
+> trick.
 
-No it has nothing to do with that.
+...
+ 
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index 7314d27d57a4..a57add994b8d 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -19,8 +19,9 @@
+>  #include <asm/memtype.h>
+>  #include <asm/vmx.h>
+> 
+> -bool __read_mostly enable_mmio_caching = true;
+> -module_param_named(mmio_caching, enable_mmio_caching, bool, 0444);
+> +bool __read_mostly enable_mmio_caching;
+> +static bool __read_mostly __enable_mmio_caching = true;
+> +module_param_named(mmio_caching, __enable_mmio_caching, bool, 0444);
+> 
+>  u64 __read_mostly shadow_host_writable_mask;
+>  u64 __read_mostly shadow_mmu_writable_mask;
+> @@ -340,6 +341,8 @@ void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask)
+>         BUG_ON((u64)(unsigned)access_mask != access_mask);
+>         WARN_ON(mmio_value & shadow_nonpresent_or_rsvd_lower_gfn_mask);
+> 
+> +       enable_mmio_caching = __enable_mmio_caching;
 
-The problem is that the use of MOVN changes the implicit value of the
-16-bit fields that are left unspecified, and assigning them in a
-different order is not going to make any difference.
+This isn't ideal as the value used by KVM won't be reflected in the module param.
+The basic approach is sound, but KVM should snapshot the original value of the module
+param and "reset" to that.
 
-I don't think we should further complicate mov_q, and I would argue
-that the existing optimization (which I added myself) is premature
-already: in the grand scheme of things, one or two instructions more
-or less are not going to make a difference anyway, given how rarely
-this macro is used. And even if any of these occurrences are on a hot
-path, it is not a given that shorter sequences of MOVZ/MOVN/MOVK are
-going to execute any faster, as the canonical MOVZ/MOVK/MOVK/MOVK
-might well decode to fewer uops.
-
-So in summary, let's leave this code be.
+> +
+>         if (!enable_mmio_caching)
+>                 mmio_value = 0;
+> 
+> 

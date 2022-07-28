@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C96A58472A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E8258472D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiG1UpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S232532AbiG1Upc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbiG1UpU (ORCPT
+        with ESMTP id S232467AbiG1UpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:45:20 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E4D3A49A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:45:18 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id c139so2916306pfc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:45:18 -0700 (PDT)
+        Thu, 28 Jul 2022 16:45:22 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AC84E60F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:45:20 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id w205so2897492pfc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:45:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:reply-to:mime-version
-         :content-transfer-encoding;
-        bh=BFYLQBNewKFOO3/y+guhXpi4ykjZO+Pwq+zagBW55FE=;
-        b=Wb1wW19HqLhehVg0fLArS6cWPVluO+n8vv+WRdAqBWU+YOiri8HLwdcSuQw7syp2Z8
-         OGA9GR5mNXY5ESKuk0phBvMRqW/A7RwdoAdQkgW9VbwLyrszbo3cMWP16TqDVqxVKDFN
-         lTjWwB+lk41FcrlMEoIWvq4M3TOhMkcw6E4kBUnr0Fu2p9EauRYEuxQWZCvp36fpThn/
-         RvJGGKmetxKXcZ+MaFqCGfg2N3xkitKILRRf4zB6fcXd+YykpuEmj8JLhp8KIH688TlY
-         HG+a2p/gvVDXMXuqnDerHwc9R/Aae7KnCEZkG5oTNj3atu+rq3NDNOvTRqjX1bOMrJpS
-         IZUA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references:reply-to
+         :mime-version:content-transfer-encoding;
+        bh=ycW0mhERWN+p0KVMgOpcoUTig1KmOvE2fu+KZQruV5Q=;
+        b=enzG2ODUUsfYcRd6l9GSOTO9h/lNV8Ef4uIhHU6yji7Llr1yXRk3yu8Jvp3eGFtyvk
+         GuacXnsG0xrlW8P8MKMl3E3zGDpphKxKDGWUicOyhyzhjvNKOJ5O/+6eGpDxn0PicZ1V
+         TRa/lGa/fMEZsrkrEAVncXaTZo1oYW9zat+vY1xOm2f+7x+0Oxd/wuCtuHT+++nhi5fN
+         P3aqzJfa/8dpzuEeqaT1QfwnZSq1teXtWEgL6iLWtf1zsU83oj0jmVJPCWHBGvdXSPiz
+         oUzYdURjUrByQA5sleCoOy4v8itR0JknzX0G/p8AaYur1CAJ5lz1Jzn1s2MjJIRXXode
+         FoXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :mime-version:content-transfer-encoding;
-        bh=BFYLQBNewKFOO3/y+guhXpi4ykjZO+Pwq+zagBW55FE=;
-        b=RfxPEEsec1vD6ne2XTuSet8f2RVHazsgUmVBM7lDZOgX3o+N5Z7Z0o/EgOu6F2ov32
-         NR/FQpCqz1e5Qq4pDH1CjNLttpLOzPAlaaRFEGhrzOU7NNWLwEJkXwUBOM8E3QKiKHs2
-         Lzvmjiw0GC3i4f2dOSpcPELDqK++ZZbzFt+YgTQ+TNAjBsXNn4urNyxzqqhh5TYAX7rk
-         f6JMIKHO/NYUMyaOmcH6JynuvtToyDWLKf0raDrR49meRYBWqC2OHIENojK6Rp/iXq4v
-         +vikLp8o+2JKfNx3F8pipHxEQFMBN+znBzrc8rU2bzB3f9k0+aRrtTmjmevlUDoZ4RaN
-         TP4g==
-X-Gm-Message-State: AJIora8R98QJXGnC45BnQrucWHri58YhBilyJcoy7XrauHW5JaAP6d6+
-        TXVgNfJdHwMkiL/i7euYDriL2nl2Aeq104zYWNo=
-X-Google-Smtp-Source: AGRyM1t/3EY+tuhYeeax1lGJ/pPz1VYuriZau27GDWfFS8xzf7J8W+nbdwuYexVNcHF2OVt6KlygbA==
-X-Received: by 2002:a63:b05:0:b0:41a:58f:f2ba with SMTP id 5-20020a630b05000000b0041a058ff2bamr380211pgl.543.1659041118085;
-        Thu, 28 Jul 2022 13:45:18 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:reply-to:mime-version:content-transfer-encoding;
+        bh=ycW0mhERWN+p0KVMgOpcoUTig1KmOvE2fu+KZQruV5Q=;
+        b=zMcDmiinDih1XZ9ZvyC4QutovYG1FMgX7sj2pZqFXd5H18R3lAcvhYsu8zd0YlSRsJ
+         ng0NWprxjoveeJD1eT8gd7cOY6YNm3wZjY//+Nsp6+WKRG+JJUUX2bUs4HK1o8Uhh5aR
+         ThuqYWmxdnQT/a9qvmdNTnBju8aiVQjFPSlJ7jbvaB/z367ZFdpqpoqrqZSCQsfP4oOA
+         sdpgCpQbiKoUPknVgjH9etAhD9706YvckN6JVru+IndV6pTKX81DKNRxz+k01TGsXGQM
+         CgZmxq/fNrMd+tz4LGT9rJJhNirE2IQC7C2d7g0PQ+Bn5oVHaffQs7y1TTyct3+iVJR9
+         XyAA==
+X-Gm-Message-State: AJIora9SINgIXQA1bzNUd5pHXFlZXtP3A8jQfqUw4NndUTCN9mLMTVXV
+        Yb1bdyADIQ8+LEcglfnuzAU=
+X-Google-Smtp-Source: AGRyM1tYmO8wnuamcnLViWW3Uo2TdiQiGqhQMiU8SvJkvB0urbOMvzbIUQjzsRT1aMImvlLKOkCoyQ==
+X-Received: by 2002:a63:b50b:0:b0:412:b42c:6940 with SMTP id y11-20020a63b50b000000b00412b42c6940mr406365pge.460.1659041120407;
+        Thu, 28 Jul 2022 13:45:20 -0700 (PDT)
 Received: from KASONG-MB0.tencent.com ([114.254.3.190])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b0016c40f8cb58sm1787304pli.81.2022.07.28.13.45.15
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b0016c40f8cb58sm1787304pli.81.2022.07.28.13.45.18
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 28 Jul 2022 13:45:17 -0700 (PDT)
+        Thu, 28 Jul 2022 13:45:19 -0700 (PDT)
 From:   Kairui Song <ryncsn@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Kairui Song <kasong@tencent.com>
-Subject: [RFC PATCH 0/7] Replace per-task RSS cache with per-CPU RSS cache
-Date:   Fri, 29 Jul 2022 04:45:04 +0800
-Message-Id: <20220728204511.56348-1-ryncsn@gmail.com>
+Subject: [RFC PATCH 1/7] mm: remove the per-task RSS counter cache
+Date:   Fri, 29 Jul 2022 04:45:05 +0800
+Message-Id: <20220728204511.56348-2-ryncsn@gmail.com>
 X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220728204511.56348-1-ryncsn@gmail.com>
+References: <20220728204511.56348-1-ryncsn@gmail.com>
 Reply-To: Kairui Song <kasong@tencent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,228 +74,287 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kairui Song <kasong@tencent.com>
 
-Hi Linux MM,
+The RSS counter cached as introduced in
+commit 34e55232e59f ("mm: avoid false sharing of mm_counter") to ease
+the contention of the RSS counters of a mm_struct.
 
-This is a early RFC patch series, which trys to fix the inaccurate RSS
-counting issue and also improve proformance.
+There are several problems with this, and the 64 events threshold
+might not be an optimal value. It makes the RSS value inaccurate,
+in the worst case, RSS value is not accounted until 64 pages are
+allocated. With common tools like `top`, there could be hundreds of
+MBs of error of the RSS value being reported by kernel.
 
-The problem
-===========
+And since 4 counters share the same event threshold, in the worst case,
+each counter will do a global sync every 16 events, which still raises
+some contention.
 
-While reading the code in mm/memory.c, I noticed the 64 event threshold
-for RSS accounting, and the per-task design seems not the best solution
-for either accuracy or efficiency.
+Remove this cache for now, and prepare for a different approach.
 
-The 64 events threshold is still quite small and contention is still
-there, it's not the most contented thing but still a performance hit.
-And it's already too large and has negative effect on RSS accuracy.
+Some helper macros are kept since they will come in handy later.
 
-Although RSS is not a really good standard to measure or control process
-memory usage, but it's still the most common way for most users to check
-the process memory usage in a system (through utils like top, read from
-/proc, ps ...)
+Signed-off-by: Kairui Song <kasong@tencent.com>
+---
+ Documentation/filesystems/proc.rst |  7 -----
+ fs/exec.c                          |  2 --
+ include/linux/mm.h                 | 20 +-----------
+ include/linux/mm_types_task.h      |  9 ------
+ include/linux/sched.h              |  3 --
+ kernel/exit.c                      |  5 ---
+ kernel/fork.c                      |  4 ---
+ kernel/kthread.c                   |  1 -
+ mm/madvise.c                       |  7 ++---
+ mm/memory.c                        | 49 ------------------------------
+ 10 files changed, 3 insertions(+), 104 deletions(-)
 
-It's not hard to find many users complaining about the strange RSS
-counting issue just by googling it. And I can easily 'steal' tons of
-memory from the kernel without being counted by RSS with the following
-code snip on x86:
-
-#include <pthread.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/mman.h>
-#include <linux/mman.h>
-#define THREAD_NUM 10000
-#define PAGE_SIZE 4096
-#define MAP_SIZE 4096 * 32
-void* thread(void *ptr) {
-	char *p = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	for (int i = 0; i < MAP_SIZE; ++i)
-		p[i] = 0xff;
-	sleep(1000);
-	munmap(p, MAP_SIZE);
-	return NULL;
-}
-int main(int argc, char **argv) {
-	pthread_t threads[THREAD_NUM];
-	for (int i = 0; i < THREAD_NUM; ++i)
-		pthread_create(&threads[i], NULL, *thread, NULL);
-	for (int i = 0; i < THREAD_NUM; ++i)
-		pthread_join(threads[i], NULL);
-	return 0;
-}
-
-And the RSS reports (using `ps`):
-USER         PID %CPU  %MEM      VSZ    RSS   TTY      STAT START   TIME COMMAND
-root        7278 33.1  0.1  83245376  43888   pts/0    Sl+  01:09   0:03 ./a.out
-
-But actually 1.5G of memory is used by it, and `top` user will have no
-idea about it.
-
-RFC
-===
-
-In this RFC series, I tried to improve it by using a per-CPU cache,
-instead of doing RSS caching per-task. A CPU will cache the RSS update
-of it's corresponding active mm as much as possible. When an mm is
-switch_to'ed to/off a CPU, flush the cached data.
-I first tried to make the cache switch/flush independent of the mm
-switch but turns out it is easier and more accurate to just stick
-with the mm switch.
-
-And as long as the mm is not switched, don't flush the cache. So the
-atomic operation of mm counter is avoided as much as possible.
-And now Instead, the RSS reader will collect the cache from each
-CPU upon reading.
-
-Since per my understanding, in most cases, RSS reading is less frequent
-than RSS updating (checking all caller of
-get_mm_counter/get_mm_rss/*_hiwater_rss, it's used by OOM killer, by
-task numa balancer periodically, from /proc, and by sparc arch code
-which seems the only hot path). This design seems to improve the
-performance overall. And besides, with the previous design, high
-frequency of RSS reading doesn't make much sense since there is a
-64 events delay for each task.
-
-And the overhead of iterating each CPU can be minimized, so reading will
-not be much slower than before. One way is to reuse mm_cpumask, RSS reader
-will only iterate CPUs that do have cached the RSS of target mm.
-
-Without this optimzation, reader and cache invalidation may suffer a
-full CPU sync. But by carefully arrange the data structure, and using
-lockless reading design, the performance hit should still be acceptable.
-
-Also removing the per-task struct cache may help save a little bit of sapce.
-
-In this series:
-Patch 1/7 - 3/7 remove the old per-task cache, and did some prepare.
-Patch 4/7 implement a generic version of per-CPU RSS cache, with a
-performance drop on RSS reading/invalidation, because it have to
-iterate all CPUs.
-Patch 6/7 and 7/7 implement and enabled reusing mm_cpumask for RSS
-caching on x86_64.
-
-Tests
-=====
-
-Based on this design and this series, I did some tests on x86_64,
-and it showed a few advantages compared to the previous design:
-
-- First, the accuracy of RSS of the demo C problem above is now fixed:
-USER         PID %CPU  %MEM      VSZ    RSS   TTY      STAT START   TIME COMMAND
-root        1201 40.7  4.7  83245376 1498856  pts/0    Sl+  01:11   0:03 ./a.out
-
-Now it's excatly the amount of memory being consumed.
-
-- Cache hit rate:
-Booting up and login system (Fedora 36):
-Hit/Miss (1 cache miss per 1800 events avg)::
-1021027/567
-
-Build linux kernel with tinyconfig and `make -j16`:
-Hit/Miss (1 cache miss per 521 events avg):
-35613357/68327
-
-pgbench:
-Hit/Miss (1 cache miss per 2543811 events avg):
-35613357/14
-
-The most common cache miss call chain here is:
- => add_mm_counter_fast
- => do_anonymous_page
- => __handle_mm_fault
- => handle_mm_fault
- => __get_user_pages
- => __get_user_pages_remote
- => get_arg_page
- => copy_string_kernel
- => do_execveat_common.isra.0
- => __x64_sys_execve
- => do_syscall_64
- => entry_SYSCALL_64_after_hwframe
-
-With long running tasks, the hit rate is extremely high, nearly 100%
-since tasks tend to have a high affinity with the local CPU.
-
-- Some benchmark result:
-(with transparent hugepage set to 'never', actuall with 'alwayse. similiar performance different is abserved, just for stabalize the result):
-
--- on 1 x 8 core AMD Ryzen 9 5900HX @ 3.30Ghz:
-pts/pgbench (100 clients, 12 test run):
-Before: 16073 TPS, 6.241 ms
-After: 16829 TPS, 5.962 ms (~4% faster)
-
-hackbench (32 process, 100 test run):
-Before: 125.317
-After: 123.482 (~1% faster)
-
-Linux kernel build (tineyconfig, 20 test run)
-Before: 20.9947s
-After: 20.9955s (Almost identical)
-
--- on 2 x 48 core Intel Xeon Platinum 8255C CPU @ 2.50GHz
-pts/pgbench (100 Clients, 24 test run):
-Before: 22556 TPS, 4.458ms latency
-After:  23025 TPS, 4.347ms latency (~2% faster)
-
-hackbench (32 process, 100 test run):
-Before: took 48.774s
-AfterA: took 48.540s (~1% faster)
-
-Linux kernel build (defconfig, 20 test run):
-Before: took 42.7050s
-After: took 42.7121s (Almost identical)
-
-Overall, the performance seems slightly better than before with the
-above tests. And some code paths can still be optimized (eg.
-*_hiwater_rss related call site, make more RSS counting routing use
-this cache etc...), and things may still get better.
-
-This patch series is only in an early RFC state since I'm not sure if
-this is an acceptable design, so I hope I can collect some discussion
-from the community.
-
-But at least this shows things definitely can be improved.
-
-If this approach is appreciatable, I'll try to improve the following
-work items:
-- Arch optimzations, using mm_cpumask. (It seems sparc reads RSS on every
-  page fault, not sure if sparc will conflict with this approach)
-- Currently, kernel uses RSS reading helpers as a very cheap function
-  call, which is no longer that cheap with this series. eg.
-  *_hiwater_rss might be batched or optimized in some way to reduce the
-  performance impact of slower reader.
-- CPU hotplug.
-- More code tweaking.
-
-Please have my excuse if I've made any silly mistakes. Looking forward
-to learn about everyone's opinion on this.
-
-Kairui Song (7):
-  mm: remove the per-task RSS counter cache
-  mm: move check_mm to memory.c
-  mm/headers: change emun order of MM_COUNTERS
-  mm: introduce a generic per-CPU RSS cache
-  mm: use fast path for pmd setting as well
-  mm: introduce CONFIG_ARCH_PCP_RSS_USE_CPUMASK
-  x86_64/tlb, mm: enable cpumask optimzation for RSS cache
-
- Documentation/filesystems/proc.rst |   7 -
- arch/Kconfig                       |   3 +
- arch/x86/Kconfig                   |   1 +
- arch/x86/mm/tlb.c                  |   5 +
- fs/exec.c                          |   2 -
- include/linux/mm.h                 |  34 +---
- include/linux/mm_types_task.h      |  49 ++++--
- include/linux/sched.h              |   3 -
- kernel/exit.c                      |   5 -
- kernel/fork.c                      |  39 +----
- kernel/kthread.c                   |   1 -
- kernel/sched/core.c                |   4 +
- mm/madvise.c                       |   7 +-
- mm/memory.c                        | 243 +++++++++++++++++++++++++----
- 14 files changed, 269 insertions(+), 134 deletions(-)
-
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 1bc91fb8c321..04a0a18da262 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -224,13 +224,6 @@ memory usage. Its seven fields are explained in Table 1-3.  The stat file
+ contains detailed information about the process itself.  Its fields are
+ explained in Table 1-4.
+ 
+-(for SMP CONFIG users)
+-
+-For making accounting scalable, RSS related information are handled in an
+-asynchronous manner and the value may not be very precise. To see a precise
+-snapshot of a moment, you can see /proc/<pid>/smaps file and scan page table.
+-It's slow but very precise.
+-
+ .. table:: Table 1-2: Contents of the status files (as of 4.19)
+ 
+  ==========================  ===================================================
+diff --git a/fs/exec.c b/fs/exec.c
+index 778123259e42..3c787ca8c68e 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -988,8 +988,6 @@ static int exec_mmap(struct mm_struct *mm)
+ 	tsk = current;
+ 	old_mm = current->mm;
+ 	exec_mm_release(tsk, old_mm);
+-	if (old_mm)
+-		sync_mm_rss(old_mm);
+ 
+ 	ret = down_write_killable(&tsk->signal->exec_update_lock);
+ 	if (ret)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index cf3d0d673f6b..6346f7e77dc7 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1998,17 +1998,7 @@ static inline bool get_user_page_fast_only(unsigned long addr,
+  */
+ static inline unsigned long get_mm_counter(struct mm_struct *mm, int member)
+ {
+-	long val = atomic_long_read(&mm->rss_stat.count[member]);
+-
+-#ifdef SPLIT_RSS_COUNTING
+-	/*
+-	 * counter is updated in asynchronous manner and may go to minus.
+-	 * But it's never be expected number for users.
+-	 */
+-	if (val < 0)
+-		val = 0;
+-#endif
+-	return (unsigned long)val;
++	return atomic_long_read(&mm->rss_stat.count[member]);
+ }
+ 
+ void mm_trace_rss_stat(struct mm_struct *mm, int member, long count);
+@@ -2094,14 +2084,6 @@ static inline void setmax_mm_hiwater_rss(unsigned long *maxrss,
+ 		*maxrss = hiwater_rss;
+ }
+ 
+-#if defined(SPLIT_RSS_COUNTING)
+-void sync_mm_rss(struct mm_struct *mm);
+-#else
+-static inline void sync_mm_rss(struct mm_struct *mm)
+-{
+-}
+-#endif
+-
+ #ifndef CONFIG_ARCH_HAS_PTE_SPECIAL
+ static inline int pte_special(pte_t pte)
+ {
+diff --git a/include/linux/mm_types_task.h b/include/linux/mm_types_task.h
+index c1bc6731125c..a00327c663db 100644
+--- a/include/linux/mm_types_task.h
++++ b/include/linux/mm_types_task.h
+@@ -48,15 +48,6 @@ enum {
+ 	NR_MM_COUNTERS
+ };
+ 
+-#if USE_SPLIT_PTE_PTLOCKS && defined(CONFIG_MMU)
+-#define SPLIT_RSS_COUNTING
+-/* per-thread cached information, */
+-struct task_rss_stat {
+-	int events;	/* for synchronization threshold */
+-	int count[NR_MM_COUNTERS];
+-};
+-#endif /* USE_SPLIT_PTE_PTLOCKS */
+-
+ struct mm_rss_stat {
+ 	atomic_long_t count[NR_MM_COUNTERS];
+ };
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index c46f3a63b758..11d3e1a95302 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -861,9 +861,6 @@ struct task_struct {
+ 	/* Per-thread vma caching: */
+ 	struct vmacache			vmacache;
+ 
+-#ifdef SPLIT_RSS_COUNTING
+-	struct task_rss_stat		rss_stat;
+-#endif
+ 	int				exit_state;
+ 	int				exit_code;
+ 	int				exit_signal;
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 64c938ce36fe..8c55cda5136f 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -482,7 +482,6 @@ static void exit_mm(void)
+ 	exit_mm_release(current, mm);
+ 	if (!mm)
+ 		return;
+-	sync_mm_rss(mm);
+ 	mmap_read_lock(mm);
+ 	mmgrab(mm);
+ 	BUG_ON(mm != current->active_mm);
+@@ -749,10 +748,6 @@ void __noreturn do_exit(long code)
+ 
+ 	io_uring_files_cancel();
+ 	exit_signals(tsk);  /* sets PF_EXITING */
+-
+-	/* sync mm's RSS info before statistics gathering */
+-	if (tsk->mm)
+-		sync_mm_rss(tsk->mm);
+ 	acct_update_integrals(tsk);
+ 	group_dead = atomic_dec_and_test(&tsk->signal->live);
+ 	if (group_dead) {
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 9d44f2d46c69..c090ebd55063 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2145,10 +2145,6 @@ static __latent_entropy struct task_struct *copy_process(
+ 	p->io_uring = NULL;
+ #endif
+ 
+-#if defined(SPLIT_RSS_COUNTING)
+-	memset(&p->rss_stat, 0, sizeof(p->rss_stat));
+-#endif
+-
+ 	p->default_timer_slack_ns = current->timer_slack_ns;
+ 
+ #ifdef CONFIG_PSI
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index 3c677918d8f2..6bfbab4e2103 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -1463,7 +1463,6 @@ void kthread_unuse_mm(struct mm_struct *mm)
+ 	 * clearing tsk->mm.
+ 	 */
+ 	smp_mb__after_spinlock();
+-	sync_mm_rss(mm);
+ 	local_irq_disable();
+ 	tsk->mm = NULL;
+ 	membarrier_update_current_mm(NULL);
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 0316bbc6441b..48cb9e5f92d2 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -711,12 +711,9 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+ 		mark_page_lazyfree(page);
+ 	}
+ out:
+-	if (nr_swap) {
+-		if (current->mm == mm)
+-			sync_mm_rss(mm);
+-
++	if (nr_swap)
+ 		add_mm_counter(mm, MM_SWAPENTS, nr_swap);
+-	}
++
+ 	arch_leave_lazy_mmu_mode();
+ 	pte_unmap_unlock(orig_pte, ptl);
+ 	cond_resched();
+diff --git a/mm/memory.c b/mm/memory.c
+index 4cf7d4b6c950..6bf7826e666b 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -176,53 +176,9 @@ void mm_trace_rss_stat(struct mm_struct *mm, int member, long count)
+ 	trace_rss_stat(mm, member, count);
+ }
+ 
+-#if defined(SPLIT_RSS_COUNTING)
+-
+-void sync_mm_rss(struct mm_struct *mm)
+-{
+-	int i;
+-
+-	for (i = 0; i < NR_MM_COUNTERS; i++) {
+-		if (current->rss_stat.count[i]) {
+-			add_mm_counter(mm, i, current->rss_stat.count[i]);
+-			current->rss_stat.count[i] = 0;
+-		}
+-	}
+-	current->rss_stat.events = 0;
+-}
+-
+-static void add_mm_counter_fast(struct mm_struct *mm, int member, int val)
+-{
+-	struct task_struct *task = current;
+-
+-	if (likely(task->mm == mm))
+-		task->rss_stat.count[member] += val;
+-	else
+-		add_mm_counter(mm, member, val);
+-}
+-#define inc_mm_counter_fast(mm, member) add_mm_counter_fast(mm, member, 1)
+-#define dec_mm_counter_fast(mm, member) add_mm_counter_fast(mm, member, -1)
+-
+-/* sync counter once per 64 page faults */
+-#define TASK_RSS_EVENTS_THRESH	(64)
+-static void check_sync_rss_stat(struct task_struct *task)
+-{
+-	if (unlikely(task != current))
+-		return;
+-	if (unlikely(task->rss_stat.events++ > TASK_RSS_EVENTS_THRESH))
+-		sync_mm_rss(task->mm);
+-}
+-#else /* SPLIT_RSS_COUNTING */
+-
+ #define inc_mm_counter_fast(mm, member) inc_mm_counter(mm, member)
+ #define dec_mm_counter_fast(mm, member) dec_mm_counter(mm, member)
+ 
+-static void check_sync_rss_stat(struct task_struct *task)
+-{
+-}
+-
+-#endif /* SPLIT_RSS_COUNTING */
+-
+ /*
+  * Note: this doesn't free the actual pages themselves. That
+  * has been handled earlier when unmapping all the memory regions.
+@@ -502,8 +458,6 @@ static inline void add_mm_rss_vec(struct mm_struct *mm, int *rss)
+ {
+ 	int i;
+ 
+-	if (current->mm == mm)
+-		sync_mm_rss(mm);
+ 	for (i = 0; i < NR_MM_COUNTERS; i++)
+ 		if (rss[i])
+ 			add_mm_counter(mm, i, rss[i]);
+@@ -5120,9 +5074,6 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+ 	count_vm_event(PGFAULT);
+ 	count_memcg_event_mm(vma->vm_mm, PGFAULT);
+ 
+-	/* do counter updates before entering really critical section. */
+-	check_sync_rss_stat(current);
+-
+ 	if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
+ 					    flags & FAULT_FLAG_INSTRUCTION,
+ 					    flags & FAULT_FLAG_REMOTE))
 -- 
 2.35.2
 

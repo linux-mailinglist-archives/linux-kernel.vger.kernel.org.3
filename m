@@ -2,103 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A3F58422D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFF6584235
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiG1Ova (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S231433AbiG1OwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiG1Ov2 (ORCPT
+        with ESMTP id S229550AbiG1OwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:51:28 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9227C5D0C0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:51:26 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id c185so2657961oia.7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:51:26 -0700 (PDT)
+        Thu, 28 Jul 2022 10:52:12 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE915D0C0;
+        Thu, 28 Jul 2022 07:52:10 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v3so1545108wrp.0;
+        Thu, 28 Jul 2022 07:52:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FrPSJfIUXBW1VaA/gZ9xkTwpWNsJzuC25QAAGkfH378=;
-        b=bwuMMJjRKv5aroYf0Q2/p+CX6DvLsYFbKRSaxlKC0FrUSB2QmGkm78mabnmpWiCy/e
-         tFfJ0JiYtj6k9RxFWz9M5Gs4XVsdRoRlqTFrQPhW1MT/GRd6+Isv28fh3qOqExrazt2Z
-         pIrlgDYkwsIbqnMrhpXbIqXuvNydtdrkGCN+A=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mD3MJdwe1M/MeC+R1sdMr+F5YiHskPdcW+5CKgvwmK4=;
+        b=iUGg/CrWW+MiUyA/mg1p5vzybXCg3jUouFcnlHWaVGqFxrhWwizVOpH2IkQW7szJma
+         iOC8pfSoe7ZZfKyDF4gvUHQ1mUov9IdU4wV/+Mk1J7/6KN37cdUlC+pfFtyERNyzfFQj
+         XuXVRdDr902PQSnkrr2MmHMUyQOnyMt+G6aCUtLTlLNZevb2z6wAE/CSG6KVdMXRmpm8
+         ED78UkYZK4M8/tXowcNICLq+pGO/J8ezajSuCEvi2D0KxuSH13LKj59MYbAgyvHaYjcX
+         0YwhkT39e7Dt+m1ZkNZv8VMP/qameaFdsVlmPPWo0SK5lvvQBzhpDyw+irGhUosn662C
+         rCVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=FrPSJfIUXBW1VaA/gZ9xkTwpWNsJzuC25QAAGkfH378=;
-        b=h7/zZYxe6P+m0FsdjygDURU0KDfnxK2FCASZgiWtSz2YRhV3G1RQcrufOaNHL71lmi
-         AmEi0fgGSUvhShoLgKZJqhLWVNWCqcgN2A0IhF13eoYmMXElKldEtye1KTjx8X5pH6zh
-         wRtWG4dSWmqVmPWc6ez1/QpNRYvrTE3SZ49yeRlY275Vd/7FBb0gMxadPOz4HDTeak/V
-         4Lmo3vr3pzpVl6nnsUMSCHsRX3+Ce4CIzVbP4Qmn72bfSASnSGKWC+dedmVCEUrnOUFY
-         FinibqAhydypG9BY1PmiHTFcKs51zqtkxJ0NQuIWq8Tt7QMZzCQzOrERuK6RtHmfkAT/
-         UJpw==
-X-Gm-Message-State: AJIora9v/2n25SvQ+Ls45Y08+QyaoizE3NPtVMS7vOoH8cgry8tBVFju
-        ufRSotmsWhCVd8i82py4xiY5WA==
-X-Google-Smtp-Source: AGRyM1suzPB2DZps2WrrfQwh3qI2p7pnrAYFGYOTE5iLwD+VQVRb/DQSQYk8rckUW9uzOFGvP6gpHg==
-X-Received: by 2002:a05:6808:2107:b0:33a:85df:5be1 with SMTP id r7-20020a056808210700b0033a85df5be1mr4149933oiw.197.1659019885707;
-        Thu, 28 Jul 2022 07:51:25 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q31-20020a056871081f00b0010d75440f41sm433425oap.45.2022.07.28.07.51.24
+        bh=mD3MJdwe1M/MeC+R1sdMr+F5YiHskPdcW+5CKgvwmK4=;
+        b=bkvfragGHb5C/unm0I+wN/tyBhvCcqwbl0jfWiFoVDwJKnOTmtvN8jNS3B2ZWPUQBK
+         coQUcnzK+lM00aoFM/4YdOqNInaIZ3YKxbjlfW3q/VeXQIXaCm+YpcDmwaRDEsrS00Ay
+         RrY+ALc+psF+YKibTNOURFfcmLJGoA1+jbMLLByM5mEqG038WExtK7wZkGzGBhWRR+8+
+         tYLjv3rUO/ZlsrmVc7w+q1gsz68bCSRv+LmJQtFYl6S0Z7CpcBjyoD7Xx2Yi1TgI/+Zt
+         LZOKgEtRsv4rxdZEfOljRUEuV12S64rgsajdMZFvatLfcHc6gir8vidqVku6CaT9CWxS
+         fFSw==
+X-Gm-Message-State: AJIora/GtUbQecyp0m4dfE6gsfvP2JboJx5qU2HzWBHWGSdmJfm9qQ/6
+        gJWb4v0LsGTQfov6hS48h2c=
+X-Google-Smtp-Source: AGRyM1sGc5o3vzAllmoqiOc4kg6oAhY9pYH2gIOcTuw0tQ66DwxqCUNnE+4m3BL7R0boMJmgLYXsBg==
+X-Received: by 2002:a05:6000:1f0e:b0:21e:87c9:6b55 with SMTP id bv14-20020a0560001f0e00b0021e87c96b55mr13834716wrb.326.1659019929483;
+        Thu, 28 Jul 2022 07:52:09 -0700 (PDT)
+Received: from [0.0.0.0] ([185.246.188.60])
+        by smtp.gmail.com with ESMTPSA id q14-20020adff94e000000b0021d7b41255esm1122958wrr.98.2022.07.28.07.52.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 07:51:25 -0700 (PDT)
-Subject: Re: [PATCH 4.19 00/62] 4.19.254-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220727161004.175638564@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7b86f5a4-cbcf-aedb-7475-4a38d97cea9a@linuxfoundation.org>
-Date:   Thu, 28 Jul 2022 08:51:24 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 28 Jul 2022 07:52:09 -0700 (PDT)
+Message-ID: <30ce6f21-0a91-81cb-8b03-5acff17c59ee@gmail.com>
+Date:   Thu, 28 Jul 2022 17:52:04 +0300
 MIME-Version: 1.0
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] efi: earlycon: Add support for generic framebuffers
+ and move to fbdev subsystem
 Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tony Lindgren <tony@atomide.com>, linux-doc@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Rob Herring <robh@kernel.org>
+References: <20220728142824.3836-1-markuss.broks@gmail.com>
+ <20220728142824.3836-3-markuss.broks@gmail.com> <YuKfnAjB4gV0ki4A@kroah.com>
+From:   Markuss Broks <markuss.broks@gmail.com>
+In-Reply-To: <YuKfnAjB4gV0ki4A@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 10:10 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.254 release.
-> There are 62 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi Greg,
+
+On 7/28/22 17:39, Greg Kroah-Hartman wrote:
+> On Thu, Jul 28, 2022 at 05:28:19PM +0300, Markuss Broks wrote:
+>> Add early console support for generic linear framebuffer devices.
+>> This driver supports probing from cmdline early parameters
+>> or from the device-tree using information in simple-framebuffer node.
+>> The EFI functionality should be retained in whole.
+>> The driver was disabled on ARM because of a bug in early_ioremap
+>> implementation on ARM.
+>>
+>> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+>> ---
+>>   .../admin-guide/kernel-parameters.txt         |  12 +-
+>>   MAINTAINERS                                   |   5 +
+>>   drivers/firmware/efi/Kconfig                  |   6 +-
+>>   drivers/firmware/efi/Makefile                 |   1 -
+>>   drivers/firmware/efi/earlycon.c               | 246 --------------
+>>   drivers/video/fbdev/Kconfig                   |  11 +
+>>   drivers/video/fbdev/Makefile                  |   1 +
+>>   drivers/video/fbdev/earlycon.c                | 301 ++++++++++++++++++
+>>   8 files changed, 327 insertions(+), 256 deletions(-)
+>>   delete mode 100644 drivers/firmware/efi/earlycon.c
+>>   create mode 100644 drivers/video/fbdev/earlycon.c
 > 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.254-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
+> That should be a rename, not a delete/create, right?
+
+Should this change be split into two separate commits,
+one for moving the file and the second for making changes?
+
 > 
 > thanks,
 > 
 > greg k-h
-> 
 
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+- Markuss

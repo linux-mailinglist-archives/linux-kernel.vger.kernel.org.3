@@ -2,59 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D505839A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607B15839C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234072AbiG1Hki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S234770AbiG1Hqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234230AbiG1Hkf (ORCPT
+        with ESMTP id S234516AbiG1Hqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:40:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5753D4D83D;
-        Thu, 28 Jul 2022 00:40:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D264AB82284;
-        Thu, 28 Jul 2022 07:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B61C43470;
-        Thu, 28 Jul 2022 07:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658994031;
-        bh=p81wbSl4jQvNdxEQIWuCLFSph+3DQKM11CCOw6EGVc4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cv5PwUYCCTni2XA0aQzBYgUcsAonaMU5j+FBsyqzk1VBGaUBwrzetTytavedUvCdv
-         oSg/NaVW1sccm2S21QeVGOyR1WM91YMv4P9yxSS7MSeF543QvBSwiKkuZ6QY8IzHze
-         IXXPphSIebXXWzKADTcb8tz4gH5C6DlKkfx8oIXcYjaqkXOXSKrD9X7bvIgAbeyAEH
-         hLFbMjVVFD7ONHyHCMfWpdGYm0ln5egrWHzeuKff2JN3TpGNhKoI//vy5s3bHUeRcY
-         cWWmFbwBBKWhGj2msQyHoMmDM4sJ7bKKc9vKPtOCRSCrdeyUhH+5/lKCptXnTGYayu
-         ftYnFgLCqFFbg==
-Date:   Thu, 28 Jul 2022 10:40:28 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v5 4/6] tpm: of: Make of-tree specific function commonly
- available
-Message-ID: <YuI9bLmqGsZwn4n6@kernel.org>
-References: <20220706152329.665636-1-stefanb@linux.ibm.com>
- <20220706152329.665636-5-stefanb@linux.ibm.com>
- <YsuTRny45aBxGjm5@kernel.org>
- <3a9196b3-c510-0c32-8b70-572d9c4fe69d@linux.ibm.com>
+        Thu, 28 Jul 2022 03:46:46 -0400
+Received: from smtp98.ord1d.emailsrvr.com (smtp98.ord1d.emailsrvr.com [184.106.54.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817EF6113F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
+        s=20170822-45nk5nwl; t=1658994027;
+        bh=Ll3lGOHj0SIoQtOcdzdr6ctTpQ/ZQPVtYA+Y55SrikI=;
+        h=Date:Subject:To:From:From;
+        b=Z+RYzJuxAeKcyyVCRG3+2jFgDavsQBuV36JsLrJ1tPe6u6BeRqO7P0IcZ69LFe9vV
+         lGgfrW8ycInrKG6wT9NRcN/Sc9JEvBC82riV6ifFmXWMWd5utc79AuQ2qMWarTnMqq
+         NNCmN9WnTCLd0BWqeYZfBlQN5Qjegc+XwMF76YSk=
+X-Auth-ID: antonio@openvpn.net
+Received: by smtp5.relay.ord1d.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id B74C6A00C2;
+        Thu, 28 Jul 2022 03:40:26 -0400 (EDT)
+Message-ID: <c490b87c-085b-baca-b7e4-c67a3ee2c25e@openvpn.net>
+Date:   Thu, 28 Jul 2022 09:41:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a9196b3-c510-0c32-8b70-572d9c4fe69d@linux.ibm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220719014704.21346-1-antonio@openvpn.net>
+ <20220719014704.21346-2-antonio@openvpn.net> <YtbNBUZ0Kz7pgmWK@lunn.ch>
+From:   Antonio Quartulli <antonio@openvpn.net>
+Organization: OpenVPN Inc.
+In-Reply-To: <YtbNBUZ0Kz7pgmWK@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 82aa384a-5660-44d4-8ad5-96a212e0778c-1-1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,79 +52,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 12:01:36PM -0400, Stefan Berger wrote:
-> 
-> 
-> On 7/10/22 23:04, Jarkko Sakkinen wrote:
-> > On Wed, Jul 06, 2022 at 11:23:27AM -0400, Stefan Berger wrote:
-> > > Simplify tpm_read_log_of() by moving reusable parts of the code into
-> > > an inline function that makes it commonly available so it can be
-> > > used also for kexec support. Call the new of_tpm_get_sml_parameters()
-> > > function from the TPM Open Firmware driver.
-> > > 
-> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > Cc: Frank Rowand <frowand.list@gmail.com>
-> > > 
-> > > ---
-> > > v4:
-> > >   - converted to inline function
-> > > ---
-> > >   drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
-> > >   include/linux/tpm.h            | 27 +++++++++++++++++++++++++++
-> > >   2 files changed, 32 insertions(+), 26 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-> > > index a9ce66d09a75..f9462d19632e 100644
-> > > --- a/drivers/char/tpm/eventlog/of.c
-> > > +++ b/drivers/char/tpm/eventlog/of.c
-> > > @@ -12,6 +12,7 @@
-> > >   #include <linux/slab.h>
-> > >   #include <linux/of.h>
-> > > +#include <linux/tpm.h>
-> > >   #include <linux/tpm_eventlog.h>
-> > >   #include "../tpm.h"
-> > > @@ -20,11 +21,10 @@
-> > >   int tpm_read_log_of(struct tpm_chip *chip)
-> > >   {
-> > >   	struct device_node *np;
-> > > -	const u32 *sizep;
-> > > -	const u64 *basep;
-> > >   	struct tpm_bios_log *log;
-> > >   	u32 size;
-> > >   	u64 base;
-> > > +	int ret;
-> > >   	log = &chip->log;
-> > >   	if (chip->dev.parent && chip->dev.parent->of_node)
-> > > @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
-> > >   	if (of_property_read_bool(np, "powered-while-suspended"))
-> > >   		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
-> > > -	sizep = of_get_property(np, "linux,sml-size", NULL);
-> > > -	basep = of_get_property(np, "linux,sml-base", NULL);
-> > > -	if (sizep == NULL && basep == NULL)
-> > > -		return -ENODEV;
-> > > -	if (sizep == NULL || basep == NULL)
-> > > -		return -EIO;
-> > > -
-> > > -	/*
-> > > -	 * For both vtpm/tpm, firmware has log addr and log size in big
-> > > -	 * endian format. But in case of vtpm, there is a method called
-> > > -	 * sml-handover which is run during kernel init even before
-> > > -	 * device tree is setup. This sml-handover function takes care
-> > > -	 * of endianness and writes to sml-base and sml-size in little
-> > > -	 * endian format. For this reason, vtpm doesn't need conversion
-> > > -	 * but physical tpm needs the conversion.
-> > > -	 */
-> 
-> 
-> Jarkko,
-> 
->  can I apply your R-b tag after putting this lost comment back into the
-> inline function?
->    Stefan
+Hi,
 
-If there's a change I want to see the updated patch first.
+On 19/07/2022 17:25, Andrew Lunn wrote:
+>> +static void ovpn_get_drvinfo(struct net_device *dev,
+>> +			     struct ethtool_drvinfo *info)
+>> +{
+>> +	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
+>> +	strscpy(info->version, DRV_VERSION, sizeof(info->version));
+>> +	strscpy(info->bus_info, "ovpn", sizeof(info->bus_info));
+> 
+> version is generally considered useless information if it comes from
+> the driver. You have no idea if this is version 42 in net-next, or
+> some backported version in an enterprise kernel with lots of out of
+> tree patches. The driver is not standalone, it runs inside the
+> kernel. So in order to understand a bug report, you need to know what
+> kernel it is. If you don't fill in version, the core will with the
+> kernel version, which is much more useful.
 
-BR, Jarkko
+True.
+
+However, I guess I will still fill MODULE_VERSION() with a custom 
+string. This may also be useful when building the module out-of-tree.
+
+Thanks for the hint!
+
+Regards,
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.

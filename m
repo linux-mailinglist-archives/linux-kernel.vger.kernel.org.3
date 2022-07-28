@@ -2,149 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE675844EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF665844EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbiG1RY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S232417AbiG1RYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiG1RYY (ORCPT
+        with ESMTP id S229492AbiG1RYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:24:24 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2B765646;
-        Thu, 28 Jul 2022 10:24:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fQJO/t5bRWx9xQWLy7tMreEuISWOSo1KW58l2j2uGCq97xQSP1Uwz+16BhaxO8oAYgFiopFZvswT1laursnJe9oXljLoPpORFXVZj/FtwFZwm55gkFpHMgrds5dtgrNHnkPEkulTSl4aU+LUVvZf+dDMuvwjo/SOdKeHFpjIZwqPLh2Ga0JR4AdnJdOWE10pOBvgQvqQYnmuJD8aSWzYvQCyfR7ZNmwUf2CBanALL/QpK7noCZuLxkHuziKtLKB5InsYZUE5N/GRnzfiCGskAZxD0umw91YzlUMyD1xfvCsqUmuHMZiO8IK3GGLl/GMQfwoJRaN3ZktXxqRUB8QH1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G+8npCijmG03kdQDaRvMGCcnNNCUP7FuyYilG4u7uOQ=;
- b=ogu0p7mY26CJ7Q06hmSw7IGoH1mqiXgUYVCOtzIDTxBaJVPriAAI4+dGlyJkbc8R/Oi192RalaBqCwf2XYwGN8zcK9m4SZoVYY6GJe2bH/GqRwf6c6YWSO/MjWu8jzI0F5jYS2fT547cidxu6YT7JoExNWzOnYjNf2VlLx/goUUNmVLvnKu+e+goeaYALwGdCa45L/JCiJMn518kJ05dQ6IXgGEwZJE1RwcdwYWbWtRQ7A8mETO4TpAqn+qL/2PgnRByNeeILYcaKDnY/XDcLNDdbx2JxtJiQ+X1kDGSN35Ns1JC0Xe+tQPha0NXdFH/42sL9+mlZeoFyvONE/aDzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G+8npCijmG03kdQDaRvMGCcnNNCUP7FuyYilG4u7uOQ=;
- b=ApASrzO86yTCnDd3EifVAf5NS0rYFQoGXTL0boBU4NUFEmJq7oBL8rUCI8OuSmBcQg25JU6WfZCOliJaMOkLHLW+ougVe+NEHn2Q/ma29eo2/QAkRhracyNeVSOb9dh993VUBnkwUEJQ2vkJl7JtYYFEZQZjxbzWXaMB9whpnEA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
- by CH2PR12MB4972.namprd12.prod.outlook.com (2603:10b6:610:69::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Thu, 28 Jul
- 2022 17:24:19 +0000
-Received: from DM4PR12MB5040.namprd12.prod.outlook.com
- ([fe80::2ddb:590a:f046:b38b]) by DM4PR12MB5040.namprd12.prod.outlook.com
- ([fe80::2ddb:590a:f046:b38b%5]) with mapi id 15.20.5482.006; Thu, 28 Jul 2022
- 17:24:19 +0000
-Message-ID: <818ed83e-00c4-354d-753a-ff1d6d38b9b8@amd.com>
-Date:   Thu, 28 Jul 2022 22:54:06 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: build failure of next-20220728 due to 93ce5e0231d7 ("HID:
- amd_sfh: Implement SFH1.1 functionality")
-Content-Language: en-US
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-References: <YuLEvUKxrcwe2dZp@debian>
-From:   Basavaraj Natikar <bnatikar@amd.com>
-In-Reply-To: <YuLEvUKxrcwe2dZp@debian>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0112.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:27::27) To DM4PR12MB5040.namprd12.prod.outlook.com
- (2603:10b6:5:38b::19)
+        Thu, 28 Jul 2022 13:24:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D52CE5FAED
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659029061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BTCAQ/2O9rI/7HtP9wa4OSuDQhJYkbO4HcHfXDMOkEc=;
+        b=Xo5iGVdz2emTlwcGPL9VlQjCaQ6ulwWTyqtNbzscX09yLdmMyd8r6F5pO8RqVT6EHu/Q1J
+        gboYztbnmkFDOf50kRR+jCVmn0s8Uo2D32kgGc3h4WHyRR3CA59W9DlKD3IAsJRNnrGoMe
+        l3M/4jX9wHU6BYCsgSD6bWSfmIkvLUo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-oopDrEpmOi-e2t_pJFAKtA-1; Thu, 28 Jul 2022 13:24:19 -0400
+X-MC-Unique: oopDrEpmOi-e2t_pJFAKtA-1
+Received: by mail-wr1-f72.google.com with SMTP id m2-20020adfc582000000b0021e28acded7so599072wrg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:24:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=BTCAQ/2O9rI/7HtP9wa4OSuDQhJYkbO4HcHfXDMOkEc=;
+        b=J7273pA2tMNPlqDT1FIvW86O0EfgwKGabeqlCItkzEy2DQZa2m0+Z3t8JEAkBxNzOP
+         n5qUz1rxMXnSxKy9AfSf9AcR9JwqTFBjlps+Btr/eFmurFkTxPQrktTRbCQ+nkePix+K
+         UiYyr97kcfWJBRsq90BeGNFu6nlD/hApbtzGk7th9e0Q9bZXLtMMOY662eLyWr2WNyhS
+         eFJUqbB/hPPMjgyead3b0P6Nzy91UA3fc+/Q67FtQfukgApZy88+z4pMFX5yF0aulrIj
+         0GbT3kH4NHmTNTPCMTe26tJhIorC4+ZCCUZZYHvWCyuU1qqfZYPSpONMusEiJOyyIBY2
+         PDnQ==
+X-Gm-Message-State: AJIora+L2K0eDrjCJpF2q6Uw3A7DXHMp6nfjjOuaC2MNOSowQFC+qnX2
+        pKHoLgxCJIAHdDxpG5vs7VMQrL3AiRaF2af6dfL8F8Et2UopLk2YPHMsJwVgQCPPb0WSKAUsF18
+        9ODeDrcazzjW/5eFbHL6Q01cd
+X-Received: by 2002:a7b:ce87:0:b0:3a3:19bf:35e0 with SMTP id q7-20020a7bce87000000b003a319bf35e0mr291365wmj.120.1659029058581;
+        Thu, 28 Jul 2022 10:24:18 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t3YZybr+YnX6CcQA+ryVcN/sTw+U4A0+0EYIenQp5eA6drZXWQb/MeyYub2TCAaLfoxlf52w==
+X-Received: by 2002:a7b:ce87:0:b0:3a3:19bf:35e0 with SMTP id q7-20020a7bce87000000b003a319bf35e0mr291356wmj.120.1659029058427;
+        Thu, 28 Jul 2022 10:24:18 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id l15-20020a05600c2ccf00b003a327f19bf9sm7315026wmc.14.2022.07.28.10.24.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 10:24:17 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [RFC PATCH v2 1/2] workqueue: Unbind workers before sending
+ them to exit()
+In-Reply-To: <YuK6zzmlFJ376UeD@slm.duckdns.org>
+References: <20220727115327.2273547-1-vschneid@redhat.com>
+ <20220727115327.2273547-2-vschneid@redhat.com>
+ <CAJhGHyCeraX1jcea9kt_FBC561zBgECuw5qx8TAdCG0EHnT6kA@mail.gmail.com>
+ <xhsmhedy5ecdg.mognet@vschneid.remote.csb>
+ <YuK6zzmlFJ376UeD@slm.duckdns.org>
+Date:   Thu, 28 Jul 2022 18:24:17 +0100
+Message-ID: <xhsmh8roddubi.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 946338d5-2df1-4272-8177-08da70be012f
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4972:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kfBHdvf3r5ni6A7z52zSSqsp9wOGcln7xoS/MLfZImpjgfPmIi/R+tJFgtbanBCGJBGbf43VICf830QDLanfcGhjsplhiyAzvV8S+59+Az7raVn1p/tFyT7KsjOqDy21aS+pPNtWF8m1NyZHakFOGWTIA7KAINKN9Pm2SEcVumnH6tj1SmPIfDdCEKVZgtiBf24ikcQ0fO9WO7sU5TISRHkowHnLbtXN8LWMxsXxSLf7MSeHqxROgAi71Rag11RLCT1thWEmylmS7ifsoinSHji0LKf02c4eBXdK3hJQx6mDOIkGsWiPVCfDvNiyWRe++x74nGDqC+7/6ertLBmuWD3bXFeFjv3s1CzSqfvBm5ZVmHk+1ogTHAY+5cv8zj1wQgxw25utIcGvR8vA3pF1CLZtDRfcXdv1HtpUSQpVyMyj7BAe6m8KxNjNIkRWi8HUc2tdKDFsJrS73khWTXzNo1TH82CPpprkNEJIBPyagUxQ9ORgYNs0QXLTASrZfOJ8Ci/23c7N90GMocmp5EXo/X/6Kt1xfC8RDChlOmHtwJAtzN5Tq1fUVMYSA4dTRMJfO4TESuSvW1/z8yBp6F91D1J0F8Ag61B8Z5n4j8k0+q4UfwXbQN4bfOd6DUE6yxO4nD3sqT8sY2ORWDMiwXjUwyz+huyvgJJnhpTfK/DR3HialBF05V0v9+49j0Wv9S8SB4uvvfTG75c0IGtyBnaKtgySLkLlfFS9vhRJlv36FWzUKiU0qbJYmAKLs2X56E/NSV2ih8qBPz6OZud9vle/rCGX/Q/n+OW1Y9AaAOSs1r9aK8gXeRPwCn13CdK/mRbiiqJ8oa4nJRJcxoyPK3HlySiQben5mLRU8DQRUOKS0W3g9OVdyZkMmPiDORKOZaucjTgHgASE+sm5hb6MHmHMSg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(5660300002)(8936002)(66556008)(4326008)(66476007)(4744005)(66946007)(8676002)(2906002)(31696002)(36756003)(6486002)(478600001)(966005)(316002)(38100700002)(110136005)(6512007)(26005)(186003)(6506007)(41300700001)(2616005)(53546011)(6666004)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R01aelBjODFiNHRPWTN2a0dDaFR0a1hLN3QyT0k5L0RwWFYxL01iQ2dHdnhT?=
- =?utf-8?B?OVdncHNQZEQ3UjJWK2hjMXFlNlUvM0JFdWZwNUFmd1UvYS90d1dVQzIwYmNX?=
- =?utf-8?B?TDNuK0QyNXJLbmZvUkwvSjl5TCtaSVBEbHRIanUzdkdrektsY0pZb2NGelJF?=
- =?utf-8?B?T0dJNmFlNVVjV1RvZng1T3lGVFRvNHZ3Z1FObGNQeHBqbTZYcEI5Y2pUeWxv?=
- =?utf-8?B?b2t0bEVpZTcyMU1xMTJMc1VQQzhBT05OWWp4YjhhOFZrSzR6L3RiODhXWi9k?=
- =?utf-8?B?RHFxN3FOaFRjR3hZdjZaMG9WTys0MVNOazBGZkdWSFA3dXVVMXFaWkk5TXcr?=
- =?utf-8?B?WGEzT0dPRVRJWlNWVS9Pd2VyWlBEVTNTWnJjaEtwT1dFK3VITURMRXlkclJx?=
- =?utf-8?B?UEl4K1FKVjRaNlZWM3RvMXRibnBwVnFMVWtjTVNsSWtZVzQ2d2VRcFNnWEM3?=
- =?utf-8?B?MkhFbHJHOGdiNHFwcTE0MU8weHhLSWZ1REV2c205RVdvdDFrY3lLN1dRY3VJ?=
- =?utf-8?B?Y0F0eEpzdW5WRXgxMTdYMkFya3Mxa3dJbStJTnM4MjVWZmJ6Sy9YeHQ5M0l5?=
- =?utf-8?B?U3dRUGhMUUQ2MzBiUE0vUzV4ZjRGZmZzK3ViZ3I3WEJZT3FQSUdLRThHSU9m?=
- =?utf-8?B?YVNSWGtISXNueHFjKzJ0bHNtWSt6NVR0MTVjQktpcDNyb2xka2tyKytjcUFt?=
- =?utf-8?B?c3V1eFBwOVN2bjlxOUVla09keVRlV21UNjc1ZG04TTBoTzJrNU9uMy92Kzd0?=
- =?utf-8?B?NjdqVkhMV3BQVVVOREw5TkE1eDdWOTNIOHR2QURLa1BNdVlhdm9UZ2NURTg4?=
- =?utf-8?B?L2ZZcFZhUlFCeVpkd3N0d1ozRVd3NHg0VCs5THZmWUU1dlF4N0dUQW5wcWI4?=
- =?utf-8?B?SGQzcHRqUXpSNWpEeTZDM0NOSHpHa1BlN1JuZUxyY2JvUHJyeG1QdjJUbUxp?=
- =?utf-8?B?ZFVIWHZwY0ZSeHVFVzVhTWgvU3hPeVlacldiNGtWTXdER242YU9hTng2Y2Rt?=
- =?utf-8?B?UENqT0kzbVFzaUtJMnI4MEtsWTJSb21Yb25tMjBrdWJRbXVlbnhCR1U2Q2M0?=
- =?utf-8?B?ajlYdHgvc1dIb2xUb1dZNzNBdExDQkpMS1RsZkg3TWtyZENzcW1KTVF3TkRO?=
- =?utf-8?B?YnhjU3A4b0JDWVB2cERRZGtBcm5PcXZtam5UOFNqMEFKZ1VqaXdyakJVM2JT?=
- =?utf-8?B?RGluUHBpcVNNSnRORVBLcFNITmtya0RXalFGZ3BhY1VNMFZkVnRncFMvdUR6?=
- =?utf-8?B?bDhVai9ZQW9ZOTVaTTAyYm42eXdaSmxUdEdkYldLcjlFTnB4bkovYi81b29Q?=
- =?utf-8?B?THdQRVNTNGpIdVhFVWxGVVRiNlVHaitqRmJWWWxGajd0WTRLcEo5aFhJOU5O?=
- =?utf-8?B?cU1teTc5ZFExcTNzKzFHdk5Oc1BjRi9SM3F2TFg4ZEFGS29PbjN4dmY4UGIz?=
- =?utf-8?B?VmxCUEdDejQ5U1VCYVhUTFZuY0REaE1zQktlWFFNZ3pLaExWMjZ5UVpsRVp2?=
- =?utf-8?B?bTI1c0xocEZiQWd1SXU5R1Y0a2cyR05CM01SN0k3Ukg0YUVIYVl5RmlsQXp3?=
- =?utf-8?B?bmxxWGEvUGVkQithdWo3YWJDWDQ4bmprRzZsUzhCTFdBdC9HRE1TQVZVWEV4?=
- =?utf-8?B?K1lZckx5UDl4WUZqK0NaNDFub1JmdFdLalFOTURNMTRjSGNIb1R6YXF4dFpS?=
- =?utf-8?B?MVpTZ0tFaGF0a3NZVTl2THdsaC9zZjB0Z0NsVkYrZkhES0RwQ25ycCtxU0dv?=
- =?utf-8?B?Sk1FTnV0ZzA5cjFScXlXUE04NS90L0lLc1JGdmpReWVGSEgvdk5KOThLQ1ZF?=
- =?utf-8?B?V05odllza3pEZ0pqYXNLVlh5VnBhY0JMdldNZjRESWIvSVdDYWh5UzV4cTh3?=
- =?utf-8?B?L1ExWU56UmEwWlZIUVpCeHpLRlViMFYwTm41bFpsRFRISHNlN1BEQ0VqbjBu?=
- =?utf-8?B?K3hpTjNTRUJ4SXI2Tm4vL1hUMmNIZWVmS3phaEp4cy9qVGpjQmJ2QXcyeEY3?=
- =?utf-8?B?cGY5Y05TRG5rMUV3NEdOSHIyeGJPSFdmRVNxMVJUZEQvZWxnZFhzdHM3TzNh?=
- =?utf-8?B?NVEyNUJEK1V4S2VRTU5USGZLbEFCUjNQcitrYnFvb1JTcWlmdEhFTHpWKy9o?=
- =?utf-8?Q?KVKPYDgFvdH7HxUj9kWiWIOBP?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 946338d5-2df1-4272-8177-08da70be012f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 17:24:19.3740
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jSVG+T4h7DvWcZe8Z9Jps50tZThL0CswPBtbht/CDeTIADtOIcv5hfOZGFxqg+sVqqcTcv5ClSL62EzLAT7gMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4972
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/28/2022 10:47 PM, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
+On 28/07/22 06:35, Tejun Heo wrote:
+> On Thu, Jul 28, 2022 at 11:54:19AM +0100, Valentin Schneider wrote:
+>> On 28/07/22 01:13, Lai Jiangshan wrote:
+>> > system_unbound_wq doesn't have a rescuer.
+>> >
+>> > A new workqueue with a rescuer needs to be created and used for
+>> > this purpose.
+>> >
+>>
+>> Right, I think it makes sense for those work items to be attached to a
+>> WQ_MEM_RECLAIM workqueue. Should I add that as a workqueue-internal
+>> thing?
 >
-> Not sure if it has been reported, builds of xtensa, mips, csky and arm allmodsconfig
-> have failed to build next-20220728 with the error:
+> I don't understand why this would need MEM_RECLAIM when it isn't sitting in
+> the memory reclaim path. Nothing in mm side can wait on this.
 >
-> drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_interface.c: In function 'amd_stop_sensor':
-> drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_interface.c:48:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
 
-Already fixed in https://lore.kernel.org/all/nycvar.YFH.7.76.2207232011090.19850@cbobk.fhfr.pm/
-Also find fix in https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/tree/?h=for-next
-or https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/log/?h=for-5.20/amd-sfh
+Vaguely reading the doc I thought that'd be for anything that would
+directly or indirectly help with reclaiming memory (not explicitly sitting
+in some *mm reclaim* path), and I assumed freeing up a worker would count as
+that - but that's the understanding of someone who doesn't know much about
+all that :-)
 
-Thanks,
---
-Basavaraj
+>> > Since WORKER_DIE is set, the worker can be possible freed now
+>> > if there is another source to wake it up.
+>> >
+>>
+>> My understanding for having reap_worker() be "safe" to use outside of
+>> raw_spin_lock_irq(pool->lock) is that pool->idle_list is never accessed
+>> outside of the pool->lock, and wake_up_worker() only wakes a worker that
+>> is in that list. So with destroy_worker() detaching the worker from
+>> pool->idle_list under pool->lock, I'm not aware of a codepath other than
+>> reap_worker() that could wake it up.
+>
+> There actually are spurious wakeups. We can't depend on there being no
+> wakeups than ours.
+>
 
+Myes, I suppose if a to-be-destroyed kworker spuriously wakes before having
+been unbound then there's not much point in having the unbinding (harm has
+been done and the kworker can do_exit(), though arguably we could reduce
+the harm and still move it away), but let me see what I can do here.
+
+> Thanks.
+>
+> --
+> tejun
 

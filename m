@@ -2,129 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302CC583E45
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C2F583E44
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237365AbiG1MEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S237754AbiG1MEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237827AbiG1MEM (ORCPT
+        with ESMTP id S237282AbiG1MEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:04:12 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC7569F38;
-        Thu, 28 Jul 2022 05:04:07 -0700 (PDT)
-Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 888D156D;
-        Thu, 28 Jul 2022 14:04:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1659009845;
-        bh=W8KWOIaou5r+VZS1JZiD6LrDaQ9bIBoLAeqLxYhMnDc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=G5npxURHTqXY8u1iyD1KqtbRO7P8zd7pxttdTNeOyMazaL+pLXYliOwBq/7GlTupo
-         o9w6kt8yw/PscOKGZA4d3GRK+ivp2OoCJA8I6iK2io3VqOGZIIlC3iHQNBXCgqZOcN
-         sxXkHxHRU3sEk5AIPxrUwEzdT3lVvNV2F4fu94C8=
-Message-ID: <4382b760-418f-4033-97f2-47e082a30232@ideasonboard.com>
-Date:   Thu, 28 Jul 2022 15:04:01 +0300
+        Thu, 28 Jul 2022 08:04:22 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B1169F38
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1659009860;
+        bh=YFuXOKSSS/9CfU+pdes5kfvp16VCDVoasIzFIfXeFDo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=gX+SVjSQFhxvCMAZxbXXAal7AmssGiJ6OYD6qCM9WD0ntJ6Xd3Tx+a82YsSviWOMG
+         VmoZafw+xasSyEQNQ0Hsfro7xF4dq1/SfqENED5rGKtOUvDRlnzUC6HqfIWTPZ+K5m
+         +TVTm4V3YrLs5rw7ALEn+MJSwowJEJ/86kLLXWQc=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 29C0366962;
+        Thu, 28 Jul 2022 08:04:17 -0400 (EDT)
+Message-ID: <93087353ec0d23c56345d4c05e3d9719b284942c.camel@xry111.site>
+Subject: [PATCH v2 4/4] LoongArch: Support modules with new relocation types
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     loongarch@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Date:   Thu, 28 Jul 2022 20:04:14 +0800
+In-Reply-To: <c596e7a73953a1c49e8f5e94ec2db642f72e7813.camel@xry111.site>
+References: <c596e7a73953a1c49e8f5e94ec2db642f72e7813.camel@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/2] drm/tidss: Add support for AM625 DSS
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>, Jyri Sarha <jyri.sarha@iki.fi>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>
-References: <20220627151200.4693-1-a-bhatia1@ti.com>
- <20220627151200.4693-3-a-bhatia1@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20220627151200.4693-3-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 18:12, Aradhya Bhatia wrote:
-> Add support for the DSS IP on TI's new AM625 SoC in the tidss driver.
-> 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> Reviewed-by: Rahul T R <r-ravikumar@ti.com>
-> ---
->   drivers/gpu/drm/tidss/tidss_dispc.c | 56 ++++++++++++++++++++++++++++-
->   drivers/gpu/drm/tidss/tidss_dispc.h |  2 ++
->   drivers/gpu/drm/tidss/tidss_drv.c   |  1 +
->   3 files changed, 58 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
-> index dae47853b728..f084f0688a54 100644
-> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
-> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
-> @@ -272,6 +272,55 @@ const struct dispc_features dispc_j721e_feats = {
->   	.vid_order = { 1, 3, 0, 2 },
->   };
->   
-> +const struct dispc_features dispc_am625_feats = {
-> +	.max_pclk_khz = {
-> +		[DISPC_VP_DPI] = 165000,
-> +		[DISPC_VP_OLDI] = 165000,
-> +	},
-> +
-> +	.scaling = {
-> +		.in_width_max_5tap_rgb = 1280,
-> +		.in_width_max_3tap_rgb = 2560,
-> +		.in_width_max_5tap_yuv = 2560,
-> +		.in_width_max_3tap_yuv = 4096,
-> +		.upscale_limit = 16,
-> +		.downscale_limit_5tap = 4,
-> +		.downscale_limit_3tap = 2,
-> +		/*
-> +		 * The max supported pixel inc value is 255. The value
-> +		 * of pixel inc is calculated like this: 1+(xinc-1)*bpp.
-> +		 * The maximum bpp of all formats supported by the HW
-> +		 * is 8. So the maximum supported xinc value is 32,
-> +		 * because 1+(32-1)*8 < 255 < 1+(33-1)*4.
-> +		 */
-> +		.xinc_max = 32,
-> +	},
-> +
-> +	.subrev = DISPC_AM625,
-> +
-> +	.common = "common",
-> +	.common_regs = tidss_am65x_common_regs,
-> +
-> +	.num_vps = 2,
-> +	.vp_name = { "vp1", "vp2" },
-> +	.ovr_name = { "ovr1", "ovr2" },
-> +	.vpclk_name =  { "vp1", "vp2" },
-> +	.vp_bus_type = { DISPC_VP_OLDI, DISPC_VP_DPI },
+If GAS 2.40 and/or GCC 13 is used to build the kernel, the modules will
+contain R_LARCH_B26, R_LARCH_PCALA_HI20, R_LARCH_PCALA_LO12,
+R_LARCH_GOT_PC_HI20, and R_LARCH_GOT_PC_LO12 relocations.  Support them
+in the module loader to allow a kernel built with latest toolchain
+capable to load the modules.
 
-This looks correct, but with the two OLDI TXes, I think there will be 
-some interesting issues.
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+---
+ arch/loongarch/include/asm/elf.h        | 37 +++++++++++
+ arch/loongarch/kernel/module-sections.c | 12 +++-
+ arch/loongarch/kernel/module.c          | 83 +++++++++++++++++++++++++
+ 3 files changed, 130 insertions(+), 2 deletions(-)
 
-The tidss_kms.c associates a DSS VP and a DT port, but that's no longer 
-true if you add the ports for both OLDI TXes, as they both use the same 
-VP. I think fixing that won't affect this patch, though, and merging 
-this patch will, afaik, enable similar DSS functionality as we have for 
-AM65x.
+diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/=
+elf.h
+index 5f3ff4781fda..7af0cebf28d7 100644
+--- a/arch/loongarch/include/asm/elf.h
++++ b/arch/loongarch/include/asm/elf.h
+@@ -74,6 +74,43 @@
+ #define R_LARCH_SUB64				56
+ #define R_LARCH_GNU_VTINHERIT			57
+ #define R_LARCH_GNU_VTENTRY			58
++#define R_LARCH_B16				64
++#define R_LARCH_B21				65
++#define R_LARCH_B26				66
++#define R_LARCH_ABS_HI20			67
++#define R_LARCH_ABS_LO12			68
++#define R_LARCH_ABS64_LO20			69
++#define R_LARCH_ABS64_HI12			70
++#define R_LARCH_PCALA_HI20			71
++#define R_LARCH_PCALA_LO12			72
++#define R_LARCH_PCALA64_LO20			73
++#define R_LARCH_PCALA64_HI12			74
++#define R_LARCH_GOT_PC_HI20			75
++#define R_LARCH_GOT_PC_LO12			76
++#define R_LARCH_GOT64_PC_LO20			77
++#define R_LARCH_GOT64_PC_HI12			78
++#define R_LARCH_GOT_HI20			79
++#define R_LARCH_GOT_LO12			80
++#define R_LARCH_GOT64_LO20			81
++#define R_LARCH_GOT64_HI12			82
++#define R_LARCH_TLS_LE_HI20			83
++#define R_LARCH_TLS_LE_LO12			84
++#define R_LARCH_TLS_LE64_LO20			85
++#define R_LARCH_TLS_LE64_HI12			86
++#define R_LARCH_TLS_IE_PC_HI20			87
++#define R_LARCH_TLS_IE_PC_LO12			88
++#define R_LARCH_TLS_IE64_PC_LO20		89
++#define R_LARCH_TLS_IE64_PC_HI12		90
++#define R_LARCH_TLS_IE_HI20			91
++#define R_LARCH_TLS_IE_LO12			92
++#define R_LARCH_TLS_IE64_LO20			93
++#define R_LARCH_TLS_IE64_HI12			94
++#define R_LARCH_TLS_LD_PC_HI20			95
++#define R_LARCH_TLS_LD_HI20			96
++#define R_LARCH_TLS_GD_PC_HI20			97
++#define R_LARCH_TLS_GD_HI20			98
++#define R_LARCH_32_PCREL			99
++#define R_LARCH_RELAX				100
+=20
+ #ifndef ELF_ARCH
+=20
+diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kerne=
+l/module-sections.c
+index 36a77771d18c..8c0e4ad048cc 100644
+--- a/arch/loongarch/kernel/module-sections.c
++++ b/arch/loongarch/kernel/module-sections.c
+@@ -76,12 +76,20 @@ static void count_max_entries(Elf_Rela *relas, int num,
+=20
+ 	for (i =3D 0; i < num; i++) {
+ 		type =3D ELF_R_TYPE(relas[i].r_info);
+-		if (type =3D=3D R_LARCH_SOP_PUSH_PLT_PCREL) {
++		switch (type) {
++		case R_LARCH_SOP_PUSH_PLT_PCREL:
++		case R_LARCH_B26:
+ 			if (!duplicate_rela(relas, i))
+ 				(*plts)++;
+-		} else if (type =3D=3D R_LARCH_SOP_PUSH_GPREL)
++			break;
++		case R_LARCH_SOP_PUSH_GPREL:
++		case R_LARCH_GOT_PC_HI20:
+ 			if (!duplicate_rela(relas, i))
+ 				(*gots)++;
++			break;
++		default:
++			/* Do nothing. */
++		}
+ 	}
+ }
+=20
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.=
+c
+index 3ac4fbb5f109..8954ac24d4ab 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -291,6 +291,84 @@ static int apply_r_larch_add_sub(struct module *mod, u=
+32 *location, Elf_Addr v,
+ 	}
+ }
+=20
++static int apply_r_larch_b26(struct module *mod, u32 *location, Elf_Addr v=
+,
++			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++{
++	ptrdiff_t offset =3D (void *)v - (void *)location;
++
++	if (offset >=3D SZ_128M)
++		v =3D module_emit_plt_entry(mod, v);
++
++	if (offset < -SZ_128M)
++		v =3D module_emit_plt_entry(mod, v);
++
++	offset =3D (void *)v - (void *)location;
++
++	if (!signed_imm_check(offset, 28)) {
++		pr_err("module %s: jump offset =3D 0x%llx overflow! dangerous R_LARCH_B2=
+6 (%u) relocation\n",
++				mod->name, (long long)offset, type);
++		return -ENOEXEC;
++	}
++
++	if (offset & 3) {
++		pr_err("module %s: jump offset =3D 0x%llx unaligned! dangerous R_LARCH_B=
+26 (%u) relocation\n",
++				mod->name, (long long)offset, type);
++		return -ENOEXEC;
++	}
++
++	*location &=3D ~(u32)0x3ffffff;
++	*location |=3D (offset >> 18) & 0x3ff;
++	*location |=3D ((offset >> 2) & 0xffff) << 10;
++	return 0;
++}
++
++static int apply_r_larch_pcala_hi20(struct module *mod, u32 *location,
++		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
++		unsigned int type)
++{
++	ptrdiff_t offset =3D (void *)((v + 0x800) & ~0xfff) -
++		(void *)((Elf_Addr)location & ~0xfff);
++
++	if (!signed_imm_check(offset, 32)) {
++		pr_err("module %s: PCALA offset =3D 0x%llx does not fit in 32-bit signed=
+ and is unsupported by kernel! dangerous %s (%u) relocation\n",
++				mod->name, (long long)offset, __func__, type);
++		return -ENOEXEC;
++	}
++
++	*location &=3D ~((u32)0xfffff << 5);
++	*location |=3D ((offset >> 12) & 0xfffff) << 5;
++	return 0;
++}
++
++static int apply_r_larch_got_pc_hi20(struct module *mod, u32 *location,
++		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
++		unsigned int type)
++{
++	Elf_Addr got =3D module_emit_got_entry(mod, v);
++
++	return apply_r_larch_pcala_hi20(mod, location, got, rela_stack,
++			rela_stack_top, type);
++}
++
++static int apply_r_larch_pcala_lo12(struct module *mod, u32 *location,
++		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
++		unsigned int type)
++{
++	*location &=3D ~((u32)0xfff << 10);
++	*location |=3D ((u32)v & 0xfff) << 10;
++	return 0;
++}
++
++static int apply_r_larch_got_pc_lo12(struct module *mod, u32 *location,
++		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
++		unsigned int type)
++{
++	Elf_Addr got =3D module_emit_got_entry(mod, v);
++
++	return apply_r_larch_pcala_lo12(mod, location, got, rela_stack,
++			rela_stack_top, type);
++}
++
+ /*
+  * reloc_handlers_rela() - Apply a particular relocation to a module
+  * @mod: the module to apply the reloc to
+@@ -321,6 +399,11 @@ static reloc_rela_handler reloc_rela_handlers[] =3D {
+ 	[R_LARCH_SOP_SUB ... R_LARCH_SOP_IF_ELSE] 	     =3D apply_r_larch_sop,
+ 	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] =3D apply_r_larch_so=
+p_imm_field,
+ 	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     =3D apply_r_larch_add_sub,
++	[R_LARCH_B26]					     =3D apply_r_larch_b26,
++	[R_LARCH_PCALA_HI20]				     =3D apply_r_larch_pcala_hi20,
++	[R_LARCH_PCALA_LO12]				     =3D apply_r_larch_pcala_lo12,
++	[R_LARCH_GOT_PC_HI20]				     =3D apply_r_larch_got_pc_hi20,
++	[R_LARCH_GOT_PC_LO12]				     =3D apply_r_larch_got_pc_lo12,
+ };
+=20
+ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+--=20
+2.37.0
 
-So, I think these two patches could be merged, or we could wait a bit 
-until the OLDI situation becomes more clear. Up to you. In any case, for 
-both patches:
 
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-
-  Tomi

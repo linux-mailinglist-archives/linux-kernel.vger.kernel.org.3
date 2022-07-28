@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD77D583C57
+	by mail.lfdr.de (Postfix) with ESMTP id 921F2583C56
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236471AbiG1Kpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S236611AbiG1Kpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236440AbiG1Kow (ORCPT
+        with ESMTP id S236441AbiG1Kow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 28 Jul 2022 06:44:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4076366133;
-        Thu, 28 Jul 2022 03:44:19 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 10:44:16 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381D76113B;
+        Thu, 28 Jul 2022 03:44:20 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 10:44:17 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659005057;
+        s=2020; t=1659005058;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Xdr6KqSFOiGLJdxbejB9C9aJ6PdLyJL/7lG9ro8GL34=;
-        b=fRzslDkNeDnPASQd29BIpOpa4f9GcPafoIF3MWLtPCskSTeqEzvgliFq0obEaJWNQbSXj0
-        11DVMeSkl3CvkbitONp7oTXsCmodBf5WZ7yaVAnKMYE+QSvfHxW3HK4PJU/zWzZL8O8JuR
-        YYi1qkU0xfZosl0BOpXiEwC6Ewa2uAydH5rIhedya5R5MBiTpEmzxHVILS5qvjg3p1Qbk7
-        0p1aE3xYomh8GocUzKzWGVVL+v1JGsETfrKvC2HZtAcl3vJeQ+8JOvq4Qj7dN6U3hyLDNu
-        Wv1BZP1iMkszoMzfhEENBcyUfV55J1gc43VaeXevvZ3e5wsAS7RZB3rWWKn5Mw==
+        bh=Hf61HpLzxZHwfHd+7ApzXIc22+Huwe7ZrKmU/hEIKDM=;
+        b=et2A7TPL515HXJFdhWA3MyzVvjslsJUllH2O2qjKICInG4MEJ75p4ib5T9CsTkcdhmfHJX
+        26d7Mghh3ifaMunKZhXwnhlBj1D1fSKpp6JdxxwHL4Lz2DraiPugPQ3e1bF17kgDOHpMUB
+        asRvPaExbEe/WBCeb1YfCaGucLO+Bu8X1e9PN8+PhlwK5CHDNIhH68kJ2/RkvOoVIDiXHU
+        iGYVp3rrlP4k2vbxPCk5C21wxfLSh/LVIjISUh0VQU3RaSOY1VgOn+qd4FJp6Q0WUsjrg8
+        IDnwhL1iT5SgU7Og95AA6Ty9kkaqTQ8bTQ8j9QQGraPAEJKbqOgqCqK4U3hK9w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659005057;
+        s=2020e; t=1659005058;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Xdr6KqSFOiGLJdxbejB9C9aJ6PdLyJL/7lG9ro8GL34=;
-        b=N8dPeP2hYqXHp8j96PkRWJvHp7ChGP5MucGjY5HmzQ7WU3cfakaPKi5acKq7w6yCNRLxa+
-        2Sr0+Nvn68aTnnDw==
-From:   "tip-bot2 for AngeloGioacchino Del Regno" <tip-bot2@linutronix.de>
+        bh=Hf61HpLzxZHwfHd+7ApzXIc22+Huwe7ZrKmU/hEIKDM=;
+        b=5qd9ocM7C7z1qEvt7YyqWjNtsBJnR6wgys+lunf6d+00LCRmO4nyaz1pv/GNVWTsuKoocY
+        v5JPOKO6rwa4qSCg==
+From:   "tip-bot2 for Kartik" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] dt-bindings: timer: mediatek: Add CPUX System
- Timer and MT6795 compatible
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+Subject: [tip: timers/core] clocksource/drivers/timer-tegra186: Add support
+ for Tegra234 SoC
+Cc:     Kartik <kkartik@nvidia.com>, Thierry Reding <treding@nvidia.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220613133819.35318-2-angelogioacchino.delregno@collabora.com>
-References: <20220613133819.35318-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1656922422-25823-4-git-send-email-kkartik@nvidia.com>
+References: <1656922422-25823-4-git-send-email-kkartik@nvidia.com>
 MIME-Version: 1.0
-Message-ID: <165900505616.15455.17063110810809942740.tip-bot2@tip-bot2>
+Message-ID: <165900505716.15455.14363041253812722121.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,48 +67,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     13b917a585c214c49cfb757fa4d5d6203e00159c
-Gitweb:        https://git.kernel.org/tip/13b917a585c214c49cfb757fa4d5d6203e00159c
-Author:        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-AuthorDate:    Mon, 13 Jun 2022 15:38:18 +02:00
+Commit-ID:     07385a6055a8649593052703b1bfd6aef49db02a
+Gitweb:        https://git.kernel.org/tip/07385a6055a8649593052703b1bfd6aef49db02a
+Author:        Kartik <kkartik@nvidia.com>
+AuthorDate:    Mon, 04 Jul 2022 13:43:39 +05:30
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Sat, 16 Jul 2022 00:41:51 +02:00
+CommitterDate: Sat, 16 Jul 2022 00:38:50 +02:00
 
-dt-bindings: timer: mediatek: Add CPUX System Timer and MT6795 compatible
+clocksource/drivers/timer-tegra186: Add support for Tegra234 SoC
 
-Document the "CPUXGPT" CPU General Purpose Timer, used as ARM/ARM64
-System Timer on MediaTek platforms and add the MT6795 compatible for it.
+The timer IP block present on Tegra234 SoC supports watchdog timer
+functionality that can be used to recover from system hangs. The
+watchdog timer uses a timer in the background for countdown.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Link: https://lore.kernel.org/r/20220613133819.35318-2-angelogioacchino.delregno@collabora.com
+Signed-off-by: Kartik <kkartik@nvidia.com>
+Acked-by: Thierry Reding <treding@nvidia.com>
+Link: https://lore.kernel.org/r/1656922422-25823-4-git-send-email-kkartik@nvidia.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/clocksource/timer-tegra186.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-index 6f1f9db..f1c848a 100644
---- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-+++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-@@ -1,7 +1,8 @@
- MediaTek Timers
- ---------------
+diff --git a/drivers/clocksource/timer-tegra186.c b/drivers/clocksource/timer-tegra186.c
+index 4515517..ea74288 100644
+--- a/drivers/clocksource/timer-tegra186.c
++++ b/drivers/clocksource/timer-tegra186.c
+@@ -486,8 +486,14 @@ static const struct tegra186_timer_soc tegra186_timer = {
+ 	.num_wdts = 3,
+ };
  
--MediaTek SoCs have two different timers on different platforms,
-+MediaTek SoCs have different timers on different platforms,
-+- CPUX (ARM/ARM64 System Timer)
- - GPT (General Purpose Timer)
- - SYST (System Timer)
- 
-@@ -29,6 +30,9 @@ Required properties:
- 	* "mediatek,mt7629-timer" for MT7629 compatible timers (SYST)
- 	* "mediatek,mt6765-timer" for MT6765 and all above compatible timers (SYST)
- 
-+	For those SoCs that use CPUX
-+	* "mediatek,mt6795-systimer" for MT6795 compatible timers (CPUX)
++static const struct tegra186_timer_soc tegra234_timer = {
++	.num_timers = 16,
++	.num_wdts = 3,
++};
 +
- - reg: Should contain location and length for timer register.
- - clocks: Should contain system clock.
- 
+ static const struct of_device_id tegra186_timer_of_match[] = {
+ 	{ .compatible = "nvidia,tegra186-timer", .data = &tegra186_timer },
++	{ .compatible = "nvidia,tegra234-timer", .data = &tegra234_timer },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, tegra186_timer_of_match);

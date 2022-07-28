@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8FC584045
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB93584049
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiG1NrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S230110AbiG1NrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiG1NrE (ORCPT
+        with ESMTP id S229532AbiG1NrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:47:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9497161DA4;
-        Thu, 28 Jul 2022 06:47:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659016023; x=1690552023;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CZja/uwthCUFDrIQap+P+xmHljMJZLA/BFEZZ78HIFk=;
-  b=oGDqGyQEYo1A6CB7LSc3/tQJrxRQWusJVYm9LamKG7CMt/LPzFDQHZ3N
-   U3VMyxsPX18AAX5aS7tnOz/bQu0D5BbqoxjE8EeouotREt9diLPv8Qmle
-   xSivt/V/bgLNt3rhgihKoz0Ea4juqAQa56KPu4ZQ8mngHhQYH+uief3Oj
-   vHPmUcKaH0r25ibj0OhY9vbK/IaqzA3yZAzPMs4ebm/F4gWJ3AHv9rfm1
-   BuXWG4tIfUHyDnTBajx2C1nHvxF7fD3gx0LDYX1Y91laCJGICtDb4RgTF
-   PIz9/oaSEYkbsms/TD16+oLmdnRe63MR/LsQgajRwzhM5SjJNH8/8sG3W
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="268278650"
-X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
-   d="scan'208";a="268278650"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 06:47:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
-   d="scan'208";a="551313622"
-Received: from bbandar7-mobl1.amr.corp.intel.com (HELO [10.209.124.46]) ([10.209.124.46])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 06:47:01 -0700
-Message-ID: <fbf213f2-f118-ccfa-3faa-ec8b2182595b@intel.com>
-Date:   Thu, 28 Jul 2022 06:47:01 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/sgx: Improve comments for
- sgx_encl_lookup/alloc_backing()
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-sgx@vger.kernel.org
-References: <20220720182120.1160956-1-kristen@linux.intel.com>
- <YuJBjq/4dALm//rf@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YuJBjq/4dALm//rf@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 09:47:16 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498E8624A3;
+        Thu, 28 Jul 2022 06:47:15 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id x64so1419834iof.1;
+        Thu, 28 Jul 2022 06:47:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=z/W+enaupbkegvbEDRlhZGtG6b7D/kXPx1TKEn5BI3s=;
+        b=5vFY8mFDjFdI7pEA3KPZ7J4IFmuS9hitF+SPc1kh5klguTwrLG3z61/IiscadIcrsu
+         zde5WHIvQPHwVNBqdtYqzyCLeZm9N8gVSoE9195Douez0zzz0vhiWoA8jZuMVWnXs22W
+         sD0EyhgbUKW8i9v3k5CjIubRSksSUijuWl2W/0x+vljoqazPRaJbhTjcSGbYQBbapX48
+         rmx347Q8LRAMG0pKqxYTRxA9CMYdPuscc8m46AJG3UgKrcXRkeRcjdwm6+MYrRtRX1qH
+         tO4R7YAXs6lXZr14FW/pGVKtsIy7jHrXujvEZh02Fxq3BcdflwKcwlO/iEyg6uM56t/c
+         gQuw==
+X-Gm-Message-State: AJIora91ajUYYHNzjOPjpbIqQgyHJUWiN50CjNFg73vJHkpbls7FI3dN
+        icyoiBniZXFl2xeg+QrGVQ==
+X-Google-Smtp-Source: AGRyM1vnN5JBFltZQ5clBLXtY/PaNiw6vObuIjwvoFtMJqjVNj4jWE1UNeF8RUb+hywHn30jJvQEag==
+X-Received: by 2002:a05:6602:2b88:b0:67c:aca7:2f73 with SMTP id r8-20020a0566022b8800b0067caca72f73mr5984371iov.108.1659016034497;
+        Thu, 28 Jul 2022 06:47:14 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id q28-20020a02a99c000000b0033a29ec646dsm404093jam.4.2022.07.28.06.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 06:47:14 -0700 (PDT)
+Received: (nullmailer pid 779712 invoked by uid 1000);
+        Thu, 28 Jul 2022 13:47:12 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?q?Martin_Za=C5=A5ovi=C4=8D?= <m.zatovic1@gmail.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        jeffrey.l.hugo@gmail.com, hemantk@codeaurora.org,
+        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, mani@kernel.org, saravanak@google.com,
+        Michael.Srba@seznam.cz, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, elder@linaro.org, linus.walleij@linaro.org
+In-Reply-To: <20220728091712.13395-2-m.zatovic1@gmail.com>
+References: <20220728091712.13395-1-m.zatovic1@gmail.com> <20220728091712.13395-2-m.zatovic1@gmail.com>
+Subject: Re: [PATCH RFC v1 2/2] devicetree: bindings: bus: add Wiegand driver documentation
+Date:   Thu, 28 Jul 2022 07:47:12 -0600
+Message-Id: <1659016032.636583.779711.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 00:58, Jarkko Sakkinen wrote:
-> On Wed, Jul 20, 2022 at 11:21:19AM -0700, Kristen Carlson Accardi wrote:
->> Modify the comments for sgx_encl_lookup_backing() and for
->> sgx_encl_alloc_backing() to indicate that they take a reference
->> which must be dropped with a call to sgx_encl_put_backing().
->> Make sgx_encl_lookup_backing() static for now, and change the
->> name of sgx_encl_get_backing() to __sgx_encl_get_backing() to
->> make it more clear that sgx_encl_get_backing() is an internal
->> function.
->>
->> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> The rename is unnecessary.
+On Thu, 28 Jul 2022 11:17:12 +0200, Martin Zaťovič wrote:
+> Wiegand write-only driver requires definitions of two GPIO lines
+> in the devicetree. This adds the documentation of their
+> definitions.
+> 
+> Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
+> ---
+>  .../devicetree/bindings/bus/wiegand-gpio.yaml | 66 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 67 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/wiegand-gpio.yaml
+> 
 
-Well, it was done to address some reviewer confusion:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-	https://lore.kernel.org/all/YtUs3MKLzFg+rqEV@zn.tnic/
+yamllint warnings/errors:
 
-I wouldn't call it unnecessary.  Heck, I'd argue that the one of the
-main reasons that this code leaked memory in the first place was the
-naming and lack of comments.
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/bus/wiegand-gpio.example.dts:22.47-48 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:383: Documentation/devicetree/bindings/bus/wiegand-gpio.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1404: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

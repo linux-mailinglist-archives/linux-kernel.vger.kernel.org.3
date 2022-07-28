@@ -2,122 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8319E5838A6
+	by mail.lfdr.de (Postfix) with ESMTP id 261805838A5
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiG1GSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S231732AbiG1GSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 02:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiG1GSN (ORCPT
+        with ESMTP id S229832AbiG1GR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:18:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF1C5A8A6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658989092; x=1690525092;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=Rwc/qniW/RO2BA+uBG6gExEBv7Fj2QLZKI7Go3cAQKw=;
-  b=YprFm7tOiPLpXgNZF9vJTalX1mJ/++5b7CpOdy5Hl7zyCBVsjvRFHMsi
-   SB3KfTraPTNkfsZB4x2tKXrtNGj6Xt0xSvISKljhRQzIFE/KDidRmpX7m
-   +8/LGarnY3VZMMorSkvUlI3fg8DpT3eoTdCs5ZEJ1p5iUzeZzzQP16Gxn
-   /+l7mHPDMO1za4oG1PIJKV98Zx8967AOv5GlJwsPpZGNskHWH2r+uQeF2
-   DOQohVvpED0qThIxxDs5N1AyO5o+BwOJMwaGshL41GAX9HyxsrbxhbAqD
-   ginp9MlVijeP5fXtn7tVC86wXX5hGPVwnxGB5LHOx4FXXVJ79qxoaIJW3
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="289627817"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="289627817"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 23:18:12 -0700
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="576311730"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 23:18:10 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     <akpm@linux-foundation.org>, <ziy@nvidia.com>,
-        <shy828301@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm: migrate: Do not retry 10 times for the subpages of
- fail-to-migrate THP
-References: <1658405108-100658-1-git-send-email-baolin.wang@linux.alibaba.com>
-Date:   Thu, 28 Jul 2022 14:16:35 +0800
-In-Reply-To: <1658405108-100658-1-git-send-email-baolin.wang@linux.alibaba.com>
-        (Baolin Wang's message of "Thu, 21 Jul 2022 20:05:08 +0800")
-Message-ID: <875yjhoj7g.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 28 Jul 2022 02:17:59 -0400
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6325726E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:17:57 -0700 (PDT)
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 9EE2E802886C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:17:55 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 8A9C610049605
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:17:33 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id Gwpwo9ineWBOVGwpxomZoq; Thu, 28 Jul 2022 06:17:33 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=cpReL30i c=1 sm=1 tr=0 ts=62e229fd
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RgO8CyIxsXoA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=04ThL/Ir5WfZnXDToLT1mrxeXlTnqbRk4yrjXl8e34g=; b=YraBbNA/JCdPobNB/H5C0GcpDy
+        4gKCEaNb+hrbNT5XuYc+K+WLykpYr5unyFofRNBtyhuUbDXVBzbEUR/IX9x5WHtDbqRuj5Y8nJR6d
+        841lXfx6aNQ+sj/PIlw/uOuoP6gsiAqNR5JmB/MDCx9WLG/wu0SWg+SEmXHuF6H8mV+S+jVwQaGXU
+        HRqs5V7IyttkCOcalhERSV9342KQ2NCs8tJM/JiAQT37yGGgIUUvTLZBtC0ru8KJ4Z3grQFQhhWZ/
+        73312BdcMwc8fmDDYn5+P/6j3HZO5UJJg9/JR2+nvdG+PGbsMdH3Da+T4jBqPhbpX96aV2tS2IjXH
+        ryI1LXJQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:37750 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oGwpv-003yHc-NP;
+        Thu, 28 Jul 2022 00:17:31 -0600
+Subject: Re: [PATCH 5.18 000/158] 5.18.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <774a6b89-b83e-3f97-f42f-467e810863e9@w6rz.net>
+Date:   Wed, 27 Jul 2022 23:17:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oGwpv-003yHc-NP
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:37750
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Baolin,
-
-Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-
-> If THP is failed to migrate due to -ENOSYS or -ENOMEM case, the THP will
-> be split, and the subpages of fail-to-migrate THP will be tried to migrate
-> again, so we should not account the retry counter in the second loop, since
-> we already accounted 'nr_thp_failed' in the first loop.
+On 7/27/22 9:11 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.15 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Moreover we also do not need retry 10 times for -EAGAIN case for the subpages
-> of fail-to-migrate THP in the second loop, since we already regarded the
-> THP as migration failure, and save some migration time (for the worst case,
-> will try 512 * 10 times) according to previous discussion [1].
+> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
+> Anything received after that time might be too late.
 >
-> [1] https://lore.kernel.org/linux-mm/87r13a7n04.fsf@yhuang6-desk2.ccr.corp.intel.com/
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
 >
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-I have tested this patch, and it works as expected.
-
-Tested-by: "Huang, Ying" <ying.huang@intel.com>
-
-> ---
-> Note, this patch is based on the patch set [1] from Huang Ying.
-> [1] https://lore.kernel.org/linux-mm/20220711084948.274787-1-ying.huang@intel.com/
-
-Please this patch is based on my patchset that hasn't been merged.  I
-can add it as the last patch of my migrate_pages failure path fixing
-patchset if you don't object.
-
-Best Regards,
-Huang, Ying
-
-> ---
->  mm/migrate.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> thanks,
 >
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 8429206..e36a084 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1507,7 +1507,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->  			case -EAGAIN:
->  				if (is_thp)
->  					thp_retry++;
-> -				else
-> +				else if (!no_subpage_counting)
->  					retry++;
->  				nr_retry_pages += nr_subpages;
->  				break;
-> @@ -1533,8 +1533,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->  			}
->  		}
->  	}
-> -	if (!no_subpage_counting)
-> -		nr_failed += retry;
-> +	nr_failed += retry;
->  	nr_thp_failed += thp_retry;
->  	nr_failed_pages += nr_retry_pages;
->  	/*
+> greg k-h
+
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+
+Tested-by: Ron Economos <re@w6rz.net>
+

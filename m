@@ -2,103 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569F75841E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5F35841E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiG1OjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S232249AbiG1Oky convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 28 Jul 2022 10:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbiG1OjG (ORCPT
+        with ESMTP id S232465AbiG1Ok2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:39:06 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25BA6D2D5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:37:05 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id x64so1531692iof.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:37:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1Mph2jFK7ZvjRCBseRSlFGNDOkdjD8AM8ows1OdKr24=;
-        b=GYEtKQvZkifdPm8Kpnar+uW65wh6U2XEHAcTfsIcuKnjyswHSAFvQKwW3VPEHxC2OV
-         rJCksvkfrFNO/0vRDvyoH4wVt2X7sIEqwmobt60tkR3N4bOn/8Jj021mRKqRRRX8+ydF
-         yuirBFn7NV0Tda/FuWskAiwmAgPPtWTZlxwIY=
+        Thu, 28 Jul 2022 10:40:28 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046D91EAF6;
+        Thu, 28 Jul 2022 07:38:23 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id e127so2819313yba.12;
+        Thu, 28 Jul 2022 07:38:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1Mph2jFK7ZvjRCBseRSlFGNDOkdjD8AM8ows1OdKr24=;
-        b=xtxfTf2PhsvuURTSy46+ayVrOLZtT6qf17BNGTSzsY+3HS7JCUINcd4t/KKQy2ZK4n
-         gjaUkRpc582c5QL19//0ty8sJqKoBxm6TuEo9TOj9YMeSedXWDDLoTz4a6d7NlnC7BGM
-         sfixpJTqmC9OxkFr2VLtdF6LRfj8zpPhkEOZby3BHFymh6aBi8aCL7N1xE6Kd3oNuNmP
-         I0R64e+TJpkZs9/KV3PPiBDqv0I8kUV7HA2ySk5Z86y0rXUDyUBHWwQrpolSAlyUxL7t
-         HtqYGTLSFUvmcAR8YWdcFhDpBqhiHjaVrfbjVUDgUAl4Nj4Zc6x4VJXKKGMFLuLPwF1O
-         HFhg==
-X-Gm-Message-State: AJIora+ab3PPoHvICrms/cfvV6L3KX9uiUObrNYs20ZvcWewirAYD7aG
-        LFSHO6LYeJvnn35cqSBxEyEzOQ==
-X-Google-Smtp-Source: AGRyM1tJnjP4Ht9/dGsjfbXMmWa/1AHSoRtlQG01a6RgKPAxbqoIjpwJAWG2DH+re/rR5uvk/0RHRQ==
-X-Received: by 2002:a05:6638:12d4:b0:33f:aaab:8d84 with SMTP id v20-20020a05663812d400b0033faaab8d84mr11106740jas.67.1659019021847;
-        Thu, 28 Jul 2022 07:37:01 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f7-20020a028487000000b00341d28e07f4sm431968jai.105.2022.07.28.07.37.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 07:37:01 -0700 (PDT)
-Subject: Re: [PATCH 5.18 000/158] 5.18.15-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220727161021.428340041@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <bffaa419-aa9b-07ff-d651-5c03d6f5b6b5@linuxfoundation.org>
-Date:   Thu, 28 Jul 2022 08:37:00 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=k45jpSrW5er3yuZp9JhSAKvAe/Lx7ZG0RRR4+n2dOdw=;
+        b=61FzNlsiAhEctIGjK1yQ9CU3LdzPRM4BBhgazoSc96pZvLmqUufMyc1WI6BkNPnaUD
+         bJ9hT9O0O1lXiwfVLOYqFsF/kSZ27LRsMcJL5CuKkEGUr5nCYxekG9IOzU/qtljPbvvG
+         1YlzyOiTUM2erhNIbSJOVaUcQgaewDKbagceyfCcWiMCM+0nOASOdQsJj2HQivzwS9+6
+         SH+4U5WNn3tmh0lzCeuBtaRfF5N3o16x/u8PDKD50TPJ8W8pmY8BsdT1zBch5bTvI1jZ
+         WoKjQzJYHjOPV0qY7kOnwnh/6rPwMkQG8WNLr188C6hNqBpj+I2qh36M8nZwb8Qo7FHm
+         /8ew==
+X-Gm-Message-State: AJIora9is3Yrism7g0Idup4koBn07+I6h7wxHfaMttukbG3OQMyvnU7y
+        x9gBnR1Q6YIH6pl3HHMFqiXAYdj1yDxJp5vgoBk=
+X-Google-Smtp-Source: AGRyM1s/C/zdXog5p3pQHtr/CDWwPlqnkIBgbBfNxbkFWmaWqxfHB529s1Nj4YOYbqc8znCQAwv40lTdK4yd9M0ixgg=
+X-Received: by 2002:a25:828f:0:b0:670:22f9:f7eb with SMTP id
+ r15-20020a25828f000000b0067022f9f7ebmr21965352ybk.137.1659019084081; Thu, 28
+ Jul 2022 07:38:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220727210253.3794069-1-daniel.lezcano@linexp.org> <35457e1c-fe6b-2212-9624-70369f04ef0d@linaro.org>
+In-Reply-To: <35457e1c-fe6b-2212-9624-70369f04ef0d@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 28 Jul 2022 16:37:50 +0200
+Message-ID: <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/32] New thermal OF code
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        damien.lemoal@opensource.wdc.com, Heiko Stuebner <heiko@sntech.de>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        mhiramat@kernel.org, Talel Shenhar <talel@amazon.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>, anarsoul@gmail.com,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        glaroque@baylibre.com, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Keerthy <j-keerthy@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 10:11 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.15 release.
-> There are 158 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.15-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hi Daniel,
 
-Compiled and booted on my test system. No dmesg regressions.
+On Wed, Jul 27, 2022 at 11:46 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> we are close to release v5.19.
+>
+> I want to send a PR this week but it would be nice if this series could
+> be part of it, so the trip point rework we discussed earlier (it is a
+> long series) could be merged more easily for v5.21-rc1 as it will depend
+> on these changes.
+>
+> This series was tested on different platforms, rk3399, broadcom and
+> rcar. The external drivers as ata, touchscreen, regulator, hwmon were
+> acked/reviewed and some other thermal drivers reviewed also. Some others
+> remain without feedback because the maintainer is unresponsive or the
+> driver is orphaned, falling under the thermal framework maintenance
+> umbrella. All the drivers changes are the same.
+>
+> I do believe it does a nice cleanup and consolidation of the OF thermal
+> code and realign it with the core thermal framework.
+>
+> Is it ok to merge the series?
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+I would prefer to put it into linux-next for a few days.
 
-thanks,
--- Shuah
+Why don't you send 2 pull requests, one with all of the other material
+you have for 5.20 and another one with this series (it may be on top
+of the first one)?
+
+I will be able to defer pushing the second one till the second half of
+the merge window.
+
+
+> On 27/07/2022 23:02, Daniel Lezcano wrote:
+> > The following changes are depending on:
+> >
+> >   - 20220722200007.1839356-1-daniel.lezcano@linexp.org
+> >
+> > which are present in the thermal/linux-next branch:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
+> >
+> > The series introduces a new thermal OF code. The patch description gives
+> > a detailed explanation of the changes. Basically we write new OF parsing
+> > functions, we migrate all the users of the old thermal OF API to the new
+> > one and then we finish by removing the old OF code.
+> >
+> > That is the second step to rework the thermal OF code. More patches will
+> > come after that to remove the duplication of the trip definitions in the
+> > different drivers which will result in more code duplication removed and
+> > consolidation of the core thermal framework.
+> >
+> > Thanks for those who tested the series on their platform and
+> > investigated the regression with the disabled by default thermal zones.
+> >
+> > Changelog:
+> >   v3:
+> >     - Rebased on the right branch as reported by Niklas Söderlund
+> >     - Collected more tags
+> >   v2:
+> >     - Changed the code in the register thermal zone function to prevent
+> >       the 'const' annotation being removed in the different drivers
+> >     - Collected the tags and adding Cc for more context
+> >     - Changed the first line patch description to comply to the 'input'
+> >       subsystem format
+> >     - Give a more detailed description in the changelog for the drivers
+> >     - Remove pointless calls to unregister as the devm version is used
+> >       instead
+> >     - Moved dummy functions from one patch to another to prevent git
+> >       bisecting issue when THERMAL_OF=n
+> >     - Fixed thermal zone disabled by default
+> >
+> > Daniel Lezcano (32):
+> >    thermal/of: Rework the thermal device tree initialization
+> >    thermal/of: Make new code and old code co-exist
+> >    thermal/drivers/rockchip: Switch to new of API
+> >    thermal/drivers/uniphier: Switch to new of API
+> >    thermal/drivers/generic-adc: Switch to new of API
+> >    thermal/drivers/mmio: Switch to new of API
+> >    thermal/drivers/tegra: Switch to new of API
+> >    thermal/drivers/sun8i: Switch to new of API
+> >    thermal/drivers/sprd: Switch to new of API
+> >    thermal/drivers/broadcom: Switch to new of API
+> >    thermal/drivers/qcom: Switch to new of API
+> >    thermal/drivers/st: Switch to new of API
+> >    thermal/drivers/amlogic: Switch to new of API
+> >    thermal/drivers/armada: Switch to new of API
+> >    thermal/drivers/db8500: Switch to new of API
+> >    thermal/drivers/imx: Switch to new of API
+> >    thermal/drivers/rcar: Switch to new of API
+> >    thermal/drivers/rzg2l: Switch to new of API
+> >    thermal/drivers/qoriq: Switch to new of API
+> >    thermal/drivers/mtk: Switch to new of API
+> >    thermal/drivers/banggap: Switch to new of API
+> >    thermal/drivers/maxim: Switch to new of API
+> >    thermal/drivers/hisilicon: Switch to new of API
+> >    thermal/drivers/ti-soc: Switch to new of API
+> >    ata/drivers/ahci_imx: Switch to new of thermal API
+> >    hwmon/drivers: Switch to new of thermal API
+> >    iio/drivers/sun4i_gpadc: Switch to new of thermal API
+> >    Input: sun4i-ts - switch to new of thermal API
+> >    regulator/drivers/max8976: Switch to new of thermal API
+> >    thermal/drivers/samsung: Switch to new of thermal API
+> >    thermal/core: Move set_trip_temp ops to the sysfs code
+> >    thermal/of: Remove old OF code
+> >
+> >   drivers/ata/ahci_imx.c                        |   15 +-
+> >   drivers/hwmon/hwmon.c                         |   14 +-
+> >   drivers/hwmon/scpi-hwmon.c                    |   14 +-
+> >   drivers/iio/adc/sun4i-gpadc-iio.c             |   12 +-
+> >   drivers/input/touchscreen/sun4i-ts.c          |   10 +-
+> >   drivers/regulator/max8973-regulator.c         |   10 +-
+> >   drivers/thermal/amlogic_thermal.c             |   16 +-
+> >   drivers/thermal/armada_thermal.c              |   12 +-
+> >   drivers/thermal/broadcom/bcm2711_thermal.c    |   14 +-
+> >   drivers/thermal/broadcom/bcm2835_thermal.c    |   14 +-
+> >   drivers/thermal/broadcom/brcmstb_thermal.c    |   20 +-
+> >   drivers/thermal/broadcom/ns-thermal.c         |   50 +-
+> >   drivers/thermal/broadcom/sr-thermal.c         |   16 +-
+> >   drivers/thermal/db8500_thermal.c              |    8 +-
+> >   drivers/thermal/hisi_thermal.c                |   14 +-
+> >   drivers/thermal/imx8mm_thermal.c              |   14 +-
+> >   drivers/thermal/imx_sc_thermal.c              |   14 +-
+> >   drivers/thermal/k3_bandgap.c                  |   12 +-
+> >   drivers/thermal/k3_j72xx_bandgap.c            |   12 +-
+> >   drivers/thermal/max77620_thermal.c            |    8 +-
+> >   drivers/thermal/mtk_thermal.c                 |   10 +-
+> >   drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |   19 +-
+> >   drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |   12 +-
+> >   drivers/thermal/qcom/tsens.c                  |   16 +-
+> >   drivers/thermal/qoriq_thermal.c               |   12 +-
+> >   drivers/thermal/rcar_gen3_thermal.c           |   16 +-
+> >   drivers/thermal/rcar_thermal.c                |   13 +-
+> >   drivers/thermal/rockchip_thermal.c            |   14 +-
+> >   drivers/thermal/rzg2l_thermal.c               |   10 +-
+> >   drivers/thermal/samsung/exynos_tmu.c          |   24 +-
+> >   drivers/thermal/sprd_thermal.c                |   18 +-
+> >   drivers/thermal/st/stm_thermal.c              |   16 +-
+> >   drivers/thermal/sun8i_thermal.c               |   14 +-
+> >   drivers/thermal/tegra/soctherm.c              |   21 +-
+> >   drivers/thermal/tegra/tegra-bpmp-thermal.c    |   19 +-
+> >   drivers/thermal/tegra/tegra30-tsensor.c       |   12 +-
+> >   drivers/thermal/thermal-generic-adc.c         |   10 +-
+> >   drivers/thermal/thermal_core.c                |    6 -
+> >   drivers/thermal/thermal_core.h                |    2 -
+> >   drivers/thermal/thermal_mmio.c                |   17 +-
+> >   drivers/thermal/thermal_of.c                  | 1140 ++++++-----------
+> >   drivers/thermal/thermal_sysfs.c               |    5 +-
+> >   .../ti-soc-thermal/ti-thermal-common.c        |   16 +-
+> >   drivers/thermal/uniphier_thermal.c            |   10 +-
+> >   include/linux/thermal.h                       |   89 +-
+> >   45 files changed, 709 insertions(+), 1131 deletions(-)
+> >
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog

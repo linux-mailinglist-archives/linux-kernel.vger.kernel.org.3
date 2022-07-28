@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D9D5842AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B3A5842B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiG1PMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
+        id S229604AbiG1PMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiG1PMa (ORCPT
+        with ESMTP id S230073AbiG1PMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:12:30 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CAD4BD3C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:12:29 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso5598646pjo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cu1gStaA0859c+H3vKSAT1FDu9N7TEl0kup5ZEP7sFk=;
-        b=IvwEwlg/b5pGaEAw55tItIpmKh7gLGTITpXR5azdnJuZO5AmWRffaiukHKI/YJ35r5
-         19+iDHO6q7nGAIHoV16HzmNAwNpGlHHDZvDINTffeQeAy9RPpxZp6YrOfxt2ukQmQicA
-         3rsLVpWrdySUBr47fUOVlynHoaJ6uVmDu1liE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cu1gStaA0859c+H3vKSAT1FDu9N7TEl0kup5ZEP7sFk=;
-        b=j53d2S86QHz5yu2k1lG6AiVAgI//parkr0Lc2COkwxv/y3iPQRovfvMxM66GmwJXnh
-         XM/NaT/8n9EDqAocOfa2TD8lor2Cd8zNwbrILHflvnXEbN2wxj+Ft6/i9hM4zPP6p1YK
-         SlLQ6UxP0Etzeplge4nBpXKZOzaLrdgyAzBLlce7anEiuai32oEA47fZCAgu3yTEr0HB
-         ksTFL40vkkCrphMAxqnnnJ1KCMptGBJj6MXYTlGNEO0alTQzvhG2a+eUndh/Z4ou3b57
-         zF9KSekad/JlbkhPBxmptD8QMzH5AI9zv5E5qIh0g0pkf+WQmCbie6yntATZM4IOQaIl
-         aPlA==
-X-Gm-Message-State: AJIora8RtVK2ok42maJW8zUQihTIHRtpR+qSN7cyDxThdZGg0DsF/yVi
-        qmR2yRFOGf0SHGcgnI+X3afR1A==
-X-Google-Smtp-Source: AGRyM1s4kY3qys6Fbzz88nX0ZI52HQGFa1iTFJdMDhgIX+eO4BUcw8pVLeKvOTMQ254iIESlJaBl8g==
-X-Received: by 2002:a17:90b:38c4:b0:1f2:c238:37fc with SMTP id nn4-20020a17090b38c400b001f2c23837fcmr10836867pjb.166.1659021148553;
-        Thu, 28 Jul 2022 08:12:28 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:bb10:e729:7f59:7cbc])
-        by smtp.gmail.com with UTF8SMTPSA id s2-20020a632142000000b0041a8f882e5bsm1097309pgm.42.2022.07.28.08.12.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 08:12:28 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 08:12:26 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <YuKnWgbdVWpAyBUn@google.com>
-References: <20220728205404.645f7c12@canb.auug.org.au>
+        Thu, 28 Jul 2022 11:12:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E6754AE6;
+        Thu, 28 Jul 2022 08:12:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4796B82495;
+        Thu, 28 Jul 2022 15:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A287C433D6;
+        Thu, 28 Jul 2022 15:12:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659021160;
+        bh=WhA/ckzTBm+8Dp8WwZDawmWD2DX62ACRlGO+kSspKMs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Chunc4kYxYsCQE/dMUfZERtZnUkAqWJs2po2zdkmjG5RIc6hf1Mb1KDgL344asVLM
+         e3fYA7RCfuGfeb+bCqPlS9Vx64f7TKUIi1dpHbBTya1qec8J8rM3qJYK8oZbqb5y6L
+         aV98A5qJV55XrTx2kLyvecyLmk6ObCBTnw9WQIS0=
+Date:   Thu, 28 Jul 2022 17:12:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 23/24] HID: bpf: add Surface Dial example
+Message-ID: <YuKnZjtOtHAKVIqX@kroah.com>
+References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
+ <20220721153625.1282007-24-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728205404.645f7c12@canb.auug.org.au>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220721153625.1282007-24-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,90 +64,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
-
-Thanks for letting me know and for the fix in -next.
-
-I'll send out a fix (which will probably be the same as yours).
-
-Thanks
-
-Matthias
-
-On Thu, Jul 28, 2022 at 08:55:43PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Thu, Jul 21, 2022 at 05:36:24PM +0200, Benjamin Tissoires wrote:
+> Add a more complete HID-BPF example.
 > 
-> After merging the kspp tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 > 
-> drivers/md/dm-verity-loadpin.c: In function 'dm_verity_loadpin_is_bdev_trusted':
-> drivers/md/dm-verity-loadpin.c:61:13: error: implicit declaration of function 'dm_table_get_num_targets'; did you mean 'dm_table_resume_targets'? [-Werror=implicit-function-declaration]
->    61 |         if (dm_table_get_num_targets(table) != 1)
->       |             ^~~~~~~~~~~~~~~~~~~~~~~~
->       |             dm_table_resume_targets
-> drivers/md/dm-verity-loadpin.c:64:14: error: implicit declaration of function 'dm_table_get_target'; did you mean 'dm_table_add_target'? [-Werror=implicit-function-declaration]
->    64 |         ti = dm_table_get_target(table, 0);
->       |              ^~~~~~~~~~~~~~~~~~~
->       |              dm_table_add_target
-> drivers/md/dm-verity-loadpin.c:64:12: error: assignment to 'struct dm_target *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
->    64 |         ti = dm_table_get_target(table, 0);
->       |            ^
-> 
-> Caused by commit
-> 
->   b6c1c5745ccc ("dm: Add verity helpers for LoadPin")
-> 
-> interacting with commits
-> 
->   2aec377a2925 ("dm table: remove dm_table_get_num_targets() wrapper")
->   564b5c5476cd ("dm table: audit all dm_table_get_target() callers")
-> 
-> from the device-mapper tree.
-> 
-> I have applied the following merge fix patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 28 Jul 2022 20:28:41 +1000
-> Subject: [PATCH] fix up for "dm: Add verity helpers for LoadPin"
-> 
-> interacting with
-> 
->   2aec377a2925 ("dm table: remove dm_table_get_num_targets() wrapper")
->   564b5c5476cd ("dm table: audit all dm_table_get_target() callers")
-> 
-> from the device-mapper tree.
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
->  drivers/md/dm-verity-loadpin.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/md/dm-verity-loadpin.c b/drivers/md/dm-verity-loadpin.c
-> index 10c18bc1652c..387ec43aef72 100644
-> --- a/drivers/md/dm-verity-loadpin.c
-> +++ b/drivers/md/dm-verity-loadpin.c
-> @@ -5,6 +5,7 @@
->  #include <linux/dm-verity-loadpin.h>
->  
->  #include "dm.h"
-> +#include "dm-core.h"
->  #include "dm-verity.h"
->  
->  #define DM_MSG_PREFIX	"verity-loadpin"
-> @@ -58,7 +59,7 @@ bool dm_verity_loadpin_is_bdev_trusted(struct block_device *bdev)
->  
->  	table = dm_get_live_table(md, &srcu_idx);
->  
-> -	if (dm_table_get_num_targets(table) != 1)
-> +	if (table->num_targets != 1)
->  		goto out;
->  
->  	ti = dm_table_get_target(table, 0);
-> -- 
-> 2.35.1
+> changes in v7:
+> - remove unnecessary __must_check definition
 > 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> new in v6
+> 
+> fix surface dial
+> ---
+>  samples/bpf/.gitignore             |   1 +
+>  samples/bpf/Makefile               |   6 +-
+>  samples/bpf/hid_surface_dial.bpf.c | 161 ++++++++++++++++++++++
+>  samples/bpf/hid_surface_dial.c     | 212 +++++++++++++++++++++++++++++
+>  4 files changed, 379 insertions(+), 1 deletion(-)
+>  create mode 100644 samples/bpf/hid_surface_dial.bpf.c
+>  create mode 100644 samples/bpf/hid_surface_dial.c
+> 
+> diff --git a/samples/bpf/.gitignore b/samples/bpf/.gitignore
+> index 65440bd618b2..6a1079d3d064 100644
+> --- a/samples/bpf/.gitignore
+> +++ b/samples/bpf/.gitignore
+> @@ -3,6 +3,7 @@ cpustat
+>  fds_example
+>  hbm
+>  hid_mouse
+> +hid_surface_dial
+>  ibumad
+>  lathist
+>  lwt_len_hist
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index a965bbfaca47..5f5aa7b32565 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -58,6 +58,7 @@ tprogs-y += xdp_redirect
+>  tprogs-y += xdp_monitor
+>  
+>  tprogs-y += hid_mouse
+> +tprogs-y += hid_surface_dial
+>  
+>  # Libbpf dependencies
+>  LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
+> @@ -122,6 +123,7 @@ xdp_monitor-objs := xdp_monitor_user.o $(XDP_SAMPLE)
+>  xdp_router_ipv4-objs := xdp_router_ipv4_user.o $(XDP_SAMPLE)
+>  
+>  hid_mouse-objs := hid_mouse.o
+> +hid_surface_dial-objs := hid_surface_dial.o
+>  
+>  # Tell kbuild to always build the programs
+>  always-y := $(tprogs-y)
+> @@ -343,6 +345,7 @@ $(obj)/hbm.o: $(src)/hbm.h
+>  $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
+>  
+>  $(obj)/hid_mouse.o: $(obj)/hid_mouse.skel.h
+> +$(obj)/hid_surface_dial.o: $(obj)/hid_surface_dial.skel.h
+>  
+>  # Override includes for xdp_sample_user.o because $(srctree)/usr/include in
+>  # TPROGS_CFLAGS causes conflicts
+> @@ -429,9 +432,10 @@ $(BPF_SKELS_LINKED): $(BPF_OBJS_LINKED) $(BPFTOOL)
+>  	$(Q)$(BPFTOOL) gen skeleton $(@:.skel.h=.lbpf.o) name $(notdir $(@:.skel.h=)) > $@
+>  
+>  # Generate BPF skeletons for non XDP progs
+> -OTHER_BPF_SKELS := hid_mouse.skel.h
+> +OTHER_BPF_SKELS := hid_mouse.skel.h hid_surface_dial.skel.h
+>  
+>  hid_mouse.skel.h-deps := hid_mouse.bpf.o
+> +hid_surface_dial.skel.h-deps := hid_surface_dial.bpf.o
+>  
+>  OTHER_BPF_SRCS_LINKED := $(patsubst %.skel.h,%.bpf.c, $(OTHER_BPF_SKELS))
+>  OTHER_BPF_OBJS_LINKED := $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(OTHER_BPF_SRCS_LINKED))
+> diff --git a/samples/bpf/hid_surface_dial.bpf.c b/samples/bpf/hid_surface_dial.bpf.c
+> new file mode 100644
+> index 000000000000..16c821d3decf
+> --- /dev/null
+> +++ b/samples/bpf/hid_surface_dial.bpf.c
+> @@ -0,0 +1,161 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2022 Benjamin Tissoires
+> + */
 
+No hints as to what this, and the other program are doing here in a
+comment?
 
+> +
+> +	while (running)
+> +		;
+
+That's burning up a CPU, why not sleep/yield/something to allow the cpu
+to not just pound on this variable and allow other things to happen?
+
+thanks,
+
+greg k-h

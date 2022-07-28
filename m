@@ -2,108 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF39584011
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D1258400C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiG1NeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
+        id S230429AbiG1Ndv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiG1Nd7 (ORCPT
+        with ESMTP id S229622AbiG1Nds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:33:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6A65B789
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:33:57 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oH3dx-0006iN-5a; Thu, 28 Jul 2022 15:33:37 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oH3dw-0006O5-D1; Thu, 28 Jul 2022 15:33:36 +0200
-Date:   Thu, 28 Jul 2022 15:33:36 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: dsa: microchip: don't try do read Gbit
- registers on non Gbit chips
-Message-ID: <20220728133336.GA30201@pengutronix.de>
-References: <20220728131725.40492-1-o.rempel@pengutronix.de>
- <YuKOTzS89D2+O8Ye@lunn.ch>
+        Thu, 28 Jul 2022 09:33:48 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646F75140F;
+        Thu, 28 Jul 2022 06:33:48 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id e1so2062076pjl.1;
+        Thu, 28 Jul 2022 06:33:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gHUvDp9XxgXKyC/S3Y/ZPZ1AK6LyrKzwAJXqinHhkxY=;
+        b=eL37x8c4y9LgS4noEaq4Nbu1pJYqbgVLPdmMfJDte8pIKclLWYmOnFxb2m7tHKCyzy
+         VqtUjtbz7Klx0xRADHJjoaoJASMrpijWb+vc3FbldV7ryvuXSv/qsjC04UkW+ivaAvil
+         ripYHP6j0az/1OtZ0saBI+nWZjnOKc9VbVnk32OcnSLxJLpRLvgMsNIImUetcpQN9WwX
+         9cZAH3hhxPVlITWWZKTjBKvIR9g0ACclEt/es8SSC135Md6q+LihcmOlul1XpRHajdrT
+         iGMLg4oSaR0gdI9Y//7hzwHCUfEG/0fXpTwbANhYwYummelwAzUiZRWKzjGnABD7x9vQ
+         Kkqw==
+X-Gm-Message-State: AJIora8lYgWyndYTkbm11el5bYptjeryvTqmbacCVUkhmWLlQJw61nvZ
+        /Y5z6CxVH9mMVdoNpOTvTW4=
+X-Google-Smtp-Source: AGRyM1s+K/6al4NrwNKS3VWhyVYTdV/0+QCqk/k3mxIiaamLxq73CxhjB49R4yO7pJbpvxoBVwNEZQ==
+X-Received: by 2002:a17:902:9307:b0:166:41a8:abc0 with SMTP id bc7-20020a170902930700b0016641a8abc0mr26273877plb.135.1659015227738;
+        Thu, 28 Jul 2022 06:33:47 -0700 (PDT)
+Received: from [192.168.3.217] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id w71-20020a627b4a000000b005289ffefe82sm736615pfc.130.2022.07.28.06.33.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 06:33:46 -0700 (PDT)
+Message-ID: <238bacda-6df5-0836-2f6a-74a6079a7ae4@acm.org>
+Date:   Thu, 28 Jul 2022 06:33:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YuKOTzS89D2+O8Ye@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V1] scsi: ufs: Get boot device storage type from command
+ line
+Content-Language: en-US
+To:     "Chetan Chinnadagudihundi Ravindranath (Consultant) (QUIC)" 
+        <quic_cchinnad@quicinc.com>, jejb@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <1658910535-31802-1-git-send-email-quic_cchinnad@quicinc.com>
+ <a09de6e0-700b-0715-06a8-150ab41e8e7f@acm.org>
+ <c66ffd91-8649-edb7-86dc-422ae82e1b84@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <c66ffd91-8649-edb7-86dc-422ae82e1b84@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 03:25:35PM +0200, Andrew Lunn wrote:
-> On Thu, Jul 28, 2022 at 03:17:25PM +0200, Oleksij Rempel wrote:
-> > Do not try to read not existing or wrong register on chips without
-> > GBIT_SUPPORT.
-> > 
-> > Fixes: c2e866911e25 ("net: dsa: microchip: break KSZ9477 DSA driver into two files")
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  drivers/net/dsa/microchip/ksz9477.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> > index c73bb6d383ad..f6bbd9646c85 100644
-> > --- a/drivers/net/dsa/microchip/ksz9477.c
-> > +++ b/drivers/net/dsa/microchip/ksz9477.c
-> > @@ -316,7 +316,13 @@ void ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
-> >  			break;
-> >  		}
-> >  	} else {
-> > -		ksz_pread16(dev, addr, 0x100 + (reg << 1), &val);
-> > +		/* No gigabit support.  Do not read wrong registers. */
-> > +		if (!(dev->features & GBIT_SUPPORT) &&
-> > +		    (reg == MII_CTRL1000 || reg == MII_ESTATUS ||
-> > +		     reg == MII_STAT1000))
-> 
-> Does this actually happen?
+On 7/28/22 01:35, Chetan Chinnadagudihundi Ravindranath (Consultant) 
+(QUIC) wrote:
+> Hi Brat,
 
-Yes. I just discovered it after adding regmap ranges validation for
-KSZ9893 chip.
-> 
-> If i remember this code correctly, it tries to make the oddly looking
-> PHY look like a normal PHY. phylib is then used to drive the PHY?
-> 
-> If i have that correct, why is phylib trying to read these registers?
-> It should know there is no 1G support, and should skip them.
+Please spell my name correctly.
 
-I didn't investigated it so far. Will try to look deeper tomorrow.
+> Yes, since SCSI_UFSHCD=y am selecting UFS_QCOM_CMDLINE=y so that it gets 
+> __setup() declarations. I am able to read the command line arguments and 
+> get this "androidboot.bootdevice=" info. I had cross checked again.
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I was asking about SCSI_UFSHCD=m instead of SCSI_UFSHCD=y.
+
+Thanks,
+
+Bart.

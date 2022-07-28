@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4B0584518
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5EF584525
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiG1RmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
+        id S232503AbiG1Rok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiG1RmI (ORCPT
+        with ESMTP id S229883AbiG1Rod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:42:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2EF1743EC
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:42:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659030126;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=osQ+/ROGDL1CS+JW7FUiX/rfJGzXDL7QFiEzVel9WBs=;
-        b=KK7JfAQPscIaYoYM1hAX5N+HC2q5N0xKUsO8KFR2vBJcUHF2KFDlYZWoJodhnrvfYNJ301
-        k8Ysc1ij9+Efp1Htrl3O/56FeswYxhtifPL/I4svBDUgQDOhdJfZEjal+/H429hvdc7Byr
-        a8Oo1a5AjIQ61eGWkD9DxZac4dB2+9g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-kbElYJGYP7e0wjYiY39SOA-1; Thu, 28 Jul 2022 13:42:03 -0400
-X-MC-Unique: kbElYJGYP7e0wjYiY39SOA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BBCFE101A586;
-        Thu, 28 Jul 2022 17:42:02 +0000 (UTC)
-Received: from [10.22.9.86] (unknown [10.22.9.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 82D371121315;
-        Thu, 28 Jul 2022 17:42:01 +0000 (UTC)
-Message-ID: <d00a8b5b-86c6-2d57-36a5-894ca70f2472@redhat.com>
-Date:   Thu, 28 Jul 2022 13:42:01 -0400
+        Thu, 28 Jul 2022 13:44:33 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC29C747BA
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:44:32 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id c185so1910515iof.7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=euGCprHtfgeGD2lqEFLlu8boLeebQ0OwrWscZfMj3tw=;
+        b=CGEsgy3vKfpdFOml8CXiObDyA3GwpotxCUspR08fALLfecVo+Kik7YFCYg6JG7GXhi
+         PsDdbkkkBotpd3/JtocEn7l5WP3tMF6M0c0N6E8tDg6qqmYbme/B5GNAKUnQRgFRaESp
+         jnVi6uUVr7qum/bGpT0hh3IPubgeTh2wsMLH9gM1W1Q+7dvqwDZ+4DnhLphHfiMxdWZR
+         DL35hqWIl4KB91cqIpc6l44yBuradKIApi5uQnjY9cTMx9/NW4TBxT774xdoMsRzUNdX
+         Ezgx3N2l71mHpsgC30sjhjoYfYGcNB0nu5RJvI2DD97/rDrBOuQ4lVzz6VRV61W8PC4K
+         jX7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=euGCprHtfgeGD2lqEFLlu8boLeebQ0OwrWscZfMj3tw=;
+        b=G7zSvl+P3nkv6ojiUBWuSMu3wMZwWbfgyUML9X3gzHwVMAryGEoY/c16sgw30ZcwW1
+         XKZ/50B6A3c+hF/CG0JwbDegmPaRyxkfy/m1eDo/I72rrzbxnjVZp8euP6V6UpEmdM7y
+         eJ0tGgpe9NVmPGZ3VQ1/EjV57Oeeag5Mg9BEzpDz2xoVyWtYdozs/Bz+4Z8RD9zF4eMt
+         nC2itctJiz4GrzsVyP94Jycgd+JCJcqJMiGBavQFp5qKnQPXFL0hkdBJAK9DeGKL6Uwd
+         SmzFGsjIM7JeZ+SekoeAlUsCJF0uw7XrTD8POGyWud8Rl+6zvxdLQ8FFTgMjSdlOg6RL
+         0h8w==
+X-Gm-Message-State: AJIora+IamMErJ/YBy2wGivbzY5EeWaxA/lDqZB6JpIVWQLi3dyvaNab
+        cVKfMq7Y8AcEw+QveTKgPiK5HwvVVbEm8Zlyn7Y++g==
+X-Google-Smtp-Source: AGRyM1vBKjdqTQANcA4eGkbC4sZ++qu8EIsrbXnKuigxtdN/x9GAVHp9nfatADvkOirreJuOJJq2sCdcDDcdzfaobrs=
+X-Received: by 2002:a05:6602:29c8:b0:678:7c44:c2fd with SMTP id
+ z8-20020a05660229c800b006787c44c2fdmr9514661ioq.89.1659030271947; Thu, 28 Jul
+ 2022 10:44:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-Content-Language: en-US
-To:     Valentin Schneider <vschneid@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220728005815.1715522-1-longman@redhat.com>
- <20220728144420.GA27407@blackbody.suse.cz>
- <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
- <xhsmhbkt9dvwm.mognet@vschneid.remote.csb>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <xhsmhbkt9dvwm.mognet@vschneid.remote.csb>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20220728121949.20985-1-linmiaohe@huawei.com> <20220728121949.20985-2-linmiaohe@huawei.com>
+In-Reply-To: <20220728121949.20985-2-linmiaohe@huawei.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 28 Jul 2022 10:44:20 -0700
+Message-ID: <CAHS8izOgtAJN1cd5+FNT-TMk22xkaPn-doJZ4M8+f5wP5OehLw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] hugetlb_cgroup: remove unneeded nr_pages > 0 check
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,54 +67,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 12:50, Valentin Schneider wrote:
-> On 28/07/22 10:59, Waiman Long wrote:
->> On 7/28/22 10:44, Michal Koutný wrote:
->>> This should apply only to tasks that were extracted out of the root
->>> cgroup, no? (OK, those are all processes practically.)
->> The reset is done on all cgroups in a particular subtree. In the case of
->> cgroup root, it is all the processes in the system.
-> I've been briefly playing with this, tasks in the cgroup root don't seem
-> affected on my end (QEMU + buildroot + latest tip/sched/core):
+On Thu, Jul 28, 2022 at 5:20 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >
->    $ mount -t cgroup2 none /sys/fs/cgroup
->    $ /root/loop.sh &
->    $ PID=$!
->    $ taskset -pc 2-3 $PID
->    pid 177's current affinity list: 0-3
->    pid 177's new affinity list: 2,3
->    $ echo +cpuset > /sys/fs/cgroup/cgroup.subtree_control
->    $ taskset -pc $PID
->    pid 177's current affinity list: 2,3
+> When code reaches here, nr_pages must be > 0. Remove unneeded nr_pages > 0
+> check to simplify the code.
 >
-> However tasks extracted out as mentioned by Michal definitely are:
->
->    $ mount -t cgroup2 none /sys/fs/cgroup
->    $ /root/loop.sh &
->    $ PID=$!
->    $ taskset -pc 2-3 $PID
->    pid 172's current affinity list: 0-3
->    pid 172's new affinity list: 2,3
->    $ mkdir /sys/fs/cgroup/foobar
->    $ echo $PID > /sys/fs/cgroup/foobar/cgroup.procs
->    $ taskset -pc $PID
->    pid 172's current affinity list: 2,3
->    $ echo +cpuset > /sys/fs/cgroup/cgroup.subtree_control
->    $ taskset -pc $PID
->    pid 172's current affinity list: 0-3
->
-> IIUC this is just what happens anytime a task gets migrated to a new
-> cpuset. Initially loop.sh remains attached to the root cpuset, and the echo
-> +cpuset migrates it to the /foobar one.
->
-> Does that match what you're seeing?
->
-Yes. echo "+cpuset" to subtree_control means tasks in the child cgroups 
-will move to new cpusets. Those new cpusets will have the same cpu lists 
-as the parent unless the cpuset.cpus files are explicitly written to. 
-This patch will ensure that tasks that have explicitly set their cpu 
-affinity won't be affected by this change.
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Cheers,
-Longman
+Thanks Miaohe,
 
+Reviewed-by: Mina Almasry <almasrymina@google.com>
+
+> ---
+>  mm/hugetlb_cgroup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
+> index c86691c431fd..d16eb00c947d 100644
+> --- a/mm/hugetlb_cgroup.c
+> +++ b/mm/hugetlb_cgroup.c
+> @@ -442,7 +442,7 @@ void hugetlb_cgroup_uncharge_file_region(struct resv_map *resv,
+>         if (hugetlb_cgroup_disabled() || !resv || !rg || !nr_pages)
+>                 return;
+>
+> -       if (rg->reservation_counter && resv->pages_per_hpage && nr_pages > 0 &&
+> +       if (rg->reservation_counter && resv->pages_per_hpage &&
+>             !resv->reservation_counter) {
+>                 page_counter_uncharge(rg->reservation_counter,
+>                                       nr_pages * resv->pages_per_hpage);
+> --
+> 2.23.0
+>

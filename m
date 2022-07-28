@@ -2,182 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C36583B79
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58676583B7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbiG1Jp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S235073AbiG1Jqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234971AbiG1Jp0 (ORCPT
+        with ESMTP id S233296AbiG1Jqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:45:26 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDA713DF0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:45:25 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id o13so1523307edc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0PGFqJ5sSwJz5+FanpjdC1l3+s9uEy4ZucSeUHVLRLA=;
-        b=jFabNESMYWFqBWmSQ0Vwnofpi1D9/axdUDChv2uvnR9jHaM6K51+IeFWEV29R1PGMX
-         kCqlMGjlTS1/dZd4+LYbt+wSsAqq2eHYUheT6qSdoIgYFVmbuBbpGtUkuo82kw7xuGaJ
-         jZ7gl//WESp+4rRI0pfNEOkGkCbsl48ko3zAZTeZ90/l5JMwRk1bCSIIivBu/O87C32c
-         6FAOLFBGXvooXiau/b0eg+omOzyWgfupNRDNrJFJQEGMVP1ZhsO8L8+v2qJ9q4h+W66G
-         xVC8sCvaKurM74JcljdEWLEquiWfGm6pvbZTbOrdmsyJTz+Q/4Wmb9O6X+SrMm5rxDI9
-         LjZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0PGFqJ5sSwJz5+FanpjdC1l3+s9uEy4ZucSeUHVLRLA=;
-        b=ZlNXva1vXzPus8Gdv35Kr4zE2uVxDQuBMSrBb/1KMGKYcNLi+9CPfqt2p23stBSfTN
-         OUByATrCVix7Q6qTJm8pQil2CuHEsTzMSRjRp/cCfnvxpxx4+S6mWNh+FO+k7EVING5u
-         vsdcHUJ5xu0m/cbvtaAjyGjUvtU304O6BJUpKp010ns5VtqNIsX83lvq0QJJFsfZIbqk
-         U08oxvr/CsumDijL62DYGMcOE4Jn2jqRrZ6rKQanjppTEUvIn8jxrnrTDLzGgVxugmEI
-         mguNdGAUmz+CNShahlFjyZMJwDDtMUnoLTwmcMbZcjRdhatiFFKCqqLIsvro7feFEXDE
-         WvoQ==
-X-Gm-Message-State: AJIora/Rn3X1PrbpabIto2SbCvabNb8uxaRLqrdux19sHuWIS3fAhM6S
-        f14jZd02bsMh/z10S4KuS5lJ7QAvPjTETwG0RXqfCQ==
-X-Google-Smtp-Source: AGRyM1s5b0erum6DedCypu3B9TEv5wCXsxyQt1uGtTfM2WDrh+EJTtUNUKLhJ79kGGmFoU+kIAuZRMxihUXEiYzGpaw=
-X-Received: by 2002:a05:6402:2d5:b0:43b:d73d:39b0 with SMTP id
- b21-20020a05640202d500b0043bd73d39b0mr26844041edx.208.1659001523674; Thu, 28
- Jul 2022 02:45:23 -0700 (PDT)
+        Thu, 28 Jul 2022 05:46:42 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C789140BFD
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:46:41 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9L_WuJi7dU+AA--.24856S3;
+        Thu, 28 Jul 2022 17:46:40 +0800 (CST)
+Subject: Re: [PATCH 4/5] LoongArch: Stop using undocumented assembler options
+To:     Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev
+References: <385f63bcbee8e37c42f479ce9cdc7e7d731d419b.camel@xry111.site>
+ <4f09c81c22d0a16883a6914a8f7209957386c07c.camel@xry111.site>
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <4f4ced23-2046-586c-2590-542923025149@loongson.cn>
+Date:   Thu, 28 Jul 2022 17:46:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <20220727161004.175638564@linuxfoundation.org>
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 28 Jul 2022 15:15:12 +0530
-Message-ID: <CA+G9fYuW1YDzwJ=7EZ3XkAR4AYMo_9t04ghQfhkCR1=ynf63pQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/62] 4.19.254-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4f09c81c22d0a16883a6914a8f7209957386c07c.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxr9L_WuJi7dU+AA--.24856S3
+X-Coremail-Antispam: 1UD129KBjvJXoWrKFW5AFW5XF1fKF1fXrWUurg_yoW8Jr13pF
+        Z2kr4DJa1fGFy8tr12v343Xr1q9a1DtF12vFZI9ry8CF4UZr1fXrWaya4DWFyDX3s7AFy0
+        qr9agFy2qF45twUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
+        c2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IUYjXd5UUUUU==
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 at 21:55, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+On 07/28/2022 12:29 AM, Xi Ruoyao wrote:
+> Now we can handle GOT and GOT-based relocations properly, remove the
+> undocumented `-Wa,-mla-{global,local}-with-{pcrel,abs}` assembler hacks.
 >
-> This is the start of the stable review cycle for the 4.19.254 release.
-> There are 62 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> Adjust assembly code to explicitly use "la.pcrel" where necessary.
 >
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> ---
+>  arch/loongarch/Makefile      |  5 +----
+>  arch/loongarch/kernel/head.S | 10 +++++-----
+>  2 files changed, 6 insertions(+), 9 deletions(-)
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.254-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
+> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> index 039dcc4fe1f3..9552c7880d34 100644
+> --- a/arch/loongarch/Makefile
+> +++ b/arch/loongarch/Makefile
+> @@ -40,10 +40,7 @@ endif
 >
-> thanks,
->
-> greg k-h
+>  cflags-y			+= -G0 -pipe -msoft-float
+>  LDFLAGS_vmlinux			+= -G0 -static -n -nostdlib
+> -KBUILD_AFLAGS_KERNEL		+= -Wa,-mla-global-with-pcrel
+> -KBUILD_CFLAGS_KERNEL		+= -Wa,-mla-global-with-pcrel
+> -KBUILD_AFLAGS_MODULE		+= -Wa,-mla-global-with-abs
+> -KBUILD_CFLAGS_MODULE		+= -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
+> +KBUILD_CFLAGS_MODULE		+= -fplt
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+The -fplt flag may be removed, the compiler defaults to -fplt if not
+specified (riscv is also not manually specified as -fplt).
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Thanks,
+Youling
 
-## Build
-* kernel: 4.19.254-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: f68ffa0f9e2ab245b3284831e972b55c677ce706
-* git describe: v4.19.253-63-gf68ffa0f9e2a
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.253-63-gf68ffa0f9e2a
-
-## Test Regressions (compared to v4.19.253)
-No test regressions found.
-
-## Metric Regressions (compared to v4.19.253)
-No metric regressions found.
-
-## Test Fixes (compared to v4.19.253)
-No test fixes found.
-
-## Metric Fixes (compared to v4.19.253)
-No metric fixes found.
-
-## Test result summary
-total: 101463, pass: 89648, fail: 226, skip: 10464, xfail: 1125
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 286 passed, 5 failed
-* arm64: 58 total, 57 passed, 1 failed
-* i386: 26 total, 25 passed, 1 failed
-* mips: 35 total, 35 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 52 total, 51 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

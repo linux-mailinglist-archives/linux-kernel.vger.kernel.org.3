@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D05583771
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6791C583772
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiG1DU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 23:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S236856AbiG1DUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 23:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233854AbiG1DUV (ORCPT
+        with ESMTP id S233213AbiG1DUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 23:20:21 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A01C1CB17
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:20:20 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id f11so490162pgj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:20:20 -0700 (PDT)
+        Wed, 27 Jul 2022 23:20:25 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDC3FD20
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:20:23 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so910285pjl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:20:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aQz/M8tT4ITIWP7n8va8EqELXMwHkMTimrkWQzSleco=;
-        b=o2ixuxHbCasV6jO8/0Hjd2PEkwx00Mj2bUOQ6BwdjZgNa0WmbqtniIDKYetCej3x0p
-         2Ia7fgL+4kO1cL4XcG7NfZytEDtDtufSe/q4booB/sBjoPCOPuBhBRZzqFELWp+WMIW4
-         X7l4yA+lfUOLOMZGy7+0aqCnfvl8y2V+/uI7DqgTpDTA5fmKvdLUecgZhdPMY7qJ/HBN
-         NKCxXIsaqL0wfFhuYITNvopaJUM91KA0j+emsWCBDFrBbbEoDisDJAcGlseQmpGdr9I1
-         PCd7hIgG75PVYbihu3VNGDp4AmpvhBYSBgJCh26udzP25A7f+kdFA5ZlZe2jzqP6cC/9
-         iLNw==
+        bh=s+4wXLhCqMOnatfAou0qtELmUB5gm3L0a/ZVBnly/jQ=;
+        b=JZz5L1rI8gDfPCtPy2bFkPx1G4Xi+2MMcQVBfPH8Opa+uFG4D02+m2QTPOiNmM7WiJ
+         knkPJhfknWLhfc1tdRpqlKdHb/dH5Ahw9b9GqhF8yIzSePlnkOab5bmH5LQ11uZLX68u
+         L9AYby3t8XJMPGzOWUoVybGYopKAZoXEcB2HzHr9lzfGpIuCihREgWdEBpWWD8me5qtc
+         5Q3IeXFcDx1qyy+VlfyjuLkwBSWnsTE7ohPaa+Q89DmSGINvVKoQoUF0k4zyvfmEMiX/
+         d4/O9piU7zDgts2p4nd5w/PSrhNxHEiHLiUDiDrgTjRuUxgFGyR+DPhd9mwdsd/Slkhp
+         DhKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aQz/M8tT4ITIWP7n8va8EqELXMwHkMTimrkWQzSleco=;
-        b=AhgY7Vp1cbfmG/F3Vo4yFUlYhe4pieVivdRLBa6jf5JkYlUEMokOMcIVF0kg9ME34m
-         XRJ9uZbwsMK8nNYUJ4fwLBFdRXpxUXa9DLjHigCmYinWpN3nksmuDZcCf2yh2T6Jm8b5
-         RIsHmefHqba2bz08AFdTPVco1GuFAruSuWiNztV9lTeCzGY7gGqp0MQWhynvQ33TaEnK
-         GNpBBr6j1Hm3QpyGweoOoqQ8vZnAuvm6tkVucyN5Vbhm7HxYEwx6EyvhnjXdUASoIsmB
-         XDOx9ORuw+5dQA6wlHbkV8HzJDyi4apy2xz6KwDqv2CgFAmWOxJSGmLrjJXUVtiCsPlr
-         PVEQ==
-X-Gm-Message-State: AJIora9/ZLeTdWWZCEyIjmxTprNmQYkmTZE/aBuPX78R1M1Is8GH9CR+
-        tUvW0zaK/gM8Mb6iycsKIQ5t
-X-Google-Smtp-Source: AGRyM1uaa77688WwY9H7Zljb7CwwO08Iio3/xMPnKaWjx7Jcs3YdkttOnndFQ19ei1v14+Uzw/T1Tg==
-X-Received: by 2002:a63:1c24:0:b0:41b:40c5:f114 with SMTP id c36-20020a631c24000000b0041b40c5f114mr6547218pgc.3.1658978419699;
-        Wed, 27 Jul 2022 20:20:19 -0700 (PDT)
+        bh=s+4wXLhCqMOnatfAou0qtELmUB5gm3L0a/ZVBnly/jQ=;
+        b=TmEUGC+W80JKE8Re6BHsOsHE6FKOShfQqbRP26QcC2o7zVOsNe/DYHoHlMHlr3jzmb
+         JbidiQDGEmx7+VjoaOuoWv7W4VC+9YeycjwvziPGvRRqaTeqZBRsEIw6UyycSdwxWLAF
+         8TSlRfXrrl/6DG//mAjVEvqmopr2UekWwQP5j8Xu1ouXZZsufQeuy1RRd5Fs5se18jU9
+         tSy3033PjdZvpsY+w5b3VoFgYXpOwD11lVe8vqAeUUTd9DAczyL7nEegMxLI6efEIgVq
+         Wvzyr02gQvjP1/ai6++HSG3+qEhRK5XglJEWk9x6A43gnyMqfpsrOzaAenCu19y7VSss
+         Im4Q==
+X-Gm-Message-State: AJIora/QGQVbj4DXzw0o71yOIhHuVP9fj2Mvk7bsOBC2MUlfYqKWlJCB
+        KWCqDUAMcNXngr4xNongPX6p
+X-Google-Smtp-Source: AGRyM1tspLhw8CgRCi1fQqiq7dNs1syI93DZKHJYclwGOXh1RKI2u7cdOG8lI1qImuWD+nzHqGP6bw==
+X-Received: by 2002:a17:90b:1e03:b0:1f2:518a:8f78 with SMTP id pg3-20020a17090b1e0300b001f2518a8f78mr8044965pjb.217.1658978423003;
+        Wed, 27 Jul 2022 20:20:23 -0700 (PDT)
 Received: from localhost ([139.177.225.253])
-        by smtp.gmail.com with ESMTPSA id t11-20020a170902e84b00b0016d1b708729sm10991153plg.132.2022.07.27.20.20.18
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902684400b0016c1cdd2de3sm14340148pln.281.2022.07.27.20.20.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 20:20:19 -0700 (PDT)
+        Wed, 27 Jul 2022 20:20:22 -0700 (PDT)
 From:   Xie Yongji <xieyongji@bytedance.com>
 To:     mst@redhat.com, jasowang@redhat.com, xiaodong.liu@intel.com,
         maxime.coquelin@redhat.com, stefanha@redhat.com
 Cc:     songmuchun@bytedance.com,
         virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/5] vduse: Remove unnecessary spin lock protection
-Date:   Thu, 28 Jul 2022 11:19:56 +0800
-Message-Id: <20220728032000.127-2-xieyongji@bytedance.com>
+Subject: [PATCH v4 2/5] vduse: Use memcpy_{to,from}_page() in do_bounce()
+Date:   Thu, 28 Jul 2022 11:19:57 +0800
+Message-Id: <20220728032000.127-3-xieyongji@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220728032000.127-1-xieyongji@bytedance.com>
 References: <20220728032000.127-1-xieyongji@bytedance.com>
@@ -71,50 +71,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we use domain->iotlb_lock to protect two different
-variables: domain->bounce_maps->bounce_page and
-domain->iotlb. But for domain->bounce_maps->bounce_page,
-we actually don't need any synchronization between
-vduse_domain_get_bounce_page() and vduse_domain_free_bounce_pages()
-since vduse_domain_get_bounce_page() will only be called in
-page fault handler and vduse_domain_free_bounce_pages() will
-be called during file release.
+kmap_atomic() is being deprecated in favor of kmap_local_page().
 
-So let's remove the unnecessary spin lock protection in
-vduse_domain_get_bounce_page(). Then the usage of
-domain->iotlb_lock could be more clear: the lock will be
-only used to protect the domain->iotlb.
+The use of kmap_atomic() in do_bounce() is all thread local therefore
+kmap_local_page() is a sufficient replacement.
+
+Convert to kmap_local_page() but, instead of open coding it,
+use the helpers memcpy_to_page() and memcpy_from_page().
 
 Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/vdpa/vdpa_user/iova_domain.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/vdpa/vdpa_user/iova_domain.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
-index 6daa3978d290..bca1f0b8850c 100644
+index bca1f0b8850c..50d7c08d5450 100644
 --- a/drivers/vdpa/vdpa_user/iova_domain.c
 +++ b/drivers/vdpa/vdpa_user/iova_domain.c
-@@ -211,17 +211,14 @@ static struct page *
- vduse_domain_get_bounce_page(struct vduse_iova_domain *domain, u64 iova)
+@@ -138,18 +138,17 @@ static void do_bounce(phys_addr_t orig, void *addr, size_t size,
  {
- 	struct vduse_bounce_map *map;
--	struct page *page = NULL;
+ 	unsigned long pfn = PFN_DOWN(orig);
+ 	unsigned int offset = offset_in_page(orig);
+-	char *buffer;
 +	struct page *page;
+ 	unsigned int sz = 0;
  
--	spin_lock(&domain->iotlb_lock);
- 	map = &domain->bounce_maps[iova >> PAGE_SHIFT];
- 	if (!map->bounce_page)
--		goto out;
-+		return NULL;
+ 	while (size) {
+ 		sz = min_t(size_t, PAGE_SIZE - offset, size);
  
- 	page = map->bounce_page;
- 	get_page(page);
--out:
--	spin_unlock(&domain->iotlb_lock);
+-		buffer = kmap_atomic(pfn_to_page(pfn));
++		page = pfn_to_page(pfn);
+ 		if (dir == DMA_TO_DEVICE)
+-			memcpy(addr, buffer + offset, sz);
++			memcpy_from_page(addr, page, offset, sz);
+ 		else
+-			memcpy(buffer + offset, addr, sz);
+-		kunmap_atomic(buffer);
++			memcpy_to_page(page, offset, addr, sz);
  
- 	return page;
- }
+ 		size -= sz;
+ 		pfn++;
 -- 
 2.20.1
 

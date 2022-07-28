@@ -2,82 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CFD583983
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7BA583987
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiG1H25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S234470AbiG1Hau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbiG1H2z (ORCPT
+        with ESMTP id S233314AbiG1Has (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:28:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF605F9A1;
-        Thu, 28 Jul 2022 00:28:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 28 Jul 2022 03:30:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B0AA5140F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:30:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658993446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ux6VwMtMxHO2mepOlWLk/n9XMR06YLsuanCnSO2VUjI=;
+        b=Cy84uvf9mctnvBd8B0UFUPyf7I6OJLszYFUHlBEnzKNXYI0dQT3n9KPW24nU2ZTwt0etK4
+        6Ez0ThLbOKlsH1aMoBJEKWeFeOuN5wODuseJ/VXgaE9e/fipWEBc6FYeTXHwPbxr/PszS/
+        0m1ojePJ4X/4a8vRUSdu71HaH/mv++Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-204-fvFAbU1_PgCryZqHIMMp5w-1; Thu, 28 Jul 2022 03:30:42 -0400
+X-MC-Unique: fvFAbU1_PgCryZqHIMMp5w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E69ABB82326;
-        Thu, 28 Jul 2022 07:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25548C433D6;
-        Thu, 28 Jul 2022 07:28:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658993332;
-        bh=O/JP6b787a9xdxS67CTuLZkxu/lZwZItMs0m4UYXNjo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LbTL8FsELlSzraB8WGi12+Q0duYn4N/Gu8P12hwin9VnU/E43BSPLJVc6JNHbHe6X
-         44Oj3PFvQ1HlHv2xypMt4LgcAygS5vIxxGinm8pWYFUOpR7KYWSTtklHTlHlSJMUBe
-         OS2oGJvtR4FBHXKP3Fl6wKKD8Caf0ru14rYZPjpw=
-Date:   Thu, 28 Jul 2022 09:28:50 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC6E2185A79C;
+        Thu, 28 Jul 2022 07:30:41 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 332ED492C3B;
+        Thu, 28 Jul 2022 07:30:34 +0000 (UTC)
+Message-ID: <fad05f161cc6425d8c36fb6322de2bbaa683dcb3.camel@redhat.com>
+Subject: Re: [PATCH v2 0/5] x86: cpuid: improve support for broken CPUID
+ configurations
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, naresh.kamboju@linaro.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state()
- for now
-Message-ID: <YuI6shUi6iJdMSfB@kroah.com>
-References: <20220727185012.3255200-1-saravanak@google.com>
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Jane Malalane <jane.malalane@citrix.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-perf-users@vger.kernel.org,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>
+Date:   Thu, 28 Jul 2022 10:30:33 +0300
+In-Reply-To: <20220718141123.136106-1-mlevitsk@redhat.com>
+References: <20220718141123.136106-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727185012.3255200-1-saravanak@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 11:50:08AM -0700, Saravana Kannan wrote:
-> More fixes/changes are needed before driver_deferred_probe_check_state()
-> can be deleted. So, bring it back for now.
+On Mon, 2022-07-18 at 17:11 +0300, Maxim Levitsky wrote:
+> This patch series aims to harden the cpuid code against the case when
+> the hypervisor exposes a broken CPUID configuration to the guest,
+> in the form of having a feature disabled but not features that depend on it.
 > 
-> Greg,
+> This is the more generic way to fix kernel panic in aes-ni kernel driver,
+> which was triggered by CPUID configuration in which AVX is disabled but
+> not AVX2.
 > 
-> Can we get this into 5.19? If not, it might not be worth picking up this
-> series. I could just do the other/more fixes in time for 5.20.
+> https://lore.kernel.org/all/20211103145231.GA4485@gondor.apana.org.au/T/
+> 
+> This was tested by booting a guest with AVX disabled and not AVX2,
+> and observing that both a warning is now printed in dmesg, and
+> that avx2 is gone from /proc/cpuinfo.
+> 
+> V2:
+> 
+> I hopefully addressed all the (very good) review feedback.
+> 
+> Best regards,
+> 	Maxim Levitsky
+> 
+> Maxim Levitsky (5):
+>   perf/x86/intel/lbr: use setup_clear_cpu_cap instead of clear_cpu_cap
+>   x86/cpuid: refactor setup_clear_cpu_cap()/clear_cpu_cap()
+>   x86/cpuid: move filter_cpuid_features to cpuid-deps.c
+>   x86/cpuid: remove 'warn' parameter from filter_cpuid_features
+>   x86/cpuid: check for dependencies violations in CPUID and attempt to
+>     fix them
+> 
+>  arch/x86/events/intel/lbr.c       |  2 +-
+>  arch/x86/include/asm/cpufeature.h |  1 +
+>  arch/x86/kernel/cpu/common.c      | 51 +-------------------
+>  arch/x86/kernel/cpu/cpuid-deps.c  | 80 +++++++++++++++++++++++++++----
+>  4 files changed, 74 insertions(+), 60 deletions(-)
+> 
+> -- 
+> 2.34.3
+> 
+> 
+A very kind ping on these patches.
 
-Wow, no, it is _WAY_ too late for 5.19 to make a change like this,
-sorry.
+Best regards,
+	Maxim Levitsky
 
-What is so broken that we need to revert these now?  I could do so for
-5.20-rc1, and then backport to 5.19.y if that release is really broken,
-but this feels odd so late in the cycle.
-
-thanks,
-
-greg k-h

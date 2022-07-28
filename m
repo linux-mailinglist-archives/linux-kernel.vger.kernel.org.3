@@ -2,141 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C246D584275
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AAC584277
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiG1O7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
+        id S230257AbiG1O7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiG1O7E (ORCPT
+        with ESMTP id S230188AbiG1O7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:59:04 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA67DC4B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:59:03 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id b25so1587637qka.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:59:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hefring-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z5/tjPr6QG6frGjHfD5cFUY7n0xr+lehOx18t20B7bI=;
-        b=6M1MGyT0JZCI3ep5oiwXY/o2YOAgICvED40hIK3y6zgNdw0bpmYMtlXW9IxdWq79P/
-         RsPQEENCdp3uPwrcKarSAZ8A9/uF21G+tUHruEiprCOsLBhdJ6BrrTQTqacVnbhl25Xg
-         7ld+FnmhkEl0/XC0iP63zjLcr92/l4aG1se9zjS1xyKNJmtqEX3f/QjWdCK144cVGnwa
-         KIWCSIHjGj42flH2QOrxjKWIdxzwfuJazR8b+AS9cPIve8tPu7Y9oaXCM2vQf8tAeCyZ
-         RMr/KVUCOG8ygAM9Tlryu/3fE9Dmnv+n1Rr7453wDm3m9jv4cez/0uey2XRuzTVxS0Ju
-         Cv5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z5/tjPr6QG6frGjHfD5cFUY7n0xr+lehOx18t20B7bI=;
-        b=OYnZJPKnAvUStCcfQS+tGV7+fj4jmdaPUQPoAVAUT7AoZbSri4TeINTV+dP4yLQdHT
-         ZnFxuupyxlXRq971dtZ7SfsGdYvMHyVoIFavXyp76eCFSKvFIQLQywUtF/NB2jX9/sAX
-         LekpUOIGU5+ZnqpSpyLyoc/ioLXNtZrQna7ymU2cavSTX6p8Xi5RVh93JV1Jodl7YsGM
-         tt+dOXE1Rk+nfWF/yvdS8rKypzWUogs1dl4URAlhdBD32D0fBIU4B/FtFvjJPJqAYUQE
-         F2FR/vC0J1CWviK0bE5u12DH56wI3AlQ7kvJZXinPStiep421U83BhamEccMdavtchbt
-         +8GQ==
-X-Gm-Message-State: AJIora9hE755i3N4TQLBUgUawIjEonhNrYJVA9u+sHcY+qIGQE2p5xe/
-        yCOnuWhsdwBIUTZwso713vpb8A==
-X-Google-Smtp-Source: AGRyM1t4DkwKnAnFc0kfx/Gt2EUQ5qJqQfJcIgulv+SylVQonHQaHp57fMDss5NRbvjRTVONPN9/gg==
-X-Received: by 2002:a05:620a:1907:b0:6a6:2fac:462f with SMTP id bj7-20020a05620a190700b006a62fac462fmr19703589qkb.213.1659020342806;
-        Thu, 28 Jul 2022 07:59:02 -0700 (PDT)
-Received: from hefring.. ([50.212.55.89])
-        by smtp.gmail.com with ESMTPSA id g24-20020ac870d8000000b0031e9ff0c44fsm586860qtp.20.2022.07.28.07.59.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 07:59:02 -0700 (PDT)
-From:   Ben Wolsieffer <ben.wolsieffer@hefring.com>
-X-Google-Original-From: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
-Cc:     Andrew Morton <akpm@osdl.org>,
-        Ben Wolsieffer <Ben.Wolsieffer@hefring.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH] proc: /proc/<pid>/maps: release mmap read lock
-Date:   Thu, 28 Jul 2022 10:58:58 -0400
-Message-Id: <20220728145859.497397-1-Ben.Wolsieffer@hefring.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 28 Jul 2022 10:59:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BEB84271C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:59:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659020346;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z/5IAGid/MkaGLoGKjcup59KN/CNT4vmw2F2KlJ1qxE=;
+        b=I5dKxH+71SyhTFUaHSPfK6+z17zQZvFjMFhlfArZ+tqKXUUd03BjxT8Hdik35tNXFvEalz
+        EAaOyTYJKU/ICzC3gXp2QEyYkUY1UOVOWsgkQkJPgrtaHTRvb+R3/QQAl0ht5ul4umVsPO
+        CXYxIR3lSnx9cESvBSyuA3w9AgApkP8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-pUuMEUEVMhqVl6KTPnjYeA-1; Thu, 28 Jul 2022 10:59:04 -0400
+X-MC-Unique: pUuMEUEVMhqVl6KTPnjYeA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22A903817A70;
+        Thu, 28 Jul 2022 14:59:03 +0000 (UTC)
+Received: from [10.22.9.86] (unknown [10.22.9.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C81B2026D64;
+        Thu, 28 Jul 2022 14:59:02 +0000 (UTC)
+Message-ID: <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
+Date:   Thu, 28 Jul 2022 10:59:01 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
+ affinity was explicitly set
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220728005815.1715522-1-longman@redhat.com>
+ <20220728144420.GA27407@blackbody.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220728144420.GA27407@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The no-MMU implementation of /proc/<pid>/map doesn't normally release
-the mmap read lock, since the !IS_ERR_OR_NULL(_vml) condition in m_stop
-is false in most cases.
+On 7/28/22 10:44, Michal Koutný wrote:
+> Hello.
+>
+> On Wed, Jul 27, 2022 at 08:58:14PM -0400, Waiman Long <longman@redhat.com> wrote:
+>> It was found that any change to the current cpuset hierarchy may reset
+>> the cpus_allowed list of the tasks in the affected cpusets to the
+>> default cpuset value even if those tasks have cpus affinity explicitly
+>> set by the users before.
+> I'm surprised this went so long unnoticed / unreported.
+>
+> Could it be users relied on that implicit affinity reset?
 
-This patch syncs the relevant locking and error handling code from the
-MMU implementation to reduce the divergence between the two
-implementations and fix the locking bug.
+As said, it is more easily triggered in a cgroup v2 environment. 
+Systemd, on a cgroup v2 environment, will write "+cpuset" to the root 
+cgroup's subtree_control file when a new container is instantiated. I 
+don't know why it is doing that, but that cause problem as it resets all 
+the cpus_allowed list assignment. Cgroup v1 doesn't have this problem.
 
-Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
----
- fs/proc/task_nommu.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/fs/proc/task_nommu.c b/fs/proc/task_nommu.c
-index a6d21fc0033c..97f387d30e74 100644
---- a/fs/proc/task_nommu.c
-+++ b/fs/proc/task_nommu.c
-@@ -208,11 +208,16 @@ static void *m_start(struct seq_file *m, loff_t *pos)
- 		return ERR_PTR(-ESRCH);
- 
- 	mm = priv->mm;
--	if (!mm || !mmget_not_zero(mm))
-+	if (!mm || !mmget_not_zero(mm)) {
-+		put_task_struct(priv->task);
-+		priv->task = NULL;
- 		return NULL;
-+	}
- 
- 	if (mmap_read_lock_killable(mm)) {
- 		mmput(mm);
-+		put_task_struct(priv->task);
-+		priv->task = NULL;
- 		return ERR_PTR(-EINTR);
- 	}
- 
-@@ -221,23 +226,21 @@ static void *m_start(struct seq_file *m, loff_t *pos)
- 		if (n-- == 0)
- 			return p;
- 
--	mmap_read_unlock(mm);
--	mmput(mm);
- 	return NULL;
- }
- 
--static void m_stop(struct seq_file *m, void *_vml)
-+static void m_stop(struct seq_file *m, void *v)
- {
- 	struct proc_maps_private *priv = m->private;
-+	struct mm_struct *mm = priv->mm;
- 
--	if (!IS_ERR_OR_NULL(_vml)) {
--		mmap_read_unlock(priv->mm);
--		mmput(priv->mm);
--	}
--	if (priv->task) {
--		put_task_struct(priv->task);
--		priv->task = NULL;
--	}
-+	if (!priv->task)
-+		return;
-+
-+	mmap_read_unlock(mm);
-+	mmput(mm);
-+	put_task_struct(priv->task);
-+	priv->task = NULL;
- }
- 
- static void *m_next(struct seq_file *m, void *_p, loff_t *pos)
--- 
-2.36.1
+>> That is especially easy to trigger under a cgroup v2 environment where
+>> writing "+cpuset" to the root cgroup's cgroup.subtree_control file
+>> will reset the cpus affinity of all the processes in the system.
+> This should apply only to tasks that were extracted out of the root
+> cgroup, no? (OK, those are all processes practically.)
+The reset is done on all cgroups in a particular subtree. In the case of 
+cgroup root, it is all the processes in the system.
+>
+> (Even without your second patch, the scope should be limited because of
+> src_cset==dst_cset check in cgroup_migrate_prepare_dst().)
+>
+>> That is especially problematic in a nohz_full environment where the
+>> tasks running in the nohz_full CPUs usually have their cpus affinity
+>> explicitly set and will behave incorrectly if cpus affinity changes.
+> One could also argue that for such processes, cgroup hierarchy should be
+> first configured and only then they start and set own affinity.
+>
+>> Fix this problem by adding a flag in the task structure to indicate that
+>> a task has their cpus affinity explicitly set before and make cpuset
+>> code not to change their cpus_allowed list unless the user chosen cpu
+>> list is no longer a subset of the cpus_allowed list of the cpuset itself.
+> I'm uneasy with the occasional revert of this flag, i.e. the task who
+> set their affinity would sometimes have it overwritten and sometimes
+> not (which might have been relied on, especially with writes into
+> cpuset.cpus).
+> (But I have no better answer than the counter-argument above since
+> there's no easier way to detect the implicit migrations.)
+I also thought about that. Another possible alternative is to use the 
+intersection of cpuset's cpu list and task's own cpu list as long as it 
+is not empty. Reducing the number of cpus assigned to a task may produce 
+some unexpected behavior too.
+>
+> Also, is there similar effect with memory binding?
+
+I think so, but memory binding is less frequently used and its effect is 
+less noticeable.
+
+Cheers,
+Longman
+
+>
+> Thanks,
+> Michal
+>
 

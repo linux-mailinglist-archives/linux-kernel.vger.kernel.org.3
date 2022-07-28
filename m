@@ -2,110 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6A5584212
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433F3584213
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiG1Oor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S229446AbiG1OpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbiG1Ool (ORCPT
+        with ESMTP id S229776AbiG1OpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:44:41 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0062A11A28;
-        Thu, 28 Jul 2022 07:44:39 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id i10-20020a1c3b0a000000b003a2fa488efdso431009wma.4;
-        Thu, 28 Jul 2022 07:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=IRQ8c2L3JLJa8KExAV2T24apu/+2cMu4sYdyXBwjm6Q=;
-        b=MShn1kAzWvQyrXokQ5UMfU98wJPbQAQOZRvkMOOAMcxhaTQ2y66w9EqEc8UV+/RFWc
-         ++60fhi1xF9A6DEx2+62tRNTQ2ORT3O+Z3CWxD3AxEtDpXpxgkEMSZx5AFrpPOYmMbNK
-         lsFRw/1XT2jl5Yo0Jqc4V+xGLys+Ds/D4J7US3i2Fdcu92yWOAHvxRJaG3pprC4iWh0Z
-         R8Km9l0bcD94GNFl8oc51gGE02VMbKG7TRJmDNuFxvHM81gpVxf/vbKffydzgwA48hiP
-         1SxlM/BGZ0pS5V58+EKO3mJiCFI2Cb6QvFeCydBdxbl1e1w1CvCInvvYq6GAxpYTJIvH
-         lhoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=IRQ8c2L3JLJa8KExAV2T24apu/+2cMu4sYdyXBwjm6Q=;
-        b=skMSjVf38wn7ey9xguYhy7mZzF895fV3EegSOB1v7Jn2BwLjc2at6zu3/l7iX7Vzg6
-         zqWdLrxuJmTGaa7b5FTLG9mEUX2XkAq8uLbAv+lN8teSAYoNibiBfuZSYGcuDaEzx9eK
-         OS6VcsvgKPKFhYwL0tvB/xP5qH0un/vi/JYNdecGam4Yy8AemKtgPN4bn9ySn/xK3ehE
-         UQyNldqU6eUKo7Ge2OZ0oAeKKXoqhqwYqWmdwv4hQvSIXg7DV6fKnWGE+bptz2+HhVuI
-         mgui/qH1/k7pVRxzAhNhUFy9AQVp38DOE+sxA/PWsZySxirKJd2WsKdU6sWeHBDnZ4tt
-         IAiA==
-X-Gm-Message-State: AJIora/BXo4xgguM53gBuit4kw4IsGgYPUJf+ZL5A4RB4jbjbtNZQGHK
-        tB79MH9igh7TL0Q66okCNwqM4c1hPbntsg==
-X-Google-Smtp-Source: AGRyM1tdc7tnAm1dZA+USXTn1cunrkVm9kUW/8+R8wD+fU+vJ9+qs1qaXNWkn+ustZVXxUHQl7Gglg==
-X-Received: by 2002:a05:600c:1986:b0:3a3:490b:1fd4 with SMTP id t6-20020a05600c198600b003a3490b1fd4mr6546981wmq.140.1659019478460;
-        Thu, 28 Jul 2022 07:44:38 -0700 (PDT)
-Received: from debian ([2402:3a80:196b:933a:553c:d695:8a60:6d86])
-        by smtp.gmail.com with ESMTPSA id d9-20020a05600c34c900b003a3170a7af9sm1675939wmq.4.2022.07.28.07.44.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 07:44:38 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:44:27 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/105] 5.10.134-rc1 review
-Message-ID: <YuKgy+5Me9LRxc0i@debian>
-References: <20220727161012.056867467@linuxfoundation.org>
+        Thu, 28 Jul 2022 10:45:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B4562D4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:45:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4CAE234A17;
+        Thu, 28 Jul 2022 14:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659019504; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KY9DxC1wYlMgzPMN5b8JyjCQ0UbOlFS6w/HjZwJbNSY=;
+        b=frHDh4+kbvFHq6PYrGvFrkmhBgq5zRVCYBNCLVfQR8p2FzcQPlUrvgGdPVTyTPztiGmcN+
+        ayGcXpE5+eM+J/WZnD5E9nIZ9ZYpwlb/Gj8D/NT1Nlcdb/VxSHP/sfLzhDGJZEWrGtZlVA
+        spdR5tIgyiXQwdIjXnLoSP72NMVitIY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659019504;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KY9DxC1wYlMgzPMN5b8JyjCQ0UbOlFS6w/HjZwJbNSY=;
+        b=/newD5UcADk7RWWfbOKX7rDKQeAzkijqbAj+YK+Ns4UQ6n+00kO+uX1Ll0IdBzJayyAOlh
+        nDOvAcDZxpBt5xAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1E09813A7E;
+        Thu, 28 Jul 2022 14:45:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yb2vBvCg4mJnZwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 28 Jul 2022 14:45:04 +0000
+Message-ID: <4fcd01a6-4a52-3389-3cd5-be8a17448892@suse.cz>
+Date:   Thu, 28 Jul 2022 16:45:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 05/15] mm/sl[au]b: factor out __do_kmalloc_node()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joe Perches <joe@perches.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Matthew WilCox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+ <20220712133946.307181-6-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220712133946.307181-6-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Wed, Jul 27, 2022 at 06:09:46PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.134 release.
-> There are 105 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 7/12/22 15:39, Hyeonggon Yoo wrote:
+> __kmalloc(), __kmalloc_node(), __kmalloc_node_track_caller()
+> mostly do same job. Factor out common code into __do_kmalloc_node().
 > 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
+> Note that this patch also fixes missing kasan_kmalloc() in SLUB's
+> __kmalloc_node_track_caller().
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Build test (gcc version 11.3.1 20220724):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+> ---
+>  mm/slab.c | 30 +----------------------
+>  mm/slub.c | 71 +++++++++++++++----------------------------------------
+>  2 files changed, 20 insertions(+), 81 deletions(-)
+> 
+> diff --git a/mm/slab.c b/mm/slab.c
+> index da2f6a5dd8fa..ab34727d61b2 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -3631,37 +3631,9 @@ void __kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
+>  }
+>  #endif
+>  
+> -/**
+> - * __do_kmalloc - allocate memory
+> - * @size: how many bytes of memory are required.
+> - * @flags: the type of memory to allocate (see kmalloc).
+> - * @caller: function caller for debug tracking of the caller
+> - *
+> - * Return: pointer to the allocated memory or %NULL in case of error
+> - */
+> -static __always_inline void *__do_kmalloc(size_t size, gfp_t flags,
+> -					  unsigned long caller)
+> -{
+> -	struct kmem_cache *cachep;
+> -	void *ret;
+> -
+> -	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+> -		return NULL;
+> -	cachep = kmalloc_slab(size, flags);
+> -	if (unlikely(ZERO_OR_NULL_PTR(cachep)))
+> -		return cachep;
+> -	ret = slab_alloc(cachep, NULL, flags, size, caller);
+> -
+> -	ret = kasan_kmalloc(cachep, ret, size, flags);
+> -	trace_kmalloc(caller, ret, cachep,
+> -		      size, cachep->size, flags);
+> -
+> -	return ret;
+> -}
+> -
+>  void *__kmalloc(size_t size, gfp_t flags)
+>  {
+> -	return __do_kmalloc(size, flags, _RET_IP_);
+> +	return __do_kmalloc_node(size, flags, NUMA_NO_NODE, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(__kmalloc);
+>  
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 7c284535a62b..2ccc473e0ae7 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -4402,29 +4402,6 @@ static int __init setup_slub_min_objects(char *str)
+>  
+>  __setup("slub_min_objects=", setup_slub_min_objects);
+>  
+> -void *__kmalloc(size_t size, gfp_t flags)
+> -{
+> -	struct kmem_cache *s;
+> -	void *ret;
+> -
+> -	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+> -		return kmalloc_large(size, flags);
+> -
+> -	s = kmalloc_slab(size, flags);
+> -
+> -	if (unlikely(ZERO_OR_NULL_PTR(s)))
+> -		return s;
+> -
+> -	ret = slab_alloc(s, NULL, flags, _RET_IP_, size);
+> -
+> -	trace_kmalloc(_RET_IP_, ret, s, size, s->size, flags);
+> -
+> -	ret = kasan_kmalloc(s, ret, size, flags);
+> -
+> -	return ret;
+> -}
+> -EXPORT_SYMBOL(__kmalloc);
+> -
+>  static void *kmalloc_large_node(size_t size, gfp_t flags, int node)
+>  {
+>  	struct page *page;
+> @@ -4442,7 +4419,8 @@ static void *kmalloc_large_node(size_t size, gfp_t flags, int node)
+>  	return kmalloc_large_node_hook(ptr, size, flags);
+>  }
+>  
+> -void *__kmalloc_node(size_t size, gfp_t flags, int node)
+> +static __always_inline
+> +void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
+>  {
+>  	struct kmem_cache *s;
+>  	void *ret;
+> @@ -4450,7 +4428,7 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
+>  	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+>  		ret = kmalloc_large_node(size, flags, node);
+>  
+> -		trace_kmalloc_node(_RET_IP_, ret, NULL,
+> +		trace_kmalloc_node(caller, ret, NULL,
+>  				   size, PAGE_SIZE << get_order(size),
+>  				   flags, node);
+>  
+> @@ -4462,16 +4440,28 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
+>  	if (unlikely(ZERO_OR_NULL_PTR(s)))
+>  		return s;
+>  
+> -	ret = slab_alloc_node(s, NULL, flags, node, _RET_IP_, size);
+> +	ret = slab_alloc_node(s, NULL, flags, node, caller, size);
+>  
+> -	trace_kmalloc_node(_RET_IP_, ret, s, size, s->size, flags, node);
+> +	trace_kmalloc_node(caller, ret, s, size, s->size, flags, node);
+>  
+>  	ret = kasan_kmalloc(s, ret, size, flags);
+>  
+>  	return ret;
+>  }
+> +
+> +void *__kmalloc_node(size_t size, gfp_t flags, int node)
+> +{
+> +	return __do_kmalloc_node(size, flags, node, _RET_IP_);
+> +}
+>  EXPORT_SYMBOL(__kmalloc_node);
+>  
+> +void *__kmalloc(size_t size, gfp_t flags)
+> +{
+> +	return __do_kmalloc_node(size, flags, NUMA_NO_NODE, _RET_IP_);
+> +}
+> +EXPORT_SYMBOL(__kmalloc);
+> +
+> +
+>  #ifdef CONFIG_HARDENED_USERCOPY
+>  /*
+>   * Rejects incorrectly sized objects and objects that are to be copied
+> @@ -4905,32 +4895,9 @@ int __kmem_cache_create(struct kmem_cache *s, slab_flags_t flags)
+>  }
+>  
+>  void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
+> -					int node, unsigned long caller)
+> +				  int node, unsigned long caller)
+>  {
+> -	struct kmem_cache *s;
+> -	void *ret;
+> -
+> -	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+> -		ret = kmalloc_large_node(size, gfpflags, node);
+> -
+> -		trace_kmalloc_node(caller, ret, NULL,
+> -				   size, PAGE_SIZE << get_order(size),
+> -				   gfpflags, node);
+> -
+> -		return ret;
+> -	}
+> -
+> -	s = kmalloc_slab(size, gfpflags);
+> -
+> -	if (unlikely(ZERO_OR_NULL_PTR(s)))
+> -		return s;
+> -
+> -	ret = slab_alloc_node(s, NULL, gfpflags, node, caller, size);
+> -
+> -	/* Honor the call site pointer we received. */
+> -	trace_kmalloc_node(caller, ret, s, size, s->size, gfpflags, node);
+> -
+> -	return ret;
+> +	return __do_kmalloc_node(size, gfpflags, node, caller);
+>  }
+>  EXPORT_SYMBOL(__kmalloc_node_track_caller);
+>  
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1572
-[2]. https://openqa.qa.codethink.co.uk/tests/1576
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip

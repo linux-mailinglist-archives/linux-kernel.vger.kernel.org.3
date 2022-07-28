@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E72584438
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8AD58443D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiG1Qeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
+        id S231184AbiG1QfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 12:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiG1Qed (ORCPT
+        with ESMTP id S229949AbiG1QfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:34:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7F92A408;
-        Thu, 28 Jul 2022 09:34:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60913B824A4;
-        Thu, 28 Jul 2022 16:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDCECC433C1;
-        Thu, 28 Jul 2022 16:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659026070;
-        bh=nHxv6d85T9pP+ZMr9V+fyaj2Jn/Rv2IPUgxkxsht70U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=cqYXCPuHS+WT6FGL4i5sVVQ3hh488bn5WY8VefisqFETD+o830r8o5DuzRgLVW53p
-         lNZeGzhyQ8QOiB1mNtSQFEJJPpx11tMYKlvZ5TmINHyTmE1VrfDVQIeLcRL93LnTJu
-         pRtByKNRTw4unO5i+yUbdipm3koH7i1SaIYGKGeHp8pZ3Q1LkTPvSJZl3i6qk1STPT
-         IIkKTlokqLliUiO+4/zVGlgsVe9V8ANEMNh6aTwI7kaDEYRM8oKhpcGDv5ckqBHqRW
-         cRpmTEGnjAaovH786jk/Zl02k6dDD4RObN6O4rYHoGdZ0dwmfiXGBMEpDWSsLNvACE
-         nVo4A5EIx9yWQ==
-Date:   Thu, 28 Jul 2022 11:34:28 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 03/15] PCI: dwc: Convert to using native
- IP-core versions representation
-Message-ID: <20220728163428.GA309179@bhelgaas>
+        Thu, 28 Jul 2022 12:35:02 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8034054ADC;
+        Thu, 28 Jul 2022 09:35:01 -0700 (PDT)
+Received: from localhost.localdomain (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 8828E40755E1;
+        Thu, 28 Jul 2022 16:34:59 +0000 (UTC)
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Bastian Stender <bst@pengutronix.de>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        ldv-project@linuxtesting.org
+Subject: [PATCH] can: j1939: Replace WARN_ON_ONCE with pr_warn_once() in j1939_sk_queue_activate_next_locked()
+Date:   Thu, 28 Jul 2022 19:34:29 +0300
+Message-Id: <20220728163429.214758-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <7ea40c0e-e696-3537-c2a4-a8eccf4695d0@ispras.ru>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d644682-094d-6151-aa2f-86552c8f9a87@codethink.co.uk>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 04:31:17PM +0100, Ben Dooks wrote:
-> On 28/07/2022 16:24, Bjorn Helgaas wrote:
-> > On Fri, Jun 24, 2022 at 05:39:35PM +0300, Serge Semin wrote:
-> > > Since DWC PCIe v4.70a the controller version can be read from the
-> > > PORT_LOGIC.PCIE_VERSION_OFF register. Version is represented in the FourCC
-> > > format [1]. It's standard versioning approach for the Synopsys DWC
-> > > IP-cores. Moreover some of the DWC kernel drivers already make use of it
-> > > to fixup version-dependent functionality (See DWC USB3, Stmicro STMMAC or
-> > > recent DW SPI driver).
-> > 
-> > These references to other drivers might be useful, but without a
-> > function name or file name, I can't easily find them.
-> > 
-> > > In order to preserve the standard version
-> > > representation and prevent the data conversion back and forth, we suggest
-> > > to preserve the native version representation in the DWC PCIe driver too
-> > > in the same way as it has already been done in the rest of the DWC
-> > > drivers. IP-core version reading from the CSR will be introduced in the
-> > > next commit together with a simple macro-based API to use it.
-> > > 
-> > > [1] https://en.wikipedia.org/wiki/FourCC
-> 
-> I'm currently looking at a OF based dw-apb-timers-pwm driver, so also
-> would like to follow this.
+We should warn user-space that it is doing something wrong when trying to
+activate sessions with identical parameters but WARN_ON_ONCE macro can not
+be used here as it serves a different purpose.
 
-FWIW, the breadcrumbs I found are:
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 
-  dwc3_core_is_valid()
-  stmmac_hwif_init()
-  dw_spi_hw_init()
+Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ net/can/j1939/socket.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+index f5ecfdcf57b2..67e8b50b8bc1 100644
+--- a/net/can/j1939/socket.c
++++ b/net/can/j1939/socket.c
+@@ -178,7 +178,8 @@ static void j1939_sk_queue_activate_next_locked(struct j1939_session *session)
+ 	if (!first)
+ 		return;
+ 
+-	if (WARN_ON_ONCE(j1939_session_activate(first))) {
++	if (j1939_session_activate(first)) {
++		pr_warn_once("can: j1939: Identical session is already activated.\n");
+ 		first->err = -EBUSY;
+ 		goto activate_next;
+ 	} else {
+-- 
+2.25.1
+

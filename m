@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DA558455D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D0E584561
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbiG1RwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
+        id S232869AbiG1RvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233016AbiG1Rvu (ORCPT
+        with ESMTP id S232867AbiG1RvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:51:50 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9C774CC9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:51:48 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id v18so2410349plo.8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:51:48 -0700 (PDT)
+        Thu, 28 Jul 2022 13:51:17 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEC22A428;
+        Thu, 28 Jul 2022 10:51:16 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id y197so1907259iof.12;
+        Thu, 28 Jul 2022 10:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MeLnh0rabjFUt9GPWYnFusxmYFD63xDhBBKxQm/Xe2E=;
-        b=WJkVfWqlO5MKqhzLt48P5aPy5h9mWBJeqgspIJDVus196oRpW0WDUAQteBPcWZY2z/
-         Gip+HmFZrf7OPUZWz2uWofCr/lpVq35xWdaECrgE11x7GKt8/zsJt1Z9Mbu6NYdQia+D
-         ismdqCjNccvQNmauP9DO0ZCeKQU8l8bs8GGR0=
+        bh=CXMRCPg/c9Nbak8x8/xFoJWKumOKkUty3hELsz55Pu4=;
+        b=FYGlUeNsJv/aOwTaXwRqilYn7rkz6D+rKHHRH0+kTu65hoygCWrHbrV13KL82jB2VN
+         5A+VFSdmQmPzv/5f/zS4lTrqI+xaqgXDXTFl8wPicp7/jpcHEsUYqu+wMqE9YuuNZdKU
+         x0i7Sp9NnXksHyYfg3/s3uET3iCfTQWNhWjUK9ttTQR7qOl7bvprRHGHeMzJW/YuoPPQ
+         H+ArPcg4A6LjUgxQ8xZP8I9NxKCQPQkYLXL0yDG7/0AeSoqiGz2qtrN6KRxDE9sh7Ck4
+         2NCT5T7MIS8whMj8NfQvnaOhgqCOVlV+bd/8MFVzIGYBRIWCt5xTWp5j4vAuStZJS8t+
+         5GdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MeLnh0rabjFUt9GPWYnFusxmYFD63xDhBBKxQm/Xe2E=;
-        b=jQ0ZsS0XhGi3lsNoPMwMHqc3tQC1oZWLEH/e2p0oOrlX3wEk9h8Jw30cTYzLPJZIWV
-         kVYPJ+fMJAPKAJIEkmfPwHq3Ple3V/lEyBW30BE7Vvga6mFiu12iCITzx7pJ6NVo883s
-         qHbWCrMwvQxdipbDxhvybaAaUYQUaEusIvQq2sTblq9Ex9Yn6fnt1vY76N1AfK65z23e
-         iR7X7OklYpl1dCRo0/1UqZTN2XXyX0ECyALh3KrITrJY9x0jn6c8fYWVKHBSCLFmDkGC
-         MaSQLz7cMRVyFJafbbVgSWdvO+a8Yeq4tbmrQxNG/Btgd7SC/A0tPT2MkQYDHcGtapKW
-         APDg==
-X-Gm-Message-State: ACgBeo0LuI+H2U9AI1uO0M1jKhskjA8OQFpPWqUfiqKSfHffQYyuXrDB
-        mxzd1qwqjWcjNgMatdTETkFSdhulgi1D1g==
-X-Google-Smtp-Source: AA6agR7yxjxkWmktYJbcRF1Vs4zVcwK33yOxw5+tpNb/w4yg6CT9nnfZkcCoqWB5wVRHT1fPy2eyJg==
-X-Received: by 2002:a17:902:f101:b0:16d:c0ae:acd5 with SMTP id e1-20020a170902f10100b0016dc0aeacd5mr20194plb.70.1659030707553;
-        Thu, 28 Jul 2022 10:51:47 -0700 (PDT)
-Received: from moragues-cloud.c.googlers.com.com (252.157.168.34.bc.googleusercontent.com. [34.168.157.252])
-        by smtp.gmail.com with ESMTPSA id t14-20020a17090a3e4e00b001f315f73ef1sm2696136pjm.0.2022.07.28.10.51.47
+        bh=CXMRCPg/c9Nbak8x8/xFoJWKumOKkUty3hELsz55Pu4=;
+        b=nLXJF8l1nFIp/fuZPFOJYL1bgHAL9LJMa+hUubtuE/KYEl8/0ttYmtrBOA1CRmHtAO
+         Dcou9uiAlSrl73jH2bcyeF8Mw/XSeN6FYdtx4Xez74Ech7nFY3jEeFuq5wGLaCHVxS3/
+         DK/2qNthkifaQZMjLm9QHtaI8XqYNCvoPCccj7ItgnhbJACcfdM0IAV17dAuXV/r2NOs
+         byuAfPzR+bcu79sAhlnrq2fy1GSCYZ+pUdDBjytiObUfRySovaVl2XbtNbriUwJ8JASw
+         IchUnVSJYTF4W9QJ24SCAij+q68yQ3a+Xu7CCTYeobKOfJKbN6RmbdIqOaf6CwykSyAl
+         6eDQ==
+X-Gm-Message-State: AJIora+0XS+Q6OHgPW6c4A3Wzi366YiV/8+GhYL4KU0mhseViiZHNtof
+        SICRsdniVHj2vrPWezBLrg3+6KBF7KkuRw==
+X-Google-Smtp-Source: AGRyM1vFETi9nJb7BXr+m3gG0v2Nk7JjG5f7nXxam3ehi4VvlChzhQxwDFSQHin/MyhxElBORWV+kg==
+X-Received: by 2002:a05:6602:2dc4:b0:648:adac:bae8 with SMTP id l4-20020a0566022dc400b00648adacbae8mr9885180iow.9.1659030675553;
+        Thu, 28 Jul 2022 10:51:15 -0700 (PDT)
+Received: from localhost.localdomain ([2601:249:600:388b::2253:8b11])
+        by smtp.gmail.com with ESMTPSA id a12-20020a02ac0c000000b0033e72ec9d93sm621487jao.145.2022.07.28.10.51.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 10:51:47 -0700 (PDT)
-From:   Bob Moragues <moragues@chromium.org>
-X-Google-Original-From: Bob Moragues <moragues@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     dianders@chromium.org, swboyd@chromium.org, mka@chromium.org,
-        Bob Moragues <moragues@chromium.org>,
-        Bob Moragues <moragues@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sc7280: Add support for zoglin
-Date:   Thu, 28 Jul 2022 10:51:11 -0700
-Message-Id: <20220728105005.v2.2.I7d57fb9c4806a8b3fe3501c766b64f4987c271ef@changeid>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-In-Reply-To: <20220728105005.v2.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
-References: <20220728105005.v2.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
+        Thu, 28 Jul 2022 10:51:14 -0700 (PDT)
+From:   Josh Kilmer <srjek2@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, Josh Kilmer <srjek2@gmail.com>
+Subject: [PATCH v2 RESEND] hid: asus: ROG NKey: Ignore portion of 0x5a report
+Date:   Thu, 28 Jul 2022 12:51:11 -0500
+Message-Id: <20220728175111.18769-1-srjek2@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <CAMXW6=97T1tzT=FSyzZN6jBAKgzUDOjqRoH-FMAPLHk1gsD=mA@mail.gmail.com>
+References: <CAMXW6=97T1tzT=FSyzZN6jBAKgzUDOjqRoH-FMAPLHk1gsD=mA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Moragues <moragues@chromium.org>
+On an Asus G513QY, of the 5 bytes in a 0x5a report, only the first byte
+is a meaningful keycode. The other bytes are zeroed out or hold garbage
+from the last packet sent to the keyboard.
 
-Zoglin is a Hoglin Chromebook with SPI Flash reduced from 64MB to 8MB.
-Zoglin is identical to Hoglin except for the SPI Flash.
-The actual SPI Flash is dynamically probed at and not specified in DTS.
+This patch fixes up the report descriptor for this event so that the
+general hid code will only process 1 byte for keycodes, avoiding
+spurious key events and unmapped Asus vendor usagepage code warnings.
 
-Signed-off-by: Bob Moragues <moragues@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Bob Moragues <moragues@google.com>
+Signed-off-by: Josh Kilmer <srjek2@gmail.com>
 ---
+ drivers/hid/hid-asus.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Changes in v2:
-- Fixed Signed-off-by
-- Added reviews / acks
-
- arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-index 6d324ac2dda1..98d09187fc69 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-@@ -13,7 +13,7 @@
+diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
+index 08c9a9a60ae4..b59c3dafa6a4 100644
+--- a/drivers/hid/hid-asus.c
++++ b/drivers/hid/hid-asus.c
+@@ -1212,6 +1212,13 @@ static __u8 *asus_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 		rdesc = new_rdesc;
+ 	}
  
- / {
- 	model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+)";
--	compatible = "google,hoglin", "qcom,sc7280";
-+	compatible = "google,zoglin", "google,hoglin", "qcom,sc7280";
- 
- 	/* FIXED REGULATORS */
++	if (drvdata->quirks & QUIRK_ROG_NKEY_KEYBOARD &&
++			*rsize == 331 && rdesc[190] == 0x85 && rdesc[191] == 0x5a &&
++			rdesc[204] == 0x95 && rdesc[205] == 0x05) {
++		hid_info(hdev, "Fixing up Asus N-KEY keyb report descriptor\n");
++		rdesc[205] = 0x01;
++	}
++
+ 	return rdesc;
+ }
  
 -- 
-2.37.1.455.g008518b4e5-goog
+2.35.1
 

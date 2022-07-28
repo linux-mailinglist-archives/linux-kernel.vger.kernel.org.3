@@ -2,119 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C489583957
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36525583945
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbiG1HPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S233616AbiG1HLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbiG1HP2 (ORCPT
+        with ESMTP id S231701AbiG1HK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:15:28 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B8A59265
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:15:26 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id i205-20020a1c3bd6000000b003a2fa488efdso2048865wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:15:26 -0700 (PDT)
+        Thu, 28 Jul 2022 03:10:58 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8781DD132;
+        Thu, 28 Jul 2022 00:10:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:subject:date:in-reply-to:message-id
-         :mime-version;
-        bh=AaIaSUDCvbW74aHuiO4CJrSTxDz4crTVOTtdXBqcE0U=;
-        b=AWbcHHbX5voPsqXsYc0lPhQLZ7zq2Rbg+WDm4j47FHMHXMKBPLuAwqpaMLT4oN34qS
-         R6hvle5W3TN4f3TJRhkhZx0QPFmqjX98W46tEqeGl2ss33pWsTUsz6ICWmUhi/rNGcp6
-         3eQgOfcF15Ov6JaO/BaW85eAfyYfbTZQOU7lHqyUe9RumDh0CPDhSAXX5tspMaURVBIN
-         hAIUu2L93pP5MlYjVltII27G+d2lmMvuyd0SOq/7MlSZeJoZH16sIqKEMA/AAaXCwDjZ
-         ZO3DlrFDankTYdhuu2q7oCaJtjXdqKBN2swatEdyWuhc0kJ1eFLYTZlGg6qxjCqabDjz
-         qUNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=AaIaSUDCvbW74aHuiO4CJrSTxDz4crTVOTtdXBqcE0U=;
-        b=GQsYVXtWBXqr4lWS08/Fp9zg7uWfTWL7RMvXi0nGVNBFV0HBm4qQhVXZLVoLsuGjrY
-         ghHwgjeEe79BH584H8Ge3phiSdy3OZivDLplUoUV7KP37QFDH4lbQ/QuLE8nlphewNhd
-         CvsyqkEgHia8e4Xe2J/PAOf8bV4Mn6fzk9ECjUwyj8YJU5MelXPgbLdDZM/enTDGjCpN
-         lnC960PKdHgexaKL2NPxOFDX+Ao4B9Vf6S32czJANkqUtcIJSYN7p+wmOkE/gzL/HSRg
-         n3L2g49a6eb1A76KQq1FapnoN5eD9xbOe5Kk83dWaIJWJ0y2yNJBZvInkARbB9MeIF8f
-         sgYw==
-X-Gm-Message-State: AJIora9oYQVUyHFypZQeFlPG3/vTByu5WintXJAC+6qEST5l1O44bg7+
-        ZFaDysAzC/f3ylyKI2Km6AQ+ig==
-X-Google-Smtp-Source: AGRyM1uBQSHcp5qkcijv00Bu7Y7/z1KirWW8lPysYxj5MYnLBGbrvNTmEd6qDPwVfOty8mtSm4vSMw==
-X-Received: by 2002:a05:600c:1289:b0:3a4:8401:5ced with SMTP id t9-20020a05600c128900b003a484015cedmr384142wmd.148.1658992524267;
-        Thu, 28 Jul 2022 00:15:24 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id n186-20020a1ca4c3000000b003a2d87aea57sm4519126wme.10.2022.07.28.00.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 00:15:23 -0700 (PDT)
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
-User-agent: mu4e 1.8.6; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V2 0/3] Add S4 SoC clock controller driver
-Date:   Thu, 28 Jul 2022 09:08:44 +0200
-In-reply-to: <20220728054202.6981-1-yu.tu@amlogic.com>
-Message-ID: <1j8rodhfn9.fsf@starbuckisacylon.baylibre.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658992257; x=1690528257;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=R4lt1h/LtXD8XZCgX0MqvcNhHlPUrXLCVf+2J1eJ5RA=;
+  b=LUl4HB7awGDJO7ZT3dM+uFHqZqZhXyvs8bFO2qZfgODoMVUVv84Vv2F1
+   NB6HxFc5Sfxm8Qb/Xg+5kJevT+3FQMbKgP/msxqtt3a5TSDB9v1V9MLOE
+   XxysGtHps01KqlPSHpxZRWmrWMuuMZM9yO0ucXEziyEKDEmH/+80Bke4O
+   Y=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Jul 2022 00:10:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 00:10:56 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Jul 2022 00:10:55 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Jul 2022 00:10:50 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        <devicetree@vger.kernel.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH] ASoC: qcom: SC7280: Add support for external DMIC bias supply
+Date:   Thu, 28 Jul 2022 12:40:33 +0530
+Message-ID: <1658992233-28372-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Update SC7280 machine driver for enabling external mic bias supply,
+Which is required for villager rev boards.
 
-On Thu 28 Jul 2022 at 13:41, Yu Tu <yu.tu@amlogic.com> wrote:
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+---
+ sound/soc/qcom/sc7280.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-> 1. Add clock controller driver for S4 SOC.
->
-> Yu Tu (3):
->   dt-bindings: clk: meson: add S4 SoC clock controller bindings
->   arm64: dts: meson: add S4 Soc clock controller in DT
->   clk: meson: s4: add s4 SoC clock controller driver
->
-> V1 -> V2: Change format as discussed in the email.
->
-> Link:https://lore.kernel.org/linux-amlogic/20220708062757.3662-1-yu.tu@amlogic.com/
->
->  .../bindings/clock/amlogic,gxbb-clkc.txt      |    1 +
->  MAINTAINERS                                   |    1 +
->  arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |   11 +
->  drivers/clk/meson/Kconfig                     |   15 +
->  drivers/clk/meson/Makefile                    |    1 +
->  drivers/clk/meson/s4.c                        | 4732 +++++++++++++++++
->  drivers/clk/meson/s4.h                        |  296 ++
->  include/dt-bindings/clock/s4-clkc.h           |  146 +
->  8 files changed, 5203 insertions(+)
->  create mode 100644 drivers/clk/meson/s4.c
->  create mode 100644 drivers/clk/meson/s4.h
->  create mode 100644 include/dt-bindings/clock/s4-clkc.h
->
->
-> base-commit: b293bc9286ee21824e93f0fcfed3b78fdfee01e6
+diff --git a/sound/soc/qcom/sc7280.c b/sound/soc/qcom/sc7280.c
+index da7469a..6404e94 100644
+--- a/sound/soc/qcom/sc7280.c
++++ b/sound/soc/qcom/sc7280.c
+@@ -33,6 +33,7 @@ struct sc7280_snd_data {
+ 	struct snd_soc_jack hdmi_jack;
+ 	bool jack_setup;
+ 	bool stream_prepared[LPASS_MAX_PORTS];
++	struct regulator *vdd_supply;
+ };
+ 
+ static void sc7280_jack_free(struct snd_jack *jack)
+@@ -345,6 +346,24 @@ static int sc7280_snd_startup(struct snd_pcm_substream *substream)
+ 	return ret;
+ }
+ 
++static int sc7280_dmic_micbias(struct snd_soc_dapm_widget *w,
++				struct snd_kcontrol *kcontrol, int event)
++{
++	struct snd_soc_card *card = w->dapm->card;
++	struct sc7280_snd_data *data = snd_soc_card_get_drvdata(card);
++	int ret = 0;
++
++	switch (event) {
++	case SND_SOC_DAPM_PRE_PMU:
++		ret = regulator_enable(data->vdd_supply);
++		break;
++	case SND_SOC_DAPM_POST_PMD:
++		ret = regulator_disable(data->vdd_supply);
++		break;
++	}
++	return ret;
++}
++
+ static const struct snd_soc_ops sc7280_ops = {
+ 	.startup = sc7280_snd_startup,
+ 	.hw_params = sc7280_snd_hw_params,
+@@ -356,6 +375,7 @@ static const struct snd_soc_ops sc7280_ops = {
+ static const struct snd_soc_dapm_widget sc7280_snd_widgets[] = {
+ 	SND_SOC_DAPM_HP("Headphone Jack", NULL),
+ 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
++	SND_SOC_DAPM_MIC("PMIC BIAS", sc7280_dmic_micbias),
+ };
+ 
+ static int sc7280_snd_platform_probe(struct platform_device *pdev)
+@@ -389,6 +409,10 @@ static int sc7280_snd_platform_probe(struct platform_device *pdev)
+ 		link->ops = &sc7280_ops;
+ 	}
+ 
++	data->vdd_supply = devm_regulator_get(dev, "vdd-dmic-bias");
++	if (IS_ERR(data->vdd_supply)
++		return PTR_ERR(data->vdd_supply);
++
+ 	return devm_snd_soc_register_card(dev, card);
+ }
+ 
+-- 
+2.7.4
 
-Please don't post until you have addressed *ALL* the comments from the
-previous version.
-
-At first glance, I can see that this is still a single driver for
-what is obviously 2 controllers with 2 register spaces. Simple comments
-like the "<< 2" in the register declaration have not been addressed either.
-
-Seeing that, I have not reviewed this version further.
-I won't until all the comments from v1 are either addressed or answered.
-
-Regards
-Jerome

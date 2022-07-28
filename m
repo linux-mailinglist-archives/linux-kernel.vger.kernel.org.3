@@ -2,73 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57393583C78
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75D4583C7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbiG1KtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S236426AbiG1Kta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236532AbiG1Ks4 (ORCPT
+        with ESMTP id S236506AbiG1KtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:48:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DAC291;
-        Thu, 28 Jul 2022 03:48:52 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AAA976601B41;
-        Thu, 28 Jul 2022 11:48:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659005331;
-        bh=Rfxcg0iEQFXBWxGeTeIp30bpOBIQldLdjIXrXh76rkw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=h0cQQ3Cg7rssjGPUCBqL5TZ8M89UkaL4FM5h6WwF+d68/KFa2P+OqQ9cu4KRkG1mF
-         ONf5jMjK7LmQk69AalHqV6jw4aNiFA9+fCC/fpkh7jLmtPRBaWDB+ExSVdRzmSATqd
-         bc3y5H4/FjPT+cDUjUq2mOfu0cbYVV5wd6sPasVpKcgvibhSqDoG4qlP821NTb6eKW
-         uRQ/30ExIE2xmOTlGFKPcYHkksZwVWdngzINr5GWgvC1SauO8PBogBTSsOHrUZnH1k
-         wH6so/lk4PQQu/gND4YHMZJSE9cgo16ipk/jb4pVR3W5Wx+HSCg2AzGhztnyfyAnyn
-         w7Sqw5oqN3DNQ==
-Message-ID: <de66908a-76cd-db18-82d3-6125ddb6b798@collabora.com>
-Date:   Thu, 28 Jul 2022 12:48:48 +0200
+        Thu, 28 Jul 2022 06:49:21 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BE81CB2F;
+        Thu, 28 Jul 2022 03:49:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w5so1631030edd.13;
+        Thu, 28 Jul 2022 03:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1netyXqxN8LoQutKcJoVO+jDbqbk0SXq/iCrpa5tJis=;
+        b=S7iooPA9SW/rWe0Vw/8nRSfGfhPN7ZrTceGOAkLKY+o+YF5WeIRcD9IleGdX3BMyiA
+         hnh6NoDGtjgWJ7THpfiJBi38l0OukqxI3p90Lh/4juvvPZfZ/kOvRGkcLX9SWtaHrYhw
+         ONZDPRYwcQ6PGMpuUh35R+vPkbNxT4k+OD7a/BUX3V1G1HuQaEqTXLlis0TXEBgaQzdQ
+         KVF9wYu3GPwx/Ky8EuuxSPfxcsypHGgOilbBtalA8TURf6y0nTtGatyUjkPxmoIxSODA
+         VTj0OQDfdi2SekzMVglNd3m79Kb7uc/8uvhczq0q0rGhFdQaSAWXcG2pJcyzBz6XHmpB
+         8lsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1netyXqxN8LoQutKcJoVO+jDbqbk0SXq/iCrpa5tJis=;
+        b=h1kI9U12dibW/w03viVLUdnH/QJIZyaHKrEXj3Bad6paLzs0EM/8BIOk4dowI1URbe
+         09IBtnKaPwQBx5i7syg+iyBoFPwkWpFsLCt/Eoxo0qCIaxFQo6TNn/P5kWd3jayepKsJ
+         fGtGmHX4m9PXrBwdIhbd/TdYdnYzBWL1oiY2/+y1eLMJrvwqOsVxklYYNQBwVa50D5iC
+         qHoDDQbVOklSKmIHHQQDPYGXpb7EUSZttgLQWPfDp3B29xr2AU+7/VJ8PmG2y9ViN1Ut
+         8m1ppLWUPmrOdXun0Rt2R20kL7PBvD7spCQmRsI2jYCPH8H4FbsBP0wtd7TTYM3Igab2
+         WuUw==
+X-Gm-Message-State: AJIora/bA1GbS/dP1ZMorRUR9s/2vADeeWxNHvxz3kbN+ZIQ5qHjJO1O
+        sIVFHuqLwucENtutq75Yf+I=
+X-Google-Smtp-Source: AGRyM1s2Tyc60OcmMpIwUQW6VJAW25PxwvECWEIpLZdp9ffQnRO3HXtDAaFK8j5PDJ1FaC37ERLEQA==
+X-Received: by 2002:a05:6402:1859:b0:43c:b0db:3f9a with SMTP id v25-20020a056402185900b0043cb0db3f9amr7638223edy.120.1659005359007;
+        Thu, 28 Jul 2022 03:49:19 -0700 (PDT)
+Received: from [192.168.2.202] (pd9ea36f8.dip0.t-ipconnect.de. [217.234.54.248])
+        by smtp.gmail.com with ESMTPSA id w7-20020aa7d287000000b0043bc19efc15sm446272edq.28.2022.07.28.03.49.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 03:49:18 -0700 (PDT)
+Message-ID: <5ec2dae9-39ca-f3d3-f9ae-11ad9fb59f2f@gmail.com>
+Date:   Thu, 28 Jul 2022 12:49:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/2] pinctrl: mediatek: add mt8188 driver
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
 Content-Language: en-US
-To:     Hui Liu <hui.liu@mediatek.com>, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        jianguo.zhang@mediatek.com, zhiyong.tao@mediatek.com,
-        sean.wang@mediatek.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220728084951.22102-1-hui.liu@mediatek.com>
- <20220728084951.22102-3-hui.liu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220728084951.22102-3-hui.liu@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
+ <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
+ <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
+ <2e522bcd-5d55-e87f-126c-514f5edaa560@gmail.com>
+ <53a602e2-0590-6c6a-597b-fd55faa3a4ab@linaro.org>
+ <acd7b231-3167-e35c-5cdf-8b3127a7d710@gmail.com>
+ <95cbcda8-d1bc-376c-b338-92d1b923f04a@linaro.org>
+ <fe2b820b-9f3b-814b-4792-e6685b13ede6@gmail.com>
+ <d8510e53-673a-7913-32be-1be691a79511@linaro.org>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <d8510e53-673a-7913-32be-1be691a79511@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/07/22 10:49, Hui Liu ha scritto:
-> From: "Hui.Liu" <hui.liu@mediatek.com>
+On 7/28/22 12:38, Krzysztof Kozlowski wrote:
+> On 28/07/2022 12:25, Maximilian Luz wrote:
+>> On 7/28/22 09:48, Krzysztof Kozlowski wrote:
+>>
+>> [...]
+>>
+>>>
+>>> For example like tegra_bpmp_get() is doing.
+>>
+>> But tegra_bpmp_get() can also not differentiate whether the supplier driver is
+>> ever going to be successfully probed or not. I'm not sure you can ever really
+>> solve that. The only thing it does in addition is check whether the phandle and
+>> device is there. Or do you mean those not being present by "broken"? That's a
+>> point I agree should be improved with SCM.
 > 
-> Add pinctrl driver support for MediaTek SoC mt8188.
+> Yes, at least it checks if phandles points to proper device and device
+> is there. That's what we want.
 > 
-> Signed-off-by: Hui.Liu <hui.liu@mediatek.com>
+> We are not solving here case of providing being in a module which never
+> gets loaded (thus endless EPROBE_DEFER). Such case is ok.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Got it, thanks for that clarification!
 
+Regards,
+Max

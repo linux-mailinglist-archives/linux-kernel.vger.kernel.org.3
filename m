@@ -2,116 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0891C583798
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DA158378D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236174AbiG1Def (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 23:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
+        id S234197AbiG1DeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 23:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbiG1DeY (ORCPT
+        with ESMTP id S232849AbiG1DeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 23:34:24 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26165A3D1;
-        Wed, 27 Jul 2022 20:34:22 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id o3so691914ple.5;
-        Wed, 27 Jul 2022 20:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=FCyuMS+MYtaXjHcIxmL31JDLi03JrIO2qsiSj9P1Eho=;
-        b=CqnwOOBEEvCpmhikYJ3JqR5kKGQKEcHIAFmX3WraUqqWfCHTg/3/ho7b2LG1xtN6MW
-         SAxT0lRJ3uJhj3jneu/Bb5Rq+j8+masl2huLxdBwc1ZWItOLd3VHmBpiZ6+r337LYEsh
-         VKMdCjVr+QKj09HmSOEQuIy0QwX8x4uU4ZK5L2h32arGX2BkcYJ8k3Pdarh/6HSxsxmS
-         puUDL9HUL7zA4lHFxfhJQFmFxuGW27f/XBUT6tN3slrmNzg7IgHISrFG0oJA0BVXiOwL
-         NZjSgXdw8mkvvdYhBwZAejxfv+tgU2Fg29/7c10O/Jr8vlAFk1JgnUvEU4Lw8WJ2u7Pf
-         6MOA==
+        Wed, 27 Jul 2022 23:34:15 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8848D5A3D1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:34:14 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id z1-20020a6b6501000000b0067c6495c03dso186776iob.8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:34:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=FCyuMS+MYtaXjHcIxmL31JDLi03JrIO2qsiSj9P1Eho=;
-        b=4xVKEhXsjWIBdLNsQrsdNGqbbnBK5W4kLWuFUAvuRvIrpOEml+mLPYbEsVCW6ckFm1
-         X4HIN7sOpnfkg0hVqQhwU4U4f2YJwjwbqhj5A7ZIR/5AB/HMNnR59M6a6riCqOl9l2xb
-         vnAGH/C/nWwMEFDq3lRRXH6v6EvvsetIrqsSsw+Tmp+fg5Q0vepPJmgZyBoXipM8Zx1N
-         ibsMUiBtnscL5QpLu4kkilto2zpbxStTYhAC+36O894MnMa7Qzs3RkEjbkXLUNoHaoUh
-         mlVHTG0VczEVrDbBi5iKMeo0nwwiC/v5UrWW8TZ3yPbdTEsxXMdaIc6BOqV2EDr5lWdb
-         h9Ug==
-X-Gm-Message-State: AJIora+rF62ypI2f4dxXA5/anny9kd0sARqrqGNdnCOXUFUt/muJkNUo
-        6w6MqhzW0xECj1xMGj99Xds=
-X-Google-Smtp-Source: AGRyM1u09bL67UJ4D22OsPriM3aYVau9eNR+g2LJANdPbWk7JIFHDJdMAaRCIPQk8nM62BjKho6bVw==
-X-Received: by 2002:a17:902:900c:b0:16a:4521:10fd with SMTP id a12-20020a170902900c00b0016a452110fdmr24586283plp.75.1658979262231;
-        Wed, 27 Jul 2022 20:34:22 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-54.three.co.id. [116.206.12.54])
-        by smtp.gmail.com with ESMTPSA id j5-20020a17090a318500b001f035bfcc53sm2582722pjb.18.2022.07.27.20.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 20:34:21 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7AB39104A8D; Thu, 28 Jul 2022 10:34:16 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH 3/3] Documentation: powerpc: add elf_hwcaps to table of contents
-Date:   Thu, 28 Jul 2022 10:33:33 +0700
-Message-Id: <20220728033332.27836-4-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220727220050.549db613@canb.auug.org.au>
-References: <20220727220050.549db613@canb.auug.org.au>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=MNz55KaaGxLrlaqs1U3qM+7ivKwtanb88ZyuIDPI5Mo=;
+        b=fJOblq6jW4330MDeCZeBI90Egfzys86BaagXuzP6udGoYICi53kX+MDRUzm9rqzjT1
+         072qzx7Pz7xg0/hgIjihVqbN3Abp7oONu8W0/p1XkvhM5XUOJTKqEBv8fD81xcp1r7Dc
+         NxNioNj/D2L9AwMKIsz6wMpiBBT1W+JdWNN7ekfgXQide9h6tNDwXzFDX25vBWUjcM2/
+         Gwerfej8dcblyc1SCHFQyR58Xw+49Mx5ew/J6HVVWBMdBCEN2z5zRl468/PWW7IOFQU9
+         QZRYIT7uOFso9q0Blh7gSXhPN+IP8fR1gAmR6cQ+JwO5OshHIMzw+LpZ7L5PUKY10sQB
+         SROg==
+X-Gm-Message-State: AJIora+nSafguUf7u5PSAaWyArOXl+QSWxrNVRUrIX2d+/ftR4STL9ct
+        1jfOOXrpCWhA9Vko8yHA3+GgIW09n/2TiPpvsWeq56V2v0ry
+X-Google-Smtp-Source: AGRyM1u7ngBipM/bsbjwlGBGsx6Kdyeri/FeEmxIk8pNogVIQ9MyEKu/P4gFHS8RL0AVTUoUFPBIfFOM/UNx1GeFevZ0dmdMj1Ta
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:168d:b0:67c:44c3:9ba5 with SMTP id
+ s13-20020a056602168d00b0067c44c39ba5mr8952708iow.190.1658979253272; Wed, 27
+ Jul 2022 20:34:13 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 20:34:13 -0700
+In-Reply-To: <20220728031520.554-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000014c7ad05e4d535fc@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in __post_watch_notification
+From:   syzbot <syzbot+03d7b43290037d1f87ca@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-elf_hwcaps documentation is missing from table of contents at index.rst,
-hence triggers Sphinx warning:
+Hello,
 
-Documentation/powerpc/elf_hwcaps.rst: WARNING: document isn't included in any toctree
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Add the documentation to the index to fix the warning.
+Reported-and-tested-by: syzbot+03d7b43290037d1f87ca@syzkaller.appspotmail.com
 
-Link: https://lore.kernel.org/linuxppc-dev/20220727220050.549db613@canb.auug.org.au/
-Fixes: 3df1ff42e69e91 ("powerpc: add documentation for HWCAPs")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/powerpc/index.rst | 1 +
- 1 file changed, 1 insertion(+)
+Tested on:
 
-diff --git a/Documentation/powerpc/index.rst b/Documentation/powerpc/index.rst
-index 0f7d3c495693e0..85e80e30160bb6 100644
---- a/Documentation/powerpc/index.rst
-+++ b/Documentation/powerpc/index.rst
-@@ -17,6 +17,7 @@ powerpc
-     dawr-power9
-     dscr
-     eeh-pci-error-recovery
-+    elf_hwcaps
-     elfnote
-     firmware-assisted-dump
-     hvcs
--- 
-An old man doll... just what I always wanted! - Clara
+commit:         e0dccc3b Linux 5.19-rc8
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=145fb2c2080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cfd2f9ae77f1f719
+dashboard link: https://syzkaller.appspot.com/bug?extid=03d7b43290037d1f87ca
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=124486de080000
 
+Note: testing is done by a robot and is best-effort only.

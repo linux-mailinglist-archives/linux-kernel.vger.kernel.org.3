@@ -2,90 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A776583DEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B7F583DF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236878AbiG1LqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 07:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S237022AbiG1LqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 07:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236175AbiG1LqB (ORCPT
+        with ESMTP id S237002AbiG1LqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 07:46:01 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131CABF64;
-        Thu, 28 Jul 2022 04:46:01 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id e15so1848241edj.2;
-        Thu, 28 Jul 2022 04:46:01 -0700 (PDT)
+        Thu, 28 Jul 2022 07:46:14 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CF15140D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:46:12 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id q14so1193614iod.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:46:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jb4sTwGYudzeMZpzODVtElAjSD+BHCr3smpqZiVPtPg=;
-        b=F0dIY41MUWVtomDbuOASiczdY4epsBOlIPUMk+Zx+JfWceMdB8Z6+w2BKeCMmMIT0J
-         dqskrP7CEUTTxjXsiJe74b5dSNN1Hdy2WM/V/YATqFyOZ0MZDstsQ1iingE5DUyZyBJ8
-         J3dGQjsNcQY9BiK+Bjkr7Zpy2U1B9x5/pWA1p4R0jzhU/eCZOeEyhlbp7KFQYcrf7ySF
-         BT6orMmij+SjdA+ZCXzw8J7dAEbrCu8K3rR0fXVkrvw18iIRlFKqYXe4NoDkl/MDiS+7
-         I+PH3+2DM++iUMdB6prHX+c3LSakjSgYy6KwcNGjEfNDqqukpTiRZWigsFEpnWQ91fV9
-         9svA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZTAI4NBWGTQ5h3Og/iXOFE6+j1LyXYJBHvMW6aUVVzs=;
+        b=3yuVzJ0kJ50eg55Qut9vgq+oU18lNCriJe7K+l/NMy1M1TeJu/Cvgm2OSsSllF4CtD
+         7yLRDb3+hTj7inXwlwwyor84uWesrJQdHqh+s3ypreV2jOUH04k7o9JDQneNozHUjMne
+         nIwpEFe0sMjHsKBY94w/2VZhwckL4ko5Mf7mxCNCMogbU47WIemkLqdSUVq+MhCCDdeB
+         E+4lniUGs1Jq8dnleXXg/cO25yiptnB1cXcDtUTFnUZMnLCAWDPXtbxAqIJocfFDmnMt
+         ljCzrjDtUkho540gcPKjgZhsK3Qx247NMazeZhqYcqVjrMW+LboIngd3b7vTW8EIM1Mf
+         c7Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jb4sTwGYudzeMZpzODVtElAjSD+BHCr3smpqZiVPtPg=;
-        b=koxIRPdrU4QcbD0kxr2MN9GWOhyD5CG+72GEsNNLcCRUo5GMEl9/Kq/96AL/mLqI2r
-         B5gE/WDk7Uv81foUahVPxxDR5BDrXZistSUe4IKDwwZjDkbTp7YBNfVg5JbzBrIyRbnc
-         uoEPGFzObnaZwev0vTXiU01aOUGyU5G6hWli6hMHh1R8LMHeVqLu9gCY5JE0BLtKUKTa
-         QAi9nrRya2SZjBuhj7anqv7bZIJO8UVF7A9p94XLxS0+NjF9CdK5iiWZbkqWOQymjpZE
-         +0cg2zkCw0N5PyF3amHoHVpjoOFaQ+CE7u+utfmgE9eB3EnlhXa6Ao9oNjy5nkCUpmdh
-         5GZQ==
-X-Gm-Message-State: AJIora9rgCiKCkOi0NcFg35Cj8DGLznrx0b3hNU4lbvgDi4ApmZ6OuIn
-        rP3nHFwuOem5+fn1FJJ/BBg=
-X-Google-Smtp-Source: AGRyM1vrOHrrFrYpoR24V9fFtx+QZaGulCsCxDHPCEgwzqdNXtWLr8jrUU1xnICMv86CFeggnRIOBQ==
-X-Received: by 2002:aa7:db8a:0:b0:43b:75b1:92e9 with SMTP id u10-20020aa7db8a000000b0043b75b192e9mr27041815edt.223.1659008759613;
-        Thu, 28 Jul 2022 04:45:59 -0700 (PDT)
-Received: from [10.31.0.4] ([37.120.217.162])
-        by smtp.gmail.com with ESMTPSA id u18-20020a1709061db200b0072b2ffc662esm324560ejh.156.2022.07.28.04.45.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 04:45:59 -0700 (PDT)
-Message-ID: <b018e909-e371-fd57-2790-9f0a37b63f29@gmail.com>
-Date:   Thu, 28 Jul 2022 13:45:57 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZTAI4NBWGTQ5h3Og/iXOFE6+j1LyXYJBHvMW6aUVVzs=;
+        b=cCdKkUBS8S2plg0l1Y7FZZwJkvT8o35kwHYz34P/eaWBUhI3gKaPrCSYbEDb+ZK1t0
+         C9j1Xu3xULs9Pr/ahPtEvKNtaskD8r+pSkY2Qt9T4FbWkBi9oBDZGZIovalqvH0A9BwL
+         Tj6FcTBtG9BUXmVwF1CYjA26ksS9B34+b08Bif9c4djJLxe8gtM9s3LWDyidcxCb6bEy
+         Rdx87wycbuFyGXuBOm7UeNO5K8NM7++tGnhGfpvXkW7WCak+zPNIGD+lZFHBwQoAsO2a
+         267kSacD6gqVHHFsZEFiYDgcKe2KjtSfDYGzTLX0zRBkik2ZErbaYU67BQOtF4m9O2jr
+         znVg==
+X-Gm-Message-State: AJIora8XK8xY5zbpLhNRXDaqVQBXfqYBHUwl749WpZiBDEUFplHvX/73
+        PNOHgFw1Zixx2K75SU3NlI3u+HCNHSF/I5bUkP15jw==
+X-Google-Smtp-Source: AGRyM1ugrvrSsb7yRxRfEHxgKZdj4iicx5noLl7XxjN5iOiB+xVZH44oPJIYfkMBjU1FtW9yPjkMrkbXYKHpcaVHK1M=
+X-Received: by 2002:a05:6638:2486:b0:33f:85cb:f387 with SMTP id
+ x6-20020a056638248600b0033f85cbf387mr10458707jat.247.1659008771414; Thu, 28
+ Jul 2022 04:46:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <20220726143005.wt4be7yo7sbd3xut@bogus>
- <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
- <20220726154138.74avqs6iqlzqpzjk@bogus>
- <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
- <20220728082330.w4ppmzvjaeywsglu@bogus>
- <4e777590-616a-558a-031e-3ef1f1e492b4@gmail.com>
- <20220728112150.hs5el6wufljeoqyy@bogus>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20220728112150.hs5el6wufljeoqyy@bogus>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220728063856.72705-1-zhangjiachen.jaycee@bytedance.com> <CAJfpegsAf=VzvC=ej+60bHgK7zOoKwQehabTAmvNYQPCQwmFKA@mail.gmail.com>
+In-Reply-To: <CAJfpegsAf=VzvC=ej+60bHgK7zOoKwQehabTAmvNYQPCQwmFKA@mail.gmail.com>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Date:   Thu, 28 Jul 2022 19:46:00 +0800
+Message-ID: <CAFQAk7jW9ZpSURW4+h9SZNNtqXqq65LxsXrtheaijk4HFzbqcg@mail.gmail.com>
+Subject: [PATCH] ovl: only WARN_ON_ONCE() if dentry is NULL in ovl_encode_fh()
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Hongbo Yin <yinhongbo@bytedance.com>,
+        Tianci Zhang <zhangtianci.1997@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,43 +66,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 13:21, Sudeep Holla wrote:
-> On Thu, Jul 28, 2022 at 12:05:15PM +0200, Maximilian Luz wrote:
->> On 7/28/22 10:23, Sudeep Holla wrote:
-> 
-> [...]
-> 
->>> Worst case I am fine with that as this needs to be one of and future
->>> platforms must get their act right in designing their f/w interface.
->>
->> Again, I fully agree with you that this situation shouldn't exist. But
->> reality is sadly different.
->>
-> 
-> As I mentioned I don't have final authority to say yes or no to DT bindings.
-> I have expressed my opinion and I thing allowing this to be generic via DT
-> bindings gives no incentive to get the firmware story right. Hence I am happy
-> to see this as one-off driver change and then we more changes are added to
-> the driver or similar drivers get added in the future, we have a change to
-> demand what action has been taken to fix the firmware story.
-> 
-> Just adding DT support(which I disagree) will make future platform to just
-> use it and not get improvements in areas of discovery or query from the
-> firmware.
+On Thu, Jul 28, 2022 at 4:57 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+>
+> On Thu, 28 Jul 2022 at 08:39, Jiachen Zhang
+> <zhangjiachen.jaycee@bytedance.com> wrote:
+> >
+> > Some code paths cannot guarantee the inode have any dentry alias. So
+> > WARN_ON() all !dentry may flood the kernel logs.
+> >
+> > For example, when an overlayfs inode is watched by inotifywait (1), and
+> > someone is trying to read the /proc/$(pidof inotifywait)/fdinfo/INOTIFY_FD,
+> > at that time if the dentry has been reclaimed by kernel (such as
+> > echo 2 > /proc/sys/vm/drop_caches), there will be a WARN_ON(). The
+> > printed call stack would be like:
+> >
+> >     ? show_mark_fhandle+0xf0/0xf0
+> >     show_mark_fhandle+0x4a/0xf0
+> >     ? show_mark_fhandle+0xf0/0xf0
+> >     ? seq_vprintf+0x30/0x50
+> >     ? seq_printf+0x53/0x70
+> >     ? show_mark_fhandle+0xf0/0xf0
+> >     inotify_fdinfo+0x70/0x90
+> >     show_fdinfo.isra.4+0x53/0x70
+> >     seq_show+0x130/0x170
+> >     seq_read+0x153/0x440
+> >     vfs_read+0x94/0x150
+> >     ksys_read+0x5f/0xe0
+> >     do_syscall_64+0x59/0x1e0
+> >     entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >
+> > So let's replace WARN_ON() with WARN_ON_ONCE() to avoid kernel log
+> > flooding.
+>
+> Better just drop the WARN_ON() completely in that case, since it's a
+> normally occurring condition.
+>
+> Thanks,
+> Miklos
 
-Okay, that is a good point. Although it's probably debatable how much
-control we have over what goes on with WoA devices.
+OK. I will send the v2 patch later.
 
-Would something like this work for you: Add a compatible for the TrEE
-interface (e.g. qcom,sc8180x-tee) but not for the specific apps running
-in that and then instantiate the app-specific sub-devices from that. We
-would still have to hard-code app-names in the driver (i.e. shift the
-problem from DT to driver and potentially create soc-specific lists),
-but they're no longer in DT (again, I'm not a particular fan of this but
-I could live with that, if needed).
-
-We can then look for a solution for apps that need to be manually loaded
-or vendor/device specific apps once those becomes an issue.
-
-Regards,
-Max
+Thanks,
+Jiachen

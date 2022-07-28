@@ -2,380 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2183583973
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AD3583979
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234383AbiG1HZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S234412AbiG1H03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbiG1HZE (ORCPT
+        with ESMTP id S232566AbiG1H00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:25:04 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B965FACC
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:25:00 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id o15so1914617yba.10
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oqbTPnu/pF8QmgHbRP8i1nrgyN4MT+vnZXxtlSHsiqQ=;
-        b=VewyJ/sVeC7InlsSQY+xSUTa3nYrK8MeWNU/9DRxadnqc/Klin7RZ7b71WD6zlS2qb
-         /nybS4oInzn2EGTy+/E02X8xhsa0HA8nTuSZsctgnQ+XmmvHvZFTsKVOaosYzrNAAcxS
-         FPWCC72qMO2O8aTQJmy/lY8e/IGlEDhNGyMgetbi5iHGwmFKZCnuNm0+LGYGOVFHoGga
-         KXX4Rx6hCU8wMcSV/LR80VISzczb6RuvO2SEpRdDMQjBn64uU2o6JPkG3umiAD58iUKP
-         jb2zQtO7XY0861h1sKzxtzaxxScD6uMiCvjF2N4V87x5YxxrY0WE6FzcefRo0+wkCck4
-         Wr2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oqbTPnu/pF8QmgHbRP8i1nrgyN4MT+vnZXxtlSHsiqQ=;
-        b=Ur7PaHXbv1Ox/Ny08BvAqCt4jhJU+BmM9IgNScS5j1N2fJtwZ48txPOuDohrCR5tH8
-         3O53DKYCImIvVXvMl3lLL+vTS4RaIzlRb5EJu3Z2yujOaU+BMzWB73C1c3KWqqLd6IiX
-         MK29JKQZtAEUFrDSjTZ6OUYR5zFFrEy3pP6A+2vYuyKFpF54K6+3KvupGbiqAIpE7t6v
-         hwSPoPERygUkNIn0OdJ6USNyfwl0yAneRLSf2ZGNCa14zXQpl4IxcHsc4qMryDloQvTp
-         3GpNbKEAexyQylNYowWmEeR3O8z27IZA3uKwXkbkmZ3q8evYrUF6jwSET0b33JDMfEsM
-         rgMg==
-X-Gm-Message-State: AJIora9oQ7wX7c32ZaJ0eQclx2zQOpgBlpKzSwX/9bCYWr6Xd+eh+rTI
-        JewZcox7OWg/EHjbuQIf70myZQq4MizwHUf219R8nA==
-X-Google-Smtp-Source: AGRyM1tUJyUp0XN9AAL3dwtyYS4a1TOP3kLFuLBQARCl6OlLfC+vDA9Li4tyxFcSLMMsGMGXivCQSd3FWYtWgFVlFH0=
-X-Received: by 2002:a25:ad16:0:b0:671:75d9:6aad with SMTP id
- y22-20020a25ad16000000b0067175d96aadmr7997719ybi.143.1658993099072; Thu, 28
- Jul 2022 00:24:59 -0700 (PDT)
+        Thu, 28 Jul 2022 03:26:26 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8967352E7A;
+        Thu, 28 Jul 2022 00:26:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658993185; x=1690529185;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=g5kqmchM6HB+PXC+MCy/bxSNFEjJ81QvgGnZA2putgI=;
+  b=KPKaIbikPVqAgZhcIufZn9OVfVWWh4JMn6dDFsT/0XLnPNx182wdhYU6
+   LCAdyLXdXsOTmUN1FFfjR7nCSp74KvDNJnGrayCLylz8clYr389LSk2B+
+   f/iIiwIOAJ0v5m7Ke+94MwkyimGuxLKmaxijTmq/z8eI1aViA5wiOo28A
+   vAGRNS/dlxk3nMN0sCmW9p1z13O4zu1Xk7kQ6m5dtEi+MAk6aEofvys1F
+   nwsk3v8A4kKm6q86lTDy7dvytOHrE1xbgEwhph322nK21R/s705JQX8i5
+   ReeIamLGIitvpQzsp+tiQCu7yUXFj2Zb9GAglSnXnAwgaC5emLdsDbhG7
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="289639419"
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="289639419"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 00:26:25 -0700
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="659590683"
+Received: from maurocar-mobl2.ger.corp.intel.com (HELO maurocar-mobl2) ([10.249.36.196])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 00:26:21 -0700
+Date:   Thu, 28 Jul 2022 09:26:18 +0200
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     stable@vger.kernel.org,
+        Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= 
+        <thomas.hellstrom@linux.intel.com>, linux-media@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Matthew Auld <matthew.auld@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v2 06/21] drm/i915/gt: Batch TLB
+ invalidations
+Message-ID: <20220728092618.050969fc@maurocar-mobl2>
+In-Reply-To: <20220728083232.352f80cf@maurocar-mobl2>
+References: <cover.1657800199.git.mchehab@kernel.org>
+        <9f535a97f32320a213a619a30c961ba44b595453.1657800199.git.mchehab@kernel.org>
+        <567823d5-57ba-30db-dd64-de609df4d8c5@linux.intel.com>
+        <20220727134836.7f7b5fab@maurocar-mobl2>
+        <d2337b73-ae34-3dd3-afa3-85c77dc2135e@linux.intel.com>
+        <20220728083232.352f80cf@maurocar-mobl2>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220727234241.1423357-1-imran.f.khan@oracle.com>
-In-Reply-To: <20220727234241.1423357-1-imran.f.khan@oracle.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 28 Jul 2022 09:24:22 +0200
-Message-ID: <CANpmjNNmD9z7oRqSaP72m90kWL7jYH+cxNAZEGpJP8oLrDV-vw@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm/kfence: Introduce kernel parameter for selective
- usage of kfence.
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     glider@google.com, dvyukov@google.com, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 01:43, Imran Khan <imran.f.khan@oracle.com> wrote:
->
-> By default kfence allocation can happen for any slub object, whose size
+On Thu, 28 Jul 2022 08:32:32 +0200
+Mauro Carvalho Chehab <mauro.chehab@linux.intel.com> wrote:
 
-s/slub object/slab object/
+> On Wed, 27 Jul 2022 13:56:50 +0100
+> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+> 
+> > > Because vma_invalidate_tlb() basically stores a TLB seqno, but the
+> > > actual invalidation is deferred to when the pages are unset, at
+> > > __i915_gem_object_unset_pages().
+> > > 
+> > > So, what happens is:
+> > > 
+> > > - on VMA sync mode, the need to invalidate TLB is marked at
+> > >    __vma_put_pages(), before VMA unbind;
+> > > - on async, this is deferred to happen at ppgtt_unbind_vma(), where
+> > >    it marks the need to invalidate TLBs.
+> > > 
+> > > On both cases, __i915_gem_object_unset_pages() is called later,
+> > > when the driver is ready to unmap the page.    
+> > 
+> > Sorry still not clear to me why is the patch moving marking of the need 
+> > to invalidate (regardless if it a bit like today, or a seqno like in 
+> > this patch) from bind to unbind?
+> > 
+> > What if the seqno was stored in i915_vma_bind, where the bit is set 
+> > today, and all the hunks which touch the unbind and evict would 
+> > disappear from the patch. What wouldn't work in that case, if anything?  
+> 
+> Ah, now I see your point.
+> 
+> I can't see any sense on having a sequence number at VMA bind, as the
+> unbind order can be different. The need of doing a full TLB invalidation
+> or not depends on the unbind order.
+> 
+> The way the current algorithm works is that drm_i915_gem_object can be
+> created on any order, and, at unbind/evict, they receive a seqno.
+> 
+> The seqno is incremented at intel_gt_invalidate_tlb():
+> 
+>     void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno)
+>     {
+> 	with_intel_gt_pm_if_awake(gt, wakeref) {
+> 		mutex_lock(&gt->tlb.invalidate_lock);
+> 		if (tlb_seqno_passed(gt, seqno))
+> 				goto unlock;
+> 
+> 		mmio_invalidate_full(gt);
+> 
+> 		write_seqcount_invalidate(&gt->tlb.seqno);	// increment seqno
+> 		
+> 
+> So, let's say 3 objects were created, on this order:
+> 
+> 	obj1
+> 	obj2
+> 	obj3
+> 
+> They would be unbind/evict on a different order. On that time, 
+> the mm.tlb will be stamped with a seqno, using the number from the
+> last TLB flush, plus 1.
+> 
+> As different threads can be used to handle TLB flushes, let's imagine
+> two threads (just for the sake of having an example). On such case,
+> what we would have is:
+> 
+> seqno		Thread 0			Thread 1
+> 
+> seqno=2		unbind/evict event
+> 		obj3.mm.tlb = seqno | 1
+> seqno=2		unbind/evict event
+> 		obj1.mm.tlb = seqno | 1
+> 						__i915_gem_object_unset_pages() 
+> 						called for obj3, TLB flush happened,
+> 						invalidating both obj1 and obj2.
+> 						seqno += 2					
+> seqno=4		unbind/evict event
+> 		obj1.mm.tlb = seqno | 1
 
-> is up to PAGE_SIZE, as long as that allocation is the first allocation
-> after expiration of kfence sample interval. But in certain debugging
-> scenarios we may be interested in debugging corruptions involving
-> some specific slub objects like dentry or ext4_* etc. In such cases
-> limiting kfence for allocations involving only specific slub objects
-> will increase the probablity of catching the issue since kfence pool
-> will not be consumed by other slub objects.
+cut-and-paste typo. it should be, instead:
 
-Have you seen this happen? The "skip already covered allocations"
-feature should take care of most of these issues filling up the pool.
-Have you tried adjusting kfence.skip_covered_thresh?
+ 		obj2.mm.tlb = seqno | 1
 
-Or put another way: with your patch, have you been able to debug an
-issue you haven't before? Typically this is not how KFENCE is meant to
-be used if you know there's an issue; at that point your best bet is
-to build a KASAN kernel and boot that. Of course that may not always
-be possible, but there are other knobs you can tweak
-(kfence.sample_interval, kfence.skip_covered_thresh).
 
-Your patch only makes sense in a "manual debugging" scenario, and not
-quite what KFENCE was designed for (deployment at scale).
+> 						__i915_gem_object_unset_pages()
+> 						called for obj1, don't flush.
+> ...
+> 						__i915_gem_object_unset_pages() called for obj2, TLB flush happened
+> 						seqno += 2
+> seqno=6
+> 
+> So, basically the seqno is used to track when the object data stopped
+> being updated, because of an unbind/evict event, being later used by
+> intel_gt_invalidate_tlb() when called from __i915_gem_object_unset_pages(),
+> in order to check if a previous invalidation call was enough to invalidate
+> the object, or if a new call is needed.
+> 
+> Now, if seqno is stored at bind, data can still leak, as the assumption
+> made by intel_gt_invalidate_tlb() that the data stopped being used at
+> seqno is not true anymore.
+> 
+> Still, I agree that this logic is complex and should be better 
+> documented. So, if you're now OK with this patch, I'll add the above
+> explanation inside a kernel-doc comment.
 
-> This patch introduces a kernel parameter slub_kfence that can be used
-> to specify a comma separated list of slabs for which kfence allocations
-> will happen. Also introduce a sysfs parameter that can be used to re-enable
-> kfence for all slabs.
->
-> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
-> ---
->
-> I am also working on getting kfence enabled for specific slabs using
-> /sys/kernel/slab/<slab_name>/kfence interface but in the meanwhile
-> I am sharing this RFC patch to get some early feedback. Especially
-> if this feature makes sense or if there is any better/existing way to
-> achieve similar end results.
+I'm enclosing the kernel-doc patch (to be applied after moving the code into
+its own files: intel_tlb.c/intel_tlb.h):
 
-Do you need the slab restriction from boot? Because if not, I'd much
-rather prefer the /sys/kernel/slab/<slab>/.. option; in that case,
-it'd also be easier to flip the slab flag to SLAB_SKIP_KFENCE, and
-none of the "kfence_global_alloc_enabled" code is needed.
+[PATCH] drm/i915/gt: document TLB cache invalidation functions
 
-Then if you want to only enable KFENCE for a few select slab caches,
-from user space you just write 1 to all
-/sys/kernel/slab/<slab>/skip_kfence, and leave them 0 where you want
-KFENCE to do allocations.
+Add a description for the TLB cache invalidation algorithm and for
+the related kAPI functions.
 
->  .../admin-guide/kernel-parameters.txt         |  5 ++
->  include/linux/kfence.h                        |  1 +
->  include/linux/slab.h                          |  6 ++
->  mm/kfence/core.c                              | 86 +++++++++++++++++++
->  mm/slub.c                                     | 47 ++++++++++
->  5 files changed, 145 insertions(+)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 98e5cb91faab..d66f555df7ba 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5553,6 +5553,11 @@
->                         last alloc / free. For more information see
->                         Documentation/mm/slub.rst.
->
-> +       slub_kfence[=slabs][,slabs]]...]        [MM, SLUB]
-> +                       Specifies the slabs for which kfence debug mechanism
-> +                       can be used. For more information about kfence see
-> +                       Documentation/dev-tools/kfence.rst.
-> +
->         slub_max_order= [MM, SLUB]
->                         Determines the maximum allowed order for slabs.
->                         A high setting may cause OOMs due to memory
-> diff --git a/include/linux/kfence.h b/include/linux/kfence.h
-> index 726857a4b680..140fc4fe87e1 100644
-> --- a/include/linux/kfence.h
-> +++ b/include/linux/kfence.h
-> @@ -125,6 +125,7 @@ static __always_inline void *kfence_alloc(struct kmem_cache *s, size_t size, gfp
->  #endif
->         if (likely(atomic_read(&kfence_allocation_gate)))
->                 return NULL;
-> +
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Why this whitespace change?
+diff --git a/drivers/gpu/drm/i915/gt/intel_tlb.c b/drivers/gpu/drm/i915/gt/intel_tlb.c
+index af8cae979489..8eda0743da74 100644
+--- a/drivers/gpu/drm/i915/gt/intel_tlb.c
++++ b/drivers/gpu/drm/i915/gt/intel_tlb.c
+@@ -145,6 +145,18 @@ static void mmio_invalidate_full(struct intel_gt *gt)
+ 	intel_uncore_forcewake_put_delayed(uncore, FORCEWAKE_ALL);
+ }
+ 
++/**
++ * intel_gt_invalidate_tlb_full - do full TLB cache invalidation
++ * @gt: GT structure
++ * @seqno: sequence number
++ *
++ * Do a full TLB cache invalidation if the @seqno is bigger than the last
++ * full TLB cache invalidation.
++ *
++ * Note:
++ * The TLB cache invalidation logic depends on GEN-specific registers.
++ * It currently supports GEN8 to GEN12 and GuC-based TLB cache invalidation.
++ */
+ void intel_gt_invalidate_tlb_full(struct intel_gt *gt, u32 seqno)
+ {
+ 	intel_wakeref_t wakeref;
+@@ -177,6 +189,12 @@ void intel_gt_init_tlb(struct intel_gt *gt)
+ 	seqcount_mutex_init(&gt->tlb.seqno, &gt->tlb.invalidate_lock);
+ }
+ 
++/**
++ * intel_gt_fini_tlb - initialize TLB-specific vars
++ * @gt: GT structure
++ *
++ * Frees any resources needed by TLB cache invalidation logic.
++ */
+ void intel_gt_fini_tlb(struct intel_gt *gt)
+ {
+ 	mutex_destroy(&gt->tlb.invalidate_lock);
+diff --git a/drivers/gpu/drm/i915/gt/intel_tlb.h b/drivers/gpu/drm/i915/gt/intel_tlb.h
+index 46ce25bf5afe..d186f5d5901f 100644
+--- a/drivers/gpu/drm/i915/gt/intel_tlb.h
++++ b/drivers/gpu/drm/i915/gt/intel_tlb.h
+@@ -11,16 +11,99 @@
+ 
+ #include "intel_gt_types.h"
+ 
++/**
++ * DOC: TLB cache invalidation logic
++ *
++ * The way the current algorithm works is that drm_i915_gem_object can be
++ * created on any order. At unbind/evict time, the object is warranted that
++ * it won't be used anymore. So, they store a sequence number provided by
++ * intel_gt_next_invalidate_tlb_full().This can happen either at
++ * __vma_put_pages(), for VMA sync unbind, or at ppgtt_unbind_vma(), for
++ * VMA async VMA bind.
++ *
++ * At __i915_gem_object_unset_pages(), intel_gt_invalidate_tlb() is called,
++ * where it checks if the sequence number of the object was already invalidated
++ * or not. If not, it increments it::
++ *
++ *   void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno)
++ *   {
++ *   ...
++ * 	with_intel_gt_pm_if_awake(gt, wakeref) {
++ * 		mutex_lock(&gt->tlb.invalidate_lock);
++ * 		if (tlb_seqno_passed(gt, seqno))
++ * 				goto unlock;
++ *
++ * 		mmio_invalidate_full(gt);
++ *
++ * 		write_seqcount_invalidate(&gt->tlb.seqno); // increment seqno
++ *    ...
++ *
++ * So, let's say the current seqno is 2 and 3 new objects were created,
++ * on this order:
++ *
++ * 	obj1
++ * 	obj2
++ * 	obj3
++ *
++ * They can be unbind/evict on a different order. At unbind/evict time,
++ * the mm.tlb will be stamped with the sequence number, using the number
++ * from the last TLB flush, plus 1.
++ *
++ * Different threads may be used on unbind/evict and/or unset pages.
++ *
++ * As the logic at void intel_gt_invalidate_tlb() is protected by a mutex,
++ * for simplicity, let's consider just two threads::
++ *
++ *   sequence number	Thread 0		Thread 1
++ *
++ *   seqno=2
++ *			unbind/evict event
++ * 			obj3.mm.tlb = seqno | 1
++ *
++ *			unbind/evict event
++ * 			obj1.mm.tlb = seqno | 1
++ * 						__i915_gem_object_unset_pages()
++ * 						called for obj3 => TLB flush
++ * 						invalidating both obj1 and obj2.
++ * 						seqno += 2
++ *   seqno=4
++ *			unbind/evict event
++ * 			obj2.mm.tlb = seqno | 1
++ * 						__i915_gem_object_unset_pages()
++ * 						called for obj1, don't flush,
++ *						as past flush invalidated obj1
++ *
++ * 						__i915_gem_object_unset_pages()
++ *						called for obj2 => TLB flush
++ * 						seqno += 2
++ *   seqno=6
++ */
++
+ void intel_gt_invalidate_tlb_full(struct intel_gt *gt, u32 seqno);
+ 
+ void intel_gt_init_tlb(struct intel_gt *gt);
+ void intel_gt_fini_tlb(struct intel_gt *gt);
+ 
++/**
++ * intel_gt_tlb_seqno - Returns the current TLB invlidation sequence number
++ *
++ * @gt: GT structure
++ *
++ * There's no need to lock while calling it, as seqprop_sequence is thread-safe
++ */
+ static inline u32 intel_gt_tlb_seqno(const struct intel_gt *gt)
+ {
+ 	return seqprop_sequence(&gt->tlb.seqno);
+ }
+ 
++/**
++ * intel_gt_next_invalidate_tlb_full - Returns the next TLB full invalidation
++ *	sequence number
++ *
++ * @gt: GT structure
++ *
++ * There's no need to lock while calling it, as seqprop_sequence is thread-safe
++ */
+ static inline u32 intel_gt_next_invalidate_tlb_full(const struct intel_gt *gt)
+ {
+ 	return intel_gt_tlb_seqno(gt) | 1;
 
->         return __kfence_alloc(s, size, flags);
->  }
->
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 0fefdf528e0d..b0def74d9fa1 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -119,6 +119,12 @@
->   */
->  #define SLAB_NO_USER_FLAGS     ((slab_flags_t __force)0x10000000U)
->
-> +#ifdef CONFIG_KFENCE
-> +#define SLAB_KFENCE            ((slab_flags_t __force)0x20000000U)
-> +#else
-> +#define SLAB_KFENCE            0
-> +#endif
-
-Consider flipping this around and making this SLAB_SKIP_KFENCE, which
-would be more intuitive.
-
->  /* The following flags affect the page allocator grouping pages by mobility */
->  /* Objects are reclaimable */
->  #define SLAB_RECLAIM_ACCOUNT   ((slab_flags_t __force)0x00020000U)
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index c252081b11df..017ea87b495b 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -132,6 +132,8 @@ DEFINE_STATIC_KEY_FALSE(kfence_allocation_key);
->  /* Gates the allocation, ensuring only one succeeds in a given period. */
->  atomic_t kfence_allocation_gate = ATOMIC_INIT(1);
->
-> +/* Determines if kfence allocation happens only for selected slabs. */
-> +atomic_t kfence_global_alloc = ATOMIC_INIT(1);
-
-This does not need to be atomic (kfence_allocation_gate is atomic
-because it needs to increment), just use normal
-READ_ONCE()/WRITE_ONCE() on an ordinary bool. But I'd also prefer if
-we don't need any of this if you go with the SLAB_SKIP_KFENCE version.
-
->  /*
->   * A Counting Bloom filter of allocation coverage: limits currently covered
->   * allocations of the same source filling up the pool.
-> @@ -1003,6 +1005,14 @@ void *__kfence_alloc(struct kmem_cache *s, size_t size, gfp_t flags)
->                 return NULL;
->         }
->
-> +       /*
-> +        * Skip allocation if kfence has been enable for selected slabs
-> +        * and this slab is not one of the selected slabs.
-> +        */
-> +       if (unlikely(!atomic_read(&kfence_global_alloc)
-> +                   && !(s->flags & SLAB_KFENCE)))
-> +               return NULL;
-> +
->         if (atomic_inc_return(&kfence_allocation_gate) > 1)
->                 return NULL;
->  #ifdef CONFIG_KFENCE_STATIC_KEYS
-> @@ -1156,3 +1166,79 @@ bool kfence_handle_page_fault(unsigned long addr, bool is_write, struct pt_regs
->
->         return kfence_unprotect(addr); /* Unprotect and let access proceed. */
->  }
-> +
-> +#ifdef CONFIG_SYSFS
-> +static ssize_t kfence_global_alloc_enabled_show(struct kobject *kobj,
-> +                                         struct kobj_attribute *attr, char *buf)
-> +{
-> +       return sysfs_emit(buf, "%d\n", atomic_read(&kfence_global_alloc));
-> +}
-
-Why do you want to make this a sysfs param? Have a look at the top of
-the file where we add parameters via module_param(). These can be
-written at runtime as well as specified as a kernel command line
-param.
-
-> +static ssize_t kfence_global_alloc_enabled_store(struct kobject *kobj,
-> +                                          struct kobj_attribute *attr,
-> +                                          const char *buf, size_t count)
-> +{
-> +       struct kmem_cache *s;
-> +       ssize_t ret;
-> +       int val;
-> +
-> +       ret = kstrtoint(buf, 10, &val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (val != 1)
-> +               return -EINVAL;
-> +
-> +       atomic_set(&kfence_global_alloc, val);
-> +
-> +       /*
-> +        * If kfence is re-enabled for all slabs from sysfs, disable
-> +        * slab specific usage of kfence.
-> +        */
-> +       mutex_lock(&slab_mutex);
-> +       list_for_each_entry(s, &slab_caches, list)
-> +               if (s->flags & SLAB_KFENCE)
-> +                       s->flags &= ~SLAB_KFENCE;
-> +       mutex_unlock(&slab_mutex);
-> +
-> +       return count;
-> +}
-> +
-> +static struct kobj_attribute kfence_global_alloc_enabled_attr =
-> +       __ATTR(kfence_global_alloc_enabled,
-> +              0644,
-> +              kfence_global_alloc_enabled_show,
-> +              kfence_global_alloc_enabled_store);
-> +
-> +static struct attribute *kfence_attrs[] = {
-> +       &kfence_global_alloc_enabled_attr.attr,
-> +       NULL,
-> +};
-> +
-> +static const struct attribute_group kfence_attr_group = {
-> +       .attrs = kfence_attrs,
-> +};
-> +
-> +static int __init kfence_init_sysfs(void)
-> +{
-> +       int err;
-> +       struct kobject *kfence_kobj;
-> +
-> +       kfence_kobj = kobject_create_and_add("kfence", mm_kobj);
-> +       if (!kfence_kobj) {
-> +               pr_err("failed to create kfence_global_alloc_enabled kobject\n");
-> +               return -ENOMEM;
-> +       }
-> +       err = sysfs_create_group(kfence_kobj, &kfence_attr_group);
-> +       if (err) {
-> +               pr_err("failed to register numa group\n");
-
-numa group?
-
-> +               goto delete_obj;
-> +       }
-> +       return 0;
-> +
-> +delete_obj:
-> +       kobject_put(kfence_kobj);
-> +       return err;
-> +}
-> +subsys_initcall(kfence_init_sysfs);
-> +#endif /* CONFIG_SYSFS */
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 862dbd9af4f5..7ee67ba5097c 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -645,6 +645,7 @@ static slab_flags_t slub_debug;
->  #endif
->
->  static char *slub_debug_string;
-> +static char *slub_kfence_list;
->  static int disable_higher_order_debug;
->
->  /*
-> @@ -1589,6 +1590,27 @@ static int __init setup_slub_debug(char *str)
->
->  __setup("slub_debug", setup_slub_debug);
->
-> +#ifdef CONFIG_KFENCE
-> +extern atomic_t kfence_global_alloc;
-> +
-> +static int __init setup_slub_kfence(char *str)
-> +{
-> +       if (*str++ != '=' || !*str)
-> +               return 1;
-> +
-> +       slub_kfence_list = str;
-> +
-> +       /*
-> +        * Disable global kfence usage if specific slabs
-> +        * were specified in bootargs.
-> +        */
-> +       atomic_set(&kfence_global_alloc, 0);
-> +
-> +       return 1;
-> +}
-> +__setup("slub_kfence", setup_slub_kfence);
-> +#endif
-> +
->  /*
->   * kmem_cache_flags - apply debugging options to the cache
->   * @object_size:       the size of an object without meta data
-> @@ -1653,6 +1675,31 @@ slab_flags_t kmem_cache_flags(unsigned int object_size,
->                 }
->         }
->
-> +       /* Check if kfence has been enabled for this slab */
-> +       iter = slub_kfence_list;
-> +
-> +       while (iter && *iter) {
-> +               char *end, *glob;
-> +               size_t cmplen;
-> +
-> +               end = strchrnul(iter, ',');
-> +
-> +               glob = strnchr(iter, end - iter, '*');
-> +
-> +               if (glob)
-> +                       cmplen = glob - iter;
-> +               else
-> +                       cmplen = end - iter;
-> +
-> +               if (!strncmp(iter, name, cmplen))
-> +                       flags |= SLAB_KFENCE;
-> +
-> +               if (!*end)
-> +                       break;
-> +
-> +               iter = end + 1;
-> +       }
-> +
->         return flags | slub_debug_local;
->  }
->  #else /* !CONFIG_SLUB_DEBUG */
-> --
-> 2.30.2
->

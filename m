@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C122D58404E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9FC584061
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiG1Nsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S230326AbiG1Nuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiG1Nsb (ORCPT
+        with ESMTP id S230342AbiG1Nud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:48:31 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8681162A4C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:48:29 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id j22so3287625ejs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:48:29 -0700 (PDT)
+        Thu, 28 Jul 2022 09:50:33 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB60E286C2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:50:31 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id b11so3240180eju.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=r+1TBu687nWQgnDLvnkVse0tVKy5rmaUjY9l5bul1bw=;
-        b=mnYFb6Z0gowla85/6p8edOEMndatPD9pHHbUPzZ2s4k7oY8QU0bfnxMTqkBA21e7M9
-         c2HgrfohogAzB8QnNIq1ZBa+YhuniXejTt3Dfv81dER5eYLZmVwEQrMljZ9MCdmcrPli
-         72ZDcJm/ZLjMZLjDuDPbGuADQBUOXTGa1k1U/e5l5wZH7KDrYiF0tpU6RiVcUoQ/oseb
-         MSZxyLJyqwlLnLmgeUaG5sEuziiKXyUpMyhDW8hAvdM5efY6/7saWadMWNdWSuNsJmFU
-         Zjzsop40EXqXk3c8H7uinr3UkW9fd93I6Vyzm974gVlTX2/4xP7gUmiGBGeGN/4RBJXN
-         WIAw==
+        bh=vxq8TONSE00HXKwla5aOrD7/8grrZxrUZOEScjMYlXo=;
+        b=I6w8bTdjtiWIAiiIyaZ8AqDCot6M72QWjJBec1p0ARnt8AHMFhDNL//ZXHs6Aj4TcJ
+         /igAyJV2zhTPOL5+D4ckDgbeeKGK3pDFJZ+uLHafanehs6HrIAZgeCEw8EHOns5jIFk+
+         kyjl9Ue4ngXTZEorTt7u464GVRsyPj5c8vMftb95KYLL3gFvZNpyv6A5Zo94ZzGwndM3
+         7+JncdsyRgSX7u3FMswQZT3L7jNW+jf0yxlZ6ZPCMyQTccQP9r8yzYtBQR4prpLllOTd
+         4gUdCmFwmc7lUNriFAqKS368bnIz7FImfmejvwn+pqMKb/5uwMK0Lacm33F2cCXgb+o5
+         MBUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=r+1TBu687nWQgnDLvnkVse0tVKy5rmaUjY9l5bul1bw=;
-        b=7ymAsFtWAhv1KRnSXj3iCHT37nzsLLNFR8lxB/9k2SOhaJH0VsM9UG+pKbRW+OWXDZ
-         ArL2DycsqI6Dg8RHdvzVq5GDS2n9RS4jWfE6ODBw3awhvoApi7VcwWF9skHJWdp4k3q4
-         8VTueEEMWHngJw1cwvs2D0oXBX0SB9e/9H9MB3WgzqlbTt1BXp62w0C69gfA3Kib8oGS
-         Xf5KH4n5Mz4SM7CzMEZg7oZz8XgUuiI5N6YWgnKnB3b0zudf/HDFUpU/JVfjN5eWgDG3
-         +mC1Sy8BUlpAk0cK5IGqoYk8LOU2r1aiOwABQNoF3zR6+i3a4vFiynouk0liCJ0Bm/pO
-         Tn5Q==
-X-Gm-Message-State: AJIora82Gux5iSXtqzmPET3TC37b2QIjlKAD6liX51w6TEjMJaV4H7ad
-        hI1aHckQIVr/EFbsOv4U+Rs+No10bXopFFjp2yd/4A==
-X-Google-Smtp-Source: AGRyM1sF5rXxF3KvP5Js0FEK0zzhguPLYc3HGt8R2vajyLSw++pPaBZPBHljYOhtWkFFGphjXk99ORezR9cjYgIjEg8=
+        bh=vxq8TONSE00HXKwla5aOrD7/8grrZxrUZOEScjMYlXo=;
+        b=Tet64Cn7IqwTM7pbUgcMRHEKMf2Peq7RQiIS1DMih14wcSAAvxHS3Cjfil3QQJbJyO
+         Hp/92Bb3B2y+YsW9H4B3cIkGolEQz2WRRb1vLXGn7OWDjYwwFOLrLgcW2MhE4buWd3A1
+         XN2IrSZ6LZvCOYAjOpuovdiZuHuJ4HSza9S5UUBrq6IJD+bnrLIEJNgeyk1rkY9vau1v
+         zbqdiagVg8xHKtdCL5mGn0cuqSSApQ8hfJ/Kz69C7zWnVicmLEyO5KRJNxMOMKkbr38p
+         8fhhxwn7aq32rOE4K6clwyFGkNBFlsboPNy+0YdI6svtZBvMlRvEQDDcbqDDRXTC/Hs7
+         PmGA==
+X-Gm-Message-State: AJIora/cS+Z7CqJ1M82D6CJJxmZT9kpdQCCiG2krcndgHXXTVLJr6Ezb
+        t9cTNL8BTqAAtNh0DXUtnUmQZcNv+zRQqk/TLoiO6w==
+X-Google-Smtp-Source: AGRyM1vd13k6pgor+DlHJHQfDA7PQXuMPPW6KeHGTUbH0ZXwLGn62yE4jjI826yPI+uPcZiWt3sa3ZGDqeczrsLkYNM=
 X-Received: by 2002:a17:907:9482:b0:72b:8c16:dac0 with SMTP id
- dm2-20020a170907948200b0072b8c16dac0mr18130555ejc.286.1659016107934; Thu, 28
- Jul 2022 06:48:27 -0700 (PDT)
+ dm2-20020a170907948200b0072b8c16dac0mr18135736ejc.286.1659016230136; Thu, 28
+ Jul 2022 06:50:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220726091448.81746-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220726091448.81746-1-andriy.shevchenko@linux.intel.com>
+References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
+ <20220723160513.271692-4-Mr.Bossman075@gmail.com> <CACRpkdZMFdYDssk9B7R-MH7xG8Ukp+ZQpXCRVtPRCS=SFh34mA@mail.gmail.com>
+In-Reply-To: <CACRpkdZMFdYDssk9B7R-MH7xG8Ukp+ZQpXCRVtPRCS=SFh34mA@mail.gmail.com>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 28 Jul 2022 15:48:17 +0200
-Message-ID: <CAMRc=MepfRwCvkos5yqQMHk0m=yXXqSv3O+nYWW0x6MuKE=t4Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpio: 74xx-mmio: Use bits instead of plain numbers
- for flags
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+Date:   Thu, 28 Jul 2022 15:50:19 +0200
+Message-ID: <CAMRc=Mf02_L1Msf3Wynqu1EROq+nsizhdEWEBJR0DpTybQ=KWA@mail.gmail.com>
+Subject: Re: [PATCH v5 03/12] dt-bindings: gpio: fsl-imx-gpio: Add i.MXRT compatibles
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Jesse Taube <mr.bossman075@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>, stefan@agner.ch,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, olof@lixom.net, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>, abel.vesa@nxp.com,
+        dev@lynxeye.de, Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        cniedermaier@dh-electronics.com, clin@suse.com,
+        giulio.benetti@benettiengineering.com,
+        devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 11:14 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Tue, Jul 26, 2022 at 10:04 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> The initial code was misleading to use bitwise AND against plain number,
-> and the commit d3054ba1db62 ("gpio: 74xx-mmio: Check MMIO_74XX_DIR_IN flag
-> in mmio_74xx_dir_in()") missed that. Switch definitions to be defined bits
-> for the correct comparison.
+> On Sat, Jul 23, 2022 at 6:05 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
 >
-> Fixes: d3054ba1db62 ("gpio: 74xx-mmio: Check MMIO_74XX_DIR_IN flag in mmio_74xx_dir_in()")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/gpio/gpio-74xx-mmio.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> > Both the i.MXRT1170 and 1050 have the same gpio controller as
+> > "fsl,imx35-gpio". Add i.MXRT to the compatible list.
+> >
+> > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> > Acked-by: Rob Herring <robh@kernel.org>
 >
-> diff --git a/drivers/gpio/gpio-74xx-mmio.c b/drivers/gpio/gpio-74xx-mmio.c
-> index cd399898ed12..0464f1ecd20d 100644
-> --- a/drivers/gpio/gpio-74xx-mmio.c
-> +++ b/drivers/gpio/gpio-74xx-mmio.c
-> @@ -13,8 +13,8 @@
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Bartosz needs to apply this to the GPIO tree, I think it can just be applied
+> directly without regard for the rest of the patches.
 >
-> -#define MMIO_74XX_DIR_IN       (0 << 8)
-> -#define MMIO_74XX_DIR_OUT      (1 << 8)
-> +#define MMIO_74XX_DIR_IN       BIT(8)
-> +#define MMIO_74XX_DIR_OUT      BIT(9)
->  #define MMIO_74XX_BIT_CNT(x)   ((x) & GENMASK(7, 0))
->
->  struct mmio_74xx_gpio_priv {
-> --
-> 2.35.1
->
+> Yours,
+> Linus Waleij
 
 Applied, thanks!
 

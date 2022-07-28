@@ -2,250 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB42E5839EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E14F5839E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234935AbiG1H64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
+        id S234919AbiG1H6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234371AbiG1H6w (ORCPT
+        with ESMTP id S234371AbiG1H6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:58:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA9B50738;
-        Thu, 28 Jul 2022 00:58:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5266B82284;
-        Thu, 28 Jul 2022 07:58:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74FDC433D6;
-        Thu, 28 Jul 2022 07:58:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658995128;
-        bh=rRhIHfV3pFJVX//Pace2Izk1Dwpw2DCmqOdXSbOMXtI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eCPoTCtGbZDng3ueU4+lEqRyb2ay4ER59fG5IGnmCebPUyI6jNdIn0zc3xRnzUC6b
-         g2bgi4mlXOLdCk+CSw9yxhXytcz45pYx5El+UrIDv0bbJNWU8CxntzGDHWNkPAjTlA
-         pAvaxun6qBXf6Q7FDSYybiqeWznWQ659mBLoUefPpho0DVKzjdDIOmFu7KbXvjUv5c
-         BBPYMer6ROzJBGF98B9bCqfl2tv87Qnb8z0QRxT2Fll/u0IfU9WMDbtIJnSfcXHNE8
-         o2pXiYcltZxFX91Xu+r6gJQnuQbb/uIq5GlC9uD/YBMGbcrQeRk1VYoR0p1lB6kjEY
-         v4rBhu6Ow2xUw==
-Date:   Thu, 28 Jul 2022 10:58:44 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     dave@sr71.net, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-Message-ID: <YuJBtNEB8B4srGIM@kernel.org>
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
+        Thu, 28 Jul 2022 03:58:49 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8B550738;
+        Thu, 28 Jul 2022 00:58:47 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LtjZx28shz67xvP;
+        Thu, 28 Jul 2022 15:54:01 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 09:58:45 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Thu, 28 Jul 2022 09:58:45 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Joe Burton <jevburton.kernel@gmail.com>
+CC:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Joe Burton <jevburton@google.com>
+Subject: RE: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
+Thread-Topic: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
+Thread-Index: AQHYm6d/RXaIdRF8qEmfFsB1DNrrP62SwR6AgAC2uWA=
+Date:   Thu, 28 Jul 2022 07:58:44 +0000
+Message-ID: <03011a0506e8474db73c8c1fa9ec0786@huawei.com>
+References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
+ <CAEf4BzbWpQS6js5LfS80PkqwDwcLc+NgzfqqUTG-CkLP16shCg@mail.gmail.com>
+In-Reply-To: <CAEf4BzbWpQS6js5LfS80PkqwDwcLc+NgzfqqUTG-CkLP16shCg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.203.37]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 12:13:47PM -0700, Dave Hansen wrote:
-> Changes from v1:
->  * Make sure SGX_ATTR_ASYNC_EXIT_NOTIFY is in the masks that are
->    used at bare-metal enclave initialization and that enumerates
->    available attributes to KVM guests.
-> 
-> --
-> 
-> Short Version:
-> 
-> Allow enclaves to use the new Asynchronous EXit (AEX)
-> notification mechanism.  This mechanism lets enclaves run a
-> handler after an AEX event.  These handlers can run mitigations
-> for things like SGX-Step[1].
-> 
-> AEX Notify will be made available both on upcoming processors and
-> on some older processors through microcode updates.
-> 
-> Long Version:
-> 
-> == SGX Attribute Background ==
-> 
-> The SGX architecture includes a list of SGX "attributes".  These
-> attributes ensure consistency and transparency around specific
-> enclave features.
-> 
-> As a simple example, the "DEBUG" attribute allows an enclave to
-> be debugged, but also destroys virtually all of SGX security.
-> Using attributes, enclaves can know that they are being debugged.
-> Attributes also affect enclave attestation so an enclave can, for
-> instance, be denied access to secrets while it is being debugged.
-> 
-> The kernel keeps a list of known attributes and will only
-> initialize enclaves that use a known set of attributes.  This
-> kernel policy eliminates the chance that a new SGX attribute
-> could cause undesired effects.
-> 
-> For example, imagine a new attribute was added called
-> "PROVISIONKEY2" that provided similar functionality to
-> "PROVISIIONKEY".  A kernel policy that allowed indiscriminate use
-> of unknown attributes and thus PROVISIONKEY2 would undermine the
-> existing kernel policy which limits use of PROVISIONKEY enclaves.
-> 
-> == AEX Notify Background ==
-> 
-> "Intel Architecture Instruction Set Extensions and Future
-> Features - Version 45" is out[2].  There is a new chapter:
-> 
-> 	Asynchronous Enclave Exit Notify and the EDECCSSA User Leaf Function.
-> 
-> Enclaves exit can be either synchronous and consensual (EEXIT for
-> instance) or asynchronous (on an interrupt or fault).  The
-> asynchronous ones can evidently be exploited to single step
-> enclaves[1], on top of which other naughty things can be built.
-> 
-> AEX Notify will be made available both on upcoming processors and
-> on some older processors through microcode updates.
-> 
-> == The Problem ==
-> 
-> These attacks are currently entirely opaque to the enclave since
-> the hardware does the save/restore under the covers. The
-> Asynchronous Enclave Exit Notify (AEX Notify) mechanism provides
-> enclaves an ability to detect and mitigate potential exposure to
-> these kinds of attacks.
-> 
-> == The Solution ==
-> 
-> Define the new attribute value for AEX Notification.  Ensure the
-> attribute is cleared from the list reserved attributes.  Instead
-> of adding to the open-coded lists of individual attributes,
-> add named lists of privileged (disallowed by default) and
-> unprivileged (allowed by default) attributes.  Add the AEX notify
-> attribute as an unprivileged attribute, which will keep the kernel
-> from rejecting enclaves with it set.
-> 
-> I just built this and ran it to make sure there were no obvious
-> regressions since I do not have the hardware (and new microcde)
-> to test it.
-> 
-> Testing on bare-metal and in VMs accompanied by Tested-by's
-> would be much appreciated.  (This means you, Intel folks who
-> actually have systems with the microcode that can do this.)
-> 
-> 1. https://github.com/jovanbulck/sgx-step
-> 2. https://cdrdv2.intel.com/v1/dl/getContent/671368?explicitVersion=true
-> 
-> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Kai Huang <kai.huang@intel.com>
-> Cc: Haitao Huang <haitao.huang@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-sgx@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->  arch/x86/include/asm/sgx.h      | 33 ++++++++++++++++++++++++++-------
->  arch/x86/kernel/cpu/sgx/ioctl.c |  2 +-
->  arch/x86/kvm/cpuid.c            |  4 +---
->  3 files changed, 28 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/sgx.h b/arch/x86/include/asm/sgx.h
-> index 3f9334ef67cd..3004dfe76498 100644
-> --- a/arch/x86/include/asm/sgx.h
-> +++ b/arch/x86/include/asm/sgx.h
-> @@ -110,17 +110,36 @@ enum sgx_miscselect {
->   * %SGX_ATTR_EINITTOKENKEY:	Allow to use token signing key that is used to
->   *				sign cryptographic tokens that can be passed to
->   *				EINIT as an authorization to run an enclave.
-> + * %SGX_ATTR_ASYNC_EXIT_NOTIFY:	Allow enclaves to be notified after an
-> + *				asynchronous exit has occurred.
->   */
->  enum sgx_attribute {
-> -	SGX_ATTR_INIT		= BIT(0),
-> -	SGX_ATTR_DEBUG		= BIT(1),
-> -	SGX_ATTR_MODE64BIT	= BIT(2),
-> -	SGX_ATTR_PROVISIONKEY	= BIT(4),
-> -	SGX_ATTR_EINITTOKENKEY	= BIT(5),
-> -	SGX_ATTR_KSS		= BIT(7),
-> +	SGX_ATTR_INIT		   = BIT(0),
-> +	SGX_ATTR_DEBUG		   = BIT(1),
-> +	SGX_ATTR_MODE64BIT	   = BIT(2),
-> +				  /* BIT(3) is reserved */
-> +	SGX_ATTR_PROVISIONKEY	   = BIT(4),
-> +	SGX_ATTR_EINITTOKENKEY	   = BIT(5),
-> +				  /* BIT(6) is for CET */
-> +	SGX_ATTR_KSS		   = BIT(7),
-> +				  /* BIT(8) is reserved */
-> +				  /* BIT(9) is reserved */
-> +	SGX_ATTR_ASYNC_EXIT_NOTIFY = BIT(10),
->  };
->  
-> -#define SGX_ATTR_RESERVED_MASK	(BIT_ULL(3) | BIT_ULL(6) | GENMASK_ULL(63, 8))
-> +#define SGX_ATTR_RESERVED_MASK	(BIT_ULL(3) | \
-> +				 BIT_ULL(6) | \
-> +				 BIT_ULL(8) | \
-> +				 BIT_ULL(9) | \
-> +				 GENMASK_ULL(63, 11))
-> +
-> +#define SGX_ATTR_UNPRIV_MASK	(SGX_ATTR_DEBUG	    | \
-> +				 SGX_ATTR_MODE64BIT | \
-> +				 SGX_ATTR_KSS	    | \
-> +				 SGX_ATTR_ASYNC_EXIT_NOTIFY)
-> +
-> +#define SGX_ATTR_PRIV_MASK	(SGX_ATTR_PROVISIONKEY	| \
-> +				 SGX_ATTR_EINITTOKENKEY)
->  
->  /**
->   * struct sgx_secs - SGX Enclave Control Structure (SECS)
-> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-> index 83df20e3e633..37d523895244 100644
-> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> @@ -110,7 +110,7 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
->  	encl->base = secs->base;
->  	encl->size = secs->size;
->  	encl->attributes = secs->attributes;
-> -	encl->attributes_mask = SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
-> +	encl->attributes_mask = SGX_ATTR_UNPRIV_MASK;
->  
->  	/* Set only after completion, as encl->lock has not been taken. */
->  	set_bit(SGX_ENCL_CREATED, &encl->flags);
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 0c1ba6aa0765..96a73b5b4369 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -1022,9 +1022,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->  		 * userspace.  ATTRIBUTES.XFRM is not adjusted as userspace is
->  		 * expected to derive it from supported XCR0.
->  		 */
-> -		entry->eax &= SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT |
-> -			      SGX_ATTR_PROVISIONKEY | SGX_ATTR_EINITTOKENKEY |
-> -			      SGX_ATTR_KSS;
-> +		entry->eax &= SGX_ATTR_PRIV_MASK | SGX_ATTR_UNPRIV_MASK;
->  		entry->ebx &= 0;
->  		break;
->  	/* Intel PT */
-> -- 
-> 2.34.1
-> 
-
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-BR, Jarkkko
+PiBGcm9tOiBBbmRyaWkgTmFrcnlpa28gW21haWx0bzphbmRyaWkubmFrcnlpa29AZ21haWwuY29t
+XQ0KPiBTZW50OiBUaHVyc2RheSwgSnVseSAyOCwgMjAyMiAxOjAzIEFNDQo+IE9uIFR1ZSwgSnVs
+IDE5LCAyMDIyIGF0IDEyOjQwIFBNIEpvZSBCdXJ0b24gPGpldmJ1cnRvbi5rZXJuZWxAZ21haWwu
+Y29tPg0KPiB3cm90ZToNCj4gPg0KPiA+IEZyb206IEpvZSBCdXJ0b24gPGpldmJ1cnRvbkBnb29n
+bGUuY29tPg0KPiA+DQo+ID4gQWRkIGFuIGV4dGVuc2libGUgdmFyaWFudCBvZiBicGZfb2JqX2dl
+dCgpIGNhcGFibGUgb2Ygc2V0dGluZyB0aGUNCj4gPiBgZmlsZV9mbGFnc2AgcGFyYW1ldGVyLg0K
+PiA+DQo+ID4gVGhpcyBwYXJhbWV0ZXIgaXMgbmVlZGVkIHRvIGVuYWJsZSB1bnByaXZpbGVnZWQg
+YWNjZXNzIHRvIEJQRiBtYXBzLg0KPiA+IFdpdGhvdXQgYSBtZXRob2QgbGlrZSB0aGlzLCB1c2Vy
+cyBtdXN0IG1hbnVhbGx5IG1ha2UgdGhlIHN5c2NhbGwuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBKb2UgQnVydG9uIDxqZXZidXJ0b25AZ29vZ2xlLmNvbT4NCj4gPiAtLS0NCj4gPiAgdG9vbHMv
+bGliL2JwZi9icGYuYyAgICAgIHwgMTAgKysrKysrKysrKw0KPiA+ICB0b29scy9saWIvYnBmL2Jw
+Zi5oICAgICAgfCAgOSArKysrKysrKysNCj4gPiAgdG9vbHMvbGliL2JwZi9saWJicGYubWFwIHwg
+IDEgKw0KPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDIwIGluc2VydGlvbnMoKykNCj4gPg0KPiANCj4g
+SSBhZ3JlZSB0aGF0IGJwZl9vYmpfZ2V0X29wdHMgc2hvdWxkIGJlIHNlcGFyYXRlIGZyb20gYnBm
+X2dldF9mZF9vcHRzLg0KPiBKdXN0IGJlY2F1c2UgYm90aCBjdXJyZW50bHkgaGF2ZSBmaWxlX2Zs
+YWdzIGluIHRoZW0gZG9lc24ndCBtZWFuIHRoYXQNCj4gdGhleSBzaG91bGQvd2lsbCBhbHdheXMg
+c3RheSBpbiBzeW5jLiBTbyB0d28gc2VwYXJhdGUgb3B0cyBmb3IgdHdvDQo+IHNlcGFyYXRlIEFQ
+SXMgbWFrZXMgc2Vuc2UgdG8gbWUuDQo+IA0KPiBTbyBJJ2QgYWNjZXB0IHRoaXMgcGF0Y2gsIGJ1
+dCBwbGVhc2Ugc2VlIGEgZmV3IHNtYWxsIHRoaW5ncyBiZWxvdyBhbmQNCj4gc2VuZCB2My4gVGhh
+bmtzIQ0KDQpTaG91bGQgbWFwX3BhcnNlX2ZkcygpIGFjY2VwdCB0d28gb3B0cywgb3IganVzdCB0
+aGUgZmxhZ3MNCnRvIGJlIHNldCBvbiBsb2NhbGx5LWRlZmluZWQgdmFyaWFibGVzPw0KDQpUaGFu
+a3MNCg0KUm9iZXJ0bw0KDQo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL2xpYi9icGYvYnBmLmMgYi90
+b29scy9saWIvYnBmL2JwZi5jDQo+ID4gaW5kZXggNWViMGRmOTBlYjJiLi41YWNiMGU4YmQxM2Mg
+MTAwNjQ0DQo+ID4gLS0tIGEvdG9vbHMvbGliL2JwZi9icGYuYw0KPiA+ICsrKyBiL3Rvb2xzL2xp
+Yi9icGYvYnBmLmMNCj4gPiBAQCAtNTc4LDEyICs1NzgsMjIgQEAgaW50IGJwZl9vYmpfcGluKGlu
+dCBmZCwgY29uc3QgY2hhciAqcGF0aG5hbWUpDQo+ID4gIH0NCj4gPg0KPiA+ICBpbnQgYnBmX29i
+al9nZXQoY29uc3QgY2hhciAqcGF0aG5hbWUpDQo+ID4gK3sNCj4gPiArICAgICAgIExJQkJQRl9P
+UFRTKGJwZl9vYmpfZ2V0X29wdHMsIG9wdHMpOw0KPiANCj4gaWYgeW91IHdlcmUgZG9pbmcgaXQg
+dGhpcyB3YXksIGhlcmUgc2hvdWxkIGJlIGFuIGVtcHR5IGxpbmUuIEJ1dA0KPiByZWFsbHkgeW91
+IGNhbi9zaG91bGQganVzdCBwYXNzIE5VTEwgaW5zdGVhZCBvZiBvcHRzIGluIHRoaXMgY2FzZS4N
+Cj4gDQo+ID4gKyAgICAgICByZXR1cm4gYnBmX29ial9nZXRfb3B0cyhwYXRobmFtZSwgJm9wdHMp
+Ow0KPiA+ICt9DQo+ID4gKw0KPiA+ICtpbnQgYnBmX29ial9nZXRfb3B0cyhjb25zdCBjaGFyICpw
+YXRobmFtZSwgY29uc3Qgc3RydWN0IGJwZl9vYmpfZ2V0X29wdHMNCj4gKm9wdHMpDQo+ID4gIHsN
+Cj4gPiAgICAgICAgIHVuaW9uIGJwZl9hdHRyIGF0dHI7DQo+ID4gICAgICAgICBpbnQgZmQ7DQo+
+ID4NCj4gPiArICAgICAgIGlmICghT1BUU19WQUxJRChvcHRzLCBicGZfb2JqX2dldF9vcHRzKSkN
+Cj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIGxpYmJwZl9lcnIoLUVJTlZBTCk7DQo+ID4gKw0K
+PiA+ICAgICAgICAgbWVtc2V0KCZhdHRyLCAwLCBzaXplb2YoYXR0cikpOw0KPiA+ICAgICAgICAg
+YXR0ci5wYXRobmFtZSA9IHB0cl90b191NjQoKHZvaWQgKilwYXRobmFtZSk7DQo+ID4gKyAgICAg
+ICBhdHRyLmZpbGVfZmxhZ3MgPSBPUFRTX0dFVChvcHRzLCBmaWxlX2ZsYWdzLCAwKTsNCj4gPg0K
+PiA+ICAgICAgICAgZmQgPSBzeXNfYnBmX2ZkKEJQRl9PQkpfR0VULCAmYXR0ciwgc2l6ZW9mKGF0
+dHIpKTsNCj4gPiAgICAgICAgIHJldHVybiBsaWJicGZfZXJyX2Vycm5vKGZkKTsNCj4gPiBkaWZm
+IC0tZ2l0IGEvdG9vbHMvbGliL2JwZi9icGYuaCBiL3Rvb2xzL2xpYi9icGYvYnBmLmgNCj4gPiBp
+bmRleCA4OGE3Y2M0YmQ3NmYuLmYzMWI0OTNiNWY5YSAxMDA2NDQNCj4gPiAtLS0gYS90b29scy9s
+aWIvYnBmL2JwZi5oDQo+ID4gKysrIGIvdG9vbHMvbGliL2JwZi9icGYuaA0KPiA+IEBAIC0yNzAs
+OCArMjcwLDE3IEBAIExJQkJQRl9BUEkgaW50IGJwZl9tYXBfdXBkYXRlX2JhdGNoKGludCBmZCwg
+Y29uc3QNCj4gdm9pZCAqa2V5cywgY29uc3Qgdm9pZCAqdmFsdWVzDQo+ID4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgX191MzIgKmNvdW50LA0KPiA+ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIGNvbnN0IHN0cnVjdCBicGZfbWFwX2JhdGNoX29wdHMgKm9w
+dHMpOw0KPiA+DQo+ID4gK3N0cnVjdCBicGZfb2JqX2dldF9vcHRzIHsNCj4gPiArICAgICAgIHNp
+emVfdCBzejsgLyogc2l6ZSBvZiB0aGlzIHN0cnVjdCBmb3IgZm9yd2FyZC9iYWNrd2FyZCBjb21w
+YXRpYmlsaXR5ICovDQo+ID4gKw0KPiA+ICsgICAgICAgX191MzIgZmlsZV9mbGFnczsNCj4gDQo+
+IHBsZWFzZSBhZGQgc2l6ZV90IDowOyB0byBhdm9pZCBub24temVyby1pbml0aWFsaXplZCBwYWRk
+aW5nICAod2UgZG8gaXQNCj4gaW4gYSBsb3Qgb2Ygb3RoZXIgb3B0cyBzdHJ1Y3RzKQ0KPiANCj4g
+DQo+ID4gK307DQo+ID4gKyNkZWZpbmUgYnBmX29ial9nZXRfb3B0c19fbGFzdF9maWVsZCBmaWxl
+X2ZsYWdzDQo+ID4gKw0KPiA+ICBMSUJCUEZfQVBJIGludCBicGZfb2JqX3BpbihpbnQgZmQsIGNv
+bnN0IGNoYXIgKnBhdGhuYW1lKTsNCj4gPiAgTElCQlBGX0FQSSBpbnQgYnBmX29ial9nZXQoY29u
+c3QgY2hhciAqcGF0aG5hbWUpOw0KPiA+ICtMSUJCUEZfQVBJIGludCBicGZfb2JqX2dldF9vcHRz
+KGNvbnN0IGNoYXIgKnBhdGhuYW1lLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgY29uc3Qgc3RydWN0IGJwZl9vYmpfZ2V0X29wdHMgKm9wdHMpOw0KPiA+DQo+ID4gIHN0cnVj
+dCBicGZfcHJvZ19hdHRhY2hfb3B0cyB7DQo+ID4gICAgICAgICBzaXplX3Qgc3o7IC8qIHNpemUg
+b2YgdGhpcyBzdHJ1Y3QgZm9yIGZvcndhcmQvYmFja3dhcmQgY29tcGF0aWJpbGl0eSAqLw0KPiA+
+IGRpZmYgLS1naXQgYS90b29scy9saWIvYnBmL2xpYmJwZi5tYXAgYi90b29scy9saWIvYnBmL2xp
+YmJwZi5tYXANCj4gPiBpbmRleCAwNjI1YWRiOWU4ODguLjExOWU2ZTFlYTdmMSAxMDA2NDQNCj4g
+PiAtLS0gYS90b29scy9saWIvYnBmL2xpYmJwZi5tYXANCj4gPiArKysgYi90b29scy9saWIvYnBm
+L2xpYmJwZi5tYXANCj4gPiBAQCAtMzU1LDYgKzM1NSw3IEBAIExJQkJQRl8wLjguMCB7DQo+ID4N
+Cj4gPiAgTElCQlBGXzEuMC4wIHsNCj4gPiAgICAgICAgIGdsb2JhbDoNCj4gPiArICAgICAgICAg
+ICAgICAgYnBmX29ial9nZXRfb3B0czsNCj4gPiAgICAgICAgICAgICAgICAgYnBmX3Byb2dfcXVl
+cnlfb3B0czsNCj4gPiAgICAgICAgICAgICAgICAgYnBmX3Byb2dyYW1fX2F0dGFjaF9rc3lzY2Fs
+bDsNCj4gPiAgICAgICAgICAgICAgICAgYnRmX19hZGRfZW51bTY0Ow0KPiA+IC0tDQo+ID4gMi4z
+Ny4wLjE3MC5nNDQ0ZDFlYWJkMC1nb29nDQo+ID4NCg==

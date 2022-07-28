@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B4D5842D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFE55842D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiG1PQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S230379AbiG1PRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiG1PQw (ORCPT
+        with ESMTP id S231670AbiG1PRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:16:52 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6ED54ACD;
-        Thu, 28 Jul 2022 08:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AmUPpMsyzQAMiFXXvNrmIFoCDHFhaj7UZeTTQJGeCWw=; b=QoKQ9jXFdAB+rfISOb/LkuVmpk
-        iONt7UX2u072T60dMWkSQGDHSMAddG7zT5nuBbMvlxIof5wCSIXY/3iBEUc2PGwiMCLinsOALEa1F
-        V5+74tzg7h3bFrNSs7adRwGAH7CG2c1+MkPoYJ4+7iHQnkC0vP8HQbGGbLZEw6pcHj441I8Zl0heJ
-        31JdQ764cl/RdnOVc55YwU6xL759EXVBwajIsfPG6yj1pAxLRbKhiHCBrhFIaevPlAlvOcVY7926t
-        pEZXbbhWmxA8bip0HkbahXbzEbQjLLNoVN/9tzq0vMPEmFdpE8/mDmUPYi3FdHzBnMkZs/qb8Tp0D
-        8Cn0Pqlg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oH5Fi-0018J0-UV; Thu, 28 Jul 2022 15:16:43 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D180A98047B; Thu, 28 Jul 2022 17:16:40 +0200 (CEST)
-Date:   Thu, 28 Jul 2022 17:16:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
-        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/bugs: Do not enable IBPB at firmware entry when IBPB
- is not available
-Message-ID: <YuKoWPRt56T+FE+s@worktop.programming.kicks-ass.net>
-References: <20220728122602.2500509-1-cascardo@canonical.com>
+        Thu, 28 Jul 2022 11:17:04 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668CF52FF9;
+        Thu, 28 Jul 2022 08:16:53 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id y197so1582217iof.12;
+        Thu, 28 Jul 2022 08:16:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JrlKPQ4z+/eb/LwH7+hyMBFCM3G+u1y3FbCWjxfRWs0=;
+        b=c9zDFxtVgHQH4mlP2LqzUZUBvZBebrtUdUQbSfPbjayElwUKasqtHBvXK0OPLWWO6/
+         e8juRC2fOFQg2Rvk4H1CCNyrYr9Auvw9bsRakQZFcYQNqQRKTgdL76bbgcb9RVdy4BAP
+         GRQYXesoHpdBy97Bh0CaByHy1VYbPR+QrfQUgjvgaRQdAxxEfcwI2/O95YEMcs12g8rZ
+         DqgqZtqYZem0AoHB2c9o6xX0sY/yMByGfbEfvpp1S/WbdfKAt+YpaWX3LXtc3bNiGVCK
+         yE9jOAKAzMK6FW0X7zxjlLj4rMPEN07wx5XkADsMiWGygSAeZxmGefr0WbQAI1QastMO
+         uyNw==
+X-Gm-Message-State: AJIora80PW4rnd9WClBiThP0T9EDn3cAXOkKTvKlCP703xCaVkNxLhK3
+        sQITYUSyFtc9RD0egwsfjw==
+X-Google-Smtp-Source: AGRyM1unOndFqwJ/QxZY7xMrXPhTBF5duUZYZLQcuDRiBpPqUp3gM2q6daVUcFNXpNNq9PA/nFbCJQ==
+X-Received: by 2002:a5d:844d:0:b0:67c:a76d:85cd with SMTP id w13-20020a5d844d000000b0067ca76d85cdmr6791200ior.191.1659021412634;
+        Thu, 28 Jul 2022 08:16:52 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id y11-20020a92d0cb000000b002cc20b48163sm466960ila.3.2022.07.28.08.16.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 08:16:52 -0700 (PDT)
+Received: (nullmailer pid 899149 invoked by uid 1000);
+        Thu, 28 Jul 2022 15:16:50 -0000
+Date:   Thu, 28 Jul 2022 09:16:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: iio: adc: ti,am3359-adc: add ti,am654-adc
+Message-ID: <20220728151650.GA899095-robh@kernel.org>
+References: <20220727155203.320929-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728122602.2500509-1-cascardo@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220727155203.320929-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 09:26:02AM -0300, Thadeu Lima de Souza Cascardo wrote:
-> Some cloud hypervisors do not provide IBPB on very recent CPU processors,
-> including AMD processors affected by Retbleed.
-
-That's a bug in the hypervisor.
-
-> Fixes: 28a99e95f55c ("x86/amd: Use IBPB for firmware calls")
-
-Fixes^WCreates-a-speculation-hole-in:
-
-> Reported-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: <stable@vger.kernel.org>
-> ---
->  arch/x86/kernel/cpu/bugs.c | 1 +
->  1 file changed, 1 insertion(+)
+On Wed, 27 Jul 2022 17:52:03 +0200, Krzysztof Kozlowski wrote:
+> Document the ti,am654-adc compatible already used in DTS:
 > 
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index 6454bc767f0f..6761668100b9 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -1520,6 +1520,7 @@ static void __init spectre_v2_select_mitigation(void)
->  	 * enable IBRS around firmware calls.
->  	 */
->  	if (boot_cpu_has_bug(X86_BUG_RETBLEED) &&
-> +	    boot_cpu_has(X86_FEATURE_IBPB) &&
->  	    (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
->  	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)) {
+>   arch/arm64/boot/dts/ti/k3-am642-evm.dtb: adc: compatible:0: 'ti,am654-adc' is not one of ['ti,am3359-adc', 'ti,am4372-adc']
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/iio/adc/ti,am3359-adc.yaml    | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
 
-At the very least we need a pr_warn() and something nasty in
-retbleed_show_state() to warn the user their firmware calls are
-vulnerable.
-
+Acked-by: Rob Herring <robh@kernel.org>

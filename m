@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0AB583824
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 07:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075D6583826
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 07:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiG1FfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 01:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
+        id S232151AbiG1Ffr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 01:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiG1FfF (ORCPT
+        with ESMTP id S229682AbiG1Ffo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 01:35:05 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B885854662
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:35:03 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id mf4so1288243ejc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:35:03 -0700 (PDT)
+        Thu, 28 Jul 2022 01:35:44 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D974D823
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:35:42 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id l23so1277553ejr.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sbR9raOV1zF+9/IjbCz4W1LZZHaNay6Pd9Un1mvpRiU=;
-        b=rToq43S7L9MRXvydWLR5igo2zcboAd2C5cejRmQzNE3woT9iU24zx/9sZzHmIRxMyk
-         bN7Az7+7dzs2RFq1JnDFGXDJQ4Z1KcHW97f8gQ3lrGMmEFy3EYSoLkMYa2ium8DGGySo
-         MNNxnDYP7eEfVdDM03cv4NZc31uetlrKx7lDz5KcvKty+B5OE2x6HeLR2olOms0hB+Fi
-         Bu02efRuP/LCFkVmfy5yVz+tyiChYa34rNQRBOx5dclMSwXpaL280kCG2kBskohwKOxn
-         GU1qdiwfHqg61iIB6FZt7l7Z+vZDBMeHFy1yhVX0Ic82+64qZ1I9RQ2fq6eRwtk0uSqG
-         2BLQ==
+         :cc:content-transfer-encoding;
+        bh=MGHVJwwOXD4TQwp5bJbQCXJw0h6HO1k8bZrkAoBMUJM=;
+        b=lRuE+5Z+z296kkBmHZxRnNydOscEZzjLsh2H1pj/ht43dnT8q1t62Kk50s3S+vgegk
+         S8pvqSdmL4tMJoxndMsksyYTTEf01qWcqvEm0KbP76JsH4MIkWNPZJcIJoqA3soHwT4e
+         QmlPhuNB//pm6y5hsZ+MbsqIqsvaamSNNg2kgzdvGDp54svuDhXOiFTj6oAN2QUHFkr/
+         i2H+qCa3bDdn0ZbrH1gshku72DhvjEaeTY/Cfv6DVgPJ/98mcsRYxjrLZgQC1v/bRxAG
+         B+e/+vVoor9hwru4gikTRNQG6cEcl/FHelxkja9PuFokO72v+UJS3xVYJzKGJLUdIj9u
+         wzGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sbR9raOV1zF+9/IjbCz4W1LZZHaNay6Pd9Un1mvpRiU=;
-        b=ao+384D5zGMczrGqbdj/cazo8hMyLCyvH30t9gXD6MIFHHdvVzRTFqaQ6IyoEILySr
-         vriyU5u85WeohNYePvZtZrh+CZEJ0/61GpzuzKc2bhJPP7hD45tlFZ6ccJrpn74QqAqm
-         b4TFYs1niJFaoPn4auUwYuz/vvEzdZAQLYDc6imDDsts9HAgniOr1N8VkpN27dzQtzUK
-         s6SPAIGqsiZQK4du6YNqdabDdfP26VUKCwpSD0tyERn6GVa1DGoESFQehRC4CfYYIc6z
-         R9haWC7L6T18Z5xeYMSdU6VxMLvvVjBVkhAh1YLWXQF0imwYDmQfQF8GdpZOgy/t3Vy/
-         i7yQ==
-X-Gm-Message-State: AJIora9xiqE4nqEoKyYmNCL9JE/eLxnJWdHBgI7totgrD7MXwdsWNrbi
-        bSlDCZVi9hkdQnXX18ROaV06vcS9FDmBV/9vmX76tYtyRXJMaw==
-X-Google-Smtp-Source: AGRyM1sAlC/g2qMEZqaOZnp+L70k1DPQR5wX7uHWbhD+3nSoTyyN1BhOU3xKKS7zIwCMQxeAjd5T75k5nbC7zhZkjes=
-X-Received: by 2002:a17:907:7294:b0:72b:1ae:9c47 with SMTP id
- dt20-20020a170907729400b0072b01ae9c47mr19979458ejc.253.1658986501786; Wed, 27
- Jul 2022 22:35:01 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MGHVJwwOXD4TQwp5bJbQCXJw0h6HO1k8bZrkAoBMUJM=;
+        b=T36aHp4MSK7WMicuemOJe5uUt1kKQ3e5uzpbinrrieIUJpFJvidr6JOaN1q8Dv+yJr
+         icm4QNSEAGaHbYYsjFpp3Rs2Immu4JfGpkLHYYAf/Kj+geTGgA6OyLdpM5+GmP2gro7/
+         ZmWEbwF1Mct0BX8qW/HNEOipijNp6Dk17JBpdkxX8t0KqxagvkEgipNPl+iewHygw+9A
+         aKSocXie1S5urg3iVjXY3IsmNn9gmX1pAhWuoTLrHDARPI6BsA073CFubJVkODw8jXVs
+         /mWtDW2nZaJ/Xe/lo67urI4tFLAl4Cv/OHm3wgtyvdoFL3JZQVqe0DHDSa3if/kocOXb
+         JL9w==
+X-Gm-Message-State: AJIora8GEutBgvEIQ8mT3l0g6TSlOyB441emorfgLG+1Ay3BaRCRJbhn
+        IH7T1xOaAinrvwRVRuULvCkjgUi58RwT1GeMgHYP4g==
+X-Google-Smtp-Source: AGRyM1tXRDyfHh0TXjI8zkFnSeBcVvIPtaDHTeDqg0sFdmg590UdpTeQ2QCs1SkEBd0ZxoasUw65usCBngPK9cGzYbI=
+X-Received: by 2002:a17:907:b0a:b0:72b:3176:3fe5 with SMTP id
+ h10-20020a1709070b0a00b0072b31763fe5mr19862421ejl.48.1658986541190; Wed, 27
+ Jul 2022 22:35:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com>
- <CAGETcx8bGwDkPP=d2MtcY69YmTyckUSa8xAwNVOPOyTR8jPk=A@mail.gmail.com>
-In-Reply-To: <CAGETcx8bGwDkPP=d2MtcY69YmTyckUSa8xAwNVOPOyTR8jPk=A@mail.gmail.com>
+References: <20220727161021.428340041@linuxfoundation.org>
+In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 28 Jul 2022 11:04:49 +0530
-Message-ID: <CA+G9fYv0DFZi2rMPQTHvK8yD7g0LZTxN76iKZxP4pi4+8Rstxg@mail.gmail.com>
-Subject: Re: [next] arm: PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Date:   Thu, 28 Jul 2022 11:05:29 +0530
+Message-ID: <CA+G9fYtpz_MgLUoxrmXpy1L9Ky8mNYhpU7_rSJpFUCZtZm_LzQ@mail.gmail.com>
+Subject: Re: [PATCH 5.18 000/158] 5.18.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,51 +70,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
-
-On Thu, 28 Jul 2022 at 00:19, Saravana Kannan <saravanak@google.com> wrote:
+On Wed, 27 Jul 2022 at 22:18, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Tue, Jul 26, 2022 at 11:44 PM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > Linux next arm BeagleBoard x15 device boot failed due to the
+> This is the start of the stable review cycle for the 5.18.15 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Can you point me to the dts file that corresponds to this board
-> please? And if you know which devices are power domains, that'd be
-> handy too. For now, I'm reverting this patch.
-metadata:
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 9250d2f72dc46a808b6aa23bf50dd670f1f52ddc
-  git_describe: v5.19-rc7-13490-g9250d2f72dc4
-  git_ref: master
-  kernel_version: 5.19.0-rc8
-  kernel-config: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/config
-  artifact-location: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH
-  toolchain: gcc-10
+> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.18.15-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.18.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I am sharing a few urls, metadata, test job link and device details link.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-      kernel:
-        url: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/zImage
-      dtb:
-        url: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/dtbs/am57xx-beagle-x15.dtb
-      modules:
-        url: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/modules.tar.xz
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Test jobs url:
-       - https://lkft.validation.linaro.org/scheduler/job/5326314#L1982
+## Build
+* kernel: 5.18.15-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.18.y
+* git commit: 63d1be154edd5513bff11d778954f7ec7cbf50c1
+* git describe: v5.18.14-159-g63d1be154edd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.18.y/build/v5.18=
+.14-159-g63d1be154edd
 
-Device details link,
-      - https://www.ti.com/tool/BEAGLEBOARD-X15
+## Test Regressions (compared to v5.18.14)
+No test regressions found.
 
-metadata:
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 9250d2f72dc46a808b6aa23bf50dd670f1f52ddc
-  git_describe: v5.19-rc7-13490-g9250d2f72dc4
-  git_ref: master
-  kernel_version: 5.19.0-rc8
-  kernel-config: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/config
-  artifact-location: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH
-  toolchain: gcc-10
+## Metric Regressions (compared to v5.18.14)
+No metric regressions found.
 
-- Naresh
+## Test Fixes (compared to v5.18.14)
+No test fixes found.
+
+## Metric Fixes (compared to v5.18.14)
+No metric fixes found.
+
+## Test result summary
+total: 131463, pass: 120143, fail: 902, skip: 9686, xfail: 732
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 307 total, 307 passed, 0 failed
+* arm64: 62 total, 60 passed, 2 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 54 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,53 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F4C583ADD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CCD583ADE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235339AbiG1JCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S235347AbiG1JCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234654AbiG1JCJ (ORCPT
+        with ESMTP id S234654AbiG1JCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:02:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDA965581
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:02:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4E07B8236F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:02:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C0B5C433C1;
-        Thu, 28 Jul 2022 09:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658998924;
-        bh=GRgdNTJ8PYQp/lGN9oA41yePt1HnQHalvV+J4FRauOU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bYjds+F/mT8xbCAb8xnhSIbva+I4XQG4q8eLZb092m7gPpKrTB0IM91BGjYZ8J3xO
-         ZK51pJxeBbCyGQkFreBQh+AGC8sbPsIkiH98omsmCgJo2tz7WBD1vgzwmFGkWmw92y
-         qaueSsNXJUsCJgqoZGEjxAX8Vxkv/NF5n9Zo+VYFth8Yvik3Px8SkLOJctkYWesmx9
-         mrJZn75evlcJWowAzEncawFJB3C/JhABKdqVNWo/48OUjRijOGie0iKwrHO3X2jQZt
-         9GKBAByRjeJWgeQ+Fzdqd88HmlilA2qZA8OtPEzcj1CJyNn4ce+eWc532gcDVXzveb
-         0JqTHQ8rn6mEA==
-Date:   Thu, 28 Jul 2022 12:01:52 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Huang, Shaoqin" <shaoqin.huang@intel.com>
-Cc:     Rebecca Mckeever <remckee0@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] memblock test: Modify the obsolete description in
- README
-Message-ID: <YuJQgAJBxQkkooVT@kernel.org>
-References: <20220728011228.23691-1-shaoqin.huang@intel.com>
- <YuIK7cU8uH7zVP+S@bertie>
- <bcff18b0-5da7-860a-410c-3868b019c717@intel.com>
+        Thu, 28 Jul 2022 05:02:32 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D316564C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:02:31 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id u17so1270236lji.5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=yfi+fc1Zb5qV2V2Wb3g8x7DGlXgAZj2Jvy0KQfSodWs=;
+        b=BwyXq3EaFf0Zk/XqgsIyi1kp3V1mOAX5f18FjumLF+gccBiXx1HjsbONcMZ5QNMedw
+         qBdvcDNoFoRD5ftiEAV8xn5QAfa+MrQPfJ5dU3yN5m22KH2s+nvoD0ht9nT6F7gXxPbc
+         rPV85IBQZgWDggbXBX1wYRVVyjuT8+CafQDIc8dEt8L+vjvSOmAMfHsHgghhh0HDUQBL
+         ZXOH0VMgtp6O4V0MCvEmE/QMXM7vxwkqlnz8I0mxwDBn0Te5PJBIKmBbUrGW9NT0PztB
+         0M/i+IHtl1GHGK/WLthwFQOgXtpIUX+BsN37ymtq6SByXSx+DmeQmgvatDFKdxCfxSoT
+         Cadw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yfi+fc1Zb5qV2V2Wb3g8x7DGlXgAZj2Jvy0KQfSodWs=;
+        b=J88nKiZw6hSnpgidGG9jS3Blm/RLirGgLVaHnYrFDVJOoiLhO27znh8O2979xB8JBG
+         4c6B0UYZHXe3sHvKAi+c3a0B7U83bz8w0XLh04WiPX+TxutGpDPt/4e3fBmbnoAWWnsC
+         AIo8PTZkf4+fmf/2LjUwU2Mz/tc4smU5LYpcHpws6xD63U0wCNBkJIbSktWUjFryhPQ6
+         sI7YJDLJWghoLQn+aSzz8W9eQjCZ2KqyMAJzUcRG7JsNc8H0QYWFJmI3mfch4payP+NF
+         axVXkZ+jl92QmEI3pkaYQqG4cEGBXa/TjJjGy2xh0qv9Gz3AFSR8Ay9+4T0XQxL9mdvf
+         oGNQ==
+X-Gm-Message-State: AJIora+MeqUhvbUW1qF4ji2WpbbQ0Oecz6FdCEYd0PTy89/ZAKvitmKn
+        7gtBZMeq1bXeqYjjl1RINfZ3CA==
+X-Google-Smtp-Source: AGRyM1uhBJjljnPuyZUlcYQa2GgWlNAIASCeOULAJ0BJ+SvIe68yj6eKdiqLW80f0YKUzSiOuu+4OQ==
+X-Received: by 2002:a2e:910d:0:b0:25d:f7e7:8cce with SMTP id m13-20020a2e910d000000b0025df7e78ccemr8115318ljg.252.1658998949558;
+        Thu, 28 Jul 2022 02:02:29 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id l13-20020a19c20d000000b00489c6c76385sm97465lfc.268.2022.07.28.02.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 02:02:29 -0700 (PDT)
+Message-ID: <367cf98b-ef06-8f44-76c8-9099a1ec13dc@linaro.org>
+Date:   Thu, 28 Jul 2022 11:02:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bcff18b0-5da7-860a-410c-3868b019c717@intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
+ controller bindings
+Content-Language: en-US
+To:     Jerome Brunet <jbrunet@baylibre.com>, Yu Tu <yu.tu@amlogic.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220728054202.6981-1-yu.tu@amlogic.com>
+ <20220728054202.6981-2-yu.tu@amlogic.com>
+ <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
+ <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,48 +84,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 01:08:25PM +0800, Huang, Shaoqin wrote:
+On 28/07/2022 10:50, Jerome Brunet wrote:
 > 
+> On Thu 28 Jul 2022 at 10:41, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> On 7/28/2022 12:05 PM, Rebecca Mckeever wrote:
-> > On Wed, Jul 27, 2022 at 07:12:28PM -0600, shaoqin.huang@intel.com wrote:
-> > > From: Shaoqin Huang <shaoqin.huang@intel.com>
-> > > 
-> > > The VERBOSE option in Makefile has been moved, but there still have the
-> > > description left in README. For now, we use `-v` options when running
-> > > memblock test to print information, so using the new to replace the
-> > > obsolete items.
-> > > 
-> > Thanks for catching this!
-> > 
-> > > Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
-> > > ---
+>> On 28/07/2022 07:42, Yu Tu wrote:
+>>> Add new clock controller compatible and dt-bindings header for the
+>>> Everything-Else domain of the S4 SoC.
+>>>
+>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>
+>>
+>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index c1abc53f9e91..f872d0c0c253 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
+>>>  F:	drivers/clk/meson/
+>>>  F:	include/dt-bindings/clock/gxbb*
+>>>  F:	include/dt-bindings/clock/meson*
+>>> +F:	include/dt-bindings/clock/s4-clkc.h
+>>>  
+>>>  ARM/Amlogic Meson SoC Crypto Drivers
+>>>  M:	Corentin Labbe <clabbe@baylibre.com>
+>>> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
+>>> new file mode 100644
+>>> index 000000000000..b686c8877419
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/clock/s4-clkc.h
+>>
+>> Filename with vendor prefix, so:
+>> amlogic,s4-clkc.h
+>>
+>>> @@ -0,0 +1,146 @@
+>>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+>>> +/*
+>>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+>>> + * Author: Yu Tu <yu.tu@amlogic.com>
+>>> + */
+>>> +
+>>> +#ifndef _DT_BINDINGS_CLOCK_S4_CLKC_H
+>>> +#define _DT_BINDINGS_CLOCK_S4_CLKC_H
+>>> +
+>>> +/*
+>>> + * CLKID index values
+>>> + */
+>>> +
+>>> +#define CLKID_FIXED_PLL			1
+>>> +#define CLKID_FCLK_DIV2			3
+>>> +#define CLKID_FCLK_DIV3			5
+>>> +#define CLKID_FCLK_DIV4			7
+>>> +#define CLKID_FCLK_DIV5			9
+>>> +#define CLKID_FCLK_DIV7			11
+>>
+>> Why these aren't continuous? IDs are expected to be incremented by 1.
+>>
+> 
+> All clocks have IDs, it is one big table in the driver, but we are not exposing them all.
+> For example, with composite 'mux / div / gate' assembly, we usually need
+> only the leaf.
 
-...
+I understand you do not expose them all, but that is not the reason to
+increment ID by 2 or 3... Otherwise these are not IDs and you are not
+expected to put register offsets into the bindings (you do not bindings
+in such case).
 
-> > >   This will print information about which functions are being tested and the
-> > >   number of test cases that passed.
-> > > -To simulate enabled NUMA, use:
-> > > +For the full list of options from command line, see `./main --help`.
-> > 
-> > --help will display the list of command line options by default, but a
-> > help command line option isn't explicitly implemented. I'm planning to add
-> > the help option, so if you want to remove this sentence, I will add it when
-> > I implement the help option.
-> 
-> Hi, Rebecca.
-> 
-> That's ok. I didn't notice the --help has not been implemented. So I can
-> remove the line:
-> -For the full list of options from command line, see `./main --help`.
-> 
-> But after remove it. There seems a little stranger about how to get the full
-> list of options at the time. How do you think about it?
 
-I '--help' option is implemented, it just does not list help for itself.
-I think it's fine to keep the "For the full list..." line.
- 
+> Same has been done for the other AML controllers:
+> For ex:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/dt-bindings/clock/gxbb-clkc.h
 
--- 
-Sincerely yours,
-Mike.
+This cannot be fixed now, but it is very poor argument. Like saying "we
+had a bug in other driver, so we implemented the bug here as well".
+
+Best regards,
+Krzysztof

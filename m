@@ -2,146 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5083158364C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 03:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284FD58364E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 03:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234343AbiG1BdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 21:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S234925AbiG1Bdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 21:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiG1BdP (ORCPT
+        with ESMTP id S234499AbiG1Bdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 21:33:15 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C223B402D8;
-        Wed, 27 Jul 2022 18:33:13 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LtY492DVrzjXXv;
-        Thu, 28 Jul 2022 09:30:17 +0800 (CST)
-Received: from ubuntu-82.huawei.com (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Jul 2022 09:33:11 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH net v3] ipv6/addrconf: fix a null-ptr-deref bug for ip6_ptr
-Date:   Thu, 28 Jul 2022 09:33:07 +0800
-Message-ID: <20220728013307.656257-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 27 Jul 2022 21:33:36 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C3443314;
+        Wed, 27 Jul 2022 18:33:35 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id u17so442650lji.5;
+        Wed, 27 Jul 2022 18:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jxKqbswVZsLw8IW+LGNWP2UVTeG8mb8Td38Txe23DLc=;
+        b=ioYCFu7ds8X+9fH4MQ8VhDkAHZyEVt8mHQC0yLhf8dL+SBXHv9B15r9Ygf6cpTMyxB
+         hM82tnNs7fFafqFmzgUN7FDXYgxxMfSXJMO6mTVqOEUsrJxAhd2oS040F+lUM8NkBcr2
+         f8+tZFJ2m2L8MwO7/8X3jij/D31dms6zW9Gq/6FzlI7mvXbLolH8ewPp+Ryny3qi/tNo
+         ceBP6bOaV6kyBCyHh8iSoXv1Pa9rAWNJVlRA1AaJQnIYVLgTMWDMf2gf/ENL2lo9cLiA
+         igqrZikLOIbvd8y2F7aDYIKDf5M33OJnVfv7eW8RzZ1v6On8o2I3UN8Gal/MLzCmWaYZ
+         ob3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jxKqbswVZsLw8IW+LGNWP2UVTeG8mb8Td38Txe23DLc=;
+        b=xvA3RK6mkL5xLIz3tfD3XhaZYTW63BgynW9v7rHibSrGpmDGcOCUdTVIRBCAspS+V8
+         ruJpMwVJQ/+yCL2jTKrKOHv8IsZRMg2v2N1g1CpJW26GItwbyMaHFN6Fnj0t36VDwSLf
+         kwuOChDdtueNDABLt+M3vBq1NPQoXWjBx1rvVVBcz6We5YCIU9kZBzuW+w6PeOWp1YS0
+         oFQXqSnKxTQLRgJE0WBIVpIAvAD/KB1I4L3foBJecJ74zEZLKgWZQsldCsjdbuAm25ei
+         u2hRDDCLgjy3hW7mwLKciRfDP6pk7NSZh6NkyDgPFcrjIM+Kj851+PL8CQqc3qIo/czb
+         gj2w==
+X-Gm-Message-State: AJIora+5t3M3/vlIroVRydlAsrcVaeTL+j49gU7AVVOdGuyDy4yaBoYy
+        BeU18/bFdpGDc7g5uV96K6YTU/yyh6BTn4OuLw==
+X-Google-Smtp-Source: AGRyM1uFMam3hnsK/BpxjPm7jHKpt4PmxF9vD8g8fuWsdGwccicJMLYIAc2ZVMcm+WAVO53Ii/hxi//ZYyr43iuexS4=
+X-Received: by 2002:a05:651c:1a1e:b0:25e:e19:b5da with SMTP id
+ by30-20020a05651c1a1e00b0025e0e19b5damr4679868ljb.307.1658972013330; Wed, 27
+ Jul 2022 18:33:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727034454.31892-1-stanley.chu@mediatek.com>
+ <20220727034454.31892-2-stanley.chu@mediatek.com> <b8ecd9ce-35b7-276d-b028-2d8a4a900945@acm.org>
+In-Reply-To: <b8ecd9ce-35b7-276d-b028-2d8a4a900945@acm.org>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Thu, 28 Jul 2022 09:33:21 +0800
+Message-ID: <CAGaU9a-=sdD2O0=Jv0J0DgLwzR8nqt7tfcKjLTPzobVRSxFPrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] scsi: ufs: ufs-mediatek: Remove redundant header files
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Avri Altman <avri.altman@wdc.com>, alim.akhtar@samsung.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        peter.wang@mediatek.com, Chun-Hung Wu <chun-hung.wu@mediatek.com>,
+        alice.chao@mediatek.com, powen.kao@mediatek.com,
+        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
+        lin.gui@mediatek.com, eddie.huang@mediatek.com,
+        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
+        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change net device's MTU to smaller than IPV6_MIN_MTU or unregister
-device while matching route. That may trigger null-ptr-deref bug
-for ip6_ptr probability as following.
+Hi Bart,
 
-=========================================================
-BUG: KASAN: null-ptr-deref in find_match.part.0+0x70/0x134
-Read of size 4 at addr 0000000000000308 by task ping6/263
+On Thu, Jul 28, 2022 at 3:03 AM Bart Van Assche <bvanassche@acm.org> wrote:
+>
+> On 7/26/22 20:44, Stanley Chu wrote:
+> > Remove redundant header files like
+> > <linux/sched/clock.h>
+> >
+> > Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+> > Change-Id: I7796a23a5fdc767a4d00475b399844ceeaded0a8
+>
+> Please leave out Change-Id tags from patches that are sent upstream.
 
-CPU: 2 PID: 263 Comm: ping6 Not tainted 5.19.0-rc7+ #14
-Call trace:
- dump_backtrace+0x1a8/0x230
- show_stack+0x20/0x70
- dump_stack_lvl+0x68/0x84
- print_report+0xc4/0x120
- kasan_report+0x84/0x120
- __asan_load4+0x94/0xd0
- find_match.part.0+0x70/0x134
- __find_rr_leaf+0x408/0x470
- fib6_table_lookup+0x264/0x540
- ip6_pol_route+0xf4/0x260
- ip6_pol_route_output+0x58/0x70
- fib6_rule_lookup+0x1a8/0x330
- ip6_route_output_flags_noref+0xd8/0x1a0
- ip6_route_output_flags+0x58/0x160
- ip6_dst_lookup_tail+0x5b4/0x85c
- ip6_dst_lookup_flow+0x98/0x120
- rawv6_sendmsg+0x49c/0xc70
- inet_sendmsg+0x68/0x94
+Ooops, I forgot to clean them up in v2. Will fix it in the next version.
 
-Reproducer as following:
-Firstly, prepare conditions:
-$ip netns add ns1
-$ip netns add ns2
-$ip link add veth1 type veth peer name veth2
-$ip link set veth1 netns ns1
-$ip link set veth2 netns ns2
-$ip netns exec ns1 ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1
-$ip netns exec ns2 ip -6 addr add 2001:0db8:0:f101::2/64 dev veth2
-$ip netns exec ns1 ifconfig veth1 up
-$ip netns exec ns2 ifconfig veth2 up
-$ip netns exec ns1 ip -6 route add 2000::/64 dev veth1 metric 1
-$ip netns exec ns2 ip -6 route add 2001::/64 dev veth2 metric 1
-
-Secondly, execute the following two commands in two ssh windows
-respectively:
-$ip netns exec ns1 sh
-$while true; do ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1; ip -6 route add 2000::/64 dev veth1 metric 1; ping6 2000::2; done
-
-$ip netns exec ns1 sh
-$while true; do ip link set veth1 mtu 1000; ip link set veth1 mtu 1500; sleep 5; done
-
-It is because ip6_ptr has been assigned to NULL in addrconf_ifdown() firstly,
-then ip6_ignore_linkdown() accesses ip6_ptr directly without NULL check.
-
-	cpu0			cpu1
-fib6_table_lookup
-__find_rr_leaf
-			addrconf_notify [ NETDEV_CHANGEMTU ]
-			addrconf_ifdown
-			RCU_INIT_POINTER(dev->ip6_ptr, NULL)
-find_match
-ip6_ignore_linkdown
-
-So we can add NULL check for ip6_ptr before using in ip6_ignore_linkdown() to
-fix the null-ptr-deref bug.
-
-Fixes: dcd1f572954f ("net/ipv6: Remove fib6_idev")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
----
-v3:
-  - Fix 'Fixes' commit
-
-v2:
-  - Use NULL check in ip6_ignore_linkdown() but synchronize_net() in
-    addrconf_ifdown()
-  - Add timing analysis of the problem
-
----
- include/net/addrconf.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/include/net/addrconf.h b/include/net/addrconf.h
-index f7506f08e505..c04f359655b8 100644
---- a/include/net/addrconf.h
-+++ b/include/net/addrconf.h
-@@ -405,6 +405,9 @@ static inline bool ip6_ignore_linkdown(const struct net_device *dev)
- {
- 	const struct inet6_dev *idev = __in6_dev_get(dev);
- 
-+	if (unlikely(!idev))
-+		return true;
-+
- 	return !!idev->cnf.ignore_routes_with_linkdown;
- }
- 
--- 
-2.25.1
-
+Thanks, Stanley

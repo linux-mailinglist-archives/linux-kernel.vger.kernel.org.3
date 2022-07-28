@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6473B58416B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2878584182
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbiG1Oe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
+        id S232573AbiG1Of1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiG1Oej (ORCPT
+        with ESMTP id S232525AbiG1OfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:34:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD756A9F8;
-        Thu, 28 Jul 2022 07:32:00 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id w205so2077475pfc.8;
-        Thu, 28 Jul 2022 07:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=6oZ44hEUQblGcAR6ofAUSZycDGVSclA71sZxflubxwQ=;
-        b=NzPq7/fsX2x4s3d2ieI7jO2Lw6v2IVjFMJA9ZC81ngORkHusPSjFeMo3WVvn8ktKKD
-         c+IrbMcN3T6BwwGpKcqFy7wYWaixRbbyiFu+hLuVVjycacqwLg2j882pgS/I3CbOryIf
-         6IIP3Ce2GN2yKTVweBdJoBnGl7mBHYIrT10FjcP+mgs6hpHHZa0XbYuxofCxJKVOZ4P8
-         HFLjp0Hue06tmjc7O0jZTwtDEFAbSIqLrBsJi/v16LArbTTpMZcZz7bD5POG0KQKVISx
-         B1hQ0k3rcoyyQ7EKr/1VXNctfUBhFLkYVIwBNl3mnnYfGm4DJI4+cH5L2U293maYotiZ
-         TWJA==
+        Thu, 28 Jul 2022 10:35:06 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC726627A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:34:14 -0700 (PDT)
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 17FC23F11F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1659018853;
+        bh=smAmLQDqaAhXYtvdpeSgEu24V4rDJU+98olXFW6DsY0=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=QXAt1CJF2EncS3zzwCWphaId3zC1GCQzRylnxNWCJgprHfPesmUztoSXIa6YQrZyP
+         2U2cjXyivXwrxfZqwUgQBwnxjMftuR6b0ysmFyY/CABXpqjbAkbnJG5+eUGtOTEbao
+         phWhvqps66Sr/xuxF+Avdv0cMOg6Z1DD+q+Z8CLwh9VFJ/ElblETxb5zoa9uJkOsOD
+         IlfQ+c3wK73jA65BRNAt4h66bPn41dtQ+MN1QdaU77hpBOPv1Pep2ixAjMqxv98hE6
+         iIBN3sbPPX9MIEmcz9iI90o0NcrEiAXUaG7/z4Twee9C7z802hjrs935ugtUfsMgZ1
+         lZwGmZmbLt/KA==
+Received: by mail-io1-f71.google.com with SMTP id v5-20020a5d9405000000b0067c98e0011dso594795ion.1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:34:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=6oZ44hEUQblGcAR6ofAUSZycDGVSclA71sZxflubxwQ=;
-        b=r6CrVLBVjuv7XdGA61Gu3HEqtGfXDqbOnje/Fs6pPnFZx4wjlR0HuoQVOqtZHyJkhU
-         syJT9NpwuzYdo/h+liL+BQzBce2cJOpRgvKGZAslVdFZbRrakljB7PzIHKA0PQDL6O0K
-         HbNzHR8b/I27QJBpHSf0X5Ggi+l4QvL8lUSirPZNJE7q1jLpoNt+mcK6P27KvAlRPRut
-         eMUdlraiClldvj29e/LuoT0MwGjgGfyf/XpIp1+1BgJ6BmAqwhm9jRcgTFLvZogmUWpQ
-         5ePh64ECrjhiZ+U1x2fnXT7PuO0ShuwX/O4RS9jmvhZL/kEe6drLKHRfKEtOYpkWVrn+
-         ngSQ==
-X-Gm-Message-State: AJIora9LXZh0rL2mcviEHj3IySbs2Sf4xs/OoUMYMds8GapYghZ1NZRz
-        gPxFaVu4xZNxl+qYAjNcrng=
-X-Google-Smtp-Source: AGRyM1tYMDQ1g5FXssNlVJgSsYWnrrpDhMGbKYf5Ln0V0LC9slDq0yuzPIaB+VnWlrkumYSRWNVpyw==
-X-Received: by 2002:a05:6a00:26f1:b0:52b:d0aa:4178 with SMTP id p49-20020a056a0026f100b0052bd0aa4178mr27348044pfw.86.1659018719861;
-        Thu, 28 Jul 2022 07:31:59 -0700 (PDT)
-Received: from debian ([2402:3a80:196b:933a:553c:d695:8a60:6d86])
-        by smtp.gmail.com with ESMTPSA id x24-20020aa79418000000b00528c6c7bf37sm825573pfo.129.2022.07.28.07.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 07:31:59 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:31:52 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/62] 4.19.254-rc1 review
-Message-ID: <YuKd2KJXia5GBp5n@debian>
-References: <20220727161004.175638564@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=smAmLQDqaAhXYtvdpeSgEu24V4rDJU+98olXFW6DsY0=;
+        b=mMeWOvtF0oieSbcLykIRLWb1iK1RpieUobt/gK9CzzognzTOT3k91fX85OFYtojkU7
+         +JANTo2nOTRfYl5/IR/x0bHPawoqgKpFQ9SfVd9wdBUt1ux9OFMMms+1+bkktKEet9SD
+         nCX4EHF8fgeHnwU9sxbd+nm3w4RFwJzcKEV4XhjoVx1FewV+dGkD6OjyM0yg342geOrb
+         FhnTfCgZmUw0GylnQy7u8D1gFVup1g6a/sHLIeWxnRwSj2Vxy0Vx2RZbNIee0z9a8Etu
+         63vVPsQ01c+d0ehlaUuoIKTns7t87IAefGwJHEUYP9utSyuYcvjZXXqRSvogloWa7Pi6
+         3rbw==
+X-Gm-Message-State: AJIora+6xe2w1SFo7gWGHdABmNXf8sTWZNr9cSj4ZnkaA1J8nMfRFYFb
+        bVZYQ3VKlC7xvJEKjKBoKuL/xmBPHkynGNFP5YA30GabHD2oZVGYsxdIPy2IPOwKlz6vhRs+3e6
+        khED6JCcxyGOK9WASrSTTO2HgvkV1EwZijp8TDoto9zTfSJf2WRLfXyKmDQ==
+X-Received: by 2002:a05:6638:1312:b0:341:40a1:7e20 with SMTP id r18-20020a056638131200b0034140a17e20mr10730103jad.228.1659018851755;
+        Thu, 28 Jul 2022 07:34:11 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sO8Inr1oA7DW5DfOY7SZGAvnWP2w936SHR2YGe8sa8XqC9EHtPsYxNlwAzfgb53552GDvTByb6QG/2yAh7A8k=
+X-Received: by 2002:a05:6638:1312:b0:341:40a1:7e20 with SMTP id
+ r18-20020a056638131200b0034140a17e20mr10730093jad.228.1659018851534; Thu, 28
+ Jul 2022 07:34:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727161004.175638564@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220728122602.2500509-1-cascardo@canonical.com> <YuKCpLOLeDOI7GII@zn.tnic>
+In-Reply-To: <YuKCpLOLeDOI7GII@zn.tnic>
+From:   Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Date:   Thu, 28 Jul 2022 15:33:35 +0100
+Message-ID: <CADWks+aosM99jv9WwLvFo3LPEnsqts+2bJPzMnRqJX70qz51cg@mail.gmail.com>
+Subject: Re: [PATCH] x86/bugs: Do not enable IBPB at firmware entry when IBPB
+ is not available
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, 28 Jul 2022 at 13:35, Borislav Petkov <bp@alien8.de> wrote:
+>
+> drop stable@
+>
+> On Thu, Jul 28, 2022 at 09:26:02AM -0300, Thadeu Lima de Souza Cascardo wrote:
+> > Some cloud hypervisors do not provide IBPB on very recent CPU processors,
+> > including AMD processors affected by Retbleed.
+>
+> Which hypervisors are those? How relevant is that use case?
+>
+> How do I reproduce it here?
 
-On Wed, Jul 27, 2022 at 06:10:09PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.254 release.
-> There are 62 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
+Azure public cloud (so it is Azure custom hyper-v hypervisor) these
+instance types https://docs.microsoft.com/en-us/azure/virtual-machines/dav4-dasv4-series
+booted as gen2 (UEFI boot, so Dasv4-series instance types). A
+particular one is chosen in our automated testing, and always fails. I
+believe more than one instance type from that series of instance types
+is affected.
 
-Build test (gcc version 11.3.1 20220724):
-mips: 63 configs -> no  failure
-arm: 115 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+I haven't tested but
+https://docs.microsoft.com/en-us/azure/virtual-machines/dasv5-dadsv5-series
+are probably affected too.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+It's a class of popular-ish instance types, meaning that it could
+potentially take out a class of users who due to availability,
+performance, and/or pricing choose to run their workloads on those
+instance types. Potentially causing them a major outage of being
+unable to boot and/or reboot.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1570
+-- 
+okurrr,
 
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+Dimitri

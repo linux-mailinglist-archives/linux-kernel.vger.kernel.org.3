@@ -2,189 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A675584541
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660A258455F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbiG1Ryv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S232995AbiG1Rzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiG1Ryr (ORCPT
+        with ESMTP id S232720AbiG1Rzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:54:47 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29E74CE9;
-        Thu, 28 Jul 2022 10:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659030886; x=1690566886;
-  h=to:cc:subject:references:date:mime-version:
-   content-transfer-encoding:from:message-id:in-reply-to;
-  bh=JsCihHwGNelzEytHVWS5kY7iC8ruf5PuejZHsP3vb04=;
-  b=SGFIZ99v3nOJJ0VR8q9S0V/b05U3LmsdqYSjId3gW0ajM3WiLwXW2DbR
-   ssDXaDiPRI73C3MpBDMY/3HyGURWPNPmDd1vJ18G2GTohEMpaOmXlvRIv
-   fl3AT9a45pwiXdINpRNRgCcb/6GzXqwg3uI8Q5+uBE/NxG9613B23zP9/
-   268KKo2nwdZAwsKzUJBXhzXyKQNq+Hw6zIvO90K+7hePgcaWda7M5Nrlp
-   mfZu1kjE/7UUdJsB5iRK6m6VkQc1c9wNl+MRoCggLpsPSsPYNOcNO8o63
-   kDFF96IRs9hZitMvw3ei7KCFOXQOJD1Ri18KwDso53mRX4xiVTNE4SW+N
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="268342962"
-X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
-   d="scan'208";a="268342962"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 10:54:46 -0700
-X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
-   d="scan'208";a="576577269"
-Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.212.82.178])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 28 Jul 2022 10:54:44 -0700
-Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
-To:     "Dave Hansen" <dave.hansen@intel.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Kai Huang" <kai.huang@intel.com>
-Cc:     "Jarkko Sakkinen" <jarkko@kernel.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Sean Christopherson" <seanjc@google.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
- <ab467244dd03b5f94bafe9068b1c02790033c18c.camel@intel.com>
- <a82e840f-2030-7ab3-7160-f1b900ecdb7d@intel.com>
- <06a9fef8579e880b9b031f03911739d4d902dbe0.camel@intel.com>
- <op.1pwcs8btwjvjmi@hhuan26-mobl1.mshome.net>
- <4c614defad8e9ce2bccce8a062600212e4978113.camel@intel.com>
- <op.1pw6lhz8wjvjmi@hhuan26-mobl1.mshome.net>
- <c99078bf036b5bb175dd4c173790a90b77c6ef72.camel@intel.com>
-Date:   Thu, 28 Jul 2022 12:54:40 -0500
+        Thu, 28 Jul 2022 13:55:39 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014C927B28
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:55:37 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id s14so2741341ljh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n+Kpt1SrfIHhgdOH6tBSVGEfnfJMA34tVlG2Tbb5sFQ=;
+        b=I4qPi8f+3XxKtWd7+MAY0XhUt0Gh5petC0kOU1jusTfg05yFCCorTM1HKl7AzCl4LB
+         pWWEX9IYTPitqYdh2uJ1alCZ8L2Xso9vH1lgeTpoKLaK0ajEwiDkWcyqdU3D9LwzszW+
+         k+i3EYifzKI8HqFpv1Z+93Od3Mfv3vR5jo1cIuTIxPL+zD/5eUMBPclEn86VbJnsrFDD
+         CBMq/ChQC8iLiv6wzsw/hC6Uxfmxm/YA72cWIjY7cflzWJrLWespgfi5h+Ym9pwmUntz
+         vr/cfU09+9EBKNNnXWNidkgGs7KswSjN9tl66jA1Hj/8GlBuHpu43RSJ0dPinVUMCZDH
+         S4Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=n+Kpt1SrfIHhgdOH6tBSVGEfnfJMA34tVlG2Tbb5sFQ=;
+        b=WaIxxcLBKZ3q8YnUOO8cU3k7V0/E5cCVCgbDhZRvKzLyGaUN9Rwm6mVZyRWeC5vl3x
+         LwFGyZVvamA7E4VK+gQOtYqhc6nDr+m7ZggFPqriPsDl7OZlqDjmbJ5Dv8EFOnvjZFcW
+         dN9aIgYGKkKVdCOsCnPqmg3csfBLFglR3Ez6KmC+CwEN0nLZmMWDGpPUHbOdeW2xwMCE
+         2c3JxBxp5vqbqTHr4QpNqeJND627C/81JU/iQLR3sm1sGdEHb40NCIK9+F5G5hFkbg9u
+         NEm9Rn2mcQbp/5If12zi1Livprzl5MyoGlifhsIPKrIIpWdwwQsg8kld14lmrlA11qZa
+         /xFg==
+X-Gm-Message-State: AJIora+uCLx/Ov1kHQw2CSaOivHwItJ1gE/jBTtxmULD8RQvWcgf1SKP
+        TLrfktWrMW3zncCKjljHr/jDZw==
+X-Google-Smtp-Source: AGRyM1v7R/9C/AmvCfr3po6yc03PXFrUR1UYDYImrkIqM9TWG/XyVQz+Ox5Yrs5dgjKdUOS8tAl5Mw==
+X-Received: by 2002:a2e:938c:0:b0:25d:f714:52e8 with SMTP id g12-20020a2e938c000000b0025df71452e8mr8633ljh.454.1659030936008;
+        Thu, 28 Jul 2022 10:55:36 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id u13-20020ac258cd000000b00489f0c8bddesm294371lfo.207.2022.07.28.10.55.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 10:55:35 -0700 (PDT)
+Message-ID: <98cc7989-fafd-c252-2b05-46a788622f7c@linaro.org>
+Date:   Thu, 28 Jul 2022 19:55:34 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/2] dt-binding: iio: time: add
+ ti,am62-ecap-capture.yaml
+Content-Language: en-US
+To:     Julien Panis <jpanis@baylibre.com>, jic23@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mranostay@ti.com
+References: <20220728175124.468461-1-jpanis@baylibre.com>
+ <20220728175124.468461-2-jpanis@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220728175124.468461-2-jpanis@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-From:   "Haitao Huang" <haitao.huang@linux.intel.com>
-Organization: Intel Corp
-Message-ID: <op.1p02pepwwjvjmi@hhuan26-mobl1.mshome.net>
-In-Reply-To: <c99078bf036b5bb175dd4c173790a90b77c6ef72.camel@intel.com>
-User-Agent: Opera Mail/1.0 (Win32)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 16:21:53 -0500, Kai Huang <kai.huang@intel.com> wrote:
+On 28/07/2022 19:51, Julien Panis wrote:
+> This commit adds a YAML binding for TI ECAP used in capture operating mode.
+> 
+> Signed-off-by: Julien Panis <jpanis@baylibre.com>
 
-> On Tue, 2022-07-26 at 10:28 -0500, Haitao Huang wrote:
->> On Tue, 26 Jul 2022 05:47:14 -0500, Kai Huang <kai.huang@intel.com>  
->> wrote:
->>
->> > On Tue, 2022-07-26 at 00:10 -0500, Haitao Huang wrote:
->> > > On Mon, 25 Jul 2022 05:36:17 -0500, Kai Huang <kai.huang@intel.com>
->> > > wrote:
->> > >
->> > > > On Fri, 2022-07-22 at 08:21 -0700, Dave Hansen wrote:
->> > > > > On 7/22/22 06:26, Kai Huang wrote:
->> > > > > > Did a quick look at the spec.  It appears ENCLU[EDECCSSA]  
->> should
->> > > be
->> > > > > used
->> > > > > > together with AEX-notify.  So besides advertising the new
->> > > > > > SGX_ATTR_ASYNC_EXIT_NOTIFY bit to the KVM guest, I think we  
->> should
->> > > > > also
->> > > > > > advertise the ENCLU[EDECCSSA] support in guest's CPUID, like  
->> below
->> > > > > (untested)?
->> > > > >
->> > > > > Sounds like a great follow-on patch!  It doesn't seem truly
->> > > functionally
->> > > > > required from the spec:
->> > > > >
->> > > > > > EDECCSSA is a new Intel SGX user leaf function
->> > > > > > (ENCLU[EDECCSSA]) that can facilitate AEX notification  
->> handling...
->> > > > >
->> > > > > If that's wrong or imprecise, I'd love to hear more about it and
->> > > also
->> > > > > about how the spec will be updated.
->> > > > >
->> > > >
->> > > > They are enumerated separately, but looks in practice the notify
->> > > handler
->> > > > will
->> > > > use it to switch back to the correct/targeted CSSA to continue to  
->> run
->> > > > normally
->> > > > after handling the exit notify.  This is my understanding of the
->> > > > "facilitate"
->> > > > mean in the spec.
->> > > >
->> > > > Btw, in real hardware I think the two should come together,  
->> meaning no
->> > > > real
->> > > > hardware will only support one.
->> > > >
->> > > > Haitao, could you give us more information?
->> > > >
->> > > You are right. They are enumerated separately and HW should come  
->> with
->> > > both
->> > > or neither.
->> > > My understanding it is also possible for enclaves choose not to  
->> receive
->> > > AEX notify
->> > > but still use EDECCSSA.
->> > >
->> >
->> > What is the use case of using EDECCSSA w/o using AEX notify?
->> > If I understand correctly EDECCSSA effectively switches to another
->> > thread (using
->> > the previous SSA, which is the context of another TCS thread if I
->> > understand
->> > correctly).  Won't this cause problem?
->>
->> No. Decrementing CSSA is equivalent to popping stack frames, not  
->> switching
->> threads.
->> In some cases such as so-called "first stage" exception handling, one
->> could pop CSSA back to the previous after resetting CPU context and  
->> stack
->> frame appropriate to the "second stage" or "real" exception handling
->> routine, then jump to the handler directly. This could improve exception
->> handling performance by saving an EEXIT/ERESUME trip.
->>
->>
->
-> Looking at the AEX-notify spec again, EDECCSSA does below:
->
-> (* At this point, the instruction is guaranteed to complete *)
-> CR_TCS_PA.CSSA := CR_TCS_PA.CSSA - 1;
-> CR_GPR_PA := Physical_Address(DS:TMP_GPR);
->
-> It doens't reset the RIP to CR_GPA_PA.RIP so looks yes you are right.   
-> It only
-> "popping the stack frame" but doesn't switch thread.
->
-> But the pseudo code of EDECCSSA only updates the CR_TCS_PA and CR_GPR_PA
-> registers (forget about XSAVE not), but doesn't manually updating the  
-> actual CPU
-> registers such as GPRs.  Are the actual CPU registers updated  
-> automatically when
-> CR_xx are updated?
->
-No, the enclave code is supposed to do that. Here is are a few more  
-details on the flow I mentioned.
 
-On any AEX event, CPU saves states including GPR/XSave into SSA[0]. When  
-AEX-notify is turned off, for enclaves to handle exceptions occurred  
-inside enclave, user space must do EENTER with the same TCS on which the  
-exception occurred. EENTER would give a clean slate of GPR and SSA[1]  
-becomes active for next AEX. It's enclave's responsibility to save  
-GPR/XSave states in SSA[0] to some place (e.g., stack), then EDECCSSA,   
-then jump to the "second stage" handler. (Note now SSA[0] is reactivated  
-and ready if another AEX occurs). The second stage handler then fixes the  
-situation that caused the original AEX, restore CPU context from the saved  
-SSA[0] states, jump back to original place where exception happened.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

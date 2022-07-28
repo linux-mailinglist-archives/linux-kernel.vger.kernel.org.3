@@ -2,155 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DFB58426C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCC4584272
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiG1O6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        id S229995AbiG1O6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiG1O5n (ORCPT
+        with ESMTP id S230469AbiG1O61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:57:43 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E376A9FF
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:56:55 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id pw15so2081286pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:56:55 -0700 (PDT)
+        Thu, 28 Jul 2022 10:58:27 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB80B10F3;
+        Thu, 28 Jul 2022 07:58:22 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id mf4so3625945ejc.3;
+        Thu, 28 Jul 2022 07:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IE9HJ/QB34gIaoVfeAMT+Lysq4a4pjkYfZrZPAIzbsM=;
-        b=RXTHZFRSPzp68kD724m5hsf+h9LtUEHJnmncEI+XoFM3zKXOvGbuUcMNHL7XGgFBAc
-         iiIYHrNSQAOXKsuaxXf6NQ295QaBAwFreKJlS/XP8KudogteskdpNKxm3cSavhkIe6ja
-         fymhfAygy+H7mP4QKCHAI0TXGkfJcxKeSsM/2srtvZHtBU52GVLEciyL/1cnLLLa/guD
-         vM4SQQsM89mlD/gf0Rw4UGb4b1TypUkRGfCm16zj0mgmcFOrozxTtVDXLltzwtwdv0YD
-         1j6gK3vJUkoI8EgGPoCV7ENnokfEIOPU/UQkVEHNBbUBciaFb0SSkhgQERl3LHuNNmAN
-         5yew==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tTSXNaw/6JZLwn2P0PGnuQ0WLB4Qu3elZxHzblM8fpU=;
+        b=c1vY1amK3SSb5Sk378Tzj2r3I4dfUYqRyR9XZ9mgTFi9sNzZ23GuRdYijNYiu2eX53
+         fdsboL/PunLjY5acbyZT/0UEAs/liP15aCEuppzTzwjXwLcsMMG5jUeuBECGpO9nnuUX
+         zXpoNt5vlZnf/4pVrX/7785OC8FVRcxwc0TqmFIbS3cqjDUejPDzp/8oEdwWPd363GbD
+         0+UmnBhekSdZkddQnF1bwWpmJ7EQAIdBvhqlsKgwl01vpePNvsgcCfHirsTZTdhj3Ady
+         NAWy/pA/+lGohtpaER7TXv1dWORYSk4JeTwNjJx2pzEAFaZ8Yj+Nqowj9RPJbPa7Qiaw
+         HazQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IE9HJ/QB34gIaoVfeAMT+Lysq4a4pjkYfZrZPAIzbsM=;
-        b=s7Ksb2jPhsI01eHEl+JXWmNo+ECqa0MgVIvewGU3iApBz0xIoLH6bbnyY5nuY8sJSs
-         +tsFOSWvQZHeBa+lRBk1/TbfHJyVJdDNFbSNncP1ip32lxVS2mRQT/9esPkc6B1xGYnc
-         YYxtm1dKI2O6t6SkVB/FsxRP4eCH/a/cJjLso36+/Ddmg46n+0AgjSRtyrCjpvYZk4aP
-         FFgU2eJOK4DHkyWFY7nYqu5AhCAGfzQT+3YSAKT7drXf/WAJsthOdVdc7MlV6H0xpc5l
-         xmbCVT12J0f3Qu1YKMo9a1Hs/gjYnTQtUX6t9uSvEdiL8UEOLArbD+2FzeWexrKg7LwG
-         TJpg==
-X-Gm-Message-State: AJIora8cE004gEAXA8wKu/rppwOhhW55lkgGy1a8cI3qL8LwR2yRliPz
-        CfYCzIDBdo443iqU9dxNjs16kwMYkDOUfw==
-X-Google-Smtp-Source: AGRyM1uTsDdDBG61hWpxX10KUtjI5qqB2K1VibyIddhNEL7eC66FtNpaFPjMeUkIbxIvplNZrvb1aQ==
-X-Received: by 2002:a17:90b:1c0b:b0:1f0:23df:5406 with SMTP id oc11-20020a17090b1c0b00b001f023df5406mr10853910pjb.157.1659020214919;
-        Thu, 28 Jul 2022 07:56:54 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902a3cc00b0016397da033csm1437740plb.62.2022.07.28.07.56.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 07:56:54 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 14:56:50 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: Possible 5.19 regression for systems with 52-bit physical
- address support
-Message-ID: <YuKjsuyM7+Gbr2nw@google.com>
-References: <20220728134430.ulykdplp6fxgkyiw@amd.com>
- <20220728135320.6u7rmejkuqhy4mhr@amd.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tTSXNaw/6JZLwn2P0PGnuQ0WLB4Qu3elZxHzblM8fpU=;
+        b=s6F7Zmp294qtsm2h1ZfBixL4+zzDGEz1JY0mIur2HPLg1I9onFMreYl0u5Ni1/mdwb
+         nxPa+ejm2WfYkiWg0dnHp9fMhxkcCIpmS4/BpjAfUYp4VYM9rCbijyqYc/qoZuZjUJkP
+         osz/4LxEcv/HJ4Dio13nkCZDWzbp9hWp17UcALJh3Dc17+l/vREGccUB1lTeLXLvS2uy
+         qknuLzb9GXuR5iaQpmpEme0xQ2elVPkxtFrKCISFXbQyKXQ/lyQ+vX3byOzK63hGfWJm
+         E4SgOm+o7DsR+r5hQee9ejn9bcLF1U/6OgvkN5xdCxImVrzZEFLE7JHPMPF8VTMQBLdO
+         3C+Q==
+X-Gm-Message-State: AJIora8hC0YE7FZ7FNksR2RxDtVIytXmvgSZ00X2H5f8GLzM1TBdfuNv
+        cUai5ke/A3Wp4emKcO1DHqM=
+X-Google-Smtp-Source: AGRyM1upxJMWgGwceVicP+qb2cN5gr+enz0dwc0rY8PAmdQ62kOzzpZJEXUWQxNPjQhxhTMGjnE7kA==
+X-Received: by 2002:a17:907:6818:b0:72b:5bac:c3a3 with SMTP id qz24-20020a170907681800b0072b5bacc3a3mr20623516ejc.139.1659020301357;
+        Thu, 28 Jul 2022 07:58:21 -0700 (PDT)
+Received: from [0.0.0.0] (tor-exit-60.for-privacy.net. [185.220.101.60])
+        by smtp.gmail.com with ESMTPSA id cq3-20020a056402220300b0043bc300c499sm827109edb.79.2022.07.28.07.58.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 07:58:21 -0700 (PDT)
+Message-ID: <8e694cb6-c3dc-74e3-6804-fc532f108523@gmail.com>
+Date:   Thu, 28 Jul 2022 17:57:58 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728135320.6u7rmejkuqhy4mhr@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] efi: earlycon: Add support for generic framebuffers
+ and move to fbdev subsystem
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tony Lindgren <tony@atomide.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Herring <robh@kernel.org>
+References: <20220728142824.3836-1-markuss.broks@gmail.com>
+ <20220728142824.3836-3-markuss.broks@gmail.com>
+ <CAK8P3a2fZ9O6vSEyxY1KW71pG_Oyvwxp3zTbW2GuaSD6aj+Qfw@mail.gmail.com>
+From:   Markuss Broks <markuss.broks@gmail.com>
+In-Reply-To: <CAK8P3a2fZ9O6vSEyxY1KW71pG_Oyvwxp3zTbW2GuaSD6aj+Qfw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022, Michael Roth wrote:
-> On Thu, Jul 28, 2022 at 08:44:30AM -0500, Michael Roth wrote:
-> > Hi Sean,
-> > 
-> > With this patch applied, AMD processors that support 52-bit physical
+Hi Arnd,
+
+On 7/28/22 17:48, Arnd Bergmann wrote:
+> On Thu, Jul 28, 2022 at 4:28 PM Markuss Broks <markuss.broks@gmail.com> wrote:
+>>
+>> Add early console support for generic linear framebuffer devices.
+>> This driver supports probing from cmdline early parameters
+>> or from the device-tree using information in simple-framebuffer node.
+>> The EFI functionality should be retained in whole.
+>> The driver was disabled on ARM because of a bug in early_ioremap
+>> implementation on ARM.
+>>
+>> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+>> ---
+>>   .../admin-guide/kernel-parameters.txt         |  12 +-
+>>   MAINTAINERS                                   |   5 +
+>>   drivers/firmware/efi/Kconfig                  |   6 +-
+>>   drivers/firmware/efi/Makefile                 |   1 -
+>>   drivers/firmware/efi/earlycon.c               | 246 --------------
+>>   drivers/video/fbdev/Kconfig                   |  11 +
+>>   drivers/video/fbdev/Makefile                  |   1 +
+>>   drivers/video/fbdev/earlycon.c                | 301 ++++++++++++++++++
 > 
-> Sorry, threading got messed up. This is in reference to:
+> It looks like this is not actually related to fbdev, and since drivers are
+> moving from fbdev/simplefb towards drm/simpledrm, maybe it would be
+> better to put this into either drivers/gpu/drm/tiny/ or possibly
+> drivers/video/console to let this be used without enabling fbdev?
+
+Ideally this shouldn't depend on anything, because it isn't utilizing 
+any of fbdev code and won't be utilizing any of drm/console code. I 
+agree that either of those would be a better place for it, but which one 
+do you think would suit more for this driver?
+
 > 
-> https://lore.kernel.org/lkml/20220420002747.3287931-1-seanjc@google.com/#r
-> 
-> commit 8b9e74bfbf8c7020498a9ea600bd4c0f1915134d
-> Author: Sean Christopherson <seanjc@google.com>
-> Date:   Wed Apr 20 00:27:47 2022 +0000
-> 
->     KVM: x86/mmu: Use enable_mmio_caching to track if MMIO caching is enabled
+>          Arnd
 
-Oh crud.  I suspect I also broke EPT with MAXPHYADDR=52; the initial
-kvm_mmu_reset_all_pte_masks() will clear the flag, and it won't get set back to
-true even though EPT can generate a reserved bit fault.
-
-> > address will result in MMIO caching being disabled. This ends up
-> > breaking SEV-ES and SNP, since they rely on the MMIO reserved bit to
-> > generate the appropriate NAE MMIO exit event.
-> >
-> > This failure can also be reproduced on Milan by disabling mmio_caching
-> > via KVM module parameter.
-
-Hrm, this is a separate bug of sorts.  SEV-ES (and later) needs to have an explicit
-check the MMIO caching is enabled, e.g. my bug aside, if KVM can't use MMIO caching
-due to the location of the C-bit, then SEV-ES must be disabled.
-
-Speaking of which, what prevents hardware (firmware?) from configuring the C-bit
-position to be bit 51 and thus preventing KVM from generating the reserved #NPF?
-
-> > In the case of AMD, guests use a separate physical address range that
-> > and so there are still reserved bits available to make use of the MMIO
-> > caching. This adjustment happens in svm_adjust_mmio_mask(), but since
-> > mmio_caching_enabled flag is 0, any attempts to update masks get
-> > ignored by kvm_mmu_set_mmio_spte_mask().
-> > 
-> > Would adding 'force' parameter to kvm_mmu_set_mmio_spte_mask() that
-> > svm_adjust_mmio_mask() can set to ignore enable_mmio_caching be
-> > reasonable fix, or should we take a different approach?
-
-Different approach.  To fix the bug with enable_mmio_caching not being set back to
-true when a vendor-specific mask allows caching, I believe the below will do the
-trick.
-
-The SEV-ES dependency is easy to solve, but will require a few patches in order
-to get the necessary ordering; svm_adjust_mmio_mask() is currently called _after_
-SEV-ES is configured.
-
-I'll test (as much as I can, I don't think we have platforms with MAXPHYADDR=52)
-and get a series sent out later today.
-
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index 7314d27d57a4..a57add994b8d 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -19,8 +19,9 @@
- #include <asm/memtype.h>
- #include <asm/vmx.h>
-
--bool __read_mostly enable_mmio_caching = true;
--module_param_named(mmio_caching, enable_mmio_caching, bool, 0444);
-+bool __read_mostly enable_mmio_caching;
-+static bool __read_mostly __enable_mmio_caching = true;
-+module_param_named(mmio_caching, __enable_mmio_caching, bool, 0444);
-
- u64 __read_mostly shadow_host_writable_mask;
- u64 __read_mostly shadow_mmu_writable_mask;
-@@ -340,6 +341,8 @@ void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask)
-        BUG_ON((u64)(unsigned)access_mask != access_mask);
-        WARN_ON(mmio_value & shadow_nonpresent_or_rsvd_lower_gfn_mask);
-
-+       enable_mmio_caching = __enable_mmio_caching;
-+
-        if (!enable_mmio_caching)
-                mmio_value = 0;
-
-
+- Markuss

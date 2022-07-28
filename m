@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A594A584202
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC79584204
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiG1OmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        id S233358AbiG1Omq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbiG1OmI (ORCPT
+        with ESMTP id S233057AbiG1OmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:42:08 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875F368DF7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:41:28 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id r6so1024699ilc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uHVdLHTLmgFe2akRBUIu4PcEhdufN5r4A+NHKCOopGw=;
-        b=LKbvDfhlpM4XYKYCWvsp2mOGqa+kvhnz6nEMtjTjOMintnXhaWsFlqvUzRA4B8YBXF
-         FuyjzouudCJdAc4AetYcMK02BYnEMMMov3VUmG/n2QeApUG2UxwIGNN3cV6BlUvnEkW2
-         tQLupTi/5v3vu++hChnQYYJpZiUQcgn88DEpI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uHVdLHTLmgFe2akRBUIu4PcEhdufN5r4A+NHKCOopGw=;
-        b=YX8FuJthVkKDwmMxxhdi/kdCay69mYNBoW+KDh8Bw6eKKhH5/rAT3H00ubXRlEsSwH
-         AZSXMoLm63i/hiP3RtG09sUXa5U00aezf8+76ESM2ZGeiS4fIoAuDJbRB1ibCdCaveHV
-         gcqz3GirhCLT36zukSHffcPZJnYjUHQD1uC9tIwlF3TVfzZzLy6RdpiaWR9nOOds7azT
-         tiXrRCG/M6bPBhI7m9m0I6ammp62P68EQMm8vy5bj+GvC5B05Pr9zmqPEL+YlKrXGR8b
-         JDetfxwGgExiuiCAt26Y1ZGXeBX/ANLka9rHQLM33RCdy8kzR7TQ32O8JIlU7o+9AjjJ
-         lRDg==
-X-Gm-Message-State: AJIora9Q29zxAC16/BhaljEfaAjU1ysCY9SsKDZ5MuaBhkp/XtDXxOHH
-        3B8+AbYF9eRjFbWBwACbYlsfSQ==
-X-Google-Smtp-Source: AGRyM1sUFBYDswiH6UyZ/aLyOfx1zsVicc9zuK8XfpVKkUmTgVD+VE9b81yteaC1bzk5AhpmW+HPaw==
-X-Received: by 2002:a92:2a0a:0:b0:2d9:2571:f57e with SMTP id r10-20020a922a0a000000b002d92571f57emr10603446ile.154.1659019287736;
-        Thu, 28 Jul 2022 07:41:27 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t129-20020a025487000000b003415b95c097sm447510jaa.42.2022.07.28.07.41.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 07:41:27 -0700 (PDT)
-Subject: Re: [PATCH 5.10 000/105] 5.10.134-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220727161012.056867467@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9a2f10a9-b783-044f-a5c3-de5d6299202c@linuxfoundation.org>
-Date:   Thu, 28 Jul 2022 08:41:26 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 28 Jul 2022 10:42:23 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008C112D24
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:41:53 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8B7185C00ED;
+        Thu, 28 Jul 2022 10:41:51 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 28 Jul 2022 10:41:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1659019311; x=
+        1659105711; bh=XYhfyDVH0yHI3jIlMNs9kEOh1alcltQ7znsPGjCUPlA=; b=h
+        fBqnTr/PrWy8B8BCKM9HIsotNih32VBh8Mi72h8yG9BBdpFFdAPVKPRKpg7EMNrI
+        8aGO3Q04xxu7zWtEHdz7F7Thy3xeg63r2mQ+DWXpe+uMUU3kZ15sNE7ojQ19ySk3
+        SCpA2kVP4HHwg9a3l121ycXXk+kF8BVkHLEon2VjcDWpQ9vx/ofkwpMhABGRsGIU
+        ece+DYg2wAN8DF/mN701BYBqU0DBNS5Pvdk2WKakvhg4Y+sJ57ZBhlYaLt8GVgNd
+        UNXXRssv7D7H7c+VfnctAfuCmdVNgmKxa4su97i1Dpm2ZCXd3kcI0IE15DR9QptL
+        zYd8yg/doMj3fUX6vOh8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1659019311; x=
+        1659105711; bh=XYhfyDVH0yHI3jIlMNs9kEOh1alcltQ7znsPGjCUPlA=; b=O
+        qyaHRyMP1iAz23MRnfnPg4UFHAgFoXsTSnp7UVtpr55OSfmlsxNoZdEghOOEcz0G
+        LqQiAvY2gufzN/znLIlYDVjqi9woC27EjcMiPvpZpA+4i/W9uRqBGTJebumfBvt9
+        lStBldI9d+ezKLjKC7wHH7hftN0UUseTtzyg4oP/t/n2vDI3Ox5b34ZYZgFMAn2J
+        ozuNQlc56PBagyfJtd4GlgBvafPXldVHD1wSAE4gkV4AZxPlt/0tNXUjhO2mov30
+        3/BQI3k++ctwMML5qJI09URCwclRo3iUTbN9LQd5c6265WmVNchi7b+/oKpE1s94
+        L+PEgRiWN587zOXENEkYg==
+X-ME-Sender: <xms:LqDiYk62tEB--HnAFE6B1qLXh2XZfj2sxjKs_8UkN3n5qAc0ytIZyg>
+    <xme:LqDiYl7PmeQ-XYTCVVCeq3lUicAWB3ojpIuGjdtOEMkS0R_zPKtNDoriyuPXE3GP4
+    HhY0gUyPxfH_nYhR-Q>
+X-ME-Received: <xmr:LqDiYjcX1Ctb6AIBN6sLV_QW2iEUAfglg1ntQsx5R6sicvozXIxg2JS1eyo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduhedgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfgggtgfesth
+    ekredtredtjeenucfhrhhomhepofgrgihimhgvucftihhprghrugcuoehmrgigihhmvges
+    tggvrhhnohdrthgvtghhqeenucggtffrrghtthgvrhhnpeeuieeggffhffffieefheduie
+    euvdetgeeufeffvefgtedvffehheekffevudefieenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:L6DiYpK4wJM9422Q8LwfH-Q3J3HvUbpAIkD3aNhiQP9Ls8Zp_Q6h3g>
+    <xmx:L6DiYoKGvQ1XPM_rkbAX9CzYDyvNf3ZkQ8xd9fNcocQK0qc75kBWqQ>
+    <xmx:L6DiYqytSV1Bhgb8d9Yf45v-3fZf062Rp89EOVeDEX6z1JggEst7Hw>
+    <xmx:L6DiYg9LFF6nKG_SuQVB5_MuWV5jQ8_GwbZ-bmbyl6ksYoimtFUj5w>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 28 Jul 2022 10:41:47 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     emma@anholt.net, daniel@ffwll.ch, dakr@redhat.com,
+        airlied@linux.ie, christian.koenig@amd.com
+Cc:     Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 00/10] drm: use idr_init_base() over idr_init() if applicable
+Date:   Thu, 28 Jul 2022 16:41:41 +0200
+Message-Id: <165901911294.5946.5075667196143577988.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220701185303.284082-1-dakr@redhat.com>
+References: <20220701185303.284082-1-dakr@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 10:09 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.134 release.
-> There are 105 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, 1 Jul 2022 20:52:53 +0200, dakr@redhat.com wrote:
+> From: Danilo Krummrich <dakr@redhat.com>
 > 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
+> This patch series initializes IDRs with idr_init_base(&idr, 1) rather than
+> idr_init(&idr) in case for the particular IDR no IDs < 1 are ever requested -
+> this avoids unnecessary tree walks.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.134-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> Danilo Krummrich (10):
+>   drm/amdgpu: use idr_init_base() to initialize mgr->ctx_handles
+>   drm/amdgpu: use idr_init_base() to initialize fpriv->bo_list_handles
+>   drm: use idr_init_base() to initialize master->magic_map
+>   drm: use idr_init_base() to initialize master->lessee_idr
+>   drm: use idr_init_base() to initialize mode_config.object_idr
+>   drm: use idr_init_base() to initialize mode_config.tile_idr
+>   drm/sis: use idr_init_base() to initialize dev_priv->object_idr
+>   drm/v3d: use idr_init_base() to initialize v3d_priv->perfmon.idr
+>   drm/via: use idr_init_base() to initialize dev_priv->object_idr
+>   drm/todo: remove task for idr_init_base()
 > 
-> thanks,
-> 
-> greg k-h
-> 
+> [...]
 
-Compiled and booted on my test system. No dmesg regressions.
+Applied to drm/drm-misc (drm-misc-next).
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Thanks!
+Maxime

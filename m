@@ -2,135 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFF6584235
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A762B58424D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiG1OwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S233272AbiG1Oxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiG1OwM (ORCPT
+        with ESMTP id S232947AbiG1OxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:52:12 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE915D0C0;
-        Thu, 28 Jul 2022 07:52:10 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v3so1545108wrp.0;
-        Thu, 28 Jul 2022 07:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mD3MJdwe1M/MeC+R1sdMr+F5YiHskPdcW+5CKgvwmK4=;
-        b=iUGg/CrWW+MiUyA/mg1p5vzybXCg3jUouFcnlHWaVGqFxrhWwizVOpH2IkQW7szJma
-         iOC8pfSoe7ZZfKyDF4gvUHQ1mUov9IdU4wV/+Mk1J7/6KN37cdUlC+pfFtyERNyzfFQj
-         XuXVRdDr902PQSnkrr2MmHMUyQOnyMt+G6aCUtLTlLNZevb2z6wAE/CSG6KVdMXRmpm8
-         ED78UkYZK4M8/tXowcNICLq+pGO/J8ezajSuCEvi2D0KxuSH13LKj59MYbAgyvHaYjcX
-         0YwhkT39e7Dt+m1ZkNZv8VMP/qameaFdsVlmPPWo0SK5lvvQBzhpDyw+irGhUosn662C
-         rCVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mD3MJdwe1M/MeC+R1sdMr+F5YiHskPdcW+5CKgvwmK4=;
-        b=bkvfragGHb5C/unm0I+wN/tyBhvCcqwbl0jfWiFoVDwJKnOTmtvN8jNS3B2ZWPUQBK
-         coQUcnzK+lM00aoFM/4YdOqNInaIZ3YKxbjlfW3q/VeXQIXaCm+YpcDmwaRDEsrS00Ay
-         RrY+ALc+psF+YKibTNOURFfcmLJGoA1+jbMLLByM5mEqG038WExtK7wZkGzGBhWRR+8+
-         tYLjv3rUO/ZlsrmVc7w+q1gsz68bCSRv+LmJQtFYl6S0Z7CpcBjyoD7Xx2Yi1TgI/+Zt
-         LZOKgEtRsv4rxdZEfOljRUEuV12S64rgsajdMZFvatLfcHc6gir8vidqVku6CaT9CWxS
-         fFSw==
-X-Gm-Message-State: AJIora/GtUbQecyp0m4dfE6gsfvP2JboJx5qU2HzWBHWGSdmJfm9qQ/6
-        gJWb4v0LsGTQfov6hS48h2c=
-X-Google-Smtp-Source: AGRyM1sGc5o3vzAllmoqiOc4kg6oAhY9pYH2gIOcTuw0tQ66DwxqCUNnE+4m3BL7R0boMJmgLYXsBg==
-X-Received: by 2002:a05:6000:1f0e:b0:21e:87c9:6b55 with SMTP id bv14-20020a0560001f0e00b0021e87c96b55mr13834716wrb.326.1659019929483;
-        Thu, 28 Jul 2022 07:52:09 -0700 (PDT)
-Received: from [0.0.0.0] ([185.246.188.60])
-        by smtp.gmail.com with ESMTPSA id q14-20020adff94e000000b0021d7b41255esm1122958wrr.98.2022.07.28.07.52.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 07:52:09 -0700 (PDT)
-Message-ID: <30ce6f21-0a91-81cb-8b03-5acff17c59ee@gmail.com>
-Date:   Thu, 28 Jul 2022 17:52:04 +0300
+        Thu, 28 Jul 2022 10:53:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7133E6050B;
+        Thu, 28 Jul 2022 07:53:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5698C106F;
+        Thu, 28 Jul 2022 07:53:15 -0700 (PDT)
+Received: from e126387.arm.com (unknown [10.57.11.24])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C9A83F70D;
+        Thu, 28 Jul 2022 07:53:13 -0700 (PDT)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: [PATCH v5 00/14] A patch series improving data quality of perf test for CoreSight
+Date:   Thu, 28 Jul 2022 15:52:42 +0100
+Message-Id: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] efi: earlycon: Add support for generic framebuffers
- and move to fbdev subsystem
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Tony Lindgren <tony@atomide.com>, linux-doc@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rob Herring <robh@kernel.org>
-References: <20220728142824.3836-1-markuss.broks@gmail.com>
- <20220728142824.3836-3-markuss.broks@gmail.com> <YuKfnAjB4gV0ki4A@kroah.com>
-From:   Markuss Broks <markuss.broks@gmail.com>
-In-Reply-To: <YuKfnAjB4gV0ki4A@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
 
-On 7/28/22 17:39, Greg Kroah-Hartman wrote:
-> On Thu, Jul 28, 2022 at 05:28:19PM +0300, Markuss Broks wrote:
->> Add early console support for generic linear framebuffer devices.
->> This driver supports probing from cmdline early parameters
->> or from the device-tree using information in simple-framebuffer node.
->> The EFI functionality should be retained in whole.
->> The driver was disabled on ARM because of a bug in early_ioremap
->> implementation on ARM.
->>
->> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
->> ---
->>   .../admin-guide/kernel-parameters.txt         |  12 +-
->>   MAINTAINERS                                   |   5 +
->>   drivers/firmware/efi/Kconfig                  |   6 +-
->>   drivers/firmware/efi/Makefile                 |   1 -
->>   drivers/firmware/efi/earlycon.c               | 246 --------------
->>   drivers/video/fbdev/Kconfig                   |  11 +
->>   drivers/video/fbdev/Makefile                  |   1 +
->>   drivers/video/fbdev/earlycon.c                | 301 ++++++++++++++++++
->>   8 files changed, 327 insertions(+), 256 deletions(-)
->>   delete mode 100644 drivers/firmware/efi/earlycon.c
->>   create mode 100644 drivers/video/fbdev/earlycon.c
-> 
-> That should be a rename, not a delete/create, right?
+This is a prelude to adding more tests to shell tests and in order to
+support putting those tests into subdirectories, I need to change the
+test code that scans/finds and runs them.
 
-Should this change be split into two separate commits,
-one for moving the file and the second for making changes?
+To support subdirs I have to recurse so it's time to refactor the code to
+allow this and centralize the shell script finding into one location and
+only one single scan that builds a list of all the found tests in memory
+instead of it being duplicated in 3 places.
 
-> 
-> thanks,
-> 
-> greg k-h
+This code also optimizes things like knowing the max width of desciption
+strings (as we can do that while we scan instead of a whole new pass
+of opening files). It also more cleanly filters scripts to see only
+*.sh files thus skipping random other files in directories like *~
+backup files, other random junk/data files that may appear and the
+scripts must be executable to make the cut (this ensures the script
+lib dir is not seen as scripts to run). This avoids perf test running
+previous older versions of test scripts that are editor backup files
+as well as skipping perf.data files that may appear and so on.
 
-- Markuss
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+
+Carsten Haitzler (Rasterman) (14):
+  perf test: Refactor shell tests allowing subdirs
+  perf test: Add CoreSight shell lib shared code for future tests
+  perf test: Add build infra for perf test tools for CoreSight tests
+  perf test: Add asm pureloop test tool
+  perf test: Add asm pureloop test shell script
+  perf test: Add git ignore for perf data generated by the CoreSight
+    tests
+  perf test: Add memcpy thread test tool
+  perf test: Add memcpy thread test shell script
+  perf test: Add thread loop test tool
+  perf test: Add thread loop test shell scripts
+  perf test: Add unroll thread test tool
+  perf test: Add unroll thread test shell script
+  perf test: Add git ignore for tmp and output files of CoreSight tests
+  perf test: Add relevant documentation about CoreSight testing
+
+ .../trace/coresight/coresight-perf.rst        | 160 ++++++++++++++
+ MAINTAINERS                                   |   1 +
+ tools/perf/.gitignore                         |   6 +-
+ tools/perf/Documentation/arm-coresight.txt    |   5 +
+ tools/perf/Makefile.perf                      |  18 +-
+ tools/perf/tests/Build                        |   1 +
+ tools/perf/tests/builtin-test-list.c          | 207 ++++++++++++++++++
+ tools/perf/tests/builtin-test-list.h          |  12 +
+ tools/perf/tests/builtin-test.c               | 152 ++-----------
+ tools/perf/tests/shell/coresight/Makefile     |  30 +++
+ .../tests/shell/coresight/Makefile.miniconfig |  24 ++
+ .../tests/shell/coresight/asm_pure_loop.sh    |  18 ++
+ .../shell/coresight/asm_pure_loop/.gitignore  |   1 +
+ .../shell/coresight/asm_pure_loop/Makefile    |  34 +++
+ .../coresight/asm_pure_loop/asm_pure_loop.S   |  28 +++
+ .../shell/coresight/memcpy_thread/.gitignore  |   1 +
+ .../shell/coresight/memcpy_thread/Makefile    |  33 +++
+ .../coresight/memcpy_thread/memcpy_thread.c   |  79 +++++++
+ .../shell/coresight/memcpy_thread_16k_10.sh   |  18 ++
+ .../shell/coresight/thread_loop/.gitignore    |   1 +
+ .../shell/coresight/thread_loop/Makefile      |  33 +++
+ .../shell/coresight/thread_loop/thread_loop.c |  86 ++++++++
+ .../coresight/thread_loop_check_tid_10.sh     |  19 ++
+ .../coresight/thread_loop_check_tid_2.sh      |  19 ++
+ .../coresight/unroll_loop_thread/.gitignore   |   1 +
+ .../coresight/unroll_loop_thread/Makefile     |  33 +++
+ .../unroll_loop_thread/unroll_loop_thread.c   |  74 +++++++
+ .../shell/coresight/unroll_loop_thread_10.sh  |  18 ++
+ tools/perf/tests/shell/lib/coresight.sh       | 132 +++++++++++
+ 29 files changed, 1105 insertions(+), 139 deletions(-)
+ create mode 100644 Documentation/trace/coresight/coresight-perf.rst
+ create mode 100644 tools/perf/Documentation/arm-coresight.txt
+ create mode 100644 tools/perf/tests/builtin-test-list.c
+ create mode 100644 tools/perf/tests/builtin-test-list.h
+ create mode 100644 tools/perf/tests/shell/coresight/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/Makefile.miniconfig
+ create mode 100755 tools/perf/tests/shell/coresight/asm_pure_loop.sh
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/asm_pure_loop.S
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+ create mode 100755 tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/thread_loop/thread_loop.c
+ create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+ create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/unroll_loop_thread.c
+ create mode 100755 tools/perf/tests/shell/coresight/unroll_loop_thread_10.sh
+ create mode 100644 tools/perf/tests/shell/lib/coresight.sh
+
+-- 
+2.32.0
+

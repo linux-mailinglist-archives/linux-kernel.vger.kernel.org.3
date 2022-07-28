@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C355838D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402FC5838E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiG1GhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        id S233783AbiG1GkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 02:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiG1Gg7 (ORCPT
+        with ESMTP id S233614AbiG1Gj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:36:59 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2044.outbound.protection.outlook.com [40.107.96.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BBB4D143;
-        Wed, 27 Jul 2022 23:36:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c9rMsnD2QtmH2lttWS3sXUds8bN0CTeHMD9zFkXuTmAU4RDLWSmTLQGmJso1nlJOblj929SZiuU/SnXyX1V4Y3K84JqjDsum41Kjy9/cw3Skp/OPqyQZN26QAUN0t6tpOhT90ghLX6Tno5z/XQrO5oKo+nSTc8nNWcC2Sy/PEwMVng2yI0VYVEPG+OCA5wxU5Hq+Hi3e0xZODnTsB4AsmUCHfLsSd3CAwaRiFbBxuZJONF0GD9M6PNaesd2GrIiGHQiGLw5i8vfO9loUzyqMkFBgk+9MWDMyaLVLhFAbo0oSGrpxTfruGkrcZLm7vajVIw5EfxpYw4nZ39c+8qBPAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LQlo73x8gVYUlxkI5upNzuQWREeqbWiTVB5sL1QZs2g=;
- b=Wqv9tp6W8tcjs30TinCHw65RO/8N3XJlrCoPqurW/g3N3y76Rq4Av5/GGlbdnaI/aHcdKamEJMaVg1oWRBe7/8BPjxv8Tfi3ILOErQVWNOmYl2wTKCVAO02xvgjks17e82Mb3Np6KZtjvX3OER/VLrbF7wbsVxnhjznd5vq4cfAkfwFA82ysTibBlwkCd3v+kIxoo/3H+r7TTjm4vvYSJQV6KzSI9ARwW3CSC2wyNZ+e5DbC0R7UE8O9P4beVqdMNVPYJzCnQyDUAR71Z38dn5QYKlrBfW6nz6ZZkTJuviiF5cT0h21CGD9923ndA966gz5GtHf20q6U6DSPnrbuJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LQlo73x8gVYUlxkI5upNzuQWREeqbWiTVB5sL1QZs2g=;
- b=OOCvMMs/Kwvx2jnI9aKuhPQNvqKqhF7XX7hZiBFA4iDBQXK333PuqRdGJtg5UcuHMZds6UQGDH7ATIez3Hmg1XPqXV3b2Mr6bt7l0XWIuLtuzW0xymR9hPS+tGTO5moBfJVRhKtvVOP9QrhN2/AmyWpFckYoMAHq8D4ZxSzh6ykDARICj44gimkeWkFdhQtg3JQfdF9vu2fUtVAjrRmYQN/UVhCJvgHID6kGZCvjka8fB3kFDDs8+dzTLoppcImgafj1gzaBczcV648vuXOnKFN6+KZ7Qjz/59hEDrSaX20HujSwUapkc08JabDSOfXWI4dj6DMwVyjoKKTF5vZx6g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by MWHPR1201MB0222.namprd12.prod.outlook.com (2603:10b6:301:54::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 28 Jul
- 2022 06:36:55 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::2d48:7610:5ec2:2d62]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::2d48:7610:5ec2:2d62%4]) with mapi id 15.20.5482.011; Thu, 28 Jul 2022
- 06:36:55 +0000
-Date:   Thu, 28 Jul 2022 09:36:49 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     petrm@nvidia.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] mlxsw: core_linecards: Remove duplicated include
- in core_linecard_dev.c
-Message-ID: <YuIugZUYq1VL1Rud@shredder>
-References: <20220727233801.23781-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727233801.23781-1-yang.lee@linux.alibaba.com>
-X-ClientProxiedBy: VI1PR09CA0177.eurprd09.prod.outlook.com
- (2603:10a6:800:120::31) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+        Thu, 28 Jul 2022 02:39:58 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AEC5C96F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:39:57 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id b133so1120951pfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/kUZ/dgqC7iw0jhI4uYoWyAcN87LUuqF13JYqIaofqY=;
+        b=hTxJbdtJd14HVPheUaqfh98GeNpnBo3mzEF73RKAoFpp+jNZuDAMxRDyKMNSidAYur
+         lWqQY/766U1A1JtH3lOY4TzIlJXpOZenWrAFHJlgNMpROvL18TdxgfISIWp3i0Ywll1j
+         j6Z+uq/2+NlpnaVM63F+yyb7MYeXg4cwVh15kC0KXxVuPbV5KknP7MNMI1WDeXvG45rR
+         72LX1ZOOVRsD0BMe7cAsrhhUMMk8ZoMQYwXKiBkLEwJ+93Ypmw/TCotxWMZMN0kv949x
+         Zwxy8sNaYe3oo40Hkzj5VQScEIgTDYo5hgUPhoLcawI+BU+Yzad3YwEPD0tcsne7Nkwv
+         ArRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/kUZ/dgqC7iw0jhI4uYoWyAcN87LUuqF13JYqIaofqY=;
+        b=sbg7O671XTrcdit889lEirlRIThRPrOfOzbbzLjY7LPcyhsaDEE7Lz4AMqgw5sverC
+         sIc4wc6kZqeEYzD8gJGh88MtUjthm78qAwoW3SMsKnq6fDj/MixiPc45hAIi1PdQXckr
+         6n2wNfX9Fa46Ok5yl4fascMHL+cgYJdPiqwCcCqJ9H4H1oP7xpaMxP8A6IxtADfbrqL/
+         rYO1ys3950QsuYeGwKnWKPSVVeNTrpnYaGxD+Iuf0tREEeIYRKGu954JZXlFRs5+k4z/
+         gHq5XSWj39aMVyoLdnGOBtwXy2KWI0chArpCvpv6sA+LBfDccrXa4S/IFbvCq1Tv731U
+         Egwg==
+X-Gm-Message-State: AJIora97iKkZNJ+CaLBpn77kQQCtiCmC9sQk4kR/gkXGAcqU3xrdEWc5
+        rmZq6HNCf6AXhw7MZAJz/lQzTA==
+X-Google-Smtp-Source: AGRyM1tvBFvRXWWgx31iR7pfQeXgyc4b1FfwvZgr1t5Z3xxZ5QUrFkoWWUhy4aMXTTZ+7pxYqOhPQg==
+X-Received: by 2002:a65:57c6:0:b0:415:c329:5d49 with SMTP id q6-20020a6557c6000000b00415c3295d49mr21175206pgr.581.1658990397120;
+        Wed, 27 Jul 2022 23:39:57 -0700 (PDT)
+Received: from localhost.localdomain ([61.120.150.71])
+        by smtp.gmail.com with ESMTPSA id l1-20020a17090a384100b001f31e91200asm704723pjf.44.2022.07.27.23.39.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 23:39:56 -0700 (PDT)
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+To:     miklos@szeredi.hu
+Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>,
+        Hongbo Yin <yinhongbo@bytedance.com>,
+        Tianci Zhang <zhangtianci.1997@bytedance.com>
+Subject: [PATCH] ovl: only WARN_ON_ONCE() if dentry is NULL in ovl_encode_fh()
+Date:   Thu, 28 Jul 2022 14:38:55 +0800
+Message-Id: <20220728063856.72705-1-zhangjiachen.jaycee@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 73725d85-ae03-4924-1f6c-08da70639056
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0222:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WAFTsWX4UKgfuQU57T1cA20ut7vD+oLdPElKbDmh4PX8zcJQ5wc+T0b7EGmY5Oqwif4F81ul+tLo7RNDgzrOxM8dJwCrMGy0/jXxuRZwNKSgZ2eMBl1SH9Tc8i5xIrXBCCbBxMwF1YEEWbVzAz17riq0w0Mp9US5lxH2m3WTq8x0hRy3L1lR31BvsrJHJMN1MXmLW7Q0W5dV9272FIYf/Z3Q0drd6pqh1GzsWhj0v6k1JDVm+8G/62hGDKoFQMNNeBMTSKy1bViQbL2EdNqMEtKj6+wVFWE4OLVZbV4pSUPD4L6Eb/CU8dd79HoICZ/hGUpqRnybKGZu+69iog7LFz1sY86ytKWBEBTU7KWb7eJr3ykdgiA5e0FYb6AG6q/TCm8S0Ng/Xmdne/FvvcFc5u4uUYSjMaPfOyDfbA8gRsIdoZyQO9lfdUakXQH69IxeO9k8H13EGwojatxNUyz84BfKYB4RfXBy3U3IJDWwqAOlGkRVYVfHWrzi2fWWPoMiLPCA3RzwgLHLVLhf5alg7jy85m0QS8YQsveNivyNbB4xC78JZNX6UGvseOZMaEzIc0UM/PybOB/V9o8uRzuFfCyxdiq9LU8L6amGHUib0vo9oi5knkjgUKd7Drantqgz8ge3jGWerlIJkL7EQVNCxNzHYYRP8G6WkIy+FvZ2vI9MjvrZeqAcksVxvWkBrs0TVFhnJFaVlDfqYqwrx6BZZHWQkAMPeeXLpxmoOltpDSZvhquzFSESdnbinhFegE/T
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(136003)(396003)(376002)(39860400002)(346002)(366004)(4744005)(186003)(2906002)(5660300002)(316002)(86362001)(6916009)(33716001)(9686003)(6666004)(6506007)(6512007)(26005)(41300700001)(38100700002)(6486002)(83380400001)(8936002)(4326008)(8676002)(66476007)(66556008)(66946007)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+csSAF4otDEMCGPG3mxCrn61ABJ9fTZ4SpY9QRgwSUU6lhNjmH+Eic2lzWlu?=
- =?us-ascii?Q?WqxgiPuD9E1M2BVZ/tKnVYUe3SoiJJk9r2fOIqMyLQe9HVoXpoc/OxKcm1rt?=
- =?us-ascii?Q?O0v8yOgqXJQeTtv6zDRhprfGnMrOwCBpPWGJZSHHTZDX6taYz7zUlXJp9BVS?=
- =?us-ascii?Q?SiA0AU0g4bjtGgg3ABUiiIxdc9Gc1qr5VmUyYKHkDlidnMI4yWEGlr2T9J8k?=
- =?us-ascii?Q?3IS1bdrpGt4HXC4UJBibffgiGEiQ1T2iMD4bS+AnEsh6g6Uid364aR8BCAKi?=
- =?us-ascii?Q?mPYdkblQRlvGeGuYE+WsmuJJnqOPTqpHEiuKmYs8IoyYmWo0ci0qCJwuymhR?=
- =?us-ascii?Q?RyQtepDkOgSRkClwEKIJ//pKdDhMwUPr7Xw8YZ0GOKGuL0+GyXe3KJO3R89N?=
- =?us-ascii?Q?rw9r0FKkNfdkYS/CZoJg8NDMrEvqmab5TS5ttfCbn1wwDTY/8uuaD9LucYky?=
- =?us-ascii?Q?BycVgC2HKraafKfq3mFYT+D8K0mwnAmx1wajg4OiNJ0kAXt5Ec4CWAaG+/et?=
- =?us-ascii?Q?I8PqmxEvPWJcVus3ui93Fr/qB577LoBhNBwpK8hqZjqdbqQ5WAv/wGhx8K5R?=
- =?us-ascii?Q?kyzx+ZnvdC0nFaUsn+wy+0T+bz1NF+itGEu4uiZRIZHnX2V2cL/PrclwHqoE?=
- =?us-ascii?Q?NSzP+651WY6nvT82K0qhf8wqYkWKCLsL6TsHw5jlwJ1hBwm/uEdTmC7SRf+N?=
- =?us-ascii?Q?cwNfUBs+1T4WtqeB8NzGFskM9QqqN2NXSygn971mc8GQf6Xu4LtZ7uhQt/tR?=
- =?us-ascii?Q?11NES4k1oZweKbcgzxJn5NA+uQqlkYBNBbtkdTmznSsw3xpDCyZQF7jXy/PA?=
- =?us-ascii?Q?RWBWsjMGz2DXYcV6Gd+hnl6M/tlhdH2HGQV/VUrhXCJ1RDo4iPRMW6ypC8hS?=
- =?us-ascii?Q?4/H21xeGr9+WinDb258HZmh3Kt66MOZNjrlNmbqhNdzMzv4N+sCl3O39oeLE?=
- =?us-ascii?Q?40w05NMvKULYR2TkTsci89cPjMrRfWjb+/2NWcowX6Fvox/6YGUQacXD/6ow?=
- =?us-ascii?Q?CGIN4y8fNArqmMT9VWtdVQ862Z04O3e+JYsiNgevTgCS4ixTMXWOQGVIUUbk?=
- =?us-ascii?Q?MzxGapbtasrOy/0JmCZcSF70HibpEql4JzwAlSn+IzhHEVgub2nPaUxoNLhe?=
- =?us-ascii?Q?U7D+EgNTF3uo5Rwejh7lqP3shEATzblkktm4LppbrBIkqpBEicIekhx7nyV3?=
- =?us-ascii?Q?BNRR9Uq8OAafdvSGiTQJJ7BUFbireBsRyGEBnd3lRsktjaccumgAKBTflKsG?=
- =?us-ascii?Q?KWBi4bFMET+DhALP9vqv7MohHnGWcTEn8rGCm78UMPUmE4qMUCrMIiLoGsjs?=
- =?us-ascii?Q?THkcEnPAO+thnFk87n0OhMa/RBoUXo4B8fbRcdjxElGgUcN9Xsy3DjFpKu4h?=
- =?us-ascii?Q?z02ZKp6nDdftpuKTFEVpYJPRB6UKQW210cQVSCq63Rs33LBAqpnJj7SgoIsc?=
- =?us-ascii?Q?NyPIXaUsYXcx9P5+CCM+2nvcxtr2pw8lNIhSEWSnyTMagrkOToK13zVuquke?=
- =?us-ascii?Q?SqhezXbvas0H3ZnPmFnw/eNpJwZc+SdrWZ5udvDwU762odQDNWyk5Kc2w8Dr?=
- =?us-ascii?Q?1ESz1XG46xy7D/akVXE2jsQlumWBBklS6Ap+P0A8?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73725d85-ae03-4924-1f6c-08da70639056
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 06:36:55.3544
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: imnexYHkBLzwvVLjiGS9XzAHCRq/7o0ulxVYomd3fq0z717cA7CTBJ6vHdFT3dv42BBuVIIp76isSx70sSEp2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0222
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 07:38:01AM +0800, Yang Li wrote:
-> Fix following includecheck warning:
-> ./drivers/net/ethernet/mellanox/mlxsw/core_linecard_dev.c: linux/err.h is included more than once.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Some code paths cannot guarantee the inode have any dentry alias. So
+WARN_ON() all !dentry may flood the kernel logs.
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+For example, when an overlayfs inode is watched by inotifywait (1), and
+someone is trying to read the /proc/$(pidof inotifywait)/fdinfo/INOTIFY_FD,
+at that time if the dentry has been reclaimed by kernel (such as
+echo 2 > /proc/sys/vm/drop_caches), there will be a WARN_ON(). The
+printed call stack would be like:
 
-BTW, next time, please use "net-next" instead of "-next".
+    ? show_mark_fhandle+0xf0/0xf0
+    show_mark_fhandle+0x4a/0xf0
+    ? show_mark_fhandle+0xf0/0xf0
+    ? seq_vprintf+0x30/0x50
+    ? seq_printf+0x53/0x70
+    ? show_mark_fhandle+0xf0/0xf0
+    inotify_fdinfo+0x70/0x90
+    show_fdinfo.isra.4+0x53/0x70
+    seq_show+0x130/0x170
+    seq_read+0x153/0x440
+    vfs_read+0x94/0x150
+    ksys_read+0x5f/0xe0
+    do_syscall_64+0x59/0x1e0
+    entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Thanks
+So let's replace WARN_ON() with WARN_ON_ONCE() to avoid kernel log
+flooding.
+
+Reported-by: Hongbo Yin <yinhongbo@bytedance.com>
+Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Signed-off-by: Tianci Zhang <zhangtianci.1997@bytedance.com>
+---
+ fs/overlayfs/export.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
+index 2eada97bbd23..3a8650442aec 100644
+--- a/fs/overlayfs/export.c
++++ b/fs/overlayfs/export.c
+@@ -259,7 +259,7 @@ static int ovl_encode_fh(struct inode *inode, u32 *fid, int *max_len,
+ 		return FILEID_INVALID;
+ 
+ 	dentry = d_find_any_alias(inode);
+-	if (WARN_ON(!dentry))
++	if (WARN_ON_ONCE(!dentry))
+ 		return FILEID_INVALID;
+ 
+ 	bytes = ovl_dentry_to_fid(ofs, dentry, fid, buflen);
+-- 
+2.20.1
+

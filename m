@@ -2,245 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5F35841E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697455841FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbiG1Oky convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 28 Jul 2022 10:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S233100AbiG1Olo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiG1Ok2 (ORCPT
+        with ESMTP id S232796AbiG1Ok1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:40:28 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046D91EAF6;
-        Thu, 28 Jul 2022 07:38:23 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id e127so2819313yba.12;
-        Thu, 28 Jul 2022 07:38:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=k45jpSrW5er3yuZp9JhSAKvAe/Lx7ZG0RRR4+n2dOdw=;
-        b=61FzNlsiAhEctIGjK1yQ9CU3LdzPRM4BBhgazoSc96pZvLmqUufMyc1WI6BkNPnaUD
-         bJ9hT9O0O1lXiwfVLOYqFsF/kSZ27LRsMcJL5CuKkEGUr5nCYxekG9IOzU/qtljPbvvG
-         1YlzyOiTUM2erhNIbSJOVaUcQgaewDKbagceyfCcWiMCM+0nOASOdQsJj2HQivzwS9+6
-         SH+4U5WNn3tmh0lzCeuBtaRfF5N3o16x/u8PDKD50TPJ8W8pmY8BsdT1zBch5bTvI1jZ
-         WoKjQzJYHjOPV0qY7kOnwnh/6rPwMkQG8WNLr188C6hNqBpj+I2qh36M8nZwb8Qo7FHm
-         /8ew==
-X-Gm-Message-State: AJIora9is3Yrism7g0Idup4koBn07+I6h7wxHfaMttukbG3OQMyvnU7y
-        x9gBnR1Q6YIH6pl3HHMFqiXAYdj1yDxJp5vgoBk=
-X-Google-Smtp-Source: AGRyM1s/C/zdXog5p3pQHtr/CDWwPlqnkIBgbBfNxbkFWmaWqxfHB529s1Nj4YOYbqc8znCQAwv40lTdK4yd9M0ixgg=
-X-Received: by 2002:a25:828f:0:b0:670:22f9:f7eb with SMTP id
- r15-20020a25828f000000b0067022f9f7ebmr21965352ybk.137.1659019084081; Thu, 28
- Jul 2022 07:38:04 -0700 (PDT)
+        Thu, 28 Jul 2022 10:40:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA68467C83
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:38:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1F0A71FFCD;
+        Thu, 28 Jul 2022 14:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659019075; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H58eHiPkUcryRP+gt9wLL6yKrQ+MGSFaspDH3eNT0Z4=;
+        b=DJ644a94EzSRlWdtsG7bXOknogezgnu4QS9e8wE6689tnAKqOrRw/7q4mDad0NG/Hx9Z9k
+        tLN8aKe+mgZZj9GxSvg+uaDPoY2cAj+xJQLYRzoyB5lK3xAUSj32NkQyH9BvzgVLkkXgbo
+        Nl1yPCn+nkzlqkqO6Lp5RMmhAkitAB4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EACD813A7E;
+        Thu, 28 Jul 2022 14:37:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lPQcN0Kf4mIpZAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 28 Jul 2022 14:37:54 +0000
+Date:   Thu, 28 Jul 2022 16:37:54 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     akpm@linux-foundation.org, hocko@suse.com, david@redhat.com,
+        quic_pkondeti@quicinc.com, pasha.tatashin@soleen.com,
+        sjpark@amazon.de, sieberf@amazon.com, shakeelb@google.com,
+        dhowells@redhat.com, willy@infradead.org,
+        liuting.0x7c00@bytedance.com, minchan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH V2] mm: fix use-after free of page_ext after race with
+ memory-offline
+Message-ID: <YuKfQoOHG1celfBK@dhcp22.suse.cz>
+References: <1658931303-17024-1-git-send-email-quic_charante@quicinc.com>
 MIME-Version: 1.0
-References: <20220727210253.3794069-1-daniel.lezcano@linexp.org> <35457e1c-fe6b-2212-9624-70369f04ef0d@linaro.org>
-In-Reply-To: <35457e1c-fe6b-2212-9624-70369f04ef0d@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Jul 2022 16:37:50 +0200
-Message-ID: <CAJZ5v0g5gtQGyLM2C+D5-Y-T_7+GHp4=Ptt7Reh6xgL-D77asQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/32] New thermal OF code
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        damien.lemoal@opensource.wdc.com, Heiko Stuebner <heiko@sntech.de>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        mhiramat@kernel.org, Talel Shenhar <talel@amazon.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>, anarsoul@gmail.com,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        glaroque@baylibre.com, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Keerthy <j-keerthy@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1658931303-17024-1-git-send-email-quic_charante@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Wed 27-07-22 19:45:03, Charan Teja Kalla wrote:
+[...]
 
-On Wed, Jul 27, 2022 at 11:46 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> we are close to release v5.19.
->
-> I want to send a PR this week but it would be nice if this series could
-> be part of it, so the trip point rework we discussed earlier (it is a
-> long series) could be merged more easily for v5.21-rc1 as it will depend
-> on these changes.
->
-> This series was tested on different platforms, rk3399, broadcom and
-> rcar. The external drivers as ata, touchscreen, regulator, hwmon were
-> acked/reviewed and some other thermal drivers reviewed also. Some others
-> remain without feedback because the maintainer is unresponsive or the
-> driver is orphaned, falling under the thermal framework maintenance
-> umbrella. All the drivers changes are the same.
->
-> I do believe it does a nice cleanup and consolidation of the OF thermal
-> code and realign it with the core thermal framework.
->
-> Is it ok to merge the series?
+Thanks for looking into this and improving the changelog. It is much
+more easier to follow and also much better to understand.
 
-I would prefer to put it into linux-next for a few days.
+> FAQ's:
+> Q) Should page_ext_[get|put]() needs to be used for every page_ext
+> access?
+> A) NO, the synchronization is really not needed in all the paths of
+> accessing page_ext. One case is where extra refcount is taken on a
+> page for which memory block, this pages falls into, offline operation is
+> being performed. This extra refcount makes the offline operation not to
+> succeed hence the freeing of page_ext.  Another case is where the page
+> is already being freed and we do reset its page_owner.
 
-Why don't you send 2 pull requests, one with all of the other material
-you have for 5.20 and another one with this series (it may be on top
-of the first one)?
+This is just subtlety and something that can get misunderstood over
+time. Moreover there is no documentation explaining the difference.
+What is the reason to have these two different APIs in the first place.
+RCU read side is almost zero cost. So what is the point?
 
-I will be able to defer pushing the second one till the second half of
-the merge window.
+[...]
 
+> Q) Why can't the page_ext is freed in the hot_remove path, where memmap
+> is also freed ?
+> 
+> A) As per David's answers, there are many reasons and a few are:
+> 1) Discussions had happened in the past to eventually also use rcu
+> protection for handling pfn_to_online_page(). So doing it cleanly here
+> is certainly an improvement.
+> 
+> 2) It's not good having to scatter section online checks all over the
+> place in page ext code. Once there is a difference between active vs.
+> stale page ext data things get a bit messy and error prone. This is
+> already ugly enough in our generic memmap handling code.
+> 
+> 3) Having on-demand allocations, such as KASAN or page ext from the
+> memory online notifier is at least currently cleaner, because we don't
+> have to handle each and every subsystem that hooks into that during the
+> core memory hotadd/remove phase, which primarily only setups the
+> vmemmap, direct map and memory block devices.
 
-> On 27/07/2022 23:02, Daniel Lezcano wrote:
-> > The following changes are depending on:
-> >
-> >   - 20220722200007.1839356-1-daniel.lezcano@linexp.org
-> >
-> > which are present in the thermal/linux-next branch:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
-> >
-> > The series introduces a new thermal OF code. The patch description gives
-> > a detailed explanation of the changes. Basically we write new OF parsing
-> > functions, we migrate all the users of the old thermal OF API to the new
-> > one and then we finish by removing the old OF code.
-> >
-> > That is the second step to rework the thermal OF code. More patches will
-> > come after that to remove the duplication of the trip definitions in the
-> > different drivers which will result in more code duplication removed and
-> > consolidation of the core thermal framework.
-> >
-> > Thanks for those who tested the series on their platform and
-> > investigated the regression with the disabled by default thermal zones.
-> >
-> > Changelog:
-> >   v3:
-> >     - Rebased on the right branch as reported by Niklas Söderlund
-> >     - Collected more tags
-> >   v2:
-> >     - Changed the code in the register thermal zone function to prevent
-> >       the 'const' annotation being removed in the different drivers
-> >     - Collected the tags and adding Cc for more context
-> >     - Changed the first line patch description to comply to the 'input'
-> >       subsystem format
-> >     - Give a more detailed description in the changelog for the drivers
-> >     - Remove pointless calls to unregister as the devm version is used
-> >       instead
-> >     - Moved dummy functions from one patch to another to prevent git
-> >       bisecting issue when THERMAL_OF=n
-> >     - Fixed thermal zone disabled by default
-> >
-> > Daniel Lezcano (32):
-> >    thermal/of: Rework the thermal device tree initialization
-> >    thermal/of: Make new code and old code co-exist
-> >    thermal/drivers/rockchip: Switch to new of API
-> >    thermal/drivers/uniphier: Switch to new of API
-> >    thermal/drivers/generic-adc: Switch to new of API
-> >    thermal/drivers/mmio: Switch to new of API
-> >    thermal/drivers/tegra: Switch to new of API
-> >    thermal/drivers/sun8i: Switch to new of API
-> >    thermal/drivers/sprd: Switch to new of API
-> >    thermal/drivers/broadcom: Switch to new of API
-> >    thermal/drivers/qcom: Switch to new of API
-> >    thermal/drivers/st: Switch to new of API
-> >    thermal/drivers/amlogic: Switch to new of API
-> >    thermal/drivers/armada: Switch to new of API
-> >    thermal/drivers/db8500: Switch to new of API
-> >    thermal/drivers/imx: Switch to new of API
-> >    thermal/drivers/rcar: Switch to new of API
-> >    thermal/drivers/rzg2l: Switch to new of API
-> >    thermal/drivers/qoriq: Switch to new of API
-> >    thermal/drivers/mtk: Switch to new of API
-> >    thermal/drivers/banggap: Switch to new of API
-> >    thermal/drivers/maxim: Switch to new of API
-> >    thermal/drivers/hisilicon: Switch to new of API
-> >    thermal/drivers/ti-soc: Switch to new of API
-> >    ata/drivers/ahci_imx: Switch to new of thermal API
-> >    hwmon/drivers: Switch to new of thermal API
-> >    iio/drivers/sun4i_gpadc: Switch to new of thermal API
-> >    Input: sun4i-ts - switch to new of thermal API
-> >    regulator/drivers/max8976: Switch to new of thermal API
-> >    thermal/drivers/samsung: Switch to new of thermal API
-> >    thermal/core: Move set_trip_temp ops to the sysfs code
-> >    thermal/of: Remove old OF code
-> >
-> >   drivers/ata/ahci_imx.c                        |   15 +-
-> >   drivers/hwmon/hwmon.c                         |   14 +-
-> >   drivers/hwmon/scpi-hwmon.c                    |   14 +-
-> >   drivers/iio/adc/sun4i-gpadc-iio.c             |   12 +-
-> >   drivers/input/touchscreen/sun4i-ts.c          |   10 +-
-> >   drivers/regulator/max8973-regulator.c         |   10 +-
-> >   drivers/thermal/amlogic_thermal.c             |   16 +-
-> >   drivers/thermal/armada_thermal.c              |   12 +-
-> >   drivers/thermal/broadcom/bcm2711_thermal.c    |   14 +-
-> >   drivers/thermal/broadcom/bcm2835_thermal.c    |   14 +-
-> >   drivers/thermal/broadcom/brcmstb_thermal.c    |   20 +-
-> >   drivers/thermal/broadcom/ns-thermal.c         |   50 +-
-> >   drivers/thermal/broadcom/sr-thermal.c         |   16 +-
-> >   drivers/thermal/db8500_thermal.c              |    8 +-
-> >   drivers/thermal/hisi_thermal.c                |   14 +-
-> >   drivers/thermal/imx8mm_thermal.c              |   14 +-
-> >   drivers/thermal/imx_sc_thermal.c              |   14 +-
-> >   drivers/thermal/k3_bandgap.c                  |   12 +-
-> >   drivers/thermal/k3_j72xx_bandgap.c            |   12 +-
-> >   drivers/thermal/max77620_thermal.c            |    8 +-
-> >   drivers/thermal/mtk_thermal.c                 |   10 +-
-> >   drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |   19 +-
-> >   drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |   12 +-
-> >   drivers/thermal/qcom/tsens.c                  |   16 +-
-> >   drivers/thermal/qoriq_thermal.c               |   12 +-
-> >   drivers/thermal/rcar_gen3_thermal.c           |   16 +-
-> >   drivers/thermal/rcar_thermal.c                |   13 +-
-> >   drivers/thermal/rockchip_thermal.c            |   14 +-
-> >   drivers/thermal/rzg2l_thermal.c               |   10 +-
-> >   drivers/thermal/samsung/exynos_tmu.c          |   24 +-
-> >   drivers/thermal/sprd_thermal.c                |   18 +-
-> >   drivers/thermal/st/stm_thermal.c              |   16 +-
-> >   drivers/thermal/sun8i_thermal.c               |   14 +-
-> >   drivers/thermal/tegra/soctherm.c              |   21 +-
-> >   drivers/thermal/tegra/tegra-bpmp-thermal.c    |   19 +-
-> >   drivers/thermal/tegra/tegra30-tsensor.c       |   12 +-
-> >   drivers/thermal/thermal-generic-adc.c         |   10 +-
-> >   drivers/thermal/thermal_core.c                |    6 -
-> >   drivers/thermal/thermal_core.h                |    2 -
-> >   drivers/thermal/thermal_mmio.c                |   17 +-
-> >   drivers/thermal/thermal_of.c                  | 1140 ++++++-----------
-> >   drivers/thermal/thermal_sysfs.c               |    5 +-
-> >   .../ti-soc-thermal/ti-thermal-common.c        |   16 +-
-> >   drivers/thermal/uniphier_thermal.c            |   10 +-
-> >   include/linux/thermal.h                       |   89 +-
-> >   45 files changed, 709 insertions(+), 1131 deletions(-)
-> >
->
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+I cannot say I agree with this reasoning but whatever.
+
+Few more notes below
+
+> [1] https://lore.kernel.org/linux-mm/59edde13-4167-8550-86f0-11fc67882107@quicinc.com/
+> 
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+> ---
+> Changes in V2:
+>    o Use only get/put_page_ext() to get the page_ext in the 
+>      required paths. Add proper comments for them.
+>    o Use synchronize_rcu() only once instead of calling it for
+>      every mem_section::page_ext of a memory block.
+>    o Free'd page_ext in 3 steps of invalidate, wait till all the
+>      users are finished using and then finally free page_ext.
+> 
+> Changes in V1:
+>    o Used the RCU lock while accessing the page_ext in the paths that
+>      can race with the memory offline operation.
+>    o Introduced (get|put)_page_ext() function to get the page_ext of page.
+>    o https://lore.kernel.org/all/1657810063-28938-1-git-send-email-quic_charante@quicinc.com/
+> 
+>  include/linux/page_ext.h  | 53 +++++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/page_idle.h | 40 ++++++++++++++++++++++++++---------
+>  mm/page_ext.c             | 41 ++++++++++++++++++++++++++++++++----
+>  mm/page_owner.c           | 35 +++++++++++++++++++++++--------
+>  mm/page_table_check.c     | 10 ++++++---
+>  5 files changed, 153 insertions(+), 26 deletions(-)
+> 
+> diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
+> index fabb2e1..3a35c95 100644
+> --- a/include/linux/page_ext.h
+> +++ b/include/linux/page_ext.h
+> @@ -5,6 +5,7 @@
+>  #include <linux/types.h>
+>  #include <linux/stacktrace.h>
+>  #include <linux/stackdepot.h>
+> +#include <linux/rcupdate.h>
+>  
+>  struct pglist_data;
+>  struct page_ext_operations {
+> @@ -36,6 +37,8 @@ struct page_ext {
+>  	unsigned long flags;
+>  };
+>  
+> +#define PAGE_EXT_INVALID       (0x1)
+> +
+>  extern unsigned long page_ext_size;
+>  extern void pgdat_page_ext_init(struct pglist_data *pgdat);
+>  
+> @@ -57,6 +60,11 @@ static inline void page_ext_init(void)
+>  
+>  struct page_ext *lookup_page_ext(const struct page *page);
+>  
+> +static inline bool page_ext_invalid(struct page_ext *page_ext)
+> +{
+> +	return !page_ext || (((unsigned long)page_ext & PAGE_EXT_INVALID) == 1);
+> +}
+> +
+
+No real reason to expose this into a header file. Nothing but page_ext.c
+should know and care about this.
+
+>  static inline struct page_ext *page_ext_next(struct page_ext *curr)
+>  {
+>  	void *next = curr;
+> @@ -64,6 +72,37 @@ static inline struct page_ext *page_ext_next(struct page_ext *curr)
+>  	return next;
+>  }
+>  
+> +/*
+> + * This function gives proper page_ext of a memory section
+> + * during race with the offline operation on a memory block
+> + * this section falls into. Not using this function to get
+> + * page_ext of a page, in code paths where extra refcount
+> + * is not taken on that page eg: pfn walking, can lead to
+> + * use-after-free access of page_ext.
+> + */
+> +static inline struct page_ext *page_ext_get(struct page *page)
+> +{
+> +	struct page_ext *page_ext;
+> +
+> +	rcu_read_lock();
+> +	page_ext = lookup_page_ext(page);
+> +	if (!page_ext) {
+> +		rcu_read_unlock();
+> +		return NULL;
+> +	}
+> +
+> +	return page_ext;
+
+If you make this an extern you can actually hide lookup_page_ext and
+prevent from future bugs where people are using non serialized API
+without realizing that.
+
+[...]
+> diff --git a/mm/page_ext.c b/mm/page_ext.c
+> index 3dc715d..404a2eb 100644
+> --- a/mm/page_ext.c
+> +++ b/mm/page_ext.c
+> @@ -211,15 +211,17 @@ struct page_ext *lookup_page_ext(const struct page *page)
+>  {
+>  	unsigned long pfn = page_to_pfn(page);
+>  	struct mem_section *section = __pfn_to_section(pfn);
+> +	struct page_ext *page_ext = READ_ONCE(section->page_ext);
+> +
+
+	WARN_ON_ONCE(!rcu_read_lock_held());
+
+>  	/*
+>  	 * The sanity checks the page allocator does upon freeing a
+>  	 * page can reach here before the page_ext arrays are
+>  	 * allocated when feeding a range of pages to the allocator
+>  	 * for the first time during bootup or memory hotplug.
+>  	 */
+> -	if (!section->page_ext)
+> +	if (page_ext_invalid(page_ext))
+>  		return NULL;
+> -	return get_entry(section->page_ext, pfn);
+> +	return get_entry(page_ext, pfn);
+>  }
+>  
+>  static void *__meminit alloc_page_ext(size_t size, int nid)
+> @@ -298,9 +300,26 @@ static void __free_page_ext(unsigned long pfn)
+>  	ms = __pfn_to_section(pfn);
+>  	if (!ms || !ms->page_ext)
+>  		return;
+> -	base = get_entry(ms->page_ext, pfn);
+> +
+> +	base = READ_ONCE(ms->page_ext);
+> +	if (page_ext_invalid(base))
+> +		base = (void *)base - PAGE_EXT_INVALID;
+
+All page_ext accesses should use the same fetched pointer including the
+ms->page_ext check. Also page_ext_invalid _must_ be true here otherwise
+something bad is going on so I would go with
+	if (WARN_ON_ONCE(!page_ext_invalid(base)))
+		return;
+	base = (void *)base - PAGE_EXT_INVALID;
+
+> +	WRITE_ONCE(ms->page_ext, NULL);
+> +
+> +	base = get_entry(base, pfn);
+>  	free_page_ext(base);
+> -	ms->page_ext = NULL;
+> +}
+> +
+-- 
+Michal Hocko
+SUSE Labs

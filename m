@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2470358431E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120E258436F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiG1Pbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S232375AbiG1Pnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiG1Pbm (ORCPT
+        with ESMTP id S232130AbiG1Pni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:31:42 -0400
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892FD61DA9;
-        Thu, 28 Jul 2022 08:31:41 -0700 (PDT)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
-        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1oH5Tr-006dKi-BO; Thu, 28 Jul 2022 16:31:19 +0100
-Message-ID: <0d644682-094d-6151-aa2f-86552c8f9a87@codethink.co.uk>
-Date:   Thu, 28 Jul 2022 16:31:17 +0100
+        Thu, 28 Jul 2022 11:43:38 -0400
+X-Greylist: delayed 623 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Jul 2022 08:43:34 PDT
+Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [202.47.80.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7604B4AE;
+        Thu, 28 Jul 2022 08:43:34 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 0995A36E512B;
+        Thu, 28 Jul 2022 22:33:02 +0700 (WIB)
+Received: from mailgate.kemenperin.go.id ([127.0.0.1])
+        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id oBnTXIv5G2bF; Thu, 28 Jul 2022 22:33:00 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mailgate.kemenperin.go.id (Postfix) with ESMTP id 6FB9236E5119;
+        Thu, 28 Jul 2022 22:32:59 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mailgate.kemenperin.go.id 6FB9236E5119
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kemenperin.go.id;
+        s=3298A942-BBC6-11E3-B333-483736368EC2; t=1659022379;
+        bh=uOhJOXArDjsoRVYImbt149tZMvqAHQKsDAdZX6+eFZQ=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=W9f1EPX40+ZX9O1aigOTRCX0fUsD5Kdubj7kYZ7o9zaEMp+xXv+kj5Tj6e5jmYQ1w
+         3XuBK7TqjDMpH38Az5O07oIN3Ao9VI3+8qk90WFl5l9m8qi9xuHuSTKpOhU5vE3pxo
+         JrDm61wzR17Z7kX5iuUrlWOEZ0Njem36Z/hKrl7A=
+X-Virus-Scanned: amavisd-new at kemenperin.go.id
+Received: from mailgate.kemenperin.go.id ([127.0.0.1])
+        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wGPIkVvkFL1E; Thu, 28 Jul 2022 22:32:59 +0700 (WIB)
+Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [10.1.0.89])
+        by mailgate.kemenperin.go.id (Postfix) with ESMTP id C2BD736E5113;
+        Thu, 28 Jul 2022 22:32:50 +0700 (WIB)
+Date:   Thu, 28 Jul 2022 22:32:50 +0700 (WIB)
+From:   Gc Credit International Consultant <trisna.aulia@kemenperin.go.id>
+Reply-To: Gc Credit International Consultant 
+          <info@gccreditinternationalconsultancy.com>
+Message-ID: <1839418311.1756947.1659022370706.JavaMail.zimbra@kemenperin.go.id>
+Subject: =?utf-8?Q?=E2=80=8B=E2=80=8BBrauchen_Sie_einen_Kredit=3F?=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH RESEND v4 03/15] PCI: dwc: Convert to using native IP-core
- versions representation
-Content-Language: en-GB
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20220728152418.GA302516@bhelgaas>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <20220728152418.GA302516@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.1.0.89]
+Thread-Index: obVCXeBQbQ8a3ez4p/Kbv/ZOd8Wq/Q==
+Thread-Topic: =?utf-8?B?4oCL4oCLQnJhdWNoZW4=?= Sie einen Kredit?
+X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,MISSING_HEADERS,
+        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/2022 16:24, Bjorn Helgaas wrote:
-> On Fri, Jun 24, 2022 at 05:39:35PM +0300, Serge Semin wrote:
->> Since DWC PCIe v4.70a the controller version can be read from the
->> PORT_LOGIC.PCIE_VERSION_OFF register. Version is represented in the FourCC
->> format [1]. It's standard versioning approach for the Synopsys DWC
->> IP-cores. Moreover some of the DWC kernel drivers already make use of it
->> to fixup version-dependent functionality (See DWC USB3, Stmicro STMMAC or
->> recent DW SPI driver).
-> 
-> These references to other drivers might be useful, but without a
-> function name or file name, I can't easily find them.
-> 
->> In order to preserve the standard version
->> representation and prevent the data conversion back and forth, we suggest
->> to preserve the native version representation in the DWC PCIe driver too
->> in the same way as it has already been done in the rest of the DWC
->> drivers. IP-core version reading from the CSR will be introduced in the
->> next commit together with a simple macro-based API to use it.
->>
->> [1] https://en.wikipedia.org/wiki/FourCC
-> 
 
-I'm currently looking at a OF based dw-apb-timers-pwm driver, so also
-would like to follow this.
 
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
+Brauchen Sie einen Kredit?
+Kreditlimit: =E2=82=AC/$10.000,00 bis =E2=82=AC/$50.000.000,00=20
+J=C3=A4hrlicher Zinssatz: 1%
+Geben Sie unten Ihre Daten ein, um Ihren Kreditantrag zu bearbeiten.
+Ihr vollst=C3=A4ndiger Name, Darlehensbetrag, Darlehensdauer und Darlehensz=
+weck.
+F=C3=BCr weitere Informationen kontaktieren Sie uns bitte unter dieser E-Ma=
+il:
+info@gccreditinternationalconsultancy.com
 
-https://www.codethink.co.uk/privacy.html
+Management
+Gc Credit Internationale Beratung

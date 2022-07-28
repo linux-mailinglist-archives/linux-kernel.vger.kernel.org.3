@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBCE583CE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3B7583CEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbiG1LO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 07:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
+        id S236121AbiG1LPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 07:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiG1LO0 (ORCPT
+        with ESMTP id S230216AbiG1LPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 07:14:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9D266AE4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:14:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 28 Jul 2022 07:15:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBF22A43F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:15:18 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0EF961A4E
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:14:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 768CAC433D6;
-        Thu, 28 Jul 2022 11:14:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659006865;
-        bh=oXhKn484H8C4pSVsSAWT8FrTdxHfNXnO2/Oj96hh46g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ecLDfjwfJxwxl7WL4Paa0dE9dnRnnddjlcSZ5n7EytRN8TpOVVUzlbYgO5njHL4uL
-         FCpXsWxfjmdoqcX8cwxnN+XMiJTBZPm2i7Bs1kv+jvtOEuJTQQoHcPXv3aAa47SE4G
-         PkxRIClibkhbMKJTF3jxT62/AshODfms/IA+1zds2vSoRyci+nVCaaDeFPOYUM4ve9
-         7ck3gppV/uCUadE3BN+hMbddSeqp0rBBOJg4EkYgO6ZvKsH0tC/qqSwFD/eU9psQCp
-         m2Tr9bd4tRyt8OJR/TzHrrAM6sSQB/EecxcgLFp4rHrsZg1ZjsnbHttkz+XwA/5hDS
-         8U+zgAsmgx8cQ==
-Date:   Thu, 28 Jul 2022 12:14:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Prasad, Prasad" <venkataprasad.potturu@amd.com>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "Reddy, V sujith kumar" <Vsujithkumar.Reddy@amd.com>,
-        "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
-        "Hiregoudar, Basavaraj" <Basavaraj.Hiregoudar@amd.com>,
-        "Dommati, Sunil-kumar" <Sunil-kumar.Dommati@amd.com>,
-        "Saba Kareem, Syed" <Syed.SabaKareem@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] ASoC: amd: acp: Initialize list to store acp_stream
- during pcm_open
-Message-ID: <YuJvi6IdbPyJWKUq@sirena.org.uk>
-References: <20220722133530.3314087-1-venkataprasad.potturu@amd.com>
- <87h739464x.wl-tiwai@suse.de>
- <PH7PR12MB5951A322E8613E1A782ACCF3E9969@PH7PR12MB5951.namprd12.prod.outlook.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D93A56601B43;
+        Thu, 28 Jul 2022 12:15:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659006917;
+        bh=0gnnEk0TG5O1vi5/Vm6gds5OMe6ylZ4Rer3EJsmYcoU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ye6q2lA5BgXCgHk9eToRCt4M7AqeV1MuUi/od7Zy/EQY00QXeuaD3kymlgnox+gTb
+         QsOoV4EGCLKh5N9Uyr18G+AZZXgvLBLMZ+jShh7FLPLTG/PGZ+SzvzPLezgdlJhvb+
+         hFsrnavXWQXsJOHz1eY4YyGy30i84TH4zKDVjFZwQTbUEYI4VtRT9YszA9MLQ96RBz
+         tyMpA1KomVlbITyGOuZ71Cb9lU7XDHMbLzxiKZ7ovJ1Cgcoe0torqjO2HKIhA//Em0
+         JxMpdKEZBS6xeoyPZWy0KL1H/osgLmU57KZO3Jft20v218FEip4wABFExuRjmyo8HE
+         MbZ6NJlzmXMBw==
+Message-ID: <decb7338-eeb8-3c0c-88f2-c0b00fb8b0e7@collabora.com>
+Date:   Thu, 28 Jul 2022 13:15:14 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="djlTOc+vqayQK83P"
-Content-Disposition: inline
-In-Reply-To: <PH7PR12MB5951A322E8613E1A782ACCF3E9969@PH7PR12MB5951.namprd12.prod.outlook.com>
-X-Cookie: People respond to people who respond.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH RFC] regulator: mt6380: Fix unused array warning
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chenglin Xu <chenglin.xu@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>
+References: <20220727132637.76d6073f@endymion.delvare>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220727132637.76d6073f@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 27/07/22 13:26, Jean Delvare ha scritto:
+> With the following configuration options:
+> CONFIG_OF is not set
+> CONFIG_REGULATOR_MT6380=y
+> we get the following build warning:
+> 
+>    CC      drivers/regulator/mt6380-regulator.o
+> drivers/regulator/mt6380-regulator.c:322:34: warning: ‘mt6380_of_match’ defined but not used [-Wunused-const-variable=]
+> 
+> Fix this by annotating that array with __maybe_unused, as done in
+> various regulator drivers.
 
---djlTOc+vqayQK83P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I know I'm late to the party, but I would've preferred to see the
+of_match_ptr() dropped instead of adding a __maybe_unused.
 
-On Thu, Jul 28, 2022 at 07:52:25AM +0000, Prasad, Prasad wrote:
+Cheers,
+Angelo
 
-> linked to multiple pcm device as we will have same dai->driver id
->=20
-> or array index for multiple pcm open. Initialize new linked list
->=20
-> stream_list to store opened pcm stream info dynamically.
->=20
->=20
->=20
-> If an IRQ handler refers to the linked list, make sure that no list
->=20
-> change will happen concurrently during the IRQ handling.  It seems
->=20
-> that you have no protection for it yet.
-> Yes, linked list may changes concurrently during IRQ handling, we will us=
-e spin locks in the next version of patch.
-
-Please fix your mail client to clearly identify quoted text, it's very
-hard to read your mails since (among other things) it's hard to tell
-what text you added.
-
---djlTOc+vqayQK83P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLib4oACgkQJNaLcl1U
-h9CUMQf7BkXcYCSXzOPB2U5KyrOlXFxo/iePJ+LMnwXcK6XPHGwNqfIl3iQ2kBzz
-HNgn7TA4mo7cKULBTZrXb3yx7Gn+lRYsZ/PfMQLbOX5hjUhGqEJEZA/6HxQkiP6J
-++vIRGFtrqlNXV8emSJAurT1m6IikCD4PAmJOPyTzNHWHV9j1U7dfEwfY2XSxfSb
-j9cB3geRNNb+jHxls+s8KTa/3E83/Krkyq1sAKH1UklL7X71KR4R9k1M3RU2ZP3o
-4jAXneq6kLpEog7YnKsnASVbRZfdhxvO6WiISeHygrtESt5UvwTTWK68uh6QowvZ
-cfDSAD0IJDBtvzFofrJ5HDbVfQgU4Q==
-=/414
------END PGP SIGNATURE-----
-
---djlTOc+vqayQK83P--
+> 
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/all/202207240252.ZY5hSCNB-lkp@intel.com/
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: Chenglin Xu <chenglin.xu@mediatek.com>
+> ---
+> This assumes that the mt6380 driver can be used without OF support.
+> However, I can't find any in-tree piece of code instantiating the
+> "mt6380-regulator" platform device by name. So unless there's an
+> out-of-tree user, a better fix would be to remove mt6380_platform_ids
+> and make the driver depend on OF. Chenglin, would that be OK with
+> you?
+> 
+>   drivers/regulator/mt6380-regulator.c |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- linux-5.18.orig/drivers/regulator/mt6380-regulator.c	2022-07-27 11:55:21.672421481 +0200
+> +++ linux-5.18/drivers/regulator/mt6380-regulator.c	2022-07-27 12:01:53.151833378 +0200
+> @@ -319,7 +319,7 @@ static const struct platform_device_id m
+>   };
+>   MODULE_DEVICE_TABLE(platform, mt6380_platform_ids);
+>   
+> -static const struct of_device_id mt6380_of_match[] = {
+> +static const struct of_device_id  __maybe_unused mt6380_of_match[] = {
+>   	{ .compatible = "mediatek,mt6380-regulator", },
+>   	{ /* sentinel */ },
+>   };
+> 

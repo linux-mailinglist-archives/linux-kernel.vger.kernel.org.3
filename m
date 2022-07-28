@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937C3583EC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F33A583EBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238381AbiG1MZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S238341AbiG1MYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236326AbiG1MYy (ORCPT
+        with ESMTP id S236326AbiG1MYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:24:54 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33DC6BD7A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:24:52 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31f56c42ab5so17231537b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fPGazMImeq7ZTnaeZ4AGBk0ohlKyyO3QqrKwonvdhpM=;
-        b=fvhONg60bsGwrIHA6bNhsT18PaJmu/2fNF1Lc/SzqBFyU6F7SX+QoTz7oJj0Eo+Bcp
-         YK4p49P2pJjPF6JoiUeG6RQFeNk5awUnc8amp9wuZAJOeLBxqlIFnJtsnW8KKJnPKAlO
-         HlEwteYdyw6ojA1RB10fyUenKWffwJimbpG5FHibao9UhPDS8OMTPBZrHur0hYfxxut+
-         o4+K0QCpXOfJfkn0u+VaAsk+CiaddG3CfVz13pCC2alc0np/Kt2D1N1hg8DGtFvigmwA
-         0tW0GV6TO88ORk1mwskI8ONAivniVnCEa9ZlXYUm2QnRLGkJZNWuxoZq4EwPUcXwoSZl
-         KAyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fPGazMImeq7ZTnaeZ4AGBk0ohlKyyO3QqrKwonvdhpM=;
-        b=TcKPqo9zIWsfjfEitBk4Mfjlz1Lte4uN5ViRZjhUqenpzI1ORpD1t1wq19oS22yvmT
-         t7gWDHfiKKDH6XqWuDQuJDzbvwixvVkSkagemg1NkzUxQ+kPAxlc2A/9q0jsvMCFq/+j
-         BGJtzG61tG/hXIrCVc0We3Bq5/QWMX1exsLpHB/02DHqnRiUJpt57f83xMo7PBybWtxS
-         daegEHwtF5ZGG+ZDsv23/R5ew/Ct7hycx9ZBKw7gcKTbUE+EAGji1mwCefERksAr0HNv
-         uxV33DxKIC55NrNya3O5H1UJFlwWWir4tlNOFP37Vk4G+P8cOm9ZcMulZiTISMNVtDj/
-         CRsg==
-X-Gm-Message-State: AJIora8zSsDYbk2/cfYOWMjYXZs7jCccPrzpR6a4Gfj9aX8MP0pOrj7l
-        tbQBSCrjqrHgQJbL8K86/iWqjHSDIeb/vnWvWHYsAw==
-X-Google-Smtp-Source: AGRyM1vI7wkmsv9IiuZ7uHDOT8/GD4OMIdM7ZmEHjlWiZkaeOZ1vzw9DdzMlOn/B2DaC5n+8y5yYKGlcs1IlnUMRpcQ=
-X-Received: by 2002:a81:e03:0:b0:31f:4e64:3e9e with SMTP id
- 3-20020a810e03000000b0031f4e643e9emr10513132ywo.128.1659011091852; Thu, 28
- Jul 2022 05:24:51 -0700 (PDT)
+        Thu, 28 Jul 2022 08:24:48 -0400
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1A76BD61;
+        Thu, 28 Jul 2022 05:24:45 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id XLB00042;
+        Thu, 28 Jul 2022 20:24:42 +0800
+Received: from Jtjnmail201613.home.langchao.com (10.100.2.13) by
+ Jtjnmail201615.home.langchao.com (10.100.2.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.9; Thu, 28 Jul 2022 20:24:41 +0800
+Received: from Jtjnmail201613.home.langchao.com ([fe80::b8bf:393:bebe:1197])
+ by Jtjnmail201613.home.langchao.com ([fe80::b8bf:393:bebe:1197%12]) with mapi
+ id 15.01.2507.009; Thu, 28 Jul 2022 20:24:41 +0800
+From:   =?utf-8?B?QW5keSBHdW8gKOmDreWNq+aWjCk=?= <guoweibin@inspur.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "b-liu@ti.com" <b-liu@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?utf-8?B?UkU6IOetlOWkjTogW3ZnZXIua2VybmVsLm9yZ+S7o+WPkV1SZTogW1BBVENI?=
+ =?utf-8?B?IHYyXSB1c2I6IG11c2I6IEZpeCBtdXNiX2dhZGdldC5jIHJ4c3RhdGUgbWF5?=
+ =?utf-8?Q?_cause_request->buf_overflow_problems?=
+Thread-Topic: =?utf-8?B?562U5aSNOiBbdmdlci5rZXJuZWwub3Jn5Luj5Y+RXVJlOiBbUEFUQ0ggdjJd?=
+ =?utf-8?B?IHVzYjogbXVzYjogRml4IG11c2JfZ2FkZ2V0LmMgcnhzdGF0ZSBtYXkgY2F1?=
+ =?utf-8?Q?se_request->buf_overflow_problems?=
+Thread-Index: AdihlK58/c/eW9hwTTW0SyWnHPS6Pf//hjMA//94hRCAAfBDgP//HpSA
+Date:   Thu, 28 Jul 2022 12:24:41 +0000
+Message-ID: <7ab29bb9ed094ee593ebcf2e351665dd@inspur.com>
+References: <28d16ec3ed25603cdda2c5fb3fbf1470@sslemail.net>
+ <YuEElC563HN5ldMu@kroah.com> <2c234d13d7274763b0102b83ce65b8ff@inspur.com>
+ <YuIzOeJZ7YKe4KDZ@kroah.com>
+In-Reply-To: <YuIzOeJZ7YKe4KDZ@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.180.162.69]
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
+        micalg=SHA1; boundary="----=_NextPart_000_0203_01D8A2C0.10078B20"
 MIME-Version: 1.0
-References: <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <20220726143005.wt4be7yo7sbd3xut@bogus> <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
- <20220726154138.74avqs6iqlzqpzjk@bogus> <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
- <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org> <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
- <20220727132437.pjob3z2nyxsuxgam@bogus> <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
- <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com> <20220728113347.ver6argevzmlsc2c@bogus>
-In-Reply-To: <20220728113347.ver6argevzmlsc2c@bogus>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Thu, 28 Jul 2022 15:24:15 +0300
-Message-ID: <CAC_iWjLkSkON99xXoXphY4JWDZXy_OuOye3T_vPru8aj+j=abw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+tUid:   20227282024422d4ffad0d3e43ad8f4512b35f066eb3e
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,48 +64,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 14:33, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Thu, Jul 28, 2022 at 12:48:19PM +0200, Maximilian Luz wrote:
->
-> [...]
->
-> >
-> > I would very much like to avoid the need for special bootloaders. The
-> > devices we're talking about are WoA devices, meaning they _should_
-> > ideally boot just fine with EFI and ACPI.
-> >
->
-> Completely agreed.
+------=_NextPart_000_0203_01D8A2C0.10078B20
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is not a special bootloader though.  Quite the opposite.  It's a
-standard UEFI compliant bootloader, which uses the fact that EFI is
-supposed to be extensible.  It installs a linux specific config table,
-similar to how we install a linux specific protocol to load our initrd
-and it's certainly lot more scalable than adding new stuff to the
-device tree.
+I'm sorroy,
+I use Enterprise mailbox doesn't work very well.
+I will send this patch through another mailbox.
 
->
-> > From an end-user perspective, it's annoying enough that we'll have to
-> > stick with DTs for the time being due to the use of PEPs in ACPI.
->
-> But have we explored or investigated what it takes to rewrite ACPI f/w
-> to just use standard methods ? Does it require more firmware changes or
-> new firmware entities or impossible at any cost ?
->
-> For me that is more important than just getting this one on DT. Because
-> if you take that path, we will have to keep doing that, with loads of
-> unnecessary drivers if they are not shared with any other SoC with DT
-> support upstream. We might also miss chance to get things added to the ACPI
-> spec as we don't care which means that we never be able to use ACPI on
-> similar future platforms even though they get shipped with ACPI.
->
-> It will be a loop where we constantly keep converting this ACPI shipped
-> platform into DT upstream. IMHO we don't want to be there.
->
-> --
-> Regards,
-> Sudeep
+Thanks
 
-Regards
-/Ilias
+guoweibin
+
+-----Original Message-----
+From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>=20
+Sent: Thursday, July 28, 2022 2:57 PM
+To: Andy Guo (=E9=83=AD=E5=8D=AB=E6=96=8C) <guoweibin@inspur.com>
+Cc: b-liu@ti.com; linux-usb@vger.kernel.org; =
+linux-kernel@vger.kernel.org
+Subject: Re: =E7=AD=94=E5=A4=8D: [vger.kernel.org=E4=BB=A3=E5=8F=91]Re: =
+[PATCH v2] usb: musb: Fix musb_gadget.c rxstate may cause request->buf =
+overflow problems
+
+On Thu, Jul 28, 2022 at 01:14:17AM +0000, Andy Guo =
+(=E9=83=AD=E5=8D=AB=E6=96=8C) wrote:
+
+As can be seen in the archives:
+	=
+https://lore.kernel.org/all/2c234d13d7274763b0102b83ce65b8ff@inspur.com/
+this message could not be decoded, sorry.
+
+Please resend in plain text format.
+
+thanks,
+
+greg k-h
+
+
+------=_NextPart_000_0203_01D8A2C0.10078B20
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIHYjCCB14w
+ggZGoAMCAQICE34AAR03Lnlt8vAH3sgAAAABHTcwDQYJKoZIhvcNAQELBQAwWTETMBEGCgmSJomT
+8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9t
+ZTESMBAGA1UEAxMJSU5TUFVSLUNBMB4XDTIxMDkyODAyMzcyNVoXDTI2MDkyNzAyMzcyNVowgbYx
+EzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT
+8ixkARkWBGhvbWUxNjA0BgNVBAsMLeWxseS4nOa1qua9ruS6uuW3peaZuuiDveeglOeptumZouac
+iemZkOWFrOWPuDESMBAGA1UEAwwJ6YOt5Y2r5paMMSMwIQYJKoZIhvcNAQkBFhRndW93ZWliaW5A
+aW5zcHVyLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKN1kpWcEFprxAKE8FNL
++AJNR9+ooGd0WOUsK7Mp02bTN0uSAs7HzvQPbXzLylGDj2EyI/g1hhustIl7qQQ9RJeEIcwQyHVZ
+Fh+KUoEuMX3duzsrLhIp89b+yCP6T5+g7m4Pp+/Mw+3ClBY7cAF0Ps3SeWFCv+h4aA2VeN8jsMpq
+G/p9/Le/+cO2v3q9AiLhc5lnG/drzDSfqU6rtaoBtoZaIJg+L+AQ4yCqFvWqUnGEGdJbNj+r8Hzb
+mx59kZlEnwooocutyEcZbwkC4x4/0ejHcvpaFmvxKld13vzXGw0ux2J9dqJkJF57423QoGOOD571
+LTYKGMs3jI28NZdwm7ECAwEAAaOCA78wggO7MD0GCSsGAQQBgjcVBwQwMC4GJisGAQQBgjcVCILy
+qR+Egdd6hqmRPYaA9xWD2I9cgUr9iyaBlKdNAgFkAgFhMCkGA1UdJQQiMCAGCCsGAQUFBwMCBggr
+BgEFBQcDBAYKKwYBBAGCNwoDBDALBgNVHQ8EBAMCBaAwNQYJKwYBBAGCNxUKBCgwJjAKBggrBgEF
+BQcDAjAKBggrBgEFBQcDBDAMBgorBgEEAYI3CgMEMEQGCSqGSIb3DQEJDwQ3MDUwDgYIKoZIhvcN
+AwICAgCAMA4GCCqGSIb3DQMEAgIAgDAHBgUrDgMCBzAKBggqhkiG9w0DBzAdBgNVHQ4EFgQUxCys
+sH6w+RFelyTb976/cxtlJVIwHwYDVR0jBBgwFoAUXlkDprRMWGCRTvYetaU5pjLBNWowggEPBgNV
+HR8EggEGMIIBAjCB/6CB/KCB+YaBumxkYXA6Ly8vQ049SU5TUFVSLUNBLENOPUpUQ0EyMDEyLENO
+PUNEUCxDTj1QdWJsaWMlMjBLZXklMjBTZXJ2aWNlcyxDTj1TZXJ2aWNlcyxDTj1Db25maWd1cmF0
+aW9uLERDPWhvbWUsREM9bGFuZ2NoYW8sREM9Y29tP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/
+YmFzZT9vYmplY3RDbGFzcz1jUkxEaXN0cmlidXRpb25Qb2ludIY6aHR0cDovL0pUQ0EyMDEyLmhv
+bWUubGFuZ2NoYW8uY29tL0NlcnRFbnJvbGwvSU5TUFVSLUNBLmNybDCCASkGCCsGAQUFBwEBBIIB
+GzCCARcwgbEGCCsGAQUFBzAChoGkbGRhcDovLy9DTj1JTlNQVVItQ0EsQ049QUlBLENOPVB1Ymxp
+YyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRpb24sREM9aG9tZSxE
+Qz1sYW5nY2hhbyxEQz1jb20/Y0FDZXJ0aWZpY2F0ZT9iYXNlP29iamVjdENsYXNzPWNlcnRpZmlj
+YXRpb25BdXRob3JpdHkwYQYIKwYBBQUHMAKGVWh0dHA6Ly9KVENBMjAxMi5ob21lLmxhbmdjaGFv
+LmNvbS9DZXJ0RW5yb2xsL0pUQ0EyMDEyLmhvbWUubGFuZ2NoYW8uY29tX0lOU1BVUi1DQS5jcnQw
+RQYDVR0RBD4wPKAkBgorBgEEAYI3FAIDoBYMFGd1b3dlaWJpbkBpbnNwdXIuY29tgRRndW93ZWli
+aW5AaW5zcHVyLmNvbTANBgkqhkiG9w0BAQsFAAOCAQEAcbsy8EKbqOnyvky62q4tgbiQXLrWAfqc
+J8ct2AWBJ09cxv5Id95DxyFzbyJMl2e9LHuoSyqIPSIK7Kt2h1s0E0dq0bHOt5avwL1TeKfjpl/a
+RAqdkkGs4o1g9aWD2Mz0av9luhQAWJAEw3Von8L/EreNRD4HwlW69whXp47pSe+vCXdRczoJ4/qi
+8/nMNmF2NHilHpSBE0fP/3dpo5AYP9PvrJSJQEFlgJrhSH3GY+hUuYFTG5E1zgr5C+nCuNUIyF4J
+6kSWRnCb+rPxLJro/mwZqD7qt+HhFJhc37vgjZmBSqMGBoswrhnbgOQHhpAFHsYAG2u3yaJrsxBb
+DpWD+jGCA5MwggOPAgEBMHAwWTETMBEGCgmSJomT8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkW
+CGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9tZTESMBAGA1UEAxMJSU5TUFVSLUNBAhN+AAEd
+Ny55bfLwB97IAAAAAR03MAkGBSsOAwIaBQCgggH4MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
+HAYJKoZIhvcNAQkFMQ8XDTIyMDcyODEyMjQzOVowIwYJKoZIhvcNAQkEMRYEFJzDPCBndwv0nGQO
+If67To9UkXhZMH8GCSsGAQQBgjcQBDFyMHAwWTETMBEGCgmSJomT8ixkARkWA2NvbTEYMBYGCgmS
+JomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9tZTESMBAGA1UEAxMJSU5TUFVS
+LUNBAhN+AAEdNy55bfLwB97IAAAAAR03MIGBBgsqhkiG9w0BCRACCzFyoHAwWTETMBEGCgmSJomT
+8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9t
+ZTESMBAGA1UEAxMJSU5TUFVSLUNBAhN+AAEdNy55bfLwB97IAAAAAR03MIGTBgkqhkiG9w0BCQ8x
+gYUwgYIwCgYIKoZIhvcNAwcwCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIw
+DgYIKoZIhvcNAwICAgCAMA0GCCqGSIb3DQMCAgFAMAcGBSsOAwIaMAsGCWCGSAFlAwQCAzALBglg
+hkgBZQMEAgIwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAF6+XPhx+xzKGT5LWETr0wKi
+YtDMJ9J7cIxKmkfQy9pq70cd6Q1h5N2pViEvWGjmvTCzlGc6PJNKrGSIfbj3PaZSywJSppfp2T3G
+mowqKyGcjCm792xOKJci2Mb/N4pASL6YZGmtzdxAh8BOp7H1XA1OYd9c5QIym61hnGikKSnbXTD2
+H8T9AyKnOoAfjbpzw4dA0E3gfSmdj7mhBNOAtAxS1nKze1LcEVnkiRHFLkp88IQ6VsmYWrVBWRqW
+OUJ44RJ0EZ7sW+h9KgyfmgiYMIiQ+s5fEmN1DFdvdHVRQsc+pgRf+wJNeMXSCuhqH8hK519l7kLo
+qBq0dqQp1Q069YEAAAAAAAA=
+
+------=_NextPart_000_0203_01D8A2C0.10078B20--

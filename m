@@ -2,92 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A425836B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4AA25836B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbiG1CKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 22:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
+        id S236613AbiG1CLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 22:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiG1CKq (ORCPT
+        with ESMTP id S232066AbiG1CLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 22:10:46 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4CA5A3CD;
-        Wed, 27 Jul 2022 19:10:44 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LtYxR15Nvz9sxn;
-        Thu, 28 Jul 2022 10:09:31 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Jul 2022 10:10:42 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.149) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Jul 2022 10:10:41 +0800
-From:   Ye Weihua <yeweihua4@huawei.com>
-To:     <wangzhou1@hisilicon.com>, <shenyang39@huawei.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <tanshukun1@huawei.com>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yeweihua4@huawei.com>
-Subject: [PATCH v2] drivers: hisilicon: fix mismatch in get/set sgl_sge_nr
-Date:   Thu, 28 Jul 2022 10:07:58 +0800
-Message-ID: <20220728020758.255383-1-yeweihua4@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 27 Jul 2022 22:11:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A195A3E0;
+        Wed, 27 Jul 2022 19:11:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtYzM1Hrhz4x1S;
+        Thu, 28 Jul 2022 12:11:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658974272;
+        bh=6O6/rqSJEj1f964QR+2xiWyKfoEJUsDxH/8FzuSmliY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hXmfrgkvp+XjkjP8rdcGoEBfVSTBp4ZY1yylGzESPK7v0dvsw/wm7VlnQJmfsMdX+
+         87wnAaKIVYlnwEiExK/7Jr+ku9EjI7wVdXricyfLi+ZOAV3h7AnOHGY0kaAf6/1Mh5
+         TzpcxVdLS2elc9zzx4SGd1/4pIeZp3vmGkOi5S+9orScB8/11bZuyADAOZlflhU6rl
+         xyHQwYZi8vo1YoZL7NWd2YBSztSfp2ivkpjSFXwXHmjNc5Oph48bzUOHBkRZheG6RU
+         QOFtafrO2uUrDgmB649tBTnahOaoJLZTi4fPvKQ3QIiDuT52iF5hXV/Vxo330FjzgB
+         kEuZ7jAfwa5hg==
+Date:   Thu, 28 Jul 2022 12:11:09 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Dave Airlie <airlied@linux.ie>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the amdgpu and
+ powerpc-fixes trees
+Message-ID: <20220728121109.0cf6cb51@canb.auug.org.au>
+In-Reply-To: <87leseabci.fsf@mpe.ellerman.id.au>
+References: <20220726205458.0b5ca446@canb.auug.org.au>
+        <87leseabci.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.149]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/bWz3G.CxO+f3lnQtrE/mONw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN reported this Bug:
+--Sig_/bWz3G.CxO+f3lnQtrE/mONw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-	[17619.659757] BUG: KASAN: global-out-of-bounds in param_get_int+0x34/0x60
-	[17619.673193] Read of size 4 at addr fffff01332d7ed00 by task read_all/1507958
-	...
-	[17619.698934] The buggy address belongs to the variable:
-	[17619.708371]  sgl_sge_nr+0x0/0xffffffffffffa300 [hisi_zip]
+Hi all,
 
-There is a mismatch in hisi_zip when get/set the variable sgl_sge_nr.
-The type of sgl_sge_nr is u16, and get/set sgl_sge_nr by
-param_get/set_int.
+On Thu, 28 Jul 2022 00:17:49 +1000 Michael Ellerman <mpe@ellerman.id.au> wr=
+ote:
+>
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> >
+> > After merging the amdgpu tree, today's linux-next build (powerpc
+> > allyesconfig) failed like this:
+> >
+> > ld: drivers/gpu/drm/amd/display/dc/dml/display_mode_lib.o uses hard flo=
+at, drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.o uses soft float
+> > ld: failed to merge target specific data of file drivers/gpu/drm/amd/di=
+splay/dc/dcn30/dcn30_optc.o
+> >
+> > I have reverted commit
+> >
+> >   c653c591789b ("drm/amdgpu: Re-enable DCN for 64-bit powerpc")
+> >
+> > for today. =20
+>=20
+> It bisects to:
+>=20
+>   40b31e5355ba ("drm/amd/display: Remove FPU flags from DCN30 Makefile")
+>=20
+> So I guess there's still some float code in dcn30?
 
-Replacing param_get/set_int to param_get/set_ushort can fix this bug.
+I have reverted commit 40b31e5355ba from the merge of the drm tree today (s=
+ince
+it has been merged in there) instead of commit c653c591789b.
 
-Fixes: f081fda293ffb ("crypto: hisilicon - add sgl_sge_nr module param for zip")
-Signed-off-by: Ye Weihua <yeweihua4@huawei.com>
----
- drivers/crypto/hisilicon/zip/zip_crypto.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/drivers/crypto/hisilicon/zip/zip_crypto.c b/drivers/crypto/hisilicon/zip/zip_crypto.c
-index 9520a4113c81..a91e6e0e9c69 100644
---- a/drivers/crypto/hisilicon/zip/zip_crypto.c
-+++ b/drivers/crypto/hisilicon/zip/zip_crypto.c
-@@ -122,12 +122,12 @@ static int sgl_sge_nr_set(const char *val, const struct kernel_param *kp)
- 	if (ret || n == 0 || n > HISI_ACC_SGL_SGE_NR_MAX)
- 		return -EINVAL;
- 
--	return param_set_int(val, kp);
-+	return param_set_ushort(val, kp);
- }
- 
- static const struct kernel_param_ops sgl_sge_nr_ops = {
- 	.set = sgl_sge_nr_set,
--	.get = param_get_int,
-+	.get = param_get_ushort,
- };
- 
- static u16 sgl_sge_nr = HZIP_SGL_SGE_NR;
--- 
-2.17.1
+--Sig_/bWz3G.CxO+f3lnQtrE/mONw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLh8D4ACgkQAVBC80lX
+0Gyppwf43NYAZ8NC3GRODxhT4uDmUsOTDyWGJXbPSAIDFaoNTFsxiNZiUyLCoUjG
+Bqbl1djk0WDY9mat8aDmp8YqSNHH93JFl7YnT7i5X8hS/jzcQYbgeNrkymGDBURX
+seTEhQDtKIU+nomYV0iiJikqEO5HNWjICR1MG4RAYSLwRVf+hJJG7eyVkXHXHw+o
+LhBHFtCAhKj/Mz3sPf64zlRsGQ85MZraqb0JK0U9bsPAPapXJa9X3WXI2URWr9Y/
+U259nlSB+qdvLA/dmhsbuLAnL3yudhyHuzPYHPLcNrMltfKY+soy5wOskXSr0xWY
+Q9RxHybQvA6+3DWrsjgyrYaZym1r
+=URjw
+-----END PGP SIGNATURE-----
+
+--Sig_/bWz3G.CxO+f3lnQtrE/mONw--

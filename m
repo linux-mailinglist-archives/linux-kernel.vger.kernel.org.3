@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960AA5844B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0015844CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiG1RP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S231867AbiG1RRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiG1RP4 (ORCPT
+        with ESMTP id S229627AbiG1RQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:15:56 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D64A5A2C3;
-        Thu, 28 Jul 2022 10:15:54 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id z22so2986295edd.6;
-        Thu, 28 Jul 2022 10:15:54 -0700 (PDT)
+        Thu, 28 Jul 2022 13:16:59 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E766D2E9;
+        Thu, 28 Jul 2022 10:16:56 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z18so2974508edb.10;
+        Thu, 28 Jul 2022 10:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=kzxkcoZRRL9rOm88Cmu3gObIZ4ByC/bqi9jRPQofGU0=;
-        b=mA1g9jERDTuXB6CIUzwheMHBNODiEGENbo+7PFcbstZJMzV1SVB6J7wTVUXl3AWB8j
-         ivmIr18bObn8snEts21XSsJ9/9kR/j5mXowkVHf+dMo9acZzMjym03+syxKTqz/m9Kb6
-         nuLIwdQfnydSj5ucudwy/eJEPu+GcAdOuDLksXUSan3Qav96jOBpMSYMw43A0ImCHRMU
-         3HW2rOt2CTjjJzWItKRjE0soDz1xjLrLhoearwoY6gA9s8yZXS/lbe1uLRnTZGMzmMSA
-         JnV6ANCvFAAAEUxvOKxd5c5x4m8VDwCWLjkCoGElzxv6bqkkxTZkkHcvgaOTNpsmIlJf
-         GRWA==
+        bh=WFtWtuh4fnkPdW4l+mTBk7hWyaNDh0oxtPhJEC+i/84=;
+        b=mhUHLFc7PT3U4HYxgQFlnVqZTq1Ncla6olvQcGYF/KgGYSydW12nVxFSsvq7lHwMym
+         HaqhYnRgiKoU0XaRRnzLHfxlh9CJZLyAXgREBHnHnUWbsx3CnJBimbJGNe1nm9wooQUi
+         K2AbHh39RvrZUV7w6IxEc4ylqoGjYwdnUhBU5OGhrIHFzKZR56cqqA3YSNhk3tMwHIeb
+         wUPyz+0PzlMocNPTCCR2TL+R1aBaA9OttKhKllwY0EsCeG0iZVAndp8RB/JQg8gUDKrJ
+         zOJjExJ/alzglDemntATfSO5c0eLlJ82VTG52/V6yvRkoDFKh0KIEPaI4fW/QRhUMC4H
+         s3uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kzxkcoZRRL9rOm88Cmu3gObIZ4ByC/bqi9jRPQofGU0=;
-        b=2TQ30Tj5jg4JtCbBwhJ3zNeqH6nBDHGN+xu29DNTPITqfb2pTpdU3wfJdkPxyfjGPD
-         94Hyf6tBxFuUAT0OrWz2AufSyleV9/RxJDdnQHHIVZCsRK7XUaYRLkjmXs9CBc9KKL2a
-         Kz/0ldOY5K7t1VQH937ZjjypTuD0bAeV8huFvzjnLzN3UtDyGqZ7AJ8k3DKGgrR/1wBh
-         iqP4g3Yp+lI5h3U6QdoopWQWgtnaoQcjnROWVl4i1PuXB58Jtxuuyp0umds09WV5ORYR
-         huv+Q6+gBtTfiXrbhckncDdOWGjAHTWn+me4iM6SptVancPDgyeDZwMZrhz1HveChqsf
-         qEPQ==
-X-Gm-Message-State: AJIora8JLoAoPHKde5uNhxnUeUNl2pzoqfz1Q9F2si/nv7t7hS21pz91
-        P/vxVqtLgfH6YVSy+7I5ghM=
-X-Google-Smtp-Source: AGRyM1sDiTz75TlHkXcEShLFlmR6ExyZ/xiXbbavvqsS7gF2u/acs7y8LRP86s4jS3LpUpQ3R7qwlw==
-X-Received: by 2002:a05:6402:1859:b0:43c:b0db:3f9a with SMTP id v25-20020a056402185900b0043cb0db3f9amr9142788edy.120.1659028552917;
-        Thu, 28 Jul 2022 10:15:52 -0700 (PDT)
+        bh=WFtWtuh4fnkPdW4l+mTBk7hWyaNDh0oxtPhJEC+i/84=;
+        b=CsRQenISdjoc9bwboswXAjl9d1XvHBnqLj50W1VGwA1B5MV+TbHHf7CmWkjVw+cc+C
+         sQhuR1h7dVMb4alQXgePIvs/Z2ZcSzlfvMIjuQKbMcgWCttHjbjsS1/rWhRqY5dTpmk3
+         m+2Yu1msW6CdJh5EBp6EO+6q0lsSu3EPfldnMfZw+bRKWQGGqdOiv2ClpJjW3m/5Y4Zq
+         HPDelYvMLc7iZqLSg/o4n4GqoKkxEERHhswfiwdEgk71V3ynXQ5VRPXtoeNGTJTPN3Y9
+         s9MOiTy3evW7uVb+7M3WsRmq29elAye9HaKAbTVtb0w/WwPgJRtCm3X2MCRkeoiOhMA6
+         EMEA==
+X-Gm-Message-State: AJIora+nH3ENNVoBn+0c/MiV7qmrnoVK5y8Dfce32vm11RtRk+dkF+hO
+        aoes0WNho7+3qrX+f7a2cT8XWUAmKCA=
+X-Google-Smtp-Source: AGRyM1tTwXpA/Wc9we8MBkI8tLc76dxU0UXWlwM7ydG/dxXSNEoBbKsnKcvY1iuyxub7SKq6sqiVUA==
+X-Received: by 2002:a05:6402:26ce:b0:43c:e187:881e with SMTP id x14-20020a05640226ce00b0043ce187881emr4212004edd.408.1659028615162;
+        Thu, 28 Jul 2022 10:16:55 -0700 (PDT)
 Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id o5-20020a056402038500b0043cfb6af49asm924040edv.16.2022.07.28.10.15.51
+        by smtp.gmail.com with ESMTPSA id gw6-20020a170906f14600b0072b2cc08c48sm626801ejb.63.2022.07.28.10.16.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 10:15:51 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 19:15:50 +0200
+        Thu, 28 Jul 2022 10:16:53 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 19:16:52 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/2] dt-bindings: pwm: mediatek: add pwm binding for
- MT8195
-Message-ID: <YuLERvcbXvsMDf2u@orome>
-References: <20220531114544.144785-1-fparent@baylibre.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-pwm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: add include/dt-bindings/pwm to PWM SUBSYSTEM
+Message-ID: <YuLEhGN6xWihUhfj@orome>
+References: <20220613123319.22964-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="syglkuQTbgvVyS97"
+        protocol="application/pgp-signature"; boundary="J1595YusDGLAFwXx"
 Content-Disposition: inline
-In-Reply-To: <20220531114544.144785-1-fparent@baylibre.com>
+In-Reply-To: <20220613123319.22964-1-lukas.bulwahn@gmail.com>
 User-Agent: Mutt/2.2.6 (2022-06-05)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -80,41 +73,48 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---syglkuQTbgvVyS97
+--J1595YusDGLAFwXx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 31, 2022 at 01:45:43PM +0200, Fabien Parent wrote:
-> MT8195's PWM IP is compatible with the MT8183 PWM IP.
+On Mon, Jun 13, 2022 at 02:33:19PM +0200, Lukas Bulwahn wrote:
+> Maintainers of the directory Documentation/devicetree/bindings/pwm
+> are also the maintainers of the corresponding directory
+> include/dt-bindings/pwm.
 >=20
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Add the file entry for include/dt-bindings/pwm to the appropriate
+> section in MAINTAINERS.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
->  Documentation/devicetree/bindings/pwm/pwm-mediatek.txt | 1 +
+> Thierry, Lee, please pick this MAINTAINERS addition to your section.
+>=20
+>  MAINTAINERS | 1 +
 >  1 file changed, 1 insertion(+)
 
 Applied, thanks.
 
 Thierry
 
---syglkuQTbgvVyS97
+--J1595YusDGLAFwXx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLixEUACgkQ3SOs138+
-s6Gkrw//QwT81sw2csc+jMi4Ltarg0gFGzww9HzroGs9JY38usGngwiffJ2quEQ3
-A58xi/nlafncbOJr8tOxv6xJ+QOWo8GBrysXJ3bPczuSf5wMddhYVJo0DLldtNlH
-rT3YUELO6B8EhEqJY3alkr6fybxYVefwHn5oXmtK3O37MnD9Yh+WiSGFfGAMTdpo
-W17Ue84+WQYk/pVR7NIN/CsevP/PejYeJAooA1+VxtLRAIeP/pHPe4AsDRb0Uuri
-A8pPKmxBk+pcnhsISZDHTwS9BzpYCqcroy9qm4dQPHkycol7fMu4yZWfsKdPNEod
-SvMORne+ZQnM9HeKOeA+7n9V/8HxQ4u54L6/c72+Zk7O6afWMBxhw6qNQWDibsFZ
-Q/h0zSZDpSbr1fZ9zr/fjyGNu7NFZj9+1RgZGRZdyBHVs3KZMD3ZsTZ0k4gWpjgu
-W/kzbvbMoX3No93uSA0/S1c5fuor2udWQrhu3Fe81KkWEXGJfptCOgR6yrKu7TNl
-M2hWpcr7/78ayDMxBOkzWCxmqKLb4vq/QwJvHoQcSFJPaWq9FYPdrm+8rIe4Ls5e
-ZGZZjQF25lYwRkXk5I/ZjXujAlhCGjN/qP+ifCNiy9ceFyoP9DqG83rSYOy8+eE/
-Jj5DNH72fa/gPBjfFH+2VHoLHPglJffUyj1RvI9IuByhT8jO7zI=
-=Ok+p
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLixIQACgkQ3SOs138+
+s6Gz4xAAvZ7zh8WZv9Il6FFdSzNueVcjcQVVpdvi8MvCni2fSe48DKgB4gzILHhQ
+4Z+LmXsVHubSm700UiVMZbnRo4G05adlws4Urpr0McwkTsQIP2HHIGl1/6WgBZCe
+YWUVVkgAQF5lJKTkI5qr08aKZvf9veAlsVsnJ2+ootLvY8q3bx/6BY0iVF9L/AgM
+Xm3xKiL3bB+LfJJJkG8dZWilNEjnn2NCfYW93ZEVWx42dnaic/kGmX7JRSrx5yCL
+8kwewFw+718wYPB4DJaPTRLsdZCtzRGexdu0SCnLr9nVfMA+Aemj1fkQvqwCWNfY
+Kk27ErsjUWYa/Wk7GlgBS1Vw6mt2zTA+knpAstmC7rK+aR9l6ozCjvGvg3ojXYhx
+rpzDNA7Q19KmJ0utrLORUB1DASeqakgvqyPK11w5DcZTu2ixbdJ4ckRr/yxm9ghG
+NU6DbkIXVvk+Mdf5hGVAu/elSK3ACE5Z8GwJ94ubt26+B+dESKCZVA3fYA8i98Sd
+OPeTqBLLiH2wH2hbqjOkYb6kUoOlwFWwKgmAeqR8o51Xmix1RJBNd3b9ZwfXMhI4
+dy+2jRCNcVSDjb6LV+bjCv3TZ1pH/kXVt2iC4lxzf9pkC9ilGh1RXSv6C15ci1rN
+EA+97UIhiiS/gYi957y+u0k6jlWcvkO9TKkGXSTIgUs2aWMBYBE=
+=AoyE
 -----END PGP SIGNATURE-----
 
---syglkuQTbgvVyS97--
+--J1595YusDGLAFwXx--

@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2A35839F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753DC5839F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbiG1IBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S234957AbiG1ICe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiG1IBP (ORCPT
+        with ESMTP id S233818AbiG1ICc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:01:15 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FE06052A;
-        Thu, 28 Jul 2022 01:01:07 -0700 (PDT)
-X-UUID: 00afaecb19a94d82a2ad66a64a5d3bb0-20220728
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:4a3bf7fe-f541-4f2a-aea3-d2995e46dd07,OB:-327
-        68,LOB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-32768,FILE:0,RULE:Relea
-        se_Ham,ACTION:release,TS:-5
-X-CID-INFO: VERSION:1.1.8,REQID:4a3bf7fe-f541-4f2a-aea3-d2995e46dd07,OB:-32768
-        ,LOB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-32768,FILE:0,RULE:Release
-        _Ham,ACTION:release,TS:-5
-X-CID-META: VersionHash:0f94e32,CLOUDID:564690d0-841b-4e95-ad42-8f86e18f54fc,C
-        OID:nil,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,QS:
-        nil,BEC:nil,COL:0
-X-UUID: 00afaecb19a94d82a2ad66a64a5d3bb0-20220728
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <wenbin.mei@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1373914139; Thu, 28 Jul 2022 16:00:55 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 28 Jul 2022 16:00:54 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 28 Jul 2022 16:00:52 +0800
-From:   Wenbin Mei <wenbin.mei@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        <linux-mmc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] mmc: mtk-sd: Clear interrupts when cqe off/disable
-Date:   Thu, 28 Jul 2022 16:00:48 +0800
-Message-ID: <20220728080048.21336-1-wenbin.mei@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 28 Jul 2022 04:02:32 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076A161721;
+        Thu, 28 Jul 2022 01:02:30 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so1441839fac.13;
+        Thu, 28 Jul 2022 01:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=WyC5/v+5IjvoemGWKh+2qqBs6Wuz7i46xSTO71cG+9s=;
+        b=BFI5/328iN0kxg2Bi10CZZ74ZzAisCFBTtDRAZHDUI2S7jDo2YpoQy7ofjPuhnc0kI
+         9NvRepgwoPXUiYtdMbb5Cm/mdtfK0HaqMEyOfCq4UFHrYWbqGjl8faKGjSxNSG4/l+uY
+         noBwc8K1Td1sJCKR9rp0HLqlj5CC4QA4CuVpIls6Hlw0mBur/2zeKSbKkeZphar4waxZ
+         XQ6FGvXPeqOnPgaTX8c5bwLCVxcPpzCLfMikERwDq80VbBswslYLmGf47G/DvNwXwRPc
+         nrkw+evpaZc/Fzw89xGH9OA5D+iej3RUBzmgOJ3LEQDNICxWMoHlCC1mRUO1CtaIy1jj
+         03vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=WyC5/v+5IjvoemGWKh+2qqBs6Wuz7i46xSTO71cG+9s=;
+        b=NI5jP3UnJ9Dye+AbdeEqNbrTlGZAGTKv/9G6yPlOfrNZKa2AIZ6DD+Gh5kQcD8zufu
+         GpSMsH8ekchHm5/VTMnyDMlal/ba3CLBMoAZO9bPgwQlXqzMXVth6XPKa45/3iyapXzZ
+         KFJLsX1/4EqshaUCcT5A5JXK/XyA4+42We3Bas32SeBWNpvQD0yRnF2+I26Gl2oeOOCf
+         iQ3zdbo+Jcg3qlm5jQm/d5KeCaOP7HEIFe2l7I6E2HPZlLIpz9jQ4z9gFKxzle7mYY4U
+         9GrNoDLDjcvWGy9dPEr4V1PMg78q7v+jY+JZA843fP6Eb0ZywNCm57fDPKK/HfzF+slu
+         WA3g==
+X-Gm-Message-State: AJIora+7Rw10aeNwjPkmFHhQaPWi1jhZ4HZZmgvfo4qu2D1x3fO4HMyv
+        vmxl0cIhd6LZLzOJhLEjCh62Q1Qy0HLOV4D9RYRxwIXBc9c=
+X-Google-Smtp-Source: AGRyM1sG1Bmj8eaRzDU0dxS/0b2tIJuV3nnAV8LnmtK7EO+lQZc65EuzA3HP+405P/cBx0k1i4n5Io8ptq1WpJhc2cg=
+X-Received: by 2002:a05:6870:e30e:b0:10d:c6b4:6396 with SMTP id
+ z14-20020a056870e30e00b0010dc6b46396mr4156894oad.128.1658995349146; Thu, 28
+ Jul 2022 01:02:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_PASS,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+References: <870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org>
+In-Reply-To: <870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 28 Jul 2022 10:01:52 +0200
+Message-ID: <CA+icZUV9waE16ZW4RNEDeiemv6eRd=MetzdGbF-vpfT_u1N4_w@mail.gmail.com>
+Subject: Re: [PATCH V2] rtla: Fix Makefile when called from -C tools/
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,49 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently we don't clear MSDC interrupts when cqe off/disable, which led
-to the data complete interrupt will be reserved for the next command.
-If the next command with data transfer after cqe off/disable, we process
-the CMD ready interrupt and trigger DMA start for data, but the data
-complete interrupt is already exists, then SW assume that the data transfer
-is complete, SW will trigger DMA stop, but the data may not be transmitted
-yet or is transmitting, so we may encounter the following error:
-mtk-msdc 11230000.mmc: CMD bus busy detected.
+On Wed, Jul 13, 2022 at 11:32 PM Daniel Bristot de Oliveira
+<bristot@kernel.org> wrote:
+>
+> Sedat Dilek reported an error on rtla Makefile when running:
+>
+>     $ make -C tools/ clean
+>     [...]
+>     make[2]: Entering directory
+>     '/home/dileks/src/linux-kernel/git/tools/tracing/rtla'
+>     [...]
+>     '/home/dileks/src/linux-kernel/git/Documentation/tools/rtla'
+>     /bin/sh: 1: test: rtla-make[2]:: unexpected operator    <------ The problem
+>     rm: cannot remove '/home/dileks/src/linux-kernel/git': Is a directory
+>     make[2]: *** [Makefile:120: clean] Error 1
+>     make[2]: Leaving directory
+>
+> This occurred because the rtla calls kernel's Makefile to get the
+> version in silence mode, e.g.,
+>
+>     $ make -sC ../../.. kernelversion
+>     5.19.0-rc4
+>
+> But the -s is being ignored when rtla's makefile is called indirectly,
+> so the output looks like this:
+>
+>     $ make -C ../../.. kernelversion
+>     make: Entering directory '/root/linux'
+>     5.19.0-rc4
+>     make: Leaving directory '/root/linux'
+>
+> Using 'grep -v make' avoids this problem, e.g.,
+>
+>     $ make -C ../../.. kernelversion | grep -v make
+>     5.19.0-rc4
+>
+> Thus, add | grep -v make.
+>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Fixes: 8619e32825fd ("rtla: Follow kernel version")
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
----
- drivers/mmc/host/mtk-sd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Hi,
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 4ff73d1883de..69d78604d1fc 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -2446,6 +2446,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
- 	/* disable busy check */
- 	sdr_clr_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
- 
-+	val = readl(host->base + MSDC_INT);
-+	writel(val, host->base + MSDC_INT);
-+
- 	if (recovery) {
- 		sdr_set_field(host->base + MSDC_DMA_CTRL,
- 			      MSDC_DMA_CTRL_STOP, 1);
-@@ -2932,11 +2935,14 @@ static int __maybe_unused msdc_suspend(struct device *dev)
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
- 	struct msdc_host *host = mmc_priv(mmc);
- 	int ret;
-+	u32 val;
- 
- 	if (mmc->caps2 & MMC_CAP2_CQE) {
- 		ret = cqhci_suspend(mmc);
- 		if (ret)
- 			return ret;
-+		val = readl(host->base + MSDC_INT);
-+		writel(val, host->base + MSDC_INT);
- 	}
- 
- 	/*
--- 
-2.25.1
+what is the status of this patch?
 
+Is it missing some ACKs e.g. from Steven?
+
+Can this go directly to Linus tree as I wanted to see it in Linux v5.19 FINAL?
+
+Thanks.
+
+Regards,
+-Sedat-
+
+> ---
+>  tools/tracing/rtla/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+> index 3822f4ea5f49..1bea2d16d4c1 100644
+> --- a/tools/tracing/rtla/Makefile
+> +++ b/tools/tracing/rtla/Makefile
+> @@ -1,6 +1,6 @@
+>  NAME   :=      rtla
+>  # Follow the kernel version
+> -VERSION :=     $(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion)
+> +VERSION :=     $(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion | grep -v make)
+>
+>  # From libtracefs:
+>  # Makefiles suck: This macro sets a default value of $(2) for the
+> --
+> 2.32.0
+>

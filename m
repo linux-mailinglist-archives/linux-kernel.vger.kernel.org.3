@@ -2,108 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FA15837A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7578D5837AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235240AbiG1DiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 23:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S233961AbiG1DoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 23:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiG1DiW (ORCPT
+        with ESMTP id S229462AbiG1DoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 23:38:22 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06B6284;
-        Wed, 27 Jul 2022 20:38:19 -0700 (PDT)
-Received: from [192.168.1.107] (87-97-28-73.pool.digikabel.hu [87.97.28.73])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: hs@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id E1C1B83010;
-        Thu, 28 Jul 2022 05:38:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1658979497;
-        bh=/cS9TPU5+rXkX+J5Jkln5vvjln8emRqorhd/BraAqbU=;
-        h=Reply-To:Subject:To:References:From:Date:In-Reply-To:From;
-        b=sAUx4q81Hb1k4UrxcPIM8ByjmJ9sKdXUtAhOl02E0bk/WDWrzNT+9zQx16jwS9mDT
-         nX/d35ryiZbjkOuxs5CK5c/HlPS2m+CbdH3c+GGbDE9E6iNz4lo3wyMNdz/9Fd1lXx
-         ceRBfwvgLGJsDBF8VIlEJmRYI2h4yevlzMk1H9oMojpatMQEAeYVTm/wgrLqp7piPI
-         EPugZspBPyg1PdPre10qfT2LqbzXCuuJMbwa+EzueEpu3jmMv8izXtTem1ZtjBatj7
-         14S9qXflcxlJQJvjAAGpF0p3cTknD2UrWiCxOdqtQ6xeJj2alY9PZaGwPtZlou5GZq
-         uug7cBm6z32Fw==
-Reply-To: hs@denx.de
-Subject: Re: [PATCH] dt-bindings: mtd: microchip,mchp48l640: use
- spi-peripheral-props.yaml
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220727164148.385476-1-krzysztof.kozlowski@linaro.org>
-From:   Heiko Schocher <hs@denx.de>
-Message-ID: <316239d0-1661-0430-1adb-e7faeff66144@denx.de>
-Date:   Thu, 28 Jul 2022 05:38:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 27 Jul 2022 23:44:08 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F47D237F7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:44:07 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id z17-20020a921a51000000b002ddff313ab2so61492ill.12
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 20:44:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Uk8xlHZP9Ax1yPtTzB8HCmPUbJsG2uFHTHKQ1aByY5s=;
+        b=1eaIucjDZRbVlXVeNg9xhe0FZKnQxFNSQ/wm2lrNyKKBIQnjWMGMK75qAc2sELwV1W
+         re6mgIPIauJG0lChNUIPoHHnEwS5utILPAOhg45UAHZ+tsBA2jHAnWIePic9w3YsaJ9/
+         kbDXz0SSDlM0KM3vsFha4YK/vTvCKOrpWOfLLvPYXa+Sfgy1ToQezVe9GtSJq/Ghk/lR
+         PuJaXBVz8twusjIMJsTIxkYAASMRsw3Fg058IytFMnZt7jCk8syBqi5TMb4SbiT+RQRv
+         FhAJ0IO5s1ddaInzJ5Ob4MklWvpKDpYG5G5L6P1Hl4MExE+NUpJecdYTDe2+qKXBwKGR
+         y91Q==
+X-Gm-Message-State: AJIora+EmNiN8qcjWmfncQ+v2SO7yiR4lPd7ExZuSApkZ4A9o6YpiufR
+        TW/l9lpQX1PZNZu5k82FWwjhRnQpwTNqforfkXeuw2YACATG
+X-Google-Smtp-Source: AGRyM1tkiIr72bZ2vZWuPsEYNTGaH9RQy89TDaaN2rd9DNeAhbKbQ4XY5ObPv2CKU0aGanlGBJiMFf+80jJVyqzohDtD9cWnbivg
 MIME-Version: 1.0
-In-Reply-To: <20220727164148.385476-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c266:0:b0:2dd:4171:ebce with SMTP id
+ h6-20020a92c266000000b002dd4171ebcemr8111918ild.190.1658979847063; Wed, 27
+ Jul 2022 20:44:07 -0700 (PDT)
+Date:   Wed, 27 Jul 2022 20:44:07 -0700
+In-Reply-To: <20220728032630.611-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007951e105e4d55807@google.com>
+Subject: Re: [syzbot] INFO: rcu detected stall in net_tx_action
+From:   syzbot <syzbot+3ba0493d523d007b3819@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+Hello,
 
-On 27.07.22 18:41, Krzysztof Kozlowski wrote:
-> Instead of listing directly properties typical for SPI peripherals,
-> reference the spi-peripheral-props.yaml schema.  This allows using all
-> properties typical for SPI-connected devices, even these which device
-> bindings author did not tried yet.
-> 
-> Remove the spi-* properties which now come via spi-peripheral-props.yaml
-> schema, except for the cases when device schema adds some constraints
-> like maximum frequency.
-> 
-> While changing additionalProperties->unevaluatedProperties, put it in
-> typical place, just before example DTS.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Technically, this depends on [1] merged to SPI tree, if we want to
-> preserve existing behavior of not allowing SPI CPHA and CPOL in each of
-> schemas in this patch.
-> 
-> If this patch comes independently via different tree, the SPI CPHA and
-> CPOL will be allowed for brief period of time, before [1] is merged.
-> This will not have negative impact, just DT schema checks will be
-> loosened for that period.
-> 
-> [1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
-> ---
->  .../devicetree/bindings/mtd/microchip,mchp48l640.yaml      | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+syzbot tried to test the proposed patch but the build/boot failed:
 
-Reviewed-by: Heiko Schocher <hs@denx.de>
+kernel/time/hrtimer.c:945:6: error: conflicting types for 'clock_was_set'
+kernel/time/hrtimer.c:985:16: error: 'CLOCK_SET_WALL' undeclared (first use in this function)
 
-Thanks!
 
-bye,
-Heiko
--- 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
+Tested on:
+
+commit:         d6765985 Revert "be2net: disable bh with spin_lock in ..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+dashboard link: https://syzkaller.appspot.com/bug?extid=3ba0493d523d007b3819
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=161b38de080000
+

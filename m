@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F125358446A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC98C58446B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbiG1QwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S231185AbiG1Qxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 12:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbiG1QwB (ORCPT
+        with ESMTP id S229498AbiG1Qxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:52:01 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEFC70E53;
-        Thu, 28 Jul 2022 09:52:00 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id y15so2269833plp.10;
-        Thu, 28 Jul 2022 09:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=fUVrK6g6lEQcJgvUhuFR+4LVGwptL3CDZhDO7VRmNOg=;
-        b=TOhl89jKQ+CkKM87tj1vWT5uQe8ni61gDVjTKzKPd+UpFyilcZ9zwRWS+IPM5TGXaU
-         u4OZN8NerzC0JJFwL/LMrixY61CQxOavVDHVnFiRXhWoqiKIS84crWtf2ADSbsopoDx9
-         CqQVo0FPvxJzSOYl/kChHOYJRiYCXURZQu8o9ZpkYt7W9Jc0yqedeTqfNgiIUSdvNoKH
-         2xPMnNg3Z1+5kPRZ2bfAL3VxeSVJUXCxZbwDO0jc3uxzGND46zHX0Q20Wi38L9P+V6EH
-         CfgH6pPNiN77F64BMbn4ufnL8wVhgVcbTodO/fXy6GyeF4xIHvXyxZkVykVSklWTTq82
-         5KGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=fUVrK6g6lEQcJgvUhuFR+4LVGwptL3CDZhDO7VRmNOg=;
-        b=MLoXuuj5D/rYPDff1wjOE18+tMr8vUPZu5hlC4sOn+wceMfVQcxwtUPGEUA5yLBAux
-         DeACz+xo+zValXWeNDSwdcV9EpPNe+9b0esL5fs72YZ900WMa2iuYbywCt6Mo7xtiduR
-         U+ZJUOcfOqtPCkuYmD3s076I1lnRNgmlvnCKK9wDU3Lk6rLYO6gY8o4IU9PlUzMv6+dB
-         X+OfYW1ttV4S4T9IYFLmv0aXt9Y6zkukISR3lOeCgxDcESRx7udywd5uESxAHpGT3Ecb
-         yUtmMNECoejh/P2GLFS8nHox07dRg1lf9mb+kp2lcrDutgoy4LDXvec+wlaGp1gq0Cd9
-         Qx4w==
-X-Gm-Message-State: AJIora9Y6iL3/sTPi7700+45CrUaud5WwAoZWb3uacFcvwu2lLOicUFm
-        xUPvYqX0PXrQDgFn+gFp5E8=
-X-Google-Smtp-Source: AGRyM1slV7f42a9r0z9ic0zdKmN0qYm12B5tomXz+oZofoxBS+pi5Tzha7NWrt/S4nWycAi7IgtjjA==
-X-Received: by 2002:a17:902:e84e:b0:16b:f773:4692 with SMTP id t14-20020a170902e84e00b0016bf7734692mr27142961plg.19.1659027119804;
-        Thu, 28 Jul 2022 09:51:59 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id m13-20020a170902f64d00b0016bf2a4598asm1478509plg.229.2022.07.28.09.51.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 09:51:59 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 28 Jul 2022 06:51:57 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 6/8] cgroup: bpf: enable bpf programs to
- integrate with rstat
-Message-ID: <YuK+rbZXg7CYjLhE@slm.duckdns.org>
-References: <20220722174829.3422466-1-yosryahmed@google.com>
- <20220722174829.3422466-7-yosryahmed@google.com>
+        Thu, 28 Jul 2022 12:53:37 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4942371BDC
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:53:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659027216; x=1690563216;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=daeOdoRNV6EtJvAH4DKhhNq1uuHrMofKvOUMeqjcUYo=;
+  b=g2QGw4Vg8ZrNf050vyCM4docI5eypRhzoDDcaaUPkLJzMLiFJPNbR0oS
+   qNX4mk36jWbOx7QNQceYmyGWCXd5KoKuWt1W/sdfROmBXjJCJQsII8+1Z
+   plLNhyUPAXagPwQuPKYAVAyDI4BgKDH7fNvVk4Lkqf5aDBDw7k02uplQE
+   uMygtEBqAOHjgzDAY739tlDyinIapcrde0lRbadt0Ts3pl86hkLTPM1OY
+   tWhjPJ9ml0lwtUNZ0fovsZHuOpnKCbUJ2zW8hgScZCj6J26CSCHCdNAH+
+   luyQbsfiUcsvAO/MOI7BMeZetn74jlpjRL2eI/JVdsMXuprvdGkxAGEVq
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="268945131"
+X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
+   d="scan'208";a="268945131"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 09:53:36 -0700
+X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
+   d="scan'208";a="633773817"
+Received: from tesmoryn-mobl.amr.corp.intel.com (HELO [10.212.62.40]) ([10.212.62.40])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 09:53:34 -0700
+Message-ID: <7686403c-7252-ef7a-70fc-040c5ab8cb79@linux.intel.com>
+Date:   Thu, 28 Jul 2022 11:53:33 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722174829.3422466-7-yosryahmed@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/3] drivers: misc: intel_sysid: Add sysid from arch to
+ drivers
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     kah.jing.lee@intel.com, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, rafael.j.wysocki@intel.com, tien.sung.ang@intel.com,
+        dinh.nguyen@intel.com, Zhou@kroah.com,
+        Furong <furong.zhou@intel.com>, Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <20220721123017.416438-1-kah.jing.lee@intel.com>
+ <20220721123149.416618-1-kah.jing.lee@intel.com> <YuJAll2MEgKF0MVM@kroah.com>
+ <be3f189e-c17c-2438-450d-3d84dfcd71da@linux.intel.com>
+ <YuKyTKHk3c7DibX3@kroah.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <YuKyTKHk3c7DibX3@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 05:48:27PM +0000, Yosry Ahmed wrote:
-> Enable bpf programs to make use of rstat to collect cgroup hierarchical
-> stats efficiently:
-> - Add cgroup_rstat_updated() kfunc, for bpf progs that collect stats.
-> - Add cgroup_rstat_flush() sleepable kfunc, for bpf progs that read stats.
-> - Add an empty bpf_rstat_flush() hook that is called during rstat
->   flushing, for bpf progs that flush stats to attach to. Attaching a bpf
->   prog to this hook effectively registers it as a flush callback.
+
+
+On 7/28/22 10:59, Greg KH wrote:
+> On Thu, Jul 28, 2022 at 10:37:37AM -0500, Pierre-Louis Bossart wrote:
+>> Thanks for the review Greg,
+>>
+>>>> +static int intel_sysid_probe(struct platform_device *pdev)
+>>>> +{
+>>>> +	struct intel_sysid *sysid;
+>>>> +	struct resource	*regs;
+>>>> +
+>>>> +	sysid = devm_kzalloc(&pdev->dev, sizeof(struct intel_sysid),
+>>>> +		GFP_KERNEL);
+>>>> +	if (!sysid)
+>>>> +		return -ENOMEM;
+>>>> +
+>>>> +	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>>> +	if (!regs)
+>>>> +		return -ENXIO;
+>>>> +
+>>>> +	sysid->regs = devm_ioremap_resource(&pdev->dev, regs);
+>>>> +	if (IS_ERR(sysid->regs))
+>>>> +		return PTR_ERR(sysid->regs);
+>>>> +
+>>>> +	platform_set_drvdata(pdev, sysid);
+>>>> +
+>>>> +	return devm_device_add_group(&pdev->dev, &intel_sysid_attr_group);
+>>>
+>>> You just raced with userspace and lost.  Please use the default group
+>>> for the platform device.
+>>>
+>>> I need to go remove this function, it should not be used at all as it is
+>>> broken.
+>>
+>> Can you elaborate on the issue and suggested replacement?
+>>
+>> We used this function for the SoundWire sysfs based on your review
+>> comments (2 years ago?) that we should not muck with kobj, and that
+>> function devm_device_add_group() is also used in a probe function.
 > 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Use the default_groups pointer in the driver structure.
 
-Acked-by: Tejun Heo <tj@kernel.org>
+did you mean dev_groups?
 
-Thanks.
-
--- 
-tejun
+I am not following the idea, for SoundWire all the attributes are really
+device-specific or described by ACPI and cannot be hard-coded in the
+driver structure.

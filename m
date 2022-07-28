@@ -2,78 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8279583C0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB77583C16
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235679AbiG1Kah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S235975AbiG1Kcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233296AbiG1Kaf (ORCPT
+        with ESMTP id S235965AbiG1Kco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:30:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AE7643C;
-        Thu, 28 Jul 2022 03:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=U3nI+Dk03TsFhKliasBzCqNdnQznxo+muaRKiNshSuY=; b=DoknfXSTWH6Zj0VygdQvr0QmiU
-        n3MBGvZvhPEFAiDYNcsplITEjAUg8GjB0EjIdovXr9DMAWKceqzB1X00wpuAfOPT0rd14gfho5lej
-        Cea7D/u12vnurMUcIqiJUIVdZ7fxAY2iHbUkSlC4ghl7mLfwL+46das3fo0EemF3c0MCYQaDOoWE/
-        Gpdw7ThlFbzXOJYPg1N8thEeDwUQ/0eOakgSxbfT1lF340nCCBAc1+Oo9XL+StraJ1EeOTvqvwj+S
-        w2bhehT6r2x+aMyEKKmGn2cive6opClxIfPNulf55c6iZfVzSev7RjV84AJaerI1G3Na5uq2NqbC6
-        C7gY0xbA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oH0mM-003kPI-If; Thu, 28 Jul 2022 10:30:06 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 09FD998040A; Thu, 28 Jul 2022 12:30:05 +0200 (CEST)
-Date:   Thu, 28 Jul 2022 12:30:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yu Zhe <yuzhe@nfschina.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        liqiong@nfschina.com
-Subject: Re: [PATCH] x86/aperfmperf: use time_is_before_jiffies(a + b) to
- replace "jiffies - a > b"
-Message-ID: <YuJlLK4x9aUuqHQZ@worktop.programming.kicks-ass.net>
-References: <20220727031405.26892-1-yuzhe@nfschina.com>
- <YuFhIgsUgNJ+o9xG@worktop.programming.kicks-ass.net>
- <ecd4dcc3-321c-e228-96a3-bac08c56794a@nfschina.com>
+        Thu, 28 Jul 2022 06:32:44 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60926422E6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:32:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659004362; x=1690540362;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=4g8gzDAmV6rhsRG6mHh43CHff7QEagwSp34J8Gn4xuM=;
+  b=HHj4WtizoeQ5sLqffgVhSzY32P8WCH6Kbjdg8bAcHIV3mKhY5zsg/9rF
+   JnoIMsbNfjV7Bb86uGNb/15AFI0Eh/lEWnMQYp2NgMpXStSUUmEqOkKi/
+   /uyo35FlbkGASJ7SwOJwSg4TCvx3n65IivG0vas5tACjwFFX6ohGYmo09
+   aMWa9kWJ6zAaNB76BJNDDA6VjBRIPJe9nchiofwo+UHWmujLCRs1dg6vO
+   dzXA6GL2cA0qDRGvGavMMFM0U26WFl/lRH6JOjypWv5oFg70yjse9ezfC
+   OpviCnHNLB4Ixzy97INVJcZQjt8nUxg311c4eu+bGqM7TS5gKRB/roDvm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="314267031"
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="314267031"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 03:32:41 -0700
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="659661892"
+Received: from byeongky-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.170.137])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 03:32:34 -0700
+Message-ID: <03c6c9cecd281d64d0efd48cb40135092dc2d0df.camel@intel.com>
+Subject: Re: [PATCH v9 2/6] selftests: tdx: Test GetReport TDX attestation
+ feature
+From:   Kai Huang <kai.huang@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 28 Jul 2022 22:32:32 +1200
+In-Reply-To: <20220728034420.648314-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220728034420.648314-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ecd4dcc3-321c-e228-96a3-bac08c56794a@nfschina.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 10:55:51AM +0800, Yu Zhe wrote:
-> 在 2022年07月28日 00:00, Peter Zijlstra 写道:
-> 
-> > On Wed, Jul 27, 2022 at 11:14:05AM +0800, Yu Zhe wrote:
-> > > time_is_before_jiffies deals with timer wrapping correctly.
-> > Please explain how the current code does not.
-> 
-> 1. If the timer wrap changes in the future you won't have to alter your code.
-> 
-> 2. unsigned long ut;
-> 
->    ut = ULONG_MAX + 4;
-> 
->    printf("time_after(ut, ULONG_MAX), ut:%d, %d --> %d\n", ut,
->              time_after(ut, ULONG_MAX), (ULONG_MAX - ut) < 0);
-> 
-> 
->    In this case, time_after returns true, it's correct.
+On Wed, 2022-07-27 at 20:44 -0700, Kuppuswamy Sathyanarayanan wrote:
+> In TDX guest, attestation is used to verify the trustworthiness of a
+> TD. During the TD bring-up, Intel TDX module measures and records the
+> initial contents and configuration of TD, and at runtime, TD software
+> uses runtime measurement registers (RMTRs) to measure and record
+> details related to kernel image, command line params, ACPI tables,
+> initrd, etc. At TD runtime, Intel SGX attestation infrastructure is
+> re-used to attest to these measurement data.
+>=20
+> First step in the TDX attestation process is to get the TDREPORT data.
+> It is fixed size data structure generated by the TDX module which
+> includes the above mentioned measurements data, a MAC to protect the
+> integerity of the TDREPORT, and a 64-Byte of user specified data passed
+> during TDREPORT request which can uniquely identify the TDREPORT.
+>=20
+> Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
+> get the TDREPORT from the user space.
+>=20
+> Add a kernel selftest module to test this ABI and verify the validity
+> of generated TDREPORT.
+>=20
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@lin=
+ux.intel.com>
+> ---
+>  tools/testing/selftests/Makefile              |   1 +
+>  tools/testing/selftests/tdx/Makefile          |   7 +
+>  tools/testing/selftests/tdx/tdx_attest_test.c | 160 ++++++++++++++++++
+>  3 files changed, 168 insertions(+)
+>  create mode 100644 tools/testing/selftests/tdx/Makefile
+>  create mode 100644 tools/testing/selftests/tdx/tdx_attest_test.c
+>=20
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/M=
+akefile
+> index de11992dc577..807a839d69c4 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -69,6 +69,7 @@ TARGETS +=3D sync
+>  TARGETS +=3D syscall_user_dispatch
+>  TARGETS +=3D sysctl
+>  TARGETS +=3D tc-testing
+> +TARGETS +=3D tdx
+>  TARGETS +=3D timens
+>  ifneq (1, $(quicktest))
+>  TARGETS +=3D timers
+> diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftes=
+ts/tdx/Makefile
+> new file mode 100644
+> index 000000000000..281db209f9d6
+> --- /dev/null
+> +++ b/tools/testing/selftests/tdx/Makefile
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +CFLAGS +=3D -O3 -Wl,-no-as-needed -Wall -static
+> +
+> +TEST_GEN_PROGS :=3D tdx_attest_test
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/tdx/tdx_attest_test.c b/tools/testin=
+g/selftests/tdx/tdx_attest_test.c
+> new file mode 100644
+> index 000000000000..7155cc751eaa
+> --- /dev/null
+> +++ b/tools/testing/selftests/tdx/tdx_attest_test.c
+> @@ -0,0 +1,160 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test TDX attestation feature
+> + *
+> + * Copyright (C) 2022 Intel Corporation. All rights reserved.
+> + *
+> + * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.=
+intel.com>
+> + */
+> +
+> +
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/time.h>
+> +#include <sys/types.h>
+> +#include <time.h>
+> +#include <unistd.h>
+> +
+> +#include "../kselftest_harness.h"
+> +#include "../../../../arch/x86/include/uapi/asm/tdx.h"
+> +
+> +#define devname         "/dev/tdx-guest"
+> +#define HEX_DUMP_SIZE	8
+> +
+> +/*
+> + * struct td_info - It contains the measurements and initial configurati=
+on of
+> + * the TD that was locked at initialization and a set of measurement
+> + * registers that are run-time extendable. These values are copied from =
+the
+> + * TDCS by the TDG.MR.REPORT function.
+> + */
+> +struct td_info {
+> +	/* TD attributes (like debug, spet_disable, etc) */
+> +	__u8 attr[8];
+> +	__u64 xfam;
+> +	/* Measurement registers */
+> +	__u64 mrtd[6];
+> +	__u64 mrconfigid[6];
+> +	__u64 mrowner[6];
+> +	__u64 mrownerconfig[6];
+> +	/* Runtime measurement registers */
+> +	__u64 rtmr[24];
+> +	__u64 reserved[14];
+> +};
+> +
+> +/*
+> + * Trusted Execution Environment (TEE) report (TDREPORT_STRUCT) type,
+> + * sub type and version..
+> + */
+> +struct tdreport_type {
+> +	/* 0 - SGX, 81 -TDX, rest are reserved */
+> +	__u8 type;
+> +	/* Default value is 0 */
+> +	__u8 sub_type;
+> +	/* Default value is 0 */
+> +	__u8 version;
+> +	__u8 reserved;
+> +};
+> +
+> +/*
+> + * struct reportmac - First field in the TEE report structure
+> + * (TRDREPORT_STRUCT). It is common to Intel=E2=80=99s TEE's e.g., SGX a=
+nd TDX.
+> + * It is MAC-protected and contains hashes of the remainder of the repor=
+t
+> + * structure which includes the TEE=E2=80=99s measurements, and where ap=
+plicable,
+> + * the measurements of additional TCB elements not reflected in CPUSVN =
+=E2=80=93
+> + * e.g., a SEAM=E2=80=99s measurements.
+> + */
+> +struct reportmac {
+> +	struct tdreport_type type;
+> +	__u8 reserved1[12];
+> +	/* CPU security version */
+> +	__u8 cpu_svn[16];
+> +	/* SHA384 hash of TEE TCB INFO */
+> +	__u8 tee_tcb_info_hash[48];
+> +	/* SHA384 hash of TDINFO_STRUCT */
+> +	__u8 tee_td_info_hash[48];
+> +	/* User defined unique data passed in TDG.MR.REPORT request */
+> +	__u8 reportdata[64];
+> +	__u8 reserved2[32];
+> +	__u8 mac[32];
+> +};
+> +
+> +struct tee_tcb_info {
+> +	__u8 data[239];
+> +};
+> +
+> +struct tdreport_data {
+> +	struct reportmac _reportmac;
+> +	struct tee_tcb_info _tcb_info;
+> +	__u8 reserved[17];
+> +	struct td_info _tdinfo;
+> +};
 
-Now try the same with the existing code...
+I think 'struct tdreport' is enough.  The _data postfix only causes it to b=
+e
+more confusing.
+
+Btw, as it appears you only verified reportdata below, is it worth to have =
+all
+those data structures (and they are used by hardware but not __packed)?  Pe=
+rhaps
+a macro to define REPORTDATA offset in TDREPORT is good enough?  Or maybe I=
+ am
+missing something.
+
+> +
+> +#ifdef DEBUG
+> +static void print_array_hex(const char *title, const char *prefix_str,
+> +		const void *buf, int len)
+> +{
+> +	const __u8 *ptr =3D buf;
+> +	int i, rowsize =3D HEX_DUMP_SIZE;
+> +
+> +	if (!len || !buf)
+> +		return;
+> +
+> +	printf("\t\t%s", title);
+> +
+> +	for (i =3D 0; i < len; i++) {
+> +		if (!(i % rowsize))
+> +			printf("\n%s%.8x:", prefix_str, i);
+> +		printf(" %.2x", ptr[i]);
+> +	}
+> +
+> +	printf("\n");
+> +}
+> +#endif
+> +
+> +TEST(verify_report)
+> +{
+> +	__u8 reportdata[TDX_REPORTDATA_LEN];
+> +	struct tdreport_data *tdr_data;
+> +	__u8 tdreport[TDX_REPORT_LEN];
+> +	struct tdx_report_req req;
+> +	int devfd, i;
+> +
+> +	devfd =3D open(devname, O_RDWR | O_SYNC);
+> +
+> +	ASSERT_LT(0, devfd);
+> +
+> +	/* Generate sample report data */
+> +	for (i =3D 0; i < TDX_REPORTDATA_LEN; i++)
+> +		reportdata[i] =3D i;
+> +
+> +	/* Initialize IOCTL request */
+> +	req.subtype     =3D 0;
+> +	req.reportdata  =3D (__u64)reportdata;
+> +	req.rpd_len     =3D TDX_REPORTDATA_LEN;
+> +	req.tdreport    =3D (__u64)tdreport;
+> +	req.tdr_len     =3D TDX_REPORT_LEN;
+> +
+> +	/* Get TDREPORT */
+> +	ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
+> +
+> +	tdr_data =3D (struct tdreport_data *)tdreport;
+> +
+> +#ifdef DEBUG
+> +	print_array_hex("\n\t\tTDX report data\n", "", reportdata,
+> +			sizeof(reportdata));
+> +
+> +	print_array_hex("\n\t\tTDX tdreport data\n", "", &tdreport,
+> +			sizeof(tdreport));
+> +#endif
+> +
+> +	/* Make sure TDREPORT data includes the REPORTDATA passed */
+> +	ASSERT_EQ(0, memcmp(&tdr_data->_reportmac.reportdata[0], reportdata,
+> +				sizeof(reportdata)));
+> +
+> +	ASSERT_EQ(0, close(devfd));
+> +}
+> +
+> +TEST_HARNESS_MAIN
+
+

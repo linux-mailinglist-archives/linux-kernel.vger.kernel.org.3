@@ -2,144 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CD4583DB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320E5583D8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237421AbiG1Lix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 07:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
+        id S235934AbiG1Lhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 07:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237004AbiG1Li1 (ORCPT
+        with ESMTP id S230399AbiG1Lhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 07:38:27 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE45A68DCE
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:38:08 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id u17so1658257lji.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=i3pXhWe7F9oOinM5AqENivKksMTvJBPlQ9aYfvlTgok=;
-        b=SIueaOtf2nQHEKtrGwBsEWEnweniJ+f87aB3s/OkORj3S1bwfvA6mVrvTKQdPYJwNC
-         RYBMvHJz43J9CTOFDGNQIl6qreTXMDhz5oVVfINrp579CTlEGclzUJdwsJIO92PYbBfS
-         F1hbhxa6jKjEVfYSiWgmQN46h2zUH0hvV785IHgrusfQ/WebV4yTgRrQ+S1K9Ov4jl9P
-         1AZx7U+ejN+tqFSmAaQoFIRo8w5n4Z8gGCUZEfzxnC9FYSwguvMmFhi2xXheC2JCz4k6
-         dqfZ+EV8CmA+n3kSci3r2p5RcYuj2o9JFffbzY7Zxo2Pg8xRnmyfs/iX6QLX+QOjsFsy
-         dwBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=i3pXhWe7F9oOinM5AqENivKksMTvJBPlQ9aYfvlTgok=;
-        b=t62cPq3HRbOlucWyqlcSNHkHQAdJbwIVEiaBfXGkTPyHZPMmjNaKpBk8k8HD42MLa3
-         st6ZmaJ3fF4GWbdrQLo35IPxPv1ENahOBzTznjsxfbvvICSFAt19X47wptQ03EifpzJy
-         EQlYXsZaIvKN2V7LXRTRNf3ejQpMbmORzTL7bAJP0iM7JvN9joaa35KKVRW1F1tFcDPS
-         rwOWGw91xtKW7NJ2XYyDpIKXc17OUvCiM4liuFoRiq3FT0FKInXuHHeMYdfzUDXxJVvM
-         jenWBNYv+ieekjlpXn+UZQR6QC4Z6JY8IPbplkZAIyUI87lPmIukmjn+TCuPPydbkp/6
-         arsA==
-X-Gm-Message-State: AJIora9ePwmwhlGnkWwxcN1dNwN6tymQjfVSJfxY4N+PQXCyi9pWnNIY
-        yII5SL/Y2Z735oNXmKwR85+VKg==
-X-Google-Smtp-Source: AGRyM1skFmBxWLp/tFnapm7KNoGg2rYhpOq/GHWZX5QvOt68rJbKLI/PlYfrLLADmwITxtiaboTdWQ==
-X-Received: by 2002:a2e:b8d5:0:b0:25e:18ef:bb57 with SMTP id s21-20020a2eb8d5000000b0025e18efbb57mr3917294ljp.37.1659008288328;
-        Thu, 28 Jul 2022 04:38:08 -0700 (PDT)
-Received: from krzk-bin.lan (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id l12-20020a2ea80c000000b0025e0396786dsm98192ljq.93.2022.07.28.04.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 04:38:07 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [PATCH v2 11/11] arm64: dts: qcom: sdm845: add LLCC BWMON
-Date:   Thu, 28 Jul 2022 13:37:48 +0200
-Message-Id: <20220728113748.170548-12-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220728113748.170548-1-krzysztof.kozlowski@linaro.org>
-References: <20220728113748.170548-1-krzysztof.kozlowski@linaro.org>
+        Thu, 28 Jul 2022 07:37:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872315073E;
+        Thu, 28 Jul 2022 04:37:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1286E61B20;
+        Thu, 28 Jul 2022 11:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 864BEC433D6;
+        Thu, 28 Jul 2022 11:37:36 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V6 0/4] mm/sparse-vmemmap: Generalise helpers and enable for LoongArch
+Date:   Thu, 28 Jul 2022 19:37:57 +0800
+Message-Id: <20220728113801.2235151-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SDM845 comes with few instances of Bandwidth Monitor.  The already
-supported one monitors traffic between CPU and Last Level Cache
-Controller (LLCC) and in downstream sources is called BWMON v4 (or v4 of
-register layout).
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
-SDM845 also has also BWMON instance measuring traffic between LLCC and
-memory with different register layout: called v5.
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
 
-Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc: Sibi Sankar <quic_sibis@quicinc.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+V2 -> V3:
+1, Change the Signed-off-by order of author and committer;
+2, Update commit message about the build error on LoongArch.
+
+V3 -> V4:
+Change pmd to pmdp for ARM64 for consistency.
+
+V4 -> V5:
+Add a detailed comment for no-fallback in the altmap case.
+
+V5 -> V6:
+1, Fix build error for NIOS2;
+2, Fix build error for allnoconfig;
+3, Update comment for no-fallback in the altmap case.
+
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 37 ++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index e318c3f8aee0..6ae0288eb384 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2053,6 +2053,43 @@ llcc: system-cache-controller@1100000 {
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		pmu@114a000 {
-+			compatible = "qcom,sdm845-llcc-bwmon";
-+			reg = <0 0x0114a000 0 0x1000>;
-+			interrupts = <GIC_SPI 580 IRQ_TYPE_LEVEL_HIGH>;
-+			interconnects = <&mem_noc MASTER_LLCC 3 &mem_noc SLAVE_EBI1 3>;
-+
-+			operating-points-v2 = <&llcc_bwmon_opp_table>;
-+
-+			llcc_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				/*
-+				 * The interconnect path bandwidth taken from
-+				 * cpu4_opp_table bandwidth for gladiator_noc-mem_noc
-+				 * interconnect.  This also matches the
-+				 * bandwidth table of qcom,llccbw (qcom,bw-tbl,
-+				 * bus width: 4 bytes) from msm-4.9 downstream
-+				 * kernel.
-+				 */
-+				opp-0 {
-+					opp-peak-kBps = <800000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <1804000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <3072000>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <5412000>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <7216000>;
-+				};
-+			};
-+		};
-+
- 		pmu@1436400 {
- 			compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
- 			reg = <0 0x01436400 0 0x600>;
--- 
-2.34.1
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
 

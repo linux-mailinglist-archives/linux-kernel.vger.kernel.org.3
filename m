@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A906D5847D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E120E5847DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiG1Vts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 17:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
+        id S230143AbiG1Vup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 17:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiG1Vtq (ORCPT
+        with ESMTP id S230332AbiG1Vul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 17:49:46 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F3856BB2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:49:44 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id s9so3762395edd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:49:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=40gu5u7tBPIakSFyQ1m/t0Td9u6SRRjNaadPqP/jZYI=;
-        b=Hf0dXQ1crSt6UjG6GCNAanYtmoH5RFrL3ms3meTf4tP7XcBC/a5R5s6JcGVLvIEUsy
-         a/RaIlwv6SuFOkY1vJ/GYSoL0unFvjIf14SqAn44HnV/6DrRbJPZUstQ7gZmvYZmld2G
-         +5unsNt9gMtZ03Cups9Dzi/s9o2Pzpt3RqSuI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=40gu5u7tBPIakSFyQ1m/t0Td9u6SRRjNaadPqP/jZYI=;
-        b=0gZd3l02gHbqTIAQ6cDewhhlduQ3nAhXNYlwl4uIbrWshAjK2OJjMXAtui6POqH7Ph
-         rDmHCzNJrsMFfnZl7HUm0z+TeGU36u26B69GXnsZLD8FG28PTh6wWq7G7wRfzuoD3Nxq
-         NcxAnFO6tQg59I6pSemK9V+xGx6nhPMj6W/51GdLqPfp7LdnV8Kax34Y2No5EeUb7Pek
-         6alcvL1IYpUBGt+KhA2SpffT55EdWDxEiRbmTl+JnSwPFbzpLmXsRTrBAWu+hQzgIJPG
-         +L1g4pIHgQ6tSKoOuNWcwC+48nyD27D0Ev2lGsc6Hgf6PZn14ooRKFFSf5SR+H2igR0U
-         /drg==
-X-Gm-Message-State: AJIora8UzrWfTL16n5AqBgFi0OgoHDUy6Nk7sWitflV0hpeAZt4Q+vNr
-        GmS8j9P9s6zZoU/Nwa7KIaB4y9Kv+79oAPUH
-X-Google-Smtp-Source: AGRyM1s1JjJJcQnLdgDc+e7KW6pt6Vjqrl9z7F3bZDVDoy/3+qjb0irbNgKt/FOOWuvCOq3HJY591w==
-X-Received: by 2002:a05:6402:27cf:b0:43a:de0b:9a82 with SMTP id c15-20020a05640227cf00b0043ade0b9a82mr878312ede.427.1659044982532;
-        Thu, 28 Jul 2022 14:49:42 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id u16-20020a056402065000b0043ab81e4230sm1362953edx.50.2022.07.28.14.49.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 14:49:41 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id i10-20020a1c3b0a000000b003a2fa488efdso1025173wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:49:41 -0700 (PDT)
-X-Received: by 2002:a05:600c:21d7:b0:3a3:2088:bbc6 with SMTP id
- x23-20020a05600c21d700b003a32088bbc6mr798181wmj.68.1659044980827; Thu, 28 Jul
- 2022 14:49:40 -0700 (PDT)
+        Thu, 28 Jul 2022 17:50:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DF01F629;
+        Thu, 28 Jul 2022 14:50:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 903A361AC7;
+        Thu, 28 Jul 2022 21:50:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1600C433D6;
+        Thu, 28 Jul 2022 21:50:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659045040;
+        bh=TIOCNvw+17eRmNBfMFABH6VkBMWnuv6D1qn6yCQMJrw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YBHZYgsKrAuDGDNxgcUIVjuVNislrbcEKsfe/xHrKkvXsKbsnBm0l7C12G3Oa27q8
+         PlIDnNyVuOSJwbT5Tji2DrzAkwZrc7HNnhNGn3hnDQppcEIXDFS18u0aW3hlVT4faS
+         BixsHF3y5wiguEnyPr1Qjeqob4YsQfoQoYjcA2YwSE8Sfoo06FHJFVTEi068Uyen5r
+         ziANQly7ihmRuTQObzk0XUjy4fvNHaykq0bFtfMvNNtVcLhN69mrWl30UFI35gbBpY
+         ObP2ygENYWaoQHDMCJyzZisRqkcfs++QU6Eod7c+qpNHrwaLu8Ia2lE3tqMKI4vDs3
+         PF1oFXvnSirvw==
+Received: by mail-vk1-f178.google.com with SMTP id b2so1445361vkg.2;
+        Thu, 28 Jul 2022 14:50:39 -0700 (PDT)
+X-Gm-Message-State: AJIora8ApiSScivdsEJbgBiWjU+0/Fs9/d2CT7dRLiFUy++vjgroT6VL
+        gdJq8V5oKVIc5X+7Y95wsABumUYdWAZp4x76HQ==
+X-Google-Smtp-Source: AGRyM1ummHcv4YmBzQF2UjMZlRgMn8EgYxyFbY/AxWBSezepPmZZ6gULxdnDc+jSowPTBq4nLYPRsyqBX5nG9adIf9Q=
+X-Received: by 2002:ac5:c916:0:b0:376:f130:808f with SMTP id
+ t22-20020ac5c916000000b00376f130808fmr245211vkl.19.1659045038884; Thu, 28 Jul
+ 2022 14:50:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220728161208.865420-1-yury.norov@gmail.com> <CAHk-=wiFJboHXZEXtMhDcHbEYXujTiDxkGbpONC=DJA7dJG6nw@mail.gmail.com>
-In-Reply-To: <CAHk-=wiFJboHXZEXtMhDcHbEYXujTiDxkGbpONC=DJA7dJG6nw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 28 Jul 2022 14:49:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgga5hrg5qgm4UwuOCjgBrobhZcdKTr1AFU7WSWgVKKZQ@mail.gmail.com>
-Message-ID: <CAHk-=wgga5hrg5qgm4UwuOCjgBrobhZcdKTr1AFU7WSWgVKKZQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] lib/find: optimize find_bit() functions
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220728185512.1270964-1-robh@kernel.org>
+In-Reply-To: <20220728185512.1270964-1-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 28 Jul 2022 15:50:27 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKGmL7BTibEJM0NWRmazOJBsNDLAWFtvth=oBOQQmn_VQ@mail.gmail.com>
+Message-ID: <CAL_JsqKGmL7BTibEJM0NWRmazOJBsNDLAWFtvth=oBOQQmn_VQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: dma: arm,pl330: Add missing 'iommus' property
+To:     Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "open list:DMA GENERIC OFFLOAD ENGINE SUBSYSTEM" 
+        <dmaengine@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 11:49 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, Jul 28, 2022 at 12:55 PM Rob Herring <robh@kernel.org> wrote:
 >
-> It builds for me and seems to generate reasonable code, although I
-> notice that clang messes up the "__ffs()" inline asm and forces the
-> source into memory.
+> The pl330 can be behind an IOMMU which is the case for Arm Juno board.
+> Add the 'iommus' property allowing for 1 IOMMU per channel.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/dma/arm,pl330.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/dma/arm,pl330.yaml b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+> index 2bec69b308f8..b9c4bee178ae 100644
+> --- a/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+> +++ b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+> @@ -55,6 +55,11 @@ properties:
+>
+>    dma-coherent: true
+>
+> +  iommus:
+> +    minItems: 1
+> +    maxItems: 8
 
-I have created a llvm issue for this at
+Off by 1. Juno has 9 entries. I think it's 8 entries for write the
+read side has 1 entry. The TRM isn't too clear.
 
-        https://github.com/llvm/llvm-project/issues/56789
+Rob
 
-and while I noticed this while looking at the rather odd code
-generation for the bit finding functions, it seems to be a general
-issue with clang inline asm.
-
-It looks like any instruction that takes a mod/rm input (so a register
-or memory) will always force the thing to be in memory. Which is very
-pointless in itself, but it actually causes some functions to have a
-stack frame that they wouldn't otherwise need or want. So it actually
-has secondary downsides too.
-
-And yes, that particular case could be solved with __builtin_ctzl(),
-which seems to DTRT. But that uses plain bsf, and we seem to really
-want tzcnt ("rep bsf") here, although I didn't check why (the comment
-explicitly says "Undefined if no bit exists", which is the main
-difference between bsf and tzcnt).
-
-I _think_ it's because tzcnt is faster when it exists exactly because
-it always writes the destination, so 'bsf' is actually the inferior
-op, and clang shouldn't generate it.
-
-But the "rm" thing exists elsewhere too, and I just checked - this
-same issue seems to happen with "g" too (ie "any general integer
-input").
-
-                      Linus
+> +    description: Up to 1 IOMMU per DMA channel
+> +
+>    power-domains:
+>      maxItems: 1
+>
+> --
+> 2.34.1
+>

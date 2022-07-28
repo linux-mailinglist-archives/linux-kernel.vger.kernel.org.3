@@ -2,118 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE724583B29
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC70A583B2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235435AbiG1JXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S234867AbiG1JZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiG1JXk (ORCPT
+        with ESMTP id S231260AbiG1JZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:23:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50E476566A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659000217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MUUHnK3mGjBTIixFdMqpioqDxoaunFSmdGJUDWVh8gY=;
-        b=fy1hI5tSguC+KnHazRGc9PMlA76Hnp/gem56+vEykEjR6jl0qyZSW6nOdffaHoiHUmYlkJ
-        CnYIJQVVzo5eOo0Yuvj4r4QE688Vto0tsyzpx9iBmzmAsfrVtOqTvGaW0WK2OW12wjv4+Q
-        FhnQAVt3HCmWULavUgBkvUheA+e+238=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-tAaXZ2XBPQa1vbNrIsQVkw-1; Thu, 28 Jul 2022 05:23:35 -0400
-X-MC-Unique: tAaXZ2XBPQa1vbNrIsQVkw-1
-Received: by mail-wm1-f70.google.com with SMTP id n19-20020a05600c3b9300b003a314062cf4so2367197wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:23:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=MUUHnK3mGjBTIixFdMqpioqDxoaunFSmdGJUDWVh8gY=;
-        b=L9xo3ADhYs8wYfTYicGrsKgoKkZSYn6F/F19E4N9lQvRNuqmRVNuSqONpqZ+0eIbcB
-         XptMdl9vbFoEQ8rGlU6V6fJRSWu+s6KAHoqq5qxv5W9FrSQQ9D280+h+fJvZ9zDAeSaD
-         KRU+9736E5IFFuAoQodjji4Hr8oinlsP5N9o+/RM35jSX293Zb59bWH0Wgj+KJCH3W9e
-         pNfVazMzdJoOfgTxyntx12mXjZvIxOIpt/uMccQnk0LN9q2zNDNeZtzxTqEBB8vkYT53
-         iZGKS6qtVzjkhr5C4jnniDrlqPs2Tids8zIwjduOsoBmPCFsWlidmW1VCgHKjgzjzrLk
-         fqnw==
-X-Gm-Message-State: AJIora9wKLZ8NPKM7xXc8uCLT2e8KiHcyTURYG+hdluj05ped3j4kJAM
-        LzKGc8DnBOdJjAE5jiuUbHTyWVOO5Ctk7bayYfzg229NeVM0reIVOYPMLrf42h48LfMnymG4UvU
-        Y9Iwndbb1jy/oqBtzDuxFKaaL
-X-Received: by 2002:a05:600c:3510:b0:3a3:34e7:cfc8 with SMTP id h16-20020a05600c351000b003a334e7cfc8mr6168706wmq.164.1659000214724;
-        Thu, 28 Jul 2022 02:23:34 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v68N2cLgOVDHlO2BHTuQI5rx78/bTHvWixAJqi4+qCUXnGL4+jti75UpEFTdiWn82+6TUIgA==
-X-Received: by 2002:a05:600c:3510:b0:3a3:34e7:cfc8 with SMTP id h16-20020a05600c351000b003a334e7cfc8mr6168689wmq.164.1659000214387;
-        Thu, 28 Jul 2022 02:23:34 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:7b00:9c4:744b:b126:3a28? (p200300cbc7047b0009c4744bb1263a28.dip0.t-ipconnect.de. [2003:cb:c704:7b00:9c4:744b:b126:3a28])
-        by smtp.gmail.com with ESMTPSA id w13-20020adfee4d000000b0021f0af83142sm254643wro.91.2022.07.28.02.23.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 02:23:33 -0700 (PDT)
-Message-ID: <6492e852-8acf-95a9-a3a0-8ce8bbaf46d6@redhat.com>
-Date:   Thu, 28 Jul 2022 11:23:33 +0200
+        Thu, 28 Jul 2022 05:25:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297453A0;
+        Thu, 28 Jul 2022 02:25:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C290560D40;
+        Thu, 28 Jul 2022 09:25:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B391C433D7;
+        Thu, 28 Jul 2022 09:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659000307;
+        bh=7pq/2Z60GYWXwFYneAORoRndD27DanVgbiYGcaR6gLk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ffMQFUj302iUtf3No5xdZTKyr38PfuNjv35jUAOBYxbQpNOaYu5z1qie/PPrwudVp
+         rbor1vghIWM3G77lJrAH1ar/K9X8EzGnc9e8/UWwcqBQUJClCdBAXm5ooTEhvWwumk
+         nqWNMZknE4HIUKhEpEMEaSDf5b46pcxY5XBNcKVtb9D7GXve33Rx3pdiwh9bXodyFe
+         XEg3bRfmARBEBSYJiMwKWc/Xd5bITzO99wuWYIPrtYKdWbh4BZVGGcGNj9G+JeF806
+         5OBqXWTaqiT/tRN1vGY4LeozcX0cGiLJGgnRmws4Ijuhc3+ZSH82D/StYdeoCaOheq
+         jGKkfn69WhEcg==
+Received: by mail-vs1-f41.google.com with SMTP id b67so1095886vsc.1;
+        Thu, 28 Jul 2022 02:25:07 -0700 (PDT)
+X-Gm-Message-State: AJIora/RA0G/X6n9pwf0tjjfkUpCFfFHPThW7eZdpQ+D4nQA07Lj/Ckh
+        9KDeIkT09LKsSxyMORsaGskbxZIwsrf2THvXAD8=
+X-Google-Smtp-Source: AGRyM1vyH+nsbqzZjGAJ6qBx3wXBi1+dUz0jOf3JsHZ5+CvaVM8g+iopMUmY8qoZiCb4cLiRSfo3Wa34/mRjVsyJuuo=
+X-Received: by 2002:a67:d599:0:b0:358:6371:4cfb with SMTP id
+ m25-20020a67d599000000b0035863714cfbmr6080587vsj.78.1659000306050; Thu, 28
+ Jul 2022 02:25:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm: Re-allow pinning of zero pfns
-Content-Language: en-US
-To:     Alistair Popple <apopple@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        akpm@linux-foundation.org, minchan@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, paulmck@kernel.org,
-        jhubbard@nvidia.com, joaodias@google.com
-References: <165490039431.944052.12458624139225785964.stgit@omen>
- <bb120b4a-e6f6-de81-35f0-9803acf9b0be@redhat.com>
- <20220615155659.GA7684@nvidia.com>
- <cb7efb0f-5537-5ce4-7aec-bb10ea81d5de@redhat.com>
- <20220623142139.462a0841.alex.williamson@redhat.com>
- <20220623204712.GG4147@nvidia.com> <87a6a2zyxk.fsf@nvdebian.thelocal>
- <20220624013415.GI4147@nvidia.com> <874k0ax1s0.fsf@nvdebian.thelocal>
- <878rodvcty.fsf@nvdebian.thelocal>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <878rodvcty.fsf@nvdebian.thelocal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220721130419.1904711-1-chenhuacai@loongson.cn>
+ <20220721130419.1904711-4-chenhuacai@loongson.cn> <20220722091604.GD18125@willie-the-truck>
+In-Reply-To: <20220722091604.GD18125@willie-the-truck>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 28 Jul 2022 17:24:52 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7sWvcVCNtzKscnYK5q0+MqdZiuywuy=_7oB7iLN9pQTA@mail.gmail.com>
+Message-ID: <CAAhV-H7sWvcVCNtzKscnYK5q0+MqdZiuywuy=_7oB7iLN9pQTA@mail.gmail.com>
+Subject: Re: [PATCH V5 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
+To:     Will Deacon <will@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.07.22 10:45, Alistair Popple wrote:
-> 
-> Looks like the original patch might need rebasing. I am about to post a
-> clean-up for the tortured logic in check_and_migrate_movable_pages() so
-> can incorporate it there, but I'm wondering what the consensus was for
-> pinning of zero pfn?
+Hi, Will,
 
-We have to keep it working right now, but in most cases (inside
-MAP_PRIVATE regions) it's shaky and undesired.
+On Fri, Jul 22, 2022 at 5:16 PM Will Deacon <will@kernel.org> wrote:
+>
+> On Thu, Jul 21, 2022 at 09:04:18PM +0800, Huacai Chen wrote:
+> > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> > index 0abcb0a5f1b5..eafd084b8e19 100644
+> > --- a/mm/sparse-vmemmap.c
+> > +++ b/mm/sparse-vmemmap.c
+> > @@ -694,6 +694,69 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
+> >       return vmemmap_populate_range(start, end, node, altmap, NULL);
+> >  }
+> >
+> > +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> > +                                   unsigned long addr, unsigned long next)
+> > +{
+> > +}
+> > +
+> > +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> > +                                    unsigned long next)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> > +                                      int node, struct vmem_altmap *altmap)
+> > +{
+> > +     unsigned long addr;
+> > +     unsigned long next;
+> > +     pgd_t *pgd;
+> > +     p4d_t *p4d;
+> > +     pud_t *pud;
+> > +     pmd_t *pmd;
+> > +
+> > +     for (addr = start; addr < end; addr = next) {
+> > +             next = pmd_addr_end(addr, end);
+> > +
+> > +             pgd = vmemmap_pgd_populate(addr, node);
+> > +             if (!pgd)
+> > +                     return -ENOMEM;
+> > +
+> > +             p4d = vmemmap_p4d_populate(pgd, addr, node);
+> > +             if (!p4d)
+> > +                     return -ENOMEM;
+> > +
+> > +             pud = vmemmap_pud_populate(p4d, addr, node);
+> > +             if (!pud)
+> > +                     return -ENOMEM;
+> > +
+> > +             pmd = pmd_offset(pud, addr);
+> > +             if (pmd_none(READ_ONCE(*pmd))) {
+> > +                     void *p;
+> > +
+> > +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> > +                     if (p) {
+> > +                             vmemmap_set_pmd(pmd, p, node, addr, next);
+> > +                             continue;
+> > +                     } else if (altmap) {
+> > +                             /*
+> > +                              * No fallback: In any case we care about, the
+> > +                              * altmap should be reasonably sized and aligned
+> > +                              * such that vmemmap_alloc_block_buf() will always
+> > +                              * succeed. If there is no more space in the altmap
+> > +                              * and we'd have to fallback to PTE (highly unlikely).
+>
+> Can you tweak the last couple of sentences please, as they don't make sense
+> to me? To be specific, I'd suggest replacing:
+>
+>   "If there is no more space in the altmap and we'd have to fallback to PTE
+>   (highly unlikely). That could indicate an altmap-size configuration
+>   issue."
+>
+> with something like:
+>
+>   "For consistency with the PTE case, return an error here as failure could
+>    indicate a configuration issue with the size of the altmap."
+>
+> With that:
+>
+> Acked-by: Will Deacon <will@kernel.org>
+OK, I will send V5, thanks.
 
-> 
-> Currently my clean-up will result in PUP returning an error for the zero
-> pfn rather than looping indefinitely in the kernel. However it wasn't
-> clear from this thread if returning an error is ok, or if R/O pinning
-> of the zero pfn should succeed?
-
-I'm working on proper COW breaking in MAP_PRIVATE mappings, which will,
-for example, unshare the shared zeropage and properly replace it by
-exclusive anon pages first in the FOLL_LONGTERM case.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Huacai
+>
+> Will

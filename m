@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF30B583A75
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D686583A57
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbiG1Ijm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S234614AbiG1I1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiG1Ijd (ORCPT
+        with ESMTP id S233460AbiG1I1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:39:33 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C43062A4C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:39:31 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id v5so583951wmj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:39:31 -0700 (PDT)
+        Thu, 28 Jul 2022 04:27:16 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D40C4E61C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:27:15 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id i62so370749yba.5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:subject:date:in-reply-to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=jIAL/NtinFiIoUs1seDVkZQ5Lk2NmjX9+zgQPi+IvjA=;
-        b=igCNHyQ+4L6hHGHtmQg+2CD+K5Lvfdlh+ACqtzyHI+0w3RvK2lZlpDBROkddBN9MaY
-         RsVkQtpd2iBAqUrYrvuxJsJcMkolsL+ZY1MFOdQuU4vQd+zBp/vI2sL5UUn/o0khNJnm
-         Tr4/ynuvnx3cxODsOm30vkD8XGxrYBipeO2GpFZiq8aE5kjO5hAdh5p8ScJQDEjSiyJY
-         lUOgKCpLWfVBzsvUEReXVJ6OwDyOWtoNh71AlIKCOKh2DIdJpw1NRrhEuOnerCgCSBM5
-         MZZRz+sXHYM3frimQR/+CoQ7D8PHkDVAkXilylaD+9GXtYkLZaFlaDAqXBsyKcXicvsf
-         fVTg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NuOwg8zLZYTNGp3dnBE/duFf3jptoCHmwZgBs/JWqoM=;
+        b=xzzKH7sPcQmkwiVdKloGauRpi7blCjAQCrDKrQeTUx6AIgCVlOJdE1tfKV3OgeeetB
+         3mbYapqzRhUe6nAZt/YPteZ4qVYbv3uJ+bYn/NpTa5VxxnxIsPQRFBaMWvPjZI/3ljeR
+         sNK/xeV3AykoDIT3fjdWS4aw3rXihp8s+P+ptoMpX0C3Ox7tttbQEgm01eTkjwlImdar
+         dNBdNe5wTcQVPXTBQgToL5PIgNkx0IIUMMW7n1Wb2NSanE/ynAKQj/mnXKaFqlb3frQK
+         M9e+V1X8rIEZEj/Cv7EfRB+fwzFP1bdKpzE4gTDonF2WPCGGsuR9l9XKG6KYc7SzQ8LI
+         UQXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:subject:date
-         :in-reply-to:message-id:mime-version:content-transfer-encoding;
-        bh=jIAL/NtinFiIoUs1seDVkZQ5Lk2NmjX9+zgQPi+IvjA=;
-        b=VO8hlK4pcRn9xFB5eT5sv9/vPAH/lTQypEk24aJZCrflk+VVSQT8HxzhG4zfb0YyA1
-         F/DUQPdJpA/BbfJSuMabyPDB02vrdTvZ8h5SEs3guNsGfdU3SKT3SPGU5V+lbvMCW1Lh
-         xjouqpNLsAPi5jXgeF4bUYvoYqTM50LleHMZmP8JTQRSVZ4Wm1qB/C2ekCl1o1R8Ab7G
-         jnkjvapJKlgBlQgFcSAXsGWAepH9SAita1m49d3ViAvqnBbxgqB/lP9iiRY5H7e2WfUL
-         521CTBcyJsTf+KVkjbQkOuZ5E7Uiw4DxLnE0CjjSJ0GEriq8wQUTOK7/hbJ6/yZJnTrX
-         /eWg==
-X-Gm-Message-State: AJIora/ZYYY1Kpzk7vwow/NrbMhyqPpWZxPW/oIcn74wkuk6IC1OSqMU
-        bqNJqwGuzChzro8wd7RQDWJdnA==
-X-Google-Smtp-Source: AGRyM1uM91GvDx6P1GRpKHAV4YFnCfa9JW4xCzK7+51rXTwVChFIWKbdxZIbjGm98XgIPJ4Z2/8p4A==
-X-Received: by 2002:a1c:7503:0:b0:3a3:2db1:d37e with SMTP id o3-20020a1c7503000000b003a32db1d37emr5730471wmc.47.1658997570007;
-        Thu, 28 Jul 2022 01:39:30 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id z16-20020adfe550000000b002185631adf0sm363872wrm.23.2022.07.28.01.39.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 01:39:29 -0700 (PDT)
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <1j8rodhfn9.fsf@starbuckisacylon.baylibre.com>
- <032b3c3f-f899-bf53-ecbb-35191d39392b@amlogic.com>
-User-agent: mu4e 1.8.6; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V2 0/3] Add S4 SoC clock controller driver
-Date:   Thu, 28 Jul 2022 10:27:00 +0200
-In-reply-to: <032b3c3f-f899-bf53-ecbb-35191d39392b@amlogic.com>
-Message-ID: <1j4jz1hbr5.fsf@starbuckisacylon.baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NuOwg8zLZYTNGp3dnBE/duFf3jptoCHmwZgBs/JWqoM=;
+        b=2NcPfaapIMYqpyq6Y3O5TuZWDCv5VuBJ3dPnrSq2yP57GaNBqEScaeK6hDGh/ilYik
+         w/ZB/k32aQOS6PHpRtyLdJ4piUhA5yht2rkz0xVW9Y75YkhG9zLGPdBL49nisEUsV7uc
+         RyXp4Pcbw88rAv/7xSODlnnyT9HfaAH18FvjQUbb1mvCFIKYiBvfItVR9tDifj2pP0md
+         gfYSOHMWrFykyvAeXonF7+R+qQM6/Sxq7eZ1ebRi1b8fTYY4tSzFZce3sdqL07AVXH8M
+         61T0AVmQ0IsltVs2a5vNTKUAjOMY8Dbp1I9AF5nARyCgbGkPxmDO346nCK/HB7hE9CMc
+         dMfQ==
+X-Gm-Message-State: AJIora9sUGKSVz5KQRFG8NsyEskm21tGJKQUTICaXfoL34WcelOJ63gf
+        7VSwkel9ksB/sZ4dwVuskhZgaeSz8LqOEjA8zKUoW/tKEg==
+X-Google-Smtp-Source: AGRyM1sAHvU7GqvfvAsRUKf5bk0NJRLPcZj8A+NCDwrJZ9G5gB688U1aoOSGAj4+vfJQQNS9bmYBSTnMzyY0j2jSh5k=
+X-Received: by 2002:a5b:cc6:0:b0:66e:45c6:2a25 with SMTP id
+ e6-20020a5b0cc6000000b0066e45c62a25mr20619329ybr.304.1658996834580; Thu, 28
+ Jul 2022 01:27:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220728032000.127-1-xieyongji@bytedance.com> <20220728032000.127-6-xieyongji@bytedance.com>
+ <CACGkMEuN0zqyLQ6vD7MvjAhtJVvmMhsn_T4b5ww0vviwq5hBrg@mail.gmail.com>
+ <CACycT3uYFWvmdJ1MzQZv=L7N0WzEiFvx5wJX+OwM1ew5Z0w0jw@mail.gmail.com> <CACGkMEtru8qaebnTXVu94oCV21JovkjshxYxdyzeSf=FTN0=xA@mail.gmail.com>
+In-Reply-To: <CACGkMEtru8qaebnTXVu94oCV21JovkjshxYxdyzeSf=FTN0=xA@mail.gmail.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Thu, 28 Jul 2022 16:27:03 +0800
+Message-ID: <CACycT3swFhETEOPNNmLbSFaYUZEJYUkPXrddQ=w0TALE=D40Lw@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] vduse: Support querying information of IOVA regions
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -79,84 +71,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu 28 Jul 2022 at 16:06, Yu Tu <yu.tu@amlogic.com> wrote:
-
-> Hi JB=EF=BC=8C
+On Thu, Jul 28, 2022 at 2:45 PM Jason Wang <jasowang@redhat.com> wrote:
 >
-> On 2022/7/28 15:08, Jerome Brunet wrote:
->> [ EXTERNAL EMAIL ]
->>=20
->> On Thu 28 Jul 2022 at 13:41, Yu Tu <yu.tu@amlogic.com> wrote:
->>=20
->>> 1. Add clock controller driver for S4 SOC.
->>>
->>> Yu Tu (3):
->>>    dt-bindings: clk: meson: add S4 SoC clock controller bindings
->>>    arm64: dts: meson: add S4 Soc clock controller in DT
->>>    clk: meson: s4: add s4 SoC clock controller driver
->>>
->>> V1 -> V2: Change format as discussed in the email.
->>>
->>> Link:https://lore.kernel.org/linux-amlogic/20220708062757.3662-1-yu.tu@=
-amlogic.com/
->>>
->>>   .../bindings/clock/amlogic,gxbb-clkc.txt      |    1 +
->>>   MAINTAINERS                                   |    1 +
->>>   arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |   11 +
->>>   drivers/clk/meson/Kconfig                     |   15 +
->>>   drivers/clk/meson/Makefile                    |    1 +
->>>   drivers/clk/meson/s4.c                        | 4732 +++++++++++++++++
->>>   drivers/clk/meson/s4.h                        |  296 ++
->>>   include/dt-bindings/clock/s4-clkc.h           |  146 +
->>>   8 files changed, 5203 insertions(+)
->>>   create mode 100644 drivers/clk/meson/s4.c
->>>   create mode 100644 drivers/clk/meson/s4.h
->>>   create mode 100644 include/dt-bindings/clock/s4-clkc.h
->>>
->>>
->>> base-commit: b293bc9286ee21824e93f0fcfed3b78fdfee01e6
->> Please don't post until you have addressed *ALL* the comments from the
->> previous version.
-> The last email asked you to adopt A1 method, but you did not reply?
+> On Thu, Jul 28, 2022 at 2:36 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+> >
+> > On Thu, Jul 28, 2022 at 1:58 PM Jason Wang <jasowang@redhat.com> wrote:
+> > >
+> > > On Thu, Jul 28, 2022 at 11:20 AM Xie Yongji <xieyongji@bytedance.com> wrote:
+> > > >
+> > > > This introduces a new ioctl: VDUSE_IOTLB_GET_INFO to
+> > > > support querying some information of IOVA regions.
+> > > >
+> > > > Now it can be used to query whether the IOVA region
+> > > > supports userspace memory registration.
+> > > >
+> > > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > > > ---
+> > > >  drivers/vdpa/vdpa_user/vduse_dev.c | 39 ++++++++++++++++++++++++++++++
+> > > >  include/uapi/linux/vduse.h         | 24 ++++++++++++++++++
+> > > >  2 files changed, 63 insertions(+)
+> > > >
+> > > > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > index eedff0a3885a..e820c37dcba8 100644
+> > > > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > @@ -1228,6 +1228,45 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+> > > >                                            umem.size);
+> > > >                 break;
+> > > >         }
+> > > > +       case VDUSE_IOTLB_GET_INFO: {
+> > > > +               struct vduse_iova_info info;
+> > > > +               struct vhost_iotlb_map *map;
+> > > > +               struct vduse_iova_domain *domain = dev->domain;
+> > > > +
+> > > > +               ret = -EFAULT;
+> > > > +               if (copy_from_user(&info, argp, sizeof(info)))
+> > > > +                       break;
+> > > > +
+> > > > +               ret = -EINVAL;
+> > > > +               if (info.start > info.last)
+> > > > +                       break;
+> > > > +
+> > > > +               if (!is_mem_zero((const char *)info.reserved,
+> > > > +                                sizeof(info.reserved)))
+> > > > +                       break;
+> > > > +
+> > > > +               spin_lock(&domain->iotlb_lock);
+> > > > +               map = vhost_iotlb_itree_first(domain->iotlb,
+> > > > +                                             info.start, info.last);
+> > > > +               if (map) {
+> > > > +                       info.start = map->start;
+> > > > +                       info.last = map->last;
+> > > > +                       info.capability = 0;
+> > > > +                       if (domain->bounce_map && map->start >= 0 &&
+> > > > +                           map->last < domain->bounce_size)
+> > > > +                               info.capability |= VDUSE_IOVA_CAP_UMEM;
+> > > > +               }
+> > > > +               spin_unlock(&domain->iotlb_lock);
+> > > > +               if (!map)
+> > > > +                       break;
+> > > > +
+> > > > +               ret = -EFAULT;
+> > > > +               if (copy_to_user(argp, &info, sizeof(info)))
+> > > > +                       break;
+> > > > +
+> > > > +               ret = 0;
+> > > > +               break;
+> > > > +       }
+> > > >         default:
+> > > >                 ret = -ENOIOCTLCMD;
+> > > >                 break;
+> > > > diff --git a/include/uapi/linux/vduse.h b/include/uapi/linux/vduse.h
+> > > > index 9885e0571f09..11bd48c72c6c 100644
+> > > > --- a/include/uapi/linux/vduse.h
+> > > > +++ b/include/uapi/linux/vduse.h
+> > > > @@ -233,6 +233,30 @@ struct vduse_iova_umem {
+> > > >  /* De-register the userspace memory. Caller should set iova and size field. */
+> > > >  #define VDUSE_IOTLB_DEREG_UMEM _IOW(VDUSE_BASE, 0x19, struct vduse_iova_umem)
+> > > >
+> > > > +/**
+> > > > + * struct vduse_iova_info - information of one IOVA region
+> > > > + * @start: start of the IOVA region
+> > > > + * @last: last of the IOVA region
+> > > > + * @capability: capability of the IOVA regsion
+> > > > + * @reserved: for future use, needs to be initialized to zero
+> > > > + *
+> > > > + * Structure used by VDUSE_IOTLB_GET_INFO ioctl to get information of
+> > > > + * one IOVA region.
+> > > > + */
+> > > > +struct vduse_iova_info {
+> > > > +       __u64 start;
+> > > > +       __u64 last;
+> > > > +#define VDUSE_IOVA_CAP_UMEM (1 << 0)
+> > > > +       __u64 capability;
+> > > > +       __u64 reserved[3];
+> > > > +};
+> > > > +
+> > > > +/*
+> > > > + * Find the first IOVA region that overlaps with the range [start, last]
+> > >
+> > > So the code is actually find the IOVA region that is the super range
+> > > of [start, last] instead of overlap:
+> > >
+> >
+> > This is achieved by vhost_iotlb_itree_first(). And can't the super
+> > range of [start,last] be considered overlapping?
 >
->> At first glance, I can see that this is still a single driver for
->> what is obviously 2 controllers with 2 register spaces. Simple comments
->> like the "<< 2" in the register declaration have not been addressed eith=
-er.
-> I understand that this should be a controller, just two address
-> descriptions. One is the various PLL registers and one is the clock for=20
-> the peripherals. And PLL is to provide a clock source for various
-> peripheral clocks. So a clock controller is reasonable. I think you got=20
-> it wrong.
-
-I don't think I do. This looks exactly like the A1.
-The post of that controller are still in the  archive and I am sure your
-colleagues can give you the history.
-
-You clearly have register regions providing clock, separated by
-0x8000. Claiming that as one big region is bad design.
-
-There has been several remarks about using a big syscon on V1,
-unaddressed too.
-
-CCF has everything necessary in place to handle each register region
-separately, properly and pass clock around.
-
-You can handle it as a single controller, claiming the two regions
-individually but:
-# 1 - handling 2 different regmaps in the controller is going to be
-      bigger mess than you think
-# 2 - I am far from convinced there is any reason to do so
-
-
+> Ok, but what I want to ask is, under which condition can we hit the
+> following case
 >
-> Ok, if you insist on using two clock controllers,, please provide your the
-> reason and example code?
+> map->last >= domain->bounce_size ?
 >
->> Seeing that, I have not reviewed this version further.
->> I won't until all the comments from v1 are either addressed or answer
->> Regards
->> Jerome
->> .
 
+I think we would not hit this case currently.
+
+Thanks,
+Yongji

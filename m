@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F07583916
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B149158392E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbiG1G7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S234449AbiG1HDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbiG1G7x (ORCPT
+        with ESMTP id S233308AbiG1HDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:59:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D07558CC
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:59:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6737B617BB
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:59:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 693F0C433C1;
-        Thu, 28 Jul 2022 06:59:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658991591;
-        bh=H6JnRUnyiByJJ0baf07rcz3QNGmBvJEdeFetwFaIrt8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oMccGIc1VNSGBXBfJ4t4ZMe2sWl5Xli8a6ddC4m2Dc0QeqDnwk3QkUXasHTPj2c/T
-         Cn0kVDBvFQCWWgw2NjRAtzNJCQkFJFrCC1rqHySwCEXAnn2PWY6sGozCCG7DfcAaYY
-         e4973Viozw117ESscA56ECU0US4l9WW9BSpJSeW8=
-Date:   Thu, 28 Jul 2022 08:59:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Sterba <dsterba@suse.com>
-Subject: Re: [PATCH 1/1] drivers/base/cpu: Print kernel arch
-Message-ID: <YuIz5bvMLKQeYn1h@kroah.com>
-References: <20220727161135.24531-1-pvorel@suse.cz>
- <YuFqh6OrWEQsZV04@kroah.com>
- <YuG6jfeT9p47Ekn1@pevik>
+        Thu, 28 Jul 2022 03:03:05 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9BB5C369
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:03:04 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id c12so1017317ede.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nZj3FVBxKWQWzHTUYRIyjL/IBGzy/vAn7ewqW8rjIR8=;
+        b=f42OwsnT9wKcuVY475gVHsDYoCC+OpxajdHImL51yEdpxocd54QorII/uh321iNpLk
+         nLzhzKik/RBXK7v8IqV8/Hl2BBivmFYt6C3YbZkMb5De1EsaghddRpvezeo7iPAsSbaM
+         tBOoksUhxbYP25RqcVchxS9d83sorUiPYZO4g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nZj3FVBxKWQWzHTUYRIyjL/IBGzy/vAn7ewqW8rjIR8=;
+        b=1KFtcqT22oSFZK0ENCjcjN+mW0txTxe0XUy4lJbui5teVO9Yaw9JLF1rp7bdEPBLSy
+         k2RIF81rkpo+S7R7sS/TBKMEZlZQoua4GjYrfkOTnlzAQIqu/cCK4Aq8KJ2NHxa3Nfbj
+         EplZWBT/gjVj2hGi4Mn+nFed+e8FHPQReaAsj7Cfm7g8GFvq0EftUzOOpMLEIRarWEdO
+         7BKfy2y6fLozzREchtmFX1j1iseqvtjfrnnZJZ/kZ2m7tWHuwCRE/KVAsVCJ7lZ/jkt/
+         Ko4NN3HAYpOFnwuESl+nIShVvQAEVzB5Hcl4IDjFiaB/bFnEpvKnPfm/SEYY+aCvjMeF
+         aEZA==
+X-Gm-Message-State: AJIora+Wfh7/bYaorfZYBZFUFcJ2eJWKngQZwqVIwJDPO+vQfceoCCfz
+        JuHxvTHmYjS0xZR+ZH8+EvJCyt7J5M3qAQ==
+X-Google-Smtp-Source: AGRyM1vBWERdkJYuFCNxqUjPJc6tZd0EdT40vckgqiOk0dpYdgduSquFN3g4x3mP+B35h84Pp+bUKA==
+X-Received: by 2002:a05:6402:4016:b0:43a:f310:9522 with SMTP id d22-20020a056402401600b0043af3109522mr26262809eda.200.1658991782896;
+        Thu, 28 Jul 2022 00:03:02 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
+        by smtp.gmail.com with ESMTPSA id r18-20020aa7d152000000b0042de3d661d2sm154742edo.1.2022.07.28.00.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 00:03:02 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
+Subject: [PATCH v4 0/7] can: slcan: extend supported features (step 2)
+Date:   Thu, 28 Jul 2022 09:02:47 +0200
+Message-Id: <20220728070254.267974-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuG6jfeT9p47Ekn1@pevik>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,74 +73,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 12:22:05AM +0200, Petr Vorel wrote:
-> Hi Greg,
-> 
-> thanks for your review!
-> 
-> > On Wed, Jul 27, 2022 at 06:11:35PM +0200, Petr Vorel wrote:
-> > > Print kernel architecture in /sys/devices/system/cpu/arch
-> > > using UTS_MACHINE, i.e. member of struct uts_namespace.machine.
-> 
-> > > This helps people who debug kernel with initramfs with minimal
-> > > environment (i.e. without coreutils or even busybox) or allow to open
-> > > sysfs file instead of run uname -m in high level languages.
-> 
-> > > Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> > > ---
-> > >  drivers/base/cpu.c | 9 +++++++++
-> > >  1 file changed, 9 insertions(+)
-> 
-> > You can't add a new sysfs file without a Documentation/ABI/ update as
-> > well.  Please fix that up.
-> I'm sorry. Yes, I realized it later on (once I got offline).
-> Sure, I'll fix this in v2. But the main question is whether this feature is
-> acceptable and what is the best place for the file.
-> 
-> 
-> > > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> > > index 4c98849577d4..7c8032e3ff10 100644
-> > > --- a/drivers/base/cpu.c
-> > > +++ b/drivers/base/cpu.c
-> > > @@ -3,6 +3,7 @@
-> > >   * CPU subsystem support
-> > >   */
-> 
-> > > +#include <generated/compile.h>
-> > >  #include <linux/kernel.h>
-> > >  #include <linux/module.h>
-> > >  #include <linux/init.h>
-> > > @@ -232,6 +233,13 @@ static ssize_t print_cpus_kernel_max(struct device *dev,
-> > >  }
-> > >  static DEVICE_ATTR(kernel_max, 0444, print_cpus_kernel_max, NULL);
-> 
-> > > +static ssize_t print_cpus_arch(struct device *dev,
-> > > +				     struct device_attribute *attr, char *buf)
-> > > +{
-> > > +	return sysfs_emit(buf, "%s\n", UTS_MACHINE);
-> > > +}
-> > > +static DEVICE_ATTR(arch, 0444, print_cpus_arch, NULL);
-> 
-> > why just UTS_MACHINE?  Doesn't 'uname' show this already?  And I thought
-> > this was in /proc/cpuinfo but odd, it isn't...
-> Sure, this info is in uname(). But for certain cases is really easier to read
-> file from /proc or /sys than run create custom C bindings or a binary which
-> calls uname(2) libc wrapper or run uname binary via execve(2).
-> 
-> Yes, I also expected /proc/cpuinfo would have it but it does not have it. I
-> don't think it's a good idea to add 'arch  : foo' line to it, but I can do if
-> there is consensus that it's the best place.
-> 
-> > Also what about the other things in compile.h?
-> UTS_VERSION is in /proc/version.
-> LINUX_COMPILE_BY (e.g. "user"), LINUX_COMPILE_HOST (e.g. "host") and
-> LINUX_COMPILER (e.g. "aarch64-alpine-linux-musl-gcc (Alpine 11.2.1_git20220219)
-> ...") are IMHO useless, but I can add it if you wish.
-> 
-> Well, there is hostname in /proc/sys/kernel/hostname, there are also ostype and
-> osrelease.. Thinking about it twice /proc/sys/kernel/ looks to me a better place
-> for arch file than current /sys/devices/system/cpu/. WDYT?
+With this series I try to finish the task, started with the series [1],
+of completely removing the dependency of the slcan driver from the
+userspace slcand/slcan_attach applications.
 
-Yeah, I think /proc/sys/kernel/ makes sense, good idea.
+The series also contains patches that remove the legacy stuff (slcan_devs,
+SLCAN_MAGIC, ...) and do some module cleanup.
 
-greg k-h
+The series has been created on top of the patches:
+
+can: slcan: convert comments to network style comments
+can: slcan: slcan_init() convert printk(LEVEL ...) to pr_level()
+can: slcan: fix whitespace issues
+can: slcan: convert comparison to NULL into !val
+can: slcan: clean up if/else
+can: slcan: use scnprintf() as a hardening measure
+can: slcan: do not report txerr and rxerr during bus-off
+can: slcan: do not sleep with a spin lock held
+
+applied to linux-next.
+
+[1] https://lore.kernel.org/all/20220628163137.413025-1-dario.binacchi@amarulasolutions.com/
+
+Changes in v4:
+- Add Max Staudt's `Reviewed-by' tag.
+- Drop the patch "ethtool: add support to get/set CAN bit time register".
+- Drop the patch "can: slcan: add support to set bit time register (btr)".
+- Remove the RFC prefix from the series.
+
+Changes in v3:
+- Update the commit message.
+- Use 1 space in front of the =.
+- Put the series as RFC again.
+- Pick up the patch "can: slcan: use KBUILD_MODNAME and define pr_fmt to replace hardcoded names".
+- Add the patch "ethtool: add support to get/set CAN bit time register"
+  to the series.
+- Add the patch "can: slcan: add support to set bit time register (btr)"
+  to the series.
+- Replace the link https://marc.info/?l=linux-can&m=165806705927851&w=2 with
+  https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.net.
+- Add the `Suggested-by' tag.
+
+Changes in v2:
+- Re-add headers that export at least one symbol used by the module.
+- Update the commit description.
+- Drop the old "slcan" name to use the standard canX interface naming.
+- Remove comment on listen-only command.
+- Update the commit subject and description.
+- Add the patch "MAINTAINERS: Add myself as maintainer of the SLCAN driver"
+  to the series.
+
+Dario Binacchi (6):
+  can: slcan: remove useless header inclusions
+  can: slcan: remove legacy infrastructure
+  can: slcan: change every `slc' occurrence in `slcan'
+  can: slcan: use the generic can_change_mtu()
+  can: slcan: add support for listen-only mode
+  MAINTAINERS: Add maintainer for the slcan driver
+
+Vincent Mailhol (1):
+  can: slcan: use KBUILD_MODNAME and define pr_fmt to replace hardcoded
+    names
+
+ MAINTAINERS                        |   6 +
+ drivers/net/can/slcan/slcan-core.c | 459 +++++++++--------------------
+ 2 files changed, 144 insertions(+), 321 deletions(-)
+
+-- 
+2.32.0
+

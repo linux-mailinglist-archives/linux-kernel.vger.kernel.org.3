@@ -2,159 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE19E583A25
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8080583A24
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235083AbiG1IQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S235052AbiG1IP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiG1IQQ (ORCPT
+        with ESMTP id S233818AbiG1IP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:16:16 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D535A2DE;
-        Thu, 28 Jul 2022 01:16:11 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id n206so1640381oia.6;
-        Thu, 28 Jul 2022 01:16:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=7lsW98oKPVkPLCsPCUl6IaHz/uaCklhdsPPA2BI505I=;
-        b=H1Z3mYYSuNgVzgTaMnKhTChwXt+zdTh2l2xOuhRSEwAzLofUyuHfBEUdrnklEexybx
-         F7SAUywk/419CihGTiYx5D7f3Yt932xZq94tpP8oU10oim8NwhGGXZZ3+lvFvBNBPamt
-         gZig97+R4szINucIMvgTQOjtsQOIDZ9HIvYAALDIJoEvFbzELVHjSav+dbEoF1QArtCc
-         VWfvmOyWZksumrEcAShJEII3LHYxotFwFBZ4tIY4q3tip5i6BbBcTBkt3zYqR9nBb0OF
-         QeZPIcWFSUlc8C9IL97fOjtF/H4fZLkwWi29k6vgQkHpqj01E1ZnXO8blJXMaDJ0voiy
-         kVkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=7lsW98oKPVkPLCsPCUl6IaHz/uaCklhdsPPA2BI505I=;
-        b=dbssjRcc/Nvsitx4NE3huDqNaB6Nk8WrNlqQq5RaeC8xeQj/YyRomr6gbhvVZzlqUB
-         lRqHYyvHkZUu45WtHT/VDgePe8W6DQ0A8/ikJROQyhUMr4F05AbyV49Fqc/D4/bfQxse
-         5DNJcgiEvyeXDNxc5ZK2+45+hlST3NVLxH3HUrvv/IyIFfRRRV5wNYVtXAfQWSAsAebL
-         EpbI4ixUcP9HvYgd/7uCVuByS3ccE3/Mh5dXNbW/wR2m2YbQMKuKrzzZPDUPhtAzyvQL
-         ekSkkL9n2Vh64xg5ld+nnE4j0wLFGRgMlaqa0etjQH/jYWZq31Kp5eWKr3RT2S8qyRNS
-         muLQ==
-X-Gm-Message-State: AJIora9wGUtsbqz40FhC8EesiRRo4pn8qE/TkbDv1cYYrv+dJmHo7tn3
-        01wBtvgPbnyw0PlplYLBADKKKUAzizhf7ByVmDQ8BFjcKqPeMA==
-X-Google-Smtp-Source: AGRyM1tGfo1Q6iew4ExpxYfhfjIpNHORqOyeSbAd494+gj107w43w2CJ9gxJXOFv/vgtpvTWQLmATunfa20FS1014gg=
-X-Received: by 2002:a05:6808:302b:b0:2f9:eeef:f03 with SMTP id
- ay43-20020a056808302b00b002f9eeef0f03mr3518377oib.128.1658996170924; Thu, 28
- Jul 2022 01:16:10 -0700 (PDT)
+        Thu, 28 Jul 2022 04:15:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459F3CE01;
+        Thu, 28 Jul 2022 01:15:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9CA961BA0;
+        Thu, 28 Jul 2022 08:15:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1410C433D6;
+        Thu, 28 Jul 2022 08:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658996155;
+        bh=/m2yuIjtmhX7sFDuqcZZi68Qe5oW8kgCP6tQn5ihcTU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l8z0fA4d3WL4ubdKlk1TEtv4uuRaGIdw+/nCBM5JFlX8Ev8QIzGaTJG7tmRZbmlJV
+         kreAeNNOwZE4BvzB4yD/AYYAUMYEDqZbeJgR6CPy5CDSelNxDu0GfK6ZkFpxWux6Oa
+         cnNOU2gY4f8kNAyn0ugAdQ6wWHqt9w+Z0Y7PHsRZzoRZbi1tNLHJGmh7yGDvR/eXDf
+         x79f+UeTVlR9Zohn1XCHsjVFIdAg8d13MTqo4N+Xq6bDncF6iDgVrBJ9UHox8bpLGm
+         WRHVN6DWXztRQsnNx7kFki8BJcK+7mMrarnPvkWJD0JGilxoZXuQMRDfD6fIeEHrAP
+         NSTq889MeP24Q==
+Date:   Thu, 28 Jul 2022 11:15:52 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
+ locality
+Message-ID: <YuJFuBFtImG/k+C0@kernel.org>
+References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
+ <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
+ <Yr4x6KRSvzlXNdH2@kernel.org>
+ <f0e33bc4-335c-322a-9295-18d6bc0b8286@gmx.de>
+ <YsuQEoVuVa00gIdE@kernel.org>
+ <744ad6e1-c4ad-1e6d-f94d-98aa5b105dc6@gmx.de>
 MIME-Version: 1.0
-References: <870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org>
- <CA+icZUV9waE16ZW4RNEDeiemv6eRd=MetzdGbF-vpfT_u1N4_w@mail.gmail.com>
-In-Reply-To: <CA+icZUV9waE16ZW4RNEDeiemv6eRd=MetzdGbF-vpfT_u1N4_w@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Thu, 28 Jul 2022 10:15:34 +0200
-Message-ID: <CA+icZUX2v-u8tL-U73hZJ0nNHXJ6XQYPupTRBV9QaQN88OF2bw@mail.gmail.com>
-Subject: Re: [PATCH V2] rtla: Fix Makefile when called from -C tools/
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <744ad6e1-c4ad-1e6d-f94d-98aa5b105dc6@gmx.de>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 10:01 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Wed, Jul 13, 2022 at 11:32 PM Daniel Bristot de Oliveira
-> <bristot@kernel.org> wrote:
+On Wed, Jul 27, 2022 at 02:16:56PM +0200, Lino Sanfilippo wrote:
+> 
+> 
+> On 11.07.22 04:50, Jarkko Sakkinen wrote:
+> > On Mon, Jul 04, 2022 at 07:45:12PM +0200, Lino Sanfilippo wrote:
+> >>
+> >>
+> >> On 01.07.22 01:29, Jarkko Sakkinen wrote:
+> >>
+> >>>
+> >>> I'm kind of thinking that should tpm_tis_data have a lock for its
+> >>> contents?
+> >>
+> >> Most of the tpm_tis_data structure elements are set once during init and
+> >> then never changed but only read. So no need for locking for these. The
+> >> exceptions I see are
+> >>
+> >> - flags
+> >> - locality_count
+> >> - locality
 > >
-> > Sedat Dilek reported an error on rtla Makefile when running:
+> > I'd still go for single data struct lock, since this lock would
+> > be taken in every transmit flow. It makes the whole thing easier
+> > to maintain over time, and does not really affect scalability.
 > >
-> >     $ make -C tools/ clean
-> >     [...]
-> >     make[2]: Entering directory
-> >     '/home/dileks/src/linux-kernel/git/tools/tracing/rtla'
-> >     [...]
-> >     '/home/dileks/src/linux-kernel/git/Documentation/tools/rtla'
-> >     /bin/sh: 1: test: rtla-make[2]:: unexpected operator    <------ The problem
-> >     rm: cannot remove '/home/dileks/src/linux-kernel/git': Is a directory
-> >     make[2]: *** [Makefile:120: clean] Error 1
-> >     make[2]: Leaving directory
-> >
-> > This occurred because the rtla calls kernel's Makefile to get the
-> > version in silence mode, e.g.,
-> >
-> >     $ make -sC ../../.. kernelversion
-> >     5.19.0-rc4
-> >
-> > But the -s is being ignored when rtla's makefile is called indirectly,
-> > so the output looks like this:
-> >
-> >     $ make -C ../../.. kernelversion
-> >     make: Entering directory '/root/linux'
-> >     5.19.0-rc4
-> >     make: Leaving directory '/root/linux'
-> >
-> > Using 'grep -v make' avoids this problem, e.g.,
-> >
-> >     $ make -C ../../.. kernelversion | grep -v make
-> >     5.19.0-rc4
-> >
-> > Thus, add | grep -v make.
-> >
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Fixes: 8619e32825fd ("rtla: Follow kernel version")
-> > Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
->
-> Hi,
->
-> what is the status of this patch?
->
-> Is it missing some ACKs e.g. from Steven?
->
-> Can this go directly to Linus tree as I wanted to see it in Linux v5.19 FINAL?
->
-> Thanks.
->
+> 
+> This means switching to a complete new locking scheme which affects many
+> parts of the TIS core code. It is also not directly related to what this patch series
+> is about, namely activating the interrupts for TPM TIS.
+> 
+> I suggest to first finish polishing this series especially since there have
+> only been minor issues in the last versions. Once the interrupts work we
+> still can think of implementing another lock handling in a follow up series.
 
-INFO:
+So what if you would use kref instead here?
 
-Steven's autoresponder says:
+On surface this looks like ad-hoc kref but I could wrong too (as always).
 
-I'm currently traveling and may be slow to respond (and may not at all).
-I'll be back at my normal hours on Tuesday, Aug 2nd.
-
-Here the lore-link to v2:
-
-[1] https://lore.kernel.org/all/870c02d4d97a921f02a31fa3b229fc549af61a20.1657747763.git.bristot@kernel.org/
-
--Sedat-
-
->
-> > ---
-> >  tools/tracing/rtla/Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-> > index 3822f4ea5f49..1bea2d16d4c1 100644
-> > --- a/tools/tracing/rtla/Makefile
-> > +++ b/tools/tracing/rtla/Makefile
-> > @@ -1,6 +1,6 @@
-> >  NAME   :=      rtla
-> >  # Follow the kernel version
-> > -VERSION :=     $(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion)
-> > +VERSION :=     $(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion | grep -v make)
-> >
-> >  # From libtracefs:
-> >  # Makefiles suck: This macro sets a default value of $(2) for the
-> > --
-> > 2.32.0
-> >
+BR, Jarkko

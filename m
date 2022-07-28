@@ -2,150 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B42584338
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B720B58433C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiG1Pjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S231767AbiG1Pk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbiG1Pjk (ORCPT
+        with ESMTP id S229875AbiG1PkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:39:40 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7122662A63
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:39:39 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id bn9so2674181wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XBcPNZ2+mlbvsLKHm0Kf6uMfdcJuvK0J6XX3HZnb67s=;
-        b=dEexRtKhhdGuFxLZw7wIFaLC/s9383EBETm32CK3PLqptTDuxb2jI8IknXdnu4Xbxm
-         SzkngLxgNrKxZMR6bIbDH26Zh2qFV7xfC/C7MB54GNXy1EO4moaom+0FEf8jn4sdPtWJ
-         5CPCzhn1hE5/SzqLyJk3w4AkftYF7FQBW9Xso=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XBcPNZ2+mlbvsLKHm0Kf6uMfdcJuvK0J6XX3HZnb67s=;
-        b=C2gcF3N9zpQpTbV2XlOabgV9eRJY+tz29qSBuo2N6CsgXA4pDsX82FRh5B50Oq4On+
-         Z5LJp+wgaG1az8tatJ7sqehtQdVm2xIQD1WBzVxjPpvyrp8G7BXe0khp1KVhl+bVM+YN
-         oBOQ74sM+iQul2sGooLcY+r6z9oAOHiZI2bPL1ORSWS1ht9tCQEgZmv6T2x2hDnsY8W+
-         QnEtWg+Vy3dhQz6/mlzz6U6XokHZK7To/MkiFnQVp+xpFMgX6ZnmV0ssZG3hethcc6Vw
-         2bYJJ+G7bQpzzT4Hogq3fTJ+Bz5RbReTsi5Kg5Ux6E9jX9H0r+Rx3tPW4HvLB4JUAjbj
-         rnbg==
-X-Gm-Message-State: AJIora+B9bDTA5eNxZw7SBQkdUqApnQdKnMYjm1kyNxyAa+ieZVSwzZP
-        +9Zrl9s42lo7Rqws/cY1E4ZlVrm5oyRHHb+8jLbLvQ==
-X-Google-Smtp-Source: AGRyM1uiraKwPpPmXImHqcfLCLjkiLs0EXwTzj4fmDBqlN+to9NWPT1jvCn430UUiC9qi4cBKySudZzFurAn0nLp5Z0=
-X-Received: by 2002:a5d:64a4:0:b0:21e:93c4:f8c6 with SMTP id
- m4-20020a5d64a4000000b0021e93c4f8c6mr11535361wrp.246.1659022777735; Thu, 28
- Jul 2022 08:39:37 -0700 (PDT)
+        Thu, 28 Jul 2022 11:40:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27CF4E61E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:40:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5914E61BCE
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79CEC433C1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659022822;
+        bh=PnLRe8DPgb5C0NP0/UiXF6v21WnJVk8lR9e0zQ/5llA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Dh+X8XvXY5meH2t+/EOJBb8EJ05RtHBrDLsCrwBS8rt3FBD+c9WjR0aaUsBDuGf2Q
+         KVrRL7R2jBOVPbvBzGTP56dozkT+STgpgCKGAJ4HIeA+CFj+qrergLUicqU28RRi0v
+         3LgnRqgiGBkn3yU+0PpvxL2sflnNS3c/4IhRrbWPIT0Go/3phVSrC9IlGmrLPQJJFG
+         mfZZjbFHJJxg+9A4JQ7nNmz33aFvnW/yWrzijC3jsc18C1LZA1PS41yEV9Pv94XTnL
+         rA/r84vZ0ypnHZCUXYT+gBkffTzI2Ku5CSOwOQcFroD7Mcy9ddSBVAwEFQtmQrF90H
+         IH0e717VUbCbw==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-f2a4c51c45so2749727fac.9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:40:22 -0700 (PDT)
+X-Gm-Message-State: AJIora/foIS3MmSBJjSq3RRSlcZohHL3ScWEZdZTEQ5+0VoQqhKhft/C
+        fkcpF9BBSoB4xwDg+qUqMVjEsHXexNZJ6tjQwxc=
+X-Google-Smtp-Source: AGRyM1u4gYleexKCkLgdyIM/RvOWOKlFlOBMtqt7iI88zBRdD9Ur32A2D/5F/TDRxWlg2MT+HljQbgOG3xn7at7tM2g=
+X-Received: by 2002:a05:6870:a90a:b0:10d:9e83:98a6 with SMTP id
+ eq10-20020a056870a90a00b0010d9e8398a6mr17264oab.228.1659022821818; Thu, 28
+ Jul 2022 08:40:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220727094034.1372745-1-treapking@chromium.org> <c455adea-2d18-60af-7175-a4e283e3dcb8@collabora.com>
-In-Reply-To: <c455adea-2d18-60af-7175-a4e283e3dcb8@collabora.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Thu, 28 Jul 2022 23:39:26 +0800
-Message-ID: <CAEXTbpc7W40-vYcTVTNo7ikQ-n0O246AsbPntNb4q2nBErYVQw@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: mt8173-oak: Switch to SMC watchdog
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eizan Miyamoto <eizan@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+References: <20220709084830.3124-1-jszhang@kernel.org> <CAMj1kXEy7_zyDqQC_e9Rf1a8HuMBz_HbZOAP-WBzeeDVu8Mwmw@mail.gmail.com>
+ <YuKh2pmJC6/17Riy@xhacker> <YuKokvBjDxATePpH@xhacker>
+In-Reply-To: <YuKokvBjDxATePpH@xhacker>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 28 Jul 2022 08:40:10 -0700
+X-Gmail-Original-Message-ID: <CAMj1kXFQ86TgA-tUM4C5-LryDiry4w0uDo=TNdBPOiJvT1UXcQ@mail.gmail.com>
+Message-ID: <CAMj1kXFQ86TgA-tUM4C5-LryDiry4w0uDo=TNdBPOiJvT1UXcQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64: save movk instructions in mov_q when the lower
+ 16|32 bits are all zero
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 7:21 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Thu, 28 Jul 2022 at 08:26, Jisheng Zhang <jszhang@kernel.org> wrote:
 >
-> Il 27/07/22 11:40, Pin-yen Lin ha scritto:
-> > Switch to SMC watchdog because we need direct control of HW watchdog
-> > registers from kernel. The corresponding firmware was uploaded in
-> > https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405.
+> On Thu, Jul 28, 2022 at 10:49:02PM +0800, Jisheng Zhang wrote:
+> > On Wed, Jul 27, 2022 at 08:15:11AM -0700, Ard Biesheuvel wrote:
+> > > On Sat, 9 Jul 2022 at 01:58, Jisheng Zhang <jszhang@kernel.org> wrote:
+> > > >
+> > > > Currently mov_q is used to move a constant into a 64-bit register,
+> > > > when the lower 16 or 32bits of the constant are all zero, the mov_q
+> > > > emits one or two useless movk instructions. If the mov_q macro is used
+> > > > in hot code path, we want to save the movk instructions as much as
+> > > > possible. For example, when CONFIG_ARM64_MTE is 'Y' and
+> > > > CONFIG_KASAN_HW_TAGS is 'N', the following code in __cpu_setup()
+> > > > routine is the pontential optimization target:
+> > > >
+> > > >         /* set the TCR_EL1 bits */
+> > > >         mov_q   x10, TCR_MTE_FLAGS
+> > > >
+> > > > Before the patch:
+> > > >         mov     x10, #0x10000000000000
+> > > >         movk    x10, #0x40, lsl #32
+> > > >         movk    x10, #0x0, lsl #16
+> > > >         movk    x10, #0x0
+> > > >
+> > > > After the patch:
+> > > >         mov     x10, #0x10000000000000
+> > > >         movk    x10, #0x40, lsl #32
+> > > >
+> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > >
+> > > This is broken for constants that have 0xffff in the top 16 bits, as
+> > > in that case, we will emit a MOVN/MOVK/MOVK sequence, and omitting the
+> > > MOVKs will set the corresponding field to 0xffff not 0x0.
 > >
-> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> > ---
+> > Thanks so much for this hint. I think you are right about the 0xffff in
+> > top 16bits case.
 > >
-> > Changes in v2:
-> > - Move the modifications to mt8173-elm.dtsi and add some comments.
-> >
-> >   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 12 ++++++++++++
-> >   1 file changed, 12 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> > index e21feb85d822..b2269770abc3 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-> > @@ -161,6 +161,18 @@ hdmi_connector_in: endpoint {
-> >                       };
-> >               };
-> >       };
-> > +
-> > +     soc {
-> > +             /*
-> > +              * Disable the original MMIO watch dog and switch to the SMC watchdog,
-> > +              * which operates on the same MMIO.
-> > +              */
-> > +             /delete-node/ watchdog@10007000;
 >
-> Unfortunately, we're not quite there yet.
-> The comment is fine, but...
+> the patch breaks below usage case:
+> mov_q x0, 0xffffffff00000000
 >
-> There's no need to /delete-node/: you can just do it like
->
-> /*
->   * Disable the original MMIO watch dog and switch to the SMC watchdog,
->   * which operates on the same MMIO.
->   */
-> &watchdog {
->         status = "disabled";
-> };
->
-> and...
->
-> > +
-> > +             watchdog {
->
-> This isn't addressable, hence it belongs to the root node, not to soc.
-> If you did that because of naming issues, I would propose to call it
-> smc-watchdog instead of watchdog.
->
->
-> > +                     compatible = "arm,smc-wdt";
->
-Thanks for the suggestion. I'll modify it accordingly in v3.
+> I think the reason is mov_q starts from high bits, if we change the
+> macro to start from LSB, then that could solve the breakage. But this
+> needs a rewrite of mov_q
 
-> P.S.: No timeout-sec?
+No it has nothing to do with that.
 
-The example in the binding file has a timeout-sec property, but it is
-not defined in the binding nor used in the driver...
-The driver seems to talk with the firmware to get a timeout value[1]
-instead of reading it from the devicetree.
+The problem is that the use of MOVN changes the implicit value of the
+16-bit fields that are left unspecified, and assigning them in a
+different order is not going to make any difference.
 
-[1]: https://elixir.bootlin.com/linux/latest/source/drivers/watchdog/arm_smc_wdt.c#L138
->
-> Regards,
-> Angelo
->
-> > +             };
-> > +     };
-> >   };
-> >
-> >   &mfg_async {
-> >
->
+I don't think we should further complicate mov_q, and I would argue
+that the existing optimization (which I added myself) is premature
+already: in the grand scheme of things, one or two instructions more
+or less are not going to make a difference anyway, given how rarely
+this macro is used. And even if any of these occurrences are on a hot
+path, it is not a given that shorter sequences of MOVZ/MOVN/MOVK are
+going to execute any faster, as the canonical MOVZ/MOVK/MOVK/MOVK
+might well decode to fewer uops.
+
+So in summary, let's leave this code be.

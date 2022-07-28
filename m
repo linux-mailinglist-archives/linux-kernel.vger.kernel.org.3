@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A13F58430C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE0C5842D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiG1P0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
+        id S231416AbiG1PSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbiG1P0l (ORCPT
+        with ESMTP id S229469AbiG1PSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:26:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C985F9B4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:26:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D150961B7C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9827EC433C1;
-        Thu, 28 Jul 2022 15:26:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659022000;
-        bh=OY1CFZWT7ad7PEe4fFSJDPEcJ11GALMZHQVGZ3Tqumo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f9HytRqrLmomx4xvTJW+cidOARGraS/srKv4Akng2xTx86OJwLfVXVsQNcUJe/lUx
-         FSRGeGiMnAZZEfv7CZKiUgWdyhmUTnyfQN11WTrQY0Pd2mkEWw7v2IOoNeR7ykcVU1
-         QxTddwr5DpEWzduPI2YTdW9uizrIMy2GXFZWpIIw7sxnhJpz05suP/6Qvkrqk7kz6p
-         5wcDu9SGemwnxkdCGm1RztjLoQyZ68jhQHwMMiqtS88KqDpDIOUHsIrk1z4HpFoTht
-         rsCjPt5wg5mRIOXMgH5zQ0WZHCPK3AvzyL/+A3rjLTMR2mrAk0cR0LuasMgPYNrzMb
-         rS9qHXl3UX4hg==
-Date:   Thu, 28 Jul 2022 23:17:38 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: save movk instructions in mov_q when the lower
- 16|32 bits are all zero
-Message-ID: <YuKokvBjDxATePpH@xhacker>
-References: <20220709084830.3124-1-jszhang@kernel.org>
- <CAMj1kXEy7_zyDqQC_e9Rf1a8HuMBz_HbZOAP-WBzeeDVu8Mwmw@mail.gmail.com>
- <YuKh2pmJC6/17Riy@xhacker>
+        Thu, 28 Jul 2022 11:18:06 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC8C46D93;
+        Thu, 28 Jul 2022 08:18:05 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id v185so1586720ioe.11;
+        Thu, 28 Jul 2022 08:18:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RvcitpT8SRhB8BocvR7SjrRkSCpHQg3td5uyJtapLlc=;
+        b=q2ecAc9U6B+x2EsYZ06j641Btj5uuj/uI8880wnQBp8RH4oGwE3x+fRHNOHYrGlbcr
+         LiPNc8tDOpumAhW6eselOP36WIh6dhmJRW3d9dazw/z7u8a1ZMPX3ueZlsqpfkXzP2fD
+         9c6n4U7ZwIh3F0ujxO4Z/8XRYMR3OlumsOCvPwxthi4yHBcN+0PGjiwH1nD5n2Sq/QL+
+         cwJsnsibw4PZPL3n86OiwM8oVTt9FvIKsAszBvs6IzVaWE/Fl31D/YDP2LJaiv+4MzeW
+         m7lBB5VQvPfeoQJnv3RSIzLQ4I6uFUzTW8fWnnhmmIJApeaq9H5E+1x0saWQuzML6UNI
+         Q+Ww==
+X-Gm-Message-State: AJIora8Wg2m6S/QmbfdJeMitJuIVv+iqhDU2RjGWRPVqaN7SsYcmhlIh
+        hYEFPgnORQ6jFaTiIYexvg==
+X-Google-Smtp-Source: AGRyM1sXd4DPBqM1JpH9G5Vt11DrwoOOQL2Jborzd8Caj/m4YTARvPG5RH2IC9+DiqZtxkJWMfb77g==
+X-Received: by 2002:a5d:8599:0:b0:67b:7d8d:9aed with SMTP id f25-20020a5d8599000000b0067b7d8d9aedmr9264709ioj.204.1659021484815;
+        Thu, 28 Jul 2022 08:18:04 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id q3-20020a92c003000000b002dc33dbed87sm452951ild.39.2022.07.28.08.18.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 08:18:04 -0700 (PDT)
+Received: (nullmailer pid 900900 invoked by uid 1000);
+        Thu, 28 Jul 2022 15:18:02 -0000
+Date:   Thu, 28 Jul 2022 09:18:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        linux-wireless@vger.kernel.org, devicetree@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Adham Abozaeid <adham.abozaeid@microchip.com>,
+        Mark Greer <mgreer@animalcreek.com>
+Subject: Re: [PATCH 1/2] dt-bindings: nfc: use spi-peripheral-props.yaml
+Message-ID: <20220728151802.GA900320-robh@kernel.org>
+References: <20220727164130.385411-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuKh2pmJC6/17Riy@xhacker>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220727164130.385411-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 10:49:02PM +0800, Jisheng Zhang wrote:
-> On Wed, Jul 27, 2022 at 08:15:11AM -0700, Ard Biesheuvel wrote:
-> > On Sat, 9 Jul 2022 at 01:58, Jisheng Zhang <jszhang@kernel.org> wrote:
-> > >
-> > > Currently mov_q is used to move a constant into a 64-bit register,
-> > > when the lower 16 or 32bits of the constant are all zero, the mov_q
-> > > emits one or two useless movk instructions. If the mov_q macro is used
-> > > in hot code path, we want to save the movk instructions as much as
-> > > possible. For example, when CONFIG_ARM64_MTE is 'Y' and
-> > > CONFIG_KASAN_HW_TAGS is 'N', the following code in __cpu_setup()
-> > > routine is the pontential optimization target:
-> > >
-> > >         /* set the TCR_EL1 bits */
-> > >         mov_q   x10, TCR_MTE_FLAGS
-> > >
-> > > Before the patch:
-> > >         mov     x10, #0x10000000000000
-> > >         movk    x10, #0x40, lsl #32
-> > >         movk    x10, #0x0, lsl #16
-> > >         movk    x10, #0x0
-> > >
-> > > After the patch:
-> > >         mov     x10, #0x10000000000000
-> > >         movk    x10, #0x40, lsl #32
-> > >
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > 
-> > This is broken for constants that have 0xffff in the top 16 bits, as
-> > in that case, we will emit a MOVN/MOVK/MOVK sequence, and omitting the
-> > MOVKs will set the corresponding field to 0xffff not 0x0.
+On Wed, 27 Jul 2022 18:41:29 +0200, Krzysztof Kozlowski wrote:
+> Instead of listing directly properties typical for SPI peripherals,
+> reference the spi-peripheral-props.yaml schema.  This allows using all
+> properties typical for SPI-connected devices, even these which device
+> bindings author did not tried yet.
 > 
-> Thanks so much for this hint. I think you are right about the 0xffff in
-> top 16bits case.
+> Remove the spi-* properties which now come via spi-peripheral-props.yaml
+> schema, except for the cases when device schema adds some constraints
+> like maximum frequency.
+> 
+> While changing additionalProperties->unevaluatedProperties, put it in
+> typical place, just before example DTS.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Technically, this depends on [1] merged to SPI tree, if we want to
+> preserve existing behavior of not allowing SPI CPHA and CPOL in each of
+> schemas in this patch.
+> 
+> If this patch comes independently via different tree, the SPI CPHA and
+> CPOL will be allowed for brief period of time, before [1] is merged.
+> This will not have negative impact, just DT schema checks will be
+> loosened for that period.
+
+I don't think these need to go via the same tree.
+
+> 
+> [1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
+> ---
+>  Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml | 4 ++--
+>  Documentation/devicetree/bindings/net/nfc/st,st-nci.yaml   | 5 ++---
+>  Documentation/devicetree/bindings/net/nfc/st,st95hf.yaml   | 7 ++++---
+>  Documentation/devicetree/bindings/net/nfc/ti,trf7970a.yaml | 7 ++++---
+>  4 files changed, 12 insertions(+), 11 deletions(-)
 > 
 
-the patch breaks below usage case:
-mov_q x0, 0xffffffff00000000
-
-I think the reason is mov_q starts from high bits, if we change the
-macro to start from LSB, then that could solve the breakage. But this
-needs a rewrite of mov_q
+Acked-by: Rob Herring <robh@kernel.org>

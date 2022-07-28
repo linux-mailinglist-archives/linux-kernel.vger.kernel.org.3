@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C5958381B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 07:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C033858381E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 07:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbiG1FJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 01:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S230061AbiG1FUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 01:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiG1FJr (ORCPT
+        with ESMTP id S229538AbiG1FUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 01:09:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBC04330E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:09:46 -0700 (PDT)
+        Thu, 28 Jul 2022 01:20:48 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335545142B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658984986; x=1690520986;
+  t=1658985647; x=1690521647;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R/MLE1I3N6MphxUQrwD8V3PrgFgijQNUcXB8tMpsx7I=;
-  b=ThxWlaQyyp8RafYCCZ8tJ7oBuG5uKSY6QJ1kbHa+15Dl/555IMr9CYzD
-   EBRbdqRxlmtb/cs166KoVVUzMwHb2yge49VX0wpcFwAUuaLinydLnmM61
-   /ijrboiwBGjiWGmdQxKtzpcJ5VO8rPL+Jkacf/Starjij2Nfp082dgnbL
-   2yA+wIw/2RRn4bWUxSfLBjVOFjQnUjuNzjTSwkd4OhOwtUM/THpJrHliC
-   r06IyFxz068/TXsX/CH84PK+qXtnY66WdyvOlJAE4jjjs5F4Ld/2IlPPk
-   U5UBLLaxliZ2I+NKsjvi6v4MZQMlXBtnCzXOCLaqqV2TBTjbqUVjcR9zi
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="275302901"
+  bh=HD4+CaAjihKbuf3BU930eUtTTwQm9V6MlayuL3aVnsE=;
+  b=An/pz9Ij12MrxU94IAGN/VRL+ZrWvFDxLZm+PwmnG9kJMqHHC/IRGlZz
+   4qfLe4ROUBDVTur+GdzeP4EFNutUtKLBZS3jAAhoQGOucE9AyRH0hENh2
+   c5nr04EpsVJaWqgFymM8qhl/Ver+oplxmcoP/dmckz9IDXTuXan2cRzFe
+   5vVwSrFFVRd4qwIPr+Xvxf3E7qWqHGHP33M85l1CXP5zMt0r1Fefw165B
+   4cqjYscZqKPp30Dzpd9f0zYkwAtCGlk7mQpAO+cB14+QuPgfiPoKZWZFb
+   hx/fk66RwBHH8yjQdkSIola2snypFJqvPliJ20V5yPrvhgJYnExE8zDw8
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="288435847"
 X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="275302901"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 22:09:46 -0700
+   d="scan'208";a="288435847"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 22:20:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="633497920"
+   d="scan'208";a="928112590"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Jul 2022 22:09:45 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 27 Jul 2022 22:20:45 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oGvmK-0009hs-0y;
-        Thu, 28 Jul 2022 05:09:44 +0000
-Date:   Thu, 28 Jul 2022 13:09:40 +0800
+        id 1oGvwy-0009iQ-26;
+        Thu, 28 Jul 2022 05:20:44 +0000
+Date:   Thu, 28 Jul 2022 13:19:56 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tracing_multi_4 24/34] kernel/bpf/syscall.c:3157:22:
- error: implicit declaration of function 'bpf_trampoline_multi_detach'
-Message-ID: <202207281336.jdMajwn0-lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/tracing_multi_4 24/34] kernel/bpf/syscall.c:3157:15:
+ error: call to undeclared function 'bpf_trampoline_multi_detach'; ISO C99
+ and later do not support implicit function declarations
+Message-ID: <202207281330.rTwELUls-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,8 +65,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_4
 head:   1637b6b5bec11596e52cdc0a6eadfa45a15276c3
 commit: ddb4a6defabce7658e7c6be7397bd5e714279b48 [24/34] bpf: Add support for tracing multi link
-config: riscv-randconfig-r042-20220728 (https://download.01.org/0day-ci/archive/20220728/202207281336.jdMajwn0-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
+config: hexagon-randconfig-r041-20220728 (https://download.01.org/0day-ci/archive/20220728/202207281330.rTwELUls-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -75,48 +76,43 @@ reproduce (this is a W=1 build):
         git checkout ddb4a6defabce7658e7c6be7397bd5e714279b48
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/bpf/ kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   kernel/bpf/syscall.c: In function 'bpf_prog_load':
-   kernel/bpf/syscall.c:2523:22: error: implicit declaration of function 'is_tracing_multi' [-Werror=implicit-function-declaration]
-    2523 |         multi_func = is_tracing_multi(attr->expected_attach_type);
-         |                      ^~~~~~~~~~~~~~~~
-   In file included from arch/riscv/include/asm/bug.h:83,
-                    from include/linux/ktime.h:26,
-                    from include/linux/timer.h:6,
-                    from include/linux/workqueue.h:9,
-                    from include/linux/bpf.h:10,
-                    from kernel/bpf/syscall.c:4:
-   kernel/bpf/syscall.c: In function 'bpf_tracing_multi_link_release':
->> kernel/bpf/syscall.c:3157:22: error: implicit declaration of function 'bpf_trampoline_multi_detach' [-Werror=implicit-function-declaration]
-    3157 |         WARN_ON_ONCE(bpf_trampoline_multi_detach(&tr_link->tp, tr_link->id));
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:110:32: note: in definition of macro 'WARN_ON_ONCE'
-     110 |         int __ret_warn_on = !!(condition);                      \
-         |                                ^~~~~~~~~
-   kernel/bpf/syscall.c: In function 'bpf_tracing_multi_link_dealloc':
->> kernel/bpf/syscall.c:3165:9: error: implicit declaration of function 'bpf_tramp_id_put'; did you mean 'bpf_trampoline_put'? [-Werror=implicit-function-declaration]
-    3165 |         bpf_tramp_id_put(tr_link->id);
-         |         ^~~~~~~~~~~~~~~~
-         |         bpf_trampoline_put
-   kernel/bpf/syscall.c: In function 'bpf_tracing_multi_attach':
->> kernel/bpf/syscall.c:3328:14: error: implicit declaration of function 'bpf_tramp_id_alloc'; did you mean 'bpf_tramp_id_resolve'? [-Werror=implicit-function-declaration]
-    3328 |         id = bpf_tramp_id_alloc(cnt);
-         |              ^~~~~~~~~~~~~~~~~~
-         |              bpf_tramp_id_resolve
-   kernel/bpf/syscall.c:3328:12: warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    3328 |         id = bpf_tramp_id_alloc(cnt);
-         |            ^
->> kernel/bpf/syscall.c:3369:15: error: implicit declaration of function 'bpf_trampoline_multi_attach'; did you mean 'bpf_tracing_multi_attach'? [-Werror=implicit-function-declaration]
-    3369 |         err = bpf_trampoline_multi_attach(&link->tp, id);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |               bpf_tracing_multi_attach
-   cc1: some warnings being treated as errors
+   kernel/bpf/syscall.c:2523:15: error: call to undeclared function 'is_tracing_multi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           multi_func = is_tracing_multi(attr->expected_attach_type);
+                        ^
+>> kernel/bpf/syscall.c:3157:15: error: call to undeclared function 'bpf_trampoline_multi_detach'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           WARN_ON_ONCE(bpf_trampoline_multi_detach(&tr_link->tp, tr_link->id));
+                        ^
+>> kernel/bpf/syscall.c:3165:2: error: call to undeclared function 'bpf_tramp_id_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           bpf_tramp_id_put(tr_link->id);
+           ^
+   kernel/bpf/syscall.c:3165:2: note: did you mean 'bpf_trampoline_put'?
+   include/linux/bpf.h:1021:20: note: 'bpf_trampoline_put' declared here
+   static inline void bpf_trampoline_put(struct bpf_trampoline *tr) {}
+                      ^
+>> kernel/bpf/syscall.c:3328:7: error: call to undeclared function 'bpf_tramp_id_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           id = bpf_tramp_id_alloc(cnt);
+                ^
+>> kernel/bpf/syscall.c:3328:5: error: incompatible integer to pointer conversion assigning to 'struct bpf_tramp_id *' from 'int' [-Wint-conversion]
+           id = bpf_tramp_id_alloc(cnt);
+              ^ ~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/bpf/syscall.c:3369:8: error: call to undeclared function 'bpf_trampoline_multi_attach'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           err = bpf_trampoline_multi_attach(&link->tp, id);
+                 ^
+   kernel/bpf/syscall.c:3369:8: note: did you mean 'bpf_tracing_multi_attach'?
+   kernel/bpf/syscall.c:3313:12: note: 'bpf_tracing_multi_attach' declared here
+   static int bpf_tracing_multi_attach(struct bpf_prog *prog,
+              ^
+   kernel/bpf/syscall.c:4841:12: error: call to undeclared function 'is_tracing_multi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   else if (is_tracing_multi(prog->expected_attach_type))
+                            ^
+   7 errors generated.
 
 
 vim +/bpf_trampoline_multi_detach +3157 kernel/bpf/syscall.c

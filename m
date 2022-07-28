@@ -2,92 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613D45839A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D505839A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234606AbiG1HkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        id S234072AbiG1Hki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbiG1HkX (ORCPT
+        with ESMTP id S234230AbiG1Hkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:40:23 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3A1147A;
-        Thu, 28 Jul 2022 00:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658994021; x=1690530021;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oIeSpejyFizNCjTe32oFzhYJ7T8h3L0O2WEPh4ZDXt0=;
-  b=yjN8wqffpZBuhaeChaorjAqCNdcgcnXSAelq6SLUE4yz1SgYj7Yau/qJ
-   jIdr2eQfGfFEcM/tql8Ml33VIBub9XPH7Q8zSfkMfbbUT/ofqECCyNY5p
-   f9gDUQystuYDD+ZD9lXUL+T4LnWzPx2k2CnLv56+8kOucnbMsmY7IaFlD
-   VCA8/k2an/obrWR1dioYW1b3R85BMDEPLmVSZ+rhxE8kXPL66wkXf6DhD
-   RYGWe8LfXTca4wT6Z0f+EXy+2OEGY19W+laRlmP+F9ms3QII2+1L4jA44
-   H3LQAowjeTX0Vz8YT7wgc/1e9M8/os6Y5ss2fIhrJyvlj8WOPeex5Hq0r
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="166752216"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jul 2022 00:40:20 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 28 Jul 2022 00:40:18 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 28 Jul 2022 00:40:15 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <peda@axentia.se>
-CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>, <bbrezillon@kernel.org>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH] mtd: rawnand: atmel: Unmap streaming DMA mappings
-Date:   Thu, 28 Jul 2022 10:40:14 +0300
-Message-ID: <20220728074014.145406-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 28 Jul 2022 03:40:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5753D4D83D;
+        Thu, 28 Jul 2022 00:40:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D264AB82284;
+        Thu, 28 Jul 2022 07:40:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B61C43470;
+        Thu, 28 Jul 2022 07:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658994031;
+        bh=p81wbSl4jQvNdxEQIWuCLFSph+3DQKM11CCOw6EGVc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cv5PwUYCCTni2XA0aQzBYgUcsAonaMU5j+FBsyqzk1VBGaUBwrzetTytavedUvCdv
+         oSg/NaVW1sccm2S21QeVGOyR1WM91YMv4P9yxSS7MSeF543QvBSwiKkuZ6QY8IzHze
+         IXXPphSIebXXWzKADTcb8tz4gH5C6DlKkfx8oIXcYjaqkXOXSKrD9X7bvIgAbeyAEH
+         hLFbMjVVFD7ONHyHCMfWpdGYm0ln5egrWHzeuKff2JN3TpGNhKoI//vy5s3bHUeRcY
+         cWWmFbwBBKWhGj2msQyHoMmDM4sJ7bKKc9vKPtOCRSCrdeyUhH+5/lKCptXnTGYayu
+         ftYnFgLCqFFbg==
+Date:   Thu, 28 Jul 2022 10:40:28 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, mpe@ellerman.id.au,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH v5 4/6] tpm: of: Make of-tree specific function commonly
+ available
+Message-ID: <YuI9bLmqGsZwn4n6@kernel.org>
+References: <20220706152329.665636-1-stefanb@linux.ibm.com>
+ <20220706152329.665636-5-stefanb@linux.ibm.com>
+ <YsuTRny45aBxGjm5@kernel.org>
+ <3a9196b3-c510-0c32-8b70-572d9c4fe69d@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a9196b3-c510-0c32-8b70-572d9c4fe69d@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Every dma_map_single() call should have its dma_unmap_single() counterpart,
-because the DMA address space is a shared resource and one could render the
-machine unusable by consuming all DMA addresses.
+On Fri, Jul 15, 2022 at 12:01:36PM -0400, Stefan Berger wrote:
+> 
+> 
+> On 7/10/22 23:04, Jarkko Sakkinen wrote:
+> > On Wed, Jul 06, 2022 at 11:23:27AM -0400, Stefan Berger wrote:
+> > > Simplify tpm_read_log_of() by moving reusable parts of the code into
+> > > an inline function that makes it commonly available so it can be
+> > > used also for kexec support. Call the new of_tpm_get_sml_parameters()
+> > > function from the TPM Open Firmware driver.
+> > > 
+> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > Cc: Frank Rowand <frowand.list@gmail.com>
+> > > 
+> > > ---
+> > > v4:
+> > >   - converted to inline function
+> > > ---
+> > >   drivers/char/tpm/eventlog/of.c | 31 +++++--------------------------
+> > >   include/linux/tpm.h            | 27 +++++++++++++++++++++++++++
+> > >   2 files changed, 32 insertions(+), 26 deletions(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
+> > > index a9ce66d09a75..f9462d19632e 100644
+> > > --- a/drivers/char/tpm/eventlog/of.c
+> > > +++ b/drivers/char/tpm/eventlog/of.c
+> > > @@ -12,6 +12,7 @@
+> > >   #include <linux/slab.h>
+> > >   #include <linux/of.h>
+> > > +#include <linux/tpm.h>
+> > >   #include <linux/tpm_eventlog.h>
+> > >   #include "../tpm.h"
+> > > @@ -20,11 +21,10 @@
+> > >   int tpm_read_log_of(struct tpm_chip *chip)
+> > >   {
+> > >   	struct device_node *np;
+> > > -	const u32 *sizep;
+> > > -	const u64 *basep;
+> > >   	struct tpm_bios_log *log;
+> > >   	u32 size;
+> > >   	u64 base;
+> > > +	int ret;
+> > >   	log = &chip->log;
+> > >   	if (chip->dev.parent && chip->dev.parent->of_node)
+> > > @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
+> > >   	if (of_property_read_bool(np, "powered-while-suspended"))
+> > >   		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
+> > > -	sizep = of_get_property(np, "linux,sml-size", NULL);
+> > > -	basep = of_get_property(np, "linux,sml-base", NULL);
+> > > -	if (sizep == NULL && basep == NULL)
+> > > -		return -ENODEV;
+> > > -	if (sizep == NULL || basep == NULL)
+> > > -		return -EIO;
+> > > -
+> > > -	/*
+> > > -	 * For both vtpm/tpm, firmware has log addr and log size in big
+> > > -	 * endian format. But in case of vtpm, there is a method called
+> > > -	 * sml-handover which is run during kernel init even before
+> > > -	 * device tree is setup. This sml-handover function takes care
+> > > -	 * of endianness and writes to sml-base and sml-size in little
+> > > -	 * endian format. For this reason, vtpm doesn't need conversion
+> > > -	 * but physical tpm needs the conversion.
+> > > -	 */
+> 
+> 
+> Jarkko,
+> 
+>  can I apply your R-b tag after putting this lost comment back into the
+> inline function?
+>    Stefan
 
-Cc: stable@vger.kernel.org
-Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- drivers/mtd/nand/raw/atmel/nand-controller.c | 1 +
- 1 file changed, 1 insertion(+)
+If there's a change I want to see the updated patch first.
 
-diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
-index 6ef14442c71a..330d2dafdd2d 100644
---- a/drivers/mtd/nand/raw/atmel/nand-controller.c
-+++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
-@@ -405,6 +405,7 @@ static int atmel_nand_dma_transfer(struct atmel_nand_controller *nc,
- 
- 	dma_async_issue_pending(nc->dmac);
- 	wait_for_completion(&finished);
-+	dma_unmap_single(nc->dev, buf_dma, len, dir);
- 
- 	return 0;
- 
--- 
-2.25.1
-
+BR, Jarkko

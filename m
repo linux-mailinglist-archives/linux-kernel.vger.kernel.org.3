@@ -2,685 +2,427 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836CB583F4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D464C583F50
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237701AbiG1Mwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S237631AbiG1MxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238345AbiG1Mwf (ORCPT
+        with ESMTP id S237181AbiG1MxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:52:35 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEBB3B95F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:52:31 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id c22so914569wmr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mmUa+efGnnzywDxvMPhfVDjqBi9J02VWB8wA5GmwpzU=;
-        b=sL5kPNDOB4ZGgOCgoSLLu8RmGwRmoyfaURtDq/zg+BEPyL/esvR3jNXDX9sMrGn9hM
-         xyfZLqbodyvwzDoT6O51nBktq7F8rXYHPtxBvJ1KetDmZDJZooE0rgINNDc4OAinxwQk
-         6OJH1Ja5uev6A6MgxQ6O4uI9fi8Uzl7zv35xonV2eN+DcQXwIlzDn1IMSIJSqd1cbf94
-         LaSapD78d+eEPVSAR60zKEL/FBGvJYQFNOvVt3aly1FqsF4caeXotHpl/yjMZznxxvXd
-         x5M8LGcyyViw4952cslit7U1GBdbukPnr+ZivC81UQGHIFGphDSk4bujC35XPsxKYJM9
-         RsNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mmUa+efGnnzywDxvMPhfVDjqBi9J02VWB8wA5GmwpzU=;
-        b=gnBrmDhEGFYefbfOP9uOSQT9LlMVAh55jerPZn6SIvk1JUtpW3gTv6H4Tm+MvgpFe7
-         twIVQx6aeH7af/ItzAu5h2D4wpxdf3d/ZStczRErMLsU52abwr9nzDr3e0qqi/SXbpEK
-         +3/SaobEFSooSw+8TsfANS5ju2IzmDQPOSGk2/mBHc6b9BpAmKF+PJCU42StsEU/mlAY
-         QLpkQ1CK7ZknTJRKw7+SL/LITP0T8TDylAYlvnak44aZ9XwPt2u8BmKX7pcXqePK54mI
-         ariQHPPJSH6wzb8a7xCgjC1YaFTfCayZ5x2GO7yU/yiTdNBmFSCUB/Cr5vq3vqhXRcON
-         oYgQ==
-X-Gm-Message-State: AJIora8QJdaA7oal8A1kI7CGFK79hmViJeRpNoDSCpPD0CMdvUCFWT4d
-        /kcvlU1BbvYM65fpoJY+7BrulA==
-X-Google-Smtp-Source: AGRyM1tp3Qz7Y4dEkI71yqZkHyPCGlV+Fe9NhNjvBTH0du7cuY3k7wFlVKVTqc/KhgoAdysbzZ1Lgg==
-X-Received: by 2002:a05:600c:1e03:b0:3a3:6cd6:1d38 with SMTP id ay3-20020a05600c1e0300b003a36cd61d38mr6531713wmb.25.1659012749714;
-        Thu, 28 Jul 2022 05:52:29 -0700 (PDT)
-Received: from localhost.localdomain (33.169.185.81.rev.sfr.net. [81.185.169.33])
-        by smtp.gmail.com with ESMTPSA id h3-20020a5d4fc3000000b0021eba590ad1sm977700wrw.90.2022.07.28.05.52.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 05:52:29 -0700 (PDT)
-From:   Julien Panis <jpanis@baylibre.com>
-To:     jic23@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mranostay@ti.com, Julien Panis <jpanis@baylibre.com>
-Subject: [PATCH v2 2/2] iio: time: capture-tiecap: capture driver support for ECAP
-Date:   Thu, 28 Jul 2022 14:52:12 +0200
-Message-Id: <20220728125212.76728-3-jpanis@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220728125212.76728-1-jpanis@baylibre.com>
-References: <20220728125212.76728-1-jpanis@baylibre.com>
+        Thu, 28 Jul 2022 08:53:22 -0400
+Received: from esa5.hc3370-68.iphmx.com (esa5.hc3370-68.iphmx.com [216.71.155.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5B93D59C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1659012799;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ng7b+AAgMXcZ/+TJuJcCEeWQ4bsCFjToHv0fp7P5JkI=;
+  b=UG0MiFYqUoXN2bQ9DXWTX5E/lZh0d6nH2/zVZCVfCjayL4S1uMsl+v3n
+   thqKLet/t+Tmehjyl9ZG8JfJ4S1rjPYXbRq3vlcy+qk1QvNPIO+T3TlJ9
+   o39mkL7qskM4W1DD2Y2lNeIna3RMmaBEqFJEKUblWtNz2rtIPMkugvKzc
+   0=;
+Authentication-Results: esa5.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+X-SBRS: 2.7
+X-MesageID: 76112333
+X-Ironport-Server: esa5.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.83
+X-Policy: $RELAYED
+IronPort-Data: A9a23:c5VvaqhWJ3cMKYa7cwBnfNCNX161BhcKZh0ujC45NGQN5FlHY01je
+ htvW2uEO/3bN2HyLo1yaI7koxkAsMXWnIUxTQA4/n0zF3wb9cadCdqndUqhZCn6wu8v7a5EA
+ 2fyTvGacajYm1eF/k/F3oDJ9CU6j+fQLlbFILasEjhrQgN5QzsWhxtmmuoo6qZlmtH8CA6W0
+ T/Ii5S31GSNhnglaQr414rZ8Ek15Kuo6GtC1rADTasjUGH2xiF94K03fcldH1OgKqFIE+izQ
+ fr0zb3R1gs1KD90V7tJOp6iGqE7aua60Tqm0xK6aID76vR2nQQg075TCRYpQRw/ZwNlPTxG4
+ I4lWZSYEW/FN0BX8QgXe0Ew/ypWZcWq9FJbSJQWXAP6I0DuKhPRL/tS4E4eFs40x8h2JzF33
+ uESEwsRT02FucS6z+fuIgVsrpxLwMjDOYoevjdrzC3DDOZgSpfGK0nIzYYGhnFq3JkIRKuAI
+ ZpCAdZsRE2ojxlnGF4RBdQbleOhgnD5fhVTqU6PpLpx6G/WpOB0+OezaYOPIYfRLSlTthuSi
+ HPE3UDTOFIDJsW42AqL0S6slNaayEsXX6pNTeblp5aGmma7wWgeCwYfU1ehluWokU61W99ZK
+ Es89zInqO4580nDZsLmQxSyrXqAvxgdc9ldCes37EeK0KW8yxbJWEAHQyRHZdhgs9U5LRQo2
+ UWOhMjBHiF0vfueTnf13qeZq3a+NDYYKUcGZDQYVk0V7t/7uoYxgxnTCNF5H8adi934CDf96
+ zmPpTo5gfMfgKYj1a+24FTGiDKEvYXSQ0g+4QC/dn6q6hNRYI+jepCy7l7a/bBMIe6xRF6bv
+ WNCnNOC9ucQFpKcvCuXSe4JEfei4PPtGDndh0N/Wpos7TKg/1a9co1KpjJzPkFkNoADYzCBS
+ ErSvwxWzIVeMHujcel8ZIfZI8QyxIDyBMjiTLbfad8mSpR4agLB/ChofkOW92TsllU816A5J
+ ZqfN82rCB4yA7xPxT63SuFNl7Mmrh3S3kuKG8q9lU7+l+PDOjjFEt/pLWdicMgSr4+5jgTzo
+ +90KsGx8Al+DevARCXYpNt7wU8xEZQrOXzng5UJK77Sf1s4RDhJ5+z5mu14JdE890hBvqKRp
+ yzmBBcFoLbqrSefQThmfEyPf18GsXxXiXsgdRIhMl+zs5TISdb+tfxPH3fbkFROyQCC8RKXZ
+ 6NcEyl4Kq4TIgkrAhxEBXUHkKRsdQ6wmSWFNDe/bT40cvZIHlKUqo64IFq/qnhUU0JbUPfSR
+ JX5jGvmrWcrHVw+XK46ltr0p79OgZTtsL0rBBaZSjWiUE7t7JJrO0TMsxPDGOlVcE2r7mbLi
+ G6r7eIw/7alT3kdrIaU3shpbu6BT4NDI6atNzKKs+7naneBozvLLE0peL/gQA0xnVjcoM2KD
+ di5BdmlWBHbtD6ma7ZBLos=
+IronPort-HdrOrdr: A9a23:XtZmI6wElHoWjHQ9EVstKrPwIL1zdoMgy1knxilNoRw8SKKlfq
+ eV7ZMmPH7P+VIssR4b+exoVJPtfZq+z+8R3WByB8bAYOCOggLBR+sO0WKL+UyHJ8SUzI9gPM
+ lbHJSWcOeAb2RHsQ==
+X-IronPort-AV: E=Sophos;i="5.93,198,1654574400"; 
+   d="scan'208";a="76112333"
+From:   Jane Malalane <jane.malalane@citrix.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+CC:     Jane Malalane <jane.malalane@citrix.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        "Maximilian Heyne" <mheyne@amazon.de>,
+        <xen-devel@lists.xenproject.org>
+Subject: [PATCH v3] x86/xen: Add support for HVMOP_set_evtchn_upcall_vector
+Date:   Thu, 28 Jul 2022 13:52:44 +0100
+Message-ID: <20220728125244.19163-1-jane.malalane@citrix.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ECAP hardware on AM62x SoC supports capture feature. It can be used
-to timestamp events (falling/rising edges) detected on signal input pin.
+Implement support for the HVMOP_set_evtchn_upcall_vector hypercall in
+order to set the per-vCPU event channel vector callback on Linux and
+use it in preference of HVM_PARAM_CALLBACK_IRQ.
 
-This commit adds capture driver support for ECAP hardware on AM62x SoC.
+If the per-VCPU vector setup is successful on BSP, use this method
+for the APs. If not, fallback to the global vector-type callback.
 
-In the ECAP hardware, capture pin can also be configured to be in
-PWM mode. Current implementation only supports capture operating mode.
-Hardware also supports timebase sync between multiple instances, but
-this driver supports simple independent capture functionality.
+Also register callback_irq at per-vCPU event channel setup to trick
+toolstack to think the domain is enlightened.
 
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
+Suggested-by: "Roger Pau Monné" <roger.pau@citrix.com>
+Signed-off-by: Jane Malalane <jane.malalane@citrix.com>
 ---
- drivers/iio/Kconfig               |   1 +
- drivers/iio/Makefile              |   1 +
- drivers/iio/time/Kconfig          |  22 ++
- drivers/iio/time/Makefile         |   6 +
- drivers/iio/time/capture-tiecap.c | 521 ++++++++++++++++++++++++++++++
- 5 files changed, 551 insertions(+)
- create mode 100644 drivers/iio/time/Kconfig
- create mode 100644 drivers/iio/time/Makefile
- create mode 100644 drivers/iio/time/capture-tiecap.c
+CC: Juergen Gross <jgross@suse.com>
+CC: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: x86@kernel.org
+CC: "H. Peter Anvin" <hpa@zytor.com>
+CC: Stefano Stabellini <sstabellini@kernel.org>
+CC: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+CC: Jan Beulich <jbeulich@suse.com>
+CC: Maximilian Heyne <mheyne@amazon.de>
+CC: xen-devel@lists.xenproject.org
 
-diff --git a/drivers/iio/Kconfig b/drivers/iio/Kconfig
-index b190846c3dc2..ba11b8824071 100644
---- a/drivers/iio/Kconfig
-+++ b/drivers/iio/Kconfig
-@@ -99,5 +99,6 @@ source "drivers/iio/pressure/Kconfig"
- source "drivers/iio/proximity/Kconfig"
- source "drivers/iio/resolver/Kconfig"
- source "drivers/iio/temperature/Kconfig"
-+source "drivers/iio/time/Kconfig"
+v3:
+ * comment style
+ * add comment on toolstack trick
+ * remove unnecessary variable and function call
+ * surround x86-specific code with #ifdef
+
+v2:
+ * remove no_vector_callback
+ * make xen_have_vector_callback a bool
+ * rename xen_ack_upcall to xen_percpu_upcall
+ * fail to bring CPU up on init instead of crashing kernel
+ * add and use xen_set_upcall_vector where suitable
+ * xen_setup_upcall_vector -> xen_init_setup_upcall_vector for clarity
+---
+ arch/x86/include/asm/xen/cpuid.h   |  2 ++
+ arch/x86/include/asm/xen/events.h  |  3 ++-
+ arch/x86/xen/enlighten.c           |  2 +-
+ arch/x86/xen/enlighten_hvm.c       | 24 ++++++++++++-----
+ arch/x86/xen/suspend_hvm.c         | 10 ++++++-
+ drivers/xen/events/events_base.c   | 54 +++++++++++++++++++++++++++++++++-----
+ include/xen/hvm.h                  |  2 ++
+ include/xen/interface/hvm/hvm_op.h | 19 ++++++++++++++
+ 8 files changed, 101 insertions(+), 15 deletions(-)
+
+diff --git a/arch/x86/include/asm/xen/cpuid.h b/arch/x86/include/asm/xen/cpuid.h
+index 78e667a31d6c..6daa9b0c8d11 100644
+--- a/arch/x86/include/asm/xen/cpuid.h
++++ b/arch/x86/include/asm/xen/cpuid.h
+@@ -107,6 +107,8 @@
+  * ID field from 8 to 15 bits, allowing to target APIC IDs up 32768.
+  */
+ #define XEN_HVM_CPUID_EXT_DEST_ID      (1u << 5)
++/* Per-vCPU event channel upcalls */
++#define XEN_HVM_CPUID_UPCALL_VECTOR    (1u << 6)
  
- endif # IIO
-diff --git a/drivers/iio/Makefile b/drivers/iio/Makefile
-index 3be08cdadd7e..09283402a2c6 100644
---- a/drivers/iio/Makefile
-+++ b/drivers/iio/Makefile
-@@ -42,4 +42,5 @@ obj-y += proximity/
- obj-y += resolver/
- obj-y += temperature/
- obj-y += test/
-+obj-y += time/
- obj-y += trigger/
-diff --git a/drivers/iio/time/Kconfig b/drivers/iio/time/Kconfig
-new file mode 100644
-index 000000000000..02f6cf7ff79e
---- /dev/null
-+++ b/drivers/iio/time/Kconfig
-@@ -0,0 +1,22 @@
-+#
-+# Time drivers
-+#
+ /*
+  * Leaf 6 (0x40000x05)
+diff --git a/arch/x86/include/asm/xen/events.h b/arch/x86/include/asm/xen/events.h
+index 068d9b067c83..62bdceb594f1 100644
+--- a/arch/x86/include/asm/xen/events.h
++++ b/arch/x86/include/asm/xen/events.h
+@@ -23,7 +23,7 @@ static inline int xen_irqs_disabled(struct pt_regs *regs)
+ /* No need for a barrier -- XCHG is a barrier on x86. */
+ #define xchg_xen_ulong(ptr, val) xchg((ptr), (val))
+ 
+-extern int xen_have_vector_callback;
++extern bool xen_have_vector_callback;
+ 
+ /*
+  * Events delivered via platform PCI interrupts are always
+@@ -34,4 +34,5 @@ static inline bool xen_support_evtchn_rebind(void)
+ 	return (!xen_hvm_domain() || xen_have_vector_callback);
+ }
+ 
++extern bool xen_percpu_upcall;
+ #endif /* _ASM_X86_XEN_EVENTS_H */
+diff --git a/arch/x86/xen/enlighten.c b/arch/x86/xen/enlighten.c
+index 30c6e986a6cd..b8db2148c07d 100644
+--- a/arch/x86/xen/enlighten.c
++++ b/arch/x86/xen/enlighten.c
+@@ -51,7 +51,7 @@ EXPORT_SYMBOL_GPL(xen_start_info);
+ 
+ struct shared_info xen_dummy_shared_info;
+ 
+-__read_mostly int xen_have_vector_callback;
++__read_mostly bool xen_have_vector_callback = true;
+ EXPORT_SYMBOL_GPL(xen_have_vector_callback);
+ 
+ /*
+diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
+index 8b71b1dd7639..198d3cd3e9a5 100644
+--- a/arch/x86/xen/enlighten_hvm.c
++++ b/arch/x86/xen/enlighten_hvm.c
+@@ -7,6 +7,8 @@
+ 
+ #include <xen/features.h>
+ #include <xen/events.h>
++#include <xen/hvm.h>
++#include <xen/interface/hvm/hvm_op.h>
+ #include <xen/interface/memory.h>
+ 
+ #include <asm/apic.h>
+@@ -30,6 +32,9 @@
+ 
+ static unsigned long shared_info_pfn;
+ 
++__ro_after_init bool xen_percpu_upcall;
++EXPORT_SYMBOL_GPL(xen_percpu_upcall);
 +
-+menu "Time"
+ void xen_hvm_init_shared_info(void)
+ {
+ 	struct xen_add_to_physmap xatp;
+@@ -125,6 +130,9 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_xen_hvm_callback)
+ {
+ 	struct pt_regs *old_regs = set_irq_regs(regs);
+ 
++	if (xen_percpu_upcall)
++		ack_APIC_irq();
 +
-+config CAPTURE_TIECAP
-+	tristate "ECAP capture support"
-+	depends on ARCH_OMAP2PLUS || ARCH_DAVINCI_DA8XX || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	select IIO_BUFFER
-+	select IIO_KFIFO_BUF
-+	help
-+	  IIO driver support for the ECAP capture hardware found on TI SoCs.
-+
-+	  It can be used to timestamp events (falling/rising edges) detected
-+	  on signal input pin.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called capture-tiecap.
-+
-+endmenu
-diff --git a/drivers/iio/time/Makefile b/drivers/iio/time/Makefile
-new file mode 100644
-index 000000000000..3a27f3557d1e
---- /dev/null
-+++ b/drivers/iio/time/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for industrial I/O Time drivers
-+#
-+
-+obj-$(CONFIG_CAPTURE_TIECAP) += capture-tiecap.o
-diff --git a/drivers/iio/time/capture-tiecap.c b/drivers/iio/time/capture-tiecap.c
-new file mode 100644
-index 000000000000..1044e0d36b86
---- /dev/null
-+++ b/drivers/iio/time/capture-tiecap.c
-@@ -0,0 +1,521 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * ECAP Capture driver
-+ *
-+ * Copyright (C) 2022 Julien Panis <jpanis@baylibre.com>
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/io.h>
-+#include <linux/err.h>
-+#include <linux/clk.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/of_device.h>
-+#include <linux/bitfield.h>
-+#include <linux/regmap.h>
-+#include <linux/interrupt.h>
-+#include <linux/iio/iio.h>
-+#include <linux/iio/buffer.h>
-+#include <linux/iio/kfifo_buf.h>
-+
-+/* Registers */
-+#define ECAP_NB_CAP			4
-+
-+#define ECAP_TSCNT_REG			0x00
-+
-+#define ECAP_CAP_REG(i)		(((i) << 2) + 0x08)
-+
-+#define ECAP_ECCTL_REG			0x28
-+#define ECAP_CAPPOL_BIT(i)		BIT((i) << 1)
-+#define ECAP_EV_MODE_MASK		GENMASK(7, 0)
-+#define ECAP_CAPLDEN_BIT		BIT(8)
-+#define ECAP_EVTFLTPS_MASK		GENMASK(13, 9)
-+#define ECAP_PS_DEFAULT_VAL		0
-+#define ECAP_PS_MAX_VAL		31
-+#define ECAP_CONT_ONESHT_BIT		BIT(16)
-+#define ECAP_STOPVALUE_MASK		GENMASK(18, 17)
-+#define ECAP_REARM_RESET_BIT		BIT(19)
-+#define ECAP_TSCNTSTP_BIT		BIT(20)
-+#define ECAP_SYNCO_DIS_MASK		GENMASK(23, 22)
-+#define ECAP_CAP_APWM_BIT		BIT(25)
-+#define ECAP_ECCTL_EN_MASK		(ECAP_CAPLDEN_BIT | ECAP_TSCNTSTP_BIT)
-+#define ECAP_ECCTL_CFG_MASK		(ECAP_EVTFLTPS_MASK | ECAP_SYNCO_DIS_MASK	\
-+					| ECAP_STOPVALUE_MASK | ECAP_ECCTL_EN_MASK	\
-+					| ECAP_CAP_APWM_BIT | ECAP_CONT_ONESHT_BIT	\
-+					| ECAP_REARM_RESET_BIT)
-+
-+#define ECAP_ECINT_EN_FLG_REG		0x2c
-+#define ECAP_NB_CEVT			(ECAP_NB_CAP + 1)
-+#define ECAP_CEVT_EN_MASK		GENMASK(ECAP_NB_CEVT, 1)
-+#define ECAP_CEVT_FLG_BIT(i)		BIT((i) + 17)
-+#define ECAP_OVF_VAL			0xff
-+
-+#define ECAP_ECINT_CLR_FRC_REG	0x30
-+#define ECAP_INT_CLR_BIT		BIT(0)
-+#define ECAP_CEVT_CLR_BIT(i)		BIT((i) + 1)
-+#define ECAP_CEVT_CLR_MASK		GENMASK(ECAP_NB_CEVT, 0)
-+
-+#define ECAP_PID_REG			0x5c
-+
-+/*
-+ * Event modes
-+ * One bit for each CAPx register : 1 = falling edge / 0 = rising edge
-+ * e.g. mode = 13 = 0xd = 0b1101
-+ * -> falling edge for CAP1-3-4 / rising edge for CAP2
-+ */
-+#define ECAP_NB_EV_MODES		GENMASK(ECAP_NB_CAP - 1, 0)
-+#define ECAP_EV_MODE_BIT(i)		BIT(i)
-+
-+static unsigned int prescaler = ECAP_PS_DEFAULT_VAL;
-+module_param(prescaler, uint, 0644);
-+MODULE_PARM_DESC(prescaler, "Input capture signal prescaler from 0 to "
-+		 __MODULE_STRING(ECAP_PS_MAX_VAL)", default "
-+		 __MODULE_STRING(ECAP_PS_DEFAULT_VAL));
-+
-+static const struct regmap_config ecap_iio_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = ECAP_PID_REG,
-+};
-+
-+/*
-+ * struct ecap_iio_context - IIO device context
-+ * @ev_mode:   event mode describing falling/rising edges for captures 1 to 4
-+ * @time_cntr: timestamp counter value
-+ */
-+struct ecap_iio_context {
-+	u8 ev_mode;
-+	unsigned int time_cntr;
-+};
-+
-+/*
-+ * struct ecap_iio_data - IIO device data
-+ * @ev_idx:  event index (0 to 3 for CAP1 to CAP4)
-+ * @ev_time: falling/rising edge timestamp
-+ */
-+struct ecap_iio_data {
-+	u8 ev_idx;
-+	s64 ev_time __aligned(sizeof(s64));
-+};
-+
-+/*
-+ * struct ecap_iio_dev - IIO device private data structure
-+ * @enabled:  device state
-+ * @clk:      device clock
-+ * @clk_rate: device clock rate
-+ * @regmap:   device register map
-+ * @pm_ctx:   device context for PM operations
-+ * @data:     device data
-+ */
-+struct ecap_iio_dev {
-+	bool enabled;
-+	struct clk *clk;
-+	unsigned long clk_rate;
-+	struct regmap *regmap;
-+	struct ecap_iio_context pm_ctx;
-+	struct ecap_iio_data data;
-+};
-+
-+static u8 ecap_iio_capture_get_evmode(struct iio_dev *indio_dev)
-+{
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+	u8 ev_mode = 0;
-+	unsigned int regval;
-+	int i;
-+
-+	pm_runtime_get_sync(indio_dev->dev.parent);
-+	regmap_read(ecap_dev->regmap, ECAP_ECCTL_REG, &regval);
-+	pm_runtime_put_sync(indio_dev->dev.parent);
-+
-+	for (i = 0 ; i < ECAP_NB_CAP ; i++) {
-+		if (regval & ECAP_CAPPOL_BIT(i))
-+			ev_mode |= ECAP_EV_MODE_BIT(i);
-+	}
-+
-+	return ev_mode;
-+}
-+
-+static void ecap_iio_capture_set_evmode(struct iio_dev *indio_dev, u8 ev_mode)
-+{
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+	unsigned int regval = 0;
-+	int i;
-+
-+	for (i = 0 ; i < ECAP_NB_CAP ; i++) {
-+		if (ev_mode & ECAP_EV_MODE_BIT(i))
-+			regval |= ECAP_CAPPOL_BIT(i);
-+	}
-+
-+	pm_runtime_get_sync(indio_dev->dev.parent);
-+	regmap_update_bits(ecap_dev->regmap, ECAP_ECCTL_REG, ECAP_EV_MODE_MASK, regval);
-+	pm_runtime_put_sync(indio_dev->dev.parent);
-+}
-+
-+static void ecap_iio_capture_enable(struct iio_dev *indio_dev, bool rearm)
-+{
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+	unsigned int regval = 0;
-+
-+	pm_runtime_get_sync(indio_dev->dev.parent);
-+
-+	/* Enable interrupts on events */
-+	regmap_update_bits(ecap_dev->regmap, ECAP_ECINT_EN_FLG_REG,
-+			   ECAP_CEVT_EN_MASK, ECAP_CEVT_EN_MASK);
-+
-+	/* Run counter */
-+	regval |= FIELD_PREP(ECAP_EVTFLTPS_MASK, prescaler)
-+		| ECAP_SYNCO_DIS_MASK | ECAP_STOPVALUE_MASK | ECAP_ECCTL_EN_MASK;
-+	if (rearm) {
-+		regmap_write(ecap_dev->regmap, ECAP_TSCNT_REG, 0);
-+		regval |= ECAP_REARM_RESET_BIT;
-+	}
-+	regmap_update_bits(ecap_dev->regmap, ECAP_ECCTL_REG, ECAP_ECCTL_CFG_MASK, regval);
-+}
-+
-+static void ecap_iio_capture_disable(struct iio_dev *indio_dev)
-+{
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+
-+	/* Disable interrupts on events */
-+	regmap_update_bits(ecap_dev->regmap, ECAP_ECINT_EN_FLG_REG, ECAP_CEVT_EN_MASK, 0);
-+
-+	/* Stop counter */
-+	regmap_update_bits(ecap_dev->regmap, ECAP_ECCTL_REG, ECAP_ECCTL_EN_MASK, 0);
-+
-+	pm_runtime_put_sync(indio_dev->dev.parent);
-+}
-+
-+static int ecap_iio_read_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan,
-+			     int *val, int *val2, long info)
-+{
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+
-+	switch (info) {
-+	case IIO_CHAN_INFO_ENABLE:
-+		*val = ecap_dev->enabled;
-+		return IIO_VAL_INT;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ecap_iio_write_raw(struct iio_dev *indio_dev,
-+			      struct iio_chan_spec const *chan,
-+			      int val, int val2, long info)
-+{
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+
-+	switch (info) {
-+	case IIO_CHAN_INFO_ENABLE:
-+		if (val < 0 || val > 1)
-+			return -EINVAL;
-+		if (val == ecap_dev->enabled)
-+			return 0;
-+		if (val)
-+			ecap_iio_capture_enable(indio_dev, true);
-+		else
-+			ecap_iio_capture_disable(indio_dev);
-+		ecap_dev->enabled = val;
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ecap_iio_read_event_value(struct iio_dev *indio_dev,
-+				     const struct iio_chan_spec *chan,
-+				     enum iio_event_type type,
-+				     enum iio_event_direction dir,
-+				     enum iio_event_info info,
-+				     int *val, int *val2)
-+{
-+	switch (info) {
-+	case IIO_EV_INFO_VALUE:
-+		switch (dir) {
-+		case IIO_EV_DIR_FALLING:
-+			*val = ecap_iio_capture_get_evmode(indio_dev);
-+			return IIO_VAL_INT;
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int ecap_iio_write_event_value(struct iio_dev *indio_dev,
-+				      const struct iio_chan_spec *chan,
-+				      enum iio_event_type type,
-+				      enum iio_event_direction dir,
-+				      enum iio_event_info info,
-+				      int val, int val2)
-+{
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+
-+	switch (info) {
-+	case IIO_EV_INFO_VALUE:
-+		switch (dir) {
-+		case IIO_EV_DIR_FALLING:
-+			if (val < 0 || val > ECAP_NB_EV_MODES)
-+				return -EINVAL;
-+			if (ecap_dev->enabled)
-+				return -EBUSY;
-+			ecap_iio_capture_set_evmode(indio_dev, val);
-+			return 0;
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct iio_info ecap_iio_info = {
-+	.read_raw = ecap_iio_read_raw,
-+	.write_raw = ecap_iio_write_raw,
-+	.read_event_value = ecap_iio_read_event_value,
-+	.write_event_value = ecap_iio_write_event_value,
-+};
-+
-+static const struct iio_event_spec ecap_iio_events[] = {
-+	{
-+		.type = IIO_EV_TYPE_CHANGE,
-+		.dir = IIO_EV_DIR_FALLING,
-+		.mask_shared_by_all = BIT(IIO_EV_INFO_VALUE),
-+	},
-+};
-+
-+static const struct iio_chan_spec ecap_iio_channels[] = {
-+	{
-+		.scan_index = 0,
-+		.type = IIO_INDEX,
-+		.address = 0,
-+		.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_ENABLE),
-+		.modified = 0,
-+		.event_spec = ecap_iio_events,
-+		.num_event_specs = ARRAY_SIZE(ecap_iio_events),
-+		.scan_type = {
-+			.sign = 'u',
-+			.endianness = IIO_LE,
-+			.realbits = 2,
-+			.storagebits = 8,
-+			.shift = 0,
-+		},
-+	},
-+	IIO_CHAN_SOFT_TIMESTAMP(1),
-+};
-+
-+static irqreturn_t ecap_iio_isr(int irq, void *dev_id)
-+{
-+	struct iio_dev *indio_dev = dev_id;
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+	struct ecap_iio_data *ecap_data = &ecap_dev->data;
-+	unsigned int clr = 0;
-+	unsigned int flg;
-+	unsigned int cap_time;
-+	int i;
-+
-+	regmap_read(ecap_dev->regmap, ECAP_ECINT_EN_FLG_REG, &flg);
-+
-+	for (i = 0 ; i < ECAP_NB_CEVT ; i++) {
-+		if (flg & ECAP_CEVT_FLG_BIT(i)) {
-+			if (i < ECAP_NB_CAP) {
-+				/*
-+				 * Input signal edge detected
-+				 * time_ns = 10^9 * time_cycles / clk_rate
-+				 */
-+				ecap_data->ev_idx = i;
-+				regmap_read(ecap_dev->regmap, ECAP_CAP_REG(i), &cap_time);
-+				ecap_data->ev_time = cap_time * NSEC_PER_SEC;
-+				do_div(ecap_data->ev_time, ecap_dev->clk_rate);
-+			} else {
-+				/* Counter overflow */
-+				ecap_data->ev_idx = ECAP_OVF_VAL;
-+				ecap_data->ev_time = 0;
-+			}
-+			iio_push_to_buffers(indio_dev, ecap_data);
-+
-+			clr |= ECAP_CEVT_CLR_BIT(i);
+ 	inc_irq_stat(irq_hv_callback_count);
+ 
+ 	xen_hvm_evtchn_do_upcall();
+@@ -168,6 +176,15 @@ static int xen_cpu_up_prepare_hvm(unsigned int cpu)
+ 	if (!xen_have_vector_callback)
+ 		return 0;
+ 
++	if (xen_percpu_upcall) {
++		rc = xen_set_upcall_vector(cpu);
++		if (rc) {
++			WARN(1, "HVMOP_set_evtchn_upcall_vector"
++			     " for CPU %d failed: %d\n", cpu, rc);
++			return rc;
 +		}
 +	}
 +
-+	clr |= ECAP_INT_CLR_BIT;
-+	regmap_update_bits(ecap_dev->regmap, ECAP_ECINT_CLR_FRC_REG, ECAP_CEVT_CLR_MASK, clr);
+ 	if (xen_feature(XENFEAT_hvm_safe_pvclock))
+ 		xen_setup_timer(cpu);
+ 
+@@ -188,8 +205,6 @@ static int xen_cpu_dead_hvm(unsigned int cpu)
+ 	return 0;
+ }
+ 
+-static bool no_vector_callback __initdata;
+-
+ static void __init xen_hvm_guest_init(void)
+ {
+ 	if (xen_pv_domain())
+@@ -211,9 +226,6 @@ static void __init xen_hvm_guest_init(void)
+ 
+ 	xen_panic_handler_init();
+ 
+-	if (!no_vector_callback && xen_feature(XENFEAT_hvm_callback_vector))
+-		xen_have_vector_callback = 1;
+-
+ 	xen_hvm_smp_init();
+ 	WARN_ON(xen_cpuhp_setup(xen_cpu_up_prepare_hvm, xen_cpu_dead_hvm));
+ 	xen_unplug_emulated_devices();
+@@ -239,7 +251,7 @@ early_param("xen_nopv", xen_parse_nopv);
+ 
+ static __init int xen_parse_no_vector_callback(char *arg)
+ {
+-	no_vector_callback = true;
++	xen_have_vector_callback = false;
+ 	return 0;
+ }
+ early_param("xen_no_vector_callback", xen_parse_no_vector_callback);
+diff --git a/arch/x86/xen/suspend_hvm.c b/arch/x86/xen/suspend_hvm.c
+index 9d548b0c772f..0c4f7554b7cc 100644
+--- a/arch/x86/xen/suspend_hvm.c
++++ b/arch/x86/xen/suspend_hvm.c
+@@ -5,6 +5,7 @@
+ #include <xen/hvm.h>
+ #include <xen/features.h>
+ #include <xen/interface/features.h>
++#include <xen/events.h>
+ 
+ #include "xen-ops.h"
+ 
+@@ -14,6 +15,13 @@ void xen_hvm_post_suspend(int suspend_cancelled)
+ 		xen_hvm_init_shared_info();
+ 		xen_vcpu_restore();
+ 	}
+-	xen_setup_callback_vector();
++	if (xen_percpu_upcall) {
++		unsigned int cpu;
 +
-+	return IRQ_HANDLED;
-+}
-+
-+static void ecap_iio_clk_disable(void *clk)
++		for_each_online_cpu(cpu)
++			BUG_ON(xen_set_upcall_vector(cpu));
++	} else {
++		xen_setup_callback_vector();
++	}
+ 	xen_unplug_emulated_devices();
+ }
+diff --git a/drivers/xen/events/events_base.c b/drivers/xen/events/events_base.c
+index 46d9295d9a6e..3681770589f5 100644
+--- a/drivers/xen/events/events_base.c
++++ b/drivers/xen/events/events_base.c
+@@ -45,6 +45,7 @@
+ #include <asm/irq.h>
+ #include <asm/io_apic.h>
+ #include <asm/i8259.h>
++#include <asm/xen/cpuid.h>
+ #include <asm/xen/pci.h>
+ #endif
+ #include <asm/sync_bitops.h>
+@@ -2183,6 +2184,7 @@ static struct irq_chip xen_percpu_chip __read_mostly = {
+ 	.irq_ack		= ack_dynirq,
+ };
+ 
++#ifdef CONFIG_X86
+ #ifdef CONFIG_XEN_PVHVM
+ /* Vector callbacks are better than PCI interrupts to receive event
+  * channel notifications because we can receive vector callbacks on any
+@@ -2195,11 +2197,49 @@ void xen_setup_callback_vector(void)
+ 		callback_via = HVM_CALLBACK_VECTOR(HYPERVISOR_CALLBACK_VECTOR);
+ 		if (xen_set_callback_via(callback_via)) {
+ 			pr_err("Request for Xen HVM callback vector failed\n");
+-			xen_have_vector_callback = 0;
++			xen_have_vector_callback = false;
+ 		}
+ 	}
+ }
+ 
++/*
++ * Setup per-vCPU vector-type callbacks and trick toolstack to think
++ * we are enlightened. If this setup is unavailable, fallback to the
++ * global vector-type callback.
++ */
++static __init void xen_init_setup_upcall_vector(void)
 +{
-+	clk_disable_unprepare(clk);
++	if (!xen_have_vector_callback)
++		return;
++
++	if ((cpuid_eax(xen_cpuid_base() + 4) & XEN_HVM_CPUID_UPCALL_VECTOR) &&
++	    !xen_set_upcall_vector(0))
++		xen_percpu_upcall = true;
++	else if (xen_feature(XENFEAT_hvm_callback_vector))
++		xen_setup_callback_vector();
++	else
++		xen_have_vector_callback = false;
 +}
 +
-+static int ecap_iio_probe(struct platform_device *pdev)
++int xen_set_upcall_vector(unsigned int cpu)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct ecap_iio_dev *ecap_dev;
-+	struct iio_dev *indio_dev;
-+	void __iomem *mmio_base;
-+	int ret;
++	int rc;
++	xen_hvm_evtchn_upcall_vector_t op = {
++		.vector = HYPERVISOR_CALLBACK_VECTOR,
++		.vcpu = per_cpu(xen_vcpu_id, cpu),
++	};
 +
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*ecap_dev));
-+	if (IS_ERR(indio_dev)) {
-+		dev_err(dev, "failed to allocate memory for iio device\n");
-+		return PTR_ERR(indio_dev);
-+	}
++	rc = HYPERVISOR_hvm_op(HVMOP_set_evtchn_upcall_vector, &op);
++	if (rc)
++		return rc;
 +
-+	ecap_dev = iio_priv(indio_dev);
++	/* Trick toolstack to think we are enlightened. */
++	if (!cpu)
++		rc = xen_set_callback_via(1);
 +
-+	ecap_dev->clk = devm_clk_get(dev, "fck");
-+	if (IS_ERR(ecap_dev->clk)) {
-+		dev_err(dev, "failed to get clock\n");
-+		return PTR_ERR(ecap_dev->clk);
-+	}
-+
-+	ret = clk_prepare_enable(ecap_dev->clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clock\n");
-+		return ret;
-+	}
-+
-+	ret = devm_add_action_or_reset(dev, ecap_iio_clk_disable, ecap_dev->clk);
-+	if (ret) {
-+		dev_err(dev, "failed to add clock disable action\n");
-+		return ret;
-+	}
-+
-+	ecap_dev->clk_rate = clk_get_rate(ecap_dev->clk);
-+	if (!ecap_dev->clk_rate) {
-+		dev_err(dev, "failed to get clock rate\n");
-+		return -EINVAL;
-+	}
-+
-+	if (prescaler > ECAP_PS_MAX_VAL) {
-+		prescaler = ECAP_PS_MAX_VAL;
-+		dev_warn(dev, "prescaler out of range, forced to %d\n", prescaler);
-+	}
-+
-+	mmio_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(mmio_base)) {
-+		dev_err(dev, "failed to remap io\n");
-+		return PTR_ERR(mmio_base);
-+	}
-+
-+	ecap_dev->regmap = regmap_init_mmio(dev, mmio_base, &ecap_iio_regmap_config);
-+	if (IS_ERR(ecap_dev->regmap)) {
-+		dev_err(dev, "failed to init regmap\n");
-+		return PTR_ERR(ecap_dev->regmap);
-+	}
-+
-+	indio_dev->name = devm_kasprintf(dev, GFP_KERNEL,
-+					 "ecap-iio-%p", mmio_base);
-+	indio_dev->info = &ecap_iio_info;
-+	indio_dev->channels = ecap_iio_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(ecap_iio_channels);
-+	indio_dev->modes = INDIO_BUFFER_SOFTWARE;
-+
-+	ret = devm_iio_kfifo_buffer_setup_ext(dev, indio_dev, NULL, NULL);
-+	if (ret) {
-+		dev_err(dev, "failed to setup iio buffer\n");
-+		return ret;
-+	}
-+
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to get irq\n");
-+		return ret;
-+	}
-+
-+	ret = devm_request_irq(dev, ret, ecap_iio_isr, 0, pdev->name, indio_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to request irq\n");
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, indio_dev);
-+	pm_runtime_enable(&pdev->dev);
-+
-+	ecap_dev->enabled = 0;
-+	ecap_iio_capture_set_evmode(indio_dev, 0);
-+
-+	return devm_iio_device_register(dev, indio_dev);
++	return rc;
 +}
 +
-+static int ecap_iio_remove(struct platform_device *pdev)
-+{
-+	struct iio_dev *indio_dev = platform_get_drvdata(pdev);
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
+ static __init void xen_alloc_callback_vector(void)
+ {
+ 	if (!xen_have_vector_callback)
+@@ -2210,8 +2250,11 @@ static __init void xen_alloc_callback_vector(void)
+ }
+ #else
+ void xen_setup_callback_vector(void) {}
++static inline void xen_init_setup_upcall_vector(void) {}
++int xen_set_upcall_vector(unsigned int cpu) {}
+ static inline void xen_alloc_callback_vector(void) {}
+-#endif
++#endif /* CONFIG_XEN_PVHVM */
++#endif /* CONFIG_X86 */
+ 
+ bool xen_fifo_events = true;
+ module_param_named(fifo_events, xen_fifo_events, bool, 0);
+@@ -2271,10 +2314,9 @@ void __init xen_init_IRQ(void)
+ 		if (xen_initial_domain())
+ 			pci_xen_initial_domain();
+ 	}
+-	if (xen_feature(XENFEAT_hvm_callback_vector)) {
+-		xen_setup_callback_vector();
+-		xen_alloc_callback_vector();
+-	}
++	xen_init_setup_upcall_vector();
++	xen_alloc_callback_vector();
 +
-+	if (ecap_dev->enabled)
-+		ecap_iio_capture_disable(indio_dev);
+ 
+ 	if (xen_hvm_domain()) {
+ 		native_init_IRQ();
+diff --git a/include/xen/hvm.h b/include/xen/hvm.h
+index b7fd7fc9ad41..8da7a6747058 100644
+--- a/include/xen/hvm.h
++++ b/include/xen/hvm.h
+@@ -60,4 +60,6 @@ static inline int hvm_get_parameter(int idx, uint64_t *value)
+ 
+ void xen_setup_callback_vector(void);
+ 
++int xen_set_upcall_vector(unsigned int cpu);
 +
-+	regmap_exit(ecap_dev->regmap);
+ #endif /* XEN_HVM_H__ */
+diff --git a/include/xen/interface/hvm/hvm_op.h b/include/xen/interface/hvm/hvm_op.h
+index f3097e79bb03..03134bf3cec1 100644
+--- a/include/xen/interface/hvm/hvm_op.h
++++ b/include/xen/interface/hvm/hvm_op.h
+@@ -46,4 +46,23 @@ struct xen_hvm_get_mem_type {
+ };
+ DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_get_mem_type);
+ 
++#if defined(__i386__) || defined(__x86_64__)
 +
-+	pm_runtime_disable(&pdev->dev);
-+
-+	return 0;
-+}
-+
-+static __maybe_unused int ecap_iio_suspend(struct device *dev)
-+{
-+	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+
-+	/* If eCAP is running, stop capture then save timestamp counter */
-+	if (ecap_dev->enabled) {
-+		ecap_iio_capture_disable(indio_dev);
-+
-+		pm_runtime_get_sync(indio_dev->dev.parent);
-+		regmap_read(ecap_dev->regmap, ECAP_TSCNT_REG, &ecap_dev->pm_ctx.time_cntr);
-+		pm_runtime_put_sync(indio_dev->dev.parent);
-+	}
-+
-+	ecap_dev->pm_ctx.ev_mode = ecap_iio_capture_get_evmode(indio_dev);
-+
-+	return 0;
-+}
-+
-+static __maybe_unused int ecap_iio_resume(struct device *dev)
-+{
-+	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-+	struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
-+
-+	ecap_iio_capture_set_evmode(indio_dev, ecap_dev->pm_ctx.ev_mode);
-+
-+	/* If eCAP was running, restore timestamp counter then run capture */
-+	if (ecap_dev->enabled) {
-+		pm_runtime_get_sync(indio_dev->dev.parent);
-+		regmap_write(ecap_dev->regmap, ECAP_TSCNT_REG, ecap_dev->pm_ctx.time_cntr);
-+		pm_runtime_put_sync(indio_dev->dev.parent);
-+
-+		ecap_iio_capture_enable(indio_dev, false);
-+	}
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(ecap_iio_pm_ops, ecap_iio_suspend, ecap_iio_resume);
-+
-+static const struct of_device_id ecap_iio_of_match[] = {
-+	{ .compatible	= "ti,am62-ecap-capture" },
-+	{},
++/*
++ * HVMOP_set_evtchn_upcall_vector: Set a <vector> that should be used for event
++ *                                 channel upcalls on the specified <vcpu>. If set,
++ *                                 this vector will be used in preference to the
++ *                                 domain global callback via (see
++ *                                 HVM_PARAM_CALLBACK_IRQ).
++ */
++#define HVMOP_set_evtchn_upcall_vector 23
++struct xen_hvm_evtchn_upcall_vector {
++    uint32_t vcpu;
++    uint8_t vector;
 +};
-+MODULE_DEVICE_TABLE(of, ecap_iio_of_match);
++typedef struct xen_hvm_evtchn_upcall_vector xen_hvm_evtchn_upcall_vector_t;
++DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_evtchn_upcall_vector_t);
 +
-+static struct platform_driver ecap_iio_driver = {
-+	.probe = ecap_iio_probe,
-+	.remove = ecap_iio_remove,
-+	.driver = {
-+		.name = "ecap-capture",
-+		.of_match_table = of_match_ptr(ecap_iio_of_match),
-+		.pm = &ecap_iio_pm_ops,
-+	},
-+};
-+module_platform_driver(ecap_iio_driver);
++#endif /* defined(__i386__) || defined(__x86_64__) */
 +
-+MODULE_DESCRIPTION("ECAP Capture driver");
-+MODULE_AUTHOR("Julien Panis <jpanis@baylibre.com>");
-+MODULE_LICENSE("GPL");
+ #endif /* __XEN_PUBLIC_HVM_HVM_OP_H__ */
 -- 
-2.25.1
+2.11.0
 

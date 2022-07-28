@@ -2,149 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C23583AC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75406583ACB
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235280AbiG1Izt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
+        id S235178AbiG1I5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbiG1Izq (ORCPT
+        with ESMTP id S234581AbiG1I5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:55:46 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DEF655A5;
-        Thu, 28 Jul 2022 01:55:43 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Thu, 28 Jul
- 2022 16:55:41 +0800
-Message-ID: <965f83cf-4695-f89c-5ede-2f6b2524f392@amlogic.com>
-Date:   Thu, 28 Jul 2022 16:55:41 +0800
+        Thu, 28 Jul 2022 04:57:40 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C7465551
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:57:38 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id os14so2030317ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xwfttGU/k1I9a2kTyLxRXPdvdNGKDNXOB3vdeDt2IZE=;
+        b=ZrSPdFO8YMUIQROaKnue3yKZbUz/2Hg5MPQInCarovto3loHky29xy69zpWMCRz3Hf
+         QY94c6ryEn3aLobEVOJReS7jbMKyGInZTZ/OLkISyFTv6QchHcwowHxvgSHVpUNOwYtS
+         7Fy4LZ/OeZ2WmpLkqxbuutEZDYk3Nk5PPOLjk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xwfttGU/k1I9a2kTyLxRXPdvdNGKDNXOB3vdeDt2IZE=;
+        b=gWA/uDnqZrEa/11G3lKXkHi+EdTfAUAG345eGIe+Om5aWT+fhG4TljMZuDXFOLTTjD
+         tE/jyLULM+juSW257CS6LITa8MnJCzIObdS0fnsDGzy81IPbYXygC0KLiWQRdwri+5Vp
+         lC5rCjzTTSV7Ef+Pr+KBs8ookXwb/4hxi4vuGUbzjQsKUWwINI/dzzc9nwNd0QdgMzih
+         wViESCVVQc24RNr3GFnvmKwTWUzUJNup9FU+XpmPkA77nrJCHwoWTPLmYeP/7OjRowa2
+         GFJ+uWM8S+4Qf1aNA7DsgAMatsVEjJKfIMTw8E+cZRbUGIsGR4Nyv/37uwbeG0FpyYIF
+         A7Ng==
+X-Gm-Message-State: AJIora8UuvrrKA9TNZ5XRbnQs6IDmun1AlZzHLbiJ/Gzb9oZOzVOfRDT
+        jB4PWNlGIdLZYvappaTAcfb0QR+Hdc3S0jdFd8d96afcGz4uaXye
+X-Google-Smtp-Source: AGRyM1uD6O64z7MKe5zWkIPORzBnJ0jZZ5Yiz6x284X0yVcxlVjrHHPvyvYiODjTZ9zON6f4ZHHpQN2Gn+ODr96E86Y=
+X-Received: by 2002:a17:907:2855:b0:72b:700e:21eb with SMTP id
+ el21-20020a170907285500b0072b700e21ebmr20656742ejc.270.1658998656661; Thu, 28
+ Jul 2022 01:57:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 0/3] Add S4 SoC clock controller driver
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <1j8rodhfn9.fsf@starbuckisacylon.baylibre.com>
- <032b3c3f-f899-bf53-ecbb-35191d39392b@amlogic.com>
- <1j4jz1hbr5.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1j4jz1hbr5.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728063856.72705-1-zhangjiachen.jaycee@bytedance.com>
+In-Reply-To: <20220728063856.72705-1-zhangjiachen.jaycee@bytedance.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Thu, 28 Jul 2022 10:57:25 +0200
+Message-ID: <CAJfpegsAf=VzvC=ej+60bHgK7zOoKwQehabTAmvNYQPCQwmFKA@mail.gmail.com>
+Subject: Re: [PATCH] ovl: only WARN_ON_ONCE() if dentry is NULL in ovl_encode_fh()
+To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Hongbo Yin <yinhongbo@bytedance.com>,
+        Tianci Zhang <zhangtianci.1997@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jerome,
-	Thanks for your reply and explanation.
+On Thu, 28 Jul 2022 at 08:39, Jiachen Zhang
+<zhangjiachen.jaycee@bytedance.com> wrote:
+>
+> Some code paths cannot guarantee the inode have any dentry alias. So
+> WARN_ON() all !dentry may flood the kernel logs.
+>
+> For example, when an overlayfs inode is watched by inotifywait (1), and
+> someone is trying to read the /proc/$(pidof inotifywait)/fdinfo/INOTIFY_FD,
+> at that time if the dentry has been reclaimed by kernel (such as
+> echo 2 > /proc/sys/vm/drop_caches), there will be a WARN_ON(). The
+> printed call stack would be like:
+>
+>     ? show_mark_fhandle+0xf0/0xf0
+>     show_mark_fhandle+0x4a/0xf0
+>     ? show_mark_fhandle+0xf0/0xf0
+>     ? seq_vprintf+0x30/0x50
+>     ? seq_printf+0x53/0x70
+>     ? show_mark_fhandle+0xf0/0xf0
+>     inotify_fdinfo+0x70/0x90
+>     show_fdinfo.isra.4+0x53/0x70
+>     seq_show+0x130/0x170
+>     seq_read+0x153/0x440
+>     vfs_read+0x94/0x150
+>     ksys_read+0x5f/0xe0
+>     do_syscall_64+0x59/0x1e0
+>     entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>
+> So let's replace WARN_ON() with WARN_ON_ONCE() to avoid kernel log
+> flooding.
 
-On 2022/7/28 16:27, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Thu 28 Jul 2022 at 16:06, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Hi JB，
->>
->> On 2022/7/28 15:08, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> On Thu 28 Jul 2022 at 13:41, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>>> 1. Add clock controller driver for S4 SOC.
->>>>
->>>> Yu Tu (3):
->>>>     dt-bindings: clk: meson: add S4 SoC clock controller bindings
->>>>     arm64: dts: meson: add S4 Soc clock controller in DT
->>>>     clk: meson: s4: add s4 SoC clock controller driver
->>>>
->>>> V1 -> V2: Change format as discussed in the email.
->>>>
->>>> Link:https://lore.kernel.org/linux-amlogic/20220708062757.3662-1-yu.tu@amlogic.com/
->>>>
->>>>    .../bindings/clock/amlogic,gxbb-clkc.txt      |    1 +
->>>>    MAINTAINERS                                   |    1 +
->>>>    arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |   11 +
->>>>    drivers/clk/meson/Kconfig                     |   15 +
->>>>    drivers/clk/meson/Makefile                    |    1 +
->>>>    drivers/clk/meson/s4.c                        | 4732 +++++++++++++++++
->>>>    drivers/clk/meson/s4.h                        |  296 ++
->>>>    include/dt-bindings/clock/s4-clkc.h           |  146 +
->>>>    8 files changed, 5203 insertions(+)
->>>>    create mode 100644 drivers/clk/meson/s4.c
->>>>    create mode 100644 drivers/clk/meson/s4.h
->>>>    create mode 100644 include/dt-bindings/clock/s4-clkc.h
->>>>
->>>>
->>>> base-commit: b293bc9286ee21824e93f0fcfed3b78fdfee01e6
->>> Please don't post until you have addressed *ALL* the comments from the
->>> previous version.
->> The last email asked you to adopt A1 method, but you did not reply?
->>
->>> At first glance, I can see that this is still a single driver for
->>> what is obviously 2 controllers with 2 register spaces. Simple comments
->>> like the "<< 2" in the register declaration have not been addressed either.
->> I understand that this should be a controller, just two address
->> descriptions. One is the various PLL registers and one is the clock for
->> the peripherals. And PLL is to provide a clock source for various
->> peripheral clocks. So a clock controller is reasonable. I think you got
->> it wrong.
-> 
-> I don't think I do. This looks exactly like the A1.
-> The post of that controller are still in the  archive and I am sure your
-> colleagues can give you the history.
-> 
-> You clearly have register regions providing clock, separated by
-> 0x8000. Claiming that as one big region is bad design.
-> 
-> There has been several remarks about using a big syscon on V1,
-> unaddressed too.
-> 
-> CCF has everything necessary in place to handle each register region
-> separately, properly and pass clock around.
-> 
-> You can handle it as a single controller, claiming the two regions
-> individually but:
-> # 1 - handling 2 different regmaps in the controller is going to be
->        bigger mess than you think
-> # 2 - I am far from convinced there is any reason to do so
-> 
-It makes sense, as you say, to separate the two controllers. But I think 
-the only thing that was forced apart was that the digital designers 
-didn't put these registers together when they were designing the chips.
+Better just drop the WARN_ON() completely in that case, since it's a
+normally occurring condition.
 
-I'm going to separate the two controllers like you said.
-
-> 
->>
->> Ok, if you insist on using two clock controllers,, please provide your the
->> reason and example code?
->>
->>> Seeing that, I have not reviewed this version further.
->>> I won't until all the comments from v1 are either addressed or answer
->>> Regards
->>> Jerome
->>> .
-> 
-> .
+Thanks,
+Miklos

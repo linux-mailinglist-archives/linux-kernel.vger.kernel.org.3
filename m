@@ -2,98 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A2B583789
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC2258378B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238018AbiG1D3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 23:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S232882AbiG1Dbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 23:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237735AbiG1D3F (ORCPT
+        with ESMTP id S234161AbiG1Dbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 23:29:05 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD03D313B8;
-        Wed, 27 Jul 2022 20:29:03 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id w10so722623plq.0;
-        Wed, 27 Jul 2022 20:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IgmuXFdC4z/43Rc7Q9cgxFfqgAnSJN8111kFQ443vyQ=;
-        b=ADaO62z8vkrGxtk6GnMjJ4r3VcgvYkwTs0rhcJvfxh8h/g8TstyKIs/GlktD9f6YFh
-         32QEtS/BRYEZSRq3mPNyAGoOzM+B1kluJs1OZAabfwc/XelJBKy1fCZPkKvbjD+fU4Yg
-         hVLiibV1j89DADxLRUqghdQeqBcCEL7hNy7n7/w1YS/ul+50ZZV3Iryj1vRkW99hJXaE
-         JOT0W4Qn0/zGBtFUAqb/95/bNmjvbjQxme7tlbMwFx3BXPdRdJidpxXJb6+loduJ2P6+
-         Dq2cwRhdztrNOuLZHSpy+ZrHJV2fo4OBh5ea8HRbu9PCd9Em4sgpsQMHHD0kkN5e0X+7
-         nTdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IgmuXFdC4z/43Rc7Q9cgxFfqgAnSJN8111kFQ443vyQ=;
-        b=V7vHQOPanihUitOKexWGzI+jskCm6iTnraHc2hAinKmxTXQ7p1Yt5n9pMZiyHEnp93
-         8856ohEJxieUct+1ahDxewOQ7wcHND1PLlcO+VQhpeWo1thyuD/MFgCMTWcgWaqjFAtd
-         pH7D6KYr2VNA7sk2+yIIF4/hsVZPlmROfLG0RyjM4D2i8ZiKoDsSakYETOuTfmwHHwrw
-         xnyfVc33Is2zi1LY5GlSVgRSO+5QIrozxXqlXqr6JKp9xwWEyYixqFD+SR8ZVrEBtEbO
-         8x+YllS7WYkjff3ePtw4Z0GJ0s7n8Ap+cIAKWDsDEehJaunoFmqkco+V1ppIbolu7lID
-         GibQ==
-X-Gm-Message-State: AJIora83d1nmoVJDeyvrRNsve/BJvFQqVqRH7IGyIRtoxBnMJdoXPrtO
-        v/9dDkbQFTQ+APwLhEvPXxbgyMVkWZPdsw==
-X-Google-Smtp-Source: AGRyM1t5DmGKZQbXkEwWJ6MjAHHdslXBLZ7TGeBz6KKNyDZJhJrvYdFseujyktImww8HVxr7gsrCJw==
-X-Received: by 2002:a17:90b:3502:b0:1f3:550:5f6f with SMTP id ls2-20020a17090b350200b001f305505f6fmr8173822pjb.49.1658978943363;
-        Wed, 27 Jul 2022 20:29:03 -0700 (PDT)
-Received: from rfl-device.localdomain ([39.124.24.102])
-        by smtp.gmail.com with ESMTPSA id u5-20020a17090a4bc500b001ef7c7564fdsm2571214pjl.21.2022.07.27.20.29.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 20:29:03 -0700 (PDT)
-From:   RuffaloLavoisier <ruffalolavoisier@gmail.com>
-X-Google-Original-From: RuffaloLavoisier <RuffaloLavoisier@gmail.com>
-To:     Taehee Yoo <ap420073@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     RuffaloLavoisier <RuffaloLavoisier@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] amt: fix typo in comment
-Date:   Thu, 28 Jul 2022 12:28:54 +0900
-Message-Id: <20220728032854.151180-1-RuffaloLavoisier@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 27 Jul 2022 23:31:31 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BBF852DD9;
+        Wed, 27 Jul 2022 20:31:29 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id B4A441E80D72;
+        Thu, 28 Jul 2022 11:31:31 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ANGcd-Ku-b8R; Thu, 28 Jul 2022 11:31:29 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 4D8BE1E80CF5;
+        Thu, 28 Jul 2022 11:31:28 +0800 (CST)
+From:   Yu Zhe <yuzhe@nfschina.com>
+To:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        liqiong@nfschina.com, Yu Zhe <yuzhe@nfschina.com>
+Subject: [PATCH v2] drm/amdkfd: use time_is_before_jiffies(a + b) to replace "jiffies - a > b"
+Date:   Thu, 28 Jul 2022 11:30:26 +0800
+Message-Id: <20220728033026.15952-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20220727025917.22477-1-yuzhe@nfschina.com>
+References: <20220727025917.22477-1-yuzhe@nfschina.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling on 'non-existent' in comment
+time_is_before_jiffies deals with timer wrapping correctly.
 
-Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
+Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
 ---
-I wrote about the commit message in detail and modified the name.
- drivers/net/amt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index febfcf2d92af..9a247eb7679c 100644
---- a/drivers/net/amt.c
-+++ b/drivers/net/amt.c
-@@ -449,7 +449,7 @@ static void amt_group_work(struct work_struct *work)
- 	dev_put(amt->dev);
- }
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c b/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
+index a9466d154395..34772fe74296 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_interrupt.c
+@@ -146,7 +146,7 @@ static void interrupt_wq(struct work_struct *work)
+ 	struct kfd_dev *dev = container_of(work, struct kfd_dev,
+ 						interrupt_work);
+ 	uint32_t ih_ring_entry[KFD_MAX_RING_ENTRY_SIZE];
+-	long start_jiffies = jiffies;
++	unsigned long start_jiffies = jiffies;
  
--/* Non-existant group is created as INCLUDE {empty}:
-+/* Non-existent group is created as INCLUDE {empty}:
-  *
-  * RFC 3376 - 5.1. Action on Change of Interface State
-  *
+ 	if (dev->device_info.ih_ring_entry_size > sizeof(ih_ring_entry)) {
+ 		dev_err_once(dev->adev->dev, "Ring entry too small\n");
+@@ -156,7 +156,7 @@ static void interrupt_wq(struct work_struct *work)
+ 	while (dequeue_ih_ring_entry(dev, ih_ring_entry)) {
+ 		dev->device_info.event_interrupt_class->interrupt_wq(dev,
+ 								ih_ring_entry);
+-		if (jiffies - start_jiffies > HZ) {
++		if (time_is_before_jiffies(start_jiffies + HZ)) {
+ 			/* If we spent more than a second processing signals,
+ 			 * reschedule the worker to avoid soft-lockup warnings
+ 			 */
 -- 
-2.25.1
+2.11.0
 

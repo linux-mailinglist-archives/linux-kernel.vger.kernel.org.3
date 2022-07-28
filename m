@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392305846F1
+	by mail.lfdr.de (Postfix) with ESMTP id 849025846F2
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbiG1UR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S232223AbiG1URm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiG1UR1 (ORCPT
+        with ESMTP id S232292AbiG1URg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:17:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50C0A76EBA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659039445;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A6u4ZQlbvoh48fBsQdaHBjhOh58DQBN7dDe6CmLd1i8=;
-        b=gt4Z3hgVAZoMppCIU2osNL8eXPm30UC6Ex+G7emYQlq4gZCt6iZTj//Pe5kGJ5oMKOB3Do
-        AI6EmkqxlhaQD58R4bBEDu+z1IfSZNWE1ZmuWBrrwPmzmVVUbW6YQFUo/O8N9W7p7eackZ
-        As+9mQeTezVytfk8YCb7G7Fpe11zRdY=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-Pp_aLg9EOvC2UcTgOeOVFw-1; Thu, 28 Jul 2022 16:17:17 -0400
-X-MC-Unique: Pp_aLg9EOvC2UcTgOeOVFw-1
-Received: by mail-qv1-f70.google.com with SMTP id f8-20020a056214076800b0047421aaa4c0so2018116qvz.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:17:17 -0700 (PDT)
+        Thu, 28 Jul 2022 16:17:36 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBF577561;
+        Thu, 28 Jul 2022 13:17:35 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id v17so3556751edc.1;
+        Thu, 28 Jul 2022 13:17:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ak/yZTzpgIpJQtD3WljhsD5fouvH+uomdrADi70BHVM=;
+        b=ixZyFAdcGtxnZpyaCmt9Oesw0zIva2L+SI9fpMV88n2PleVuncVjFahbO2RmDl2rqU
+         vvwH9bl1seswMDFt9LREEvFykrv28/iYW3kXZHIOMRGwQ745SyQfeLVvvqmjIbNUt2lf
+         JYVPKyifCOpaSqxGt3Mq9uLyDEc5NtI7kiMMFBp7s1t414ea26irotKawjyBC9o+udWg
+         vugtMk1KbGMjLhmcQRtezpUvB/Mv1UGXW9DMNQu52hD20BK5pp3VJJIT+d6Zxcq1Rxsi
+         0qfVWuFHddxsmbH+jcgD77xo38pROEoug1MJwEEJi8ukv5cu7duHJwLnm9VbWcGBLdnK
+         C12A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=A6u4ZQlbvoh48fBsQdaHBjhOh58DQBN7dDe6CmLd1i8=;
-        b=Rs9+hjnNK4xaXuCrXOAODp/RrYus+chNrEGRHpj+MvDnxYC50HLdz2VWiR04lG6zwh
-         Wwx9IdfXyiKGDURKqRhvVtY+6b8dvGPVaY/tU2Ai4D9yPdRj6enqxazR7j1Ix7v+LbpI
-         LtFXe5UNA2FR8DuefCXBJB7xw0hLGgCaYNDGthN44xmOEUbB98c1k4MDtWMaj7+CofGv
-         QTjrlRvaLFaM9pbIFXeGz70o01PRb9giyr1f7hzhw7UQ6OJpo+o9yhIaptsn6KVMJ+F3
-         F8uiIsuGSE2f+q27iK8EKfs6JvJOOhUzBbMad0r9sS4HdnIZWjGnNDxsbCUMR2JA5oKO
-         SuVA==
-X-Gm-Message-State: AJIora9pi9P8SlEAw29U+hNZa3vgadvDi+LM1qF5LutxdHm7VGZsxOyK
-        iJHyMj8itoGfMkg5VeY/4bcf+/I0oHZZn4IjpQo2azZa46unam03Mv67BlTawLfH81GT0mHpGO+
-        yrr+82f/BJnfJQEf5rjZQgA8O
-X-Received: by 2002:a05:620a:3707:b0:6b5:e205:81c7 with SMTP id de7-20020a05620a370700b006b5e20581c7mr454884qkb.754.1659039436931;
-        Thu, 28 Jul 2022 13:17:16 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vOtsnFMeB+47s+JEBfSL51sNWIhYCgzWGrde48yH7YXwWO1SbAs5TDZJ3n/JREYKaXerZ2MQ==
-X-Received: by 2002:a05:620a:3707:b0:6b5:e205:81c7 with SMTP id de7-20020a05620a370700b006b5e20581c7mr454869qkb.754.1659039436693;
-        Thu, 28 Jul 2022 13:17:16 -0700 (PDT)
-Received: from [192.168.8.138] (pool-100-0-245-4.bstnma.fios.verizon.net. [100.0.245.4])
-        by smtp.gmail.com with ESMTPSA id j18-20020a05620a289200b006a693e46d5csm1338993qkp.11.2022.07.28.13.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 13:17:16 -0700 (PDT)
-Message-ID: <63f7fdefca924ac5d192a5f617ea41cf266ba756.camel@redhat.com>
-Subject: Re: [PATCH] nouveau/svm: Fix to migrate all requested pages
-From:   Lyude Paul <lyude@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>, bskeggs@redhat.com,
-        rcampbell@nvidia.com
-Cc:     kherbst@redhat.com, airlied@linux.ie, daniel@ffwll.ch,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, jhubbard@nvidia.com
-Date:   Thu, 28 Jul 2022 16:17:14 -0400
-In-Reply-To: <20220720062745.960701-1-apopple@nvidia.com>
-References: <20220720062745.960701-1-apopple@nvidia.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        bh=Ak/yZTzpgIpJQtD3WljhsD5fouvH+uomdrADi70BHVM=;
+        b=TIF1tsbOcuTIUVL6q/UnHQ5Kh5Iptkz6bCqhXYLL2vAReVXpyr8a439Mro71KdMmdB
+         mheK9IW6Dbeo9iA1ODSBocrPwSWlIcwe/rWEh6E4I7At0MblPlmLirKwHWJ+vG84F2cQ
+         x2XEW/x+Ep8lnkGQWhabTXONbd8F2glSGGLwVS/zwZK2cFmF2vgf230c6egH8olpGhrJ
+         7sa5PNgaWe9Kykj7HF71Vd3xVElVLEL6iOc8dWP+qAHpx+ieclI+Xv/4AarNV28x/LvH
+         rOBXTjFxCkjscRXXZjY41CBo8AYkcNsv1roxk5TF31oYwYtFShVINTGYDrBRc9Nb2ju8
+         LyLQ==
+X-Gm-Message-State: AJIora8KK9kQgJWrXaEsY0viHMaY/28xvCVjim/xgBdWzaU50li50sSs
+        NidD7NtXqdXi68KzwyN+JFPItbSlFRUGuw==
+X-Google-Smtp-Source: AGRyM1tqe5zcrm8zLfAR8ilc9c99y9AKaTtFwV2/m2nTbzCaLqmQB3NSujcoq8v5zn3R7h/29xP9Cw==
+X-Received: by 2002:aa7:ce94:0:b0:43b:bf79:e9c3 with SMTP id y20-20020aa7ce94000000b0043bbf79e9c3mr590238edv.57.1659039453783;
+        Thu, 28 Jul 2022 13:17:33 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id v18-20020a170906293200b00726c0e63b94sm778289ejd.27.2022.07.28.13.17.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 13:17:33 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <08c9e2ed-29a2-14ea-c872-1a353a70d3e5@redhat.com>
+Date:   Thu, 28 Jul 2022 22:17:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 0/6] KVM: x86: Apply NX mitigation more precisely
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
+References: <20220723012325.1715714-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220723012325.1715714-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi, in the future if it's taking a while for a review to come back feel free
-to just send a poke on the thread for the patch you submitted, I do my best to
-keep up with all of the patches coming in. But there's a lot of email that I
-get so every now and then one slips through the cracks.
-
-Anyway, this patch looks good to me:
-
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-
-I will push it to the appropriate branch in a little bit
-
-On Wed, 2022-07-20 at 16:27 +1000, Alistair Popple wrote:
-> Users may request that pages from an OpenCL SVM allocation be migrated
-> to the GPU with clEnqueueSVMMigrateMem(). In Nouveau this will call into
-> nouveau_dmem_migrate_vma() to do the migration. If the total range to be
-> migrated exceeds SG_MAX_SINGLE_ALLOC the pages will be migrated in
-> chunks of size SG_MAX_SINGLE_ALLOC. However a typo in updating the
-> starting address means that only the first chunk will get migrated.
+On 7/23/22 03:23, Sean Christopherson wrote:
+> Patch 6 from Mingwei is the end goal of the series.  KVM incorrectly
+> assumes that the NX huge page mitigation is the only scenario where KVM
+> will create a non-leaf page instead of a huge page.   Precisely track
+> (via kvm_mmu_page) if a non-huge page is being forced and use that info
+> to avoid unnecessarily forcing smaller page sizes in
+> disallowed_hugepage_adjust().
 > 
-> Fix the calculation so that the entire range will get migrated if
-> possible.
+> v2: Rebase, tweak a changelog accordingly.
 > 
-> Signed-off-by: Alistair Popple <apopple@nvidia.com>
-> Fixes: e3d8b0890469 ("drm/nouveau/svm: map pages after migration")
-> ---
->  drivers/gpu/drm/nouveau/nouveau_dmem.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> v1:https://lore.kernel.org/all/20220409003847.819686-1-seanjc@google.com
 > 
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_dmem.c
-> b/drivers/gpu/drm/nouveau/nouveau_dmem.c
-> index 7ba66ad68a8a..16356611b5b9 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
-> @@ -680,7 +680,11 @@ nouveau_dmem_migrate_vma(struct nouveau_drm *drm,
->                 goto out_free_dma;
->  
->         for (i = 0; i < npages; i += max) {
-> -               args.end = start + (max << PAGE_SHIFT);
-> +               if (args.start + (max << PAGE_SHIFT) > end)
-> +                       args.end = end;
-> +               else
-> +                       args.end = args.start + (max << PAGE_SHIFT);
-> +
->                 ret = migrate_vma_setup(&args);
->                 if (ret)
->                         goto out_free_pfns;
+> Mingwei Zhang (1):
+>    KVM: x86/mmu: explicitly check nx_hugepage in
+>      disallowed_hugepage_adjust()
+> 
+> Sean Christopherson (5):
+>    KVM: x86/mmu: Tag disallowed NX huge pages even if they're not tracked
+>    KVM: x86/mmu: Properly account NX huge page workaround for nonpaging
+>      MMUs
+>    KVM: x86/mmu: Set disallowed_nx_huge_page in TDP MMU before setting
+>      SPTE
+>    KVM: x86/mmu: Track the number of TDP MMU pages, but not the actual
+>      pages
+>    KVM: x86/mmu: Add helper to convert SPTE value to its shadow page
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+Some of the benefits are cool, such as not having to track the pages for 
+the TDP MMU, and patch 2 is a borderline bugfix, but there's quite a lot 
+of new non-obvious complexity here.
 
+So the obligatory question is: is it worth a hundred lines of new code?
+
+Paolo

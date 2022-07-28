@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBDE583706
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DE3583722
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237770AbiG1Chp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 22:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S235028AbiG1Cnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 22:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237718AbiG1Chm (ORCPT
+        with ESMTP id S232002AbiG1Cnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 22:37:42 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63259550BD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 19:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658975861; x=1690511861;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nHZx2yHq0jQY1QGoZzw/Odwsc6IYuQTX9cmQoQNYIWY=;
-  b=JkuU6F9nrrleR7nId9gpCamBIbWDkhOFZPq/oQVYTiu/eiKJ/Iq4XDTZ
-   PkaPm3SGHrMQ5kFOSkQeGj7KOsFqFsQgeoHvrW3gJgYtXcvTADkWllhcI
-   WSe9s85Wlr9Q5R9UVtZ7sre02KMaHIBe1tFeDVspnZpkJvKJ4LHPZ8R1x
-   8=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jul 2022 19:37:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 19:37:40 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 27 Jul 2022 19:37:40 -0700
-Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Jul
- 2022 19:37:38 -0700
-Message-ID: <3dca718f-8d58-06c2-3f90-ef34a3dc114d@quicinc.com>
-Date:   Thu, 28 Jul 2022 10:37:35 +0800
+        Wed, 27 Jul 2022 22:43:45 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF47242AEA;
+        Wed, 27 Jul 2022 19:43:43 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LtZcL5b36zWflC;
+        Thu, 28 Jul 2022 10:39:46 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 10:43:41 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 10:43:40 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Josh Triplett" <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH v2] rcu: Display registers of self-detected stall as far as possible
+Date:   Thu, 28 Jul 2022 10:43:27 +0800
+Message-ID: <20220728024327.1202-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH] workqueue: avoid re-entry of pwq->pool->lock through
- __queue_work
-Content-Language: en-US
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-CC:     Tejun Heo <tj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220727110426.19079-1-quic_yingangl@quicinc.com>
- <CAJhGHyDXL90aprU2FjF++5DunJb90MiWRcz4VzBeFmJ0xeq-VA@mail.gmail.com>
-From:   Kassey Li <quic_yingangl@quicinc.com>
-In-Reply-To: <CAJhGHyDXL90aprU2FjF++5DunJb90MiWRcz4VzBeFmJ0xeq-VA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,131 +56,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For architectures that do not support NMI interrupts, registers is not
+printed when rcu stall is self-detected. However, this information is
+useful for analyzing the root cause of the fault. Fortunately, the rcu
+stall is always detected in the tick interrupt handler. So we can take
+it through get_irq_regs() and display it through show_regs(). Further,
+show_regs() unwind the call trace based on 'regs', the worthless call
+trace associated with tick handling will be omitted, this helps us to
+focus more on the problem.
 
+This is an example on arm64:
+[   27.501721] rcu: INFO: rcu_preempt self-detected stall on CPU
+[   27.502238] rcu:     0-....: (1250 ticks this GP) idle=4f7/1/0x4000000000000000 softirq=2594/2594 fqs=619
+[   27.502632]  (t=1251 jiffies g=2989 q=29 ncpus=4)
+[   27.503845] CPU: 0 PID: 306 Comm: test0 Not tainted 5.19.0-rc7-00009-g1c1a6c29ff99-dirty #46
+[   27.504732] Hardware name: linux,dummy-virt (DT)
+[   27.504947] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.504998] pc : arch_counter_read+0x18/0x24
+[   27.505301] lr : arch_counter_read+0x18/0x24
+[   27.505328] sp : ffff80000b29bdf0
+[   27.505345] x29: ffff80000b29bdf0 x28: 0000000000000000 x27: 0000000000000000
+[   27.505475] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+[   27.505553] x23: 0000000000001f40 x22: ffff800009849c48 x21: 000000065f871ae0
+[   27.505627] x20: 00000000000025ec x19: ffff80000a6eb300 x18: ffffffffffffffff
+[   27.505654] x17: 0000000000000001 x16: 0000000000000000 x15: ffff80000a6d0296
+[   27.505681] x14: ffffffffffffffff x13: ffff80000a29bc18 x12: 0000000000000426
+[   27.505709] x11: 0000000000000162 x10: ffff80000a2f3c18 x9 : ffff80000a29bc18
+[   27.505736] x8 : 00000000ffffefff x7 : ffff80000a2f3c18 x6 : 00000000759bd013
+[   27.505761] x5 : 01ffffffffffffff x4 : 0002dc6c00000000 x3 : 0000000000000017
+[   27.505787] x2 : 00000000000025ec x1 : ffff80000b29bdf0 x0 : 0000000075a30653
+[   27.505937] Call trace:
+[   27.506002]  arch_counter_read+0x18/0x24
+[   27.506171]  ktime_get+0x48/0xa0
+[   27.506207]  test_task+0x70/0xf0
+[   27.506227]  kthread+0x10c/0x110
+[   27.506243]  ret_from_fork+0x10/0x20
 
-On 7/28/2022 12:51 AM, Lai Jiangshan wrote:
-> On Wed, Jul 27, 2022 at 7:04 PM Kassey Li <quic_yingangl@quicinc.com> wrote:
->>
->> [0:swapper/4]BUG: spinlock recursion on CPU#4, swapper/4/0
->> [0:swapper/4]lock: 0xffffff8000c0f400, .magic: dead4ead, .owner:
->> swapper/4/0, .owner_cpu: 4
->> [0:swapper/4]CPU: 4 PID: 0 Comm: swapper/4 Tainted: G S
->> [0:swapper/4]Call trace:
->> [0:swapper/4] dump_backtrace.cfi_jt+0x0/0x8
->> [0:swapper/4] show_stack+0x1c/0x2c
->> [0:swapper/4] dump_stack_lvl+0xd8/0x16c
->> [0:swapper/4] spin_dump+0x104/0x278
->> [0:swapper/4] do_raw_spin_lock+0xec/0x15c
->> [0:swapper/4] _raw_spin_lock+0x28/0x3c
->> [0:swapper/4] __queue_work+0x1fc/0x618
->> [0:swapper/4] queue_work_on+0x64/0x134
->> [0:swapper/4] memlat_hrtimer_handler+0x28/0x3c [memlat]
->> [0:swapper/4] __run_hrtimer+0xe8/0x448
->> [0:swapper/4] hrtimer_interrupt+0x184/0x40c
->> [0:swapper/4] arch_timer_handler_virt+0x5c/0x98
->> [0:swapper/4] handle_percpu_devid_irq+0xd8/0x3e0
->> [0:swapper/4] __handle_domain_irq+0xd0/0x19c
->> [0:swapper/4] gic_handle_irq+0x6c/0x134
->> [0:swapper/4] el1_irq+0xe4/0x1c0
-> 
-> It seems it is an unexpected IRQ.
-    thanks for your suggest, we will focus on the api usage of spin_lock 
-where possible broken the irq enable/disable.
-    currently, abandon this change.
-> 
->> [0:swapper/4] _raw_spin_unlock_irqrestore+0x2c/0x60
->> [0:swapper/4] try_to_wake_up.llvm.14610847381734009831+0x334/0x888
->> [0:swapper/4] wake_up_process+0x1c/0x2c
->> [0:swapper/4] __queue_work+0x3e8/0x618
->> [0:swapper/4] delayed_work_timer_fn+0x24/0x34
-> 
-> delayed_work_timer_fn() should have been invoked with IRQ disabled
-> since it is TIMER_IRQSAFE.
-> 
-> Could you add some code to check if it is the case if possible, please?
-   the timer flags = 0x15200004, which means TIMER_IRQSAFE is set.
-   #define TIMER_IRQSAFE 0x00200000
+The old output is as follows:
+[   27.944550] rcu: INFO: rcu_preempt self-detected stall on CPU
+[   27.944980] rcu:     0-....: (1249 ticks this GP) idle=cbb/1/0x4000000000000000 softirq=2610/2610 fqs=614
+[   27.945407]  (t=1251 jiffies g=2681 q=28 ncpus=4)
+[   27.945731] Task dump for CPU 0:
+[   27.945844] task:test0           state:R  running task     stack:    0 pid:  306 ppid:     2 flags:0x0000000a
+[   27.946073] Call trace:
+[   27.946151]  dump_backtrace.part.0+0xc8/0xd4
+[   27.946378]  show_stack+0x18/0x70
+[   27.946405]  sched_show_task+0x150/0x180
+[   27.946427]  dump_cpu_task+0x44/0x54
+[   27.947193]  rcu_dump_cpu_stacks+0xec/0x130
+[   27.947212]  rcu_sched_clock_irq+0xb18/0xef0
+[   27.947231]  update_process_times+0x68/0xac
+[   27.947248]  tick_sched_handle+0x34/0x60
+[   27.947266]  tick_sched_timer+0x4c/0xa4
+[   27.947281]  __hrtimer_run_queues+0x178/0x360
+[   27.947295]  hrtimer_interrupt+0xe8/0x244
+[   27.947309]  arch_timer_handler_virt+0x38/0x4c
+[   27.947326]  handle_percpu_devid_irq+0x88/0x230
+[   27.947342]  generic_handle_domain_irq+0x2c/0x44
+[   27.947357]  gic_handle_irq+0x44/0xc4
+[   27.947376]  call_on_irq_stack+0x2c/0x54
+[   27.947415]  do_interrupt_handler+0x80/0x94
+[   27.947431]  el1_interrupt+0x34/0x70
+[   27.947447]  el1h_64_irq_handler+0x18/0x24
+[   27.947462]  el1h_64_irq+0x64/0x68                       <--- the above backtrace is worthless
+[   27.947474]  arch_counter_read+0x18/0x24
+[   27.947487]  ktime_get+0x48/0xa0
+[   27.947501]  test_task+0x70/0xf0
+[   27.947520]  kthread+0x10c/0x110
+[   27.947538]  ret_from_fork+0x10/0x20
 
-> 
->> [0:swapper/4] call_timer_fn+0x58/0x268
->> [0:swapper/4] expire_timers+0xe0/0x1c4
-> 
-> Or could you do a "disass expire_timers+0xe0" in GDB?
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ kernel/rcu/tree_stall.h | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
+v1 --> v2:
+Fix C99 build warning:
+kernel/rcu/tree_stall.h:358:10: error: call to undeclared function 'get_irq_regs';
+ISO C99 and later do not support implicit function declarations
 
-    0xffffffc01025bf44 <+200>:   tbz     w8, #5, 0xffffffc01025bee4 
-<expire_timers+104>
-    0xffffffc01025bf48 <+204>:   bl      0xffffffc0118093bc 
-<_raw_spin_unlock>
-    0xffffffc01025bf4c <+208>:   mov     x0, x23
-    0xffffffc01025bf50 <+212>:   mov     x1, x24
-    0xffffffc01025bf54 <+216>:   mov     x2, x21
-    0xffffffc01025bf58 <+220>:   bl      0xffffffc01025c040 <call_timer_fn>
-    0xffffffc01025bf5c <+224>:   mov     x0, x20 //expire_timers+0xe0
---Type <RET> for more, q to quit, c to continue without paging--
-    0xffffffc01025bf60 <+228>:   bl      0xffffffc011809230 <_raw_spin_lock>
-    0xffffffc01025bf64 <+232>:   b       0xffffffc01025bf00 
-<expire_timers+132>
+diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+index a001e1e7a99269c..23bfd755c3f6e5b 100644
+--- a/kernel/rcu/tree_stall.h
++++ b/kernel/rcu/tree_stall.h
+@@ -8,6 +8,7 @@
+  */
+ 
+ #include <linux/kvm_para.h>
++#include <asm/irq_regs.h>
+ 
+ //////////////////////////////////////////////////////////////////////////////
+ //
+@@ -350,6 +351,21 @@ static int rcu_print_task_stall(struct rcu_node *rnp, unsigned long flags)
+ }
+ #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
+ 
++static void rcu_dump_cpu_task(int cpu)
++{
++	if (cpu == smp_processor_id() && in_irq()) {
++		struct pt_regs *regs;
++
++		regs = get_irq_regs();
++		if (regs) {
++			show_regs(regs);
++			return;
++		}
++	}
++
++	dump_cpu_task(cpu);
++}
++
+ /*
+  * Dump stacks of all tasks running on stalled CPUs.  First try using
+  * NMIs, but fall back to manual remote stack tracing on architectures
+@@ -369,7 +385,7 @@ static void rcu_dump_cpu_stacks(void)
+ 				if (cpu_is_offline(cpu))
+ 					pr_err("Offline CPU %d blocking current GP.\n", cpu);
+ 				else if (!trigger_single_cpu_backtrace(cpu))
+-					dump_cpu_task(cpu);
++					rcu_dump_cpu_task(cpu);
+ 			}
+ 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 	}
+-- 
+2.25.1
 
-> 
->> [0:swapper/4] __run_timers+0x16c/0x1c4
->> [0:swapper/4] run_timer_softirq+0x34/0x60
->> [0:swapper/4] efi_header_end+0x198/0x59c
->> [0:swapper/4] __irq_exit_rcu+0xdc/0xf0
->> [0:swapper/4] irq_exit+0x14/0x50
->> [0:swapper/4] __handle_domain_irq+0xd4/0x19c
->> [0:swapper/4] gic_handle_irq+0x6c/0x134
->> [0:swapper/4] el1_irq+0xe4/0x1c0
->> [0:swapper/4] cpuidle_enter_state+0x1b4/0x5dc
->> [0:swapper/4] cpuidle_enter+0x3c/0x58
->> [0:swapper/4] do_idle.llvm.6296834828977863291+0x1f4/0x2e8
->> [0:swapper/4] cpu_startup_entry+0x28/0x2c
->> [0:swapper/4] secondary_start_kernel+0x1c8/0x230
->>
->> Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
->> ---
->>   kernel/workqueue.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
->> index 1ea50f6be843..f23491f373b1 100644
->> --- a/kernel/workqueue.c
->> +++ b/kernel/workqueue.c
->> @@ -1468,10 +1468,10 @@ static void __queue_work(int cpu, struct workqueue_struct *wq,
->>                  } else {
->>                          /* meh... not running there, queue here */
->>                          raw_spin_unlock(&last_pool->lock);
->> -                       raw_spin_lock(&pwq->pool->lock);
->> +                       raw_spin_lock_irq(&pwq->pool->lock);
->>                  }
->>          } else {
->> -               raw_spin_lock(&pwq->pool->lock);
->> +               raw_spin_lock_irq(&pwq->pool->lock);
->>          }
->>
->>          /*
->> @@ -1484,7 +1484,7 @@ static void __queue_work(int cpu, struct workqueue_struct *wq,
->>           */
->>          if (unlikely(!pwq->refcnt)) {
->>                  if (wq->flags & WQ_UNBOUND) {
->> -                       raw_spin_unlock(&pwq->pool->lock);
->> +                       raw_spin_unlock_irq(&pwq->pool->lock);
-> 
-> The patch is hardly correct, __queue_work() is called with irq-disabled,
-> this code will enable IRQ imbalanced.
-> 
->>                          cpu_relax();
->>                          goto retry;
->>                  }
->> @@ -1517,7 +1517,7 @@ static void __queue_work(int cpu, struct workqueue_struct *wq,
->>          insert_work(pwq, work, worklist, work_flags);
->>
->>   out:
->> -       raw_spin_unlock(&pwq->pool->lock);
->> +       raw_spin_unlock_irq(&pwq->pool->lock);
->>          rcu_read_unlock();
->>   }
->>
->> --
->> 2.17.1
->>

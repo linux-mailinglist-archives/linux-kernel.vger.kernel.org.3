@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C0D5844ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E93475844E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiG1RXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
+        id S232217AbiG1RXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiG1RXK (ORCPT
+        with ESMTP id S229971AbiG1RXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:23:10 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B254F2A27D;
-        Thu, 28 Jul 2022 10:23:09 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id b133so2479941pfb.6;
-        Thu, 28 Jul 2022 10:23:09 -0700 (PDT)
+        Thu, 28 Jul 2022 13:23:12 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93185B79D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:23:10 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id o21so1904086qkm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:23:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=N+EDZeN9hOjgggv+GakuBGOt5cAU+R6TAmQfKefuGy4=;
-        b=Emg3DdK7LSA+NPGtwUNvKOne+VsyeeyNXbQvyE/VGpLz3/txaN1mHFE01gAsuDkCbB
-         2K7lXPS/nzQZA2KQw6vB/AgSjSFuh5/PtFjUpNz/VSASorhlSmLD2FS3h2HbfMkcTDG2
-         fxBFMM8xJyVClKV9xW3aMewFxSDcY7TeKGj4/W3nEqhO62yY+c9uMYLUim1v3S2aZWn2
-         iguQ331j5j8wWHjY9b26yu1dsHepHq14knp9Lp2mh3CssireX5EasKZP+fh+IoToiO9d
-         uOOzEZXLpe1nmRc16BoqGuojFL+81jyLgTuwt2FYlVdkxONSwxluMiO3xqYUjVk9MEFQ
-         +7pQ==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1bpeiU6xJe06BhKMBB9TymWuJgsApmhu1bP3WtUTIhI=;
+        b=pQcHZGMM8cnpt7ARDuITkHvi77Yt5Zt5QtdeTeHfFp1ZXshN1/OlmE/QHCwGn9LiIC
+         TtiCHmD6pv/6lfByvazNLBF4GtYkQGjX0sMu+GEMqTFSfDamNZ3kMGX+Nh6jQWBop6j5
+         2qD6m+i9xkBSz86mC5pO/wAHYUtokUDqri3o2wud2JOURD/8DV2iUQWhHHtarF0HKoBI
+         OXA/5yWUmtmnJMVF7M41H+zE15BzHpbvvaXD4h0o793q9zohrw9gY9Z+BFJldGP7cOlK
+         ExO1s68ZGans3vqRusMj01Q8/dvfO7afHB6GRi3UNq7dxRgwm1mkfqpst8w1OZEbefOJ
+         GIyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=N+EDZeN9hOjgggv+GakuBGOt5cAU+R6TAmQfKefuGy4=;
-        b=Kk+7gkYKa6CO+hfYwExgmlpOKVhCxRkihGiowlk/mkbTgb7iidzVleCsOeGltFKFI6
-         nM0nvqezQZim3uUX0MGVKatasB3agMWcrTHr8QjmJC61YM2vDggWMkJwNWdpfPJ/FlhR
-         g85EDKUkRQtg7AVhteTPw9bH7Q3eTrpKxnuBfQZ6ZkKVvj2LdUumwN9mVMfWJadNIp2b
-         TLDv7WtbLifAAJqCzex049SG0UQypox3qR/8qq8VA7QXXq+fuCrysULe1IAVh7CLb4y+
-         FcSzr/yjdlLPTeylLvQRc+XY4Q8c5ccCukiIi4SvHImwtxU9yMR1wcEqL6Ip7Pnrr07i
-         QgOw==
-X-Gm-Message-State: AJIora/I+uNPqfN2xJ1KgoywUayh7CbgeHbbwrb/d0Hq6WVb7a1ktu1U
-        nh59TN9Gr+IIEpdU8RjY4Ak=
-X-Google-Smtp-Source: AGRyM1vWAeNNMrOWt9hod6gzpgcnKjOTotfiqgHg0fz7dxoEyRqT93I9WP7AjN6lq33F38HaWSX6Uw==
-X-Received: by 2002:a05:6a00:8cf:b0:522:93a6:46e9 with SMTP id s15-20020a056a0008cf00b0052293a646e9mr28490624pfu.62.1659028989086;
-        Thu, 28 Jul 2022 10:23:09 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902cec500b0016dc808f29bsm1408662plg.13.2022.07.28.10.23.08
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1bpeiU6xJe06BhKMBB9TymWuJgsApmhu1bP3WtUTIhI=;
+        b=fN62FefSW87Wwedl8QGiK5YihLXtLiPowf/iuipIUVdurtLorJdK5CHQTuPNDdnEBL
+         aOWOp1jM9x5uye/MjqKQX0GBti9kvsuxHXfwi6ZDSd3LAHjAbyBw6MlbmOyYtmtnRwiv
+         Bm+5KAczBGqI1kV8HnJsbMPNv0iQeX/HDAAl7p9iqQivB3epTM07lajbA8g3o79EXwm3
+         f+EtSFdTVElbfGxHgP42VklOU1dOmuVjfTJlKgp7edSt3sWL7MtM3CMMkLtoH7Zc+DqZ
+         +eSa908lfuBO4LUaw+bEB7TDhTVcOio043iUDWtbPFdvxGFPODTTsrABypBRN2s2A98Q
+         iuuw==
+X-Gm-Message-State: AJIora+0HvD6swelFbGhmE7f5NHyXZpvPwUXEfvaXeexIG2Uhp+B5CUn
+        l28RafM7oW+r9hvdTTL3bqc0Jw==
+X-Google-Smtp-Source: AGRyM1uOeNQ6O5O6VgA66Jbex+hGdMpMLlFOcjsQPWG4mNYu3adiReX5u8cPXRh948v4hzR2Ui1l/g==
+X-Received: by 2002:a05:620a:44d4:b0:6b6:229e:dc5b with SMTP id y20-20020a05620a44d400b006b6229edc5bmr20148181qkp.327.1659028990091;
+        Thu, 28 Jul 2022 10:23:10 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:994f])
+        by smtp.gmail.com with ESMTPSA id t7-20020a375f07000000b006af50b6f10csm876959qkb.61.2022.07.28.10.23.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 10:23:08 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 28 Jul 2022 07:23:07 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-Message-ID: <YuLF+xXaCzwWi2BR@slm.duckdns.org>
-References: <20220728005815.1715522-1-longman@redhat.com>
+        Thu, 28 Jul 2022 10:23:09 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 13:23:08 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Wei Xu <weixugc@google.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jvgediya.oss@gmail.com, Jagdish Gediya <jvgediya@linux.ibm.com>
+Subject: Re: [PATCH v10 1/8] mm/demotion: Add support for explicit memory
+ tiers
+Message-ID: <YuLF/GG8x5lQvg/f@cmpxchg.org>
+References: <20220720025920.1373558-1-aneesh.kumar@linux.ibm.com>
+ <20220720025920.1373558-2-aneesh.kumar@linux.ibm.com>
+ <87k080wmvb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <9e9ba2e4-3a87-3a79-e336-8849dad4856a@linux.ibm.com>
+ <87lesfuzhj.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728005815.1715522-1-longman@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87lesfuzhj.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Wed, Jul 27, 2022 at 08:58:14PM -0400, Waiman Long wrote:
-> It was found that any change to the current cpuset hierarchy may reset
-> the cpus_allowed list of the tasks in the affected cpusets to the
-> default cpuset value even if those tasks have cpus affinity explicitly
-> set by the users before. That is especially easy to trigger under a
-> cgroup v2 environment where writing "+cpuset" to the root cgroup's
-> cgroup.subtree_control file will reset the cpus affinity of all the
-> processes in the system.
+On Wed, Jul 27, 2022 at 09:16:08AM +0800, Huang, Ying wrote:
+> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+> > It is an abstract concept that indicates the performance of the
+> > device. As we learn more about which device attribute makes more impact in
+> > defining hierarchy, performance level will give more weightage to that specific
+> > attribute. It could be write latency or bandwidth. For me, distance has a direct
+> > linkage to latency because that is how we define numa distance now. Adding
+> > abstract to the name is not making it more abstract than perf_level. 
+> >
+> > I am open to suggestions from others.  Wei Xu has also suggested perf_level name.
+> > I can rename this to abstract_distance if that indicates the goal better.
 > 
-> That is especially problematic in a nohz_full environment where the
-> tasks running in the nohz_full CPUs usually have their cpus affinity
-> explicitly set and will behave incorrectly if cpus affinity changes.
+> I'm open to naming.  But I think that it's good to define it at some
+> degree instead of completely opaque stuff.  If it's latency based, then
+> low value corresponds to high performance.  If it's bandwidth based,
+> then low value corresponds to low performance.
 > 
-> Fix this problem by adding a flag in the task structure to indicate that
-> a task has their cpus affinity explicitly set before and make cpuset
-> code not to change their cpus_allowed list unless the user chosen cpu
-> list is no longer a subset of the cpus_allowed list of the cpuset itself.
+> Hi, Wei and Johannes,
 > 
-> With that change in place, it was verified that tasks that have its
-> cpus affinity explicitly set will not be affected by changes made to
-> the v2 cgroup.subtree_control files.
+> What do you think about this?
 
-I think the underlying cause here is cpuset overwriting the cpumask the user
-configured but that's a longer discussion.
+I'm also partial to distance. It's a familiar metric in non-uniform
+memory for guiding placement decisions, and that is how we continue to
+use it here too.
 
-> +/*
-> + * Don't change the cpus_allowed list if cpus affinity has been explicitly
-> + * set before unless the current cpu list is not a subset of the new cpu list.
-> + */
-> +static int cpuset_set_cpus_allowed_ptr(struct task_struct *p,
-> +				       const struct cpumask *new_mask)
-> +{
-> +	if (p->cpus_affinity_set && cpumask_subset(p->cpus_ptr, new_mask))
-> +		return 0;
-> +
-> +	p->cpus_affinity_set = 0;
-> +	return set_cpus_allowed_ptr(p, new_mask);
-> +}
-
-I wonder whether the more predictable behavior would be always not resetting
-the cpumask if it's a subset of the new_mask. Also, shouldn't this check
-p->cpus_mask instead of p->cpus_ptr?
-
-Thanks.
-
--- 
-tejun
+It's historically meant bus latency, but given how the kernel
+perceives and acts on the metric IMO the term works just fine to
+express differences in bandwidth and chip resonpse times as well.

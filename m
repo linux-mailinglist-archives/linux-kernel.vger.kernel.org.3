@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849025846F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871025846EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbiG1URm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S232194AbiG1USp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbiG1URg (ORCPT
+        with ESMTP id S229728AbiG1USi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:17:36 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBF577561;
-        Thu, 28 Jul 2022 13:17:35 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id v17so3556751edc.1;
-        Thu, 28 Jul 2022 13:17:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ak/yZTzpgIpJQtD3WljhsD5fouvH+uomdrADi70BHVM=;
-        b=ixZyFAdcGtxnZpyaCmt9Oesw0zIva2L+SI9fpMV88n2PleVuncVjFahbO2RmDl2rqU
-         vvwH9bl1seswMDFt9LREEvFykrv28/iYW3kXZHIOMRGwQ745SyQfeLVvvqmjIbNUt2lf
-         JYVPKyifCOpaSqxGt3Mq9uLyDEc5NtI7kiMMFBp7s1t414ea26irotKawjyBC9o+udWg
-         vugtMk1KbGMjLhmcQRtezpUvB/Mv1UGXW9DMNQu52hD20BK5pp3VJJIT+d6Zxcq1Rxsi
-         0qfVWuFHddxsmbH+jcgD77xo38pROEoug1MJwEEJi8ukv5cu7duHJwLnm9VbWcGBLdnK
-         C12A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ak/yZTzpgIpJQtD3WljhsD5fouvH+uomdrADi70BHVM=;
-        b=TIF1tsbOcuTIUVL6q/UnHQ5Kh5Iptkz6bCqhXYLL2vAReVXpyr8a439Mro71KdMmdB
-         mheK9IW6Dbeo9iA1ODSBocrPwSWlIcwe/rWEh6E4I7At0MblPlmLirKwHWJ+vG84F2cQ
-         x2XEW/x+Ep8lnkGQWhabTXONbd8F2glSGGLwVS/zwZK2cFmF2vgf230c6egH8olpGhrJ
-         7sa5PNgaWe9Kykj7HF71Vd3xVElVLEL6iOc8dWP+qAHpx+ieclI+Xv/4AarNV28x/LvH
-         rOBXTjFxCkjscRXXZjY41CBo8AYkcNsv1roxk5TF31oYwYtFShVINTGYDrBRc9Nb2ju8
-         LyLQ==
-X-Gm-Message-State: AJIora8KK9kQgJWrXaEsY0viHMaY/28xvCVjim/xgBdWzaU50li50sSs
-        NidD7NtXqdXi68KzwyN+JFPItbSlFRUGuw==
-X-Google-Smtp-Source: AGRyM1tqe5zcrm8zLfAR8ilc9c99y9AKaTtFwV2/m2nTbzCaLqmQB3NSujcoq8v5zn3R7h/29xP9Cw==
-X-Received: by 2002:aa7:ce94:0:b0:43b:bf79:e9c3 with SMTP id y20-20020aa7ce94000000b0043bbf79e9c3mr590238edv.57.1659039453783;
-        Thu, 28 Jul 2022 13:17:33 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id v18-20020a170906293200b00726c0e63b94sm778289ejd.27.2022.07.28.13.17.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 13:17:33 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <08c9e2ed-29a2-14ea-c872-1a353a70d3e5@redhat.com>
-Date:   Thu, 28 Jul 2022 22:17:31 +0200
+        Thu, 28 Jul 2022 16:18:38 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA0C77550;
+        Thu, 28 Jul 2022 13:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=jyimSRaAw9wxhi7YQujJr9tMl4SkrhmCEF1+wkpWhGk=; b=0Litq/Fsb43jdyPHkycZ41xn9y
+        by3rUO5zmjLF+BaGMgqWbx8M4Jgzcb7fWzAtB0LdW5TtVOhcO2D3GUN1Jo6Byx6E26HE2wYf7QNYs
+        TP+L4CW8fPyqhA8+4DrKnAarhukfo+sn/eshpluE/E+o3bSleYvSnA+gg/G/K58VyN/Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oH9xl-00Bq2D-PA; Thu, 28 Jul 2022 22:18:29 +0200
+Date:   Thu, 28 Jul 2022 22:18:29 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Marcin Wojtas <mw@semihalf.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to
+ fwnode_find_net_device_by_node()
+Message-ID: <YuLvFQiZP6qmWcME@lunn.ch>
+References: <20220727064321.2953971-1-mw@semihalf.com>
+ <20220727064321.2953971-7-mw@semihalf.com>
+ <20220727143147.u6yd6wqslilspyhw@skbuf>
+ <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
+ <20220727163848.f4e2b263zz3vl2hc@skbuf>
+ <CAPv3WKe+e6sFd6+7eoZbA2iRTPhBorD+mk6W+kJr-f9P8SFh+w@mail.gmail.com>
+ <20220727211112.kcpbxbql3tw5q5sx@skbuf>
+ <CAPv3WKcc2i6HsraP3OSrFY0YiBOAHwBPxJUErg_0p7mpGjn3Ug@mail.gmail.com>
+ <20220728195607.co75o3k2ggjlszlw@skbuf>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 0/6] KVM: x86: Apply NX mitigation more precisely
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Ben Gardon <bgardon@google.com>
-References: <20220723012325.1715714-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220723012325.1715714-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728195607.co75o3k2ggjlszlw@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/23/22 03:23, Sean Christopherson wrote:
-> Patch 6 from Mingwei is the end goal of the series.  KVM incorrectly
-> assumes that the NX huge page mitigation is the only scenario where KVM
-> will create a non-leaf page instead of a huge page.   Precisely track
-> (via kvm_mmu_page) if a non-huge page is being forced and use that info
-> to avoid unnecessarily forcing smaller page sizes in
-> disallowed_hugepage_adjust().
-> 
-> v2: Rebase, tweak a changelog accordingly.
-> 
-> v1:https://lore.kernel.org/all/20220409003847.819686-1-seanjc@google.com
-> 
-> Mingwei Zhang (1):
->    KVM: x86/mmu: explicitly check nx_hugepage in
->      disallowed_hugepage_adjust()
-> 
-> Sean Christopherson (5):
->    KVM: x86/mmu: Tag disallowed NX huge pages even if they're not tracked
->    KVM: x86/mmu: Properly account NX huge page workaround for nonpaging
->      MMUs
->    KVM: x86/mmu: Set disallowed_nx_huge_page in TDP MMU before setting
->      SPTE
->    KVM: x86/mmu: Track the number of TDP MMU pages, but not the actual
->      pages
->    KVM: x86/mmu: Add helper to convert SPTE value to its shadow page
+> The 'label' thing is actually one of the things that I'm seriously
+> considering skipping parsing if this is an ACPI system, simply because
+> best practices are different today than they were when the OF bindings
+> were created.
 
-Some of the benefits are cool, such as not having to track the pages for 
-the TDP MMU, and patch 2 is a borderline bugfix, but there's quite a lot 
-of new non-obvious complexity here.
+Agreed. We want the ACPI binding to learn from what has worked and not
+worked in DT. We should clean up some of the historical mess. And
+enforce things we don't in DT simply because there is too much
+history.
 
-So the obligatory question is: is it worth a hundred lines of new code?
+So a straight one to one conversion is not going to happen.
 
-Paolo
+> It can be debated what exactly is at fault there, although one
+> interpretation can be that the DT bindings themselves are to blame,
+> for describing a circular dependency between a parent and a child.
+
+DT describes hardware. I'm not sure hardware can have a circular
+dependency. It is more about how software make use of that hardware
+description that ends up in circular dependencies.
+
+	    Andrew

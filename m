@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F0D583D54
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2F0583D66
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbiG1LYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 07:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S235765AbiG1L33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 07:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236944AbiG1LY2 (ORCPT
+        with ESMTP id S233296AbiG1L3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 07:24:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 296536D56C;
-        Thu, 28 Jul 2022 04:21:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1D598106F;
-        Thu, 28 Jul 2022 04:21:55 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8366F3F73B;
-        Thu, 28 Jul 2022 04:21:52 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 12:21:50 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Message-ID: <20220728112150.hs5el6wufljeoqyy@bogus>
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <20220726143005.wt4be7yo7sbd3xut@bogus>
- <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
- <20220726154138.74avqs6iqlzqpzjk@bogus>
- <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
- <20220728082330.w4ppmzvjaeywsglu@bogus>
- <4e777590-616a-558a-031e-3ef1f1e492b4@gmail.com>
+        Thu, 28 Jul 2022 07:29:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA76214;
+        Thu, 28 Jul 2022 04:29:25 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2839A6601B43;
+        Thu, 28 Jul 2022 12:29:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659007763;
+        bh=uNWcE5HfgFGFIQScfXTCaroVaJZ+sGnKlroMwrEXQRc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fhPaUsX32oN2Zv+HMQErEyWkgFTSLph5msyPBzP5gXlQodELxkRpJmMQW6bGUsLn3
+         Qpiw3k1mxW+S1ZJI1K4JyNT6zWYicwdubvggyLSplfHCBAlFAu5DsgaydNwM8g6cfl
+         BnuHxCvPkY+78d+ccyYmKYueWEkONobkIZd34M4MZt+JacksXUB880jqoWJCL5n6Dx
+         DEGkHvfJ+2HTkEbsiOtLKy7UdINeDvN8+kH4GOA188+cKTWeoeJg5YWPCKIUKP0hj2
+         +3wVDUgm54X8LJPim0kcg3Rs2eUJ0C+OLo0oSs+2AOxxOf5lbboiuylVnyIn9XojL1
+         8yoqdAEAveNYQ==
+Message-ID: <d0d24ba1-e870-2ba0-8259-c405cb029d2f@collabora.com>
+Date:   Thu, 28 Jul 2022 13:29:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e777590-616a-558a-031e-3ef1f1e492b4@gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: spmi: add compatible for mt8188
+Content-Language: en-US
+To:     Sen Chu <sen.chu@mediatek.com>, Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Hui Liu <hui.liu@mediatek.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220726103729.24525-1-sen.chu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220726103729.24525-1-sen.chu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 12:05:15PM +0200, Maximilian Luz wrote:
-> On 7/28/22 10:23, Sudeep Holla wrote:
+Il 26/07/22 12:37, Sen Chu ha scritto:
+> Add dt-binding documentation of spmi for Mediatek MT8188 SoC platform.
+> 
+> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml b/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
+> index 2445c5e0b0ef..05801e0199f9 100644
+> --- a/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
+> +++ b/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
+> @@ -20,6 +20,7 @@ properties:
+>     compatible:
+>       enum:
+>         - mediatek,mt6873-spmi
+> +      - mediatek,mt8188-spmi
 
-[...]
+I think that you'll be adding a SPMI node that will have:
 
-> > Worst case I am fine with that as this needs to be one of and future
-> > platforms must get their act right in designing their f/w interface.
->
-> Again, I fully agree with you that this situation shouldn't exist. But
-> reality is sadly different.
->
+compatible = "mediatek,mt8188-spmi", "mediatek,mt8195-spmi";
 
-As I mentioned I don't have final authority to say yes or no to DT bindings.
-I have expressed my opinion and I thing allowing this to be generic via DT
-bindings gives no incentive to get the firmware story right. Hence I am happy
-to see this as one-off driver change and then we more changes are added to
-the driver or similar drivers get added in the future, we have a change to
-demand what action has been taken to fix the firmware story.
+Which means that this is actually wrong, so, please fix it by
+adding items...
 
-Just adding DT support(which I disagree) will make future platform to just
-use it and not get improvements in areas of discovery or query from the
-firmware.
-
---
 Regards,
-Sudeep
+Angelo
+
+>         - mediatek,mt8195-spmi
+>   
+>     reg:
+> 
+

@@ -2,141 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9945583E11
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E85583DFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237241AbiG1Lu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 07:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S236757AbiG1Lsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 07:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237012AbiG1LuU (ORCPT
+        with ESMTP id S236346AbiG1Ls2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 07:50:20 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A83D108
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:50:16 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id n185so821586wmn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:subject:date:in-reply-to:message-id
-         :mime-version;
-        bh=FxwqpjhD9/gLaQrnTT9TOXORIlpv5bjNu3/8g5til8A=;
-        b=nTEylWFWV5aRYXQnjm2kiRjVJlk7CEQjzrUBHIDJnxn+cY0Vj8Q7ezPN7FgIiJK/+v
-         ine2IGE+ebrioKCcdP9pPI+ICu9WtJvFA+PUXlNmr8SoGEJwVEgcyeHUlpHnXNjI/HmY
-         pLvlZNwoi1m0h5/WHucjBDABR1SPLS8arubysiloaSV92rt9yiaiMG3l9yCH5l/aQ3/9
-         s+IwJzB984E9vKSpdLwuxLICOc1sgE4UtWWOy3UrfagJPHpMHyDvMoK4x3Cyq1tORPeE
-         gbi0d45zdtr7iycIpE5AhCbM8wEKpE9OrycAhoQLkNBUjTUoAZMsEcibmKdyhO0fjDjX
-         21yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=FxwqpjhD9/gLaQrnTT9TOXORIlpv5bjNu3/8g5til8A=;
-        b=ejaPUmpG9TyNHBpxddyXTDjYWywTTpPbXnPue5AMwaNMENrAmf0ZrAhPtwIrXviVzB
-         aUfo8GGZXlFRcr6XDW9Wjq7QZAkqyhNaD9mkIXbMI830RBmPNgcTr2JA2fNDRxJJO7Rl
-         CstsPRn8O/uGiBt321iNGvm2kHyhGQItO+Bj6VZSSwJLmVccK97ydUGaejOWICGWVN5O
-         czz3znHp28+idzab9sg3rDgSmD/3jzAqVcADV+mlXP6tg51Iz0ybXTYiEc28WtkX11/v
-         Yslf9ymjdYouPwo6geSz845wjAVwW00bo2KQ+0AdNzKDw4eKolKLtpnnbpHVoIVtBvW1
-         a0mg==
-X-Gm-Message-State: AJIora+rb8ILgFf2lJLvPCPzb9cTT9/+LVwN/EIczVMvEPTgAH6/F+eP
-        RHxHdRqqeyZZmr5a5O7ojbYbxg==
-X-Google-Smtp-Source: AGRyM1v0j0TKqWnZsAUWLQ3B4oY6N7U+8YetS6WSCx/Q+1LpG7g7jTIsnd/U+8JWEBXprZeoB78iww==
-X-Received: by 2002:a7b:c453:0:b0:3a3:1c65:ff97 with SMTP id l19-20020a7bc453000000b003a31c65ff97mr6046013wmi.180.1659009015199;
-        Thu, 28 Jul 2022 04:50:15 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003a2d6c623f3sm5639135wms.19.2022.07.28.04.50.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 04:50:14 -0700 (PDT)
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <20220728054202.6981-2-yu.tu@amlogic.com>
- <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
- <74cd833a-4773-eeb0-80aa-75ea1cdc093e@amlogic.com>
- <39395257-703b-a5e9-17c3-80f79f67fdc7@linaro.org>
- <ff582551-9661-4404-c00e-853bc60907cc@amlogic.com>
-User-agent: mu4e 1.8.6; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
- controller bindings
-Date:   Thu, 28 Jul 2022 13:48:14 +0200
-In-reply-to: <ff582551-9661-4404-c00e-853bc60907cc@amlogic.com>
-Message-ID: <1jbkt9focq.fsf@starbuckisacylon.baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 07:48:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F323167CAB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:48:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F89A61B77
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:48:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB467C433C1;
+        Thu, 28 Jul 2022 11:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659008907;
+        bh=g1ToiQ9ikGco4SSXQkZwptv+T6Xj8qP+/AAmx1sioq8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K5qvEpGP7bx3f+MSRtC197Sy96M+qHZEKBLeRJ6yALzvwptSVGk4MhRRKTUzg61DT
+         fhM5/DBwGp3ezfhgWTtrm2qNfYmJzR3xD393pU+RatyA5dwhPVXciYoIOHTi8Yzwaq
+         Ebw7TIa+8sYn4y9w2oCsCTpXd2VEO2EfZMjf5JlkyCTjsiUcuRXw/fvFJbJS5fZX+Y
+         xmihqrGCRF6C84KHLIqqW3jWBYr63ERJ8oA0Hn7VifYbOqR/WivB8RUf0w5QiK3fCi
+         Z9dt+i8a1H1YOqY3uo9AFhppnzac7+qs2Ytz4jH5gvRRlyxStW305cW33lTYzcYkMl
+         Lapv7GAuPoXSQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oH208-00AefZ-Bw;
+        Thu, 28 Jul 2022 12:48:24 +0100
+Date:   Thu, 28 Jul 2022 12:48:23 +0100
+Message-ID: <87wnbxwj94.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH] irqdomain: Fix mapping-creation race
+In-Reply-To: <20220728092710.21190-1-johan+linaro@kernel.org>
+References: <20220728092710.21190-1-johan+linaro@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: johan+linaro@kernel.org, tglx@linutronix.de, gregkh@linuxfoundation.org, robh@kernel.org, linux-kernel@vger.kernel.org, dtor@chromium.org, jonathanh@nvidia.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 28 Jul 2022 10:27:10 +0100,
+Johan Hovold <johan+linaro@kernel.org> wrote:
+> 
+> Parallel probing (e.g. due to asynchronous probing) of devices that share
+> interrupts can currently result in two mappings for the same hardware
+> interrupt to be created.
 
-On Thu 28 Jul 2022 at 18:19, Yu Tu <yu.tu@amlogic.com> wrote:
+And I thought nobody would be using shared interrupts anymore. Turns
+out people are still building braindead HW... :-/
 
-> On 2022/7/28 18:09, Krzysztof Kozlowski wrote:
->> [ EXTERNAL EMAIL ]
->> On 28/07/2022 12:05, Yu Tu wrote:
->>> Hi Krzysztof,
->>> 	Thanks for your reply.
->>>
->>> On 2022/7/28 16:41, Krzysztof Kozlowski wrote:
->>>> [ EXTERNAL EMAIL ]
->>>>
->>>> On 28/07/2022 07:42, Yu Tu wrote:
->>>>> Add new clock controller compatible and dt-bindings header for the
->>>>> Everything-Else domain of the S4 SoC.
->>>>>
->>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>>
->>>>
->>>>
->>>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>>> index c1abc53f9e91..f872d0c0c253 100644
->>>>> --- a/MAINTAINERS
->>>>> +++ b/MAINTAINERS
->>>>> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
->>>>>    F:	drivers/clk/meson/
->>>>>    F:	include/dt-bindings/clock/gxbb*
->>>>>    F:	include/dt-bindings/clock/meson*
->>>>> +F:	include/dt-bindings/clock/s4-clkc.h
->>>>>       ARM/Amlogic Meson SoC Crypto Drivers
->>>>>    M:	Corentin Labbe <clabbe@baylibre.com>
->>>>> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
->>>>> new file mode 100644
->>>>> index 000000000000..b686c8877419
->>>>> --- /dev/null
->>>>> +++ b/include/dt-bindings/clock/s4-clkc.h
->>>>
->>>> Filename with vendor prefix, so:
->>>> amlogic,s4-clkc.h
->>> It's fine with me. It's mainly Jerome's opinion.
->> To clarify: I understand such naming might bring inconsistency, but we
->> want to bring some order in the bindings directories. They keep growing
->> and at some point the model names might start conflicting.
-> If Jerome agrees, I will change it according to your opinion and make
-> another edition.
+> 
+> Add a serialising mapping mutex so that looking for an existing mapping
+> before creating a new one is done atomically.
+> 
+> Note that serialising the lookup and creation in
+> irq_create_mapping_affinity() would have been enough to prevent the
+> duplicate mapping, but that could instead cause
+> irq_create_fwspec_mapping() to fail when there is a race.
+> 
+> Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
+> Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
+> Cc: Dmitry Torokhov <dtor@chromium.org>
+> Cc: Jon Hunter <jonathanh@nvidia.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  kernel/irq/irqdomain.c | 46 +++++++++++++++++++++++++++++++-----------
+>  1 file changed, 34 insertions(+), 12 deletions(-)
+> 
+> diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> index 8fe1da9614ee..d263a7dd4170 100644
+> --- a/kernel/irq/irqdomain.c
+> +++ b/kernel/irq/irqdomain.c
+> @@ -22,6 +22,7 @@
+>  
+>  static LIST_HEAD(irq_domain_list);
+>  static DEFINE_MUTEX(irq_domain_mutex);
+> +static DEFINE_MUTEX(irq_mapping_mutex);
 
-I'm aligned with Krzysztof on this. Please add the vendor prefix.
+I'd really like to avoid a global mutex. At the very least this should
+be a per-domain mutex, otherwise this will serialise a lot more than
+what is needed.
 
-It was mistake to omit the vendor prefix. Unfortunately, I don't think
-we can fix the old bindings now.
+>  
+>  static struct irq_domain *irq_default_domain;
+>  
+> @@ -669,7 +670,7 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
+>  #endif
+>  
+>  /**
+> - * irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
+> + * __irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
+>   * @domain: domain owning this hardware interrupt or NULL for default domain
+>   * @hwirq: hardware irq number in that domain space
+>   * @affinity: irq affinity
+> @@ -679,9 +680,9 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
+>   * If the sense/trigger is to be specified, set_irq_type() should be called
+>   * on the number returned from that call.
+>   */
 
->
->> 
->> Best regards,
->> Krzysztof
->> .
+This comment should be moved to the exported function, instead of
+documenting something that nobody can call...
 
+> -unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+> -				       irq_hw_number_t hwirq,
+> -				       const struct irq_affinity_desc *affinity)
+> +static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
+> +						  irq_hw_number_t hwirq,
+> +						  const struct irq_affinity_desc *affinity)
+>  {
+>  	struct device_node *of_node;
+>  	int virq;
+> @@ -724,6 +725,19 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+>  
+>  	return virq;
+>  }
+> +
+> +unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+> +					 irq_hw_number_t hwirq,
+> +					 const struct irq_affinity_desc *affinity)
+> +{
+> +	unsigned int virq;
+> +
+> +	mutex_lock(&irq_mapping_mutex);
+> +	virq = __irq_create_mapping_affinity(domain, hwirq, affinity);
+> +	mutex_unlock(&irq_mapping_mutex);
+> +
+> +	return virq;
+> +}
+>  EXPORT_SYMBOL_GPL(irq_create_mapping_affinity);
+>  
+>  static int irq_domain_translate(struct irq_domain *d,
+> @@ -789,6 +803,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
+>  		type &= IRQ_TYPE_SENSE_MASK;
+>  
+> +	mutex_lock(&irq_mapping_mutex);
+> +
+>  	/*
+>  	 * If we've already configured this interrupt,
+>  	 * don't do it again, or hell will break loose.
+> @@ -801,7 +817,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  		 * interrupt number.
+>  		 */
+>  		if (type == IRQ_TYPE_NONE || type == irq_get_trigger_type(virq))
+> -			return virq;
+> +			goto out;
+>  
+>  		/*
+>  		 * If the trigger type has not been set yet, then set
+> @@ -810,26 +826,26 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  		if (irq_get_trigger_type(virq) == IRQ_TYPE_NONE) {
+>  			irq_data = irq_get_irq_data(virq);
+>  			if (!irq_data)
+> -				return 0;
+> +				goto err;
+>  
+>  			irqd_set_trigger_type(irq_data, type);
+> -			return virq;
+> +			goto out;
+>  		}
+>  
+>  		pr_warn("type mismatch, failed to map hwirq-%lu for %s!\n",
+>  			hwirq, of_node_full_name(to_of_node(fwspec->fwnode)));
+> -		return 0;
+> +		goto err;
+>  	}
+>  
+>  	if (irq_domain_is_hierarchy(domain)) {
+>  		virq = irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, fwspec);
+>  		if (virq <= 0)
+> -			return 0;
+> +			goto err;
+>  	} else {
+>  		/* Create mapping */
+> -		virq = irq_create_mapping(domain, hwirq);
+> +		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
+
+This rechecks for the existence of the mapping. Surely we can do a bit
+better by rejigging this (admittedly bitrotting) code.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

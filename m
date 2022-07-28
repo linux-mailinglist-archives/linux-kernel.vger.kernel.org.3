@@ -2,143 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C5558392D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C489583957
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbiG1HEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
+        id S234039AbiG1HPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbiG1HDZ (ORCPT
+        with ESMTP id S233501AbiG1HP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:03:25 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A875F9BF
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:03:13 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id m8so991962edd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:03:13 -0700 (PDT)
+        Thu, 28 Jul 2022 03:15:28 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B8A59265
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:15:26 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id i205-20020a1c3bd6000000b003a2fa488efdso2048865wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:15:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fDjEmDyORVH40LT30HT7nddNnjTd9U3ufOmG3gtdwn4=;
-        b=bhtAgngU0ARmVRA+ekvUAJt/91+Kyzk4BLE5J+upuCzSXKfnkw4CRLBDKZ+WYbLbaz
-         P4jz1l6MzKgopkdCduGCdcy4eKqeECcgE8bISqw9VUyMMzEiwta+BQahMbSk8jkNItHB
-         5AZNxbQ3Mqu8N4xD2GFEJ9+PQ0B9n3NppUEMs=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:subject:date:in-reply-to:message-id
+         :mime-version;
+        bh=AaIaSUDCvbW74aHuiO4CJrSTxDz4crTVOTtdXBqcE0U=;
+        b=AWbcHHbX5voPsqXsYc0lPhQLZ7zq2Rbg+WDm4j47FHMHXMKBPLuAwqpaMLT4oN34qS
+         R6hvle5W3TN4f3TJRhkhZx0QPFmqjX98W46tEqeGl2ss33pWsTUsz6ICWmUhi/rNGcp6
+         3eQgOfcF15Ov6JaO/BaW85eAfyYfbTZQOU7lHqyUe9RumDh0CPDhSAXX5tspMaURVBIN
+         hAIUu2L93pP5MlYjVltII27G+d2lmMvuyd0SOq/7MlSZeJoZH16sIqKEMA/AAaXCwDjZ
+         ZO3DlrFDankTYdhuu2q7oCaJtjXdqKBN2swatEdyWuhc0kJ1eFLYTZlGg6qxjCqabDjz
+         qUNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fDjEmDyORVH40LT30HT7nddNnjTd9U3ufOmG3gtdwn4=;
-        b=IlK3uoqwC2WyLVA/ySx2DZGpdK5f5BGBf9uah5Alol355zM0zwbrGHet/lm9zFN4P6
-         +48xK08ITRI+V0/YOueq1GsI5ScbL7C4/YzWTVHuF633wRMQ6gTOn8VW18wYpK5uKInb
-         2SmMka1YW/b//05lniXfQPusGsPWzyhvcNLjt6Htc33thj2t0szczh0Y9ssTwthCnrOD
-         3is7VAmgCOFJwJRFFPyWHdTd0ZyQ3zoWmj1lCeocgu4C1yOyt4nb9S3r0G0h0GA+HlHW
-         tvEg8Je7ccD37qpm/kUMrBWgEaPwV8qiJKjHSNnMI7pnd4ccDJq4dBcW+tgzVLEwXkDJ
-         4cyA==
-X-Gm-Message-State: AJIora/X5JiuyAJauhwcy4gxNOQUFDQ8pgXOVl4f55g38bI0St7wQRKF
-        kwhIoIl1+FdpO9TKaaVMUHXv2S36zC0eXg==
-X-Google-Smtp-Source: AGRyM1tiqzR09UHp1JH3MSCIvelLBjjOZqohNSPDse2yML5BPTWiji9/+KZTUNVZXouGXZpzgbFjSg==
-X-Received: by 2002:a05:6402:54:b0:43b:5cbd:d5db with SMTP id f20-20020a056402005400b0043b5cbdd5dbmr27268474edu.264.1658991792820;
-        Thu, 28 Jul 2022 00:03:12 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
-        by smtp.gmail.com with ESMTPSA id r18-20020aa7d152000000b0042de3d661d2sm154742edo.1.2022.07.28.00.03.11
+        h=x-gm-message-state:references:user-agent:from:to:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=AaIaSUDCvbW74aHuiO4CJrSTxDz4crTVOTtdXBqcE0U=;
+        b=GQsYVXtWBXqr4lWS08/Fp9zg7uWfTWL7RMvXi0nGVNBFV0HBm4qQhVXZLVoLsuGjrY
+         ghHwgjeEe79BH584H8Ge3phiSdy3OZivDLplUoUV7KP37QFDH4lbQ/QuLE8nlphewNhd
+         CvsyqkEgHia8e4Xe2J/PAOf8bV4Mn6fzk9ECjUwyj8YJU5MelXPgbLdDZM/enTDGjCpN
+         lnC960PKdHgexaKL2NPxOFDX+Ao4B9Vf6S32czJANkqUtcIJSYN7p+wmOkE/gzL/HSRg
+         n3L2g49a6eb1A76KQq1FapnoN5eD9xbOe5Kk83dWaIJWJ0y2yNJBZvInkARbB9MeIF8f
+         sgYw==
+X-Gm-Message-State: AJIora9oYQVUyHFypZQeFlPG3/vTByu5WintXJAC+6qEST5l1O44bg7+
+        ZFaDysAzC/f3ylyKI2Km6AQ+ig==
+X-Google-Smtp-Source: AGRyM1uBQSHcp5qkcijv00Bu7Y7/z1KirWW8lPysYxj5MYnLBGbrvNTmEd6qDPwVfOty8mtSm4vSMw==
+X-Received: by 2002:a05:600c:1289:b0:3a4:8401:5ced with SMTP id t9-20020a05600c128900b003a484015cedmr384142wmd.148.1658992524267;
+        Thu, 28 Jul 2022 00:15:24 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id n186-20020a1ca4c3000000b003a2d87aea57sm4519126wme.10.2022.07.28.00.15.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 00:03:12 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-Subject: [PATCH v4 7/7] MAINTAINERS: Add maintainer for the slcan driver
-Date:   Thu, 28 Jul 2022 09:02:54 +0200
-Message-Id: <20220728070254.267974-8-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220728070254.267974-1-dario.binacchi@amarulasolutions.com>
-References: <20220728070254.267974-1-dario.binacchi@amarulasolutions.com>
+        Thu, 28 Jul 2022 00:15:23 -0700 (PDT)
+References: <20220728054202.6981-1-yu.tu@amlogic.com>
+User-agent: mu4e 1.8.6; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH V2 0/3] Add S4 SoC clock controller driver
+Date:   Thu, 28 Jul 2022 09:08:44 +0200
+In-reply-to: <20220728054202.6981-1-yu.tu@amlogic.com>
+Message-ID: <1j8rodhfn9.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the suggestion of its author Oliver Hartkopp ([1]), I take over the
-maintainer-ship and add myself to the authors of the driver.
 
-[1] https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.net
+On Thu 28 Jul 2022 at 13:41, Yu Tu <yu.tu@amlogic.com> wrote:
 
-Suggested-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> 1. Add clock controller driver for S4 SOC.
+>
+> Yu Tu (3):
+>   dt-bindings: clk: meson: add S4 SoC clock controller bindings
+>   arm64: dts: meson: add S4 Soc clock controller in DT
+>   clk: meson: s4: add s4 SoC clock controller driver
+>
+> V1 -> V2: Change format as discussed in the email.
+>
+> Link:https://lore.kernel.org/linux-amlogic/20220708062757.3662-1-yu.tu@amlogic.com/
+>
+>  .../bindings/clock/amlogic,gxbb-clkc.txt      |    1 +
+>  MAINTAINERS                                   |    1 +
+>  arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |   11 +
+>  drivers/clk/meson/Kconfig                     |   15 +
+>  drivers/clk/meson/Makefile                    |    1 +
+>  drivers/clk/meson/s4.c                        | 4732 +++++++++++++++++
+>  drivers/clk/meson/s4.h                        |  296 ++
+>  include/dt-bindings/clock/s4-clkc.h           |  146 +
+>  8 files changed, 5203 insertions(+)
+>  create mode 100644 drivers/clk/meson/s4.c
+>  create mode 100644 drivers/clk/meson/s4.h
+>  create mode 100644 include/dt-bindings/clock/s4-clkc.h
+>
+>
+> base-commit: b293bc9286ee21824e93f0fcfed3b78fdfee01e6
 
----
+Please don't post until you have addressed *ALL* the comments from the
+previous version.
 
-Changes in v4:
-- Drop the patch "ethtool: add support to get/set CAN bit time register".
-- Drop the patch "can: slcan: add support to set bit time register (btr)".
-- Remove the RFC prefix from the series.
+At first glance, I can see that this is still a single driver for
+what is obviously 2 controllers with 2 register spaces. Simple comments
+like the "<< 2" in the register declaration have not been addressed either.
 
-Changes in v3:
-- Put the series as RFC again.
-- Pick up the patch "can: slcan: use KBUILD_MODNAME and define pr_fmt to replace hardcoded names".
-- Add the patch "ethtool: add support to get/set CAN bit time register"
-  to the series.
-- Add the patch "can: slcan: add support to set bit time register (btr)"
-  to the series.
-- Replace the link https://marc.info/?l=linux-can&m=165806705927851&w=2 with
-  https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.net.
-- Add the `Suggested-by' tag.
+Seeing that, I have not reviewed this version further.
+I won't until all the comments from v1 are either addressed or answered.
 
-Changes in v2:
-- Add the patch "MAINTAINERS: Add myself as maintainer of the SLCAN driver"
-  to the series.
-
- MAINTAINERS                        | 6 ++++++
- drivers/net/can/slcan/slcan-core.c | 1 +
- 2 files changed, 7 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c3fc5ff6ffb8..c82b6e74220e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18450,6 +18450,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git
- F:	include/linux/sl?b*.h
- F:	mm/sl?b*
- 
-+SLCAN CAN NETWORK DRIVER
-+M:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+L:	linux-can@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/can/slcan/
-+
- SLEEPABLE READ-COPY UPDATE (SRCU)
- M:	Lai Jiangshan <jiangshanlai@gmail.com>
- M:	"Paul E. McKenney" <paulmck@kernel.org>
-diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-index 45e521910236..f079c8f2296b 100644
---- a/drivers/net/can/slcan/slcan-core.c
-+++ b/drivers/net/can/slcan/slcan-core.c
-@@ -63,6 +63,7 @@ MODULE_ALIAS_LDISC(N_SLCAN);
- MODULE_DESCRIPTION("serial line CAN interface");
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Oliver Hartkopp <socketcan@hartkopp.net>");
-+MODULE_AUTHOR("Dario Binacchi <dario.binacchi@amarulasolutions.com>");
- 
- /* maximum rx buffer len: extended CAN frame with timestamp */
- #define SLCAN_MTU (sizeof("T1111222281122334455667788EA5F\r") + 1)
--- 
-2.32.0
-
+Regards
+Jerome

@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8168458368F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 03:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35878583691
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 03:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234231AbiG1Byq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 21:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S234358AbiG1B4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 21:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiG1Byo (ORCPT
+        with ESMTP id S229919AbiG1B4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 21:54:44 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6954F663;
-        Wed, 27 Jul 2022 18:54:42 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id e20so249511vkm.3;
-        Wed, 27 Jul 2022 18:54:42 -0700 (PDT)
+        Wed, 27 Jul 2022 21:56:07 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497AA4D833
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 18:56:04 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id n138so464659iod.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 18:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=OnjdniXbQp+HuZbyZX0sPLXHIblB/RAJDkONKRBrLrY=;
-        b=S+RVC01zHZZ1rm0K35cbsio28SU5krD18nblE4sldghkGMXMjQE6+Lm0Q5/k7u+pyB
-         BTyYRNIgA48TUZjLWYn5ikDzn+YCepnoe3mR9K9inA2r0EYy/9jpWxeyXtNGzsg2BObH
-         mAqcf/jf6YCZBeE5JTKEQBcmLM954F/dsnhGJO3/xoqoeg9kLO09/YKWvOHpEEGC9QLw
-         QTHzuFCXMKoa/anYzi3+XT+vxSQUiYWNe1koz7XuZRyyOTfTR1btFblVT/MCTLTn2r6f
-         6jpDaOoPnqUVtM/b1dTLlp8b+C9P9Pg8s8ufkL3WFynuLCuaDte4lj9AL66Hq7TbtQD3
-         81vQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ghVRaKpA3w2oJXBOA2AbjqUBZ9us/Teyabu+e6c3M8w=;
+        b=P/LsS62sFa9dYqH9nqR68yKc+0md1rd+9GzxPihHMXLNuy6QceFKGQPFjpi63cN7EE
+         D+1Pem5fb3OCJ5CRuxa+I/sIDP2Jrdimp0Ba5wvekG5X9ZyJVOnnUlUu6V7IvxPsclyd
+         qiw0iSggJ2uVuimajJekRU6MjFHvN/UlwmlExqM4hs+obx5yLkhSwffnc32fW3JxtuZT
+         /Z+oYhCNLcB3qPC33ErlAzxe78sjbWFUISMdmQi0Wn6Xz7SCHKqChU1NiiN6VqWp8S6y
+         zshHl5Rft47KXYIpU9ExCioyoXm62vW3d9IDleW+wBfyZKNdr3nyB/bizXcHBRz5vIgv
+         b7qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=OnjdniXbQp+HuZbyZX0sPLXHIblB/RAJDkONKRBrLrY=;
-        b=dc53IJXBpHmYDUFkd//5tJ//u2pSRJP+wvmMpxuY/ugumwSf1ftl5XNvsVDZGLR0L2
-         Q/YMzwXek11MbM1Sx6WSAbxtMays6woE3k4PTkBcAJHpi0DISvP2dt0bfsi0U9uxoAXB
-         FHC6ZWlUQZfwuLzTqHDngfiRzqr6jnoL47WUDoHKviytKCPrEAcN6uM/eYVAEAkmInjM
-         6p81x4okou09UR+OQkKSvR3bBi17iVkxvV6PaO0EGGYKbpjey+c7LX7HMOSpWpdEvcPJ
-         oBc07EXOsv67Qt8aQM9fGwBpayqg190jcNiCBBVHH3BCLvfuhugA7LBBQqFTljLDIlT4
-         QfDg==
-X-Gm-Message-State: AJIora9qvAyqVHXlTJCSqWi1v9QY4gFaqXbbgVG/yhUyfwN1nvNawMzE
-        cGr56nimsZ2AUHJELKQo24N7LZegCg1hACkBjJI=
-X-Google-Smtp-Source: AGRyM1uVZiRv75QwHcr+M//vqsxcbZXIus3XYgqL2kL/vJjYg4KpUPLi7Qao3+OB8dqTxwLZZfUPBXriY7HbhfOoJcY=
-X-Received: by 2002:a1f:ac15:0:b0:375:65d6:269c with SMTP id
- v21-20020a1fac15000000b0037565d6269cmr7966970vke.13.1658973281106; Wed, 27
- Jul 2022 18:54:41 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ghVRaKpA3w2oJXBOA2AbjqUBZ9us/Teyabu+e6c3M8w=;
+        b=KwcLYWAITJ3G+Se+AcHFClSb1ZbkSkTSU3b4f0fRgt6pwJFMxhogFwrpery+oYvyu0
+         H9sETT9ibrEUPauV5Gx2pqb6UVcVrtW8wcsJuo26Tg01tUN/C+fXEEeZKC/icNYOpjyX
+         7Ui1g33wWUuCNaAbbelLk1GqY7iR82k3TPGpJpKrreKBfFdFOq+5MCo7hbjWfmgWcqeP
+         pBFhh0VhGuYT0hBiG981PPbLABQgJgN1/beoyv0V5nhSqBuMyYkwQrvGoE3nEaKJGUig
+         dlmC3k2bMYZ6jE3QEG6q+fnoH1EjxbPuThuK6kacmIhp0dNjs2IrqkovsFwJdYPk9OC+
+         fSLw==
+X-Gm-Message-State: AJIora8nM1zo+EhCR9iKs+tZqxsX2H9k8RqkZFfs8Pf/FFoJ9MmwLgVj
+        F8DhR96mIaugZu9sBPiHNwvo8rGmqzsiz0xJVRYEaA==
+X-Google-Smtp-Source: AGRyM1vSKzJol69nakS/gv207Uye8H5wbZ232je3cmt5SST4SX3pvujSthz0USXF7QBZ+SB0TA1nk1mXEryMMhnUzbU=
+X-Received: by 2002:a05:6602:2b84:b0:67b:d178:38bb with SMTP id
+ r4-20020a0566022b8400b0067bd17838bbmr8574838iov.120.1658973363562; Wed, 27
+ Jul 2022 18:56:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722084314.17816-1-di.shen@unisoc.com> <CAJZ5v0iKWH2QkztewmJXiqGwnzBxCo5MWni9Q3VODwV+huvuQA@mail.gmail.com>
- <12043680.O9o76ZdvQC@kreacher> <CAHYJL4r85vyJ9GukmhVki8EHt2VTAr0549-DA4ND0WGQHWpGqA@mail.gmail.com>
- <CAHYJL4r9Mqv96dg+KaNa0Vh6_EuXSkMy7uLwDFYGMfZP9UTRfg@mail.gmail.com> <CAJZ5v0j9B7=3r=2tvtuhQyPV1egZJzQ=Yf8OKXTa+QJO0vO_xg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j9B7=3r=2tvtuhQyPV1egZJzQ=Yf8OKXTa+QJO0vO_xg@mail.gmail.com>
-From:   Di Shen <cindygm567@gmail.com>
-Date:   Thu, 28 Jul 2022 09:54:30 +0800
-Message-ID: <CAHYJL4obZYjPg-qQ4dMQKVzUe0Sf6ecvhVSLTtJpJeyFRsY_-A@mail.gmail.com>
-Subject: Re: [PATCH V2 1/1] thermal/sysfs: Clear cooling_device_stats_attr_group
- before initialized
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Di Shen <di.shen@unisoc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jeson.gao@unisoc.com, xuewen.yan@unisoc.com, ke.wang@unisoc.com
+References: <20220725083904.56552-1-huangjie.albert@bytedance.com>
+ <8735epf7j5.fsf@email.froward.int.ebiederm.org> <CABKxMyOwHC9ZhL9Gxt-MVg-sy3d1kqzPviQOH845rers7inX3Q@mail.gmail.com>
+In-Reply-To: <CABKxMyOwHC9ZhL9Gxt-MVg-sy3d1kqzPviQOH845rers7inX3Q@mail.gmail.com>
+From:   =?UTF-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
+Date:   Thu, 28 Jul 2022 09:55:52 +0800
+Message-ID: <CABKxMyMMghgyVk5S0-uyPp5uBPLdOMAMw7zW6q4vBHb_iJxrow@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH 0/4] faster kexec reboot
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-kbuild@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,133 +84,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ok, thanks.
-
-On Wed, Jul 27, 2022 at 10:20 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+=E9=BB=84=E6=9D=B0 <huangjie.albert@bytedance.com> =E4=BA=8E2022=E5=B9=B47=
+=E6=9C=8826=E6=97=A5=E5=91=A8=E4=BA=8C 13:53=E5=86=99=E9=81=93=EF=BC=9A
 >
-> On Wed, Jul 27, 2022 at 10:17 AM Di Shen <cindygm567@gmail.com> wrote:
+> Hi
+> Eric W. Biederman
+> Thank you for your advice and opinion, I am very honored
+>
+> Eric W. Biederman <ebiederm@xmission.com> =E4=BA=8E2022=E5=B9=B47=E6=9C=
+=8826=E6=97=A5=E5=91=A8=E4=BA=8C 01:04=E5=86=99=E9=81=93=EF=BC=9A
 > >
-> > Hi Rafael,
-> > I have tested this patch on our platform, and it works. Later, I will
-> > send the patch v3.
->
-> Well, no need.  I'll use the one that you've just tested.
->
-> Thanks!
->
->
-> > On Tue, Jul 26, 2022 at 3:39 PM Di Shen <cindygm567@gmail.com> wrote:
+> > Albert Huang <huangjie.albert@bytedance.com> writes:
+> >
+> > > From: "huangjie.albert" <huangjie.albert@bytedance.com>
 > > >
-> > > On Sat, Jul 23, 2022 at 2:42 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > > >
-> > > > On Friday, July 22, 2022 7:18:42 PM CEST Rafael J. Wysocki wrote:
-> > > > > On Fri, Jul 22, 2022 at 10:44 AM Di Shen <di.shen@unisoc.com> wrote:
-> > > > > >
-> > > > > > There's a space allocated for cooling_device_stats_attr_group
-> > > > > > within cooling_device_attr_groups. This space is shared by all
-> > > > > > cooling devices.
-> > > > >
-> > > > > That's correct.
-> > > > >
-> > > > > > If the stats structure of one cooling device successfully
-> > > > > > creates stats sysfs. After that, another cooling device fails
-> > > > > > to get max_states in cooling_device_stats_setup(). It can
-> > > > > > return directly without initializing the stats structure, but
-> > > > > > the cooling_device_stats_attr_group is still the attribute
-> > > > > > group of the last cooling device.
-> > > > >
-> > > > > I cannot parse the above, sorry.
-> > > > >
-> > > > > For example, how can a "stats structure of one cooling device" create
-> > > > > anything?   As a data structure, it is a passive entity, so it doesn't
-> > > > > carry out any actions.
-> > > > >
-> > > > > I think (but I am not sure) that you are referring to the error code
-> > > > > path in which the ->get_max_state() callback fails for a cooling
-> > > > > device after cooling_device_stats_setup() has completed successfully
-> > > > > for another one.
-> > > > >
-> > > > > > At this time, read or write stats sysfs nodes can cause kernel
-> > > > > > crash. Like the following, kernel crashed when
-> > > > > > 'cat time_in_state_ms'.
-> > > > > >
-> > > > > > [<5baac8d4>] panic+0x1b4/0x3c8
-> > > > > > [<9d287b0f>] arm_notify_die+0x0/0x78
-> > > > > > [<094fc22c>] __do_kernel_fault+0x94/0xa4
-> > > > > > [<3b4b69a4>] do_page_fault+0xd4/0x364
-> > > > > > [<23793e7a>] do_translation_fault+0x38/0xc0
-> > > > > > [<6e5cc52a>] do_DataAbort+0x4c/0xd0
-> > > > > > [<a28c16b8>] __dabt_svc+0x5c/0xa0
-> > > > > > [<747516ae>] _raw_spin_lock+0x20/0x60
-> > > > > > [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
-> > > > > > [<cb78325e>] dev_attr_show+0x38/0x64
-> > > > > > [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
-> > > > > > [<c0a843ab>] seq_read+0x244/0x620
-> > > > > > [<b316b374>] vfs_read+0xd8/0x218
-> > > > > > [<3aebf5fa>] sys_read+0x80/0xe4
-> > > > > > [<7cf100f5>] ret_fast_syscall+0x0/0x28
-> > > > > > [<08cbe22f>] 0xbe8c1198
-> > > > > >
-> > > > > > stats sysfs:
-> > > > > > phone:/sys/class/thermal/cooling_device2/stats # ls
-> > > > > > reset  time_in_state_ms  total_trans  trans_table
-> > > > > >
-> > > > > > The same as cat total_trans, trans_table, and echo reset.
-> > > >
-> > > > So does the (untested) patch below work too?
-> > > >
+> > > In many time-sensitive scenarios, we need a shorter time to restart
+> > > the kernel. However, in the current kexec fast restart code, there
+> > > are many places in the memory copy operation, verification operation
+> > > and decompression operation, which take more time than 500ms. Through
+> > > the following patch series. machine_kexec-->start_kernel only takes
+> > > 15ms
+> >
+> > Is this a tiny embedded device you are taking the timings of?
+> >
+> > How are you handling driver shutdown and restart?  I would expect those
+> > to be a larger piece of the puzzle than memory.
+>
+> There is no way to make the code universal in the time optimization here,
+> and various devices need to be customized, but we have some solutions to
+> achieve the maintenance and recovery of these devices,
+> especially the scanning and initialization of pci devices
+>
+> >
+> > My desktop can do something like 128GiB/s.  Which would suggest that
+> > copying 128MiB of kernel+initrd would take perhaps 10ms.  The SHA256
+> > implementation may not be tuned so that could be part of the performanc=
+e
+> > issue.  The SHA256 hash has a reputation for having fast
+> > implementations.  I chose SHA256 originally simply because it has more
+> > bits so it makes the odds of detecting an error higher.
+> >
+>
+> Yes, sha256 is a better choice, but if there is no memory copy between
+> kexec load
+> and kexec -e, and this part of the memory is reserved. Don't think
+> this part of memory will be changed.
+> Especially in virtual machine scenarios
+>
+
+hi  Eric :
+
+Do you know why this sha256 check is put here? I feel that it is
+better to put it in the system call of kexec -e.
+If the verification is not passed, the second kernel will not be
+started, and some prompt information will be
+printed at the same time, which seems to be better than when the
+second kernel is started.
+Doing the verification operation will be more friendly, and it can
+also reduce downtime.
+
+BR
+albert.
+
+> >
+> > If all you care about is booting a kernel as fast as possible it make
+> > make sense to have a large reserved region of memory like we have for
+> > the kexec on panic kernel.  If that really makes sense I recommend
+> > adding a second kernel command line option and a reserving second regio=
+n
+> > of reserved memory.  That makes telling if the are any conflicts simple=
+.
+> >
+>
+> I initially implemented re-adding a parameter and region, but I
+> figured out later
+> that it doesn't really make sense and would waste extra memory.
+>
+> >
+> > I am having a hard time seeing how anyone else would want these options=
+.
+> > Losing megabytes of memory simply because you might reboot using kexec
+> > seems like the wrong side of a trade-off.
+>
+> Reuse the memory reserved by the crash kernel? Why does it increase
+> memory consumption?
+>
+> >
+> > The CONFIG_KEXEC_PURGATORY_SKIP_SIG option is very misnamed.  It is not
+> > signature verification that is happening it is a hash verification.
+> > There are not encrypted bits at play.  Instead there is a check to
+> > ensure that the kernel has not been corrupted by in-flight DMA that som=
+e
+> > driver forgot to shut down.
+> >
+> Thanks for pointing that out.
+> but Even if the data is detected to have been changed, there is
+> currently no way to recover it.
+> I don't have a good understanding of this place yet. maybe for security r=
+easons=EF=BC=9F
+>
+>
+> > So you are building a version of kexec that if something goes wrong it
+> > could very easily eat your data, or otherwise do some very bad things
+> > that are absolutely non-trivial to debug.
+> >
+> > That the decision to skip the sha256 hash that prevents corruption is
+> > happening at compile time, instead of at run-time, will guarantee the
+> > option is simply not available on any general purpose kernel
+> > configuration.  Given how dangerous it is to skip the hash verification
+> > it is probably not a bad thing overall, but it is most definitely
+> > something that will make maintenance more difficult.
+> >
+>
+> Maybe parameters will be a better choice. What do you think ?
+>
+> >
+> > If done well I don't see why anyone would mind a uncompressed kernel
+> > but I don't see what the advantage of what you are doing is over using
+> > vmlinux is the build directory.  It isn't a bzImage but it is the
+> > uncompressed kernel.
+> >
+>
+>
+> > As I proof of concept I think what you are doing goes a way to showing
+> > that things can be improved.  My overall sense is that improving things
+> > the way you are proposing does not help the general case and simply add=
+s
+> > to the maintenance burden.
+>
+> I don't think so. The kernel startup time of some lightweight virtual
+> machines maybe
+> 100-200ms (start_kernel->init). But this kexec->start_kernel took more
+> than 500ms.
+> This is still valuable, and the overall code size is also very small.
+>
+> > Eric
+> >
 > > >
-> > > Yes, I agree with you. I will test it on our platform and give
-> > > a reply later. Thanks.
+> > > How to measure time:
 > > >
-> > > > ---
-> > > >  drivers/thermal/thermal_sysfs.c |   10 +++++++---
-> > > >  1 file changed, 7 insertions(+), 3 deletions(-)
-> > > >
-> > > > Index: linux-pm/drivers/thermal/thermal_sysfs.c
-> > > > ===================================================================
-> > > > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-> > > > +++ linux-pm/drivers/thermal/thermal_sysfs.c
-> > > > @@ -813,12 +813,13 @@ static const struct attribute_group cool
-> > > >
-> > > >  static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
-> > > >  {
-> > > > +       const struct attribute_group *stats_attr_group = NULL;
-> > > >         struct cooling_dev_stats *stats;
-> > > >         unsigned long states;
-> > > >         int var;
-> > > >
-> > > >         if (cdev->ops->get_max_state(cdev, &states))
-> > > > -               return;
-> > > > +               goto out;
-> > > >
-> > > >         states++; /* Total number of states is highest state + 1 */
-> > > >
-> > > > @@ -828,7 +829,7 @@ static void cooling_device_stats_setup(s
-> > > >
-> > > >         stats = kzalloc(var, GFP_KERNEL);
-> > > >         if (!stats)
-> > > > -               return;
-> > > > +               goto out;
-> > > >
-> > > >         stats->time_in_state = (ktime_t *)(stats + 1);
-> > > >         stats->trans_table = (unsigned int *)(stats->time_in_state + states);
-> > > > @@ -838,9 +839,12 @@ static void cooling_device_stats_setup(s
-> > > >
-> > > >         spin_lock_init(&stats->lock);
-> > > >
-> > > > +       stats_attr_group = &cooling_device_stats_attr_group;
-> > > > +
-> > > > +out:
-> > > >         /* Fill the empty slot left in cooling_device_attr_groups */
-> > > >         var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
-> > > > -       cooling_device_attr_groups[var] = &cooling_device_stats_attr_group;
-> > > > +       cooling_device_attr_groups[var] = stats_attr_group;
-> > > >  }
-> > > >
-> > > >  static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
-> > > >
-> > > >
-> > > >
-> > > --
-> > > Best regards,
+> > > c code:
+> > > uint64_t current_cycles(void)
+> > > {
+> > >     uint32_t low, high;
+> > >     asm volatile("rdtsc" : "=3Da"(low), "=3Dd"(high));
+> > >     return ((uint64_t)low) | ((uint64_t)high << 32);
+> > > }
+> > > assembly code:
+> > >        pushq %rax
+> > >        pushq %rdx
+> > >        rdtsc
+> > >        mov   %eax,%eax
+> > >        shl   $0x20,%rdx
+> > >        or    %rax,%rdx
+> > >        movq  %rdx,0x840(%r14)
+> > >        popq  %rdx
+> > >        popq  %rax
+> > > the timestamp may store in boot_params or kexec control page, so we c=
+an
+> > > get the all timestamp after kernel boot up.
+> > >
+> > > huangjie.albert (4):
+> > >   kexec: reuse crash kernel reserved memory for normal kexec
+> > >   kexec: add CONFING_KEXEC_PURGATORY_SKIP_SIG
+> > >   x86: Support the uncompressed kernel to speed up booting
+> > >   x86: boot: avoid memory copy if kernel is uncompressed
+> > >
+> > >  arch/x86/Kconfig                   | 10 +++++++++
+> > >  arch/x86/boot/compressed/Makefile  |  5 ++++-
+> > >  arch/x86/boot/compressed/head_64.S |  8 +++++--
+> > >  arch/x86/boot/compressed/misc.c    | 35 +++++++++++++++++++++++++---=
+--
+> > >  arch/x86/purgatory/purgatory.c     |  7 ++++++
+> > >  include/linux/kexec.h              |  9 ++++----
+> > >  include/uapi/linux/kexec.h         |  2 ++
+> > >  kernel/kexec.c                     | 19 +++++++++++++++-
+> > >  kernel/kexec_core.c                | 16 ++++++++------
+> > >  kernel/kexec_file.c                | 20 +++++++++++++++--
+> > >  scripts/Makefile.lib               |  5 +++++
+> > >  11 files changed, 114 insertions(+), 22 deletions(-)

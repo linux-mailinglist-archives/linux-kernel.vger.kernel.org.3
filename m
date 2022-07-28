@@ -2,123 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0FC583E3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E057583E3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbiG1MDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S237616AbiG1MDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbiG1MDE (ORCPT
+        with ESMTP id S236715AbiG1MD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:03:04 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8998C67151;
-        Thu, 28 Jul 2022 05:03:03 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id c3so1725019pfb.13;
-        Thu, 28 Jul 2022 05:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6nvKbT9kndzSOUcfK+zc9MvubXEZk6miyWHNHn+5OxY=;
-        b=f1YeSeTjLcomvltM6VYE8CROdkCKG4NTbFMbj45rMThgoM6sGFv8czsgRRZfgd1WKt
-         f/08GfGCfpugkNkzhZUBer6T79p1kpE4c4DXPGSZNsCf2T0QJ2VCkuWLqJo0ziYiPCDz
-         GvwVufYfxqJRU595/YjWWArmjF9unlseUWacHYEBZmo13XHJxCJ6tuyGAbG65R+7HwNr
-         uo2WTpmy2euBKPbcYPy28keUFAt/3oP9OJ1JFjEoaHfZYfyWUBB8/FpBtlv3XNF1hiO5
-         3uFGN7/p7PfTIf+xlNLn/R9PWIus6jG9WetHyv8CdccXU0FfYs4GlnzKyd9hXY1rfNE5
-         AbFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6nvKbT9kndzSOUcfK+zc9MvubXEZk6miyWHNHn+5OxY=;
-        b=C0+fM6FK8o5hemvJkcpS2lrO5toy6iD96j0HqQ8WkWxPt9uURaZ3e1FTOnTQNUZHiW
-         AHThJpUB+bnrRlCP3cYGy2ZyIhk74ycZt8UwNZruQwi0a21vhPa2R/q0paSQDHyCQvf2
-         +sy/AMU/XMT6GXozQNcha5PeVFBWkH9QTIrVxsYQlMe3amfMQTeix4gtPOlmF0qbOmtn
-         DsBCz05bCQhNnUF1ltKZlWfuMgmI11N2kv2qVr37/n6W4kkLupxsPqJPb5pZDc3nOU9U
-         PpSLjqIGPb38DNtl/ODGv+aIN+b/Wan37CvU6X7INknrn5HIXPJh05l6QEhmlJKLvq+i
-         C/aA==
-X-Gm-Message-State: AJIora+brUw6vrhrPJaqsfjwnUsWGbrqp1qUPWUq72jJvJS21GEY5AOl
-        qmWX6IvQugzoLdizGHPqvdbjK0Ghn5oOlw==
-X-Google-Smtp-Source: AGRyM1ufvExeCGCzYxqGycF0uLOFYtynrFUL0MSe6SOxjvtAeuwZiJkNue2cpzf3SNcK4og20Lnzyg==
-X-Received: by 2002:a65:6494:0:b0:419:9527:2a69 with SMTP id e20-20020a656494000000b0041995272a69mr22789010pgv.80.1659009782991;
-        Thu, 28 Jul 2022 05:03:02 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902a3cc00b0016397da033csm1108413plb.62.2022.07.28.05.03.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 05:03:02 -0700 (PDT)
-Message-ID: <271bddfa-9e48-d5f6-6147-af346d7946bf@gmail.com>
-Date:   Thu, 28 Jul 2022 20:02:53 +0800
+        Thu, 28 Jul 2022 08:03:26 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B599D69F38
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:03:24 -0700 (PDT)
+Received: from mail-ej1-f45.google.com ([209.85.218.45]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N33ZD-1nL2lr44jN-013O7J for <linux-kernel@vger.kernel.org>; Thu, 28 Jul
+ 2022 14:03:23 +0200
+Received: by mail-ej1-f45.google.com with SMTP id z23so2764534eju.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:03:22 -0700 (PDT)
+X-Gm-Message-State: AJIora8J+pdb9SgWvbAlwlJLv7bfeoJtSQk95HwSR40ZLbdxH3yOnZrF
+        LUIkbeeN7Q5NES+79rhrmpR79XsXUMn5X+9MBTA=
+X-Google-Smtp-Source: AGRyM1vbcZtXff9wdVPPzf+JJ956N9jBi6RVLMTg4p5oOr7chFDjRAgayypXIkN9s9OCY7Rbo+VZ/Wqd9spSTPDDM/I=
+X-Received: by 2002:a17:907:d0f:b0:72e:db1f:9b91 with SMTP id
+ gn15-20020a1709070d0f00b0072edb1f9b91mr21266735ejc.470.1659009802540; Thu, 28
+ Jul 2022 05:03:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] KVM: x86: Refresh PMU after writes to
- MSR_IA32_PERF_CAPABILITIES
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220727233424.2968356-1-seanjc@google.com>
- <20220727233424.2968356-2-seanjc@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20220727233424.2968356-2-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+ <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com> <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+ <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com> <CAK8P3a0w+_MLOjJAKMENe6MYvBcXWXSir47Hz34WbtdEeAmaBw@mail.gmail.com>
+ <4d010f40-6c4c-32c7-2772-1bbfa02c03b7@linaro.org> <CAK8P3a38uGGGLA4b2bi=v8cV6-dH5yEcvBYcwr5ChzkwMTX9_Q@mail.gmail.com>
+ <966a62da-52b6-1789-13d6-5fe06b62c7fe@marek.ca>
+In-Reply-To: <966a62da-52b6-1789-13d6-5fe06b62c7fe@marek.ca>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 28 Jul 2022 14:03:06 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
+Message-ID: <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
+To:     Jonathan Marek <jonathan@marek.ca>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:xVJOdBOsIQjuFIi3cL17M0Cl/DpUHhg5lxdtZ8F0Tq2wbkSDYZg
+ EwlpUXB3OkCZPbviUz0kKAr8fXZdM/fU9DLyoufpshmj/UykoipDpPKWv2dTDXgCdRVl2Ea
+ 6k81F4WUPKm9t4Q6nmCxzf+CasqEg6X+H51leVnxE1MyJMWtfgElQZFC5ctTZmiFXlVbHm+
+ rlFIp+5hKdfP2yaEOFnFQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mzPKANfprsg=:DNJlnpS/IZdYPb27FeAC+s
+ 6+CF8Ppc6Ye1hInlkg39qAcQ+YKu0EaBikfV270R/+w4i29ptbI1gvGfv5UigpClPwxW7wjGx
+ 4sr1PtEdazq+9RjkZwfrHrePYexJIhEI5p2rR3JMcFCaOq5L0KcVffe2inx5SLUgaRoxpIMLU
+ roZFpZ3Cor3iud2jQOvbWmxv+LiOSfwEWFNDT1eg/s3DLMtNbavmg1d8vdTyUZuG8WX+8AcQB
+ bFrBL6dEfHsPae2YUNydsfjVn2tLAKGPQkZVr8IV73MBTONigKyYwM7Ka7XhfrF4VAC3251k/
+ eqFSSJew6IiDg8oavtkSEi+lazwItoJdrzAhwhbHPEKWnDDB/Khx2uwt/leQVsK3jJlzk6Wfx
+ JWKW1U0YbjMQX31MFbEsliF2FlM76uMwmVjtDLUssxgijdIObHBvJwUwBRb1LguWkpoBsGL/D
+ JQJW4Vde5ol0ZdUZo7oF37U8qGSCa9muqf5BQIV6KqHoRUBRbL19bCqJgywGbOBsBt/UBdfFI
+ EZR5uKF6n8GaVdtEXpp5WhquIYkwB2w0LlYXJHkkPr/j3a392zRjgDzz1f5xiS/TUHmunM7cb
+ OV6MDZ43banzYulpTRlfjoeunDwfk6BxRgr6JjAzMKZUIBdOXN2VaLT9olL9S3YMmc4ggweoB
+ OK0mRHUQIFXIPNuKO8AjTODU6yU9yCPNmGrFZGAs7ulEgtvgx7lpE19XX/ee/KBvRXIhKZg9d
+ uAKTVYGbOgXUYdw9Bf7vKu/9Ss8mHRkTLS10AaFhKxHoYAtBpCJl3BMH+MZbKRJGDn+wFHvDe
+ ZZjZhgFMnz9SGUZKMLXFVKCyalmUDbL9Fnp2/XadIW3dhflajEsW2Euqqcd+xbabBpgoLgWG+
+ HVrql/XD53rJxfKiguRg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/7/2022 7:34 am, Sean Christopherson wrote:
-> Refresh the PMU if userspace modifies MSR_IA32_PERF_CAPABILITIES.  KVM
-> consumes the vCPU's PERF_CAPABILITIES when enumerating PEBS support, but
-> relies on CPUID updates to refresh the PMU.  I.e. KVM will do the wrong
-> thing if userspace stuffs PERF_CAPABILITIES _after_ setting guest CPUID.
+On Thu, Jul 28, 2022 at 1:57 PM Jonathan Marek <jonathan@marek.ca> wrote:
+> On 7/28/22 5:09 AM, Arnd Bergmann wrote:
+> > diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> > index 22b706350ead..f65c7737c2db 100644
+> > --- a/drivers/soundwire/qcom.c
+> > +++ b/drivers/soundwire/qcom.c
+> > @@ -1289,11 +1289,7 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+> >          data = of_device_get_match_data(dev);
+> >          ctrl->rows_index = sdw_find_row_index(data->default_rows);
+> >          ctrl->cols_index = sdw_find_col_index(data->default_cols);
+> > -#if IS_REACHABLE(CONFIG_SLIMBUS)
+> > -       if (dev->parent->bus == &slimbus_bus) {
+> > -#else
+> > -       if (false) {
+> > -#endif
+> > +       if (IS_ENABLED(CONFIG_SLIMBUS) && dev->parent->bus == &slimbus_bus) {
+> >                  ctrl->reg_read = qcom_swrm_ahb_reg_read;
+> >                  ctrl->reg_write = qcom_swrm_ahb_reg_write;
+> >                  ctrl->regmap = dev_get_regmap(dev->parent, NULL);
+> >
+>
+> This relies on the compiler optimizing out the reference to slimbus_bus,
+> which doesn't exist in the CONFIG_SLIMBUS=n case (not tested, but I
+> think this means an O0 build will fail?).
 
-Unwise userspace should reap its consequences if it does not break KVM or host.
+That is correct: We rely on this everywhere in the kernel, which is why
+it is impossible to build kernels with -O0.
 
-When a guest feature can be defined/controlled by multiple KVM APIs entries,
-(such as SET_CPUID2, msr_feature, KVM_CAP, module_para), should KVM
-define the priority of these APIs (e.g. whether they can override each other) ?
-
-Removing this ambiguity ensures consistency in the architecture and behavior of 
-all KVM features.
-Any further performance optimizations can be based on these finalized values as 
-you do.
-
-> 
-> Opportunistically fix a curly-brace indentation.
-> 
-> Fixes: c59a1f106f5c ("KVM: x86/pmu: Add IA32_PEBS_ENABLE MSR emulation for extended PEBS")
-> Cc: Like Xu <like.xu.linux@gmail.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/x86.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5366f884e9a7..362c538285db 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3543,9 +3543,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   			return 1;
->   
->   		vcpu->arch.perf_capabilities = data;
-> -
-> +		kvm_pmu_refresh(vcpu);
-
-I had proposed this diff but was met with silence.
-
->   		return 0;
-> -		}
-> +	}
->   	case MSR_EFER:
->   		return set_efer(vcpu, msr_info);
->   	case MSR_K7_HWCR:
+       Arnd

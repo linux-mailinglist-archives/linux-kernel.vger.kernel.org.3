@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D312E583ABB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B253A583ABC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235254AbiG1Ixo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S235109AbiG1Ixv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbiG1Ixj (ORCPT
+        with ESMTP id S234581AbiG1Ixt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:53:39 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF3C655AD
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:53:36 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id k11so1309413wrx.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:53:36 -0700 (PDT)
+        Thu, 28 Jul 2022 04:53:49 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1110965591
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:53:47 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id bn9so1301084wrb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:53:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DKQ0uiAhHEj5rPSCLVtiu1ddFQFOymPB/HshHkjwW4o=;
-        b=lmyJRyRdOIzd6r7FfTVyoxA4BbcI8gkgFLb6R2RQR6AfxKyjl6CZu8IVdu5GJL5R8c
-         mZWZ21mBEfLw/QazpTZ7gwBintF6/WwFgrNPD8ouh+Bjeu3ft08/VEUZSGLp9WkpsoPq
-         RlYuSo5LIR+IRaA6Om9ANfgxt/BZqIt8DuT8xuBOQCRpi5NqwBg0HLA91IuVK6fXYDaS
-         0xi7elTMf+mthzw24dntaDbvQcoVyBVCb1vKjl/xCMcNtHcnZZntijEh1XwnUjTIJJOS
-         Piz4snRmn1UD7dAm2+CkCYPgVEDqKnbroAh/IAFt2PLm5ie56M0g4fNC+Shd2hPADHVs
-         Bumw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=9AF0C8l8seSrzx2WmUBIWSdZqGWfFBtfpdLun9U6Kz8=;
+        b=mP/mmTrHM6/k6VQpQzfSYKo6wM/3/z+WB1b8AnfbQRmYSGYo2t1YFLoEixZuoBhuPa
+         UvwY/bfbiI1uveHGmETaK6nuicHscsF/pNv7VhlbF+eeKKvhO2fJwzdDDcLkTsaAWf97
+         /JUhjOFMU/gtHAeg84LBUq0TGc3iMe7bxaxkY6gVCzMumA1b6dkhX+4a5BdRjWSDQj8z
+         LTmPqw6LTmwqIYYlHgTuQdE0ynLn2ouVfuDmtpzyXT+qDxveLv1U8r7ZXkOn6EC3Rloz
+         fVgoWX3H2vNK2SGhXDa5k0WcYY9uXbdoAopMfF9+T77xzkIk5fZc99Fpi9boaQ1IL9fE
+         5ofw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DKQ0uiAhHEj5rPSCLVtiu1ddFQFOymPB/HshHkjwW4o=;
-        b=cKdfoFSNglsUTQNtkcki4eRQckzG8YOb5ZYV87ZOXNGL45kQgceLUJ3eutNduofCAn
-         8VFKiugmL5DSQ07y+/Sh920gYJpqzMz/h3qnil27l2GoUJTzczl/M1baGdcmV68Gjxih
-         O4YjMVs+spGwqsuqEb3ZysWIPdiaf4j7zGdAh362sZRfLFjFHukadGn/ZNk96HScMM3i
-         tHiSTyin0GRwnFy+1wunLlI8UnY/27hEM69TDeoJJbFApBM9luHweHwlKFj9rqktoDT6
-         iMxPbgjddCWSKBTfFRdsCYftYc0S0sbSB6y6X3bOnEHQZ0K8t0Wd96BZ2fplzkXxemlA
-         C/Og==
-X-Gm-Message-State: AJIora8LNCYVcW0xEwTK/uElclhDiC+Sm4VXEUmRheb1ziO7jy2AMdw5
-        VysirVDZeWAFn8KbW4S8liLXJA==
-X-Google-Smtp-Source: AGRyM1uY6i0/z9UNt4vPhLZFwJ2v7vJdjW5cSaAWVSrELo2mA/ch292sjdVdA9ywEp/ICseO/6wqew==
-X-Received: by 2002:a05:6000:1241:b0:21e:f1e1:2ca2 with SMTP id j1-20020a056000124100b0021ef1e12ca2mr1761007wrx.122.1658998414507;
-        Thu, 28 Jul 2022 01:53:34 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id s16-20020a5d4250000000b0021edf1c18b5sm310457wrr.93.2022.07.28.01.53.33
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=9AF0C8l8seSrzx2WmUBIWSdZqGWfFBtfpdLun9U6Kz8=;
+        b=ERNJuLA+bx+mutzMzB+vO4LYYSSQF27RQFRMjxSNM6p8Z0mdbXjqo7DlW9pmKfghqt
+         P2okbHvpfd5OgP08UfDl6GQcwu21WcnD1EaDt0BpMEdkxVcgnRgItljj/h0ObNMe1uNE
+         DWGsOMap27ylpvUwNwgHKK2YynRGMviMHXyib+iq4w86V1M2ZU8dxqHQfayVuB2mXvxw
+         rtvr56YZP03bmi5lpMFZPaEZNWUngnitjhGlyJ/yIsBALFp5v3s9Pm5as7IWxVI64uO8
+         XzprP3l4CZRtLZksOllgeCQDlLrFEhFSt9f7I5OfolHbmFWDc318VIWpdpPqZrwSmYsh
+         Sujg==
+X-Gm-Message-State: AJIora84hLRj4TMj2C+vZg0+tcsgcr3d9XNzsB72rcqJH3YCTS13y5mp
+        R5IRAp6rMWFl7TU3U5UnEg+Fhg==
+X-Google-Smtp-Source: AGRyM1tjAGtsAciOHE5CsBzVumOndSP4m4ERcdH7oyhmbdFq+OGEyGoruEpjxxeh3gBxCpR4A3Ahdw==
+X-Received: by 2002:a05:6000:1789:b0:21e:87cd:beba with SMTP id e9-20020a056000178900b0021e87cdbebamr13229704wrg.252.1658998425382;
+        Thu, 28 Jul 2022 01:53:45 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0? ([2a05:6e02:1041:c10:65a8:ebd8:4098:d9d0])
+        by smtp.googlemail.com with ESMTPSA id n18-20020a5d67d2000000b0020fff0ea0a3sm293465wrw.116.2022.07.28.01.53.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 01:53:34 -0700 (PDT)
-Message-ID: <4d010f40-6c4c-32c7-2772-1bbfa02c03b7@linaro.org>
-Date:   Thu, 28 Jul 2022 09:53:32 +0100
+        Thu, 28 Jul 2022 01:53:45 -0700 (PDT)
+Message-ID: <24250d03-b25f-e521-5abd-f36109885c36@linaro.org>
+Date:   Thu, 28 Jul 2022 10:53:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek
+ folder
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, John Garry <john.garry@huawei.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Marek <jonathan@marek.ca>
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
- <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
- <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
- <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
- <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com>
- <CAK8P3a0w+_MLOjJAKMENe6MYvBcXWXSir47Hz34WbtdEeAmaBw@mail.gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <CAK8P3a0w+_MLOjJAKMENe6MYvBcXWXSir47Hz34WbtdEeAmaBw@mail.gmail.com>
+To:     Balsam CHIHI <bchihi@baylibre.com>, rafael@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+References: <20220726135506.485108-1-bchihi@baylibre.com>
+ <20220726135506.485108-2-bchihi@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220726135506.485108-2-bchihi@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,80 +84,152 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Hi Balsam,
 
-On 28/07/2022 09:23, Arnd Bergmann wrote:
-> On Thu, Jul 28, 2022 at 10:06 AM John Garry <john.garry@huawei.com> wrote:
->>
->> trim list
+On 26/07/2022 15:55, Balsam CHIHI wrote:
+> Add Mediatek proprietary folder to upstream more thermal zone and cooler
+> drivers. Relocate the original thermal controller driver to it and rename
+> as soc_temp.c to show its purpose more clearly.
+
+I realize the Kconfig, Makefiles format are not consistent across the 
+boards. Before I fix this, you can comply to the format:
+
+drivers/thermal/Kconfig:
+
+menu "Mediatek thermal drivers"
+depends on ARCH_MEDIATEK || COMPILE_TEST
+source "drivers/thermal/mediatek/Kconfig"
+endmenu
+
+drivers/thermal/Makefile:
+
+-obj-$(CONFIG_MTK_THERMAL)      += mtk_thermal.o
++obj-y                          += mediatek
+
+drivers/thermal/mediatek/Kconfig:
+
+config MTK_SOC_THERMAL
+	tristate "Temperature sensor driver for MediaTek SoCs"
+	depends on HAS_IOMEM
+	depends on NVMEM
+	depends on RESET_CONTROLLER
+	help
+		Enable this option if you want to get SoC temperature
+		information for MediaTek platforms. This driver
+		configures thermal controllers to collect temperature
+		via AUXADC interface.
+
+drivers/thermal/mediatek/Makefile:
+
+obj-$(MTK_SOC_THERMAL)	+= soc_temp.o
+
+However, rename 'soc_temp' to something more SoC explicit, eg. 
+mtxxx_thermal.c
+
+Thanks
+
+   -- Daniel
+
+
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+
+> ---
+>   drivers/thermal/Kconfig                       | 14 ++++-------
+>   drivers/thermal/Makefile                      |  2 +-
+>   drivers/thermal/mediatek/Kconfig              | 23 +++++++++++++++++++
+>   drivers/thermal/mediatek/Makefile             |  1 +
+>   .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
+>   5 files changed, 29 insertions(+), 11 deletions(-)
+>   create mode 100644 drivers/thermal/mediatek/Kconfig
+>   create mode 100644 drivers/thermal/mediatek/Makefile
+>   rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
 > 
-> Adding a few other people for slimbus.
-> 
->> On 25/07/2022 13:51, Arnd Bergmann wrote:
->>>>> CONFIG_SLIMBUS=m
->>>> Config 5bd773242f75 added a kconfig "imply" on config SLIMBUS from
->>>> config SOUNDWIRE_QCOM, and this happens to mean that we don't explicitly
->>>> require config SLIMBUS enabled in the defconfig.
->>> That 'imply' looks like it was added to solve a problem using the old 'imply'
->>> semantics that are not what this keyword does today. I suspect it's still
->>> broken when CONFIG=SOUNDWIRE_QCOM=y and CONFIG_SLIBMUS=m,
->>> and the correct fix is to use a dependency like
->>>
->>>         depends on SLIMBUS || !SLIMBUS
->>>
->>> so the defconfig symbol should stay.
->>>
->>
->> JFYI, building for CONFIG_SOUNDWIRE_QCOM=y and CONFIG_SLIBMUS=m is ok.
->> The driver has a runtime check for CONFIG_SLIMBUS in qcom_swrm_probe().
->>
->> That implementation seems consistent with guidance in
->> kconfig-language.rst - so do you think that there is still a problem?
-> 
-> I see Vinod added the IS_REACHABLE() check, which makes it build, but
-> I think both the 'imply' and the IS_REACHABLE() are mistakes here, as they
-> are almost everywhere else.
-> 
->  From what I understand, the driver can actually use two different
-> back-ends, with slimbus being one of them. In the configuration
-> with CONFIG_SOUNDWIRE_QCOM=y and CONFIG_SLIBMUS=m,
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 0e5cc948373c..ecba8d6e313b 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -412,16 +412,10 @@ config DA9062_THERMAL
+>   	  zone.
+>   	  Compatible with the DA9062 and DA9061 PMICs.
+>   
+> -config MTK_THERMAL
+> -	tristate "Temperature sensor driver for mediatek SoCs"
+> -	depends on ARCH_MEDIATEK || COMPILE_TEST
+> -	depends on HAS_IOMEM
+> -	depends on NVMEM || NVMEM=n
+> -	depends on RESET_CONTROLLER
+> -	default y
+> -	help
+> -	  Enable this option if you want to have support for thermal management
+> -	  controller present in Mediatek SoCs
+> +menu "Mediatek thermal drivers"
+> +depends on ARCH_MEDIATEK || COMPILE_TEST
+> +source "drivers/thermal/mediatek/Kconfig"
+> +endmenu
+>   
+>   config AMLOGIC_THERMAL
+>   	tristate "Amlogic Thermal Support"
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index def8e1a0399c..3c00e864ad55 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -55,7 +55,7 @@ obj-y				+= st/
+>   obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+>   obj-y				+= tegra/
+>   obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
+>   obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+>   obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> new file mode 100644
+> index 000000000000..9c41e9079fc3
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Kconfig
+> @@ -0,0 +1,23 @@
+> +config MTK_THERMAL
+> +	tristate "MediaTek thermal drivers"
+> +	depends on THERMAL_OF
+> +	help
+> +		This is the option for MediaTek thermal software
+> +		solutions. Please enable corresponding options to
+> +		get temperature information from thermal sensors or
+> +		turn on throttle mechaisms for thermal mitigation.
+> +
+> +if MTK_THERMAL
+> +
+> +config MTK_SOC_THERMAL
+> +	tristate "Temperature sensor driver for MediaTek SoCs"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_CONTROLLER
+> +	help
+> +		Enable this option if you want to get SoC temperature
+> +		information for MediaTek platforms. This driver
+> +		configures thermal controllers to collect temperature
+> +		via AUXADC interface.
+> +
+> +endif
+> diff --git a/drivers/thermal/mediatek/Makefile b/drivers/thermal/mediatek/Makefile
+> new file mode 100644
+> index 000000000000..4b4cb04a358f
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Makefile
+> @@ -0,0 +1 @@
+> +obj-$(CONFIG_MTK_SOC_THERMAL)		+= soc_temp.o
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mediatek/soc_temp.c
+> similarity index 100%
+> rename from drivers/thermal/mtk_thermal.c
+> rename to drivers/thermal/mediatek/soc_temp.c
 
-w.r.t Qualcomm SoundWire Controller.
 
-There are two types of integrations at IP level.
-1> SoundWire Controller is part of Codec which is connected over 
-SlimBus. ex: SoCs SDM845 and older ones
-	All the read writes have to go via SlimBus physical layer.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-2> SoundWire Controller is part of Codec which is MMIO,ex: SM8250 and 
-newer SoCs. No SlimBus dependency.
-
-As we are using a common driver for this, we wanted to check if the 
-parent was a slimbus or not, to be able to select correct read/write 
-interfaces.
-
-rethinking about this approach, It should be doable to also derive this 
-information from compatible strings, Soundwire controller versions 1.3.0 
-and below are always of type 1 and the newer ones are type 2.
-
-So this could get rid of IS_REACHABLE check along with references to 
-slimbus_bus from driver.
-
-expressing the SlimBus dependency for type 1 should be either captured 
-using imply SLIMBUS or depends in Kconfig.
-
-
-> I think you can end up with a slimbus device being detected at
-> runtime, which gets passed to the built-in qcom driver, but that driver
-> then misdetects the bus because it is not linked against the
-> slimbus module. It then uses the incorrect code path, causing
-> unintended behavior.
-> 
-> The 'depends on SLIMBUS || !SLIMBUS' dependency would completely
-> avoid this issue and make the driver work correctly in each configuration.
-> 
->          Arnd
-
-
-Thanks,
-Srini
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,115 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862FF584836
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813CC584837
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbiG1WZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S231894AbiG1W2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbiG1WZU (ORCPT
+        with ESMTP id S229570AbiG1W2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:25:20 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F021A39C;
-        Thu, 28 Jul 2022 15:25:19 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id i8so3935798wro.11;
-        Thu, 28 Jul 2022 15:25:19 -0700 (PDT)
+        Thu, 28 Jul 2022 18:28:41 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FDF79ECC
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:28:40 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2eb7d137101so27462767b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:28:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zhQMD8WNvOQjT/U1dXD2LRPZHwffkL9Bm1xxBkXDodc=;
-        b=UR6fLSV9vHafCaddO1Qk21OI1NeVq6haLG9wZ0SD/mGCjSdUmOlvQQz5Tqis8R9IAL
-         LxFqQEH6nKTGDHk9DT7mM7KvTA61mQ2BrECGwWZgnbSNA43v8m6AxKK1R2AfzPhbEwg6
-         hIK1Uh0OK5St9g1NqYpVoO4AApEDIYvsp0GvpC1fnbD2VLZhbdAeW7prfxPYwDVwMiFT
-         W2ktKd1pksDRQmJfkeAH1fB4wzFfhGTa3cJ2uF8Vj8VqnTqQWoVGF8EqK3Dhn8pzapvR
-         +ybMC/qI3j0cctXbsIajI5jAl5dArUaYnStdywKPJlJHJ1MXPNeDsCCJYtnb44tSoF+v
-         y4/g==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ETr0ImHhwUdJX2BkgmsBul/UHH73JiSQwKeA9GsTDe0=;
+        b=RT02s468km4lLI9wYrRupqP5panMrSRtmFOmilNZOnKYGxIgV//8B59ZaEwcudiuhH
+         ZQuyQR4Gn8rpYmORnAEwGNk6lxCTt6YqFO9D52w1yIuhxxfdvA9MheEcKR9w6+x9L+/X
+         a8l8mNWkbXVfp17MgzRMC9JXzEP7IlSacLxjLeTtkGmy3nTeIah/OkHbgWse38L5Uu18
+         rAycKGCNxDl0uXP+Xgty6D1ztsJ7l7HqnhWoiWcL3o3h7o3RFu/emxmW3jt9qJ4JAFxq
+         8HXcns8C3sDF1NnrysKyaB/mPgXXSqoXoDXF8FqQoBeQOO7GlEYTn9MvIji1lH9OLBC8
+         A/TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zhQMD8WNvOQjT/U1dXD2LRPZHwffkL9Bm1xxBkXDodc=;
-        b=nKjdAT0bzv3xR+6k4iuzR34IyKanSxEYufphOue+GQRaynMQp18B2b03WoPdYg6oPz
-         St2skFNRvpCksOoufz4KprkInM6W/+eXMA++pz3RRgKTF2iSfph2MlNIUkYBKC5EEz8R
-         FHGAuEYk7YLUK3UmAqndpeIVzKb/uI9mfsHdmC9+RdOWI4sgehsRvfoU32Ej5eFJOqQ7
-         +SP6/eJHN65dcc5NHfrzSOqOhALqjhXpHY7QWvRjhLnsRAvHMf/h3Gv0sPaERniPdB39
-         Cta8HzVWB3NmAdIRkgRFRYVRk1op/yvkP7CeZrlEFhV3E/YA1UQJcqEYlmXajQJpUdJ3
-         O7+A==
-X-Gm-Message-State: ACgBeo0XZ0hGzVzZ0NeIIt9d8eMgIcw8W8FQKrn9TJMFbQCSUzYDxlMz
-        RER74V3mJX8VgSkGVOQAx9Y=
-X-Google-Smtp-Source: AA6agR5IDyzx1VeN0I77IjxK+eNJN7uyVZguAUOlCxa5sIyHOoL8qoXoewHvdsgsb7jgJXbMfIs7qQ==
-X-Received: by 2002:a5d:6b10:0:b0:21e:4bbd:e893 with SMTP id v16-20020a5d6b10000000b0021e4bbde893mr544856wrw.613.1659047118137;
-        Thu, 28 Jul 2022 15:25:18 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id s7-20020adfeb07000000b0021d6d9c0bd9sm1997314wrn.82.2022.07.28.15.25.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 15:25:17 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <2e60bd73-e4da-eb4e-4eae-e43be7fd5bcd@redhat.com>
-Date:   Fri, 29 Jul 2022 00:25:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 21/25] KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL errata
- handling out of setup_vmcs_config()
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-22-vkuznets@redhat.com> <YtnZmCutdd5tpUmz@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YtnZmCutdd5tpUmz@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ETr0ImHhwUdJX2BkgmsBul/UHH73JiSQwKeA9GsTDe0=;
+        b=l8+Lk8IOD9bXiwiJ13PkTlNRAj2SXNrYCI2ktXfjHjdZ14bMaH9QRkOIyx1rObw+QG
+         gZoO3Ow4JljKbygye+Nj+DgxiaCpGrYac+Y6uX5czhxw8ERdhOsSr68YXpAWyIr5Ohtp
+         4a0TEfZPZw3fLKDoPBtLNBE9K7J0osu4qeglHnsysTQfkngyrlj47b0SXDIBcEiSlPOS
+         dZ/0+Par4ACfq0gtjKVSrKdDOb+EiGq6CAshQq9V05o/Lc+PfG/GzN/zxYVrOh8jcBLv
+         1ATuwyxz+s+IYf6BsuHf0iTUzr296x3qKQphqOxgtRdM4GhZdo4CxuZX9Hx0x7pwST/5
+         yW2Q==
+X-Gm-Message-State: ACgBeo01sDWc9VkJk6K+QToXZeeaxdwvBnUh9mM6ky8KmPYRmiKKoqFb
+        BKFE31vEVYP2XhuVLE9saChrSXpJYM1R
+X-Google-Smtp-Source: AA6agR6HP7ek8z/XQavgHza6DQ1Q8SZSFxK/sHeUkjT0cmIJ2DbP2xQyJTxjwiVuy7pC5/UuoQWCobzDIKsa
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:fd09:96c3:28af:b08f])
+ (user=irogers job=sendgmr) by 2002:a25:f50a:0:b0:66f:4f74:1417 with SMTP id
+ a10-20020a25f50a000000b0066f4f741417mr642286ybe.64.1659047319851; Thu, 28 Jul
+ 2022 15:28:39 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:28:19 -0700
+Message-Id: <20220728222835.3254224-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+Subject: [PATCH v2 00/16] Compress the pmu_event tables
+From:   Ian Rogers <irogers@google.com>
+To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 00:56, Sean Christopherson wrote:
-> Except the errata are based on FMS and the FMS exposed to the L1 hypervisor may
-> not be the real FMS.
-> 
-> But that's moot, because they_should_  be fully emulated by KVM anyways; KVM
-> runs L2 with a MSR value modified by perf, not the raw MSR value requested by L1.
-> 
-> Of course KVM screws things up and fails to clear the flag in entry controls...
-> All exit controls are emulated so at least KVM gets those right.
+jevents.py creates a number of large arrays from the json events. The
+arrays contain pointers to strings that need relocating. The
+relocations have file size, run time and memory costs. These changes
+refactor the pmu_events API so that the storage of the pmu_event
+struct isn't exposed. The format is then changed to an offset within a
+combined big string, with adjacent pmu_event struct variables being
+next to each other in the string separated by \0 - meaning only the
+first variable of the struct needs its offset recording.
 
-Can you send this as a separate patch?
+Some related fixes are contained with the patches. The architecture
+jevents.py creates tables for can now be set by the JEVENTS_ARCH make
+variable, with a new 'all' that generates the events and metrics for
+all architectures.
 
-Paolo
+An example of the improvement to the file size on x86 is:
+no jevents - the same 19,788,464bytes
+x86 jevents - ~16.7% file size saving 23,744,288bytes vs 28,502,632bytes
+all jevents - ~19.5% file size saving 24,469,056bytes vs 30,379,920bytes
+default build options plus NO_LIBBFD=1.
 
-> Untested, but I believe KVM the fix is:
-> 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index d0e781c7ac72..76926147b672 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -2357,7 +2357,8 @@ static void prepare_vmcs02_early(struct vcpu_vmx *vmx, struct loaded_vmcs *vmcs0
->           * we can avoid VMWrites during vmx_set_efer().
->           */
->          exec_control = __vm_entry_controls_get(vmcs01);
-> -       exec_control |= vmcs12->vm_entry_controls;
-> +       exec_control |= (vmcs12->vm_entry_controls &
-> +                        ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL);
->          exec_control &= ~(VM_ENTRY_IA32E_MODE | VM_ENTRY_LOAD_IA32_EFER);
->          if (cpu_has_load_ia32_efer()) {
->                  if (guest_efer & EFER_LMA)
+I originally suggested fixing this problem in:
+https://lore.kernel.org/linux-perf-users/CAP-5=fVB8G4bdb9T=FncRTh9oBVKCS=+=eowAO+YSgAhab+Dtg@mail.gmail.com/
+
+v2. Split the substring folding optimization to its own patch and
+    comment tweaks as suggested by Namhyung Kim
+    <namhyung@kernel.org>. Recompute the file size savings with the
+    latest json events and metrics.
+
+Ian Rogers (16):
+  perf jevents: Simplify generation of C-string
+  perf jevents: Add JEVENTS_ARCH make option
+  perf jevent: Add an 'all' architecture argument
+  perf jevents: Remove the type/version variables
+  perf jevents: Provide path to json file on error
+  perf jevents: Sort json files entries
+  perf pmu-events: Hide pmu_sys_event_tables
+  perf pmu-events: Avoid passing pmu_events_map
+  perf pmu-events: Hide pmu_events_map
+  perf test: Use full metric resolution
+  perf pmu-events: Move test events/metrics to json
+  perf pmu-events: Don't assume pmu_event is an array
+  perf pmu-events: Hide the pmu_events
+  perf metrics: Copy entire pmu_event in find metric
+  perf jevents: Compress the pmu_events_table
+  perf jevents: Fold strings optimization
+
+ tools/perf/arch/arm64/util/pmu.c              |   4 +-
+ tools/perf/pmu-events/Build                   |   6 +-
+ .../arch/test/test_soc/cpu/metrics.json       |  64 +++
+ tools/perf/pmu-events/empty-pmu-events.c      | 204 +++++++-
+ tools/perf/pmu-events/jevents.py              | 485 +++++++++++++++---
+ tools/perf/pmu-events/pmu-events.h            |  40 +-
+ tools/perf/tests/expand-cgroup.c              |  25 +-
+ tools/perf/tests/parse-metric.c               |  77 +--
+ tools/perf/tests/pmu-events.c                 | 466 +++++++----------
+ tools/perf/util/metricgroup.c                 | 275 ++++++----
+ tools/perf/util/metricgroup.h                 |   5 +-
+ tools/perf/util/pmu.c                         | 139 ++---
+ tools/perf/util/pmu.h                         |   8 +-
+ tools/perf/util/s390-sample-raw.c             |  50 +-
+ 14 files changed, 1135 insertions(+), 713 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
+
+-- 
+2.37.1.455.g008518b4e5-goog
 

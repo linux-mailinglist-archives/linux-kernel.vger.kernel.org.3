@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231855847B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294BF5847BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiG1Vco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 17:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S232353AbiG1Vdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 17:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiG1Vcm (ORCPT
+        with ESMTP id S231486AbiG1Vdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 17:32:42 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A09C683FB;
-        Thu, 28 Jul 2022 14:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=dJwqq4OXPlmsjE2fwTHp8d7oWFSLWghbqXfczdjRCXA=; b=OesYrilz3qQq6gIUCpIbQECUFa
-        HUlSbdRLoxJAX6ZztEq1m3qgUdfHiDfP2RGg9lEcNVQz7f/r2X3+Hu1ThbhFX9THpEs+gINiizIUa
-        XIayyfOgK3ohOjZJ6o+pazb1MMM3cTw0ISgmCXod1c8BlrofpUOAMAt/PrI5YwAijY14=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oHB7U-00BqMl-BN; Thu, 28 Jul 2022 23:32:36 +0200
-Date:   Thu, 28 Jul 2022 23:32:36 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
-        Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next 3/4] net: phy: Add helper to derive the number
- of ports from a phy mode
-Message-ID: <YuMAdACnRKsL8/xD@lunn.ch>
-References: <20220728145252.439201-1-maxime.chevallier@bootlin.com>
- <20220728145252.439201-4-maxime.chevallier@bootlin.com>
+        Thu, 28 Jul 2022 17:33:33 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867577478C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:33:32 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id v16-20020a17090abb9000b001f25244c65dso6535643pjr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7Oc/bWNh4wSfrPUVGN+ae9wVp1cO7IaMu60kdS0UEJ0=;
+        b=bdWzyRDFqQ6bHrqG7NGUjjpofldwWnA5FJSctMR6m/RMzAiI1zGWzMMQFv8VtAQ2em
+         n4RdT29yNWrECbQHHLtZo0vSOKzR5zHDYLaUuyJknhQg2ei9lJKasCiScMSkm4FhyNxw
+         JgNdGjoY4D2SFaMmtwyDL3UXl1rMdN+O37fQ0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7Oc/bWNh4wSfrPUVGN+ae9wVp1cO7IaMu60kdS0UEJ0=;
+        b=rVpt/6e0YWaOs8nsXAB+HYWqaMANvbySXVmfUdSyzHP0P98ikk22uv6FFGtO/bJn8S
+         jAIAgo/jWZABfbSWoB2BSRa4RGpFQZLxVeLch/izPyS2ARAiHj4xSOQYYp9fdHMEQTyf
+         76lUwi/wg4dSXOds6SLKRGEMxzv7tphh1gCDlQJNDi5naRIeU/uacukRvjBkFFqYF8Dn
+         kCwFP8ox11uFQmpA87kGANU52GJkwRf49kUaimdTwExn3bYKMsfgXg3bOgydNPT4X2mW
+         P1ueXGNaQhl1gALNztSEi7vLJp6J4gjEHMfUUSVYme0pe0gI4ctZe+EskiKKBSftB+yI
+         2huQ==
+X-Gm-Message-State: ACgBeo0xwYQiq9kc0xZnZDJJlvxrERXdfUAXANDKNnfQo+C/pjgbASbt
+        TRUGa1chrDrNEcdKp3ysb66Bz5+Kz+QajA==
+X-Google-Smtp-Source: AA6agR4xOmrJNRtjUcXcNJExXEtJnz8QbF3P63CwItGjHnK9qM3n9r/mW8c2Op5tCD1R8cPB7gtwQA==
+X-Received: by 2002:a17:902:d716:b0:16d:be4:40f9 with SMTP id w22-20020a170902d71600b0016d0be440f9mr755944ply.146.1659044011752;
+        Thu, 28 Jul 2022 14:33:31 -0700 (PDT)
+Received: from moragues-cloud.c.googlers.com.com (252.157.168.34.bc.googleusercontent.com. [34.168.157.252])
+        by smtp.gmail.com with ESMTPSA id z1-20020a170902d54100b0016bf4428586sm1756930plf.208.2022.07.28.14.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 14:33:31 -0700 (PDT)
+From:   Bob Moragues <moragues@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     swboyd@chromium.org, mka@chromium.org, dianders@chromium.org,
+        Bob Moragues <moragues@chromium.org>,
+        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v3 1/2] dt-bindings: arm: qcom: document zoglin board
+Date:   Thu, 28 Jul 2022 14:33:20 -0700
+Message-Id: <20220728143215.v3.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728145252.439201-4-maxime.chevallier@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +int phy_interface_num_ports(phy_interface_t interface)
-> +{
-> +	switch (interface) {
-> +	case PHY_INTERFACE_MODE_NA:
-> +	case PHY_INTERFACE_MODE_INTERNAL:
-> +		return 0;
+Zoglin is a Hoglin Chromebook with SPI Flash reduced from 64MB to 8MB.
+Zoglin is identical to Hoglin except for the SPI Flash.
+The actual SPI Flash is dynamically probed at and not specified in DTS.
 
-I've not yet looked at how this is used. Returning 0 could have
-interesting effects i guess? INTERNAL clearly does have some sort of
-path between the MAC and the PHY, so i think 1 would be a better
-value. NA is less clear, it generally means Don't touch. But again,
-there still needs to be a path between the MAC and PHY, otherwise
-there would not be any to touch.
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Bob Moragues <moragues@chromium.org>
+---
 
-Why did you pick 0?
+Changes in v3:
+- Fixed Author
+- Fixed duplicate Signed-off-by
 
-> +
-> +	case PHY_INTERFACE_MODE_MII:
-> +	case PHY_INTERFACE_MODE_GMII:
-> +	case PHY_INTERFACE_MODE_TBI:
-> +	case PHY_INTERFACE_MODE_REVMII:
-> +	case PHY_INTERFACE_MODE_RMII:
-> +	case PHY_INTERFACE_MODE_REVRMII:
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +	case PHY_INTERFACE_MODE_RTBI:
-> +	case PHY_INTERFACE_MODE_XGMII:
-> +	case PHY_INTERFACE_MODE_XLGMII:
-> +	case PHY_INTERFACE_MODE_MOCA:
-> +	case PHY_INTERFACE_MODE_TRGMII:
-> +	case PHY_INTERFACE_MODE_USXGMII:
-> +	case PHY_INTERFACE_MODE_SGMII:
-> +	case PHY_INTERFACE_MODE_SMII:
-> +	case PHY_INTERFACE_MODE_1000BASEX:
-> +	case PHY_INTERFACE_MODE_2500BASEX:
-> +	case PHY_INTERFACE_MODE_5GBASER:
-> +	case PHY_INTERFACE_MODE_10GBASER:
-> +	case PHY_INTERFACE_MODE_25GBASER:
-> +	case PHY_INTERFACE_MODE_10GKR:
-> +	case PHY_INTERFACE_MODE_100BASEX:
-> +	case PHY_INTERFACE_MODE_RXAUI:
-> +	case PHY_INTERFACE_MODE_XAUI:
-> +		return 1;
-> +	case PHY_INTERFACE_MODE_QSGMII:
-> +	case PHY_INTERFACE_MODE_QUSGMII:
-> +		return 4;
-> +
-> +	default:
-> +		return 0;
-> +	}
-> +}
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Have you tried without a default: ? I _think_ gcc will then warn about
-missing enum values, which will help future developers when they add
-further values to the enum.
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 581485392404..63091df3cbb3 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -475,6 +475,7 @@ properties:
+ 
+       - description: Qualcomm Technologies, Inc. sc7280 CRD platform (newest rev)
+         items:
++          - const: google,zoglin
+           - const: google,hoglin
+           - const: qcom,sc7280
+ 
+-- 
+2.37.1.455.g008518b4e5-goog
 
-	Andrew

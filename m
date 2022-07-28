@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEFF5848CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5335848CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbiG1XxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 19:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
+        id S233351AbiG1Xw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 19:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiG1Xwu (ORCPT
+        with ESMTP id S231617AbiG1Xwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 28 Jul 2022 19:52:50 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB85A7171A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABB2071731;
         Thu, 28 Jul 2022 16:52:49 -0700 (PDT)
 Received: from localhost.localdomain (unknown [76.135.27.191])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D887820FE9AC;
-        Thu, 28 Jul 2022 16:52:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D887820FE9AC
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1622920FE9AF;
+        Thu, 28 Jul 2022 16:52:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1622920FE9AF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1659052369;
-        bh=AUgYkvSQU9ibc65r7fNJmBL+pnRrox56knfluC9Psp0=;
+        bh=HaSDfOxma22GjtN+QHmKmuwb7fowkhGpnjJEeEWHD1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YLdQu5vLfUh67N0cayijcX5/lq1FjeIDFtaKnK3fJZTpfjspOm3paWB1+5Lf6uxQQ
-         zeavhYYpiFLpbq/WOPoXbqWmQsDMUIgAwQ37OLQVxAX/iaoxBhrSR0FpbfFkdh9n/X
-         A3Dooz/2a0QT+AxJW4xu43Xxqp1VoqjLnvyMBSlU=
+        b=IDSBV9uuzKRNHwoO6GlvQi96BtvNyXgAz4hmeQ3SoHWgTlhfTdVOS1Tcj3L40RsuS
+         IQlildg0Z9sasvdYcs1qs+LO4imtcTyDrfiiSg3vF8wdJGdQB/mmCY95ZE72uT/N9i
+         Pg5GTptIYrD96jUTKpbPcrY3PggMGZEadWDT4Wus=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         mathieu.desnoyers@efficios.com
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 5/7] tracing/user_events: Register with trace namespace API
-Date:   Thu, 28 Jul 2022 16:52:39 -0700
-Message-Id: <20220728235241.2249-6-beaub@linux.microsoft.com>
+Subject: [RFC PATCH v2 6/7] tracing/user_events: Enable setting event limit within namespace
+Date:   Thu, 28 Jul 2022 16:52:40 -0700
+Message-Id: <20220728235241.2249-7-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220728235241.2249-1-beaub@linux.microsoft.com>
 References: <20220728235241.2249-1-beaub@linux.microsoft.com>
@@ -48,226 +48,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register user_events up to the trace namespace API to allow user
-programs to interface with isolated events when required. Each namespace
-will have their own user_events_status and user_events_data files that
-have the same ABI as before, however, the system name for events created
-will be different (user_events.<namespace_name> vs user_events).
+When granting non-admin users the ability to register and write data to
+user events they should have a limit imposed. Using the namespace
+options file, operators can change the limit of the events that are
+allowed to be created.
+
+There is also a new line in the user_events_status file to let users
+know the current limit (and to ask the operator for more if required).
+
+For example, to limit the namespace to only 256 events:
+echo user_events_limit=256 > options
+
+From within the namespace root:
+cat user_events_status
+...
+Limit: 256
 
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 ---
- kernel/trace/trace_events_user.c | 167 ++++++++++++++++++++++++++++++-
- 1 file changed, 166 insertions(+), 1 deletion(-)
+ kernel/trace/trace_events_user.c | 57 +++++++++++++++++++++++++++++---
+ 1 file changed, 52 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 44f9efd58af5..9694eee27956 100644
+index 9694eee27956..1dc88bbd04f9 100644
 --- a/kernel/trace/trace_events_user.c
 +++ b/kernel/trace/trace_events_user.c
-@@ -23,6 +23,10 @@
- #include "trace.h"
- #include "trace_dynevent.h"
+@@ -41,6 +41,7 @@
+ #define MAX_PAGES (1 << MAX_PAGE_ORDER)
+ #define MAX_BYTES (MAX_PAGES * PAGE_SIZE)
+ #define MAX_EVENTS (MAX_BYTES * 8)
++#define MAX_LIMIT (MAX_EVENTS - 1)
  
-+#ifdef CONFIG_TRACE_NAMESPACE
-+#include "trace_namespace.h"
-+#endif
-+
- #define USER_EVENTS_PREFIX_LEN (sizeof(USER_EVENTS_PREFIX)-1)
+ /* Limit how long of an event name plus args within the subsystem. */
+ #define MAX_EVENT_DESC 512
+@@ -85,6 +86,7 @@ struct user_event_group {
+ 	DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
+ 	refcount_t refcnt;
+ 	int id;
++	int reg_limit;
+ };
  
- #define FIELD_DEPTH_TYPE 0
-@@ -180,6 +184,18 @@ static void user_event_group_destroy(struct user_event_group *group)
- 	kfree(group);
- }
+ static DEFINE_HASHTABLE(group_table, 8);
+@@ -252,6 +254,13 @@ static struct user_event_group *user_event_group_create(const char *name,
+ 			goto error;
+ 	}
  
-+static void user_event_group_unlink(struct user_event_group *group)
-+{
-+	if (WARN_ON(refcount_read(&group->refcnt) != 1))
-+		pr_warn("user_event: Group unlink with more than 1 ref\n");
++	/*
++	 * Register limit is based on available events:
++	 * The ABI states event 0 is reserved, so the real max is the amount
++	 * of bits in the bitmap minus 1 (the reserved event slot).
++	 */
++	group->reg_limit = MAX_LIMIT;
 +
-+	mutex_lock(&group_mutex);
-+	hash_del(&group->node);
-+	mutex_unlock(&group_mutex);
-+
-+	user_event_group_destroy(group);
-+}
-+
- static char *user_event_group_system_name(const char *name)
+ 	group->pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
+ 
+ 	if (!group->pages)
+@@ -1276,8 +1285,7 @@ static int user_event_parse(struct user_event_group *group, char *name,
+ 			    char *args, char *flags,
+ 			    struct user_event **newuser)
  {
- 	char *system_name;
-@@ -262,6 +278,7 @@ static struct user_event_group *user_event_group_create(const char *name,
+-	int ret;
+-	int index;
++	int ret, index, limit;
+ 	u32 key;
+ 	struct user_event *user;
  
- 	return group;
- error:
-+	/* Hash table not added, safe to destroy vs unlink */
- 	if (group)
- 		user_event_group_destroy(group);
+@@ -1296,9 +1304,16 @@ static int user_event_parse(struct user_event_group *group, char *name,
+ 		return 0;
+ 	}
  
-@@ -1905,6 +1922,148 @@ static int create_user_tracefs(struct dentry *parent,
- 	return -ENODEV;
+-	index = find_first_zero_bit(group->page_bitmap, MAX_EVENTS);
++	/*
++	 * 0 is a reserved bit, so the real limit needs to be one higher.
++	 * An example of this is a limit of 1, bit 0 is always set. To make
++	 * this work, the limit must be 2 in this case (bit 1 will be set).
++	 */
++	limit = min(group->reg_limit + 1, (int)MAX_EVENTS);
++
++	index = find_first_zero_bit(group->page_bitmap, limit);
+ 
+-	if (index == MAX_EVENTS)
++	if (index == limit)
+ 		return -EMFILE;
+ 
+ 	user = kzalloc(sizeof(*user), GFP_KERNEL);
+@@ -1831,6 +1846,7 @@ static int user_seq_show(struct seq_file *m, void *p)
+ 	seq_printf(m, "Active: %d\n", active);
+ 	seq_printf(m, "Busy: %d\n", busy);
+ 	seq_printf(m, "Max: %ld\n", MAX_EVENTS);
++	seq_printf(m, "Limit: %d\n", group->reg_limit);
+ 
+ 	return 0;
+ }
+@@ -2010,13 +2026,44 @@ static int user_event_ns_remove(struct trace_namespace *ns)
+ 	return ret;
  }
  
-+#ifdef CONFIG_TRACE_NAMESPACE
-+static int user_event_ns_create(struct trace_namespace *ns)
-+{
-+	struct user_event_group *group;
-+	int ret;
++#define NS_EVENT_LIMIT_PREFIX "user_events_limit="
 +
-+	group = user_event_group_create(ns->name, ns->id);
-+
-+	if (!group)
-+		return -ENOMEM;
-+
-+	ret = create_user_tracefs(ns->dir, group);
-+
-+	user_event_group_release(group);
-+
-+	if (ret) {
-+		user_event_group_unlink(group);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int user_event_ns_remove(struct trace_namespace *ns)
-+{
+ static int user_event_ns_parse(struct trace_namespace *ns, const char *command)
+ {
+-	return -ECANCELED;
 +	struct user_event_group *group = user_event_group_find(ns->id);
-+	struct user_event *user;
-+	struct hlist_node *tmp;
-+	int i, ret = 0;
++	int len, value, ret = -ECANCELED;
 +
 +	if (!group)
-+		return -ENOENT;
++		return -ECANCELED;
 +
-+	/*
-+	 * Lock out finding this namespace while we are doing this so that
-+	 * user programs trying to open a file owned by this group will block
-+	 * until we are done here. The user program upon unblocking will then
-+	 * fail to find the group if we removed it.
-+	 */
-+	mutex_lock(&group_mutex);
-+
-+	/* Ensure we have the only reference */
-+	if (refcount_read(&group->refcnt) != 2) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+
-+	/*
-+	 * At this point no more files can be opened by user space programs
-+	 * while we are holding the group_mutex (they'll block on group_mutex).
-+	 * To ensure other parts of the kernel aren't registering something we
-+	 * also grab the group register mutex as an extra precaution.
-+	 *
-+	 * The events might be being recorded, which will result in their
-+	 * being busy and we'll bail out.
-+	 *
-+	 * NOTE: event_mutex is held, locking reg_mutex could deadlock so we
-+	 * must try to lock it and treat as busy if we cannot.
-+	 */
-+	if (!mutex_trylock(&group->reg_mutex)) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+
-+	hash_for_each_safe(group->register_table, i, tmp, user, node) {
-+		if (!user_event_last_ref(user)) {
-+			ret = -EBUSY;
-+			break;
++	len = str_has_prefix(command, NS_EVENT_LIMIT_PREFIX);
++	if (len && !kstrtouint(command + len, 0, &value)) {
++		if (value <= 0 || value > MAX_LIMIT) {
++			ret = -EINVAL;
++			goto out;
 +		}
 +
-+		ret = destroy_user_event(user);
-+
-+		if (ret)
-+			break;
++		group->reg_limit = value;
++		ret = 0;
++		goto out;
 +	}
-+
-+	mutex_unlock(&group->reg_mutex);
 +out:
-+	mutex_unlock(&group_mutex);
-+
 +	user_event_group_release(group);
-+
-+	if (!ret)
-+		user_event_group_unlink(group);
 +
 +	return ret;
-+}
-+
-+static int user_event_ns_parse(struct trace_namespace *ns, const char *command)
-+{
-+	return -ECANCELED;
-+}
-+
-+static int user_event_ns_show(struct trace_namespace *ns, struct seq_file *m)
-+{
-+	return 0;
-+}
-+
-+static bool user_event_ns_is_busy(struct trace_namespace *ns)
-+{
+ }
+ 
+ static int user_event_ns_show(struct trace_namespace *ns, struct seq_file *m)
+ {
 +	struct user_event_group *group = user_event_group_find(ns->id);
-+	struct user_event *user;
-+	int i;
-+	bool busy = false;
 +
 +	if (!group)
-+		return false;
++		return 0;
 +
-+	/*
-+	 * Quick check to ensure all events aren't busy:
-+	 * The actual remove will do a more exhaustive check including
-+	 * finding if any outstanding files are opened, etc.
-+	 *
-+	 * NOTE: event_mutex is held, locking reg_mutex could deadlock so we
-+	 * must try to lock it and treat as busy if we cannot.
-+	 */
-+	if (!mutex_trylock(&group->reg_mutex))
-+		return true;
-+
-+	hash_for_each(group->register_table, i, user, node) {
-+		if (!user_event_last_ref(user)) {
-+			busy = true;
-+			break;
-+		}
-+	}
-+
-+	mutex_unlock(&group->reg_mutex);
++	seq_printf(m, "%s%d\n", NS_EVENT_LIMIT_PREFIX, group->reg_limit);
 +
 +	user_event_group_release(group);
-+
-+	return busy;
-+}
-+
-+static struct trace_namespace_operations user_event_ns_ops = {
-+	.create = user_event_ns_create,
-+	.remove = user_event_ns_remove,
-+	.parse = user_event_ns_parse,
-+	.show = user_event_ns_show,
-+	.is_busy = user_event_ns_is_busy,
-+};
-+#endif
-+
- static int __init trace_events_user_init(void)
- {
- 	int ret;
-@@ -1918,7 +2077,8 @@ static int __init trace_events_user_init(void)
- 
- 	if (ret) {
- 		pr_warn("user_events could not register with tracefs\n");
--		user_event_group_destroy(root_group);
-+		user_event_group_release(root_group);
-+		user_event_group_unlink(root_group);
- 		root_group = NULL;
- 		return ret;
- 	}
-@@ -1926,6 +2086,11 @@ static int __init trace_events_user_init(void)
- 	if (dyn_event_register(&user_event_dops))
- 		pr_warn("user_events could not register with dyn_events\n");
- 
-+#ifdef CONFIG_TRACE_NAMESPACE
-+	if (trace_namespace_register(&user_event_ns_ops))
-+		pr_warn("user_events could not register with namespaces\n");
-+#endif
 +
  	return 0;
  }

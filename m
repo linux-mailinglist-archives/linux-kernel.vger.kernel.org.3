@@ -2,224 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5968E583EEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A594583EF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238680AbiG1Mem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
+        id S238709AbiG1MgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235098AbiG1Mel (ORCPT
+        with ESMTP id S235098AbiG1Mf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:34:41 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AC06AA39;
-        Thu, 28 Jul 2022 05:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659011676; x=1690547676;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NpqsG0b27gN4zLFhtffwbPF59H321Xp5P+60EfiMSG4=;
-  b=MfJDIYSvPYW9WRSUOQI7htpoyjLxefPIrH2vAasQhdWl4xlpWHqrgJY5
-   bsFULllTwPyInQ+GHdp9HKDb1fReTafxxL11/HDX0x6Yby9GrDb8khutr
-   jM4X2W117hDSYUGpSw7YvXF57dnuZKJYdG50mJLLhFNkPaY04DY/gLcxo
-   cVKY7k+b61wNIrOk6Qk3nkmdtNK4c2K13XyeUp9Mwz88WVh6iPu/tqRPv
-   WEx+yhMObXPqEGZ+bBw4VLEP+ItEw5q8agz7zLHY2blyoCERF/aBojVZS
-   ui5iZi3igr6rzUSg30/pmfe7+fK8ln9xivVV5WKKuH92k7APMU0vv5q/s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="314289670"
-X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
-   d="scan'208";a="314289670"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 05:34:36 -0700
-X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
-   d="scan'208";a="628873855"
-Received: from maurocar-mobl2.ger.corp.intel.com (HELO maurocar-mobl2) ([10.251.211.191])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 05:34:33 -0700
-Date:   Thu, 28 Jul 2022 14:34:30 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH v3 0/6] drm/i915: reduce TLB performance
- regressions
-Message-ID: <20220728143430.0d0d875a@maurocar-mobl2>
-In-Reply-To: <YuJ8K7W50VeHNAGX@alfio.lan>
-References: <cover.1658924372.git.mchehab@kernel.org>
-        <YuJ8K7W50VeHNAGX@alfio.lan>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 28 Jul 2022 08:35:58 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078AF65D78
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:35:57 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31f1d1c82c8so17614417b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l6kv977iX0DxQe8GqSszxDwkV+ebVuYMRRbZ1g3snjc=;
+        b=v7uH8UZVPUY1DgE+baRwICn8k4lVtu4x39Wor3Siqsh5ebSZO6yD/Yux6yzwiRQH9Y
+         t7flcF5rbKQPtcSbqdAeCfIh5F1wzgKosuS4A66Nj5mS1FxzuVEwlJAQYDZU7/KLY1DZ
+         2bgWnL258OJuEzxrf4rPJ1VBLSie8koqO4vryM6xiJa+AKDMODACMzTsJHAbIjpcwgpw
+         2V0FI9iCw+jkrjnWnc37TQ2neLspwkUEXgKYrEi2hIlRLqJJsI4LjdkWSZ+av1ph3O11
+         9Na9kpX65gzqHrNLlBXA/KxWoMeQ9bx8QVqllwcC7REyDJf6KlnV6WTSOUlGR6qT/Zym
+         /O9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l6kv977iX0DxQe8GqSszxDwkV+ebVuYMRRbZ1g3snjc=;
+        b=OfyOMP6jntciM94sLHDzHiURAvedSvTA+BzocE7yw0UVXOn02TR2ki98Wk1SLpc/J9
+         11Ka7n+YK2y0eohwd4OLi37o5UQqKhM84sz1vF81DuU5Q3BLkQmMhZh+zuDPnO1IPEDn
+         SEKCqGEDoKzAKFKydzBxXfmLCQRChmQfYKfT/vDXSuqzIDZaYlSuqc2h3HkN2BqQDc1r
+         AnFYUuKXDqf1ywQ7DPpn35f1FNLkdluU5N4LGW7PEu7jnWr/tHNfzP7Ybb1R6WlE2EpU
+         wHGXcH8dnwnwviFywmDybkOlapA8FPvTR+FVj0F2GVKna00wxp+VHYrERTHWlv6+rnAK
+         ULGA==
+X-Gm-Message-State: ACgBeo1OoDJki9KI7kOjkmO3esXCh6IXnrcVZRJRGh+eOLZYRVamC2WC
+        14+mgkuLqhU8ACq20ahqSFKw51BMAiPD4Yl9EMN8Tw==
+X-Google-Smtp-Source: AA6agR58r+D9gfe5rfd35JLF7P8cV3HvNf9eNcgRgUXYK/mn7Yvty9e/DoSp30m6KaxnofxrnwjnlxkivXa0NbBncqw=
+X-Received: by 2002:a81:6a07:0:b0:323:8614:10c2 with SMTP id
+ f7-20020a816a07000000b00323861410c2mr17175ywc.191.1659011756195; Thu, 28 Jul
+ 2022 05:35:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com> <20220726143005.wt4be7yo7sbd3xut@bogus>
+ <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com> <20220726154138.74avqs6iqlzqpzjk@bogus>
+ <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com> <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
+ <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com> <20220727132437.pjob3z2nyxsuxgam@bogus>
+ <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com> <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com>
+In-Reply-To: <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com>
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date:   Thu, 28 Jul 2022 15:35:20 +0300
+Message-ID: <CAC_iWjLWBJLth26ifFfHvimProHZu_w5SjQNWSH_D2Fs_JXjbA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andi,
+Hi Maximilian
 
-On Thu, 28 Jul 2022 14:08:11 +0200
-Andi Shyti <andi.shyti@linux.intel.com> wrote:
+On Thu, 28 Jul 2022 at 13:48, Maximilian Luz <luzmaximilian@gmail.com> wrote:
+>
+> On 7/28/22 08:03, Ilias Apalodimas wrote:
+> > Hi all,
+> >
+> > On Wed, 27 Jul 2022 at 16:24, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >>
+> >> On Wed, Jul 27, 2022 at 03:03:49PM +0200, Maximilian Luz wrote:
+> >>>
+> >>> Is there really a good way around it?
+> >>
+> >> Yes rely on the firmware preferably auto discover, if that is not an option,
+> >> how about query. It seem to be working in your case.
+> >
+> > That's a good point.  We have a similar situation with some Arm
+> > devices and U-Boot.  Let me try to explain a bit.
+> >
+> > There's code plugged in in OP-TEE and U-Boot atm which allows you to
+> > store EFI variables on an RPMB.  This is a nice alternative if your
+> > device doesn't have any other secure storage,  however it presents
+> > some challenges after ExitBootServices, similar to the ones you have
+> > here.
+> >
+> > The eMMC controller usually lives in the non-secure world.  OP-TEE
+> > can't access that, so it relies on a userspace supplicant to perform
+> > the RPMB accesses.  That supplicant is present in U-Boot and
+> > Get/SetVariable works fine before ExitBootServices.  Once Linux boots,
+> >   the 'U-Boot supplicant' goes away and we launch the linux equivalent
+> > one from userspace.  Since variable accessing is a runtime service and
+> > it still has to go through the firmware we can't use those anymore
+> > since U-Boot doesn't preserve the supplicant, the eMMC driver and the
+> > OP-TEE portions needed in the runtime section(and even if it did we
+> > would now have 2 drivers racing to access the same hardware).  Instead
+> > U-Boot copies the variables in runtime memory and
+> > GetVariable/GetNextVariable still works, but SetVariable returns
+> > EFI_UNSUPPORTED.
+> >
+> > I've spent enough time looking at available solutions and although
+> > this indeed breaks the EFI spec, something along the lines of
+> > replacing the runtime services with ones that give you direct access
+> > to the secure world, completely bypassing the firmware is imho our
+> > least bad option.
+>
+> This sounds very similar to what Qualcomm may be doing on some devices.
+> The TrEE interface allows for callbacks and there are indications that
+> one such callback-service is for RPMB. I believe that at least on some
+> platforms, Qualcomm also stores UEFI variables in RPMB and uses the same
+> uefisecapp interface in combination with RPMB listeners installed by the
+> kernel to access them.
+>
+> > I have an ancient branch somewhere that I can polish up and send an
+> > RFC [1],  but the way I enabled that was to install an empty config
+> > table from the firmware.  That empty table is basically an indication
+> > to the kernel saying "Hey I can't store variables, can you do that for
+> > me".
+> >
+> > Is there any chance we can do something similar on that device (or
+> > find a reasonable way of inferring that we need to replace some
+> > services).  That way we could at least have a common entry point to
+> > the kernel and leave out the DT changes.
+> >
+> > [1] https://git.linaro.org/people/ilias.apalodimas/net-next.git/log/?h=setvar_rt_optee_3
+>
+> I would very much like to avoid the need for special bootloaders. The
+> devices we're talking about are WoA devices, meaning they _should_
+> ideally boot just fine with EFI and ACPI.
 
-> Hi Mauro,
-> 
-> Pushed in drm-intel-gt-next.
+I've already responded to following email, but I'll repeat it here for
+completeness. It's not a special bootloader.  It's the opposite, it's
+a generic UEFI compliant bootloader which takes advantage of the fact
+EFI is extensible. We are doing something very similar in how we load
+our initrd via the EFI_LOAD_FILE2 protocol.  Whether Qualcomm can add
+that to their bootloaders is a different topic though.  But at some
+point we need to draw a line than keep overloading the DT because a
+vendor decided to go down it's own path.
 
-Thank you!
+>
+>  From an end-user perspective, it's annoying enough that we'll have to
+> stick with DTs for the time being due to the use of PEPs in ACPI. I
+> really don't want to add some special bootloader for fixups to that.
+> Also, this would just move the problem from kernel to bootloader.
 
-I submitted two additional patches moving the TLB code into its own file,
-and adding the documentation for it, as agreed during patch 5/6 review:
+But it *is* a bootloader problem.  The bootloader is aware of the fact
+that it can't provide runtime services for X reasons and that's
+exactly why we are trying to set EFI_RT_PROPERTIES_TABLE correctly
+from the firmware.  All we are doing is install a config table to tell
+the OS "I can't do that, can you find a way around it?".
 
-	https://patchwork.freedesktop.org/series/106806/
+Regards
+/Ilias
 
-That should make easier to maintain TLB-related code and have such
-functions properly documented.
-
-Regards,
-Mauro
-
-
-> 
-> Thanks,
-> Andi
-> 
-> On Wed, Jul 27, 2022 at 02:29:50PM +0200, Mauro Carvalho Chehab wrote:
-> > Doing TLB invalidation cause performance regressions, like:
-> > 	[424.370996] i915 0000:00:02.0: [drm] *ERROR* rcs0 TLB invalidation did not complete in 4ms!
-> > 
-> > As reported at:
-> > 	https://gitlab.freedesktop.org/drm/intel/-/issues/6424
-> > 
-> > as this is an expensive operation. So, reduce the need of it by:
-> >   - checking if the engine is awake;
-> >   - checking if the engine is not wedged;
-> >   - batching operations.
-> > 
-> > Additionally, add a workaround for a known hardware issue on some GPUs.
-> > 
-> > In order to double-check that this series won't be introducing any regressions,
-> > I used this new IGT test:
-> > 
-> > https://patchwork.freedesktop.org/patch/495684/?series=106757&rev=1
-> > 
-> > Checking the results for 3 different patchsets, on Broadwell:
-> > 
-> > 1) On the top of drm-tip (2022y-07m-14d-08h-35m-36) - e. g. with TLB
-> > invalidation and serialization patches:
-> > 
-> > 	$ sudo build/tests/gem_exec_tlb|grep Subtest
-> > 	Subtest close-clear: SUCCESS (10.490s)
-> > 	Subtest madv-clear: SUCCESS (10.484s)
-> > 	Subtest u-unmap-clear: SUCCESS (10.527s)
-> > 	Subtest u-shrink-clear: SUCCESS (10.506s)
-> > 	Subtest close-dumb: SUCCESS (10.165s)
-> > 	Subtest madv-dumb: SUCCESS (10.177s)
-> > 	Subtest u-unmap-dumb: SUCCESS (10.172s)
-> > 	Subtest u-shrink-dumb: SUCCESS (10.172s)
-> > 
-> > 2) With the new version of the batch TLB invalidation patches from this series:
-> > 
-> > 	$ sudo build/tests/gem_exec_tlb|grep Subtest
-> > 	Subtest close-clear: SUCCESS (10.483s)
-> > 	Subtest madv-clear: SUCCESS (10.495s)
-> > 	Subtest u-unmap-clear: SUCCESS (10.545s)
-> > 	Subtest u-shrink-clear: SUCCESS (10.508s)
-> > 	Subtest close-dumb: SUCCESS (10.172s)
-> > 	Subtest madv-dumb: SUCCESS (10.169s)
-> > 	Subtest u-unmap-dumb: SUCCESS (10.174s)
-> > 	Subtest u-shrink-dumb: SUCCESS (10.176s)
-> > 
-> > 3) Changing the TLB invalidation routine to do nothing[1]:
-> > 
-> > 	$ sudo ~/freedesktop-igt/build/tests/gem_exec_tlb|grep Subtest
-> > 	(gem_exec_tlb:1958) CRITICAL: Test assertion failure function check_bo, file ../tests/i915/gem_exec_tlb.c:384:
-> > 	(gem_exec_tlb:1958) CRITICAL: Failed assertion: !sq
-> > 	(gem_exec_tlb:1958) CRITICAL: Found deadbeef in a new (clear) buffer after 3 tries!
-> > 	(gem_exec_tlb:1956) CRITICAL: Test assertion failure function check_bo, file ../tests/i915/gem_exec_tlb.c:384:
-> > 	(gem_exec_tlb:1956) CRITICAL: Failed assertion: !sq
-> > 	(gem_exec_tlb:1956) CRITICAL: Found deadbeef in a new (clear) buffer after 89 tries!
-> > 	(gem_exec_tlb:1957) CRITICAL: Test assertion failure function check_bo, file ../tests/i915/gem_exec_tlb.c:384:
-> > 	(gem_exec_tlb:1957) CRITICAL: Failed assertion: !sq
-> > 	(gem_exec_tlb:1957) CRITICAL: Found deadbeef in a new (clear) buffer after 256 tries!
-> > 	(gem_exec_tlb:1960) CRITICAL: Test assertion failure function check_bo, file ../tests/i915/gem_exec_tlb.c:384:
-> > 	(gem_exec_tlb:1960) CRITICAL: Failed assertion: !sq
-> > 	(gem_exec_tlb:1960) CRITICAL: Found deadbeef in a new (clear) buffer after 845 tries!
-> > 	(gem_exec_tlb:1961) CRITICAL: Test assertion failure function check_bo, file ../tests/i915/gem_exec_tlb.c:384:
-> > 	(gem_exec_tlb:1961) CRITICAL: Failed assertion: !sq
-> > 	(gem_exec_tlb:1961) CRITICAL: Found deadbeef in a new (clear) buffer after 1138 tries!
-> > 	(gem_exec_tlb:1954) CRITICAL: Test assertion failure function check_bo, file ../tests/i915/gem_exec_tlb.c:384:
-> > 	(gem_exec_tlb:1954) CRITICAL: Failed assertion: !sq
-> > 	(gem_exec_tlb:1954) CRITICAL: Found deadbeef in a new (clear) buffer after 1359 tries!
-> > 	(gem_exec_tlb:1955) CRITICAL: Test assertion failure function check_bo, file ../tests/i915/gem_exec_tlb.c:384:
-> > 	(gem_exec_tlb:1955) CRITICAL: Failed assertion: !sq
-> > 	(gem_exec_tlb:1955) CRITICAL: Found deadbeef in a new (clear) buffer after 1794 tries!
-> > 	(gem_exec_tlb:1959) CRITICAL: Test assertion failure function check_bo, file ../tests/i915/gem_exec_tlb.c:384:
-> > 	(gem_exec_tlb:1959) CRITICAL: Failed assertion: !sq
-> > 	(gem_exec_tlb:1959) CRITICAL: Found deadbeef in a new (clear) buffer after 2139 tries!
-> > 	Dynamic subtest smem0 failed.
-> > 	**** DEBUG ****
-> > 	(gem_exec_tlb:1944) DEBUG: 2M hole:200000 contains poison:6b6b6b6b
-> > 	(gem_exec_tlb:1944) DEBUG: Running writer for 200000 at 300000 on bcs0
-> > 	(gem_exec_tlb:1944) DEBUG: Closing hole:200000 on rcs0, sample:deadbeef
-> > 	(gem_exec_tlb:1944) DEBUG: Rechecking hole:200000, sample:6b6b6b6b
-> > 	****  END  ****
-> > 	Subtest close-clear: FAIL (10.434s)
-> > 	Subtest madv-clear: SUCCESS (10.479s)
-> > 	Subtest u-unmap-clear: SUCCESS (10.512s)
-> > 
-> > In summary, the test does properly detect fail when TLB cache invalidation doesn't happen,
-> > as shown at result (3). It also shows that both current drm-tip and drm-tip with this series
-> > applied don't have TLB invalidation cache issues.
-> > 
-> > [1] I applied this patch on the top of drm-tip:
-> > 
-> > 	diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-> > 	index 68c2b0d8f187..0aefcd7be5e9 100644
-> > 	--- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> > 	+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> > 	@@ -930,0 +931,3 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
-> > 	+	// HACK: don't do TLB invalidations!!!
-> > 	+	return;
-> > 	+
-> > 
-> > Regards,
-> > Mauro
-> > 
-> > Chris Wilson (4):
-> >   drm/i915/gt: Ignore TLB invalidations on idle engines
-> >   drm/i915/gt: Invalidate TLB of the OA unit at TLB invalidations
-> >   drm/i915/gt: Skip TLB invalidations once wedged
-> >   drm/i915/gt: Batch TLB invalidations
-> > 
-> > Mauro Carvalho Chehab (2):
-> >   drm/i915/gt: document with_intel_gt_pm_if_awake()
-> >   drm/i915/gt: describe the new tlb parameter at i915_vma_resource
-> > 
-> >  .../gpu/drm/i915/gem/i915_gem_object_types.h  |  3 +-
-> >  drivers/gpu/drm/i915/gem/i915_gem_pages.c     | 25 +++---
-> >  drivers/gpu/drm/i915/gt/intel_gt.c            | 77 +++++++++++++++----
-> >  drivers/gpu/drm/i915/gt/intel_gt.h            | 12 ++-
-> >  drivers/gpu/drm/i915/gt/intel_gt_pm.h         | 11 +++
-> >  drivers/gpu/drm/i915/gt/intel_gt_types.h      | 18 ++++-
-> >  drivers/gpu/drm/i915/gt/intel_ppgtt.c         |  8 +-
-> >  drivers/gpu/drm/i915/i915_vma.c               | 33 ++++++--
-> >  drivers/gpu/drm/i915/i915_vma.h               |  1 +
-> >  drivers/gpu/drm/i915/i915_vma_resource.c      |  9 ++-
-> >  drivers/gpu/drm/i915/i915_vma_resource.h      |  6 +-
-> >  11 files changed, 163 insertions(+), 40 deletions(-)
-> > 
-> > -- 
-> > 2.36.1
-> >   
+>
+> If you have any suggestions for another way of detecting this, please
+> feel free to share. I, unfortunately, don't.
+>
+> Regards,
+> Max

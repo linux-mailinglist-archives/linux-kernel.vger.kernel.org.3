@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AACE58423A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5DA58426A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiG1OxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S229698AbiG1O6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiG1OxB (ORCPT
+        with ESMTP id S232340AbiG1O5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:53:01 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6045D0FA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:53:00 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id n206so2672523oia.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OzaFTfFjJcBqeTt4+aAXn7s/cwrwl9JZ8wjMvkdATBg=;
-        b=hAYopeDIjkC3heXdVb/Lb9okyGlITFJJJnujN8M3uPUVG75NLrD8xgCza//DxNNjmD
-         P04P+KqPxvocSYLdyw3W/z2Cdqkah7HM1rz/h5jvJVvsj71F/rKJioHG0PoS8rI2x3Me
-         2wj1DIpCedWMNpM+ctFq14ojwxhr7uIjOtlYE=
+        Thu, 28 Jul 2022 10:57:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D93246A49B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659020195;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ow7cxV/Atc87f2QLcR9gN0+95qXSVO5SPHOy85HIOrM=;
+        b=TBcVhfDQMIAe+vWG+S3gh0eMhO4+4OMaBPYegSEWMsv8yhW4PRfyrHOTvISxCwAnMoIOHH
+        5SBMytCrPPgzu6uFR2ym2JZNUObM83u5HuvsIL2btR9hUP2+rtECq+5d1cEpmvtLwSE5AE
+        NCCr3bA/to+96fTNBl0GKmbOzkQ/8v8=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-600-vr3C8Yz4N3Kk8HBTE12YhQ-1; Thu, 28 Jul 2022 10:56:33 -0400
+X-MC-Unique: vr3C8Yz4N3Kk8HBTE12YhQ-1
+Received: by mail-ej1-f71.google.com with SMTP id qw22-20020a1709066a1600b0072f43c1f59bso706959ejc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:56:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=OzaFTfFjJcBqeTt4+aAXn7s/cwrwl9JZ8wjMvkdATBg=;
-        b=mUG9EbDRsdkKNUfp5RHypm+/u4OFDCE+vG2xbUmn8FQLasKzNVHQZrbJc3WnhSx68l
-         yBv5y7nVl0BUZ4CcusDN/l4sQj0Tqb5BBGyg/DM8I0g5T5VMmV7iSPyzaTr7XErTtvHx
-         fOEZPGg9/WNHYK/9Wufhh1j0jQpRTfF0OTPOIQci4//PsbDhL9r5bQjWFJ4kHQ6NhRG+
-         smWk/FuJYrpJfs8o/7EedAaa2p5GbqigOs7yb7uxCgVhUQ46WzEGWmEESCRnZWWjJmC8
-         UN3W2JxxBe//+W78rUy60K1+r7NaQYUd0/HiZ+etf6b5Ybv73X7YiWtPS1aySdWl4EWi
-         4kyg==
-X-Gm-Message-State: AJIora86D5miA0/6AD3qt935t2OBLAK/NZaG2FZW8x5HxSoZiqU+YaP5
-        /fZTIwx2MqV/jVmIgKSmKeobng==
-X-Google-Smtp-Source: AGRyM1u4oe9L4dQ9fEMwdz3b4J9ov/Jni73YxJ8sfm2poCcNqkLa2HDNpw2dtDnRVfo6k26hkLBUPA==
-X-Received: by 2002:a05:6808:23c2:b0:33a:ad0e:f85e with SMTP id bq2-20020a05680823c200b0033aad0ef85emr4071998oib.203.1659019979967;
-        Thu, 28 Jul 2022 07:52:59 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id d184-20020aca36c1000000b00339e6212ea7sm321607oia.55.2022.07.28.07.52.59
+        bh=Ow7cxV/Atc87f2QLcR9gN0+95qXSVO5SPHOy85HIOrM=;
+        b=1kchiu7ZlgKSgoOYIVSfyahNys+j07gCIX6tFL/90mfpREja0Ov/QSS53yOIo/l6iX
+         PqwLl4anaY3thBZsd4ao64ruj+LNFX7oBqjXMU/W2w7vsWxaBRw2d4FQN1WAQrH9yWl/
+         byqJofH/CbPRcl4PgyCmdp62ci7929p0sMNdj6CJ+SV/gepRisYffe/jHJupG5gzWLFa
+         JssYYspWikBauQFsASOfbVWiw5SSWhJaA4d8hzUwt47QW4wAD9W3Pdr62tyw+7+2Xl1Z
+         5/gxgLjoNtOdMEHzhhTTzNaFSH5IrA32aoc0ov5p6boo/IAqagGepb+UlXjmZxGavVzG
+         /4gg==
+X-Gm-Message-State: AJIora+IsyVgiYcJAEjXzddBt2KtMvdPNimJ3CEtt9wE28TZOSk4TT01
+        CwQF4IU+iX8dYji2FZveNwl7tE8ZrJw4Gc+ES5IoAyJitYPFSaQBI5XRm1x6Op1L8XzuIIV9s9o
+        CxUg2kp9EXlE1tH/PQm+SbozW
+X-Received: by 2002:a05:6402:428a:b0:42e:8f7e:1638 with SMTP id g10-20020a056402428a00b0042e8f7e1638mr27739881edc.228.1659020192255;
+        Thu, 28 Jul 2022 07:56:32 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tDmdcEEoul6TEaJrWO7TmsyTDEwAQLTQHfD/I1YBrvGdzgxhGW04Dbh9agWYJX6WNHPzo8Kg==
+X-Received: by 2002:a05:6402:428a:b0:42e:8f7e:1638 with SMTP id g10-20020a056402428a00b0042e8f7e1638mr27739865edc.228.1659020192019;
+        Thu, 28 Jul 2022 07:56:32 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:4b40:2ee8:642:1aff:fe31:a15c? ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id l24-20020a056402029800b0043a7293a03dsm820031edv.7.2022.07.28.07.56.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 07:52:59 -0700 (PDT)
-Subject: Re: [PATCH 4.9 00/26] 4.9.325-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220727160959.122591422@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <75abf2b3-b6f6-1c8f-ab1f-8533e09804b2@linuxfoundation.org>
-Date:   Thu, 28 Jul 2022 08:52:58 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 28 Jul 2022 07:56:31 -0700 (PDT)
+Message-ID: <f44b703b-dc53-932a-6701-00d553fe56d0@redhat.com>
+Date:   Thu, 28 Jul 2022 16:56:30 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220727160959.122591422@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 00/10] drm: use idr_init_base() over idr_init() if
+ applicable
 Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, emma@anholt.net,
+        daniel@ffwll.ch, airlied@linux.ie, christian.koenig@amd.com
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220701185303.284082-1-dakr@redhat.com>
+ <165901911294.5946.5075667196143577988.b4-ty@cerno.tech>
+ <20220728144413.nebc2js26vlwovr3@penduick>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <20220728144413.nebc2js26vlwovr3@penduick>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,29 +85,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 10:10 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.325 release.
-> There are 26 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.325-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On 7/28/22 16:44, Maxime Ripard wrote:
+> On Thu, Jul 28, 2022 at 04:41:41PM +0200, Maxime Ripard wrote:
+>> On Fri, 1 Jul 2022 20:52:53 +0200, dakr@redhat.com wrote:
+>>> From: Danilo Krummrich <dakr@redhat.com>
+>>>
+>>> This patch series initializes IDRs with idr_init_base(&idr, 1) rather than
+>>> idr_init(&idr) in case for the particular IDR no IDs < 1 are ever requested -
+>>> this avoids unnecessary tree walks.
+>>>
+>>> Danilo Krummrich (10):
+>>>    drm/amdgpu: use idr_init_base() to initialize mgr->ctx_handles
+>>>    drm/amdgpu: use idr_init_base() to initialize fpriv->bo_list_handles
+>>>    drm: use idr_init_base() to initialize master->magic_map
+>>>    drm: use idr_init_base() to initialize master->lessee_idr
+>>>    drm: use idr_init_base() to initialize mode_config.object_idr
+>>>    drm: use idr_init_base() to initialize mode_config.tile_idr
+>>>    drm/sis: use idr_init_base() to initialize dev_priv->object_idr
+>>>    drm/v3d: use idr_init_base() to initialize v3d_priv->perfmon.idr
+>>>    drm/via: use idr_init_base() to initialize dev_priv->object_idr
+>>>    drm/todo: remove task for idr_init_base()
+>>>
+>>> [...]
+>>
+>> Applied to drm/drm-misc (drm-misc-next).
 
-Compiled and booted on my test system. No dmesg regressions.
+Thanks.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> The via driver had changed a bit and the patch 9 didn't apply at all.
+> I've moved the change to where it looked like it belonged, but you might
+> want to double check.
 
-thanks,
--- Shuah
+LGTM.
+
+- Danilo
+> 
+> Maxime
+

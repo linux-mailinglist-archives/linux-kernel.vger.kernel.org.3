@@ -2,181 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC67584517
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB1B584535
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbiG1Re3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
+        id S231131AbiG1RfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiG1Re1 (ORCPT
+        with ESMTP id S229447AbiG1RfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:34:27 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89DC6FA29
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:34:25 -0700 (PDT)
+        Thu, 28 Jul 2022 13:35:17 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359F46151;
+        Thu, 28 Jul 2022 10:35:17 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so2904095pjl.0;
+        Thu, 28 Jul 2022 10:35:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659029666; x=1690565666;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=o+fn6h9fFDfk07b94ykcs0xYkUzKgqQtjInlwWCLcjs=;
-  b=jwQ1HpKjEiU8jJBoBqrTA2eeN9TvXocWLVLHZoc7WyC+XYhAEiapTpfy
-   RvYEDigEeJp3pbAbMBj0sWqf+ELL7Ru3CnYFdqwj2QmYpnY6qjCMkl/Uw
-   9vxvvAnudidKFA+99g1z6tu0bmAJYvl7u1yKZW20ZyeAfx6W/9wITgXBo
-   A=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 28 Jul 2022 10:34:25 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 10:34:25 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Jul 2022 10:34:24 -0700
-Received: from [10.111.167.242] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Jul
- 2022 10:34:21 -0700
-Message-ID: <5c8ca71c-5f0b-d5f5-9f16-e312dec0d01b@quicinc.com>
-Date:   Thu, 28 Jul 2022 10:34:19 -0700
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=QspELtFwrGd992ER4IywagKhOwPAd04XFlDr4WU6NiI=;
+        b=mr2y8Nixp9iQYiaPkk1ld3aAvfXUbpKTeQ15WW56UqOrHJT7F6ygOyrLj1DDaCkTiT
+         Btb3DBlO0KaSYzChaNk/QE5FisTCujb6TIsaKo4sDfHWGqDOXRI4z6wzpsc71giBkXAE
+         UhjaXLzeSQ2FYrOgzCYkyCnkLpH0GqfV6Nyk/MXzhQHa6peGkiIqaB74rxQlVlC4CRMH
+         0m98YNTpKu9tGdkZ38JBZ7DKi8bs2oCmbjDgzVxUBHk1Hvy75bihPcG4YlLTiseIQnl8
+         KKQA0QK0h3Dm+kDcrY67cJ6p/LBOkjXG3TRzWjzbNxxOvxuxKDD6/OsYCaLaW7q16zWD
+         FPqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=QspELtFwrGd992ER4IywagKhOwPAd04XFlDr4WU6NiI=;
+        b=cd7rWHuNS5uDB7il2YX4eDJx0qj+jLnLXs/4kxa3TC/DKhvsacr0iWVVPP97fMw2Iq
+         BjjXkN03w/KU1CqbJjiXG1JEINRRimJbg1PzUFtksfVPI6fcJ5spYVRrhCgVn/FXWgWb
+         zxmKjRWq4DRhYhIdJxBuKfSqSBtnTIV24tMiJs/th93BPNHSzzt8EBV3UEPf/VrGfj+r
+         PSfVV9SDH3bzxRLtMd3zcSxY1SdTpyQ1V8Bi9I7txolqPj914Z584ASgk73P+kBNHM8B
+         m6W39kMpz/TlwFKwJqRC4id/uVY4vRiSJ278/LwefAzvqGd/6yWu3Iwq5yXP27NcU9WG
+         phlA==
+X-Gm-Message-State: ACgBeo1FzFWIEnXFKBKHvfddWEEQXFyHY7aQ+Hz5/c5gr4BB6EhLnVuL
+        yulW5q2pktzlWSXh7N7WmBNpeJ/zMjM=
+X-Google-Smtp-Source: AA6agR7okzIQnyApf+9UYpAca/XBs/2oCNUQhHi1ypbpfNRIB7ZTqTSnbha72zmPDlumuwhqNZoOww==
+X-Received: by 2002:a17:90a:4809:b0:1f0:59d7:7ee2 with SMTP id a9-20020a17090a480900b001f059d77ee2mr464354pjh.240.1659029716495;
+        Thu, 28 Jul 2022 10:35:16 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id c204-20020a621cd5000000b0052baa22575asm1035532pfc.134.2022.07.28.10.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 10:35:15 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 28 Jul 2022 07:35:14 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Hao Luo <haoluo@google.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 4/8] bpf: Introduce cgroup iter
+Message-ID: <YuLI0jh8Csq0mErM@slm.duckdns.org>
+References: <20220722174829.3422466-1-yosryahmed@google.com>
+ <20220722174829.3422466-5-yosryahmed@google.com>
+ <YuK+eg3lgwJ2CJnJ@slm.duckdns.org>
+ <CA+khW7gfzoeHVd5coTSWXuYVfqiVMwoSjXkWsP-CeVdmOm0FqA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PATCH] drm/edid: Make 144 Hz not preferred on Sharp
- LQ140M1JW46
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>,
-        Doug Anderson <dianders@chromium.org>
-CC:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David Airlie" <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-References: <20220721152314.RFC.1.Ie333b3e4aff6e4a5b58c4aa805e030e561be8773@changeid>
- <269f2610-425b-f296-dcfc-89bdc2e1d587@quicinc.com>
- <CAD=FV=XSVXasU5PMR2kL0WQjQ458xDePuTGd1m14_v9JO5B6oA@mail.gmail.com>
- <CAF6AEGv_Vikf80v-7ccz90fvGPrk5pV1tOxRoWKxKHYuEW8=aA@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAF6AEGv_Vikf80v-7ccz90fvGPrk5pV1tOxRoWKxKHYuEW8=aA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+khW7gfzoeHVd5coTSWXuYVfqiVMwoSjXkWsP-CeVdmOm0FqA@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob and Doug
+On Thu, Jul 28, 2022 at 10:20:46AM -0700, Hao Luo wrote:
+...
+> is a good feature of this convention. My thoughts: It seems that ID
+> may be better, for two reasons. First, because ID is stateless, the
+> userspace doesn't have to remember closing the FD. Second, using
+> different identifications in two directions (userspace specifies
+> cgroup using FD, while kernel reports cgroup using ID) introduces a
+> little complexity when connecting them together.
 
-On 7/22/2022 10:36 AM, Rob Clark wrote:
-> On Fri, Jul 22, 2022 at 9:48 AM Doug Anderson <dianders@chromium.org> wrote:
->>
->> Hi,
->>
->> On Fri, Jul 22, 2022 at 9:37 AM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->>>
->>> + sankeerth
->>>
->>> Hi Doug
->>>
->>> On 7/21/2022 3:23 PM, Douglas Anderson wrote:
->>>> The Sharp LQ140M1JW46 panel is on the Qualcomm sc7280 CRD reference
->>>> board. This panel supports 144 Hz and 60 Hz. In the EDID, the 144 Hz
->>>> mode is listed first and thus is marked preferred. The EDID decode I
->>>> ran says:
->>>>
->>>>     First detailed timing includes the native pixel format and preferred
->>>>     refresh rate.
->>>>
->>>>     ...
->>>>
->>>>     Detailed Timing Descriptors:
->>>>       DTD 1:  1920x1080  143.981 Hz  16:9   166.587 kHz  346.500 MHz
->>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
->>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
->>>>       DTD 2:  1920x1080   59.990 Hz  16:9    69.409 kHz  144.370 MHz
->>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
->>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
->>>>
->>>> I'm proposing here that the above is actually a bug and that the 60 Hz
->>>> mode really should be considered preferred by Linux.
+Yeah, you can pass the IDs around different processes, print and log them in
+meaningful ways and so on because they're actual IDs, so my preference is
+towards using them for anything new.
 
-Its a bit tricky to say that this is a bug but I think we can certainly 
-add here that for an internal display we would have ideally had the 
-lower resolution first to indicate it as default.
+Thanks.
 
->>>>
->>>> The argument here is that this is a laptop panel and on a laptop we
->>>> know power will always be a concern. Presumably even if someone using
->>>> this panel wanted to use 144 Hz for some use cases they would only do
->>>> so dynamically and would still want the default to be 60 Hz.
->>>>
->>>> Let's change the default to 60 Hz using a standard quirk.
->>>>
->>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->>>
->>> Yes, we were aware that 144Hz was getting picked. We found that while
->>> debugging the screen corruption issue.
->>>
->>> Well, yes power would be less with 60Hz but so will be the performance.
->>
->> What performance specifically will be less with 60 Hz? In general the
->> sc7280 CPU is a bit memory-bandwidth constrained and the LCD refresh
->> from memory is a non-trivial part of that. Reducing to 60 Hz will
->> relieve some of the memory bandwidth pressure and will actually allow
->> tasks on the CPU to run _faster_. I guess the downside is that some
->> animations might be a little less smooth...
-> 
-> I guess he is referring to something that is vblank sync'd running
-> faster than 60fps.
-> 
-> but OTOH it is a bit of a waste for fbcon to be using 144Hz.  And
-> there are enough android games that limit themselves to 30fps to save
-> your "phone" battery.  So it seems a lot more sane to default to 60Hz
-> and let userspace that knows it wants more pick the 144Hz rate when
-> needed.
-> 
-> BR,
-> -R
-
-Yes i was referring to vblank synced apps.
-
-> 
->>
->>
->>> The test teams have been validating with 144Hz so far so we are checking
->>> internally with the team whether its OKAY to goto 60Hz now since that
->>> kind of invalidates the testing they have been doing.
->>
->> You're worried that the panel itself won't work well at 60 Hz, or
->> something else about the system won't? The whole system in general
->> needs to work well with 60 Hz displays and I expect them to be much
->> more common than 144 Hz displays. Quite honestly if switching to 60 Hz
->> uncovers a problem that would be a huge benefit of landing this patch
->> because it would mean we'd find it now rather than down the road when
->> someone hooks up a different panel.
-
-I was worried that it will invalidate the testing they did so far but 
-since you have confirmed that you would prefer 60Hz to be more 
-thoroughly tested than 144Hz, I have informed the internal teams of this 
-change and given the heads up.
-
-You can have my R-b for this change,
-
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-
-I would also wait to see if others have different thought about this.
-
->>
->> -Doug
+-- 
+tejun

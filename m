@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF13584732
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23442584740
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233404AbiG1UqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S232641AbiG1UsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbiG1Upl (ORCPT
+        with ESMTP id S229625AbiG1UsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:45:41 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D136D3A49A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:45:34 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id t2so2814295ply.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:45:34 -0700 (PDT)
+        Thu, 28 Jul 2022 16:48:24 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D79433E00;
+        Thu, 28 Jul 2022 13:48:23 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id oy13so5139767ejb.1;
+        Thu, 28 Jul 2022 13:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references:reply-to
-         :mime-version:content-transfer-encoding;
-        bh=gfO26u2xpyVmEWxjONFXEHf40ylM6r3kRxMGtINMS28=;
-        b=CqUpKZVcHUdGhidYMYjokkBi17q5SK18jd7MhWe5pwlpQrL2nQqeN19YTR0WYDAFbP
-         CMXhllFoexuWnVPLj4OetWCIXeI9nvG6zUlojn7oUojsxyNpgy7iF7r1rfVjsYa0ze71
-         xnb7t4vhiEViH6GAuV16Z31aSTVXUb5Gw00YwzsqcVrbtgZvjF3zYtKzugy+OFOVYce+
-         XTYTpiiV5Uqu8E6hZ+/VnjofZ9wyy0blnM4F2o3or+2R2ISS15tzVuSyLZVzFLexsber
-         PTxe/D7DN/AFX9JYEBisHhtlBriUSIZuluLk2DWot1+vXvb6yB/2/At1UPMkYKaOwcLm
-         PJmQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Hj8U9na81wK1LpQEMnouXXM1glGKZ1/n4yT2ZjBsSPM=;
+        b=FHNnpco0EB5PmciJdUcejUWujO92l7IErU8hH+r9eJGL+4ZGyXBHZHbCkD9e32wy06
+         1yy+YMOnXadzd1otL5afrABZZSMue1wUH/smZuQvSXOvDgYpi1Sso4+TxRh8V7UTaeFS
+         2jh9jjXfxXpfdaJvIFNsykJZxBdogVewZb1s4HJ4vsN7nx15MWJBttrVlVOJkaXbgoIE
+         a3DmjzaMMoRArjRdph1l/T3d9NoJckjzlT8ncjFPB9irwfbuAsJ9cv6pGjvoxZcT2xY5
+         DedO2RNu/CsTpnhpjwpizIr6ARBc22T16zqwyfdEJhRLZqFOu4YiZvimItB513p1JeUV
+         UQEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:reply-to:mime-version:content-transfer-encoding;
-        bh=gfO26u2xpyVmEWxjONFXEHf40ylM6r3kRxMGtINMS28=;
-        b=rsbrXMRyv+3XHimQxr8lVsKB7iMOtZ4jcSmk2cfPoIlkz3U9RaN+j4DZCFv2ZalpLs
-         9jkAR5ZACTZFCxZm3j/Sm6ZIIHGdP0lqFzHlXY/WPcNb9f8CdRkyxsZL69hEnfpIARak
-         xvepQcFNWoB+PlbrKCWSL1z4aZAeI7k1g0sSMV8hrCt8Ao5nz73YHVrR6jCkiWKtksXs
-         7BsFxW6lg+8HAdng7fiqx0Q3NQ+dv9cM/R8fUce1H+wmRxTSY6uFhJu9RQjXjKo1B3v8
-         TcWLwQHqqOLmW03QJCkUZlTAjaH4FUua2kAAE+b5LX/QEC9OR6yq9R0ke3tewy6nGnm4
-         9XEA==
-X-Gm-Message-State: ACgBeo3+5auZg/vkoVjZDVS6zHVNcdxoHWG5o/UqIPetTKUih+QHRaJG
-        NAC95y+23ZgTBU8QTBDnVh0=
-X-Google-Smtp-Source: AA6agR65b9BvIPJJ2aIA34xLNFyBah7YuqJvpKELG7QwV25Vml1sxFR036NxwJ4Xi5LcGcZNJFfljw==
-X-Received: by 2002:a17:90a:17e1:b0:1f2:2ff2:6cae with SMTP id q88-20020a17090a17e100b001f22ff26caemr1175172pja.196.1659041134124;
-        Thu, 28 Jul 2022 13:45:34 -0700 (PDT)
-Received: from KASONG-MB0.tencent.com ([114.254.3.190])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b0016c40f8cb58sm1787304pli.81.2022.07.28.13.45.32
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 28 Jul 2022 13:45:33 -0700 (PDT)
-From:   Kairui Song <ryncsn@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kairui Song <kasong@tencent.com>
-Subject: [RFC PATCH 7/7] x86_64/tlb, mm: enable cpumask optimzation for RSS cache
-Date:   Fri, 29 Jul 2022 04:45:11 +0800
-Message-Id: <20220728204511.56348-8-ryncsn@gmail.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220728204511.56348-1-ryncsn@gmail.com>
-References: <20220728204511.56348-1-ryncsn@gmail.com>
-Reply-To: Kairui Song <kasong@tencent.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Hj8U9na81wK1LpQEMnouXXM1glGKZ1/n4yT2ZjBsSPM=;
+        b=whhNKihLR2WeujjowXNXEirCrKQJ9blgmr+K0RdTKE/MSdUf64sLS3PEjI4VKyDq9/
+         aZkhJRoenosPGf/dk4ExduDhKtyxkczX58lld9v0ChLzMcnik9WEjHt/TXjVUauwGKtn
+         q7iC75402basA15Yh5+1r04JNCW/E1+81ik84KJqZezZiAqfS7HGRqz0SgcFQpZtoDem
+         naIOVd4VgL6mvy8WhE5sv9w4l3yo8uO+3Eto2NtrbnqRLaO28OHGPbKTYMXnVeENo62j
+         M4JV2/JQYYGPD67IwqIr9gcXgPGBQdnq6Hoa6O7zameIsSgBrpKDCely5KyrH4/b3GZ7
+         txAA==
+X-Gm-Message-State: AJIora+CpQ9qJXA+k/MZBWVyQ+32wD04RNrZ2c92aYVO3xDVO2b3RxUa
+        dFQPKGV35Wkxmt+GYI0ehqzCCiL5GF1TK8U1eSJmDLMb
+X-Google-Smtp-Source: AGRyM1tsKkzS1CT8rCY6o8o9woxCrtMhsRoDBVhGwPNBqSKIaHxvRdCWJuHr+zGfGBcLeXJgsTOMtgmkoB63DfFCf/M=
+X-Received: by 2002:a17:907:6e02:b0:72b:9f16:1bc5 with SMTP id
+ sd2-20020a1709076e0200b0072b9f161bc5mr519930ejc.676.1659041301407; Thu, 28
+ Jul 2022 13:48:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
+ <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com> <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
+In-Reply-To: <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 28 Jul 2022 22:47:44 +0200
+Message-ID: <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
+To:     Jason Gerecke <killertofu@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,48 +74,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kairui Song <kasong@tencent.com>
+On Thu, Jul 28, 2022 at 4:30 PM Jason Gerecke <killertofu@gmail.com> wrote:
+> On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote:
+> > On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> wrote:
 
-Enable CONFIG_ARCH_PCP_RSS_USE_CPUMASK for x86_64, we do a
-RSS cache switch in switch_mm_irqs_off. On x86_64 this is the unified
-routine for switching a mm, so hook into this can make sure any dead mm
-will have their cache invalidated in time, and cpumask is synced with
-cache state.
+> > Writing a patch to fix the new warnings generated by my I2C patch is
+> > simple enough, but I'd like some help coordinating getting both
+> > patches landed. Should I wait for the I2C patch to land in "for-next"
+> > before sending the IIO fix, or would it be preferred to send the IIO
+> > fix right now so that both patches can be reviewed simultaneously?
+>
+> It's been pretty quiet, so asking again for any thoughts on how to
+> best address this tangle...
 
-Signed-off-by: Kairui Song <kasong@tencent.com>
----
- arch/x86/Kconfig  | 1 +
- arch/x86/mm/tlb.c | 5 +++++
- 2 files changed, 6 insertions(+)
+The rule of thumb is not to introduce an additional warning or compile error.
+I haven't looked deeply into this case, but it smells to me as if you need a new
+version of your initial patch that includes a fix to IIO.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 52a7f91527fe..15e2b29ba972 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -125,6 +125,7 @@ config X86
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select ARCH_WANTS_THP_SWAP		if X86_64
- 	select ARCH_HAS_PARANOID_L1D_FLUSH
-+	select ARCH_PCP_RSS_USE_CPUMASK		if X86_64
- 	select BUILDTIME_TABLE_SORT
- 	select CLKEVT_I8253
- 	select CLOCKSOURCE_VALIDATE_LAST_CYCLE
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index d400b6d9d246..614865f94d85 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -597,6 +597,11 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 		 */
- 		cond_mitigation(tsk);
- 
-+		/*
-+		 * Flush RSS cache before clear up the bitmask
-+		 */
-+		switch_pcp_rss_cache_no_irq(next);
-+
- 		/*
- 		 * Stop remote flushes for the previous mm.
- 		 * Skip kernel threads; we never send init_mm TLB flushing IPIs,
+
 -- 
-2.35.2
-
+With Best Regards,
+Andy Shevchenko

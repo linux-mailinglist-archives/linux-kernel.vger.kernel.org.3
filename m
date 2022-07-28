@@ -2,135 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2646584068
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0640558406F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiG1Nxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
+        id S229772AbiG1N5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiG1Nxs (ORCPT
+        with ESMTP id S229672AbiG1N45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:53:48 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2055.outbound.protection.outlook.com [40.107.100.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12498EE30;
-        Thu, 28 Jul 2022 06:53:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D7JgjdVOw0OWKJmtw2NRoFQ22Zr0iV9VuyeSQTKxvknPIZ5T7COL+goBBLc6R98Y9wDo07EaQvNZDwZCy/wagwSuSHqXV6js6NLC2rUhN7qE2X/HmeC/1F1ekRZGh2sovzbXLdF+wcCbZiP0cCTAqzMcFAdN4An3EgPm746HQHKvb2Io4cdjpsOGdatxgcEkAa06iRUiFBwECR0Nux2UqjQ8YQ26ggjRGMTqDQYyyJEj2OArOPc6MufHpvy7Ulat9/Q3QdKvY5VUbw9aPiRdHdY0v3YCty+Sum6N+dIpOjQ/ExpQvHmG9My2cirS6AwjNz9VfDoG+K0VdNLzDTYM6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aNcjT+sdwxV/ilXTDZdvi6SPlBzo6OrdI/fMZlBbE28=;
- b=Mf9Yspu+bCvAV+CSBIejY8/JRGlMclphYGm8IYNL3uFalXIqnU4Ra/SXytpK5n7F2rHtaaM0sCkIW7coIcJxmi2T758ozklPUv1DgFkw4lAQZHYUdKO0cIhd08gMJNGdOj3+ZLoBu/WqS/vPZFhv30U5CRYTrVtLKYTxa9qRD7wcJCpMcKVn0fJjotIAgR2Suy1hZkonUgsf/WlgEabdyX7i7FehwKNDxZgp3hrHxrZctPhOK/I7ePPJTvaj3j83Eb4vCuh2d4Id5FT3FRKaRyM0vscvaMns2yy74OeRgaJHWg+AHHAsteQoQKhXBYZ9AF0A1MRPF1prNRBEJF2tbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aNcjT+sdwxV/ilXTDZdvi6SPlBzo6OrdI/fMZlBbE28=;
- b=444LLUamiV0NWED3OcexfoEoc4TMJO1kV9tiB0ZUNv5i+a4aOMkAZTrYDsdMenPiOsPUuDYMQK6gDFxi1lDYpQ9UxJnk4nVsAUu+Zqxb0tXXzS2mmDvP8u/4xLs3pCUZbr5aTYL6NBY+rJ4GFqQLPhjWYqcCmcSEnXs5Cll9bSc=
-Received: from BN9PR03CA0871.namprd03.prod.outlook.com (2603:10b6:408:13c::6)
- by MWHPR1201MB2542.namprd12.prod.outlook.com (2603:10b6:300:e8::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 28 Jul
- 2022 13:53:43 +0000
-Received: from BN8NAM11FT052.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13c:cafe::4d) by BN9PR03CA0871.outlook.office365.com
- (2603:10b6:408:13c::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.24 via Frontend
- Transport; Thu, 28 Jul 2022 13:53:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT052.mail.protection.outlook.com (10.13.177.210) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5482.10 via Frontend Transport; Thu, 28 Jul 2022 13:53:43 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 28 Jul
- 2022 08:53:41 -0500
-Date:   Thu, 28 Jul 2022 08:53:20 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     <seanjc@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: Possible 5.19 regression for systems with 52-bit physical
- address support
-Message-ID: <20220728135320.6u7rmejkuqhy4mhr@amd.com>
-References: <20220728134430.ulykdplp6fxgkyiw@amd.com>
+        Thu, 28 Jul 2022 09:56:57 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C801EEE6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:56:55 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 8D0B822249;
+        Thu, 28 Jul 2022 15:56:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1659016613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ey/90lOx4wMpw43TX64tvVeDePycWmEHff+P7HYmJcM=;
+        b=fR0dfNP64VUq13hcIS81FiKnIvkOI8R2MUuhOAjqOZuednKNaTu1XFcR05hj+M1rmqva3L
+        8jfKyi7GydRS5x4L7gQSYc3jBTpIwzZCAGs/LzA0k6ZafTWLOODdQfROsKipA5SFr94Ted
+        KOK1JNk46Tby+WxQlVCAqPeaJQpnPDU=
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220728134430.ulykdplp6fxgkyiw@amd.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7a4137aa-123e-45cd-7cd9-08da70a095cd
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB2542:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Bzx2dgg90GLHPDuDzAze1S3M+E+PF64SNmBgV03HgKRLKom1pg6V8M2tGL9XKXLMG3Vf430dD68HiGtUHetsawNR6HdN8BLWOQT6Q/AsCvDdb5wNtmSquRzpF9aRu7UCcVg0umDeDLHsg5hCPgMck+gga0NCmzTdBORlay8HXGiTnn/kL0blvNc8ngOdgleDp2o93oODK4GMc4kGGdnnmVJOIJ9laF10LpFvsPZ5kE5egmB/y8SaLSzPXtuTJUvxTB9W/S7aLTjlwmXRawDSCEmLxD11JSsxcRGsNWSfoOb6d3rBM5t9RRRuuwpKBFKsoX79pK2pKZ0HeVtp6hFCuavYc2/4BDAucjX/L7Zmn/iZSp4nPe00OnhrY0zqDMApEAQbv20e5IDYuHpk2CFwK8/Af/VySYxLNV78rdlLfEQbe1xwuwc8JlAw0tttMGi2mNUDmzcpElhli/LaSTE4RzpnBJZj4dOFspDlLmwD6m/X8t8jHhMOfS7ubuKq18m7SolLu73tpYMH6/pwtjq3yO8+82eIqmRQNFQGuk26SIB/IaZI8nlIBTPhGWwde69gbyu8XqVfGZc87I0DSIeWS7SXs93D6yFRQtBH5vIf8UBWomzerryHEvT5KNEWunu/hmFF1iYkGpezBjlyPeqHBhwcWksmjtlfs2rhS8GDlJkZZ45ObKDKdm81Jwbc7X3ySfSey84L4gk/5joR2H9MplT1gtJIX8xbO7lEXr5CmLCdgSespL4EmateKYTPchfGiyFQa9Z1M5u4c3aqVnHGt+DlWSFP9CZ/2VOZ/XroRv983bbOXSzFRRLCoSu7SALpTvb1B1X4xZdycD1kfB+n6J8VWugMe2DqT3X96DuIZxH9EK39X09eNV+1VN74Y209
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(39860400002)(396003)(46966006)(36840700001)(40470700004)(478600001)(8676002)(70206006)(336012)(4326008)(40480700001)(426003)(8936002)(966005)(83380400001)(40460700003)(26005)(5660300002)(70586007)(82740400003)(186003)(82310400005)(16526019)(356005)(6666004)(86362001)(6916009)(81166007)(2616005)(2906002)(47076005)(54906003)(36860700001)(36756003)(316002)(41300700001)(1076003)(44832011)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 13:53:43.6071
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a4137aa-123e-45cd-7cd9-08da70a095cd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT052.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB2542
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 28 Jul 2022 15:56:53 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor.Ambarus@microchip.com
+Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, quic_c_sbhanu@quicinc.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] mtd: spi-nor: introduce SNOR_ID3()
+In-Reply-To: <29f4cff4-edc5-3838-2495-253e794178ae@microchip.com>
+References: <20220510140232.3519184-1-michael@walle.cc>
+ <20220510140232.3519184-2-michael@walle.cc>
+ <160ddac1-6d0a-c922-1380-09e7823a285e@microchip.com>
+ <41e6b74d-6973-60da-1556-82a1e879ffd4@microchip.com>
+ <ff6ffb3f8e77b29b44883d30c9b4385e@walle.cc>
+ <29f4cff4-edc5-3838-2495-253e794178ae@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <902917c39041fc9c0a2695de0f7382a0@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 08:44:30AM -0500, Michael Roth wrote:
-> Hi Sean,
+Am 2022-07-28 15:31, schrieb Tudor.Ambarus@microchip.com:
+> On 7/28/22 16:12, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the content is safe
+>> 
+>>>>> +#define SNOR_ID3(_jedec_id)
+>>> 
+>>> How about SFDP_ID3 and SFDP_ID6 instead?
+>> 
+>> Yes, probably a better name. I was also thinking about splitting
+>> the id in vendor, device and additional bytes. But I haven't
+>> thought of the actual implementation that much. Such as:
+>> 
+>> #define SFDP_ID(<u8 vid>, <u16 did>, <variable aux bytes>)
+>> #define SFDP_ID_FULL(<num_continuation_code>, <u8 vid>, <u16 did>,
+>> <variable aux bytes>)
+>> 
+>> Couldn't make up a better name than that _FULL for now. Happy to hear
+>> suggestions :)
+>> 
 > 
-> With this patch applied, AMD processors that support 52-bit physical
+> You mean splitting the ID in manufacturer ID, flash ID and extended 
+> flash ID?
+> I'd like to understand the benefits of splitting this, can you give me 
+> an
+> example? In the past I though about introducing some flash info macros 
+> for
+> families of flashes of the same vendor, it will reduce the number of 
+> lines
+> on flash definition, but not really related.
 
-Sorry, threading got messed up. This is in reference to:
+First, why would you combine the vendor and part id into one three byte
+field? Isn't it natural to have these as two fields? We know the did is
+8 bit and the vid is 16 bit. And there might be N continuation codes. So
+putting that all in one value is error prone. See also below for the
+is25cd512.
+Second, the extended (so maybe SFDP_ID_EXT?) bytes is variable. I've
+seen flashes with one additional byte.
 
-https://lore.kernel.org/lkml/20220420002747.3287931-1-seanjc@google.com/#r
+If you want to have per vendor convenience macros you could do
 
-commit 8b9e74bfbf8c7020498a9ea600bd4c0f1915134d
-Author: Sean Christopherson <seanjc@google.com>
-Date:   Wed Apr 20 00:27:47 2022 +0000
+#define WINBOND_SFDP_ID(did, ...) SFDP_ID(0xNN, did, __VA_ARGS__)
 
-    KVM: x86/mmu: Use enable_mmio_caching to track if MMIO caching is enabled
+I don't see much benefit here. OTHO "#define SFDP_VID_WINBOND 0xNN"
+might make sense. But then we'd need to come up with support for
+continuation codes. So mhhh.
 
-> address will result in MMIO caching being disabled. This ends up
-> breaking SEV-ES and SNP, since they rely on the MMIO reserved bit to
-> generate the appropriate NAE MMIO exit event.
-> 
-> This failure can also be reproduced on Milan by disabling mmio_caching
-> via KVM module parameter.
-> 
-> In the case of AMD, guests use a separate physical address range that
-> and so there are still reserved bits available to make use of the MMIO
-> caching. This adjustment happens in svm_adjust_mmio_mask(), but since
-> mmio_caching_enabled flag is 0, any attempts to update masks get
-> ignored by kvm_mmu_set_mmio_spte_mask().
-> 
-> Would adding 'force' parameter to kvm_mmu_set_mmio_spte_mask() that
-> svm_adjust_mmio_mask() can set to ignore enable_mmio_caching be
-> reasonable fix, or should we take a different approach?
-> 
-> Thanks!
-> 
-> -Mike
+As for the examples:
+  SFDP_ID(SFDP_VID_WINBOND, 0x6019)
+  SFDP_ID(SFDP_VID_MICRON, 0xba19, 0x10, 0x44, 0x00)
+or maybe
+  SFDP_ID(SFDP_VID_MICRON, 0xba19, 0x10, 0x44)
+
+Currently we have the is25cd512 which (correctly) uses
+continuation codes. So, we'd need have something like
+#define SFDP_VID_ISSI_LEGACY 0x9d
+#define SFDP_VID_ISSI 1, 0x9d
+
+And preferrably we'd have something like:
+
+  SFDP_ID(SFDP_VID_ISSI_LEGACY, 0x4013)
+  SFDP_ID(SFDD_VID_ISSI, 0x20xx)
+
+(note that "xx" is unknown here.. we are lacking that because
+the entry is just using INFO() and I'm too lazy to look up the
+datasheet now.)
+
+Now I know that above probably won't compile, but maybe someone
+could come up with macros which actually work :)
+
+The following might work, but feels awful like a hack:
+#define SFDP_VID_ISSI_LEGACY 0, 0x9d
+#define SFDP_VID_ISSI 1, 0x9d
+
+-michael

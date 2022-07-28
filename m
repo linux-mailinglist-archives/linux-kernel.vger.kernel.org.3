@@ -2,51 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DFF5845F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9245845F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbiG1Svw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 14:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
+        id S229839AbiG1SxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 14:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiG1Svt (ORCPT
+        with ESMTP id S229456AbiG1SxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 14:51:49 -0400
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06955743DE;
-        Thu, 28 Jul 2022 11:51:49 -0700 (PDT)
-Received: by mail-pl1-f173.google.com with SMTP id v18so2550834plo.8;
-        Thu, 28 Jul 2022 11:51:49 -0700 (PDT)
+        Thu, 28 Jul 2022 14:53:17 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2330C743EE;
+        Thu, 28 Jul 2022 11:53:16 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id t1so4113825lft.8;
+        Thu, 28 Jul 2022 11:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YqDuXzOWTVq7U9l2+ECUplWD7jFZHdMOUjcOJGRtYg8=;
+        b=oTsUjBvaphUVin2C+irLGt/eQKo8mEz1OmLk6F+TFa44ZlbqPfzst4bMz9r/xmHSJn
+         thA2IcTMKOtkE6tSKOAoLZeDN9FCKJOUe6kVcn7gDptnjwA2zrQ62oIqrel+7PJy1eiN
+         Bz4Jy2DumSblx8a+L+V3MUsziemK6oDsm3XXQ9nJl4DqDHl9dr7qFXz00Pba9LA5P9Sy
+         Tdq/417wkgMqW5LmNlpGXjAdixfia0K5C0RoOmOwJYOEDwrS/dQYxVFs/5wobUFefq6M
+         L5bZ5MPFbowYk7VxyDWZSVHPwrE3X42q5Xm82TlVolK+O5NlXoj96r7m+1z1WU5dLTab
+         4o0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=q3oeKEjtvlvPNkG5zR+PlPN6rycCHhc3ruuEWMjNKTM=;
-        b=CzUYBxvVoyoNmASe97+ikLDvmq4XqM5Wm1I7GnXiCbP9gKZ8JvZ9/vfvhOTWXiYKcp
-         DwuOElQs5ly2nXdosL7wtnX3f08LIqQxIIqkNXhVWely2wTJFrDd0c4bvwNsjwE0DArU
-         aip+V0aJJa4s2hngdoSLj0StEGjMy+spFrnRjbZxauJsMwkQ+3Lt/+oja34xfw7CQ3LN
-         fSDe4q7qdf7mK25L9ijt2I9kFf6GisqSQSlDYHvVAi+88TcVZPanXpf9EDfGP4YREkxT
-         Qlw9S2w3Pw1mh2MoCDZ5gxXcfO/ahVfECx9TwCm5weS01BQNJWI5P0YXvS40/zDIviS8
-         0H7Q==
-X-Gm-Message-State: ACgBeo30pQdJ3HzWkDKpq4T8WFzCPheLxu811nvRObviVu95mx85YOt2
-        NK+4oGzLMvoR/wkDay0k4gJTveWCYTCSCuNpnCVK+Fel6G4=
-X-Google-Smtp-Source: AA6agR6sJHmBT9spTWeHSOkRH0SmOntZuWBc/osfJJG5ZsaBAI1+JvPSysWa3L2LqUWIUTWUoEwaWUnpfpaiL+m45NE=
-X-Received: by 2002:a17:903:2282:b0:16c:500f:b78e with SMTP id
- b2-20020a170903228200b0016c500fb78emr204415plh.49.1659034308454; Thu, 28 Jul
- 2022 11:51:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YqDuXzOWTVq7U9l2+ECUplWD7jFZHdMOUjcOJGRtYg8=;
+        b=PHN7/lMdiuSHNm4K7NgKIYg8J3vgIjc0cP66RO3bDQ5H7CkeajccK/1/otzGzLNf3q
+         G2ZVpNVFa++39uQiBGW3SvNbzMVgN+r4+7sEQNFB5ZvPHTc6RjBHPtBaCe9Lzd5ZYsm9
+         k5IjD+wvSC7RxcFMxg1hkj6uJ60zZm89qOA0hv/MZi9rxTC8IdJXmTO9dmHAGrGOowYW
+         brVMUa7mBdStK2uDTlh7dHFD/n61NsB9M9vrYiRtdni1uh8txrlsD8RxbCJw8GlXv+QY
+         RIQdolyA//imBpmhR+Am/4bbgVjWfe0cCPkAdKTicKXyyCr7YZyk1STObQCxI+CirGRG
+         wHfg==
+X-Gm-Message-State: AJIora8/M+y1H2jLegPhGAQ9lGIwp7mZJjG99gXD/v5/pWa5XAqOdEfD
+        JDxX6ODQ8e92SDRR5SDBGiA=
+X-Google-Smtp-Source: AGRyM1vxbrmC9UG6lvhuS8D++pmLdPzd/EMFdQeBuXzwgUbAdL+jtkgDOa5UQ8z/YDvwcmjbrXhETQ==
+X-Received: by 2002:a05:6512:ac6:b0:48a:8379:bcc0 with SMTP id n6-20020a0565120ac600b0048a8379bcc0mr56793lfu.601.1659034394104;
+        Thu, 28 Jul 2022 11:53:14 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id y14-20020a0565123f0e00b0048a9a756763sm322087lfa.19.2022.07.28.11.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 11:53:13 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 21:53:11 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 03/15] PCI: dwc: Convert to using native
+ IP-core versions representation
+Message-ID: <20220728185311.3b4n2izy64fdpfk6@mobilestation>
+References: <20220624143947.8991-4-Sergey.Semin@baikalelectronics.ru>
+ <20220728152418.GA302516@bhelgaas>
 MIME-Version: 1.0
-From:   Len Brown <lenb@kernel.org>
-Date:   Thu, 28 Jul 2022 14:51:36 -0400
-Message-ID: <CAJvTdK=yehzeVG42K=W_chyJ2YPRh18m729S1trWk=yKVDzRQw@mail.gmail.com>
-Subject: [GIT PULL] turbostat update to 2022.07.28
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728152418.GA302516@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,59 +88,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Jul 28, 2022 at 10:24:18AM -0500, Bjorn Helgaas wrote:
+> On Fri, Jun 24, 2022 at 05:39:35PM +0300, Serge Semin wrote:
+> > Since DWC PCIe v4.70a the controller version can be read from the
+> > PORT_LOGIC.PCIE_VERSION_OFF register. Version is represented in the FourCC
+> > format [1]. It's standard versioning approach for the Synopsys DWC
+> > IP-cores. Moreover some of the DWC kernel drivers already make use of it
+> > to fixup version-dependent functionality (See DWC USB3, Stmicro STMMAC or
+> > recent DW SPI driver).
+> 
 
-Please pull these turbostat patches.
-(only updating the utility here, no kernel changes)
+> These references to other drivers might be useful, but without a
+> function name or file name, I can't easily find them.
 
-thanks!
-Len Brown, Intel Open Source Technology Center
+1. DW APB SSI driver, defined in drivers/spi/spi-dw.h:
+#define DW_HSSI_102A                    0x3130322a
+#define dw_spi_ip_is(_dws, _ip) ...
+#define dw_spi_ver_is(_dws, _ip, _ver) ...
+#define dw_spi_ver_is_ge(_dws, _ip, _ver) ...
 
-The following changes since commit e0dccc3b76fb35bb257b4118367a883073d7390e:
+2. DWC USB3 driver, defined in drivers/usb/dwc3/core.h
+#define DWC3_IP                 0x5533
+#define DWC31_IP                0x3331
+#define DWC32_IP                0x3332
+#define DWC3_REVISION_173A      0x5533173a
+#define DWC3_REVISION_175A      0x5533175a
+...
+#define DWC31_REVISION_110A     0x3131302a
+#define DWC31_REVISION_120A     0x3132302a
+...
+#define DWC3_IP_IS(_ip) ...
+#define DWC3_VER_IS(_ip, _ver) ...
+#define DWC3_VER_IS_PRIOR(_ip, _ver) ...
+#define DWC3_VER_IS_WITHIN(_ip, _from, _to) ...
+#define DWC3_VER_TYPE_IS_WITHIN(_ip, _ver, _from, _to) ...
 
-  Linux 5.19-rc8 (2022-07-24 13:26:27 -0700)
+Regarding the STMMAC (DW MAC/GMAC/xGMAC) driver. I've harried up to
+claim it has the native IP-core versioning support. The current kernel
+driver doesn't have it. Instead I have it implemented in my local
+repo, but it isn't ready to be submitted yet. I need some more time to
+finish my DW GMAC/xGMAC work first.
 
-are available in the Git repository at:
+Ideally we could have created a common interface for all the drivers.
+I thought about it first when I was initially creating the patchsets.
+But now I don't time left for this at all. The review process's taken
+way much more time than I had/planned to spend for the PCIe-patches.
+So what I can do at this stage is to provide minor fixes if required.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+-Sergey
 
-for you to fetch changes up to 3afe697b74bc6c59f0b9a9c89d5b163db56fd4b1:
-
-  tools/power turbostat: version 2022.07.28 (2022-07-28 14:38:55 -0400)
-
-----------------------------------------------------------------
-Artem Bityutskiy (4):
-      tools/power turbostat: separate SPR from ICX
-      tools/power turbostat: cleanup 'automatic_cstate_conversion_probe()'
-      tools/power turbostat: fix SPR PC6 limits
-      tools/power turbostat: do not decode ACC for ICX and SPR
-
-Chen Yu (1):
-      tools/power turbostat: print the kernel boot commandline
-
-Colin Ian King (2):
-      tools/power turbostat: replace strncmp with single character compare
-      tools/power turbostat: Fix file pointer leak
-
-George D Sworo (1):
-      tools/power turbostat: Support RAPTORLAKE P
-
-Jiang Jian (1):
-      tools/power turbosstat: fix comment
-
-Len Brown (6):
-      tools/power turbostat: Show uncore frequency
-      tools/power turbostat: update turbostat.8
-      tools/power turbostat: dump CPUID.7.EDX.Hybrid
-      tools/power turbostat: simplify dump_turbo_ratio_limits()
-      tools/power turbostat: dump secondary Turbo-Ratio-Limit
-      tools/power turbostat: version 2022.07.28
-
-Zhang Rui (2):
-      tools/power turbostat: Introduce support for RaptorLake
-      tools/power turbostat: add support for ALDERLAKE_N
-
- arch/x86/include/asm/msr-index.h      |   1 +
- tools/power/x86/turbostat/turbostat.8 | 200 +++++++++++++++++-----------
- tools/power/x86/turbostat/turbostat.c | 240 +++++++++++++++++++++++++---------
- 3 files changed, 302 insertions(+), 139 deletions(-)
+> 
+> > In order to preserve the standard version
+> > representation and prevent the data conversion back and forth, we suggest
+> > to preserve the native version representation in the DWC PCIe driver too
+> > in the same way as it has already been done in the rest of the DWC
+> > drivers. IP-core version reading from the CSR will be introduced in the
+> > next commit together with a simple macro-based API to use it.
+> > 
+> > [1] https://en.wikipedia.org/wiki/FourCC

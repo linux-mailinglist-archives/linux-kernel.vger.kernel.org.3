@@ -2,188 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D1A5843E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF035843D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbiG1QNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
+        id S231991AbiG1QMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 12:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbiG1QNF (ORCPT
+        with ESMTP id S231448AbiG1QMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:13:05 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A7E6E2F9;
-        Thu, 28 Jul 2022 09:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=QX9Hvrhq1tv4fuik2gar58r4BELAfbzt39ubLuFRRa0=; b=Ifec17vWKOORU7KJ0UJ0qxyM7V
-        BfbF1rc539Oq5wXb9QGSZDhcZIxZrMfngNDwDuR4D+GSRfUyIo8Fe/Xaqkfn5Cs1wzUc6F3ZVHwwe
-        mtO12JyefeJ7YdQmoOuRZQCqE572PizMAdBqXJ8mUOd5jCCSuS+GTUt1Nw+l1+FkON8j4UXVeCl96
-        6MU8fzYK9ecQS31LIlcFNfz+XChPvIfmAgZ+xlR2xC4fOR27U3A0wrrIkHf0K8Defjfv0PnUtg7tI
-        mmj+4hZuc8EF5rXHdTzBcy4JvZ+MN536BLqZ7b5+38+RKCN49IC8+cCL7wNRdpdz12jaiiAvRoNli
-        9P6xh4NA==;
-Received: from [165.90.126.25] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oH67S-00A3YA-MD; Thu, 28 Jul 2022 18:12:14 +0200
-Date:   Thu, 28 Jul 2022 15:11:55 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, Guenter Roeck <linux@roeck-us.net>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH] drm/tests: Split up test cases in
- igt_check_drm_format_min_pitch
-Message-ID: <20220728161155.tzjalvrxaezk556t@mail.igalia.com>
-References: <20220717184336.1197723-1-mairacanal@riseup.net>
+        Thu, 28 Jul 2022 12:12:18 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726484505D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:12:17 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id q3so1739600qvp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BevssIEixB8bWfQySBHmZ4Jr0wRcQugiruyrYaaCWJ8=;
+        b=aqCxrokHPzJf/bvyCgVsYDOmal6oumiqBBhE8LXg+LXcDB3wZ8pVqTIxHezMIrHblX
+         mU3opnlsYpTKfi6wbXPxddV52RZ7Nj/5Us0B6PVYHqROQD1SLBzw0Q4QppFPFyClN/Ss
+         2lu6wT6NgOiUwMdaTCna1KAvD0FmAy1sBIpMT0+v1NSDK/4TaBLTRF+awv4QmkJhhlvp
+         RBiOHVKW4RaYv/dsXyvdjR5RPFWWMFB7bBpkqTJTCLEKONfzNBtWtKbMBjEJ/zLXhySY
+         EIaD8QjOpGQBt7aWDtrioPSqpAa7p/gwiKKzuKJOSuBgTdbPCcLdg0DfMWXuRW7I5lfw
+         NWwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BevssIEixB8bWfQySBHmZ4Jr0wRcQugiruyrYaaCWJ8=;
+        b=TLuX6ZpSkO8shTVhWH4JFzK5aUQtCskMZiokGfh6slpTsMgrasmya1UzVhNbFZ1nHq
+         OaSY0vheE7qrz0/7+nHk1q+Alrd2xtgHPKkXxuK3lHi3MGzO1xW48wMZw3tYnPQIjQzF
+         HZ8fqooCuHQ6fvWkU3CLWpr+TP4VeZ4fEzLo+l31+nX2x4VZie2zDSsb6O3NZ+fo8O7c
+         79/iLrYagot2o/Jg3UBaySiB1NbarRJac8yrZGE1rQy6YDtuy8uwkop7QSSMkgpDtVQS
+         9qGTktuhuyOKMB0WSl9lx6BmF+3cb4w+gNChhag4vXA2EJVuw1gPEMohgeO6s5xfN5uM
+         +X1A==
+X-Gm-Message-State: AJIora81eDJp+etFqlaSwtI3KkV0ie5j55ZKwLc8nYPPoQzY12S1Cy6J
+        SqYpM3uZUwKgfzRFXOhUkr9xVo4Q2XQ=
+X-Google-Smtp-Source: AGRyM1uUdPTZi343IiPW1iPumrhWdEfIibVUWCoheq11I99V3X31FRTWuGSzlD5xoRrUH1zcWlD+oA==
+X-Received: by 2002:a05:6214:1c4f:b0:473:7909:85e2 with SMTP id if15-20020a0562141c4f00b00473790985e2mr25147548qvb.69.1659024736342;
+        Thu, 28 Jul 2022 09:12:16 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:b984:ba52:c3cf:cb5e])
+        by smtp.gmail.com with ESMTPSA id t22-20020ac87396000000b0031ec44aa37bsm629225qtp.93.2022.07.28.09.12.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 09:12:15 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dennis Zhou <dennis@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH 0/5] lib/find: optimize find_bit() functions
+Date:   Thu, 28 Jul 2022 09:12:03 -0700
+Message-Id: <20220728161208.865420-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cycfpb3jug72cn35"
-Content-Disposition: inline
-In-Reply-To: <20220717184336.1197723-1-mairacanal@riseup.net>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the recent discussion [1], it was noticed that find_next_bit()
+functions may be improved by adding wrappers around common
+__find_next_bit(). 
 
---cycfpb3jug72cn35
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I tried that trick; and although it doesn't affect performance
+significantly, as reported by find_bit_benchmark, there's ~2.5K
+decrease in image size.
 
-On 07/17, Ma=EDra Canal wrote:
-> The igt_check_drm_format_min_pitch() function had a lot of
-> KUNIT_EXPECT_* calls, all of which ended up allocating and initializing
-> various test assertion structures on the stack.
->=20
-> This behavior was producing -Wframe-larger-than warnings on PowerPC, i386,
-> and MIPS architectures, such as:
->=20
-> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_forma=
-t_min_pitch':
-> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of
-> 3712 bytes is larger than 2048 bytes
->=20
-> So, the igt_check_drm_format_min_pitch() test case was split into three
-> smaller functions: one testing single plane formats, one testing multiple
-> planes formats, and the other testing tiled formats.
->=20
-Hi Ma=EDra,
+find_first_bit() is reworked accordingly.
 
-Could you add a Fixes tag to indicate the commit that introduces the
-issue?
+[1] https://lkml.org/lkml/2022/7/25/830
 
-Thanks,
+Yury Norov (5):
+  lib/find_bit: rename le to need_swab in __find_next_bit()
+  lib/find_bit: optimize find_next_bit() functions
+  lib/find_bit: unify _find_first_{,and,zero}_bit implementations
+  lib/find_bit: create find_first_zero_bit_le()
+  lib/find_bit: re-use __find_first_bit() in __find_next_bit()
 
-Melissa
+ include/linux/find.h |  45 +++++++++----
+ lib/find_bit.c       | 155 +++++++++++++++++++++++++++++--------------
+ 2 files changed, 138 insertions(+), 62 deletions(-)
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Ma=EDra Canal <mairacanal@riseup.net>
-> ---
->  drivers/gpu/drm/tests/drm_format_test.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/tests/drm_format_test.c b/drivers/gpu/drm/te=
-sts/drm_format_test.c
-> index 056cb8599d6d..28f2b8f88818 100644
-> --- a/drivers/gpu/drm/tests/drm_format_test.c
-> +++ b/drivers/gpu/drm/tests/drm_format_test.c
-> @@ -91,7 +91,7 @@ static void igt_check_drm_format_block_height(struct ku=
-nit *test)
->  	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
->  }
-> =20
-> -static void igt_check_drm_format_min_pitch(struct kunit *test)
-> +static void igt_check_drm_format_min_pitch_for_single_plane(struct kunit=
- *test)
->  {
->  	const struct drm_format_info *info =3D NULL;
-> =20
-> @@ -175,6 +175,11 @@ static void igt_check_drm_format_min_pitch(struct ku=
-nit *test)
->  			(uint64_t)UINT_MAX * 4);
->  	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)=
-),
->  			(uint64_t)(UINT_MAX - 1) * 4);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_multiple_planes(struct ku=
-nit *test)
-> +{
-> +	const struct drm_format_info *info =3D NULL;
-> =20
->  	/* Test 2 planes format */
->  	info =3D drm_format_info(DRM_FORMAT_NV12);
-> @@ -249,6 +254,11 @@ static void igt_check_drm_format_min_pitch(struct ku=
-nit *test)
->  			(uint64_t)(UINT_MAX - 1) / 2);
->  	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, (UINT_MAX - 1)=
- / 2),
->  			(uint64_t)(UINT_MAX - 1) / 2);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_tiled_format(struct kunit=
- *test)
-> +{
-> +	const struct drm_format_info *info =3D NULL;
-> =20
->  	/* Test tiled format */
->  	info =3D drm_format_info(DRM_FORMAT_X0L2);
-> @@ -273,7 +283,9 @@ static void igt_check_drm_format_min_pitch(struct kun=
-it *test)
->  static struct kunit_case drm_format_tests[] =3D {
->  	KUNIT_CASE(igt_check_drm_format_block_width),
->  	KUNIT_CASE(igt_check_drm_format_block_height),
-> -	KUNIT_CASE(igt_check_drm_format_min_pitch),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_single_plane),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_multiple_planes),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_tiled_format),
->  	{ }
->  };
-> =20
-> --=20
-> 2.36.1
->=20
+-- 
+2.34.1
 
---cycfpb3jug72cn35
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmLitTIACgkQwqF3j0dL
-ehwt4A/+IqGJpHDAaqlrXh3uSs6Sz5+Ca8yyh0YOHdzqDY64qUdT1DYXohXpy7MV
-fmgbtKGJL5erww3V5Jqg01+zpV1Q9MaC02Nb1txXqBreI1k8c1ALkB/m1Mlj6nLl
-UavoEhVhxA5utbETxtATCoEq3C/LxC65hZ6LPdwj2kQQaPOOHEccpuPC3CYTu9do
-qRblunLb6+VKPxdSmUFVwK2Ocshg1Efoa3ZJ9AipJjVmOQUSzXI644hr9l6biPOF
-a/5aS8R08FL7QhQQU9lzNU2zUeJuPSXdXDcUnZ3vkcOFR5bXejdedlMcK/SPbJbA
-4W5u6fNjE5PBer3AZDyc33xWUNUbc7kevBJj2oiqAGikQ6gLwJxTnQo8vRHwHoW0
-psyGiheXTlpMo4CPBmsHvGDSDSo8eQ6GNiyoXdMNC6LMal++ly/DgH7nMlhA83SS
-G2QwCvmHVgpR3BJ/R7voFcFoMn9DpTnwjvcAZqoXribwbOA9CIEhV0zVejlBbGoR
-HoassarpIU+B+I/c6i19qXt+crD4MW2x3W+X7hbrFTuOvE30QGtpFqP3CLBPUj3E
-ySNjplYAP3ZrK6ZGERzPThNavFDQB4ZzSUUclTRo0KxFqY2kNZfbc3ZVeg71UriN
-mPtuXUUC9tb7xsRRVaKCoJcRyur/nSG0RKce7dSUbdI5OdPVsHg=
-=OvDL
------END PGP SIGNATURE-----
-
---cycfpb3jug72cn35--

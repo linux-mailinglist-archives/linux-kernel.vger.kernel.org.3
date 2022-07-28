@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F30583C9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205DF583CB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236593AbiG1K5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S236865AbiG1K66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiG1K5t (ORCPT
+        with ESMTP id S235668AbiG1K6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:57:49 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C06C61D95;
-        Thu, 28 Jul 2022 03:57:48 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ltncq31LHzmVN3;
-        Thu, 28 Jul 2022 18:55:55 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Jul 2022 18:57:46 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Jul 2022 18:57:45 +0800
-Message-ID: <882a28de-3bd5-23e5-fbad-bfdc2a4a24e4@huawei.com>
-Date:   Thu, 28 Jul 2022 18:57:44 +0800
+        Thu, 28 Jul 2022 06:58:51 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1716664C5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1659005923;
+        bh=y319GJZ42LdkVPQdcO0bdeXk+v6i2YLb2hHt78rlabo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=TLQnLTWUCKPR0ZKBW4k7cxvSLPQwmV5oLCQnR+oz0gGlB8E56tqMvw5PZy7DFXYfC
+         uvzEl4YR/7WH8J7yY2UpSK3iR63dYCzYu2x4tp9NE+6l4PbJVmNVbk7igVOPO7ytts
+         3tSKwARcmFNTntEOUjmDqNRS513Agl+ApOYrbrpU=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 3A502667D7;
+        Thu, 28 Jul 2022 06:58:42 -0400 (EDT)
+Message-ID: <4f8b9895d807b954b3af435b5ef4b70ddd95862b.camel@xry111.site>
+Subject: Re: [PATCH 4/5] LoongArch: Stop using undocumented assembler options
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Youling Tang <tangyouling@loongson.cn>, loongarch@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 28 Jul 2022 18:58:40 +0800
+In-Reply-To: <4f4ced23-2046-586c-2590-542923025149@loongson.cn>
+References: <385f63bcbee8e37c42f479ce9cdc7e7d731d419b.camel@xry111.site>
+         <4f09c81c22d0a16883a6914a8f7209957386c07c.camel@xry111.site>
+         <4f4ced23-2046-586c-2590-542923025149@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH] xfs: fix NULL pointer dereference in xfs_getbmap()
-To:     "Darrick J. Wong" <djwong@kernel.org>
-CC:     <linux-xfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <guoxuenan@huawei.com>, <liuyongqiang13@huawei.com>,
-        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
-References: <20220727085230.4073478-1-chenxiaosong2@huawei.com>
- <YuFW4OLWCuAhrC7R@magnolia>
-From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
-In-Reply-To: <YuFW4OLWCuAhrC7R@magnolia>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,28 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/7/27 23:16, Darrick J. Wong 写道:
+On Thu, 2022-07-28 at 17:46 +0800, Youling Tang wrote:
+>=20
+> On 07/28/2022 12:29 AM, Xi Ruoyao wrote:
+> > Now we can handle GOT and GOT-based relocations properly, remove the
+> > undocumented `-Wa,-mla-{global,local}-with-{pcrel,abs}` assembler
+> > hacks.
+> >=20
+> > Adjust assembly code to explicitly use "la.pcrel" where necessary.
+> >=20
+> > Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> > ---
+> > =C2=A0arch/loongarch/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 5 +=
+----
+> > =C2=A0arch/loongarch/kernel/head.S | 10 +++++-----
+> > =C2=A02 files changed, 6 insertions(+), 9 deletions(-)
+> >=20
+> > diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> > index 039dcc4fe1f3..9552c7880d34 100644
+> > --- a/arch/loongarch/Makefile
+> > +++ b/arch/loongarch/Makefile
+> > @@ -40,10 +40,7 @@ endif
+> >=20
+> > =C2=A0cflags-y=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0+=3D -G0 -pipe -msoft-float
+> > =C2=A0LDFLAGS_vmlinux=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0+=3D -G0 -static -n -nostdlib
+> > -KBUILD_AFLAGS_KERNEL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0+=3D -Wa,-mla-global-with-pcrel
+> > -KBUILD_CFLAGS_KERNEL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0+=3D -Wa,-mla-global-with-pcrel
+> > -KBUILD_AFLAGS_MODULE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0+=3D -Wa,-mla-global-with-abs
+> > -KBUILD_CFLAGS_MODULE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0+=3D -fplt -Wa,-mla-global-with-abs,-
+> > mla-local-with-abs
+> > +KBUILD_CFLAGS_MODULE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0+=3D -fplt
+>=20
+> The -fplt flag may be removed, the compiler defaults to -fplt if not
+> specified (riscv is also not manually specified as -fplt).
 
-> Heh.  Is this worth an fstest?  It probably is, since prior to 5.20 this
-> would have been a UAF bug on top of a NULL deref.
+Will remove explicit -fplt in V2.
 
-I will try to add regression test to xfstests for this commit when it is 
-merged into mainline.
+By the way, how do you think about "-G0"?  It does not have any effect
+now because the toolchain does not attempt to use sbss/sdata sections.
+Do we have any plan to add sbss and sdata support in the toolchain?
 
-> 
-> Nit: it's ILOCK, not i_lock.  Otherwise... this looks correct to me --
-> take the IOLOCK and ILOCK in shared mode before accessing the inode fork
-> structures.
-> 
-> Do you have any suggestions for Fixes:?  I suspect this has been broken
-> for quite some time.
 
-The "Fixes:" label is: abbf9e8a4507 ("xfs: rewrite getbmap using the 
-xfs_iext_* helpers")
-
-> 
-> No need to fix the nit, I'll do that when I commit this.
-> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-> 
-> --D
-> 
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

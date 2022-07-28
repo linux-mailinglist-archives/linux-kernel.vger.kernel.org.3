@@ -2,286 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE9F584107
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D5B58410F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbiG1OYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
+        id S231721AbiG1OZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiG1OYJ (ORCPT
+        with ESMTP id S231786AbiG1OZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:24:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235C754AF0;
-        Thu, 28 Jul 2022 07:24:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 905DB6102A;
-        Thu, 28 Jul 2022 14:24:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B56C433D7;
-        Thu, 28 Jul 2022 14:24:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659018247;
-        bh=jGICmRzkN3mB2vVHmw3SJO6pEzZUPArOLL2IhzvWYfo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cKDLWHduHYMvzFo69JVaBPtGcczE9v78EFedXugXg2Q26iUlJ+zz6lt6L+Rdgw3VQ
-         VBZnZaYkjxvvx7eGqz0ffgyRIocMxEqtCGGFUBGBB8LkAWlrcugzepIfw4CnYpBYzh
-         B3JtbldrLfFtDib0fdO2L8i3L9UusHFledAW7N18=
-Date:   Thu, 28 Jul 2022 16:24:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Appana Durga Kedareswara rao 
-        <appana.durga.kedareswara.rao@amd.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com, arnd@arndb.de, appanad@amd.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, git@amd.com, git@xilinx.com,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Subject: Re: [PATCH v2 4/4] drivers: misc: Add Support for TMR Inject IP
-Message-ID: <YuKcBO5JatwRYQJ3@kroah.com>
-References: <20220720060016.1646317-1-appana.durga.kedareswara.rao@amd.com>
- <20220720060016.1646317-5-appana.durga.kedareswara.rao@amd.com>
+        Thu, 28 Jul 2022 10:25:46 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CBC3C144;
+        Thu, 28 Jul 2022 07:25:45 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 141so3518302ybn.4;
+        Thu, 28 Jul 2022 07:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=p3LundJe/B7kP70p/sHLOn4E+FS4l10QjqFmK00htFE=;
+        b=A1npVQRsIIGhqrLf8k1afl0RnpwTJqtndWJ9zwwdiHBec1qyAdFLwzqHsOSEz3tCvV
+         J33JylIt6+Pd/jdRlsNR8UNmRloDG3G3NH8SDxk+u/mKNySVTad5ytB99iquy75NDEmJ
+         4mWC5CLDqVkcs4L2XoIG3yXXPEAHHG/8Tcg/Dvv9GYAPEUkBT69Sf5SENvQPZzOzH0sX
+         rfGEF5dzUYaNlMOHu9Bo+MhNb46gjzqbFsnt6Os5CtChAsnh8Oe9HHUf8ZzIl+foGeav
+         4tev6dNQXoIBnvQvDpzSxoDwu4FxCVkjoAtNixqsdq3d7+awDvcxDaofyreOs9jcFNbc
+         pM7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=p3LundJe/B7kP70p/sHLOn4E+FS4l10QjqFmK00htFE=;
+        b=6RF8NVyqer2ry7KkMbl4IGe3s466k9oAtT8aexLm+GyWJ8LGxFSmOwyN77/S38+3c1
+         fKKwh2CnoBJL8cg15hV7rxdNiwuSvH+rPXrZGZntlbgnmWQ4y7yi4yAx5kFspcdVe0pr
+         +pByPs6GHVdjawPpGZV0FuOoHi0L5tU0q2NfKxxMibBhfWpUr5HDe5XVX9U5lF6ZadYw
+         /qHuBuHuM2yrtiLfokOHvCGQXCqontHwfRxWYG/FcKKacSIVP9tleGsyDrOCvm/DeoYR
+         b+ucXBpRe03WGawwrsk6EXEOzdEoKDGs0tPFSDZgFbEIq6qDVPpJrJBzhBd4JliSP5kO
+         CUjA==
+X-Gm-Message-State: AJIora9AUiv+GEFNUaem3B7qlfBZvrywD5GTOgrdxToXQkTak2+zIN/G
+        dB1ZendnebimntracZRkcoXk8sTco+kdtkssDs0=
+X-Google-Smtp-Source: AGRyM1tCj4kGBTNXRwFwSGAlKun9Kno3+3NAkIfxjL5nye0CiOrWdeD4Is2ry7fRDFK14XMZzZ9IWnwfFJOA1A028zM=
+X-Received: by 2002:a25:e401:0:b0:66e:280a:98cd with SMTP id
+ b1-20020a25e401000000b0066e280a98cdmr20245601ybh.540.1659018344244; Thu, 28
+ Jul 2022 07:25:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220720060016.1646317-5-appana.durga.kedareswara.rao@amd.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
+ <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
+In-Reply-To: <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
+From:   Jason Gerecke <killertofu@gmail.com>
+Date:   Thu, 28 Jul 2022 07:26:00 -0700
+Message-ID: <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 11:30:16AM +0530, Appana Durga Kedareswara rao wrote:
-> From: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-> 
-> The Triple Modular Redundancy(TMR) provides functional fault injection by
-> changing selected MicroBlaze instructions, which provides the possibility
-> to verify that the TMR subsystem error detection and fault recovery logic
-> is working properly, provided sysfs entries which allow the user to inject
-> a fault.
+On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote=
+:
+>
+> On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com>=
+ wrote:
+> >
+> >
+> > Hi Jason,
+> >
+> > I love your patch! Yet something to improve:
+> >
+> > [auto build test ERROR on wsa/i2c/for-next]
+> > [also build test ERROR on linus/master v5.19-rc7 next-20220718]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:
+> > https://github.com/intel-lab-lkp/linux/commits/Jason-Gerecke/i2c-Use-u8=
+-type-in-i2c-transfer-calls/20220718-233658
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
+> > i2c/for-next
+> > config: hexagon-randconfig-r026-20220718
+> > (https://download.01.org/0day-ci/archive/20220719/202207190634.ToyhlXSz=
+-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
+> > d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
+> > reproduce (this is a W=3D1 build):
+> >          wget
+> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cros=
+s
+> > -O ~/bin/make.cross
+> >          chmod +x ~/bin/make.cross
+> >          #
+> > https://github.com/intel-lab-lkp/linux/commit/9732240c23a365c0590f05ce8=
+3196869235a2ea7
+> >          git remote add linux-review https://github.com/intel-lab-lkp/l=
+inux
+> >          git fetch --no-tags linux-review
+> > Jason-Gerecke/i2c-Use-u8-type-in-i2c-transfer-calls/20220718-233658
+> >          git checkout 9732240c23a365c0590f05ce83196869235a2ea7
+> >          # save the config file
+> >          mkdir build_dir && cp config build_dir/.config
+> >          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=
+ W=3D1
+> > O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/iio/adc/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> drivers/iio/adc/max1363.c:1645:12: error: incompatible function poin=
+ter types assigning to 'int (*)(const struct i2c_client *, const char *, in=
+t)' from 'int (const struct i2c_client *, const u8 *, int)' (aka 'int (cons=
+t struct i2c_client *, const unsigned char *, int)') [-Werror,-Wincompatibl=
+e-function-pointer-types]
+> >                     st->send =3D i2c_master_send;
+> >                              ^ ~~~~~~~~~~~~~~~
+> > >> drivers/iio/adc/max1363.c:1646:12: error: incompatible function poin=
+ter types assigning to 'int (*)(const struct i2c_client *, char *, int)' fr=
+om 'int (const struct i2c_client *, u8 *, int)' (aka 'int (const struct i2c=
+_client *, unsigned char *, int)') [-Werror,-Wincompatible-function-pointer=
+-types]
+> >                     st->recv =3D i2c_master_recv;
+> >                              ^ ~~~~~~~~~~~~~~~
+> >     2 errors generated.
+>
+> Wolfram and Jonathan,
+>
+> Writing a patch to fix the new warnings generated by my I2C patch is
+> simple enough, but I'd like some help coordinating getting both
+> patches landed. Should I wait for the I2C patch to land in "for-next"
+> before sending the IIO fix, or would it be preferred to send the IIO
+> fix right now so that both patches can be reviewed simultaneously?
 
-We already have a fault-injection api, why are you not using that?
+It's been pretty quiet, so asking again for any thoughts on how to
+best address this tangle...
 
-> 
-> Usage:
-> echo 1 > /sys/devices/platform/amba_pl/44a30000.tmr_inject/inject_err
-> 
-> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.kedareswara.rao@amd.com>
-> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-
-Odd, just one is needed.
-
-> ---
-> Changes for v2:
-> --> Added Examples for sysfs entries
-> --> Removed uneeded struct dev from the driver private structure
-> --> Updated driver to use sysfs_emit() API instead of sprintf() API
-> --> Added error checks wherever applicable.
-> --> Fixed sysfs registration.
->  .../testing/sysfs-driver-xilinx-tmr-inject    |  16 ++
->  MAINTAINERS                                   |   7 +
->  drivers/misc/Kconfig                          |  10 +
->  drivers/misc/Makefile                         |   1 +
->  drivers/misc/xilinx_tmr_inject.c              | 186 ++++++++++++++++++
->  5 files changed, 220 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-xilinx-tmr-inject
->  create mode 100644 drivers/misc/xilinx_tmr_inject.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-xilinx-tmr-inject b/Documentation/ABI/testing/sysfs-driver-xilinx-tmr-inject
-> new file mode 100644
-> index 000000000000..d274b30ee24c
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-xilinx-tmr-inject
-> @@ -0,0 +1,16 @@
-> +What:		/sys/devices/platform/amba_pl/<dev>/inject_err
-> +Date:		June 2022
-
-It's not June anymore, even when you sent this patch :(
-
-> +Contact:	appana.durga.rao@xilinx.com
-> +Description:	This control file allows to inject fault using tmr inject.
-> +		This file is write only.
-> +		Example:
-> +		# echo 1 > /sys/devices/platform/amba_pl/44a30000.tmr_inject/inject_err
-> +
-> +What:		/sys/devices/platform/amba_pl/<dev>/inject_cpuid
-> +Date:		June 2022
-> +Contact:	appana.durga.rao@xilinx.com
-> +Description:	This control file allows to configure the CPU identifier
-> +		to enable fault injection.
-> +		This file is write only.
-> +		Example:
-> +		# echo 1 > /sys/devices/platform/amba_pl/44a30000.tmr_inject/inject_cpuid
-
-What errors and faults happen?  Where is that documented?  What happens
-when you write to these sysfs files?  Does the system crash?  Why would
-you want to use them ever?
-
-
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 732fd9ae7d9f..c903b45c204a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13087,6 +13087,13 @@ F:	Documentation/ABI/testing/sysfs-driver-xilinx-tmr-manager
->  F:	Documentation/devicetree/bindings/misc/xlnx,tmr-manager.yaml
->  F:	drivers/misc/xilinx_tmr_manager.c
->  
-> +MICROBLAZE TMR INJECT
-> +M:	Appana Durga Kedareswara rao <appana.durga.kedareswara.rao@amd.com>
-> +S:	Supported
-> +F:	Documentation/ABI/testing/sysfs-driver-xilinx-tmr-inject
-> +F:	Documentation/devicetree/bindings/misc/xlnx,tmr-inject.yaml
-> +F:	drivers/misc/xilinx_tmr_inject.c
-> +
->  MICROCHIP AT91 DMA DRIVERS
->  M:	Ludovic Desroches <ludovic.desroches@microchip.com>
->  M:	Tudor Ambarus <tudor.ambarus@microchip.com>
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 555ae2e33b91..0989c36f3051 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -493,6 +493,16 @@ config TMR_MANAGER
->  
->  	  Say N here unless you know what you are doing.
->  
-> +config TMR_INJECT
-> +	bool "Select TMR Inject"
-> +	depends on TMR_MANAGER
-> +	help
-> +	  This option enables the driver developed for TMR Inject.
-> +	  The Triple Modular Redundancy(TMR) Inject provides
-> +	  fault injection.
-> +
-> +	  Say N here unless you know what you are doing.
-
-Why can't this be a module?
-
-
-
-> +
->  source "drivers/misc/c2port/Kconfig"
->  source "drivers/misc/eeprom/Kconfig"
->  source "drivers/misc/cb710/Kconfig"
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index 28b9803f909b..e9d0a709e207 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -61,3 +61,4 @@ obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
->  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
->  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
->  obj-$(CONFIG_TMR_MANAGER)	+= xilinx_tmr_manager.o
-> +obj-$(CONFIG_TMR_INJECT)	+= xilinx_tmr_inject.o
-> diff --git a/drivers/misc/xilinx_tmr_inject.c b/drivers/misc/xilinx_tmr_inject.c
-> new file mode 100644
-> index 000000000000..930d89e90b61
-> --- /dev/null
-> +++ b/drivers/misc/xilinx_tmr_inject.c
-> @@ -0,0 +1,186 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Driver for Xilinx TMR Inject IP.
-> + *
-> + * Copyright (C) 2022 Xilinx, Inc.
-> + *
-> + * Description:
-> + * This driver is developed for TMR Inject IP,The Triple Modular Redundancy(TMR)
-> + * Inject provides fault injection.
-> + * Fault injection and detection features are provided through sysfs entries
-> + * which allow the user to generate a fault.
-> + */
-> +
-> +#include <asm/xilinx_mb_manager.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +
-> +/* TMR Inject Register offsets */
-> +#define XTMR_INJECT_CR_OFFSET		0x0
-> +#define XTMR_INJECT_AIR_OFFSET		0x4
-> +#define XTMR_INJECT_IIR_OFFSET		0xC
-> +#define XTMR_INJECT_EAIR_OFFSET		0x10
-> +#define XTMR_INJECT_ERR_OFFSET		0x204
-> +
-> +/* Register Bitmasks/shifts */
-> +#define XTMR_INJECT_CR_CPUID_SHIFT	8
-> +#define XTMR_INJECT_CR_IE_SHIFT		10
-> +#define XTMR_INJECT_IIR_ADDR_MASK	GENMASK(31, 16)
-> +
-> +#define XTMR_INJECT_MAGIC_MAX_VAL	255
-> +
-> +/**
-> + * struct xtmr_inject_dev - Driver data for TMR Inject
-> + * @regs: device physical base address
-> + * @cr_val: control register value
-> + * @magic: Magic hardware configuration value
-> + * @err_cnt: error statistics count
-> + */
-> +struct xtmr_inject_dev {
-> +	void __iomem *regs;
-> +	u32 cr_val;
-> +	u32 magic;
-> +	u32 err_cnt;
-> +};
-> +
-> +/* IO accessors */
-> +static inline void xtmr_inject_write(struct xtmr_inject_dev *xtmr_inject,
-> +				     u32 addr, u32 value)
-> +{
-> +	iowrite32(value, xtmr_inject->regs + addr);
-> +}
-> +
-> +static inline u32 xtmr_inject_read(struct xtmr_inject_dev *xtmr_inject,
-> +				   u32 addr)
-> +{
-> +	return ioread32(xtmr_inject->regs + addr);
-> +}
-> +
-> +static ssize_t inject_err_store(struct device *dev,
-> +				struct device_attribute *attr, const char *buf,
-> +				size_t size)
-> +{
-> +	int ret;
-> +	long value;
-> +
-> +	ret = kstrtoul(buf, 16, &value);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (value > 1)
-> +		return -EINVAL;
-
-That does not match your documentation :(
-
-
-> +
-> +	xmb_inject_err();
-> +
-> +	return size;
-> +}
-> +static DEVICE_ATTR_WO(inject_err);
-> +
-> +static ssize_t inject_cpuid_store(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  const char *buf, size_t size)
-> +{
-> +	struct xtmr_inject_dev *xtmr_inject = dev_get_drvdata(dev);
-> +	int ret;
-> +	long value;
-> +
-> +	ret = kstrtoul(buf, 0, &value);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (value > 3)
-> +		return -EINVAL;
-
-Again, does not match the documentation at all.
-
-confused,
-
-greg k-h
+Jason

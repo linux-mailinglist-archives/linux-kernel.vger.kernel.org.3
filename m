@@ -2,129 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2258658478B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5B4584797
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbiG1VIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 17:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        id S232720AbiG1VTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 17:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbiG1VH7 (ORCPT
+        with ESMTP id S229620AbiG1VS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 17:07:59 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB60F6D554;
-        Thu, 28 Jul 2022 14:07:58 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id sz17so5181115ejc.9;
-        Thu, 28 Jul 2022 14:07:58 -0700 (PDT)
+        Thu, 28 Jul 2022 17:18:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE214F1A1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:18:55 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id v17so3721262edc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:18:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NZXtt/QofZDC7zUBwIWTxL7PY3McEogGdP7WygPZyc0=;
-        b=K0WElrLXF9gteDIH0IgTF0SkihqpeO2+7ttRzCUdN6AHdyEYH7EF7ZHQyKGodloZEU
-         jREZarlI9W81gfzl9cAahqf8B9KI8HKM5cVHjU2PU05aoCxrtI2SFYl1Izor/FrGwTwN
-         8iUJ//j3rKtlMzD5406DgJQR6rKywPaV7hODOxp20dd4Q1R1q111VzTsV7lQg0hBjGZT
-         vslGtHmCRWOf6CuydcUfGWzrSncIzOHWcN2y/uRr4y1/n+LPcnny2Pd7M452awo3Y5fD
-         Ak+EaZ8pJeJ5krSd0Ub2DJ70kEqAZnR/oAKMDFTHXSYA+XdViuNChTANv23OqkmoreWe
-         a4Xw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=iyWCACEtC3V1/iSrvN7QORzRaYA0n5oxtpPIEK5JvoY=;
+        b=hojvuCIi/iO1jzC4b5F+GmGDTGC2yye7iwBOOzqvwXV5B9awqbtFx+l5y9sEpVYvVb
+         MKTJQFlSC6egSjsxyBPPsUi8SXkfkGpO7D0i0SG6bCx2pjNO7p+/kbAYFHVuceQ4QrRV
+         eOzWRd2+QQ/db5vE+TUfBHOTFgrYR/+XBFm/o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NZXtt/QofZDC7zUBwIWTxL7PY3McEogGdP7WygPZyc0=;
-        b=fqLXblvMeNb7P1yxgkRAS2U5BUXzLoh0MQXpwkGGOHC9BEJY6Us5Bspz7iYAb8gqDT
-         paDtdnnlFcmSjNI7YF3zHe394SnOr3sHRe7wReuSFwnnCeck66Azq2KF0sgxd5N9jjwh
-         R+Wtk9kAyQT8urhSZlZ5BpV9HMckPCRJnrvVBt+XbnmLd6My2JmAh7qYPws8FMqYq9Oh
-         KEaCW/WN29KOSa9dGD28STk8WvspZB6Af10BSnLeWkXJUhMpcakt8GnWd8kOZGMH+mct
-         C5SFaWH4R1K2gzWcjJU0/zdjZlTaFREGHP5Nxew5g71gNJc8ZsqI8qRly58lqwh7Dt3J
-         lUcA==
-X-Gm-Message-State: AJIora9diOLZ+TZXnvZEFAshUW7JLggNUS2RZEwlQW2DC64riY/ZLh2J
-        7sIYeqwAGdVl4aPMGAso4qOcUAoadPIEweCsCHg=
-X-Google-Smtp-Source: AGRyM1vHwsO7bWnYPOgUVw6s/I0ThIB1PnCnsiig6YntbHlaTBXWTNPcvD6bTVITaR8ENfdsYfE1XxnsXSkG13vQLwo=
-X-Received: by 2002:a17:907:2722:b0:72b:735a:d3b4 with SMTP id
- d2-20020a170907272200b0072b735ad3b4mr521562ejl.363.1659042477105; Thu, 28 Jul
- 2022 14:07:57 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=iyWCACEtC3V1/iSrvN7QORzRaYA0n5oxtpPIEK5JvoY=;
+        b=xqkawXbH/tkiPns6Xz/UoeZIk7zTJ+MZXsk5v/8xO0EV9RtX4znRf+BvWqn/W4i01j
+         isA4cvD3hTd5KEYSgEGnG348KpdhHVy3MWRelm2bbG9dJGMMwOrUE6+8Doxl1/agw5bE
+         6YD9DIfqzMzMpSh59N0zg69S2Jwbt0G10QkOmkJpgsJfYHXr5jMINM7esOaC1VdbUPS7
+         KPLQN4MACrmRIbzFqMV99mV6F8HGCNCwbIXR6kT8BikqBssVGxbRpGBvlGpN844vi5KL
+         yu/tRCIauSGGezvGByfgVxTRrrNZVFesQK+JC5M/gVZLHM3wfIrj3fLyRTsYxpqd1jY1
+         N9kw==
+X-Gm-Message-State: AJIora/WzcA4Oc8xYy+ewMgglfFmDl33nhphkdlZqKs4+qe4j7Okxv3S
+        Qoeo+GNW8eji/5YG2L1Z494v9eErzrNZQK9o
+X-Google-Smtp-Source: AGRyM1sktl0v3OfWeM5DHPMZPsK8Q6DVhT+tSWMy4U/iLbMSy2o3hI6eg4LLKmRvU9UDznbVYO0hcA==
+X-Received: by 2002:a05:6402:5412:b0:435:5997:ccb5 with SMTP id ev18-20020a056402541200b004355997ccb5mr758195edb.167.1659043133368;
+        Thu, 28 Jul 2022 14:18:53 -0700 (PDT)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id u6-20020aa7d986000000b0043bb8023caesm1292124eds.62.2022.07.28.14.18.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 14:18:52 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id a18-20020a05600c349200b003a30de68697so3828539wmq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:18:51 -0700 (PDT)
+X-Received: by 2002:a05:600c:5114:b0:3a3:3f7f:27ec with SMTP id
+ o20-20020a05600c511400b003a33f7f27ecmr406453wms.93.1659043131573; Thu, 28 Jul
+ 2022 14:18:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220728190810.1290857-1-robh@kernel.org> <CABb+yY2jV7c8oX7=F=nocfvGrOMHJAYov7zS2nT0=qFoNyoxJQ@mail.gmail.com>
-In-Reply-To: <CABb+yY2jV7c8oX7=F=nocfvGrOMHJAYov7zS2nT0=qFoNyoxJQ@mail.gmail.com>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Thu, 28 Jul 2022 16:07:45 -0500
-Message-ID: <CABb+yY0JzztBB+giBu+RCt-dzgwYWF32sCR3WKKP9U5K9UvhxA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mailbox: arm,mhu: Make secure interrupt optional
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220721152314.RFC.1.Ie333b3e4aff6e4a5b58c4aa805e030e561be8773@changeid>
+ <269f2610-425b-f296-dcfc-89bdc2e1d587@quicinc.com> <CAD=FV=XSVXasU5PMR2kL0WQjQ458xDePuTGd1m14_v9JO5B6oA@mail.gmail.com>
+ <CAF6AEGv_Vikf80v-7ccz90fvGPrk5pV1tOxRoWKxKHYuEW8=aA@mail.gmail.com> <5c8ca71c-5f0b-d5f5-9f16-e312dec0d01b@quicinc.com>
+In-Reply-To: <5c8ca71c-5f0b-d5f5-9f16-e312dec0d01b@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 28 Jul 2022 14:18:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UGYV1mZenDCRrbpC+gpE12-Uis7fm_=H3PeEjK=t36yA@mail.gmail.com>
+Message-ID: <CAD=FV=UGYV1mZenDCRrbpC+gpE12-Uis7fm_=H3PeEjK=t36yA@mail.gmail.com>
+Subject: Re: [RFC PATCH] drm/edid: Make 144 Hz not preferred on Sharp LQ140M1JW46
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 3:17 PM Jassi Brar <jassisinghbrar@gmail.com> wrote:
+Hi,
+
+On Thu, Jul 28, 2022 at 10:34 AM Abhinav Kumar
+<quic_abhinavk@quicinc.com> wrote:
 >
-> On Thu, Jul 28, 2022 at 2:08 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > The secure interrupt is only useful to secure world, therefore for NS
-> > users it shouldn't be required. Make it optional.
-> >
-> > This fixes a warning on Arm Juno board:
-> >
-> > mhu@2b1f0000: interrupts: [[0, 36, 4], [0, 35, 4]] is too short
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/mailbox/arm,mhu.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/mailbox/arm,mhu.yaml b/Documentation/devicetree/bindings/mailbox/arm,mhu.yaml
-> > index bd49c201477d..d9a4f4a02d7c 100644
-> > --- a/Documentation/devicetree/bindings/mailbox/arm,mhu.yaml
-> > +++ b/Documentation/devicetree/bindings/mailbox/arm,mhu.yaml
-> > @@ -57,6 +57,7 @@ properties:
-> >      maxItems: 1
-> >
-> >    interrupts:
-> > +    minItems: 2
-> >      items:
-> >        - description: low-priority non-secure
-> >        - description: high-priority non-secure
-> >
-> Do we also want to specify that only the secure-irq is optional
-> because irqs are directly mapped onto channels in the driver, and only
-> omitting the secure (last) irq will work.
+> Hi Rob and Doug
 >
-I could learn why specifying secure irq isn't desirable?
-No non-secure client node would ask for that secure irq/channel, which
-will simply lay unused.
+> On 7/22/2022 10:36 AM, Rob Clark wrote:
+> > On Fri, Jul 22, 2022 at 9:48 AM Doug Anderson <dianders@chromium.org> wrote:
+> >>
+> >> Hi,
+> >>
+> >> On Fri, Jul 22, 2022 at 9:37 AM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+> >>>
+> >>> + sankeerth
+> >>>
+> >>> Hi Doug
+> >>>
+> >>> On 7/21/2022 3:23 PM, Douglas Anderson wrote:
+> >>>> The Sharp LQ140M1JW46 panel is on the Qualcomm sc7280 CRD reference
+> >>>> board. This panel supports 144 Hz and 60 Hz. In the EDID, the 144 Hz
+> >>>> mode is listed first and thus is marked preferred. The EDID decode I
+> >>>> ran says:
+> >>>>
+> >>>>     First detailed timing includes the native pixel format and preferred
+> >>>>     refresh rate.
+> >>>>
+> >>>>     ...
+> >>>>
+> >>>>     Detailed Timing Descriptors:
+> >>>>       DTD 1:  1920x1080  143.981 Hz  16:9   166.587 kHz  346.500 MHz
+> >>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
+> >>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
+> >>>>       DTD 2:  1920x1080   59.990 Hz  16:9    69.409 kHz  144.370 MHz
+> >>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
+> >>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
+> >>>>
+> >>>> I'm proposing here that the above is actually a bug and that the 60 Hz
+> >>>> mode really should be considered preferred by Linux.
+>
+> Its a bit tricky to say that this is a bug but I think we can certainly
+> add here that for an internal display we would have ideally had the
+> lower resolution first to indicate it as default.
 
-The programming of the secure channel doesn't care if the mode is
-indeed secure. It all relies on providing accurate information in the
-device tree :- the controller provides secure and non-secure channels
-but only non-secure channels are _used_ in non-secure mode.
+Yeah, it gets into the vagueness of the EDID spec in general. As far
+as I can find it's really up to the monitor to decide by what means it
+chooses the "preferred" refresh rate if the monitor can support many.
+Some displays may decide that the normal rate is "preferred" and some
+may decide that the high refresh rate is "preferred". Neither display
+is "wrong" per say, but it's nice to have some consistency here and to
+make it so that otherwise "dumb" userspace will get something
+reasonable by default. I'll change it to say:
 
-diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi
-b/arch/arm64/boot/dts/arm/juno-base.dtsi
-index f6c55877fbd94..004b1566be74d 100644
---- a/arch/arm64/boot/dts/arm/juno-base.dtsi
-+++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
-@@ -26,7 +26,8 @@ mailbox: mhu@2b1f0000 {
-        compatible = "arm,mhu", "arm,primecell";
-        reg = <0x0 0x2b1f0000 0x0 0x1000>;
-        interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>,
--                <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-+                <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>,
-+                <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
-        interrupt-names = "mhu_lpri_rx",
-                  "mhu_hpri_rx";
-        #mbox-cells = <1>;
+While the EDID spec appears to allow a display to use any criteria for
+picking which refresh mode is "preferred" or "optimal", that vagueness
+is a bit annoying. From Linux's point of view let's choose the 60 Hz
+one as the default.
 
-If this works for you, I could submit a proper patch.
 
-thanks.
+> >>>> The argument here is that this is a laptop panel and on a laptop we
+> >>>> know power will always be a concern. Presumably even if someone using
+> >>>> this panel wanted to use 144 Hz for some use cases they would only do
+> >>>> so dynamically and would still want the default to be 60 Hz.
+> >>>>
+> >>>> Let's change the default to 60 Hz using a standard quirk.
+> >>>>
+> >>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> >>>
+> >>> Yes, we were aware that 144Hz was getting picked. We found that while
+> >>> debugging the screen corruption issue.
+> >>>
+> >>> Well, yes power would be less with 60Hz but so will be the performance.
+> >>
+> >> What performance specifically will be less with 60 Hz? In general the
+> >> sc7280 CPU is a bit memory-bandwidth constrained and the LCD refresh
+> >> from memory is a non-trivial part of that. Reducing to 60 Hz will
+> >> relieve some of the memory bandwidth pressure and will actually allow
+> >> tasks on the CPU to run _faster_. I guess the downside is that some
+> >> animations might be a little less smooth...
+> >
+> > I guess he is referring to something that is vblank sync'd running
+> > faster than 60fps.
+> >
+> > but OTOH it is a bit of a waste for fbcon to be using 144Hz.  And
+> > there are enough android games that limit themselves to 30fps to save
+> > your "phone" battery.  So it seems a lot more sane to default to 60Hz
+> > and let userspace that knows it wants more pick the 144Hz rate when
+> > needed.
+> >
+> > BR,
+> > -R
+>
+> Yes i was referring to vblank synced apps.
+>
+> >
+> >>
+> >>
+> >>> The test teams have been validating with 144Hz so far so we are checking
+> >>> internally with the team whether its OKAY to goto 60Hz now since that
+> >>> kind of invalidates the testing they have been doing.
+> >>
+> >> You're worried that the panel itself won't work well at 60 Hz, or
+> >> something else about the system won't? The whole system in general
+> >> needs to work well with 60 Hz displays and I expect them to be much
+> >> more common than 144 Hz displays. Quite honestly if switching to 60 Hz
+> >> uncovers a problem that would be a huge benefit of landing this patch
+> >> because it would mean we'd find it now rather than down the road when
+> >> someone hooks up a different panel.
+>
+> I was worried that it will invalidate the testing they did so far but
+> since you have confirmed that you would prefer 60Hz to be more
+> thoroughly tested than 144Hz, I have informed the internal teams of this
+> change and given the heads up.
+>
+> You can have my R-b for this change,
+>
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>
+> I would also wait to see if others have different thought about this.
+
+Thanks! I'll probably wait another week or so then I'll land in
+drm-misc-next with your tag.
+
+-Doug

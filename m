@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBBB584302
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C949584307
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiG1PYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
+        id S230048AbiG1PY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiG1PX7 (ORCPT
+        with ESMTP id S229693AbiG1PYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:23:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FADB664C7;
-        Thu, 28 Jul 2022 08:23:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 28 Jul 2022 11:24:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2F061B0C;
+        Thu, 28 Jul 2022 08:24:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7878A33F11;
-        Thu, 28 Jul 2022 15:23:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659021837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SRF9MyYDxSMz1004MAxo6xxMYmTRoIn6prKJRfvdun8=;
-        b=Q1KNd85cVzSSFmi42M5onWHVuxuR4JxQDTShGHvzT1UF7YE5YJzw5A621cajhDejtlunGg
-        cF3/xOafEk+snEKjU50p1two9rp8NCu6vZNHWEk4ViJjp6+mM/vvZjVfLrpXYqEsSJgAXV
-        9/tOOOmYkta+W2r/j5AnczQdehm85hc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2D69913427;
-        Thu, 28 Jul 2022 15:23:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ek4rCg2q4mLJdwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 28 Jul 2022 15:23:57 +0000
-Date:   Thu, 28 Jul 2022 17:23:55 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-Message-ID: <20220728152355.GB25894@blackbody.suse.cz>
-References: <20220728005815.1715522-1-longman@redhat.com>
- <20220728144420.GA27407@blackbody.suse.cz>
- <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E700B82491;
+        Thu, 28 Jul 2022 15:24:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A88C433D7;
+        Thu, 28 Jul 2022 15:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659021860;
+        bh=EsA74sOB2n98wUsKoE7FhRXKRQmfuntkL/X594nUluc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=h+8lY04M+5g4HrnAtPnqR0ikmpbndvTE452QXSiiAODQQkQi+BucTIoVF+8tUYqFu
+         vcuetjjmfSYXsc0QyGESgRqvpakmEYuWJ2kJN5KrZAQ4cywkMZzkim6DBEpkwUN0Se
+         nNQWJAmssAKtjVPTdfTJ4NzLhKR8W0Eqa+jYLp9Z2kRkR3iCK1sT3E6XP2/+HAehHG
+         xjRre/UwlV66FlM0bQhWN1ZkVlExpOKVrtcmUfN3G4o7n4L3yCthIo77DFX4Age58t
+         RcBYJio2Mx3aM/Eno0tw7czz/ATWeFF/sS/cvLGjvg3OhpX/IgfkDduOf1PCOVy7xM
+         cNOl+yvmFukJQ==
+Date:   Thu, 28 Jul 2022 10:24:18 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 03/15] PCI: dwc: Convert to using native
+ IP-core versions representation
+Message-ID: <20220728152418.GA302516@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220624143947.8991-4-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 10:59:01AM -0400, Waiman Long <longman@redhat.com> wrote:
-> Cgroup v1 doesn't have this problem.
+On Fri, Jun 24, 2022 at 05:39:35PM +0300, Serge Semin wrote:
+> Since DWC PCIe v4.70a the controller version can be read from the
+> PORT_LOGIC.PCIE_VERSION_OFF register. Version is represented in the FourCC
+> format [1]. It's standard versioning approach for the Synopsys DWC
+> IP-cores. Moreover some of the DWC kernel drivers already make use of it
+> to fixup version-dependent functionality (See DWC USB3, Stmicro STMMAC or
+> recent DW SPI driver).
 
-v1 analogy would be:
+These references to other drivers might be useful, but without a
+function name or file name, I can't easily find them.
 
-	echo 2-3 >$dst/cpuset.cpus
-	# job runs in $dst
-	# one task T in $dst sets affinity just to one cpu
-	# I rethink my config, I want to allow $dst more space
-	echo 2-5 >$dst/cpuset.cpus
-
-Most tasks in $dst happily utilize the new cpus but it breaks affinity
-for T -- this must have been broken since ever.
-
-(Or I'd argue that per-thread affinities are just recommendations, if I
-have a task for nohz CPU, I should enforce its placement with cpuset
-from the beginning.)
-
-Michal
+> In order to preserve the standard version
+> representation and prevent the data conversion back and forth, we suggest
+> to preserve the native version representation in the DWC PCIe driver too
+> in the same way as it has already been done in the rest of the DWC
+> drivers. IP-core version reading from the CSR will be introduced in the
+> next commit together with a simple macro-based API to use it.
+> 
+> [1] https://en.wikipedia.org/wiki/FourCC

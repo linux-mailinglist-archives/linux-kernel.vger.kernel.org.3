@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B4B5848CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7295848D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbiG1XxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 19:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S233467AbiG1XxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 19:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbiG1Xwv (ORCPT
+        with ESMTP id S232383AbiG1Xwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 28 Jul 2022 19:52:51 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B47726F7EE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB94A70E52;
         Thu, 28 Jul 2022 16:52:48 -0700 (PDT)
 Received: from localhost.localdomain (unknown [76.135.27.191])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 653B620FE9A8;
+        by linux.microsoft.com (Postfix) with ESMTPSA id A0D6D20FE9AA;
         Thu, 28 Jul 2022 16:52:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 653B620FE9A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A0D6D20FE9AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1659052368;
-        bh=kAarDP4unDCgpeZ3y0NRt3LmijJbD1Usfd1EcpoSZxE=;
+        bh=kkeIYCk4xRugfOKaGOA3vKIixSzKEtc2wGMUQxDoCEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BpyOXDrKyRkdGv2nq+Ypr8dlmCR2uHSh9kEs4bc4Rq+INrIdovoCEz+31oEa9Rj68
-         IqcOJCiI7dkzXIWC+FeoFmH9dkmPVKnNhSJ7MmUu/ox6WDvPTWU1H10yp8PHAmG6bJ
-         xqUB49rCz2VqzK3IktZn3CYWTpM9BsREpVd6l2Os=
+        b=Gk4lcjuBPg1338bAh/yKzySDxaPtgFq6jJipfr7O/NCLn99FI8g6OzqdtMvqIlOeX
+         B+++hAJsMkqG5U0dYjOew/BBFffZH4gVhmuzAhMps8+DrAy5oHYIj591F3rKJ4wYyx
+         LcV66e6Rm7OqK4pxl63rZ9G+PDzsTgotckRkwBio=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         mathieu.desnoyers@efficios.com
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 3/7] tracing: Add tracing namespace API for systems to register with
-Date:   Thu, 28 Jul 2022 16:52:37 -0700
-Message-Id: <20220728235241.2249-4-beaub@linux.microsoft.com>
+Subject: [RFC PATCH v2 4/7] tracing/user_events: Move pages/locks into groups to prepare for namespaces
+Date:   Thu, 28 Jul 2022 16:52:38 -0700
+Message-Id: <20220728235241.2249-5-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220728235241.2249-1-beaub@linux.microsoft.com>
 References: <20220728235241.2249-1-beaub@linux.microsoft.com>
@@ -48,806 +48,751 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-User facing tracing systems, such as user_events and LTTng, sometimes
-require multiple events with the same name, but from different
-containers. This can cause event name conflicts and leak out details
-of events not owned by the container.
-
-To create a tracing namespace, run mkdir under the new tracefs directory
-named "namespaces" (/sys/kernel/tracing/namespaces typically). This
-directory largely works the same as "instances" where the new directory
-will have files populated within it via the tracing system
-automatically. The tracing systems will put their files under the "root"
-directory, which is meant to be the directory that you can bind mount
-out to containers. The "options" file is meant to allow operators to
-configure the namespaces via the registered systems.
-
-The tracing namespace allows those user facing systems to register with
-the tracing namespace. When an operator creates a namespace directory
-under /sys/kernel/tracing/namespaces the registered systems will have
-their create operation run for that namespace. The systems can then create
-files in the new directory used for tracing via user programs. These
-files will then isolate events between each namespace the operator
-creates.
-
-Typically the system name of the event will have the tracing namespace
-name appended onto the system name. For example, if a namespace
-directory was created named "mygroup", then the system name would be
-"<system_name>.mygroup". Since the system names are different for each
-namespace, per-namespace recording/playback can be done by specifying the
-per-namespace system name and the event name. However, this decision is
-up to the registered tracing system for each namespace.
-
-The operator can then bind mount each namespace directory into
-containers. This provides isolation between events and containers, if
-required. It's also possible for several containers to share an
-isolation via bind mounts instead of having an isolation per-container.
-With these files being isolated, different permissions can be added for
-these files than normal tracefs files. This helps scenarios where
-non-admin processes would like to trace, but currently cannot.
-
-Link: https://lore.kernel.org/all/20220312010140.1880-1-beaub@linux.microsoft.com/
+In order to enable namespaces or any sort of isolation within
+user_events the register lock and pages need to be broken up into
+groups. Each event and file now has a group pointer which stores the
+actual pages to map, lookup data and synchronization objects.
 
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 ---
- kernel/trace/Kconfig           |  11 +
- kernel/trace/Makefile          |   1 +
- kernel/trace/trace.c           |  39 +++
- kernel/trace/trace_namespace.c | 568 +++++++++++++++++++++++++++++++++
- kernel/trace/trace_namespace.h |  57 ++++
- 5 files changed, 676 insertions(+)
- create mode 100644 kernel/trace/trace_namespace.c
- create mode 100644 kernel/trace/trace_namespace.h
+ kernel/trace/trace_events_user.c | 381 ++++++++++++++++++++++++-------
+ 1 file changed, 304 insertions(+), 77 deletions(-)
 
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index c9302f46a317..b8b49a16ca02 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -780,6 +780,17 @@ config USER_EVENTS
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index fd8ea555437a..44f9efd58af5 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -69,11 +69,23 @@
+ #define EVENT_STATUS_PERF BIT(1)
+ #define EVENT_STATUS_OTHER BIT(7)
  
- 	  If in doubt, say N.
- 
-+config TRACE_NAMESPACE
-+	bool "Tracing namespaces"
-+	select TRACING
-+	help
-+	  Tracing namespaces are isolated directories within tracefs
-+	  that can be used to isolate tracing events from other events
-+	  and processes.  Typically this is most useful for user-defined
-+	  trace events.
-+
-+	  If in doubt, say N.
-+
- config HIST_TRIGGERS
- 	bool "Histogram triggers"
- 	depends on ARCH_HAVE_NMI_SAFE_CMPXCHG
-diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-index 0d261774d6f3..b88241164eb3 100644
---- a/kernel/trace/Makefile
-+++ b/kernel/trace/Makefile
-@@ -87,6 +87,7 @@ obj-$(CONFIG_TRACE_EVENT_INJECT) += trace_events_inject.o
- obj-$(CONFIG_SYNTH_EVENTS) += trace_events_synth.o
- obj-$(CONFIG_HIST_TRIGGERS) += trace_events_hist.o
- obj-$(CONFIG_USER_EVENTS) += trace_events_user.o
-+obj-$(CONFIG_TRACE_NAMESPACE) += trace_namespace.o
- obj-$(CONFIG_BPF_EVENTS) += bpf_trace.o
- obj-$(CONFIG_KPROBE_EVENTS) += trace_kprobe.o
- obj-$(CONFIG_TRACEPOINTS) += error_report-traces.o
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 7eb5bce62500..2b0016969c98 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -53,6 +53,10 @@
- #include "trace.h"
- #include "trace_output.h"
- 
-+#ifdef CONFIG_TRACE_NAMESPACE
-+#include "trace_namespace.h"
-+#endif
-+
- /*
-  * On boot up, the ring buffer is set to the minimum size, so that
-  * we do not waste memory on systems that are not using tracing.
-@@ -9071,6 +9075,10 @@ static const struct file_operations buffer_percent_fops = {
- 
- static struct dentry *trace_instance_dir;
- 
-+#ifdef CONFIG_TRACE_NAMESPACE
-+static struct dentry *trace_namespace_dir;
-+#endif
-+
- static void
- init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer);
- 
-@@ -9313,6 +9321,18 @@ static int instance_mkdir(const char *name)
- 	return ret;
- }
- 
-+#ifdef CONFIG_TRACE_NAMESPACE
-+static int namespace_mkdir(const char *name)
-+{
-+	return trace_namespace_add(name);
-+}
-+
-+static int namespace_rmdir(const char *name)
-+{
-+	return trace_namespace_remove(name);
-+}
-+#endif
-+
- /**
-  * trace_array_get_by_name - Create/Lookup a trace array, given its name.
-  * @name: The name of the trace array to be looked up/created.
-@@ -9464,6 +9484,21 @@ static __init void create_trace_instances(struct dentry *d_tracer)
- 	mutex_unlock(&event_mutex);
- }
- 
-+#ifdef CONFIG_TRACE_NAMESPACE
-+static __init void create_trace_namespaces(struct dentry *d_tracer)
-+{
-+	trace_namespace_dir = tracefs_create_namespace_dir("namespaces",
-+							   d_tracer,
-+							   namespace_mkdir,
-+							   namespace_rmdir);
-+
-+	if (MEM_FAIL(!trace_namespace_dir, "Failed to create namespaces directory\n"))
-+		return;
-+
-+	trace_namespace_init(trace_namespace_dir);
-+}
-+#endif
-+
- static void
- init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer)
- {
-@@ -9752,6 +9787,10 @@ static __init void tracer_init_tracefs_work_func(struct work_struct *work)
- 
- 	create_trace_instances(NULL);
- 
-+#ifdef CONFIG_TRACE_NAMESPACE
-+	create_trace_namespaces(NULL);
-+#endif
-+
- 	update_tracer_options(&global_trace);
- }
- 
-diff --git a/kernel/trace/trace_namespace.c b/kernel/trace/trace_namespace.c
-new file mode 100644
-index 000000000000..ddec53a41de6
---- /dev/null
-+++ b/kernel/trace/trace_namespace.c
-@@ -0,0 +1,568 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022, Microsoft Corporation.
-+ *
-+ * Authors:
-+ *   Beau Belgrave <beaub@linux.microsoft.com>
-+ */
-+
-+#include <linux/dcache.h>
-+#include <linux/idr.h>
-+#include <linux/list.h>
-+#include <linux/mutex.h>
-+#include <linux/refcount.h>
-+#include <linux/tracefs.h>
-+#include "trace.h"
-+#include "trace_namespace.h"
-+
-+static struct dentry *root_namespace_dir;
-+#define TRACE_ROOT_DIR_NAME "root"
-+#define TRACE_OPTIONS_NAME "options"
-+
-+static LIST_HEAD(namespace_systems);
-+static LIST_HEAD(namespace_groups);
-+static DEFINE_IDR(namespace_idr);
-+
-+/*
-+ * Stores a registered system operations.
-+ */
-+struct namespace_system {
-+	struct list_head link;
-+	struct trace_namespace_operations *ops;
-+};
-+
-+/*
-+ * Stores namespace specific data about the group. The group can either
-+ * be looked up by name or the id of the trace_namespace property.
-+ */
-+struct namespace_group {
-+	struct list_head link;
-+	struct trace_namespace ns;
+-static char *register_page_data;
++struct user_event_group {
++	struct page *pages;
++	char *register_page_data;
++	char *system_name;
++	struct dentry *status_file;
++	struct dentry *data_file;
++	struct hlist_node node;
++	struct mutex reg_mutex;
++	DECLARE_HASHTABLE(register_table, 8);
++	DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
 +	refcount_t refcnt;
-+	struct dentry *trace_dir;
-+	struct dentry *trace_options;
++	int id;
++};
+ 
+-static DEFINE_MUTEX(reg_mutex);
+-static DEFINE_HASHTABLE(register_table, 8);
+-static DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
++static DEFINE_HASHTABLE(group_table, 8);
++static DEFINE_MUTEX(group_mutex);
++static struct user_event_group *root_group;
+ 
+ /*
+  * Stores per-event properties, as users register events
+@@ -83,6 +95,7 @@ static DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
+  * refcnt reaches one.
+  */
+ struct user_event {
++	struct user_event_group *group;
+ 	struct tracepoint tracepoint;
+ 	struct trace_event_call call;
+ 	struct trace_event_class class;
+@@ -109,6 +122,11 @@ struct user_event_refs {
+ 	struct user_event *events[];
+ };
+ 
++struct user_event_file_info {
++	struct user_event_group *group;
++	struct user_event_refs *refs;
 +};
 +
-+/* Current parsing group to allow using trace_parse_run_command */
-+static struct namespace_group *parsing_group;
-+
-+#define TRACE_NS_FROM_GROUP(group) (&(group)->ns)
-+
-+/*
-+ * Runs the parse operation for each registered system for the group.
-+ */
-+static int namespace_systems_parse(struct namespace_group *group,
-+				   const char *command)
+ #define VALIDATOR_ENSURE_NULL (1 << 0)
+ #define VALIDATOR_REL (1 << 1)
+ 
+@@ -121,7 +139,8 @@ struct user_event_validator {
+ typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
+ 				   void *tpdata, bool *faulted);
+ 
+-static int user_event_parse(char *name, char *args, char *flags,
++static int user_event_parse(struct user_event_group *group, char *name,
++			    char *args, char *flags,
+ 			    struct user_event **newuser);
+ 
+ static u32 user_event_key(char *name)
+@@ -129,12 +148,132 @@ static u32 user_event_key(char *name)
+ 	return jhash(name, strlen(name), 0);
+ }
+ 
++static void set_page_reservations(char *pages, bool set)
 +{
-+	struct list_head *head = &namespace_systems;
-+	struct namespace_system *system;
-+	struct trace_namespace *ns;
-+	int ret = -ENODEV;
++	int page;
 +
-+	ns = TRACE_NS_FROM_GROUP(group);
++	for (page = 0; page < MAX_PAGES; ++page) {
++		void *addr = pages + (PAGE_SIZE * page);
 +
-+	list_for_each_entry(system, head, link) {
-+		ret = system->ops->parse(ns, command);
-+
-+		if (!ret || ret != -ECANCELED)
-+			break;
++		if (set)
++			SetPageReserved(virt_to_page(addr));
++		else
++			ClearPageReserved(virt_to_page(addr));
 +	}
-+
-+	if (ret == -ECANCELED)
-+		ret = -EINVAL;
-+
-+	return ret;
 +}
 +
-+
-+/*
-+ * Runs the is_busy operation for each registered system for the group.
-+ */
-+static bool namespace_systems_busy(struct namespace_group *group)
++static void user_event_group_destroy(struct user_event_group *group)
 +{
-+	struct list_head *head = &namespace_systems;
-+	struct namespace_system *system;
-+	struct trace_namespace *ns;
++	if (group->status_file)
++		tracefs_remove(group->status_file);
 +
-+	ns = TRACE_NS_FROM_GROUP(group);
++	if (group->data_file)
++		tracefs_remove(group->data_file);
 +
-+	list_for_each_entry(system, head, link)
-+		if (system->ops->is_busy(ns))
-+			return true;
++	if (group->register_page_data)
++		set_page_reservations(group->register_page_data, false);
 +
-+	return false;
++	if (group->pages)
++		__free_pages(group->pages, MAX_PAGE_ORDER);
++
++	kfree(group->system_name);
++	kfree(group);
 +}
 +
-+/*
-+ * Runs the remove operation for each registered system for the group.
-+ *
-+ * NOTE: If a system has a failure it does not stop the other systems from
-+ * having their remove operation run for the group.
-+ */
-+static int namespace_systems_remove(struct namespace_group *group, int max)
++static char *user_event_group_system_name(const char *name)
 +{
-+	struct list_head *head = &namespace_systems;
-+	struct namespace_system *system;
-+	struct trace_namespace *ns;
-+	int error, ret = 0, i = 0;
++	char *system_name;
++	int len = strlen(name) + sizeof(USER_EVENTS_SYSTEM) + 1;
 +
-+	ns = TRACE_NS_FROM_GROUP(group);
++	system_name = kmalloc(len, GFP_KERNEL);
 +
-+	list_for_each_entry(system, head, link) {
-+		error = system->ops->remove(ns);
-+		i++;
++	if (!system_name)
++		return NULL;
 +
-+		/* Save last error (if not no entity), but keep removing */
-+		if (error && error != -ENOENT)
-+			ret = error;
++	snprintf(system_name, len, "%s.%s", USER_EVENTS_SYSTEM, name);
 +
-+		if (max != -1 && i >= max)
-+			break;
-+	}
-+
-+	return ret;
++	return system_name;
 +}
 +
-+/*
-+ * Runs the create operation for each registered system for the group.
-+ *
-+ * NOTE: If a system has a failure, then the previously successful systems
-+ * will have their remove operation run for the group.
-+ */
-+static int namespace_systems_create(struct namespace_group *group)
-+{
-+	struct list_head *head = &namespace_systems;
-+	struct namespace_system *system;
-+	struct trace_namespace *ns;
-+	int ret = 0, count = 0;
-+
-+	ns = TRACE_NS_FROM_GROUP(group);
-+
-+	list_for_each_entry(system, head, link) {
-+		ret = system->ops->create(ns);
-+
-+		if (ret)
-+			break;
-+
-+		count++;
-+	}
-+
-+	/* If we had a failure, remove systems that were created */
-+	if (ret && count > 0)
-+		namespace_systems_remove(group, count);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Release a previously acquired reference to a namespace group.
-+ */
 +static __always_inline
-+void namespace_group_release(struct namespace_group *group)
++void user_event_group_release(struct user_event_group *group)
 +{
 +	refcount_dec(&group->refcnt);
 +}
 +
-+/*
-+ * Looks up a namespace group by ID and increments the ref count.
-+ */
-+static struct namespace_group *namespace_group_ref(int id)
++static struct user_event_group *user_event_group_find(int id)
 +{
-+	struct namespace_group *group;
++	struct user_event_group *group;
 +
-+	mutex_lock(&event_mutex);
++	mutex_lock(&group_mutex);
 +
-+	group = idr_find(&namespace_idr, id);
-+
-+	if (group)
-+		refcount_inc(&group->refcnt);
-+
-+	mutex_unlock(&event_mutex);
-+
-+	return group;
-+}
-+
-+/*
-+ * Looks up a namespace group by name, without increasing the ref count.
-+ */
-+static struct namespace_group *namespace_group_find(const char *name)
-+{
-+	struct list_head *head = &namespace_groups;
-+	struct namespace_group *group;
-+	struct trace_namespace *ns;
-+
-+	lockdep_assert_held(&event_mutex);
-+
-+	list_for_each_entry(group, head, link) {
-+		ns = TRACE_NS_FROM_GROUP(group);
-+
-+		if (!strcmp(ns->name, name))
++	hash_for_each_possible(group_table, group, node, id)
++		if (group->id == id) {
++			refcount_inc(&group->refcnt);
++			mutex_unlock(&group_mutex);
 +			return group;
-+	}
++		}
++
++	mutex_unlock(&group_mutex);
 +
 +	return NULL;
 +}
 +
-+/*
-+ * Frees group resources and removes the directory of a namespace.
-+ */
-+static void namespace_group_destroy(struct namespace_group *group)
++static struct user_event_group *user_event_group_create(const char *name,
++							int id)
 +{
-+	struct trace_namespace *ns = TRACE_NS_FROM_GROUP(group);
-+
-+	lockdep_assert_held(&event_mutex);
-+
-+	if (ns->id > 0)
-+		idr_remove(&namespace_idr, ns->id);
-+
-+	if (ns->dir)
-+		tracefs_remove(ns->dir);
-+
-+	if (group->trace_options)
-+		tracefs_remove(group->trace_options);
-+
-+	if (group->trace_dir)
-+		tracefs_remove(group->trace_dir);
-+
-+	kfree(ns->name);
-+	kfree(group);
-+}
-+
-+static void *group_options_seq_start(struct seq_file *m, loff_t *pos)
-+{
-+	mutex_lock(&event_mutex);
-+
-+	return seq_list_start(&namespace_systems, *pos);
-+}
-+
-+static void *group_options_seq_next(struct seq_file *m, void *v, loff_t *pos)
-+{
-+	return seq_list_next(v, &namespace_systems, pos);
-+}
-+
-+static void group_options_seq_stop(struct seq_file *m, void *v)
-+{
-+	mutex_unlock(&event_mutex);
-+}
-+
-+static int group_options_seq_show(struct seq_file *m, void *v)
-+{
-+	struct namespace_system *system = v;
-+	struct namespace_group *group = m->private;
-+
-+	if (system && system->ops && group)
-+		return system->ops->show(TRACE_NS_FROM_GROUP(group), m);
-+
-+	return 0;
-+}
-+
-+static const struct seq_operations group_options_seq_op = {
-+	.start  = group_options_seq_start,
-+	.next   = group_options_seq_next,
-+	.stop   = group_options_seq_stop,
-+	.show   = group_options_seq_show
-+};
-+
-+/*
-+ * Gets the group associated with the current seq_file.
-+ */
-+static struct namespace_group *seq_file_namespace_group(struct file *file)
-+{
-+	struct seq_file *seq = file->private_data;
-+
-+	if (!seq)
-+		return NULL;
-+
-+	return seq->private;
-+}
-+
-+static int group_options_open(struct inode *node, struct file *file)
-+{
-+	struct namespace_group *group;
-+	int ret;
-+
-+	group = namespace_group_ref((int)(uintptr_t)node->i_private);
-+
-+	if (!group)
-+		return -ENOENT;
-+
-+	ret = seq_open(file, &group_options_seq_op);
-+
-+	if (!ret) {
-+		/* Chain group into seq_file private data */
-+		struct seq_file *seq = file->private_data;
-+
-+		seq->private = group;
-+	}
-+
-+	return ret;
-+}
-+
-+static int group_options_parse(const char *command)
-+{
-+	return namespace_systems_parse(parsing_group, command);
-+}
-+
-+static ssize_t group_options_write(struct file *file, const char __user *buffer,
-+				   size_t count, loff_t *ppos)
-+{
-+	struct namespace_group *group = seq_file_namespace_group(file);
-+	int ret;
-+
-+	if (!group)
-+		return -EINVAL;
-+
-+	mutex_lock(&event_mutex);
-+
-+	/* Set group to use for commands */
-+	parsing_group = group;
-+
-+	ret = trace_parse_run_command(file, buffer, count, ppos,
-+				      group_options_parse);
-+
-+	parsing_group = NULL;
-+
-+	mutex_unlock(&event_mutex);
-+
-+	return ret;
-+}
-+
-+static int group_options_release(struct inode *node, struct file *file)
-+{
-+	struct namespace_group *group = seq_file_namespace_group(file);
-+
-+	if (group)
-+		namespace_group_release(group);
-+
-+	return seq_release(node, file);
-+}
-+
-+static const struct file_operations group_options_fops = {
-+	.open = group_options_open,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = group_options_release,
-+	.write = group_options_write,
-+};
-+
-+/*
-+ * Creates a group that tracks the name and directory of a namespace.
-+ */
-+static struct namespace_group *namespace_group_create(const char *name)
-+{
-+	struct namespace_group *group;
-+	struct trace_namespace *ns;
++	struct user_event_group *group;
 +
 +	group = kzalloc(sizeof(*group), GFP_KERNEL);
 +
 +	if (!group)
++		return NULL;
++
++	if (name) {
++		group->system_name = user_event_group_system_name(name);
++
++		if (!group->system_name)
++			goto error;
++	}
++
++	group->pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
++
++	if (!group->pages)
 +		goto error;
 +
-+	refcount_set(&group->refcnt, 1);
++	group->register_page_data = page_address(group->pages);
 +
-+	ns = TRACE_NS_FROM_GROUP(group);
-+	ns->name = kstrdup(name, GFP_KERNEL);
++	set_page_reservations(group->register_page_data, true);
 +
-+	if (!ns->name)
-+		goto error;
++	/* Zero all bits beside 0 (which is reserved for failures) */
++	bitmap_zero(group->page_bitmap, MAX_EVENTS);
++	set_bit(0, group->page_bitmap);
 +
-+	/*
-+	 * 0 is reserved for non-namespace lookups for systems to use.
-+	 * If this were not the case, systems would have to pivot code
-+	 * between namespace cases and non-namespace cases.
-+	 *
-+	 * Cyclic is used here to reduce the chances of the same id being
-+	 * used again quickly. This allows for less chance of a id lookup
-+	 * to get the wrong namespace during file open cases.
-+	 */
-+	ns->id = idr_alloc_cyclic(&namespace_idr, group, 1, 0, GFP_KERNEL);
++	mutex_init(&group->reg_mutex);
++	hash_init(group->register_table);
 +
-+	if (ns->id < 0)
-+		goto error;
++	/* Mark and add to lookup */
++	group->id = id;
++	refcount_set(&group->refcnt, 2);
 +
-+	group->trace_dir = tracefs_create_dir(ns->name, root_namespace_dir);
-+
-+	if (!group->trace_dir)
-+		goto error;
-+
-+	group->trace_options = tracefs_create_file(TRACE_OPTIONS_NAME,
-+						   TRACE_MODE_WRITE,
-+						   group->trace_dir,
-+						   (void *)(uintptr_t)ns->id,
-+						   &group_options_fops);
-+
-+	if (!group->trace_options)
-+		goto error;
-+
-+	ns->dir = tracefs_create_dir(TRACE_ROOT_DIR_NAME, group->trace_dir);
-+
-+	if (!ns->dir)
-+		goto error;
++	mutex_lock(&group_mutex);
++	hash_add(group_table, &group->node, group->id);
++	mutex_unlock(&group_mutex);
 +
 +	return group;
 +error:
 +	if (group)
-+		namespace_group_destroy(group);
++		user_event_group_destroy(group);
 +
 +	return NULL;
-+}
++};
 +
-+/**
-+ * trace_namespace_register - register a system for tracing namespaces.
-+ * @ops: operations to perform for each namespace
-+ *
-+ * Registers a system that runs operations for each namespace on the system.
-+ * This will fail if not all operations are not specified.
-+ */
-+int trace_namespace_register(struct trace_namespace_operations *ops)
+ static __always_inline
+ void user_event_register_set(struct user_event *user)
+ {
+ 	int i = user->index;
+ 
+-	register_page_data[MAP_STATUS_BYTE(i)] |= MAP_STATUS_MASK(i);
++	user->group->register_page_data[MAP_STATUS_BYTE(i)] |= MAP_STATUS_MASK(i);
+ }
+ 
+ static __always_inline
+@@ -142,7 +281,7 @@ void user_event_register_clear(struct user_event *user)
+ {
+ 	int i = user->index;
+ 
+-	register_page_data[MAP_STATUS_BYTE(i)] &= ~MAP_STATUS_MASK(i);
++	user->group->register_page_data[MAP_STATUS_BYTE(i)] &= ~MAP_STATUS_MASK(i);
+ }
+ 
+ static __always_inline __must_check
+@@ -186,7 +325,8 @@ static struct list_head *user_event_get_fields(struct trace_event_call *call)
+  *
+  * Upon success user_event has its ref count increased by 1.
+  */
+-static int user_event_parse_cmd(char *raw_command, struct user_event **newuser)
++static int user_event_parse_cmd(struct user_event_group *group,
++				char *raw_command, struct user_event **newuser)
+ {
+ 	char *name = raw_command;
+ 	char *args = strpbrk(name, " ");
+@@ -200,7 +340,7 @@ static int user_event_parse_cmd(char *raw_command, struct user_event **newuser)
+ 	if (flags)
+ 		*flags++ = '\0';
+ 
+-	return user_event_parse(name, args, flags, newuser);
++	return user_event_parse(group, name, args, flags, newuser);
+ }
+ 
+ static int user_field_array_size(const char *type)
+@@ -688,7 +828,7 @@ static int destroy_user_event(struct user_event *user)
+ 	dyn_event_remove(&user->devent);
+ 
+ 	user_event_register_clear(user);
+-	clear_bit(user->index, page_bitmap);
++	clear_bit(user->index, user->group->page_bitmap);
+ 	hash_del(&user->node);
+ 
+ 	user_event_destroy_validators(user);
+@@ -699,14 +839,15 @@ static int destroy_user_event(struct user_event *user)
+ 	return ret;
+ }
+ 
+-static struct user_event *find_user_event(char *name, u32 *outkey)
++static struct user_event *find_user_event(struct user_event_group *group,
++					  char *name, u32 *outkey)
+ {
+ 	struct user_event *user;
+ 	u32 key = user_event_key(name);
+ 
+ 	*outkey = key;
+ 
+-	hash_for_each_possible(register_table, user, node, key)
++	hash_for_each_possible(group->register_table, user, node, key)
+ 		if (!strcmp(EVENT_NAME(user), name)) {
+ 			refcount_inc(&user->refcnt);
+ 			return user;
+@@ -953,14 +1094,14 @@ static int user_event_create(const char *raw_command)
+ 	if (!name)
+ 		return -ENOMEM;
+ 
+-	mutex_lock(&reg_mutex);
++	mutex_lock(&root_group->reg_mutex);
+ 
+-	ret = user_event_parse_cmd(name, &user);
++	ret = user_event_parse_cmd(root_group, name, &user);
+ 
+ 	if (!ret)
+ 		refcount_dec(&user->refcnt);
+ 
+-	mutex_unlock(&reg_mutex);
++	mutex_unlock(&root_group->reg_mutex);
+ 
+ 	if (ret)
+ 		kfree(name);
+@@ -1114,7 +1255,8 @@ static int user_event_trace_register(struct user_event *user)
+  * The name buffer lifetime is owned by this method for success cases only.
+  * Upon success the returned user_event has its ref count increased by 1.
+  */
+-static int user_event_parse(char *name, char *args, char *flags,
++static int user_event_parse(struct user_event_group *group, char *name,
++			    char *args, char *flags,
+ 			    struct user_event **newuser)
+ {
+ 	int ret;
+@@ -1124,7 +1266,7 @@ static int user_event_parse(char *name, char *args, char *flags,
+ 
+ 	/* Prevent dyn_event from racing */
+ 	mutex_lock(&event_mutex);
+-	user = find_user_event(name, &key);
++	user = find_user_event(group, name, &key);
+ 	mutex_unlock(&event_mutex);
+ 
+ 	if (user) {
+@@ -1137,7 +1279,7 @@ static int user_event_parse(char *name, char *args, char *flags,
+ 		return 0;
+ 	}
+ 
+-	index = find_first_zero_bit(page_bitmap, MAX_EVENTS);
++	index = find_first_zero_bit(group->page_bitmap, MAX_EVENTS);
+ 
+ 	if (index == MAX_EVENTS)
+ 		return -EMFILE;
+@@ -1151,6 +1293,7 @@ static int user_event_parse(char *name, char *args, char *flags,
+ 	INIT_LIST_HEAD(&user->fields);
+ 	INIT_LIST_HEAD(&user->validators);
+ 
++	user->group = group;
+ 	user->tracepoint.name = name;
+ 
+ 	ret = user_event_parse_fields(user, args);
+@@ -1170,7 +1313,11 @@ static int user_event_parse(char *name, char *args, char *flags,
+ 	user->call.tp = &user->tracepoint;
+ 	user->call.event.funcs = &user_event_funcs;
+ 
+-	user->class.system = USER_EVENTS_SYSTEM;
++	if (group->system_name)
++		user->class.system = group->system_name;
++	else
++		user->class.system = USER_EVENTS_SYSTEM;
++
+ 	user->class.fields_array = user_event_fields_array;
+ 	user->class.get_fields = user_event_get_fields;
+ 	user->class.reg = user_event_reg;
+@@ -1193,8 +1340,8 @@ static int user_event_parse(char *name, char *args, char *flags,
+ 
+ 	dyn_event_init(&user->devent, &user_event_dops);
+ 	dyn_event_add(&user->devent, &user->call);
+-	set_bit(user->index, page_bitmap);
+-	hash_add(register_table, &user->node, key);
++	set_bit(user->index, group->page_bitmap);
++	hash_add(group->register_table, &user->node, key);
+ 
+ 	mutex_unlock(&event_mutex);
+ 
+@@ -1212,10 +1359,10 @@ static int user_event_parse(char *name, char *args, char *flags,
+ /*
+  * Deletes a previously created event if it is no longer being used.
+  */
+-static int delete_user_event(char *name)
++static int delete_user_event(struct user_event_group *group, char *name)
+ {
+ 	u32 key;
+-	struct user_event *user = find_user_event(name, &key);
++	struct user_event *user = find_user_event(group, name, &key);
+ 
+ 	if (!user)
+ 		return -ENOENT;
+@@ -1233,6 +1380,7 @@ static int delete_user_event(char *name)
+  */
+ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+ {
++	struct user_event_file_info *info = file->private_data;
+ 	struct user_event_refs *refs;
+ 	struct user_event *user = NULL;
+ 	struct tracepoint *tp;
+@@ -1244,7 +1392,7 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+ 
+ 	rcu_read_lock_sched();
+ 
+-	refs = rcu_dereference_sched(file->private_data);
++	refs = rcu_dereference_sched(info->refs);
+ 
+ 	/*
+ 	 * The refs->events array is protected by RCU, and new items may be
+@@ -1302,6 +1450,30 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+ 	return ret;
+ }
+ 
++static int user_events_open(struct inode *node, struct file *file)
 +{
-+	struct namespace_system *system;
++	struct user_event_group *group;
++	struct user_event_file_info *info;
 +
-+	if (!ops->create || !ops->remove || !ops->is_busy ||
-+	    !ops->parse || !ops->show)
-+		return -EINVAL;
++	group = user_event_group_find((int)(uintptr_t)node->i_private);
 +
-+	system = kmalloc(sizeof(*system), GFP_KERNEL);
++	if (!group)
++		return -ENOENT;
 +
-+	if (!system)
++	info = kzalloc(sizeof(*info), GFP_KERNEL);
++
++	if (!info) {
++		user_event_group_release(group);
 +		return -ENOMEM;
++	}
 +
-+	system->ops = ops;
++	info->group = group;
 +
-+	mutex_lock(&event_mutex);
-+
-+	list_add(&system->link, &namespace_systems);
-+
-+	mutex_unlock(&event_mutex);
++	file->private_data = info;
 +
 +	return 0;
 +}
 +
-+/**
-+ * trace_namespace_init - configures namespaces to be used on the system.
-+ * @dir: directory to use for namespaces
-+ *
-+ * Configures the directory to be used for namespaces.
-+ *
-+ * NOTE: Can only be called once.
-+ */
-+int trace_namespace_init(struct dentry *dir)
+ static ssize_t user_events_write(struct file *file, const char __user *ubuf,
+ 				 size_t count, loff_t *ppos)
+ {
+@@ -1323,13 +1495,15 @@ static ssize_t user_events_write_iter(struct kiocb *kp, struct iov_iter *i)
+ 	return user_events_write_core(kp->ki_filp, i);
+ }
+ 
+-static int user_events_ref_add(struct file *file, struct user_event *user)
++static int user_events_ref_add(struct user_event_file_info *info,
++			       struct user_event *user)
+ {
++	struct user_event_group *group = info->group;
+ 	struct user_event_refs *refs, *new_refs;
+ 	int i, size, count = 0;
+ 
+-	refs = rcu_dereference_protected(file->private_data,
+-					 lockdep_is_held(&reg_mutex));
++	refs = rcu_dereference_protected(info->refs,
++					 lockdep_is_held(&group->reg_mutex));
+ 
+ 	if (refs) {
+ 		count = refs->count;
+@@ -1355,7 +1529,7 @@ static int user_events_ref_add(struct file *file, struct user_event *user)
+ 
+ 	refcount_inc(&user->refcnt);
+ 
+-	rcu_assign_pointer(file->private_data, new_refs);
++	rcu_assign_pointer(info->refs, new_refs);
+ 
+ 	if (refs)
+ 		kfree_rcu(refs, rcu);
+@@ -1392,7 +1566,8 @@ static long user_reg_get(struct user_reg __user *ureg, struct user_reg *kreg)
+ /*
+  * Registers a user_event on behalf of a user process.
+  */
+-static long user_events_ioctl_reg(struct file *file, unsigned long uarg)
++static long user_events_ioctl_reg(struct user_event_file_info *info,
++				  unsigned long uarg)
+ {
+ 	struct user_reg __user *ureg = (struct user_reg __user *)uarg;
+ 	struct user_reg reg;
+@@ -1413,14 +1588,14 @@ static long user_events_ioctl_reg(struct file *file, unsigned long uarg)
+ 		return ret;
+ 	}
+ 
+-	ret = user_event_parse_cmd(name, &user);
++	ret = user_event_parse_cmd(info->group, name, &user);
+ 
+ 	if (ret) {
+ 		kfree(name);
+ 		return ret;
+ 	}
+ 
+-	ret = user_events_ref_add(file, user);
++	ret = user_events_ref_add(info, user);
+ 
+ 	/* No longer need parse ref, ref_add either worked or not */
+ 	refcount_dec(&user->refcnt);
+@@ -1438,7 +1613,8 @@ static long user_events_ioctl_reg(struct file *file, unsigned long uarg)
+ /*
+  * Deletes a user_event on behalf of a user process.
+  */
+-static long user_events_ioctl_del(struct file *file, unsigned long uarg)
++static long user_events_ioctl_del(struct user_event_file_info *info,
++				  unsigned long uarg)
+ {
+ 	void __user *ubuf = (void __user *)uarg;
+ 	char *name;
+@@ -1451,7 +1627,7 @@ static long user_events_ioctl_del(struct file *file, unsigned long uarg)
+ 
+ 	/* event_mutex prevents dyn_event from racing */
+ 	mutex_lock(&event_mutex);
+-	ret = delete_user_event(name);
++	ret = delete_user_event(info->group, name);
+ 	mutex_unlock(&event_mutex);
+ 
+ 	kfree(name);
+@@ -1465,19 +1641,21 @@ static long user_events_ioctl_del(struct file *file, unsigned long uarg)
+ static long user_events_ioctl(struct file *file, unsigned int cmd,
+ 			      unsigned long uarg)
+ {
++	struct user_event_file_info *info = file->private_data;
++	struct user_event_group *group = info->group;
+ 	long ret = -ENOTTY;
+ 
+ 	switch (cmd) {
+ 	case DIAG_IOCSREG:
+-		mutex_lock(&reg_mutex);
+-		ret = user_events_ioctl_reg(file, uarg);
+-		mutex_unlock(&reg_mutex);
++		mutex_lock(&group->reg_mutex);
++		ret = user_events_ioctl_reg(info, uarg);
++		mutex_unlock(&group->reg_mutex);
+ 		break;
+ 
+ 	case DIAG_IOCSDEL:
+-		mutex_lock(&reg_mutex);
+-		ret = user_events_ioctl_del(file, uarg);
+-		mutex_unlock(&reg_mutex);
++		mutex_lock(&group->reg_mutex);
++		ret = user_events_ioctl_del(info, uarg);
++		mutex_unlock(&group->reg_mutex);
+ 		break;
+ 	}
+ 
+@@ -1489,17 +1667,24 @@ static long user_events_ioctl(struct file *file, unsigned int cmd,
+  */
+ static int user_events_release(struct inode *node, struct file *file)
+ {
++	struct user_event_file_info *info = file->private_data;
++	struct user_event_group *group;
+ 	struct user_event_refs *refs;
+ 	struct user_event *user;
+ 	int i;
+ 
++	if (!info)
++		return -EINVAL;
++
++	group = info->group;
++
+ 	/*
+ 	 * Ensure refs cannot change under any situation by taking the
+ 	 * register mutex during the final freeing of the references.
+ 	 */
+-	mutex_lock(&reg_mutex);
++	mutex_lock(&group->reg_mutex);
+ 
+-	refs = file->private_data;
++	refs = info->refs;
+ 
+ 	if (!refs)
+ 		goto out;
+@@ -1518,32 +1703,54 @@ static int user_events_release(struct inode *node, struct file *file)
+ out:
+ 	file->private_data = NULL;
+ 
+-	mutex_unlock(&reg_mutex);
++	mutex_unlock(&group->reg_mutex);
+ 
+ 	kfree(refs);
++	kfree(info);
++
++	/* No longer using group */
++	user_event_group_release(group);
+ 
+ 	return 0;
+ }
+ 
+ static const struct file_operations user_data_fops = {
++	.open = user_events_open,
+ 	.write = user_events_write,
+ 	.write_iter = user_events_write_iter,
+ 	.unlocked_ioctl	= user_events_ioctl,
+ 	.release = user_events_release,
+ };
+ 
++static struct user_event_group *user_status_group(struct file *file)
 +{
-+	int ret = 0;
++	struct seq_file *m = file->private_data;
 +
-+	mutex_lock(&event_mutex);
++	if (!m)
++		return NULL;
 +
-+	if (root_namespace_dir) {
-+		pr_warn("trace namespace init called more than once\n");
-+		ret = -EEXIST;
-+		goto out;
-+	}
-+
-+	root_namespace_dir = dir;
-+out:
-+	mutex_unlock(&event_mutex);
-+
-+	return ret;
++	return m->private;
 +}
 +
-+/**
-+ * trace_namespace_add - adds a trace namespace to the system.
-+ * @name: name of the namespace
-+ *
-+ * Adds a new trace namespace to the system. This can fail if the
-+ * namespace already exists or internal errors within sub-systems registered
-+ * for namespaces.
-+ */
-+int trace_namespace_add(const char *name)
-+{
-+	struct namespace_group *group;
-+	int ret = 0;
+ /*
+  * Maps the shared page into the user process for checking if event is enabled.
+  */
+ static int user_status_mmap(struct file *file, struct vm_area_struct *vma)
+ {
++	char *pages;
++	struct user_event_group *group = user_status_group(file);
+ 	unsigned long size = vma->vm_end - vma->vm_start;
+ 
+ 	if (size != MAX_BYTES)
+ 		return -EINVAL;
+ 
++	if (!group)
++		return -EINVAL;
 +
-+	mutex_lock(&event_mutex);
++	pages = group->register_page_data;
 +
-+	if (!root_namespace_dir) {
-+		ret = -ENODEV;
-+		goto out;
-+	}
+ 	return remap_pfn_range(vma, vma->vm_start,
+-			       virt_to_phys(register_page_data) >> PAGE_SHIFT,
++			       virt_to_phys(pages) >> PAGE_SHIFT,
+ 			       size, vm_get_page_prot(VM_READ));
+ }
+ 
+@@ -1567,13 +1774,17 @@ static void user_seq_stop(struct seq_file *m, void *p)
+ 
+ static int user_seq_show(struct seq_file *m, void *p)
+ {
++	struct user_event_group *group = m->private;
+ 	struct user_event *user;
+ 	char status;
+ 	int i, active = 0, busy = 0, flags;
+ 
+-	mutex_lock(&reg_mutex);
++	if (!group)
++		return -EINVAL;
 +
-+	/* Ensure we don't already have this group */
-+	group = namespace_group_find(name);
++	mutex_lock(&group->reg_mutex);
+ 
+-	hash_for_each(register_table, i, user, node) {
++	hash_for_each(group->register_table, i, user, node) {
+ 		status = user->status;
+ 		flags = user->flags;
+ 
+@@ -1597,7 +1808,7 @@ static int user_seq_show(struct seq_file *m, void *p)
+ 		active++;
+ 	}
+ 
+-	mutex_unlock(&reg_mutex);
++	mutex_unlock(&group->reg_mutex);
+ 
+ 	seq_puts(m, "\n");
+ 	seq_printf(m, "Active: %d\n", active);
+@@ -1616,7 +1827,38 @@ static const struct seq_operations user_seq_ops = {
+ 
+ static int user_status_open(struct inode *node, struct file *file)
+ {
+-	return seq_open(file, &user_seq_ops);
++	struct user_event_group *group;
++	int ret;
 +
-+	if (group) {
-+		ret = -EEXIST;
-+		goto out;
-+	}
++	group = user_event_group_find((int)(uintptr_t)node->i_private);
 +
-+	/* Create the group */
-+	group = namespace_group_create(name);
++	if (!group)
++		return -ENOENT;
 +
-+	if (!group) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	/* Notify the systems of a new group */
-+	ret = namespace_systems_create(group);
-+
-+	if (!ret)
-+		list_add(&group->link, &namespace_groups);
-+out:
-+	/* Ensure we cleanup on failure */
-+	if (ret && group)
-+		namespace_group_destroy(group);
-+
-+	mutex_unlock(&event_mutex);
-+
-+	return ret;
-+}
-+
-+/**
-+ * trace_namespace_remove - remove a trace namespace from the system.
-+ * @name: name of the namespace
-+ *
-+ * Removes an existing trace namespace from the system. This can fail if
-+ * the namespace doesn't exist, the namespace is busy, or internal errors
-+ * within sub-systems registered for namespaces.
-+ */
-+int trace_namespace_remove(const char *name)
-+{
-+	struct namespace_group *group;
-+	int ret = 0;
-+
-+	mutex_lock(&event_mutex);
-+
-+	if (!root_namespace_dir) {
-+		ret = -ENODEV;
-+		goto out;
-+	}
-+
-+	group = namespace_group_find(name);
-+
-+	if (!group) {
-+		ret = -ENOENT;
-+		goto out;
-+	}
-+
-+	if (refcount_read(&group->refcnt) != 1) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+
-+	if (namespace_systems_busy(group)) {
-+		ret = -EBUSY;
-+		goto out;
-+	}
-+
-+	ret = namespace_systems_remove(group, -1);
++	ret = seq_open(file, &user_seq_ops);
 +
 +	if (!ret) {
-+		list_del(&group->link);
++		/* Chain group to seq_file */
++		struct seq_file *m = file->private_data;
 +
-+		namespace_group_destroy(group);
++		m->private = group;
++	} else {
++		user_event_group_release(group);
 +	}
-+
-+out:
-+	mutex_unlock(&event_mutex);
 +
 +	return ret;
 +}
-diff --git a/kernel/trace/trace_namespace.h b/kernel/trace/trace_namespace.h
-new file mode 100644
-index 000000000000..644e2d6c4802
---- /dev/null
-+++ b/kernel/trace/trace_namespace.h
-@@ -0,0 +1,57 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
 +
-+#ifndef _LINUX_KERNEL_TRACE_NAMESPACE_H
-+#define _LINUX_KERNEL_TRACE_NAMESPACE_H
++static int user_status_release(struct inode *node, struct file *file)
++{
++	struct user_event_group *group = user_status_group(file);
 +
-+/**
-+ * struct trace_namespace - Trace namespace information
-+ *
-+ * @name: Unique name of the namespace, can be used for event system names,
-+ *  etc.
-+ * @dir: Directory of the namespace, can be used for creating system files.
-+ * @id: Id of the namespace, can be used for looking up associated data by
-+ *  namespace. NOTE: 0 is reserved for non-namespace lookups for systems.
-+ */
-+struct trace_namespace {
-+	const char *name;
-+	struct dentry *dir;
-+	int id;
-+};
++	if (group)
++		user_event_group_release(group);
++	else
++		pr_warn("user_events: No group attached to status file\n");
 +
-+/**
-+ * struct trace_namespace_operations - Methods to run for each trace namespace
-+ *
-+ * These methods must be set for each system using trace namespaces.
-+ *
-+ * @create: Run when a trace namespace is being created. Systems create files
-+ *  for the namespace with appropriate options. Return 0 if successful.
-+ * @is_busy: Check whether the system is busy within the namespace. Return
-+ *  true if it is busy, otherwise false.
-+ * @remove: Removes the namespace from the system. Return 0 if successful,
-+ *  return -ENOENT if the namespace is not within the system. All other return
-+ *  values are treated as errors.
-+ * @parse: Parses a command to configure a namespace. Return 0 if successful,
-+ *  return -ECANCELED if the command is not for your system. All other return
-+ *  values are treated as errors.
-+ * @show: Shows the configured options for the namespace. This is run when a
-+ *  user reads the options of the namespace.
-+ *
-+ * NOTE: These methods are called while holding event_mutex.
-+ */
-+struct trace_namespace_operations {
-+	int (*create)(struct trace_namespace *ns);
-+	int (*remove)(struct trace_namespace *ns);
-+	int (*parse)(struct trace_namespace *ns, const char *command);
-+	int (*show)(struct trace_namespace *ns, struct seq_file *m);
-+	bool (*is_busy)(struct trace_namespace *ns);
-+};
++	return seq_release(node, file);
+ }
+ 
+ static const struct file_operations user_status_fops = {
+@@ -1624,18 +1866,20 @@ static const struct file_operations user_status_fops = {
+ 	.mmap = user_status_mmap,
+ 	.read = seq_read,
+ 	.llseek  = seq_lseek,
+-	.release = seq_release,
++	.release = user_status_release,
+ };
+ 
+ /*
+  * Creates a set of tracefs files to allow user mode interactions.
+  */
+-static int create_user_tracefs(void)
++static int create_user_tracefs(struct dentry *parent,
++			       struct user_event_group *group)
+ {
+ 	struct dentry *edata, *emmap;
+ 
+ 	edata = tracefs_create_file("user_events_data", TRACE_MODE_WRITE,
+-				    NULL, NULL, &user_data_fops);
++				    parent, (void *)(uintptr_t)group->id,
++				    &user_data_fops);
+ 
+ 	if (!edata) {
+ 		pr_warn("Could not create tracefs 'user_events_data' entry\n");
+@@ -1644,7 +1888,8 @@ static int create_user_tracefs(void)
+ 
+ 	/* mmap with MAP_SHARED requires writable fd */
+ 	emmap = tracefs_create_file("user_events_status", TRACE_MODE_WRITE,
+-				    NULL, NULL, &user_status_fops);
++				    parent, (void *)(uintptr_t)group->id,
++				    &user_status_fops);
+ 
+ 	if (!emmap) {
+ 		tracefs_remove(edata);
+@@ -1652,47 +1897,29 @@ static int create_user_tracefs(void)
+ 		goto err;
+ 	}
+ 
++	group->data_file = edata;
++	group->status_file = emmap;
 +
-+int trace_namespace_register(struct trace_namespace_operations *ops);
-+
-+int trace_namespace_init(struct dentry *dir);
-+
-+int trace_namespace_add(const char *name);
-+
-+int trace_namespace_remove(const char *name);
-+
-+#endif /* _LINUX_KERNEL_TRACE_NAMESPACE_H */
+ 	return 0;
+ err:
+ 	return -ENODEV;
+ }
+ 
+-static void set_page_reservations(bool set)
+-{
+-	int page;
+-
+-	for (page = 0; page < MAX_PAGES; ++page) {
+-		void *addr = register_page_data + (PAGE_SIZE * page);
+-
+-		if (set)
+-			SetPageReserved(virt_to_page(addr));
+-		else
+-			ClearPageReserved(virt_to_page(addr));
+-	}
+-}
+-
+ static int __init trace_events_user_init(void)
+ {
+-	struct page *pages;
+ 	int ret;
+ 
+-	/* Zero all bits beside 0 (which is reserved for failures) */
+-	bitmap_zero(page_bitmap, MAX_EVENTS);
+-	set_bit(0, page_bitmap);
++	root_group = user_event_group_create(NULL, 0);
+ 
+-	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
+-	if (!pages)
++	if (!root_group)
+ 		return -ENOMEM;
+-	register_page_data = page_address(pages);
+-
+-	set_page_reservations(true);
+ 
+-	ret = create_user_tracefs();
++	ret = create_user_tracefs(NULL, root_group);
+ 
+ 	if (ret) {
+ 		pr_warn("user_events could not register with tracefs\n");
+-		set_page_reservations(false);
+-		__free_pages(pages, MAX_PAGE_ORDER);
++		user_event_group_destroy(root_group);
++		root_group = NULL;
+ 		return ret;
+ 	}
+ 
 -- 
 2.25.1
 

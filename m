@@ -2,119 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3F3583C2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD348583C35
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236052AbiG1Kib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S236058AbiG1Kna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234966AbiG1Ki1 (ORCPT
+        with ESMTP id S234966AbiG1Kn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:38:27 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEDB558E3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:38:26 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id m12so2221564lfj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8m/gkzSEeNVGRFeYIZRczc0LCDlyyEDYTWCS8S+fEHE=;
-        b=XqLaXF2NeoAQW2dMnoSIDTZU0KG6eCdZEAY5fhmVPd/5x50fX4JXudcgltKeyaotQ0
-         O5ULowKZ4NKoWL2xhBvMkDBRHlO+3nZnyD8rVN0R1USPZ5NqUi53UsRnmrRriN3vSfR6
-         H/4PSGLLVf+pz3k34Epn+3R6uSXJEaaEinGw5oBQmu2/vBKiVsFg8d5CHssFfN1khEGK
-         CEC3/E/6j4XJQ+X7zbw1+0HDRvHXdG8YrYuQJl2B+KJlqxsllu1E9xZTjEGFKKoqdkc2
-         RXOVtqLeYuiHlVZeS3f7HeKxk8Y8d3cTS+oUii8HaBeXv1mSk7fTYM+2ildVCtirszrh
-         KqZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8m/gkzSEeNVGRFeYIZRczc0LCDlyyEDYTWCS8S+fEHE=;
-        b=ejrGHT9wAiVbZ1FMA7JrrIGmWKVMN3NkUSU7G/P7G5lQRifrCASDXyfUlmtO1ifYbQ
-         DynNFTw2sYM1aT02IhamCfbRVIjEnWmzBLk/PkLYCKHvgOrUd6UgvmK7idcG/q/kjgG0
-         tfBhW2YYp00aBz9RMpTvyH/yNFy03aFj6mbmxcA2JtZdKYiXD/sNhY9bFw2BW8z3znYk
-         OZ2EfHvCgXrr4k5RDtyVumVCy/Fp2IGj3zGFK6ShUaH6zDDMoEy8UDcc1zMKdWjJ+jMn
-         hrmNIehzYLw5JU0Oz588WEd0ZtlFenOJBeG4IgCynsGmMLNEFJzB0HfuCIm4o/YmbYzE
-         +A3w==
-X-Gm-Message-State: AJIora8fwGmqaNaoK+RuEVGXxGfWlq63YL2DtquCFXCZ5HMxJCgQTauV
-        hlekEzYuZvibac/STXja0q2Lr6ajfho+PA==
-X-Google-Smtp-Source: AGRyM1s0UetzE1MnFh1Eb1ryFBat7KSzR7WNDyYfOitPLcyRuZriydrL2o7MLluKluE7GI2HTDn+cA==
-X-Received: by 2002:a05:6512:3b81:b0:48a:9787:7837 with SMTP id g1-20020a0565123b8100b0048a97877837mr6118077lfv.678.1659004704638;
-        Thu, 28 Jul 2022 03:38:24 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id r1-20020a2e8e21000000b0025e0a13bf42sm76850ljk.53.2022.07.28.03.38.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 03:38:24 -0700 (PDT)
-Message-ID: <d8510e53-673a-7913-32be-1be691a79511@linaro.org>
-Date:   Thu, 28 Jul 2022 12:38:22 +0200
+        Thu, 28 Jul 2022 06:43:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E69E13E8D;
+        Thu, 28 Jul 2022 03:43:26 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 10:43:23 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659005005;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hGvppzKvnn5emKn8FK6lLsUDjVMRn3uVDNjhTYdUSyw=;
+        b=VhpbSU6p3d5SUSYJ6x9R3Pnt/BgokR28x8xadnm3XLH3PH6wPyURqiwOUIOlgVBVLmJlnZ
+        5rAx2YgQ7Cn4tGhiUl1ZWzdtlUaqQHgSsNXzkJyVIp5npzv9QwnZ2ObBbIIfJsDOJtPmMR
+        e2oyHnACe1SBKDAcBRrRnDjq4Nj/4zgB3XZDEc7W3QsqLdhwRX3PZ5YgyzcsPHkvAwk+AP
+        7Xra92dZnd8au6w3XQL+QhlzeXnbc2OAVsRw4uKhUtJ/XV8k3OaPaFyl1TjLReZ+fHnkFV
+        o64lFpoEeml4huCwPnsqTQTwybZLQRD2ZiHxk7VTwMrSkKbrmkcsp3FGjchsHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659005005;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hGvppzKvnn5emKn8FK6lLsUDjVMRn3uVDNjhTYdUSyw=;
+        b=PphPLRXSYqPCFzSk4O3SBTROFMAyG5LODJF/SbUvdlc921eUb7UpRMk6MV9DnsVKqb8HzC
+        eTBgIDCtqhBNtVCg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] Merge tag 'irqchip-5.20' of
+ git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/core
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20220727192356.1860546-1-maz@kernel.org>
+References: <20220727192356.1860546-1-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
- <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
- <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
- <2e522bcd-5d55-e87f-126c-514f5edaa560@gmail.com>
- <53a602e2-0590-6c6a-597b-fd55faa3a4ab@linaro.org>
- <acd7b231-3167-e35c-5cdf-8b3127a7d710@gmail.com>
- <95cbcda8-d1bc-376c-b338-92d1b923f04a@linaro.org>
- <fe2b820b-9f3b-814b-4792-e6685b13ede6@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fe2b820b-9f3b-814b-4792-e6685b13ede6@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <165900500373.15455.16400919758936217377.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/2022 12:25, Maximilian Luz wrote:
-> On 7/28/22 09:48, Krzysztof Kozlowski wrote:
-> 
-> [...]
-> 
->>
->> For example like tegra_bpmp_get() is doing.
-> 
-> But tegra_bpmp_get() can also not differentiate whether the supplier driver is
-> ever going to be successfully probed or not. I'm not sure you can ever really
-> solve that. The only thing it does in addition is check whether the phandle and
-> device is there. Or do you mean those not being present by "broken"? That's a
-> point I agree should be improved with SCM.
+The following commit has been merged into the irq/core branch of tip:
 
-Yes, at least it checks if phandles points to proper device and device
-is there. That's what we want.
+Commit-ID:     779fda86bdeb86bad6daa4f0ecf37788dfc26f6c
+Gitweb:        https://git.kernel.org/tip/779fda86bdeb86bad6daa4f0ecf37788dfc26f6c
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 28 Jul 2022 12:36:35 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 28 Jul 2022 12:36:35 +02:00
 
-We are not solving here case of providing being in a module which never
-gets loaded (thus endless EPROBE_DEFER). Such case is ok.
+Merge tag 'irqchip-5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/core
 
-Best regards,
-Krzysztof
+Pull irqchip/genirq updates from Marc Zyngier:
+
+ * Core code update:
+
+  - Non-SMP IRQ affinity fixes, allowing UP kernel to behave similarly
+    to SMP ones for the purpose of interrupt affinity
+
+  - Let irq_set_chip_handler_name_locked() take a const struct irq_chip *
+
+  - Tidy-up the NOMAP irqdomain API variant
+
+  - Teach action_show() to use for_each_action_of_desc()
+
+  - Make irq_chip_request_resources_parent() allow the parent callback
+    to be optional
+
+  - Remove dynamic allocations from populate_parent_alloc_arg()
+
+ * New drivers:
+
+  - Merge the long awaited IRQ support for the LoongArch architecture,
+    with the provisional ACPICA update (to be reverted once the official
+    support lands)
+
+  - New Renesas RZ/G2L IRQC driver, equipped with its companion GPIO
+    driver
+
+ * Driver updates
+
+  - Optimise the hot path operations for the SiFive PLIC, trading the
+    locking for per-CPU priority masking masking operations which are
+    apparently faster
+
+  - Work around broken PLIC implementations that deal pretty badly with
+    edge-triggered interrupts. Flag two implementations as affected.
+
+  - Simplify the irq-stm32-exti driver, particularly the table that
+    remaps the interrupts from exti to the GIC, reducing the memory usage
+
+  - Convert the ocelot irq_chip to being immutable
+
+  - Check ioremap() return value in the MIPS GIC driver
+
+  - Move MMP driver init function declarations into the common .h
+
+  - The obligatory typo fixes
+
+Link: https://lore.kernel.org/all/20220727192356.1860546-1-maz@kernel.org
+---

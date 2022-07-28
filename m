@@ -2,77 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7B4583DF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4830583DFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbiG1Lrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 07:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
+        id S236842AbiG1LsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 07:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiG1Lre (ORCPT
+        with ESMTP id S236421AbiG1LsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 07:47:34 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FE74D17C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:47:33 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id m9so1664609ljp.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:47:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=n0GfnOx42koEcO5+/PVzP+w1zirglEDHUOT3VpjHSPg=;
-        b=K5NRv5yHc/zPIxFDViCXnDRQ3JPb3CkvlN8nCjU0H+WnC+ZCxaSXgX2CsVyjrvfCc4
-         FH3d9VPzUC9U/rbBFX9qZCzeXyPo8/uJ+8o6aqEPvdo+tWKwLPWgNmjG6Bn8CWOGoLPG
-         b1WsistX7ROQS/wAoNm2FmksMVGZfx9laqc/6NgODjwEhzoNM1ZrP5W+2EiwiqKjnI4P
-         3HYYyTjrSHlrmX759/3nS9CqNSUYCecX/CMVF0xDYsaBwXTQ7IBKEgXe9LGTZ+SvWTi0
-         7+3ZZt11Lgzgc9ZH6J5WqvWC9cNV4lDEP08g2heMab2UsLm4y2X/E59OyewWoNCbI0yO
-         neTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n0GfnOx42koEcO5+/PVzP+w1zirglEDHUOT3VpjHSPg=;
-        b=Zm3QESBaTGFLcNoykGtUyn7k2+iT6FUQ3PjkBuskj1Cy9VXWRtrYmy//8e3fdDyrNU
-         +Ly/Ru7//XCv2S5MZTXX/t58EbRbuIz6iRX7R5dPg7EqjulA8QIKC9b1H+GW0IIVCEMM
-         sfRDWK+x1PBTzaz1XOrEczKVnn72d7Wqcr0PUhh2n3d89aCCXgdWjAa7H3LTRDeBo6Ib
-         Lef2apkPm3wMO0O0uoc6z73HIakNPqZorfz+qXq2hglfU7vdI5fMZwNjDocp4GP1Pox8
-         EU0FgPeb+cfv+k983ebFc2a/GyG540gwGH1aT/7MJ5tbRC5D5hJv8p4W4emmaOGoUoOg
-         qgVQ==
-X-Gm-Message-State: AJIora/Xr1nLc1yUBn8qI4aldyHyhzt769o8Jh6JfYaGMkieica1sBtZ
-        +cZxIxq8M7HcP3nD0TKdJ4pfoQ==
-X-Google-Smtp-Source: AGRyM1v4vjYqO3CkCMpBNTBZ/IKMSVwDPE4TYZ0uxKEVLNs/RiM2204FwMlW7/gwgeSXvTXEKcTw2A==
-X-Received: by 2002:a05:651c:118a:b0:25d:e721:a35a with SMTP id w10-20020a05651c118a00b0025de721a35amr9114206ljo.278.1659008851776;
-        Thu, 28 Jul 2022 04:47:31 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id u30-20020ac251de000000b0048a9603399csm164412lfm.116.2022.07.28.04.47.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 04:47:30 -0700 (PDT)
-Message-ID: <aef9bae5-b72b-d520-a8e5-8f6a838775eb@linaro.org>
-Date:   Thu, 28 Jul 2022 13:47:29 +0200
+        Thu, 28 Jul 2022 07:48:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2852267CB5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:48:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7DD3B82322
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:48:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D021CC433D6;
+        Thu, 28 Jul 2022 11:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659008885;
+        bh=bmnhC51lVRzoD/ELMNtwN9HgEsw5L7dsWpRX5ebkBro=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EOoz2dA3JGhA5JyMErivTV72PA+VRiO5m8C8ALB1WflGRyykUDZHAPN9H4z/C0PXG
+         Vhaf+aYKKO5xNpKGMAPL55GNqO8ww6N0Lakj+NaMDHFdsfzDpUkpQYYNWrsYvakPBz
+         4G4YORB8EM1u2+fvdgEOe8ZrdexKvvrRJE1qRx9c=
+Date:   Thu, 28 Jul 2022 13:48:02 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     rafael@kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH] component: try_module_get() to prevent unloading while
+ in use
+Message-ID: <YuJ3cuuQETb2A7gv@kroah.com>
+References: <20220725160859.1274472-1-rf@opensource.cirrus.com>
+ <Yt7cT66p0Bn+aXn5@kroah.com>
+ <4165774b-2b96-83d1-67eb-f7c49dd8041e@opensource.cirrus.com>
+ <YuAkQtik4ud6xw8L@kroah.com>
+ <85bb9c36-33e9-c3e2-1838-9ef45311669b@opensource.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 3/3] dt-bindings: phy: add definition for MSM8960
-Content-Language: en-US
-To:     Shinjo Park <peremen@gmail.com>
-Cc:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220728111740.30595-1-peremen@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220728111740.30595-1-peremen@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <85bb9c36-33e9-c3e2-1838-9ef45311669b@opensource.cirrus.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,17 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/2022 13:17, Shinjo Park wrote:
-> Document the changes introduced by MSM8960 inclusion.
+On Thu, Jul 28, 2022 at 11:49:57AM +0100, Richard Fitzgerald wrote:
+> On 26/07/2022 18:28, Greg KH wrote:
+> > On Tue, Jul 26, 2022 at 11:32:28AM +0100, Richard Fitzgerald wrote:
+> > > On 25/07/2022 19:09, Greg KH wrote:
+> > > > On Mon, Jul 25, 2022 at 05:08:59PM +0100, Richard Fitzgerald wrote:
+> > > > > Call try_module_get() on a component before attempting to call its
+> > > > > bind() function, to ensure that a loadable module cannot be
+> > > > > unloaded while we are executing its bind().
+> > > > 
+> > > > How can bind be called while the module is unloaded?
+> > > > 
+> > > 
+> > > I didn't say it could. What I said is "unloaded while we are executing
+> > > its bind()". Maybe that's already guaranteed to be safe somehow. It's
+> > > actually the problem below that I was trying to fix but placing the
+> > > try_module_get() before the bind() rather than after bind() seemed a
+> > > trivial extra safety.
+> > 
+> > It should be safe, bind() can't race with module remove as the driver
+> > core locks will handle this.
+> > 
+> > > > > If the bind is successful the module_put() is called only after it
+> > > > > has been unbound. This ensures that the module cannot be unloaded
+> > > > > while it is in use as an aggregate device.
+> > > > 
+> > > > That's almost never the correct thing to do, what problem is this
+> > > > solving?
+> > > > 
+> > > 
+> > > What I see is that when a loadable module has been made part of an
+> > > aggregate it is still possible to rmmod'd it.
+> > > 
+> > > An alternative workaround would be for the parent to softdep to every
+> > > driver that _might_ provide the aggregated components. Softdeps aren't
+> > > unusual (we use it in some drivers that are directly related but don't
+> > > directly link into each other). But to me this feels like a hack when
+> > > used with the component framework - isn't the idea that the parent
+> > > doesn't know (or doesn't need to know) which drivers will be aggregated?
+> > > Wouldn't it be better that when a component driver is bound into an
+> > > aggregate its module is automatically marked in-use?
+> > > 
+> > > If there's a better way to mark the module in-use while is it bound
+> > > into an aggregate, let me know and I'll look at implementing it.
+> > 
+> > No module references should be incremented if a device is bound to a
+> > driver, that's the old (1990's) way of thinking.  If a module wants to
+> > be unloaded, let it, and clean up everything that it was
+> > controlling/talking to before the module remove is finished.
+> > 
+> > That's the way all busses should be working, you don't increment a
+> > module count when a driver binds to a device, otherwise how would you
+> > unload a module that was being used at all?
+> > 
+> > So just remove the components controlled by the module properly when it
+> > is removed and all should be good.
+> > 
+> > Do you have example code in the kernel tree today that does not properly
+> > do this?  Why not just fix that instead?
+> > 
 > 
+> The actual code I'm working on isn't upstream yet, but it's a derivative
+> of the way these two interoperate:
+>  sound/pci/hda/patch_realtek
+>  sound/pci/hda/cs35l41_hda.c
+> 
+> In these systems the host audio interface is HDA but the amps are not
+> HDA devices. Audio goes through the Realtek HDA codec to the amp but
+> the amp is on a different bus (i2c or spi). The modules in the HDA stack
+> all get marked as in-use, but the amp driver doesn't. So if it's
+> unloaded the audio system is left in a limbo state where ALSA and the
+> HDA stack are still up but the amp driver code has gone.
+> 
+> However I realised that my try_module_get() isn't a fix anyway.
+> It's claiming use of the module implementing the component but not
+> of the bus that owns that module. I assume that's what you were
+> referring to by having to deal with an unload instead of trying to
+> prevent the unload.
 
-1. Thread your submissions.
-2. Use subject prefix matching the file.
+Yes.
 
-> Signed-off-by: Shinjo Park <peremen@gmail.com>
-> Reviewed-by: David Heidelberg <david@ixit.cz>
+Also there is no requirement that a module increment its reference count
+even if it is being used, as long as it can properly tear things down
+when it is removed.  Look at network modules for examples of that
+working properly.  Odds are other modules should move to that model over
+time, and we are not going to try to go backwards and add module
+reference counting to the driver core.
 
-It is a v1. How the review tag got here?
+module references lock code, you are modifying data here, two different
+things.
 
-Best regards,
-Krzysztof
+thanks,
+
+greg k-h

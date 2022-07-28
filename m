@@ -2,202 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51189583E65
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C0C583E6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237776AbiG1MMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S237804AbiG1MOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236087AbiG1ML5 (ORCPT
+        with ESMTP id S236087AbiG1MOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:11:57 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F966A4A1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:11:56 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220728121154euoutp0131a01e52093d008ebac5175d135153f5~F-RdownXo0182701827euoutp01A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 12:11:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220728121154euoutp0131a01e52093d008ebac5175d135153f5~F-RdownXo0182701827euoutp01A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659010314;
-        bh=ReW6TWWOLPxwvSvlUCJFXEfk/gXldI/9UdqGISndCwA=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=qmQj3MZ5HKaUbfeJEsfGJMDgozkSCf4sR1+5nYtdVwJOxgt1sFtH5jdVbAygUBAY3
-         85VbrMNOItQR1kaSVccsPRgxWcQ5N8u1a3aEDoNtBVL3GZyU3uwIV8g5pNLr8sNZn3
-         uwvV77j8NZqODNuNDKtRdtnR8urlb9woKpS0JVAA=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220728121154eucas1p2a483eaeef676eb995683b016b0c0a0c2~F-RdCaIaK2051520515eucas1p2s;
-        Thu, 28 Jul 2022 12:11:54 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id EE.96.10067.90D72E26; Thu, 28
-        Jul 2022 13:11:54 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220728121153eucas1p2608d9935422fdb31c3a99a4ea2e765ff~F-RcirRNq2057020570eucas1p2D;
-        Thu, 28 Jul 2022 12:11:53 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220728121153eusmtrp2f526d169df0fc66fd0d18be8b5c1a050~F-RcgtnQX2735727357eusmtrp2u;
-        Thu, 28 Jul 2022 12:11:53 +0000 (GMT)
-X-AuditID: cbfec7f4-dd7ff70000002753-ce-62e27d09b17a
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 11.F4.09095.90D72E26; Thu, 28
-        Jul 2022 13:11:53 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220728121153eusmtip125d7a9b3b36b4c1ae55cbba9c4f02230~F-RcWQT1O3030030300eusmtip1X;
-        Thu, 28 Jul 2022 12:11:53 +0000 (GMT)
-Received: from [106.110.32.100] (106.110.32.100) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 28 Jul 2022 13:11:52 +0100
-Message-ID: <eed7d9ee-fd7f-e57c-598e-909dbb0d2380@samsung.com>
-Date:   Thu, 28 Jul 2022 14:11:51 +0200
+        Thu, 28 Jul 2022 08:14:08 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30FD6A4A2;
+        Thu, 28 Jul 2022 05:14:06 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id va17so2938655ejb.0;
+        Thu, 28 Jul 2022 05:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=scVy0siNZQpTUdZNL0fbzg1tkYynfpBNYNosy5mDXbo=;
+        b=L1d+CZwzgEYbBQfAzHvwLizC1GGkZ90spMFq1QdruzSr63GvGl1AcEs22RojeLnbsG
+         PXacIVMpW+xbG7m1aDuXWx3QO/0tbRAQ/apH+gzBDFpkrBobX4y4KnaUeV90QOk4HXAb
+         0eR4gOqBUTJvjQJfXZ/cwIo8U5l6/qp9TMyTgY4agh4epz+MweVcz0KHTkuGQV7EQmPQ
+         y5dTNk4+HBISwbw40woua8pheq+Lyk5TiP+07wcj6WEIjypXwcI9fefz0LaPjuY9Ks9G
+         AU+3hIpK0jhvaL+A7oYFWyDtqlnCkxhbZ2+/7RTU0MAD3ak3jAhpFqAXO5gKgTujzus7
+         R9uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=scVy0siNZQpTUdZNL0fbzg1tkYynfpBNYNosy5mDXbo=;
+        b=M4xtLAocg/NyfP6Gdhe54Y1d0C2bfOIBKB2t5HWNt3AD+PhSXLUK/CKpjPWmorInLM
+         gommY+E92jeySVuWjqc7p3rzGQO281+n4C5iKgJTK7qXl5RLyArK+fSPYhR7k2b3e7iX
+         cUl3dFpqXfKKjQTD+HnT8XvBFFccDlOPQSTkWjZla0U7CgwCXl8lzzM/9zy8HZBNG8I0
+         +gjo0iEYMYhx8LlkpgxLgUbXxusiuZJXGXVFG4IGhvvHU337ar4yyoohc8d+Dgnl8D+e
+         SDARMnLxc0rK3UIt7DoDWgkIBHdSYMahrhpe/68SJVSI8SqylEBJsB2YOS21khOsf8un
+         WX6w==
+X-Gm-Message-State: AJIora8pKzJo9NOsz4/v4Joe1TUmOOu1g+SND0+1lwDSaiz+t4QkzSnV
+        OKoamgNe6DnOczED6Zd6GyU=
+X-Google-Smtp-Source: AGRyM1v8wI8e/9YVypkA6YmuF9VMTC2v748xvT/qo96rRnB5rK/71JOzO0432SDZmmnY/cQxLEN2Jg==
+X-Received: by 2002:a17:907:2bf4:b0:72b:3336:ca9e with SMTP id gv52-20020a1709072bf400b0072b3336ca9emr20838356ejc.341.1659010445268;
+        Thu, 28 Jul 2022 05:14:05 -0700 (PDT)
+Received: from [10.31.0.4] ([37.120.217.162])
+        by smtp.gmail.com with ESMTPSA id c17-20020a17090618b100b006fee98045cdsm367373ejf.10.2022.07.28.05.14.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 05:14:04 -0700 (PDT)
+Message-ID: <e9c6e5dd-928c-c227-eb03-708e6b3e1a26@gmail.com>
+Date:   Thu, 28 Jul 2022 14:13:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.11.0
-Subject: Re: [PATCH v8 02/11] block: allow blk-zoned devices to have
- non-power-of-2 zone size
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
 Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        <damien.lemoal@opensource.wdc.com>, <hch@lst.de>,
-        <axboe@kernel.dk>, <snitzer@kernel.org>,
-        <Johannes.Thumshirn@wdc.com>
-CC:     <matias.bjorling@wdc.com>, <gost.dev@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <hare@suse.de>,
-        <linux-block@vger.kernel.org>, <pankydev8@gmail.com>,
-        <jaegeuk@kernel.org>, <dm-devel@redhat.com>,
-        <linux-nvme@lists.infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <7984b969-9025-6b31-2645-da08daeefafb@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [106.110.32.100]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRmVeSWpSXmKPExsWy7djPc7pctY+SDBZOY7RYfbefzWLah5/M
-        Fr/Pnme22PtuNqvFnkWTmCxWrj7KZPFk/Sxmi79d95gs9t7Stri8aw6bxfxlT9ktJrR9Zba4
-        MeEpo8Wam09ZLE7cknbg97h8xdtj56y77B6Xz5Z6bFrVyeaxeUm9x+6bDWweO1vvs3q833cV
-        KHS62uPzJjmP9gPdTAHcUVw2Kak5mWWpRfp2CVwZe9/fYS2YL14x+e1klgbGycJdjJwcEgIm
-        EhcnvGPpYuTiEBJYwSjx+EULE4TzhVGi6+cPqMxnRonN+xexwLS86/rNCJFYzijx7/cuNriq
-        3a1roPp3M0r8vzGPvYuRg4NXwE7iU5MmiMkioCpxqSEQZBCvgKDEyZlPwIaKCkRKrNl9lh3E
-        FhaIl/hxfBEbiM0sIC5x68l8sJEiAkuBlt2+CLaMWWAGk8Txy6vYQIayCWhJNHaCreIUsJa4
-        fL0coldTonX7b3YIW16ieetsZogHlCQmzLvPBmHXSqw9doYdZKSEwDNOibWPdkAVuUg82f6V
-        EcIWlnh1fAs7hC0j8X8nyEEgdrXE0xu/mSGaWxgl+neuB7tHAuiIvjM5EDWOEgteP2eECPNJ
-        3HgrCHEPn8SkbdOZJzCqzkIKillIXp6F5IVZSF5YwMiyilE8tbQ4Nz212CgvtVyvODG3uDQv
-        XS85P3cTIzANnv53/MsOxuWvPuodYmTiYDzEKMHBrCTCmxB9P0mINyWxsiq1KD++qDQntfgQ
-        ozQHi5I4b3LmhkQhgfTEktTs1NSC1CKYLBMHp1QD0+pz82Ku6OckvN0X+9r+5zFldneDnKPe
-        20oOXHz/M+ei3jp55W3q0ZkJV1/YttQqv3fTd3KdmMKp/oLpYYN7NMf2J79288/MYLDs55tR
-        FWQdGx1m19uiat3xZee+vZp5fy5xnFfYZdt9LalR27Ow8tEr6xdW/Ln+giJ6glnR7Ffb1t6c
-        siW260jGnXAZniLJm8pGwtxRlybmJD6se3z24cNTu7Xmz+h4+P+NzvTH+rOcFm1c4JJ1I/va
-        16CnDKfPnrGf6vRh97986Uuv/Ztm7ua6xvHWbf5Uh0mWqru2bnx+mW9/SdLRm3+lZ3bmtS8W
-        2n5NnyNpZ/LXW299bd63mMdP2/RlTouvyZzpDD9vTFBiKc5INNRiLipOBABWBeAm8gMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRmVeSWpSXmKPExsVy+t/xu7qctY+SDDZclbZYfbefzWLah5/M
-        Fr/Pnme22PtuNqvFnkWTmCxWrj7KZPFk/Sxmi79d95gs9t7Stri8aw6bxfxlT9ktJrR9Zba4
-        MeEpo8Wam09ZLE7cknbg97h8xdtj56y77B6Xz5Z6bFrVyeaxeUm9x+6bDWweO1vvs3q833cV
-        KHS62uPzJjmP9gPdTAHcUXo2RfmlJakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2
-        Kak5mWWpRfp2CXoZe9/fYS2YL14x+e1klgbGycJdjJwcEgImEu+6fjN2MXJxCAksZZT40vqa
-        DSIhI/Hpykd2CFtY4s+1LjaIoo+MEhse3WKFcHYzSqx6u4y5i5GDg1fATuJTkyaIySKgKnGp
-        IRCkl1dAUOLkzCcsILaoQKTEw2VNTCC2sEC8xI/ji8B2MQuIS9x6Mp8JZKQIyBFzZj4Bu4hZ
-        YAaTxPHLq8CqhAQ+MEp0HpUFWcAmoCXR2MkOYnIKWEtcvl4OMUdTonX7b3YIW16ieetsZoj7
-        lSQmzLsP9VetxKv7uxknMIrOQnLeLCRnzEIyahaSUQsYWVYxiqSWFuem5xYb6hUn5haX5qXr
-        JefnbmIEpo5tx35u3sE479VHvUOMTByMhxglOJiVRHgTou8nCfGmJFZWpRblxxeV5qQWH2I0
-        BQbRRGYp0eR8YPLKK4k3NDMwNTQxszQwtTQzVhLn9SzoSBQSSE8sSc1OTS1ILYLpY+LglGpg
-        Wmh+55llhdbKTSUXPX8utvzYvmL17VfTDW6fccu5vf25Y5yq22TlN3+fOa9JmL04vtR58dek
-        yZO8Z7+7fN6Webfix+XHF0UtL/r1QaVqZbL7PpVXC074qKUdXPJO+9r7K/cbUzKm65+Veljk
-        1MusF5iXcShm8rJrSz2X9b9fGzpjPuf5xPZJj5qNbx8rter9VCagxpT962BpE7Pm20Pz7v6Z
-        fGARA5fB9ctbt59fcj5O7ISy64a9D6csv72p9avntaf7dDaxHEpRszPebuwxf+O+KtvIiXdP
-        yO3WT5p4btb9rm/1Os3///maxZ7Z+eT66kQn9r3N5akdcwrX+jb9eHNnhTl3yblg3rRFUuqh
-        pWo8SizFGYmGWsxFxYkAoli54aYDAAA=
-X-CMS-MailID: 20220728121153eucas1p2608d9935422fdb31c3a99a4ea2e765ff
-X-Msg-Generator: CA
-X-RootMTR: 20220727162248eucas1p2ff8c3c2b021bedcae3960024b4e269e9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220727162248eucas1p2ff8c3c2b021bedcae3960024b4e269e9
-References: <20220727162245.209794-1-p.raghav@samsung.com>
-        <CGME20220727162248eucas1p2ff8c3c2b021bedcae3960024b4e269e9@eucas1p2.samsung.com>
-        <20220727162245.209794-3-p.raghav@samsung.com>
-        <7984b969-9025-6b31-2645-da08daeefafb@acm.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <20220726143005.wt4be7yo7sbd3xut@bogus>
+ <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
+ <20220726154138.74avqs6iqlzqpzjk@bogus>
+ <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
+ <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
+ <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
+ <20220727132437.pjob3z2nyxsuxgam@bogus>
+ <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
+ <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com>
+ <20220728113347.ver6argevzmlsc2c@bogus>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20220728113347.ver6argevzmlsc2c@bogus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-28 01:16, Bart Van Assche wrote:
-> On 7/27/22 09:22, Pankaj Raghav wrote:
->> Checking if a given sector is aligned to a zone is a common
->> operation that is performed for zoned devices. Add
->> bdev_is_zone_start helper to check for this instead of opencoding it
->> everywhere.
+On 7/28/22 13:33, Sudeep Holla wrote:
+> On Thu, Jul 28, 2022 at 12:48:19PM +0200, Maximilian Luz wrote:
 > 
-> I can't find the bdev_is_zone_start() function in this patch?
+> [...]
 > 
-I made the name change from bdev_is_zone_start to bdev_is_zone_aligned
-last moment and missed changing it in the commit log.
+>>
+>> I would very much like to avoid the need for special bootloaders. The
+>> devices we're talking about are WoA devices, meaning they _should_
+>> ideally boot just fine with EFI and ACPI.
+>>
+> 
+> Completely agreed.
+> 
+>>  From an end-user perspective, it's annoying enough that we'll have to
+>> stick with DTs for the time being due to the use of PEPs in ACPI.
+> 
+> But have we explored or investigated what it takes to rewrite ACPI f/w
+> to just use standard methods ? Does it require more firmware changes or
+> new firmware entities or impossible at any cost ?
 
->> To make this work bdev_get_queue(), bdev_zone_sectors() and
->> bdev_is_zoned() are moved earlier without modifications.
-> 
-> Can that change perhaps be isolated into a separate patch?
-> 
->> diff --git a/block/blk-core.c b/block/blk-core.c
->> index 3d286a256d3d..1f7e9a90e198 100644
->> --- a/block/blk-core.c
->> +++ b/block/blk-core.c
->> @@ -570,7 +570,7 @@ static inline blk_status_t
->> blk_check_zone_append(struct request_queue *q,
->>           return BLK_STS_NOTSUPP;
->>         /* The bio sector must point to the start of a sequential zone */
->> -    if (bio->bi_iter.bi_sector & (bdev_zone_sectors(bio->bi_bdev) -
->> 1) ||
->> +    if (!bdev_is_zone_aligned(bio->bi_bdev, bio->bi_iter.bi_sector) ||
->>           !bio_zone_is_seq(bio))
->>           return BLK_STS_IOERR;
-> 
-> The bdev_is_zone_start() name seems more clear to me than
-> bdev_is_zone_aligned(). Has there already been a discussion about which
-> name to use for this function?
-> 
-The reason I did s/bdev_is_zone_start/bdev_is_zone_aligned is that this
-name makes more sense for also checking if a given size is a multiple of
-zone sectors for e.g., used in PATCH 9:
+Again, I'm not a Qualcomm employee. I would prefer it they'd use
+standard methods in the future. Rewriting the ACPI tables based on the
+information that we have is probably possible, but we'd again have to do
+this on a device-by-device basis, so why not just write a DT instead?
 
--		if (len & (zone_sectors - 1)) {
-+		if (!bdev_is_zone_aligned(bdev, len)) {
+Again, I'm not a Qualcomm employee. I would prefer it they'd use
+standard methods in the future. I cannot say why they are using PEPs and
+whether they can't just use something "normal". Rewriting the ACPI
+tables based on the information that we have is probably possible, but
+we'd again have to do this manually, on a device-by-device basis. So why
+not just write a DT instead?
 
-I felt `bdev_is_zone_aligned` fits the use case of checking if the
-sector starts at the start of a zone and also check if a given length of
-sectors also align with the zone sectors. bdev_is_zone_start does not
-make the intention clear for the latter use case IMO.
+Apart from that they also unfortunately hard-code a lot of SoC specific
+MMIO addresses into their drivers, so, for each SoC, they essentially
+have their own ACPI HID even if the specific hardware interface hasn't
+changed. It's bad all around... and I don't like it one bit either.
 
-But I am fine with going back to bdev_is_zone_start if you and Damien
-feel strongly otherwise.
->> +        /*
->> +         * Non power-of-2 zone size support was added to remove the
->> +         * gap between zone capacity and zone size. Though it is
->> technically
->> +         * possible to have gaps in a non power-of-2 device, Linux
->> requires
->> +         * the zone size to be equal to zone capacity for non power-of-2
->> +         * zoned devices.
->> +         */
->> +        if (!is_power_of_2(zone->len) && zone->capacity < zone->len) {
->> +            pr_warn("%s: Invalid zone capacity for non power of 2
->> zone size",
->> +                disk->disk_name);
+> For me that is more important than just getting this one on DT. Because
+> if you take that path, we will have to keep doing that, with loads of
+> unnecessary drivers if they are not shared with any other SoC with DT
+> support upstream. We might also miss chance to get things added to the ACPI
+> spec as we don't care which means that we never be able to use ACPI on
+> similar future platforms even though they get shipped with ACPI.
 > 
-> Given the severity of this error, shouldn't the zone capacity and length
-> be reported in the error message?
-> 
-Ok.
-> Thanks,
-> 
-> Bart.
+> It will be a loop where we constantly keep converting this ACPI shipped
+> platform into DT upstream. IMHO we don't want to be there.
+
+I fully agree with that. And that is also something that I fear.
+
+Unfortunately, the only way out that I can see is either Qualcomm
+changing its ways or us supporting ACPI PEPs, doing hard-coded register
+addresses based on ACPI HIDs, and converting a lot of existing drivers
+written for DT/OF to support ACPI. I personally would prefer if we'd do
+all that and hope that we can one day support PEPs.
+
+Once we do, we'd at least "only" have to add the needed MMIO definitions
+for drivers via HID matches and write a PEP driver for that specific SoC
+(which would then be similar to regulator or clock controllers). Still
+some work but a lot less than having to write DTs for each and every
+possible model.
+
+As much as I'd like to support and work on that, I'm doing this in my
+free time, and this sounds like a big undertaking. At the moment, my
+efforts are focused on making the Surface Pro X play (relatively) nice
+with Linux (via DT). I had thought about this, but my time to work on
+this is unfortunately limited. You'd probably have to ask e.g. the
+Linaro folks for help and input (some of which, e.g. Bjorn Andersson
+are currently working on DTs for WoA devices), and also convince the
+ACPI maintainers.
+
+Regards,
+Max

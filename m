@@ -2,97 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C7A583A12
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BF7583A13
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234985AbiG1ILV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S235031AbiG1INC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiG1ILU (ORCPT
+        with ESMTP id S233818AbiG1IM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:11:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BD63AE5D;
-        Thu, 28 Jul 2022 01:11:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5387C61B46;
-        Thu, 28 Jul 2022 08:11:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8E9C433D6;
-        Thu, 28 Jul 2022 08:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658995878;
-        bh=c23ZgkhJmhmN1wnP5D1JbbpVm4WFz2aOVz5hhH/OAds=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z6e9VtqnnXePXNjtw/HfVPKcu1t2JMIo6Iv9/mcYraldHi3VQmAugHjzmBeHVwKJ0
-         EcnRRZBaYls2zcLrnVc1N90lnqVy2u0IwgA7ZTzu1OYDIFUbOR/px12dG6syjgta5T
-         YqDUOCRtt4vEkZJ02v/sq5ezmt3GO7kkWCoIR9tNq5rD68ewo0db8PiUZaLdlvHQar
-         CKP3cFp3dpSkig2mT1gUfpQ8CfPrveelpo7RK8+F5wybjDK3yVoNMrr2qcKBfdZj98
-         SoqtG4M6AkV06JNl6Z+4pCe3X7ZKy5Ec/VALfOZdfs48PHwzoCVk/HVj16BEz0wN3R
-         aQTXlXvF8zkbQ==
-Date:   Thu, 28 Jul 2022 11:11:15 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        keyrings <keyrings@vger.kernel.org>,
-        linux-security-modules <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Subject: Re: [PATCH] keys/keyctl: Use kfree_rcu instead of kfree
-Message-ID: <YuJEozyceOKQ63/6@kernel.org>
-References: <20220723135035.199188-1-code@siddh.me>
+        Thu, 28 Jul 2022 04:12:58 -0400
+Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1A055086;
+        Thu, 28 Jul 2022 01:12:56 -0700 (PDT)
+Received: from proxy02.sjtu.edu.cn (smtp188.sjtu.edu.cn [202.120.2.188])
+        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 5B98C1008B393;
+        Thu, 28 Jul 2022 16:12:52 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by proxy02.sjtu.edu.cn (Postfix) with ESMTP id 34CAD2008BD4F;
+        Thu, 28 Jul 2022 16:12:52 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from proxy02.sjtu.edu.cn ([127.0.0.1])
+        by localhost (proxy02.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 7I_j8N54BGeu; Thu, 28 Jul 2022 16:12:50 +0800 (CST)
+Received: from [192.168.24.189] (unknown [202.120.40.82])
+        (Authenticated sender: qtxuning1999@sjtu.edu.cn)
+        by proxy02.sjtu.edu.cn (Postfix) with ESMTPSA id 4A714200BFDA8;
+        Thu, 28 Jul 2022 16:12:40 +0800 (CST)
+Message-ID: <f4612182-698b-c687-17c8-610c890adcf9@sjtu.edu.cn>
+Date:   Thu, 28 Jul 2022 16:12:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723135035.199188-1-code@siddh.me>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC 4/5] virtio: get desc id in order
+Content-Language: en-US
+To:     Jason Wang <jasowang@redhat.com>, eperezma@redhat.com,
+        sgarzare@redhat.com, mst@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
+References: <20220721084341.24183-1-qtxuning1999@sjtu.edu.cn>
+ <20220721084341.24183-5-qtxuning1999@sjtu.edu.cn>
+ <9d4c24de-f2cc-16a0-818a-16695946f3a3@redhat.com>
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+In-Reply-To: <9d4c24de-f2cc-16a0-818a-16695946f3a3@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 07:20:35PM +0530, Siddh Raman Pant wrote:
-> In keyctl_watch_key, use kfree_rcu() for freeing watch and wlist
-> as they support RCU and have an rcu_head in the struct definition.
-> 
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+On 2022/7/26 16:07, Jason Wang wrote:
+>
+> 在 2022/7/21 16:43, Guo Zhi 写道:
+>> If in order feature negotiated, we can skip the used ring to get
+>> buffer's desc id sequentially.
+>
+>
+> Let's rename the patch to something like "in order support for 
+> virtio_ring"
+>
+>
+>>
+>> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+>> ---
+>>   drivers/virtio/virtio_ring.c | 37 ++++++++++++++++++++++++++++--------
+>>   1 file changed, 29 insertions(+), 8 deletions(-)
+>
+>
+> I don't see packed support in this patch, we need to implement that.
+>
+It will be implemented later.
+>
+>>
+>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+>> index a5ec724c0..4d57a4edc 100644
+>> --- a/drivers/virtio/virtio_ring.c
+>> +++ b/drivers/virtio/virtio_ring.c
+>> @@ -144,6 +144,9 @@ struct vring_virtqueue {
+>>               /* DMA address and size information */
+>>               dma_addr_t queue_dma_addr;
+>>               size_t queue_size_in_bytes;
+>> +
+>> +            /* In order feature batch begin here */
+>> +            u16 next_batch_desc_begin;
+>>           } split;
+>>             /* Available for packed ring */
+>> @@ -700,8 +703,10 @@ static void detach_buf_split(struct 
+>> vring_virtqueue *vq, unsigned int head,
+>>       }
+>>         vring_unmap_one_split(vq, i);
+>> -    vq->split.desc_extra[i].next = vq->free_head;
+>> -    vq->free_head = head;
+>> +    if (!virtio_has_feature(vq->vq.vdev, VIRTIO_F_IN_ORDER)) {
+>> +        vq->split.desc_extra[i].next = vq->free_head;
+>> +        vq->free_head = head;
+>> +    }
+>
+>
+> Let's add a comment to explain why we don't need anything if in order 
+> is neogitated.
+>
+LGTM.
+>
+>>         /* Plus final descriptor */
+>>       vq->vq.num_free++;
+>> @@ -743,7 +748,8 @@ static void *virtqueue_get_buf_ctx_split(struct 
+>> virtqueue *_vq,
+>>   {
+>>       struct vring_virtqueue *vq = to_vvq(_vq);
+>>       void *ret;
+>> -    unsigned int i;
+>> +    __virtio16 nextflag = cpu_to_virtio16(vq->vq.vdev, 
+>> VRING_DESC_F_NEXT);
+>> +    unsigned int i, j;
+>>       u16 last_used;
+>>         START_USE(vq);
+>> @@ -762,11 +768,24 @@ static void *virtqueue_get_buf_ctx_split(struct 
+>> virtqueue *_vq,
+>>       /* Only get used array entries after they have been exposed by 
+>> host. */
+>>       virtio_rmb(vq->weak_barriers);
+>>   -    last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> -    i = virtio32_to_cpu(_vq->vdev,
+>> -            vq->split.vring.used->ring[last_used].id);
+>> -    *len = virtio32_to_cpu(_vq->vdev,
+>> -            vq->split.vring.used->ring[last_used].len);
+>> +    if (virtio_has_feature(_vq->vdev, VIRTIO_F_IN_ORDER)) {
+>> +        /* Skip used ring and get used desc in order*/
+>> +        i = vq->split.next_batch_desc_begin;
+>> +        j = i;
+>> +        while (vq->split.vring.desc[j].flags & nextflag)
+>
+>
+> Let's don't depend on the descriptor ring which is under the control 
+> of the malicious hypervisor.
+>
+> Let's use desc_extra that is not visible by the hypervisor. More can 
+> be seen in this commit:
+>
+> 72b5e8958738 ("virtio-ring: store DMA metadata in desc_extra for split 
+> virtqueue")
+>
+LGTM, I will use desc_extra in new version patch.
+>
+>> +            j = (j + 1) % vq->split.vring.num;
+>> +        /* move to next */
+>> +        j = (j + 1) % vq->split.vring.num;
+>> +        vq->split.next_batch_desc_begin = j;
+>
+>
+> I'm not sure I get the logic here, basically I think we should check 
+> buffer instead of descriptor here.
 
-Applies to any patch: the commit message should *clearly* describe
+Because the vq->last_used_idx != vq->split.vring.used->idx, So the 
+virtio driver know these has at least one used descriptor. the 
+descriptor's id is vq->split.next_batch_desc_begin because of in order. 
+Then we have to traverse the descriptor chain and point 
+vq->split.next_batch_desc_begin to next used descriptor.
 
-1. What is wrong in the current code *behaviour*.
-2. Why does the code change save the day.
+Thanks.
 
-> ---
->  security/keys/keyctl.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
-> index 96a92a645216..087fbc141cfd 100644
-> --- a/security/keys/keyctl.c
-> +++ b/security/keys/keyctl.c
-> @@ -1832,9 +1832,9 @@ long keyctl_watch_key(key_serial_t id, int watch_queue_fd, int watch_id)
->  	}
->  
->  err_watch:
-> -	kfree(watch);
-> +	kfree_rcu(watch, rcu);
->  err_wlist:
-> -	kfree(wlist);
-> +	kfree_rcu(wlist, rcu);
->  err_wqueue:
->  	put_watch_queue(wqueue);
->  err_key:
-> -- 
-> 2.35.1
-> 
-> 
+>
+> So if vring.used->ring[last_used].id != last_used, we know all 
+> [last_used, vring.used->ring[last_used].id] have been used in a batch?
+>
+>
+>> +
+>> +        /* TODO: len of buffer */
+>
+>
+> So spec said:
+>
+> "
+>
+> The skipped buffers (for which no used ring entry was written) are 
+> assumed to have been used (read or written) by the device completely.
+>
+>
+> "
+>
+> Thanks
+>
+The driver will need len in used ring to get buffer size. However in 
+order will not write len of each buffer in used ring. So I will tried 
+pass len of buffer in device header.
+>
+>> +    } else {
+>> +        last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> +        i = virtio32_to_cpu(_vq->vdev,
+>> + vq->split.vring.used->ring[last_used].id);
+>> +        *len = virtio32_to_cpu(_vq->vdev,
+>> + vq->split.vring.used->ring[last_used].len);
+>> +    }
+>>         if (unlikely(i >= vq->split.vring.num)) {
+>>           BAD_RING(vq, "id %u out of range\n", i);
+>> @@ -2234,6 +2253,8 @@ struct virtqueue 
+>> *__vring_new_virtqueue(unsigned int index,
+>>       vq->split.avail_flags_shadow = 0;
+>>       vq->split.avail_idx_shadow = 0;
+>>   +    vq->split.next_batch_desc_begin = 0;
+>> +
+>>       /* No callback?  Tell other side not to bother us. */
+>>       if (!callback) {
+>>           vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+>
 
-BR, Jarkko

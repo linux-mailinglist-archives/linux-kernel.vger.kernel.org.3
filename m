@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121D8584485
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B1258448E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbiG1Q6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S232204AbiG1RCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiG1Q6s (ORCPT
+        with ESMTP id S229632AbiG1RCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:58:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81751664DB
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:58:47 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oH6qG-00082K-1X; Thu, 28 Jul 2022 18:58:32 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oH6qC-0001DX-8P; Thu, 28 Jul 2022 18:58:28 +0200
-Date:   Thu, 28 Jul 2022 18:58:28 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Bastian Stender <bst@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org
-Subject: Re: [PATCH] can: j1939: Replace WARN_ON_ONCE with pr_warn_once() in
- j1939_sk_queue_activate_next_locked()
-Message-ID: <20220728165828.GB30201@pengutronix.de>
-References: <7ea40c0e-e696-3537-c2a4-a8eccf4695d0@ispras.ru>
- <20220728163429.214758-1-pchelkin@ispras.ru>
+        Thu, 28 Jul 2022 13:02:07 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A884953D32
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:02:05 -0700 (PDT)
+Received: from quatroqueijos (1.general.cascardo.us.vpn [10.172.70.58])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 47D25416EC;
+        Thu, 28 Jul 2022 17:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1659027723;
+        bh=eJFVXCtA/nJevHAQEgQ8T/YTuTveTIvqgwNCM/uhRKs=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=BjTP/uyZp7aD9rA17SRyJYGVEchnk5xL/j+S+UEUrkAosmZJbOOrAZ3S2UQc4YVBN
+         s6soNx5Ch8N9eylVJCXhA9AMQMjZLE+MyF4RsCWO8sWkiUTTZdTcxvMKeSUGHSn+HH
+         ffBuOhBEsqpWu5MqxgDPlAA3HyDjTo8sNkpbIfmlBo8ZG6ra+HRwAxJEVPjbWdexfz
+         U60Wd9jauPD5vFpqvsBkvIdDeSRhhPVDnipCRaeSi2/A2T25QN2rHr5UpVPbmXg03R
+         cjH240bdyfXBD/NTpzhPk2EUa88d+3MUG38BWrDmwHMd75FIcTxWv3qtL6ER0aCGL7
+         R/YcbCIcl0q7Q==
+Date:   Thu, 28 Jul 2022 14:01:57 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] x86/bugs: Do not enable IBPB at firmware entry when IBPB
+ is not available
+Message-ID: <YuLBBe2BXrC7CNiu@quatroqueijos>
+References: <20220728122602.2500509-1-cascardo@canonical.com>
+ <YuKCpLOLeDOI7GII@zn.tnic>
+ <CADWks+aosM99jv9WwLvFo3LPEnsqts+2bJPzMnRqJX70qz51cg@mail.gmail.com>
+ <YuKoxyUdAWsTfKez@zn.tnic>
+ <YuKwLnYlzC0R8xrF@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728163429.214758-1-pchelkin@ispras.ru>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YuKwLnYlzC0R8xrF@zn.tnic>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fedor,
-
-thank you for your patch.
-
-On Thu, Jul 28, 2022 at 07:34:29PM +0300, Fedor Pchelkin wrote:
-> We should warn user-space that it is doing something wrong when trying to
-> activate sessions with identical parameters but WARN_ON_ONCE macro can not
-> be used here as it serves a different purpose.
+On Thu, Jul 28, 2022 at 05:50:06PM +0200, Borislav Petkov wrote:
+> + Cooper to sanity-check me.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+> On Thu, Jul 28, 2022 at 05:18:31PM +0200, Borislav Petkov wrote:
+> > On Thu, Jul 28, 2022 at 03:33:35PM +0100, Dimitri John Ledkov wrote:
+> > > Azure public cloud (so it is Azure custom hyper-v hypervisor) these
+> > > instance types https://docs.microsoft.com/en-us/azure/virtual-machines/dav4-dasv4-series
+> > 
+> > Thank you both for the info.
+> > 
+> > Virt is an awful piece of sh*t when it goes and emulates all kinds of
+> > imaginary CPUs. And AMD machine *without* an IBPB which is affected by
+> > retbleed. Well, f*ck that.
+> > 
+> > Does that say somewhere on azure that those guests need to even enable
+> > the mitigation or does the HV mitigate it for them?
+> > 
+> > Because I wouldn't mind to simply disable the mitigation when on a
+> > hypervisor which doesn't support IBPB.
 > 
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> ---
->  net/can/j1939/socket.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> So for 5.19 we probably should take the one-liner just so that we
+> release with all known issues fixed.
 > 
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index f5ecfdcf57b2..67e8b50b8bc1 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-> @@ -178,7 +178,8 @@ static void j1939_sk_queue_activate_next_locked(struct j1939_session *session)
->  	if (!first)
->  		return;
->  
-> -	if (WARN_ON_ONCE(j1939_session_activate(first))) {
-> +	if (j1939_session_activate(first)) {
-> +		pr_warn_once("can: j1939: Identical session is already activated.\n");
+> Going forward, I'm thinking all that FW-mitigation selection should go
+> into a function called something like firmware_select_mitigations()
+> which gets called at the end of check_bugs(), after all mitigation
+> selectors have run.
+> 
+> And in there, the first check should be if X86_FEATURE_HYPERVISOR and if
+> set, not set any mitigations for firmware calls.
+> 
+> Because, frankly, is there any point in protecting against firmware
+> calls in the guest? The guest firmware is part of the hypervisor which
+> gets supplied by the guest owner or cloud provider or so.
+> 
+> In the former case you probably don't need protection and in the latter,
+> you don't have a choice.
+> 
+> But I'm unclear on the fw-in-the-guest thing - I'm sure Andy has a
+> better idea...
+> 
 
-please use netdev_warn_once().
-Otherwise looks good.
+I may be completely wrong here, so excuse me throwing out this idea.
 
->  		first->err = -EBUSY;
->  		goto activate_next;
->  	} else {
+But isn't it also possible that userspace attacks the kernel by leveraging
+speculative execution when in firmware? So even when firmware is trusted, it
+might not have mitigations like retpoline and rethunks. So userspace will train
+the BTB in order to make a RET in the firmware speculate to a firmware gadget
+that may spill out kernel bits to the cache.
+
+Even though there is some limited mapping when doing the firmware calls, there
+are still some kernel pages mapped.
+
+Cascardo.
+
+> Thx.
+> 
 > -- 
-> 2.25.1
+> Regards/Gruss,
+>     Boris.
 > 
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> https://people.kernel.org/tglx/notes-about-netiquette

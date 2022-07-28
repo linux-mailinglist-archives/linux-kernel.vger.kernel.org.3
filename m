@@ -2,299 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967775837FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 06:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389FA583801
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 06:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiG1Ejj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 00:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S232305AbiG1Ej6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 00:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiG1Eji (ORCPT
+        with ESMTP id S230180AbiG1Ejz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 00:39:38 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F97949B55
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 21:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658983177; x=1690519177;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cDZ5sQcP8lKOVgr80scfvjNaiLrp4ghRr840W+KQyEU=;
-  b=WujjVHFLtQ1hbquGikMBmebcL920n1zw7JT+M5q7icnw1uxS1stSJSK0
-   mw96+aD0QNH047EEOGp1WllXfjFYsb1QWWfe/l6gcq+E2fInM/QFvpZe0
-   MKDe2TY8gxhW1ZX+iibPFjPhAwi2KFBTMgcFWKC9WHdf7NjvbNVmMVNKk
-   FLJFW6+rPW085GwxbCRRMjwSGDPWNqZBgHS0VktOkdW8kNVQU7V5HoZwk
-   2w2kzCNXRL26c0hK2Zzj8bNBeFrXVN7ZanyggcZRP4SIhshJ3WFnYS6lZ
-   KcDA3mxgsSP/THLydXj27H8+3vThtoZkaivL9vjGzntFx5S0r4dggkJYc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="287173769"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="287173769"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 21:39:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="846536165"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Jul 2022 21:39:35 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGvJ9-0009ep-0A;
-        Thu, 28 Jul 2022 04:39:35 +0000
-Date:   Thu, 28 Jul 2022 12:38:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tracing_multi_4 14/34] kernel/bpf/syscall.c:2522:22:
- error: implicit declaration of function 'is_tracing_multi'
-Message-ID: <202207281228.VdBNGu2A-lkp@intel.com>
+        Thu, 28 Jul 2022 00:39:55 -0400
+Received: from mx0a-002c1b01.pphosted.com (mx0a-002c1b01.pphosted.com [148.163.151.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9BD51409;
+        Wed, 27 Jul 2022 21:39:54 -0700 (PDT)
+Received: from pps.filterd (m0127838.ppops.net [127.0.0.1])
+        by mx0a-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26RJkBSb024220;
+        Wed, 27 Jul 2022 21:39:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=proofpoint20171006; bh=9e6RM5dqI627zdgXBF/kBZc5p6DjgELE2u2+V7eeZHE=;
+ b=0K47IrGdffiqYVscCAedyOgP3xYXFYQuQ2lvf6+HHS/f70hhvzVIiAr+wHkbTJ4IvPeA
+ dNVpGKRZ8Unbe2P4mq6YPPf14qNrbGMoAoIbnQKSMfJo68uIVxR7lc3DHH4WRBOw2VN3
+ DBk0+kySdLWbfaCQ77gjRDSwkYMg9u9D0DaL4BitzMvoJ3NGQ4HmXbB3ra9aI+Z1Ghjq
+ NuOwo9/1gpRz6C6A915lo2k8W+n9G10xPTowdXhjbm8kIoNWWW9CFylYkmaG4+RHNXpS
+ 46xmI7uCkAk2LU7tV0lnqDJMjkjwDfj9wPRkmOjJ5Y9MGxitglwIgaz06rtfd69h/eap pA== 
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2043.outbound.protection.outlook.com [104.47.74.43])
+        by mx0a-002c1b01.pphosted.com (PPS) with ESMTPS id 3hgghy32bb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Jul 2022 21:39:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XJ9q2gOprviI5ZKWiPLh//fvGdQQ7dFLSn2dvdrgxiNqaiL04iycWP4YlYcdFPMwFTVeUerxk/TQ/Vf8ywLNOh1kTv8sBSsx3neLOqPR08GwzEHiZxrYpVNM7uoL1yKoI5pTgMCrw0QYzKeWSUpQ15FqcIeOlyPAa5r7+wSfaTOdOmUbenqIjlaN3Y7eXwrEMyWQc5AVv/m/MZumD7EHEQ8gdx9fEk1wqIBWttsw9BeJTaX1RhPa0lfPhj4eKLvyS5wlfUzn/vjmCX5bAjPLmkBF0YocRRIJ451/4J1mU10xgeazabtNccEotU9mhS+aYD09QWeVKQzdXVh+/z761g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9e6RM5dqI627zdgXBF/kBZc5p6DjgELE2u2+V7eeZHE=;
+ b=ViNkFuynymrKqxU52gB12RVsXF8txv4gh3LCFDXaFKvF4arZ0PCR/vM8bmw0/7XOBUuBylIAyR81qd4OzbHNM0IEtHKaNkMTHJv0Utw8Ho8CeYAd9GGtcrbw4uVQ9nVyWVM5fh1/qXYAmgmW9f0lYmcOAjpFKjhFkkzhgApO+rg/kbaVFcuD4n0OsK3ta6U7e692uzG8XsYcwGBbvDKgt/vi1IHkz/Ou2C6rro6c+h3BukehGBArXxir6nMxYH1ZmSxXeLLQG2yXd01qn8m/8rmBe/ht6r6pEbQqLdLrCXt9KCQNm7oO9s83DGdWVtTWrxMtxOp/BTK6aukWP223Yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+Received: from CH0PR02MB8041.namprd02.prod.outlook.com (2603:10b6:610:106::10)
+ by BN6PR02MB2755.namprd02.prod.outlook.com (2603:10b6:404:fb::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Thu, 28 Jul
+ 2022 04:39:35 +0000
+Received: from CH0PR02MB8041.namprd02.prod.outlook.com
+ ([fe80::b044:2472:ac8e:6acb]) by CH0PR02MB8041.namprd02.prod.outlook.com
+ ([fe80::b044:2472:ac8e:6acb%9]) with mapi id 15.20.5458.025; Thu, 28 Jul 2022
+ 04:39:35 +0000
+From:   Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+To:     corbet@lwn.net, bp@suse.de, paulmck@kernel.org,
+        keescook@chromium.org, akpm@linux-foundation.org,
+        peterz@infradead.org, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Subject: [PATCH] docs/kernel-parameters: Update retbleed descriptions for "mitigations=" param
+Date:   Thu, 28 Jul 2022 04:39:07 +0000
+Message-Id: <20220728043907.165688-1-eiichi.tsukata@nutanix.com>
+X-Mailer: git-send-email 2.9.3
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0131.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::16) To CH0PR02MB8041.namprd02.prod.outlook.com
+ (2603:10b6:610:106::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a7c15973-78c1-48ae-ed26-08da70532c13
+X-MS-TrafficTypeDiagnostic: BN6PR02MB2755:EE_
+x-proofpoint-crosstenant: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EEKzoPh5DP2z1V71Jeq47X0NG5cwGo0Bts2jiFgM0FEB+0OnDYAtFfNaC+Zq9jvmeeV6GAB/TsszZWuUKTwgsEWA3K4qbGazmTIiyUMNjPn6sVmGj4QkaVl9tRHwsIWKI4Jmn1Q2Z/RAx54oqWl0+ite+aFRLipV3vIegxKdDZ/QYVLa/cILF3dAz9ZE2KgHRDTzKAxci9Cq+QtNev+KldeQ/RV2C2jyAGSC/P65NsCorFDACavqzVRDXMIICJ4mBdd12Bc38tBmRkjfiwSL0Dp+VfQr4toDzetM/r0lYrEvNYD9NBJQsIfMJvvDODV5YK5kZbNUlJT3tGM/l6zDMYvc5x0aYK6RwXdOmxMl7FRuX8X1i70KRpJI/QO4tG7JDXKZpCqKu0o8Rbt6MUE/edcqvcMX0vVQwrZv0qVWHX6mwooqjYiyCuoveMBG+Nf+/+OQbYAcQ0uJvEKAGONtnHunhynzjFAqf+BawJUO9399NJ27a7hxAYu4M2POGMo4gkmU8KaFy0WFntPDijdWHO5NWAc1oJCpQSNanhRD60PsGfbM1+Zz6FcmZrtGS7Do0sXzeCjJAHVbvs8zcoUwntQ5VeINfIl3/aHPMSN6MVIuw/oF4YoMz0BQWJwB1/B+97SKTcuNV0o+BRPpSnWZvFfg1rQ+3q3ggW4OXG1Yh5O4BUtapiCqvLz0dGOUHdCaXdejwk+Mj3Bu7RXdJNUCFy0oW084iJ+6WaX78sFMR8Us+NiZJOEoen60++Q3taD66l8VEgWb5lb5gunSBOrpohtUunMoXzbdXrRK5a+cOlXNF6oIoSOA+6IwooRl+Hph
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB8041.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(376002)(366004)(39860400002)(136003)(921005)(7416002)(44832011)(4744005)(38100700002)(15650500001)(6666004)(38350700002)(41300700001)(2906002)(1076003)(86362001)(186003)(2616005)(107886003)(83380400001)(26005)(6512007)(6506007)(52116002)(66556008)(66946007)(66476007)(4326008)(8676002)(316002)(36756003)(5660300002)(8936002)(478600001)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OF+RNn/IF46oXOFnpzOhk0eAe7a0/VYyGr3FR/du7//r23jomyrdlqT90Nb9?=
+ =?us-ascii?Q?1bwbP9jBP+RA6vlOhtCL3iuyDAXoBZQHdMrl2VwPsgdC73oqRmDKCO7W3UFG?=
+ =?us-ascii?Q?Gqp8fZaJyt7nLj4ESzvAkpwzl5FiPNjsPqI9K0tMCffRHCu5Z8opXgtI6A0U?=
+ =?us-ascii?Q?IWOMEm8Pwq1Se5FAXZ98+ZO5mAtOEIH3/4YHA4dijpaYeDfoXnhpNj2JkmcR?=
+ =?us-ascii?Q?GlmzC90TUTfSi80HnUIP0W9AkANIXyq2XPMwwYIxo5+FURSAd3fLXEa1KrcT?=
+ =?us-ascii?Q?0+RL7IdikHnEImKCqCi6vddrbVji9vfOBDZiZevjhZNTn9aBLy4tRMlillu0?=
+ =?us-ascii?Q?EqZreOqVeXy6e2gARYua0b21BIZ5LhCXSccJxVKzDwm5g/3lo1ds//+m8diI?=
+ =?us-ascii?Q?tbU25bn+JbTkc1vDH8B8/moj7vbQE1PvXN3caSdauMSL9KGat9HcJ7r8vW6p?=
+ =?us-ascii?Q?Fhe10+x2kzb0EpfXZYhztSdzEjrrgXo7+Gg4Vnb4PByeO9HvBIugsfx8Zf91?=
+ =?us-ascii?Q?gYVK8u96nyEmPYhEhvrWNCz8AdGdW8TQ73C9ohHQgkrKGGpDLU8ZBWNbThvW?=
+ =?us-ascii?Q?B0eSgA2JbyoZkp89UcCBZmq2i84s/E6yXPQcAVDbqxWz/kwVE8V0/CkQGSKL?=
+ =?us-ascii?Q?DYn6/7TxtZfuv1YISxX0AcAVVbXB3uJi2x5xTbOVvxtKqPwhI0O9ss1aQh3v?=
+ =?us-ascii?Q?qQsJl9jmmupdCT67oNAHZewEqLke1BubqhkS0Rc4R7QVv/ze2+YS/5r7Nn16?=
+ =?us-ascii?Q?jWUb8ntaWy897FTfyXM8wyHxyoKINovBrgBm2LFBWUlicu8ekerkVu2S5ZFF?=
+ =?us-ascii?Q?kXyBTbXRz3iwLKsQxnWjiQAmPZMOeDj+QITGgtuJBjLwraoOV6pSmLw3FOBa?=
+ =?us-ascii?Q?S78CRuR4N90D+e/UErNIg411W52yEYtCnKylq1MDLqMneyCjldHHmFxJMe9E?=
+ =?us-ascii?Q?aHLgYJ/3a53Dce4dMvWkLWyKOX0RnXsvGBm90cT8FWUzmY4tBH9ASQLSr78p?=
+ =?us-ascii?Q?j9hGHcnZ7n2rziMMnMk+pfMVxdqO2TjxQA/RPQoTHlfOp137QBHIY1Vlc96C?=
+ =?us-ascii?Q?6zeH3Wv5AnFMRC62OhgG1cOK5biSCKEEGjhvYJRrt0mCuMEOONuUV9V8bmsX?=
+ =?us-ascii?Q?w9WBLRHRMEFF4joadp8qTCc8YqcTc9+bo3bWREnUZuxxHO34blSLQTaBlmCs?=
+ =?us-ascii?Q?jb69T6Q4gqfgt6sf8yrJJ+tmfzsV4HjxwiRIPxqdY6JiNUWsscn6lvdjLLtk?=
+ =?us-ascii?Q?QKYHkzLTKVPuEEeP9DCLuTnVsSXZ7EGSpeqUmVE0oGdr1t+L7PIrdvaixF/i?=
+ =?us-ascii?Q?glUihGXzyjGlMb7+MH1FFMxjPGBxxcmR90DNs+XraKpqHnFQ+olbHVEuXgsV?=
+ =?us-ascii?Q?GNEThSIH+VOErw14sbvRVj/Rfpfd8gcj03gVBf+IAtJbiVvbea55ibcICGqb?=
+ =?us-ascii?Q?ghJ+YcbEV+TsxB+k8XKcRCSrPhye5EOYDsB+kqdkmmrKFdfgKoQrPiNGIKQb?=
+ =?us-ascii?Q?P6BsmXOf+vQ091jLLbORXxTFagT4JptEojSOYhlV4cVPGI8LEWg7THn+8h8l?=
+ =?us-ascii?Q?1nCeotobjsTq9Zo93DByY/d+Nko6+jhFF85gQ20wTo4XeasCbQAL5P2GtSNc?=
+ =?us-ascii?Q?fA=3D=3D?=
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7c15973-78c1-48ae-ed26-08da70532c13
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB8041.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 04:39:35.2334
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rmFAdoOb7xYYQ6sG6b1PgT1tzM5BKhg7Lnkh4JNiSgSngIGUBA6U6c4tNI1dlBe7re0Iz34/weAu4Uddi//e7YlMnFPrBfdJYlh3/KWLI/I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2755
+X-Proofpoint-GUID: hRFUdm6X3IuluInRwy5fEYfDhWEUnA76
+X-Proofpoint-ORIG-GUID: hRFUdm6X3IuluInRwy5fEYfDhWEUnA76
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-27_08,2022-07-27_01,2022-06-22_01
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_4
-head:   1637b6b5bec11596e52cdc0a6eadfa45a15276c3
-commit: bea966904e542c1a3a8d12a19f56042211d4e302 [14/34] bpf: Add multi tracing attach types
-config: riscv-randconfig-r042-20220728 (https://download.01.org/0day-ci/archive/20220728/202207281228.VdBNGu2A-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=bea966904e542c1a3a8d12a19f56042211d4e302
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tracing_multi_4
-        git checkout bea966904e542c1a3a8d12a19f56042211d4e302
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/bpf/ kernel/trace/
+Updates descriptions for "mitigations=off" and "mitigations=auto,nosmt".
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-All errors (new ones prefixed by >>):
-
-   kernel/bpf/syscall.c: In function 'bpf_prog_load':
->> kernel/bpf/syscall.c:2522:22: error: implicit declaration of function 'is_tracing_multi' [-Werror=implicit-function-declaration]
-    2522 |         multi_func = is_tracing_multi(attr->expected_attach_type);
-         |                      ^~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
---
-   kernel/bpf/verifier.c: In function 'check_attach_btf_id':
->> kernel/bpf/verifier.c:15099:20: error: implicit declaration of function 'is_tracing_multi' [-Werror=implicit-function-declaration]
-   15099 |         } else if (is_tracing_multi(prog->expected_attach_type))
-         |                    ^~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/is_tracing_multi +2522 kernel/bpf/syscall.c
-
-  2472	
-  2473	static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
-  2474	{
-  2475		enum bpf_prog_type type = attr->prog_type;
-  2476		struct bpf_prog *prog, *dst_prog = NULL;
-  2477		struct btf *attach_btf = NULL;
-  2478		int err;
-  2479		char license[128];
-  2480		bool multi_func;
-  2481		bool is_gpl;
-  2482	
-  2483		if (CHECK_ATTR(BPF_PROG_LOAD))
-  2484			return -EINVAL;
-  2485	
-  2486		if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT |
-  2487					 BPF_F_ANY_ALIGNMENT |
-  2488					 BPF_F_TEST_STATE_FREQ |
-  2489					 BPF_F_SLEEPABLE |
-  2490					 BPF_F_TEST_RND_HI32 |
-  2491					 BPF_F_XDP_HAS_FRAGS))
-  2492			return -EINVAL;
-  2493	
-  2494		if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-  2495		    (attr->prog_flags & BPF_F_ANY_ALIGNMENT) &&
-  2496		    !bpf_capable())
-  2497			return -EPERM;
-  2498	
-  2499		/* copy eBPF program license from user space */
-  2500		if (strncpy_from_bpfptr(license,
-  2501					make_bpfptr(attr->license, uattr.is_kernel),
-  2502					sizeof(license) - 1) < 0)
-  2503			return -EFAULT;
-  2504		license[sizeof(license) - 1] = 0;
-  2505	
-  2506		/* eBPF programs must be GPL compatible to use GPL-ed functions */
-  2507		is_gpl = license_is_gpl_compatible(license);
-  2508	
-  2509		if (attr->insn_cnt == 0 ||
-  2510		    attr->insn_cnt > (bpf_capable() ? BPF_COMPLEXITY_LIMIT_INSNS : BPF_MAXINSNS))
-  2511			return -E2BIG;
-  2512		if (type != BPF_PROG_TYPE_SOCKET_FILTER &&
-  2513		    type != BPF_PROG_TYPE_CGROUP_SKB &&
-  2514		    !bpf_capable())
-  2515			return -EPERM;
-  2516	
-  2517		if (is_net_admin_prog_type(type) && !capable(CAP_NET_ADMIN) && !capable(CAP_SYS_ADMIN))
-  2518			return -EPERM;
-  2519		if (is_perfmon_prog_type(type) && !perfmon_capable())
-  2520			return -EPERM;
-  2521	
-> 2522		multi_func = is_tracing_multi(attr->expected_attach_type);
-  2523	
-  2524		/* attach_prog_fd/attach_btf_obj_fd can specify fd of either bpf_prog
-  2525		 * or btf, we need to check which one it is
-  2526		 */
-  2527		if (attr->attach_prog_fd) {
-  2528			dst_prog = bpf_prog_get(attr->attach_prog_fd);
-  2529			if (IS_ERR(dst_prog)) {
-  2530				dst_prog = NULL;
-  2531				attach_btf = btf_get_by_fd(attr->attach_btf_obj_fd);
-  2532				if (IS_ERR(attach_btf))
-  2533					return -EINVAL;
-  2534				if (!btf_is_kernel(attach_btf)) {
-  2535					/* attaching through specifying bpf_prog's BTF
-  2536					 * objects directly might be supported eventually
-  2537					 */
-  2538					btf_put(attach_btf);
-  2539					return -ENOTSUPP;
-  2540				}
-  2541			}
-  2542		} else if (attr->attach_btf_id || multi_func) {
-  2543			/* fall back to vmlinux BTF, if BTF type ID is specified */
-  2544			attach_btf = bpf_get_btf_vmlinux();
-  2545			if (IS_ERR(attach_btf))
-  2546				return PTR_ERR(attach_btf);
-  2547			if (!attach_btf)
-  2548				return -EINVAL;
-  2549			btf_get(attach_btf);
-  2550		}
-  2551	
-  2552		bpf_prog_load_fixup_attach_type(attr);
-  2553		if (bpf_prog_load_check_attach(type, attr->expected_attach_type,
-  2554					       attach_btf, attr->attach_btf_id,
-  2555					       dst_prog, multi_func)) {
-  2556			if (dst_prog)
-  2557				bpf_prog_put(dst_prog);
-  2558			if (attach_btf)
-  2559				btf_put(attach_btf);
-  2560			return -EINVAL;
-  2561		}
-  2562	
-  2563		/* plain bpf_prog allocation */
-  2564		prog = bpf_prog_alloc(bpf_prog_size(attr->insn_cnt), GFP_USER);
-  2565		if (!prog) {
-  2566			if (dst_prog)
-  2567				bpf_prog_put(dst_prog);
-  2568			if (attach_btf)
-  2569				btf_put(attach_btf);
-  2570			return -ENOMEM;
-  2571		}
-  2572	
-  2573		prog->expected_attach_type = attr->expected_attach_type;
-  2574		prog->aux->attach_btf = attach_btf;
-  2575		prog->aux->attach_btf_id = multi_func ? bpf_multi_func_btf_id[0] : attr->attach_btf_id;
-  2576		prog->aux->dst_prog = dst_prog;
-  2577		prog->aux->offload_requested = !!attr->prog_ifindex;
-  2578		prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
-  2579		prog->aux->xdp_has_frags = attr->prog_flags & BPF_F_XDP_HAS_FRAGS;
-  2580	
-  2581		err = security_bpf_prog_alloc(prog->aux);
-  2582		if (err)
-  2583			goto free_prog;
-  2584	
-  2585		prog->aux->user = get_current_user();
-  2586		prog->len = attr->insn_cnt;
-  2587	
-  2588		err = -EFAULT;
-  2589		if (copy_from_bpfptr(prog->insns,
-  2590				     make_bpfptr(attr->insns, uattr.is_kernel),
-  2591				     bpf_prog_insn_size(prog)) != 0)
-  2592			goto free_prog_sec;
-  2593	
-  2594		prog->orig_prog = NULL;
-  2595		prog->jited = 0;
-  2596	
-  2597		atomic64_set(&prog->aux->refcnt, 1);
-  2598		prog->gpl_compatible = is_gpl ? 1 : 0;
-  2599	
-  2600		if (bpf_prog_is_dev_bound(prog->aux)) {
-  2601			err = bpf_prog_offload_init(prog, attr);
-  2602			if (err)
-  2603				goto free_prog_sec;
-  2604		}
-  2605	
-  2606		/* find program type: socket_filter vs tracing_filter */
-  2607		err = find_prog_type(type, prog);
-  2608		if (err < 0)
-  2609			goto free_prog_sec;
-  2610	
-  2611		prog->aux->load_time = ktime_get_boottime_ns();
-  2612		err = bpf_obj_name_cpy(prog->aux->name, attr->prog_name,
-  2613				       sizeof(attr->prog_name));
-  2614		if (err < 0)
-  2615			goto free_prog_sec;
-  2616	
-  2617		/* run eBPF verifier */
-  2618		err = bpf_check(&prog, attr, uattr);
-  2619		if (err < 0)
-  2620			goto free_used_maps;
-  2621	
-  2622		prog = bpf_prog_select_runtime(prog, &err);
-  2623		if (err < 0)
-  2624			goto free_used_maps;
-  2625	
-  2626		err = bpf_prog_alloc_id(prog);
-  2627		if (err)
-  2628			goto free_used_maps;
-  2629	
-  2630		/* Upon success of bpf_prog_alloc_id(), the BPF prog is
-  2631		 * effectively publicly exposed. However, retrieving via
-  2632		 * bpf_prog_get_fd_by_id() will take another reference,
-  2633		 * therefore it cannot be gone underneath us.
-  2634		 *
-  2635		 * Only for the time /after/ successful bpf_prog_new_fd()
-  2636		 * and before returning to userspace, we might just hold
-  2637		 * one reference and any parallel close on that fd could
-  2638		 * rip everything out. Hence, below notifications must
-  2639		 * happen before bpf_prog_new_fd().
-  2640		 *
-  2641		 * Also, any failure handling from this point onwards must
-  2642		 * be using bpf_prog_put() given the program is exposed.
-  2643		 */
-  2644		bpf_prog_kallsyms_add(prog);
-  2645		perf_event_bpf_event(prog, PERF_BPF_EVENT_PROG_LOAD, 0);
-  2646		bpf_audit_prog(prog, BPF_AUDIT_LOAD);
-  2647	
-  2648		err = bpf_prog_new_fd(prog);
-  2649		if (err < 0)
-  2650			bpf_prog_put(prog);
-  2651		return err;
-  2652	
-  2653	free_used_maps:
-  2654		/* In case we have subprogs, we need to wait for a grace
-  2655		 * period before we can tear down JIT memory since symbols
-  2656		 * are already exposed under kallsyms.
-  2657		 */
-  2658		__bpf_prog_put_noref(prog, prog->aux->func_cnt);
-  2659		return err;
-  2660	free_prog_sec:
-  2661		free_uid(prog->aux->user);
-  2662		security_bpf_prog_free(prog->aux);
-  2663	free_prog:
-  2664		if (prog->aux->attach_btf)
-  2665			btf_put(prog->aux->attach_btf);
-  2666		bpf_prog_free(prog);
-  2667		return err;
-  2668	}
-  2669	
-
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index c0fdb04a0435..cc3ea8febc62 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3176,6 +3176,7 @@
+ 					       no_entry_flush [PPC]
+ 					       no_uaccess_flush [PPC]
+ 					       mmio_stale_data=off [X86]
++					       retbleed=off [X86]
+ 
+ 				Exceptions:
+ 					       This does not have any effect on
+@@ -3198,6 +3199,7 @@
+ 					       mds=full,nosmt [X86]
+ 					       tsx_async_abort=full,nosmt [X86]
+ 					       mmio_stale_data=full,nosmt [X86]
++					       retbleed=auto,nosmt [X86]
+ 
+ 	mminit_loglevel=
+ 			[KNL] When CONFIG_DEBUG_MEMORY_INIT is set, this
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C29F583AD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8786583AAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235328AbiG1JAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S234759AbiG1Iv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235018AbiG1JAE (ORCPT
+        with ESMTP id S233586AbiG1Ivy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:00:04 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F7B655B0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:00:02 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id v17so1312508wrr.10
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:00:02 -0700 (PDT)
+        Thu, 28 Jul 2022 04:51:54 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F0118346;
+        Thu, 28 Jul 2022 01:51:53 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id y1so1218317pja.4;
+        Thu, 28 Jul 2022 01:51:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:subject:date:in-reply-to:message-id
-         :mime-version;
-        bh=r0KkVkVfudOsZa8bt775hkQQT4bXWpl6svhyGVd6ieQ=;
-        b=KA2+5rXbBP1kJXeW6hiBXH2pt90gqNXRRgOvI9OI4R4XpmjEaLf1UIiUGZyGlOxFHC
-         ykYgfhTnrP+POspD23CY/8v9+X5DsIrqFYaRgocVqdCuB5PMK30TxTNWlnsBNrR8Fank
-         ragjMrJgixERVOzTdYl1vzqJHh/eAYZtDZScJ/nKWzR1FObowBVnVPGrXruSlc/bjvqk
-         BdHd48UjYmjvkbYL4wG52xrLfmK0zE+IupWNAU/TK4zqXTdUcv2OSQKwTjP8kCljGM11
-         /FXwhX5sr/1imuYz7tqOErnW+wJY4f6z3OpQRPzEFDa229eSksGSQ2K87rJflO6gQNJi
-         V56Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=brCDVHlbSzhWfeWZwVjuyjDWC1Yudq6Y4FN4pwOlp/c=;
+        b=bgpfWBqshcqlEG9rFVkdSI5SJj35E5X6WvsHyIdWCBBniU1LHsKr6P5Fplj26LFLxo
+         GO1h/v+L5IKba4sled7XBZ+G4k/gx5wz/qbBVWnmw/4f+nJ51/nRs3gCj4Gyvc2IGMF/
+         AbZ7ZPu6cD2VbF4feSFEXFyPfTzHY3oDa2VSs8fKXSF3XqCM07nk+WYMKKYfhAlDloLf
+         ERUShKV6Q5fwVDf5r0SoDIW1dRxq5UdNTRfzKpIotMPGQ6WoOY/ejXy8QACPjuQHCBL+
+         qhUl9MZ33hGPk1daJV6xPmrbQ/x2R6c5U7Qf2ICsCwV+/B9PgznhL+luN6zTpxzR/ete
+         SXwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=r0KkVkVfudOsZa8bt775hkQQT4bXWpl6svhyGVd6ieQ=;
-        b=Vbr0mZHglZvI4DyuX5YsAQullkwvTZPFEjWKuoK5Sh7Ha2s7hrFG8nZZ7FJ5Pn3Fed
-         7wS2OPT7fIBtU//o6Pe0diKe7h2vIMpUehP9oIJrbwjByff46/xT0YR18iLfE1vj5mPF
-         IHY/+p5XBWxaQpP7A9GoLjQzWRADyXnk9Qncs3qbSchun3l4T64QkarEVKy9WmkrAWbg
-         u0maEJ0wVdHXDkj7nnPjJIQtILqDqtOpk7OIY1jO/UNmp1MMhuiB16g4b2rAoyR+AHmv
-         61Bt93n6LNRY7CiMF06m+VB0+WchDv1ShDBZZ6mZPJM2bMyxvh8FAIAjwwhpTX2HoWHJ
-         t4hA==
-X-Gm-Message-State: AJIora9sZRawltl14n595fZSG8IHmfQUi9cJB6IDcH2IbrueYFXrstRc
-        +Ua4bc93S3GNJC2nN5CgPoM5nQ==
-X-Google-Smtp-Source: AGRyM1vJ9qug6pEGy6DgN4WD7c36nLypVRFi2FQDF34WxBfiQss+w86zHbsxaCj2bnKZVMdA3qxhgw==
-X-Received: by 2002:adf:ecc5:0:b0:21e:b73f:e33d with SMTP id s5-20020adfecc5000000b0021eb73fe33dmr6349761wro.223.1658998800870;
-        Thu, 28 Jul 2022 02:00:00 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id y14-20020adffa4e000000b0021eb309c97dsm398706wrr.25.2022.07.28.02.00.00
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=brCDVHlbSzhWfeWZwVjuyjDWC1Yudq6Y4FN4pwOlp/c=;
+        b=0iJzDqqYeqWk2v9XDpA2pR3Xd+myC8a3l3j1iyd7I7brk7afIIoiN9XMEnwnsotLZS
+         fkx24G4YBavDrydfrSaUj/Tpd6WLThhnFaNYX0B1w2KcWHN1jxDEnOUxkAV1TRkmD4OJ
+         1YFzG+82XJiR+bsYDM1B/1HYgCxzNGyPKPBBeSdwMVJyG8mqyBrypUkvncns1k5uWQch
+         f+KdG4bxYJJvsGbaolGYDNVabFggFx25pMVw0rv1X24DhamnYJzMV3u14m8th29LO/Y6
+         ZO/WK83ottmnD4G305cjBPjIzVeqA0Ub/mwigUHPGcQJoYWGNhHOqJhCjkPRHaowJqMu
+         8HOw==
+X-Gm-Message-State: AJIora+8Rwm58MHreP9tPGpmTCaLg17sQ07rPabGFbRzBYhV/mYLLXAp
+        Q74xGV9tvz76famqyraLDMdM37v0Hhw=
+X-Google-Smtp-Source: AGRyM1v5Qiamp9MCyzgoZMJAKt4tZylP9tvQEDYTPA0S7QyVTJI97a3XlOfAuavaza2CY0l2xnP5jQ==
+X-Received: by 2002:a17:90b:3ec5:b0:1f0:3986:4502 with SMTP id rm5-20020a17090b3ec500b001f039864502mr9467107pjb.6.1658998312456;
+        Thu, 28 Jul 2022 01:51:52 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-83.three.co.id. [180.214.232.83])
+        by smtp.gmail.com with ESMTPSA id a28-20020aa794bc000000b00528bc6d8939sm96561pfl.157.2022.07.28.01.51.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 02:00:00 -0700 (PDT)
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <20220728054202.6981-2-yu.tu@amlogic.com>
- <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
-User-agent: mu4e 1.8.6; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
- controller bindings
-Date:   Thu, 28 Jul 2022 10:50:50 +0200
-In-reply-to: <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
-Message-ID: <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
+        Thu, 28 Jul 2022 01:51:52 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 905BB103C68; Thu, 28 Jul 2022 15:51:48 +0700 (WIB)
+Date:   Thu, 28 Jul 2022 15:51:48 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/158] 5.18.15-rc1 review
+Message-ID: <YuJOJFj1GCnVQOgr@debian.me>
+References: <20220727161021.428340041@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,75 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jul 27, 2022 at 06:11:04PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.15 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-On Thu 28 Jul 2022 at 10:41, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
+and powerpc (ps3_defconfig, GCC 12.1.0).
 
-> On 28/07/2022 07:42, Yu Tu wrote:
->> Add new clock controller compatible and dt-bindings header for the
->> Everything-Else domain of the S4 SoC.
->> 
->> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->
->
->
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index c1abc53f9e91..f872d0c0c253 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
->>  F:	drivers/clk/meson/
->>  F:	include/dt-bindings/clock/gxbb*
->>  F:	include/dt-bindings/clock/meson*
->> +F:	include/dt-bindings/clock/s4-clkc.h
->>  
->>  ARM/Amlogic Meson SoC Crypto Drivers
->>  M:	Corentin Labbe <clabbe@baylibre.com>
->> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
->> new file mode 100644
->> index 000000000000..b686c8877419
->> --- /dev/null
->> +++ b/include/dt-bindings/clock/s4-clkc.h
->
-> Filename with vendor prefix, so:
-> amlogic,s4-clkc.h
->
->> @@ -0,0 +1,146 @@
->> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
->> +/*
->> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
->> + * Author: Yu Tu <yu.tu@amlogic.com>
->> + */
->> +
->> +#ifndef _DT_BINDINGS_CLOCK_S4_CLKC_H
->> +#define _DT_BINDINGS_CLOCK_S4_CLKC_H
->> +
->> +/*
->> + * CLKID index values
->> + */
->> +
->> +#define CLKID_FIXED_PLL			1
->> +#define CLKID_FCLK_DIV2			3
->> +#define CLKID_FCLK_DIV3			5
->> +#define CLKID_FCLK_DIV4			7
->> +#define CLKID_FCLK_DIV5			9
->> +#define CLKID_FCLK_DIV7			11
->
-> Why these aren't continuous? IDs are expected to be incremented by 1.
->
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-All clocks have IDs, it is one big table in the driver, but we are not exposing them all.
-For example, with composite 'mux / div / gate' assembly, we usually need
-only the leaf.
-
-Same has been done for the other AML controllers:
-For ex:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/dt-bindings/clock/gxbb-clkc.h
-
->> +
->> +#endif /* _DT_BINDINGS_CLOCK_S4_CLKC_H */
->
->
-> Best regards,
-> Krzysztof
-
+-- 
+An old man doll... just what I always wanted! - Clara

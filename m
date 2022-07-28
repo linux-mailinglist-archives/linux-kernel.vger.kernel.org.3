@@ -2,116 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1423D5846E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29D45846EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiG1UPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S231880AbiG1UQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiG1UPy (ORCPT
+        with ESMTP id S229482AbiG1UQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:15:54 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88553747B4;
-        Thu, 28 Jul 2022 13:15:52 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id o13so3571825edc.0;
-        Thu, 28 Jul 2022 13:15:52 -0700 (PDT)
+        Thu, 28 Jul 2022 16:16:29 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC56A7539D;
+        Thu, 28 Jul 2022 13:16:28 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so3301321pjl.0;
+        Thu, 28 Jul 2022 13:16:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4S0mMfGnyRuF8ikfL4mmZ+1Q0MllTpdpEE+oMIn4K8E=;
-        b=dT/6fWpwg48FRzDzpqVPQxXaBbgwSGT8VwBraEBdMxBeaczJbJu9y7pfI7+PashNtb
-         pCGfS+v70b3pRzAKaRAD+6QFT7edmfRhUHAU058uqh2/FtUgNzyFGCaTjgBo9fSHP6oP
-         uihGzY8NdeFO8c/90CADpUvSG5W8UQ5eZU/icVoNAat69Vzf3L/iRCumozEHRU3kBaBo
-         dmZb7B9Myr5xPfW6tS5wKMg8M/tHzTdG7b3OUZTNEPzRXx1gLtGo/Q981KVoc8mx5ek5
-         S8qVDa2O1yYDGJcxovoOWlBwTbz9Cxo8bvmUVpfzN1rjjQYJUEySQPFlfoDHg/G6groY
-         zTSQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nx0lYFPeFGBGctf9BUntX+MOfiVo2RC3lsZGIMCvKQ0=;
+        b=M3jDbJMCKlYXno8dkQeGXH53S+ZT87D5pxt67t4rk1Kbmv9cLqsEtye6Vbz9QPdBXz
+         0pGTHtkD6DPzx+dWbg1DsGHhvcddk53AsjaAkhwQg2z1FvorGPW4NN3OFCnCUjJ2g58h
+         ga9h8V69nbt6lb31BU+t5VHQ/NwDd+wj0+29rBOwXnUTnvtEonaXKs5v/rcnONPuDxiT
+         VBhxvGeTnFBTCseTNYm5y8zT5zRZQG7cdbuFx6O7jnc+TFWdXHcMTEypSdF8WahzxSPT
+         Ag7EBmPSsx6wmZrO8stEYBvVQMXhKcG3uSQkUMTCc7OqO+jcWZT+WRjtOzbSRj+v1hIO
+         /Csw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4S0mMfGnyRuF8ikfL4mmZ+1Q0MllTpdpEE+oMIn4K8E=;
-        b=yqri/O0pZzDZZ+2SZhO7aFa4Uu8puHLMAUi71f+4ceTBvxwDiCBfZGPAqiP/JVgD9r
-         tl4RuXPDxxoxxL5fyP1B4CcyxYV93RagXj7GndOco5G08HvTZUDB1nPih9KH8ecXzOpe
-         i4e7udAxgwqoTG/9ho13cl8+LUjeUIO74wqXkmgUrY2bgSEFlrhMbD16KnaQUcd7gDny
-         m6WFQOmeDVJLPdhECs3rIESBu3HIubcEqNLUVPjJCyAGaLDDTbtkis7NE8j6/Y+RvHeI
-         Q992R2CNKyPGnBrfMgHaC11ZFlkmZU4aKwkrsg2BVdVfVw1buoXgO5NGmwnrK6Syyjl1
-         JZDQ==
-X-Gm-Message-State: AJIora8D0tQsM+STEUgAse5rcECMf17Lodt+e//kfTvbPVr/h1bOXy9q
-        EZv3LBa0hjhFFY1A1jpfgJDWj3/O6exOwg==
-X-Google-Smtp-Source: AGRyM1sbY7Ahfp0Mwc3Ffsv9jEuRczlu/jFRcxM9zgCiXhi8y4VQ+EMAe5MjHrvXPhzcYQG+Ij24aA==
-X-Received: by 2002:a05:6402:5412:b0:435:5997:ccb5 with SMTP id ev18-20020a056402541200b004355997ccb5mr562565edb.167.1659039351013;
-        Thu, 28 Jul 2022 13:15:51 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id r9-20020a17090609c900b0072f5fa11d19sm765176eje.202.2022.07.28.13.15.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 13:15:50 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <31ab1931-7737-2052-398b-0bb49281e561@redhat.com>
-Date:   Thu, 28 Jul 2022 22:15:48 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nx0lYFPeFGBGctf9BUntX+MOfiVo2RC3lsZGIMCvKQ0=;
+        b=gOxpvNnlBwpZYBBbN64UjGDgufOvlnLmDOhcBR76h8XfsOAHUkXo8heTwJsUI7sPEC
+         6E6KSYxESDuZL67+JMwdUHJTl4wieuP6ANOjxCt5o9GJxPmxwBlbcaB+6DCmgNpwH63F
+         zTd9neI/mIWdDLxCk/2fMc10QybAYu6UjHzu87B2Fcixt6vNH7R9oKn4CpjWtI3BUxXp
+         wPFLWsVAc9hwFXm2PW6HrlIBdij5YVAVt9x2eWj0mOQnasX3ZowR7hEsq5QmJ2nNuwBV
+         q+4EFGrTLeeyANLrD60g6hqqej6e1UQ7FtY1B/VLwFn57kGgPoWpoGMPm72XWmtd7HIB
+         piPg==
+X-Gm-Message-State: ACgBeo2I1ON5IUt4bc34POc7LC2t67xrRiAFAOnVstR/FeNt9w3/Z6No
+        dM+uL08WfqNk85ehxM2HR5I=
+X-Google-Smtp-Source: AA6agR6QcO3uoiz26HvijSC2UBcobfHVPmy1T1pNv1JJzPmfjmB8e/Pw6HTAQXj7Z1Ii44gJA7w47w==
+X-Received: by 2002:a17:90b:4c4e:b0:1f0:48e7:7258 with SMTP id np14-20020a17090b4c4e00b001f048e77258mr369041pjb.223.1659039388087;
+        Thu, 28 Jul 2022 13:16:28 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:46dc:1a7c:6135:8f96])
+        by smtp.gmail.com with ESMTPSA id i1-20020a17090332c100b0016c4546fbf9sm1792494plr.128.2022.07.28.13.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 13:16:23 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 13:16:19 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lubomir Rintel <lkundrak@v3.sk>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: input: ariel-pwrbutton: use
+ spi-peripheral-props.yaml
+Message-ID: <YuLukz4H63om4dXH@google.com>
+References: <20220727164230.385614-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/6] KVM: x86/mmu: Properly account NX huge page
- workaround for nonpaging MMUs
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Ben Gardon <bgardon@google.com>
-References: <20220723012325.1715714-1-seanjc@google.com>
- <20220723012325.1715714-3-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220723012325.1715714-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220727164230.385614-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/23/22 03:23, Sean Christopherson wrote:
-> +
-> +	/*
-> +	 * Note, enforcing the NX huge page mitigation for nonpaging MMUs
-> +	 * (shadow paging, CR0.PG=0 in the guest) is completely unnecessary.
-> +	 * The guest doesn't have any page tables to abuse and is guaranteed
-> +	 * to switch to a different MMU when CR0.PG is toggled on (may not
-> +	 * always be guaranteed when KVM is using TDP).  See also make_spte().
-> +	 */
->   	const bool nx_huge_page_workaround_enabled;
->   
->   	/*
-> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> index 7314d27d57a4..9f3e5af088a5 100644
-> --- a/arch/x86/kvm/mmu/spte.c
-> +++ b/arch/x86/kvm/mmu/spte.c
-> @@ -147,6 +147,17 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->   	if (!prefetch)
->   		spte |= spte_shadow_accessed_mask(spte);
->   
-> +	/*
-> +	 * For simplicity, enforce the NX huge page mitigation even if not
-> +	 * strictly necessary.  KVM could ignore if the mitigation if paging is
-> +	 * disabled in the guest, but KVM would then have to ensure a new MMU
-> +	 * is loaded (or all shadow pages zapped) when CR0.PG is toggled on,
-> +	 * and that's a net negative for performance when TDP is enabled.  KVM
-> +	 * could ignore the mitigation if TDP is disabled and CR0.PG=0, as KVM
-> +	 * will always switch to a new MMU if paging is enabled in the guest,
-> +	 * but that adds complexity just to optimize a mode that is anything
-> +	 * but performance critical.
+On Wed, Jul 27, 2022 at 06:42:30PM +0200, Krzysztof Kozlowski wrote:
+> Instead of listing directly properties typical for SPI peripherals,
+> reference the spi-peripheral-props.yaml schema.  This allows using all
+> properties typical for SPI-connected devices, even these which device
+> bindings author did not tried yet.
+> 
+> Remove the spi-* properties which now come via spi-peripheral-props.yaml
+> schema, except for the cases when device schema adds some constraints
+> like maximum frequency.
+> 
+> While changing additionalProperties->unevaluatedProperties, put it in
+> typical place, just before example DTS.a
+> 
+> The binding references also input.yaml and lists explicitly allowed
+> properties, thus here reference only spi-peripheral-props.yaml for
+> purpose of documenting the SPI slave device and bringing
+> spi-max-frequency type validation.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 
-Why even separate the two comments?  I think they both belong in 
-make_spte().
+Applied, thank you.
 
-Paolo
+-- 
+Dmitry

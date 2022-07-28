@@ -2,163 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4CA5840E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE235840F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiG1OR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S231443AbiG1OT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiG1ORz (ORCPT
+        with ESMTP id S229484AbiG1OT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:17:55 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E448751A07;
-        Thu, 28 Jul 2022 07:17:53 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id s14so2123538ljh.0;
-        Thu, 28 Jul 2022 07:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XrrrW4++UP8Z1/g4RPl+VWHxRE3xR4vShEJqGT7s7ks=;
-        b=jFPW+/cAzl1wgsBZ+OnwY61OHhJWd86DKN+6Hj9sDgImdFglHPnhs8rGRYKMopLwh2
-         PP5m5jW/eyQ0JXNxDROJXZx7bseJaqd3LlrUXK4kJGpdqZO/fkoyYSnMl50GLitzHHGj
-         B5v7Xxvi1oliv6t4WEAeXjfTuyl05VDDBsH5rzIZV5N8JREMhgAoPL2tqoz77xNc9eZK
-         KDTP7GmuURxC+8nJEnbcPpAAoCqTq8Czcy2280q3ecj0jpzMX4hKqTLvMYsUYM1ucobf
-         gt/wk0eEjIAMz0bve1vIIpIeDVso6bhJrYeJjdPWqIfYk7IidBlwbKS/9x7P9DJsh6KY
-         FHAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XrrrW4++UP8Z1/g4RPl+VWHxRE3xR4vShEJqGT7s7ks=;
-        b=eNiuYQEzBLeZDhspLo3ADltqQ/bC1kWVfar/xHdUL31MGh6ZS9hkLhkUYfR0vFswNc
-         /dMayzSxkERYZ4j/IOyqy7bdnH4HJh/H1xE9vhAUFnF5b5u4kZtWptfFaYQketRJFRuk
-         NJNlZZ+lm2JiSKRUmFvp2MfoDe0+yGSgbvrkj2y0iqT5H9HSYOHuhI+GZ0T9WVd4G8zT
-         eZMIH4A31hwiFink4DBzGf4jR+5T9+scCBkSZywcwEd1Vy7xypdxFqmoWaeP8Uh7IaQ/
-         T6P6yBnbtImPs1Rno4aIc3HuH1hLMzqzAhWkQRjYdkxvw57jT/Tmu/7OPuCEbYVSRNyy
-         ERvA==
-X-Gm-Message-State: AJIora+3HyBfh6BYw4RU7jy1bY/19GVSqWAoQjy5PCoBBOyqTZfTrNsV
-        GbLxlxai85NKaIQZyYWKB9c=
-X-Google-Smtp-Source: AGRyM1vmDbf/D2wQN66Ua5khxvctUPoy/TITsmzPW0Qi+P0RywPFWU/UBLOkF7DR/IYtB5I2dT/ZbQ==
-X-Received: by 2002:a2e:6a18:0:b0:25e:2f3f:ba71 with SMTP id f24-20020a2e6a18000000b0025e2f3fba71mr786247ljc.352.1659017871652;
-        Thu, 28 Jul 2022 07:17:51 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id e14-20020a2e500e000000b0025df04af0f0sm168583ljb.51.2022.07.28.07.17.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 07:17:51 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 17:17:48 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/24] dmaengine: dw-edma: Add RP/EP local DMA
- controllers support
-Message-ID: <20220728141748.karft7dflr5e3vlp@mobilestation>
-References: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
- <YtlDivjaXfSEK1Xg@matsya>
- <20220728113359.hs54apv22bo5bnyr@mobilestation>
- <YuKFnjrxnyNa+98X@matsya>
+        Thu, 28 Jul 2022 10:19:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C2852E7B;
+        Thu, 28 Jul 2022 07:19:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D997660CF5;
+        Thu, 28 Jul 2022 14:19:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B743CC433C1;
+        Thu, 28 Jul 2022 14:19:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659017995;
+        bh=U5iozSv/8RP3dsBx9k6LZep1YUm9fKbhqK00jFLY6MM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PSaiytatvrk5GSUslwFa5vrteSRxZWvGSSS3IJrNjkht2SCbj6v4HHbWgwpFYpeZF
+         sqFC/VVHrn1wkSpMEsHGQvYJcEYfSxYgCU8sdL75lXqIqXcDDoZWUHLhXxf8tncm4f
+         bAVq+OXuSLiOqXXaPJvC2mlQq0+4bSklCLZcTlRM=
+Date:   Thu, 28 Jul 2022 16:19:52 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 13/24] HID: initial BPF implementation
+Message-ID: <YuKbCCOAtSvUlI3z@kroah.com>
+References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
+ <20220721153625.1282007-14-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuKFnjrxnyNa+98X@matsya>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220721153625.1282007-14-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 06:18:30PM +0530, Vinod Koul wrote:
-> On 28-07-22, 14:33, Serge Semin wrote:
-> > On Thu, Jul 21, 2022 at 05:46:10PM +0530, Vinod Koul wrote:
-> > > On 10-06-22, 12:14, Serge Semin wrote:
-> > > > This is a final patchset in the series created in the framework of
-> > > > my Baikal-T1 PCIe/eDMA-related work:
-> > > > 
-> > > > [1: In-progress v4] PCI: dwc: Various fixes and cleanups
-> > > > Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
-> > > > [2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
-> > > > Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
-> > > > [3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
-> > > > Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
-> > > > [4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
-> > > > Link: ---you are looking at it---
-> > > > 
-> > > > Note it is very recommended to merge the patchsets in the same order as
-> > > > they are listed in the set above in order to have them applied smoothly.
-> > > > Nothing prevents them from being reviewed synchronously though.
-> > > > 
-> > > > Please note originally this series was self content, but due to Frank
-> > > > being a bit faster in his work submission I had to rebase my patchset onto
-> > > > his one. So now this patchset turns to be dependent on the Frank' work:
-> > > > 
-> > > > Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
-> > > > 
-> > > > So please merge Frank' series first before applying this one.
-> > > > 
-> > > > Here is a short summary regarding this patchset. The series starts with
-> > > > fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
-> > > > initializes the LL/DT base addresses for the platforms with not matching
-> > > > CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
-> > > > method to get a correct base address. After that you can find a series of
-> > > > the interleaved xfers fixes. It turned out the interleaved transfers
-> > > > implementation didn't work quite correctly from the very beginning for
-> > > > instance missing src/dst addresses initialization, etc. In the framework
-> > > > of the next two patches we suggest to add a new platform-specific
-> > > > callback - pci_address() and use it to convert the CPU address to the PCIe
-> > > > space address. It is at least required for the DW eDMA remote End-point
-> > > > setup on the platforms with not-matching CPU/PCIe address spaces. In case
-> > > > of the DW eDMA local RP/EP setup the conversion will be done automatically
-> > > > by the outbound iATU (if no DMA-bypass flag is specified for the
-> > > > corresponding iATU window). Then we introduce a set of the patches to make
-> > > > the DebugFS part of the code supporting the multi-eDMA controllers
-> > > > platforms. It starts with several cleanup patches and is closed joining
-> > > > the Read/Write channels into a single DMA-device as they originally should
-> > > > have been. After that you can find the patches with adding the non-atomic
-> > > > io-64 methods usage, dropping DT-region descriptors allocation, replacing
-> > > > chip IDs with the device name. In addition to that in order to have the
-> > > > eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
-> > > > dma-ranges-based memory ranges mapping since in case of the root port DT
-> > > > node it's applicable for the peripheral PCIe devices only. Finally at the
-> > > > series closure we introduce a generic DW eDMA controller support being
-> > > > available in the DW PCIe Root Port/Endpoint driver.
-> > > 
-> > 
-> > > Acked-By: Vinod Koul <vkoul@kernel.org>
-> > 
-> > Thanks, Vinod! The series will be merged in after the patchset
-> > [PATCH vX 00/17] PCI: dwc: Add generic resources and Baikal-T1 support
-> > Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
-> > is done with Rob' review (I failed to reach him with a few issues
-> > lately). I'll add your ab-tag to this one on the next patchset re-spin
-> > (rebase will be likely needed).
-> 
+On Thu, Jul 21, 2022 at 05:36:14PM +0200, Benjamin Tissoires wrote:
+> --- /dev/null
+> +++ b/include/linux/hid_bpf.h
+> @@ -0,0 +1,102 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
 
-> You can cc Krzysztof (cced him0, maybe he can help with review of DT
-> parts
+This is not a uapi .h file, so the "WITH Linux-syscall-note" should not
+be here, right?
 
-Thanks for the suggestion. I'll Cc him in the next series re-spin.
 
--Sergey
+> +
+> +#ifndef __HID_BPF_H
+> +#define __HID_BPF_H
+> +
+> +#include <linux/spinlock.h>
+> +#include <uapi/linux/hid.h>
+> +#include <uapi/linux/hid_bpf.h>
+> +
+> +struct hid_device;
+> +
+> +/*
+> + * The following is the HID BPF API.
+> + *
+> + * It should be treated as UAPI, so extra care is required
+> + * when making change to this file.
 
-> 
-> thanks
-> -- 
-> ~Vinod
+So is this uapi?  If so, shouldn't it go into a uapi include directory
+so we know this and properly track it and maintain it that way?
+
+> + */
+> +
+> +/**
+> + * struct hid_bpf_ctx - User accessible data for all HID programs
+> + *
+> + * ``data`` is not directly accessible from the context. We need to issue
+> + * a call to ``hid_bpf_get_data()`` in order to get a pointer to that field.
+> + *
+> + * All of these fields are currently read-only.
+> + *
+> + * @index: program index in the jump table. No special meaning (a smaller index
+> + *         doesn't mean the program will be executed before another program with
+> + *         a bigger index).
+> + * @hid: the ``struct hid_device`` representing the device itself
+> + * @report_type: used for ``hid_bpf_device_event()``
+> + * @size: Valid data in the data field.
+> + *
+> + *        Programs can get the available valid size in data by fetching this field.
+> + */
+> +struct hid_bpf_ctx {
+> +	__u32 index;
+> +	const struct hid_device *hid;
+> +	enum hid_report_type report_type;
+> +	__s32 size;
+> +};
+> +
+> +/* Following functions are tracepoints that BPF programs can attach to */
+> +int hid_bpf_device_event(struct hid_bpf_ctx *ctx);
+> +
+> +/* Following functions are kfunc that we export to BPF programs */
+> +/* only available in tracing */
+> +__u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t __sz);
+> +
+> +/* only available in syscall */
+> +int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags);
+> +
+> +/*
+> + * Below is HID internal
+> + */
+> +
+> +/* internal function to call eBPF programs, not to be used by anybody */
+> +int __hid_bpf_tail_call(struct hid_bpf_ctx *ctx);
+> +
+> +#define HID_BPF_MAX_PROGS_PER_DEV 64
+> +#define HID_BPF_FLAG_MASK (((HID_BPF_FLAG_MAX - 1) << 1) - 1)
+> +
+> +/* types of HID programs to attach to */
+> +enum hid_bpf_prog_type {
+> +	HID_BPF_PROG_TYPE_UNDEF = -1,
+> +	HID_BPF_PROG_TYPE_DEVICE_EVENT,			/* an event is emitted from the device */
+> +	HID_BPF_PROG_TYPE_MAX,
+> +};
+> +
+> +struct hid_bpf_ops {
+> +	struct module *owner;
+> +	struct bus_type *bus_type;
+> +};
+> +
+> +extern struct hid_bpf_ops *hid_bpf_ops;
+> +
+> +struct hid_bpf_prog_list {
+> +	u16 prog_idx[HID_BPF_MAX_PROGS_PER_DEV];
+> +	u8 prog_cnt;
+> +};
+> +
+> +/* stored in each device */
+> +struct hid_bpf {
+> +	struct hid_bpf_prog_list __rcu *progs[HID_BPF_PROG_TYPE_MAX];	/* attached BPF progs */
+> +	bool destroyed;			/* prevents the assignment of any progs */
+> +
+> +	spinlock_t progs_lock;		/* protects RCU update of progs */
+> +};
+> +
+> +#ifdef CONFIG_HID_BPF
+> +int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
+> +				  u32 size, int interrupt);
+> +void hid_bpf_destroy_device(struct hid_device *hid);
+> +void hid_bpf_device_init(struct hid_device *hid);
+> +#else /* CONFIG_HID_BPF */
+> +static inline int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
+> +						u32 size, int interrupt) { return 0; }
+> +static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
+> +static inline void hid_bpf_device_init(struct hid_device *hid) {}
+> +#endif /* CONFIG_HID_BPF */
+> +
+> +#endif /* __HID_BPF_H */
+> diff --git a/include/uapi/linux/hid_bpf.h b/include/uapi/linux/hid_bpf.h
+> new file mode 100644
+> index 000000000000..ba8caf9b60ee
+> --- /dev/null
+> +++ b/include/uapi/linux/hid_bpf.h
+> @@ -0,0 +1,25 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+
+This is fine, it is in include/uapi/
+
+Other than those minor comments, this all looks good to me!
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

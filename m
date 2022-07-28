@@ -2,108 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECEA5838A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067FC5838AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234049AbiG1GS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S234105AbiG1GTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 02:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiG1GSY (ORCPT
+        with ESMTP id S233890AbiG1GTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:18:24 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCA115D0F2;
-        Wed, 27 Jul 2022 23:18:22 -0700 (PDT)
-Received: from [192.168.87.140] (unknown [50.47.106.71])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 18D4620FE86F;
-        Wed, 27 Jul 2022 23:18:22 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 18D4620FE86F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1658989102;
-        bh=dOWYO9Tc9My88lpKym2V9t4KyEwrpWAjOIRXvs4C5XQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ak0uQ40xJOJRfAIrFUYHIr9TFMyUDjJbJTZm6CGUkKy+4qOq8U56I8c+XrKWgMQ8B
-         csdkyl9vpQCSv5JuJFTpnLAuSRIlKNFG4wOc1us79zruuwJNmDK1gCUlFhLZtlZyG7
-         wGUvBV/uHTBcB+UTdH5KjjtwmuxD2IG+4K95CEvI=
-Message-ID: <450dee2f-63bf-51a7-730e-b780b594c1c5@linux.microsoft.com>
-Date:   Wed, 27 Jul 2022 23:18:22 -0700
+        Thu, 28 Jul 2022 02:19:07 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725A05C96B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:19:06 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id tk8so1403295ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C3neU1AtxmqWdDSuYqkB7lF7A3shUmwSCsbgD00NRVo=;
+        b=JbjP0JxIPi4T11YXcnH4HfzVt3B9IfnonC2lFIPLzS/wmOUb7lhpdzdYvT4RKIgN1s
+         +fllYg1aF6mDvF+BzTc6y2eUkbdIIT+mir7T0+tHeml2NqWAzQ7NwFEWVxbKafGJdQYr
+         QfcK0ns+1kHqIN7wPBPR+/tZaFEMkZuqLNs6A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C3neU1AtxmqWdDSuYqkB7lF7A3shUmwSCsbgD00NRVo=;
+        b=NNfHwHCHFzJznGY1h/WMsmd/X2dPaiF4HA9YWTKiIF3weBTsDZvMFwY3MvgHYK75G6
+         IDB9rTRqpdYLygTKT5UX3uVY4Q19N7soHPnL2YunTCIIb21AV5ZOQ0nJKGbcUgp4xQVy
+         emAwCoexeQXdeBEw2TwVoqtxX2iUF9vKRUPkFBPx0HiA3W+78BWKFC2WB7R0rq2IjzP2
+         TeIvgKaSJ0C78ws4H+6DPH2cu+ltttIo436dBXzSGF8uZtRLxYQxzZERkrghhIgKW0Ns
+         5R2BTfqLgxhfkzapQewL4+9A27sKpnJG3SzhO9AEDILwMGKXvyyJNHu1ZKwRpXLqKele
+         ivMA==
+X-Gm-Message-State: AJIora+eGAhnqNkM81LV/rKfjHJNKKRL7Nexkl0p85yGAT2yHhhs+A8q
+        sB9UMaOq1pL3krmU7y/8v0f39jzZ+cCk+A==
+X-Google-Smtp-Source: AGRyM1vRSnP3N6GPEflp6ikLzS+9t4V10CZ7mlxxZuvGRyYifP+MCFcmCR166eNhGSGUlfm9VPhAfw==
+X-Received: by 2002:a17:907:6818:b0:72b:5bac:c3a3 with SMTP id qz24-20020a170907681800b0072b5bacc3a3mr19390245ejc.139.1658989144713;
+        Wed, 27 Jul 2022 23:19:04 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
+        by smtp.gmail.com with ESMTPSA id d6-20020aa7ce06000000b0043ba24a26casm105469edv.23.2022.07.27.23.19.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 23:19:04 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Michael Trimarchi <michael@amarulasolutions.com>,
+        linux-amarula@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [RESEND PATCH v5 1/2] dmaengine: mxs: use platform_driver_register
+Date:   Thu, 28 Jul 2022 08:18:51 +0200
+Message-Id: <20220728061852.209938-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 5/5] crypto: aspeed: add HACE crypto driver
-Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-References: <20220726113448.2964968-1-neal_liu@aspeedtech.com>
- <20220726113448.2964968-6-neal_liu@aspeedtech.com>
- <9d6beefe-9974-22f8-750c-68c9acb707ab@linux.microsoft.com>
- <TY2PR06MB32137A54B483D6D700BDE7EC80979@TY2PR06MB3213.apcprd06.prod.outlook.com>
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-In-Reply-To: <TY2PR06MB32137A54B483D6D700BDE7EC80979@TY2PR06MB3213.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/2022 10:31 PM, Neal Liu wrote:
->> Why are separate options required for hash and crypto algorithms, if hace is
->> only hw crypto on the SoCs?
->>
->> Looks like that's requiring unnecessary __weak register / unregister functions
->> [see below].
->>
->> Couldn't just two options CONFIG_CRYPTO_DEV_ASPEED and
->> CONFIG_CRYPTO_DEV_ASPEED_DEBUG be simpler to set for downstream
->> defconfigs?
-> I would like to separate different algorithms by different options for more convenient for further use and debug.
-> We also have RSA engine named ACRY, and would upstream once hash & crypto being accepted.
-> So combined them into one option seems not a good choice for multiple hw crypto, do you agree?
+Driver registration fails on SOC imx8mn as its supplier, the clock
+control module, is probed later than subsys initcall level. This driver
+uses platform_driver_probe which is not compatible with deferred probing
+and won't be probed again later if probe function fails due to clock not
+being available at that time.
 
-Not sure what's the use case of just enabling crypto or hash separately
-out of same HW engine and esp. when there's no alternative accel 
-available, but that's fine.
+This patch replaces the use of platform_driver_probe with
+platform_driver_register which will allow probing the driver later again
+when the clock control module will be available.
 
-If ARCY is different HW engine (interface) then having separate config
-sounds logical.
+Fixes: a580b8c5429a ("dmaengine: mxs-dma: add dma support for i.MX23/28")
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: stable@vger.kernel.org
 
-Multiplying DEBUG configs seems unnecessary though. With dynamic debug
-any of the dev_dbg could be turned on. Suggest using single one for
-the module, if not drop it altogether. Following code is still not
-covered by Kconfig, it in common code.
+---
 
- > +#ifdef ASPEED_HACE_DEBUG
- > +#define HACE_DBG(d, fmt, ...)	\
- > +	dev_info((d)->dev, "%s() " fmt, __func__, ##__VA_ARGS__)
- > +#else
- > +#define HACE_DBG(d, fmt, ...)	\
- > +	dev_dbg((d)->dev, "%s() " fmt, __func__, ##__VA_ARGS__)
- > +#endif
+Changes in v5:
+- Update the commit message.
+- Add the patch "dmaengine: mxs: fix section mismatch" to remove the
+  warning raised by this patch.
 
-Regards,
-Dhananjay
+Changes in v4:
+- Restore __init in front of mxs_dma_probe() definition.
+- Rename the mxs_dma_driver variable to mxs_dma_driver_probe.
+- Update the commit message.
+- Use builtin_platform_driver() instead of module_platform_driver().
 
+Changes in v3:
+- Restore __init in front of mxs_dma_init() definition.
+
+Changes in v2:
+- Add the tag "Cc: stable@vger.kernel.org" in the sign-off area.
+
+ drivers/dma/mxs-dma.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
+index 994fc4d2aca4..18f8154b859b 100644
+--- a/drivers/dma/mxs-dma.c
++++ b/drivers/dma/mxs-dma.c
+@@ -839,10 +839,6 @@ static struct platform_driver mxs_dma_driver = {
+ 		.name	= "mxs-dma",
+ 		.of_match_table = mxs_dma_dt_ids,
+ 	},
++	.probe = mxs_dma_probe,
+ };
+-
+-static int __init mxs_dma_module_init(void)
+-{
+-	return platform_driver_probe(&mxs_dma_driver, mxs_dma_probe);
+-}
+-subsys_initcall(mxs_dma_module_init);
++builtin_platform_driver(mxs_dma_driver);
+-- 
+2.32.0
 

@@ -2,71 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FD758430E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE40584314
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiG1P1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41916 "EHLO
+        id S230258AbiG1P2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiG1P1L (ORCPT
+        with ESMTP id S229622AbiG1P2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:27:11 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8827752460
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:27:10 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id f7so2404063pjp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=csSpCZse6HkYpD0alLhYtbnpKIryDbXXSRH4Zixe2I0=;
-        b=DkCdzxLK5NMyhbrRcX2IZyC+qb3fASA7xm+FklYTyIR9i/BtuJCrGtnZ+AdUf0X0wm
-         hGWnJ2oNm7620mgjU+M3EsIbnX9EOpgInxnyAH4HoQucT4UJh+HDjoWAUyeJ+WsbPayP
-         jWsjtVh/hMHN7ORsq0XS+MXrT4EbO9ByEAyycoW2W6ogA76kfiecl+tobRog/ZwdtR2/
-         ZUKCtjOm4My2QJZRlWG8SmorApa8fR3ZFp9TTfOaJgn7R78s1zs/vAHZzkhtK8vr7Q5g
-         b15cKKmG3mRaTCY3npAWbsJ0rBfv8LLQAzK9L8QPC/UxuKQr6Xu/7Ssu/zmG2oXqHLEn
-         WVyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=csSpCZse6HkYpD0alLhYtbnpKIryDbXXSRH4Zixe2I0=;
-        b=I9ko0nWxE/l8Uzo8E1aWMl0KhfhOd2zNUIgjsBpDmiO4sSxTDzqbx7fUYiQ2B7E5Nh
-         ia4Rs/6SSzDiSNJMvKLzOL/+BL06kvLe3lExiZ43nTv2+Bd/sUdRiu2hTgA/fM0IJm6q
-         LhLPwbajFxe9E5FW2yvFh+oJAC8YvT5Dc9JRbiJeHAqAa9sPUxdxQK9j7ELsDJz59JK0
-         vRY3xE3sKLnwJcTWSOaqtj7iCnOhlNijozbAS4KY1rHudZKYaFyjhptFuqdVV7IJsuXU
-         rBtJQxx7m1Svgc6t3gLSE1nZv1KxjKmzUlNqfJh3hqb7Ojc3iYAo/pNi66aj4FjyoQAp
-         Y5kw==
-X-Gm-Message-State: AJIora9iqO7hRg1gbkq+T1+JVHvJkuC6miAZHvvOU+qIpWw5SXLFT30K
-        nvedWQh0wL9MmYfz7damJKd00Ayzi656bA==
-X-Google-Smtp-Source: AGRyM1sSrhEeTcGBug/hRwN/UzMJ5vxfJ6sRHheRoPfJs89jT56gNZ6MA6i+bGEizG7IcFl0eZ8aig==
-X-Received: by 2002:a17:902:ea07:b0:16c:1efb:916e with SMTP id s7-20020a170902ea0700b0016c1efb916emr26478459plg.25.1659022029899;
-        Thu, 28 Jul 2022 08:27:09 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h14-20020a056a00000e00b005255263a864sm881752pfk.169.2022.07.28.08.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 08:27:09 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:27:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] KVM: x86: Refresh PMU after writes to
- MSR_IA32_PERF_CAPABILITIES
-Message-ID: <YuKqyTvbVx2UyP2w@google.com>
-References: <20220727233424.2968356-1-seanjc@google.com>
- <20220727233424.2968356-2-seanjc@google.com>
- <271bddfa-9e48-d5f6-6147-af346d7946bf@gmail.com>
+        Thu, 28 Jul 2022 11:28:20 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80041.outbound.protection.outlook.com [40.107.8.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A70F60694
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:28:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ca8Gi8Qsvf3ZBm6CCceMjLIc7BrcNzoTX9lDK18TMPgqlXwWd8GIewLdjZJwLdSH6j1FaxqMN+XWk3gJyESnKVHFARxGinNkolqKVVlg86APmdAc7yw2RCdQTKBZ+CQ7ZE+AGV3zAxWMfxrXQnvlc5KdSxs+gqCxa/j3q22u3bmE9V+3xREfUyOFNoR7egV7aRR59F4m1w0vqMQWpRaU/1naVpZKzganCKGWPMhziPMyGrYZmHBZ4DN4ZBBaD4UFK9YukmICuiQ4xt+muBnehcF/uuSuOcG+/v9wrEKX4GWoin2pZZBJGXhmVTCRFjynUH70yNf66ocoT7KbsAeDLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bdUdfTxo0votKCLxPo9SZ/TWZ1MtPMsleV1l2CSQZjg=;
+ b=dWeoAQvkksioVmkY61r6vFEXfbj6Lg28RsZD/yh7XzTj+e03ss3wcvxcrdkiALMUkWmOVwTXfIVrC1YuXKca23+9g4qE+LgRwgwQFqCEI/gDbPFZLWm83wqVuIWLP3zvmmNat0dr5AKdqUtsxWOB54C+saOuorSAj4/zFmzkAffstBtgyyoikAFq9Dp3y6/3Fmz9WV+ody3ENwvm9ekAme4+kVcbDog9fHBJPIN2kQXCUODTOOvNBj3L9yOlS7BDVtOkchWoYR/0g4PXh57Avjhkw8GgAkWXYtplgd6HggiQhYM+4a5mAHfYrUDqMRkuFgZmyyoecY8+GPJED0xuBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bdUdfTxo0votKCLxPo9SZ/TWZ1MtPMsleV1l2CSQZjg=;
+ b=o8wOCFsWoC8SOczFN8sLm/Ni9xd0xWQP5EjuatHJGHex+CI48uHtBATWuEZLB5M82rIl2ISaa/AePxMGBe1vKIJwR72nsqfhzoerEXzH5xGFZ03EqEdbC8lqSukzGEoiJd2PHOo7zZsdpiGE9JieiGVKAnatBCCGU0UWzADA5tc=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PAXPR04MB9060.eurprd04.prod.outlook.com (2603:10a6:102:223::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.25; Thu, 28 Jul
+ 2022 15:28:16 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5458.019; Thu, 28 Jul 2022
+ 15:28:16 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Z.Q. Hou" <zhiqiang.hou@nxp.com>, Biwen Li <biwen.li@nxp.com>
+Subject: Re: [PATCH v4] irqchip/ls-extirq: fix invalid wait context by
+ avoiding to use regmap
+Thread-Topic: [PATCH v4] irqchip/ls-extirq: fix invalid wait context by
+ avoiding to use regmap
+Thread-Index: AQHYopBXddIttVt6zkGyOalTC33MGK2T52GAgAAAzYA=
+Date:   Thu, 28 Jul 2022 15:28:15 +0000
+Message-ID: <20220728152815.6h4ytx52ll2gzjj3@skbuf>
+References: <20220728144254.175385-1-vladimir.oltean@nxp.com>
+ <501b52ba-7691-0263-c007-38174c7e5c22@seco.com>
+In-Reply-To: <501b52ba-7691-0263-c007-38174c7e5c22@seco.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dafe0f88-2ab5-4bac-431c-08da70adcacc
+x-ms-traffictypediagnostic: PAXPR04MB9060:EE_
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5G7Cj291aezVZQ+NMZiag/w369/gjqxfmfwkalC+vBbAFFnkne9azPwn3Rb4V/Skv8DmBs4XnfbykIU7SMzR8APEsFfzrtKuK56hhzYf7Kig92IxficGxSfT/wzEhtRwidPo4WWsmj0MyujQxY8O3fu0FMddubSEvfop1BNaiio6cywdej+iUItLPpgrYOmTY3HhJg8RdM7o6hVR+eya8meDerjfBJ72EQ7GmrwwIXGkKYVZeWEJ6ylF9DYRAPfxyh857YmNevAEA1nCW0bMvfFIUKPJQIDZejWm8XzgsJghBlPGsleuxNUFbkbNNjkiKMcYvJS8SPqiDZweTyqazdj8C6gOdu6zw6WZYFVbu4uQ/z5sh6c7kXOII6eFo3Ep2yH/rO0Wa/Sr9o+jUosLJnq2ljuGfDD5ySmStiLBatb/HLLvXMboy6m2d5dqjS3/1Q4eoi12QSBeK/W5oOdB5zOQ+yjI5zjdWTejZdiMAz1nrUeTDZsZH6IUAEVeWCd/odpMIocoUmabsb5Ik3vUjRxrxq/798+CVf45BiKtwGASGoDQqePJYzYDLoChxdvR9PREmvqMeeDrON1SynZCTUeQW4noIKlMFudCykV6JRVi4LgvdAje5RAdA+1BBXYay6MOkdiAibpC1Rk7Cqgu91HjqvnHEee0hywfwnNUEU6z+qMONTT+esn3s8STXGO7OP3wjSM1R1jRjkoxC8Zf6omnaWXf2pWxjdWckCqSu/0lChmDljYU4/f3DdnR15Zch1Phym6iv0EcFLz971Z6MpFMT2zltdo5Z96G3MC7kyBACig4ojYX0H1ZjqHcBKKqgUqB7jlNxDDzwalxP1hsQw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(366004)(39860400002)(136003)(346002)(376002)(396003)(1076003)(122000001)(316002)(83380400001)(33716001)(86362001)(6916009)(966005)(54906003)(186003)(8936002)(66476007)(66446008)(2906002)(66946007)(38100700002)(64756008)(66556008)(8676002)(9686003)(6506007)(478600001)(38070700005)(4326008)(558084003)(6486002)(71200400001)(5660300002)(91956017)(44832011)(26005)(76116006)(6512007)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hYg7fERWH9po76GgehhRTdoYyuaMlpqd9ksPdeavx+zmtx1sSo+lx/V6DPwk?=
+ =?us-ascii?Q?AgUSKn173tkgr5xemIeD+gsZfVSGTD4BjWBT1KVHxEdMNQOyzEvRuYCZ/5yL?=
+ =?us-ascii?Q?2/XE527GSIOC5FPxNclI0nM2en4igyXkHQyYj40RF0EWzvVtSlEZBJvBS4/7?=
+ =?us-ascii?Q?mm+kqWOYzClZqTHvyFlk1ug+VztF7CS4g7r/5fmCYFAOTlRzoaglX0hL4D2C?=
+ =?us-ascii?Q?ZQchQNndeuk4xoyUQxhOIp1ZM9PmCOWMPIiZN23I8uZfgIde31DVi0S8axaJ?=
+ =?us-ascii?Q?w6ZEarnSfSMdFK8CwrNDi61OzAoRNfy95PZUAYs55iUqiQplgJ7pnwkjh0wl?=
+ =?us-ascii?Q?yWnFchfgHvaSMh+AQ6nl6gaeoMxi+1DMeOEpZmAnX2/9fFcH0e10yIdYmr/K?=
+ =?us-ascii?Q?cmo4tJ5dPgqSpAEawE35Y8JDij2zai3sxoOYiNlG87RQ5MAYYsx11swtSbzY?=
+ =?us-ascii?Q?Xxa+cRKFlvkaUe0PrRJmu1QrUQuKydD0U1Q8yYMpQZcbhwQve4wZNuVagnia?=
+ =?us-ascii?Q?Hl19JN/D1B1Q8zv5lBP6UAO/Gm8CqWmmACfbttguBKQiFJbI4DU6aWrM8rXj?=
+ =?us-ascii?Q?pNRJv4jOSgRPj4yxMfJg3XtAj+ruTh73ruNacfrF/LpYHen/fkoQLqL7nhxU?=
+ =?us-ascii?Q?yaUSayKMVuO1CS/K49VMPwFd2Eb5olBnkILOsL/m8i7QZjmmIIDj8TbTCvot?=
+ =?us-ascii?Q?DQd72rYfZlu9lgOMX9XzsTKbVTufMCcSy28SJo6INy7MMlR1XyARYuYvtmeO?=
+ =?us-ascii?Q?YtB0PlMDdD8wRoyjgxIqBCDLzns8s8WNXp2bnoJs9Z1e39KcY7wJAup1hx3f?=
+ =?us-ascii?Q?4qRpsv2QqQ7ZrIYHBVz8zDi5wVMW6NeHnObgh6/5bSUnZN1ULWtZUhVwq+7Z?=
+ =?us-ascii?Q?d9dTjz8sgvOKs12JuBVSDr5Kd4GRa/PLedeUQa/a7+G3WZpKxS+BM3VKZUEP?=
+ =?us-ascii?Q?dScd5WIGA+4XkAGh7dKJxScydXHsiJfH3giNGFx+y3+guFm1sDVtJ54JGtiH?=
+ =?us-ascii?Q?Gw6UeqGNahvfRJ4Dk2D47MDl9zIhvRX3RF4smmegM+GPl4QM06ISVyAbhKkb?=
+ =?us-ascii?Q?Y48fBkJho7/nnJlcRAbWjBl5QtHozX0kTjShnOLwZy7wintAJCSE0w6g05qH?=
+ =?us-ascii?Q?KEAjPwm56xVypo6iFE4TMlAZWlM6qupUB0alfZarENBBFw05K5px+Wpb+UjV?=
+ =?us-ascii?Q?Kd6Xk4JzVkaX6SkYMSbl+4p5ALIJZ2FtkSyBoj0UFvZuT9QZgDh5t8Y+UGWB?=
+ =?us-ascii?Q?JYIK8W+vd0s1S+jgQbHtH2b+K6nHMF6GZSYy7sm5FLcdwePEcXGnkSzh06oD?=
+ =?us-ascii?Q?JkzLcCE2JW22eO0w5ODc3StClgFt2wnnslPyz1ofZLqSemV3S+nSuBryiFom?=
+ =?us-ascii?Q?W+qVOzIR088Upf6SpBYGiavl1oZL9Z3YtSR0jEeWK6zWElUkxx+J+1mVdL5V?=
+ =?us-ascii?Q?bZ0m0K/I/65KWeFGJ4HLJzj5XvDL9LWW7nEDVtgZQDfjZ3g52sH1pk71qxWG?=
+ =?us-ascii?Q?DTkc7UhPuZ5ARSBscCJhc4jqFf15FmevLWDw1Q/vdU0sw5l5DgZGwUyldmIt?=
+ =?us-ascii?Q?G9yYdPVUz3xfLjSmFqKpALz5AzFi3v4Ue58FOzSPwj8RkN3PDGcnZ8IeKy92?=
+ =?us-ascii?Q?+Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <AA587EFAB584BD4B92338B2FF7D51225@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <271bddfa-9e48-d5f6-6147-af346d7946bf@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dafe0f88-2ab5-4bac-431c-08da70adcacc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jul 2022 15:28:15.9915
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UazVw4k3xs9K86pecYeBbGuxWJYIRoYp45LgwsB9DqOS5Xg+gSfYz2kmxPUDQeRvncB5hhWFGIpnrBxSTupNrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9060
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,56 +126,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022, Like Xu wrote:
-> On 28/7/2022 7:34 am, Sean Christopherson wrote:
-> > Refresh the PMU if userspace modifies MSR_IA32_PERF_CAPABILITIES.  KVM
-> > consumes the vCPU's PERF_CAPABILITIES when enumerating PEBS support, but
-> > relies on CPUID updates to refresh the PMU.  I.e. KVM will do the wrong
-> > thing if userspace stuffs PERF_CAPABILITIES _after_ setting guest CPUID.
-> 
-> Unwise userspace should reap its consequences if it does not break KVM or host.
+On Thu, Jul 28, 2022 at 11:25:23AM -0400, Sean Anderson wrote:
+> Could we just use use_raw_spinlock in the regmap config?
 
-I don't think this is a case of userspace being weird or unwise.  IMO, setting
-CPUID before MSRs is perfectly logical and intuitive.
-
-> When a guest feature can be defined/controlled by multiple KVM APIs entries,
-> (such as SET_CPUID2, msr_feature, KVM_CAP, module_para), should KVM
-> define the priority of these APIs (e.g. whether they can override each other) ?
-
-KVM does have "rules" in the sense that it has an established ABI for things
-like KVM_CAP and module params, though documentation may be lacking in some cases.
-The CPUID and MSR ioctls don't have a prescribe ordering though.
-
-> Removing this ambiguity ensures consistency in the architecture and behavior
-> of all KVM features.
-
-Agreed, but the CPUID and MSR ioctls (among many others) have existed for quite
-some time.  KVM likely can't retroactively force a specific order without breaking
-one userspace or another.
-
-> Any further performance optimizations can be based on these finalized values
-> as you do.
-> 
-> > 
-> > Opportunistically fix a curly-brace indentation.
-> > 
-> > Fixes: c59a1f106f5c ("KVM: x86/pmu: Add IA32_PEBS_ENABLE MSR emulation for extended PEBS")
-> > Cc: Like Xu <like.xu.linux@gmail.com>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >   arch/x86/kvm/x86.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 5366f884e9a7..362c538285db 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -3543,9 +3543,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-> >   			return 1;
-> >   		vcpu->arch.perf_capabilities = data;
-> > -
-> > +		kvm_pmu_refresh(vcpu);
-> 
-> I had proposed this diff but was met with silence.
-
-My apologies, I either missed it or didn't connect the dots.
+That was v2, essentially:
+https://lore.kernel.org/lkml/874jz6dcp6.wl-maz@kernel.org/=

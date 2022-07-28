@@ -2,89 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD37584800
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8494058480E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbiG1WLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S231886AbiG1WNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbiG1WLZ (ORCPT
+        with ESMTP id S229570AbiG1WNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:11:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147D1785A6;
-        Thu, 28 Jul 2022 15:11:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85A3C61B54;
-        Thu, 28 Jul 2022 22:11:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EB9C433D6;
-        Thu, 28 Jul 2022 22:11:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659046282;
-        bh=vp6m+L9NT4VOGQFGhTGWKhJ+KeHAmVR6ZlUE3kmLqwo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OVWwxA6TrLNqjrPLMMlsdyH5BSH0sI2F2NZpv/X4HtMwy8C36kYfRBPUJgmZ6W6XP
-         t4ii7bUoL+B2HUSGLNdl4UglXKyEg03AR2eEy1+ms4DUqKMKOK8fTdxL3lMDQUnEUo
-         3irc0aMX511EfdFlP9OZDZuul86sq3cYe1876wH3lX9VJ6V0BjtwFaY+Z0aT/mA1BC
-         rMpmKBPSIzMdWATDtErF+FKsWVNNVa7fuY+hZJT0XNKNSbDjrNKKNBPu3C2A7ZZqyb
-         MIJCr9p33GFqz1g+XFIQfV63LePmtZ6V+eIFiTSB04bAH/HUcWzVMLlC0VYNX+azzH
-         fjp4lvB7x6Psw==
-Date:   Thu, 28 Jul 2022 17:11:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 15/15] PCI: dwc: Introduce dma-ranges property
- support for RC-host
-Message-ID: <20220728221120.GA330510@bhelgaas>
+        Thu, 28 Jul 2022 18:13:33 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E3C785AB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:13:32 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id o3so2972057ple.5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=l+5rBl2AK20PKGSH65YU4OKpcYRMAbAXO924wPV6Eik=;
+        b=G8r95Q5hVuJdINZ5QqtY3e6DleLLl6mJ8NIAFZtg9iYDfXUfTrEfqm91RDT9EPqoXH
+         v/h2kLU9U4IM03G3Y3Syt3PeuvRfeMeHuytOAsJFNn4HkAS0CWdFNUNxpK9Xqm1z69Yz
+         ofZSMnadJWIBesKXLIWCCNeW5w5zzy2Lgrph55zYPmUWos4Sx638KPd/A2K+CbOKnexw
+         FJMZw6w3cOeJydQGZ89N8ZOyWsVESGDUsZSKlzzPSoRmAH3b5eDw0j/SASSXovoly4EG
+         pgoJKE3WAWl6SLP4OioP1JsCteYpM+rVXi/iwQyxpJuYAWSRfKaqTbRU2udnrO2F6eKS
+         42ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=l+5rBl2AK20PKGSH65YU4OKpcYRMAbAXO924wPV6Eik=;
+        b=ZIhRk+GIXA60f/vWxAIbUjE06Af9sXKm6UK4BJTP3Z8dwE8JI+7bQLpCdsKlpxDjmy
+         SwT33p7fgMMy7G13XHxnFwT7pyfx6Z9pJyIbrNfaPAqsKA7VAmq3gwQvb9ZoA3FcO6t1
+         A3ycm03L9RJ3+9EIN1ZOxZJUYRfuOmy/jfP/Vz64PcO3Eyupix9/uBngGfgCgzITTtgM
+         p/f4TCJ7eOivoOoduy6tLS5vlvbbI7nhSPElO0i+3WWPl6AIn+YdCF5bE1hAOWZKNhff
+         OjonPoN1zGTJ3V5s5jMtjteksNJvxmrKzQTPhTDMhXWqUargizB/TzfeX3d5CNmQnozX
+         y5uw==
+X-Gm-Message-State: ACgBeo1rgqzFzLPpYjv9OY1xwc0Sghwe84fd268bXPTL4HFnMMoC6mFx
+        CDop6XhiqQq6Zd05oDySeToDAQ==
+X-Google-Smtp-Source: AA6agR6+VxdW2AncFaQzR2JNzm9++SeJViANFTSi6sftkYixtXxow5mvN8+au9fN/WbG/faRu1Swfg==
+X-Received: by 2002:a17:902:cf06:b0:16b:cc33:5bce with SMTP id i6-20020a170902cf0600b0016bcc335bcemr864483plg.152.1659046412192;
+        Thu, 28 Jul 2022 15:13:32 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b0016db7f49cc2sm1826843plg.115.2022.07.28.15.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 15:13:31 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 22:13:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 09/25] KVM: VMX: nVMX: Support TSC scaling and
+ PERF_GLOBAL_CTRL with enlightened VMCS
+Message-ID: <YuMKBzeB2cE/NZ2K@google.com>
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+ <20220714091327.1085353-10-vkuznets@redhat.com>
+ <YtnMIkFI469Ub9vB@google.com>
+ <48de7ea7-fc1a-6a83-3d6f-e04d26ea2f05@redhat.com>
+ <Yt7ehL0HfR3b97FQ@google.com>
+ <870d507d-a516-5601-4d21-2bfd571cf008@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220624143947.8991-16-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <870d507d-a516-5601-4d21-2bfd571cf008@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 05:39:47PM +0300, Serge Semin wrote:
-> In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
-> property has the same format as the "ranges" property. The only difference
-> is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
-> memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
-> property. Even though the DW PCIe controllers are normally equipped with
-> the internal Address Translation Unit which inbound and outbound tables
-> can be used to implement both properties semantics, it was surprising for
-> me to discover that the host-related part of the DW PCIe driver currently
-> supports the "ranges" property only while the "dma-ranges" windows are
-> just ignored. Having the "dma-ranges" supported in the driver would be
-> very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
-> mapping and require a customized PCIe memory layout. So let's fix that by
-> introducing the "dma-ranges" property support.
+On Thu, Jul 28, 2022, Paolo Bonzini wrote:
+> On 7/25/22 20:18, Sean Christopherson wrote:
+> > > I kind of like the idea of having a two-dimensional array based on the enums
+> > > instead of switch statements, so for now I'll keep Vitaly's enums.
+> > I don't have a strong opinion on using a 2d array, but unless I'm missing something,
+> > that's nowhere to be found in this patch.  IMO, having the enums without them
+> > providing any unique value is silly and obfuscates the code.
+> 
+> Yeah, like this:
+> 
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index d8da4026c93d..8055128d8638 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -342,9 +342,10 @@ uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
+>  	return 0;
+>  }
+> -enum evmcs_v1_revision {
+> +enum evmcs_revision {
+>  	EVMCSv1_2016,
+>  	EVMCSv1_2022,
+> +	EVMCS_REVISION_MAX,
+>  };
+>  enum evmcs_unsupported_ctrl_type {
+> @@ -353,13 +354,37 @@ enum evmcs_unsupported_ctrl_type {
+>  	EVMCS_2NDEXEC,
+>  	EVMCS_PINCTRL,
+>  	EVMCS_VMFUNC,
+> +	EVMCS_CTRL_MAX,
+> +};
+> +
+> +static u32 evmcs_unsupported_ctls[EVMCS_CTRL_MAX][EVMCS_REVISION_MAX] = {
 
-Do we have a platform that requires this yet?  Or does this fix a bug?
+Can this be const?
 
-I see that dw_pcie_host_init() calls devm_pci_alloc_host_bridge(),
-which eventually parses "dma-ranges", but I don't see any DWC DT
-bindings that use it yet.
+> +	[EVMCS_EXIT_CTLS] = {
+> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMEXIT_CTRL | VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL,
+> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_VMEXIT_CTRL,
+> +	},
+> +	[EVMCS_ENTRY_CTLS] = {
+> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMENTRY_CTRL | VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL,
+> +		[EVMCSv1_2022] =  EVMCS1_UNSUPPORTED_VMENTRY_CTRL,
+> +	},
+> +	[EVMCS_2NDEXEC] = {
+> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_2NDEXEC | SECONDARY_EXEC_TSC_SCALING,
+> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_2NDEXEC,
+> +	},
+> +	[EVMCS_PINCTRL] = {
+> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_PINCTRL,
+> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_PINCTRL,
+> +	},
+> +	[EVMCS_VMFUNC] = {
+> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMFUNC,
+> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_VMFUNC,
+> +	},
+>  };
 
-I'm not clear on what value this adds today.
+...
 
-Bjorn
+> +	return evmcs_unsupported_ctls[ctrl_type][evmcs_rev];
+>  }
+
+The only flaw in this is if KVM gets handed a CPUID model that enumerates support
+for 2025 (or whenever the next update comes) but not 2022.  Hmm, though if Microsoft
+defines each new "version" as a full superset, then even that theoretical bug goes
+away.  I'm happy to be optimistic for once and give this a shot.  I definitely like
+that it makes it easier to see the deltas between versions.

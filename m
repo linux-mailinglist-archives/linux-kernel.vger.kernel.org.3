@@ -2,91 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D42D584248
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C91584259
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiG1OxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S230149AbiG1Oy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbiG1OxJ (ORCPT
+        with ESMTP id S232867AbiG1Oxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:53:09 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D62A5D0FA;
-        Thu, 28 Jul 2022 07:53:05 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id ABBF56000B;
-        Thu, 28 Jul 2022 14:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1659019982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bfRFgIm9TD823qNLzMMh6i2HmzOFrr2qvhJOGCSLGw8=;
-        b=LvInS2Igr/SwKW/LEc8udAuBQkdClSN/n/IysqCQ6t5P73M8SlYHqK6iBh/QT5BWb5LZMW
-        yuWATT+wzFU2K7GVMQ/RlErmHItWsL3grrRdxaO+50sg0467qjDLW+8tzHRYBSohPXSaQs
-        uc/rrZV3UWkSM9cciPc0Z6lY14TRs9tKw62fEPfhA2tMy2b8QcZKUU7RXCtLO6R4IFqtLn
-        KXza+WxrPfRQWSJWCAhRVWwTZjh4/swlkwRDD8rI22BxPcWjj9eUOebT5U0H2V4w1ccQEa
-        VK+LRY2zNPpTLzG3zFKu5cRJvZCk3+F0FKUeoF5wROP61KLsIeuW+0JGAlIfSA==
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
-        Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH net-next 2/4] dt-bindings: net: ethernet-controller: add QUSGMII mode
-Date:   Thu, 28 Jul 2022 16:52:50 +0200
-Message-Id: <20220728145252.439201-3-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220728145252.439201-1-maxime.chevallier@bootlin.com>
-References: <20220728145252.439201-1-maxime.chevallier@bootlin.com>
+        Thu, 28 Jul 2022 10:53:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE5CD6A9F0;
+        Thu, 28 Jul 2022 07:53:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32D47113E;
+        Thu, 28 Jul 2022 07:53:27 -0700 (PDT)
+Received: from e126387.arm.com (unknown [10.57.11.24])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B3313F70D;
+        Thu, 28 Jul 2022 07:53:25 -0700 (PDT)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: [PATCH v5 08/14] perf test: Add memcpy thread test shell script
+Date:   Thu, 28 Jul 2022 15:52:50 +0100
+Message-Id: <20220728145256.2985298-9-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new QUSGMII mode, standing for "Quad Universal Serial Gigabit
-Media Independent Interface", a derivative of USGMII which, similarly to
-QSGMII, allows to multiplex 4 1Gbps links to a Quad-PHY.
+From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
 
-The main difference with QSGMII is that QUSGMII can include an extension
-instead of the standard 7bytes ethernet preamble, allowing to convey
-arbitrary data such as Timestamps.
+Add a script to drive the threaded memcpy test that gathers data so
+it passes a minimum bar for amount and quality of content that we
+extract from the kernel's perf support.
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 ---
-V1->V2 : Added Rob's acked-by
+ .../shell/coresight/memcpy_thread_16k_10.sh    | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100755 tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
 
- Documentation/devicetree/bindings/net/ethernet-controller.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-index 56d9aca8c954..eb69a720575f 100644
---- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-+++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-@@ -67,6 +67,7 @@ properties:
-       - gmii
-       - sgmii
-       - qsgmii
-+      - qusgmii
-       - tbi
-       - rev-mii
-       - rmii
+diff --git a/tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh b/tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
+new file mode 100755
+index 000000000000..d21ba8545938
+--- /dev/null
++++ b/tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
+@@ -0,0 +1,18 @@
++#!/bin/sh -e
++# CoreSight / Memcpy 16k 10 Threads
++
++# SPDX-License-Identifier: GPL-2.0
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++
++TEST="memcpy_thread"
++. $(dirname $0)/../lib/coresight.sh
++ARGS="16 10 1"
++DATV="16k_10"
++DATA="$DATD/perf-$TEST-$DATV.data"
++
++perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
++
++perf_dump_aux_verify "$DATA" 10 10 10
++
++err=$?
++exit $err
 -- 
-2.37.1
+2.32.0
 

@@ -2,154 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DC2584245
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E54C58425B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbiG1OxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S233394AbiG1Oya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232246AbiG1OxF (ORCPT
+        with ESMTP id S232907AbiG1Oxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:53:05 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579236050A;
-        Thu, 28 Jul 2022 07:53:02 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0114760004;
-        Thu, 28 Jul 2022 14:52:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1659019980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9EcP+9/stfB5EXECkZZmXmTw+rS+fOUz4yGICEAjfH8=;
-        b=KzhElMPONR6+NIurGD5gkalAb09py/fu3eojj4JomY45vNUMiCL22n14frh3xePoj1IUkJ
-        t5IYFf0kTkDfsl2esrdkLFHjuWZld120suUITNrcjTsiSvFv9AmCXTjTqPDnAfHP5CZD6C
-        SqcK6ZmVICBrU6HfSnxXX3rQTjXZ//B3xpERrYJkN1yHKDUSD3abCfG6kn9szq9Atqv0cg
-        5PXq+qDGC5NTnyrG5v84UB5rzDZRlGBxbHYv/HhPt8h8FK7UIFlf6cObLKPD9S9GWc6nKk
-        FTgFHraNbu4ysljHM9gzzxNoA+3J4sb9Qgn99R7atdIS1lGLcl0CBKTbRlDLuw==
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
-        Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com
-Subject: [PATCH net-next 1/4] net: phy: Introduce QUSGMII PHY mode
-Date:   Thu, 28 Jul 2022 16:52:49 +0200
-Message-Id: <20220728145252.439201-2-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220728145252.439201-1-maxime.chevallier@bootlin.com>
-References: <20220728145252.439201-1-maxime.chevallier@bootlin.com>
+        Thu, 28 Jul 2022 10:53:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE5816A9E6;
+        Thu, 28 Jul 2022 07:53:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6F861692;
+        Thu, 28 Jul 2022 07:53:25 -0700 (PDT)
+Received: from e126387.arm.com (unknown [10.57.11.24])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DC7303F70D;
+        Thu, 28 Jul 2022 07:53:23 -0700 (PDT)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: [PATCH v5 07/14] perf test: Add memcpy thread test tool
+Date:   Thu, 28 Jul 2022 15:52:49 +0100
+Message-Id: <20220728145256.2985298-8-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The QUSGMII mode is a derivative of Cisco's USXGMII standard. This
-standard is pretty similar to SGMII, but allows for faster speeds, and
-has the build-in bits for Quad and Octa variants (like QSGMII).
+From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
 
-The main difference with SGMII/QSGMII is that USXGMII/QUSGMII re-uses
-the preamble to carry various information, named 'Extensions'.
+Add test tool to be driven by further test scripts. This is a simple C
+based memcpy with threads test to drive from scripts.
 
-As of today, the USXGMII standard only mentions the "PCH" extension,
-which is used to convey timestamps, allowing in-band signaling of PTP
-timestamps without having to modify the frame itself.
-
-This commit adds support for that mode. When no extension is in use, it
-behaves exactly like QSGMII, although it's not compatible with QSGMII.
-
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 ---
-V1->V2 : No changes
+ tools/perf/tests/shell/coresight/Makefile     |  3 +-
+ .../shell/coresight/memcpy_thread/.gitignore  |  1 +
+ .../shell/coresight/memcpy_thread/Makefile    | 33 ++++++++
+ .../coresight/memcpy_thread/memcpy_thread.c   | 79 +++++++++++++++++++
+ 4 files changed, 115 insertions(+), 1 deletion(-)
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
 
- Documentation/networking/phy.rst | 9 +++++++++
- drivers/net/phy/phylink.c        | 3 +++
- include/linux/phy.h              | 3 +++
- 3 files changed, 15 insertions(+)
-
-diff --git a/Documentation/networking/phy.rst b/Documentation/networking/phy.rst
-index 704f31da5167..712e44caebd0 100644
---- a/Documentation/networking/phy.rst
-+++ b/Documentation/networking/phy.rst
-@@ -308,6 +308,15 @@ Some of the interface modes are described below:
-     rate of 125Mpbs using a 4B/5B encoding scheme, resulting in an underlying
-     data rate of 100Mpbs.
+diff --git a/tools/perf/tests/shell/coresight/Makefile b/tools/perf/tests/shell/coresight/Makefile
+index d4f868d55773..561c807022ec 100644
+--- a/tools/perf/tests/shell/coresight/Makefile
++++ b/tools/perf/tests/shell/coresight/Makefile
+@@ -5,7 +5,8 @@ include ../../../../../tools/scripts/Makefile.arch
+ include ../../../../../tools/scripts/utilities.mak
  
-+``PHY_INTERFACE_MODE_QUSGMII``
-+    This defines the Cisco the Quad USGMII mode, which is the Quad variant of
-+    the USGMII (Universal SGMII) link. It's very similar to QSGMII, but uses
-+    a Packet Control Header (PCH) instead of the 7 bytes preamble to carry not
-+    only the port id, but also so-called "extensions". The only documented
-+    extension so-far in the specification is the inclusion of timestamps, for
-+    PTP-enabled PHYs. This mode isn't compatible with QSGMII, but offers the
-+    same capabilities in terms of link speed and negociation.
+ SUBDIRS = \
+-	asm_pure_loop
++	asm_pure_loop \
++	memcpy_thread
+ 
+ all: $(SUBDIRS)
+ $(SUBDIRS):
+diff --git a/tools/perf/tests/shell/coresight/memcpy_thread/.gitignore b/tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
+new file mode 100644
+index 000000000000..f8217e56091e
+--- /dev/null
++++ b/tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
+@@ -0,0 +1 @@
++memcpy_thread
+diff --git a/tools/perf/tests/shell/coresight/memcpy_thread/Makefile b/tools/perf/tests/shell/coresight/memcpy_thread/Makefile
+new file mode 100644
+index 000000000000..2db637eb2c26
+--- /dev/null
++++ b/tools/perf/tests/shell/coresight/memcpy_thread/Makefile
+@@ -0,0 +1,33 @@
++# SPDX-License-Identifier: GPL-2.0
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++include ../Makefile.miniconfig
 +
- Pause frames / flow control
- ===========================
- 
-diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-index 9bd69328dc4d..d2455df1d8d2 100644
---- a/drivers/net/phy/phylink.c
-+++ b/drivers/net/phy/phylink.c
-@@ -321,6 +321,7 @@ void phylink_get_linkmodes(unsigned long *linkmodes, phy_interface_t interface,
- 	case PHY_INTERFACE_MODE_RGMII_ID:
- 	case PHY_INTERFACE_MODE_RGMII:
- 	case PHY_INTERFACE_MODE_QSGMII:
-+	case PHY_INTERFACE_MODE_QUSGMII:
- 	case PHY_INTERFACE_MODE_SGMII:
- 	case PHY_INTERFACE_MODE_GMII:
- 		caps |= MAC_1000HD | MAC_1000FD;
-@@ -632,6 +633,7 @@ static int phylink_parse_mode(struct phylink *pl, struct fwnode_handle *fwnode)
- 		switch (pl->link_config.interface) {
- 		case PHY_INTERFACE_MODE_SGMII:
- 		case PHY_INTERFACE_MODE_QSGMII:
-+		case PHY_INTERFACE_MODE_QUSGMII:
- 			phylink_set(pl->supported, 10baseT_Half);
- 			phylink_set(pl->supported, 10baseT_Full);
- 			phylink_set(pl->supported, 100baseT_Half);
-@@ -2929,6 +2931,7 @@ void phylink_mii_c22_pcs_decode_state(struct phylink_link_state *state,
- 
- 	case PHY_INTERFACE_MODE_SGMII:
- 	case PHY_INTERFACE_MODE_QSGMII:
-+	case PHY_INTERFACE_MODE_QUSGMII:
- 		phylink_decode_sgmii_word(state, lpa);
- 		break;
- 
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 87638c55d844..6b96b810a4d8 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -152,6 +152,7 @@ typedef enum {
- 	PHY_INTERFACE_MODE_USXGMII,
- 	/* 10GBASE-KR - with Clause 73 AN */
- 	PHY_INTERFACE_MODE_10GKR,
-+	PHY_INTERFACE_MODE_QUSGMII,
- 	PHY_INTERFACE_MODE_MAX,
- } phy_interface_t;
- 
-@@ -267,6 +268,8 @@ static inline const char *phy_modes(phy_interface_t interface)
- 		return "10gbase-kr";
- 	case PHY_INTERFACE_MODE_100BASEX:
- 		return "100base-x";
-+	case PHY_INTERFACE_MODE_QUSGMII:
-+		return "qusgmii";
- 	default:
- 		return "unknown";
- 	}
++# Binary to produce
++BIN=memcpy_thread
++# Any linking/libraries needed for the binary - empty if none needed
++LIB=-pthread
++
++all: $(BIN)
++
++$(BIN): $(BIN).c
++ifdef CORESIGHT
++ifeq ($(ARCH),arm64)
++# Build line
++	$(Q)$(CC) $(BIN).c -o $(BIN) $(LIB)
++endif
++endif
++
++install-tests: all
++ifdef CORESIGHT
++ifeq ($(ARCH),arm64)
++# Install the test tool in the right place
++	$(call QUIET_INSTALL, tests) \
++		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/$(INSTDIR_SUB)/$(BIN)'; \
++		$(INSTALL) $(BIN) '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/$(INSTDIR_SUB)/$(BIN)/$(BIN)'
++endif
++endif
++
++clean:
++	$(Q)$(RM) -f $(BIN)
++
++.PHONY: all clean install-tests
+diff --git a/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c b/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+new file mode 100644
+index 000000000000..a7e169d1bf64
+--- /dev/null
++++ b/tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+@@ -0,0 +1,79 @@
++// SPDX-License-Identifier: GPL-2.0
++// Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <pthread.h>
++
++struct args {
++	unsigned long loops;
++	unsigned long size;
++	pthread_t th;
++	void *ret;
++};
++
++static void *thrfn(void *arg)
++{
++	struct args *a = arg;
++	unsigned long i, len = a->loops;
++	unsigned char *src, *dst;
++
++	src = malloc(a->size * 1024);
++	dst = malloc(a->size * 1024);
++	if ((!src) || (!dst)) {
++		printf("ERR: Can't allocate memory\n");
++		exit(1);
++	}
++	for (i = 0; i < len; i++)
++		memcpy(dst, src, a->size * 1024);
++}
++
++static pthread_t new_thr(void *(*fn) (void *arg), void *arg)
++{
++	pthread_t t;
++	pthread_attr_t attr;
++
++	pthread_attr_init(&attr);
++	pthread_create(&t, &attr, fn, arg);
++	return t;
++}
++
++int main(int argc, char **argv)
++{
++	unsigned long i, len, size, thr;
++	pthread_t threads[256];
++	struct args args[256];
++	long long v;
++
++	if (argc < 4) {
++		printf("ERR: %s [copysize Kb] [numthreads] [numloops (hundreds)]\n", argv[0]);
++		exit(1);
++	}
++
++	v = atoll(argv[1]);
++	if ((v < 1) || (v > (1024 * 1024))) {
++		printf("ERR: max memory 1GB (1048576 KB)\n");
++		exit(1);
++	}
++	size = v;
++	thr = atol(argv[2]);
++	if ((thr < 1) || (thr > 256)) {
++		printf("ERR: threads 1-256\n");
++		exit(1);
++	}
++	v = atoll(argv[3]);
++	if ((v < 1) || (v > 40000000000ll)) {
++		printf("ERR: loops 1-40000000000 (hundreds)\n");
++		exit(1);
++	}
++	len = v * 100;
++	for (i = 0; i < thr; i++) {
++		args[i].loops = len;
++		args[i].size = size;
++		args[i].th = new_thr(thrfn, &(args[i]));
++	}
++	for (i = 0; i < thr; i++)
++		pthread_join(args[i].th, &(args[i].ret));
++	return 0;
++}
 -- 
-2.37.1
+2.32.0
 

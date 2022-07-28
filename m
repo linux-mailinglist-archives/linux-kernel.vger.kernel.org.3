@@ -2,155 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0523C584609
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C425845FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiG1Sin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 14:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        id S231124AbiG1Sjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 14:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiG1Sik (ORCPT
+        with ESMTP id S229506AbiG1Sja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 14:38:40 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B576E891
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:38:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659033519; x=1690569519;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vgrok3srpFw/hYBSRTOFIcO/v/8calaWWqHrcYn3tjE=;
-  b=RIHdCoS3S/ytGHsSaF5eveVI00tzaK6FQ0H/UH7dTajPVUX33bh1/i5a
-   JHyYP87RdI60g+wTC8Dm9naPcRfWNcMXxOijZvJI2aYDc/3EGkjJSsKiE
-   L3YVWFNnOBhyTvf4WmQ+i85PkXMfFlSaFsf87YMU+NszyOq7HVdohiVz5
-   PtSh/yOeBg8irq96ZwhqChT3xlMPaWepYJnzibF5alU5vbIgFu1p8cx9j
-   CiZCPrBnAMCJc55Ssx+oXa8zU5EzMoIdCI0MEfgZvRuCQS0wqYQwQDnhp
-   fJo4xwTu3EEvOr4l78ff7dpn81TTQuIPC3olzSk3IetbDH0mPN4QBHLef
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="289357515"
-X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
-   d="scan'208";a="289357515"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 11:38:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
-   d="scan'208";a="576593761"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2022 11:38:37 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oH8P7-000AUw-06;
-        Thu, 28 Jul 2022 18:38:37 +0000
-Date:   Fri, 29 Jul 2022 02:38:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
-Subject: [avpatel:riscv_timer_dt_imp_v2 8/16] arch/arm64/kvm/mmu.c:789:55:
- error: incompatible pointer to integer conversion initializing 'gfp_t' (aka
- 'unsigned int') with an expression of type 'void *'
-Message-ID: <202207290233.HRtZcPRo-lkp@intel.com>
+        Thu, 28 Jul 2022 14:39:30 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A475D6E891;
+        Thu, 28 Jul 2022 11:39:29 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id b67so2421657vsc.1;
+        Thu, 28 Jul 2022 11:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fz0oK/sN+pADIj/VwoAHbt78SykQERFDb/zndg/n+o4=;
+        b=PeR4v5FPPNZF2D9vedblyx4eKNARkMi4ujjFHfuLxJb/FnPdFaeKolrNgkgnb2UCo5
+         XnchN+59ZDj3IMQc9l33LlEni3ecBzFgvitykuXcCAFgzA2UxhUDBxQNP/MV3Ochhnq1
+         iacsoI653CprFyWvbrgQc385KXTJu18+RkDLAPp9MetIjEvUPajAYALWekEsKh7gyxl1
+         qITNz+azSvawoHqa3EtrjPjwoJ8DxaQ4uje07c5Gu+Dm6Get7SZQG2WpEMZKlPRLyrg6
+         FlMgHUJYPii7CaIMNP8GUxvtnjhWcJ6zwv9ZMNgbGpz/viUEZ9yrF7U4gJBfv51ug7s6
+         5Qpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fz0oK/sN+pADIj/VwoAHbt78SykQERFDb/zndg/n+o4=;
+        b=r1ZQgugmPZJpSoZ2ipCUWGw0XxgOVI/jB2jNNCf+1XigqRiEqC4V+V0liIMA1vCBZN
+         CdRTIq46FdsVB2y/q1lznwsrsZqUB4B0PA1HXHkQafobxeRHzHdTxUxw1w87v5TWEguv
+         vn5zw+oqz6OSY/O5Gn2BjApHxbeB+O2S64ivm2AN7JPAofzDHnpRA4GpAP7xniL1ShVh
+         IiTE+CKYB4zJzQVSGAHcQTEjcf4r39cvPXI0EpYXIf2vLv55kip7asJTUPwpzBz50D/C
+         XtHT2mPRJYtjeSCE+X1s+KsNr+oxHtk0rxmNImhdFOKKbEEOQYPDg/msV7TrUfVmdFLb
+         BGog==
+X-Gm-Message-State: AJIora+nA4Nc0EnHobeJ7QycxHp6hV8WU+pe9yy4OjDIH8TSPtJ5WGZn
+        qka+RqBQxQ3YBHXB5I4KGUirrlld3xrBCIBakMU=
+X-Google-Smtp-Source: AGRyM1timhPpruesbtrMQ8SdjHcmWAC5Ft3HORMPnH54f/WLe2VxnEiZP3MLhQbBUZQ5MItaMFgtQhXjhCIE1DS4U3Q=
+X-Received: by 2002:a67:1a06:0:b0:358:418f:b8a1 with SMTP id
+ a6-20020a671a06000000b00358418fb8a1mr37360vsa.56.1659033568631; Thu, 28 Jul
+ 2022 11:39:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727153232.13359-1-matwey@sai.msu.ru> <5f0b98a5-1929-a78e-4d44-0bb2aec18b5a@redhat.com>
+In-Reply-To: <5f0b98a5-1929-a78e-4d44-0bb2aec18b5a@redhat.com>
+From:   "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
+Date:   Thu, 28 Jul 2022 21:39:17 +0300
+Message-ID: <CAJs94EYdNVROqDw=ZpzBTGeNRQzzCN9QQNkicv6LapJGDmb=Dg@mail.gmail.com>
+Subject: Re: [PATCH] platform/x86: pmc_atom: Add DMI quirk for Lex 3I380A/CW boards
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        carlo@endlessm.com, davem@davemloft.net, hkallweit1@gmail.com,
+        js@sig21.net, linux-clk@vger.kernel.org,
+        linux-wireless@vger.kernel.org, mturquette@baylibre.com,
+        netdev@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        sboyd@kernel.org, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        paul.gortmaker@windriver.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_timer_dt_imp_v2
-head:   ea3e044608ebdd55aea86cb6fe7fe6e5cbf61e36
-commit: 62961693e39c0cb1df571320918fcda4344bcc9b [8/16] KVM: Add gfp_custom flag in struct kvm_mmu_memory_cache
-config: arm64-buildonly-randconfig-r003-20220728 (https://download.01.org/0day-ci/archive/20220729/202207290233.HRtZcPRo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/avpatel/linux/commit/62961693e39c0cb1df571320918fcda4344bcc9b
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_timer_dt_imp_v2
-        git checkout 62961693e39c0cb1df571320918fcda4344bcc9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+=D1=87=D1=82, 28 =D0=B8=D1=8E=D0=BB. 2022 =D0=B3. =D0=B2 21:33, Hans de Goe=
+de <hdegoede@redhat.com>:
+>
+> Hi,
+>
+> On 7/27/22 17:32, Matwey V. Kornilov wrote:
+> > Lex 3I380A/CW (Atom E3845) motherboards are equipped with dual Intel I2=
+11
+> > based 1Gbps copper ethernet:
+> >
+> >      http://www.lex.com.tw/products/pdf/3I380A&3I380CW.pdf
+> >
+> > This patch is to fix the issue with broken "LAN2" port. Before the
+> > patch, only one ethernet port is initialized:
+> >
+> >      igb 0000:01:00.0: added PHC on eth0
+> >      igb 0000:01:00.0: Intel(R) Gigabit Ethernet Network Connection
+> >      igb 0000:01:00.0: eth0: (PCIe:2.5Gb/s:Width x1) 4c:02:89:10:02:e4
+> >      igb 0000:01:00.0: eth0: PBA No: FFFFFF-0FF
+> >      igb 0000:01:00.0: Using MSI-X interrupts. 2 rx queue(s), 2 tx queu=
+e(s)
+> >      igb: probe of 0000:02:00.0 failed with error -2
+> >
+> > With this patch, both ethernet ports are available:
+> >
+> >      igb 0000:01:00.0: added PHC on eth0
+> >      igb 0000:01:00.0: Intel(R) Gigabit Ethernet Network Connection
+> >      igb 0000:01:00.0: eth0: (PCIe:2.5Gb/s:Width x1) 4c:02:89:10:02:e4
+> >      igb 0000:01:00.0: eth0: PBA No: FFFFFF-0FF
+> >      igb 0000:01:00.0: Using MSI-X interrupts. 2 rx queue(s), 2 tx queu=
+e(s)
+> >      igb 0000:02:00.0: added PHC on eth1
+> >      igb 0000:02:00.0: Intel(R) Gigabit Ethernet Network Connection
+> >      igb 0000:02:00.0: eth1: (PCIe:2.5Gb/s:Width x1) 4c:02:89:10:02:e5
+> >      igb 0000:02:00.0: eth1: PBA No: FFFFFF-0FF
+> >      igb 0000:02:00.0: Using MSI-X interrupts. 2 rx queue(s), 2 tx queu=
+e(s)
+> >
+> > The issue was observed at 3I380A board with BIOS version "A4 01/15/2016=
+"
+> > and 3I380CW board with BIOS version "A3 09/29/2014".
+> >
+> > Reference: https://lore.kernel.org/netdev/08c744e6-385b-8fcf-ecdf-1292b=
+5869f94@redhat.com/
+> > Fixes: 648e921888ad ("clk: x86: Stop marking clocks as CLK_IS_CRITICAL"=
+)
+> > Cc: <stable@vger.kernel.org> # v4.19+
+> > Signed-off-by: Matwey V. Kornilov <matwey@sai.msu.ru>
+>
+>
+> Thank you for the patch.
+>
+> The last week I have received 2 different patches adding
+> a total of 3 new "Lex BayTrail" entries to critclk_systems[]
+> on top of the existing 2.
+>
+> Looking at: https://www.lex.com.tw/products/embedded-ipc-board/
+> we can see that Lex BayTrail makes many embedded boards with
+> multiple ethernet boards and none of their products are battery
+> powered so we don't need to worry (too much) about power consumption
+> when suspended.
+>
+> So instead of adding 3 new entries I've written a patch to
+> simply disable the turning off of the clocks on all
+> systems which have "Lex BayTrail" as their DMI sys_vendor:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x8=
+6.git/commit/?h=3Dreview-hans&id=3Dc9d959fc32a5f9312282817052d8986614f2dc08
+>
+> I've added a Reported-by tag to give you credit for the work
+> you have done on this.
+>
+> I will send this alternative fix to Linus as part of
+> the other pdx86 patches for 5.21.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you. Will your fix also appear in stable/lts kernels?
 
-All errors (new ones prefixed by >>):
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+> > ---
+> >  drivers/platform/x86/pmc_atom.c | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >
+> > diff --git a/drivers/platform/x86/pmc_atom.c b/drivers/platform/x86/pmc=
+_atom.c
+> > index b8b1ed1406de..5dc82667907b 100644
+> > --- a/drivers/platform/x86/pmc_atom.c
+> > +++ b/drivers/platform/x86/pmc_atom.c
+> > @@ -388,6 +388,24 @@ static const struct dmi_system_id critclk_systems[=
+] =3D {
+> >                       DMI_MATCH(DMI_PRODUCT_NAME, "CEC10 Family"),
+> >               },
+> >       },
+> > +     {
+> > +             /* pmc_plt_clk* - are used for ethernet controllers */
+> > +             .ident =3D "Lex 3I380A",
+> > +             .callback =3D dmi_callback,
+> > +             .matches =3D {
+> > +                     DMI_MATCH(DMI_SYS_VENDOR, "Lex BayTrail"),
+> > +                     DMI_MATCH(DMI_PRODUCT_NAME, "3I380A"),
+> > +             },
+> > +     },
+> > +     {
+> > +             /* pmc_plt_clk* - are used for ethernet controllers */
+> > +             .ident =3D "Lex 3I380CW",
+> > +             .callback =3D dmi_callback,
+> > +             .matches =3D {
+> > +                     DMI_MATCH(DMI_SYS_VENDOR, "Lex BayTrail"),
+> > +                     DMI_MATCH(DMI_PRODUCT_NAME, "3I380CW"),
+> > +             },
+> > +     },
+> >       {
+> >               /* pmc_plt_clk0 - 3 are used for the 4 ethernet controlle=
+rs */
+> >               .ident =3D "Lex 3I380D",
+>
 
->> arch/arm64/kvm/mmu.c:789:55: error: incompatible pointer to integer conversion initializing 'gfp_t' (aka 'unsigned int') with an expression of type 'void *' [-Wint-conversion]
-           struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-                                                                ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   1 error generated.
 
-
-vim +789 arch/arm64/kvm/mmu.c
-
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  774  
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  775  /**
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  776   * kvm_phys_addr_ioremap - map a device range to guest IPA
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  777   *
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  778   * @kvm:	The KVM pointer
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  779   * @guest_ipa:	The IPA at which to insert the mapping
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  780   * @pa:		The physical address of the device
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  781   * @size:	The size of the mapping
-c9c0279cc02b4e1 arch/arm64/kvm/mmu.c Xiaofei Tan         2020-09-17  782   * @writable:   Whether or not to create a writable mapping
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  783   */
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  784  int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
-c40f2f8ff833edd arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  785  			  phys_addr_t pa, unsigned long size, bool writable)
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  786  {
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  787  	phys_addr_t addr;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  788  	int ret = 0;
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02 @789  	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  790  	struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  791  	enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  792  				     KVM_PGTABLE_PROT_R |
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  793  				     (writable ? KVM_PGTABLE_PROT_W : 0);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  794  
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  795  	if (is_protected_kvm_enabled())
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  796  		return -EPERM;
-bff01cb6b1bf680 arch/arm64/kvm/mmu.c Quentin Perret      2021-12-08  797  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  798  	size += offset_in_page(guest_ipa);
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  799  	guest_ipa &= PAGE_MASK;
-c40f2f8ff833edd arch/arm/kvm/mmu.c   Ard Biesheuvel      2014-09-17  800  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  801  	for (addr = guest_ipa; addr < guest_ipa + size; addr += PAGE_SIZE) {
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  802  		ret = kvm_mmu_topup_memory_cache(&cache,
-61ffb3a50c4402e arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  803  						 kvm_mmu_cache_min_pages(kvm));
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  804  		if (ret)
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  805  			break;
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  806  
-fcc5bf89635a05e arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  807  		write_lock(&kvm->mmu_lock);
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  808  		ret = kvm_pgtable_stage2_map(pgt, addr, PAGE_SIZE, pa, prot,
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  809  					     &cache);
-fcc5bf89635a05e arch/arm64/kvm/mmu.c Jing Zhang          2022-01-18  810  		write_unlock(&kvm->mmu_lock);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  811  		if (ret)
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  812  			break;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  813  
-02bbd374ce4a8aa arch/arm64/kvm/mmu.c Will Deacon         2020-09-11  814  		pa += PAGE_SIZE;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  815  	}
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  816  
-c1a33aebe91d49c arch/arm64/kvm/mmu.c Sean Christopherson 2020-07-02  817  	kvm_mmu_free_memory_cache(&cache);
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  818  	return ret;
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  819  }
-d5d8184d35c990b arch/arm/kvm/mmu.c   Christoffer Dall    2013-01-20  820  
-
-:::::: The code at line 789 was first introduced by commit
-:::::: c1a33aebe91d49c958df1648b2a84db96c403075 KVM: arm64: Use common KVM implementation of MMU memory caches
-
-:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+With best regards,
+Matwey V. Kornilov

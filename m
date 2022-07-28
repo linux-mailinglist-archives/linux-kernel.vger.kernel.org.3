@@ -2,201 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3452B583905
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE51583906
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiG1GwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S234222AbiG1Gwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 02:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbiG1GwR (ORCPT
+        with ESMTP id S233104AbiG1Gwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:52:17 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164FC5C353
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:52:16 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id u9so1429800oiv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GVYKTeZOs73kMVOGScvV1WQYPWwqW1DUKJOIJsaQhHs=;
-        b=siEYlYcRE/DOMiSGZuRXKfgmHEV2pjykwMIZlOkXroO5b9WzXOaRAxHMIiJygjQqE8
-         R5plCuxLTaJ1gCTQSsHaIvU46lcB8i4dAqAD4SqiaGER94W+M6f7yo1ekmlDrFzpqckd
-         KfW5EQ32E58zt/RYXeRs2sL30qso+Jq8MYM5LSZwV+mZl+12QDBGl+BIhMxCiN9DzDxj
-         Z5v2+45yBXjQn/vzABUFS+oCjgMOMT8ntN6K3KReILhbqsG/XVAT82E+YFg2SV1AxFKs
-         ASoJfBKxW/n58C7M995Lgmy3Pk+4qy9qdlYmmOKMa/w09ACxXJMzTn3hgBcAnQcIXWpL
-         88XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GVYKTeZOs73kMVOGScvV1WQYPWwqW1DUKJOIJsaQhHs=;
-        b=lKAo6hDAl2B3UAmrl4KVwshB5DGIQQogc4PD1YbJW6bN+xvSf4qrMWvN1YGeI0GKT0
-         mDsK0pTtGtLkNnbfPwQsjKN/MXOMP3DAEmUQgLWMlQ1mpArLd5gbhzDlBVTwB2ky2l0/
-         tgQFEXUAo0UX75o2pnofnSRLgAugn+Ilrjx+VN6e3+a6j9booflkJOPsAXB87jjmtEiv
-         s6sJZLBHqvz58ieeYcdm5hrtLdpXpNSQQBVwqaglp1PGqF+WqU8Vcid2vX1Ka9NA9Sdi
-         ffGnan10jb0hQ5EK6QeFxIE5Mw3zzKkyhtRRTtPcbhgxrqKkvoGVxgO3ilhgMKQy/KYJ
-         ucbg==
-X-Gm-Message-State: AJIora/CXizhSCyOgwTBir+j/JGm/dkISL/h9RgJHps2ObkChn2YFYs0
-        EFlcR6ru9vrVaArWcXqkvrSAXbpAhgucQWw3KU7SQA==
-X-Google-Smtp-Source: AGRyM1uuittOHwZWvzVERGk6XZ6tXmAB65uDcVv1Ac8dxuQqLXyVHYcRLUcRxtaHouYNxv8BbEMUtKBrw+i92ckH4ec=
-X-Received: by 2002:a05:6808:4d7:b0:33a:9437:32d with SMTP id
- a23-20020a05680804d700b0033a9437032dmr3356302oie.97.1658991134942; Wed, 27
- Jul 2022 23:52:14 -0700 (PDT)
+        Thu, 28 Jul 2022 02:52:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67F05D0CF
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:52:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9053AB821BD
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:52:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C91C433B5;
+        Thu, 28 Jul 2022 06:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658991149;
+        bh=K9c9yy81GS7CFkzPv82V7yRAR1v5pIO6ddj+1v5t3Mk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GLqb0tZazPI/3BtsiAZ/M4HVVg8whBTxwy2ZEQefsBgNIdkb6+pzCk37NgrFEUmJk
+         xbXiHFoxcgwXEigx8+9C1K0lXdfMBh4l4MbQR2kSyVLHZa1WxpVtnI1JvRqORGvbdL
+         3xvcqY/cXO+qV8wFkAQESELOErLeHQv7NYTPl/I4=
+Date:   Thu, 28 Jul 2022 08:52:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dipanjan Das <mail.dipanjan.das@gmail.com>
+Cc:     dhowells@redhat.com, sashal@kernel.org, fmdefrancesco@gmail.com,
+        edumazet@google.com, linux-kernel@vger.kernel.org,
+        syzkaller@googlegroups.com, fleischermarius@googlemail.com,
+        its.priyanka.bose@gmail.com
+Subject: Re: KASAN: use-after-free Read in post_one_notification
+Message-ID: <YuIyKjvQ0vOeRWhl@kroah.com>
+References: <CANX2M5bHye2ZEEhEV6PUj1kYL2KdWYeJtgXw8KZRzwrNpLYz+A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220727064321.2953971-1-mw@semihalf.com> <20220727064321.2953971-7-mw@semihalf.com>
- <20220727143147.u6yd6wqslilspyhw@skbuf> <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
- <20220727163848.f4e2b263zz3vl2hc@skbuf> <CAPv3WKe+e6sFd6+7eoZbA2iRTPhBorD+mk6W+kJr-f9P8SFh+w@mail.gmail.com>
- <CAHp75VfGfKx1fggoE7wf4ndmUv4FEVfV=-EaO0ypescmNqDFkw@mail.gmail.com>
-In-Reply-To: <CAHp75VfGfKx1fggoE7wf4ndmUv4FEVfV=-EaO0ypescmNqDFkw@mail.gmail.com>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Thu, 28 Jul 2022 08:52:04 +0200
-Message-ID: <CAPv3WKeXtwJRPSaERzo+so+_ZAPSNk5RjxzE+N7u-uNUTMaeKA@mail.gmail.com>
-Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to fwnode_find_net_device_by_node()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANX2M5bHye2ZEEhEV6PUj1kYL2KdWYeJtgXw8KZRzwrNpLYz+A@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C5=9Br., 27 lip 2022 o 23:15 Andy Shevchenko <andy.shevchenko@gmail.com> n=
-apisa=C5=82(a):
->
->
->
-> On Wednesday, July 27, 2022, Marcin Wojtas <mw@semihalf.com> wrote:
->>
->> =C5=9Br., 27 lip 2022 o 18:38 Vladimir Oltean <olteanv@gmail.com> napisa=
-=C5=82(a):
->> >
->> > On Wed, Jul 27, 2022 at 05:18:16PM +0200, Marcin Wojtas wrote:
->> > > Do you mean a situation analogous to what I addressed in:
->> > > [net-next: PATCH v3 4/8] net: mvpp2: initialize port fwnode pointer
->> > > ?
->> >
->> > Not sure if "analogous" is the right word. My estimation is that the
->> > overwhelmingly vast majority of DSA masters can be found by DSA simply
->> > due to the SET_NETDEV_DEV() call that the Ethernet drivers need to mak=
-e
->> > anyway.  I see that mvpp2 also needed commit c4053ef32208 ("net: mvpp2=
-:
->> > initialize port of_node pointer"), but that isn't needed in general, a=
-nd
->> > I can't tell you exactly why it is needed there, I don't know enough
->> > about the mvpp2 driver.
->>
->> SET_NETDEV_DEV() fills net_device->dev.parent with &pdev->dev
->> and in most cases it is sufficient apparently it is sufficient for
->> fwnode_find_parent_dev_match (at least tests with mvneta case proves
->> it's fine).
->>
->> We have some corner cases though:
->> * mvpp2 -> single controller can handle up to 3 net_devices and
->> therefore we need device_set_node() to make this work. I think dpaa2
->> is a similar case
->> * PCIE drivers with extra DT description (I think that's the case of ene=
-tc).
->>
->> >
->> > > I found indeed a couple of drivers that may require a similar change
->> > > (e.g. dpaa2).
->> >
->> > There I can tell you why the dpaa2-mac code mangles with net_dev->dev.=
-of_node,
->> > but I'd rather not go into an explanation that essentially doesn't mat=
-ter.
->> > The point is that you'd be mistaken to think that only the drivers whi=
-ch
->> > touch the net device's ->dev->of_node are the ones that need updating
->> > for your series to not cause regressions.
->>
->> As above - SET_NETDEV_DEV() should be fine in most cases, but we can
->> never be 100% sure untils it's verified.
->>
->> >
->> > > IMO we have 2 options:
->> > > - update these drivers
->> > > - add some kind of fallback? If yes, I am wondering about an elegant
->> > > solution - maybe add an extra check inside
->> > > fwnode_find_parent_dev_match?
->> > >
->> > > What would you suggest?
->> >
->> > Fixing fwnode_find_parent_dev_match(), of course.
->
->
->
-> Fixing how?!
->
->
->>
->>
->> This change broke DSA
->> > on my LS1028A system (master in drivers/net/ethernet/freescale/enetc/)
->> > and LS1021A (master in drivers/net/ethernet/freescale/gianfar.c).
->>
->> Can you please check applying following diff:
->>
->> --- a/drivers/base/property.c
->> +++ b/drivers/base/property.c
->> @@ -695,20 +695,22 @@ EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
->>   * The routine can be used e.g. as a callback for class_find_device().
->>   *
->>   * Returns: %1 - match is found
->>   *          %0 - match not found
->>   */
->>  int fwnode_find_parent_dev_match(struct device *dev, const void *data)
->>  {
->>         for (; dev; dev =3D dev->parent) {
->>                 if (device_match_fwnode(dev, data))
->>                         return 1;
->> +               else if (device_match_of_node(dev, to_of_node(data))
->> +                       return 1;
->>         }
->>
->
-> This adds a piece of dead code. device_match_fwnode() covers this already=
-.
->
+On Wed, Jul 27, 2022 at 02:28:45PM -0700, Dipanjan Das wrote:
+> Hi,
+> 
+> We would like to report the following bug which has been found by our
+> modified version of syzkaller.
+> 
+> ======================================================
+> description: KASAN: use-after-free Read in post_one_notification
+> affected file: kernel/watch_queue.c
+> kernel version: 5.10.131
+> kernel commit: 8f95261a006489c828f1d909355669875649668b
+> git tree: upstream
+> kernel config: https://syzkaller.appspot.com/x/.config?x=e49433cfed49b7d9
+> crash reproducer: attached
+> patch: This bug was previously reported by syzkaller for kernel
+> version 5.17. The same patch works for kernel version 5.10 as well,
+> i.e., we tested that the repro can no longer triggers the reported
+> crash with this patch:
+> https://syzkaller.appspot.com/text?tag=Patch&x=13b8c83c080000
 
-Yes, indeed. After recent update, I think we can assume the current
-implementation of fwnode_find_parent_dev_match should work fine with
-all existing cases.
+I'm sorry, I do not understand.  So this is fixed in Linus's tree?  But
+not in 5.10.y?  Or it is not fixed everywhere?
 
-Thank you for all remarks and comments, I'll address them in v4 later today=
-.
+If it is fixed, what is the git commit id of the patch in Linus's tree
+that fixes this that should be backported to 5.10.y?
 
-Best regards,
-Marcin
+confused,
+
+greg k-h

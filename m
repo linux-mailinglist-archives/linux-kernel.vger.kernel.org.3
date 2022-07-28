@@ -2,240 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97F75845EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9EA584605
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbiG1StD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 14:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S232793AbiG1Str (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 14:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbiG1StB (ORCPT
+        with ESMTP id S232135AbiG1Stp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 14:49:01 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D7D71BDE
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:49:00 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:36148)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oH8Z9-00E1aV-0m; Thu, 28 Jul 2022 12:48:59 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:48830 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oH8Z7-00BYV8-ND; Thu, 28 Jul 2022 12:48:58 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Tycho Andersen <tycho@tycho.pizza>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
-References: <Ys2PwTS0qFmGNFqy@netflix>
-        <20220713175305.1327649-1-tycho@tycho.pizza>
-        <20220720150328.GA30749@mail.hallyn.com>
-        <YthsgqAZYnwHZLn+@tycho.pizza> <20220721015459.GA4297@mail.hallyn.com>
-        <YuFdUj5X4qckC/6g@tycho.pizza>
-        <871qu6bjp3.fsf@email.froward.int.ebiederm.org>
-        <YuF8H3ZVNugbLtFC@tycho.pizza>
-Date:   Thu, 28 Jul 2022 13:48:17 -0500
-In-Reply-To: <YuF8H3ZVNugbLtFC@tycho.pizza> (Tycho Andersen's message of "Wed,
-        27 Jul 2022 11:55:43 -0600")
-Message-ID: <8735elhy4u.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 28 Jul 2022 14:49:45 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEF174E1C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:49:44 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id e15so3283475edj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:49:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=o4JsS03Vx0jtL7YYXAFCaM1jM5Qa3FkoCPUmMAdZ7vQ=;
+        b=ZkwpQzU6cwO3kq6f7VwhOh/R0c7Y3AhMC5D1/J3igjtAioM7sdGi3t2KhlYOQU3rXb
+         aauC+z1tUw8ULAlNlQ+VREvuT2gpnrwJBGC5la0a/zW15sErEXYTDK2o8jvkvMtF9jA6
+         wnaHLyNlXc2nN+tgxgQvYYyaylDg6Mi/mY7YA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=o4JsS03Vx0jtL7YYXAFCaM1jM5Qa3FkoCPUmMAdZ7vQ=;
+        b=bv6yliKU+LnRW0387JtvQp2mlSCSaB2/KxPAiqwrTS2aGQxjvPViM7JwCfG/kbZIMF
+         f6og7FlaI5SlPaJMTUzglh3FQEmN4rxgJ7P9tdqdm5RT+wxQA7J0fZ/it47eHtpPZ1ws
+         pGKQG7QdHnc/iBQ3ywnOWfpFEa2ouDlESNlQjo6E9UP1HHmbrcOBaYQmTV+AaswS8sgh
+         xBsUVpDqorbXIRLSN6YL1WNR0flkSGr6T0qF66EGYBEc7PFbmBiRUcJ0ePQ1447WI43a
+         wvQC87S34OTaf9aauel9oxXz9+Jqw2ZRy4b+F1WNfH3yqhoXJHoa6/TDLaoveAda4k4u
+         tWjg==
+X-Gm-Message-State: AJIora9olrGL4CgERv+g0Z4alCHibXWoP2fp2IOY2LzjmisT7QjBMWbB
+        vFwYNLuV979EJombBUE3EPh7S/fcEqxKkfqc
+X-Google-Smtp-Source: AGRyM1s5ELcuDvKr5y9PBOiImgv5dBHVbq/WAhvNW2Apm7vrqvpXUYi4SpRbCrZHijGu5LsC7oqyrA==
+X-Received: by 2002:a05:6402:11d3:b0:43c:436b:829 with SMTP id j19-20020a05640211d300b0043c436b0829mr296214edw.324.1659034182540;
+        Thu, 28 Jul 2022 11:49:42 -0700 (PDT)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id kw7-20020a170907770700b00722e31fcf42sm683573ejc.184.2022.07.28.11.49.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 11:49:41 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id i8so3405780wro.11
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:49:41 -0700 (PDT)
+X-Received: by 2002:adf:edcb:0:b0:21e:d043:d271 with SMTP id
+ v11-20020adfedcb000000b0021ed043d271mr195839wro.274.1659034180672; Thu, 28
+ Jul 2022 11:49:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oH8Z7-00BYV8-ND;;;mid=<8735elhy4u.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18zLJB9EbXzeH/7OXoXVAdVtkdREDgofKw=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220728161208.865420-1-yury.norov@gmail.com>
+In-Reply-To: <20220728161208.865420-1-yury.norov@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 28 Jul 2022 11:49:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiFJboHXZEXtMhDcHbEYXujTiDxkGbpONC=DJA7dJG6nw@mail.gmail.com>
+Message-ID: <CAHk-=wiFJboHXZEXtMhDcHbEYXujTiDxkGbpONC=DJA7dJG6nw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] lib/find: optimize find_bit() functions
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Dennis Zhou <dennis@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000028e7d05e4e1ff41"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Tycho Andersen <tycho@tycho.pizza>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 750 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.0 (0.5%), b_tie_ro: 2.7 (0.4%), parse: 0.88
-        (0.1%), extract_message_metadata: 11 (1.4%), get_uri_detail_list: 3.2
-        (0.4%), tests_pri_-1000: 3.8 (0.5%), tests_pri_-950: 1.03 (0.1%),
-        tests_pri_-900: 0.80 (0.1%), tests_pri_-90: 214 (28.6%), check_bayes:
-        202 (26.9%), b_tokenize: 10 (1.3%), b_tok_get_all: 12 (1.6%),
-        b_comp_prob: 2.9 (0.4%), b_tok_touch_all: 172 (23.0%), b_finish: 0.80
-        (0.1%), tests_pri_0: 501 (66.8%), check_dkim_signature: 0.46 (0.1%),
-        check_dkim_adsp: 2.5 (0.3%), poll_dns_idle: 0.85 (0.1%), tests_pri_10:
-        2.7 (0.4%), tests_pri_500: 8 (1.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] sched: __fatal_signal_pending() should also check
- PF_EXITING
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tycho Andersen <tycho@tycho.pizza> writes:
+--000000000000028e7d05e4e1ff41
+Content-Type: text/plain; charset="UTF-8"
 
-> On Wed, Jul 27, 2022 at 11:32:08AM -0500, Eric W. Biederman wrote:
->> Tycho Andersen <tycho@tycho.pizza> writes:
->> 
->> > Hi all,
->> >
->> > On Wed, Jul 20, 2022 at 08:54:59PM -0500, Serge E. Hallyn wrote:
->> >> Oh - I didn't either - checking the sigkill in shared signals *seems*
->> >> legit if they can be put there - but since you posted the new patch I
->> >> assumed his reasoning was clear to you.  I know Eric's busy, cc:ing Oleg
->> >> for his interpretation too.
->> >
->> > Any thoughts on this?
->> 
->> Having __fatal_signal_pending check SIGKILL in shared signals is
->> completely and utterly wrong.
->> 
->> What __fatal_signal_pending reports is if a signal has gone through
->> short cirucuit delivery after determining that the delivery of the
->> signal will terminate the process.
+On Thu, Jul 28, 2022 at 9:12 AM Yury Norov <yury.norov@gmail.com> wrote:
 >
-> This short-circuiting you're talking about happens in __send_signal()?
-> The problem here is that __send_signal() will add things to the shared
-> queue:
->
->     pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
->
-> and indeed we add it to the shared set because of the way
-> zap_pid_ns_processes() calls it:
->
->     roup_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
->
->> Using "sigismember(&tsk->pending.signal, SIGKILL)" to report that a
->> fatal signal has experienced short circuit delivery is a bit of an
->> abuse, but essentially harmless as tkill of SIGKILL to a thread will
->> result in every thread in the process experiencing short circuit
->> delivery of the fatal SIGKILL.  So a pending SIGKILL can't really mean
->> anything else.
->
-> This is the part I don't follow. If it's ok to send a signal to this
-> set, why is it not ok to also look there (other than that it was a
-> slight hack in the first place)? Maybe it will short circuit
-> more threads, but that seems ok.
+> In the recent discussion [1], it was noticed that find_next_bit()
+> functions may be improved by adding wrappers around common
+> __find_next_bit().
 
-Let me see if I can help, now that I have the code and the backtrace
-the details are becoming clearer.
+So looking at the end result, this generates fairly good code.
 
-In zap_pid_ns_processes group_send_signal sets some signal bits.
-Then the processes notices those bits and deals with them in get_signal.
-Then get_signal calls do_exit.
-Then do_exit flushes the file descriptors.
+I say "fairly good" because _find_next_and_bit() ends up being disgusting.
 
+The reason? That
 
-So the reason __fatal_signal_pending fails is that the signal has been
-dealt with by calling do_exit and it is no longer pending.
+        if (addr2)
+                tmp &= addr2[start / BITS_PER_LONG];
 
-Frankly that there are some left over SIGKILL bits in the pending mask
-is a misfeature, and it is definitely not something you should count on.
+generates horrific code when 'addr2' isn't seen to be always NULL.
 
+So this doesn't affect the regular _find_next_bit case, because the
+inliner sees that addr2 is always NULL and doesn't generate extra code
+for it.
 
->> After having looked at the code a little more I can unfortunately also
->> say that testing PF_EXITING in __fatal_signal_pending will cause
->> kernel_wait4 in zap_pid_ns_processes to not sleep, and instead to return
->> 0.  Which will cause zap_pid_ns_processes to busy wait.  That seems very
->> unfortunate.
->> 
->> I hadn't realized it at the time I wrote zap_pid_ns_processes but I
->> think anything called from do_exit that cares about signal pending state
->> is pretty much broken and needs to be fixed.
->
->> So the question is how do we fix the problem in fuse that shows up
->> during a pid namespace exit without having interruptible sleeps we need
->> to wake up?
->> 
->> What are the code paths that experience the problem?
->
-> [<0>] request_wait_answer+0x282/0x710 [fuse]
-> [<0>] fuse_simple_request+0x502/0xc10 [fuse]
-> [<0>] fuse_flush+0x431/0x630 [fuse]
-> [<0>] filp_close+0x96/0x120
-> [<0>] put_files_struct+0x15c/0x2c0
-> [<0>] do_exit+0xa00/0x2450
-> [<0>] do_group_exit+0xb2/0x2a0
-> [<0>] get_signal+0x1eed/0x2090
-> [<0>] arch_do_signal_or_restart+0x89/0x1bc0
-> [<0>] exit_to_user_mode_prepare+0x11d/0x1b0
-> [<0>] syscall_exit_to_user_mode+0x19/0x50
-> [<0>] do_syscall_64+0x50/0x90
-> [<0>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+But the code that actually *does* have two incoming bitmasks will now
+pointlessly test that second bitmask pointer all the time.
 
-This is half of the hang thank you.
+Now, that particular function probably doesn't matter, but this code
+seems to be unnecessarily written to try to be overly generic, and
+that
 
-> is the full call stack, I have a reproducer here (make check will run
-> it): https://github.com/tych0/kernel-utils/tree/master/fuse2
+ (a) makes it hard to read the source code because the source code
+doesn't do the obvious thing
 
+ (b) clearly generates suboptimal code too
 
-Thank you for this I can almost trace what is going on.
+so I'm really not a huge fan of this "try to share code". Not when the
+resulting shared code is harder to read, and impossible for the
+compiler to do a great job at.
 
-There is a server and it is accessing the filesystem it servers.
-Plus the process staying alive keeps the filesystem mounted and
-active because it is acessing the filesystem it serves.
+And the code sharing really doesn't help all that much.
 
+If you really want to generate good code, use macros, and share the
+logic that way. Not hugely readable either, but I think it's actually
+not bad.
 
-The filesystem access hanging appears to be because fc->connected != 0.
+I think something like this would work:
 
-If fuse_abort_conn could successfully run that should successfully
-shut everything down.
+    #define BIT_FIND_SETUP(addr, size, start)                   \
+        unsigned long val, idx;                                 \
+        if (unlikely(start >= size))                            \
+                return size;                                    \
+        idx = start / BITS_PER_LONG;
 
-The server when it is killed should call fuse_abort_conn from
-fuse_dev_release, but the code appears to never get there because it is
-blocked in fuse_flush from closing the file descriptor open to the fuse
-file system.
+    #define BIT_FIND_FIRST_WORD(addr, size, start, EXPRESSION)  \
+        if (!IS_ALIGNED(start, BITS_PER_LONG)) {                \
+                unsigned long mask;                             \
+                mask = BITMAP_FIRST_WORD_MASK(start);           \
+                if ((val = mask & (EXPRESSION)) != 0)           \
+                        goto found;                             \
+                idx++;                                          \
+        }
 
-So this looks like one process hanging and waiting on itself.
+    #define BIT_WORD_LOOP(ptr, size, idx, val, EXPRESSION)              \
+        do {                                                    \
+                if ((val = (EXPRESSION)) != 0)                  \
+                         goto found;                            \
+                idx++;                                          \
+        } while ((idx)*BITS_PER_LONG < (size));
 
+    #define BIT_FIND_BODY(addr, size, start, EXPRESSION)                \
+        BIT_FIND_SETUP(addr, size, start)                       \
+        BIT_FIND_FIRST_WORD(addr, size, start, EXPRESSION)      \
+        BIT_WORD_LOOP(addr, size, idx, val, EXPRESSION) \
+        return size;                                            \
+    found:      BIT_WORD_SWAB(val);                                     \
+        return min((idx)*BITS_PER_LONG + __ffs(val), size)
 
-I suspect the solution is do use something like task_wake in the
-fuse_flush calls to allow the server file descriptor to be close
-resulting in fuse_dev_release calling fuse_abort_conn.
+    #define BIT_WORD_SWAB(x) /* Nothing */
 
+and then for the BE versions you just use the same macros, but you
+make BIT_WORD_SWAB() do the swab.
 
->
-> In addition to fuse, it looks like nfs_file_flush() eventually ends up
-> in __fatal_signal_pending(), and probably a few others that want to
-> synchronize with something outside the local kernel.
+I'm attaching an UNTESTED version of lib/find_bit.c that works the
+above way (note: it is based on your header file changes!)
 
-Yes, my thinking there about not calling __fatal_signal_pending during
-do_exit seems to have been confused.  Rather what can't be done is
-depending upon __fatal_signal_pending to ever returning true.
+It builds for me and seems to generate reasonable code, although I
+notice that clang messes up the "__ffs()" inline asm and forces the
+source into memory.
 
-What needs to happen is to make certain we don't have the loops where
-one part of the shutdown depends upon another.  I don't know if there
-is a way to shutdown the nfs connection why a client is waiting or not.
+(Gcc doesn't do that, but gcc follows the code exactly and generates
+"shl $6" instructions, while clang seems to figure out that it can
+just add 64 instead)
 
->> Will refactoring zap_pid_ns_processes as I have proposed so that it does
->> not use kernel_wait4 help sort this out?  AKA make it work something
->> like thread group leader of a process and not allow wait to reap the
->> init process of a pid namespace until all of the processes in a pid
->> namespaces have been gone.  Not that I see the problem in using
->> kernel_wait4 it looks like zap_pid_ns_processes needs to stop calling
->> kernel_wait4 regardless of the fuse problem.
->
-> I can look at this, but I really don't think it will help: in this
-> brave new world, what wakes up tasks stuck like the above? They're
-> still looking at the wrong signal set.
+                        Linus
 
-This is probably a wild goose chase.  There are some funny namespace
-bits like the pid namespace closing that we need to rule out of
-the picture, but overall I don't think the pid namespace has
-anything to do with this.
+--000000000000028e7d05e4e1ff41
+Content-Type: text/x-csrc; charset="US-ASCII"; name="find_bit.c"
+Content-Disposition: attachment; filename="find_bit.c"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l65e3m350>
+X-Attachment-Id: f_l65e3m350
 
-I was thinking removing the kernel_wait would simplify things by
-removing one place where a process waits on another process during
-shutdown.  With the right problem it probably will help.  In this case
-since everything is in a single process I don't see that happening.
-
-I spent a little time and tried to get this to reproduce without the
-pid namespace and it initially it looked like it was working but
-after a bunch of time those attempts exited on their own.  So I haven't
-mastered all of what is going on in your fuse test case yet.
-
-Eric
-
+Ly8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb3ItbGF0ZXIKLyogYml0IHNlYXJj
+aCBpbXBsZW1lbnRhdGlvbgogKgogKiBDb3B5cmlnaHQgKEMpIDIwMDQgUmVkIEhhdCwgSW5jLiBB
+bGwgUmlnaHRzIFJlc2VydmVkLgogKiBXcml0dGVuIGJ5IERhdmlkIEhvd2VsbHMgKGRob3dlbGxz
+QHJlZGhhdC5jb20pCiAqCiAqIENvcHlyaWdodCAoQykgMjAwOCBJQk0gQ29ycG9yYXRpb24KICog
+J2ZpbmRfbGFzdF9iaXQnIGlzIHdyaXR0ZW4gYnkgUnVzdHkgUnVzc2VsbCA8cnVzdHlAcnVzdGNv
+cnAuY29tLmF1PgogKiAoSW5zcGlyZWQgYnkgRGF2aWQgSG93ZWxsJ3MgZmluZF9uZXh0X2JpdCBp
+bXBsZW1lbnRhdGlvbikKICoKICogUmV3cml0dGVuIGJ5IFl1cnkgTm9yb3YgPHl1cnkubm9yb3ZA
+Z21haWwuY29tPiB0byBkZWNyZWFzZQogKiBzaXplIGFuZCBpbXByb3ZlIHBlcmZvcm1hbmNlLCAy
+MDE1LgogKi8KCiNpbmNsdWRlIDxsaW51eC9iaXRvcHMuaD4KI2luY2x1ZGUgPGxpbnV4L2JpdG1h
+cC5oPgojaW5jbHVkZSA8bGludXgvZXhwb3J0Lmg+CiNpbmNsdWRlIDxsaW51eC9tYXRoLmg+CiNp
+bmNsdWRlIDxsaW51eC9taW5tYXguaD4KI2luY2x1ZGUgPGxpbnV4L3N3YWIuaD4KCiNkZWZpbmUg
+QklUX0ZJTkRfU0VUVVAoYWRkciwgc2l6ZSwgc3RhcnQpCQkJXAoJdW5zaWduZWQgbG9uZyB2YWws
+IGlkeDsJCQkJCVwKCWlmICh1bmxpa2VseShzdGFydCA+PSBzaXplKSkJCQkJXAoJCXJldHVybiBz
+aXplOwkJCQkJXAoJaWR4ID0gc3RhcnQgLyBCSVRTX1BFUl9MT05HOwoKI2RlZmluZSBCSVRfRklO
+RF9GSVJTVF9XT1JEKGFkZHIsIHNpemUsIHN0YXJ0LCBFWFBSRVNTSU9OKQlcCglpZiAoIUlTX0FM
+SUdORUQoc3RhcnQsIEJJVFNfUEVSX0xPTkcpKSB7CQlcCgkJdW5zaWduZWQgbG9uZyBtYXNrOwkJ
+CQlcCgkJbWFzayA9IEJJVE1BUF9GSVJTVF9XT1JEX01BU0soc3RhcnQpOwkJXAoJCWlmICgodmFs
+ID0gbWFzayAmIChFWFBSRVNTSU9OKSkgIT0gMCkJCVwKCQkJZ290byBmb3VuZDsJCQkJXAoJCWlk
+eCsrOwkJCQkJCVwKCX0KCiNkZWZpbmUgQklUX1dPUkRfTE9PUChwdHIsIHNpemUsIGlkeCwgdmFs
+LCBFWFBSRVNTSU9OKQkJXAoJZG8gewkJCQkJCQlcCgkJaWYgKCh2YWwgPSAoRVhQUkVTU0lPTikp
+ICE9IDApCQkJXAoJCQkgZ290byBmb3VuZDsJCQkJXAoJCWlkeCsrOwkJCQkJCVwKCX0gd2hpbGUg
+KChpZHgpKkJJVFNfUEVSX0xPTkcgPCAoc2l6ZSkpOwoKI2RlZmluZSBCSVRfRklORF9CT0RZKGFk
+ZHIsIHNpemUsIHN0YXJ0LCBFWFBSRVNTSU9OKQkJXAoJQklUX0ZJTkRfU0VUVVAoYWRkciwgc2l6
+ZSwgc3RhcnQpCQkJXAoJQklUX0ZJTkRfRklSU1RfV09SRChhZGRyLCBzaXplLCBzdGFydCwgRVhQ
+UkVTU0lPTikJXAoJQklUX1dPUkRfTE9PUChhZGRyLCBzaXplLCBpZHgsIHZhbCwgRVhQUkVTU0lP
+TikJXAoJcmV0dXJuIHNpemU7CQkJCQkJXApmb3VuZDoJQklUX1dPUkRfU1dBQih2YWwpOwkJCQkJ
+XAoJcmV0dXJuIG1pbigoaWR4KSpCSVRTX1BFUl9MT05HICsgX19mZnModmFsKSwgc2l6ZSkKCiNk
+ZWZpbmUgQklUX1dPUkRfU1dBQih4KSAvKiBOb3RoaW5nICovCgp1bnNpZ25lZCBsb25nIF9maW5k
+X2ZpcnN0X2JpdChjb25zdCB1bnNpZ25lZCBsb25nICphZGRyLCB1bnNpZ25lZCBsb25nIHNpemUp
+CnsgQklUX0ZJTkRfQk9EWShhZGRyLCBzaXplLCAwLCBhZGRyW2lkeF0pOyB9Cgp1bnNpZ25lZCBs
+b25nIF9maW5kX2ZpcnN0X3plcm9fYml0KGNvbnN0IHVuc2lnbmVkIGxvbmcgKmFkZHIsIHVuc2ln
+bmVkIGxvbmcgc2l6ZSkKeyBCSVRfRklORF9CT0RZKGFkZHIsIHNpemUsIDAsIH5hZGRyW2lkeF0p
+OyB9Cgp1bnNpZ25lZCBsb25nIF9maW5kX25leHRfYml0KGNvbnN0IHVuc2lnbmVkIGxvbmcgKmFk
+ZHIsIHVuc2lnbmVkIGxvbmcgc2l6ZSwgdW5zaWduZWQgbG9uZyBzdGFydCkKeyBCSVRfRklORF9C
+T0RZKGFkZHIsIHNpemUsIHN0YXJ0LCBhZGRyW2lkeF0pOyB9Cgp1bnNpZ25lZCBsb25nIF9maW5k
+X25leHRfemVyb19iaXQoY29uc3QgdW5zaWduZWQgbG9uZyAqYWRkciwgdW5zaWduZWQgbG9uZyBz
+aXplLCB1bnNpZ25lZCBsb25nIHN0YXJ0KQp7IEJJVF9GSU5EX0JPRFkoYWRkciwgc2l6ZSwgc3Rh
+cnQsIH5hZGRyW2lkeF0pOyB9Cgp1bnNpZ25lZCBsb25nIF9maW5kX2ZpcnN0X2FuZF9iaXQoY29u
+c3QgdW5zaWduZWQgbG9uZyAqYWRkcjEsIGNvbnN0IHVuc2lnbmVkIGxvbmcgKmFkZHIyLCB1bnNp
+Z25lZCBsb25nIHNpemUpCnsgQklUX0ZJTkRfQk9EWShhZGRyLCBzaXplLCAwLCBhZGRyMVtpZHhd
+ICYgYWRkcjJbaWR4XSk7IH0KCnVuc2lnbmVkIGxvbmcgX2ZpbmRfbmV4dF9hbmRfYml0KGNvbnN0
+IHVuc2lnbmVkIGxvbmcgKmFkZHIxLCBjb25zdCB1bnNpZ25lZCBsb25nICphZGRyMiwgdW5zaWdu
+ZWQgbG9uZyBzaXplLCB1bnNpZ25lZCBsb25nIHN0YXJ0KQp7IEJJVF9GSU5EX0JPRFkoYWRkciwg
+c2l6ZSwgc3RhcnQsIGFkZHIxW2lkeF0gJiBhZGRyMltpZHhdKTsgfQoKI2lmZGVmIF9fQklHX0VO
+RElBTgoKI3VuZGVmIEJJVF9XT1JEX1NXQUIKI2RlZmluZSBCSVRfV09SRF9TV0FCKHZhbCkgdmFs
+ID0gc3dhYih2YWwpCgouLiBGSVhNRTogc2FtZSBhcyBhYm92ZSwgbm93IHdpdGggX2ZpbmRfZmly
+c3RfYml0X2xlKCkgZXRjIC4uCgojZW5kaWYKCiNpZm5kZWYgZmluZF9sYXN0X2JpdAp1bnNpZ25l
+ZCBsb25nIF9maW5kX2xhc3RfYml0KGNvbnN0IHVuc2lnbmVkIGxvbmcgKmFkZHIsIHVuc2lnbmVk
+IGxvbmcgc2l6ZSkKewoJaWYgKHNpemUpIHsKCQl1bnNpZ25lZCBsb25nIHZhbCA9IEJJVE1BUF9M
+QVNUX1dPUkRfTUFTSyhzaXplKTsKCQl1bnNpZ25lZCBsb25nIGlkeCA9IChzaXplLTEpIC8gQklU
+U19QRVJfTE9ORzsKCgkJZG8gewoJCQl2YWwgJj0gYWRkcltpZHhdOwoJCQlpZiAodmFsKQoJCQkJ
+cmV0dXJuIGlkeCAqIEJJVFNfUEVSX0xPTkcgKyBfX2Zscyh2YWwpOwoKCQkJdmFsID0gfjB1bDsK
+CQl9IHdoaWxlIChpZHgtLSk7Cgl9CglyZXR1cm4gc2l6ZTsKfQpFWFBPUlRfU1lNQk9MKF9maW5k
+X2xhc3RfYml0KTsKI2VuZGlmCgp1bnNpZ25lZCBsb25nIGZpbmRfbmV4dF9jbHVtcDgodW5zaWdu
+ZWQgbG9uZyAqY2x1bXAsIGNvbnN0IHVuc2lnbmVkIGxvbmcgKmFkZHIsCgkJCSAgICAgICB1bnNp
+Z25lZCBsb25nIHNpemUsIHVuc2lnbmVkIGxvbmcgb2Zmc2V0KQp7CglvZmZzZXQgPSBmaW5kX25l
+eHRfYml0KGFkZHIsIHNpemUsIG9mZnNldCk7CglpZiAob2Zmc2V0ID09IHNpemUpCgkJcmV0dXJu
+IHNpemU7CgoJb2Zmc2V0ID0gcm91bmRfZG93bihvZmZzZXQsIDgpOwoJKmNsdW1wID0gYml0bWFw
+X2dldF92YWx1ZTgoYWRkciwgb2Zmc2V0KTsKCglyZXR1cm4gb2Zmc2V0Owp9CkVYUE9SVF9TWU1C
+T0woZmluZF9uZXh0X2NsdW1wOCk7Cg==
+--000000000000028e7d05e4e1ff41--

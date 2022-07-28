@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDA258384E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 07:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7DA583851
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 07:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbiG1Fzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 01:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
+        id S233033AbiG1F4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 01:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiG1Fzi (ORCPT
+        with ESMTP id S229538AbiG1F4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 01:55:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3015E57262;
-        Wed, 27 Jul 2022 22:55:36 -0700 (PDT)
+        Thu, 28 Jul 2022 01:56:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E7F57267;
+        Wed, 27 Jul 2022 22:56:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D88FAB821C2;
-        Thu, 28 Jul 2022 05:55:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B09C433D6;
-        Thu, 28 Jul 2022 05:55:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 717C1B8229B;
+        Thu, 28 Jul 2022 05:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B8E3C433D7;
+        Thu, 28 Jul 2022 05:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658987733;
-        bh=DUDHTcuvIpp71R4euVPZqQUfVOIvukmavIN5Uge2ANY=;
+        s=k20201202; t=1658987761;
+        bh=5U82LOFcNwDUA8/kh9KM96VMu6YPACZ2xuM2ixXGbiI=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JrVX0l75QZwJIqKw2c3HzCLLhCABtmRE32QvoSRvYW8sdoRFNkQX9DiE7Q6Z4J0me
-         ZrD9YIv2cEugKW8DMcr/xAY7STaxXcc2cIoZXttYlTU2C28btXcHbS0y1ntBxOphHf
-         /Cx9bxX0l79vhMevGaWg1Tzy+ZtgyEBUkiqdXW5bpyn6P12PSZRkIizAIICl/pdfIS
-         QxwmqSPL5Oz6OltMC0CPYPYj99isDOo0H6vZMFQ0AtsGwhKBYhgbBXQhhEr1lFgnt+
-         ucZrIIRm5pvLU+89Tnve2V0bZbo2SxRDj+tnMtcsXxbUdkd7ECzRqkRkqNc6OwqU54
-         z8Ylrx96Vq89w==
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31f41584236so8559577b3.5;
-        Wed, 27 Jul 2022 22:55:33 -0700 (PDT)
-X-Gm-Message-State: AJIora/3JsX+YCPPWXU0hy8cOP0p7appN0oWOyCslU90rRkT0t7fLPvQ
-        ejnz1DraCEByrC/LPZq2K2Knk3vi15R8OvSKtj0=
-X-Google-Smtp-Source: AGRyM1vgypE0k5aiU3RHkEJf6DMr5nyDHhemQecWGE6d6RPuC/lOaFAXOL7tv5qj1pMK2dto84JYThdJZd0TN+6F33U=
-X-Received: by 2002:a81:551:0:b0:322:1cd3:8a35 with SMTP id
- 78-20020a810551000000b003221cd38a35mr2686027ywf.148.1658987732528; Wed, 27
- Jul 2022 22:55:32 -0700 (PDT)
+        b=sTZZPAoPUzlf2YGz5otlmpxCLGIm0yJgWlEAPWNQx76ywbCJhQEpT6+Sb/+xMTn73
+         Auuoto/S1PKk98izJHpQaqr0oGD804HemMuFQeHBpJ0W/TpHzqgaNHP1rmdXpjergh
+         K/jbWNk19DaDI3qzI5a35peKfBUudSfX1uvuxcocGMTcosey5Rol9YthDxJtSpg9GW
+         vWXVjvZei/3kMGHf/7adRQE4YuOHgToDdljNpdH4+m8IjUo6w5g5WF1ivmCybiNbU9
+         pVHpHbzoCyGbpvNUwgyQaCVKojgtTok1fuDBRQrJd8/ZU1b5ajJug2CkVcwgiSOuQM
+         2kWiQH6za0yaA==
+Received: by mail-yb1-f177.google.com with SMTP id o15so1661941yba.10;
+        Wed, 27 Jul 2022 22:56:01 -0700 (PDT)
+X-Gm-Message-State: AJIora/vNscy/O0DV8m8tK0+5f5djOD9wGnHn5O5M4W3i96H9NFw3wzU
+        Dk6kGkyMkeBud0y40Ga5bUIcFoVNJloYA0G4aNk=
+X-Google-Smtp-Source: AGRyM1udCZvbOsiIVUzq3BLoiUWpMLxeV8CfqP6vQhaYqXcXBJkmAfQxjKSXvpwp9csRtMZb/qqqBQqU5AiAbjmcW7w=
+X-Received: by 2002:a25:41d6:0:b0:673:817c:e163 with SMTP id
+ o205-20020a2541d6000000b00673817ce163mr2590841yba.561.1658987760160; Wed, 27
+ Jul 2022 22:56:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220728113919.7985-1-Wentao_Liang_g@163.com>
-In-Reply-To: <20220728113919.7985-1-Wentao_Liang_g@163.com>
+References: <20220727210600.120221-1-logang@deltatee.com>
+In-Reply-To: <20220727210600.120221-1-logang@deltatee.com>
 From:   Song Liu <song@kernel.org>
-Date:   Wed, 27 Jul 2022 22:55:21 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6WEfJeCNu8T5tTu2W7+mHdGqdccRB05+5n=oz=8CgUzg@mail.gmail.com>
-Message-ID: <CAPhsuW6WEfJeCNu8T5tTu2W7+mHdGqdccRB05+5n=oz=8CgUzg@mail.gmail.com>
-Subject: Re: [PATCH] drivers:md:fix a potential use-after-free bug
-To:     Wentao_Liang <Wentao_Liang_g@163.com>
-Cc:     linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+Date:   Wed, 27 Jul 2022 22:55:49 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7Ao3hTCjB2QvZcyqFYixSs8WYhWZoCqE3azqsttqDp4A@mail.gmail.com>
+Message-ID: <CAPhsuW7Ao3hTCjB2QvZcyqFYixSs8WYhWZoCqE3azqsttqDp4A@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Bug fix for recent batching change
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -61,62 +66,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 8:40 PM Wentao_Liang <Wentao_Liang_g@163.com> wrote:
+On Wed, Jul 27, 2022 at 2:06 PM Logan Gunthorpe <logang@deltatee.com> wrote:
 >
-> In line 2884, "raid5_release_stripe(sh);" drops the reference to sh and
-> may cause sh to be released. However, sh is subsequently used in lines
-> 2886 "if (sh->batch_head && sh != sh->batch_head)". This may result in an
-> use-after-free bug.
+> Hey,
 >
-> It can be fixed by moving "raid5_release_stripe(sh);" to the bottom of
-> the function.
+> We hit another bug on my recent batching patch. In this case the
+> bug has never been hit with the current md/md-next branch but
+> some other patches we were working on changed the timing such
+> that we hit this bug. It is theoretically possible to hit in
+> the md/md-next batch so this patchset contains a fix.
 >
-> The bug has been confirmed by Song on 2021-08-14. Now, I resend this
-> patch with my real name. I hope the patch can be updated in a near
-> future.
+> The fix is the last commit. The first four commits are some
+> basic refactoring that makes the final commit a bit easier.
+>
+> A git repo is here and is based on current md/md-next (7a6f9e9cf1):
+>
+>    https://github.com/sbates130272/linux-p2pmem raid5_batch_quiesce
 
-I removed this paragraph while applying the patch, as it doesn't belong to
-the commit log. In the future you can put it after a "---", so it will
-be dropped
-automatically by git-am. In other words, use something like:
+Applied to md-next. Thanks!
 
-========================================
-...
-Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
----
-The bug has been confirmed by Song on 2021-08-14. Now, I resend this
-patch with my real name. I hope the patch can be updated in a near
-future. (This will be dropped.)
----
- drivers/md/raid5.c | 2 +-
-...
-======================================
->
-> Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
-
-Applied to md-next. Thanks for the fix.
-
-
-> ---
->  drivers/md/raid5.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> index 5d09256d7f81..93fcbeac5096 100644
-> --- a/drivers/md/raid5.c
-> +++ b/drivers/md/raid5.c
-> @@ -2881,10 +2881,10 @@ static void raid5_end_write_request(struct bio *bi)
->         if (!test_and_clear_bit(R5_DOUBLE_LOCKED, &sh->dev[i].flags))
->                 clear_bit(R5_LOCKED, &sh->dev[i].flags);
->         set_bit(STRIPE_HANDLE, &sh->state);
-> -       raid5_release_stripe(sh);
->
->         if (sh->batch_head && sh != sh->batch_head)
->                 raid5_release_stripe(sh->batch_head);
-> +       raid5_release_stripe(sh);
->  }
->
->  static void raid5_error(struct mddev *mddev, struct md_rdev *rdev)
-> --
-> 2.25.1
->
+Song

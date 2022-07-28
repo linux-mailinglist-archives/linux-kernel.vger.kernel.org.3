@@ -2,185 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0CA584249
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7667584257
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbiG1OxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S230085AbiG1Oyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232730AbiG1OxJ (ORCPT
+        with ESMTP id S233416AbiG1OyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:53:09 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FDE6069F;
-        Thu, 28 Jul 2022 07:53:06 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9C15860007;
-        Thu, 28 Jul 2022 14:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1659019984;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i6ixpedV57yhN8lJ4519v1XA35dTMW/Roc+IABYUoNc=;
-        b=PfI2rfazBYUivvLzCdMAOGchPRLUBBGck7wt4NaDSNeacSGWEXrDjRkYM9r0VTimNMR5DT
-        4v2xe4nTzlQrY/hiYOhVyEcpNTOSnsegMHHMewQ1HZ3Di/0m7h0P7tfay2cQL0K6hA1j9w
-        9H2W9mVuJZOX+O6jQrlsdzFceEQzSlMRTdioDRaQrRohgINzqN3jXYuqD0qRDBb97QHRm1
-        0f0GW/uj68bJzXn4GjIGxWvqSqNpuyF4jLzd/8fFWe9wPw5tUBKboNRvD38Vlhwh60/tAv
-        D4+1fmENrP+La1NGB0oXuQ4J5QFeU6bng21S7tXiIw6jGJW6Tm+uXdwTzu4eyw==
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
-        Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com
-Subject: [PATCH net-next 4/4] net: lan966x: Add QUSGMII support for lan966x
-Date:   Thu, 28 Jul 2022 16:52:52 +0200
-Message-Id: <20220728145252.439201-5-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220728145252.439201-1-maxime.chevallier@bootlin.com>
-References: <20220728145252.439201-1-maxime.chevallier@bootlin.com>
+        Thu, 28 Jul 2022 10:54:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 543576AA1C;
+        Thu, 28 Jul 2022 07:53:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94C311691;
+        Thu, 28 Jul 2022 07:53:31 -0700 (PDT)
+Received: from e126387.arm.com (unknown [10.57.11.24])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC3F53F70D;
+        Thu, 28 Jul 2022 07:53:29 -0700 (PDT)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: [PATCH v5 11/14] perf test: Add unroll thread test tool
+Date:   Thu, 28 Jul 2022 15:52:53 +0100
+Message-Id: <20220728145256.2985298-12-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Lan996x controller supports the QUSGMII mode, which is very similar
-to QSGMII in the way it's configured and the autonegociation
-capababilities it provides.
+From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
 
-This commit adds support for that mode, treating it most of the time
-like QSGMII, making sure that we do configure the PCS how we should.
+Add test tool to be driven by further test scripts. This is a simple C
+based test that is for arm64 with some inline ASM to manually unroll a
+lot of code to have a very long sequence of commands.
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 ---
-V1->V2 : Pass the QUSGMII mode as-is to the generic PHY driver, and use
-         phy_interface_num_ports, as per Russell's review
+ tools/perf/tests/shell/coresight/Makefile     |  3 +-
+ .../coresight/unroll_loop_thread/.gitignore   |  1 +
+ .../coresight/unroll_loop_thread/Makefile     | 33 +++++++++
+ .../unroll_loop_thread/unroll_loop_thread.c   | 74 +++++++++++++++++++
+ 4 files changed, 110 insertions(+), 1 deletion(-)
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/.gitignore
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/unroll_loop_thread.c
 
- .../ethernet/microchip/lan966x/lan966x_main.c |  2 ++
- .../microchip/lan966x/lan966x_phylink.c       |  3 ++-
- .../ethernet/microchip/lan966x/lan966x_port.c | 22 ++++++++++++++-----
- .../ethernet/microchip/lan966x/lan966x_regs.h |  6 +++++
- 4 files changed, 26 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 1d6e3b641b2e..1e604e8db20c 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -778,6 +778,8 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
- 		  port->phylink_config.supported_interfaces);
- 	__set_bit(PHY_INTERFACE_MODE_QSGMII,
- 		  port->phylink_config.supported_interfaces);
-+	__set_bit(PHY_INTERFACE_MODE_QUSGMII,
-+		  port->phylink_config.supported_interfaces);
- 	__set_bit(PHY_INTERFACE_MODE_1000BASEX,
- 		  port->phylink_config.supported_interfaces);
- 	__set_bit(PHY_INTERFACE_MODE_2500BASEX,
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-index 38a7e95d69b4..87f3d3a57aed 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-@@ -28,11 +28,12 @@ static int lan966x_phylink_mac_prepare(struct phylink_config *config,
- 				       phy_interface_t iface)
- {
- 	struct lan966x_port *port = netdev_priv(to_net_dev(config->dev));
-+	phy_interface_t serdes_mode = iface;
- 	int err;
+diff --git a/tools/perf/tests/shell/coresight/Makefile b/tools/perf/tests/shell/coresight/Makefile
+index 004974a71fb8..3b2b876cd9e2 100644
+--- a/tools/perf/tests/shell/coresight/Makefile
++++ b/tools/perf/tests/shell/coresight/Makefile
+@@ -7,7 +7,8 @@ include ../../../../../tools/scripts/utilities.mak
+ SUBDIRS = \
+ 	asm_pure_loop \
+ 	memcpy_thread \
+-	thread_loop
++	thread_loop \
++	unroll_loop_thread
  
- 	if (port->serdes) {
- 		err = phy_set_mode_ext(port->serdes, PHY_MODE_ETHERNET,
--				       iface);
-+				       serdes_mode);
- 		if (err) {
- 			netdev_err(to_net_dev(config->dev),
- 				   "Could not set mode of SerDes\n");
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_port.c b/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
-index f141644e4372..bbf42fc8c8d5 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
-@@ -168,7 +168,7 @@ static void lan966x_port_link_up(struct lan966x_port *port)
- 	/* Also the GIGA_MODE_ENA(1) needs to be set regardless of the
- 	 * port speed for QSGMII ports.
- 	 */
--	if (config->portmode == PHY_INTERFACE_MODE_QSGMII)
-+	if (phy_interface_num_ports(config->portmode) == 4)
- 		mode = DEV_MAC_MODE_CFG_GIGA_MODE_ENA_SET(1);
- 
- 	lan_wr(config->duplex | mode,
-@@ -331,10 +331,14 @@ int lan966x_port_pcs_set(struct lan966x_port *port,
- 	struct lan966x *lan966x = port->lan966x;
- 	bool inband_aneg = false;
- 	bool outband;
-+	bool full_preamble = false;
+ all: $(SUBDIRS)
+ $(SUBDIRS):
+diff --git a/tools/perf/tests/shell/coresight/unroll_loop_thread/.gitignore b/tools/perf/tests/shell/coresight/unroll_loop_thread/.gitignore
+new file mode 100644
+index 000000000000..2cb4e996dbf3
+--- /dev/null
++++ b/tools/perf/tests/shell/coresight/unroll_loop_thread/.gitignore
+@@ -0,0 +1 @@
++unroll_loop_thread
+diff --git a/tools/perf/tests/shell/coresight/unroll_loop_thread/Makefile b/tools/perf/tests/shell/coresight/unroll_loop_thread/Makefile
+new file mode 100644
+index 000000000000..6264c4e3abd1
+--- /dev/null
++++ b/tools/perf/tests/shell/coresight/unroll_loop_thread/Makefile
+@@ -0,0 +1,33 @@
++# SPDX-License-Identifier: GPL-2.0
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++include ../Makefile.miniconfig
 +
-+	if (config->portmode == PHY_INTERFACE_MODE_QUSGMII)
-+		full_preamble = true;
- 
- 	if (config->inband) {
- 		if (config->portmode == PHY_INTERFACE_MODE_SGMII ||
--		    config->portmode == PHY_INTERFACE_MODE_QSGMII)
-+		    phy_interface_num_ports(config->portmode) == 4)
- 			inband_aneg = true; /* Cisco-SGMII in-band-aneg */
- 		else if (config->portmode == PHY_INTERFACE_MODE_1000BASEX &&
- 			 config->autoneg)
-@@ -345,9 +349,15 @@ int lan966x_port_pcs_set(struct lan966x_port *port,
- 		outband = true;
- 	}
- 
--	/* Disable or enable inband */
--	lan_rmw(DEV_PCS1G_MODE_CFG_SGMII_MODE_ENA_SET(outband),
--		DEV_PCS1G_MODE_CFG_SGMII_MODE_ENA,
-+	/* Disable or enable inband.
-+	 * For QUSGMII, we rely on the preamble to transmit data such as
-+	 * timestamps, therefore force full preamble transmission, and prevent
-+	 * premable shortening
-+	 */
-+	lan_rmw(DEV_PCS1G_MODE_CFG_SGMII_MODE_ENA_SET(outband) |
-+		DEV_PCS1G_MODE_CFG_SAVE_PREAMBLE_ENA_SET(full_preamble),
-+		DEV_PCS1G_MODE_CFG_SGMII_MODE_ENA |
-+		DEV_PCS1G_MODE_CFG_SAVE_PREAMBLE_ENA,
- 		lan966x, DEV_PCS1G_MODE_CFG(port->chip_port));
- 
- 	/* Enable PCS */
-@@ -396,7 +406,7 @@ void lan966x_port_init(struct lan966x_port *port)
- 	if (lan966x->fdma)
- 		lan966x_fdma_netdev_init(lan966x, port->dev);
- 
--	if (config->portmode != PHY_INTERFACE_MODE_QSGMII)
-+	if (phy_interface_num_ports(config->portmode) != 4)
- 		return;
- 
- 	lan_rmw(DEV_CLOCK_CFG_PCS_RX_RST_SET(0) |
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
-index 8265ad89f0bc..c53bae5d8dbd 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
-@@ -504,6 +504,12 @@ enum lan966x_target {
- #define DEV_PCS1G_MODE_CFG_SGMII_MODE_ENA_GET(x)\
- 	FIELD_GET(DEV_PCS1G_MODE_CFG_SGMII_MODE_ENA, x)
- 
-+#define DEV_PCS1G_MODE_CFG_SAVE_PREAMBLE_ENA        BIT(1)
-+#define DEV_PCS1G_MODE_CFG_SAVE_PREAMBLE_ENA_SET(x)\
-+	FIELD_PREP(DEV_PCS1G_MODE_CFG_SAVE_PREAMBLE_ENA, x)
-+#define DEV_PCS1G_MODE_CFG_SAVE_PREAMBLE_ENA_GET(x)\
-+	FIELD_GET(DEV_PCS1G_MODE_CFG_SAVE_PREAMBLE_ENA, x)
++# Binary to produce
++BIN=unroll_loop_thread
++# Any linking/libraries needed for the binary - empty if none needed
++LIB=-pthread
 +
- /*      DEV:PCS1G_CFG_STATUS:PCS1G_SD_CFG */
- #define DEV_PCS1G_SD_CFG(t)       __REG(TARGET_DEV, t, 8, 72, 0, 1, 68, 8, 0, 1, 4)
- 
++all: $(BIN)
++
++$(BIN): $(BIN).c
++ifdef CORESIGHT
++ifeq ($(ARCH),arm64)
++# Build line
++	$(Q)$(CC) $(BIN).c -o $(BIN) $(LIB)
++endif
++endif
++
++install-tests: all
++ifdef CORESIGHT
++ifeq ($(ARCH),arm64)
++# Install the test tool in the right place
++	$(call QUIET_INSTALL, tests) \
++		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/$(INSTDIR_SUB)/$(BIN)'; \
++		$(INSTALL) $(BIN) '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/$(INSTDIR_SUB)/$(BIN)/$(BIN)'
++endif
++endif
++
++clean:
++	$(Q)$(RM) -f $(BIN)
++
++.PHONY: all clean install-tests
+diff --git a/tools/perf/tests/shell/coresight/unroll_loop_thread/unroll_loop_thread.c b/tools/perf/tests/shell/coresight/unroll_loop_thread/unroll_loop_thread.c
+new file mode 100644
+index 000000000000..cb9d22c7dfb9
+--- /dev/null
++++ b/tools/perf/tests/shell/coresight/unroll_loop_thread/unroll_loop_thread.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0
++// Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <pthread.h>
++
++struct args {
++	pthread_t th;
++	unsigned int in, out;
++	void *ret;
++};
++
++static void *thrfn(void *arg)
++{
++	struct args *a = arg;
++	unsigned int i, in = a->in;
++
++	for (i = 0; i < 10000; i++) {
++		asm volatile (
++// force an unroll of thia add instruction so we can test long runs of code
++#define SNIP1 "add %[in], %[in], #1\n"
++// 10
++#define SNIP2 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1
++// 100
++#define SNIP3 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2
++// 1000
++#define SNIP4 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3
++// 10000
++#define SNIP5 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4
++// 100000
++			SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5
++			: /* out */
++			: /* in */ [in] "r" (in)
++			: /* clobber */
++		);
++	}
++}
++
++static pthread_t new_thr(void *(*fn) (void *arg), void *arg)
++{
++	pthread_t t;
++	pthread_attr_t attr;
++
++	pthread_attr_init(&attr);
++	pthread_create(&t, &attr, fn, arg);
++	return t;
++}
++
++int main(int argc, char **argv)
++{
++	unsigned int i, thr;
++	pthread_t threads[256];
++	struct args args[256];
++
++	if (argc < 2) {
++		printf("ERR: %s [numthreads]\n", argv[0]);
++		exit(1);
++	}
++
++	thr = atoi(argv[1]);
++	if ((thr > 256) || (thr < 1)) {
++		printf("ERR: threads 1-256\n");
++		exit(1);
++	}
++	for (i = 0; i < thr; i++) {
++		args[i].in = rand();
++		args[i].th = new_thr(thrfn, &(args[i]));
++	}
++	for (i = 0; i < thr; i++)
++		pthread_join(args[i].th, &(args[i].ret));
++	return 0;
++}
 -- 
-2.37.1
+2.32.0
 

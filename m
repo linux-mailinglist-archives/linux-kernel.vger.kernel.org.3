@@ -2,132 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8324A5846C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1A05846F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiG1UGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S230403AbiG1UHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiG1UG2 (ORCPT
+        with ESMTP id S229456AbiG1UHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:06:28 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4725D7538D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:06:28 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Lv1r33mm9z9s1T;
-        Thu, 28 Jul 2022 20:06:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1659038787; bh=qMkVhpHfimqGZ1UHe8cnMLY3YgQI8b39H7ayhDfdi6Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KjxI3gik4u0EyftYF37MDXA2IlhpWeTCfn9LKSIq4qtJXUVUdBY2Mfoki7d6Nlsx9
-         qw4G8GIIqMWpOQHTJX5YCE7sgItB/Jk4o/Ii1RF2YsB4a0uUe5PZGVBXAjPkPepUKG
-         e0/RklUyyBcKTyS0Njh1b6GVCW1aZiI9wLFewjJM=
-X-Riseup-User-ID: 951C84FCE757D20387021224588B25A3FBE76A1B970D0C2DC7BD085DD24D9ED8
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4Lv1qy64Mzz5vTb;
-        Thu, 28 Jul 2022 20:06:22 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH 16/16] drm/amd/display: Remove never used VBA variables
-Date:   Thu, 28 Jul 2022 17:06:16 -0300
-Message-Id: <20220728200616.514993-1-mairacanal@riseup.net>
-In-Reply-To: <20220728182047.264825-1-mairacanal@riseup.net>
-References: <20220728182047.264825-1-mairacanal@riseup.net>
+        Thu, 28 Jul 2022 16:07:01 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3E57479D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:06:59 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id m8so3485248edd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=b99vshAhGChh3A9VDnm6KS29Pg4yAPwV39WCn0DHyEw=;
+        b=j/cVnyPJc3NbVdA6KozIiXB7d1QQk+XXmRNE0ZX9Jr5ze1E0ZnY/NdUc8lE2pzXYHK
+         T0jUhZs+w+0Rdv0Ke7Ah2OmBDArPN9qCD2CvffXu2uKVOU1h8HOBkyCChfnrD2nfS7e1
+         g1n0sndpcyCYQLwBxOrKsGhccrjtnd+evojNk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=b99vshAhGChh3A9VDnm6KS29Pg4yAPwV39WCn0DHyEw=;
+        b=ecpDhkPJ5rpMUH6QIMBE0FNkMgGGzC+UfXoFQmfCHBXSt0KNWRjaXhkLjfBAl6fHRF
+         Shk7B7ojt/l0QVvQyAtnZ+9Eo4rDKqZVDzBAz8q3i+5IsM/yuyNLrz/Xf8SntMCuQmiw
+         Ne++LQe0e1GOUwqBrsz3mVAyIROpZONWAVQzCe172kW3t5peikdm6/An2tvIFNKpN1+g
+         /nFZSyXtItC4j5t7RaaU0uKQ0qR0loVlF8lQmjtmWuqgsIPzzt1vGF7ujjUcCQYp/vz9
+         yYJCNw1SqbvW9+2lV7xeRLwR6wJGXBgrq8XJ7xPMKxubEIchBkJMkrAJKL5GB50GgHxh
+         kxvA==
+X-Gm-Message-State: AJIora9Ji7DQxd3dbnhfYt27biNpsJdfrUhhtja+txjJXZeEmmCME8Ao
+        kACANxd1FTYPRAyXBD8sm0As1NkEW5i7luq2
+X-Google-Smtp-Source: AGRyM1vA1NKL4rGiriN/ma0xZX/Zn6+WIfLIBRd6uXH0MLcGGOuUj/c8cvX1esKrKRNyDnSVLHQBPw==
+X-Received: by 2002:a05:6402:27ca:b0:43c:2a52:a90f with SMTP id c10-20020a05640227ca00b0043c2a52a90fmr557907ede.328.1659038817755;
+        Thu, 28 Jul 2022 13:06:57 -0700 (PDT)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id ee24-20020a056402291800b0043b7917b1a4sm1235159edb.43.2022.07.28.13.06.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 13:06:56 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so3163104wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 13:06:56 -0700 (PDT)
+X-Received: by 2002:a05:600c:1e0f:b0:3a3:191c:a3c8 with SMTP id
+ ay15-20020a05600c1e0f00b003a3191ca3c8mr292036wmb.151.1659038816119; Thu, 28
+ Jul 2022 13:06:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728105005.v2.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
+In-Reply-To: <20220728105005.v2.1.I5b9006878bdabd6493b866b46dbd6149968d545b@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 28 Jul 2022 13:06:42 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=U=BbNDW3R0bRoJNrOz61KSop4NorP-6QQKYHVu5wnTMw@mail.gmail.com>
+Message-ID: <CAD=FV=U=BbNDW3R0bRoJNrOz61KSop4NorP-6QQKYHVu5wnTMw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: document zoglin board
+To:     Bob Moragues <moragues@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Bob Moragues <moragues@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variables OutputBPP, VTotal_Min,
-TotalBandwidthConsumedGBytePerSecond, BandwidthSupport,
-dummy_integer_array, dummysinglestring,
-SurfaceRequiredDISPCLKWithoutODMCombine, SurfaceRequiredDISPCLK,
-MinVoltageLevel, and MaxVoltageLevel are never used. So, remove the
-variables entries from the struct vba_vars_st.
+Hi,
 
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
----
- drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h | 10 ----------
- 1 file changed, 10 deletions(-)
+On Thu, Jul 28, 2022 at 10:51 AM Bob Moragues <moragues@chromium.org> wrote:
+>
+> From: Bob Moragues <moragues@chromium.org>
+>
+> Zoglin is a Hoglin Chromebook with SPI Flash reduced from 64MB to 8MB.
+> Zoglin is identical to Hoglin except for the SPI Flash.
+> The actual SPI Flash is dynamically probed at and not specified in DTS.
+>
+> Signed-off-by: Bob Moragues <moragues@chromium.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Bob Moragues <moragues@google.com>
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-index 5eaedc3bf2c8..839f8fde4b47 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-@@ -527,7 +527,6 @@ struct vba_vars_st {
- 	unsigned int MinCompressedBufferSizeInKByte;
- 	unsigned int NumberOfActiveSurfaces;
- 	bool ViewportStationary[DC__NUM_DPP__MAX];
--	double       OutputBPP[DC__NUM_DPP__MAX];
- 	unsigned int GPUVMMinPageSizeKBytes[DC__NUM_DPP__MAX];
- 	bool SynchronizeTimingsFinal;
- 	bool SynchronizeDRRDisplaysForUCLKPStateChangeFinal;
-@@ -557,7 +556,6 @@ struct vba_vars_st {
- 	unsigned int HTotal[DC__NUM_DPP__MAX];
- 	unsigned int VTotal[DC__NUM_DPP__MAX];
- 	unsigned int VTotal_Max[DC__NUM_DPP__MAX];
--	unsigned int VTotal_Min[DC__NUM_DPP__MAX];
- 	int DPPPerPlane[DC__NUM_DPP__MAX];
- 	double PixelClock[DC__NUM_DPP__MAX];
- 	double PixelClockBackEnd[DC__NUM_DPP__MAX];
-@@ -690,12 +688,10 @@ struct vba_vars_st {
- 	/*outputs*/
- 	bool ScaleRatioAndTapsSupport;
- 	bool SourceFormatPixelAndScanSupport;
--	double TotalBandwidthConsumedGBytePerSecond;
- 	bool DCCEnabledInAnyPlane;
- 	bool WritebackLatencySupport;
- 	bool WritebackModeSupport;
- 	bool Writeback10bpc420Supported;
--	bool BandwidthSupport[DC__VOLTAGE_STATES];
- 	unsigned int TotalNumberOfActiveWriteback;
- 	double CriticalPoint;
- 	double ReturnBWToDCNPerState;
-@@ -955,9 +951,7 @@ struct vba_vars_st {
- 	unsigned int        dummyinteger9;
- 	unsigned int        dummyinteger10;
- 	unsigned int        dummyinteger11;
--	unsigned int        dummy_integer_array[8][DC__NUM_DPP__MAX];
- 
--	bool           dummysinglestring;
- 	bool           SingleDPPViewportSizeSupportPerPlane[DC__NUM_DPP__MAX];
- 	double         PlaneRequiredDISPCLKWithODMCombine2To1;
- 	double         PlaneRequiredDISPCLKWithODMCombine4To1;
-@@ -1248,11 +1242,7 @@ struct vba_vars_st {
- 	unsigned int NotEnoughUrgentLatencyHidingA[DC__VOLTAGE_STATES][2];
- 	double ReadBandwidthSurfaceLuma[DC__NUM_DPP__MAX];
- 	double ReadBandwidthSurfaceChroma[DC__NUM_DPP__MAX];
--	double SurfaceRequiredDISPCLKWithoutODMCombine;
--	double SurfaceRequiredDISPCLK;
- 	double MinActiveFCLKChangeLatencySupported;
--	int MinVoltageLevel;
--	int MaxVoltageLevel;
- 	unsigned int TotalNumberOfSingleDPPSurfaces[DC__VOLTAGE_STATES][2];
- 	unsigned int CompressedBufferSizeInkByteAllStates[DC__VOLTAGE_STATES][2];
- 	unsigned int DETBufferSizeInKByteAllStates[DC__VOLTAGE_STATES][2][DC__NUM_DPP__MAX];
--- 
-2.37.1
+Something is still messed up with the way you're sending this. You
+don't want the extra Signed-off-by here. Maybe try again for v3?
 
+-Doug

@@ -2,162 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CCD583ADE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F0B583AE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbiG1JCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S235379AbiG1JCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234654AbiG1JCc (ORCPT
+        with ESMTP id S234654AbiG1JCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:02:32 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D316564C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:02:31 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id u17so1270236lji.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=yfi+fc1Zb5qV2V2Wb3g8x7DGlXgAZj2Jvy0KQfSodWs=;
-        b=BwyXq3EaFf0Zk/XqgsIyi1kp3V1mOAX5f18FjumLF+gccBiXx1HjsbONcMZ5QNMedw
-         qBdvcDNoFoRD5ftiEAV8xn5QAfa+MrQPfJ5dU3yN5m22KH2s+nvoD0ht9nT6F7gXxPbc
-         rPV85IBQZgWDggbXBX1wYRVVyjuT8+CafQDIc8dEt8L+vjvSOmAMfHsHgghhh0HDUQBL
-         ZXOH0VMgtp6O4V0MCvEmE/QMXM7vxwkqlnz8I0mxwDBn0Te5PJBIKmBbUrGW9NT0PztB
-         0M/i+IHtl1GHGK/WLthwFQOgXtpIUX+BsN37ymtq6SByXSx+DmeQmgvatDFKdxCfxSoT
-         Cadw==
+        Thu, 28 Jul 2022 05:02:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C91F65662
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658998963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KzC7zxZBrSOXts7QAnv7lFC1B1g3+eSUwjPBNTC8QDM=;
+        b=a67Axq3Kr6lEcnzrG6pxSaSjP3ALohR4Bv74O2XBzKIpACC5QXH0wIMH7UxP9eFsR4pNhA
+        bIbZsF62mgdcZLb+xnuWyYc0VTkwzi1U/2na2yyI4IluptSlm3vkopW2nKdDwRB/yY0BFy
+        2R0SgIeeBBA6kPYANilfym2LrcBDWz8=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-477-dgqGbPA_P3GQYpRina5G1A-1; Thu, 28 Jul 2022 05:02:42 -0400
+X-MC-Unique: dgqGbPA_P3GQYpRina5G1A-1
+Received: by mail-ej1-f69.google.com with SMTP id hq20-20020a1709073f1400b0072b9824f0a2so434272ejc.23
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:02:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yfi+fc1Zb5qV2V2Wb3g8x7DGlXgAZj2Jvy0KQfSodWs=;
-        b=J88nKiZw6hSnpgidGG9jS3Blm/RLirGgLVaHnYrFDVJOoiLhO27znh8O2979xB8JBG
-         4c6B0UYZHXe3sHvKAi+c3a0B7U83bz8w0XLh04WiPX+TxutGpDPt/4e3fBmbnoAWWnsC
-         AIo8PTZkf4+fmf/2LjUwU2Mz/tc4smU5LYpcHpws6xD63U0wCNBkJIbSktWUjFryhPQ6
-         sI7YJDLJWghoLQn+aSzz8W9eQjCZ2KqyMAJzUcRG7JsNc8H0QYWFJmI3mfch4payP+NF
-         axVXkZ+jl92QmEI3pkaYQqG4cEGBXa/TjJjGy2xh0qv9Gz3AFSR8Ay9+4T0XQxL9mdvf
-         oGNQ==
-X-Gm-Message-State: AJIora+MeqUhvbUW1qF4ji2WpbbQ0Oecz6FdCEYd0PTy89/ZAKvitmKn
-        7gtBZMeq1bXeqYjjl1RINfZ3CA==
-X-Google-Smtp-Source: AGRyM1uhBJjljnPuyZUlcYQa2GgWlNAIASCeOULAJ0BJ+SvIe68yj6eKdiqLW80f0YKUzSiOuu+4OQ==
-X-Received: by 2002:a2e:910d:0:b0:25d:f7e7:8cce with SMTP id m13-20020a2e910d000000b0025df7e78ccemr8115318ljg.252.1658998949558;
-        Thu, 28 Jul 2022 02:02:29 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id l13-20020a19c20d000000b00489c6c76385sm97465lfc.268.2022.07.28.02.02.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 02:02:29 -0700 (PDT)
-Message-ID: <367cf98b-ef06-8f44-76c8-9099a1ec13dc@linaro.org>
-Date:   Thu, 28 Jul 2022 11:02:27 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KzC7zxZBrSOXts7QAnv7lFC1B1g3+eSUwjPBNTC8QDM=;
+        b=U3DVzDvJOHcy70vKVkeqqk8L438SbULUADcE1fdqkLzoh2451GG1MAlQVrReEBaJhc
+         VsE2WSAdHVhtOyhuTrbv09pkOR0uMpqeJWbYLyKioUWMMtmGAzPHLDvX2Je1EcPFOdsy
+         UqRTB6Z1B1b7yIP1aZR9PDJUTKXpit0S8+omArRsviD8qXPl4mB8daiI2YL2pomGv+Sa
+         Rp99st4yDwb9UzpnXinbWFPuCpX/iQPXmFs1eoJvHl+PHPQ7hKwB+aSuODvXJCvBSp4w
+         AtQDp94KyAWuV8Re47n36B3qOJTDTMr+09UnVo99HzJD9RbwFSp2PA3WCX8e85J16Qy1
+         FjKQ==
+X-Gm-Message-State: AJIora+xLdEVIzNH4X1+Ylk40pwplT6OhUo6gBuuRxTqYBDtPCWDCW8D
+        cYb3yvAfPHdKL0z3a5acdY+cZWq8f7t0pAnUSRsNTEQaNzU5Sjsd3uH77onVZsh2PEhpsMnnksp
+        xLebH6aA/b/cusjshw9++qZg/T1jaJPsLGToEzydp
+X-Received: by 2002:a17:907:2cf6:b0:72b:9d9b:2404 with SMTP id hz22-20020a1709072cf600b0072b9d9b2404mr20022938ejc.171.1658998959967;
+        Thu, 28 Jul 2022 02:02:39 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tQIqsVpahFrnYCYZvp58S9uAUE4QDiEw5xrWFlR9EOhNei8yHZPwCsR7qCe+NUhl7lSU3iC4+jdb5+ANa8Z3E=
+X-Received: by 2002:a17:907:2cf6:b0:72b:9d9b:2404 with SMTP id
+ hz22-20020a1709072cf600b0072b9d9b2404mr20022919ejc.171.1658998959626; Thu, 28
+ Jul 2022 02:02:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
- controller bindings
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, Yu Tu <yu.tu@amlogic.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <20220728054202.6981-2-yu.tu@amlogic.com>
- <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
- <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728032000.127-1-xieyongji@bytedance.com> <20220728032000.127-6-xieyongji@bytedance.com>
+ <CACGkMEuN0zqyLQ6vD7MvjAhtJVvmMhsn_T4b5ww0vviwq5hBrg@mail.gmail.com>
+ <CACycT3uYFWvmdJ1MzQZv=L7N0WzEiFvx5wJX+OwM1ew5Z0w0jw@mail.gmail.com>
+ <CACGkMEtru8qaebnTXVu94oCV21JovkjshxYxdyzeSf=FTN0=xA@mail.gmail.com> <CACycT3swFhETEOPNNmLbSFaYUZEJYUkPXrddQ=w0TALE=D40Lw@mail.gmail.com>
+In-Reply-To: <CACycT3swFhETEOPNNmLbSFaYUZEJYUkPXrddQ=w0TALE=D40Lw@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 28 Jul 2022 17:02:28 +0800
+Message-ID: <CACGkMEsGt4=2c20xfi-4ZYfnn9NYHQ=CQm8TrP7HSYiwwDCWag@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] vduse: Support querying information of IOVA regions
+To:     Yongji Xie <xieyongji@bytedance.com>
+Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/2022 10:50, Jerome Brunet wrote:
-> 
-> On Thu 28 Jul 2022 at 10:41, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 28/07/2022 07:42, Yu Tu wrote:
->>> Add new clock controller compatible and dt-bindings header for the
->>> Everything-Else domain of the S4 SoC.
->>>
->>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>
->>
->>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index c1abc53f9e91..f872d0c0c253 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
->>>  F:	drivers/clk/meson/
->>>  F:	include/dt-bindings/clock/gxbb*
->>>  F:	include/dt-bindings/clock/meson*
->>> +F:	include/dt-bindings/clock/s4-clkc.h
->>>  
->>>  ARM/Amlogic Meson SoC Crypto Drivers
->>>  M:	Corentin Labbe <clabbe@baylibre.com>
->>> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
->>> new file mode 100644
->>> index 000000000000..b686c8877419
->>> --- /dev/null
->>> +++ b/include/dt-bindings/clock/s4-clkc.h
->>
->> Filename with vendor prefix, so:
->> amlogic,s4-clkc.h
->>
->>> @@ -0,0 +1,146 @@
->>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
->>> +/*
->>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
->>> + * Author: Yu Tu <yu.tu@amlogic.com>
->>> + */
->>> +
->>> +#ifndef _DT_BINDINGS_CLOCK_S4_CLKC_H
->>> +#define _DT_BINDINGS_CLOCK_S4_CLKC_H
->>> +
->>> +/*
->>> + * CLKID index values
->>> + */
->>> +
->>> +#define CLKID_FIXED_PLL			1
->>> +#define CLKID_FCLK_DIV2			3
->>> +#define CLKID_FCLK_DIV3			5
->>> +#define CLKID_FCLK_DIV4			7
->>> +#define CLKID_FCLK_DIV5			9
->>> +#define CLKID_FCLK_DIV7			11
->>
->> Why these aren't continuous? IDs are expected to be incremented by 1.
->>
-> 
-> All clocks have IDs, it is one big table in the driver, but we are not exposing them all.
-> For example, with composite 'mux / div / gate' assembly, we usually need
-> only the leaf.
+On Thu, Jul 28, 2022 at 4:27 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+>
+> On Thu, Jul 28, 2022 at 2:45 PM Jason Wang <jasowang@redhat.com> wrote:
+> >
+> > On Thu, Jul 28, 2022 at 2:36 PM Yongji Xie <xieyongji@bytedance.com> wrote:
+> > >
+> > > On Thu, Jul 28, 2022 at 1:58 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > >
+> > > > On Thu, Jul 28, 2022 at 11:20 AM Xie Yongji <xieyongji@bytedance.com> wrote:
+> > > > >
+> > > > > This introduces a new ioctl: VDUSE_IOTLB_GET_INFO to
+> > > > > support querying some information of IOVA regions.
+> > > > >
+> > > > > Now it can be used to query whether the IOVA region
+> > > > > supports userspace memory registration.
+> > > > >
+> > > > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > > > > ---
+> > > > >  drivers/vdpa/vdpa_user/vduse_dev.c | 39 ++++++++++++++++++++++++++++++
+> > > > >  include/uapi/linux/vduse.h         | 24 ++++++++++++++++++
+> > > > >  2 files changed, 63 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > > index eedff0a3885a..e820c37dcba8 100644
+> > > > > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > > > @@ -1228,6 +1228,45 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+> > > > >                                            umem.size);
+> > > > >                 break;
+> > > > >         }
+> > > > > +       case VDUSE_IOTLB_GET_INFO: {
+> > > > > +               struct vduse_iova_info info;
+> > > > > +               struct vhost_iotlb_map *map;
+> > > > > +               struct vduse_iova_domain *domain = dev->domain;
+> > > > > +
+> > > > > +               ret = -EFAULT;
+> > > > > +               if (copy_from_user(&info, argp, sizeof(info)))
+> > > > > +                       break;
+> > > > > +
+> > > > > +               ret = -EINVAL;
+> > > > > +               if (info.start > info.last)
+> > > > > +                       break;
+> > > > > +
+> > > > > +               if (!is_mem_zero((const char *)info.reserved,
+> > > > > +                                sizeof(info.reserved)))
+> > > > > +                       break;
+> > > > > +
+> > > > > +               spin_lock(&domain->iotlb_lock);
+> > > > > +               map = vhost_iotlb_itree_first(domain->iotlb,
+> > > > > +                                             info.start, info.last);
+> > > > > +               if (map) {
+> > > > > +                       info.start = map->start;
+> > > > > +                       info.last = map->last;
+> > > > > +                       info.capability = 0;
+> > > > > +                       if (domain->bounce_map && map->start >= 0 &&
+> > > > > +                           map->last < domain->bounce_size)
+> > > > > +                               info.capability |= VDUSE_IOVA_CAP_UMEM;
+> > > > > +               }
+> > > > > +               spin_unlock(&domain->iotlb_lock);
+> > > > > +               if (!map)
+> > > > > +                       break;
+> > > > > +
+> > > > > +               ret = -EFAULT;
+> > > > > +               if (copy_to_user(argp, &info, sizeof(info)))
+> > > > > +                       break;
+> > > > > +
+> > > > > +               ret = 0;
+> > > > > +               break;
+> > > > > +       }
+> > > > >         default:
+> > > > >                 ret = -ENOIOCTLCMD;
+> > > > >                 break;
+> > > > > diff --git a/include/uapi/linux/vduse.h b/include/uapi/linux/vduse.h
+> > > > > index 9885e0571f09..11bd48c72c6c 100644
+> > > > > --- a/include/uapi/linux/vduse.h
+> > > > > +++ b/include/uapi/linux/vduse.h
+> > > > > @@ -233,6 +233,30 @@ struct vduse_iova_umem {
+> > > > >  /* De-register the userspace memory. Caller should set iova and size field. */
+> > > > >  #define VDUSE_IOTLB_DEREG_UMEM _IOW(VDUSE_BASE, 0x19, struct vduse_iova_umem)
+> > > > >
+> > > > > +/**
+> > > > > + * struct vduse_iova_info - information of one IOVA region
+> > > > > + * @start: start of the IOVA region
+> > > > > + * @last: last of the IOVA region
+> > > > > + * @capability: capability of the IOVA regsion
+> > > > > + * @reserved: for future use, needs to be initialized to zero
+> > > > > + *
+> > > > > + * Structure used by VDUSE_IOTLB_GET_INFO ioctl to get information of
+> > > > > + * one IOVA region.
+> > > > > + */
+> > > > > +struct vduse_iova_info {
+> > > > > +       __u64 start;
+> > > > > +       __u64 last;
+> > > > > +#define VDUSE_IOVA_CAP_UMEM (1 << 0)
+> > > > > +       __u64 capability;
+> > > > > +       __u64 reserved[3];
+> > > > > +};
+> > > > > +
+> > > > > +/*
+> > > > > + * Find the first IOVA region that overlaps with the range [start, last]
+> > > >
+> > > > So the code is actually find the IOVA region that is the super range
+> > > > of [start, last] instead of overlap:
+> > > >
+> > >
+> > > This is achieved by vhost_iotlb_itree_first(). And can't the super
+> > > range of [start,last] be considered overlapping?
+> >
+> > Ok, but what I want to ask is, under which condition can we hit the
+> > following case
+> >
+> > map->last >= domain->bounce_size ?
+> >
+>
+> I think we would not hit this case currently.
 
-I understand you do not expose them all, but that is not the reason to
-increment ID by 2 or 3... Otherwise these are not IDs and you are not
-expected to put register offsets into the bindings (you do not bindings
-in such case).
+I wonder if it's worthwhile to have a WARN or just remove this check.
 
+Thanks
 
-> Same has been done for the other AML controllers:
-> For ex:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/dt-bindings/clock/gxbb-clkc.h
+>
+> Thanks,
+> Yongji
+>
 
-This cannot be fixed now, but it is very poor argument. Like saying "we
-had a bug in other driver, so we implemented the bug here as well".
-
-Best regards,
-Krzysztof

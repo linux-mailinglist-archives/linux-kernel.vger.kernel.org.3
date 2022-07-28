@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65BB583A68
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DF5583A6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235057AbiG1Ies (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S235118AbiG1If1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234827AbiG1Iep (ORCPT
+        with ESMTP id S234819AbiG1IfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:34:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA421624B8;
-        Thu, 28 Jul 2022 01:34:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 587F0B81F65;
-        Thu, 28 Jul 2022 08:34:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3562C43470;
-        Thu, 28 Jul 2022 08:34:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658997282;
-        bh=/iqXB4sLqfkAmIly9U+AknKUxpbzNoD0MnbOOsfK7Ng=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TYqJAbqLdN8M3xs9HZReajmGzxvKVejhfd2cQh7aHwiwro+NOjg1KO9lnY2my2gIT
-         YeJGsbiSn7Js28Nw/4jCJaFbZy3dNBd8G4FGPu6JSbrKSME1wcYtUIf2lLRp3WaUhb
-         LZptqu8IlAtBZCIW0gzapu+XE15Oy7Z7xjLQcpNDF4KbxNnLNorWEIuj4xri0imEQV
-         KDvxvL9hi0I3tV/u2niDHalJINw9z1rNcHXIlmAt4XqBqBPqHO/OC2iM0rW8352VR3
-         1Ay9NbwBwY4rVzQLh+hCiar9lgqkv3ipsw4xSYtr3Ta7iZXo/WcjymT2afo+w+41Ay
-         Ig63TZEJ2i4zQ==
-Received: by mail-lf1-f47.google.com with SMTP id d17so1776403lfa.12;
-        Thu, 28 Jul 2022 01:34:41 -0700 (PDT)
-X-Gm-Message-State: AJIora9Zq8PiMkcMqvGUOHeD8sXe2vzZJa+dpJjSosDDtJZcakV9IrAG
-        DJmhUBaR/wB1qIUoFOIHvL77lAFxMygoZoxDq70=
-X-Google-Smtp-Source: AGRyM1uXUEQAfs9KiWv7b6I8p+YLZZk8OQY2G+P3Cpr48Xxlen88hCbjTlhYSi9lr0dYrkzKEoSCAWeHCCrd9KwYuI4=
-X-Received: by 2002:a05:6512:1516:b0:48a:3da4:3411 with SMTP id
- bq22-20020a056512151600b0048a3da43411mr9316179lfb.229.1658997279895; Thu, 28
- Jul 2022 01:34:39 -0700 (PDT)
+        Thu, 28 Jul 2022 04:35:25 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A402AC4D;
+        Thu, 28 Jul 2022 01:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658997324; x=1690533324;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mX7tx2ptiK9+LjYYpztHVJd2LwqnLvya+VDbnMoCesA=;
+  b=c6rm6T0dRMloTMEyHoQFwz5whepbX29LwFsNQYSVSNhihFlBt0xqDtgz
+   ToMOheiFveyyc2klmDFYZZ93Wf6WShdB9x1cskl3m3MJFJ6ml6S/HwFhO
+   93zhK01Ump3/bD3WE9CMSzZaD2vuKPFsD60zhv8Hn5OL6P7PrpCdL7QHY
+   M=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Jul 2022 01:35:24 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 01:35:23 -0700
+Received: from [10.242.58.28] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Jul
+ 2022 01:35:22 -0700
+Message-ID: <c66ffd91-8649-edb7-86dc-422ae82e1b84@quicinc.com>
+Date:   Thu, 28 Jul 2022 14:05:18 +0530
 MIME-Version: 1.0
-References: <20220724122517.1019187-8-guoren@kernel.org> <202207280822.VHS6qieH-lkp@intel.com>
- <CAJF2gTQRV+6CZVkvhtsY19zv6XVbyDeRY-SdLPhkF0akHqvBWA@mail.gmail.com> <CAK8P3a2X3R40S5F2fDzUz+ZoxJLEjO8iaGGk7zBDaiRwJ_oGLg@mail.gmail.com>
-In-Reply-To: <CAK8P3a2X3R40S5F2fDzUz+ZoxJLEjO8iaGGk7zBDaiRwJ_oGLg@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 28 Jul 2022 16:34:27 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQDASUaszVL64_D0GeCZ67svko7Grn2zmjmbSqgQoDzXQ@mail.gmail.com>
-Message-ID: <CAJF2gTQDASUaszVL64_D0GeCZ67svko7Grn2zmjmbSqgQoDzXQ@mail.gmail.com>
-Subject: Re: [PATCH V8 07/10] riscv: Add qspinlock support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Waiman Long <longman@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        kbuild-all@lists.01.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH V1] scsi: ufs: Get boot device storage type from command
+ line
+To:     Bart Van Assche <bvanassche@acm.org>, <jejb@linux.ibm.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+References: <1658910535-31802-1-git-send-email-quic_cchinnad@quicinc.com>
+ <a09de6e0-700b-0715-06a8-150ab41e8e7f@acm.org>
+Content-Language: en-US
+From:   "Chetan Chinnadagudihundi Ravindranath (Consultant) (QUIC)" 
+        <quic_cchinnad@quicinc.com>
+In-Reply-To: <a09de6e0-700b-0715-06a8-150ab41e8e7f@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,86 +63,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 4:14 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Jul 28, 2022 at 5:35 AM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > Hi Palmer,
-> >
-> > The warning is from a clang problem.
-> >
-> > drivers/net/wireguard/queueing.c:
-> > static void __wg_prev_queue_enqueue(struct prev_queue *queue, struct
-> > sk_buff *skb)
-> > {
-> >         WRITE_ONCE(NEXT(skb), NULL);
-> >         WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
-> > }
-> >
-> > The queue->head is 64bit pointer size.
-> >
-> > #define __xchg_relaxed(ptr, new, size)                                  \
-> > ({                                                                      \
-> >         __typeof__(ptr) __ptr = (ptr);                                  \
-> >         __typeof__(new) __new = (new);                                  \
-> >         __typeof__(*(ptr)) __ret;                                       \
-> >         switch (size) {                                                 \
-> >         case 2: {                                                       \
-> > ... Clang shouldn't give warning from here, because code won't enter the path.
-> >                 break;                                                  \
-> >         }                                                               \
-> >         case 4:                                                         \
-> > ...
-> >                 break;                                                  \
-> >         case 8:                                                         \
-> > ... The case would enter this path.
-> >                 break;                                                  \
-> >         default:                                                        \
-> >                 BUILD_BUG();                                            \
-> >         }                                                               \
-> >         __ret;                                                          \
-> > })
->
-> I assume it's this warning you are referring to?
->
-> >> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
->            WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
->
-> I don't consider this a bug in clang, it just performs the normal type checking
-> before dead code elimination and complains about code that clearly violates
-> the type rules.
->
-> I would suggest you split out the 16-bit xchg() into a properly typed inline
-> function and add type casts when calling it.
-Okay, I would try that style.
+Hi Brat,
 
-> In fact, I would love to
-> completely eliminate the 8-bit and 16-bit cases from the regular xchg()
-> and cmpxchg() interface and require all callers to explicitly call the
-> xchg16()/cmpxchg16() instead, as we require for cmpxchg64() on 32-bit
-> architectures already. This is something to do for another time though.
+Thanks for you response!
+
+Yes, since SCSI_UFSHCD=y am selecting UFS_QCOM_CMDLINE=y so that it gets 
+__setup() declarations. I am able to read the command line arguments and 
+get this "androidboot.bootdevice=" info. I had cross checked again.
+
+Thanks,
+Chetan C R
+
+On 7/27/2022 11:16 PM, Bart Van Assche wrote:
+> On 7/27/22 01:28, Chetan C R wrote:
+>> diff --git a/drivers/ufs/Kconfig b/drivers/ufs/Kconfig
+>> index 90226f7..9d2f84e 100644
+>> --- a/drivers/ufs/Kconfig
+>> +++ b/drivers/ufs/Kconfig
+>> @@ -9,6 +9,7 @@ menuconfig SCSI_UFSHCD
+>>       select PM_DEVFREQ
+>>       select DEVFREQ_GOV_SIMPLE_ONDEMAND
+>>       select NLS
+>> +    select UFS_QCOM_CMDLINE if ARCH_QCOM
+>>       help
+>>         Enables support for UFS (Universal Flash Storage) host 
+>> controllers.
+>>         A UFS host controller is an electronic component that is able to
 >
-> > >    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> > >            val = __raw_readb(PCI_IOBASE + addr);
-> > >                              ~~~~~~~~~~ ^
-> > >    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> > >            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+> [ ... ]
 >
-> Not your bug, but I see that CONFIG_MMU=n risc-v has the same bug that s390 has
-> with missing I/O space support.  The correct workaround for this is to mark all
-> drivers using PCI I/O space as 'depends on HAS_IO_PORT' or similar and then
-> leaving out the definitions from the asm-generic header. Niklas Schnelle has
-> spent a lot of time working on patches for this, but they are somewhat stuck
-> in review. If RISC-V has the same problem, I hope we can get more people
-> interested in it. I think OpenRISC and C-Sky have this as well, but I'm not
-> sure if there is any plan to upstream clang support for those.
-C-SKY hasn't any plan to support clang, as I know.
-
+>> +__setup("androidboot.bootdevice=", get_android_boot_dev_v3);
 >
->         Arnd
-
-
-
--- 
-Best Regards
- Guo Ren
+> How can this work since __setup() declarations should occur in the 
+> core kernel and since the ufshcd driver can be built as a kernel module?
+>
+> Thanks,
+>
+> Bart.

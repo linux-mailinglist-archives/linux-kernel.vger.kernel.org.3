@@ -2,84 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C9658465E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 21:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C954B584612
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbiG1TMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 15:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S232666AbiG1SrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 14:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiG1TMe (ORCPT
+        with ESMTP id S232202AbiG1SrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 15:12:34 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66718691EB;
-        Thu, 28 Jul 2022 12:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=FGPbbjbX4KDK76QvCX4o0ok2E32+6Ip3ULLXoY832p8=;
-        b=JZ2/j3yOOKkow1aDcnks4F8J1DLOwd33yz/gaSgCbRATSIjRn3ZE+Fu3SQLDhzUY8VSACsn6zXQwq
-         rOXCFCxENAEfwheB/O47YyRydzhgRPqmrNXhYaAD2kXyb5GHH1KagAAOzsu2IhwVUpiSxPLBSWryr8
-         dyCPmOTWKXWPzofzwYcKJO3zb6egGdFOAeWs+bb+tSUzjERPTVC9GeSZLghyAGgxVJZxhzSYB8At6G
-         Mq4ptZEJ5UIIqpnrY/lB8VvdbXMIyIwAosj87DOK7by4H6q5XkJ200P5GXC3ISdevscaTbKpWbzh7X
-         D6qtemzvzbYAYNfbNuSeR5SeRV++9Ig==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000008,0.005760)], BW: [Enabled, t: (0.000013,0.000001)], RTDA: [Enabled, t: (0.070870), Hit: No, Details: v2.41.0; Id: 15.52k0je.1g933hend.4boe; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from x260 ([85.93.58.13])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 28 Jul 2022 22:11:36 +0300
-Date:   Thu, 28 Jul 2022 21:46:50 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: microchip-spi: add missing module author entry
-Message-ID: <20220728184650.6wa5zwbrciatfsba@x260>
-References: <20220728075012.3136914-1-conor.dooley@microchip.com>
+        Thu, 28 Jul 2022 14:47:00 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141316E8B4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:46:59 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id e16so2638511pfm.11
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=7izCngOY4FlJA7aFVGJAVWlS1so31LHrdF1iXKo0s7k=;
+        b=AM21h/0ZazfG9t+LflSWC6wOUxf0sIuppMbc4jGoGUlehO+IH4f5xZcXJAy6mewqdp
+         DvdYRPqEiU+VlN0xnvlVRpCoaIJup9Tfr8ktmoZOY4hrOoN5YnbxK28oDwRb5EpLSmip
+         lM9AG2NaCSeDeSlSEMBullYvZeO9gr0REU3AQJ2ImnQdGRAp4qMHQ0LADFNKfz+sUJPh
+         vg43NTe1Zur6nAIVxadX8uwYLNIJ5UZUFCwiyIpU5HmsBc+dP1TswFOTOuFkEHwEFPVd
+         oMjGg39f7JMqPgBUWnq4DL7EBWWlSmDf0nM5MBlOQKA/kfQiQaW3xdqYc/JhgN3seH6Z
+         hzwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=7izCngOY4FlJA7aFVGJAVWlS1so31LHrdF1iXKo0s7k=;
+        b=5Tvz+Z6a5t0Z5RxgggoTPqKFiy1PUB4AuS3IZ2G0s4hZTydlfgi/Mp9quU2Z5awYwB
+         AeUHDbt32pZdcbukGa5zFaceiNTODBpTL76EEukV25PZI0VdepxuTtFJ0agGWUUvy5hR
+         RoL+NjN5B0dFSU+YCutmLWmoZcBOWeqLAVhZY5nWM0rRmXcRWtLCEI9rv8YWZ7CFmmh3
+         IDUfHbF7Iy+WrVv6bCqzcdm8wP6lHWR1DKejm0v6z6jT9rk6at86DJrO53G5F4CE8m2/
+         Rbwj4nd8MRAKSCTzVPyATn36RT2ZmUeUrtVR/NPIGNUxCv1dqysENKwHcjhe+NUNxErN
+         a8/w==
+X-Gm-Message-State: AJIora/kdJYfdvRRsr7Cjaq1nZ0CeDa2UFGxTpadtCbhfHsqCmgtDI5M
+        9VDc8hcPSlsalq341QjmdlLgxQ==
+X-Google-Smtp-Source: AGRyM1vjaB1h+xE9vDngPt439cAbv1JnPa8dBVGgeDZaKfEcBegXZIOHbyewCCZLnFkv3DUgwi4Ibw==
+X-Received: by 2002:a63:f04:0:b0:41a:aea0:9726 with SMTP id e4-20020a630f04000000b0041aaea09726mr104814pgl.382.1659034018461;
+        Thu, 28 Jul 2022 11:46:58 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n9-20020a056a00212900b0052844157f09sm1127537pfj.51.2022.07.28.11.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 11:46:58 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 18:46:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dmytro Maluka <dmy@semihalf.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Dmitry Torokhov <dtor@google.com>
+Subject: Re: [PATCH 1/3] KVM: x86: Move kvm_(un)register_irq_mask_notifier()
+ to generic KVM
+Message-ID: <YuLZng8mW0qn4MFk@google.com>
+References: <20220715155928.26362-1-dmy@semihalf.com>
+ <20220715155928.26362-2-dmy@semihalf.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220728075012.3136914-1-conor.dooley@microchip.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220715155928.26362-2-dmy@semihalf.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 08:50:13AM +0100, Conor Dooley wrote:
-> Add the missing MODULE_AUTHOR entry for the Microchip spi-slave FPGA
-> programming driver.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  drivers/fpga/microchip-spi.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-> index bd284c7b8dc9..7436976ea904 100644
-> --- a/drivers/fpga/microchip-spi.c
-> +++ b/drivers/fpga/microchip-spi.c
-> @@ -395,4 +395,5 @@ static struct spi_driver mpf_driver = {
->  module_spi_driver(mpf_driver);
->  
->  MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
-> +MODULE_AUTHOR("Ivan Bornyakov <i.bornyakov@metrotek.ru>");
->  MODULE_LICENSE("GPL");
-> -- 
-> 2.36.1
-> 
+On Fri, Jul 15, 2022, Dmytro Maluka wrote:
+> In preparation for implementing postponing resamplefd event until the
+> interrupt is unmasked, move kvm_(un)register_irq_mask_notifier() from
+> x86 to arch-independent code to make it usable by irqfd.
 
-Acked-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+This patch needs to move more than just the helpers, e.g. mask_notifier_list
+needs to be in "struct kvm", not "stuct kvm_arch".
 
-Yet, I'm wondering in what situations MODULE_AUTHOR is needed? I've
-submitted a couple of other drivers without it, should I fix them?
+arch/arm64/kvm/../../../virt/kvm/eventfd.c: In function ‘kvm_register_irq_mask_notifier’:
+arch/arm64/kvm/../../../virt/kvm/eventfd.c:528:51: error: ‘struct kvm_arch’ has no member named ‘mask_notifier_list’
+  528 |         hlist_add_head_rcu(&kimn->link, &kvm->arch.mask_notifier_list);
+      |                                                   ^
+make[3]: *** [scripts/Makefile.build:249: arch/arm64/kvm/../../../virt/kvm/eventfd.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+  AR      kernel/entry/built-in.a
 
+
+And kvm_fire_mask_notifiers() should probably be moved as well, otherwise there's
+no point in moving the registration to common code.
+
+The other option would be to make the generic functions wrappers around arch-specific
+hooks.  But IIRC won't this eventually be needed for other architectures?

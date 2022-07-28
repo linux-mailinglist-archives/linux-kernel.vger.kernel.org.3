@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33E5583F96
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2DE583F9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239012AbiG1NGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S238919AbiG1NIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238882AbiG1NGW (ORCPT
+        with ESMTP id S238518AbiG1NIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:06:22 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC31225E86;
-        Thu, 28 Jul 2022 06:06:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659013581; x=1690549581;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=b/wEQ01RTadmT60aE0Fd5qVRKAPrU1I1CCnWHz9Go5Y=;
-  b=Kc8OJY/+AhN68NOxkIrzQIrZjewBuw5yC5qyNgyDpKbsOeKqZw5ZuBBO
-   COcs8tTguxwjjiFMdggfdx91dg0y/RP8gmGU4S2rmAL3ABhaE30ORhllr
-   jtuHREt3toOrKSIREDm58oMbfxxHpcp9W3UY/gH+KIKJDLVEcfQFvEiTy
-   o=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Jul 2022 06:06:21 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 06:06:21 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Jul 2022 06:06:20 -0700
-Received: from [10.216.53.81] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Jul
- 2022 06:06:15 -0700
-Message-ID: <00cd5620-a276-6e55-8997-fbf8285d9a9a@quicinc.com>
-Date:   Thu, 28 Jul 2022 18:36:12 +0530
+        Thu, 28 Jul 2022 09:08:04 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE0525E86;
+        Thu, 28 Jul 2022 06:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=e2aRA4oShO3rcHQwn3d4gkYplDcEMSwuuAnIV3K8o2Q=; b=6Ub0R7uZ5U5TkIk5V1ocXPS0HH
+        3gWNd7c02bhaCyypM1OIgyxaEN85a3Kj9nSfSOaKtH0pZyQUm1UUTeTUMG8w+y8qYx9LXuInvTopi
+        Y7tbBC0tDMBD5Tj0WJgFPEJzI/B/6nKXOZB2kN8v8mQAeHT2sVT+O+t/5wL6tqsEHAHc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oH3F1-00Bo2q-Ey; Thu, 28 Jul 2022 15:07:51 +0200
+Date:   Thu, 28 Jul 2022 15:07:51 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Antonio Quartulli <antonio@openvpn.net>
+Cc:     netdev@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
+Message-ID: <YuKKJxSFOgOL836y@lunn.ch>
+References: <20220719014704.21346-1-antonio@openvpn.net>
+ <20220719014704.21346-2-antonio@openvpn.net>
+ <YtbNBUZ0Kz7pgmWK@lunn.ch>
+ <c490b87c-085b-baca-b7e4-c67a3ee2c25e@openvpn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ASoC: qcom: SC7280: Add support for external DMIC bias
- supply
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <devicetree@vger.kernel.org>
-References: <1658992233-28372-1-git-send-email-quic_srivasam@quicinc.com>
- <YuJpxSuPBB++pl/o@sirena.org.uk>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <YuJpxSuPBB++pl/o@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c490b87c-085b-baca-b7e4-c67a3ee2c25e@openvpn.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 28, 2022 at 09:41:11AM +0200, Antonio Quartulli wrote:
+> Hi,
+> 
+> On 19/07/2022 17:25, Andrew Lunn wrote:
+> > > +static void ovpn_get_drvinfo(struct net_device *dev,
+> > > +			     struct ethtool_drvinfo *info)
+> > > +{
+> > > +	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
+> > > +	strscpy(info->version, DRV_VERSION, sizeof(info->version));
+> > > +	strscpy(info->bus_info, "ovpn", sizeof(info->bus_info));
+> > 
+> > version is generally considered useless information if it comes from
+> > the driver. You have no idea if this is version 42 in net-next, or
+> > some backported version in an enterprise kernel with lots of out of
+> > tree patches. The driver is not standalone, it runs inside the
+> > kernel. So in order to understand a bug report, you need to know what
+> > kernel it is. If you don't fill in version, the core will with the
+> > kernel version, which is much more useful.
+> 
+> True.
+> 
+> However, I guess I will still fill MODULE_VERSION() with a custom string.
+> This may also be useful when building the module out-of-tree.
 
-On 7/28/2022 4:19 PM, Mark Brown wrote:
-Thanks for your time Mark!!!
-> On Thu, Jul 28, 2022 at 12:40:33PM +0530, Srinivasa Rao Mandadapu wrote:
->
->> +static int sc7280_dmic_micbias(struct snd_soc_dapm_widget *w,
->> +				struct snd_kcontrol *kcontrol, int event)
->> +{
->> +	struct snd_soc_card *card = w->dapm->card;
->> +	struct sc7280_snd_data *data = snd_soc_card_get_drvdata(card);
->> +	int ret = 0;
->> +
-> This is open coding SND_SOC_DAPM_REGULATOR_SUPPLY() isn't it?
+You could, but out of tree is even worse. You have even less idea what
+environment the driver is running in, so the version is even less
+meaningful. You need to ask be bug reported for even more information.
 
-Yes, agree that SND_SOC_DAPM_REGULATOR_SUPPLY can be used here. As I was 
-using two different names for
+Also, using a mainline driver out of tree is not easy. The code will
+make use of the latest APIs, and internal APIs are not stable, making
+it hard to use in older kernels. So you end up with out of tree
+wrapper code for whatever version of out of tree Linux you decide to
+support. Take a look at
 
-VDD supply property and widget name, got confused. I will re post the 
-patch, with single name for both and replace with above macro .
+https://github.com/open-mesh-mirror/batman-adv
 
+for an example of this.
+
+    Andrew

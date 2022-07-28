@@ -2,191 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A18158399A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDE358399C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiG1HiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
+        id S234604AbiG1Hif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbiG1HiF (ORCPT
+        with ESMTP id S234579AbiG1Hia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:38:05 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A6452E54;
-        Thu, 28 Jul 2022 00:38:02 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oGy5o-0000kv-Ci; Thu, 28 Jul 2022 09:38:00 +0200
-Message-ID: <62df64ca-dc79-c308-a8e0-7c2b2c45248a@leemhuis.info>
-Date:   Thu, 28 Jul 2022 09:37:59 +0200
+        Thu, 28 Jul 2022 03:38:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F07116052D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658993909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DzKmVBcMOj8qzEpSvPOSPxK9ws90/nG5O/3/XIYyucI=;
+        b=H0m2lcFWMuyIzKFzJVit+iA5IXm0lzBy9agcNOULIyVNLpTNg2SuFQoOnkT66qKF4xh94a
+        un+9BB3dKM6KBxA6QGE5zX/5B7SflsfUTlPdJXHzHDySmvpMmZTHF9JpLlul08wQk2GXsq
+        5OD991dZEZ1HPTSrQKew0B8m8UhULqI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-669-_vcwfJwPNr6emxXGad7sow-1; Thu, 28 Jul 2022 03:38:10 -0400
+X-MC-Unique: _vcwfJwPNr6emxXGad7sow-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 597E33C01E04;
+        Thu, 28 Jul 2022 07:38:09 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B6A76492C3B;
+        Thu, 28 Jul 2022 07:38:07 +0000 (UTC)
+Message-ID: <6c1596d7203b7044a628c10b97eb076ad0ae525f.camel@redhat.com>
+Subject: Re: [PATCH] KVM: SVM: Do not virtualize MSR accesses for APIC LVTT
+ register
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, jon.grimm@amd.com
+Date:   Thu, 28 Jul 2022 10:38:06 +0300
+In-Reply-To: <20220725033428.3699-1-suravee.suthikulpanit@amd.com>
+References: <20220725033428.3699-1-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev,
-        Jan Kara <jack@suse.cz>
-References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
- <Yt6xsyy3+qEMn08y@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <0840b428-3a77-2339-354f-7fbd3295bb4d@i2se.com>
- <Yt+M+JgW6KuZFMvc@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <e9aa5629-b6a8-3e5d-422e-eb79ac333fdc@i2se.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
- Raspberry Pi
-In-Reply-To: <e9aa5629-b6a8-3e5d-422e-eb79ac333fdc@i2se.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1658993883;e2a7abd8;
-X-HE-SMSGID: 1oGy5o-0000kv-Ci
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26.07.22 17:54, Stefan Wahren wrote:
-> Hi Ojaswin,
+On Sun, 2022-07-24 at 22:34 -0500, Suravee Suthikulpanit wrote:
+> AMD does not support APIC TSC-deadline timer mode. AVIC hardware
+> will generate GP fault when guest kernel writes 1 to bits [18]
+> of the APIC LVTT register (offset 0x32) to set the timer mode.
+> (Note: bit 18 is reserved on AMD system).
 > 
-> Am 26.07.22 um 08:43 schrieb Ojaswin Mujoo:
->> On Mon, Jul 25, 2022 at 09:09:32PM +0200, Stefan Wahren wrote:
->>> Hi Ojaswin,
->>>
->>> Am 25.07.22 um 17:07 schrieb Ojaswin Mujoo:
->>>> On Mon, Jul 18, 2022 at 03:29:47PM +0200, Stefan Wahren wrote:
->>>>> Hi,
->>>>>
->>>>> i noticed that since Linux 5.18 (Linux 5.19-rc6 is still affected) i'm
->>>>> unable to run "rpi-update" without massive performance regression
->>>>> on my
->>>>> Raspberry Pi 4 (multi_v7_defconfig + CONFIG_ARM_LPAE). Using Linux
->>>>> 5.17 this
->>>>> tool successfully downloads the latest firmware (> 100 MB) on my
->>>>> development
->>>>> micro SD card (Kingston 16 GB Industrial) with a ext4 filesystem
->>>>> within ~ 1
->>>>> min. The same scenario on Linux 5.18 shows the following symptoms:
->>>>>
->>>>> - download takes endlessly much time and leads to an abort by
->>>>> userspace in
->>>>> most cases because of the poor performance
->>>>> - massive system load during download even after download has been
->>>>> aborted
->>>>> (heartbeat LED goes wild)
->>>>> - whole system becomes nearly unresponsive
->>>>> - system load goes back to normal after > 10 min
->>>>> - dmesg doesn't show anything suspicious
->>>>>
->>>>> I was able to bisect this issue:
->>>>>
->>>>> ff042f4a9b050895a42cae893cc01fa2ca81b95c good
->>>>> 4b0986a3613c92f4ec1bdc7f60ec66fea135991f bad
->>>>> 25fd2d41b505d0640bdfe67aa77c549de2d3c18a bad
->>>>> b4bc93bd76d4da32600795cd323c971f00a2e788 bad
->>>>> 3fe2f7446f1e029b220f7f650df6d138f91651f2 bad
->>>>> b080cee72ef355669cbc52ff55dc513d37433600 good
->>>>> ad9c6ee642a61adae93dfa35582b5af16dc5173a good
->>>>> 9b03992f0c88baef524842e411fbdc147780dd5d bad
->>>>> aab4ed5816acc0af8cce2680880419cd64982b1d good
->>>>> 14705fda8f6273501930dfe1d679ad4bec209f52 good
->>>>> 5c93e8ecd5bd3bfdee013b6da0850357eb6ca4d8 good
->>>>> 8cb5a30372ef5cf2b1d258fce1711d80f834740a bad
->>>>> 077d0c2c78df6f7260cdd015a991327efa44d8ad bad
->>>>> cc5095747edfb054ca2068d01af20be3fcc3634f good
->>>>> 27b38686a3bb601db48901dbc4e2fc5d77ffa2c1 good
->>>>>
->>>>> commit 077d0c2c78df6f7260cdd015a991327efa44d8ad
->>>>> Author: Ojaswin Mujoo <ojaswin@linux.ibm.com>
->>>>> Date:   Tue Mar 8 15:22:01 2022 +0530
->>>>>
->>>>> ext4: make mb_optimize_scan performance mount option work with extents
->>>>>
->>>>> If i revert this commit with Linux 5.19-rc6 the performance regression
->>>>> disappears.
->>>>>
->>>>> Please ask if you need more information.
->>>> Hi Stefan,
->>>>
->>>> Apologies, I had missed this email initially. So this particular patch
->>>> simply changed a typo in an if condition which was preventing the
->>>> mb_optimize_scan option to be enabled correctly (This feature was
->>>> introduced in the following commit [1]). I think with the
->>>> mb_optimize_scan now working, it is somehow causing the firmware
->>>> download/update to take a longer time.
->>>>
->>>> I'll try to investigate this and get back with my findings.
->>> thanks. I wasn't able to reproduce this heavy load symptoms with
->>> every SD
->>> card. Maybe this depends on the write performance of the SD card to
->>> trigger
->>> the situation (used command to measure write performance: dd
->>> if=/dev/zero
->>> of=/boot/test bs=1M count=30 oflag=dsync,direct ).
->>>
->>> I tested a Kingston consumer 32 GB which had nearly constant write
->>> performance of 13 MB/s and didn't had the heavy load symptoms. The
->>> firmware
->>> update was done in a few seconds, so hard to say that at least the
->>> performance regression is reproducible.
->>>
->>> I also tested 2x Kingston industrial 16 GB which had a floating write
->>> performance between 5 and 10 MB/s (wear leveling?) and both had the
->>> heavy
->>> load symptoms.
->>>
->>> All SD cards has been detected as ultra high speed DDR50 by the emmc2
->>> interface.
->>>
->>> Best regards
->>>
->>>> Regard,
->>>> Ojaswin
->>>>
->>>> [1]
->>>>     commit 196e402adf2e4cd66f101923409f1970ec5f1af3
->>>>     From: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
->>>>     Date: Thu, 1 Apr 2021 10:21:27 -0700
->>>>     
->>>>     ext4: improve cr 0 / cr 1 group scanning
->>>>
->>>>> Regards
->>>>>
->> Thanks for the info Stefan, I'm still trying to reproduce the issue but
->> it's slightly challenging since I don't have my RPi handy at the moment.
->>
->> In the meantime, would you please try out the mb_optmize_scan=0 command
->> line options to see if that helps bypass the issue. This will help
->> confirm if the issue lies in mb_optmize_scan itself or if its something
->> else.
->>
-> I run the firmware update 5 times with mb_optimize_scan=0 on my
-> Raspberry Pi 4 and the industrial SD card and everytime the update worked.
->>
+> Therefore, always intercept and let KVM emulate the MSR accesses.
+> 
+> Fixes: f3d7c8aa6882 ("KVM: SVM: Fix x2APIC MSRs interception")
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/svm.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index aef63aae922d..3e0639a68385 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -118,7 +118,14 @@ static const struct svm_direct_access_msrs {
+>  	{ .index = X2APIC_MSR(APIC_ESR),		.always = false },
+>  	{ .index = X2APIC_MSR(APIC_ICR),		.always = false },
+>  	{ .index = X2APIC_MSR(APIC_ICR2),		.always = false },
+> -	{ .index = X2APIC_MSR(APIC_LVTT),		.always = false },
+> +
+> +	/*
+> +	 * Note:
+> +	 * AMD does not virtualize APIC TSC-deadline timer mode, but it is
+> +	 * emulated by KVM. When setting APIC LVTT (0x832) register bit 18,
+> +	 * the AVIC hardware would generate GP fault. Therefore, always
+> +	 * intercept the MSR 0x832, and do not setup direct_access_msr.
+> +	 */
+>  	{ .index = X2APIC_MSR(APIC_LVTTHMR),		.always = false },
+>  	{ .index = X2APIC_MSR(APIC_LVTPC),		.always = false },
+>  	{ .index = X2APIC_MSR(APIC_LVT0),		.always = false },
 
-[CCing Jan]
 
-FYI, Jan yesterday reported benchmark regresses that might or might not
-be related Stefan's regression on the Raspberry Pi:
-https://lore.kernel.org/all/20220727105123.ckwrhbilzrxqpt24@quack3/
+LVT is not something I would expect x2avic to even try to emulate, I would expect
+it to dumbly forward the write to apic backing page (garbage in, garbage out) and then
+signal trap vmexit?
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+I also think that regular AVIC works like that (just forwards the write to the page).
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+I am asking because there is a remote possibliity that due to some bug the guest got
+direct access to x2apic registers of the host, and this is how you got that #GP.
+Could you double check it?
 
-#regzbot monitor
-https://lore.kernel.org/all/20220727105123.ckwrhbilzrxqpt24@quack3/
+We really need x2avic (and vNMI) spec to be published to know exactly how all of this
+is supposed to work.
+
+Best regards,
+	Maxim Levitsky
+
+
+

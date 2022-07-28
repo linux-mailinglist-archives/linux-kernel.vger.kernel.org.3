@@ -2,206 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B94C584808
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD2A5847FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiG1WLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S229594AbiG1WLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiG1WLh (ORCPT
+        with ESMTP id S230357AbiG1WLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:11:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 264DA78DF7;
-        Thu, 28 Jul 2022 15:11:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77A42113E;
-        Thu, 28 Jul 2022 15:11:36 -0700 (PDT)
-Received: from mammon-tx2.austin.arm.com (mammon-tx2.austin.arm.com [10.118.28.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B64233F70D;
-        Thu, 28 Jul 2022 15:11:35 -0700 (PDT)
-From:   Jeremy Linton <jeremy.linton@arm.com>
-To:     linux-pm@vger.kernel.org
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeremy Linton <jeremy.linton@arm.com>
-Subject: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC regions
-Date:   Thu, 28 Jul 2022 17:10:43 -0500
-Message-Id: <20220728221043.4161903-2-jeremy.linton@arm.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220728221043.4161903-1-jeremy.linton@arm.com>
-References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+        Thu, 28 Jul 2022 18:11:07 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DB5FD05;
+        Thu, 28 Jul 2022 15:11:05 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id r1-20020a05600c35c100b003a326685e7cso3698080wmq.1;
+        Thu, 28 Jul 2022 15:11:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q2/z+7O4E17iIS07AIkl4QnBTdGWTDMPIVTs4ITLA3c=;
+        b=UdAYIgX3QnJ+zCPpv5ngrq1lAvvosnMRgn5q9rc47OC/o8am/v/DwLn8s+AAaq7jkY
+         dks9vXZ9WLVFKbXopbNuDy2zZlqMAIWgsmBWJdBYlmZeLkDJYS+bgf2LPF1x2T7wbYj7
+         vs6n0smR5/rGJfzQuyaC9A2iBSB9P8w6Z14oOK7BzwB7k49wY3CL/Nvd2KOdpCMZb0ZX
+         /XUozKLgyIJMuHLrMzjJHfEsTlI4VbbgdFOmK0cpOKJamYPKcmzTEO9JfdTFY3L4V+gv
+         CfKh/fJLrTlC0i8S3dLp+DmISvPIGYcnaSLP1yz6oWzWGcdXa/t5YEXnuGswE0uM+gQH
+         dr6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q2/z+7O4E17iIS07AIkl4QnBTdGWTDMPIVTs4ITLA3c=;
+        b=qzI+kLyh3iA5sjmg5Tcq8Yx3WXTzMBbeli58L2wr/DN9hRbiQllIzYWEFWxr5BEzGO
+         0Kyn5CbKOL3IaRwvAspDKWyfFMwLTfr2NovIfyEI8uVadm/KS2JsxhesxyLMmqQxOOyF
+         NoXiRmMU95EaJcv+zxNN6dMmgF9uCGriEZpj5vWsJZgo8vawgcIxinCy8jEbcdnLbMaT
+         ZceLbvCzMJjPccLl+ZFJagYgmNGZBX4VuYGfKVceJ2tBUK5iQGUi5n1J004ZC/p3eVOn
+         bJWLca4ERlvVbByo34Qpp2eQabZBLBGGQiJrQdPfb6QiG17mPZVmgwPAuV7WSyZUKVfH
+         a0IA==
+X-Gm-Message-State: AJIora/O5QkLE8ZIf9GY2fK9WcfCwEi/DoOCfjUebBszfjbLWSBFkUM1
+        t+bFSpQOrMoEsmGGTChZXOs=
+X-Google-Smtp-Source: AGRyM1uT4dr9G2iKVcNG5Z7Zve1cM+mhX0bkVdF4U2dM1BceH9FJUEGUOew6sFEQcNvfp0+0gQgfXA==
+X-Received: by 2002:a1c:a444:0:b0:3a3:53e6:fd3d with SMTP id n65-20020a1ca444000000b003a353e6fd3dmr811870wme.173.1659046263431;
+        Thu, 28 Jul 2022 15:11:03 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id v21-20020a7bcb55000000b003a3270735besm2364725wmj.28.2022.07.28.15.11.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 15:11:02 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <16036872-43d6-fdef-b262-1423fd6207bc@redhat.com>
+Date:   Fri, 29 Jul 2022 00:11:00 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Tag disallowed NX huge pages even if
+ they're not tracked
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
+References: <20220723012325.1715714-1-seanjc@google.com>
+ <20220723012325.1715714-2-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220723012325.1715714-2-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCC regions utilize a mailbox to set/retrieve register values used by
-the CPPC code. This is fine as long as the operations are
-infrequent. With the FIE code enabled though the overhead can range
-from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-based machines.
+On 7/23/22 03:23, Sean Christopherson wrote:
+> Tag shadow pages that cannot be replaced with an NX huge page even if
+> zapping the page would not allow KVM to create a huge page, e.g. because
+> something else prevents creating a huge page.  This will allow a future
+> patch to more precisely apply the mitigation by checking if an existing
+> shadow page can be replaced by a NX huge page.  Currently, KVM assumes
+> that any existing shadow page encountered cannot be replaced by a NX huge
+> page (if the mitigation is enabled), which prevents KVM from replacing
+> no-longer-necessary shadow pages with huge pages, e.g. after disabling
+> dirty logging, zapping from the mmu_notifier due to page migration,
+> etc...
+> 
+> Failure to tag shadow pages appropriately could theoretically lead to
+> false negatives, e.g. if a fetch fault requests a small page and thus
+> isn't tracked, and a read/write fault later requests a huge page, KVM
+> will not reject the huge page as it should.
+> 
+> To avoid yet another flag, initialize the list_head and use list_empty()
+> to determine whether or not a page is on the list of NX huge pages that
+> should be recovered.
+> 
+> Opportunstically rename most of the variables/functions involved to
+> provide consistency, e.g. lpage vs huge page and NX huge vs huge NX, and
+> clarity, e.g. to make it obvious the flag applies only to the NX huge
+> page mitigation, not to any condition that prevents creating a huge page.
 
-So, before enabling FIE assure none of the registers used by
-cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
-enable a module parameter which can also disable it at boot or module
-reload.
+Please do this in a separate patch, since this one is already complex 
+enough.
 
-Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
----
- drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
- drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
- include/acpi/cppc_acpi.h       |  5 +++++
- 3 files changed, 61 insertions(+), 4 deletions(-)
+>   	 * The following two entries are used to key the shadow page in the
+> @@ -100,7 +106,14 @@ struct kvm_mmu_page {
+>   		};
+>   	};
+>   
+> -	struct list_head lpage_disallowed_link;
+> +	/*
+> +	 * Use to track shadow pages that, if zapped, would allow KVM to create
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index 3c6d4ef87be0..38b881db14c7 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -1246,6 +1246,47 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
- }
- EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
- 
-+/**
-+ * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC region.
-+ *
-+ * CPPC has flexibility about how counters describing CPU perf are delivered.
-+ * One of the choices is PCC regions, which can have a high access latency. This
-+ * routine allows callers of cppc_get_perf_ctrs() to know this ahead of time.
-+ *
-+ * Return: true if any of the counters are in PCC regions, false otherwise
-+ */
-+bool cppc_perf_ctrs_in_pcc(void)
-+{
-+	int cpu;
-+
-+	for_each_present_cpu(cpu) {
-+		struct cpc_register_resource *ref_perf_reg;
-+		struct cpc_desc *cpc_desc;
-+
-+		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-+
-+		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-+		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-+		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-+			return true;
-+
-+
-+		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-+
-+		/*
-+		 * If reference perf register is not supported then we should
-+		 * use the nominal perf value
-+		 */
-+		if (!CPC_SUPPORTED(ref_perf_reg))
-+			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-+
-+		if (CPC_IN_PCC(ref_perf_reg))
-+			return true;
-+	}
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-+
- /**
-  * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
-  * @cpunum: CPU from which to read counters.
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 24eaf0ec344d..ed607e27d6bb 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -63,7 +63,11 @@ static struct cppc_workaround_oem_info wa_info[] = {
- 
- static struct cpufreq_driver cppc_cpufreq_driver;
- 
-+static bool fie_disabled;
-+
- #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-+module_param(fie_disabled, bool, 0444);
-+MODULE_PARM_DESC(fie_disabled, "Disable Frequency Invariance Engine (FIE)");
- 
- /* Frequency invariance support */
- struct cppc_freq_invariance {
-@@ -158,7 +162,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
- 	struct cppc_freq_invariance *cppc_fi;
- 	int cpu, ret;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	for_each_cpu(cpu, policy->cpus) {
-@@ -199,7 +203,7 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
- 	struct cppc_freq_invariance *cppc_fi;
- 	int cpu;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	/* policy->cpus will be empty here, use related_cpus instead */
-@@ -229,7 +233,12 @@ static void __init cppc_freq_invariance_init(void)
- 	};
- 	int ret;
- 
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (cppc_perf_ctrs_in_pcc()) {
-+		pr_debug("FIE not enabled on systems with registers in PCC\n");
-+		fie_disabled = true;
-+	}
-+
-+	if (fie_disabled)
- 		return;
- 
- 	kworker_fie = kthread_create_worker(0, "cppc_fie");
-@@ -247,7 +256,7 @@ static void __init cppc_freq_invariance_init(void)
- 
- static void cppc_freq_invariance_exit(void)
- {
--	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
-+	if (fie_disabled)
- 		return;
- 
- 	kthread_destroy_worker(kworker_fie);
-@@ -940,6 +949,8 @@ static void cppc_check_hisi_workaround(void)
- 		}
- 	}
- 
-+	fie_disabled = true;
-+
- 	acpi_put_table(tbl);
- }
- 
-diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-index d389bab54241..fe6dc3e5a454 100644
---- a/include/acpi/cppc_acpi.h
-+++ b/include/acpi/cppc_acpi.h
-@@ -140,6 +140,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
- extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
- extern int cppc_set_enable(int cpu, bool enable);
- extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-+extern bool cppc_perf_ctrs_in_pcc(void);
- extern bool acpi_cpc_valid(void);
- extern bool cppc_allow_fast_switch(void);
- extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-@@ -173,6 +174,10 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
- {
- 	return -ENOTSUPP;
- }
-+static inline bool cppc_perf_ctrs_in_pcc(void)
-+{
-+	return false;
-+}
- static inline bool acpi_cpc_valid(void)
- {
- 	return false;
--- 
-2.35.3
+s/Use/Used/
 
+Thanks,
+
+Paolo

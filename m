@@ -2,158 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2DA583C93
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9306D583C96
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236527AbiG1Kzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S235294AbiG1K5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234566AbiG1Kzt (ORCPT
+        with ESMTP id S234566AbiG1K5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:55:49 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF8414D37;
-        Thu, 28 Jul 2022 03:55:47 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 28 Jul 2022 06:57:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D1A75C340
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659005825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=djWSv5fPHi2jGbQNYrbYdl4FpksrNeE6qDghXEwlg5c=;
+        b=YanEk5gocKyYOzCNPtuCjU1naMD/zC0T0vyZQbgE/7e3Qq+vA7k3wJYc2weN4XYRoefQey
+        XKULtPMQ5oaNCarwtn3pDtel+c9WfnffrP6nU8E7uNMX2ZNTFVqX4SLLEiUY1ZsHJLOVPQ
+        Irxlt4X2gN1KNZTazwKZbvIP5YVuDQ4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-92-6D5_Hst4ObOy2JZHUrSn7g-1; Thu, 28 Jul 2022 06:57:02 -0400
+X-MC-Unique: 6D5_Hst4ObOy2JZHUrSn7g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ltncd3Slrz4x1G;
-        Thu, 28 Jul 2022 20:55:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1659005745;
-        bh=muYu5kZoW0xItd8KHdU3znK265ixoqRAZvzqYkR7v9Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X4xwE7y6aYt/cW6r3ZqeuaoxE8gcRrgBDPjoyh9hmGDWwzz+PtLCXnP3bgt8lu8Nt
-         T5BPAa3JT15rz5VCtiiSmULxcU8/pSE3tX7o8N6yQ5EMGlNMulYwJ6cYlWSssvXMNu
-         I1Kgtgm2HnWaOVpCsiSXGb7FI9uTd1JWERH/nCzFD1Dcj4w/C4ve18P2I1/tqWBc98
-         SRLEyheY3jU8gSFozlQTDWexzPggvWyjvFHB/WBLZ8MZOJsO7pSuCYTR8upmq8k9UO
-         c7eZoVYABPyPw0c9P6nKQsHZSE8aU9edYJoLd0xJnv9oswqC34pJd1HBXOqvpSnRpk
-         Vz7/I8LWZMYQw==
-Date:   Thu, 28 Jul 2022 20:55:43 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>,
-        Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220728205404.645f7c12@canb.auug.org.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE78B8037AC;
+        Thu, 28 Jul 2022 10:57:01 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 59DE1401473;
+        Thu, 28 Jul 2022 10:57:00 +0000 (UTC)
+Message-ID: <43d7341341a3211a2f16ce1b9ab376c3de35608e.camel@redhat.com>
+Subject: Re: [PATCH] KVM: SVM: Do not virtualize MSR accesses for APIC LVTT
+ register
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, jon.grimm@amd.com
+Date:   Thu, 28 Jul 2022 13:56:59 +0300
+In-Reply-To: <257483ff-0224-ad67-614e-2c9e6c9d99a3@amd.com>
+References: <20220725033428.3699-1-suravee.suthikulpanit@amd.com>
+         <6c1596d7203b7044a628c10b97eb076ad0ae525f.camel@redhat.com>
+         <257483ff-0224-ad67-614e-2c9e6c9d99a3@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PYm+ZwgZa.DoU7fyI=lOJl5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/PYm+ZwgZa.DoU7fyI=lOJl5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2022-07-28 at 15:55 +0700, Suravee Suthikulpanit wrote:
+> Maxim,
+> 
+> On 7/28/22 2:38 PM, Maxim Levitsky wrote:
+> > On Sun, 2022-07-24 at 22:34 -0500, Suravee Suthikulpanit wrote:
+> > > AMD does not support APIC TSC-deadline timer mode. AVIC hardware
+> > > will generate GP fault when guest kernel writes 1 to bits [18]
+> > > of the APIC LVTT register (offset 0x32) to set the timer mode.
+> > > (Note: bit 18 is reserved on AMD system).
+> > > 
+> > > Therefore, always intercept and let KVM emulate the MSR accesses.
+> > > 
+> > > Fixes: f3d7c8aa6882 ("KVM: SVM: Fix x2APIC MSRs interception")
+> > > Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> > > ---
+> > >   arch/x86/kvm/svm/svm.c | 9 ++++++++-
+> > >   1 file changed, 8 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > > index aef63aae922d..3e0639a68385 100644
+> > > --- a/arch/x86/kvm/svm/svm.c
+> > > +++ b/arch/x86/kvm/svm/svm.c
+> > > @@ -118,7 +118,14 @@ static const struct svm_direct_access_msrs {
+> > >   	{ .index = X2APIC_MSR(APIC_ESR),		.always = false },
+> > >   	{ .index = X2APIC_MSR(APIC_ICR),		.always = false },
+> > >   	{ .index = X2APIC_MSR(APIC_ICR2),		.always = false },
+> > > -	{ .index = X2APIC_MSR(APIC_LVTT),		.always = false },
+> > > +
+> > > +	/*
+> > > +	 * Note:
+> > > +	 * AMD does not virtualize APIC TSC-deadline timer mode, but it is
+> > > +	 * emulated by KVM. When setting APIC LVTT (0x832) register bit 18,
+> > > +	 * the AVIC hardware would generate GP fault. Therefore, always
+> > > +	 * intercept the MSR 0x832, and do not setup direct_access_msr.
+> > > +	 */
+> > >   	{ .index = X2APIC_MSR(APIC_LVTTHMR),		.always = false },
+> > >   	{ .index = X2APIC_MSR(APIC_LVTPC),		.always = false },
+> > >   	{ .index = X2APIC_MSR(APIC_LVT0),		.always = false },
+> > 
+> > LVT is not something I would expect x2avic to even try to emulate, I would expect
+> > it to dumbly forward the write to apic backing page (garbage in, garbage out) and then
+> > signal trap vmexit?
+> > 
+> > I also think that regular AVIC works like that (just forwards the write to the page).
+> 
+> The main difference b/w AVIC and x2AVIC is the MSR interception control, which needs to
+> not-intercept x2APIC MSRs for x2AVIC (allowing HW to virtualize MSR accesses).
+> However, the hypervisor can decide which x2APIC MSR to intercept and emulate.
 
-Hi all,
 
-After merging the kspp tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+> 
+> > I am asking because there is a remote possibility that due to some bug the guest got
+> > direct access to x2apic registers of the host, and this is how you got that #GP.
+> > Could you double check it?
+> 
+> I have verified this behavior with the HW designer and requested them to document
+> this in the next AMD programmers manual that will include x2AVIC details.
 
-drivers/md/dm-verity-loadpin.c: In function 'dm_verity_loadpin_is_bdev_trus=
-ted':
-drivers/md/dm-verity-loadpin.c:61:13: error: implicit declaration of functi=
-on 'dm_table_get_num_targets'; did you mean 'dm_table_resume_targets'? [-We=
-rror=3Dimplicit-function-declaration]
-   61 |         if (dm_table_get_num_targets(table) !=3D 1)
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~
-      |             dm_table_resume_targets
-drivers/md/dm-verity-loadpin.c:64:14: error: implicit declaration of functi=
-on 'dm_table_get_target'; did you mean 'dm_table_add_target'? [-Werror=3Dim=
-plicit-function-declaration]
-   64 |         ti =3D dm_table_get_target(table, 0);
-      |              ^~~~~~~~~~~~~~~~~~~
-      |              dm_table_add_target
-drivers/md/dm-verity-loadpin.c:64:12: error: assignment to 'struct dm_targe=
-t *' from 'int' makes pointer from integer without a cast [-Werror=3Dint-co=
-nversion]
-   64 |         ti =3D dm_table_get_target(table, 0);
-      |            ^
+I guess this implies that when guest has direct access to LVTT msr, x2avic redirection
+happens after microcode already checked some things, like reserved bits.
 
-Caused by commit
+You are also welcome to check vs hardware team, how all other apic msrs behave - there could be similar
+cases, maybe even some msrs which don't go through x2avic flow.
 
-  b6c1c5745ccc ("dm: Add verity helpers for LoadPin")
+Assuming that this it is really the case (I am just very afraid of CVEs),
+then this patch is all right.
 
-interacting with commits
+So with all that said:
 
-  2aec377a2925 ("dm table: remove dm_table_get_num_targets() wrapper")
-  564b5c5476cd ("dm table: audit all dm_table_get_target() callers")
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-from the device-mapper tree.
+Best regards,
+	Maxim Levitsky
 
-I have applied the following merge fix patch for today.
+> 
+> > We really need x2avic (and vNMI) spec to be published to know exactly how all of this
+> > is supposed to work.
+> 
+> I have raised the concern to the team responsible for publishing the doc.
+> 
+> Best Regards,
+> Suravee
+> 
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 28 Jul 2022 20:28:41 +1000
-Subject: [PATCH] fix up for "dm: Add verity helpers for LoadPin"
 
-interacting with
-
-  2aec377a2925 ("dm table: remove dm_table_get_num_targets() wrapper")
-  564b5c5476cd ("dm table: audit all dm_table_get_target() callers")
-
-from the device-mapper tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/md/dm-verity-loadpin.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/md/dm-verity-loadpin.c b/drivers/md/dm-verity-loadpin.c
-index 10c18bc1652c..387ec43aef72 100644
---- a/drivers/md/dm-verity-loadpin.c
-+++ b/drivers/md/dm-verity-loadpin.c
-@@ -5,6 +5,7 @@
- #include <linux/dm-verity-loadpin.h>
-=20
- #include "dm.h"
-+#include "dm-core.h"
- #include "dm-verity.h"
-=20
- #define DM_MSG_PREFIX	"verity-loadpin"
-@@ -58,7 +59,7 @@ bool dm_verity_loadpin_is_bdev_trusted(struct block_devic=
-e *bdev)
-=20
- 	table =3D dm_get_live_table(md, &srcu_idx);
-=20
--	if (dm_table_get_num_targets(table) !=3D 1)
-+	if (table->num_targets !=3D 1)
- 		goto out;
-=20
- 	ti =3D dm_table_get_target(table, 0);
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/PYm+ZwgZa.DoU7fyI=lOJl5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLiay8ACgkQAVBC80lX
-0GwAfgf+Iu9REq677ofzIbNSNd8XqQNeXDlYKfJ7XDofS//QGl/rpw2bK8cPQb/m
-qixESTKOXF9aJ0E+7vC3ZmujyFQazp/d+N28vlBYt/K2ZV324UuA6bdTYbdNtJw7
-vvcLgYbVxPZ5IGB1zIjPldyjFeDCZWobUZ+HqarJXNR8YwjF59nikD82ZKL+k0gB
-VzR7bpELc4Tf2n1yeENwfop+SP/KCxG9lt7u/wTptT632bI+g8dHIFoAQMX5nHcT
-OaBOMkjFpNc1rDjj8+fw4jne1xEF2gPj4apeLlly0JzsAtmz4dqZb0SHr7k6wVw1
-irwNlsh7dJ5MB6OSfkyoVDYyCqpH4w==
-=oOz8
------END PGP SIGNATURE-----
-
---Sig_/PYm+ZwgZa.DoU7fyI=lOJl5--

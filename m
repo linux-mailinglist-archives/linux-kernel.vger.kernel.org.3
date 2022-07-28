@@ -2,209 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BC9583B39
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB17583B37
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235525AbiG1J2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
+        id S235520AbiG1J1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233606AbiG1J2O (ORCPT
+        with ESMTP id S235398AbiG1J1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:28:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D85D65837
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:28:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35EA5B82381
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:28:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D238CC433D6;
-        Thu, 28 Jul 2022 09:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659000490;
-        bh=lk5BBdnVMgk5f2fm1o9PA39S1U41Y9NR+a2cIo5is50=;
-        h=From:To:Cc:Subject:Date:From;
-        b=a/grYEPqQL38OVfRghnD9V/a7+DIS4nogaAWl5r9GYXd0YDZishRRTVE4I3IQQsVl
-         D9ImpTy3RloRs8uRlr/GziCsMYx8VNvoIdMybVVZS+rhqd3gzr8H8m+PnCT8p+5G0N
-         DkP+qGqp1unTiTh7UcLUmGMhO7DgzY31UvXofEniKw2gVUHLkMZl6N+skbthcrCiBb
-         7H2uug+7/XwU9w+3zHprD3lkJEWfkzSZEw3l4DWF4mBS1HXW4PR03CU8n1LFg06eAB
-         jYJyBdSm3nirgoyK+weGQU8ev8DN3KMRwX/MidAsj7LcJti/z2U1Lj79TsR/siSsZL
-         fN8K90KrH7x2g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oGzod-0005WP-1t; Thu, 28 Jul 2022 11:28:23 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH] irqdomain: Fix mapping-creation race
-Date:   Thu, 28 Jul 2022 11:27:10 +0200
-Message-Id: <20220728092710.21190-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 28 Jul 2022 05:27:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FBF165D40
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659000441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LrxQSWciaWJjGdDz7VQeuucGTXw62npYksns5+Sozgk=;
+        b=ATfVOxmWSkRH7ZBFtBSI0o29I/urswpG32IhmuGaqdeGpNu4UO2g0fIuWfsUgf2+jdExaG
+        SoCYU5hGiw14UF68thT0ChujJ4giRzasVQqFoD0owyLhdsc8RY0ZF45hWuH7bRK5GDikxg
+        hFNXvKrc0nyNvQWvs3rb7qk8F+i1FnY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-391-PnlwxStjMfqH-71LQUt28g-1; Thu, 28 Jul 2022 05:27:20 -0400
+X-MC-Unique: PnlwxStjMfqH-71LQUt28g-1
+Received: by mail-wm1-f71.google.com with SMTP id z20-20020a1c4c14000000b003a3020da654so263080wmf.5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:27:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=LrxQSWciaWJjGdDz7VQeuucGTXw62npYksns5+Sozgk=;
+        b=Qvi/RAori9QMLaSENCbCxMD2Dm8UzQwXXEhqCphc35kOgJydOtWFxyyksIyZfbrKDO
+         s/sSondalxsg4Dz5Hg6kaQweorkfenW2qNAoYTj9nQ4CZshEyufsBYN7oK37QOC/fsV/
+         tJAZhbkfqjYfTDvWyvyJIJOalG92MXYZffKBiEl2qJRNHHjjmEQxpuEK6p5mEwmR3IFH
+         C1fJraSKTrrNQ4xAFNSHTvKkDhWPdM+NoyCgMvsJQ7NGobIC0uwKqYInkutUUrn6zlyG
+         yh/vDF1gIpxdSmR59bhNSrt1YY35tCOPjqzciLpRroaZqMHgvKjUCbQZuQwooil00vrJ
+         ws0w==
+X-Gm-Message-State: AJIora8Z1Wke/+/PJjQ1N8orPzwtDX4uSkWSXWOyAZtyDryeOrwo9hlt
+        S4Ujb6P43JxBLb3OveYnH7V5sJ+kvXar2ZjclXpNg718nIDMxviFc9cYUv5AbR5LExc2a7ZpHA0
+        eGPHjaxpepF65kH9sIriLUejF
+X-Received: by 2002:adf:ffc1:0:b0:21d:66a1:c3ee with SMTP id x1-20020adfffc1000000b0021d66a1c3eemr16041387wrs.364.1659000439057;
+        Thu, 28 Jul 2022 02:27:19 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1upxqCVjXPJAiQREZPjwda4AYwu3LBOidqDUdl61pYBbKHbL+vvbmNlzGyLJV5MOoy3LxjH1A==
+X-Received: by 2002:adf:ffc1:0:b0:21d:66a1:c3ee with SMTP id x1-20020adfffc1000000b0021d66a1c3eemr16041365wrs.364.1659000438748;
+        Thu, 28 Jul 2022 02:27:18 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id g17-20020a5d4891000000b0021f0558e51asm444942wrq.55.2022.07.28.02.27.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 02:27:18 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: Re: [PATCH] sched: Print each field value left-aligned in
+ sched_show_task()
+In-Reply-To: <20220727060819.1085-1-thunder.leizhen@huawei.com>
+References: <20220727060819.1085-1-thunder.leizhen@huawei.com>
+Date:   Thu, 28 Jul 2022 10:27:17 +0100
+Message-ID: <xhsmhh731egei.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parallel probing (e.g. due to asynchronous probing) of devices that share
-interrupts can currently result in two mappings for the same hardware
-interrupt to be created.
+On 27/07/22 14:08, Zhen Lei wrote:
+> Currently, the values of some fields are printed right-aligned, causing
+> the field value to be next to the next field name rather than next to its
+> own field name. So print each field value left-aligned, to make it more
+> readable.
+>
+> Before:
+>       stack:    0 pid:  307 ppid:     2 flags:0x00000008
+> After
+>       stack:0     pid:308   ppid:2      flags:0x0000000a
+>
+> This also makes them print in the same style as the other two fields:
+>       task:demo0           state:R  running task
+>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-Add a serialising mapping mutex so that looking for an existing mapping
-before creating a new one is done atomically.
-
-Note that serialising the lookup and creation in
-irq_create_mapping_affinity() would have been enough to prevent the
-duplicate mapping, but that could instead cause
-irq_create_fwspec_mapping() to fail when there is a race.
-
-Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
-Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
-Cc: Dmitry Torokhov <dtor@chromium.org>
-Cc: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- kernel/irq/irqdomain.c | 46 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 34 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index 8fe1da9614ee..d263a7dd4170 100644
---- a/kernel/irq/irqdomain.c
-+++ b/kernel/irq/irqdomain.c
-@@ -22,6 +22,7 @@
- 
- static LIST_HEAD(irq_domain_list);
- static DEFINE_MUTEX(irq_domain_mutex);
-+static DEFINE_MUTEX(irq_mapping_mutex);
- 
- static struct irq_domain *irq_default_domain;
- 
-@@ -669,7 +670,7 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
- #endif
- 
- /**
-- * irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
-+ * __irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
-  * @domain: domain owning this hardware interrupt or NULL for default domain
-  * @hwirq: hardware irq number in that domain space
-  * @affinity: irq affinity
-@@ -679,9 +680,9 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
-  * If the sense/trigger is to be specified, set_irq_type() should be called
-  * on the number returned from that call.
-  */
--unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
--				       irq_hw_number_t hwirq,
--				       const struct irq_affinity_desc *affinity)
-+static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
-+						  irq_hw_number_t hwirq,
-+						  const struct irq_affinity_desc *affinity)
- {
- 	struct device_node *of_node;
- 	int virq;
-@@ -724,6 +725,19 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
- 
- 	return virq;
- }
-+
-+unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
-+					 irq_hw_number_t hwirq,
-+					 const struct irq_affinity_desc *affinity)
-+{
-+	unsigned int virq;
-+
-+	mutex_lock(&irq_mapping_mutex);
-+	virq = __irq_create_mapping_affinity(domain, hwirq, affinity);
-+	mutex_unlock(&irq_mapping_mutex);
-+
-+	return virq;
-+}
- EXPORT_SYMBOL_GPL(irq_create_mapping_affinity);
- 
- static int irq_domain_translate(struct irq_domain *d,
-@@ -789,6 +803,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
- 	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
- 		type &= IRQ_TYPE_SENSE_MASK;
- 
-+	mutex_lock(&irq_mapping_mutex);
-+
- 	/*
- 	 * If we've already configured this interrupt,
- 	 * don't do it again, or hell will break loose.
-@@ -801,7 +817,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
- 		 * interrupt number.
- 		 */
- 		if (type == IRQ_TYPE_NONE || type == irq_get_trigger_type(virq))
--			return virq;
-+			goto out;
- 
- 		/*
- 		 * If the trigger type has not been set yet, then set
-@@ -810,26 +826,26 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
- 		if (irq_get_trigger_type(virq) == IRQ_TYPE_NONE) {
- 			irq_data = irq_get_irq_data(virq);
- 			if (!irq_data)
--				return 0;
-+				goto err;
- 
- 			irqd_set_trigger_type(irq_data, type);
--			return virq;
-+			goto out;
- 		}
- 
- 		pr_warn("type mismatch, failed to map hwirq-%lu for %s!\n",
- 			hwirq, of_node_full_name(to_of_node(fwspec->fwnode)));
--		return 0;
-+		goto err;
- 	}
- 
- 	if (irq_domain_is_hierarchy(domain)) {
- 		virq = irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, fwspec);
- 		if (virq <= 0)
--			return 0;
-+			goto err;
- 	} else {
- 		/* Create mapping */
--		virq = irq_create_mapping(domain, hwirq);
-+		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
- 		if (!virq)
--			return virq;
-+			goto err;
- 	}
- 
- 	irq_data = irq_get_irq_data(virq);
-@@ -838,13 +854,19 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
- 			irq_domain_free_irqs(virq, 1);
- 		else
- 			irq_dispose_mapping(virq);
--		return 0;
-+		goto err;
- 	}
- 
- 	/* Store trigger type */
- 	irqd_set_trigger_type(irq_data, type);
-+out:
-+	mutex_unlock(&irq_mapping_mutex);
- 
- 	return virq;
-+err:
-+	mutex_unlock(&irq_mapping_mutex);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(irq_create_fwspec_mapping);
- 
--- 
-2.35.1
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 

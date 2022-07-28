@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3B7583CEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563CD583CF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 13:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236121AbiG1LPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 07:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S235441AbiG1LQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 07:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiG1LPU (ORCPT
+        with ESMTP id S230216AbiG1LQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 07:15:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBF22A43F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 04:15:18 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D93A56601B43;
-        Thu, 28 Jul 2022 12:15:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659006917;
-        bh=0gnnEk0TG5O1vi5/Vm6gds5OMe6ylZ4Rer3EJsmYcoU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ye6q2lA5BgXCgHk9eToRCt4M7AqeV1MuUi/od7Zy/EQY00QXeuaD3kymlgnox+gTb
-         QsOoV4EGCLKh5N9Uyr18G+AZZXgvLBLMZ+jShh7FLPLTG/PGZ+SzvzPLezgdlJhvb+
-         hFsrnavXWQXsJOHz1eY4YyGy30i84TH4zKDVjFZwQTbUEYI4VtRT9YszA9MLQ96RBz
-         tyMpA1KomVlbITyGOuZ71Cb9lU7XDHMbLzxiKZ7ovJ1Cgcoe0torqjO2HKIhA//Em0
-         JxMpdKEZBS6xeoyPZWy0KL1H/osgLmU57KZO3Jft20v218FEip4wABFExuRjmyo8HE
-         MbZ6NJlzmXMBw==
-Message-ID: <decb7338-eeb8-3c0c-88f2-c0b00fb8b0e7@collabora.com>
-Date:   Thu, 28 Jul 2022 13:15:14 +0200
+        Thu, 28 Jul 2022 07:16:27 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC2263912;
+        Thu, 28 Jul 2022 04:16:26 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id m8so1728051edd.9;
+        Thu, 28 Jul 2022 04:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I1hcQDsRPMnRc56BCmzgeV/mUPsQfxRSFDip2MB+Kss=;
+        b=q70S7u6oJiCsrKuJPZt99845aiVMvcyznOEvoqs0xtppse3X4bNHBeucluhRlRIB17
+         Hfee1lCq6qk0BFvYf6Kxex6JHeLUqa0j5St90+LzbAuGcEjWJHeUHp94UZj79kp/LuEr
+         T0g8u5bXJB+FohCvoHnyQ2UdhGA3louCqsa2EhAWJnxcTJ71rzBtLPFEeAqhWCnQ0crA
+         J1I6FZFBCVI961ESYAn/cRc1haxmewRSJP3Eqr8OrdTyxXjE7F/5B4k//Ak41fu0fRQ0
+         4CqeUpIQK8IYOOjG3SJRnmatNbV3W7EV2XCoZ0WQX/fEPbk8anmDRVxlLPUx9UVy1Qh5
+         3QHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I1hcQDsRPMnRc56BCmzgeV/mUPsQfxRSFDip2MB+Kss=;
+        b=4vm8Hfynp/dtSv++K1LfsCt9AKiMS1mkL6fYkKJY5akmxpfMzv4yB088bs1eOwMeef
+         p1N/l4Obn0BTbr5J0NSP/oKqUcTYWaCPEPOzOHeVAdYQCcq9C1B28zqGVG5PxMtgEGqr
+         uyjolKavdba5aYa6onCGwYIoH8CTiYlHhYssBdmJiJqIN7+b8Wnmlz52bgN/MTKAQpHl
+         nJ5khiqyvYBKAPk98QnVL7ek/Q1OjhJHt7DKArJWaYYUv21kpUuS2r4jiT9rqE0cudnx
+         4AoZayY8dRbJ+g+kc/0BWLkmXpL1rhQzQFeJA1gyzmSOYjwYXZ5qBByEwjOKbXtD4brr
+         XYxA==
+X-Gm-Message-State: AJIora8nm/F1SV82yAfYHEpe6UfA/Bbca8vf9uIppf1g7SpSdzSO/sOj
+        I3YN2cW19G6/XMuj7thDtdY=
+X-Google-Smtp-Source: AGRyM1voPgPgibrhvl7h3F9hwBmh2W/rUdGDc8VASe+RSNb8IV4fCxzHIbqAtTVnhr2RBOEovu7gaQ==
+X-Received: by 2002:a05:6402:4cc:b0:43c:cd5c:dcfb with SMTP id n12-20020a05640204cc00b0043ccd5cdcfbmr4601784edw.277.1659006984597;
+        Thu, 28 Jul 2022 04:16:24 -0700 (PDT)
+Received: from brandenburg.sect.tu-berlin.de ([130.149.39.100])
+        by smtp.gmail.com with ESMTPSA id vj16-20020a170907131000b006fec27575f1sm295803ejb.123.2022.07.28.04.16.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 04:16:21 -0700 (PDT)
+From:   Shinjo Park <peremen@gmail.com>
+Cc:     peremen@gmail.com, David Heidelberg <david@ixit.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] ARM: dts: qcom: msm8960: add reference to sleep_clk
+Date:   Thu, 28 Jul 2022 13:16:02 +0200
+Message-Id: <20220728111603.30503-1-peremen@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RFC] regulator: mt6380: Fix unused array warning
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chenglin Xu <chenglin.xu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>
-References: <20220727132637.76d6073f@endymion.delvare>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220727132637.76d6073f@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/07/22 13:26, Jean Delvare ha scritto:
-> With the following configuration options:
-> CONFIG_OF is not set
-> CONFIG_REGULATOR_MT6380=y
-> we get the following build warning:
-> 
->    CC      drivers/regulator/mt6380-regulator.o
-> drivers/regulator/mt6380-regulator.c:322:34: warning: ‘mt6380_of_match’ defined but not used [-Wunused-const-variable=]
-> 
-> Fix this by annotating that array with __maybe_unused, as done in
-> various regulator drivers.
+Change the reference of sleep_clk to the same as qcom-apq8064.dtsi.
 
-I know I'm late to the party, but I would've preferred to see the
-of_match_ptr() dropped instead of adding a __maybe_unused.
+Signed-off-by: Shinjo Park <peremen@gmail.com>
+Reviewed-by: David Heidelberg <david@ixit.cz>
+---
+ arch/arm/boot/dts/qcom-msm8960.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
-Angelo
+diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+index e8cd1c9c0..991eb1948 100644
+--- a/arch/arm/boot/dts/qcom-msm8960.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+@@ -71,7 +71,7 @@ pxo_board: pxo_board {
+ 			clock-output-names = "pxo_board";
+ 		};
+ 
+-		sleep_clk {
++		sleep_clk: sleep_clk {
+ 			compatible = "fixed-clock";
+ 			#clock-cells = <0>;
+ 			clock-frequency = <32768>;
+-- 
+2.34.1
 
-> 
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/all/202207240252.ZY5hSCNB-lkp@intel.com/
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: Chenglin Xu <chenglin.xu@mediatek.com>
-> ---
-> This assumes that the mt6380 driver can be used without OF support.
-> However, I can't find any in-tree piece of code instantiating the
-> "mt6380-regulator" platform device by name. So unless there's an
-> out-of-tree user, a better fix would be to remove mt6380_platform_ids
-> and make the driver depend on OF. Chenglin, would that be OK with
-> you?
-> 
->   drivers/regulator/mt6380-regulator.c |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- linux-5.18.orig/drivers/regulator/mt6380-regulator.c	2022-07-27 11:55:21.672421481 +0200
-> +++ linux-5.18/drivers/regulator/mt6380-regulator.c	2022-07-27 12:01:53.151833378 +0200
-> @@ -319,7 +319,7 @@ static const struct platform_device_id m
->   };
->   MODULE_DEVICE_TABLE(platform, mt6380_platform_ids);
->   
-> -static const struct of_device_id mt6380_of_match[] = {
-> +static const struct of_device_id  __maybe_unused mt6380_of_match[] = {
->   	{ .compatible = "mediatek,mt6380-regulator", },
->   	{ /* sentinel */ },
->   };
-> 

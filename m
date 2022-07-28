@@ -2,96 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02AA58420F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6A5584212
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiG1Oof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S230327AbiG1Oor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiG1Oob (ORCPT
+        with ESMTP id S232683AbiG1Ool (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:44:31 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED5A6262;
-        Thu, 28 Jul 2022 07:44:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2E4B534A17;
-        Thu, 28 Jul 2022 14:44:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659019468; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gpW4YToHW6w1TJ+JUui+ok8xn0F55KMcQkwdz3YZ6hI=;
-        b=gr1imVX/+jT5GEcGtWZ8FbJVs2S+5goVZ3h54Klc/9rJIqVQc5zm9Io0oEppBZkpPdh/6p
-        vBJUd2+893USnplUtxLe9m9SBOZYRw9hFoC11WwAfTE1LB4fL5sASnD2XsvlwN9GgP2Z6A
-        0x0hKwuBnycqcXIaHuIFbuizv3oUn/I=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C936C13A7E;
-        Thu, 28 Jul 2022 14:44:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id g4QoMMug4mILZwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 28 Jul 2022 14:44:27 +0000
-Date:   Thu, 28 Jul 2022 16:44:26 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] cgroup: Skip subtree root in
- cgroup_update_dfl_csses()
-Message-ID: <20220728144426.GA26631@blackbody.suse.cz>
-References: <20220728005815.1715522-1-longman@redhat.com>
- <20220728005815.1715522-2-longman@redhat.com>
+        Thu, 28 Jul 2022 10:44:41 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0062A11A28;
+        Thu, 28 Jul 2022 07:44:39 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id i10-20020a1c3b0a000000b003a2fa488efdso431009wma.4;
+        Thu, 28 Jul 2022 07:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=IRQ8c2L3JLJa8KExAV2T24apu/+2cMu4sYdyXBwjm6Q=;
+        b=MShn1kAzWvQyrXokQ5UMfU98wJPbQAQOZRvkMOOAMcxhaTQ2y66w9EqEc8UV+/RFWc
+         ++60fhi1xF9A6DEx2+62tRNTQ2ORT3O+Z3CWxD3AxEtDpXpxgkEMSZx5AFrpPOYmMbNK
+         lsFRw/1XT2jl5Yo0Jqc4V+xGLys+Ds/D4J7US3i2Fdcu92yWOAHvxRJaG3pprC4iWh0Z
+         R8Km9l0bcD94GNFl8oc51gGE02VMbKG7TRJmDNuFxvHM81gpVxf/vbKffydzgwA48hiP
+         1SxlM/BGZ0pS5V58+EKO3mJiCFI2Cb6QvFeCydBdxbl1e1w1CvCInvvYq6GAxpYTJIvH
+         lhoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=IRQ8c2L3JLJa8KExAV2T24apu/+2cMu4sYdyXBwjm6Q=;
+        b=skMSjVf38wn7ey9xguYhy7mZzF895fV3EegSOB1v7Jn2BwLjc2at6zu3/l7iX7Vzg6
+         zqWdLrxuJmTGaa7b5FTLG9mEUX2XkAq8uLbAv+lN8teSAYoNibiBfuZSYGcuDaEzx9eK
+         OS6VcsvgKPKFhYwL0tvB/xP5qH0un/vi/JYNdecGam4Yy8AemKtgPN4bn9ySn/xK3ehE
+         UQyNldqU6eUKo7Ge2OZ0oAeKKXoqhqwYqWmdwv4hQvSIXg7DV6fKnWGE+bptz2+HhVuI
+         mgui/qH1/k7pVRxzAhNhUFy9AQVp38DOE+sxA/PWsZySxirKJd2WsKdU6sWeHBDnZ4tt
+         IAiA==
+X-Gm-Message-State: AJIora/BXo4xgguM53gBuit4kw4IsGgYPUJf+ZL5A4RB4jbjbtNZQGHK
+        tB79MH9igh7TL0Q66okCNwqM4c1hPbntsg==
+X-Google-Smtp-Source: AGRyM1tdc7tnAm1dZA+USXTn1cunrkVm9kUW/8+R8wD+fU+vJ9+qs1qaXNWkn+ustZVXxUHQl7Gglg==
+X-Received: by 2002:a05:600c:1986:b0:3a3:490b:1fd4 with SMTP id t6-20020a05600c198600b003a3490b1fd4mr6546981wmq.140.1659019478460;
+        Thu, 28 Jul 2022 07:44:38 -0700 (PDT)
+Received: from debian ([2402:3a80:196b:933a:553c:d695:8a60:6d86])
+        by smtp.gmail.com with ESMTPSA id d9-20020a05600c34c900b003a3170a7af9sm1675939wmq.4.2022.07.28.07.44.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 07:44:38 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 15:44:27 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/105] 5.10.134-rc1 review
+Message-ID: <YuKgy+5Me9LRxc0i@debian>
+References: <20220727161012.056867467@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220728005815.1715522-2-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220727161012.056867467@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 08:58:15PM -0400, Waiman Long <longman@redhat.com> wrote:
-> The cgroup_update_dfl_csses() function updates css associations when a
-> cgroup's subtree_control file is modified. Any changes made to a cgroup's
-> subtree_control file, however, will only affect its descendants but not
-> the cgroup itself. 
+Hi Greg,
 
-I find this correct.
+On Wed, Jul 27, 2022 at 06:09:46PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.134 release.
+> There are 105 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
+> Anything received after that time might be too late.
 
-> So there is no point in migrating csses associated with that cgroup.
-> We can skip them instead.
+Build test (gcc version 11.3.1 20220724):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Alone it's not such a big win but it componds with the recent Tejun's
-threadgroup_rwsem elision.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-> ---
->  kernel/cgroup/cgroup.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+[1]. https://openqa.qa.codethink.co.uk/tests/1572
+[2]. https://openqa.qa.codethink.co.uk/tests/1576
 
-Feel free to have
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

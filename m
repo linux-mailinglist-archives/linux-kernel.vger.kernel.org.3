@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86977583E83
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD09583E75
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238128AbiG1MRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S237039AbiG1MQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237869AbiG1MRI (ORCPT
+        with ESMTP id S235640AbiG1MQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:17:08 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBEB691D0;
-        Thu, 28 Jul 2022 05:17:07 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26SA4n5n032223;
-        Thu, 28 Jul 2022 05:17:01 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=+BixbfkLRoEVSlMXKnuj4O4Z7KmNTMJZZpE1nhzCvQ0=;
- b=fvuvuK+Mdo6RCYpAle6aT1GKo3qpLVGTq4lrrzpHyfIC8XEATabrrc/nb3c/mrm+zn6j
- rHXZIwnluBzDop4B546MeLyrQgy4m02+DTn1dXrSV5gMdtt8Z3wri7QhKpl1Jkok7nkI
- TmAC1KLMzMNcQRYc6XPEybu+r7YY9/ArPkLxtp9jLPIIzWApr8rDvCJwNn6fHfC5Xfdd
- 49l0mN9UBo6nlZfjdkZRWU4+Msps3ar48ad59foirD8+2W4Y+vxJB0fGabSAdWtZYgYK
- fbYy5EWXF6whzsmBJWtOsjQZopqamXyfRChkW/vYL8KBwCXJe7NGdOlbY5NFPTGPwyMw Zg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3hjyn8nm2u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 28 Jul 2022 05:17:01 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 28 Jul
- 2022 05:16:59 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 28 Jul 2022 05:16:59 -0700
-Received: from #hyd1583.marvell.com (unknown [10.29.37.44])
-        by maili.marvell.com (Postfix) with ESMTP id BEB2A3F703F;
-        Thu, 28 Jul 2022 05:16:56 -0700 (PDT)
-From:   Naveen Mamindlapalli <naveenm@marvell.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
-CC:     Naveen Mamindlapalli <naveenm@marvell.com>
-Subject: [net-next PATCH 4/4] octeontx2-af: Initialize PTP_SEC_ROLLOVER register properly
-Date:   Thu, 28 Jul 2022 17:46:38 +0530
-Message-ID: <20220728121638.17989-5-naveenm@marvell.com>
-X-Mailer: git-send-email 2.16.5
-In-Reply-To: <20220728121638.17989-1-naveenm@marvell.com>
-References: <20220728121638.17989-1-naveenm@marvell.com>
+        Thu, 28 Jul 2022 08:16:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6214752DFB;
+        Thu, 28 Jul 2022 05:16:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0201761C3C;
+        Thu, 28 Jul 2022 12:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FEEC433C1;
+        Thu, 28 Jul 2022 12:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659010608;
+        bh=LFZJFSQspiVXFSZZuiOSuX8EkyVURrciQuZijn6iuYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pYRAjGPcx4Pk+v7gA5d4Y6TZiNhDSm7UAjnIIjANFVLL8CYcpVXuUoogC7+zNaKPJ
+         kWW7IV/58w9goM69D3Tkl45VhrvTInyyVh1QwLsYCpxV9cMJf4UCLOUY0Ztqolg/iq
+         YMMMTRLyixkiRn3X3BWEDTxsGRIsCGhvs8TpVU7kAYWK569AZgOBT5zAAs5xPT/Ps8
+         InUShCMMs2GtlAmYmb4tb6Zhj3NC0NFTGEP9h5V8QJ2D/GcafM7BbjUApVTZNZ11yo
+         6w6yFxQ1A7z981s9Or8o+q1DZ0mDboZSxX/1Vf7iTvLbs6m1vYfhEmZL6wY2PFbQt6
+         FDG7BBdnD4FFg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oH2Rp-0008HG-QL; Thu, 28 Jul 2022 14:17:01 +0200
+Date:   Thu, 28 Jul 2022 14:17:01 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Xiaowei Song <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        linux-pci@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Why set .suppress_bind_attrs even though .remove() implemented?
+Message-ID: <YuJ+PZIhg8mDrdlX@hovoldconsulting.com>
+References: <Yt+6azfwd/LuMzoG@hovoldconsulting.com>
+ <20220727195716.GA220011@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: tR-aVwKvL_35yGz4GRUWM3dH3Ns0YvoF
-X-Proofpoint-GUID: tR-aVwKvL_35yGz4GRUWM3dH3Ns0YvoF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-28_05,2022-07-28_02,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220727195716.GA220011@bhelgaas>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,51 +68,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the reset value of PTP_SEC_ROLLOVER is incorrect on
-CNF10KB silicon, the ptp timestamps are inaccurate. This
-patch initializes the PTP_SEC_ROLLOVER register properly
-for the CNF10KB silicon.
+On Wed, Jul 27, 2022 at 02:57:16PM -0500, Bjorn Helgaas wrote:
+> On Tue, Jul 26, 2022 at 11:56:59AM +0200, Johan Hovold wrote:
+> > On Mon, Jul 25, 2022 at 06:35:27PM +0100, Marc Zyngier wrote:
+> > > On Mon, 25 Jul 2022 16:18:48 +0100,
+> > > Johan Hovold <johan@kernel.org> wrote:
+> > 
+> > > > Since when is unloading modules something that is expected to
+> > > > work perfectly? I keep hearing "well, don't do that then" when
+> > > > someone complains about unloading this module while doing this
+> > > > or that broke something. (And it's only root that can unload
+> > > > modules in the first place.)
+> > > 
+> > > Well, maybe I have higher standards. For the stuff I maintain, I
+> > > now point-blank refuse to support module unloading if this can
+> > > result in a crash. Or worse.
+> > 
+> > That makes sense for regular interrupt controllers where its hard to
+> > tell that all consumers are gone, but I don't think that should
+> > limit the usefulness of having modular PCI controller drivers where
+> > we know that the consumers are gone after deregistering the bus
+> > (i.e. the consumers are descendants of the controller in the device
+> > tree).
+> 
+> Those consumers are endpoint drivers, so I think this depends on those
+> drivers correctly unmapping the interrupts they use, right?
 
-Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/af/ptp.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Right. For MSI this means that pci_alloc_irq_vectors() in probe should
+be matched by pci_free_irq_vectors() on remove.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-index 01f7dbad6b92..3411e2e47d46 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-@@ -52,12 +52,18 @@
- #define PTP_CLOCK_COMP				0xF18ULL
- #define PTP_TIMESTAMP				0xF20ULL
- #define PTP_CLOCK_SEC				0xFD0ULL
-+#define PTP_SEC_ROLLOVER			0xFD8ULL
- 
- #define CYCLE_MULT				1000
- 
- static struct ptp *first_ptp_block;
- static const struct pci_device_id ptp_id_table[];
- 
-+static bool is_ptp_dev_cnf10kb(struct ptp *ptp)
-+{
-+	return (ptp->pdev->subsystem_device == PCI_SUBSYS_DEVID_CNF10K_B_PTP) ? true : false;
-+}
-+
- static bool is_ptp_dev_cn10k(struct ptp *ptp)
- {
- 	return (ptp->pdev->device == PCI_DEVID_CN10K_PTP) ? true : false;
-@@ -290,6 +296,10 @@ void ptp_start(struct ptp *ptp, u64 sclk, u32 ext_clk_freq, u32 extts)
- 	/* sclk is in MHz */
- 	ptp->clock_rate = sclk * 1000000;
- 
-+	/* Program the seconds rollover value to 1 second */
-+	if (is_ptp_dev_cnf10kb(ptp))
-+		writeq(0x3b9aca00, ptp->reg_base + PTP_SEC_ROLLOVER);
-+
- 	/* Enable PTP clock */
- 	clock_cfg = readq(ptp->reg_base + PTP_CLOCK_CFG);
- 
--- 
-2.16.5
+For legacy interrupts, which can be shared, the mapping is created by
+PCI core when binding to the first device and can only be disposed by
+the host-bridge driver once all descendants have been removed.
 
+The endpoint drivers still need to disable their interrupts of course.
+
+Buggy endpoint-driver remove implementations can lead to all sorts of
+crashes (e.g. after failing to deregister a class device), and if that's
+a worry then don't unload modules (and possibly disable it completely
+using CONFIG_MODULE_UNLOAD).
+
+> > > > It's useful for developers, but use it at your own risk.
+> > > > 
+> > > > That said, I agree that if something is next to impossible to
+> > > > get right, as may be the case with interrupt controllers
+> > > > generally, then fine, let's disable module unloading for that
+> > > > class of drivers.
+> > > > 
+> > > > And this would mean disabling driver unbind for the 20+ driver
+> > > > PCI drivers that currently implement it to some degree.
+> > > 
+> > > That would be Bjorn's and Lorenzo's call.
+> > 
+> > Sure, but I think it would be the wrong decision here. Especially,
+> > since the end result will likely just be that more drivers will
+> > become always compiled-in.
+> 
+> Can you elaborate on this?  I think Marc is suggesting that these PCI
+> controller drivers be modular but not removable.  Why would that cause
+> more of them to be compiled-in?
+
+As mentioned earlier in this thread, we only appear to have some 60
+drivers in the entire tree that bother to try to implement that. I fear
+that blocking the use of modules (including being able to unload them)
+will just make people submit drivers that can only be built in.
+
+Not everyone cares about Android's GKI, but being able to unload a
+module during development is very useful (and keeping that out-of-tree
+prevents sharing the implementation and make it susceptible to even
+further bit rot).
+
+So continuing to supporting modules properly is a win for everyone (e.g.
+GKI and developers).
+ 
+> > > > > > Turns out the pcie-qcom driver does not support legacy
+> > > > > > interrupts so there's no risk of there being any lingering
+> > > > > > mappings if I understand things correctly.
+> > > > > 
+> > > > > It still does MSIs, thanks to dw_pcie_host_init(). If you can
+> > > > > remove the driver while devices are up and running with MSIs
+> > > > > allocated, things may get ugly if things align the wrong way
+> > > > > (if a driver still has a reference to an irq_desc or irq_data,
+> > > > > for example).
+> > > > 
+> > > > That is precisely the way I've been testing it and everything
+> > > > appears to be tore down as it should.
+> > > >
+> > > > And a PCI driver that has been unbound should have released its
+> > > > resources, or that's a driver bug. Right?
+> > > 
+> > > But that's the thing: you can easily remove part of the
+> > > infrastructure without the endpoint driver even noticing. It may
+> > > not happen in your particular case if removing the RC driver will
+> > > also nuke the endpoints in the process, but I can't see this is an
+> > > absolute guarantee. The crash pointed to by an earlier email is
+> > > symptomatic of it.
+> > 
+> > But that was arguably due to a driver bug, which we know how to fix.
+> > For MSIs the endpoint driver will free its interrupts and all is
+> > good.
+> > 
+> > The key observation is that the driver model will make sure that any
+> > endpoint drivers have been unbound before the bus is deregistered.
+> > 
+> > That means there are no longer any consumers of the interrupts,
+> > which can be disposed. For MSI this is handled by
+> > pci_free_irq_vectors() when unbinding the endpoint drivers. For
+> > legacy interrupts, which can be shared, the PCIe RC driver needs to
+> > manage this itself after the consumers are gone.
+> 
+> The driver model ensures that endpoint drivers have been unbound. But
+> doesn't the interrupt disposal depend on the correct functioning of
+> those endpoint drivers?  So if a buggy endpoint driver failed to
+> dispose of them, we're still vulnerable?
+
+Just as you are if an endpoint-driver fails to clean up after itself in
+some other way (e.g. leaves the interrupt enabled).
+
+Johan

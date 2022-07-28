@@ -2,116 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6605844E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92F55844FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiG1Rbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
+        id S232677AbiG1Rcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiG1Rbq (ORCPT
+        with ESMTP id S230187AbiG1Rcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:31:46 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E686FA1D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:31:45 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id e1so2633961pjl.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=JzWSbegIa18BHBsASV98zvRT5onUp1vk7q4OW1er06Q=;
-        b=FHAd4S42PQWgOUTtJLeher3mJZNYMDm6Q8ch+tKigZv6XbAa+eoy4wNvdVxuPp5kLd
-         aQKGGkjNPUj9Ud0bS7RW8Et+qvqXBTDnVDWmT/rZ/OoPxo2xB5Z7gL/Al85Jk+hR4Fta
-         qB3StRXNTxByiUYpwT1+9Y9Gg3V7RArWLxsFQQ66QL9KmkB8JEuE+riAPn8BhMjYa1EL
-         1YkPqDfvPLpwd9m0rmZfod8mSnfqt0U9GH2l7FJBjQQD9fWvz0cefgMm+0kdPCcHHJC/
-         oJ//zLDrB3IaMU9KyF560e8my+A3ppLNyWBiK70yerGW5H4T5tQlfqzKxuFFWwigdqwy
-         p2/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=JzWSbegIa18BHBsASV98zvRT5onUp1vk7q4OW1er06Q=;
-        b=DXfM1Bus3DnvfcXnI47b9CHx9lYp3g6oqx6FKyYeJr1QrtyZ6gIyysxfoM/c915W73
-         iwjQWtVfbNokt8TrV9D3b4Orou3qrIv2RWigIWXRr2yMbXAUslKLmKuhQ5TGGZGwhJ0l
-         wTZfhpx8fHw8aYqha5Xgbx/aRg29O4/rauq1i+ey+IC5X6lP8QbJb0jaqm/QQKuseX3z
-         PmbZvIj6NkmXoOtSlMn8bxRMjQrRhpEDpg+f8pDmx7zt0gREGPLWuaVz2k9fWRPuPMh0
-         TeKd/QDrVr2/m2vw6iRASR9mxDCpjBvq+L3Ki3TKXyJv8sQVuXMqkDwWf83fSIkWVT7z
-         6UQQ==
-X-Gm-Message-State: ACgBeo2Wz4G7QquYVberYfcavVZw2kYX8h/Q92Xhy3mbrXytn5I4A2S+
-        oY5SQfUOrYWksN/eRdKg8cM=
-X-Google-Smtp-Source: AA6agR79XgLeYtVswaHYrccTNfk8EN5TwR71V5MTFwRQuNzMgRId0lj/kNqiriOE1Xa2W7VGLxfNKw==
-X-Received: by 2002:a17:90b:3141:b0:1f2:c6d9:6bc4 with SMTP id ip1-20020a17090b314100b001f2c6d96bc4mr491470pjb.30.1659029505044;
-        Thu, 28 Jul 2022 10:31:45 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id w187-20020a6230c4000000b0052c456eafe1sm1040312pfw.176.2022.07.28.10.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 10:31:44 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 28 Jul 2022 07:31:42 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [RFC PATCH v2 1/2] workqueue: Unbind workers before sending them
- to exit()
-Message-ID: <YuLH/l9YZYG6FRSW@slm.duckdns.org>
-References: <20220727115327.2273547-1-vschneid@redhat.com>
- <20220727115327.2273547-2-vschneid@redhat.com>
- <CAJhGHyCeraX1jcea9kt_FBC561zBgECuw5qx8TAdCG0EHnT6kA@mail.gmail.com>
- <xhsmhedy5ecdg.mognet@vschneid.remote.csb>
- <YuK6zzmlFJ376UeD@slm.duckdns.org>
- <xhsmh8roddubi.mognet@vschneid.remote.csb>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmh8roddubi.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 13:32:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3968574352
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:32:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4792B824B5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:32:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66744C433C1;
+        Thu, 28 Jul 2022 17:32:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659029548;
+        bh=nNnuBCpVyH3x9kHuriUFccdMchpBJrgqK2YxrMxw+8s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dfd4PJLWKn1nKqaEC/RrMYYpY/jBx7YElf1hZaHzyO3nzM2bsSfG50ES3q63FlnEB
+         Sy0GV5d2Rd3oA/b3gySEx0pc0+pmr0AltR9tGgY5Hvj2SqkzIQol9hGiyf994GmrTf
+         14lbXeUTxYaOftBI4wjhQ79UpBPDjkcVJhs9/EaL4TIvbUn04RrUZ9/37tZNO/kvfC
+         TmvfBHLuwdDtIkQaLPVvUV2UAlDQpXAJK1QzdeKEOLmMJSEgjTGoR95TApj8B9E205
+         dDKfqhliOWATgsrdhF/RpG7ewJCO4WrmRFXj41uSLWZXl6S3nuKClK+ICqQez5E6FE
+         lm3Smzz9WcBug==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oH7N3-00Ainm-Q7;
+        Thu, 28 Jul 2022 18:32:26 +0100
+Date:   Thu, 28 Jul 2022 18:32:25 +0100
+Message-ID: <87tu71w3bq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Z.Q. Hou" <zhiqiang.hou@nxp.com>, Biwen Li <biwen.li@nxp.com>
+Subject: Re: [PATCH v4] irqchip/ls-extirq: fix invalid wait context by avoiding to use regmap
+In-Reply-To: <532c8141-2a8b-6842-c9a2-cc4d17afd73d@seco.com>
+References: <20220728144254.175385-1-vladimir.oltean@nxp.com>
+        <501b52ba-7691-0263-c007-38174c7e5c22@seco.com>
+        <20220728152815.6h4ytx52ll2gzjj3@skbuf>
+        <532c8141-2a8b-6842-c9a2-cc4d17afd73d@seco.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sean.anderson@seco.com, vladimir.oltean@nxp.com, linux-kernel@vger.kernel.org, lee.jones@linaro.org, tglx@linutronix.de, linux@rasmusvillemoes.dk, arnd@arndb.de, zhiqiang.hou@nxp.com, biwen.li@nxp.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Sean
 
-On Thu, Jul 28, 2022 at 06:24:17PM +0100, Valentin Schneider wrote:
-> > I don't understand why this would need MEM_RECLAIM when it isn't sitting in
-> > the memory reclaim path. Nothing in mm side can wait on this.
+Please don't mix the threads. This makes it impossible to follow.
+
+On Thu, 28 Jul 2022 16:43:40 +0100,
+Sean Anderson <sean.anderson@seco.com> wrote:
 > 
-> Vaguely reading the doc I thought that'd be for anything that would
-> directly or indirectly help with reclaiming memory (not explicitly sitting
-> in some *mm reclaim* path), and I assumed freeing up a worker would count as
-> that - but that's the understanding of someone who doesn't know much about
-> all that :-)
-
-Oh, it's just needed for things that mm might end up waiting on. Here,
-there's no way for mm to know about or trigger this at all, so it doesn't
-need the flag.
-
-> > There actually are spurious wakeups. We can't depend on there being no
-> > wakeups than ours.
 > 
-> Myes, I suppose if a to-be-destroyed kworker spuriously wakes before having
-> been unbound then there's not much point in having the unbinding (harm has
-> been done and the kworker can do_exit(), though arguably we could reduce
-> the harm and still move it away), but let me see what I can do here.
+> 
+> On 7/28/22 11:28 AM, Vladimir Oltean wrote:
+> > On Thu, Jul 28, 2022 at 11:25:23AM -0400, Sean Anderson wrote:
+> >> Could we just use use_raw_spinlock in the regmap config?
+> > 
+> > That was v2, essentially:
+> > https://lore.kernel.org/lkml/874jz6dcp6.wl-maz@kernel.org/
+> > 
+> 
+> On 7/24/22 6:31 AM, Marc Zyngier wrote:
+> > On Fri, 22 Jul 2022 21:40:19 +0100,
+> > Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> >>
+> >> The irqchip->irq_set_type method is called by __irq_set_trigger() under
+> >> the desc->lock raw spinlock.
+> >>
+> >> The ls-extirq implementation, ls_extirq_irq_set_type(), uses an MMIO
+> >> regmap created by of_syscon_register(), which uses plain spinlocks
+> >> (the kind that are sleepable on RT).
+> >>
+> >> Therefore, this is an invalid locking scheme for which we get a kernel
+> >> splat stating just that ("[ BUG: Invalid wait context ]"), because the
+> >> context in which the plain spinlock may sleep is atomic due to the raw
+> >> spinlock. We need to go raw spinlocks all the way.
+> >>
+> >> Make this driver create its own MMIO regmap, with use_raw_spinlock=true,
+> >> and stop relying on syscon to provide it. Since the regmap we got from
+> >> syscon belonged to the parent and this one belongs to us, the offset to
+> >> the INTPCR register is now 0, because of the address translation that
+> >> takes place through the device tree.
+> >>
+> >> Another complication that we need to deal with is the fact that we need
+> >> to parse the 'little-endian'/'big-endian' specifiers that exist in
+> >> device trees for the parent ourselves now, since we no longer involve
+> >> syscon.
+> >>
+> >> And yet one final complication, due to the fact that this driver uses
+> >> IRQCHIP_DECLARE rather than traditional platform devices with probe and
+> >> remove methods, is that we cannot use devres, so we need to implement a
+> >> full-blown cleanup procedure on the error path.
+> >>
+> >> This patch depends on commit 67021f25d952 ("regmap: teach regmap to use
+> >> raw spinlocks if requested in the config").
+> > 
+> > This information doesn't belong to the commit message (and please read
+> > the documentation about the use of "This patch").
+> > 
+> >>
+> >> Fixes: 0dcd9f872769 ("irqchip: Add support for Layerscape external interrupt lines")
+> >> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> >> ---
+> >> v1->v2: create a separate regmap for the ls-extirq driver rather than
+> >>         relying on the one provided by syscon or modifying that.
+> >>
+> >> For reference, v1 is at:
+> >> https://lore.kernel.org/lkml/20210825205041.927788-3-vladimir.oltean@nxp.com/
+> >>
+> >> For extra reviewer convenience, the ls-extirq appears in the following
+> >> SoC device trees:
+> >> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi#L289
+> >> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi#L249
+> >> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi#L319
+> >> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi#L325
+> >> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi#L682
+> >> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm/boot/dts/ls1021a.dtsi#L182
+> >>
+> >> Patch tested on LX2160A and LS1021A.
+> >>
+> >>  drivers/irqchip/irq-ls-extirq.c | 81 +++++++++++++++++++++++----------
+> >>  1 file changed, 58 insertions(+), 23 deletions(-)
+> >>
+> >> diff --git a/drivers/irqchip/irq-ls-extirq.c b/drivers/irqchip/irq-ls-extirq.c
+> >> index 853b3972dbe7..94a22642b3f2 100644
+> >> --- a/drivers/irqchip/irq-ls-extirq.c
+> >> +++ b/drivers/irqchip/irq-ls-extirq.c
+> >> @@ -6,7 +6,7 @@
+> >>  #include <linux/irqchip.h>
+> >>  #include <linux/irqdomain.h>
+> >>  #include <linux/of.h>
+> >> -#include <linux/mfd/syscon.h>
+> >> +#include <linux/of_address.h>
+> >>  #include <linux/regmap.h>
+> >>  #include <linux/slab.h>
+> >>  
+> >> @@ -16,8 +16,7 @@
+> >>  #define LS1021A_SCFGREVCR 0x200
+> >>  
+> >>  struct ls_extirq_data {
+> >> -	struct regmap		*syscon;
+> >> -	u32			intpcr;
+> >> +	struct regmap		*regmap;
+> >>  	bool			is_ls1021a_or_ls1043a;
+> >>  	u32			nirq;
+> >>  	struct irq_fwspec	map[MAXIRQ];
+> >> @@ -51,7 +50,10 @@ ls_extirq_set_type(struct irq_data *data, unsigned int type)
+> >>  	default:
+> >>  		return -EINVAL;
+> >>  	}
+> >> -	regmap_update_bits(priv->syscon, priv->intpcr, mask, value);
+> >> +	/* INTPCR is the only register of our regmap,
+> >> +	 * therefore its offset is 0
+> >> +	 */
+> > 
+> > For multi-line comments, please use the normal kernel comment style,
+> > not the one that is mandated for net.
+> > 
+> >> +	regmap_update_bits(priv->regmap, 0, mask, value);
+> >>  
+> >>  	return irq_chip_set_type_parent(data, type);
+> >>  }
+> >> @@ -143,48 +145,81 @@ ls_extirq_parse_map(struct ls_extirq_data *priv, struct device_node *node)
+> >>  static int __init
+> >>  ls_extirq_of_init(struct device_node *node, struct device_node *parent)
+> >>  {
+> >> -
+> >> +	struct regmap_config extirq_regmap_config = {
+> >> +		.name = "intpcr",
+> >> +		.reg_bits = 32,
+> >> +		.val_bits = 32,
+> >> +		.reg_stride = 4,
+> >> +		.use_raw_spinlock = true,
+> >> +	};
+> >>  	struct irq_domain *domain, *parent_domain;
+> >>  	struct ls_extirq_data *priv;
+> >> +	void __iomem *base;
+> >>  	int ret;
+> >>  
+> >>  	parent_domain = irq_find_host(parent);
+> >>  	if (!parent_domain) {
+> >>  		pr_err("Cannot find parent domain\n");
+> >> -		return -ENODEV;
+> >> +		ret = -ENODEV;
+> >> +		goto err_irq_find_host;
+> >>  	}
+> >>  
+> >>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> >> -	if (!priv)
+> >> -		return -ENOMEM;
+> >> -
+> >> -	priv->syscon = syscon_node_to_regmap(node->parent);
+> >> -	if (IS_ERR(priv->syscon)) {
+> >> -		ret = PTR_ERR(priv->syscon);
+> >> -		pr_err("Failed to lookup parent regmap\n");
+> >> -		goto out;
+> >> +	if (!priv) {
+> >> +		ret = -ENOMEM;
+> >> +		goto err_alloc_priv;
+> >> +	}
+> >> +
+> >> +	/* All extirq OF nodes are under a scfg/syscon node with
+> >> +	 * the 'ranges' property
+> >> +	 */
+> >> +	base = of_iomap(node, 0);
+> >> +	if (!base) {
+> >> +		pr_err("Cannot ioremap OF node %pOF\n", node);
+> >> +		ret = -ENOMEM;
+> >> +		goto err_iomap;
+> >>  	}
+> >> -	ret = of_property_read_u32(node, "reg", &priv->intpcr);
+> >> -	if (ret) {
+> >> -		pr_err("Missing INTPCR offset value\n");
+> >> -		goto out;
+> >> +
+> >> +	/* Parse the parent device's DT node for an endianness specification */
+> >> +	if (of_property_read_bool(parent, "big-endian"))
+> >> +		extirq_regmap_config.val_format_endian = REGMAP_ENDIAN_BIG;
+> >> +	else if (of_property_read_bool(parent, "little-endian"))
+> >> +		extirq_regmap_config.val_format_endian = REGMAP_ENDIAN_LITTLE;
+> >> +	else if (of_property_read_bool(parent, "native-endian"))
+> >> +		extirq_regmap_config.val_format_endian = REGMAP_ENDIAN_NATIVE;
+> > 
+> > All of this should be rewritten to use of_device_is_big_endian(), and
+> > reduce the whole thing to two cases (I don't think native endian makes
+> > much sense anyway). I also wonder what the result is if none of these
+> > properties is present...
+> 
+> I think regmap_get_val_endian would be better here.
 
-Yeah, it kinda sucks but is a kernel-wide thing and pretty rare, so for the
-most part, we can pretend that they don't exist but under specific
-conditions, there can be asynchronous wakeups coming from whereever, so we
-gotta be crash proof against those.
+Why?
 
-Thanks.
+> 
+> >> +
+> >> +	priv->regmap = regmap_init_mmio(NULL, base, &extirq_regmap_config);
+> 
+> It could also be done automatically if we pass the syscon dev instead of
+> NULL. The only downside is that some regmap error messages will use the
+> syscon device
+> 
+> >> +	if (IS_ERR(priv->regmap)) {
+> >> +		pr_err("Cannot create MMIO regmap: %pe\n", priv->regmap);
+> >> +		ret = PTR_ERR(priv->regmap);
+> >> +		goto err_regmap_init;
+> > 
+> > Finally, what is the actual benefit of using a regmap here? It seems
+> > like a very roundabout way of performing a RMW on a register whilst
+> > holding a lock... Passing NULL for a device to regmap_init_mmio() also
+> > seems to be an extremely rare idiom (only 5 cases in the tree), and
+> > this doesn't seem completely right to me.
+> 
+> The benefit is that you don't have to write (yet another) set of
+> endian-converting read/write functions. The above (non-NULL) usage of
+> regmap_init would also address your criticism here.
+
+I really don't see the point of adding yet another abstraction layer
+for something can be efficiently be managed locally.
+
+regmap is good at managing things that are repeatedly updated, and
+keep the most up to date version. This isn't the case here. This
+register is read/written *once* per interrupt being configured. There
+is no performance requirement.
+
+So no, I don't think we need this at all.
+
+	M.
 
 -- 
-tejun
+Without deviation from the norm, progress is not possible.

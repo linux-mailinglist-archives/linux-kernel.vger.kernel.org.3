@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1F958360C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 02:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6429D58360E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 02:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236240AbiG1ArF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 20:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S236333AbiG1AsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 20:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiG1ArD (ORCPT
+        with ESMTP id S229898AbiG1AsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 20:47:03 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179A658B7A;
-        Wed, 27 Jul 2022 17:47:03 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 12so282435pga.1;
-        Wed, 27 Jul 2022 17:47:03 -0700 (PDT)
+        Wed, 27 Jul 2022 20:48:16 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B7F5A177;
+        Wed, 27 Jul 2022 17:48:16 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id y15so424726plp.10;
+        Wed, 27 Jul 2022 17:48:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=zq+yw9MoLlDFVjCZabxL+GTI/wzIy2gG7jrKCUyRlhA=;
-        b=dZ/2SsnSHTBnsjBC2dq+jJf8Bkc6/5TgzQVfXPrSTOR9iESxJgx/pAiAkNfeGDan2H
-         fTGKc2NDFsaviLubsw+pDgvWcaFnsoZAxKgBbEFH3Jz1ycuZQ5c9XSWDyUsyL7bsaN0q
-         tcsTRpsG7iIB+U+s5mgnzpUh+zxfZLGXREht8anb/QCcVRr9eUFEdRvtv5k2BrIcl2OJ
-         Trp3hzhqJ+yZ6Tpuhesw/Gs9MyyO7sFdlIU0l+twEboFYV6d0iaX6a+lVATGYEiTMsjC
-         hUVsob8kqv/1gN5gAHYkQpwGJ/tpBzl5GqqIgFxC8RAad8TJkyB78I+7xhNkyl8QOg5z
-         UanQ==
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=T0sL0XnJkncypoWkEhEH3dj3z+lxGzyNkbrr0SmJH6Q=;
+        b=bxpwONXPqPNpRCOenGs8YTjEOKB78iXI6gX+aEKIPFGvQLBu6IjWm4c1Bhan1KFFPF
+         x2lcMabdxWNjWqof5Ado8U6SdN6/XX88XZAHy2CBHoxo0+alcPUgLgH14B4mWf1tm879
+         1em7GytN5b7xKYyIkpb08Hg5cwhAIKnNl8ezppHRHhiKYYsr+VxIFNhRLF9vKA61KhOf
+         Le+fYJMRwghkxo/skObFr11nFkjnBiDjbKA1TPBNU/VYEkXPnOsope/9Tjsa7DbeWqze
+         Rb4mCsQbZHbBqn5Bhl455xncWDRwOj47oeJHd/41ry7eLy17f6lqYIM7b0ViVsOEs0nL
+         UEiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=zq+yw9MoLlDFVjCZabxL+GTI/wzIy2gG7jrKCUyRlhA=;
-        b=1izXvdvW7YQ6IpSk+KCNS7mlwlWVNvsTf1SrHo/3GDxADqmEN0iEysOc/cKZZgvESS
-         MaE48iC0GHFYUlPVx66sfe6g1HMyi5wTImwlh7RbA0cuSqT45EaMjOLQ6GeIhGVkMoRr
-         Vhlr0s7l2RvooNJ82JtfiFKb0ecxvj6Dsb9+kWS2nLgSyd+fL1o9qLKgkKnMS9Y1u0FI
-         Z1n/upkoGPYdjDb81QNQNRLRo0Bw8xVulEOJVivs4fuzPTeZqqjppo6OQ74pPR0pjsLM
-         qBYtK/hZR5h2prMi1qyiXYoGVJ1TZsd9QawOsAt/7vRC3wBKG0+LdQaKt2lcFe6A6YCl
-         HZIw==
-X-Gm-Message-State: AJIora9ELfQY/gmXsy4lE6ji4hOB+GRlrIir3Rc7N6N6TN5h0UGx+YvL
-        G7pdq5adEqPHXfLwBAVG7PPt/BZkBs2WIORKxF8=
-X-Google-Smtp-Source: AGRyM1vJd4D2/nI5bkwbGKoWa5v9oGTDJnQdmNHzCqKm5FNToDnxz055SwQa1XGgvQalbrTssE8Jx5xXbYVqjAlXZWg=
-X-Received: by 2002:a63:1b22:0:b0:411:9b47:f6bf with SMTP id
- b34-20020a631b22000000b004119b47f6bfmr20911092pgb.200.1658969222464; Wed, 27
- Jul 2022 17:47:02 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=T0sL0XnJkncypoWkEhEH3dj3z+lxGzyNkbrr0SmJH6Q=;
+        b=aS9kadufYiH3UYytneckEUhTdSlUvQije3H+xstL2laU+Y3BKNmJonf4mKtMB2Clt/
+         sCJQP2GUt/B6GuKogfI34jHoK0Iqe9xyKOtwDGcc58pDFVmo+G4u2udcffZA4hOWgaaD
+         YzX3+nN6/UkdaqNqYTPuVfVbkAKxvLY6zmo1ySrWe5LSMxn0UEf5y07hSCHiTN+/RTx1
+         756+W90OFAdiWsAT7RswXmqf+GESiaRIaryDsrabbb+LTmUzkO13wgbOJDRrvLLqqiX7
+         sQLoACHV2FlW3G4p9YF6WAxlczC8QmqqrgUbWketVqUJGeaieYxzCsX3geCymg3phQGD
+         fsCQ==
+X-Gm-Message-State: AJIora9njMLPFe4REWseXozpS4fgGs8cQf4t+R+efQYRXvxpv5Pr9IEB
+        TxCKfeFCsYfrFm5K8m7L8Ag=
+X-Google-Smtp-Source: AGRyM1v290IK4T13ORDXLX28StcVZB/qyOC2m3rSSm5iiqDU4acScmDk8+SR+G5Ug1xEm/omwSZsRw==
+X-Received: by 2002:a17:90b:390:b0:1f3:ee2:62a8 with SMTP id ga16-20020a17090b039000b001f30ee262a8mr5146355pjb.148.1658969295811;
+        Wed, 27 Jul 2022 17:48:15 -0700 (PDT)
+Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id x1-20020a170902b40100b0016bf803341asm4337829plr.146.2022.07.27.17.48.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 17:48:15 -0700 (PDT)
+Message-ID: <a0968736-5fb8-8ff9-7a70-d6d871175bb6@gmail.com>
+Date:   Wed, 27 Jul 2022 17:48:14 -0700
 MIME-Version: 1.0
-References: <20220727025255.61232-1-jrdr.linux@gmail.com> <20220728001648.cwfcmcg75lpqip5v@skbuf>
-In-Reply-To: <20220728001648.cwfcmcg75lpqip5v@skbuf>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Thu, 28 Jul 2022 06:16:50 +0530
-Message-ID: <CAFqt6zZF-bTh_8vYxwhG5wWvCkFHc2duK2A14_Fdt9Agzfkxwg@mail.gmail.com>
-Subject: Re: [PATCH] net: dsa: microchip: remove of_match_ptr() from ksz9477_dt_ids
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        Andrew Lunn <andrew@lunn.ch>, vivien.didelot@gmail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.18 000/158] 5.18.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220727161021.428340041@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,59 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 5:46 AM Vladimir Oltean <olteanv@gmail.com> wrote:
->
-> On Wed, Jul 27, 2022 at 08:22:55AM +0530, Souptick Joarder wrote:
-> > From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
-> >
-> > >> drivers/net/dsa/microchip/ksz9477_i2c.c:89:34:
-> > warning: 'ksz9477_dt_ids' defined but not used [-Wunused-const-variable=]
-> >       89 | static const struct of_device_id ksz9477_dt_ids[] = {
-> >          |                                  ^~~~~~~~~~~~~~
-> >
-> > Removed of_match_ptr() from ksz9477_dt_ids.
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-> > ---
->
-> I have to say, this is a major fail for what of_match_ptr() intended to do.
->
-> commit 3a1e362e3f3cd571b3974b8d44b8e358ec7a098c
-> Author: Ben Dooks <ben-linux@fluff.org>
-> Date:   Wed Aug 3 10:11:42 2011 +0100
->
->     OF: Add of_match_ptr() macro
->
->     Add a macro of_match_ptr() that allows the .of_match_table
->     entry in the driver structures to be assigned without having
->     an #ifdef xxx NULL for the case that OF is not enabled
->
->     Signed-off-by: Ben Dooks <ben-linux@fluff.org>
->     Signed-off-by: Grant Likely <grant.likely@secretlab.ca>
->
-> Should we also depend on CONFIG_OF?
+On 7/27/22 09:11, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.15 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Few other drivers threw similar warnings and the suggestion was to
-remove of_match_ptr(). Anyway both approaches look fine.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and build tested on 
+BMIPS_GENERIC:
 
->
-> >  drivers/net/dsa/microchip/ksz9477_i2c.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/dsa/microchip/ksz9477_i2c.c b/drivers/net/dsa/microchip/ksz9477_i2c.c
-> > index 99966514d444..c967a03a22c6 100644
-> > --- a/drivers/net/dsa/microchip/ksz9477_i2c.c
-> > +++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
-> > @@ -118,7 +118,7 @@ MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
-> >  static struct i2c_driver ksz9477_i2c_driver = {
-> >       .driver = {
-> >               .name   = "ksz9477-switch",
-> > -             .of_match_table = of_match_ptr(ksz9477_dt_ids),
-> > +             .of_match_table = ksz9477_dt_ids,
-> >       },
-> >       .probe  = ksz9477_i2c_probe,
-> >       .remove = ksz9477_i2c_remove,
-> > --
-> > 2.25.1
-> >
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

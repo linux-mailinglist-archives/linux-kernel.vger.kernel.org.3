@@ -2,83 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607B15839C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54755839A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234770AbiG1Hqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
+        id S234635AbiG1HnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234516AbiG1Hqq (ORCPT
+        with ESMTP id S234230AbiG1HnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:46:46 -0400
-Received: from smtp98.ord1d.emailsrvr.com (smtp98.ord1d.emailsrvr.com [184.106.54.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817EF6113F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:46:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
-        s=20170822-45nk5nwl; t=1658994027;
-        bh=Ll3lGOHj0SIoQtOcdzdr6ctTpQ/ZQPVtYA+Y55SrikI=;
-        h=Date:Subject:To:From:From;
-        b=Z+RYzJuxAeKcyyVCRG3+2jFgDavsQBuV36JsLrJ1tPe6u6BeRqO7P0IcZ69LFe9vV
-         lGgfrW8ycInrKG6wT9NRcN/Sc9JEvBC82riV6ifFmXWMWd5utc79AuQ2qMWarTnMqq
-         NNCmN9WnTCLd0BWqeYZfBlQN5Qjegc+XwMF76YSk=
-X-Auth-ID: antonio@openvpn.net
-Received: by smtp5.relay.ord1d.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id B74C6A00C2;
-        Thu, 28 Jul 2022 03:40:26 -0400 (EDT)
-Message-ID: <c490b87c-085b-baca-b7e4-c67a3ee2c25e@openvpn.net>
-Date:   Thu, 28 Jul 2022 09:41:11 +0200
+        Thu, 28 Jul 2022 03:43:01 -0400
+Received: from out20-206.mail.aliyun.com (out20-206.mail.aliyun.com [115.124.20.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA55960685;
+        Thu, 28 Jul 2022 00:42:58 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1063008|-1;BR=01201311R191S62rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.168038-0.000676144-0.831286;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047204;MF=longjin@ringotek.cn;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.OfhcAno_1658994164;
+Received: from localhost.localdomain(mailfrom:longjin@RinGoTek.cn fp:SMTPD_---.OfhcAno_1658994164)
+          by smtp.aliyun-inc.com;
+          Thu, 28 Jul 2022 15:42:55 +0800
+From:   fslongjin <longjin@RinGoTek.cn>
+To:     corbet@lwn.net, twoerner@gmail.com, keescook@chromium.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fslongjin <fslongjin@vip.qq.com>, longjin <longjin@RinGoTek.cn>
+Subject: [PATCH] Documentation: Fixed errors in the title level of coding style documents
+Date:   Thu, 28 Jul 2022 15:42:24 +0800
+Message-Id: <20220728074224.155298-1-longjin@RinGoTek.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220719014704.21346-1-antonio@openvpn.net>
- <20220719014704.21346-2-antonio@openvpn.net> <YtbNBUZ0Kz7pgmWK@lunn.ch>
-From:   Antonio Quartulli <antonio@openvpn.net>
-Organization: OpenVPN Inc.
-In-Reply-To: <YtbNBUZ0Kz7pgmWK@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Classification-ID: 82aa384a-5660-44d4-8ad5-96a212e0778c-1-1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: fslongjin <fslongjin@vip.qq.com>
 
-On 19/07/2022 17:25, Andrew Lunn wrote:
->> +static void ovpn_get_drvinfo(struct net_device *dev,
->> +			     struct ethtool_drvinfo *info)
->> +{
->> +	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
->> +	strscpy(info->version, DRV_VERSION, sizeof(info->version));
->> +	strscpy(info->bus_info, "ovpn", sizeof(info->bus_info));
-> 
-> version is generally considered useless information if it comes from
-> the driver. You have no idea if this is version 42 in net-next, or
-> some backported version in an enterprise kernel with lots of out of
-> tree patches. The driver is not standalone, it runs inside the
-> kernel. So in order to understand a bug report, you need to know what
-> kernel it is. If you don't fill in version, the core will with the
-> kernel version, which is much more useful.
+In Section 3, `Placing Braces and Spaces`. In the previous document, only
+`Spaces` is written in the subtitle without the `Braces`. I think this
+ may be a format error caused by negligence, so I fixed it.
 
-True.
+Signed-off-by: longjin <longjin@RinGoTek.cn>
+Signed-off-by: fslongjin <fslongjin@vip.qq.com>
+---
+ Documentation/process/coding-style.rst | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-However, I guess I will still fill MODULE_VERSION() with a custom 
-string. This may also be useful when building the module out-of-tree.
-
-Thanks for the hint!
-
-Regards,
-
+diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+index 03eb53fd029a..2a26bcb9f391 100644
+--- a/Documentation/process/coding-style.rst
++++ b/Documentation/process/coding-style.rst
+@@ -120,6 +120,9 @@ that breaks the ability to grep for them.
+ 3) Placing Braces and Spaces
+ ----------------------------
+ 
++3.1) Braces
++***********
++
+ The other issue that always comes up in C styling is the placement of
+ braces.  Unlike the indent size, there are few technical reasons to
+ choose one placement strategy over the other, but the preferred way, as
+@@ -231,7 +234,7 @@ Also, use braces when a loop contains more than a single simple statement:
+ 			do_something();
+ 	}
+ 
+-3.1) Spaces
++3.2) Spaces
+ ***********
+ 
+ Linux kernel style for use of spaces depends (mostly) on
 -- 
-Antonio Quartulli
-OpenVPN Inc.
+2.20.1
+

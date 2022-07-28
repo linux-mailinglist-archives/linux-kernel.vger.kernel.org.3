@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E405836E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895835836E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237404AbiG1C3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 22:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
+        id S237205AbiG1C3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 22:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234731AbiG1C2r (ORCPT
+        with ESMTP id S233372AbiG1C2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Jul 2022 22:28:47 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A0159248;
-        Wed, 27 Jul 2022 19:28:43 -0700 (PDT)
-X-UUID: d0d29861226841f4956561e0ef92ebe1-20220728
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56A34F644;
+        Wed, 27 Jul 2022 19:28:41 -0700 (PDT)
+X-UUID: 5965c47180424d14bc829228f3f7e9d4-20220728
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:46e0a248-82ea-4e68-bdb6-0ab6e5a33919,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:ad37858e-b90a-4310-9e08-cd036292eb9e,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: d0d29861226841f4956561e0ef92ebe1-20220728
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.8,REQID:0df5d5e0-9d68-4d36-841d-b4a5e35873b5,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:95
+X-CID-INFO: VERSION:1.1.8,REQID:0df5d5e0-9d68-4d36-841d-b4a5e35873b5,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:95
+X-CID-META: VersionHash:0f94e32,CLOUDID:6637858e-b90a-4310-9e08-cd036292eb9e,C
+        OID:3c8029a76794,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 5965c47180424d14bc829228f3f7e9d4-20220728
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1111241679; Thu, 28 Jul 2022 10:28:37 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 690183093; Thu, 28 Jul 2022 10:28:36 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Thu, 28 Jul 2022 10:28:35 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -47,18 +50,18 @@ CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
         <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
         <stanley.chu@mediatek.com>
-Subject: [PATCH v3 3/5] scsi: ufs: ufs-mediatek: Dump more registers
-Date:   Thu, 28 Jul 2022 10:28:31 +0800
-Message-ID: <20220728022833.16243-4-stanley.chu@mediatek.com>
+Subject: [PATCH v3 4/5] scsi: ufs: ufs-mediatek: Fix performance scaling
+Date:   Thu, 28 Jul 2022 10:28:32 +0800
+Message-ID: <20220728022833.16243-5-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220728022833.16243-1-stanley.chu@mediatek.com>
 References: <20220728022833.16243-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,39 +70,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Wang <peter.wang@mediatek.com>
 
-Dump more proprietary UFSHCI status registers for
-easier issue breakdown.
+If clk-scaling is enabled, performance scaling can be bound
+to the decision of clk-scaling to avoid unnecessary boosting.
+
+Meanwhile, fix missing initialization of pm-qos request.
 
 Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
 Signed-off-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 572fafa069a4..9b4932780645 100644
+index 9b4932780645..fc59a37a9045 100644
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1284,13 +1284,16 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+@@ -635,6 +635,12 @@ static void ufs_mtk_boost_pm_qos(struct ufs_hba *hba, bool boost)
+ 				       boost ? 0 : PM_QOS_DEFAULT_VALUE);
+ }
  
- static void ufs_mtk_dbg_register_dump(struct ufs_hba *hba)
++static void ufs_mtk_scale_perf(struct ufs_hba *hba, bool scale_up)
++{
++	ufs_mtk_boost_crypt(hba, scale_up);
++	ufs_mtk_boost_pm_qos(hba, scale_up);
++}
++
+ static void ufs_mtk_pwr_ctrl(struct ufs_hba *hba, bool on)
  {
--	ufshcd_dump_regs(hba, REG_UFS_REFCLK_CTRL, 0x4, "Ref-Clk Ctrl ");
-+	/* Dump ufshci register 0x140 ~ 0x14C */
-+	ufshcd_dump_regs(hba, REG_UFS_XOUFS_CTRL, 0x10,
-+			 "XOUFS Ctrl (0x140): ");
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+@@ -642,11 +648,11 @@ static void ufs_mtk_pwr_ctrl(struct ufs_hba *hba, bool on)
+ 	if (on) {
+ 		phy_power_on(host->mphy);
+ 		ufs_mtk_setup_ref_clk(hba, on);
+-		ufs_mtk_boost_crypt(hba, on);
+-		ufs_mtk_boost_pm_qos(hba, on);
++		if (!ufshcd_is_clkscaling_supported(hba))
++			ufs_mtk_scale_perf(hba, on);
+ 	} else {
+-		ufs_mtk_boost_pm_qos(hba, on);
+-		ufs_mtk_boost_crypt(hba, on);
++		if (!ufshcd_is_clkscaling_supported(hba))
++			ufs_mtk_scale_perf(hba, on);
+ 		ufs_mtk_setup_ref_clk(hba, on);
+ 		phy_power_off(host->mphy);
+ 	}
+@@ -870,6 +876,10 @@ static int ufs_mtk_init(struct ufs_hba *hba)
  
- 	ufshcd_dump_regs(hba, REG_UFS_EXTREG, 0x4, "Ext Reg ");
+ 	host->ip_ver = ufshcd_readl(hba, REG_UFS_MTK_IP_VER);
  
-+	/* Dump ufshci register 0x2200 ~ 0x22AC */
- 	ufshcd_dump_regs(hba, REG_UFS_MPHYCTRL,
- 			 REG_UFS_REJECT_MON - REG_UFS_MPHYCTRL + 4,
--			 "MPHY Ctrl ");
-+			 "MPHY Ctrl (0x2200): ");
++	/* Initialize pm-qos request */
++	cpu_latency_qos_add_request(&host->pm_qos_req, PM_QOS_DEFAULT_VALUE);
++	host->pm_qos_init = true;
++
+ 	goto out;
  
- 	/* Direct debugging information to REG_MTK_PROBE */
- 	ufs_mtk_dbg_sel(hba);
+ out_variant_clear:
 -- 
 2.18.0
 

@@ -2,164 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B156583B58
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EA0583B5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235595AbiG1Jhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S235616AbiG1Jjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235577AbiG1Jhs (ORCPT
+        with ESMTP id S234722AbiG1Jja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:37:48 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2564A61DA4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:37:46 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id t17so2087185lfk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8JmHUzVejHKie8HTRAolerKNkqFMF0TC8kqIrcN4GZo=;
-        b=lB4vLEJrwzE71UKK834Pf5O06Jg6ogSa3Dvcuxgp+4S9Dv2VCMquOICJcCHjYPJBxU
-         +9N8GJXdyV1ldMUygXvuKCCVNfE7A5I8DLufpcbN1Oh63jFmkt+b5oqcqY7yCy9b5UoH
-         GvWUuKdeRBFbZUN+4GyppsL5WyINRw+S3yU4ikzpHQ9QpK0EzS+1J9zjxm92nAbGUNzv
-         uc5dmvrIus5SHp6D/8zRmJrYFgrYJ58GMytqNIoZr0yYejJSoVOaO98qek8O1XiffeGn
-         TyFtqDmFBR8oeEzkzabFg359QGWVyBi98dWr86IEtlyznGquiSScimQHoD7dh2WuUoPn
-         5h4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8JmHUzVejHKie8HTRAolerKNkqFMF0TC8kqIrcN4GZo=;
-        b=5dKwql7eT2d+EJArbPEtTsnIsdMc9/WgBtIsrrSS4euLvajOydlXGuHeQAiDQNofGe
-         5P8tRbrXo2SvYfcYS4HRZWSA8Ed5sfaCRjHs2Twy3clMkRHrJuxJqzA0xGmeEvs/Qo3U
-         BSmDi6HmFsofFPOfI9H285Oa4F4wHOoENnwUSz88DtUjCPG/gTmsJbJl9WyVo/bwLmjj
-         GmyzVo9pIEq41qLCJ8Hd18jU69uUdkDElvYWCYBx0FfGzK6qGFEFvpgzDJWo2awUQmSD
-         GX3Edt1nEzrGT596ASQ6Rya11hicYBuZiTJeUvFy1COl7o5+9fU55wSFEB66vrtk/tRQ
-         OzEg==
-X-Gm-Message-State: AJIora9a7hix9qD9isDkLKSUP+dp8i9RCZ9E6O3YRXQ14v32urCqhRu5
-        5cyS+o+uJJrMN283rvgFQOR41hOAJelNf5MHE5KZvA==
-X-Google-Smtp-Source: AGRyM1tFoTcCL8AhPA0bTHZG2PZ20h0N/CQpdR8GaxfVYWkeyLmZlM9lQ/QSu/W9u2xGpTHGHte/WaxMGINcPl4jCNo=
-X-Received: by 2002:a05:6512:2a8e:b0:48a:6b7d:617d with SMTP id
- dt14-20020a0565122a8e00b0048a6b7d617dmr10219035lfb.167.1659001064322; Thu, 28
- Jul 2022 02:37:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
- <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
- <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com> <20220726160337.GA41736@francesco-nb.int.toradex.com>
-In-Reply-To: <20220726160337.GA41736@francesco-nb.int.toradex.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 28 Jul 2022 11:37:07 +0200
-Message-ID: <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Max Krummenacher <max.oss.09@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Thu, 28 Jul 2022 05:39:30 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CAF37F94;
+        Thu, 28 Jul 2022 02:39:25 -0700 (PDT)
+X-UUID: 1348953cf6a04774a6e9172ff09187fb-20220728
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:00ce714b-e383-4642-a363-25a7bf4720fc,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:50
+X-CID-INFO: VERSION:1.1.8,REQID:00ce714b-e383-4642-a363-25a7bf4720fc,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:50
+X-CID-META: VersionHash:0f94e32,CLOUDID:2c4e93d0-841b-4e95-ad42-8f86e18f54fc,C
+        OID:f0ccf6249fe2,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 1348953cf6a04774a6e9172ff09187fb-20220728
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2114459139; Thu, 28 Jul 2022 17:39:20 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 28 Jul 2022 17:39:19 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 28 Jul 2022 17:39:19 +0800
+Message-ID: <3dd233ff2c5a69078c9b5eb3f0263d16da128647.camel@mediatek.com>
+Subject: Re: [PATCH v15 01/11] dt-bindings: mediatek,dp: Add Display Port
+ binding
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 28 Jul 2022 17:39:19 +0800
+In-Reply-To: <aaa6b5d0-20e8-146f-ba37-8784dbfd6072@linaro.org>
+References: <20220727045035.32225-1-rex-bc.chen@mediatek.com>
+         <20220727045035.32225-2-rex-bc.chen@mediatek.com>
+         <aaa6b5d0-20e8-146f-ba37-8784dbfd6072@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 at 18:03, Francesco Dolcini
-<francesco.dolcini@toradex.com> wrote:
->
-> Hello Ulf and everybody,
->
-> On Wed, Jul 13, 2022 at 01:43:28PM +0200, Ulf Hansson wrote:
-> > On Thu, 23 Jun 2022 at 18:14, Max Krummenacher <max.oss.09@gmail.com> wrote:
-> > > So our plan is to explicitly handle a (shared) regulator in every
-> > > driver involved, adding that regulator capability for drivers not
-> > > already having one.
-> >
-> > Please don't! I have recently rejected a similar approach for Tegra
-> > platforms, which now have been converted into using the power domain
-> > approach.
->
-> Just to quickly re-iterate how our hardware design looks like, we do
-> have a single gpio that control the power of a whole board area that is
-> supposed to be powered-off in suspend mode, this area could contains
-> devices that have a proper Linux driver and some passive driver-less
-> components (e.g. level shifter) - the exact mix varies.
->
-> Our proposal in this series was to model this as a power domain that
-> could be controlled with a regulator. Krzysztof, Robin and others
-> clearly argued against this idea.
+On Wed, 2022-07-27 at 09:23 +0200, Krzysztof Kozlowski wrote:
+> On 27/07/2022 06:50, Bo-Chen Chen wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This controller is present on several mediatek hardware. Currently
+> > mt8195 and mt8395 have this controller without a functional
+> > difference,
+> > so only one compatible field is added.
+> > 
+> > The controller can have two forms, as a normal display port and as
+> > an
+> > embedded display port.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../display/mediatek/mediatek,dp.yaml         | 117
+> > ++++++++++++++++++
+> >  1 file changed, 117 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > new file mode 100644
+> > index 000000000000..fd68c6c08df3
+> > --- /dev/null
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.ya
+> > ml
+> > @@ -0,0 +1,117 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml*__;Iw!!CTRNKA9wMg0ARbw!wfsojIGZI_UYOhzgZxHy9ndUMC78GcAtJV-oZkD4DNXz0NE58uCHPE_MRZIyljEjrpwP$
+> >  
+> > +$schema: 
+> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!wfsojIGZI_UYOhzgZxHy9ndUMC78GcAtJV-oZkD4DNXz0NE58uCHPE_MRZIylldgseRE$
+> >  
+> > +
+> > +title: MediaTek Display Port Controller
+> > +
+> > +maintainers:
+> > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> > +  - Jitao shi <jitao.shi@mediatek.com>
+> > +
+> > +description: |
+> > +  Device tree bindings for the MediaTek display port TX (DP) and
+> > +  embedded display port TX (eDP) controller present on some
+> > MediaTek SoCs.
+> 
+> Drop entire sentence and just describe the hardware.
+> 
+> > +  We just need to enable the power domain of DP. The clock of DP
+> > is
+> > +  generated by itself and we are not using other PLL to generate
+> > clocks.
+> > +  MediaTek DP and eDP are different hardwares and there are some
+> > features
+> > +  which are not supported for eDP. For example, audio is not
+> > supported for
+> > +  eDP. Therefore, we need to use two different compatibles to
+> > describe them.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt8195-dp-tx
+> > +      - mediatek,mt8195-edp-tx
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  nvmem-cells:
+> > +    maxItems: 1
+> > +    description: efuse data for display port calibration
+> > +
+> > +  nvmem-cell-names:
+> > +    const: dp_calibration_data
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: Input endpoint of the controller, usually
+> > dp_intf
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        unevaluatedProperties: false
+> > +        description: Output endpoint of the controller
+> > +        properties:
+> > +          endpoint:
+> > +            $ref: /schemas/media/video-interfaces.yaml#
+> > +            unevaluatedProperties: false
+> > +            properties:
+> > +              data-lanes:
+> > +                description: |
+> > +                  number of lanes supported by the hardware.
+> > +                  The possible values:
+> > +                  0       - For 1 lane enabled in IP.
+> > +                  0 1     - For 2 lanes enabled in IP.
+> > +                  0 1 2 3 - For 4 lanes enabled in IP.
+> > +                minItems: 1
+> > +                maxItems: 4
+> > +            required:
+> > +              - data-lanes
+> > +
+> > +    required:
+> > +      - port@0
+> > +      - port@1
+> > +
+> > +  max-linkrate-mhz:
+> > +    enum: [ 1620, 2700, 5400, 8100 ]
+> > +    description: maximum link rate supported by the hardware.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - ports
+> > +  - max-linkrate-mhz
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/power/mt8195-power.h>
+> > +    dp_tx@1c600000 {
+> 
+> No underscores in node names, so just "dp".
+> 
+> Best regards,
+> Krzysztof
 
-Well, historically we haven't modelled these kinds of power-rails
-other than through power-domains. And this is exactly what genpd and
-PM domains in Linux are there to help us with.
+Hello Krzysztof,
 
-Moreover, on another SoC/platform, maybe the power-rails are deployed
-differently and maybe those have the ability to scale performance too.
-Then it doesn't really fit well with the regulator model anymore.
+Thanks for your review.
+I will modify these in next version.
 
-If we want to continue to keep drivers portable, I don't see any
-better option than continuing to model these power-rails as
-power-domains.
+BRs,
+Bo-Chen
 
->
-> The other approach would be to have a single regulator shared with the
-> multiple devices we have there (still not clear how that would work in
-> case we have only driver-less passive components). This is just a
-> device-tree matter, maybe we would need to add support for a supply to
-> some device drivers.
->
-> Honestly my conclusion from this discussion is that the only viable
-> option is this second one, do I miss something?
-
-No thanks!
-
-Well, unless you can convince me there are benefits to this approach
-over the power-domain approach.
-
->
-> > If it's a powerail that is shared between controllers (devices), used
-> > to keep their registers values for example, that should be modelled as
-> > a power domain. Moreover for power domains, we can support
-> > voltage/frequency (performance) scaling, which isn't really applicable
-> > to a plain regulator.
-> >
-> > However, if the actual powerrail fits well to be modelled as
-> > regulator, please go ahead. Although, in this case, the regulator must
-> > only be controlled behind a genpd provider's on/off callback, so you
-> > still need the power domain approach, rather than using the regulator
-> > in each driver and for each device.
->
-> Francesco
->
-
-Kind regards
-Uffe

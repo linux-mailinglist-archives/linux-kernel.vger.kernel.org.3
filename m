@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7913E584887
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1456D58488D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiG1XGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 19:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S232989AbiG1XIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 19:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiG1XGF (ORCPT
+        with ESMTP id S230234AbiG1XIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 19:06:05 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDECE51A2C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:06:01 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id w205so3151725pfc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:06:01 -0700 (PDT)
+        Thu, 28 Jul 2022 19:08:18 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB7168DD2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:08:17 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ef5380669cso34557617b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=invBG5xMXzjEltsK545VLHu8MZxeoZu1uoiZNi97Phk=;
-        b=bPVO6QacKDugDyEDOSaJ3JZwlv385SFV20Ltpu9KZf5M/nCWeCrgUHTks4ehn2nglI
-         qpDRdW/WkPcDEUwMst3Kq/kGg6yf9lMRRi9YVN/u65q9eNILxTqzdKUTvD1y6+lqqBnd
-         kf2pucKesim8mkcRciv6zS5mlAC7WpSlePmUo=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XoO5+n5lAtjmhTQDOVl7dv9SMJLx74LKvYh0rgO002k=;
+        b=lf+VaVNgHbKzynF2J+uFL/65qWQblyv/9uz1kSSTpdG+YcE1xSbVSN3ZjSlOkui0LD
+         oxqD0UuKiRQ6Wrjxnp/A+jXV/dUGvANr6EOypo48O2JJ77SzZsaR7by4hiY8JFm99JXI
+         Fsnz8aeYw6gS4lZqBQ7h1C98wUa1NEGt7LYO0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=invBG5xMXzjEltsK545VLHu8MZxeoZu1uoiZNi97Phk=;
-        b=o419UDxUR/PoOguCKZEjwcSVbw1Akn3DAtzDueUV0mYH810yjtE+LR7B5BE9xB8C/i
-         Mq91DJlutnq/nn4DvwFO3q2uWryBE6FRn7axIxk1FIttXbD3VwIdvXjq358K6ByFLFOS
-         kqJ4SWGwOd+Z2+RWdPMY5ZOo5hafhMdAtgKIOhc/ljB7JI9MHFQimpEQ5avIh/GATw7p
-         PIR4AO9cCUAw4vugd+qYEYc6ItkTRH0iP8aMq4k5GkSfR6lkbFSl0TLM9/rLGz0D0hw9
-         pjgPZDn4qEUlFUSm/ax0qGBCokSGu3ir27zkiMCNeC22C9GVHYL8SLcbgBzqDKby4wUW
-         BnhA==
-X-Gm-Message-State: AJIora8/OZzb9eiTFe/XVhDEug09rnjVcVGt7+rBtz5a0Zpbm3uAMMm6
-        q+ljq3Pl48ug6Xv6DacPCuZt0Q==
-X-Google-Smtp-Source: AGRyM1swyX1PXVaNHGWEmmfoZ3PHQ20qfpgeOKlJpO4J6WEZqcdZCaOinOJBSc4QsM7+MthkVDMGwA==
-X-Received: by 2002:a05:6a00:240e:b0:52c:81cf:8df2 with SMTP id z14-20020a056a00240e00b0052c81cf8df2mr750238pfh.40.1659049561155;
-        Thu, 28 Jul 2022 16:06:01 -0700 (PDT)
-Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
-        by smtp.gmail.com with ESMTPSA id h14-20020a170902680e00b0016d2d2c7df1sm1824656plk.188.2022.07.28.16.05.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 16:06:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XoO5+n5lAtjmhTQDOVl7dv9SMJLx74LKvYh0rgO002k=;
+        b=mt1ncxkJu1+FJXr4EEK5ctJ+8eqK41ifhIQHfasXt2ekAu/8Ngbz7oBt1ev6zZh1f5
+         wn3usWjv5zeUpBiyz5dU9JQ5RzeHc8TH3CbKBHRU/Q2OSkbI7p6zAXcUTWhlXQOMwA4i
+         S65RI1bXKIv/RPeQTvIAHJoVr++cvBY5/KKNsV5oOe2eT0E5HdVkQqhFwqYOtn2XCONg
+         YI8wbj5o+Nv8PHtj9X8aAZPEaOMvAvJ7gIvFhVi+M4g8nQXxPD0Tg+f1z2KnmssQCASC
+         2ZNZwjE4lrLAVUEh+JuZEo3zICzE1tzGW6aaTriSSAex9F2xgeA8NN9x4WWrf5sgLGlr
+         5Kxw==
+X-Gm-Message-State: ACgBeo2zfb1wD9vtnTnKNXRQp9jWESMtmosTXO247AHikHeUSQCVasNm
+        xYzOMS2vTsB1TI+1GiaokhkN7rG8VuwU/yYwehjvgA==
+X-Google-Smtp-Source: AA6agR5oRXRMaifdJbmmaXl+CGlcWTtqcKz1yXvC0+ms6Icr72IEbWbAZYkNL79SKIo5v7cCLBJh1TyvepcI/Wm0FFo=
+X-Received: by 2002:a81:81c1:0:b0:31e:7378:960c with SMTP id
+ r184-20020a8181c1000000b0031e7378960cmr947411ywf.266.1659049696719; Thu, 28
+ Jul 2022 16:08:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220728144710.1.Id612b86fd30936dfd4c456b3341547c15cecf321@changeid>
+ <28005e66-ba90-8986-1b8f-b76bba46064c@acm.org>
+In-Reply-To: <28005e66-ba90-8986-1b8f-b76bba46064c@acm.org>
 From:   Daniil Lunev <dlunev@chromium.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Daniil Lunev <dlunev@chromium.org>,
+Date:   Fri, 29 Jul 2022 09:08:05 +1000
+Message-ID: <CAONX=-d-_2bXqf0TCjdJ1u+B3cU3ZkP9WCu3QxqSZT-v3E_4BQ@mail.gmail.com>
+Subject: Re: [PATCH] ufs: core: print capabilities in controller's sysfs node
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         Avri Altman <avri.altman@wdc.com>,
         Bean Huo <beanhuo@micron.com>,
         Daejun Park <daejun7.park@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: [PATCH v2] ufs: core: print capabilities in controller's sysfs node
-Date:   Fri, 29 Jul 2022 09:05:50 +1000
-Message-Id: <20220729090521.v2.1.Id612b86fd30936dfd4c456b3341547c15cecf321@changeid>
-X-Mailer: git-send-email 2.31.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,75 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allows userspace to check supported by the controller/device
-functionality, e.g. write booster.
-
-Signed-off-by: Daniil Lunev <dlunev@chromium.org>
-
----
-
-Changes in v2:
-* Add documentation entry for the new sysfs node.
-
- Documentation/ABI/testing/sysfs-driver-ufs |  9 +++++++++
- drivers/ufs/core/ufs-sysfs.c               | 10 ++++++++++
- 2 files changed, 19 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
-index 6b248abb1bd71..97e42e4763eaf 100644
---- a/Documentation/ABI/testing/sysfs-driver-ufs
-+++ b/Documentation/ABI/testing/sysfs-driver-ufs
-@@ -1591,6 +1591,15 @@ Description:	This entry shows the status of HPB.
- 
- 		The file is read only.
- 
-+What:		/sys/bus/platform/drivers/ufshcd/*/caps
-+What:		/sys/bus/platform/devices/*.ufs/caps
-+Date:		July 2022
-+Contact:	Daniil Lunev <dlunev@chromium.org>
-+Description:	Read-only attribute. Enabled capabilities of the UFS driver. The
-+		enabled capabilities are determined by what is supported by the
-+		host controller and the UFS device.
-+		Format: 0x%08llx
-+
- What:		/sys/class/scsi_device/*/device/hpb_param_sysfs/activation_thld
- Date:		February 2021
- Contact:	Avri Altman <avri.altman@wdc.com>
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 0a088b47d5570..b0c294c367519 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -254,6 +254,14 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 	return res < 0 ? res : count;
- }
- 
-+static ssize_t caps_show(struct device *dev, struct device_attribute *attr,
-+			 char *buf)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "0x%08llx\n", hba->caps);
-+}
-+
- static DEVICE_ATTR_RW(rpm_lvl);
- static DEVICE_ATTR_RO(rpm_target_dev_state);
- static DEVICE_ATTR_RO(rpm_target_link_state);
-@@ -262,6 +270,7 @@ static DEVICE_ATTR_RO(spm_target_dev_state);
- static DEVICE_ATTR_RO(spm_target_link_state);
- static DEVICE_ATTR_RW(auto_hibern8);
- static DEVICE_ATTR_RW(wb_on);
-+static DEVICE_ATTR_RO(caps);
- 
- static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_rpm_lvl.attr,
-@@ -272,6 +281,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_spm_target_link_state.attr,
- 	&dev_attr_auto_hibern8.attr,
- 	&dev_attr_wb_on.attr,
-+	&dev_attr_caps.attr,
- 	NULL
- };
- 
--- 
-2.31.0
-
+On Thu, Jul 28, 2022 at 11:37 PM Bart Van Assche <bvanassche@acm.org> wrote:
+> This code change includes all of the UFSHCD_CAP_* constants in the
+> kernel ABI. Is that really what we want? I'm wondering whether it
+> perhaps would be better only to export those capabilities to user space
+> that user space needs to know about.
+Adding the filtering would introduce an extra maintenance burden and
+will likely go out
+of sync. I don't see harm in exposing all capabilities, both intrinsic
+to the controller and
+negotiated with the device. Do you see any scenario where that would be harmful?
+--Daniil

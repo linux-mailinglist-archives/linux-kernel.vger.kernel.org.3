@@ -2,102 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB17583B37
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC26583B3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbiG1J1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        id S235529AbiG1JaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbiG1J1X (ORCPT
+        with ESMTP id S235163AbiG1JaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:27:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FBF165D40
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659000441;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LrxQSWciaWJjGdDz7VQeuucGTXw62npYksns5+Sozgk=;
-        b=ATfVOxmWSkRH7ZBFtBSI0o29I/urswpG32IhmuGaqdeGpNu4UO2g0fIuWfsUgf2+jdExaG
-        SoCYU5hGiw14UF68thT0ChujJ4giRzasVQqFoD0owyLhdsc8RY0ZF45hWuH7bRK5GDikxg
-        hFNXvKrc0nyNvQWvs3rb7qk8F+i1FnY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-391-PnlwxStjMfqH-71LQUt28g-1; Thu, 28 Jul 2022 05:27:20 -0400
-X-MC-Unique: PnlwxStjMfqH-71LQUt28g-1
-Received: by mail-wm1-f71.google.com with SMTP id z20-20020a1c4c14000000b003a3020da654so263080wmf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:27:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=LrxQSWciaWJjGdDz7VQeuucGTXw62npYksns5+Sozgk=;
-        b=Qvi/RAori9QMLaSENCbCxMD2Dm8UzQwXXEhqCphc35kOgJydOtWFxyyksIyZfbrKDO
-         s/sSondalxsg4Dz5Hg6kaQweorkfenW2qNAoYTj9nQ4CZshEyufsBYN7oK37QOC/fsV/
-         tJAZhbkfqjYfTDvWyvyJIJOalG92MXYZffKBiEl2qJRNHHjjmEQxpuEK6p5mEwmR3IFH
-         C1fJraSKTrrNQ4xAFNSHTvKkDhWPdM+NoyCgMvsJQ7NGobIC0uwKqYInkutUUrn6zlyG
-         yh/vDF1gIpxdSmR59bhNSrt1YY35tCOPjqzciLpRroaZqMHgvKjUCbQZuQwooil00vrJ
-         ws0w==
-X-Gm-Message-State: AJIora8Z1Wke/+/PJjQ1N8orPzwtDX4uSkWSXWOyAZtyDryeOrwo9hlt
-        S4Ujb6P43JxBLb3OveYnH7V5sJ+kvXar2ZjclXpNg718nIDMxviFc9cYUv5AbR5LExc2a7ZpHA0
-        eGPHjaxpepF65kH9sIriLUejF
-X-Received: by 2002:adf:ffc1:0:b0:21d:66a1:c3ee with SMTP id x1-20020adfffc1000000b0021d66a1c3eemr16041387wrs.364.1659000439057;
-        Thu, 28 Jul 2022 02:27:19 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1upxqCVjXPJAiQREZPjwda4AYwu3LBOidqDUdl61pYBbKHbL+vvbmNlzGyLJV5MOoy3LxjH1A==
-X-Received: by 2002:adf:ffc1:0:b0:21d:66a1:c3ee with SMTP id x1-20020adfffc1000000b0021d66a1c3eemr16041365wrs.364.1659000438748;
-        Thu, 28 Jul 2022 02:27:18 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id g17-20020a5d4891000000b0021f0558e51asm444942wrq.55.2022.07.28.02.27.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 02:27:18 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Thu, 28 Jul 2022 05:30:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2064BE06;
+        Thu, 28 Jul 2022 02:30:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FE65B8040B;
+        Thu, 28 Jul 2022 09:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2432EC433C1;
+        Thu, 28 Jul 2022 09:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659000611;
+        bh=RK0p45PJzf+xSyo1liQs0iRoThupe00fRizXrfLKftk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WxKxnFJL+LI4HzvHm+8/hxVki4r/bxkblBRS6RK2nIeWzptQU21Ou7g7VVQ67RrSs
+         r56W0EmhnBCJ+dpC/33zDeOtXyFS5YH6k4OnpKwZqpN+Y4ImiXsM3pxACJ31c5DKBB
+         mWm55JdqrxZM4fVwOd1oFfKOuNvWykqQjfnJjMBSfGSGT7spnfkvzmS+BwrntqPCiT
+         wV5uW3H1/zaA9YiFkX+NlpAMv00rLvP35XnTCaaFn6SsRnSX0wbh8FWK6RxWIO+wr6
+         Ah3FEfJl0LwrIHnkWj0nY2/ZipjfIzghhcj2QHWvEkziNdAbMUCbfUrpNlnCr9nEAA
+         6wAFy0tPtbg0g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oGzqa-0005Xq-5X; Thu, 28 Jul 2022 11:30:24 +0200
+Date:   Thu, 28 Jul 2022 11:30:24 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Dmitry Torokhov <dtor@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: Re: [PATCH] sched: Print each field value left-aligned in
- sched_show_task()
-In-Reply-To: <20220727060819.1085-1-thunder.leizhen@huawei.com>
-References: <20220727060819.1085-1-thunder.leizhen@huawei.com>
-Date:   Thu, 28 Jul 2022 10:27:17 +0100
-Message-ID: <xhsmhh731egei.mognet@vschneid.remote.csb>
+Subject: Second-source devices and interrupt-mapping race
+Message-ID: <YuJXMHoT4ijUxnRb@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/07/22 14:08, Zhen Lei wrote:
-> Currently, the values of some fields are printed right-aligned, causing
-> the field value to be next to the next field name rather than next to its
-> own field name. So print each field value left-aligned, to make it more
-> readable.
->
-> Before:
->       stack:    0 pid:  307 ppid:     2 flags:0x00000008
-> After
->       stack:0     pid:308   ppid:2      flags:0x0000000a
->
-> This also makes them print in the same style as the other two fields:
->       task:demo0           state:R  running task
->
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Hi Marc, Rob and Krzysztof,
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+When adding support for the new Lenovo Thinkpad X13s laptop, we realised
+that it comes with two different touchpad controllers.
 
+To enable some early adopters to use the alternate touchpad, I tried to
+enable both nodes in the devicetree and have the i2c-hid driver bind to
+the one that is actually present.
+
+This turned out to be racy due to the hid driver in question enabling
+async probing so that the populated and non-populated nodes can be
+probed in parallel, which in turn lead to some interesting findings.
+
+Specifically, it seems like the interrupt-domain mapping code is racy in
+that it can return two different mappings for the same hwirq, and when
+the hid driver enables one of them, this may end up looking like
+spurious interrupts for the other mapping:
+
+[  +0.014042] i2c_hid_of 0-002c: i2c_device_probe
+[  +0.000001] i2c_hid_of 0-0015: i2c_device_probe
+[  +0.000025] i2c_hid_of 0-002c: i2c_device_probe - irq mapped (166)
+[  +0.000013] i2c_hid_of 0-0015: i2c_device_probe - irq mapped (167)
+[  +0.000051] i2c_hid_of 0-002c: supply vddl not found, using dummy regulator
+[  +0.000056] i2c_hid_of 0-0015: supply vddl not found, using dummy regulator
+[  +0.000016] i2c_hid_of 0-002c: HID probe called for i2c 0x2c
+[  +0.000374] i2c_hid_of 0-0015: HID probe called for i2c 0x15
+...
+[  +0.000180] i2c_hid_of 0-002c: Requesting IRQ: 166
+[  +0.000045] irq 167, desc: (____ptrval____), depth: 1, count: 0, unhandled: 0
+[  +0.000014] ->handle_irq():  (____ptrval____), handle_bad_irq+0x0/0x220
+[  +0.000015] ->irq_data.chip(): (____ptrval____), msm_gpio_irq_chip+0x0/0x108
+[  +0.000011] ->action(): 0000000000000000
+[  +0.000006]    IRQ_NOPROBE set
+
+The interrupt is eventually disabled and the populated device fails to
+probe. Note that this only happens intermittently.
+
+This second-source example could obviously be dismissed as something
+which is simply not supported (the boot firmware should have made sure
+only the populated node was enabled), but what if there were actually
+two separate devices sharing an interrupt and that now end up with two
+different virq?
+
+Async probing has been around for a while now and needs to be supported,
+even if the platform bus doesn't use it (yet). 
+
+TL;DR:
+
+1. Marc, does the irq mapping code need to be serialised to handle the
+valid case of two devices sharing an interrupt being probed in parallel?
+It may not be a common setup, but correctness first?
+
+I've just posted a patch that should address this here:
+
+	https://lore.kernel.org/r/20220728092710.21190-1-johan+linaro@kernel.org
+
+
+2. Rob, Krzysztof, I assume that handling second-source devices by
+enabling multiple variants in the devicetree can not be considered
+correct?
+
+What about the related case of simply non-populated devices (e.g. laptop
+variants without a touchscreen)?
+
+Note that we have at least two cases of "second-source" nodes in mainline
+("rtc" and "trackpad", respectively):
+
+	85a9efcd4e29 ("ARM: mvebu: add DT support for Seagate NAS 2 and 4-Bay")
+	689b937bedde ("arm64: dts: mediatek: add mt8173 elm and hana board")
+
+and that, for example, the i2c-hid driver explicitly supports
+non-populated devices:
+
+	b3a81b6c4fc6 ("HID: i2c-hid: check if device is there before really probing")
+
+and the commit message indicates that this is something that Chromebooks
+rely on.
+
+For the X13s, I'm not sure how we would go about to tell the variants
+apart (the ACPI tables that Windows use include both touchpads and an
+optional touchscreen). In the end, the boot firmware might need to
+resort to a similar kind of probing if we don't allow the kernel to do
+it.
+
+Finally, note that while disabling async probing for "second-source"
+nodes (e.g. if we could mark them as requiring that) would take care of
+the irq-mapping race, we'd still currently also need to move any
+pinconfig handles to the parent bus node (as is also done in one of the
+in-tree examples above) to suppress the corresponding pinctrl errors in
+case the populated device is probed and bound first:
+
+[  +0.010217] sc8280xp-tlmm f100000.pinctrl: pin GPIO_182 already requested by 0-0015; cannot claim for 0-002c
+
+Johan

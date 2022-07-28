@@ -2,159 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E853583B66
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4686F583B6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235661AbiG1Jkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S235673AbiG1JlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235617AbiG1Jks (ORCPT
+        with ESMTP id S235617AbiG1JlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:40:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555A2B49E;
-        Thu, 28 Jul 2022 02:40:47 -0700 (PDT)
-X-UUID: ec76a3fca1e7485c9046b5b537d5a4e7-20220728
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:f6e62fc7-c20c-4bd7-83d4-42ab672c27cc,OB:20,L
-        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:45
-X-CID-INFO: VERSION:1.1.8,REQID:f6e62fc7-c20c-4bd7-83d4-42ab672c27cc,OB:20,LOB
-        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-META: VersionHash:0f94e32,CLOUDID:1a5993d0-841b-4e95-ad42-8f86e18f54fc,C
-        OID:f0ccf6249fe2,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ec76a3fca1e7485c9046b5b537d5a4e7-20220728
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1802726423; Thu, 28 Jul 2022 17:40:42 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 28 Jul 2022 17:40:41 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 28 Jul 2022 17:40:41 +0800
-Message-ID: <22cd8a6807385941c55e75b390d31424936ae8c4.camel@mediatek.com>
-Subject: Re: [PATCH v15 07/11] drm/mediatek: Add retry to prevent
- misjudgment for sink devices
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <ck.hu@mediatek.com>, <liangxu.xu@mediatek.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 28 Jul 2022 17:40:41 +0800
-In-Reply-To: <ce46e9b2-8e34-b6cd-d802-35b3ae66e02d@collabora.com>
-References: <20220727045035.32225-1-rex-bc.chen@mediatek.com>
-         <20220727045035.32225-8-rex-bc.chen@mediatek.com>
-         <ce46e9b2-8e34-b6cd-d802-35b3ae66e02d@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 28 Jul 2022 05:41:03 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE4617E16
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:41:00 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ez10so2151744ejc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:41:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XaNvgy+1H36IRcM7AA2Xwbajk022czzMS+90Wa7oW3M=;
+        b=jYblao2xdRWipW13vVnDXLltc7VXnm/RC3o0aLU683Pl8BYeecapjUqIUXfmwUlSGu
+         /tHklsM0PqVfgQztSY7YHwNFbEIJbxSbgpS/MVp8jW5YJi68UwJWUqTX8zSRnVW7Kvrw
+         fEwcApWEUezdfwtmeq9M1XdsbUcptaD6kAG6DzTHVFkSI9LizFFn8DwbwBlwIZUBJju0
+         7/BxwtxtWDP9NgNzhz276eg9swjzDPOiJDNs03x43fS6CIwgkluj9fowZY2+/3Mzbaca
+         Ji6fmqdpLjGZaVPwdzt6gPeWdG8mJM5Lzr4PVMpQvPkPstgD9htaFc4x9i2kmamB1IH+
+         LP8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XaNvgy+1H36IRcM7AA2Xwbajk022czzMS+90Wa7oW3M=;
+        b=mzxLuvlPuI3r+IbRNTDe8jnmj0odFpLmrW+etCVab2hYVsLx7hwI/WbTHsSC6yI9Ne
+         s1KYV4NEmQQuugU/hxm5HeCGB7kq9uNvZixPUHvBAT/hQm02qLjwn5UjV/m7h+NpMZOZ
+         lrsC6erDHxduqfaTxE6zxL1QA85tFy1PSGES4dDMZ0dauwIb+1ucojcIZ5lUYGx22WSN
+         TU+Pk11iLE3wA99Ob+fPuBdR6IqsyWCQ52Y6fuEI9xmV9YYheE6hXMwR2O0GoMmI+QHU
+         2MqyOIWyisUD4zeVeaMsMkpYiyIBeE1g3WgvsRqrqp9X6tZG41nlr85pEXD7U+fbqd6q
+         M0UQ==
+X-Gm-Message-State: AJIora+bqzBTX6Zcj0hezSIOubB3gIhhg/VvlVDBra7C7eQmZj+VhnsI
+        t5KTCDzhGhbxfDDAs/CYPny56w+AEcFj8072F7JVHbEZtp52ag==
+X-Google-Smtp-Source: AGRyM1tOQ8M/osYWnQJOErj/AI1B/ST5/0zrasMiZKcmBcOAqVuS7XX8VMqPl6GEd1Vqevy6Uiim30H4iKNYfTmKuQY=
+X-Received: by 2002:a17:906:7b88:b0:72f:d080:415 with SMTP id
+ s8-20020a1709067b8800b0072fd0800415mr16027088ejo.169.1659001259232; Thu, 28
+ Jul 2022 02:40:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220727161008.993711844@linuxfoundation.org>
+In-Reply-To: <20220727161008.993711844@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 28 Jul 2022 15:10:47 +0530
+Message-ID: <CA+G9fYveB+NVVi0+-u5=hT-5gm2f-deCiQ3wG5NbCPL6VWXUqQ@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/87] 5.4.208-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-27 at 11:40 +0200, AngeloGioacchino Del Regno wrote:
-> Il 27/07/22 06:50, Bo-Chen Chen ha scritto:
-> > For some DP dungles, we need to train more than onece to confirm
-> > that we
-> > don't misjudge the status of sink device.
-> 
-> Please fix the typos in your commit title and description.
-> title: misjudgment -> misjudgement
-> desc: dungles->dongles; onece->once
-> 
-> > 
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >   drivers/gpu/drm/mediatek/mtk_dp.c | 21 ++++++++++++++++++---
-> >   1 file changed, 18 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
-> > b/drivers/gpu/drm/mediatek/mtk_dp.c
-> > index ce817cb59445..80d7d6488105 100644
-> > --- a/drivers/gpu/drm/mediatek/mtk_dp.c
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> > @@ -42,6 +42,7 @@
-> >   #define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
-> >   #define MTK_DP_TBC_BUF_READ_START_ADDR 0x08
-> >   #define MTK_DP_TRAIN_DOWNSCALE_RETRY 8
-> > +#define MTK_DP_TRAIN_CLEAR_RETRY 50
-> >   
-> >   struct mtk_dp_train_info {
-> >   	bool tps3;
-> > @@ -1431,11 +1432,25 @@ static int mtk_dp_video_config(struct
-> > mtk_dp *mtk_dp)
-> >   
-> >   static int mtk_dp_training(struct mtk_dp *mtk_dp)
-> >   {
-> > +	short max_retry = MTK_DP_TRAIN_CLEAR_RETRY;
-> >   	int ret;
-> >   
-> > -	ret = mtk_dp_train_start(mtk_dp);
-> > -	if (ret)
-> > -		return ret;
-> > +	/*
-> > +	 * We do retry to confirm that we don't misjudge the sink
-> > status.
-> > +	 * If it is still failed, we can confirm there are some issues
-> > for the
-> > +	 * sink device.
-> > +	 */
-> > +	do {
-> > +		ret = mtk_dp_train_start(mtk_dp);
-> > +		if (!ret)
-> > +			break;
-> > +	} while (--max_retry);
-> > +
-> > +	dev_info(mtk_dp->dev, "dp training clear retry times: %d\n",
-> > +		 MTK_DP_TRAIN_CLEAR_RETRY - max_retry);
-> 
-> dev_dbg() here.
-> 
-> ...after which,
-> 
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> 
+On Wed, 27 Jul 2022 at 21:58, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.208 release.
+> There are 87 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.208-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hello Angelo,
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Thanks for your review.
-I will modify these in next version.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-BRs,
-Bo-Chen
+## Build
+* kernel: 5.4.208-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 048552f118bf6191e9f2eb6f21b0c12f04f8f4dd
+* git describe: v5.4.207-88-g048552f118bf
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+07-88-g048552f118bf
 
-> > +
-> > +	if (!max_retry)
-> > +		return -ETIMEDOUT;
-> >   
-> >   	ret = mtk_dp_video_config(mtk_dp);
-> >   	if (ret)
-> 
-> 
+## Test Regressions (compared to v5.4.207)
+No test regressions found.
 
+## Metric Regressions (compared to v5.4.207)
+No metric regressions found.
+
+## Test Fixes (compared to v5.4.207)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.207)
+No metric fixes found.
+
+## Test result summary
+total: 123475, pass: 110463, fail: 392, skip: 11618, xfail: 1002
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 307 total, 307 passed, 0 failed
+* arm64: 61 total, 57 passed, 4 failed
+* i386: 28 total, 26 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 53 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

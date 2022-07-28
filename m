@@ -2,132 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03517584689
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 21:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8FA584655
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 21:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiG1S5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 14:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
+        id S232681AbiG1TAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 15:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiG1S5h (ORCPT
+        with ESMTP id S231693AbiG1TA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 14:57:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 452EB18B31
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659034655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fjIYWUhlmn952PQamHyhfurxBgzciXNRkjegJKiOJW4=;
-        b=PcCi3gU55ywwQ9YonL0ILXdb0EOs5LWocH3kKjiDfvUvvLEN02PCPfshU72Ex0TugBiit8
-        2z5bCNICnrybAASirJGMfJahvnq46AQrz059TAN+b50PXecOr+BhqtLn5jWRhQucdGTKUx
-        6N41JdkvgzLpwC4nzOkmujBAFB+53h8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-sdLg74s2Nye9Wp21UThKiA-1; Thu, 28 Jul 2022 14:57:31 -0400
-X-MC-Unique: sdLg74s2Nye9Wp21UThKiA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4515E102BCDB;
-        Thu, 28 Jul 2022 18:57:30 +0000 (UTC)
-Received: from [10.22.9.86] (unknown [10.22.9.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4B68040315E;
-        Thu, 28 Jul 2022 18:57:29 +0000 (UTC)
-Message-ID: <1ae1cc6c-dca9-4958-6b22-24a5777c5e8d@redhat.com>
-Date:   Thu, 28 Jul 2022 14:57:28 -0400
+        Thu, 28 Jul 2022 15:00:29 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C232ABC02;
+        Thu, 28 Jul 2022 12:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659034828; x=1690570828;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=QCH1ItzV0KMBiEEScypOp5iCtuClkJoas7APqtx/Xdc=;
+  b=bzQKWjA/MkyJlCsZhOl7ZkXBihv0R0Sf5yUgFQUqBAJCOC7KpganGoh8
+   COc9gU3XEd9iGG5lAuL8l9eIvv0AY1ou9bZWLVJIWId8eDXDL/xv+TTmA
+   nJLNKnWirEajvwkDylhJCfI4QwdB2bRhZ+3iodOx71FGhhMbc1tjZXEi2
+   E=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Jul 2022 12:00:28 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 12:00:28 -0700
+Received: from hu-cchinnad-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Jul 2022 12:00:25 -0700
+From:   Chetan C R <quic_cchinnad@quicinc.com>
+To:     <bvanassche@acm.org>
+CC:     <jejb@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>,
+        Chetan C R <quic_cchinnad@quicinc.com>
+Subject: [PATCH V3] scsi: ufs: Get boot device storage type from command line
+Date:   Fri, 29 Jul 2022 00:30:13 +0530
+Message-ID: <1659034814-3473-1-git-send-email-quic_cchinnad@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220728005815.1715522-1-longman@redhat.com>
- <YuLF+xXaCzwWi2BR@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YuLF+xXaCzwWi2BR@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 13:23, Tejun Heo wrote:
-> Hello,
->
-> On Wed, Jul 27, 2022 at 08:58:14PM -0400, Waiman Long wrote:
->> It was found that any change to the current cpuset hierarchy may reset
->> the cpus_allowed list of the tasks in the affected cpusets to the
->> default cpuset value even if those tasks have cpus affinity explicitly
->> set by the users before. That is especially easy to trigger under a
->> cgroup v2 environment where writing "+cpuset" to the root cgroup's
->> cgroup.subtree_control file will reset the cpus affinity of all the
->> processes in the system.
->>
->> That is especially problematic in a nohz_full environment where the
->> tasks running in the nohz_full CPUs usually have their cpus affinity
->> explicitly set and will behave incorrectly if cpus affinity changes.
->>
->> Fix this problem by adding a flag in the task structure to indicate that
->> a task has their cpus affinity explicitly set before and make cpuset
->> code not to change their cpus_allowed list unless the user chosen cpu
->> list is no longer a subset of the cpus_allowed list of the cpuset itself.
->>
->> With that change in place, it was verified that tasks that have its
->> cpus affinity explicitly set will not be affected by changes made to
->> the v2 cgroup.subtree_control files.
-> I think the underlying cause here is cpuset overwriting the cpumask the user
-> configured but that's a longer discussion.
->
->> +/*
->> + * Don't change the cpus_allowed list if cpus affinity has been explicitly
->> + * set before unless the current cpu list is not a subset of the new cpu list.
->> + */
->> +static int cpuset_set_cpus_allowed_ptr(struct task_struct *p,
->> +				       const struct cpumask *new_mask)
->> +{
->> +	if (p->cpus_affinity_set && cpumask_subset(p->cpus_ptr, new_mask))
->> +		return 0;
->> +
->> +	p->cpus_affinity_set = 0;
->> +	return set_cpus_allowed_ptr(p, new_mask);
->> +}
-> I wonder whether the more predictable behavior would be always not resetting
-> the cpumask if it's a subset of the new_mask.
-There can be a counter argument that if a user found out that there is 
-not enough cpus in a cpuset to meet its performance target, one can 
-always increase the number of cpus in the cpuset. Generalizing this 
-behavior to all the tasks irrespective if they have explicitly set cpus 
-affinity before will disallow this use case.
-> Also, shouldn't this check
-> p->cpus_mask instead of p->cpus_ptr?
+v1->v2:
+- Made UFS_QCOM_CMDLINE as default 'Y' to get __setup() addressing review comments from Bart
+v2->v3
+- Made ufs-cmdline to build as core driver obj-y
 
-You are right. I should have used cpus_mask instead. Will send out a v2.
+Thanks for your response!
 
-Cheers,
-Longman
+Chetan C R (1):
+  scsi: ufs: Get boot device storage type from command line
+
+ drivers/ufs/host/Makefile      |  1 +
+ drivers/ufs/host/ufs-cmdline.c | 54 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
+ create mode 100644 drivers/ufs/host/ufs-cmdline.c
+
+-- 
+2.7.4
 

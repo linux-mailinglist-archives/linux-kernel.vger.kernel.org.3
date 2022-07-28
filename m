@@ -2,69 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274135843A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2675843B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbiG1PzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
+        id S231268AbiG1P4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiG1Pyr (ORCPT
+        with ESMTP id S232011AbiG1P4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:54:47 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB3C6C12F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:54:46 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id e16so2260720pfm.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kU+1umJQF2o/NXaZ6DOn2fpiiayOd6S6bPdTx2dKd/k=;
-        b=dcP32hnVDAltE5oC+wFB7l+/9L6Z/Bg5HW+o9yRipBBv5uJDAQXieFFGffT0dNJZ7l
-         zEqG4XhEhIB0FrK93YOLQ4BJORQ8hjBdq2MOry8P8m+EZz0Cz2Rj7fHJJ1k3L22PNqoW
-         9YBcW2a6vn5f+takyY6WspSt+E5TvXmdfcbNU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kU+1umJQF2o/NXaZ6DOn2fpiiayOd6S6bPdTx2dKd/k=;
-        b=L2cQ3SMuTNXk9NAUiLkVvsyv45/w4LTPyt+Je8KVbodi3gmr+cMoWtv5T6Jgaq+DF3
-         2nFbwq8vtHwCUIZYvjq6JRxPCbp/W6e5OQh9aD2ZrkyX+CdkDCHjxC+TUANhRZyFvmrT
-         Vaar187wd6KoJTuHy2n01XGs1ElZhafnqNx/ORO+ufERDetpH4s7MqQ+5caLIzYFix8e
-         0s5Cnj04C644saZvBB3Cgb9qjz+siKxexSe7nU7aMauXqt0vmzWWtGSDo/+I7wF6EA8x
-         4ko0NVUavrRoTeJUoD5dLGZqJH6ccdgAtvWBpVTeA2SzbltEcTNprQ+tddFeGoor/8Lz
-         y8wg==
-X-Gm-Message-State: AJIora+1xhhfllOVfgd+X0cs4QazDRncUQWO8iBLpT/SLU4xQuqECIOs
-        vwGCXGJ5Y375QDmq3gFdM1fN9A==
-X-Google-Smtp-Source: AGRyM1uEQZQL0BQQkR3RNvEAFIjhq7+7MXq8qU7ybWJ2B13O/5RNLqRZS5pTd/rmE0sG+MnN8+l1Xg==
-X-Received: by 2002:a05:6a00:234c:b0:52b:7cb:ed9d with SMTP id j12-20020a056a00234c00b0052b07cbed9dmr27527599pfj.32.1659023686099;
-        Thu, 28 Jul 2022 08:54:46 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:bb10:e729:7f59:7cbc])
-        by smtp.gmail.com with UTF8SMTPSA id i6-20020a626d06000000b0052c70770b24sm974115pfc.40.2022.07.28.08.54.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 08:54:45 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     Douglas Anderson <dianders@chromium.org>, dm-devel@redhat.com,
-        Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        Milan Broz <gmazyland@gmail.com>, linux-raid@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH] dm: verity-loadpin: Drop use of dm_table_get_num_targets()
-Date:   Thu, 28 Jul 2022 08:54:41 -0700
-Message-Id: <20220728085412.1.I242d21b378410eb6f9897a3160efb56e5608c59d@changeid>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+        Thu, 28 Jul 2022 11:56:22 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E007652DC0;
+        Thu, 28 Jul 2022 08:56:20 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 6EBDF21F;
+        Thu, 28 Jul 2022 15:56:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6EBDF21F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1659023780; bh=Fdz/aB00PMrpIGOtZ/f4nnm4cHA+314fJvDTvpvlkbY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=aO7nC7rNH86DCNoWuAYMNivOT6HBQkFj8b/fK+OtZ7gCUv+1XjcFsZpNfeB7ePNCf
+         2Vm3pzw7efIR+opcI1xOS5s+ONzJmQ8J54oXor/6CwzUuAhMj/Fz0uNU7M1DNgBR6q
+         go97rDcBgU/Q30dXNKtmSrgSvH6qdD7hpSV2+n4aj8gjVY8HkMLEASAv2yqGHAOt/W
+         /6DTT2Fs0m3RcHSDdkJ0ng9cUMoX56kjpNxYLgzPxL3ug3eIiUL6OnLK20mcO9wqTk
+         mDq8qT43QKIQbG4bsfoe+qbDtildb4h1p7FKJ59cXMvenJBbExVo+q0tIR3MeatSSq
+         SSpilxR2LNwpw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-doc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [RFC PATCH 0/2] Rework the kernel's README.rst
+In-Reply-To: <20220720041325.15693-1-lukas.bulwahn@gmail.com>
+References: <20220720041325.15693-1-lukas.bulwahn@gmail.com>
+Date:   Thu, 28 Jul 2022 09:56:19 -0600
+Message-ID: <87czdpb598.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 2aec377a2925 ("dm table: remove dm_table_get_num_targets()
-wrapper") in linux-dm/for-next removed the function
-dm_table_get_num_targets() which is used by verity-loadpin. Access
-table->num_targets directly instead of using the defunct wrapper.
+Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
 
-Fixes: b6c1c5745ccc ("dm: Add verity helpers for LoadPin")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+> As far as I see, the README.rst file in Documentation/admin-guide/ covers
+> three rather outdated (or subsumed) aspects:
+>
+>   1. mentioning that it is possible to "run a.out user programs with this kernel"
+>
+>   2. how to report a kernel bug
+>
+>   3. the explanations around the use of LILO as a boot loader
+>
+> This patch series addressed the first two aspects; the third one simply
+> first needs some more experimenting/experience on my side to update
+> the description of the setup with a GRUB boot loader.
+>
+> I am happy if anyone else contributes or helps with this rework task on
+> the third aspect.
+>
+> I am also adding Linus as recipient, as he seems to be the original author,
+> i.e., in the text, 'me' refers to Linus.
+>
+> Please let me know if you are generally fine with this approach, and
+> if there is something on the other documentation to be done to get this
+> patch accepted.
 
- drivers/md/dm-verity-loadpin.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The changes seem fine to me; I'll apply them after the merge window if
+nobody objects.
 
-diff --git a/drivers/md/dm-verity-loadpin.c b/drivers/md/dm-verity-loadpin.c
-index 10c18bc1652c..387ec43aef72 100644
---- a/drivers/md/dm-verity-loadpin.c
-+++ b/drivers/md/dm-verity-loadpin.c
-@@ -5,6 +5,7 @@
- #include <linux/dm-verity-loadpin.h>
- 
- #include "dm.h"
-+#include "dm-core.h"
- #include "dm-verity.h"
- 
- #define DM_MSG_PREFIX	"verity-loadpin"
-@@ -58,7 +59,7 @@ bool dm_verity_loadpin_is_bdev_trusted(struct block_device *bdev)
- 
- 	table = dm_get_live_table(md, &srcu_idx);
- 
--	if (dm_table_get_num_targets(table) != 1)
-+	if (table->num_targets != 1)
- 		goto out;
- 
- 	ti = dm_table_get_target(table, 0);
--- 
-2.37.1.455.g008518b4e5-goog
+Longer term it's probably worth thinking about what the README.rst file
+is for.  It seems like we should have one starting point for somebody's
+first encounter with the docs; that would likely either be this file or
+Documentation/index.rst but not both.  I keep meaning to try to improve
+the initial documentation experience, but haven't found the time yet...
 
+Thanks,
+
+jon

@@ -2,78 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83645836ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F355836F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 04:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbiG1Cch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 22:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S236318AbiG1CfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 22:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbiG1Ccd (ORCPT
+        with ESMTP id S229618AbiG1CfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 22:32:33 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0881C901
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 19:32:32 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id p10so886107lfd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 19:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=2ER2WW01ET2wH1WV2jGlyhputEhjwKA2tNpxchjmONE=;
-        b=JaYppaBYvyfdmz1MNr/HK3KvWm9Sz+t/YuEOuPFu2OqjCyYQemk8TTaIhD7w0V+Qwh
-         mpEk5a71C+P6aWgpwNqPV3GYnDJsUqXoMekAAXm0HABUDlt4Y5lsaKG/JCQB9QPfU+4x
-         XICxS8dO5M7eAtAnktXGKksLDJ68WPet/1Qgy4G3qjtDgbtdo6QSdRC01xUCd2GQfuFa
-         21JyIa7jI6+MYXsMaijiqQt4zpNMnduA7cYi+x4mwH2pF3JdD9Q32HBy4XLt3nsrNIJy
-         kOYmtCwMFtJtCZqpCOSX8jHQbkQ78YHf+7b/zVc3Zjc4E1JqmbDqU/FMD+bdzLJL5DBR
-         xG5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=2ER2WW01ET2wH1WV2jGlyhputEhjwKA2tNpxchjmONE=;
-        b=1MKMbjaHUM8H/5pgGlfXBnkY+64RFR0sa0198s1T1zw7suSOvzgTbBDzFYTjTL+cOF
-         pkGcwvEHTuW69MiinMGp+qzGwjZITpi3MMB7L7R3yz4/jO8NYH4IfOyRsx63VkLQpPRG
-         10NwSLU5VhrF7dXT9ypw9zS6WKXp/k+iBp1D8A02Tvm06YsiwfAu6bRkxjPlorrjaKSV
-         w/6OxgQN0juZMgbhX6za3mGl8tVz8ZLBRDlGkoAH6KeuJfK3Zy3219ymUhhj9M0KsLEV
-         kkYWAcGHgP4m4FQJYxYb7G74BmikwT+5NROUJKNyE40fzUmDAnbQnXVOQTmI1oo7wB0d
-         g4BQ==
-X-Gm-Message-State: AJIora+zUTegOVaKzCdunomDlZYXm8xkAc2X3CKUrShX2E2ZESDdTW+o
-        jVGQvWZOalCp4i52XMyGj+SuD9DR2vvojCZTdRQ=
-X-Google-Smtp-Source: AGRyM1vtAZkIDHO+C1Mp4SQzIV9nIO1IXCu/+FniG9e/EuX/gIsuq9pdAB8I+Ja8/rwQGvj/fHwM07zwvYp7QuPCQtY=
-X-Received: by 2002:ac2:5f6f:0:b0:48a:be19:8be8 with SMTP id
- c15-20020ac25f6f000000b0048abe198be8mr1709533lfc.595.1658975550594; Wed, 27
- Jul 2022 19:32:30 -0700 (PDT)
+        Wed, 27 Jul 2022 22:35:09 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942CB192;
+        Wed, 27 Jul 2022 19:35:06 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LtZTY5LT8z9syc;
+        Thu, 28 Jul 2022 10:33:53 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 10:35:04 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 10:35:04 +0800
+Subject: Re: [PATCH] rcu: Display registers of self-detected stall as far as
+ possible
+To:     kernel test robot <lkp@intel.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>
+References: <20220727060929.1149-1-thunder.leizhen@huawei.com>
+ <202207280520.yvgjXjJx-lkp@intel.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <fad2fcf8-9dd9-e2dc-dc04-203311ade6c9@huawei.com>
+Date:   Thu, 28 Jul 2022 10:35:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Received: by 2002:a05:6504:9ce:b0:1d7:f59e:4751 with HTTP; Wed, 27 Jul 2022
- 19:32:30 -0700 (PDT)
-Reply-To: drlisa985@gmail.com
-From:   Lisa <hwaldean@gmail.com>
-Date:   Thu, 28 Jul 2022 04:32:30 +0200
-Message-ID: <CAGpHGUFzWiTrMcvdDV+OZy0C0i8SEH5aayChcUbAbpFNVrYXDA@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+In-Reply-To: <202207280520.yvgjXjJx-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
 
-My name is Dr Lisa Williams from the United States.I am a French and
-American nationality (dual) living in the U.S and sometimes in France
-for Work Purpose.
 
-I hope you consider my friend request. I will share some of my pics
-and more details about myself when I get your response.
+On 2022/7/28 5:12, kernel test robot wrote:
+> Hi Zhen,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on paulmck-rcu/dev]
+> [also build test ERROR on linus/master v5.19-rc8 next-20220727]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/rcu-Display-registers-of-self-detected-stall-as-far-as-possible/20220727-141107
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+> config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220728/202207280520.yvgjXjJx-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/9f3fe5a0e46546db5bcfd1f33f12d87339e5de98
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Zhen-Lei/rcu-Display-registers-of-self-detected-stall-as-far-as-possible/20220727-141107
+>         git checkout 9f3fe5a0e46546db5bcfd1f33f12d87339e5de98
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from kernel/rcu/tree.c:4641:
+>>> kernel/rcu/tree_stall.h:358:10: error: call to undeclared function 'get_irq_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                    regs = get_irq_regs();
 
-Thanks
-With love
-Lisa
+OK, I will fix it in v2, thanks.
+
+>                           ^
+>>> kernel/rcu/tree_stall.h:358:8: error: incompatible integer to pointer conversion assigning to 'struct pt_regs *' from 'int' [-Wint-conversion]
+>                    regs = get_irq_regs();
+>                         ^ ~~~~~~~~~~~~~~
+>    2 errors generated.
+> 
+> 
+> vim +/get_irq_regs +358 kernel/rcu/tree_stall.h
+> 
+>    352	
+>    353	static void rcu_dump_cpu_task(int cpu)
+>    354	{
+>    355		if (cpu == smp_processor_id() && in_irq()) {
+>    356			struct pt_regs *regs;
+>    357	
+>  > 358			regs = get_irq_regs();
+>    359			if (regs) {
+>    360				show_regs(regs);
+>    361				return;
+>    362			}
+>    363		}
+>    364	
+>    365		dump_cpu_task(cpu);
+>    366	}
+>    367	
+> 
+
+-- 
+Regards,
+  Zhen Lei

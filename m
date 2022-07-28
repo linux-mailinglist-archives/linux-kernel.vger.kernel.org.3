@@ -2,175 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AF9583B12
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE60583B20
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235487AbiG1JRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
+        id S235488AbiG1JUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbiG1JRg (ORCPT
+        with ESMTP id S234427AbiG1JUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:17:36 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08226402C9;
-        Thu, 28 Jul 2022 02:17:35 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id l23so2108341ejr.5;
-        Thu, 28 Jul 2022 02:17:34 -0700 (PDT)
+        Thu, 28 Jul 2022 05:20:36 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC84648CA1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:20:34 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bf9so1925598lfb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=y78Ct4fFXNg/6yn3eXTXocHBOF2oFMofyGfsSfBm76E=;
-        b=lRZeChtcl6QKLLncrcd65RtuwmC+AmJfYNZCNuFqvTeDNN4N2du0je1r2yULwLjsJj
-         XjEA6s32GZvsv0PEdvL3uIaEbHrolSNrHjxLdZ+/8ugi/gmXvnVM1OBfMd2E4nL6/GS6
-         g6+LY5Mnq0QUFXTNh+b6sNXic9Ll1g5OD5OvO7QhAGRZLHubcpQBAtDEG1mq1Qk/WWfW
-         ujXRrL3Hj1Mgz+kswZgeWv9KpuKm5ObbdV09AHc8MDKR/QgP//V+OpJnvL5qJLdYRa9B
-         SrsKS5GldctkLI632cSlX1igJL7d/IhogXaFj2ZjLvUDYdD4cBYtBLNxXfT/GwcA7ISY
-         5A9A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ywBOOR3hRZ95Faea8Y6GMt4e6+qAIbLT8FcbUkq7ZHE=;
+        b=FLMFlnMeKZxsVr2c45CmvBS+qrnhsIuZ0il6XWUWSJOHskOe3htKisNWoRGcqQJ6Bc
+         IwKoYwCJgIag0uNUSvZRp9i60AKPHNAVzP1lduRtVgkklONHYiYRv/3jIzwJE0mFx74d
+         2ZpSqbV6dQzFqj8auMplx9uRoDOc95fnky0nB56ssFA3bfjG/ppdIPore4Rifm9+MfCt
+         JM0Nqo6IXJ/X36tB7PJXO4bclIdjzw4jGnRBQxLpIO6YJ6UvnH1XG/2qn4p9+0RkexuM
+         5NDGhoJSc7lbi1btPg+xk8t6eJ0NqkOsznAqqpFx7Lbc3gyUiIwyM/38FQZKqN9ZEQo0
+         MeOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=y78Ct4fFXNg/6yn3eXTXocHBOF2oFMofyGfsSfBm76E=;
-        b=sltU7GuGR3HGCV2XPTFwdkRMVNjTozEiR2044kFm2A4ljM3M1/6VcekBzbGdC3MNhE
-         aXX/Jm/FiPxLiW8OWvSMZEyYRR8NChZztPT2Jmc6kNarb6JAQ/SRjibthqwMyL3WnbRg
-         mkNfENoyruOpRZiO4WfB9r6kCSO8J4FoWNsIKJi3uqOv7mwT6g7r+xNjVyVDzmh1NSLd
-         Q6VV0TI2GCgwhYBDyDKSZK6vsmNhgnp9rgJGoNJyPfCslqMzGnJ0DhEETUD8lPwRMqaW
-         vfZ/ofLQh0Ck6gE0QD5wXumSSIvFiEAQ4jTijX3fMC5AO/mnJ6EPuiluzb0Hfi4T7Cxa
-         kS6w==
-X-Gm-Message-State: AJIora/bHhCc0wcB4aJ7sUFKh9dqdTJG0/kys5zauZT2z5TpknLutxCy
-        2/i6Q2socQybUhbeQ0snT1zUrsEZtZrNo00gKWY=
-X-Google-Smtp-Source: AGRyM1vjbD5Pyz6kINYX/l0Ve6gjd8ITkXtHl6Gw2228CXHIBLWySFdFwrh1TYKdI179iB0D7VczFw==
-X-Received: by 2002:a17:906:9754:b0:72f:58fe:41ce with SMTP id o20-20020a170906975400b0072f58fe41cemr20289114ejy.467.1658999853312;
-        Thu, 28 Jul 2022 02:17:33 -0700 (PDT)
-Received: from fedora.local.tbs-biometrics.cz (176-74-132-138.netdatacomm.cz. [176.74.132.138])
-        by smtp.gmail.com with ESMTPSA id v23-20020a1709062f1700b0072ff4515792sm195760eji.54.2022.07.28.02.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 02:17:32 -0700 (PDT)
-From:   =?UTF-8?q?Martin=20Za=C5=A5ovi=C4=8D?= <m.zatovic1@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, mani@kernel.org,
-        hemantk@codeaurora.org, elder@linaro.org, f.fainelli@gmail.com,
-        linus.walleij@linaro.org, Michael.Srba@seznam.cz,
-        jeffrey.l.hugo@gmail.com, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org, saravanak@google.com,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        =?UTF-8?q?Martin=20Za=C5=A5ovi=C4=8D?= <m.zatovic1@gmail.com>
-Subject: [PATCH RFC v1 2/2] devicetree: bindings: bus: add Wiegand driver documentation
-Date:   Thu, 28 Jul 2022 11:17:12 +0200
-Message-Id: <20220728091712.13395-2-m.zatovic1@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220728091712.13395-1-m.zatovic1@gmail.com>
-References: <20220728091712.13395-1-m.zatovic1@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ywBOOR3hRZ95Faea8Y6GMt4e6+qAIbLT8FcbUkq7ZHE=;
+        b=dKyCVA6gldW/lmkvHYpMyAve5kClhUIrvoxOnZBEUgN+wGuRYaM5h5rBtn+vIEm9O1
+         2NmHJnhnCVGaIvpQAqvWOOub2DN0aVZpYz7lQwC/se2RTL2jD5s/1b82mUZRnnaA0Adf
+         gE5gA41TYIU5AufQvBOI0YJ7JCzjUJzSFLNKQ41gKcw+k5insIHps4NaRX1NAtk+FO+t
+         acjxoTj47apPH86cbS/4gDStFon7Lirct8/ii/hiW8SjyCfPrGe5VJ8gkDx13QS1Licl
+         Q7qnUOJi/h2h9qpuubHwJJIPZivjhyBxkpJlwXson3RPkERRbSEycc2Z/QiIQuQ2CJTx
+         J/Hg==
+X-Gm-Message-State: AJIora+NYHo2y3dg9KjtVC5yahogOKVpE6KHdpInGg007Z4Fk1fEME6E
+        /InpNmWi1gAwXwj4PQRcFyMx/G9ODPf7a3vACksprg==
+X-Google-Smtp-Source: AGRyM1v4zQOyf52XZG8OieodKUUIY6pg6LY/9dvoTrTj2RYsX1V1xy0G18hqalRKNzt7C6arApkKcjQdf5akPoM6wQk=
+X-Received: by 2002:a05:6512:32c5:b0:48a:af79:601e with SMTP id
+ f5-20020a05651232c500b0048aaf79601emr3638569lfg.373.1659000033025; Thu, 28
+ Jul 2022 02:20:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
+ <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
+ <CAJZ5v0hG4+z=ypDudiSnhG1SUxfLv+EFsUGOjQEqUi0EKH3+Rw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hG4+z=ypDudiSnhG1SUxfLv+EFsUGOjQEqUi0EKH3+Rw@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 28 Jul 2022 11:19:56 +0200
+Message-ID: <CAPDyKFpNTW4vJYpHmSed_VZ6irex_OCO-NFBkK=Hnfm7rP4NAQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, kernel@puri.sm,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>, aford173@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wiegand write-only driver requires definitions of two GPIO lines
-in the devicetree. This adds the documentation of their
-definitions.
+On Tue, 26 Jul 2022 at 20:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Jul 26, 2022 at 5:07 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
+> > <martin.kepplinger@puri.sm> wrote:
+> > >
+> > > If for example the power-domains' power-supply node (regulator) needs
+> > > interrupts to work, the current setup with noirq callbacks cannot
+> > > work; for example a pmic regulator on i2c, when suspending, usually already
+> > > times out during suspend_noirq:
+> > >
+> > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
+> > >
+> > > So fix system suspend and resume for these power-domains by using the
+> > > "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5 board,
+> > > but by looking at the dts, this will fix imx8mq-evk and possibly many other
+> > > boards too.
+> > >
+> > > This is designed so that genpd providers just say "this genpd needs
+> > > interrupts" (by setting the flag) - without implying an implementation.
+> > >
+> > > Initially system suspend problems had been discussed at
+> > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+> > > which led to discussing the pmic that contains the regulators which
+> > > serve as power-domain power-supplies:
+> > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+> > >
+> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > > ---
+> > >  drivers/base/power/domain.c | 13 +++++++++++--
+> > >  include/linux/pm_domain.h   |  5 +++++
+> > >  2 files changed, 16 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > > index 5a2e0232862e..58376752a4de 100644
+> > > --- a/drivers/base/power/domain.c
+> > > +++ b/drivers/base/power/domain.c
+> > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+> > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+> > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+> > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
+> > > +#define genpd_irq_on(genpd)            (genpd->flags & GENPD_FLAG_IRQ_ON)
+> > >
+> > >  static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
+> > >                 const struct generic_pm_domain *genpd)
+> > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+> > >         genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
+> > >         genpd->domain.ops.runtime_resume = genpd_runtime_resume;
+> > >         genpd->domain.ops.prepare = genpd_prepare;
+> > > -       genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
+> > > -       genpd->domain.ops.resume_noirq = genpd_resume_noirq;
+> > > +
+> > > +       if (genpd_irq_on(genpd)) {
+> > > +               genpd->domain.ops.suspend = genpd_suspend_noirq;
+> > > +               genpd->domain.ops.resume = genpd_resume_noirq;
+> > > +       } else {
+> > > +               genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
+> > > +               genpd->domain.ops.resume_noirq = genpd_resume_noirq;
+> >
+> > As we discussed previously, I am thinking that it may be better to
+> > move to using genpd->domain.ops.suspend_late and
+> > genpd->domain.ops.resume_early instead.
+>
+> Should I take this as a change request?
 
-Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
----
- .../devicetree/bindings/bus/wiegand-gpio.yaml | 66 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 67 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/bus/wiegand-gpio.yaml
+Yes.
 
-diff --git a/Documentation/devicetree/bindings/bus/wiegand-gpio.yaml b/Documentation/devicetree/bindings/bus/wiegand-gpio.yaml
-new file mode 100644
-index 000000000000..74733aadc61e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/bus/wiegand-gpio.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/bus/wiegand-gpio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Wiegand write-only GPIO driver
-+
-+maintainers:
-+  - Martin Zaťovič <m.zatovic1@gmail.com>
-+
-+description: |
-+  Wiegand interface is a wiring standard popularized in the 1980s. To this day
-+  many card readers, fingerprint readers, sensors, etc. use Wiegand interface
-+  particularly for access control applications. It utilizes two wires to
-+  transmit the data - D0 and D1.
-+
-+  Both data lines are initially pulled up. To send a bit of value 1, the D1
-+  line is set low. Similarly to send a bit of value 0, the D0 line is set low.
-+  Standard Wiegand formats include 26, 36 and 37 bit and they reserve the first
-+  and last bits for parity. The first(MSB) parity bit is set to 1 if the parity
-+  of the first half of the payload is odd. The last(LSB) parity bit is set to 1
-+  if the parity of the second half of the payload even.
-+
-+properties:
-+  $nodename:
-+    pattern: "^wiegand-gpio(@[0-9a-f]+)?$"
-+
-+  compatible:
-+    contains:
-+      const: gpio,wiegand-gpio
-+    description:
-+      Shall contain "wiegand-gpio" for the driver to match with this node.
-+
-+  wiegand-data-hi-gpios:
-+    description:
-+      gpio used to transmit bits the value of which is 1, it should be
-+      flagged as active high with GPIO_ACTIVE_HIGH from
-+      <dt-bindings/gpio/gpio.h>.
-+    maxItems: 1
-+
-+  wiegand-data-lo-gpios:
-+    description:
-+      gpio used to transmit bits the value of which is 1, it should be
-+      flagged as active high with GPIO_ACTIVE_HIGH from
-+      <dt-bindings/gpio/gpio.h>.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - wiegand-data-hi-gpios
-+  - wiegand-data-lo-gpios
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    wiegand-gpio {
-+        compatible = "wiegand-gpio";
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_uart1_wiegand>;
-+        wiegand-data-hi-gpios = <&gpio2 1 GPIO_ACTIVE_HIGH>;
-+        wiegand-data-lo-gpios = <&gpio2 2 GPIO_ACTIVE_HIGH>;
-+        status = "okay";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9a519530e44e..c7db1e41cc02 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21589,6 +21589,7 @@ F:	drivers/rtc/rtc-sd3078.c
- WIEGAND WRITE-ONLY GPIO DRIVER
- M:	Martin Zaťovič <m.zatovic1@gmail.com>
- S:	Maintained
-+F:	Documentation/devicetree/bindings/bus/wiegand-gpio.yaml
- F:	drivers/bus/wiegand-gpio.c
- F:	drivers/bus/wiegand-gpio.h
- 
--- 
-2.37.1
+>
+> > Beside this, I think the $subject patch looks good to me.
+>
+> Or not?
 
+The patch needs to be updated before I give it my blessing, but the
+only changes that are needed are the minor things I pointed out above.
+Sorry if it was not clear enough.
+
+Kind regards
+Uffe

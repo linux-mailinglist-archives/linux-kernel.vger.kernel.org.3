@@ -2,80 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34250584852
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE58584853
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiG1WfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
+        id S232919AbiG1WgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiG1WfO (ORCPT
+        with ESMTP id S229813AbiG1WgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:35:14 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309DA6268
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:35:13 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o14-20020a17090a4b4e00b001f2f2b61be5so3552879pjl.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:35:13 -0700 (PDT)
+        Thu, 28 Jul 2022 18:36:15 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C1027B29
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:36:14 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26SKIkEe021664;
+        Thu, 28 Jul 2022 22:36:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=sbHUAlBpYZgB/FMv4NzKSj/EVNLYWXjzVq/nuTQUkyo=;
+ b=fCcNRjBqupPqLN8CygqGylYIGBxEMaRZD2YOSgX6AhYR+YbxPQjswVXtBhAY+xgM6img
+ HoIQgWRt5aVkpQh114NN1dy52Nc25ALc/2SeiwCONdpIDzB5R0SBT0QsE3tP/+B1wL/m
+ cnKDNhf8b3kBmghOM71rt/hOMuC3a1RX70ffMFqwm8atjJg8EUHFgZMVKZOmzfJEhk4h
+ UBLpZe/1FKUBNklu3NNF56fwVSYUrhSUwhlWBjRt7Zh3vwQ01ap9NrVPS7unmTEB8eBt
+ m3CA1jGXF7MrJ/oP521W4yM6FwRlO++NUOtB96AbI7Ktc17ctvmGNPR8kCw6lPgElQsM rA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hg9a9nyhg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Jul 2022 22:36:05 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26SKpwi6023058;
+        Thu, 28 Jul 2022 22:36:04 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2043.outbound.protection.outlook.com [104.47.57.43])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hh5yy0pj0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Jul 2022 22:36:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nm5R9T0MeSQB0rKvSzvkSPnKyRbyz2WO1S3HW83Zfa4mojV8FNsDzQZT9CTbAWqBJnv6YajRRHBe4Ef0M3Q3MtRNaYyiEQlohCgzymTjO1EAUDevQdZ3WZO9JKPMEAcHuHaU1Kst2G3miSGXu9D0LNWj91+hfqJqIX8NstUeEXI9xZmG+cqjFLHYWUL9E7dvf8YnaNEQREPh9iVQX0KCTMZbxNEMBEYgDcOc6MTflSwVKxJZ20iRU4rrREUeUgl/SvUPGmBmpXR/0q8TH6e58Zd3tdMRb3pePD53I3CgCNdgZacX2//bqUrcziueSsmwJ7fUx7ua+WocykR1SxfwIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sbHUAlBpYZgB/FMv4NzKSj/EVNLYWXjzVq/nuTQUkyo=;
+ b=iXpvF0xeUfHOb5AUIVtRKnaUgGAdtwO3W9O0eo5EkSxtuYh+++kfjtm2vBXEw53pOt9XtGMBAcrR3tHZ7Q3o62AhOSCMlynFzl3AJPXrMzzuM2fdnrPLtGMFwJetBFzTdzJhH7HLh80s0nkMVIHpDEB8yQ42LV2VCeyMxbeldHc1M4VeihOU0qeasVnrYAzzLzi2pMpTAFpmQlpvuaAICaINwTehDW5r+HMoI+oruusLf9Slgk893h+rPGRCIfInHcnM6fb4mwzZ3Md+Zg3lufEUERiIjyIgpb5ztM/HnpvyO1KOP/QnxXt73OZK7CofhvZDdDFs5I4IykeNCeuQ3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=QH1SswHogd2HYdm+DJGhURoSojlk/dCm4tDDpy+Plzc=;
-        b=DWgbT7/SYnRGYxKp/73nM2bQFceSlVA3zb3AvExKGWdz6XwR3KqCuJ6tMopoNSTwhZ
-         eRIWaAsjGsBzKoJLpgSXn/X1Rb5rYTvp96m87FPAX8pjQAaL0bAJ1a2qS2/XEY9sAUAG
-         wlSocwL9FFsjh5l3rUCCSMbBEYKVHLaf7bLu91sxJBWbWynNrrpotygzZHJtHcGGTG5x
-         REfu8SuEJ6iTKYLpB7DhRVq8pvy4lLMWQ8xsS196GMWGPWpwxR03Y8QbGeIuGrHFcSxE
-         m8rLptXZeTOF/Y/UgNB1TgAHFr7LVURTKoVoEVeyvaCbVO37TsavGwXUMnetdD9CtNtp
-         wD1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=QH1SswHogd2HYdm+DJGhURoSojlk/dCm4tDDpy+Plzc=;
-        b=yvx+HK+FSsMxIDWbVM8v8ezb4Al3bbAl2BywlCeqz9EReUSj/uesxK4sMjI41WRrtj
-         o5QuOOtC0gN4NzZ7fUDq8nmYFfUkX56VqJ2sm92KM4Zfn+TGnD79nkc0DXjwZF5BtyUG
-         Gy+hf8L9Raa6idP4CzOHIqX4MzwIJEb4HiOP7K2VJO+eZZvIOMgbpsdj7AuvBuj+BBYO
-         e2NWJH0zXW6I+kORhQWFRPv/emHsaz2wfmH3TKUH8mohMuES/Q+aPwTUnC0qP+uRLWqL
-         CXAsrMfQCg6dbCNgwuzHvNG0j6DQ6bgXdt5lKPEfLYdfKuxvvK2okP9Ss+uhsRcWvdmy
-         ZMqg==
-X-Gm-Message-State: ACgBeo3i2rhJT8X950m7Gea0iugLoCd4xwLRhd3Z6tYJLfvv95Z1suLl
-        X+TcFFrxq2xZzdg3U5TUaLWjww==
-X-Google-Smtp-Source: AA6agR6XAn25lwoKn04LJu4ycH59kHbRg8DdCtEwqTycQaCiFYXeFkDEbZF8JhKF9qSbtzmZIYGbKA==
-X-Received: by 2002:a17:902:d4c6:b0:16d:2f7f:9a71 with SMTP id o6-20020a170902d4c600b0016d2f7f9a71mr974863plg.36.1659047712638;
-        Thu, 28 Jul 2022 15:35:12 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id ix2-20020a170902f80200b0016c5306917fsm1883805plb.53.2022.07.28.15.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 15:35:11 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 22:35:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 09/25] KVM: VMX: nVMX: Support TSC scaling and
- PERF_GLOBAL_CTRL with enlightened VMCS
-Message-ID: <YuMPHCanuPtYEN4j@google.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-10-vkuznets@redhat.com>
- <YtnMIkFI469Ub9vB@google.com>
- <48de7ea7-fc1a-6a83-3d6f-e04d26ea2f05@redhat.com>
- <Yt7ehL0HfR3b97FQ@google.com>
- <870d507d-a516-5601-4d21-2bfd571cf008@redhat.com>
- <YuMKBzeB2cE/NZ2K@google.com>
- <62ac29cb-3270-a810-bad1-3692da448016@redhat.com>
-MIME-Version: 1.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sbHUAlBpYZgB/FMv4NzKSj/EVNLYWXjzVq/nuTQUkyo=;
+ b=wZz7pe4+Fu0y808p4JeJ3k64Uidb6v/d3ImYD9d2B7n1oCrKU3FcTtAJSRL8xY0gkX+pO7VSh2+6uIfbwK9RKVs2Kgm04kkyvzMqIHvF3TuplFnGwJ1eKCC8laUobe4oW3cASYI8nMLypv9FAFT4SLF1z1sP3VIL2cRu1oWO8Mc=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BN6PR10MB1523.namprd10.prod.outlook.com (2603:10b6:404:46::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Thu, 28 Jul
+ 2022 22:36:02 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0%6]) with mapi id 15.20.5482.006; Thu, 28 Jul 2022
+ 22:36:02 +0000
+Date:   Thu, 28 Jul 2022 15:35:59 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, almasrymina@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] hugetlb_cgroup: remove unneeded return value
+Message-ID: <YuMPTxt2gFNR76xR@monkey>
+References: <20220728121949.20985-1-linmiaohe@huawei.com>
+ <20220728121949.20985-5-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <62ac29cb-3270-a810-bad1-3692da448016@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20220728121949.20985-5-linmiaohe@huawei.com>
+X-ClientProxiedBy: SJ0PR03CA0098.namprd03.prod.outlook.com
+ (2603:10b6:a03:333::13) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5513ba14-ec9c-45f9-3fac-08da70e98cce
+X-MS-TrafficTypeDiagnostic: BN6PR10MB1523:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rpt8fohrnFNQg1bBhlxpahMVXrBXHx1Cy+OSmuX9D3w7U7RW3RocVsIFuooqSYsbqa/2LosoqDmsKRL366JW8vv8Z5YG0nT6gm2Y+OgoVAAWzVPWyQEDlSx8LXYFN5bEcId0YhChdWNKMBazOu7qWr9OYNrGKsWYxIdclXKWmxqud9HX9Mt/qU4xyF7mDZOBLeySKXpEoR4npdCwB3jLphCd9jW0PPDPSeU+8iuBYNzwaUEFhVptneQLm98m7O+I0gJLyguOaff7YptlXlNwiitQ+HEYp6r8dYR4jP7d6wRnJrmbbWcsJY1ownwleAmvS7JXWNIXtUKv1PpsFQAoYobyvtYRmHLzRXB5fA4ZMTBrPRnP0tHe/nn5J3ueqKOUS26Xd12idI0HyKK5KnnOaK2cQtvK8sKywNydxlr/fLSgbRUB8jOGmHWFlYjLV4nBUDEusJgp1l8paszCaSGVOXs4o0CuRKN/nLDBAYf0KUu7G9TlpPV5O0bPjfEZLWmaaGJiYmU/w9A1gerTMQuTwXfWXaKFsGVU4x5sREA3o1IVcgzAr+WpRV9TvtHvlcoYwxwjSQ7v6HTfUumJN30DVuD+6Beo9nVELgHg2nHyh9EbzXW1blu4ktnVpDHV4Y/NGQKsDkPsY7+9n5Q0FGVy3zZeI4u3bhbHwAfcYxBA7mh3RS07ZdFoPyWVs3kYyr4xh78wv7C9/bG+LuwG3mDfDN0BUfkCXQWqWenQS/mZXx2Y08zpIBMCeBq+z0/bqhBO
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(39860400002)(396003)(346002)(366004)(376002)(66476007)(66946007)(4326008)(66556008)(33716001)(53546011)(5660300002)(478600001)(8676002)(8936002)(6916009)(316002)(6486002)(6666004)(38100700002)(4744005)(2906002)(44832011)(41300700001)(6506007)(6512007)(9686003)(26005)(186003)(86362001)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X6Ae0N4yJsb5zpI0h4WWPwPi0II92hz/+FU1vUvD/df3EUTQQbKrjBkqRKWg?=
+ =?us-ascii?Q?2v3JBnv/csPW87G/ZebMNcacPZbWef00jlfRh5ksfLma/HL9WMVajGcKcx2/?=
+ =?us-ascii?Q?Hyp6g9jlCHTGvr0TRiNqSaipF+DAJXqkg/kaW4KGJ+RsuxUiKwGqsNAZvbWA?=
+ =?us-ascii?Q?xOYHTbwAJxq7BoO/2pAuBYbpF0TC07SLgaV1N1WVa/NP2pPf5crHKZmW3BuH?=
+ =?us-ascii?Q?YXjPpEy0Hqsc8lB3BiKcbCOLANlMbAbanh69iPxnSV7HdTXesfmPaDMfnyeb?=
+ =?us-ascii?Q?XFhQ4r5mDI8yFJHF2ZrdClVBpWzM3kjqHgmblUYahXEN6jhxwTKqpsV2pLWf?=
+ =?us-ascii?Q?VBCkFzz0Q3Ydx5jVJ+SMfF3E4xApGlnKJo1hHJ6EiwVQFScMopFuDKwSwtTR?=
+ =?us-ascii?Q?Bsv366TTf18MO1eFEvsOidXivv/c5lix3fqCANofPeNUbAPeB8YbkXKvYF8Y?=
+ =?us-ascii?Q?Je9w3pux1ta7EkY9DlY2OpMyiSRXRbKA1ajsBvg+jGt8+HXSIZNA4k8PrG+h?=
+ =?us-ascii?Q?M9l92FEmEibHHmsU9qN2cHzUgz5UACVWYdldfuadrjAKiYzXRNgLjfXWjpom?=
+ =?us-ascii?Q?m53zw6ZXsWZ6xRnmgbE8b8PC88qjiDquWitDlMHVrUEce7uI3GBzQcA4v5zS?=
+ =?us-ascii?Q?9SGWzb0IgLqpKny6dszZ1zAByUf5999sGuRDE1TtUisxUagzrhgTVKY4VEir?=
+ =?us-ascii?Q?836xDDpjRF8cPgkbiGXq1lLJpttX8cRfbZiiXifOHdyAGa+iSeYE4Z82jNrO?=
+ =?us-ascii?Q?ijqQ9rNkgc2DcjHH65l2Irv1owM9dyCFMmx5JDQ4r73LnDo9KSXM9YEuban6?=
+ =?us-ascii?Q?wbgNKMeZdpeckunFL0UAJaYrVIBaHwtWcW5ACgUuqnb/mlVGxT30Awr0hCzU?=
+ =?us-ascii?Q?wrMp1qbqEnm6OslzRQsA147CBPUINi8yA7y7CXgofAtk2E+xE4Qpx0lnbxga?=
+ =?us-ascii?Q?cePIL+uohrzpFU8JVItWzCAfSX/MAaRsoWpbThHzW2fgWbXM4hS+g2jKukxK?=
+ =?us-ascii?Q?syCKM271j+uuIMM8oXWrsQrOmsTPkRwohGTCBS4394TNcjswbjUh1JBT86G8?=
+ =?us-ascii?Q?wH0lLDGioGsMu3YlRpKI3KA21+KT5GPq8NK7SfROERsvWln9fBj9rtN4sCBn?=
+ =?us-ascii?Q?ZhmSgBhyzjGUGj9QEUPn0jHkKxef6PbOFWgzpm7fUIlNdlc5WssswjFtKpZ+?=
+ =?us-ascii?Q?52GK5MOoMp2YO90+DUGH1vyrOx3Ic2oCmwyCKIfzFu3s0Wl6/jKPT7G7H/tm?=
+ =?us-ascii?Q?MscsJdqWYVz8IN4CeaBb4dmZFQghDGBr2thehl0/uSCCUFp9HxfuF1pQ8Kpg?=
+ =?us-ascii?Q?KW89MIsae3Lr6u6u2zMauvitSGeBxrFZ9pOFATSp2yKFdiZ79lSoJ+E7ggl0?=
+ =?us-ascii?Q?ep6YwUP0DUHFXkhGrjmb878VkzcncUoUTNSlO2WLt92pPD48PLd0cQw9eELK?=
+ =?us-ascii?Q?DynxfpIuL+nLgf4/eqPxkPsdWE3HaBi7jgUHlzhwlrsTLq5Nx2a1h8ks5Ymh?=
+ =?us-ascii?Q?Kx69dAAiIjtv6WWzu2QVgn1QZ0WuJfWprFxLAh56pr6b+cVrUWuP8E8Yg5bD?=
+ =?us-ascii?Q?EaOcfznKx//I8hW8STfLjD6TbPSFvnEWQgTwSX7OGgWipFKZ0+hLNb3FiR2B?=
+ =?us-ascii?Q?Dg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5513ba14-ec9c-45f9-3fac-08da70e98cce
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 22:36:01.9770
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ySrqmRqqw7kzwjiOaXyqgqhFwVRWrfIocJeGp2flevvg8QaUtrVy9SJZQBjJdxjFKsUDGKu1TI8YoiJW+7/ouw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1523
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-28_06,2022-07-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ mlxscore=0 suspectscore=0 adultscore=0 bulkscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207280100
+X-Proofpoint-GUID: 45htpJWR0ApqD0tSZJoooBa8mgaYAkSV
+X-Proofpoint-ORIG-GUID: 45htpJWR0ApqD0tSZJoooBa8mgaYAkSV
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,21 +145,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022, Paolo Bonzini wrote:
-> On 7/29/22 00:13, Sean Christopherson wrote:
-> > The only flaw in this is if KVM gets handed a CPUID model that enumerates support
-> > for 2025 (or whenever the next update comes) but not 2022.  Hmm, though if Microsoft
-> > defines each new "version" as a full superset, then even that theoretical bug goes
-> > away.  I'm happy to be optimistic for once and give this a shot.  I definitely like
-> > that it makes it easier to see the deltas between versions.
-> 
-> Okay, I have queued the series but I still haven't gone through all the
-> comments.  So this will _not_ be in the 5.21 pull request.
+On 07/28/22 20:19, Miaohe Lin wrote:
+> The return value of set_hugetlb_cgroup and set_hugetlb_cgroup_rsvd are
+> always ignored. Remove them to clean up the code.
 
-I assume you meant 5.20?
+Agree.  Thanks!
 
-> The first patch also needs a bit more thought to figure out the impact on
-> userspace and whether we can consider syndbg niche enough to not care.
 > 
-> Paolo
-> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  include/linux/hugetlb_cgroup.h | 19 ++++++++-----------
+>  1 file changed, 8 insertions(+), 11 deletions(-)
+
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+-- 
+Mike Kravetz

@@ -2,109 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEBD5842FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5948E5842FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbiG1PWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S232089AbiG1PXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiG1PVt (ORCPT
+        with ESMTP id S229920AbiG1PXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:21:49 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D446B65558;
-        Thu, 28 Jul 2022 08:21:44 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id s9so2600415edd.8;
-        Thu, 28 Jul 2022 08:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=J+XcpxAZIHMHNGONdx78PErdDSYd+XFkvpXs7VSOMdk=;
-        b=oa9WGsAukuXemTpS6eX9qETqa8yGtnVn2FCG9f7+4nwUKlrOWfZiXgtkrXuWJ/Yz7R
-         DHq4ez4+OxvxIruajP/mf86Bfz4Smd8FY1SDhiyti+cy9dEyjqkMbgiHUI3HoWxu6En/
-         8FLpP6KlxKzB13y49bZrdv2U3c7BZvdIBFS0zKl3qc83ZJFC0PI89UoO7Kkhg+L+RpxW
-         dWdCopf/RN/qqVvJjUj3xbgPPHsr8FDfkP19wt/JyXOxERREUQ49XvT5gZUZU5fankYO
-         BhXtpgT+1hBla4Nfx0mh3lgh7BXtrAHmJssIJSW1Gij+nJQhr+J26X+Ejz1NcXdQ2zjK
-         dsLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=J+XcpxAZIHMHNGONdx78PErdDSYd+XFkvpXs7VSOMdk=;
-        b=kAm359Y1Oetz1kXCZeBKqdLnOJEBXbSwrcUYuTCZdiazHdEivE39a7cWYT9dgsntDT
-         QNPQ8VOg+Yd4XmzlUFEQ/Kkf7szqil1YaSjb6qXGJo1J7HuaQamXQ06C/jPvwplE0Ite
-         pqTBeM5yeH9wh3I27X2GnkYAOMzghDvbfpeNZXXauCJlmuY17HWXlk72xnSSNghLZi0s
-         9OS0NV1jBj/4z/KX1PBhFCZ1pKC/L3EYE613NWa878r05h+nm/br1vj8VhzT0GnhsaSt
-         F8Lw4qNHj5a9YNQCPsSRBd+/odIUx8UQAH/7J1UkUobvqFWqleCMYJB8UsxQ7Gm9536G
-         lxZg==
-X-Gm-Message-State: AJIora9O83PcwX+EIvQVIDH7G/oo8PBrIlqpt/wGmWCquAcgXKmJhlwh
-        kCm/9EWTlUIKmp3OwjabU9VekSTSZPA=
-X-Google-Smtp-Source: AGRyM1vKd52t4Rw1LnaLLjcVrmFWo/l3sUYmbU60b78Z2TVUU/OCog+Xh+Cl8oOWE6nm8kBvDDDG2A==
-X-Received: by 2002:a05:6402:1f01:b0:43a:239e:e65a with SMTP id b1-20020a0564021f0100b0043a239ee65amr27673878edb.428.1659021702919;
-        Thu, 28 Jul 2022 08:21:42 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a01-0c23-c001-5600-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c001:5600::e63])
-        by smtp.googlemail.com with ESMTPSA id e20-20020a170906315400b0072a881b21d8sm525006eje.119.2022.07.28.08.21.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 08:21:42 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bert@biot.com, sander@svanheule.net,
-        mail@birger-koblitz.de,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 2/2] spi: realtek-rtl: Improve readability when clearing the size mask
-Date:   Thu, 28 Jul 2022 17:21:18 +0200
-Message-Id: <20220728152118.1429161-3-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220728152118.1429161-1-martin.blumenstingl@googlemail.com>
-References: <20220728152118.1429161-1-martin.blumenstingl@googlemail.com>
+        Thu, 28 Jul 2022 11:23:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D446113B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:23:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1172220E15;
+        Thu, 28 Jul 2022 15:23:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659021810; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GBpbJCh/BB1+g0Qo38EpopiGfLAbdzkmDaIRkS3xMi4=;
+        b=Mhy7DNYCHp0JeYv1QXVIwdw/DH4KsvDQoMf0Tp4G9XteI6wFPLmDX7sw4COArlbUcWI+He
+        452iK//hFJQNR+a2OVAjt1jAI9cG9l2ztNWgTDLuiQGejrn1+6BATnYGzjtOBdedXrcX58
+        Gh6t/wOxuvVD12glMwgh5HbTrw8IWK4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659021810;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GBpbJCh/BB1+g0Qo38EpopiGfLAbdzkmDaIRkS3xMi4=;
+        b=/zgVuQpFQuEfbYwq3HwMqstlHm9HXOvZCIWZcoWCeZQMCdDyrjR8zzQTosFhDiuclrxQhB
+        2gRDvIzSqhIDtuDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1B3913427;
+        Thu, 28 Jul 2022 15:23:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4nVLMvGp4mKZdwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 28 Jul 2022 15:23:29 +0000
+Message-ID: <2e252179-0ffe-0d9c-9340-77e46f6ffdfd@suse.cz>
+Date:   Thu, 28 Jul 2022 17:23:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 06/15] mm/slab_common: fold kmalloc_order_trace() into
+ kmalloc_large()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joe Perches <joe@perches.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Matthew WilCox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+ <20220712133946.307181-7-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220712133946.307181-7-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define the bitmask RTL_SPI_SFCSR_LEN_MASK so it only sets the bits of
-this specific part of the register instead of setting all bits except
-the relevant ones. This makes it consistent with single bit macros in
-the spi-realtek-rtl driver as well as with the approach that many other
-drivers use.
+On 7/12/22 15:39, Hyeonggon Yoo wrote:
+> There is no caller of kmalloc_order_trace() except kmalloc_large().
+> Fold it into kmalloc_large() and remove kmalloc_order{,_trace}().
+> 
+> Also add tracepoint in kmalloc_large() that was previously
+> in kmalloc_order_trace().
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-Suggested-by: Sander Vanheule <sander@svanheule.net>
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/spi/spi-realtek-rtl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hmm noticed a small change in how we call trace_kmalloc() which will now
+include the __GFP_COMP. I think we could just call alloc_pages() from
+kmalloc_large() with flags | __GFP_COMP instead of doing flags |=
+__GFP_COMP; first. AFAICS both kasan_kmalloc_large() and kmemleak_alloc()
+will filter it out anyway.
 
-diff --git a/drivers/spi/spi-realtek-rtl.c b/drivers/spi/spi-realtek-rtl.c
-index 866b0477dbd7..0371d44cbfbd 100644
---- a/drivers/spi/spi-realtek-rtl.c
-+++ b/drivers/spi/spi-realtek-rtl.c
-@@ -20,7 +20,7 @@ struct rtspi {
- #define RTL_SPI_SFCSR_CSB1		BIT(30)
- #define RTL_SPI_SFCSR_RDY		BIT(27)
- #define RTL_SPI_SFCSR_CS		BIT(24)
--#define RTL_SPI_SFCSR_LEN_MASK		~(0x03 << 28)
-+#define RTL_SPI_SFCSR_LEN_MASK		(0x03 << 28)
- #define RTL_SPI_SFCSR_LEN1		(0x00 << 28)
- #define RTL_SPI_SFCSR_LEN4		(0x03 << 28)
- 
-@@ -49,7 +49,7 @@ static void set_size(struct rtspi *rtspi, int size)
- 	u32 value;
- 
- 	value = readl(REG(RTL_SPI_SFCSR));
--	value &= RTL_SPI_SFCSR_LEN_MASK;
-+	value &= ~RTL_SPI_SFCSR_LEN_MASK;
- 	if (size == 4)
- 		value |= RTL_SPI_SFCSR_LEN4;
- 	else if (size == 1)
--- 
-2.37.1
+> ---
+>  include/linux/slab.h | 22 ++--------------------
+>  mm/slab_common.c     | 14 +++-----------
+>  2 files changed, 5 insertions(+), 31 deletions(-)
+> 
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index a0e57df3d5a4..15a4c59da59e 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -489,26 +489,8 @@ static __always_inline void *kmem_cache_alloc_node_trace(struct kmem_cache *s, g
+>  }
+>  #endif /* CONFIG_TRACING */
+>  
+> -extern void *kmalloc_order(size_t size, gfp_t flags, unsigned int order) __assume_page_alignment
+> -									 __alloc_size(1);
+> -
+> -#ifdef CONFIG_TRACING
+> -extern void *kmalloc_order_trace(size_t size, gfp_t flags, unsigned int order)
+> -				__assume_page_alignment __alloc_size(1);
+> -#else
+> -static __always_inline __alloc_size(1) void *kmalloc_order_trace(size_t size, gfp_t flags,
+> -								 unsigned int order)
+> -{
+> -	return kmalloc_order(size, flags, order);
+> -}
+> -#endif
+> -
+> -static __always_inline __alloc_size(1) void *kmalloc_large(size_t size, gfp_t flags)
+> -{
+> -	unsigned int order = get_order(size);
+> -	return kmalloc_order_trace(size, flags, order);
+> -}
+> -
+> +void *kmalloc_large(size_t size, gfp_t flags) __assume_page_alignment
+> +					      __alloc_size(1);
+>  /**
+>   * kmalloc - allocate memory
+>   * @size: how many bytes of memory are required.
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 6c9aac5d8f4a..1f8af2106df0 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -932,10 +932,11 @@ gfp_t kmalloc_fix_flags(gfp_t flags)
+>   * directly to the page allocator. We use __GFP_COMP, because we will need to
+>   * know the allocation order to free the pages properly in kfree.
+>   */
+> -void *kmalloc_order(size_t size, gfp_t flags, unsigned int order)
+> +void *kmalloc_large(size_t size, gfp_t flags)
+>  {
+>  	void *ret = NULL;
+>  	struct page *page;
+> +	unsigned int order = get_order(size);
+>  
+>  	if (unlikely(flags & GFP_SLAB_BUG_MASK))
+>  		flags = kmalloc_fix_flags(flags);
+> @@ -950,19 +951,10 @@ void *kmalloc_order(size_t size, gfp_t flags, unsigned int order)
+>  	ret = kasan_kmalloc_large(ret, size, flags);
+>  	/* As ret might get tagged, call kmemleak hook after KASAN. */
+>  	kmemleak_alloc(ret, size, 1, flags);
+> -	return ret;
+> -}
+> -EXPORT_SYMBOL(kmalloc_order);
+> -
+> -#ifdef CONFIG_TRACING
+> -void *kmalloc_order_trace(size_t size, gfp_t flags, unsigned int order)
+> -{
+> -	void *ret = kmalloc_order(size, flags, order);
+>  	trace_kmalloc(_RET_IP_, ret, NULL, size, PAGE_SIZE << order, flags);
+>  	return ret;
+>  }
+> -EXPORT_SYMBOL(kmalloc_order_trace);
+> -#endif
+> +EXPORT_SYMBOL(kmalloc_large);
+>  
+>  #ifdef CONFIG_SLAB_FREELIST_RANDOM
+>  /* Randomize a generic freelist */
 

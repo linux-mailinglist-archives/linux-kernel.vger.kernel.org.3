@@ -2,104 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6429D58360E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 02:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B280C583610
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 02:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbiG1AsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 20:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        id S236460AbiG1Asm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 20:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiG1AsQ (ORCPT
+        with ESMTP id S236337AbiG1Ask (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 20:48:16 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B7F5A177;
-        Wed, 27 Jul 2022 17:48:16 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id y15so424726plp.10;
-        Wed, 27 Jul 2022 17:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=T0sL0XnJkncypoWkEhEH3dj3z+lxGzyNkbrr0SmJH6Q=;
-        b=bxpwONXPqPNpRCOenGs8YTjEOKB78iXI6gX+aEKIPFGvQLBu6IjWm4c1Bhan1KFFPF
-         x2lcMabdxWNjWqof5Ado8U6SdN6/XX88XZAHy2CBHoxo0+alcPUgLgH14B4mWf1tm879
-         1em7GytN5b7xKYyIkpb08Hg5cwhAIKnNl8ezppHRHhiKYYsr+VxIFNhRLF9vKA61KhOf
-         Le+fYJMRwghkxo/skObFr11nFkjnBiDjbKA1TPBNU/VYEkXPnOsope/9Tjsa7DbeWqze
-         Rb4mCsQbZHbBqn5Bhl455xncWDRwOj47oeJHd/41ry7eLy17f6lqYIM7b0ViVsOEs0nL
-         UEiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=T0sL0XnJkncypoWkEhEH3dj3z+lxGzyNkbrr0SmJH6Q=;
-        b=aS9kadufYiH3UYytneckEUhTdSlUvQije3H+xstL2laU+Y3BKNmJonf4mKtMB2Clt/
-         sCJQP2GUt/B6GuKogfI34jHoK0Iqe9xyKOtwDGcc58pDFVmo+G4u2udcffZA4hOWgaaD
-         YzX3+nN6/UkdaqNqYTPuVfVbkAKxvLY6zmo1ySrWe5LSMxn0UEf5y07hSCHiTN+/RTx1
-         756+W90OFAdiWsAT7RswXmqf+GESiaRIaryDsrabbb+LTmUzkO13wgbOJDRrvLLqqiX7
-         sQLoACHV2FlW3G4p9YF6WAxlczC8QmqqrgUbWketVqUJGeaieYxzCsX3geCymg3phQGD
-         fsCQ==
-X-Gm-Message-State: AJIora9njMLPFe4REWseXozpS4fgGs8cQf4t+R+efQYRXvxpv5Pr9IEB
-        TxCKfeFCsYfrFm5K8m7L8Ag=
-X-Google-Smtp-Source: AGRyM1v290IK4T13ORDXLX28StcVZB/qyOC2m3rSSm5iiqDU4acScmDk8+SR+G5Ug1xEm/omwSZsRw==
-X-Received: by 2002:a17:90b:390:b0:1f3:ee2:62a8 with SMTP id ga16-20020a17090b039000b001f30ee262a8mr5146355pjb.148.1658969295811;
-        Wed, 27 Jul 2022 17:48:15 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902b40100b0016bf803341asm4337829plr.146.2022.07.27.17.48.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 17:48:15 -0700 (PDT)
-Message-ID: <a0968736-5fb8-8ff9-7a70-d6d871175bb6@gmail.com>
-Date:   Wed, 27 Jul 2022 17:48:14 -0700
+        Wed, 27 Jul 2022 20:48:40 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771375A2C4;
+        Wed, 27 Jul 2022 17:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658969319; x=1690505319;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=n0+u3qQjBHjzD5Z26a1dlESHYO+jSVVySd7JC68F2ew=;
+  b=WinUQTHlbAtoUPMqkCmj7Y31HqyharAme/bePjRBBcHzVY9QNG+w6Ouz
+   CwGUNjc/ZvMYzx/h4o42JkhimaSur9R3yjOSkgq6qbGwNkYwh4ceLSxwN
+   a5r9qyCA5ptfQ0OdWP3rL/8jir03Gxp9z5WDFf3N6rHG+UAwqGJwBXnDP
+   XWDSfXsJ1ZjLqp7aZSzyyftEmEtT8eTjkAnsgWeS7aXHT0N3MzRbjkVJm
+   /+jxZg9ztP1Ex6OVn1yoXqPf3OcbqL7cSO2MtG5EAnfmJAd9xyq9mqPck
+   3iYVB3ydqG1RdXgIMmoWBdTRCgDTnG3W/4+3cmwoEykHzmbWWJq3/kVna
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="314169056"
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="314169056"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 17:48:39 -0700
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="633417803"
+Received: from lmcmurch-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.76.147])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 17:48:37 -0700
+Message-ID: <a0aaf7458536129fd6fe81417ab43f6dc6b4d4b3.camel@intel.com>
+Subject: Re: [PATCH v7 037/102] KVM: x86/mmu: Track shadow MMIO value/mask
+ on a per-VM basis
+From:   Kai Huang <kai.huang@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Date:   Thu, 28 Jul 2022 12:48:35 +1200
+In-Reply-To: <20220727232058.GB3669189@ls.amr.corp.intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+         <242df8a7164b593d3702b9ba94889acd11f43cbb.1656366338.git.isaku.yamahata@intel.com>
+         <20220719084737.GU1379820@ls.amr.corp.intel.com>
+         <c9d7f7e0665358f7352e95a7028a8779fd0531c6.camel@intel.com>
+         <20220727232058.GB3669189@ls.amr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.18 000/158] 5.18.15-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220727161021.428340041@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 09:11, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.15 release.
-> There are 158 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.15-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Wed, 2022-07-27 at 16:20 -0700, Isaku Yamahata wrote:
+> > KVM has a global enable_mmio_caching boolean, and I think we should hon=
+or it
+> > here (in this patch) by doing below first:
+> >=20
+> > =C2=A0	if (enabling_mmio_caching)
+> > =C2=A0		mmio_value =3D 0;
+>=20
+> This function already includes "if (!enable_mmio_caching) mmio_value =3D =
+0;" in
+> the beginning. (But not in this hunk, though).=C2=A0 So this patch honors=
+ the
+> kernel
+> module parameter.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and build tested on 
-BMIPS_GENERIC:
+Yeah I missed that. Thanks.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+--=20
+Thanks,
+-Kai
+
+

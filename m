@@ -2,239 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361005847A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D767E5847A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbiG1VUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 17:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
+        id S232948AbiG1VU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 17:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiG1VUx (ORCPT
+        with ESMTP id S233315AbiG1VUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 17:20:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFC26E8B4;
+        Thu, 28 Jul 2022 17:20:54 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F88B6E8B0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:20:53 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso3415652pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=uuN6oV2GDxVgrMrqBmdFNwnkVyBPZkA4XskmYFR538M=;
+        b=KNMypVL63c6J1kGWCcU1z+6rnrd5vdPhCfv4kiN5RGx4ubCIjZ1GxW9mJkr4vEl3QE
+         wb/fYespIwj5zRps11p0Ql+jbfsowwu8z5M7IluoPiOKLwqgk+jrpiA/DvampHtFZTnC
+         Stypnoqag7pqxhfKtMHzdTzNIFpiBSAIX96frENV7ZEEv2Vq12BnPw234C8qkHtW9Iry
+         RXI1cviow6I4m9m6rdLPd034RnzOTwmO+8dX763q9XksNQLmkJTbEqLZkrhUXmTdDsMN
+         xdrHBxJXoBaDwlZhZUz1Lelh+TB9pISZj+DFDwANAGNL7fROgtHM1IbUhI3vnqM19nyA
+         X+4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=uuN6oV2GDxVgrMrqBmdFNwnkVyBPZkA4XskmYFR538M=;
+        b=t5d0X7rCY0wO7yvraJ0tBr4SGSEPO4jSO7RzdOXCyUutJ0v8JR8HwfelfxZ1EMkQ+4
+         i2qMUxBud1hrES0U023rKPl6ZrXEg7Gsn3NecU2OaFhzRdE4LxUB4IHL+76oOMmW0lKS
+         pnU0tNlhNJEx0B/GeYkMm0Eg/+n1k3c7KYQCYmx6Ho3u1xXSg4UdmpzwYkcVZ06Kuzz3
+         J5mXu2jQNgNuPouApxM1EjlHHP/OAJfZ8H9QJVpHZ3PNNXuoCTxqzaCtBNP8haIPOX5p
+         wECJzhyxgvTz5+FlTPtG1SKavdmc30A4ibLiFHRbbZHYQIROp+dyT65u+dYP/awXOWQM
+         enQQ==
+X-Gm-Message-State: ACgBeo3pxt5FZzmvUx+X3dfNQqUKDRyZ/VsYiDESZ3B4jC2cZ+gBCf64
+        yexCSWcZTtm8dlLU3xcEh8LOJg==
+X-Google-Smtp-Source: AA6agR5tmWMEJ2tsryUZTuqYhWdo/6KZgZs5pr3I1SGn4yIBa/QGPUT2iCS4TUg40upw5pijthGhiA==
+X-Received: by 2002:a17:90a:6fe1:b0:1f3:19f7:2e2d with SMTP id e88-20020a17090a6fe100b001f319f72e2dmr675184pjk.28.1659043252422;
+        Thu, 28 Jul 2022 14:20:52 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i5-20020a17090332c500b0016a091eb88esm1812015plr.126.2022.07.28.14.20.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 28 Jul 2022 14:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659043251; x=1690579251;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pxP46KbMMLqAAyC8VE4buMLpi2fN+uP6X+8JG9II198=;
-  b=mtAf7M2Hm39W3dG176XEBoR+wivQb+Ai36XZ0PsscK4411xLciFDHu27
-   d3YtmZC7WdAWM6zJTlyp4bo8/yJDxvyzY/ToV8MVKqa+msXJzzQbokoej
-   8RMfulLbCFv28Mv309iJCxh/dvTWi7Ok0crtxQfkJZ+akmf91Dr6FMfiE
-   XjjQvUEZAUeX8KLYhbtKM1d7Eh9y/6B7FfrGFYkVjWo3sLnjsSlMDMiiB
-   XEjKqfsVJU8AQCY5W9vV8m5mTTKU4Z0yYicIpI27pnyB15VJZbDopjufd
-   M9u9J/wSL/nNQt+xzGMcBaH1GWcubGtYnoHNI2rHE666CBbFvsdRl/9V8
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="352630431"
-X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
-   d="scan'208";a="352630431"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 14:20:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
-   d="scan'208";a="703958074"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Jul 2022 14:20:45 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHAw0-000Ab2-16;
-        Thu, 28 Jul 2022 21:20:44 +0000
-Date:   Fri, 29 Jul 2022 05:20:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-fbdev@vger.kernel.org,
-        linux-efi@vger.kernel.org, Markuss Broks <markuss.broks@gmail.com>,
-        linux-doc@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        dri-devel@lists.freedesktop.org,
-        Wei Ming Chen <jj251510319013@gmail.com>,
-        phone-devel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-serial@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH 2/2] efi: earlycon: Add support for generic framebuffers
- and move to fbdev subsystem
-Message-ID: <202207290523.Br8Zr7V3-lkp@intel.com>
-References: <20220728142824.3836-3-markuss.broks@gmail.com>
+Date:   Thu, 28 Jul 2022 21:20:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 0/6] KVM: x86: Apply NX mitigation more precisely
+Message-ID: <YuL9sB8ux88TJ9o0@google.com>
+References: <20220723012325.1715714-1-seanjc@google.com>
+ <08c9e2ed-29a2-14ea-c872-1a353a70d3e5@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728142824.3836-3-markuss.broks@gmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <08c9e2ed-29a2-14ea-c872-1a353a70d3e5@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markuss,
+On Thu, Jul 28, 2022, Paolo Bonzini wrote:
+> On 7/23/22 03:23, Sean Christopherson wrote:
+> > Patch 6 from Mingwei is the end goal of the series.  KVM incorrectly
+> > assumes that the NX huge page mitigation is the only scenario where KVM
+> > will create a non-leaf page instead of a huge page.   Precisely track
+> > (via kvm_mmu_page) if a non-huge page is being forced and use that info
+> > to avoid unnecessarily forcing smaller page sizes in
+> > disallowed_hugepage_adjust().
+> > 
+> > v2: Rebase, tweak a changelog accordingly.
+> > 
+> > v1:https://lore.kernel.org/all/20220409003847.819686-1-seanjc@google.com
+> > 
+> > Mingwei Zhang (1):
+> >    KVM: x86/mmu: explicitly check nx_hugepage in
+> >      disallowed_hugepage_adjust()
+> > 
+> > Sean Christopherson (5):
+> >    KVM: x86/mmu: Tag disallowed NX huge pages even if they're not tracked
+> >    KVM: x86/mmu: Properly account NX huge page workaround for nonpaging
+> >      MMUs
+> >    KVM: x86/mmu: Set disallowed_nx_huge_page in TDP MMU before setting
+> >      SPTE
+> >    KVM: x86/mmu: Track the number of TDP MMU pages, but not the actual
+> >      pages
+> >    KVM: x86/mmu: Add helper to convert SPTE value to its shadow page
+> 
+> Some of the benefits are cool, such as not having to track the pages for the
+> TDP MMU, and patch 2 is a borderline bugfix, but there's quite a lot of new
+> non-obvious complexity here.
 
-I love your patch! Yet something to improve:
+100% agree on the complexity.
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on efi/next staging/staging-testing usb/usb-testing linus/master v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> So the obligatory question is: is it worth a hundred lines of new code?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Markuss-Broks/Add-generic-framebuffer-support-to-EFI-earlycon-driver/20220728-223117
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220729/202207290523.Br8Zr7V3-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b6a59e731326deaa78f7dcbd97520e2eed2bc707
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Markuss-Broks/Add-generic-framebuffer-support-to-EFI-earlycon-driver/20220728-223117
-        git checkout b6a59e731326deaa78f7dcbd97520e2eed2bc707
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/video/fbdev/
+Assuming I understanding the bug Mingwei's patch fixes, yes.  Though after
+re-reading that changelog, it should more explicitly call out the scenario we
+actually care about.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/video/fbdev/earlycon.c: In function 'simplefb_earlycon_map':
->> drivers/video/fbdev/earlycon.c:65:16: error: implicit declaration of function 'early_memremap_prot'; did you mean 'early_memremap'? [-Werror=implicit-function-declaration]
-      65 |         return early_memremap_prot(info.phys_base + start, len, pgprot_val(fb_prot));
-         |                ^~~~~~~~~~~~~~~~~~~
-         |                early_memremap
->> drivers/video/fbdev/earlycon.c:65:16: warning: returning 'int' from a function with return type 'void *' makes pointer from integer without a cast [-Wint-conversion]
-      65 |         return early_memremap_prot(info.phys_base + start, len, pgprot_val(fb_prot));
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-   {standard input}: Assembler messages:
-   {standard input}:210: Error: Register number out of range 0..0
-   {standard input}:211: Error: Register number out of range 0..0
-   {standard input}:211: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:211: Warning: Only the first path encountering the conflict is reported
-   {standard input}:210: Warning: This is the location of the conflicting usage
-   {standard input}:212: Error: Register number out of range 0..0
-   {standard input}:212: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:212: Warning: Only the first path encountering the conflict is reported
-   {standard input}:210: Warning: This is the location of the conflicting usage
-   {standard input}:212: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:212: Warning: Only the first path encountering the conflict is reported
-   {standard input}:211: Warning: This is the location of the conflicting usage
-   {standard input}:214: Error: Register number out of range 0..0
-   {standard input}:214: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:214: Warning: Only the first path encountering the conflict is reported
-   {standard input}:210: Warning: This is the location of the conflicting usage
-   {standard input}:214: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:214: Warning: Only the first path encountering the conflict is reported
-   {standard input}:211: Warning: This is the location of the conflicting usage
-   {standard input}:214: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:214: Warning: Only the first path encountering the conflict is reported
-   {standard input}:212: Warning: This is the location of the conflicting usage
-   {standard input}:215: Error: Register number out of range 0..0
-   {standard input}:215: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:215: Warning: Only the first path encountering the conflict is reported
-   {standard input}:210: Warning: This is the location of the conflicting usage
-   {standard input}:215: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:215: Warning: Only the first path encountering the conflict is reported
-   {standard input}:211: Warning: This is the location of the conflicting usage
-   {standard input}:215: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:215: Warning: Only the first path encountering the conflict is reported
-   {standard input}:212: Warning: This is the location of the conflicting usage
-   {standard input}:215: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:215: Warning: Only the first path encountering the conflict is reported
-   {standard input}:214: Warning: This is the location of the conflicting usage
-   {standard input}:216: Error: Register number out of range 0..0
-   {standard input}:216: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:216: Warning: Only the first path encountering the conflict is reported
-   {standard input}:210: Warning: This is the location of the conflicting usage
-   {standard input}:216: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:216: Warning: Only the first path encountering the conflict is reported
-   {standard input}:211: Warning: This is the location of the conflicting usage
-   {standard input}:216: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:216: Warning: Only the first path encountering the conflict is reported
-   {standard input}:212: Warning: This is the location of the conflicting usage
-   {standard input}:216: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:216: Warning: Only the first path encountering the conflict is reported
-   {standard input}:214: Warning: This is the location of the conflicting usage
-   {standard input}:216: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 35
-   {standard input}:216: Warning: Only the first path encountering the conflict is reported
-   {standard input}:215: Warning: This is the location of the conflicting usage
-   {standard input}:220: Error: Register number out of range 0..0
-   {standard input}:376: Error: Register number out of range 0..1
-   {standard input}:376: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:376: Warning: Only the first path encountering the conflict is reported
-   {standard input}:374: Warning: This is the location of the conflicting usage
-   {standard input}:378: Error: Register number out of range 0..1
-   {standard input}:378: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:378: Warning: Only the first path encountering the conflict is reported
-   {standard input}:374: Warning: This is the location of the conflicting usage
-   {standard input}:378: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:378: Warning: Only the first path encountering the conflict is reported
-   {standard input}:376: Warning: This is the location of the conflicting usage
-   {standard input}:379: Error: Register number out of range 0..1
-   {standard input}:379: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:379: Warning: Only the first path encountering the conflict is reported
-   {standard input}:374: Warning: This is the location of the conflicting usage
-   {standard input}:379: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:379: Warning: Only the first path encountering the conflict is reported
-   {standard input}:376: Warning: This is the location of the conflicting usage
-   {standard input}:379: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:379: Warning: Only the first path encountering the conflict is reported
-   {standard input}:378: Warning: This is the location of the conflicting usage
-   {standard input}:380: Error: Register number out of range 0..1
-   {standard input}:380: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:380: Warning: Only the first path encountering the conflict is reported
-   {standard input}:374: Warning: This is the location of the conflicting usage
-   {standard input}:380: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:380: Warning: Only the first path encountering the conflict is reported
-   {standard input}:376: Warning: This is the location of the conflicting usage
-   {standard input}:380: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:380: Warning: Only the first path encountering the conflict is reported
-   {standard input}:378: Warning: This is the location of the conflicting usage
-   {standard input}:380: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:380: Warning: Only the first path encountering the conflict is reported
-   {standard input}:379: Warning: This is the location of the conflicting usage
-   {standard input}:383: Error: Register number out of range 0..1
-   {standard input}:384: Error: Register number out of range 0..1
-   {standard input}:384: Warning: Use of 'mov' violates WAW dependency 'GR%, % in 1 - 127' (impliedf), specific resource number is 37
-   {standard input}:384: Warning: Only the first path encountering the conflict is reported
-   {standard input}:383: Warning: This is the location of the conflicting usage
-
-
-vim +65 drivers/video/fbdev/earlycon.c
-
-    56	
-    57	static __ref void *simplefb_earlycon_map(unsigned long start, unsigned long len)
-    58	{
-    59		pgprot_t fb_prot;
-    60	
-    61		if (info.virt_base)
-    62			return info.virt_base + start;
-    63	
-    64		fb_prot = PAGE_KERNEL;
-  > 65		return early_memremap_prot(info.phys_base + start, len, pgprot_val(fb_prot));
-    66	}
-    67	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Anyways, the bug we really care about is that by not precisely checking if a
+huge page is disallowed, KVM would refuse to create huge page after disabling
+dirty logging, which is a very noticeable performance issue for large VMs if
+a migration is canceled.  That particular bug has since been unintentionally
+fixed in the TDP MMU by zapping the non-leaf SPTE, but there are other paths
+that could similarly be affected, e.g. I believe zapping leaf SPTEs in response
+to a host page migration (mmu_notifier invalidation) to create a huge page would
+yield a similar result; KVM would see the shadow-present non-leaf SPTE and assume
+a huge page is disallowed.

@@ -2,193 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE235840F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3731D5840F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbiG1OT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
+        id S231518AbiG1OUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiG1OT5 (ORCPT
+        with ESMTP id S229484AbiG1OUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:19:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C2852E7B;
-        Thu, 28 Jul 2022 07:19:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D997660CF5;
-        Thu, 28 Jul 2022 14:19:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B743CC433C1;
-        Thu, 28 Jul 2022 14:19:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659017995;
-        bh=U5iozSv/8RP3dsBx9k6LZep1YUm9fKbhqK00jFLY6MM=;
+        Thu, 28 Jul 2022 10:20:19 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61FFCFF;
+        Thu, 28 Jul 2022 07:20:18 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3F76B56D;
+        Thu, 28 Jul 2022 16:20:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1659018016;
+        bh=q2BB39MP0tZQIZRXCzJWG56ZohL9stJRt4VHYJFO6jI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PSaiytatvrk5GSUslwFa5vrteSRxZWvGSSS3IJrNjkht2SCbj6v4HHbWgwpFYpeZF
-         sqFC/VVHrn1wkSpMEsHGQvYJcEYfSxYgCU8sdL75lXqIqXcDDoZWUHLhXxf8tncm4f
-         bAVq+OXuSLiOqXXaPJvC2mlQq0+4bSklCLZcTlRM=
-Date:   Thu, 28 Jul 2022 16:19:52 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 13/24] HID: initial BPF implementation
-Message-ID: <YuKbCCOAtSvUlI3z@kroah.com>
-References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
- <20220721153625.1282007-14-benjamin.tissoires@redhat.com>
+        b=ZdxDrewPgpInaF+/7uxPx56GKvm1lJ9F8meoFeXq4J7bQBXB7t8kpFLE/IGm6bKUx
+         bUA5e4m0I2FcgWDEZ/LA1AFzIAMjQAiYhb1iSWxQBMUHS503HkRXj9bvVTItANOGX2
+         TtGyE9q2UGlzqYgGlSxfCffkO0t1Wvi+XtARQiYE=
+Date:   Thu, 28 Jul 2022 17:20:13 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     paul.elder@ideasonboard.com
+Cc:     linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] media: rkisp1: Add UYVY as an output format
+Message-ID: <YuKbHdiZD5JGE/GY@pendragon.ideasonboard.com>
+References: <20220714112603.1117335-1-paul.elder@ideasonboard.com>
+ <20220714112603.1117335-3-paul.elder@ideasonboard.com>
+ <YtcwZSbXlSaaMjcd@pendragon.ideasonboard.com>
+ <20220728125259.GL3984498@pyrite.rasen.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220721153625.1282007-14-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220728125259.GL3984498@pyrite.rasen.tech>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 05:36:14PM +0200, Benjamin Tissoires wrote:
-> --- /dev/null
-> +++ b/include/linux/hid_bpf.h
-> @@ -0,0 +1,102 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+Hi Paul,
 
-This is not a uapi .h file, so the "WITH Linux-syscall-note" should not
-be here, right?
+On Thu, Jul 28, 2022 at 09:52:59PM +0900, paul.elder@ideasonboard.com wrote:
+> On Wed, Jul 20, 2022 at 01:29:57AM +0300, Laurent Pinchart wrote:
+> > On Thu, Jul 14, 2022 at 08:26:03PM +0900, Paul Elder wrote:
+> > > Add support for UYVY as an output format. The uv_swap bit in the
+> > > MI_XTD_FORMAT_CTRL register that is used for the NV formats does not
+> > > work for packed YUV formats. Thus, UYVY support is implemented via
+> > > byte-swapping. This method clearly does not work for implementing
+> > > support for YVYU and VYUY.
+> > > 
+> > > Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+> > > 
+> > > ---
+> > > UYVY for the self path has not been tested because no device supports
+> > > it. The rk3399 has a self path, but does not have the
+> > > MI_OUTPUT_ALIGN_FORMAT register and thus does not support UYVY. The
+> > > i.MX8MP does support UYVY, but does not have a self path.
+> > 
+> > I'm tempted to drop it then, as the code below isn't correct given that
+> > you use the same register for both MP and SP. Let's address MP only for
+> > now.
+> 
+> The same register is used for both MP and SP. They just have different
+> bits. Which is why we'd need the read-write cycle, assuming that there
+> exists a device that has both an SP and the MI_OUTPUT_ALIGN_FORMAT
+> register.
 
+Indeed, I had missed that. The documentation is confusing, the register
+is described as "Output align format for main path", has both
+mp_byte_swap and sp_byte_swap, but no sp equivalent to mp_lsb_alignment
+(maybe the self path doesn't support raw outputs though ?).
 
-> +
-> +#ifndef __HID_BPF_H
-> +#define __HID_BPF_H
-> +
-> +#include <linux/spinlock.h>
-> +#include <uapi/linux/hid.h>
-> +#include <uapi/linux/hid_bpf.h>
-> +
-> +struct hid_device;
-> +
-> +/*
-> + * The following is the HID BPF API.
-> + *
-> + * It should be treated as UAPI, so extra care is required
-> + * when making change to this file.
+I'm OK keeping support for both paths, but I think the
+MI_OUTPUT_ALIGN_FORMAT register should then be initialized to a default
+value somewhere.
 
-So is this uapi?  If so, shouldn't it go into a uapi include directory
-so we know this and properly track it and maintain it that way?
+> > > ---
+> > >  .../platform/rockchip/rkisp1/rkisp1-capture.c | 40 +++++++++++++++++++
+> > >  1 file changed, 40 insertions(+)
+> > > 
+> > > diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > > index 85fd85fe208c..77496ccef7ec 100644
+> > > --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > > +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > > @@ -97,6 +97,12 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_mp_fmts[] = {
+> > >  		.uv_swap = 0,
+> > >  		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
+> > >  		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+> > > +	}, {
+> > > +		.fourcc = V4L2_PIX_FMT_UYVY,
+> > > +		.uv_swap = 0,
+> > > +		.yc_swap = 1,
+> > > +		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
+> > > +		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+> > >  	}, {
+> > >  		.fourcc = V4L2_PIX_FMT_YUV422P,
+> > >  		.uv_swap = 0,
+> > > @@ -231,6 +237,13 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
+> > >  		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
+> > >  		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
+> > >  		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+> > > +	}, {
+> > > +		.fourcc = V4L2_PIX_FMT_UYVY,
+> > > +		.uv_swap = 0,
+> > > +		.yc_swap = 1,
+> > > +		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
+> > > +		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
+> > > +		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
+> > >  	}, {
+> > >  		.fourcc = V4L2_PIX_FMT_YUV422P,
+> > >  		.uv_swap = 0,
+> > > @@ -464,6 +477,20 @@ static void rkisp1_mp_config(struct rkisp1_capture *cap)
+> > >  		rkisp1_write(rkisp1, RKISP1_CIF_MI_XTD_FORMAT_CTRL, reg);
+> > >  	}
+> > >  
+> > > +	/*
+> > > +	 * uv swapping with the MI_XTD_FORMAT_CTRL register only works for
+> > 
+> > s@uv@U/V@
+> > 
+> > > +	 * NV12/NV21 and NV16/NV61, so instead use byte swap to support UYVY.
+> > > +	 * YVYU and VYUY cannot be supported with this method.
+> > > +	 */
+> > > +	if (rkisp1->info->features & RKISP1_FEATURE_MI_OUTPUT_ALIGN) {
+> > > +		reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT);
+> > > +		if (cap->pix.cfg->yc_swap)
+> > > +			reg |= RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_BYTES;
+> > > +		else
+> > > +			reg &= ~RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_BYTES;
+> > > +		rkisp1_write(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT, reg);
+> > 
+> > As the register is not initialized anywhere, it would be better to write
+> > it fully here instead of a read-modify-write cycle. Same comments below.
+> > 
+> > > +	}
+> > > +
+> > >  	rkisp1_mi_config_ctrl(cap);
+> > >  
+> > >  	reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_CTRL);
+> > > @@ -505,6 +532,19 @@ static void rkisp1_sp_config(struct rkisp1_capture *cap)
+> > >  		rkisp1_write(rkisp1, RKISP1_CIF_MI_XTD_FORMAT_CTRL, reg);
+> > >  	}
+> > >  
+> > > +	/*
+> > > +	 * uv swapping with the MI_XTD_FORMAT_CTRL register only works for
+> > > +	 * NV12/NV21 and NV16/NV61, so instead use byte swap to support UYVY.
+> > > +	 * YVYU and VYUY cannot be supported with this method.
+> > > +	 */
+> > > +	if (rkisp1->info->features & RKISP1_FEATURE_MI_OUTPUT_ALIGN) {
+> > > +		reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT);
+> > > +		if (cap->pix.cfg->yc_swap)
+> > > +			reg |= RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_BYTES;
+> > > +		else
+> > > +			reg &= ~RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_BYTES;
+> > > +		rkisp1_write(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT, reg);
+> > > +	}
+> > 
+> > Missing blank line.
+> > 
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > 
+> > >  	rkisp1_mi_config_ctrl(cap);
+> > >  
+> > >  	mi_ctrl = rkisp1_read(rkisp1, RKISP1_CIF_MI_CTRL);
 
-> + */
-> +
-> +/**
-> + * struct hid_bpf_ctx - User accessible data for all HID programs
-> + *
-> + * ``data`` is not directly accessible from the context. We need to issue
-> + * a call to ``hid_bpf_get_data()`` in order to get a pointer to that field.
-> + *
-> + * All of these fields are currently read-only.
-> + *
-> + * @index: program index in the jump table. No special meaning (a smaller index
-> + *         doesn't mean the program will be executed before another program with
-> + *         a bigger index).
-> + * @hid: the ``struct hid_device`` representing the device itself
-> + * @report_type: used for ``hid_bpf_device_event()``
-> + * @size: Valid data in the data field.
-> + *
-> + *        Programs can get the available valid size in data by fetching this field.
-> + */
-> +struct hid_bpf_ctx {
-> +	__u32 index;
-> +	const struct hid_device *hid;
-> +	enum hid_report_type report_type;
-> +	__s32 size;
-> +};
-> +
-> +/* Following functions are tracepoints that BPF programs can attach to */
-> +int hid_bpf_device_event(struct hid_bpf_ctx *ctx);
-> +
-> +/* Following functions are kfunc that we export to BPF programs */
-> +/* only available in tracing */
-> +__u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t __sz);
-> +
-> +/* only available in syscall */
-> +int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags);
-> +
-> +/*
-> + * Below is HID internal
-> + */
-> +
-> +/* internal function to call eBPF programs, not to be used by anybody */
-> +int __hid_bpf_tail_call(struct hid_bpf_ctx *ctx);
-> +
-> +#define HID_BPF_MAX_PROGS_PER_DEV 64
-> +#define HID_BPF_FLAG_MASK (((HID_BPF_FLAG_MAX - 1) << 1) - 1)
-> +
-> +/* types of HID programs to attach to */
-> +enum hid_bpf_prog_type {
-> +	HID_BPF_PROG_TYPE_UNDEF = -1,
-> +	HID_BPF_PROG_TYPE_DEVICE_EVENT,			/* an event is emitted from the device */
-> +	HID_BPF_PROG_TYPE_MAX,
-> +};
-> +
-> +struct hid_bpf_ops {
-> +	struct module *owner;
-> +	struct bus_type *bus_type;
-> +};
-> +
-> +extern struct hid_bpf_ops *hid_bpf_ops;
-> +
-> +struct hid_bpf_prog_list {
-> +	u16 prog_idx[HID_BPF_MAX_PROGS_PER_DEV];
-> +	u8 prog_cnt;
-> +};
-> +
-> +/* stored in each device */
-> +struct hid_bpf {
-> +	struct hid_bpf_prog_list __rcu *progs[HID_BPF_PROG_TYPE_MAX];	/* attached BPF progs */
-> +	bool destroyed;			/* prevents the assignment of any progs */
-> +
-> +	spinlock_t progs_lock;		/* protects RCU update of progs */
-> +};
-> +
-> +#ifdef CONFIG_HID_BPF
-> +int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
-> +				  u32 size, int interrupt);
-> +void hid_bpf_destroy_device(struct hid_device *hid);
-> +void hid_bpf_device_init(struct hid_device *hid);
-> +#else /* CONFIG_HID_BPF */
-> +static inline int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
-> +						u32 size, int interrupt) { return 0; }
-> +static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
-> +static inline void hid_bpf_device_init(struct hid_device *hid) {}
-> +#endif /* CONFIG_HID_BPF */
-> +
-> +#endif /* __HID_BPF_H */
-> diff --git a/include/uapi/linux/hid_bpf.h b/include/uapi/linux/hid_bpf.h
-> new file mode 100644
-> index 000000000000..ba8caf9b60ee
-> --- /dev/null
-> +++ b/include/uapi/linux/hid_bpf.h
-> @@ -0,0 +1,25 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-- 
+Regards,
 
-This is fine, it is in include/uapi/
-
-Other than those minor comments, this all looks good to me!
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Laurent Pinchart

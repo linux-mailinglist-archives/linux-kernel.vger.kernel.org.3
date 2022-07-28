@@ -2,164 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAED584618
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97F75845EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbiG1SsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 14:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S232740AbiG1StD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 14:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbiG1SsF (ORCPT
+        with ESMTP id S232138AbiG1StB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 14:48:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2938971BDE
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659034084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2DJM3dywGojOdJzQwenMVghSwcw7CDj/ldG3SLSuEbw=;
-        b=QowrBzP+76OolKdgV34ijZF7MBj5iZ3I5Cm3pokq1XYPBSQVYAetFDh0NbgS07YrfoArfW
-        VnzMjW2vBEVzhMqF03ZzJ6NpVzIBadyE3JHeg09ftPNdq31A22gDzRfPW/Nak1G9RKA7gI
-        8Ld9By7VEl5XATdszLAH5aFdUsjbR3o=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-xd7l4yjGO-S_CXlB1vTHpg-1; Thu, 28 Jul 2022 14:48:02 -0400
-X-MC-Unique: xd7l4yjGO-S_CXlB1vTHpg-1
-Received: by mail-ej1-f70.google.com with SMTP id ne36-20020a1709077ba400b0072b64ce28aaso918988ejc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:48:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2DJM3dywGojOdJzQwenMVghSwcw7CDj/ldG3SLSuEbw=;
-        b=p4knDs0/Vr24pIkxebpB6Dg1I3Lx7UgQXewn+GB1eyFFaBP/KaMNTHVeJGK1tscKc3
-         y2wOHFzRaCo35tS5T77/IK1E6fWTP0+YwVIarF1sOB8z6Lr5gUuNSn+4xGpwvbeVKjoQ
-         7DLWgGkcVMpTZvHxqYss5k61nMB+f9WSyFf9emRQJ5Puwx8RUQMK9fDz/mGseOTpraGE
-         KJpJSde9Klhgz+eaqNgX4XGNIuEXN/MLwAdEo6GY9oWChXCfRPLb+8rBPf2z5wQdkv3L
-         dHzFeSrHNdjbdvHdG87BABuw/gVxHZbboXjN6HMfOaTYjST6U5xB4nOZPAEBrm4CmLP+
-         kFSA==
-X-Gm-Message-State: AJIora+NnYt8e7BYwckEBBwUErQVElPUeChmpI08Oi12ED8bX1w7+ue5
-        i75Zdr87DkkPr21gpFveRqBG0+dPGX43QKOl720Yi+ZppWgMoi4zNV4UeDj8mZtwLxMo6oCzfkR
-        xu5WkRIOKT6CxW1ucE2nvvZ6y
-X-Received: by 2002:a17:907:3e21:b0:72f:87c:efeb with SMTP id hp33-20020a1709073e2100b0072f087cefebmr214902ejc.528.1659034081600;
-        Thu, 28 Jul 2022 11:48:01 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vAcJF0/ZzVFPQboJ+JLU58QC/RmPOy2zxuKOSX70XcNJXPfG51IrsnAW5B5zXNdTrQbF6e3g==
-X-Received: by 2002:a17:907:3e21:b0:72f:87c:efeb with SMTP id hp33-20020a1709073e2100b0072f087cefebmr214882ejc.528.1659034081223;
-        Thu, 28 Jul 2022 11:48:01 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id s21-20020aa7cb15000000b0043cfda1368fsm944844edt.82.2022.07.28.11.48.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 11:48:00 -0700 (PDT)
-Message-ID: <26102aca-a730-ddf8-d024-2e7367696757@redhat.com>
-Date:   Thu, 28 Jul 2022 20:48:00 +0200
+        Thu, 28 Jul 2022 14:49:01 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D7D71BDE
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:49:00 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:36148)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oH8Z9-00E1aV-0m; Thu, 28 Jul 2022 12:48:59 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:48830 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oH8Z7-00BYV8-ND; Thu, 28 Jul 2022 12:48:58 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
+References: <Ys2PwTS0qFmGNFqy@netflix>
+        <20220713175305.1327649-1-tycho@tycho.pizza>
+        <20220720150328.GA30749@mail.hallyn.com>
+        <YthsgqAZYnwHZLn+@tycho.pizza> <20220721015459.GA4297@mail.hallyn.com>
+        <YuFdUj5X4qckC/6g@tycho.pizza>
+        <871qu6bjp3.fsf@email.froward.int.ebiederm.org>
+        <YuF8H3ZVNugbLtFC@tycho.pizza>
+Date:   Thu, 28 Jul 2022 13:48:17 -0500
+In-Reply-To: <YuF8H3ZVNugbLtFC@tycho.pizza> (Tycho Andersen's message of "Wed,
+        27 Jul 2022 11:55:43 -0600")
+Message-ID: <8735elhy4u.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] platform/x86/intel/ifs: Allow non-default names for
- IFS image
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-References: <20220710160011.995800-1-jithu.joseph@intel.com>
- <YssFjbveghDLNn4N@kroah.com>
- <55368a65-c536-93c7-c501-9f6086e308d2@redhat.com>
- <YuJ8Ah37WAHGTJlV@kroah.com>
- <39b47ca8-1d25-0e60-d326-ad627541fe36@redhat.com>
- <YuKIL4QkC25h6RF8@kroah.com>
- <1ea8a38f-538c-43ed-c4dc-bc3722c03489@redhat.com>
- <SJ1PR11MB6083263E8EEBF106B6B61B24FC969@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <SJ1PR11MB6083263E8EEBF106B6B61B24FC969@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oH8Z7-00BYV8-ND;;;mid=<8735elhy4u.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18zLJB9EbXzeH/7OXoXVAdVtkdREDgofKw=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Tycho Andersen <tycho@tycho.pizza>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 750 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 4.0 (0.5%), b_tie_ro: 2.7 (0.4%), parse: 0.88
+        (0.1%), extract_message_metadata: 11 (1.4%), get_uri_detail_list: 3.2
+        (0.4%), tests_pri_-1000: 3.8 (0.5%), tests_pri_-950: 1.03 (0.1%),
+        tests_pri_-900: 0.80 (0.1%), tests_pri_-90: 214 (28.6%), check_bayes:
+        202 (26.9%), b_tokenize: 10 (1.3%), b_tok_get_all: 12 (1.6%),
+        b_comp_prob: 2.9 (0.4%), b_tok_touch_all: 172 (23.0%), b_finish: 0.80
+        (0.1%), tests_pri_0: 501 (66.8%), check_dkim_signature: 0.46 (0.1%),
+        check_dkim_adsp: 2.5 (0.3%), poll_dns_idle: 0.85 (0.1%), tests_pri_10:
+        2.7 (0.4%), tests_pri_500: 8 (1.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] sched: __fatal_signal_pending() should also check
+ PF_EXITING
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
+Tycho Andersen <tycho@tycho.pizza> writes:
 
-On 7/28/22 17:12, Luck, Tony wrote:
->>>> Speculating myself as far as I understand IFS is not for factory
->>>> tests but for testing in the fields since big cloud vendors have
->>>> found that sometimes there are hard to catch CPU defects which
->>>> they only find out by running statistics which show that certain
->>>> tasks only crash when run on machine a, socket b, core c.
->>>
->>> Who knows, Intel doesn't say so we can't really guess :(
->>
->> Right, for version 3 the commit message and ABI documentation changes
->> really need to clarify why multiple test-pattern files may be needed
->> mucy better. If possible please also include 1 or 2 _clear_ examples
->> of cases where more then 1 test-pattern file may be used.
-> 
-> Sorry for the radio silence. We took Greg's suggestion to go back and
-> thinks this out completely to heart. As he said, there is no rush to get
-> this in. We need to do it right.
+> On Wed, Jul 27, 2022 at 11:32:08AM -0500, Eric W. Biederman wrote:
+>> Tycho Andersen <tycho@tycho.pizza> writes:
+>> 
+>> > Hi all,
+>> >
+>> > On Wed, Jul 20, 2022 at 08:54:59PM -0500, Serge E. Hallyn wrote:
+>> >> Oh - I didn't either - checking the sigkill in shared signals *seems*
+>> >> legit if they can be put there - but since you posted the new patch I
+>> >> assumed his reasoning was clear to you.  I know Eric's busy, cc:ing Oleg
+>> >> for his interpretation too.
+>> >
+>> > Any thoughts on this?
+>> 
+>> Having __fatal_signal_pending check SIGKILL in shared signals is
+>> completely and utterly wrong.
+>> 
+>> What __fatal_signal_pending reports is if a signal has gone through
+>> short cirucuit delivery after determining that the delivery of the
+>> signal will terminate the process.
+>
+> This short-circuiting you're talking about happens in __send_signal()?
+> The problem here is that __send_signal() will add things to the shared
+> queue:
+>
+>     pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+>
+> and indeed we add it to the shared set because of the way
+> zap_pid_ns_processes() calls it:
+>
+>     roup_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
+>
+>> Using "sigismember(&tsk->pending.signal, SIGKILL)" to report that a
+>> fatal signal has experienced short circuit delivery is a bit of an
+>> abuse, but essentially harmless as tkill of SIGKILL to a thread will
+>> result in every thread in the process experiencing short circuit
+>> delivery of the fatal SIGKILL.  So a pending SIGKILL can't really mean
+>> anything else.
+>
+> This is the part I don't follow. If it's ok to send a signal to this
+> set, why is it not ok to also look there (other than that it was a
+> slight hack in the first place)? Maybe it will short circuit
+> more threads, but that seems ok.
 
-That (taking your time to get this right) is good to hear, thanks.
+Let me see if I can help, now that I have the code and the backtrace
+the details are becoming clearer.
 
-> Your summary above on how this works is completely correct.
-> 
-> The reason for adding more files is to cover more transistors in the
-> core. The base file that we started with gets mumble-mumble percent
-> of the transistors checked. Adding a few more files will increase that
-> quite significantly.
-> 
-> So testing a system may look like:
-> 
-> 	for each scan file
-> 	do
-> 		load the scan file
-> 		for each core
-> 		do
-> 			test the core with this set of tests
-> 		done
-> 	done
-> 
-> Our internal discussions on naming are following the same direction that
-> you suggested, but likely even more restrictive. The "suffix" may just be
-> a two-digit hex number (allowing for up to 256 files ... though for Sapphire
-> Rapids we are looking at just 6).
-> 
-> So our current direction is to name six "parts" something like this:
-> 
-> 	06-8f-06-00.scan
-> 	06-8f-06-01.scan
-> 	06-8f-06-02.scan
-> 	06-8f-06-03.scan
-> 	06-8f-06-04.scan
-> 	06-8f-06-05.scan
-> 
-> but we are still checking to make sure this will work for future CPUs. Once
-> we have something solid we will come back to the mailing list.
+In zap_pid_ns_processes group_send_signal sets some signal bits.
+Then the processes notices those bits and deals with them in get_signal.
+Then get_signal calls do_exit.
+Then do_exit flushes the file descriptors.
 
-Thanks, this sounds good to me.
 
-> As also suggested in earlier thread we will change the name of the "reload"
-> file (since skipping to a new file isn't a "reload"). The "load a scan file" will
-> write the "part" number to this new file.
+So the reason __fatal_signal_pending fails is that the signal has been
+dealt with by calling do_exit and it is no longer pending.
 
-Regards,
+Frankly that there are some left over SIGKILL bits in the pending mask
+is a misfeature, and it is definitely not something you should count on.
 
-Hans
+
+>> After having looked at the code a little more I can unfortunately also
+>> say that testing PF_EXITING in __fatal_signal_pending will cause
+>> kernel_wait4 in zap_pid_ns_processes to not sleep, and instead to return
+>> 0.  Which will cause zap_pid_ns_processes to busy wait.  That seems very
+>> unfortunate.
+>> 
+>> I hadn't realized it at the time I wrote zap_pid_ns_processes but I
+>> think anything called from do_exit that cares about signal pending state
+>> is pretty much broken and needs to be fixed.
+>
+>> So the question is how do we fix the problem in fuse that shows up
+>> during a pid namespace exit without having interruptible sleeps we need
+>> to wake up?
+>> 
+>> What are the code paths that experience the problem?
+>
+> [<0>] request_wait_answer+0x282/0x710 [fuse]
+> [<0>] fuse_simple_request+0x502/0xc10 [fuse]
+> [<0>] fuse_flush+0x431/0x630 [fuse]
+> [<0>] filp_close+0x96/0x120
+> [<0>] put_files_struct+0x15c/0x2c0
+> [<0>] do_exit+0xa00/0x2450
+> [<0>] do_group_exit+0xb2/0x2a0
+> [<0>] get_signal+0x1eed/0x2090
+> [<0>] arch_do_signal_or_restart+0x89/0x1bc0
+> [<0>] exit_to_user_mode_prepare+0x11d/0x1b0
+> [<0>] syscall_exit_to_user_mode+0x19/0x50
+> [<0>] do_syscall_64+0x50/0x90
+> [<0>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+This is half of the hang thank you.
+
+> is the full call stack, I have a reproducer here (make check will run
+> it): https://github.com/tych0/kernel-utils/tree/master/fuse2
+
+
+Thank you for this I can almost trace what is going on.
+
+There is a server and it is accessing the filesystem it servers.
+Plus the process staying alive keeps the filesystem mounted and
+active because it is acessing the filesystem it serves.
+
+
+The filesystem access hanging appears to be because fc->connected != 0.
+
+If fuse_abort_conn could successfully run that should successfully
+shut everything down.
+
+The server when it is killed should call fuse_abort_conn from
+fuse_dev_release, but the code appears to never get there because it is
+blocked in fuse_flush from closing the file descriptor open to the fuse
+file system.
+
+So this looks like one process hanging and waiting on itself.
+
+
+I suspect the solution is do use something like task_wake in the
+fuse_flush calls to allow the server file descriptor to be close
+resulting in fuse_dev_release calling fuse_abort_conn.
+
+
+>
+> In addition to fuse, it looks like nfs_file_flush() eventually ends up
+> in __fatal_signal_pending(), and probably a few others that want to
+> synchronize with something outside the local kernel.
+
+Yes, my thinking there about not calling __fatal_signal_pending during
+do_exit seems to have been confused.  Rather what can't be done is
+depending upon __fatal_signal_pending to ever returning true.
+
+What needs to happen is to make certain we don't have the loops where
+one part of the shutdown depends upon another.  I don't know if there
+is a way to shutdown the nfs connection why a client is waiting or not.
+
+>> Will refactoring zap_pid_ns_processes as I have proposed so that it does
+>> not use kernel_wait4 help sort this out?  AKA make it work something
+>> like thread group leader of a process and not allow wait to reap the
+>> init process of a pid namespace until all of the processes in a pid
+>> namespaces have been gone.  Not that I see the problem in using
+>> kernel_wait4 it looks like zap_pid_ns_processes needs to stop calling
+>> kernel_wait4 regardless of the fuse problem.
+>
+> I can look at this, but I really don't think it will help: in this
+> brave new world, what wakes up tasks stuck like the above? They're
+> still looking at the wrong signal set.
+
+This is probably a wild goose chase.  There are some funny namespace
+bits like the pid namespace closing that we need to rule out of
+the picture, but overall I don't think the pid namespace has
+anything to do with this.
+
+I was thinking removing the kernel_wait would simplify things by
+removing one place where a process waits on another process during
+shutdown.  With the right problem it probably will help.  In this case
+since everything is in a single process I don't see that happening.
+
+I spent a little time and tried to get this to reproduce without the
+pid namespace and it initially it looked like it was working but
+after a bunch of time those attempts exited on their own.  So I haven't
+mastered all of what is going on in your fuse test case yet.
+
+Eric
 

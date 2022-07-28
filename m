@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC20583799
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDB858379A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 05:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234752AbiG1Del (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 23:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S234361AbiG1De4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 23:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbiG1DeY (ORCPT
+        with ESMTP id S232849AbiG1De0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 23:34:24 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B915B7A9;
-        Wed, 27 Jul 2022 20:34:22 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id o3so691912ple.5;
-        Wed, 27 Jul 2022 20:34:22 -0700 (PDT)
+        Wed, 27 Jul 2022 23:34:26 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6EB5C340;
+        Wed, 27 Jul 2022 20:34:23 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id ha11so820505pjb.2;
+        Wed, 27 Jul 2022 20:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=JhMvbIL/TwREFiBbhotzA3SEMID5qPiHSEntbLaD1W0=;
-        b=O9JqYvVSKOe0Yn6Nzu7KhVKqcpVLsZ98oKGiSGSTOgVnaEeGIVcBfDog8iPOe2/jV6
-         Do9q2C3g4H6zu1nr6zR8QyhneNtjq36NfIKjoUKVKMJMLhxtrD10+NvcgGzqO9jRTqdI
-         yLbEYOg3zeLceiDD0JX99bVps8WGiGW4qrwAzGLBMNxEkECd2tgicvP04XymNp/TfWOW
-         PwRjVU6E7YZVZO6YaWmxf8CNVYeQ4qOPTlgEyILjQbhj52JD2w5Bl1Wydp7nQTHcTm3L
-         daHd9hS2wGpaf/X0OjIm/l6OzzEtl23gNoOlbp20Mb2IWWz4E7JCaVIOm8ryiAPwm0qv
-         Vj/Q==
+        bh=j10ToGanO3cd/vYuHa5Kn8foeTs8uMlyZtELPg2UY1U=;
+        b=ZCpCWijzlJKFs64G+1k7Jl5GKh6G4zOE6ybwGhhR/exQ9bGqHu5jiznO5HvWlqa/rJ
+         6blTRDDSiBqKmbeZa1uCPh2Nyo9/0lSgoBae4muND+4qWPGNamj5AmdAYBJUEm7SGqbw
+         HXf6QFOrlDBQfF0eLDtdaVtzxe79XUj6OMXvc70gPfydf9HkHcRXdr6fvkFRltTf5//h
+         6Fy6RAqzfsW2N7ZbZKzdwib5zi2mCAOr5ScVrstEYPdirvZgJ8zOFm9HKdRn/Y5LPWwJ
+         ZY60cdEvLCP8iXWLUhJQo99JJiatYHysQCuaGzKDYXD6AMFLvjVx1VTyMSLscmEAgq2B
+         xtsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=JhMvbIL/TwREFiBbhotzA3SEMID5qPiHSEntbLaD1W0=;
-        b=h5PYcOlrEnORnXIbuzZjx4jHUATAGyQNU7IL7e5sWUp0T70Szg8+1zmufmT1Jfdg2Z
-         fbUP4RvjXZv7/W8uocUqV8h0mMR7Jo4+efGFlvFBKdM3RuWatbne8aqgoGWPYv3GotO2
-         AwHTV6T7Ux4AgmgqG//W5ziY+LR4bJSBspR3Dp87rw4kWOkbi7NLydfbEdwXJHBzHtOf
-         xkWaDrSEfdXBamReZHwPIyNl4Q3lfuEzujqpbCVgBR0lNhSlExU6rKGL2d9RMdEATCHg
-         mC7BmAzL+LZBSwoTEukxC1waOHLJ37ZcMHu9HPZD3kF+/V/QHAZj9awEcEYoUDsFcxLR
-         7OeA==
-X-Gm-Message-State: AJIora8ucDW89p708OHLSsOosarjvRWeoZAS0m9dsc26z7XbGg/bKozX
-        EzomU7j13tx4M6YAE/td/bA=
-X-Google-Smtp-Source: AGRyM1v5oWSU07CfUHQBcDsJS2AJzY+++qTWksKGLH2SCBONeBvdzlc3GtYmLMhOu8HbK5mXjsXOYA==
-X-Received: by 2002:a17:903:2351:b0:16d:9468:bb02 with SMTP id c17-20020a170903235100b0016d9468bb02mr11898940plh.82.1658979262115;
+        bh=j10ToGanO3cd/vYuHa5Kn8foeTs8uMlyZtELPg2UY1U=;
+        b=3dLL3LT2qKsh8dbz4Bx4kgWtoBbBlMC6LVGI3xXskWibh6XCSGPyuGySavy565uRXE
+         N0jObY7l9dbf70Zn3zjpy9VfmvG6sei46CJ9nhIgmdbRrtUxtIt0WPAyDSANFEicoLbC
+         r9Akq1d9C55tSWBuO/qLd73TWyFWGK+ScZGff2mlDZPCpZElTS/jR9vGsMtyy8xTrDwy
+         Fi9wBGe1payuBtHLM0y652fEVT8MDqfp7DdE/W8cynjCVi4XrxZrJaXditXGBlBlgFr4
+         RwGhFiWA83Nte7GKnjmPfzIF7BWFiOxhS27M6mnhLxh0v6qenthx5M04/e+ld+UrZSY3
+         5+cA==
+X-Gm-Message-State: AJIora/UMYlmY4NBEjWpdw8lPgGbHY69mATFZqdWVGakJyWk6aFTVtTA
+        2F4NRNdyYo4GYunhmFD63oA=
+X-Google-Smtp-Source: AGRyM1stnTgNjHqQvTX8yokSMFJC+fEv40VFSklSquPlJzshMGe0L5wVcYIHWCUudBsD3zBQBgCCow==
+X-Received: by 2002:a17:902:d54f:b0:16d:3bce:c40e with SMTP id z15-20020a170902d54f00b0016d3bcec40emr24861840plf.87.1658979262545;
         Wed, 27 Jul 2022 20:34:22 -0700 (PDT)
 Received: from debian.me (subs28-116-206-12-54.three.co.id. [116.206.12.54])
-        by smtp.gmail.com with ESMTPSA id h6-20020a056a00000600b00528c22fbb45sm15008851pfk.141.2022.07.27.20.34.21
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902db1100b0016d33b8a231sm8418629plx.270.2022.07.27.20.34.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 27 Jul 2022 20:34:21 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 3E949104A8A; Thu, 28 Jul 2022 10:34:16 +0700 (WIB)
+        id 5F5C7104A8C; Thu, 28 Jul 2022 10:34:16 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     linux-doc@vger.kernel.org, linux-next@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH 1/3] Documentation: powerpc: fix indentation warnings
-Date:   Thu, 28 Jul 2022 10:33:31 +0700
-Message-Id: <20220728033332.27836-2-bagasdotme@gmail.com>
+Subject: [PATCH 2/3] Documentation: use different label names for each arch's elf_hwcaps.rst
+Date:   Thu, 28 Jul 2022 10:33:32 +0700
+Message-Id: <20220728033332.27836-3-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220727220050.549db613@canb.auug.org.au>
 References: <20220727220050.549db613@canb.auug.org.au>
@@ -85,75 +85,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sphinx reported unexpected indentation warnings:
+Sphinx reported duplicate label warning:
 
-Documentation/powerpc/elf_hwcaps.rst:82: WARNING: Unexpected indentation.
-Documentation/powerpc/elf_hwcaps.rst:100: WARNING: Unexpected indentation.
-Documentation/powerpc/elf_hwcaps.rst:117: WARNING: Unexpected indentation.
-Documentation/powerpc/elf_hwcaps.rst:122: WARNING: Unexpected indentation.
-Documentation/powerpc/elf_hwcaps.rst:144: WARNING: Unexpected indentation.
+WARNING: duplicate label elf_hwcaps_index, other instance in Documentation/arm64/elf_hwcaps.rst
 
-Fix these warnings by unindenting commit references and using literal code
-block for instructions list for PPC_FEATURE_ICACHE_SNOOP.
+The warning is caused by elf_hwcaps_index label name is already used for
+arm64 documentation, whileas powerpc use the same name.
+
+Disambiguate the label name for each architecture's documentation. While
+at it, also adjust original reference in translated documentation.
 
 Link: https://lore.kernel.org/linuxppc-dev/20220727220050.549db613@canb.auug.org.au/
 Fixes: 3df1ff42e69e91 ("powerpc: add documentation for HWCAPs")
 Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/powerpc/elf_hwcaps.rst | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ Documentation/arm64/elf_hwcaps.rst                    | 2 +-
+ Documentation/powerpc/elf_hwcaps.rst                  | 2 +-
+ Documentation/translations/zh_CN/arm64/elf_hwcaps.rst | 2 +-
+ Documentation/translations/zh_TW/arm64/elf_hwcaps.rst | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+index 3d116fb536c538..63b75080ec4544 100644
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -1,4 +1,4 @@
+-.. _elf_hwcaps_index:
++.. _elf_hwcaps_arm64:
+ 
+ ================
+ ARM64 ELF hwcaps
 diff --git a/Documentation/powerpc/elf_hwcaps.rst b/Documentation/powerpc/elf_hwcaps.rst
-index 96d4fc4a3f91fe..bb7438cebf36e8 100644
+index bb7438cebf36e8..3366e5b18e6759 100644
 --- a/Documentation/powerpc/elf_hwcaps.rst
 +++ b/Documentation/powerpc/elf_hwcaps.rst
-@@ -78,8 +78,7 @@ PPC_FEATURE_64
+@@ -1,4 +1,4 @@
+-.. _elf_hwcaps_index:
++.. _elf_hwcaps_powerpc:
  
- PPC_FEATURE_601_INSTR
-     The processor is PowerPC 601.
--    Unused in the kernel since:
--      f0ed73f3fa2c ("powerpc: Remove PowerPC 601")
-+    Unused in the kernel since f0ed73f3fa2c ("powerpc: Remove PowerPC 601")
+ ==================
+ POWERPC ELF HWCAPs
+diff --git a/Documentation/translations/zh_CN/arm64/elf_hwcaps.rst b/Documentation/translations/zh_CN/arm64/elf_hwcaps.rst
+index 9aa4637eac979c..39a94ff5383c01 100644
+--- a/Documentation/translations/zh_CN/arm64/elf_hwcaps.rst
++++ b/Documentation/translations/zh_CN/arm64/elf_hwcaps.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
  
- PPC_FEATURE_HAS_ALTIVEC
-     Vector (aka Altivec, VMX) facility is available.
-@@ -96,8 +95,7 @@ PPC_FEATURE_HAS_4xxMAC
- PPC_FEATURE_UNIFIED_CACHE
-     The processor has a unified L1 cache for instructions and data, as
-     found in NXP e200.
--    Unused in the kernel since:
--      39c8bf2b3cc1 ("powerpc: Retire e200 core (mpc555x processor)")
-+    Unused in the kernel since 39c8bf2b3cc1 ("powerpc: Retire e200 core (mpc555x processor)")
+-:Original: :ref:`Documentation/arm64/elf_hwcaps.rst <elf_hwcaps_index>`
++:Original: :ref:`Documentation/arm64/elf_hwcaps.rst <elf_hwcaps_arm64>`
  
- PPC_FEATURE_HAS_SPE
-     Signal Processing Engine facility is available.
-@@ -113,13 +111,11 @@ PPC_FEATURE_NO_TB
-     This is a 601 specific HWCAP, so if it is known that the processor
-     running is not a 601, via other HWCAPs or other means, it is not
-     required to test this bit before using the timebase.
--    Unused in the kernel since:
--      f0ed73f3fa2c ("powerpc: Remove PowerPC 601")
-+    Unused in the kernel since f0ed73f3fa2c ("powerpc: Remove PowerPC 601")
+ Translator: Bailu Lin <bailu.lin@vivo.com>
  
- PPC_FEATURE_POWER4
-     The processor is POWER4 or PPC970/FX/MP.
--    POWER4 support dropped from the kernel since:
--      471d7ff8b51b ("powerpc/64s: Remove POWER4 support")
-+    POWER4 support dropped from the kernel since 471d7ff8b51b ("powerpc/64s: Remove POWER4 support")
+diff --git a/Documentation/translations/zh_TW/arm64/elf_hwcaps.rst b/Documentation/translations/zh_TW/arm64/elf_hwcaps.rst
+index 3eb1c623ce31b0..76164d851d0b5e 100644
+--- a/Documentation/translations/zh_TW/arm64/elf_hwcaps.rst
++++ b/Documentation/translations/zh_TW/arm64/elf_hwcaps.rst
+@@ -2,7 +2,7 @@
  
- PPC_FEATURE_POWER5
-     The processor is POWER5.
-@@ -140,7 +136,8 @@ PPC_FEATURE_ICACHE_SNOOP
-     The processor icache is coherent with the dcache, and instruction storage
-     can be made consistent with data storage for the purpose of executing
-     instructions with the sequence (as described in, e.g., POWER9 Processor
--    User's Manual, 4.6.2.2 Instruction Cache Block Invalidate (icbi)):
-+    User's Manual, 4.6.2.2 Instruction Cache Block Invalidate (icbi))::
-+
-         sync
-         icbi (to any address)
-         isync
+ .. include:: ../disclaimer-zh_TW.rst
+ 
+-:Original: :ref:`Documentation/arm64/elf_hwcaps.rst <elf_hwcaps_index>`
++:Original: :ref:`Documentation/arm64/elf_hwcaps.rst <elf_hwcaps_arm64>`
+ 
+ Translator: Bailu Lin <bailu.lin@vivo.com>
+             Hu Haowen <src.res@email.cn>
 -- 
 An old man doll... just what I always wanted! - Clara
 

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6D05842FB
+	by mail.lfdr.de (Postfix) with ESMTP id CAEBD5842FC
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiG1PVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
+        id S232700AbiG1PWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbiG1PVs (ORCPT
+        with ESMTP id S232208AbiG1PVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:21:48 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102F562491;
-        Thu, 28 Jul 2022 08:21:43 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sz17so3715041ejc.9;
-        Thu, 28 Jul 2022 08:21:43 -0700 (PDT)
+        Thu, 28 Jul 2022 11:21:49 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D446B65558;
+        Thu, 28 Jul 2022 08:21:44 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id s9so2600415edd.8;
+        Thu, 28 Jul 2022 08:21:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YEir7AE9Ws+RmW/sodChSCIEWr1J7MkIMYSUtdJkuKk=;
-        b=SmgUF5EU+KWwGQ6TQef/B3s18NFjKon04gUJnbrKPqTPjzJlpmu20yLLYlsD2g2bn2
-         7D9TM/l0VU5tR5WVzcWuKFkpgt/xvFF9vyQ47X6XG7NokcD07h/EYkhJTR7rEctVLnvq
-         s2Y7LmRKGCEVa07Vjj6E90zajpcJ6efs1o8PADx+7o3Xa8kPPtCdB/+n4b8fp19DBxBi
-         1FqozyryLUiPnLKxuuj43kkbmXvK/9vh17jbvKfbhw518T7m6dWwxwtxdM5xg5/VHDUq
-         T+EeSRYVhN28rgju0kHSP9GPHQmKhr413DGHGqRLFiZZrKWIAKF3IfYTYCV1vZqGSMbk
-         d9fQ==
+        bh=J+XcpxAZIHMHNGONdx78PErdDSYd+XFkvpXs7VSOMdk=;
+        b=oa9WGsAukuXemTpS6eX9qETqa8yGtnVn2FCG9f7+4nwUKlrOWfZiXgtkrXuWJ/Yz7R
+         DHq4ez4+OxvxIruajP/mf86Bfz4Smd8FY1SDhiyti+cy9dEyjqkMbgiHUI3HoWxu6En/
+         8FLpP6KlxKzB13y49bZrdv2U3c7BZvdIBFS0zKl3qc83ZJFC0PI89UoO7Kkhg+L+RpxW
+         dWdCopf/RN/qqVvJjUj3xbgPPHsr8FDfkP19wt/JyXOxERREUQ49XvT5gZUZU5fankYO
+         BhXtpgT+1hBla4Nfx0mh3lgh7BXtrAHmJssIJSW1Gij+nJQhr+J26X+Ejz1NcXdQ2zjK
+         dsLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YEir7AE9Ws+RmW/sodChSCIEWr1J7MkIMYSUtdJkuKk=;
-        b=qDhCssfLqCeCdDf+jKqqizO9H5zjFQoEzY6y3ihW2ezJeQCowqXO8ewbVWcczppxgb
-         jMH06epvtBVUeShIDHkQdxbgqAY7YDS1NHpqV0ZUszfMUzxjkr3WVG8hQtyQZkzjonBB
-         1oymbBt9HlyRZ96gLr87eLYfbo2TV4ht3UNKL/suHNFn/3Gd2alojIDHUMes3Yo+fZH3
-         nDoZDXdL0/ZqvWg/jgDdC28mPYES3vQCunNvUqFg5Pvq9gpoIhxp7QaWne58Go0eFrMp
-         +ZNNekCOSQ5WMlq8RM8TCm7bNIVEPbGDetoWM9+bWe1JQXe8MxFCELEx6JNLjC9dqxrB
-         Ylzw==
-X-Gm-Message-State: AJIora/xW/64F/0o5Q6KYZVoVYBGtg5l2h72Dqty6pyhF0WSGO33RUlc
-        mMO5FOrYQhsWvZKYGC5p+/ukObFHqvY=
-X-Google-Smtp-Source: AGRyM1v5AkuvtsQvsa8GWZ6nfDgP5XKmB/xkCUILQh8aQKb5QgkAASW1WicKfiPBL6q9UzBz/se9tg==
-X-Received: by 2002:a17:907:7ea4:b0:72b:6929:4571 with SMTP id qb36-20020a1709077ea400b0072b69294571mr20682759ejc.257.1659021701963;
-        Thu, 28 Jul 2022 08:21:41 -0700 (PDT)
+        bh=J+XcpxAZIHMHNGONdx78PErdDSYd+XFkvpXs7VSOMdk=;
+        b=kAm359Y1Oetz1kXCZeBKqdLnOJEBXbSwrcUYuTCZdiazHdEivE39a7cWYT9dgsntDT
+         QNPQ8VOg+Yd4XmzlUFEQ/Kkf7szqil1YaSjb6qXGJo1J7HuaQamXQ06C/jPvwplE0Ite
+         pqTBeM5yeH9wh3I27X2GnkYAOMzghDvbfpeNZXXauCJlmuY17HWXlk72xnSSNghLZi0s
+         9OS0NV1jBj/4z/KX1PBhFCZ1pKC/L3EYE613NWa878r05h+nm/br1vj8VhzT0GnhsaSt
+         F8Lw4qNHj5a9YNQCPsSRBd+/odIUx8UQAH/7J1UkUobvqFWqleCMYJB8UsxQ7Gm9536G
+         lxZg==
+X-Gm-Message-State: AJIora9O83PcwX+EIvQVIDH7G/oo8PBrIlqpt/wGmWCquAcgXKmJhlwh
+        kCm/9EWTlUIKmp3OwjabU9VekSTSZPA=
+X-Google-Smtp-Source: AGRyM1vKd52t4Rw1LnaLLjcVrmFWo/l3sUYmbU60b78Z2TVUU/OCog+Xh+Cl8oOWE6nm8kBvDDDG2A==
+X-Received: by 2002:a05:6402:1f01:b0:43a:239e:e65a with SMTP id b1-20020a0564021f0100b0043a239ee65amr27673878edb.428.1659021702919;
+        Thu, 28 Jul 2022 08:21:42 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a01-0c23-c001-5600-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c001:5600::e63])
-        by smtp.googlemail.com with ESMTPSA id e20-20020a170906315400b0072a881b21d8sm525006eje.119.2022.07.28.08.21.41
+        by smtp.googlemail.com with ESMTPSA id e20-20020a170906315400b0072a881b21d8sm525006eje.119.2022.07.28.08.21.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 08:21:41 -0700 (PDT)
+        Thu, 28 Jul 2022 08:21:42 -0700 (PDT)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     linux-spi@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, bert@biot.com, sander@svanheule.net,
         mail@birger-koblitz.de,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 1/2] spi: realtek-rtl: Add compile testing support
-Date:   Thu, 28 Jul 2022 17:21:17 +0200
-Message-Id: <20220728152118.1429161-2-martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 2/2] spi: realtek-rtl: Improve readability when clearing the size mask
+Date:   Thu, 28 Jul 2022 17:21:18 +0200
+Message-Id: <20220728152118.1429161-3-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220728152118.1429161-1-martin.blumenstingl@googlemail.com>
 References: <20220728152118.1429161-1-martin.blumenstingl@googlemail.com>
@@ -71,48 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for compile testing the spi-realtek-rtl driver to increase
-build testing coverage.
+Define the bitmask RTL_SPI_SFCSR_LEN_MASK so it only sets the bits of
+this specific part of the register instead of setting all bits except
+the relevant ones. This makes it consistent with single bit macros in
+the spi-realtek-rtl driver as well as with the approach that many other
+drivers use.
 
+Suggested-by: Sander Vanheule <sander@svanheule.net>
 Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- drivers/spi/Kconfig  | 9 +++++++++
- drivers/spi/Makefile | 2 +-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ drivers/spi/spi-realtek-rtl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 8e550269d488..d8b55efb05d5 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -969,6 +969,15 @@ config SPI_MXS
- 	help
- 	  SPI driver for Freescale MXS devices.
+diff --git a/drivers/spi/spi-realtek-rtl.c b/drivers/spi/spi-realtek-rtl.c
+index 866b0477dbd7..0371d44cbfbd 100644
+--- a/drivers/spi/spi-realtek-rtl.c
++++ b/drivers/spi/spi-realtek-rtl.c
+@@ -20,7 +20,7 @@ struct rtspi {
+ #define RTL_SPI_SFCSR_CSB1		BIT(30)
+ #define RTL_SPI_SFCSR_RDY		BIT(27)
+ #define RTL_SPI_SFCSR_CS		BIT(24)
+-#define RTL_SPI_SFCSR_LEN_MASK		~(0x03 << 28)
++#define RTL_SPI_SFCSR_LEN_MASK		(0x03 << 28)
+ #define RTL_SPI_SFCSR_LEN1		(0x00 << 28)
+ #define RTL_SPI_SFCSR_LEN4		(0x03 << 28)
  
-+config SPI_REALTEK_RTL
-+	tristate "Realtek RTL SPI controller"
-+	depends on HAS_IOMEM
-+	depends on MACH_REALTEK_RTL || COMPILE_TEST
-+	default MACH_REALTEK_RTL
-+	help
-+	  SPI driver for the hardware found on Realtek RLTL8380, RTL8382,
-+	  RTL8391, RTL8392 and RTL8393 SoCs.
-+
- config SPI_TEGRA210_QUAD
- 	tristate "NVIDIA Tegra QSPI Controller"
- 	depends on ARCH_TEGRA || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 18bf3d8c6df7..9fe4a2aa0fd7 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -105,7 +105,7 @@ obj-$(CONFIG_SPI_QUP)			+= spi-qup.o
- obj-$(CONFIG_SPI_ROCKCHIP)		+= spi-rockchip.o
- obj-$(CONFIG_SPI_ROCKCHIP_SFC)		+= spi-rockchip-sfc.o
- obj-$(CONFIG_SPI_RB4XX)			+= spi-rb4xx.o
--obj-$(CONFIG_MACH_REALTEK_RTL)		+= spi-realtek-rtl.o
-+obj-$(CONFIG_SPI_REALTEK_RTL)		+= spi-realtek-rtl.o
- obj-$(CONFIG_SPI_RPCIF)			+= spi-rpc-if.o
- obj-$(CONFIG_SPI_RSPI)			+= spi-rspi.o
- obj-$(CONFIG_SPI_S3C24XX)		+= spi-s3c24xx-hw.o
+@@ -49,7 +49,7 @@ static void set_size(struct rtspi *rtspi, int size)
+ 	u32 value;
+ 
+ 	value = readl(REG(RTL_SPI_SFCSR));
+-	value &= RTL_SPI_SFCSR_LEN_MASK;
++	value &= ~RTL_SPI_SFCSR_LEN_MASK;
+ 	if (size == 4)
+ 		value |= RTL_SPI_SFCSR_LEN4;
+ 	else if (size == 1)
 -- 
 2.37.1
 

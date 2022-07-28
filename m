@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2CF584867
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FEF584868
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbiG1Wsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S231821AbiG1Wtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiG1Wsr (ORCPT
+        with ESMTP id S229813AbiG1Wtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:48:47 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBAA51A05;
-        Thu, 28 Jul 2022 15:48:45 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31e47ac84daso34837127b3.0;
-        Thu, 28 Jul 2022 15:48:45 -0700 (PDT)
+        Thu, 28 Jul 2022 18:49:53 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC50051A10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:49:51 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id e69so2499541iof.5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IbbIwNHYA5fQMBY7syKbTH1UwgoGIprYwzTKm582+h0=;
-        b=TlEJ6Ruu4n0OcOMH/kNl+yUxKyVkTDjntX+0bKHpRUyDzlHVanmpZP2JTZRyjeGbqr
-         h9QMOT35fNBH+EMy/HUeZF/EYb/TPovcKSOB3q0fqXWtjfp4HnJBw2F9CY+eon8eV1Jf
-         Ul6t5tPQP5QhXYftUWF/0hEO56pz1fsppXMMQzfap0hWGCOHLOy3SISAioovIqtlS8Fw
-         cLvI+Az7YceG8PAEoYenIsVreiAh1MMlBTJbFMaaSTIX3RWAoKJztTvbH95/F1XhRnC5
-         vTSc6F1r88SyDur7K7AQ7tbFy6kfE/9PQqBOQAj+muPHKdenSqBYss/jb2kYj+Pgv//N
-         GAFQ==
+        d=csp-edu.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=zp3s0H17eNS8RLeZJwuDNDBm2rORUB76Sr+0ULT5CUY=;
+        b=6PGeof5tavB8xZZTMvnmR1G9QRO/mLfOjc0reQCxtLSivzfi9q8iDpINmOG3CqIk1J
+         V/4tvnXKugAAt21XfV/Z2uiIxw+8hXzLA2dsAv/uoXinTF4o8Nqwz1gfVxY8qwjGwY/g
+         ufPTjRpLHsKTfLpawEKVoX2rNyPWNAmDWeHmOBct8AVx0zYE3CiPQ8jV0V4RIpUngPKE
+         1fnLh+jaLYGb+QbWJx0XiPPLS/1W7idEyupyUBwnk3IYA1WWk6ObCbHxbzGlYOeQ7hMS
+         srTT0S2fMC/rzOYu2eNTUrB+cZyNdLRlHtwIcSDAz3Wu+lGFtnno1DSP3IU7TtdWciEa
+         si1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IbbIwNHYA5fQMBY7syKbTH1UwgoGIprYwzTKm582+h0=;
-        b=y6kLpoOQK2+yXoeA6/aJteNg2sC3+zj3XJPhvGlBs1QGZnK89lInckF0vqUsvAhm0S
-         yhKsQ1kvHzygyQGPm21xvk1r1fYN7+CBo6NPXdyufYgQRUolV8f+FvZNNG6aE/lh4bBP
-         3kupS4Uz3LaBGFPqgMZUCrXeqQIPY4LzjaCWSrlryrVLZ1f9UFEScfqu/T2QLxrP4baf
-         sQ5KD17RosvWkztAwwMsxZdGOR9O/PtLjx999VAz/XiLdV/zH89Otdi4FlduGYz/AOnK
-         5/4ZtUCDFBS/6IHGLokulCXbL1XIUHm3wmYlZJqDhV3JY5WhK+FgaAGoQ8kgeDa8pvQH
-         vUjg==
-X-Gm-Message-State: ACgBeo36ujnK17gK/lvyNzrzBEM2ZYVsRgAzwmNpoLB5AIoBVoGPPgeT
-        w1mFehvprOMNg+p/k0i+jVEqVHS4a7OomFSXyQs=
-X-Google-Smtp-Source: AA6agR6/s/iZvfkJGZABz6Eu7j8VuDO5qbShjSiqVGx4ORVST12Al5dEVLSCk1fAyA9mOHgfJmwp/hWxQOFxJ5Kew9k=
-X-Received: by 2002:a81:85c5:0:b0:31c:1f50:1bbb with SMTP id
- v188-20020a8185c5000000b0031c1f501bbbmr819183ywf.3.1659048524769; Thu, 28 Jul
- 2022 15:48:44 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=zp3s0H17eNS8RLeZJwuDNDBm2rORUB76Sr+0ULT5CUY=;
+        b=j69y/oKtf9p27CUApvdKiP5km5XG1pyw08SuFO+PN1KehRIM6XVQQICI81WuegZ4pZ
+         6LMsAmIuVYDpzdKmv2e/n3lSBCsfmY0i7tu1g4NSh1856jp61o70mnPt+y2QEKe78OgJ
+         ADu57PUAQZyuKAn7g8LEjl/DIkPV2SG84lR/OJg1iSaXC4sQjdMAvDpSSrD+krm9VOPb
+         8EYH1orKn4uaUd/ylCjNCrECr1o3GSlPo5yApr6h4W3pgoa3G0F+R/0/qVgAZX4FSz05
+         2l9d+NV0y9aRlFhM+aFOg5vWn+S2pWYaf/UvqHmYYtnxENd0QC/GpP8ACv7VQZk88ZFZ
+         TZvQ==
+X-Gm-Message-State: AJIora8BhRW0V4cCNiIkNg3WBOshkHFjeqcXiHZPpNrDo9Y9O/tKYPhO
+        qQBRYoW2nDTLQsMPTCepZI1fTHk2ol+wwyGQ
+X-Google-Smtp-Source: AGRyM1uqTbWLghcYSIroC35qIH2sScjpChjXWce93/xlSm9BiJZwYwxOvdmB3S0gh0B1moTqmpnYeQ==
+X-Received: by 2002:a05:6638:270d:b0:33f:3f96:468c with SMTP id m13-20020a056638270d00b0033f3f96468cmr394388jav.272.1659048591254;
+        Thu, 28 Jul 2022 15:49:51 -0700 (PDT)
+Received: from kernel-dev-1 (75-168-113-69.mpls.qwest.net. [75.168.113.69])
+        by smtp.gmail.com with ESMTPSA id w11-20020a056602034b00b0067bd23bb692sm853686iou.27.2022.07.28.15.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 15:49:50 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 17:49:49 -0500
+From:   Coleman Dietsch <dietschc@csp.edu>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
+Subject: Re: [PATCH] KVM: x86/xen: Fix bug in kvm_xen_vcpu_set_attr()
+Message-ID: <YuMSjQ3Y2ADA40KV@kernel-dev-1>
+References: <20220728194736.383727-1-dietschc@csp.edu>
+ <YuL0auT3lFhfQHeY@google.com>
 MIME-Version: 1.0
-References: <202207190634.ToyhlXSz-lkp@intel.com> <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
- <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
- <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com> <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
-In-Reply-To: <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
-From:   Jason Gerecke <killertofu@gmail.com>
-Date:   Thu, 28 Jul 2022 15:48:59 -0700
-Message-ID: <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-iio <linux-iio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuL0auT3lFhfQHeY@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,36 +76,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 1:48 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Jul 28, 2022 at 4:30 PM Jason Gerecke <killertofu@gmail.com> wrote:
-> > On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote:
-> > > On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> wrote:
->
-> > > Writing a patch to fix the new warnings generated by my I2C patch is
-> > > simple enough, but I'd like some help coordinating getting both
-> > > patches landed. Should I wait for the I2C patch to land in "for-next"
-> > > before sending the IIO fix, or would it be preferred to send the IIO
-> > > fix right now so that both patches can be reviewed simultaneously?
-> >
-> > It's been pretty quiet, so asking again for any thoughts on how to
-> > best address this tangle...
->
-> The rule of thumb is not to introduce an additional warning or compile error.
-> I haven't looked deeply into this case, but it smells to me as if you need a new
-> version of your initial patch that includes a fix to IIO.
->
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+On Thu, Jul 28, 2022 at 08:41:14PM +0000, Sean Christopherson wrote:
+> Be more specific in the shortlog.  "Fix a bug in XYZ" doesn't provide any info
+> about the bug itself, and can even become frustratingly stale if XYZ is renamed.
+> I believe we should end up with two patches (see below), e.g.
+> 
+>   KVM: x86/xen: Initialize Xen timer only once (when it's NOT running)
+> 
+> and
+>   
+>   KVM: x86/xen: Stop Xen timer before changing the IRQ vector
+> 
 
-Thanks! Since the patch would touch both IIO and I2C I assume I would
-submit it to both mailinglists. And that whichever maintainer gets to
-it first would just give their Reviewed-by (if all looks good) and the
-second applies the Signed-off-by and handles the merge?
+Got it, I will work on splitting the v2 into a patch set as you suggested
+(with better names of course).
 
-I'll work on the updated combined patch...
+> Note, I'm assuming timer_virq is a vector of some form, I haven't actually looked
+> that far into the code.
+> 
+> On Thu, Jul 28, 2022, Coleman Dietsch wrote:
+> > This crash appears to be happening when vcpu->arch.xen.timer is already set
+> 
+> Instead of saying "This crash", provide the actual splat (sanitized to make it
+> more readable).  That way readers, reviewers, and archaeologists don't need to
+> open up a hyperlink to get details on what broken.
+> 
+> > and kvm_xen_init_timer(vcpu) is called.
+> 
+> Wrap changelogs at ~75 chars.
+> 
+> > During testing with the syzbot reproducer code it seemed apparent that the
+> > else if statement in the KVM_XEN_VCPU_ATTR_TYPE_TIMER switch case was not
+> > being reached, which is where the kvm_xen_stop_timer(vcpu) call is located.
+> 
+> Neither the shortlog nor the changelog actually says anything about what is actually
+> being changed.
+> 
 
-Jason
+I will make sure to address all these issues in the v2 patch set.
+
+> > Link: https://syzkaller.appspot.com/bug?id=8234a9dfd3aafbf092cc5a7cd9842e3ebc45fc42
+> > Reported-and-tested-by: syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
+> > Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
+> > ---
+> >  arch/x86/kvm/xen.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+> > index 610beba35907..4b4b985813c5 100644
+> > --- a/arch/x86/kvm/xen.c
+> > +++ b/arch/x86/kvm/xen.c
+> > @@ -707,6 +707,12 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+> >  		break;
+> >  
+> >  	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
+> > +		/* Stop current timer if it is enabled */
+> > +		if (kvm_xen_timer_enabled(vcpu)) {
+> > +			kvm_xen_stop_timer(vcpu);
+> > +			vcpu->arch.xen.timer_virq = 0;
+> > +		}
+> > +
+> >  		if (data->u.timer.port) {
+> >  			if (data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
+> >  				r = -EINVAL;
+> 
+> I'm not entirely sure this is correct.  Probably doesn't matter, but there's a
+> subtle ABI change here in that invoking the ioctl with a "bad" priority will
+> cancel any existing timer.
+> 
+
+I will try to get some clarification before I send in the next patch.
+
+> And there appear to be two separate bugs: initializing the hrtimer while it's
+> running, and not canceling a running timer before changing timer_virq.
+> 
+
+This does seem to be the case so I will be splitting v2 into a patch
+set.
+
+> Calling kvm_xen_init_timer() on "every" KVM_XEN_VCPU_ATTR_TYPE_TIMER is odd and
+> unnecessary, it only needs to be called once during vCPU setup.  If Xen doesn't
+> have such a hook, then a !ULL check can be done on vcpu->arch.xen.timer.function
+> to initialize the timer on-demand.
+> 
+
+Yes I also thought that was a bit odd that kvm_xen_init_timer() is called on "every" KVM_XEN_VCPU_ATTR_TYPE_TIMER 
+
+> With that out of the way, the code can be streamlined a bit, e.g. something like
+> this?
+> 
+> 	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
+> 		if (data->u.timer.port &&
+> 		    data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
+> 			r = -EINVAL;
+> 			break;
+> 		}
+> 
+> 		if (!vcpu->arch.xen.timer.function)
+> 			kvm_xen_init_timer(vcpu);
+> 
+> 		/* Stop the timer (if it's running) before changing the vector. */
+> 		kvm_xen_stop_timer(vcpu);
+> 		vcpu->arch.xen.timer_virq = data->u.timer.port;
+> 
+> 		if (data->u.timer.port && data->u.timer.expires_ns)
+> 			kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
+> 					    data->u.timer.expires_ns -
+> 					    get_kvmclock_ns(vcpu->kvm));
+> 		r = 0;
+> 		break;
+> 
+
+I agree this code could use some cleanup, I'll see what I can do.
+
+> > @@ -720,9 +726,6 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+> >  				kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
+> >  						    data->u.timer.expires_ns -
+> >  						    get_kvmclock_ns(vcpu->kvm));
+> > -		} else if (kvm_xen_timer_enabled(vcpu)) {
+> > -			kvm_xen_stop_timer(vcpu);
+> > -			vcpu->arch.xen.timer_virq = 0;
+> >  		}
+> >  
+> >  		r = 0;
+> > -- 
+> > 2.34.1
+> > 
+
+Thank you for the feedback Sean, it has been most helpful!

@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57146584898
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA32258489C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbiG1XPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 19:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S233530AbiG1XSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 19:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiG1XPo (ORCPT
+        with ESMTP id S229940AbiG1XSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 19:15:44 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF767393A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:15:43 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id z23so5606911eju.8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=EMgR3r/5USP32zGR0vJlVbcUsNeEC3RV1rZfC68/TZ4=;
-        b=DFmAxk+++JyHq3e6SsxFu2Lej6OEn+mKsyCIELvgqpY6A6MW0gKmnVGyFlju8Cyrl+
-         atep2zO0iCCeUo75O3924iv/YN5TyG0aeEqRLknHNgFtg+9u8hQGoqwYPH6oJps5xCCX
-         qTQVZbCWgsROJPygaqSZTDwBZ8XyOzeRPsInQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=EMgR3r/5USP32zGR0vJlVbcUsNeEC3RV1rZfC68/TZ4=;
-        b=ahYPBiYPzHQ70voDEhVAd3n64F15VJqZmoBQqatQB/dASbTv0159+vCtaRyoZAWoAn
-         UZi3/ZRl2b/bxeum2KFpWwJD28x1lmFKM+W3GIIkt5A6f4NmoDgEomOYLKwciGelNEMX
-         vF4KF6EXdxgALQiyR4dmMkYp4Nkgx6Z4oxDzYvwjgcNwKUj5GNrphBPy38ZLEzf7DkOF
-         sKW2BHSBXrWx9wS3XfUCau/3Y4a29WHHpW/6On0QlIDgdi6hZMEVJlxCJqeX/4oEY1XJ
-         qkhp4p38L4kFO6so93wF9bHsvGAUmpA2k5q1jf2p/mlioted7dVMnDKr6Grqolg3d7qF
-         ZYVg==
-X-Gm-Message-State: AJIora9Rtjgt5QkCeok8asLLmSsaK4Y6kYpflPJZcJflhzRQ2LYxoIog
-        KD7kcj8mhjrEM1QM2HDWIjWjsucKn1YUsETg
-X-Google-Smtp-Source: AGRyM1uOWHqRUJ3aia5+thXQL1yAgsD6KN/KsroZvC8i9qCBMC/PxUf3TvCz/sJ1pVMFi6dj14B5Yw==
-X-Received: by 2002:a17:906:93ef:b0:72b:44e2:bdd8 with SMTP id yl15-20020a17090693ef00b0072b44e2bdd8mr845536ejb.192.1659050141693;
-        Thu, 28 Jul 2022 16:15:41 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id y6-20020a1709064b0600b0072fa1571c9asm919731eju.104.2022.07.28.16.15.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 16:15:41 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso3315209wma.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:15:40 -0700 (PDT)
-X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
- g16-20020a05600c4ed000b003a33ef3c8d1mr951437wmq.154.1659050140559; Thu, 28
- Jul 2022 16:15:40 -0700 (PDT)
+        Thu, 28 Jul 2022 19:18:47 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81217393A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:18:46 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26SNIY6G031260;
+        Fri, 29 Jul 2022 08:18:34 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Fri, 29 Jul 2022 08:18:34 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26SNIY7Q031253
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 29 Jul 2022 08:18:34 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <0ad532b2-df5f-331a-ae7f-21460fc62fe2@I-love.SAKURA.ne.jp>
+Date:   Fri, 29 Jul 2022 08:18:32 +0900
 MIME-Version: 1.0
-References: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
-In-Reply-To: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 28 Jul 2022 16:15:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgdnnAmDopTKXbS5u3Ty8GgAfuFOSOycsCfe6pSAqunHg@mail.gmail.com>
-Message-ID: <CAHk-=wgdnnAmDopTKXbS5u3Ty8GgAfuFOSOycsCfe6pSAqunHg@mail.gmail.com>
-Subject: Re: [GIT PULL 0/6] SoC branches for 5.20
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     SoC Team <soc@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] workqueue: don't skip lockdep wq dependency in
+ cancel_work_sync()
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Hillf Danton <hdanton@sina.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
+ <YuK78Jiy12BJG/Tp@slm.duckdns.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YuK78Jiy12BJG/Tp@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 3:28 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> This is another large merge window for us, with over 1000 patches from 177
-> contributors. I'm sending these early since I'll be out of office for the next
-> few days.
+On 2022/07/29 1:40, Tejun Heo wrote:
+> Tetsuo, you gotta explain why this is okay w.r.t. the spurious warnings that
+> the above commit addressed. You can't just state that there are cases which
+> are missed and then revert it.
 
-Hmm. I'm missing 2/6. I don't see it on lore either, so I don't think
-the problem is on my end..
+There are four commits related to this change.
 
-            Linus
+  commit 87915adc3f0acdf03c776df42e308e5a155c19af
+  Author: Johannes Berg <johannes.berg@intel.com>
+  Date:   Wed Aug 22 11:49:04 2018 +0200
+
+      workqueue: re-add lockdep dependencies for flushing
+
+  commit d6e89786bed977f37f55ffca11e563f6d2b1e3b5
+  Author: Johannes Berg <johannes.berg@intel.com>
+  Date:   Wed Aug 22 11:49:03 2018 +0200
+
+      workqueue: skip lockdep wq dependency in cancel_work_sync()
+
+  commit fd1a5b04dfb899f84ddeb8acdaea6b98283df1e5
+  Author: Byungchul Park <byungchul.park@lge.com>
+  Date:   Wed Oct 25 17:56:04 2017 +0900
+
+      workqueue: Remove now redundant lock acquisitions wrt. workqueue flushes
+
+  commit 0976dfc1d0cd80a4e9dfaf87bd8744612bde475a
+  Author: Stephen Boyd <sboyd@codeaurora.org>
+  Date:   Fri Apr 20 17:28:50 2012 -0700
+
+      workqueue: Catch more locking problems with flush_work()
+
+. Commit 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for
+flushing") saying
+
+    These were removed after cross-release partially caught these
+    problems, but now cross-release was reverted anyway. IMHO the
+    removal was erroneous anyway though, since lockdep should be
+    able to catch potential problems, not just actual ones, and
+    cross-release would only have caught the problem when actually
+    invoking wait_for_completion().
+
+is the answer, commit 0976dfc1d0cd80a4 ("workqueue: Catch more locking
+problems with flush_work()") saying
+
+    Add a lockdep hint by acquiring and releasing the work item
+    lockdep_map in flush_work() so that we always catch this
+    potential deadlock scenario.
+
+is what this patch restores.

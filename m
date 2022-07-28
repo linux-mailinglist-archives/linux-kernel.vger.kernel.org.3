@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749E4583BA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E60583BAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbiG1KCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S235007AbiG1KCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbiG1KCS (ORCPT
+        with ESMTP id S234891AbiG1KCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:02:18 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3AA4D4FF
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:02:17 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d3so1386397pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QMSVS5co5DmQWtBsGYgUz11jaolJ6abD96Bm3WbXxQQ=;
-        b=sYD71ADoWtX4BaIx2emIjxU1J4bV15HBdyGFVZKkDRrjpgFHGR0Fg3ijCNvH85DeKK
-         fiWfBRl+dzTQSOAIIxRFAkQ3uTGREnlg6EIkMEWr2zxS97gUHOqjyda/LOq4HiKrrp5T
-         WFxRaQFpWOaCFgPwdnByfOGgUn4voXe32Ro3byZdEYZXE95aUWybUySNNsfaueMXZXuR
-         KxzUB1mUpsaO7DvMuUVKnxZIyHYWuTUOfMkI5r8lNLix/p8K888tQvS8aBfKEUD1G0/u
-         22chg7Xjvv9M5cSL1EVJg5Fd/lC9FrW68PenrKDx6Xe285zXLo1OrfYqy8c3lWqKlTLn
-         hQ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QMSVS5co5DmQWtBsGYgUz11jaolJ6abD96Bm3WbXxQQ=;
-        b=sGy6Q5Co1zlw6X43wRfAMQbrbVnM7+AQVy9WJAIMbOeVOlHTwHr1lwQ/F0nxVpjs5j
-         OPsqdHfhNMbFPB6mUXCGj0PCiqZ2eDM+iK4h3X2BosVInvhYaLWEj6X5Hjwx/jAqHX7H
-         OyH5f9Zbm7e6zHljTF2gENRgSMsnAnUpt5lzC3DKJoww4u6x/DCIQtUgHPaGOB+nWyTI
-         YBdu/CDKCjo0tyZV1L3QZO7EUpzPelQqNanEmjNAFzfNhEWCEsbQoWcEilSz3ImbpHff
-         FRgG5VWaegq2cvBepg9p25+xtOX7JraQEc4qT0TkMGSSXfNsbCQuPmvUWDkMikQyI4q7
-         KfuQ==
-X-Gm-Message-State: AJIora+OzCIRLYOmZNFAIbSWhzL/oS3xr1RbkccGDsqVIa8jHrQG3RLE
-        aJG/TRbazjmg3q3oa/0l19O/aZan5sSHBg==
-X-Google-Smtp-Source: AGRyM1uFrkLd9HUUAhgrHZkURycMBvtkxMTTtDK/WsVdopz6XAOnBSOEIzHbc+KdFdTGUgsdl+EIRg==
-X-Received: by 2002:a17:902:9a07:b0:16d:3c0a:b9e7 with SMTP id v7-20020a1709029a0700b0016d3c0ab9e7mr25849014plp.149.1659002537073;
-        Thu, 28 Jul 2022 03:02:17 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id v12-20020a1709029a0c00b0016c454598b5sm761271plp.167.2022.07.28.03.02.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 03:02:16 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:32:14 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Zeng Jingxiang <zengjx95@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeng Jingxiang <linuszeng@tencent.com>
-Subject: Re: [PATCH v2] rtc: rtc-spear: set range max
-Message-ID: <20220728100214.dta4feqm5zo25f4g@vireshk-i7>
-References: <20220728100101.1906801-1-zengjx95@gmail.com>
+        Thu, 28 Jul 2022 06:02:33 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495742AFE;
+        Thu, 28 Jul 2022 03:02:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtmR34rGLz4x1S;
+        Thu, 28 Jul 2022 20:02:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659002545;
+        bh=sPwx65IXOXOfoP6X8JNfSvi/mfHaolNTY7UuZAPTHxM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=bTJwS0MmN71BhGqdr8ToWBSJvA6AplKAolqClqT1iGsuHDBv64mAEpIcQQshIye2q
+         HKTuJo6OZRytt6xw62TKmUMiQ8vffCP2zL1Rsa+EXaeUil62i//DyOa1V+g/MTdp/t
+         +Lb7zXH4ZernE31Yo+B3raBw+pncu+fIqCuOvfROyGIJe8uNmRYA7JQX0O9MfYdthM
+         h70R+U6xgOLRCrQ8OuVyFYHmK1I2DobOEoV8Fbjp++jf48Anjmo8ZMVVFxPPzOR60+
+         sgaWV7Gi4u07L+19Pc3c6AZqqXBLbVgn7+L5aSVIZVcdTw55v4L7N7KO701LIXF5XQ
+         Wcmys6hA+Olpg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH 0/3] Documentation: powerpc: documentation fixes for
+ Documentation/powerpc/elf_hwcaps.rst
+In-Reply-To: <20220728033332.27836-1-bagasdotme@gmail.com>
+References: <20220727220050.549db613@canb.auug.org.au>
+ <20220728033332.27836-1-bagasdotme@gmail.com>
+Date:   Thu, 28 Jul 2022 20:02:22 +1000
+Message-ID: <87fsila72p.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728100101.1906801-1-zengjx95@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28-07-22, 18:01, Zeng Jingxiang wrote:
-> From: Zeng Jingxiang <linuszeng@tencent.com>
-> 
-> In the commit f395e1d3b28d7c2c67b73bd467c4fb79523e1c65 
-> ("rtc: spear: set range"), the value of 
-> RTC_TIMESTAMP_END_9999 was incorrectly set to range_min.
-> 390	config->rtc->range_min = RTC_TIMESTAMP_BEGIN_0000;
-> 391	config->rtc->range_max = RTC_TIMESTAMP_END_9999;
-> 
-> Fixes: f395e1d3b28d ("rtc: spear: set range")
-> Signed-off-by: Zeng Jingxiang <linuszeng@tencent.com>
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
+> After merging powerpc tree for linux-next integration testing, Stephen
+> Rothwell reported htmldocs warnings at [1]. Fix these with self-explanatory
+> fixes in the shortlog below.
+>
+> [1]: https://lore.kernel.org/linuxppc-dev/20220727220050.549db613@canb.auug.org.au/
+>
+> Bagas Sanjaya (3):
+>   Documentation: powerpc: fix indentation warnings
+>   Documentation: use different label names for each arch's
+>     elf_hwcaps.rst
+>   Documentation: powerpc: add elf_hwcaps to table of contents
+>
+>  Documentation/arm64/elf_hwcaps.rst              |  2 +-
+>  Documentation/powerpc/elf_hwcaps.rst            | 17 +++++++----------
+>  Documentation/powerpc/index.rst                 |  1 +
+>  .../translations/zh_CN/arm64/elf_hwcaps.rst     |  2 +-
+>  .../translations/zh_TW/arm64/elf_hwcaps.rst     |  2 +-
+>  5 files changed, 11 insertions(+), 13 deletions(-)
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Hi Bagas,
 
-> ---
-> 
-> Change in v2:
-> - Add fixes tag
-> 
->  drivers/rtc/rtc-spear.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-spear.c b/drivers/rtc/rtc-spear.c
-> index d4777b01ab22..736fe535cd45 100644
-> --- a/drivers/rtc/rtc-spear.c
-> +++ b/drivers/rtc/rtc-spear.c
-> @@ -388,7 +388,7 @@ static int spear_rtc_probe(struct platform_device *pdev)
->  
->  	config->rtc->ops = &spear_rtc_ops;
->  	config->rtc->range_min = RTC_TIMESTAMP_BEGIN_0000;
-> -	config->rtc->range_min = RTC_TIMESTAMP_END_9999;
-> +	config->rtc->range_max = RTC_TIMESTAMP_END_9999;
->  
->  	status = devm_rtc_register_device(config->rtc);
->  	if (status)
-> -- 
-> 2.27.0
+I'd actually already fixed these locally, but I'll take your versions
+because you went to all the trouble of sending them :)
 
--- 
-viresh
+I've modified patch 2 to only change the powerpc label name, I don't
+want to be touching the arm64 documentation this late in the development
+cycle.
+
+I've also installed every python package on earth and got my development
+machine setup to build the docs again, so hopefully I'll catch errors
+like this in future.
+
+cheers

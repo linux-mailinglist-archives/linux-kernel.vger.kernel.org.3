@@ -2,276 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEDC583F0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5283C583F21
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238810AbiG1Mlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S235843AbiG1Mmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235809AbiG1Mle (ORCPT
+        with ESMTP id S238137AbiG1Mmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:41:34 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50A26DE86
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:41:32 -0700 (PDT)
-Received: from [10.130.0.193] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb+P5g+JiCys_AA--.25558S3;
-        Thu, 28 Jul 2022 20:41:29 +0800 (CST)
-Subject: Re: [PATCH v2 4/4] LoongArch: Support modules with new relocation
- types
-To:     Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev
-References: <c596e7a73953a1c49e8f5e94ec2db642f72e7813.camel@xry111.site>
- <93087353ec0d23c56345d4c05e3d9719b284942c.camel@xry111.site>
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jinyang He <hejinyang@loongson.cn>
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <1c1b5d2f-84f0-534c-ace2-2da48b5a7419@loongson.cn>
-Date:   Thu, 28 Jul 2022 20:41:29 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 28 Jul 2022 08:42:50 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA924F6AE;
+        Thu, 28 Jul 2022 05:42:49 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id 125so1492118vsx.7;
+        Thu, 28 Jul 2022 05:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jg5lIrA1Nmh5UvhPYy2QWqb9BuZ3z6KhgX1vk09dz9U=;
+        b=j7gGVeWa7IKZYsj05ig/vAcIMFEYG/zKbqMHKlDAcg/dGOiWPgVmby6Y6VzMKdgOeh
+         nGg33aFwhMtFOq/bcKB7Y0ISqBeho4vrfqCs91vh5lvxpwK4+Aei2eGunNRcW8x1Pung
+         wlIRgBybj3Ap/GA/NZt1Yx6syqcCJCrcd5H3jYfEK1/5yLMM8iJDkwRHE2dTzO0rHpZZ
+         7IvyQG4XpnTTYN2GykTh1oKCSIGnmcc2kek75GtemfAMVeBHrTRLCIylfmEDF6Yxww+v
+         lep5xuZjMeX8fmpRbzJ/rqe9i4cOZKkqiHMcgCpfEM6ei3FYkSHv4scpxadtVD7GfFfl
+         2Fpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jg5lIrA1Nmh5UvhPYy2QWqb9BuZ3z6KhgX1vk09dz9U=;
+        b=FZ8f70sWQSKuRk4EEw/pKReHUCT80jvYF4rWfaubna4f7x2yL2qX+dTqeXbavZL8NU
+         uPaz5u/DRKmg+DlrSBJe9kYm2aNxHGNYB8M91Q0YnYjZQaOzFSMrKJRHbR5uNnztOzYE
+         5uxNKGEvBmZ5ze65nTTMCEglxRzLxz5DWtjJbeUwWn/ILa3VWzq1GOWfQLtwF1td4nXl
+         OngufnXpOK0/zN1cvV9qZrieC4j8U17E9mmRWq9yGsOtS4wGiRgzSgYBYmiIgMDG6zPB
+         SkSKZ+fOS0H7gSXf/UnRiD0bmGZ3pj0MUMOUiy6Xtq0Sho5jUuAP1H0IEjj10Hyx7qZO
+         Xo2g==
+X-Gm-Message-State: AJIora83Z7MC4/wVRwukO8S89Zx9vic5PomLiaFxpBy7xmA7NhlMrdsj
+        3aluMQ8x0DTRMuKyLEXxCHSJMwdUlzS2qbnfMEmPsySG
+X-Google-Smtp-Source: AGRyM1t6xQ7l9gz0UG1rjgaRRZ0gfywDfvIoZKHm4fUPan868K5+fzofemzf+hOPVqIL8yJYJUGU414xnZvYkZqKzNk=
+X-Received: by 2002:a67:e307:0:b0:358:5896:c0a1 with SMTP id
+ j7-20020a67e307000000b003585896c0a1mr6752177vsf.70.1659012168634; Thu, 28 Jul
+ 2022 05:42:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <93087353ec0d23c56345d4c05e3d9719b284942c.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxb+P5g+JiCys_AA--.25558S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxuw4DKFW5Zw47uw15Ar1UJrb_yoW3Jr45pF
-        yDZr9rtF48GFn7Wa40y3W5ZF1xWw1kKrW2ga43W3yxAFnrtFyIk3WxKr98GayUWrsYkryr
-        XrnYgw1xZa9rA37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvSb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
-        c2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU5dpnJUUUUU==
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714084136.570176-1-chenhuacai@loongson.cn> <20220714084136.570176-2-chenhuacai@loongson.cn>
+In-Reply-To: <20220714084136.570176-2-chenhuacai@loongson.cn>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 28 Jul 2022 20:42:35 +0800
+Message-ID: <CAAhV-H7W8V8XdJXX5FvyvvSCAbeTSgLEKhHLivm89T-Nd59Umw@mail.gmail.com>
+Subject: Re: [PATCH V2 2/3] LoongArch: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Arnd,
 
-On 07/28/2022 08:04 PM, Xi Ruoyao wrote:
-> If GAS 2.40 and/or GCC 13 is used to build the kernel, the modules will
-> contain R_LARCH_B26, R_LARCH_PCALA_HI20, R_LARCH_PCALA_LO12,
-> R_LARCH_GOT_PC_HI20, and R_LARCH_GOT_PC_LO12 relocations.  Support them
-> in the module loader to allow a kernel built with latest toolchain
-> capable to load the modules.
+Since the SH maintainer hasn't responded, I suppose it is better to
+let both LoongArch fix and SH fix go through your asm-generic tree?
+
+Huacai
+
+On Thu, Jul 14, 2022 at 4:41 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
 >
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
+> cpu_max_bits_warn() generates a runtime warning similar as below while
+> we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
+> instead of NR_CPUS to iterate CPUs.
+>
+> [    3.052463] ------------[ cut here ]------------
+> [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
+> [    3.070072] Modules linked in: efivarfs autofs4
+> [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
+> [    3.084034] Hardware name: Loongson Loongson-3A5000-7A1000-1w-V0.1-CRB/Loongson-LS3A5000-7A1000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V2.0.04082-beta7 04/27
+> [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
+> [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
+> [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
+> [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
+> [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
+> [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
+> [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
+> [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
+> [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
+> [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
+> [    3.195868]         ...
+> [    3.199917] Call Trace:
+> [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
+> [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
+> [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
+> [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
+> [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
+> [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
+> [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
+> [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
+> [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
+> [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
+> [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
+> [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
->  arch/loongarch/include/asm/elf.h        | 37 +++++++++++
->  arch/loongarch/kernel/module-sections.c | 12 +++-
->  arch/loongarch/kernel/module.c          | 83 +++++++++++++++++++++++++
->  3 files changed, 130 insertions(+), 2 deletions(-)
+>  arch/loongarch/kernel/proc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/elf.h
-> index 5f3ff4781fda..7af0cebf28d7 100644
-> --- a/arch/loongarch/include/asm/elf.h
-> +++ b/arch/loongarch/include/asm/elf.h
-> @@ -74,6 +74,43 @@
->  #define R_LARCH_SUB64				56
->  #define R_LARCH_GNU_VTINHERIT			57
->  #define R_LARCH_GNU_VTENTRY			58
-> +#define R_LARCH_B16				64
-> +#define R_LARCH_B21				65
-> +#define R_LARCH_B26				66
-> +#define R_LARCH_ABS_HI20			67
-> +#define R_LARCH_ABS_LO12			68
-> +#define R_LARCH_ABS64_LO20			69
-> +#define R_LARCH_ABS64_HI12			70
-> +#define R_LARCH_PCALA_HI20			71
-> +#define R_LARCH_PCALA_LO12			72
-> +#define R_LARCH_PCALA64_LO20			73
-> +#define R_LARCH_PCALA64_HI12			74
-> +#define R_LARCH_GOT_PC_HI20			75
-> +#define R_LARCH_GOT_PC_LO12			76
-> +#define R_LARCH_GOT64_PC_LO20			77
-> +#define R_LARCH_GOT64_PC_HI12			78
-> +#define R_LARCH_GOT_HI20			79
-> +#define R_LARCH_GOT_LO12			80
-> +#define R_LARCH_GOT64_LO20			81
-> +#define R_LARCH_GOT64_HI12			82
-> +#define R_LARCH_TLS_LE_HI20			83
-> +#define R_LARCH_TLS_LE_LO12			84
-> +#define R_LARCH_TLS_LE64_LO20			85
-> +#define R_LARCH_TLS_LE64_HI12			86
-> +#define R_LARCH_TLS_IE_PC_HI20			87
-> +#define R_LARCH_TLS_IE_PC_LO12			88
-> +#define R_LARCH_TLS_IE64_PC_LO20		89
-> +#define R_LARCH_TLS_IE64_PC_HI12		90
-> +#define R_LARCH_TLS_IE_HI20			91
-> +#define R_LARCH_TLS_IE_LO12			92
-> +#define R_LARCH_TLS_IE64_LO20			93
-> +#define R_LARCH_TLS_IE64_HI12			94
-> +#define R_LARCH_TLS_LD_PC_HI20			95
-> +#define R_LARCH_TLS_LD_HI20			96
-> +#define R_LARCH_TLS_GD_PC_HI20			97
-> +#define R_LARCH_TLS_GD_HI20			98
-> +#define R_LARCH_32_PCREL			99
-> +#define R_LARCH_RELAX				100
+> diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
+> index e0b5f3b031b1..b12a1f21f864 100644
+> --- a/arch/loongarch/kernel/proc.c
+> +++ b/arch/loongarch/kernel/proc.c
+> @@ -106,7 +106,7 @@ static void *c_start(struct seq_file *m, loff_t *pos)
+>  {
+>         unsigned long i = *pos;
 >
->  #ifndef ELF_ARCH
->
-> diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kernel/module-sections.c
-> index 36a77771d18c..8c0e4ad048cc 100644
-> --- a/arch/loongarch/kernel/module-sections.c
-> +++ b/arch/loongarch/kernel/module-sections.c
-> @@ -76,12 +76,20 @@ static void count_max_entries(Elf_Rela *relas, int num,
->
->  	for (i = 0; i < num; i++) {
->  		type = ELF_R_TYPE(relas[i].r_info);
-> -		if (type == R_LARCH_SOP_PUSH_PLT_PCREL) {
-> +		switch (type) {
-> +		case R_LARCH_SOP_PUSH_PLT_PCREL:
-> +		case R_LARCH_B26:
->  			if (!duplicate_rela(relas, i))
->  				(*plts)++;
-> -		} else if (type == R_LARCH_SOP_PUSH_GPREL)
-> +			break;
-> +		case R_LARCH_SOP_PUSH_GPREL:
-> +		case R_LARCH_GOT_PC_HI20:
->  			if (!duplicate_rela(relas, i))
->  				(*gots)++;
-> +			break;
-> +		default:
-> +			/* Do nothing. */
-> +		}
->  	}
+> -       return i < NR_CPUS ? (void *)(i + 1) : NULL;
+> +       return i < nr_cpu_ids ? (void *)(i + 1) : NULL;
 >  }
 >
-> diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
-> index 3ac4fbb5f109..8954ac24d4ab 100644
-> --- a/arch/loongarch/kernel/module.c
-> +++ b/arch/loongarch/kernel/module.c
-> @@ -291,6 +291,84 @@ static int apply_r_larch_add_sub(struct module *mod, u32 *location, Elf_Addr v,
->  	}
->  }
+>  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
+> --
+> 2.31.1
 >
-> +static int apply_r_larch_b26(struct module *mod, u32 *location, Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	ptrdiff_t offset = (void *)v - (void *)location;
-> +
-> +	if (offset >= SZ_128M)
-> +		v = module_emit_plt_entry(mod, v);
-> +
-> +	if (offset < -SZ_128M)
-> +		v = module_emit_plt_entry(mod, v);
-> +
-> +	offset = (void *)v - (void *)location;
-> +
-> +	if (!signed_imm_check(offset, 28)) {
-> +		pr_err("module %s: jump offset = 0x%llx overflow! dangerous R_LARCH_B26 (%u) relocation\n",
-> +				mod->name, (long long)offset, type);
-> +		return -ENOEXEC;
-> +	}
-> +
-> +	if (offset & 3) {
-> +		pr_err("module %s: jump offset = 0x%llx unaligned! dangerous R_LARCH_B26 (%u) relocation\n",
-> +				mod->name, (long long)offset, type);
-> +		return -ENOEXEC;
-> +	}
-Unaligned is handled more efficiently before overflow checking, while
-being consistent with apply_r_larch_sop_imm_field.
-
-> +
-> +	*location &= ~(u32)0x3ffffff;
-> +	*location |= (offset >> 18) & 0x3ff;
-> +	*location |= ((offset >> 2) & 0xffff) << 10;
-
-It may be better to use the loongarch_instruction format to modify the
-immediate field of the instruction, similar to the following:
-
-union loongarch_instruction *insn = (union loongarch_instruction *)location;
-
-offset >>= 2;
-insn->reg0i26_format.immediate_l = offset & 0xffff;
-insn->reg0i26_format.immediate_h = (offset >> 16) & 0x3ff;
-
-> +	return 0;
-> +}
-> +
-> +static int apply_r_larch_pcala_hi20(struct module *mod, u32 *location,
-> +		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-> +		unsigned int type)
-> +{
-> +	ptrdiff_t offset = (void *)((v + 0x800) & ~0xfff) -
-> +		(void *)((Elf_Addr)location & ~0xfff);
-> +
-> +	if (!signed_imm_check(offset, 32)) {
-> +		pr_err("module %s: PCALA offset = 0x%llx does not fit in 32-bit signed and is unsupported by kernel! dangerous %s (%u) relocation\n",
-> +				mod->name, (long long)offset, __func__, type);
-> +		return -ENOEXEC;
-> +	}
-> +
-> +	*location &= ~((u32)0xfffff << 5);
-> +	*location |= ((offset >> 12) & 0xfffff) << 5;
-
-Ditto.
-
-> +	return 0;
-> +}
-> +
-> +static int apply_r_larch_got_pc_hi20(struct module *mod, u32 *location,
-> +		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-> +		unsigned int type)
-> +{
-> +	Elf_Addr got = module_emit_got_entry(mod, v);
-> +
-> +	return apply_r_larch_pcala_hi20(mod, location, got, rela_stack,
-> +			rela_stack_top, type);
-> +}
-> +
-> +static int apply_r_larch_pcala_lo12(struct module *mod, u32 *location,
-> +		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-> +		unsigned int type)
-> +{
-> +	*location &= ~((u32)0xfff << 10);
-> +	*location |= ((u32)v & 0xfff) << 10;
-
-Ditto.
-
-Thanks,
-Youling
-> +	return 0;
-> +}
-> +
-> +static int apply_r_larch_got_pc_lo12(struct module *mod, u32 *location,
-> +		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-> +		unsigned int type)
-> +{
-> +	Elf_Addr got = module_emit_got_entry(mod, v);
-> +
-> +	return apply_r_larch_pcala_lo12(mod, location, got, rela_stack,
-> +			rela_stack_top, type);
-> +}
-> +
->  /*
->   * reloc_handlers_rela() - Apply a particular relocation to a module
->   * @mod: the module to apply the reloc to
-> @@ -321,6 +399,11 @@ static reloc_rela_handler reloc_rela_handlers[] = {
->  	[R_LARCH_SOP_SUB ... R_LARCH_SOP_IF_ELSE] 	     = apply_r_larch_sop,
->  	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] = apply_r_larch_sop_imm_field,
->  	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     = apply_r_larch_add_sub,
-> +	[R_LARCH_B26]					     = apply_r_larch_b26,
-> +	[R_LARCH_PCALA_HI20]				     = apply_r_larch_pcala_hi20,
-> +	[R_LARCH_PCALA_LO12]				     = apply_r_larch_pcala_lo12,
-> +	[R_LARCH_GOT_PC_HI20]				     = apply_r_larch_got_pc_hi20,
-> +	[R_LARCH_GOT_PC_LO12]				     = apply_r_larch_got_pc_lo12,
->  };
->
->  int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
->
-

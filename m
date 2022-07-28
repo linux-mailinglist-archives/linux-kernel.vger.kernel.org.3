@@ -2,45 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7AD583AFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EAB583B4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235426AbiG1JJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S235583AbiG1Jf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbiG1JJy (ORCPT
+        with ESMTP id S235539AbiG1Jf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:09:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9FD6655A6;
-        Thu, 28 Jul 2022 02:09:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26A01106F;
-        Thu, 28 Jul 2022 02:09:53 -0700 (PDT)
-Received: from [10.57.43.118] (unknown [10.57.43.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 34EDC3F73B;
-        Thu, 28 Jul 2022 02:09:51 -0700 (PDT)
-Message-ID: <3adff726-c3a1-e1db-0506-a3c2b742c9ea@arm.com>
-Date:   Thu, 28 Jul 2022 10:09:49 +0100
+        Thu, 28 Jul 2022 05:35:26 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15965727B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:35:24 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so2254271wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:subject:date:in-reply-to:message-id
+         :mime-version;
+        bh=k3WJMzc4VlzWe028CTMpp0rc55xqANnpObGj9ASfF4g=;
+        b=kOiWRnnN6mtieKOLjkH8T/0NvwhYzh0u+fsDATST0slwNj6In1/nzfpCUEkvXm7Pyk
+         O/2OKtZs1s4n4YFLLn78mYDpEhfEGHm62+fkQZWOyUz/SEbcaUnE9VKWANHVfee0vKD+
+         QQjzOWZVkRGBmbP+ld5BkAyuZbQ/CaVT+aAvvbFHaNer0Hr8ncc99WZ3ua5goVCC6Ahw
+         XG+RS0KBxgVyH7uiruCjp6x3+yowOOT+5dFJZtNdB5qeEcDKQLfrMMlq4WQ5CUxQUJte
+         Y7aQe6ROKacO/PpnXLfb8LmfCkEGVkvsb1YrN9d9+qwOmZeKKUz3Mu43NYu27HJBzICF
+         QTlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=k3WJMzc4VlzWe028CTMpp0rc55xqANnpObGj9ASfF4g=;
+        b=3fTsld+2J/jceL7EWJZ6F7ohb0qlcrgEkGaOJU6yj960aPFd893NbmfZ1PMFSBHRCD
+         bztA7OrmlKewV6VOf/I5sLad6KTFwECqRf7B9CT4Nwv/6bug5wb5Fy768QUTsch9Sntq
+         dFPHB/TZ+sek9Xl/Vq4YGqRk0mmW5ekjsseAOMSsxLAKG9vgmYDkdUHKN6Su2aBHIcVK
+         InGB2lQjsKJu76vnRRBZusuOXUPJKcsjHe5XHlpOom6SyXDIFywtJoCyrcvgYQ3qkEjI
+         VrlW87d+1OF9lWm+XASVDmVrpxC8aFAKYPBlK5OgSo9R0ehxoRNud1H2jpTp7EzuCrfE
+         y6Og==
+X-Gm-Message-State: AJIora+4WtdfvDKDyFURY4WLPSEmMREzdX739Hj9kK8AKPZ3hcF2MGnl
+        tZpAJVWFOHIdmXiPi91Uvm3uEg==
+X-Google-Smtp-Source: AGRyM1urGG1USTxB/ciyzDD0khYnDOQsI8Zs2PyCwuGAPjHdiKK1K1HzIvms+8txwfUegpyR48kRGg==
+X-Received: by 2002:a1c:2783:0:b0:3a2:fd82:bf46 with SMTP id n125-20020a1c2783000000b003a2fd82bf46mr5863699wmn.29.1659000923324;
+        Thu, 28 Jul 2022 02:35:23 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id u13-20020a05600c19cd00b003a2e1883a27sm6126778wmq.18.2022.07.28.02.35.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 02:35:22 -0700 (PDT)
+References: <20220728054202.6981-1-yu.tu@amlogic.com>
+ <20220728054202.6981-2-yu.tu@amlogic.com>
+ <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
+ <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
+ <367cf98b-ef06-8f44-76c8-9099a1ec13dc@linaro.org>
+User-agent: mu4e 1.8.6; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
+ controller bindings
+Date:   Thu, 28 Jul 2022 11:09:52 +0200
+In-reply-to: <367cf98b-ef06-8f44-76c8-9099a1ec13dc@linaro.org>
+Message-ID: <1jmtctfuli.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] perf/tests: Fix test case 95 on s390 and use same event
-Content-Language: en-US
-To:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, german.gomez@arm.com
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com
-References: <20220727141439.712582-1-tmricht@linux.ibm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220727141439.712582-1-tmricht@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -48,72 +83,70 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On Thu 28 Jul 2022 at 11:02, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-On 27/07/2022 15:14, Thomas Richter wrote:
-> On linux-next tree perf test 95 was added recently.
-> s390 does not support branch sampling at all and the test case fails
-> despite for checking branch support before hand.
-> The check for support of branching
-> uses the software event named dummy, as seen in the line:
-> 
->  perf record -b -o- -e dummy -B true > /dev/null 2>&1 || exit 2
-> 
-> However when the branch recording is actually done, a different
-> event is used, as seen in the line:
-> 
->  perf record -o $TMPDIR/... --branch-filter any,save_type,u -- ...
-> 
-> The event is omitted and for perf record the default event is
-> cycles, which is not supported by s390 and this fails when executed
-> on s390:
-> 
->  # perf record --branch-filter any,save_type,u -- \
-> 	/tmp/__perf_test.program.iDSmQ/a.out
->  Error:
->  cycles: PMU Hardware or event type doesn't support branch stack sampling.
->  #
-> 
-> Therefore fix this and use the same event cycles for testing support
-> and actually running the test.
-> 
-> Output before:
->  # ./perf test -Fv 95
->  95: Check branch stack sampling                                     :
->  --- start ---
->  Testing user branch stack sampling
->  ---- end ----
->  Check branch stack sampling: FAILED!
->  #
-> 
-> Output after:
->  # ./perf test -Fv 95
->  95: Check branch stack sampling                                     :
->  --- start ---
->  ---- end ----
->  Check branch stack sampling: Skip
->  #
-> 
-> Fixes: b55878c90ab9 ("perf test: Add test for branch stack sampling")
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+> On 28/07/2022 10:50, Jerome Brunet wrote:
+>> 
+>> On Thu 28 Jul 2022 at 10:41, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>> 
+>>> On 28/07/2022 07:42, Yu Tu wrote:
+[...]
+>>>> +/*
+>>>> + * CLKID index values
+>>>> + */
+>>>> +
+>>>> +#define CLKID_FIXED_PLL			1
+>>>> +#define CLKID_FCLK_DIV2			3
+>>>> +#define CLKID_FCLK_DIV3			5
+>>>> +#define CLKID_FCLK_DIV4			7
+>>>> +#define CLKID_FCLK_DIV5			9
+>>>> +#define CLKID_FCLK_DIV7			11
+>>>
+>>> Why these aren't continuous? IDs are expected to be incremented by 1.
+>>>
+>> 
+>> All clocks have IDs, it is one big table in the driver, but we are not exposing them all.
+>> For example, with composite 'mux / div / gate' assembly, we usually need
+>> only the leaf.
+>
+> I understand you do not expose them all, but that is not the reason to
+> increment ID by 2 or 3... Otherwise these are not IDs and you are not
+> expected to put register offsets into the bindings (you do not bindings
+> in such case).
 
-Looks good to me.
+Why is it not an IDs if it not continuous in the bindings ?
 
-Reviewed-by: James Clark <james.clark@arm.com>
+If there is technical reason, we'll probably end up exposing everything. It
+would not be a dramatic change. I asked for this over v1 because we have
+done that is the past and I think it makes sense.
 
-> ---
->  tools/perf/tests/shell/test_brstack.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
-> index 113ccd17bf03..c644f94a6500 100755
-> --- a/tools/perf/tests/shell/test_brstack.sh
-> +++ b/tools/perf/tests/shell/test_brstack.sh
-> @@ -12,7 +12,7 @@ if ! [ -x "$(command -v cc)" ]; then
->  fi
->  
->  # skip the test if the hardware doesn't support branch stack sampling
-> -perf record -b -o- -e dummy -B true > /dev/null 2>&1 || exit 2
-> +perf record -b -o- -B true > /dev/null 2>&1 || exit 2
->  
->  TMPDIR=$(mktemp -d /tmp/__perf_test.program.XXXXX)
->  
+I'm happy to be convinced to do things differently. Just looking for the
+technical reason that require contiuous exposed IDs.
+
+The other IDs exists, but we do not expose them as bindings.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/meson/gxbb.h#n125
+
+>
+>
+>> Same has been done for the other AML controllers:
+>> For ex:
+>> 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/dt-bindings/clock/gxbb-clkc.h
+>
+> This cannot be fixed now, but it is very poor argument. Like saying "we
+> had a bug in other driver, so we implemented the bug here as well".
+
+I agree, "done before" is not a good argument. I was trying to provide a
+better picutre. I'm just surprised to have this new requirement that IDs
+have to be incremented by 1 (in the bindings) and I'd like to understand
+why what we had done could be considered a bug now.
+
+For example the simple-reset driver compute the reset offset from the IDs:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/reset/reset-simple.c
+There might be holes in the IDs if not all bits have reset maps.
+I don't think that would be a bug either.
+
+>
+> Best regards,
+> Krzysztof
+

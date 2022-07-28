@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A78584816
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FFB584817
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbiG1WSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S232505AbiG1WSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiG1WSE (ORCPT
+        with ESMTP id S232022AbiG1WSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:18:04 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F43785AB
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:18:02 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 66-20020a630645000000b0041a63d6c638so1456853pgg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:18:02 -0700 (PDT)
+        Thu, 28 Jul 2022 18:18:05 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD3378DFF
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:18:04 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id z15-20020a170903018f00b0016d6e7a043dso1876702plg.12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:18:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:reply-to:from:to:cc;
-        bh=nmSFdwgcuE5SfSU8QrIA95a2sshWJa8QHPw1OmKiKkE=;
-        b=aI8VbxGDdSh4aW1HVorxqf3OFz4YOYdqY3zro1KyrPx/dtkwSBZElzlcE8FrYFjdKf
-         2YvFQzq/pyVJ0f2W7mr+DNzgq3LuLoxLbSoIMu3kRcVkn4o44xU2AcGlBAHh/1nxMzrW
-         oOnmmUZGUhjqiq6IowyZtwLTOjXgo3q5SiC+dNW5yrDi5/JvD59lzn+nnNCF9zzwCU17
-         U8l2tzuz6FZBICOW+SmE+0bvK98ay8Fa3upjrzcZ80tf7t4gDFHbI8Js2LO8t7BbYvNA
-         ELd/k2sNWESXpjk5M7aX2V/DiuenKhHUCTKZnoE5We+YF8x3BwHoZrQZl3VMl4YCe2W6
-         17+Q==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:reply-to:from:to:cc;
+        bh=pMK326Dzz47oLnHyTt02WlUweZBXPrgublIXKnjlXLs=;
+        b=IvZ6eY8kvJcRYMajPsxpgxvKuckIcFz2KmQGWJT3C+CW0DMU6PL4Bzlo/ENRyL7+Eh
+         G4XPhKndip03jPsiYTgmDx7Nqkrir7S6G7+PU38jq9t0OfJMV/WtPrODlMQLvyxUTufx
+         5TMmb2kdBBkjAgG77RIctTQrYXKdbBvxxRYbJ/KWqNRuVVucT4ygC5ft/NB48/1XcDKa
+         SmXFcw84BJD/PCg2WMCvUY04QtzHYuURIkkpCB1B9Xs0pW0mv+XsLjMy+Y1kcu+sFxCL
+         6JKgb7FNFJ/iSDx1rtTBO7UjxPqWQhDVHFDNm2ErVESeA5KRhqkS6eatTOc6YLOUkhR0
+         nznQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:reply-to
-         :x-gm-message-state:from:to:cc;
-        bh=nmSFdwgcuE5SfSU8QrIA95a2sshWJa8QHPw1OmKiKkE=;
-        b=7jmTOvZ3CdKGOI5H4+dL1HdunqdwYttXtJr3Zl02l0kGqgHfCw/mn4DX7yOmtgAva4
-         yqH4SKKotgL6jlKW1ZKMij8H9cI2v0RZ/lWGoNgQBZNvD1qYk+4dswXS76N8TH/hOqFa
-         5B+jgRAb1aT0ZChKD4fE2KLRJACE3TUKWUXE944g4J0p0W9eQP61iRlBz9Yt0Rn2qOvo
-         s6P4unEs2EFG67gyx3dJ1py3PQWIAuFUDJG4WBKfcgh3jUy3OH5XV36t9AVFDPDew+Xn
-         LFwY5NoipIsEQJTO5qIX7xacIAFrHnUhQIt4c3fF/8MMTpEzPmH+wRblAFxkMhRUxGmi
-         fciw==
-X-Gm-Message-State: ACgBeo1Trf6GHXF4NJBBKuvNlw+E5kOpzhvqAnwo6x+2MiyjKvrnDnsf
-        QeXmKBge41VMj0SgSmtF3Sb0Lu0FY4E=
-X-Google-Smtp-Source: AA6agR42e24oo1TzeL/rjcuJmVi7KOwUsV+NJa/JRa+nLhldOIxrwG4TOaNOr8+awav+IotkFF67JhnjE8c=
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc;
+        bh=pMK326Dzz47oLnHyTt02WlUweZBXPrgublIXKnjlXLs=;
+        b=NNGj54B00zPpHiRFucQqaHbhh4icnUI7m0qwQAREx0nI+IP37ruMmLRp9DBurz9MBV
+         tLYgpoxXP4kF4nIKaJmvtH2Z1sRworti3nPPvO4FCEX1RJdKWAuoOl1Fc23Fu7p59jUv
+         0FYsrvFhPJx1XO+0P7FCOtpehuPiYzYlA7d/ZMDPB/7JVfvEu2Mj1zr5iR+qpWS6IKVw
+         ctRNQuopGIjzz/vXRwlUvqB/+MkZkQhXP3l5QpcvvYZN80QRy3p+5ehrzNCRqUD+0DIa
+         qdcXKgl39v82VL3xWU5IZITIAn29NFoDdpPet+DPKM9AgP7RRXdGspsH3BcDJpcdE0ve
+         sMgA==
+X-Gm-Message-State: ACgBeo0wWOJ3A2pbDV0dMWdUdmFYRcXiHtloXVtJrv9F4lkOzfkd3WGH
+        ihxFvGoBMPr4hoLglPsftPC2wWXvYyw=
+X-Google-Smtp-Source: AA6agR5J0r9RC8k4KPKoyp4aR5OSquWQ0jV/zZ0nJrOMiCYTbB6yzXApQ30OuliGZc5Et0WralgBhkcYjrM=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:11d2:b0:167:8a0f:8d33 with SMTP id
- q18-20020a17090311d200b001678a0f8d33mr876844plh.95.1659046682325; Thu, 28 Jul
- 2022 15:18:02 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:1d90:b0:1f2:5f47:ca6c with SMTP id
+ pf16-20020a17090b1d9000b001f25f47ca6cmr1522492pjb.162.1659046683830; Thu, 28
+ Jul 2022 15:18:03 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 28 Jul 2022 22:17:55 +0000
-Message-Id: <20220728221759.3492539-1-seanjc@google.com>
+Date:   Thu, 28 Jul 2022 22:17:56 +0000
+In-Reply-To: <20220728221759.3492539-1-seanjc@google.com>
+Message-Id: <20220728221759.3492539-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20220728221759.3492539-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [PATCH 0/4] KVM: x86/mmu: MMIO caching bug fixes
+Subject: [PATCH 1/4] KVM: x86: Tag kvm_mmu_x86_module_init() with __init
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -60,7 +63,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,44 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix two bugs I introduced when adding the enable_mmio_caching module param.
+Mark kvm_mmu_x86_module_init() with __init, the entire reason it exists
+is to initialize variables when kvm.ko is loaded, i.e. it must never be
+called after module initialization.
 
-Bug #1 is that KVM unintentionally makes disabling caching due to a config
-incompatibility "sticky", e.g. disabling caching because there are no
-reserved PA bits prevents KVM from enabling when "switching" to an EPT
-config (doesn't rely on PA bits) or when SVM adjusts the MMIO masks to
-account for C-bit shenanigans (even if MAXPHYADDR=52 and C-bit=51, there
-can be reserved PA bits due to the "real" MAXPHYADDR being reduced).
+Fixes: 1d0e84806047 ("KVM: x86/mmu: Resolve nx_huge_pages when kvm.ko is loaded")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/kvm_host.h | 2 +-
+ arch/x86/kvm/mmu/mmu.c          | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Bug #2 is that KVM doesn't explicitly check that MMIO caching is enabled
-when doing SEV-ES setup.  Prior to the module param, MMIO caching was
-guaranteed when SEV-ES could be enabled as SEV-ES-capable CPUs effectively
-guarantee there will be at least one reserved PA bit (see above).  With
-the module param, userspace can explicitly disable MMIO caching, thus
-silently breaking SEV-ES.
-
-I believe I tested all combinations of things getting disabled and enabled
-by hacking kvm_mmu_reset_all_pte_masks() to disable MMIO caching on a much
-lower MAXPHYADDR, e.g. 43 instead of 52.  That said, definitely wait for a
-thumbs up from the AMD folks before queueing.
-
-Sean Christopherson (4):
-  KVM: x86: Tag kvm_mmu_x86_module_init() with __init
-  KVM: x86/mmu: Fully re-evaluate MMIO caching when SPTE masks change
-  KVM: SVM: Adjust MMIO masks (for caching) before doing SEV(-ES) setup
-  KVM: SVM: Disable SEV-ES support if MMIO caching is disable
-
- arch/x86/include/asm/kvm_host.h |  2 +-
- arch/x86/kvm/mmu.h              |  2 ++
- arch/x86/kvm/mmu/mmu.c          |  6 +++++-
- arch/x86/kvm/mmu/spte.c         | 20 ++++++++++++++++++++
- arch/x86/kvm/mmu/spte.h         |  3 +--
- arch/x86/kvm/svm/sev.c          | 10 ++++++++++
- arch/x86/kvm/svm/svm.c          |  9 ++++++---
- 7 files changed, 45 insertions(+), 7 deletions(-)
-
-
-base-commit: 1a4d88a361af4f2e91861d632c6a1fe87a9665c2
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index e8281d64a431..5ffa578cafe1 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1704,7 +1704,7 @@ static inline int kvm_arch_flush_remote_tlb(struct kvm *kvm)
+ #define kvm_arch_pmi_in_guest(vcpu) \
+ 	((vcpu) && (vcpu)->arch.handling_intr_from_guest)
+ 
+-void kvm_mmu_x86_module_init(void);
++void __init kvm_mmu_x86_module_init(void);
+ int kvm_mmu_vendor_module_init(void);
+ void kvm_mmu_vendor_module_exit(void);
+ 
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 8e477333a263..2975fcb14c86 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -6700,7 +6700,7 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
+  * nx_huge_pages needs to be resolved to true/false when kvm.ko is loaded, as
+  * its default value of -1 is technically undefined behavior for a boolean.
+  */
+-void kvm_mmu_x86_module_init(void)
++void __init kvm_mmu_x86_module_init(void)
+ {
+ 	if (nx_huge_pages == -1)
+ 		__set_nx_huge_pages(get_nx_auto_mode());
 -- 
 2.37.1.455.g008518b4e5-goog
 

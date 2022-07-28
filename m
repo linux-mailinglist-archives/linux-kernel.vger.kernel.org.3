@@ -2,91 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C975B583FAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297A1583FB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239128AbiG1NMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        id S238313AbiG1NNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236688AbiG1NMV (ORCPT
+        with ESMTP id S235641AbiG1NNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:12:21 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D066454CB9;
-        Thu, 28 Jul 2022 06:12:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=IRO9xgSlBIIqF+gFlWl24ukH/G3G/wx7T+Evz1UrmeQ=; b=2v8LYbL1S0fEA+nX2ouKbLXvNY
-        4VZzX4JTfrTq/RXB6AlLQsqKxbL90iCabutlcb2dUsfAfe74l2MPy27WYvMmA3MNQNN1lM7ZaH2sr
-        Qe4Vz8sUTyPTvToKxr3pTT9bcdZRoym19ctWzMJevUoZRM+WTsnpSUzpZFeL7Qrf+fDo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oH3JI-00Bo54-Lv; Thu, 28 Jul 2022 15:12:16 +0200
-Date:   Thu, 28 Jul 2022 15:12:16 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Antonio Quartulli <antonio@openvpn.net>
-Cc:     netdev@vger.kernel.org, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
-Message-ID: <YuKLMIJcb9OkBHry@lunn.ch>
-References: <20220719014704.21346-1-antonio@openvpn.net>
- <20220719014704.21346-2-antonio@openvpn.net>
- <YtbPtkF1Ah9xrBam@lunn.ch>
- <d645f6e1-d977-e2ea-1f8e-0b5458c9438e@openvpn.net>
+        Thu, 28 Jul 2022 09:13:48 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD861BEBA;
+        Thu, 28 Jul 2022 06:13:47 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10e615a36b0so741862fac.1;
+        Thu, 28 Jul 2022 06:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Fntp37A2ZM1jsqUQe1WOs9WjI9pqp0FHO+6vN3U6LqQ=;
+        b=b5w5Cwcx5OFpChR9iMqoHlJh3IwH7nOBr7Jz7dIsSpDXaeg5b/R+xuHTgB0eW+Mxbb
+         ymhdjRh1qwqk/QDdIFBtnMiQRSc5OF7ApKptouc1rTOjP1Sl/2xQ43A4Vd75RmdL6U/w
+         Nd2Y6SEgEnKqHet7lShrb1iS5osP47SktKgHNmldEnqpAzqpvEY1SKtwvQ6Y1RJZCEnp
+         4oD+yPPn9yt9F44wWcolIgnf2Cvkiq4Ie7UbNAu1LIu+2D18es8PtcVgAsLDMMXns/K4
+         V5KkVvlyBwn2hAfoplrei/1F4iH8YSoPAkl4I8zLqDbAdGOW7/7ljQeFeXUcXX6z4Ge6
+         R2Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Fntp37A2ZM1jsqUQe1WOs9WjI9pqp0FHO+6vN3U6LqQ=;
+        b=gEvl4W5E3JhHUaaAOVMuRw6SlUBM2f0oXNnxeCe+m1cKhdwcyDJ0cKrrGmf2zhv9N6
+         hrhd8pb3wmQm1dlvZpD276brT8tLolviIgrayaBfSbyj+Mgh8oq7XW6Zv5XaFhRVlDvX
+         lMuZY0JJT9rIMAmVBLv936TrGzXMxO/L5EXGEw8PtWWC72LE3GnzmZb0LJrzvf4RecvU
+         9MGZGTIwSwxmS7GdNCN69pkgY75eSZBvxPZhSyOpR2eLnx7gRgZlf8v6uuaiwc9grKlR
+         jA8LRVvkmVIKZlNKCwLfrwIbjbdFnajKX+1DCip95qIAwu1q/X6egLOPH9a5EFOOxY75
+         pnjA==
+X-Gm-Message-State: AJIora84KgXan1v85HZleyLUSsHUR4T9cohTD8nHrhZ4uoxsbfqi93pU
+        IQhQbRiJGQMh7v1P262IVjo=
+X-Google-Smtp-Source: AGRyM1t2Zl5X7crOLnFNQi+wEs0/Tm3JLWQMclWfAMvhKQDuTS/N+M0+a7PgcOTO2EzAX+TTxwzJhQ==
+X-Received: by 2002:a05:6870:d0cd:b0:10e:d6:a10f with SMTP id k13-20020a056870d0cd00b0010e00d6a10fmr4674230oaa.179.1659014026310;
+        Thu, 28 Jul 2022 06:13:46 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q22-20020a056870e61600b000f2455e26acsm374808oag.48.2022.07.28.06.13.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 06:13:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <fa5fd00e-d71f-da29-0242-058026f90128@roeck-us.net>
+Date:   Thu, 28 Jul 2022 06:13:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d645f6e1-d977-e2ea-1f8e-0b5458c9438e@openvpn.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.15 000/201] 5.15.58-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220727161026.977588183@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 09:44:18AM +0200, Antonio Quartulli wrote:
-> Hi,
+On 7/27/22 09:08, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.58 release.
+> There are 201 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On 19/07/2022 17:37, Andrew Lunn wrote:
-> > > +static int ovpn_net_change_mtu(struct net_device *dev, int new_mtu)
-> > > +{
-> > > +	if (new_mtu < IPV4_MIN_MTU ||
-> > > +	    new_mtu + dev->hard_header_len > IP_MAX_MTU)
-> > > +		return -EINVAL;
-> > 
-> > If you set dev->min_mtu and dev->max_mtu, the core will validate this
-> > for you, see dev_validate_mtu().
+> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
+> Anything received after that time might be too late.
 > 
-> Yeah, thanks for the pointer.
-> 
-> > 
-> > > +static int ovpn_get_link_ksettings(struct net_device *dev,
-> > > +				   struct ethtool_link_ksettings *cmd)
-> > > +{
-> > > +	ethtool_convert_legacy_u32_to_link_mode(cmd->link_modes.supported, 0);
-> > > +	ethtool_convert_legacy_u32_to_link_mode(cmd->link_modes.advertising, 0);
-> > 
-> > These two should not be needed. Look at tun, veth etc, they don't set
-> > them.
-> 
-> I found this in tun.c:
-> 
-> 3512         ethtool_link_ksettings_zero_link_mode(cmd, supported);
-> 3513         ethtool_link_ksettings_zero_link_mode(cmd, advertising);
-> 
-> Which seems a more appropriate version of my code, no?
 
-I would trace is backwards. Where is cmd coming from? In order to
-avoid unintentional information leaks, the core should be clearing any
-memory which gets passed to a driver which might optionally be filled
-in and then returned to user space. So take a look in net/ethtool, and
-see if there is a memset() or a kzalloc() etc. If it is already been
-zero'ed, you don't need this.
+Building i386:allyesconfig ... failed
+--------------
+Error log:
+In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/os_types.h:37,
+                  from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services_types.h:29,
+                  from drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:29:
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'dm_dmub_outbox1_low_irq':
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:761:51: error: format '%ld' expects argument of type 'long int', but argument 3 has type 'unsigned int'
 
-	  Andrew
+Needs commit 655c167edc8c26 ("drm/amd/display: Fix wrong format specifier
+in amdgpu_dm.c").
+
+Guenter

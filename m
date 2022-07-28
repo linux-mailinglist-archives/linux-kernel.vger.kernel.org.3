@@ -2,190 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8603D583EBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937C3583EC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238338AbiG1MXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
+        id S238381AbiG1MZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235980AbiG1MXs (ORCPT
+        with ESMTP id S236326AbiG1MYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:23:48 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DC915828
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:23:47 -0700 (PDT)
-Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26SCNTq3090536;
-        Thu, 28 Jul 2022 21:23:29 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
- Thu, 28 Jul 2022 21:23:29 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26SCNSPB090528
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 28 Jul 2022 21:23:29 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
-Date:   Thu, 28 Jul 2022 21:23:25 +0900
+        Thu, 28 Jul 2022 08:24:54 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33DC6BD7A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:24:52 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31f56c42ab5so17231537b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fPGazMImeq7ZTnaeZ4AGBk0ohlKyyO3QqrKwonvdhpM=;
+        b=fvhONg60bsGwrIHA6bNhsT18PaJmu/2fNF1Lc/SzqBFyU6F7SX+QoTz7oJj0Eo+Bcp
+         YK4p49P2pJjPF6JoiUeG6RQFeNk5awUnc8amp9wuZAJOeLBxqlIFnJtsnW8KKJnPKAlO
+         HlEwteYdyw6ojA1RB10fyUenKWffwJimbpG5FHibao9UhPDS8OMTPBZrHur0hYfxxut+
+         o4+K0QCpXOfJfkn0u+VaAsk+CiaddG3CfVz13pCC2alc0np/Kt2D1N1hg8DGtFvigmwA
+         0tW0GV6TO88ORk1mwskI8ONAivniVnCEa9ZlXYUm2QnRLGkJZNWuxoZq4EwPUcXwoSZl
+         KAyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fPGazMImeq7ZTnaeZ4AGBk0ohlKyyO3QqrKwonvdhpM=;
+        b=TcKPqo9zIWsfjfEitBk4Mfjlz1Lte4uN5ViRZjhUqenpzI1ORpD1t1wq19oS22yvmT
+         t7gWDHfiKKDH6XqWuDQuJDzbvwixvVkSkagemg1NkzUxQ+kPAxlc2A/9q0jsvMCFq/+j
+         BGJtzG61tG/hXIrCVc0We3Bq5/QWMX1exsLpHB/02DHqnRiUJpt57f83xMo7PBybWtxS
+         daegEHwtF5ZGG+ZDsv23/R5ew/Ct7hycx9ZBKw7gcKTbUE+EAGji1mwCefERksAr0HNv
+         uxV33DxKIC55NrNya3O5H1UJFlwWWir4tlNOFP37Vk4G+P8cOm9ZcMulZiTISMNVtDj/
+         CRsg==
+X-Gm-Message-State: AJIora8zSsDYbk2/cfYOWMjYXZs7jCccPrzpR6a4Gfj9aX8MP0pOrj7l
+        tbQBSCrjqrHgQJbL8K86/iWqjHSDIeb/vnWvWHYsAw==
+X-Google-Smtp-Source: AGRyM1vI7wkmsv9IiuZ7uHDOT8/GD4OMIdM7ZmEHjlWiZkaeOZ1vzw9DdzMlOn/B2DaC5n+8y5yYKGlcs1IlnUMRpcQ=
+X-Received: by 2002:a81:e03:0:b0:31f:4e64:3e9e with SMTP id
+ 3-20020a810e03000000b0031f4e643e9emr10513132ywo.128.1659011091852; Thu, 28
+ Jul 2022 05:24:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Hillf Danton <hdanton@sina.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH] workqueue: don't skip lockdep wq dependency in
- cancel_work_sync()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220723224949.1089973-5-luzmaximilian@gmail.com>
+ <20220726143005.wt4be7yo7sbd3xut@bogus> <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
+ <20220726154138.74avqs6iqlzqpzjk@bogus> <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
+ <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org> <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
+ <20220727132437.pjob3z2nyxsuxgam@bogus> <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
+ <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com> <20220728113347.ver6argevzmlsc2c@bogus>
+In-Reply-To: <20220728113347.ver6argevzmlsc2c@bogus>
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date:   Thu, 28 Jul 2022 15:24:15 +0300
+Message-ID: <CAC_iWjLkSkON99xXoXphY4JWDZXy_OuOye3T_vPru8aj+j=abw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like Hillf Danton mentioned
+On Thu, 28 Jul 2022 at 14:33, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Thu, Jul 28, 2022 at 12:48:19PM +0200, Maximilian Luz wrote:
+>
+> [...]
+>
+> >
+> > I would very much like to avoid the need for special bootloaders. The
+> > devices we're talking about are WoA devices, meaning they _should_
+> > ideally boot just fine with EFI and ACPI.
+> >
+>
+> Completely agreed.
 
-  syzbot should have been able to catch cancel_work_sync() in work context
-  by checking lockdep_map in __flush_work() for both flush and cancel.
+This is not a special bootloader though.  Quite the opposite.  It's a
+standard UEFI compliant bootloader, which uses the fact that EFI is
+supposed to be extensible.  It installs a linux specific config table,
+similar to how we install a linux specific protocol to load our initrd
+and it's certainly lot more scalable than adding new stuff to the
+device tree.
 
-in [1], being unable to report an obvious deadlock scenario shown below is
-broken. From locking dependency perspective, sync version of cancel request
-should behave as if flush request, for it waits for completion of work if
-that work has already started execution.
+>
+> > From an end-user perspective, it's annoying enough that we'll have to
+> > stick with DTs for the time being due to the use of PEPs in ACPI.
+>
+> But have we explored or investigated what it takes to rewrite ACPI f/w
+> to just use standard methods ? Does it require more firmware changes or
+> new firmware entities or impossible at any cost ?
+>
+> For me that is more important than just getting this one on DT. Because
+> if you take that path, we will have to keep doing that, with loads of
+> unnecessary drivers if they are not shared with any other SoC with DT
+> support upstream. We might also miss chance to get things added to the ACPI
+> spec as we don't care which means that we never be able to use ACPI on
+> similar future platforms even though they get shipped with ACPI.
+>
+> It will be a loop where we constantly keep converting this ACPI shipped
+> platform into DT upstream. IMHO we don't want to be there.
+>
+> --
+> Regards,
+> Sudeep
 
-  ----------
-  #include <linux/module.h>
-  #include <linux/sched.h>
-  static DEFINE_MUTEX(mutex);
-  static void work_fn(struct work_struct *work)
-  {
-    schedule_timeout_uninterruptible(HZ / 5);
-    mutex_lock(&mutex);
-    mutex_unlock(&mutex);
-  }
-  static DECLARE_WORK(work, work_fn);
-  static int __init test_init(void)
-  {
-    schedule_work(&work);
-    schedule_timeout_uninterruptible(HZ / 10);
-    mutex_lock(&mutex);
-    cancel_work_sync(&work);
-    mutex_unlock(&mutex);
-    return -EINVAL;
-  }
-  module_init(test_init);
-  MODULE_LICENSE("GPL");
-  ----------
-
-Link: https://lkml.kernel.org/r/20220504044800.4966-1-hdanton@sina.com [1]
-Reported-by: Hillf Danton <hdanton@sina.com>
-Fixes: d6e89786bed977f3 ("workqueue: skip lockdep wq dependency in cancel_work_sync()")
-Cc: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
- kernel/workqueue.c | 45 ++++++++++++++++++---------------------------
- 1 file changed, 18 insertions(+), 27 deletions(-)
-
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 1ea50f6be843..e6df688f84db 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -3000,8 +3000,7 @@ void drain_workqueue(struct workqueue_struct *wq)
- }
- EXPORT_SYMBOL_GPL(drain_workqueue);
- 
--static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
--			     bool from_cancel)
-+static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr)
- {
- 	struct worker *worker = NULL;
- 	struct worker_pool *pool;
-@@ -3043,8 +3042,7 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
- 	 * workqueues the deadlock happens when the rescuer stalls, blocking
- 	 * forward progress.
- 	 */
--	if (!from_cancel &&
--	    (pwq->wq->saved_max_active == 1 || pwq->wq->rescuer)) {
-+	if (pwq->wq->saved_max_active == 1 || pwq->wq->rescuer) {
- 		lock_map_acquire(&pwq->wq->lockdep_map);
- 		lock_map_release(&pwq->wq->lockdep_map);
- 	}
-@@ -3056,7 +3054,18 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
- 	return false;
- }
- 
--static bool __flush_work(struct work_struct *work, bool from_cancel)
-+/**
-+ * flush_work - wait for a work to finish executing the last queueing instance
-+ * @work: the work to flush
-+ *
-+ * Wait until @work has finished execution.  @work is guaranteed to be idle
-+ * on return if it hasn't been requeued since flush started.
-+ *
-+ * Return:
-+ * %true if flush_work() waited for the work to finish execution,
-+ * %false if it was already idle.
-+ */
-+bool flush_work(struct work_struct *work)
- {
- 	struct wq_barrier barr;
- 
-@@ -3066,12 +3075,10 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
- 	if (WARN_ON(!work->func))
- 		return false;
- 
--	if (!from_cancel) {
--		lock_map_acquire(&work->lockdep_map);
--		lock_map_release(&work->lockdep_map);
--	}
-+	lock_map_acquire(&work->lockdep_map);
-+	lock_map_release(&work->lockdep_map);
- 
--	if (start_flush_work(work, &barr, from_cancel)) {
-+	if (start_flush_work(work, &barr)) {
- 		wait_for_completion(&barr.done);
- 		destroy_work_on_stack(&barr.work);
- 		return true;
-@@ -3079,22 +3086,6 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
- 		return false;
- 	}
- }
--
--/**
-- * flush_work - wait for a work to finish executing the last queueing instance
-- * @work: the work to flush
-- *
-- * Wait until @work has finished execution.  @work is guaranteed to be idle
-- * on return if it hasn't been requeued since flush started.
-- *
-- * Return:
-- * %true if flush_work() waited for the work to finish execution,
-- * %false if it was already idle.
-- */
--bool flush_work(struct work_struct *work)
--{
--	return __flush_work(work, false);
--}
- EXPORT_SYMBOL_GPL(flush_work);
- 
- struct cwt_wait {
-@@ -3159,7 +3150,7 @@ static bool __cancel_work_timer(struct work_struct *work, bool is_dwork)
- 	 * isn't executing.
- 	 */
- 	if (wq_online)
--		__flush_work(work, true);
-+		flush_work(work);
- 
- 	clear_work_data(work);
- 
--- 
-2.18.4
+Regards
+/Ilias

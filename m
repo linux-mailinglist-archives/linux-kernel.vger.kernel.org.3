@@ -2,175 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D17583F4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D797583F71
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236944AbiG1MxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S231272AbiG1NBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235799AbiG1MxL (ORCPT
+        with ESMTP id S236063AbiG1NBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:53:11 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A053D59C;
-        Thu, 28 Jul 2022 05:53:09 -0700 (PDT)
-Received: from pyrite.rasen.tech (h175-177-042-159.catv02.itscom.jp [175.177.42.159])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8F27356D;
-        Thu, 28 Jul 2022 14:53:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1659012788;
-        bh=5LdV1rsx9QDBeHDyTBeBmy8DwsxHqzMNWJXEq1skaY4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Prq3PmTcwGEH28JNMP5bHmGzORHfZh3XJ+Ts7xrJsJAb/YpajJDPOrZgGJK3IolPi
-         ELtrHwAQVlydWL187wc76XUPrEJ6TB+HBhS/WQ02YtiWWPN/dv1hBBUsVE5SDoPKT0
-         kCGQj0yYPTR/wbKiHeXkDlkswxacR3CUzK8JxhrI=
-Date:   Thu, 28 Jul 2022 21:52:59 +0900
-From:   paul.elder@ideasonboard.com
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, Dafna Hirschfeld <dafna@fastmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] media: rkisp1: Add UYVY as an output format
-Message-ID: <20220728125259.GL3984498@pyrite.rasen.tech>
-References: <20220714112603.1117335-1-paul.elder@ideasonboard.com>
- <20220714112603.1117335-3-paul.elder@ideasonboard.com>
- <YtcwZSbXlSaaMjcd@pendragon.ideasonboard.com>
+        Thu, 28 Jul 2022 09:01:38 -0400
+X-Greylist: delayed 251 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Jul 2022 06:01:37 PDT
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC2831921;
+        Thu, 28 Jul 2022 06:01:37 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1oH30q-001ykm-C0; Thu, 28 Jul 2022 14:53:12 +0200
+Received: from p5b13af7b.dip0.t-ipconnect.de ([91.19.175.123] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1oH30p-0025iU-UV; Thu, 28 Jul 2022 14:53:12 +0200
+Message-ID: <28f1be2e-ca7c-1c95-535a-2099ebf607f2@physik.fu-berlin.de>
+Date:   Thu, 28 Jul 2022 14:53:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtcwZSbXlSaaMjcd@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH V2 2/3] LoongArch: cpuinfo: Fix a warning for
+ CONFIG_CPUMASK_OFFSTACK
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220714084136.570176-1-chenhuacai@loongson.cn>
+ <20220714084136.570176-2-chenhuacai@loongson.cn>
+ <CAAhV-H7W8V8XdJXX5FvyvvSCAbeTSgLEKhHLivm89T-Nd59Umw@mail.gmail.com>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <CAAhV-H7W8V8XdJXX5FvyvvSCAbeTSgLEKhHLivm89T-Nd59Umw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.175.123
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Hi!
 
-On Wed, Jul 20, 2022 at 01:29:57AM +0300, Laurent Pinchart wrote:
-> Hi Paul,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Jul 14, 2022 at 08:26:03PM +0900, Paul Elder wrote:
-> > Add support for UYVY as an output format. The uv_swap bit in the
-> > MI_XTD_FORMAT_CTRL register that is used for the NV formats does not
-> > work for packed YUV formats. Thus, UYVY support is implemented via
-> > byte-swapping. This method clearly does not work for implementing
-> > support for YVYU and VYUY.
-> > 
-> > Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-> > 
-> > ---
-> > UYVY for the self path has not been tested because no device supports
-> > it. The rk3399 has a self path, but does not have the
-> > MI_OUTPUT_ALIGN_FORMAT register and thus does not support UYVY. The
-> > i.MX8MP does support UYVY, but does not have a self path.
-> 
-> I'm tempted to drop it then, as the code below isn't correct given that
-> you use the same register for both MP and SP. Let's address MP only for
-> now.
+On 7/28/22 14:42, Huacai Chen wrote:
+> Since the SH maintainer hasn't responded, I suppose it is better to
+> let both LoongArch fix and SH fix go through your asm-generic tree?
 
-The same register is used for both MP and SP. They just have different
-bits. Which is why we'd need the read-write cycle, assuming that there
-exists a device that has both an SP and the MI_OUTPUT_ALIGN_FORMAT
-register.
+I could test on actual SuperH hardware if needed. CC'ing Geert who has
+SH hardware as well.
 
+Adrian
 
-Paul
+-- 
+  .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
-> 
-> > ---
-> >  .../platform/rockchip/rkisp1/rkisp1-capture.c | 40 +++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
-> > 
-> > diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> > index 85fd85fe208c..77496ccef7ec 100644
-> > --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> > +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> > @@ -97,6 +97,12 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_mp_fmts[] = {
-> >  		.uv_swap = 0,
-> >  		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
-> >  		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
-> > +	}, {
-> > +		.fourcc = V4L2_PIX_FMT_UYVY,
-> > +		.uv_swap = 0,
-> > +		.yc_swap = 1,
-> > +		.write_format = RKISP1_MI_CTRL_MP_WRITE_YUVINT,
-> > +		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
-> >  	}, {
-> >  		.fourcc = V4L2_PIX_FMT_YUV422P,
-> >  		.uv_swap = 0,
-> > @@ -231,6 +237,13 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
-> >  		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
-> >  		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
-> >  		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
-> > +	}, {
-> > +		.fourcc = V4L2_PIX_FMT_UYVY,
-> > +		.uv_swap = 0,
-> > +		.yc_swap = 1,
-> > +		.write_format = RKISP1_MI_CTRL_SP_WRITE_INT,
-> > +		.output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
-> > +		.mbus = MEDIA_BUS_FMT_YUYV8_2X8,
-> >  	}, {
-> >  		.fourcc = V4L2_PIX_FMT_YUV422P,
-> >  		.uv_swap = 0,
-> > @@ -464,6 +477,20 @@ static void rkisp1_mp_config(struct rkisp1_capture *cap)
-> >  		rkisp1_write(rkisp1, RKISP1_CIF_MI_XTD_FORMAT_CTRL, reg);
-> >  	}
-> >  
-> > +	/*
-> > +	 * uv swapping with the MI_XTD_FORMAT_CTRL register only works for
-> 
-> s@uv@U/V@
-> 
-> > +	 * NV12/NV21 and NV16/NV61, so instead use byte swap to support UYVY.
-> > +	 * YVYU and VYUY cannot be supported with this method.
-> > +	 */
-> > +	if (rkisp1->info->features & RKISP1_FEATURE_MI_OUTPUT_ALIGN) {
-> > +		reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT);
-> > +		if (cap->pix.cfg->yc_swap)
-> > +			reg |= RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_BYTES;
-> > +		else
-> > +			reg &= ~RKISP1_CIF_OUTPUT_ALIGN_FORMAT_MP_BYTE_SWAP_BYTES;
-> > +		rkisp1_write(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT, reg);
-> 
-> As the register is not initialized anywhere, it would be better to write
-> it fully here instead of a read-modify-write cycle. Same comments below.
-> 
-> > +	}
-> > +
-> >  	rkisp1_mi_config_ctrl(cap);
-> >  
-> >  	reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_CTRL);
-> > @@ -505,6 +532,19 @@ static void rkisp1_sp_config(struct rkisp1_capture *cap)
-> >  		rkisp1_write(rkisp1, RKISP1_CIF_MI_XTD_FORMAT_CTRL, reg);
-> >  	}
-> >  
-> > +	/*
-> > +	 * uv swapping with the MI_XTD_FORMAT_CTRL register only works for
-> > +	 * NV12/NV21 and NV16/NV61, so instead use byte swap to support UYVY.
-> > +	 * YVYU and VYUY cannot be supported with this method.
-> > +	 */
-> > +	if (rkisp1->info->features & RKISP1_FEATURE_MI_OUTPUT_ALIGN) {
-> > +		reg = rkisp1_read(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT);
-> > +		if (cap->pix.cfg->yc_swap)
-> > +			reg |= RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_BYTES;
-> > +		else
-> > +			reg &= ~RKISP1_CIF_OUTPUT_ALIGN_FORMAT_SP_BYTE_SWAP_BYTES;
-> > +		rkisp1_write(rkisp1, RKISP1_CIF_MI_OUTPUT_ALIGN_FORMAT, reg);
-> > +	}
-> 
-> Missing blank line.
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> >  	rkisp1_mi_config_ctrl(cap);
-> >  
-> >  	mi_ctrl = rkisp1_read(rkisp1, RKISP1_CIF_MI_CTRL);

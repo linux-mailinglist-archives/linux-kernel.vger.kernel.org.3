@@ -2,183 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C1D58385F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2AA583861
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiG1GEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S233484AbiG1GE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 02:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiG1GEV (ORCPT
+        with ESMTP id S229832AbiG1GE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:04:21 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F69C5C95B
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:04:20 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31f445bd486so8370337b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CA4wATDSYUWB9Gpjzl6nBaY/UX8ZMyWfJ9JqsbS9J10=;
-        b=ZqZo9AKJEwlaUWQDb0iOO1tLCjpPom4IAWxcinWucbh9rSYXGka3QSSV/Z5Ce/Vtxd
-         G1TBGbz4Uq9bTL/e0Hf4maFiVDLquc6ak5ku7fvn2gXLCdKIrC+C/ZTmDsdXuMWaACa/
-         h1z2tZU7fQcrxPlJK45IFfQ28LuocH021UpxVapmlB0Zl9aADmjaV0uLNL5xoXDQj540
-         7QwMs6JmAlfImuFEbkbaEKVn0yJIr3WaG85YkWbbmNPNrB44AB6OC61n5Ju0OpFxqioz
-         TXBNHzP8wT2hIEXD8qy2cGYctY5p7Q+5BY4mEp/yffq1u0YiPQWQB4HvxIEnwpLXefU7
-         OWmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CA4wATDSYUWB9Gpjzl6nBaY/UX8ZMyWfJ9JqsbS9J10=;
-        b=woTc8ObbTOhXC6/qrfHTXTloK7GOD6dRa9G18ssff2djFvKv0/oItHB4KJjmr4PWpb
-         fVKdi2NHBWnftRqRxP6eMludg3iV5kgeKaO+IGoFrQLUac36lNzatW4M+xqdl9r0MWgf
-         Yb8VdpCP5UFm2LFqZ2ybyKZZ6v12lB+SPVX3WDtGEmH3lj3ZrVIgt/b4y6oVjmMein0h
-         f6+NWq1ARi5RuK6oz5ZpnEFtvYMj0VjeGPNJX98GdMgALT/mVaiUGvbbVnMBQpYx/X/b
-         qbGdofRxdqlRMRN+OddscuqnBwmQYE5eUJ6k7nxeezXwdpRH60q5niBbDsV4+iBvaqS7
-         PSLg==
-X-Gm-Message-State: AJIora/D6VW+vYHQO/bAtPUofieXoChtxRhXY8MYeQ3lPwzf3mYa0H9t
-        w2X2q8kncmcgDlQH8hYfumzlWmFKXfA67trRzloyzw==
-X-Google-Smtp-Source: AGRyM1udlf3/HhTv0KnlYVLgoG36EzZB0C9m8/ZLmxBcNlB5imRW/rCGDa9yRafy4GMMrBICMoGoRw64/lyMtA4d3Bo=
-X-Received: by 2002:a81:d542:0:b0:31e:c878:7565 with SMTP id
- l2-20020a81d542000000b0031ec8787565mr21125377ywj.382.1658988259228; Wed, 27
- Jul 2022 23:04:19 -0700 (PDT)
+        Thu, 28 Jul 2022 02:04:57 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CE65C952;
+        Wed, 27 Jul 2022 23:04:51 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 565445FD0D;
+        Thu, 28 Jul 2022 09:04:49 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1658988289;
+        bh=MoEuNgethiYS1LyovyEQkePt4IF0Rd4EfDLSvvIR3tU=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=HjQ+X93Dlp5K0j56HqHFvWdixdQMCd2tusGXewSlLr+gpH4QzJ+ufmFfeavAoqWqu
+         TECFjSNH66CQpoKWUlu9oAt2nTicz/f7jYjGEaCC7E2OXCctj/W2txY4NBN3wS72dQ
+         GOJ5ioRC1PPUrW74/S1yY5mRVlWnc5KJGs9bICR0WYlAdvetJ4i7HUWroQhwmvIrLM
+         uhJ0lEd2xJCYGpGPrOqrQcNP3zslWGRefz3Y+dIDQDf6Us062YREuSqw1RNnpb8MJh
+         Owri1gz5iqp9z7HxHijAcqHa4GmEMdvfwx/2DObsofzLfZTm/tg9k1RvmZmlC09d4m
+         8xHcqxjzTLnvw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 28 Jul 2022 09:04:44 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "Dexuan Cui" <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v2 1/9] vsock: use sk_rcvlowat to set
+ POLLIN/POLLRDNORM
+Thread-Topic: [RFC PATCH v2 1/9] vsock: use sk_rcvlowat to set
+ POLLIN/POLLRDNORM
+Thread-Index: AQHYn/weV9iJ1kN02k+zjfwbZg+yc62R81OAgAEqRoA=
+Date:   Thu, 28 Jul 2022 06:04:25 +0000
+Message-ID: <bc6328cf-ddf8-5e7c-31d9-ea346c81c5b0@sberdevices.ru>
+References: <19e25833-5f5c-f9b9-ac0f-1945ea17638d@sberdevices.ru>
+ <aafc654d-5b42-aa18-bf74-f5277d549f73@sberdevices.ru>
+ <20220727121709.z26dspwegqeiv55x@sgarzare-redhat>
+In-Reply-To: <20220727121709.z26dspwegqeiv55x@sgarzare-redhat>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7CD917DE2BA46949973DDFDA04BE97E5@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com> <20220726143005.wt4be7yo7sbd3xut@bogus>
- <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com> <20220726154138.74avqs6iqlzqpzjk@bogus>
- <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com> <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
- <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com> <20220727132437.pjob3z2nyxsuxgam@bogus>
-In-Reply-To: <20220727132437.pjob3z2nyxsuxgam@bogus>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Thu, 28 Jul 2022 09:03:42 +0300
-Message-ID: <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/28 02:09:00 #19985101
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-
-On Wed, 27 Jul 2022 at 16:24, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, Jul 27, 2022 at 03:03:49PM +0200, Maximilian Luz wrote:
-> >
-> > Is there really a good way around it?
->
-> Yes rely on the firmware preferably auto discover, if that is not an option,
-> how about query. It seem to be working in your case.
-
-That's a good point.  We have a similar situation with some Arm
-devices and U-Boot.  Let me try to explain a bit.
-
-There's code plugged in in OP-TEE and U-Boot atm which allows you to
-store EFI variables on an RPMB.  This is a nice alternative if your
-device doesn't have any other secure storage,  however it presents
-some challenges after ExitBootServices, similar to the ones you have
-here.
-
-The eMMC controller usually lives in the non-secure world.  OP-TEE
-can't access that, so it relies on a userspace supplicant to perform
-the RPMB accesses.  That supplicant is present in U-Boot and
-Get/SetVariable works fine before ExitBootServices.  Once Linux boots,
- the 'U-Boot supplicant' goes away and we launch the linux equivalent
-one from userspace.  Since variable accessing is a runtime service and
-it still has to go through the firmware we can't use those anymore
-since U-Boot doesn't preserve the supplicant, the eMMC driver and the
-OP-TEE portions needed in the runtime section(and even if it did we
-would now have 2 drivers racing to access the same hardware).  Instead
-U-Boot copies the variables in runtime memory and
-GetVariable/GetNextVariable still works, but SetVariable returns
-EFI_UNSUPPORTED.
-
-I've spent enough time looking at available solutions and although
-this indeed breaks the EFI spec, something along the lines of
-replacing the runtime services with ones that give you direct access
-to the secure world, completely bypassing the firmware is imho our
-least bad option.
-
-I have an ancient branch somewhere that I can polish up and send an
-RFC [1],  but the way I enabled that was to install an empty config
-table from the firmware.  That empty table is basically an indication
-to the kernel saying "Hey I can't store variables, can you do that for
-me".
-
-Is there any chance we can do something similar on that device (or
-find a reasonable way of inferring that we need to replace some
-services).  That way we could at least have a common entry point to
-the kernel and leave out the DT changes.
-
-[1] https://git.linaro.org/people/ilias.apalodimas/net-next.git/log/?h=setvar_rt_optee_3
-
-Thanks
-/Ilias
-
->
-> > As far as I can see the alternative (especially for the apps that
-> > need to be loaded manually) is hard-coding everything in the driver.
-> > Which IMHO just spreads device specific information everywhere.
-> >
->
-> It may not be too bad compared to putting loads of firmware details
-> in the DT. What happens if you get a firmware upgrade with changed
-> number of firmware entities or even if the names are changed.
->
-> Are these name user ABI in a way that they won't be changed ? Generally
-> these entities tend to use UUID and the name you have might get changed.
->
-> I would ideally prefer even the name to be supplied from the userspace.
-> In this particular case, make this a driver and have the name as the
-> parameter. If the secure side services are used by some non-secure
-> applications, then you will need to have a user-interface which means
-> you can get the named from the userspace. No need to change the driver
-> in either case. Please let me know if I am missing anything to consider
-> here.
->
-> > Also: Let's use the TPM app as example. If that would be a SPI or I2C
-> > device, you'd model it in the DT. Just because it's a hardware device
-> > that's accessible via SCM/firmware you now don't?
-> >
->
-> Not sure if I understand the comparison here. But if there is some device
-> that is access restricted but needs to be accessed and has mechanism to
-> access, then you would model it as device in DT.
->
-> But the one $subject is addressing looks pure software and doesn't make
-> sense to model in DT IMO.
->
-> > If I were absolutely certain that there is a reliable mechanism to
-> > detect these apps, I'd agree with having a driver to instantiate those
-> > devices. But I am not.
-> >
->
-> You did say you use some query API to check this. I haven't seen the driver,
-> so relying on what you said earlier.
->
-> --
-> Regards,
-> Sudeep
+T24gMjcuMDcuMjAyMiAxNToxNywgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBNb24s
+IEp1bCAyNSwgMjAyMiBhdCAwNzo1Njo1OUFNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
+DQo+PiBCb3RoIGJpdHMgaW5kaWNhdGUsIHRoYXQgbmV4dCBkYXRhIHJlYWQgY2FsbCB3b24ndCBi
+ZSBibG9ja2VkLCBidXQgd2hlbg0KPj4gc2tfcmN2bG93YXQgaXMgbm90IDEsIHRoZXNlIGJpdHMg
+d2lsbCBiZSBzZXQgYnkgcG9sbCBhbnl3YXksIHRodXMgd2hlbg0KPj4gdXNlciB0cmllcyB0byBk
+ZXF1ZXVlIGRhdGEsaXQgd2lsbCB3YWl0IHVudGlsIHNrX3Jjdmxvd2F0IGJ5dGVzIG9mIGRhdGEN
+Cj4+IHdpbGwgYmUgYXZhaWxhYmxlLg0KPj4NCj4gDQo+IFRoZSBwYXRjaCBMR1RNLCBidXQgSSBz
+dWdnZXN0IHlvdSB0byByZXdyaXRlIHRoZSB0aXRsZSBhbmQgY29tbWl0IG9mIHRoZSBtZXNzYWdl
+IHRvIGJldHRlciBleHBsYWluIHdoYXQgdGhpcyBwYXRjaCBkb2VzIChwYXNzIHNvY2tfcmN2bG93
+YXQgdG8gbm90aWZ5X3BvbGxfaW4gYXMgdGFyZ2V0KSBhbmQgdGhlbiBleHBsYWluIHdoeSBhcyB5
+b3UgYWxyZWFkeSBkaWQgKHRvIHNldCBQT0xMSU4vUE9MTFJETk9STSBvbmx5IHdoZW4gdGFyZ2V0
+IGlzIHJlYWNoZWQpLg0KT2ssIGkgc2VlLiBBY2sNCj4gDQo+IFRoYW5rcywNCj4gU3RlZmFubw0K
+PiANCj4+IFNpZ25lZC1vZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZp
+Y2VzLnJ1Pg0KPj4gLS0tDQo+PiBuZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMgfCAzICsrLQ0KPj4g
+MSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPj4NCj4+IGRp
+ZmYgLS1naXQgYS9uZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMgYi9uZXQvdm13X3Zzb2NrL2FmX3Zz
+b2NrLmMNCj4+IGluZGV4IGYwNGFiZjY2MmVjNi4uNjNhMTNmYTI2ODZhIDEwMDY0NA0KPj4gLS0t
+IGEvbmV0L3Ztd192c29jay9hZl92c29jay5jDQo+PiArKysgYi9uZXQvdm13X3Zzb2NrL2FmX3Zz
+b2NrLmMNCj4+IEBAIC0xMDY2LDggKzEwNjYsOSBAQCBzdGF0aWMgX19wb2xsX3QgdnNvY2tfcG9s
+bChzdHJ1Y3QgZmlsZSAqZmlsZSwgc3RydWN0IHNvY2tldCAqc29jaywNCj4+IMKgwqDCoMKgwqDC
+oMKgIGlmICh0cmFuc3BvcnQgJiYgdHJhbnNwb3J0LT5zdHJlYW1faXNfYWN0aXZlKHZzaykgJiYN
+Cj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgIShzay0+c2tfc2h1dGRvd24gJiBSQ1ZfU0hVVERP
+V04pKSB7DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJvb2wgZGF0YV9yZWFkeV9ub3cgPSBm
+YWxzZTsNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludCB0YXJnZXQgPSBzb2NrX3Jjdmxv
+d2F0KHNrLCAwLCBJTlRfTUFYKTsNCj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW50IHJldCA9
+IHRyYW5zcG9ydC0+bm90aWZ5X3BvbGxfaW4oDQo+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgdnNrLCAxLCAmZGF0YV9yZWFkeV9ub3cpOw0KPj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHZzaywgdGFyZ2V0LCAmZGF0YV9yZWFkeV9ub3cp
+Ow0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAocmV0IDwgMCkgew0KPj4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIG1hc2sgfD0gRVBPTExFUlI7DQo+PiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIH0gZWxzZSB7DQo+PiAtLcKgDQo+PiAyLjI1LjENCj4gDQoNCg==

@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378BA5841F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36765841F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbiG1Ol1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
+        id S232788AbiG1Ola (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbiG1Ok4 (ORCPT
+        with ESMTP id S232731AbiG1OlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:40:56 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507AC6BC07
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:39:16 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id n138so1526736iod.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:39:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MpQb02OG5tD7IhYTPbMlbV6KQmQpDfBQQiZPoTkmq1k=;
-        b=LUs7b5/lDzcdiI/VF38fW19YDMfXbgj92L1iNbF/CXgu6+NelN6zARM+ae54yeqZmH
-         ngnbbgR4t0kWp623mJZn+FYCVVa+bJ103svZkNMfhlXf8rpbIen9FB+rGypj8naD21q4
-         6WlXxy4oHOTd3Ka4cZLdS8fXIQW/rJ+fnQ/xI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MpQb02OG5tD7IhYTPbMlbV6KQmQpDfBQQiZPoTkmq1k=;
-        b=JSZZC/XygCegDqrTdDdOuProQvehfHUNc2MUO+/GH7zCRRxz4tJqPxeBtCBjTyoZBW
-         SCfbDECBXoVq84b6wNZIeNzxVBol8X/Y3K9FSpvrzHSh89TyjRplEVB1QCT5uHOtHCcs
-         A1DB58seih1yW4iO0QKkC7k03GD1amv3c8w10f7ZOVjkZz3L+/+PrkFg5GF4n0zkGaXK
-         AqAFNTdySQaLeBDS6wpDEaRasY5ZU/iSnnqLRMISN8eYSqRGhG0mRBmHWnTnNlpuW8Sb
-         FnGNfyjAaKkPqlG/DsuJrhTKQ87bEtHhFABa5j3MbcdG1Pg9Kpfmy3jPhFY3TVm5rev4
-         jdog==
-X-Gm-Message-State: AJIora8850UueUcOFFl+vYO2OK/K3Ae5CnG8mJoC8wG35SRxjSKc7qPS
-        CJ3EAixXANT8VOYVhoJ2oLvrHw==
-X-Google-Smtp-Source: AGRyM1vtZ8PA+17pAvLU2qnwAlu8fgiaVXnMud2uxRPyRSTsyAQpHNZSdAtF2KdLfaDb7dLlCpbZYg==
-X-Received: by 2002:a02:b915:0:b0:341:927a:41e0 with SMTP id v21-20020a02b915000000b00341927a41e0mr11312621jan.174.1659019155651;
-        Thu, 28 Jul 2022 07:39:15 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q11-20020a02cf0b000000b0033f3dd2e7e7sm442746jar.44.2022.07.28.07.39.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 07:39:15 -0700 (PDT)
-Subject: Re: [PATCH 5.15 000/201] 5.15.58-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220727161026.977588183@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e10cf48d-c385-cdb4-f11b-82100b1132e9@linuxfoundation.org>
-Date:   Thu, 28 Jul 2022 08:39:14 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 28 Jul 2022 10:41:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6836BD69;
+        Thu, 28 Jul 2022 07:39:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 323A46199C;
+        Thu, 28 Jul 2022 14:39:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11A53C433D7;
+        Thu, 28 Jul 2022 14:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659019167;
+        bh=3HHwUSnABtyBitfyWAYqnpnxT+xy7vgOKgYPD5JZTs4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AVqg/vUeMurLoJsh6DiMraBDl8Za7huyv9LG4WhAHgjsqDly2yvM+fGdOSc2ehzUL
+         OL0rxnh3c5bC3B5XJZ6AtAWS6SJSt6HYMmHiW8m1q4mTuYCsM9Ym+etrMMUJ78tNIT
+         vZRa/MJ5RHGcpwrUIh8jVh8KMNL2w0v1Brvz+Wtk=
+Date:   Thu, 28 Jul 2022 16:39:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tony Lindgren <tony@atomide.com>, linux-doc@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 2/2] efi: earlycon: Add support for generic framebuffers
+ and move to fbdev subsystem
+Message-ID: <YuKfnAjB4gV0ki4A@kroah.com>
+References: <20220728142824.3836-1-markuss.broks@gmail.com>
+ <20220728142824.3836-3-markuss.broks@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728142824.3836-3-markuss.broks@gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/27/22 10:08 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.58 release.
-> There are 201 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Jul 28, 2022 at 05:28:19PM +0300, Markuss Broks wrote:
+> Add early console support for generic linear framebuffer devices.
+> This driver supports probing from cmdline early parameters
+> or from the device-tree using information in simple-framebuffer node.
+> The EFI functionality should be retained in whole.
+> The driver was disabled on ARM because of a bug in early_ioremap
+> implementation on ARM.
 > 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.58-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  12 +-
+>  MAINTAINERS                                   |   5 +
+>  drivers/firmware/efi/Kconfig                  |   6 +-
+>  drivers/firmware/efi/Makefile                 |   1 -
+>  drivers/firmware/efi/earlycon.c               | 246 --------------
+>  drivers/video/fbdev/Kconfig                   |  11 +
+>  drivers/video/fbdev/Makefile                  |   1 +
+>  drivers/video/fbdev/earlycon.c                | 301 ++++++++++++++++++
+>  8 files changed, 327 insertions(+), 256 deletions(-)
+>  delete mode 100644 drivers/firmware/efi/earlycon.c
+>  create mode 100644 drivers/video/fbdev/earlycon.c
 
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+That should be a rename, not a delete/create, right?
 
 thanks,
--- Shuah
+
+greg k-h

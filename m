@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B1258448E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705BE5844A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiG1RCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        id S229948AbiG1RKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiG1RCH (ORCPT
+        with ESMTP id S229600AbiG1RKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:02:07 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A884953D32
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:02:05 -0700 (PDT)
-Received: from quatroqueijos (1.general.cascardo.us.vpn [10.172.70.58])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 47D25416EC;
-        Thu, 28 Jul 2022 17:02:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1659027723;
-        bh=eJFVXCtA/nJevHAQEgQ8T/YTuTveTIvqgwNCM/uhRKs=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=BjTP/uyZp7aD9rA17SRyJYGVEchnk5xL/j+S+UEUrkAosmZJbOOrAZ3S2UQc4YVBN
-         s6soNx5Ch8N9eylVJCXhA9AMQMjZLE+MyF4RsCWO8sWkiUTTZdTcxvMKeSUGHSn+HH
-         ffBuOhBEsqpWu5MqxgDPlAA3HyDjTo8sNkpbIfmlBo8ZG6ra+HRwAxJEVPjbWdexfz
-         U60Wd9jauPD5vFpqvsBkvIdDeSRhhPVDnipCRaeSi2/A2T25QN2rHr5UpVPbmXg03R
-         cjH240bdyfXBD/NTpzhPk2EUa88d+3MUG38BWrDmwHMd75FIcTxWv3qtL6ER0aCGL7
-         R/YcbCIcl0q7Q==
-Date:   Thu, 28 Jul 2022 14:01:57 -0300
-From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] x86/bugs: Do not enable IBPB at firmware entry when IBPB
- is not available
-Message-ID: <YuLBBe2BXrC7CNiu@quatroqueijos>
-References: <20220728122602.2500509-1-cascardo@canonical.com>
- <YuKCpLOLeDOI7GII@zn.tnic>
- <CADWks+aosM99jv9WwLvFo3LPEnsqts+2bJPzMnRqJX70qz51cg@mail.gmail.com>
- <YuKoxyUdAWsTfKez@zn.tnic>
- <YuKwLnYlzC0R8xrF@zn.tnic>
+        Thu, 28 Jul 2022 13:10:42 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619C25B789;
+        Thu, 28 Jul 2022 10:10:41 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26SAkOLQ005425;
+        Thu, 28 Jul 2022 10:10:35 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=TpQCp4iaOzI5J2JDwEntBLH654zx8KeMuZaAIPissfo=;
+ b=RZ5Eef7JtEFzmB1ZRpnPqW9AA/LYams89oGfR3mZ4KeFdBfuHDV36wv7FkHgwkemAS/3
+ 1ILonyhQnRlr5g+ftatHoxEyLnCUxYe9RNzSNlu3PrUAJ6cwUDgcsAQQde5t6V/ciVK4
+ Mjx4qVwsvRPRkEZX+gmjrDR9teNefiZ4IItR1UbBt1iCQYOrEMthVu0XVpGTLv9Ug9uc
+ DZQaQKm0vzCSzw/Gx4LZPfOxQZ47bpGl6qsNQR4pJ7PgUYcDgU1StEhlYCefwW3NKtSM
+ x5PACoDJursYv545owrIJHTz8E5gQQ49+C2gvHePF3rvACA3VYI4EPY1JxaOt+AEZ0/F zA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3hjyn8ps0j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 28 Jul 2022 10:10:34 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 28 Jul
+ 2022 10:10:32 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 28 Jul 2022 10:10:32 -0700
+Received: from #hyd1583.marvell.com (unknown [10.29.37.44])
+        by maili.marvell.com (Postfix) with ESMTP id 7B5B53F706A;
+        Thu, 28 Jul 2022 10:10:30 -0700 (PDT)
+From:   Naveen Mamindlapalli <naveenm@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
+CC:     Naveen Mamindlapalli <naveenm@marvell.com>
+Subject: [net PATCH] octeontx2-pf: Fix NIX_AF_TL3_TL2X_LINKX_CFG register configuration
+Date:   Thu, 28 Jul 2022 22:40:26 +0530
+Message-ID: <20220728171026.22699-1-naveenm@marvell.com>
+X-Mailer: git-send-email 2.16.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuKwLnYlzC0R8xrF@zn.tnic>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: yBsM_FHfYFE-AQ5BxiriR-8cSJoZm9qr
+X-Proofpoint-GUID: yBsM_FHfYFE-AQ5BxiriR-8cSJoZm9qr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-28_06,2022-07-28_02,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,65 +64,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 05:50:06PM +0200, Borislav Petkov wrote:
-> + Cooper to sanity-check me.
-> 
-> On Thu, Jul 28, 2022 at 05:18:31PM +0200, Borislav Petkov wrote:
-> > On Thu, Jul 28, 2022 at 03:33:35PM +0100, Dimitri John Ledkov wrote:
-> > > Azure public cloud (so it is Azure custom hyper-v hypervisor) these
-> > > instance types https://docs.microsoft.com/en-us/azure/virtual-machines/dav4-dasv4-series
-> > 
-> > Thank you both for the info.
-> > 
-> > Virt is an awful piece of sh*t when it goes and emulates all kinds of
-> > imaginary CPUs. And AMD machine *without* an IBPB which is affected by
-> > retbleed. Well, f*ck that.
-> > 
-> > Does that say somewhere on azure that those guests need to even enable
-> > the mitigation or does the HV mitigate it for them?
-> > 
-> > Because I wouldn't mind to simply disable the mitigation when on a
-> > hypervisor which doesn't support IBPB.
-> 
-> So for 5.19 we probably should take the one-liner just so that we
-> release with all known issues fixed.
-> 
-> Going forward, I'm thinking all that FW-mitigation selection should go
-> into a function called something like firmware_select_mitigations()
-> which gets called at the end of check_bugs(), after all mitigation
-> selectors have run.
-> 
-> And in there, the first check should be if X86_FEATURE_HYPERVISOR and if
-> set, not set any mitigations for firmware calls.
-> 
-> Because, frankly, is there any point in protecting against firmware
-> calls in the guest? The guest firmware is part of the hypervisor which
-> gets supplied by the guest owner or cloud provider or so.
-> 
-> In the former case you probably don't need protection and in the latter,
-> you don't have a choice.
-> 
-> But I'm unclear on the fw-in-the-guest thing - I'm sure Andy has a
-> better idea...
-> 
+This patch configures the NIX_AF_TL3_TL2X_LINKX_CFG register
+based on NIX_AF_PSE_CHANNEL_LEVEL BP_LEVEL value.
 
-I may be completely wrong here, so excuse me throwing out this idea.
+Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
+Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+---
+ .../net/ethernet/marvell/octeontx2/nic/otx2_common.c  | 19 ++++++++++++++-----
+ .../net/ethernet/marvell/octeontx2/nic/otx2_common.h  |  1 +
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
-But isn't it also possible that userspace attacks the kernel by leveraging
-speculative execution when in firmware? So even when firmware is trusted, it
-might not have mitigations like retpoline and rethunks. So userspace will train
-the BTB in order to make a RET in the firmware speculate to a firmware gadget
-that may spill out kernel bits to the cache.
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+index fb8db5888d2f..d686c7b6252f 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+@@ -632,6 +632,12 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl)
+ 		req->num_regs++;
+ 		req->reg[1] = NIX_AF_TL3X_SCHEDULE(schq);
+ 		req->regval[1] = dwrr_val;
++		if (lvl == hw->txschq_link_cfg_lvl) {
++			req->num_regs++;
++			req->reg[2] = NIX_AF_TL3_TL2X_LINKX_CFG(schq, hw->tx_link);
++			/* Enable this queue and backpressure */
++			req->regval[2] = BIT_ULL(13) | BIT_ULL(12);
++		}
+ 	} else if (lvl == NIX_TXSCH_LVL_TL2) {
+ 		parent =  hw->txschq_list[NIX_TXSCH_LVL_TL1][0];
+ 		req->reg[0] = NIX_AF_TL2X_PARENT(schq);
+@@ -641,11 +647,12 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl)
+ 		req->reg[1] = NIX_AF_TL2X_SCHEDULE(schq);
+ 		req->regval[1] = TXSCH_TL1_DFLT_RR_PRIO << 24 | dwrr_val;
+ 
+-		req->num_regs++;
+-		req->reg[2] = NIX_AF_TL3_TL2X_LINKX_CFG(schq, hw->tx_link);
+-		/* Enable this queue and backpressure */
+-		req->regval[2] = BIT_ULL(13) | BIT_ULL(12);
+-
++		if (lvl == hw->txschq_link_cfg_lvl) {
++			req->num_regs++;
++			req->reg[2] = NIX_AF_TL3_TL2X_LINKX_CFG(schq, hw->tx_link);
++			/* Enable this queue and backpressure */
++			req->regval[2] = BIT_ULL(13) | BIT_ULL(12);
++		}
+ 	} else if (lvl == NIX_TXSCH_LVL_TL1) {
+ 		/* Default config for TL1.
+ 		 * For VF this is always ignored.
+@@ -1591,6 +1598,8 @@ void mbox_handler_nix_txsch_alloc(struct otx2_nic *pf,
+ 		for (schq = 0; schq < rsp->schq[lvl]; schq++)
+ 			pf->hw.txschq_list[lvl][schq] =
+ 				rsp->schq_list[lvl][schq];
++
++	pf->hw.txschq_link_cfg_lvl = rsp->link_cfg_lvl;
+ }
+ EXPORT_SYMBOL(mbox_handler_nix_txsch_alloc);
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index ce2766317c0b..f9c0d2f08e87 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -195,6 +195,7 @@ struct otx2_hw {
+ 	u16			sqb_size;
+ 
+ 	/* NIX */
++	u8			txschq_link_cfg_lvl;
+ 	u16		txschq_list[NIX_TXSCH_LVL_CNT][MAX_TXSCHQ_PER_FUNC];
+ 	u16			matchall_ipolicer;
+ 	u32			dwrr_mtu;
+-- 
+2.16.5
 
-Even though there is some limited mapping when doing the firmware calls, there
-are still some kernel pages mapped.
-
-Cascardo.
-
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette

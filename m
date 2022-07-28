@@ -2,126 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DD05846A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 21:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37235846AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 21:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbiG1TuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 15:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S229483AbiG1TwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 15:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbiG1TuK (ORCPT
+        with ESMTP id S229502AbiG1TwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 15:50:10 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2461152
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 12:50:09 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-f2a4c51c45so3562990fac.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 12:50:09 -0700 (PDT)
+        Thu, 28 Jul 2022 15:52:13 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0FB1CFD5;
+        Thu, 28 Jul 2022 12:52:13 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id l193so1936102pge.9;
+        Thu, 28 Jul 2022 12:52:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=spQC5DgL3oN87S+iC1PglEQ45W/HemORZipZMoLzdbo=;
-        b=Z3pjI6O9fsHjdX0fd0JMIbiPAuKOZ/jbEfl+8fap+JTqPS44WCC2h0P3V5kbBPb8+x
-         arHLTqP0WBbd1ANzqmqVf3CJdfq4Eu3ef4vNfoui4p1Udt5gPsH7EG0SqQOaR3IhuH8N
-         D3/Xkt0ez0WrkBj88iC2DELqeI5DtwtnnjysXHyjGzp17v1YBh3wthJ3nNjclGdJYO1P
-         Rr3s7wCu9ShcLlg/vhVslWrAbQltfKGVxZZe7rTTele1mdU0JwPiLZ4+1kn7b1VLu1uc
-         lu/QZxTE8JLiSmEFJHk/7HPfs3bC86fobhGfCdZvzOfJXVmhd69YkZPhH/detcDK9qZz
-         tHGw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Q6Nd+Q0znhV0oBUcJ9SffYMNHCPkVgH2JbTP7gR3xXw=;
+        b=alecOQsYpv2iZLHlSQSZ8Pv/W0uldMCf/G3vQ/8QXQu/XhBmIaeA44YEqkPbt8iDS5
+         FTLUhAR2OtfhLK7KIirjYSjGoW8dDTllCAk4mKkIAtFTWWGzmbVwuZ8t5z5kuz+sYB26
+         qvo1xcqRqwhz4+tIix6DMdtbvaBZQWNWy0eYctGWrT7RafPhHSZArbwHFx9ML77a4GxA
+         84aOhEvZJDvq7kPc03npiGoF1fKAzQ3Xr5sdF1Jd2++QGYTFYOBLpJ66XFAx0CJ+9PaY
+         GJkX5z+WNtartBSWU/8BV8Q2C2xnEFbx7M42EUPn9pdH97f5R4Yt3oXs9SBqdxwnTGIZ
+         iLTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=spQC5DgL3oN87S+iC1PglEQ45W/HemORZipZMoLzdbo=;
-        b=STahhqdlVnK3kZyOTbloBIg3Pj7ZT+j1rj9UqaVz2Rp/+EkQSeztucm+2np415Xwh+
-         chzLSJbDtkd2PT/ghHeWaUadxdZq9QP9kFZCnF5Ro5OpekDyAPtHGvw+YpEeKImvIBvh
-         wCKdPFaYXf/nY6BtR8TDL1etCncZVBbJvuwUEzBQzt6SfAD4yK3lq4y3O1j7LMnWSoP5
-         E4xRYnQH978TBIWf0u1Wpj8OZsyPYq7wq6lJXJXjh/tAhAfPqvwVLD5jU/DYXq5M0oZ+
-         QjgtIhBJwebVZrkBGga754l0RTAHRs1QiJppCzeC441ENKQJB2y7ZIUAXf4m/qBFMGGE
-         WDHw==
-X-Gm-Message-State: AJIora9bdkue9KUo9zM0ioE74h0u940RsZcWuFTFccQpcAYvAx9npx7l
-        uS9Q+NyJ65pPD26M6r/QzKzz4W2kBLQzAqXfQCQreA==
-X-Google-Smtp-Source: AGRyM1vSA2JOkaQqBtH9qzmnpbRJvsTC0Bp3SA27Hwqk66QdtarAJd6bAmkwBF0NfeyH35IKczAxtPrwNVBfqOoDbk8=
-X-Received: by 2002:a05:6870:a182:b0:10b:efbe:e65d with SMTP id
- a2-20020a056870a18200b0010befbee65dmr519829oaf.5.1659037807922; Thu, 28 Jul
- 2022 12:50:07 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q6Nd+Q0znhV0oBUcJ9SffYMNHCPkVgH2JbTP7gR3xXw=;
+        b=l2mrqQKet2YrXEvsZFuHJ93DD7Wp0uX2HoLupJaWBs0PFrjjJS23/12YglT/v9X3aC
+         GFTLc5Poq2pMgMIjuj5gOE78n3nSe7z4tjWgNMKV5IgYmWeeH5GT+7AOzkiMeM+erSuy
+         YKWCwdTuTbG73bHqYaqNj+EgYEfR1pkWUvVC0Ey7zNajP34UJGPw29WT7g5fv8uESllf
+         N+vdbOY6teNfmEMHLMKVi+cqC9UBlKInRyu3mnktQz7kAuhy0D94kZPxskMxajZqNUX2
+         a7fI+2iqxeyQjPqnpeW04gN4ykTEIMZY2ngeSoCIG2LEStXYlEZWmV81c8K9mjH/to5j
+         UW8g==
+X-Gm-Message-State: AJIora+1GABj9dfu4HtRYo/d5PxVOfbMiH9SxzOlTBQ4PsXjOl0s3nDJ
+        bfAKEwaOn0YuTdLt29QQe90=
+X-Google-Smtp-Source: AGRyM1suCrcDF6++nJ3oOFqhptT6beAHWVLcZwrncorVv/8TNUI45oZSjY6ot1xjaLv0iT9q/G7hDw==
+X-Received: by 2002:a05:6a00:a29:b0:52a:c0c3:4379 with SMTP id p41-20020a056a000a2900b0052ac0c34379mr143615pfh.15.1659037932535;
+        Thu, 28 Jul 2022 12:52:12 -0700 (PDT)
+Received: from [10.69.47.244] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b0016d710d8af7sm1719223pln.142.2022.07.28.12.52.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 12:52:12 -0700 (PDT)
+Message-ID: <36eb306c-2e44-4639-5d1a-e1f3e09c3a47@gmail.com>
+Date:   Thu, 28 Jul 2022 12:52:10 -0700
 MIME-Version: 1.0
-References: <20220727064321.2953971-1-mw@semihalf.com> <20220727064321.2953971-7-mw@semihalf.com>
- <20220727143147.u6yd6wqslilspyhw@skbuf> <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
- <20220727163848.f4e2b263zz3vl2hc@skbuf> <CAPv3WKe+e6sFd6+7eoZbA2iRTPhBorD+mk6W+kJr-f9P8SFh+w@mail.gmail.com>
- <CAHp75VfGfKx1fggoE7wf4ndmUv4FEVfV=-EaO0ypescmNqDFkw@mail.gmail.com>
- <CAPv3WKeXtwJRPSaERzo+so+_ZAPSNk5RjxzE+N7u-uNUTMaeKA@mail.gmail.com>
- <20220728091643.m6c5d36pseenrw6l@skbuf> <CAPv3WKd0rbwN2AyGRSG1hUji3KzCdG2S=HfCxk7=Ut3VbmPXGA@mail.gmail.com>
- <20220728191630.wjmm4mfbhrvbolqq@skbuf>
-In-Reply-To: <20220728191630.wjmm4mfbhrvbolqq@skbuf>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Thu, 28 Jul 2022 21:49:58 +0200
-Message-ID: <CAPv3WKdKj+7d03EQ5rCdmqYgK3hKNV7YEYJ8OqaN5pzM5j2ZvA@mail.gmail.com>
-Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to fwnode_find_net_device_by_node()
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.1
+Subject: Re: [PATCH] scsi: lpfc: check the return value of alloc_workqueue()
+Content-Language: en-US
+To:     williamsukatube@163.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+References: <20220723064027.2956623-1-williamsukatube@163.com>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20220723064027.2956623-1-williamsukatube@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-czw., 28 lip 2022 o 21:16 Vladimir Oltean <olteanv@gmail.com> napisa=C5=82(=
-a):
->
-> On Thu, Jul 28, 2022 at 06:56:48PM +0200, Marcin Wojtas wrote:
-> > There was a regression even for OF in v1, but after switching to
-> > device_match_fwnode() it works indeed. Anyway patch v4 is imo useful,
-> > I'll only reword the commit message.
->
-> Do you mean patch 4 or patch v4? If patch 4, of course it's useful, but
+On 7/22/2022 11:40 PM, williamsukatube@163.com wrote:
+> From: William Dean <williamsukatube@gmail.com>
+> 
+> The function alloc_workqueue() in lpfc_sli4_driver_resource_setup() can
+> fail, but there is no check of its return value. To fix this bug, its
+> return value should be checked with new error handling code.
+> 
+> Fixes: 3cee98db2610f ("scsi: lpfc: Fix crash on driver unload in wq free")
+> Reported-by: Hacash Robot <hacashRobot@santino.com>
+> Signed-off-by: William Dean <williamsukatube@gmail.com>
+> ---
+>   drivers/scsi/lpfc/lpfc_init.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+> index 750dd1e9f2cc..8e9594f4ed16 100644
+> --- a/drivers/scsi/lpfc/lpfc_init.c
+> +++ b/drivers/scsi/lpfc/lpfc_init.c
+> @@ -7958,6 +7958,8 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
+>   
+>   	/* The lpfc_wq workqueue for deferred irq use */
+>   	phba->wq = alloc_workqueue("lpfc_wq", WQ_MEM_RECLAIM, 0);
+> +	if (!phba->wq)
+> +		return -ENOMEM;
+>   
+>   	/*
+>   	 * Initialize timers used by driver
 
-Patch 4/8 in v4 :) I'm working on it right now to submit asap.
+Reviewed-by: James Smart <jsmart2021@gmail.com>
 
-> not for avoiding a regression with OF (case in which I drop all my claims
-> made earlier about fw_find_net_device_by_node), but rather to actually
-
-Change in the mvpp2 driver:
--       dev->dev.of_node =3D port_node;
-+       device_set_node(&dev->dev, port_fwnode);
-is desired and correct anyway, so as a low-cost change I think it can
-be included in this series (which is in fact preparation-to-ACPI
-support). I will update the commit message. accordingly.
-
-> get something working with actual ACPI (although perhaps not in this
-> series, you'll need to add ACPI IDs in the mv88e6xxx driver some time
-
-v1 added all of this, but we agreed that ACPI-specific bits should be
-sent separately later, after extending the ACPI Specification.
-
-> later as well, maybe you could focus this series just on converting DSA
-> to play nice with fwnodes). If you're already thinking about the v4 of
-> this patch set, I'll respond to that in a separate email shortly.
+-- james

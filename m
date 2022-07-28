@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9352583F36
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BF4583F41
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237751AbiG1Mtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S237888AbiG1MwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236073AbiG1Mtn (ORCPT
+        with ESMTP id S236073AbiG1MwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:49:43 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CCB2B269;
-        Thu, 28 Jul 2022 05:49:42 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id v17so2068020edc.1;
-        Thu, 28 Jul 2022 05:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=S8iemc+Dee2LMXXfSDk04gG8NQ+lhhgD/kgDAwC7Ads=;
-        b=OVroWaLBfwi4INQPt1GS+eroFAx7I+wOomWEzBXzDNg88sbfYjzDY2D3xJGkm6vuJV
-         B/DPPWqXBWQGOzLBNcrzwWD1tyTlCAV/oSKUcn8p+h1A4K4pZw2kFnU28YZJDFAWVK3O
-         kvVIyiyEKafE3X3i6VXXmugEu4ilOLNRripWPwQw9DrjmKMRImbHz82RcxGzwWAg8w9r
-         XZ0TiCZziz6ZoBPYcz8+97lXd2KhZa1nB8DobWc4CCkwqpj5ibN6+9x3JblOzU3Ny8k3
-         p+cU7sGD1o2CToXMC4e8Dy9Hj3MNpAzLmhpn4++An0ZeaBTGsdf+fy4lSjDW1/YYBXKl
-         1N0Q==
+        Thu, 28 Jul 2022 08:52:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA40712A9A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659012731;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RZpcro9+G+01bmRt12gASDtsXsCB4hr0At/KWhkZS28=;
+        b=cqzl0ckouEXXx8zPeoUEjChSv6zndHAXqh9ADwCCEoxmOO8vhOlgVcdI9YPZPWXjWv7pDk
+        JMvDGx9qxeVB8I5UZuTa8/RcfI2ZJrwrlui9SkhJvKK2M30pSNr9Cp8J4hPxhOZs2u48wt
+        a2Gapxz3XxE8EUYnWh63OHx28Sj9ayw=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-331-eKKZ2y_DOVqFKtYLZa3l-w-1; Thu, 28 Jul 2022 08:52:09 -0400
+X-MC-Unique: eKKZ2y_DOVqFKtYLZa3l-w-1
+Received: by mail-ej1-f71.google.com with SMTP id gb37-20020a170907962500b0072b820af09dso600165ejc.20
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:52:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=S8iemc+Dee2LMXXfSDk04gG8NQ+lhhgD/kgDAwC7Ads=;
-        b=FeiPvaOaHRpy07pArBy/i9LIC+jMCYaZsp04ocZydswotIMZWUjGH1oEaygyXbDDLY
-         DwwTBkYM4o3z2jpfD8GbUribMq4be/HfzQJkHXKySvKoOnLcz+dlgazYFygBcP7jxg0v
-         Y66CYB/4Jc7U6Xbf7j4YSZ3b63WC/3CbZh+mm+iywzzMHImBUodxWHeoqaT3tfbCeFlX
-         U1gs3clApIrA59+zT1eNn7L8o0BmwIpkumMeuz6OJ4Y+h/TdNw3b0gvVualQ/2LTDOoy
-         5jXqSLEiCPwNguVVZK10aKAnkJWhLZ2UZBfhGfkfRhyYL+b/ihuzZ8mW465OHflOvsQJ
-         NmqA==
-X-Gm-Message-State: AJIora86j9sr7sqDB1TP1w0NjCofJ7nwyLCslvxbox/s0gmOfoi5UH2Z
-        4Qf+lMJMZFogHwFRZn1DtHQ=
-X-Google-Smtp-Source: AGRyM1tOy/Gd8npujdup3qJIK0tbEeb+re5ppKvmymOOw2EnJvTYfEV3jozLHJVxCL0BC8zVEnYx3g==
-X-Received: by 2002:a05:6402:40d2:b0:43c:5a4d:c3b4 with SMTP id z18-20020a05640240d200b0043c5a4dc3b4mr12016462edb.95.1659012580444;
-        Thu, 28 Jul 2022 05:49:40 -0700 (PDT)
-Received: from [10.31.0.4] ([37.120.217.162])
-        by smtp.gmail.com with ESMTPSA id s21-20020aa7cb15000000b0043cfda1368fsm463107edt.82.2022.07.28.05.49.39
+        bh=RZpcro9+G+01bmRt12gASDtsXsCB4hr0At/KWhkZS28=;
+        b=m0m+hBizf2ST7hEUlAJimmJFSBnPefMEkd5/Nrgbv59+FXK7A2VbQzIXwkAOh3a6gE
+         oQlH1sOJu1+oRYe+jaDevzQLN9Zv5X0KLddNyk+qKhMlcgMGncdKiWxBZCrjXUrhFjMr
+         65lC7irDJ3bJ08iT16/8XjSXxCnGeVm3Tv/fhvQeIWJszuDVk7Z9N4yPFQfUjcfQcGK2
+         anzImekKiwRfQy8aZEYcGAag9j5g0+iUDoIHVpu9rCq9dKBSx/BDWVivrA3OlBxbhyYp
+         n4sLp7+LUkqwbSXnBuI0EUWLDaqeCToPhcAD1oe+V3DOQqoRm/b7BAggSeZm0tIGCHZ6
+         ET3A==
+X-Gm-Message-State: AJIora/mqtbM2oVbJmfVWw/AZ897nOOhDUxBxv+xCn+cd1D95TG233lt
+        iuIQTSYjHEevcsCy6Wh9Wr4fWieUP7DHE/2zGdXCQ59ndlcwcNvp693q0FuMv/tnb9JltItvabv
+        K8WBs6xMfVZ8lWwjRx9K8M0V2
+X-Received: by 2002:a05:6402:2554:b0:43b:e4a3:2664 with SMTP id l20-20020a056402255400b0043be4a32664mr24268592edb.423.1659012728272;
+        Thu, 28 Jul 2022 05:52:08 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v2WcS7jVOLwQKZRX606THN42iKJRukow+e5LJZWjx05BisPIpOGOY9bCZ4CwqSbMcn8oud6A==
+X-Received: by 2002:a05:6402:2554:b0:43b:e4a3:2664 with SMTP id l20-20020a056402255400b0043be4a32664mr24268562edb.423.1659012727787;
+        Thu, 28 Jul 2022 05:52:07 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id w20-20020a056402129400b0043cd42a3f28sm618868edv.95.2022.07.28.05.52.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 05:49:39 -0700 (PDT)
-Message-ID: <b703f678-b2c5-cdeb-ac40-9646e043d1c3@gmail.com>
-Date:   Thu, 28 Jul 2022 14:49:38 +0200
+        Thu, 28 Jul 2022 05:52:07 -0700 (PDT)
+Message-ID: <39b47ca8-1d25-0e60-d326-ad627541fe36@redhat.com>
+Date:   Thu, 28 Jul 2022 14:52:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
+Subject: Re: [PATCH v2] platform/x86/intel/ifs: Allow non-default names for
+ IFS image
 Content-Language: en-US
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <20220726143005.wt4be7yo7sbd3xut@bogus>
- <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
- <20220726154138.74avqs6iqlzqpzjk@bogus>
- <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
- <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
- <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
- <20220727132437.pjob3z2nyxsuxgam@bogus>
- <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
- <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com>
- <CAC_iWjLWBJLth26ifFfHvimProHZu_w5SjQNWSH_D2Fs_JXjbA@mail.gmail.com>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <CAC_iWjLWBJLth26ifFfHvimProHZu_w5SjQNWSH_D2Fs_JXjbA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org,
+        ashok.raj@intel.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev
+References: <20220710160011.995800-1-jithu.joseph@intel.com>
+ <YssFjbveghDLNn4N@kroah.com>
+ <55368a65-c536-93c7-c501-9f6086e308d2@redhat.com>
+ <YuJ8Ah37WAHGTJlV@kroah.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YuJ8Ah37WAHGTJlV@kroah.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,107 +87,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 14:35, Ilias Apalodimas wrote:
-> Hi Maximilian
-> 
-> On Thu, 28 Jul 2022 at 13:48, Maximilian Luz <luzmaximilian@gmail.com> wrote:
->>
->> On 7/28/22 08:03, Ilias Apalodimas wrote:
->>> Hi all,
->>>
->>> On Wed, 27 Jul 2022 at 16:24, Sudeep Holla <sudeep.holla@arm.com> wrote:
->>>>
->>>> On Wed, Jul 27, 2022 at 03:03:49PM +0200, Maximilian Luz wrote:
->>>>>
->>>>> Is there really a good way around it?
->>>>
->>>> Yes rely on the firmware preferably auto discover, if that is not an option,
->>>> how about query. It seem to be working in your case.
->>>
->>> That's a good point.  We have a similar situation with some Arm
->>> devices and U-Boot.  Let me try to explain a bit.
->>>
->>> There's code plugged in in OP-TEE and U-Boot atm which allows you to
->>> store EFI variables on an RPMB.  This is a nice alternative if your
->>> device doesn't have any other secure storage,  however it presents
->>> some challenges after ExitBootServices, similar to the ones you have
->>> here.
->>>
->>> The eMMC controller usually lives in the non-secure world.  OP-TEE
->>> can't access that, so it relies on a userspace supplicant to perform
->>> the RPMB accesses.  That supplicant is present in U-Boot and
->>> Get/SetVariable works fine before ExitBootServices.  Once Linux boots,
->>>    the 'U-Boot supplicant' goes away and we launch the linux equivalent
->>> one from userspace.  Since variable accessing is a runtime service and
->>> it still has to go through the firmware we can't use those anymore
->>> since U-Boot doesn't preserve the supplicant, the eMMC driver and the
->>> OP-TEE portions needed in the runtime section(and even if it did we
->>> would now have 2 drivers racing to access the same hardware).  Instead
->>> U-Boot copies the variables in runtime memory and
->>> GetVariable/GetNextVariable still works, but SetVariable returns
->>> EFI_UNSUPPORTED.
->>>
->>> I've spent enough time looking at available solutions and although
->>> this indeed breaks the EFI spec, something along the lines of
->>> replacing the runtime services with ones that give you direct access
->>> to the secure world, completely bypassing the firmware is imho our
->>> least bad option.
->>
->> This sounds very similar to what Qualcomm may be doing on some devices.
->> The TrEE interface allows for callbacks and there are indications that
->> one such callback-service is for RPMB. I believe that at least on some
->> platforms, Qualcomm also stores UEFI variables in RPMB and uses the same
->> uefisecapp interface in combination with RPMB listeners installed by the
->> kernel to access them.
->>
->>> I have an ancient branch somewhere that I can polish up and send an
->>> RFC [1],  but the way I enabled that was to install an empty config
->>> table from the firmware.  That empty table is basically an indication
->>> to the kernel saying "Hey I can't store variables, can you do that for
->>> me".
->>>
->>> Is there any chance we can do something similar on that device (or
->>> find a reasonable way of inferring that we need to replace some
->>> services).  That way we could at least have a common entry point to
->>> the kernel and leave out the DT changes.
->>>
->>> [1] https://git.linaro.org/people/ilias.apalodimas/net-next.git/log/?h=setvar_rt_optee_3
->>
->> I would very much like to avoid the need for special bootloaders. The
->> devices we're talking about are WoA devices, meaning they _should_
->> ideally boot just fine with EFI and ACPI.
-> 
-> I've already responded to following email, but I'll repeat it here for
-> completeness. It's not a special bootloader.  It's the opposite, it's
-> a generic UEFI compliant bootloader which takes advantage of the fact
-> EFI is extensible. We are doing something very similar in how we load
-> our initrd via the EFI_LOAD_FILE2 protocol.  Whether Qualcomm can add
-> that to their bootloaders is a different topic though.  But at some
-> point we need to draw a line than keep overloading the DT because a
-> vendor decided to go down it's own path.
+Hi,
 
-But still, you're asking users to install an extra thing in the boot
-chain. That's what I mean by "special". So the situation would then be
-this: User needs a) GRUB (or something similar) for booting the kernel
-(or dual-booting, ...), b) DTBLoader for loading the device-tree because
-we don't support the ACPI Qualcomm provided, and c) your thing for EFI
-variables and potentially other firmware fix-ups. b) and c) are both
-things that "normal" users don't expect. IMHO we should try to get rid
-of those "non-standard" things, not add more.
-
->>   From an end-user perspective, it's annoying enough that we'll have to
->> stick with DTs for the time being due to the use of PEPs in ACPI. I
->> really don't want to add some special bootloader for fixups to that.
->> Also, this would just move the problem from kernel to bootloader.
+On 7/28/22 14:07, Greg KH wrote:
+> On Thu, Jul 28, 2022 at 01:57:25PM +0200, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 7/10/22 18:59, Greg KH wrote:
+>>> On Sun, Jul 10, 2022 at 09:00:11AM -0700, Jithu Joseph wrote:
+>>>> Existing implementation limits IFS images to be loaded only from
+>>>> a default file-name /lib/firmware/intel/ifs/ff-mm-ss.scan.
+>>>
+>>> That was by design, why is this suddenly not acceptable?
+>>>
+>>>> But there are situations where there may be multiple scan files
+>>>> that can be run on a particular system stored in /lib/firmware/intel/ifs
+>>>
+>>> Again, this was by design.
+>>>
+>>>> E.g.
+>>>> 1. Because test contents are larger than the memory reserved for IFS by BIOS
+>>>
+>>> What does the BIOS have to do with this?
+>>>
+>>>> 2. To provide increased test coverage
+>>>
+>>> Test coverage of what?
+>>>
+>>>> 3. Custom test files to debug certain specific issues in the field
+>>>
+>>> Why can't you rename the existing file?
+>>>
+>>>> Renaming each of these to ff-mm-ss.scan and then loading might be
+>>>> possible in some environments. But on systems where /lib is read-only
+>>>> this is not a practical solution.
+>>>
+>>> What system puts /lib/ as read-only that you want to have loading
+>>> hardware firmware?  That kind of defeats the security implications of
+>>> having a read-only /lib/, right?
+>>>
+>>>> Modify the semantics of the driver file
+>>>> /sys/devices/virtual/misc/intel_ifs_0/reload such that,
+>>>> it interprets the input as the filename to be loaded.
+>>>
+>>> So you are now going to allow any file to be read from the system, in an
+>>> unknown filesystem namespace, by this driver?
+>>
+>> @Intel folks to me this is the big blocker which needs to be solved before
+>> we can move forward with figuring out how to allow loading multiple
+>> different sets of test patterns through IFS.
+>>
+>> Which in turn is required to remove the broken marking...
+>>
+>> How about echoing a suffix to be appended to the default filename to
+>> the reload attribute? This suffix would then need to be sanity checked
+>> to only contain [a-z][0-9] (we don't want '/' but it seems better to
+>> limit this further) to avoid directory traversal attacks. 
+>>
+>> (and echoing an empty suffix can be used to force reloading the
+>> default test-patterns after a linux-firmware pkg upgrade)
+>>
+>> This way we avoid the allowing user to load an arbitrary file issue.
+>>
+>> Greg, would using a suffix appended to the default filename be
+>> acceptable to you as a solution to solving the load arbitrary
+>> file issue?
 > 
-> But it *is* a bootloader problem.  The bootloader is aware of the fact
-> that it can't provide runtime services for X reasons and that's
-> exactly why we are trying to set EFI_RT_PROPERTIES_TABLE correctly
-> from the firmware.  All we are doing is install a config table to tell
-> the OS "I can't do that, can you find a way around it?".
+> Not really, a suffix doesn't protect much at all.
 
-Sure, but is making the Linux installation process more device
-dependent and complicated really the best way to solve this?
+?
+
+Currently the driver will always load:
+
+/lib/firmware/intel/ifs/%02x-%02x-%02x.scan
+
+with the "%02x" bits being fixed parts of the CPU model.
+
+My suggestion is to make it:
+
+/lib/firmware/intel/ifs/%02x-%02x-%02x%s.scan
+
+Where the "%s" bit can be supplied by userspace, but it may
+only contain [a-z] and [0-9] so no '/' (or other special chars)
+so that an attacker cannot use directory traversal to get a file
+from below the /lib/firmware/intel/ifs/ dir.
+
+This means that an attacker can only cause a bad file to be
+loaded if they have write access to /lib/firmware/intel/ifs/  at
+which point they can also just replace the default file. So I
+don't see how just allowing userspace to just add a suffix
+is a possible problem. Where as the previous arbitrary filename
+approach obviously was a problem ?
+
+> This really feels like a "test the product in the factory" type of
+> option that someone seems to want to do without just renaming the
+> firmware file.  Why this is unique from all other firmware file loading
+> in the kernel needs to really be explained here in order to even
+> consider justifying this type of change.
+
+First of all I really wish some of the Intel folks would elaborate
+more on why multiple test-pattern files are necessary. Ping
+anyone@intel, you have all been very quiet in this thread which
+is not helpful (not helpful at all really).
+
+Speculating myself as far as I understand IFS is not for factory
+tests but for testing in the fields since big cloud vendors have
+found that sometimes there are hard to catch CPU defects which
+they only find out by running statistics which show that certain
+tasks only crash when run on machine a, socket b, core c.
+
+IFS allows them to periodically run a set of CPU selftests to
+detect CPU defects (which may sometimes also only show up
+over time). AFAIK the multiple test-pattern files thing is
+necessary now because it is not possible to put all
+possible tests on a single file due to size constraints of
+the special RAM into which the test-patterns are loaded.
+
+So the default firmware file will contain a set of defaiult
+tests. But there will also be e.g. a special file which
+only exercises the avx512 parts of a core, but then more
+thoroughly. Again this is all speculation from my side, but
+this is my understanding of this all.
 
 Regards,
-Max
+
+Hans
+

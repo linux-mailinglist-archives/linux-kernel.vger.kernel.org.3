@@ -2,181 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E278258403D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280A3584043
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiG1NoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S229905AbiG1NqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiG1NoP (ORCPT
+        with ESMTP id S230326AbiG1Npr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:44:15 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA50761D48
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:44:13 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id e11so2019570ljl.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t3snUb/RB7GBK47suv0EVR2ZsOaRly5GONJO77oiuQg=;
-        b=sOfaZgsXdyu9YFFlp0fBAF2zTWC0nkR9f1upJND4qGEPvrIrLVegHEtcimHFcC9AGq
-         prtZcg30BThzrAdiXdKEkUpRniIlN96f9mAQHH7S+CtLKp+3fTUZSPlD611eQ2dtYPjR
-         YqiMQUjkRHEf04LzZ3ppP6nOtWAGMc2bT8RjQ/hyE7z92pAwqHUhynHwvZZNtP4KbouY
-         eceF+JDX0LoKRTtVK45Nwa4hAEhH/SEhaMDggMzfvU4kS+8AyKVNwNkLJElivl4nSrZE
-         TmqN96xweMiMzHG2Ydb14z1yTvzz3i2DMY+wiFAizX7sPBHqBoMkScO6+hRyMgBmlRvl
-         OhAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t3snUb/RB7GBK47suv0EVR2ZsOaRly5GONJO77oiuQg=;
-        b=pPhg/uifeFOHSKFs0GcDRf1iULvcsNAJP580GRnXUaunKX8rVaxmOrGI/PX06Of3EY
-         GKgC8Mt5uLQuxCoYg9sR0jY5/AB3CRom4KER+Mv8lH2NVwoLMhBK9lixwyFJwKmW8ktn
-         pDLfkDdw1tq+xF60QKUz172UgtvbsLR/0BiXCJF5bIMZkjKXne8c2rfzLFX3eC+ZPOfw
-         iWDATSUo2fqfYzXLxX+GLgQ/C/PGa2+DKysxRmaDET+T9s8ZB03BEI8yTKiJZplZu6L7
-         /p3MdbineQE95iHjaSgJqfvRZBkEzeDAD2Dumg8aFQ9q1yY+hJK0wfWJeQstNA97OydP
-         Bb3Q==
-X-Gm-Message-State: AJIora9DKtgwQ3LFmm7MOonpZpVCfrCOcgJLUHW4Ob8g6dXfgmVPW7TL
-        sqS5EA6UK74OrIVOawSZK3sMAQ==
-X-Google-Smtp-Source: AGRyM1uZFOldfIslMBj3ijO/FI232ybFsJuneomS8qRe2mSt04mZInbLVyYT4ft2fJRvZF6pDwVzIA==
-X-Received: by 2002:a05:651c:1993:b0:25e:2766:924 with SMTP id bx19-20020a05651c199300b0025e27660924mr2108589ljb.231.1659015852086;
-        Thu, 28 Jul 2022 06:44:12 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id v23-20020a2e9f57000000b0025de9a05176sm149221ljk.111.2022.07.28.06.44.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 06:44:11 -0700 (PDT)
-Message-ID: <5f728a46-d222-a734-ce69-5adb695fb374@linaro.org>
-Date:   Thu, 28 Jul 2022 15:44:10 +0200
+        Thu, 28 Jul 2022 09:45:47 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9341661D82;
+        Thu, 28 Jul 2022 06:45:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bMVeZIi7IIwT+TQu9ZjFNc5KoaNsIZneVFiXyxSrZKLyk9Y8Ne3kiByOeV7x7XMdVkd8KRGaf/FG4+azW3HEdr9vKcqmzndIZpy5jIaH4+7PE8LkIc/6pnKdYzba68Q9OgTHs+Zlrif28t5PmHMOTwkk+eAMp3BTbsLgiAaxAl3Pa0TcwdcDwS9Hd7kx0ZeHbAF5blyEHZkbr8DVkLA++rOSrUclTkOpBfLz6RXVqjM2J5ehiVEQ/pcC6XbhLzLvyHjUYCzSkInNVovW+jKupBhD8PWeCveePuZZ9b8xOkBqtaamnMt31oelVNY9rSSCVst9O4coYCrITw/Stcx9xA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sCYmpIlNiV51gzZNOnmcf/o3xy/Uy06xSdY4vy71K9s=;
+ b=kHer0QyGpWuZZrzekgq0I1NqYb6xMpS4R7ggeYjsmUtFmy0D3HuaT4NM9EVGlxscxrNGvvjGWbPIan7M1HO9hmSwuGv64gqpYS3AiYYGzGBGg17A0uUMJkJvK9Zx5pCBvaWiH9rDR0WCs56vsmnrmgfITuMfUVFF+9BqWPfjBvMzc4v5r69QWol8gQzlm9GeNUg1joezVzG2o/2662SRAP8wK/RrHZOHLieZDmhASTbltPo8f7DP9PsELhmYGU79KCMAtmC4/im8Vq5F55X1ox7OF+3jqR379OMFzntT4NCA1WpUPqV8cvlE9JyOn1urTbEOKjvXT8M4y2vssIgTDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sCYmpIlNiV51gzZNOnmcf/o3xy/Uy06xSdY4vy71K9s=;
+ b=wG32dGZrkbm7fpN0/U6M6f/WjI+ohvfTHzoLbqGdXHmTpBrw7+j1BBD4DSflvlk8wcBEEhLwZftKG3r+op/71RN4ZzQBRImhgNAMFsazHQmb/40oGCaHhLtnYNsIw72A8a8hRFyOsFb514yaDvmXIirVHD3RhMReKisJ5MxcNIk=
+Received: from DS7PR03CA0208.namprd03.prod.outlook.com (2603:10b6:5:3b6::33)
+ by SN7PR12MB7021.namprd12.prod.outlook.com (2603:10b6:806:262::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Thu, 28 Jul
+ 2022 13:45:45 +0000
+Received: from DM6NAM11FT052.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b6:cafe::df) by DS7PR03CA0208.outlook.office365.com
+ (2603:10b6:5:3b6::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.10 via Frontend
+ Transport; Thu, 28 Jul 2022 13:45:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT052.mail.protection.outlook.com (10.13.172.111) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5482.10 via Frontend Transport; Thu, 28 Jul 2022 13:45:44 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 28 Jul
+ 2022 08:45:43 -0500
+Date:   Thu, 28 Jul 2022 08:44:30 -0500
+From:   Michael Roth <michael.roth@amd.com>
+To:     <seanjc@google.com>
+CC:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: re: Possible 5.19 regression for systems with 52-bit physical
+ address support
+Message-ID: <20220728134430.ulykdplp6fxgkyiw@amd.com>
+In-Reply-To: 20220420002747.3287931-1-seanjc@google.com
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/2] iio: time: capture-tiecap: capture driver support
- for ECAP
-Content-Language: en-US
-To:     Julien Panis <jpanis@baylibre.com>, jic23@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mranostay@ti.com
-References: <20220728125212.76728-1-jpanis@baylibre.com>
- <20220728125212.76728-3-jpanis@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220728125212.76728-3-jpanis@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 21c41e81-08aa-49f8-a564-08da709f785e
+X-MS-TrafficTypeDiagnostic: SN7PR12MB7021:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AptLxT/0AVBMxcQwalw2vEsT0oxr8he/vsUjPWJFvMSiJt8ymyiNZcmrd3R3vb/OqXfQ/J7Re+i9KafVYJcfuoELOEK0LKasGTFE5N6UQnfb56JDSqGuUcXZGtTh5eOTosq6rrWHhZ/1tw+lp5Qrn+480++v98ocN9IOT6N2ovxgGNZ9CrSXxNocvCDy28GMtvgnLnlJq+55T6OpPtOsRaxQPMD9LB1AywhV+UfNklLIWxEyfuAyEh9CgQgvHWsb4kUW0rgNpcz8RdeSd3umo/SMehWiVTXyp0Stkr8qhnHvApaQ9TMuSJ49FF63VOFh13PQlPGIGh+5qYU4AsyVMCR08GYSIP1pWFRWxlt+d40nMvfIzbC7wVYkHIodV7+mV3CKdiIKVhyExQHlt4a09ZtUi0jWquxwOCQ/SR75787t/W9vv+PAYadKushupUXJmOQratENf/y3CVLa4S0D/euPPA9ojOo0afZRukbHxkTpGB/T7aGt7ZHAnPpYFb7DJyaAVKzLWFO3U4ihYrxSLAwt6M4s5UIxC0HLJTDxaVdd2QFSPRSQOA39NeUdrm70POpFVX/Kdy9brHpEzb8uhTGRQPiYnqqnaW7w0mHfk7UiWTrFJgvTrksqFkzcKxTcpWE6DVWz3G4p7tQmcD3tM76CpkcTj2paLtexoJ4veske98zJ0prCYMm172o7B1jJKh0Yw83yH3lbhIJ8YJe9ip5QiesoeEYwmkjpddLCUsJfd3fxZvJGD5dSbZTVWtQ6VPsjD9cqAlK+nOKtgtbMYrIbVytDXHLBTRuvbIwP2j6T2yb84BjldjB1VzseYv83h1FzIeiQfp5yAbf9/xkwLg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(376002)(396003)(46966006)(36840700001)(40470700004)(2616005)(44832011)(86362001)(54906003)(4744005)(8936002)(8676002)(6916009)(4326008)(316002)(41300700001)(16526019)(186003)(36756003)(6666004)(70586007)(5660300002)(70206006)(336012)(426003)(81166007)(47076005)(356005)(1076003)(2906002)(83380400001)(40460700003)(82310400005)(26005)(82740400003)(478600001)(36860700001)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 13:45:44.6988
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21c41e81-08aa-49f8-a564-08da709f785e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT052.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7021
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/2022 14:52, Julien Panis wrote:
-> ECAP hardware on AM62x SoC supports capture feature. It can be used
-> to timestamp events (falling/rising edges) detected on signal input pin.
-> 
-> This commit adds capture driver support for ECAP hardware on AM62x SoC.
-> 
-> In the ECAP hardware, capture pin can also be configured to be in
+Hi Sean,
 
-Thank you for your patch. There is something to discuss/improve.
+With this patch applied, AMD processors that support 52-bit physical
+address will result in MMIO caching being disabled. This ends up
+breaking SEV-ES and SNP, since they rely on the MMIO reserved bit to
+generate the appropriate NAE MMIO exit event.
 
-(...)
+This failure can also be reproduced on Milan by disabling mmio_caching
+via KVM module parameter.
 
-> +static int ecap_iio_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct ecap_iio_dev *ecap_dev;
-> +	struct iio_dev *indio_dev;
-> +	void __iomem *mmio_base;
-> +	int ret;
-> +
-> +	indio_dev = devm_iio_device_alloc(dev, sizeof(*ecap_dev));
-> +	if (IS_ERR(indio_dev)) {
-> +		dev_err(dev, "failed to allocate memory for iio device\n");
+In the case of AMD, guests use a separate physical address range that
+and so there are still reserved bits available to make use of the MMIO
+caching. This adjustment happens in svm_adjust_mmio_mask(), but since
+mmio_caching_enabled flag is 0, any attempts to update masks get
+ignored by kvm_mmu_set_mmio_spte_mask().
 
-Do not print messages, which core takes care of.
+Would adding 'force' parameter to kvm_mmu_set_mmio_spte_mask() that
+svm_adjust_mmio_mask() can set to ignore enable_mmio_caching be
+reasonable fix, or should we take a different approach?
 
-> +		return PTR_ERR(indio_dev);
-> +	}
-> +
-> +	ecap_dev = iio_priv(indio_dev);
-> +
-> +	ecap_dev->clk = devm_clk_get(dev, "fck");
-> +	if (IS_ERR(ecap_dev->clk)) {
-> +		dev_err(dev, "failed to get clock\n");
-> +		return PTR_ERR(ecap_dev->clk);
-> +	}
-> +
-> +	ret = clk_prepare_enable(ecap_dev->clk);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable clock\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(dev, ecap_iio_clk_disable, ecap_dev->clk);
-> +	if (ret) {
-> +		dev_err(dev, "failed to add clock disable action\n");
-> +		return ret;
-> +	}
-> +
-> +	ecap_dev->clk_rate = clk_get_rate(ecap_dev->clk);
-> +	if (!ecap_dev->clk_rate) {
-> +		dev_err(dev, "failed to get clock rate\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (prescaler > ECAP_PS_MAX_VAL) {
-> +		prescaler = ECAP_PS_MAX_VAL;
-> +		dev_warn(dev, "prescaler out of range, forced to %d\n", prescaler);
-> +	}
-> +
-> +	mmio_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(mmio_base)) {
-> +		dev_err(dev, "failed to remap io\n");
+Thanks!
 
-No need for msg.
-
-> +		return PTR_ERR(mmio_base);
-> +	}
-> +
-> +	ecap_dev->regmap = regmap_init_mmio(dev, mmio_base, &ecap_iio_regmap_config);
-> +	if (IS_ERR(ecap_dev->regmap)) {
-> +		dev_err(dev, "failed to init regmap\n");
-> +		return PTR_ERR(ecap_dev->regmap);
-> +	}
-> +
-> +	indio_dev->name = devm_kasprintf(dev, GFP_KERNEL,
-> +					 "ecap-iio-%p", mmio_base);
-> +	indio_dev->info = &ecap_iio_info;
-> +	indio_dev->channels = ecap_iio_channels;
-> +	indio_dev->num_channels = ARRAY_SIZE(ecap_iio_channels);
-> +	indio_dev->modes = INDIO_BUFFER_SOFTWARE;
-> +
-> +	ret = devm_iio_kfifo_buffer_setup_ext(dev, indio_dev, NULL, NULL);
-> +	if (ret) {
-> +		dev_err(dev, "failed to setup iio buffer\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = platform_get_irq(pdev, 0);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to get irq\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_request_irq(dev, ret, ecap_iio_isr, 0, pdev->name, indio_dev);
-> +	if (ret) {
-> +		dev_err(dev, "failed to request irq\n");
-> +		return ret;
-> +	}
-
-Best regards,
-Krzysztof
+-Mike

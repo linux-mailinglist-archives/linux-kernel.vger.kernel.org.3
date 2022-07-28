@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564C4584367
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9CA584370
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbiG1PnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        id S232282AbiG1Pna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiG1PnN (ORCPT
+        with ESMTP id S232130AbiG1PnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:43:13 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACA069F2E
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:43:12 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a7-20020a17090a008700b001f325db8b90so1111313pja.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OvVirUwva7iitmCWZI9gOg8g2CWki9PsaWOed+nTpOU=;
-        b=AiRFPHaA7gZOYNc69ZY96d8VhlOkMnaDNRHXUPXYvDABBFKi+J5uw7z/ofo7pXx+kZ
-         OLkNhH6Kgd3V69r4I7YmRLT/Tjia4T46btmtB1dIkIw28Vis+01PIRvIPlJitO/FwFw/
-         1U1P8H0p3NMJKHx+U00LYiF/H6ovjadOyBh9jbw5EV0yzAp2mhazixc661ahs+T9PIG2
-         PLxkwjYXNKIM7s/70lnmsJ6WXvH8uJuhEARVWaFT4vFEvklLelKE8IPxtg2ZlI3gWFrm
-         WLZJK2MpAbAObHMb4Zc+gAO/fwqAEfWJaGvKTCbie4uhrbeJl0J8pMdvZBKF8ZOaLOct
-         J5WA==
+        Thu, 28 Jul 2022 11:43:25 -0400
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37F06A4A9;
+        Thu, 28 Jul 2022 08:43:22 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id x10so1424406plb.3;
+        Thu, 28 Jul 2022 08:43:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OvVirUwva7iitmCWZI9gOg8g2CWki9PsaWOed+nTpOU=;
-        b=R1ITWPZcMUgXIBieaacELWFCwUbFw1ORUavMulh6p99b+Wr3jeROYloYxEA5AEgghE
-         MsSw0UvEA/5T9Ziev5MEAWVvW52+KvvbdjkMphyYWSDRcRcFz+37lV2aM4HJzhn9txrC
-         Rt3B1oKo1zAm9e3/JZI5oeOp+08hld5J+YlQfdnzELTtj4WlDW6ytiOOS71MyNFLnumY
-         raBCaSKVuvkUa9y11WR7eQOKlx+Dfg/RmnAK/9JQTx6ohIeS+OHQPQ10N3I8Rb4AJlkj
-         f8gPzt/C9XfIjc4Z01BjURm71+18WyW9tVR5qupRZ+0ve5rLN3Lzho5w+IzyuKbVmttz
-         fy2g==
-X-Gm-Message-State: AJIora90DntX7jqRhZ4qtjPwSPo+zGdqyN93qdKWiIIvO74C1ur8INH7
-        sb0oVQTC6xWf8UV35NG3/d+yGMZpghXHlg==
-X-Google-Smtp-Source: AGRyM1sH1quS5prsBUI9o3IRDsm8cA8ZRJf5b7TYuFSboXNv9OrkXcNXF6d6uc0XJRCyRVNDWZAZfg==
-X-Received: by 2002:a17:902:d483:b0:16d:6d17:1695 with SMTP id c3-20020a170902d48300b0016d6d171695mr20600840plg.73.1659022992223;
-        Thu, 28 Jul 2022 08:43:12 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q17-20020aa78431000000b0052badc0f3d7sm947704pfn.50.2022.07.28.08.43.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=9J9OIkJMZnysMReJqY0eBDSfGAATl0A6Xx7Ap4m7F8k=;
+        b=eit6dye5UVfLjH2AhkiBYZ1QuhsRRvNhx//RGJqzsTqPn023VZmDf+O9etHxNrJelk
+         3Efye8jN4sYlNLZHNSrlOsT2Mo+vLjgqaX3uZfA64+ft7RV5hZe8OB/1/5Ypq6OTJgTk
+         QeZ4P9/hP2iZ+Dm3qAaPfvRcoc+E+uvojc9NaC/irr+bwNbVLKUcRzbcb+50UieOXnT+
+         DRU6bpyVnK7Q0GY9wWWh+gRqHWqPUVWagtvjdsfTON2/4BsoFJqXoDHY4QaETHJO9ifa
+         vz4GWmWLqy9iOafc6d4T8IPYmQ7Kmco1ClG3IdYAzH85JOs+5JOD8laeCYwJ39OkKlQ0
+         EPrQ==
+X-Gm-Message-State: AJIora85cqIA7AoT0Lw+BVBRst2VX8wtcVnSVg8ftcPDIL1sIxk7xTjT
+        SISxlSrS+OKLAWCjDzlWFF4=
+X-Google-Smtp-Source: AGRyM1u24LGPgyQLBUhgENLyOoBvMALle4uJlRPhTLWgWhlPPfmDqRB16Mor7m8gcDzDmrm1tfpMCA==
+X-Received: by 2002:a17:902:da88:b0:16d:b75e:16d8 with SMTP id j8-20020a170902da8800b0016db75e16d8mr7113840plx.157.1659023002111;
+        Thu, 28 Jul 2022 08:43:22 -0700 (PDT)
+Received: from karthik-strix-linux.karthek.com ([61.1.131.162])
+        by smtp.gmail.com with ESMTPSA id q6-20020a170902dac600b0015e9f45c1f4sm1483344plx.186.2022.07.28.08.43.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 08:43:11 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 15:43:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: Possible 5.19 regression for systems with 52-bit physical
- address support
-Message-ID: <YuKuiyFFFY3QbZ3z@google.com>
-References: <20220728134430.ulykdplp6fxgkyiw@amd.com>
- <20220728135320.6u7rmejkuqhy4mhr@amd.com>
- <YuKjsuyM7+Gbr2nw@google.com>
+        Thu, 28 Jul 2022 08:43:21 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 21:13:17 +0530
+From:   Karthik Alapati <mail@karthek.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: hidraw: fix memory leak in hidraw_release()
+Message-ID: <YuKuldGx55BB+hrd@karthik-strix-linux.karthek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuKjsuyM7+Gbr2nw@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022, Sean Christopherson wrote:
-> On Thu, Jul 28, 2022, Michael Roth wrote:
-> > On Thu, Jul 28, 2022 at 08:44:30AM -0500, Michael Roth wrote:
-> Different approach.  To fix the bug with enable_mmio_caching not being set back to
-> true when a vendor-specific mask allows caching, I believe the below will do the
-> trick.
+Free the buffered reports before deleting the list entry.
 
-...
+BUG: memory leak
+unreferenced object 0xffff88810e72f180 (size 32):
+  comm "softirq", pid 0, jiffies 4294945143 (age 16.080s)
+  hex dump (first 32 bytes):
+    64 f3 c6 6a d1 88 07 04 00 00 00 00 00 00 00 00  d..j............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814ac6c3>] kmemdup+0x23/0x50 mm/util.c:128
+    [<ffffffff8357c1d2>] kmemdup include/linux/fortify-string.h:440 [inline]
+    [<ffffffff8357c1d2>] hidraw_report_event+0xa2/0x150 drivers/hid/hidraw.c:521
+    [<ffffffff8356ddad>] hid_report_raw_event+0x27d/0x740 drivers/hid/hid-core.c:1992
+    [<ffffffff8356e41e>] hid_input_report+0x1ae/0x270 drivers/hid/hid-core.c:2065
+    [<ffffffff835f0d3f>] hid_irq_in+0x1ff/0x250 drivers/hid/usbhid/hid-core.c:284
+    [<ffffffff82d3c7f9>] __usb_hcd_giveback_urb+0xf9/0x230 drivers/usb/core/hcd.c:1670
+    [<ffffffff82d3cc26>] usb_hcd_giveback_urb+0x1b6/0x1d0 drivers/usb/core/hcd.c:1747
+    [<ffffffff82ef1e14>] dummy_timer+0x8e4/0x14c0 drivers/usb/gadget/udc/dummy_hcd.c:1988
+    [<ffffffff812f50a8>] call_timer_fn+0x38/0x200 kernel/time/timer.c:1474
+    [<ffffffff812f5586>] expire_timers kernel/time/timer.c:1519 [inline]
+    [<ffffffff812f5586>] __run_timers.part.0+0x316/0x430 kernel/time/timer.c:1790
+    [<ffffffff812f56e4>] __run_timers kernel/time/timer.c:1768 [inline]
+    [<ffffffff812f56e4>] run_timer_softirq+0x44/0x90 kernel/time/timer.c:1803
+    [<ffffffff848000e6>] __do_softirq+0xe6/0x2ea kernel/softirq.c:571
+    [<ffffffff81246db0>] invoke_softirq kernel/softirq.c:445 [inline]
+    [<ffffffff81246db0>] __irq_exit_rcu kernel/softirq.c:650 [inline]
+    [<ffffffff81246db0>] irq_exit_rcu+0xc0/0x110 kernel/softirq.c:662
+    [<ffffffff84574f02>] sysvec_apic_timer_interrupt+0xa2/0xd0 arch/x86/kernel/apic/apic.c:1106
+    [<ffffffff84600c8b>] asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
+    [<ffffffff8458a070>] native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
+    [<ffffffff8458a070>] arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
+    [<ffffffff8458a070>] acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+    [<ffffffff8458a070>] acpi_idle_do_entry+0xc0/0xd0 drivers/acpi/processor_idle.c:554
+
+Link: https://syzkaller.appspot.com/bug?id=19a04b43c75ed1092021010419b5e560a8172c4f
+Reported-by: syzbot+f59100a0428e6ded9443@syzkaller.appspotmail.com
+Signed-off-by: Karthik Alapati <mail@karthek.com>
+---
+ drivers/hid/hidraw.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
+index 681614a8302a..197b1e7bf029 100644
+--- a/drivers/hid/hidraw.c
++++ b/drivers/hid/hidraw.c
+@@ -350,6 +350,8 @@ static int hidraw_release(struct inode * inode, struct file * file)
+ 	down_write(&minors_rwsem);
  
-> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> index 7314d27d57a4..a57add994b8d 100644
-> --- a/arch/x86/kvm/mmu/spte.c
-> +++ b/arch/x86/kvm/mmu/spte.c
-> @@ -19,8 +19,9 @@
->  #include <asm/memtype.h>
->  #include <asm/vmx.h>
-> 
-> -bool __read_mostly enable_mmio_caching = true;
-> -module_param_named(mmio_caching, enable_mmio_caching, bool, 0444);
-> +bool __read_mostly enable_mmio_caching;
-> +static bool __read_mostly __enable_mmio_caching = true;
-> +module_param_named(mmio_caching, __enable_mmio_caching, bool, 0444);
-> 
->  u64 __read_mostly shadow_host_writable_mask;
->  u64 __read_mostly shadow_mmu_writable_mask;
-> @@ -340,6 +341,8 @@ void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask)
->         BUG_ON((u64)(unsigned)access_mask != access_mask);
->         WARN_ON(mmio_value & shadow_nonpresent_or_rsvd_lower_gfn_mask);
-> 
-> +       enable_mmio_caching = __enable_mmio_caching;
+ 	spin_lock_irqsave(&hidraw_table[minor]->list_lock, flags);
++	for (int i = list->tail; i < list->head; i++)
++		kfree(list->buffer[i].value);
+ 	list_del(&list->node);
+ 	spin_unlock_irqrestore(&hidraw_table[minor]->list_lock, flags);
+ 	kfree(list);
+-- 
+2.36.1
 
-This isn't ideal as the value used by KVM won't be reflected in the module param.
-The basic approach is sound, but KVM should snapshot the original value of the module
-param and "reset" to that.
-
-> +
->         if (!enable_mmio_caching)
->                 mmio_value = 0;
-> 
-> 

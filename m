@@ -2,154 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4435845C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEC7584615
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbiG1SXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 14:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
+        id S230031AbiG1S0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 14:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbiG1SXQ (ORCPT
+        with ESMTP id S229693AbiG1S0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 14:23:16 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A327274E2F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:23:15 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        Thu, 28 Jul 2022 14:26:49 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1516D55C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:26:46 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4LtzXz0ZxHzDryt;
-        Thu, 28 Jul 2022 18:23:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1659032595; bh=LnmnWVBXfBBsa2YvNeh9AU/iih0ZnFjpv0bMrh0FAP8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IS7cW3mLiujda2mpl99ObsGOY+1kSIgWAD/8u6Qgq0S1oFjc5wAo66z70gfuQNzvy
-         g2S72l5sDJzJqNxv5sqk9QOnm/NIwQ/oReT0q6npdG2QcIwtp2U/++8yYxnfOrxXs6
-         7eBlpJnjgFS27rKZwoeSnyKzhdrVwgHZIfDOx8bs=
-X-Riseup-User-ID: 785C277BFA268284350BCCF64E44C393D806A14C85E7B44A5EF3FAAAE016287F
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4LtzXt2rL8z5vMX;
-        Thu, 28 Jul 2022 18:23:10 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH 14/16] drm/amd/display: Remove MaximumDCCCompressionYSurface VBA variable
-Date:   Thu, 28 Jul 2022 15:20:46 -0300
-Message-Id: <20220728182047.264825-15-mairacanal@riseup.net>
-In-Reply-To: <20220728182047.264825-1-mairacanal@riseup.net>
-References: <20220728182047.264825-1-mairacanal@riseup.net>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 81618302740;
+        Thu, 28 Jul 2022 20:26:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1659032804;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tBLNbZ0iXZQd0mXrqJ8005T/3DAkEB7BeWOFtSOzZ2w=;
+        b=s8G8S6ahouXHgFOIfnZZKHdlodgIb5e9A9L5Nv+BV/L3wXRMB6A0W3gi3mn/aA6xNtMgwj
+        GP07kv8z1tbHnZzSifnfoRYZC4XlhRWQ2/RbfOLaGPxyBZQjW1xbF3YkqGfiJPZay0cCfl
+        8O1B/bvnicEcY+6zgKnGTYjwCVsWcaX4FOyJO3e0M7snDvI/udxRNs06NemXnS43DUUHRS
+        ixHtJMatETqYonA6EOHMWlbHaeSsxNNrI3aHaNnT20qpO8YZtjcu3kR2P0bBGRIQLuexMe
+        PDeia9lSYqpj4DYOzMNIZbunXX/LLEnJ4px63PnBy/he4uVYBih2Y6nJlwkoeQ==
+Message-ID: <f5b80dfafccd629e98df6c516b512b9492cae14d.camel@svanheule.net>
+Subject: Re: [PATCH v2 1/2] spi: realtek-rtl: Add compile testing support
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bert@biot.com, mail@birger-koblitz.de
+Date:   Thu, 28 Jul 2022 20:26:41 +0200
+In-Reply-To: <20220728152118.1429161-2-martin.blumenstingl@googlemail.com>
+References: <20220728152118.1429161-1-martin.blumenstingl@googlemail.com>
+         <20220728152118.1429161-2-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MaximumDCCCompressionYSurface variable from the struct vba_vars_st is
-only used on assignments, so its value is not used on code. So,
-remove the MaximumDCCCompressionYSurface entry from the struct vba_vars_st.
-
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
----
- .../amd/display/dc/dml/dcn21/display_mode_vba_21.c  | 13 +++----------
- .../gpu/drm/amd/display/dc/dml/display_mode_vba.h   |  1 -
- 2 files changed, 3 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-index bc8cc21cf3f6..7007b6e16e7d 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-@@ -143,7 +143,7 @@ static bool CalculatePrefetchSchedule(
- 		double *VReadyOffsetPix);
- static double RoundToDFSGranularityUp(double Clock, double VCOSpeed);
- static double RoundToDFSGranularityDown(double Clock, double VCOSpeed);
--static double CalculateDCCConfiguration(
-+static void CalculateDCCConfiguration(
- 		bool                 DCCEnabled,
- 		bool                 DCCProgrammingAssumesScanDirectionUnknown,
- 		unsigned int         ViewportWidth,
-@@ -1072,7 +1072,7 @@ static double RoundToDFSGranularityDown(double Clock, double VCOSpeed)
- 	return VCOSpeed * 4 / dml_ceil(VCOSpeed * 4 / Clock, 1);
- }
- 
--static double CalculateDCCConfiguration(
-+static void CalculateDCCConfiguration(
- 		bool DCCEnabled,
- 		bool DCCProgrammingAssumesScanDirectionUnknown,
- 		unsigned int ViewportWidth,
-@@ -1087,7 +1087,6 @@ static double CalculateDCCConfiguration(
- 		unsigned int *MaxCompressedBlock,
- 		unsigned int *Independent64ByteBlock)
- {
--	double MaximumDCCCompressionSurface = 0.0;
- 	enum {
- 		REQ_256Bytes,
- 		REQ_128BytesNonContiguous,
-@@ -1185,25 +1184,19 @@ static double CalculateDCCConfiguration(
- 		*MaxUncompressedBlock = 256;
- 		*MaxCompressedBlock = 256;
- 		*Independent64ByteBlock = false;
--		MaximumDCCCompressionSurface = 4.0;
- 	} else if (Request == REQ_128BytesContiguous) {
- 		*MaxUncompressedBlock = 128;
- 		*MaxCompressedBlock = 128;
- 		*Independent64ByteBlock = false;
--		MaximumDCCCompressionSurface = 2.0;
- 	} else if (Request == REQ_128BytesNonContiguous) {
- 		*MaxUncompressedBlock = 256;
- 		*MaxCompressedBlock = 64;
- 		*Independent64ByteBlock = true;
--		MaximumDCCCompressionSurface = 4.0;
- 	} else {
- 		*MaxUncompressedBlock = 0;
- 		*MaxCompressedBlock = 0;
- 		*Independent64ByteBlock = 0;
--		MaximumDCCCompressionSurface = 0.0;
- 	}
--
--	return MaximumDCCCompressionSurface;
- }
- 
- static double CalculatePrefetchSourceLines(
-@@ -2568,7 +2561,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
- 	// DCC Configuration
- 	mode_lib->vba.ActiveDPPs = 0;
- 	for (k = 0; k < mode_lib->vba.NumberOfActivePlanes; ++k) {
--		locals->MaximumDCCCompressionYSurface[k] = CalculateDCCConfiguration(
-+		CalculateDCCConfiguration(
- 			mode_lib->vba.DCCEnable[k],
- 			false, // We should always know the direction DCCProgrammingAssumesScanDirectionUnknown,
- 			mode_lib->vba.ViewportWidth[k],
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-index 46e69f941bff..a07e97035dd1 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_vba.h
-@@ -1032,7 +1032,6 @@ struct vba_vars_st {
- 	unsigned int DCCYMaxUncompressedBlock[DC__NUM_DPP__MAX];
- 	unsigned int DCCYMaxCompressedBlock[DC__NUM_DPP__MAX];
- 	unsigned int DCCYIndependent64ByteBlock[DC__NUM_DPP__MAX];
--	double MaximumDCCCompressionYSurface[DC__NUM_DPP__MAX];
- 	unsigned int BlockHeight256BytesY[DC__NUM_DPP__MAX];
- 	unsigned int BlockHeight256BytesC[DC__NUM_DPP__MAX];
- 	unsigned int BlockWidth256BytesY[DC__NUM_DPP__MAX];
--- 
-2.37.1
+SGkgTWFydGluLAoKT24gVGh1LCAyMDIyLTA3LTI4IGF0IDE3OjIxICswMjAwLCBNYXJ0aW4gQmx1
+bWVuc3RpbmdsIHdyb3RlOgo+IEFkZCBzdXBwb3J0IGZvciBjb21waWxlIHRlc3RpbmcgdGhlIHNw
+aS1yZWFsdGVrLXJ0bCBkcml2ZXIgdG8gaW5jcmVhc2UKPiBidWlsZCB0ZXN0aW5nIGNvdmVyYWdl
+Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IE1hcnRpbiBCbHVtZW5zdGluZ2wgPG1hcnRpbi5ibHVtZW5z
+dGluZ2xAZ29vZ2xlbWFpbC5jb20+Cj4gLS0tCj4gwqBkcml2ZXJzL3NwaS9LY29uZmlnwqAgfCA5
+ICsrKysrKysrKwo+IMKgZHJpdmVycy9zcGkvTWFrZWZpbGUgfCAyICstCj4gwqAyIGZpbGVzIGNo
+YW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9zcGkvS2NvbmZpZyBiL2RyaXZlcnMvc3BpL0tjb25maWcKPiBpbmRleCA4ZTU1MDI2
+OWQ0ODguLmQ4YjU1ZWZiMDVkNSAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3NwaS9LY29uZmlnCj4g
+KysrIGIvZHJpdmVycy9zcGkvS2NvbmZpZwo+IEBAIC05NjksNiArOTY5LDE1IEBAIGNvbmZpZyBT
+UElfTVhTCj4gwqDCoMKgwqDCoMKgwqDCoGhlbHAKPiDCoMKgwqDCoMKgwqDCoMKgwqAgU1BJIGRy
+aXZlciBmb3IgRnJlZXNjYWxlIE1YUyBkZXZpY2VzLgo+IMKgCj4gK2NvbmZpZyBTUElfUkVBTFRF
+S19SVEwKPiArwqDCoMKgwqDCoMKgwqB0cmlzdGF0ZSAiUmVhbHRlayBSVEwgU1BJIGNvbnRyb2xs
+ZXIiCj4gK8KgwqDCoMKgwqDCoMKgZGVwZW5kcyBvbiBIQVNfSU9NRU0KCkkgdGhpbmsgdGhpcyBp
+cyBhbHJlYWR5IGFuIGltcGxpZWQgZGVwZW5kZW5jeSwgYnkgdmlydHVlIG9mIHRoaXMgc3ltYm9s
+IGJlaW5nCmF2YWlsYWJsZSBvbmx5IHdoZW4gQ09ORklHX1NQST15LgoKPiArwqDCoMKgwqDCoMKg
+wqBkZXBlbmRzIG9uIE1BQ0hfUkVBTFRFS19SVEwgfHwgQ09NUElMRV9URVNUCj4gK8KgwqDCoMKg
+wqDCoMKgZGVmYXVsdCBNQUNIX1JFQUxURUtfUlRMCj4gK8KgwqDCoMKgwqDCoMKgaGVscAo+ICvC
+oMKgwqDCoMKgwqDCoMKgIFNQSSBkcml2ZXIgZm9yIHRoZSBoYXJkd2FyZSBmb3VuZCBvbiBSZWFs
+dGVrIFJMVEw4MzgwLCBSVEw4MzgyLAo+ICvCoMKgwqDCoMKgwqDCoMKgIFJUTDgzOTEsIFJUTDgz
+OTIgYW5kIFJUTDgzOTMgU29Dcy4KPiArCgpDb3VsZCB5b3UgYWRkIGhvdyB0aGUgbW9kdWxlIHdp
+bGwgYmUgbmFtZWQgYmUgdG8gdGhlIGhlbHAgdGV4dD8gU2VlIGZvciBleGFtcGxlCkNPTkZJR19T
+UElfRExOMi4KCkJlc3QsClNhbmRlcgoKPiDCoGNvbmZpZyBTUElfVEVHUkEyMTBfUVVBRAo+IMKg
+wqDCoMKgwqDCoMKgwqB0cmlzdGF0ZSAiTlZJRElBIFRlZ3JhIFFTUEkgQ29udHJvbGxlciIKPiDC
+oMKgwqDCoMKgwqDCoMKgZGVwZW5kcyBvbiBBUkNIX1RFR1JBIHx8IENPTVBJTEVfVEVTVAo+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9NYWtlZmlsZSBiL2RyaXZlcnMvc3BpL01ha2VmaWxlCj4g
+aW5kZXggMThiZjNkOGM2ZGY3Li45ZmU0YTJhYTBmZDcgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9z
+cGkvTWFrZWZpbGUKPiArKysgYi9kcml2ZXJzL3NwaS9NYWtlZmlsZQo+IEBAIC0xMDUsNyArMTA1
+LDcgQEAgb2JqLSQoQ09ORklHX1NQSV9RVVApwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1xdXAubwo+IMKgb2JqLSQoQ09ORklHX1NQSV9ST0NLQ0hJ
+UCnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1yb2NrY2hpcC5vCj4gwqBvYmotJChD
+T05GSUdfU1BJX1JPQ0tDSElQX1NGQynCoMKgwqDCoMKgwqDCoMKgwqArPSBzcGktcm9ja2NoaXAt
+c2ZjLm8KPiDCoG9iai0kKENPTkZJR19TUElfUkI0WFgpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgKz0gc3BpLXJiNHh4Lm8KPiAtb2JqLSQoQ09ORklHX01B
+Q0hfUkVBTFRFS19SVEwpwqDCoMKgwqDCoMKgwqDCoMKgKz0gc3BpLXJlYWx0ZWstcnRsLm8KPiAr
+b2JqLSQoQ09ORklHX1NQSV9SRUFMVEVLX1JUTCnCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1y
+ZWFsdGVrLXJ0bC5vCj4gwqBvYmotJChDT05GSUdfU1BJX1JQQ0lGKcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHNwaS1ycGMtaWYubwo+IMKgb2JqLSQo
+Q09ORklHX1NQSV9SU1BJKcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqArPSBzcGkt
+cnNwaS5vCj4gwqBvYmotJChDT05GSUdfU1BJX1MzQzI0WFgpwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCs9IHNwaS1zM2MyNHh4LWh3Lm8KCg==
 

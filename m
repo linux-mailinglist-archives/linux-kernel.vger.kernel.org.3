@@ -2,79 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFE55842D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A13F58430C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiG1PRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S229493AbiG1P0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiG1PRE (ORCPT
+        with ESMTP id S231676AbiG1P0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:17:04 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668CF52FF9;
-        Thu, 28 Jul 2022 08:16:53 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id y197so1582217iof.12;
-        Thu, 28 Jul 2022 08:16:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JrlKPQ4z+/eb/LwH7+hyMBFCM3G+u1y3FbCWjxfRWs0=;
-        b=c9zDFxtVgHQH4mlP2LqzUZUBvZBebrtUdUQbSfPbjayElwUKasqtHBvXK0OPLWWO6/
-         e8juRC2fOFQg2Rvk4H1CCNyrYr9Auvw9bsRakQZFcYQNqQRKTgdL76bbgcb9RVdy4BAP
-         GRQYXesoHpdBy97Bh0CaByHy1VYbPR+QrfQUgjvgaRQdAxxEfcwI2/O95YEMcs12g8rZ
-         DqgqZtqYZem0AoHB2c9o6xX0sY/yMByGfbEfvpp1S/WbdfKAt+YpaWX3LXtc3bNiGVCK
-         yE9jOAKAzMK6FW0X7zxjlLj4rMPEN07wx5XkADsMiWGygSAeZxmGefr0WbQAI1QastMO
-         uyNw==
-X-Gm-Message-State: AJIora80PW4rnd9WClBiThP0T9EDn3cAXOkKTvKlCP703xCaVkNxLhK3
-        sQITYUSyFtc9RD0egwsfjw==
-X-Google-Smtp-Source: AGRyM1unOndFqwJ/QxZY7xMrXPhTBF5duUZYZLQcuDRiBpPqUp3gM2q6daVUcFNXpNNq9PA/nFbCJQ==
-X-Received: by 2002:a5d:844d:0:b0:67c:a76d:85cd with SMTP id w13-20020a5d844d000000b0067ca76d85cdmr6791200ior.191.1659021412634;
-        Thu, 28 Jul 2022 08:16:52 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id y11-20020a92d0cb000000b002cc20b48163sm466960ila.3.2022.07.28.08.16.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 08:16:52 -0700 (PDT)
-Received: (nullmailer pid 899149 invoked by uid 1000);
-        Thu, 28 Jul 2022 15:16:50 -0000
-Date:   Thu, 28 Jul 2022 09:16:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: iio: adc: ti,am3359-adc: add ti,am654-adc
-Message-ID: <20220728151650.GA899095-robh@kernel.org>
-References: <20220727155203.320929-1-krzysztof.kozlowski@linaro.org>
+        Thu, 28 Jul 2022 11:26:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C985F9B4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 08:26:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D150961B7C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9827EC433C1;
+        Thu, 28 Jul 2022 15:26:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659022000;
+        bh=OY1CFZWT7ad7PEe4fFSJDPEcJ11GALMZHQVGZ3Tqumo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f9HytRqrLmomx4xvTJW+cidOARGraS/srKv4Akng2xTx86OJwLfVXVsQNcUJe/lUx
+         FSRGeGiMnAZZEfv7CZKiUgWdyhmUTnyfQN11WTrQY0Pd2mkEWw7v2IOoNeR7ykcVU1
+         QxTddwr5DpEWzduPI2YTdW9uizrIMy2GXFZWpIIw7sxnhJpz05suP/6Qvkrqk7kz6p
+         5wcDu9SGemwnxkdCGm1RztjLoQyZ68jhQHwMMiqtS88KqDpDIOUHsIrk1z4HpFoTht
+         rsCjPt5wg5mRIOXMgH5zQ0WZHCPK3AvzyL/+A3rjLTMR2mrAk0cR0LuasMgPYNrzMb
+         rS9qHXl3UX4hg==
+Date:   Thu, 28 Jul 2022 23:17:38 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: save movk instructions in mov_q when the lower
+ 16|32 bits are all zero
+Message-ID: <YuKokvBjDxATePpH@xhacker>
+References: <20220709084830.3124-1-jszhang@kernel.org>
+ <CAMj1kXEy7_zyDqQC_e9Rf1a8HuMBz_HbZOAP-WBzeeDVu8Mwmw@mail.gmail.com>
+ <YuKh2pmJC6/17Riy@xhacker>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220727155203.320929-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YuKh2pmJC6/17Riy@xhacker>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 17:52:03 +0200, Krzysztof Kozlowski wrote:
-> Document the ti,am654-adc compatible already used in DTS:
+On Thu, Jul 28, 2022 at 10:49:02PM +0800, Jisheng Zhang wrote:
+> On Wed, Jul 27, 2022 at 08:15:11AM -0700, Ard Biesheuvel wrote:
+> > On Sat, 9 Jul 2022 at 01:58, Jisheng Zhang <jszhang@kernel.org> wrote:
+> > >
+> > > Currently mov_q is used to move a constant into a 64-bit register,
+> > > when the lower 16 or 32bits of the constant are all zero, the mov_q
+> > > emits one or two useless movk instructions. If the mov_q macro is used
+> > > in hot code path, we want to save the movk instructions as much as
+> > > possible. For example, when CONFIG_ARM64_MTE is 'Y' and
+> > > CONFIG_KASAN_HW_TAGS is 'N', the following code in __cpu_setup()
+> > > routine is the pontential optimization target:
+> > >
+> > >         /* set the TCR_EL1 bits */
+> > >         mov_q   x10, TCR_MTE_FLAGS
+> > >
+> > > Before the patch:
+> > >         mov     x10, #0x10000000000000
+> > >         movk    x10, #0x40, lsl #32
+> > >         movk    x10, #0x0, lsl #16
+> > >         movk    x10, #0x0
+> > >
+> > > After the patch:
+> > >         mov     x10, #0x10000000000000
+> > >         movk    x10, #0x40, lsl #32
+> > >
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > 
+> > This is broken for constants that have 0xffff in the top 16 bits, as
+> > in that case, we will emit a MOVN/MOVK/MOVK sequence, and omitting the
+> > MOVKs will set the corresponding field to 0xffff not 0x0.
 > 
->   arch/arm64/boot/dts/ti/k3-am642-evm.dtb: adc: compatible:0: 'ti,am654-adc' is not one of ['ti,am3359-adc', 'ti,am4372-adc']
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/iio/adc/ti,am3359-adc.yaml    | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+> Thanks so much for this hint. I think you are right about the 0xffff in
+> top 16bits case.
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+the patch breaks below usage case:
+mov_q x0, 0xffffffff00000000
+
+I think the reason is mov_q starts from high bits, if we change the
+macro to start from LSB, then that could solve the breakage. But this
+needs a rewrite of mov_q

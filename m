@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7015839B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39ED5839B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234701AbiG1Hn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
+        id S234665AbiG1Hnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbiG1Hnz (ORCPT
+        with ESMTP id S234641AbiG1Hnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:43:55 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BD260685;
-        Thu, 28 Jul 2022 00:43:55 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id t2so1120837ply.2;
-        Thu, 28 Jul 2022 00:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=ld02fAkkfQOOuyOTcOJP2ZPoGVJcKXaJAF1qWkKBQFU=;
-        b=BolG1kEwisLqRQ4VzpTH7v/DNlxzLqYO51lMC29vIUlJIBcvaDLGJURQWrJsxrs8U/
-         j4VFGHkB9qBs7D+iEa4fzmt5UMHpQwnrDz+gZJ6ilVU+hSrJR21sKTx7JMiZIc8YZDI4
-         rC7eS/foBYSGPL7A5ZKIWxEJlCFjndMohFV14u4UQBeR4o5NDTi/ihWG0TUgRYj2AjF2
-         nMhi+SXmG9D7t21+APP9p0Wo3T+iDRV2TFCGFcKlzil2Sy+7XMOfSrjamMKmqeM4IycZ
-         5RRUcDD+Q96ErSGZatsEL1qHi0/FuFqf5odyXzRyOSQmNxCo+0Wdu+24YucPZ81x4tSJ
-         Jqvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=ld02fAkkfQOOuyOTcOJP2ZPoGVJcKXaJAF1qWkKBQFU=;
-        b=ZwetXX3cw6N7YoFFj6zapYj5lh2W8O7j7D9vulgxRK9zuSFsixVdjpZBIknZ3Za4ay
-         8pFIN5S6yREnO3ghw3EA8fW0vLb+UL181mwAs64ry+yC0TorH0LYViONOuBoetIjqOAg
-         x1HOq5/1xps1w6nmD+BWD+4ATOTBsS3DzVdBcixx25m0VEtC3UrHSd6WSOZ8vVR1ErrK
-         BDe8Tp0P6VUi0C3rp9Pnn039qn97LQEf41vvgv1ZkCN2Cu2IasMA47r76cWXVMQDvYgm
-         1e9tXipGT80FR8mHhSBoDa6R4qO7x/r9xX4a18A4vva6xG8mD7T8+Ylr04y1uSYawqSo
-         g+1Q==
-X-Gm-Message-State: AJIora/jjUU+y1joHDd5M3fFIGuulqPbVGQdsgY2/yF8NzUgFJhb0SV8
-        QRChhArUmeAZXmv0KJhy6Y0=
-X-Google-Smtp-Source: AGRyM1s3HzMpz9c1oBbT1x2dnRdj1bGj85TmFHhbUHZBPlgBgNdAPgaDx3NA0OrcBtUzk+6HlPev4Q==
-X-Received: by 2002:a17:90a:fec:b0:1f2:8c1f:210b with SMTP id 99-20020a17090a0fec00b001f28c1f210bmr8913583pjz.114.1658994234573;
-        Thu, 28 Jul 2022 00:43:54 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-25.three.co.id. [180.214.232.25])
-        by smtp.gmail.com with ESMTPSA id i2-20020a626d02000000b0052c0a9234e0sm80pfc.11.2022.07.28.00.43.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 00:43:54 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id C45B1104A8A; Thu, 28 Jul 2022 14:43:49 +0700 (WIB)
-Date:   Thu, 28 Jul 2022 14:43:49 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/201] 5.15.58-rc1 review
-Message-ID: <YuI+NZPGYYg9g/T3@debian.me>
-References: <20220727161026.977588183@linuxfoundation.org>
+        Thu, 28 Jul 2022 03:43:37 -0400
+X-Greylist: delayed 187 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Jul 2022 00:43:36 PDT
+Received: from smtp86.ord1d.emailsrvr.com (smtp86.ord1d.emailsrvr.com [184.106.54.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4394461109
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
+        s=20170822-45nk5nwl; t=1658994214;
+        bh=COnHq0q10jhFOxbkwvLuP4sHO7hzKD2UTU9fvogld5o=;
+        h=Date:Subject:To:From:From;
+        b=imTyKsUTDpVzxEuwveDG9Vi/iPpqKWnZg0vHRucblp1d5tQO6MuTx+7WB+8L2f2dk
+         YW9WYmM4V2DSzo6pGqIjf7+RQEdfKJZq1B33HaqSQhxGDR/ErZ21+856eJAyrStgrV
+         eaPQ4qTYUGlrESkf2GsmhGL5N4yvZI+rwrVuiJxg=
+X-Auth-ID: antonio@openvpn.net
+Received: by smtp3.relay.ord1d.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id 9B1F460090;
+        Thu, 28 Jul 2022 03:43:33 -0400 (EDT)
+Message-ID: <d645f6e1-d977-e2ea-1f8e-0b5458c9438e@openvpn.net>
+Date:   Thu, 28 Jul 2022 09:44:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220727161026.977588183@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220719014704.21346-1-antonio@openvpn.net>
+ <20220719014704.21346-2-antonio@openvpn.net> <YtbPtkF1Ah9xrBam@lunn.ch>
+From:   Antonio Quartulli <antonio@openvpn.net>
+Organization: OpenVPN Inc.
+In-Reply-To: <YtbPtkF1Ah9xrBam@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 8cf5a843-5e45-45b4-8822-23f11e9ecabf-1-1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 06:08:24PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.58 release.
-> There are 201 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi,
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
-and powerpc (ps3_defconfig, GCC 12.1.0).
+On 19/07/2022 17:37, Andrew Lunn wrote:
+>> +static int ovpn_net_change_mtu(struct net_device *dev, int new_mtu)
+>> +{
+>> +	if (new_mtu < IPV4_MIN_MTU ||
+>> +	    new_mtu + dev->hard_header_len > IP_MAX_MTU)
+>> +		return -EINVAL;
+> 
+> If you set dev->min_mtu and dev->max_mtu, the core will validate this
+> for you, see dev_validate_mtu().
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Yeah, thanks for the pointer.
+
+> 
+>> +static int ovpn_get_link_ksettings(struct net_device *dev,
+>> +				   struct ethtool_link_ksettings *cmd)
+>> +{
+>> +	ethtool_convert_legacy_u32_to_link_mode(cmd->link_modes.supported, 0);
+>> +	ethtool_convert_legacy_u32_to_link_mode(cmd->link_modes.advertising, 0);
+> 
+> These two should not be needed. Look at tun, veth etc, they don't set
+> them.
+
+I found this in tun.c:
+
+3512         ethtool_link_ksettings_zero_link_mode(cmd, supported);
+3513         ethtool_link_ksettings_zero_link_mode(cmd, advertising);
+
+Which seems a more appropriate version of my code, no?
+
+Regards,
 
 -- 
-An old man doll... just what I always wanted! - Clara
+Antonio Quartulli
+OpenVPN Inc.

@@ -2,222 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FCA583F55
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCC3583F5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236650AbiG1M4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S237412AbiG1M6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiG1M4d (ORCPT
+        with ESMTP id S235767AbiG1M6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:56:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A452F46DAC
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:56:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42671B82445
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 12:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1151C433D6;
-        Thu, 28 Jul 2022 12:56:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659012988;
-        bh=VrARDON6MbbsGtnH+7r+BZjRFSap/yVpLEOwumEtuAQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S59vQ7Z9gA8wdVLPDSCycoXdtrLb9uTdzJ0uF35hf5YoD/AVjT3eLxX7F9hc4isVK
-         Z8h23/W0nPWIWXzOSS7uFHMKruxJGUgMrKPCeNhX2ph0B2rDlQc1b7MqBDVhMPKG0y
-         WTlCqRKJkU2+74A3l200mVLrzBAcUr2X8KcAKIO0rQAUSoEdEWlfqPZhIE6xSLpeEW
-         FtTBJNrRHXdtlqPTlTTM3clgYNVd2S2IR7h1Xae9mzGcPy4KASpnF4Jld95DKcURSk
-         QECj85NpuHcLj0rDCWp/jFdAtNaDX35hQpnEXBz+ZPaiNhmI1s1AGgo/LDuU0t8u1s
-         Qmzto7H8wH1zw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oH34D-0000Bz-Pr; Thu, 28 Jul 2022 14:56:42 +0200
-Date:   Thu, 28 Jul 2022 14:56:41 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Jon Hunter <jonathanh@nvidia.com>
-Subject: Re: [PATCH] irqdomain: Fix mapping-creation race
-Message-ID: <YuKHiZuNvN+K9NCc@hovoldconsulting.com>
-References: <20220728092710.21190-1-johan+linaro@kernel.org>
- <87wnbxwj94.wl-maz@kernel.org>
+        Thu, 28 Jul 2022 08:58:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AED46DAC
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659013094; x=1690549094;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mOBeZUird/F+xHLCKLGIqA+qu0Eq+kakO8OWHHGsyGA=;
+  b=S5b9QbDRbUc+Uzw+OyFWlsOdMZty1arOPV4HN9UP6gzboIbKuTiI4H1L
+   oV+A6xefgbz6Ylo3L98xEssgER8jPMh4A5Voc8IL/3dTJddMVOimXgdJe
+   JcDijHwwXiEiLu1ylqPuyUWBu2wV6pRgmX2hDv6UYQQGttUPqMO1RJIQi
+   BQOKPyS1FcsCMlShr1r7ri10credqHoLcEGeHeAdYOLx4oozMxHdIQUfk
+   z5FAy9dg7teER/j2/0pmuPEZOG3JZRekS8iR1Hwz4kRTFNXOJM8KJIyoM
+   1Bet4zxUouvE5nhWJeB/OMN+JrioYJH4gLCJHReQOIOJy/OLstLrJGCV7
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="268884616"
+X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
+   d="scan'208";a="268884616"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 05:58:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,198,1654585200"; 
+   d="scan'208";a="668819284"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Jul 2022 05:58:11 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oH35e-000A14-1m;
+        Thu, 28 Jul 2022 12:58:10 +0000
+Date:   Thu, 28 Jul 2022 20:57:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kassey Li <quic_yingangl@quicinc.com>, akpm@linux-foundation.org,
+        vbabka@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, minchan@kernel.org,
+        iamjoonsoo.kim@lge.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, quic_yingangl@quicinc.com
+Subject: Re: [PATCH v2] mm/page_owner.c: add llseek for page_owner
+Message-ID: <202207282029.T2NTavCf-lkp@intel.com>
+References: <20220727125508.5154-1-quic_yingangl@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87wnbxwj94.wl-maz@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220727125508.5154-1-quic_yingangl@quicinc.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 12:48:23PM +0100, Marc Zyngier wrote:
-> On Thu, 28 Jul 2022 10:27:10 +0100,
-> Johan Hovold <johan+linaro@kernel.org> wrote:
-> > 
-> > Parallel probing (e.g. due to asynchronous probing) of devices that share
-> > interrupts can currently result in two mappings for the same hardware
-> > interrupt to be created.
-> 
-> And I thought nobody would be using shared interrupts anymore. Turns
-> out people are still building braindead HW... :-/
-> 
-> > 
-> > Add a serialising mapping mutex so that looking for an existing mapping
-> > before creating a new one is done atomically.
-> > 
-> > Note that serialising the lookup and creation in
-> > irq_create_mapping_affinity() would have been enough to prevent the
-> > duplicate mapping, but that could instead cause
-> > irq_create_fwspec_mapping() to fail when there is a race.
-> > 
-> > Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
-> > Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
-> > Cc: Dmitry Torokhov <dtor@chromium.org>
-> > Cc: Jon Hunter <jonathanh@nvidia.com>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  kernel/irq/irqdomain.c | 46 +++++++++++++++++++++++++++++++-----------
-> >  1 file changed, 34 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-> > index 8fe1da9614ee..d263a7dd4170 100644
-> > --- a/kernel/irq/irqdomain.c
-> > +++ b/kernel/irq/irqdomain.c
-> > @@ -22,6 +22,7 @@
-> >  
-> >  static LIST_HEAD(irq_domain_list);
-> >  static DEFINE_MUTEX(irq_domain_mutex);
-> > +static DEFINE_MUTEX(irq_mapping_mutex);
-> 
-> I'd really like to avoid a global mutex. At the very least this should
-> be a per-domain mutex, otherwise this will serialise a lot more than
-> what is needed.
+Hi Kassey,
 
-Yeah, I considered that too, but wanted to get your comments on this
-first.
+Thank you for the patch! Perhaps something to improve:
 
-Also note that the likewise global irq_domain_mutex (and
-sparse_irq_lock) are taken in some of these paths so perhaps using finer
-locking won't actually matter that much as this is mostly for parallel
-probing.
+[auto build test WARNING on akpm-mm/mm-everything]
 
-> >  
-> >  static struct irq_domain *irq_default_domain;
-> >  
-> > @@ -669,7 +670,7 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
-> >  #endif
-> >  
-> >  /**
-> > - * irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
-> > + * __irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
-> >   * @domain: domain owning this hardware interrupt or NULL for default domain
-> >   * @hwirq: hardware irq number in that domain space
-> >   * @affinity: irq affinity
-> > @@ -679,9 +680,9 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
-> >   * If the sense/trigger is to be specified, set_irq_type() should be called
-> >   * on the number returned from that call.
-> >   */
-> 
-> This comment should be moved to the exported function, instead of
-> documenting something that nobody can call...
+url:    https://github.com/intel-lab-lkp/linux/commits/Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220727-205617
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: arm64-randconfig-r025-20220727 (https://download.01.org/0day-ci/archive/20220728/202207282029.T2NTavCf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/5533df4120ec1703df71542154e8c5b0b21ddb10
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220727-205617
+        git checkout 5533df4120ec1703df71542154e8c5b0b21ddb10
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Yes, of course. I looked at the kernel doc for another
-double-underscore-prefixed function, but those are all exported.
- 
-> > -unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
-> > -				       irq_hw_number_t hwirq,
-> > -				       const struct irq_affinity_desc *affinity)
-> > +static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
-> > +						  irq_hw_number_t hwirq,
-> > +						  const struct irq_affinity_desc *affinity)
-> >  {
-> >  	struct device_node *of_node;
-> >  	int virq;
-> > @@ -724,6 +725,19 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
-> >  
-> >  	return virq;
-> >  }
-> > +
-> > +unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
-> > +					 irq_hw_number_t hwirq,
-> > +					 const struct irq_affinity_desc *affinity)
-> > +{
-> > +	unsigned int virq;
-> > +
-> > +	mutex_lock(&irq_mapping_mutex);
-> > +	virq = __irq_create_mapping_affinity(domain, hwirq, affinity);
-> > +	mutex_unlock(&irq_mapping_mutex);
-> > +
-> > +	return virq;
-> > +}
-> >  EXPORT_SYMBOL_GPL(irq_create_mapping_affinity);
-> >  
-> >  static int irq_domain_translate(struct irq_domain *d,
-> > @@ -789,6 +803,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
-> >  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
-> >  		type &= IRQ_TYPE_SENSE_MASK;
-> >  
-> > +	mutex_lock(&irq_mapping_mutex);
-> > +
-> >  	/*
-> >  	 * If we've already configured this interrupt,
-> >  	 * don't do it again, or hell will break loose.
-> > @@ -801,7 +817,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
-> >  		 * interrupt number.
-> >  		 */
-> >  		if (type == IRQ_TYPE_NONE || type == irq_get_trigger_type(virq))
-> > -			return virq;
-> > +			goto out;
-> >  
-> >  		/*
-> >  		 * If the trigger type has not been set yet, then set
-> > @@ -810,26 +826,26 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
-> >  		if (irq_get_trigger_type(virq) == IRQ_TYPE_NONE) {
-> >  			irq_data = irq_get_irq_data(virq);
-> >  			if (!irq_data)
-> > -				return 0;
-> > +				goto err;
-> >  
-> >  			irqd_set_trigger_type(irq_data, type);
-> > -			return virq;
-> > +			goto out;
-> >  		}
-> >  
-> >  		pr_warn("type mismatch, failed to map hwirq-%lu for %s!\n",
-> >  			hwirq, of_node_full_name(to_of_node(fwspec->fwnode)));
-> > -		return 0;
-> > +		goto err;
-> >  	}
-> >  
-> >  	if (irq_domain_is_hierarchy(domain)) {
-> >  		virq = irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, fwspec);
-> >  		if (virq <= 0)
-> > -			return 0;
-> > +			goto err;
-> >  	} else {
-> >  		/* Create mapping */
-> > -		virq = irq_create_mapping(domain, hwirq);
-> > +		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
-> 
-> This rechecks for the existence of the mapping. Surely we can do a bit
-> better by rejigging this (admittedly bitrotting) code.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm sure we can. Should I try to fix the race first with a patch like
-this one that can potentially be backported, and then see what I can do
-about cleaning this up?
+All warnings (new ones prefixed by >>):
 
-After all it has looked like this for the past eight years since when
-this code was first merged.
+>> mm/page_owner.c:573:8: warning: no previous prototype for function 'llseek_page_owner' [-Wmissing-prototypes]
+   loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
+          ^
+   mm/page_owner.c:573:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
+   ^
+   static 
+   1 warning generated.
 
-Johan
+
+vim +/llseek_page_owner +573 mm/page_owner.c
+
+   572	
+ > 573	loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
+   574	{
+   575		loff_t retval = 0;
+   576		switch (whence) {
+   577			case SEEK_CUR:
+   578			case SEEK_SET:
+   579				file->f_pos = offset;
+   580				break;
+   581			default:
+   582				retval = -ENXIO;
+   583		}
+   584	
+   585		return retval;
+   586	}
+   587	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

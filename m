@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDD85835FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 02:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E58583603
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 02:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbiG1A2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Jul 2022 20:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
+        id S236104AbiG1AcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Jul 2022 20:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiG1A2O (ORCPT
+        with ESMTP id S229505AbiG1Ab6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Jul 2022 20:28:14 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E89D51436
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 17:28:13 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 88D631E80D72;
-        Thu, 28 Jul 2022 08:28:16 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id VSybt8IYnz-4; Thu, 28 Jul 2022 08:28:14 +0800 (CST)
-Received: from [172.30.38.102] (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id A6EED1E80CF5;
-        Thu, 28 Jul 2022 08:28:13 +0800 (CST)
-Subject: Re: [PATCH] tracing: Do PTR_ERR() after IS_ERR()
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        yuzhe@nfschina.com, renyu@nfschina.com, jiaming@nfschina.com
-References: <20220727153519.6697-1-liqiong@nfschina.com>
- <20220727122847.6b00e29d@rorschach.local.home>
-From:   liqiong <liqiong@nfschina.com>
-Message-ID: <efce3a4c-4480-99f5-0229-a44009ebe9d8@nfschina.com>
-Date:   Thu, 28 Jul 2022 08:28:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        Wed, 27 Jul 2022 20:31:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81EE54CA0;
+        Wed, 27 Jul 2022 17:31:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75B23B8229F;
+        Thu, 28 Jul 2022 00:31:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D28C433D6;
+        Thu, 28 Jul 2022 00:31:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658968315;
+        bh=cgMax9nf9qW48JMtAkUoIyip26M7Bpa8V5h47PbKfC4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=nlqaAET4ci75hpEpVFTfRPIEF2htScl2LXIAlqXintsUaUKetcCiPAzb42chVmnkB
+         wKr9EwczFt7JxVVho5QiYakPC+GtoRtP4t0rfUVwGo9Fslccl0m+4xx7uQrCsgmCTm
+         DO7IySLE7/4lrN2Wbug+uNmq4hEj2qUCKYShnJduTcyRX+nB26mLun1a4MxFjOqyJ1
+         f2wI2hMWzsu0AaZVl7XYyzu8ulkz9VwMj5klckTi/1Y0zHSSkpKf/rEdKtDtWEXpkd
+         VpwhUErr0IIXtuOyfLAJvhkyLkJGvvPVMm6yRSH/RtCPQnAFIrj9KScMWnH2Stkk5W
+         Rj4PZYLvujSxA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20220727122847.6b00e29d@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_20,NICE_REPLY_A,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220714203822.186448-1-marijn.suijten@somainline.org>
+References: <20220714203822.186448-1-marijn.suijten@somainline.org>
+Subject: Re: [PATCH] clk: qcom: gcc-sdm660: Use floor ops for SDCC1 clock
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>,
+        Rob Herring <robh@kernel.org>,
+        Craig Tatlor <ctatlor97@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Date:   Wed, 27 Jul 2022 17:31:53 -0700
+User-Agent: alot/0.10
+Message-Id: <20220728003155.22D28C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022年07月28日 00:28, Steven Rostedt 写道:
-> On Wed, 27 Jul 2022 23:35:19 +0800
-> Li Qiong <liqiong@nfschina.com> wrote:
->
->> Check IS_ERR() firstly, then do PTR_ERR().
-> Why?
->
-> The code is fine as is.
->
-> -- Steve
->
+Quoting Marijn Suijten (2022-07-14 13:38:22)
+> In commit 3f905469c8ce ("clk: qcom: gcc: Use floor ops for SDCC clocks")
+> floor ops were applied to SDCC2 only, but flooring is also required on
+> the SDCC1 apps clock which is used by the eMMC card on Sony's Nile
+> platform, and otherwise result in the typicial "Card appears
+> overclocked" warnings observed on many other platforms before:
+>=20
+>     mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
+>     mmc0: Card appears overclocked; req 52000000 Hz, actual 100000000 Hz
+>     mmc0: Card appears overclocked; req 104000000 Hz, actual 192000000 Hz
+>=20
+> Fixes: f2a76a2955c0 ("clk: qcom: Add Global Clock controller (GCC) driver=
+ for SDM660")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
 
-Hi, 
-
-It's all right, assign  PTR_ERR()  to 'ret'  anyway.
-But this assignment is valid only at the "IS_ERR()" path.
-Maybe it is better put "PTR_ERR()" at error path, keep the code clear.
-
--- 
-李力琼 <13524287433>
-上海市浦东新区海科路99号中科院上海高等研究院3号楼3楼
-
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>

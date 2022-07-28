@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D145845FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 20:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C9658465E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 21:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiG1Sq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 14:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        id S233189AbiG1TMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 15:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiG1SqX (ORCPT
+        with ESMTP id S229619AbiG1TMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 14:46:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B4C96E2D1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659033981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UjF6W4Csz4g0rUWnnoan8g4wLstWebVhsMlFWJRzp2s=;
-        b=ERxE3KtlZZCEvOQ6ClkuypjDAhTUJdmvZ4bL7e2mD/zsPlmodfHAC/FcXtZV9G/+jZpzQ1
-        9qhjYCV7TyGPAQZFAJpZ2a2Y0k/TJJTQoicwbl3HfTsEeGhkBbGyT/pkrtlJumyPEpFtFs
-        W2tCITEda1d2z97fXyvfn29/9guIhyE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-Bbc-Yeo5PkuJEHbKTs5h0Q-1; Thu, 28 Jul 2022 14:46:20 -0400
-X-MC-Unique: Bbc-Yeo5PkuJEHbKTs5h0Q-1
-Received: by mail-ed1-f72.google.com with SMTP id z1-20020a05640235c100b0043bca7d9b3eso1598308edc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 11:46:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UjF6W4Csz4g0rUWnnoan8g4wLstWebVhsMlFWJRzp2s=;
-        b=Mt/YJS3RIlrAKja8VYLa/hhB9JpH2orTeB6WP1QFVHMXtftsEdbkR2agSML3exTajo
-         boUm6OEwlcPiJsxmn3lZiDLpDDZBOpnyLToSSPooPERF4sbThtKPD5nSUk53Q6/3kGAg
-         ZZAWO8uEccXfXQSl/nzSO+05KWq1j3Y5+4sT+hwatZoGQtAqFtwUjRHSyhpiNBn9JQoe
-         dRQdPHMtKx4CLVfRDcAXivILlGGLdo/L5lDWuOy/JK0KNadsCjxyw5zNXX177LHH/i4R
-         Bo3KOxVUfdE/H2H3OyRXqgcb9Z7F3jzPw/BXydCNSF6JyUeAcyaqGU2LOyc0Ofvgd5s5
-         shZg==
-X-Gm-Message-State: AJIora8U6404hV4kQG71oPVMOwTgx6w0buntxU3hAeG3POR+J6IB6Srt
-        uGKYb3QjHALnqocWfft+kxWve/nITTEVmLS6XJYEUzb0SEm1BW7PVMa/1AkciIYTZIKO4m3yz94
-        Wtw+LVduOgA8XE0YvzOypfJS0
-X-Received: by 2002:a17:907:7ba9:b0:72f:2994:74aa with SMTP id ne41-20020a1709077ba900b0072f299474aamr198716ejc.85.1659033978863;
-        Thu, 28 Jul 2022 11:46:18 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vp3AJuTTutmrSFCg3orG4R7IBnDwQmGu+7Ego5p5sGZrqIbp7PLCS9usMJA/fn2Q+kkUuUVA==
-X-Received: by 2002:a17:907:7ba9:b0:72f:2994:74aa with SMTP id ne41-20020a1709077ba900b0072f299474aamr198701ejc.85.1659033978404;
-        Thu, 28 Jul 2022 11:46:18 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id yw17-20020a170907245100b00722fadc4279sm686602ejb.124.2022.07.28.11.46.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 11:46:17 -0700 (PDT)
-Message-ID: <63a992e4-6016-7063-8219-ac59288a6ec0@redhat.com>
-Date:   Thu, 28 Jul 2022 20:46:17 +0200
+        Thu, 28 Jul 2022 15:12:34 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66718691EB;
+        Thu, 28 Jul 2022 12:12:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=FGPbbjbX4KDK76QvCX4o0ok2E32+6Ip3ULLXoY832p8=;
+        b=JZ2/j3yOOKkow1aDcnks4F8J1DLOwd33yz/gaSgCbRATSIjRn3ZE+Fu3SQLDhzUY8VSACsn6zXQwq
+         rOXCFCxENAEfwheB/O47YyRydzhgRPqmrNXhYaAD2kXyb5GHH1KagAAOzsu2IhwVUpiSxPLBSWryr8
+         dyCPmOTWKXWPzofzwYcKJO3zb6egGdFOAeWs+bb+tSUzjERPTVC9GeSZLghyAGgxVJZxhzSYB8At6G
+         Mq4ptZEJ5UIIqpnrY/lB8VvdbXMIyIwAosj87DOK7by4H6q5XkJ200P5GXC3ISdevscaTbKpWbzh7X
+         D6qtemzvzbYAYNfbNuSeR5SeRV++9Ig==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000008,0.005760)], BW: [Enabled, t: (0.000013,0.000001)], RTDA: [Enabled, t: (0.070870), Hit: No, Details: v2.41.0; Id: 15.52k0je.1g933hend.4boe; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([85.93.58.13])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Thu, 28 Jul 2022 22:11:36 +0300
+Date:   Thu, 28 Jul 2022 21:46:50 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: microchip-spi: add missing module author entry
+Message-ID: <20220728184650.6wa5zwbrciatfsba@x260>
+References: <20220728075012.3136914-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] platform/x86: Fix comment typo
-Content-Language: en-US
-To:     Xin Gao <gaoxin@cdjrlc.com>, paul.gortmaker@windriver.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220722022337.15903-1-gaoxin@cdjrlc.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220722022337.15903-1-gaoxin@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728075012.3136914-1-conor.dooley@microchip.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 7/22/22 04:23, Xin Gao wrote:
-> The double `of' is duplicated in line 50, remove one.
+On Thu, Jul 28, 2022 at 08:50:13AM +0100, Conor Dooley wrote:
+> Add the missing MODULE_AUTHOR entry for the Microchip spi-slave FPGA
+> programming driver.
 > 
-> Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  include/linux/platform_data/x86/pmc_atom.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/fpga/microchip-spi.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/include/linux/platform_data/x86/pmc_atom.h b/include/linux/platform_data/x86/pmc_atom.h
-> index 6807839c718b..3edfb6d4e67a 100644
-> --- a/include/linux/platform_data/x86/pmc_atom.h
-> +++ b/include/linux/platform_data/x86/pmc_atom.h
-> @@ -47,7 +47,7 @@
->  #define	PMC_S0I2_TMR		0x88
->  #define	PMC_S0I3_TMR		0x8C
->  #define	PMC_S0_TMR		0x90
-> -/* Sleep state counter is in units of of 32us */
-> +/* Sleep state counter is in units of 32us */
->  #define	PMC_TMR_SHIFT		5
+> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> index bd284c7b8dc9..7436976ea904 100644
+> --- a/drivers/fpga/microchip-spi.c
+> +++ b/drivers/fpga/microchip-spi.c
+> @@ -395,4 +395,5 @@ static struct spi_driver mpf_driver = {
+>  module_spi_driver(mpf_driver);
 >  
->  /* Power status of power islands */
+>  MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
+> +MODULE_AUTHOR("Ivan Bornyakov <i.bornyakov@metrotek.ru>");
+>  MODULE_LICENSE("GPL");
+> -- 
+> 2.36.1
+> 
+
+Acked-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+
+Yet, I'm wondering in what situations MODULE_AUTHOR is needed? I've
+submitted a couple of other drivers without it, should I fix them?
 

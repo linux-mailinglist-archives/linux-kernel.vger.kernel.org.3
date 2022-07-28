@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB93584049
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C122D58404E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiG1NrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S230307AbiG1Nsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiG1NrQ (ORCPT
+        with ESMTP id S230245AbiG1Nsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:47:16 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498E8624A3;
-        Thu, 28 Jul 2022 06:47:15 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id x64so1419834iof.1;
-        Thu, 28 Jul 2022 06:47:15 -0700 (PDT)
+        Thu, 28 Jul 2022 09:48:31 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8681162A4C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:48:29 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id j22so3287625ejs.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 06:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r+1TBu687nWQgnDLvnkVse0tVKy5rmaUjY9l5bul1bw=;
+        b=mnYFb6Z0gowla85/6p8edOEMndatPD9pHHbUPzZ2s4k7oY8QU0bfnxMTqkBA21e7M9
+         c2HgrfohogAzB8QnNIq1ZBa+YhuniXejTt3Dfv81dER5eYLZmVwEQrMljZ9MCdmcrPli
+         72ZDcJm/ZLjMZLjDuDPbGuADQBUOXTGa1k1U/e5l5wZH7KDrYiF0tpU6RiVcUoQ/oseb
+         MSZxyLJyqwlLnLmgeUaG5sEuziiKXyUpMyhDW8hAvdM5efY6/7saWadMWNdWSuNsJmFU
+         Zjzsop40EXqXk3c8H7uinr3UkW9fd93I6Vyzm974gVlTX2/4xP7gUmiGBGeGN/4RBJXN
+         WIAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=z/W+enaupbkegvbEDRlhZGtG6b7D/kXPx1TKEn5BI3s=;
-        b=5vFY8mFDjFdI7pEA3KPZ7J4IFmuS9hitF+SPc1kh5klguTwrLG3z61/IiscadIcrsu
-         zde5WHIvQPHwVNBqdtYqzyCLeZm9N8gVSoE9195Douez0zzz0vhiWoA8jZuMVWnXs22W
-         sD0EyhgbUKW8i9v3k5CjIubRSksSUijuWl2W/0x+vljoqazPRaJbhTjcSGbYQBbapX48
-         rmx347Q8LRAMG0pKqxYTRxA9CMYdPuscc8m46AJG3UgKrcXRkeRcjdwm6+MYrRtRX1qH
-         tO4R7YAXs6lXZr14FW/pGVKtsIy7jHrXujvEZh02Fxq3BcdflwKcwlO/iEyg6uM56t/c
-         gQuw==
-X-Gm-Message-State: AJIora91ajUYYHNzjOPjpbIqQgyHJUWiN50CjNFg73vJHkpbls7FI3dN
-        icyoiBniZXFl2xeg+QrGVQ==
-X-Google-Smtp-Source: AGRyM1vnN5JBFltZQ5clBLXtY/PaNiw6vObuIjwvoFtMJqjVNj4jWE1UNeF8RUb+hywHn30jJvQEag==
-X-Received: by 2002:a05:6602:2b88:b0:67c:aca7:2f73 with SMTP id r8-20020a0566022b8800b0067caca72f73mr5984371iov.108.1659016034497;
-        Thu, 28 Jul 2022 06:47:14 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id q28-20020a02a99c000000b0033a29ec646dsm404093jam.4.2022.07.28.06.47.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 06:47:14 -0700 (PDT)
-Received: (nullmailer pid 779712 invoked by uid 1000);
-        Thu, 28 Jul 2022 13:47:12 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?q?Martin_Za=C5=A5ovi=C4=8D?= <m.zatovic1@gmail.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        jeffrey.l.hugo@gmail.com, hemantk@codeaurora.org,
-        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, mani@kernel.org, saravanak@google.com,
-        Michael.Srba@seznam.cz, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, elder@linaro.org, linus.walleij@linaro.org
-In-Reply-To: <20220728091712.13395-2-m.zatovic1@gmail.com>
-References: <20220728091712.13395-1-m.zatovic1@gmail.com> <20220728091712.13395-2-m.zatovic1@gmail.com>
-Subject: Re: [PATCH RFC v1 2/2] devicetree: bindings: bus: add Wiegand driver documentation
-Date:   Thu, 28 Jul 2022 07:47:12 -0600
-Message-Id: <1659016032.636583.779711.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r+1TBu687nWQgnDLvnkVse0tVKy5rmaUjY9l5bul1bw=;
+        b=7ymAsFtWAhv1KRnSXj3iCHT37nzsLLNFR8lxB/9k2SOhaJH0VsM9UG+pKbRW+OWXDZ
+         ArL2DycsqI6Dg8RHdvzVq5GDS2n9RS4jWfE6ODBw3awhvoApi7VcwWF9skHJWdp4k3q4
+         8VTueEEMWHngJw1cwvs2D0oXBX0SB9e/9H9MB3WgzqlbTt1BXp62w0C69gfA3Kib8oGS
+         Xf5KH4n5Mz4SM7CzMEZg7oZz8XgUuiI5N6YWgnKnB3b0zudf/HDFUpU/JVfjN5eWgDG3
+         +mC1Sy8BUlpAk0cK5IGqoYk8LOU2r1aiOwABQNoF3zR6+i3a4vFiynouk0liCJ0Bm/pO
+         Tn5Q==
+X-Gm-Message-State: AJIora82Gux5iSXtqzmPET3TC37b2QIjlKAD6liX51w6TEjMJaV4H7ad
+        hI1aHckQIVr/EFbsOv4U+Rs+No10bXopFFjp2yd/4A==
+X-Google-Smtp-Source: AGRyM1sF5rXxF3KvP5Js0FEK0zzhguPLYc3HGt8R2vajyLSw++pPaBZPBHljYOhtWkFFGphjXk99ORezR9cjYgIjEg8=
+X-Received: by 2002:a17:907:9482:b0:72b:8c16:dac0 with SMTP id
+ dm2-20020a170907948200b0072b8c16dac0mr18130555ejc.286.1659016107934; Thu, 28
+ Jul 2022 06:48:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220726091448.81746-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220726091448.81746-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 28 Jul 2022 15:48:17 +0200
+Message-ID: <CAMRc=MepfRwCvkos5yqQMHk0m=yXXqSv3O+nYWW0x6MuKE=t4Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: 74xx-mmio: Use bits instead of plain numbers
+ for flags
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 11:17:12 +0200, Martin Zaťovič wrote:
-> Wiegand write-only driver requires definitions of two GPIO lines
-> in the devicetree. This adds the documentation of their
-> definitions.
-> 
-> Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
+On Tue, Jul 26, 2022 at 11:14 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The initial code was misleading to use bitwise AND against plain number,
+> and the commit d3054ba1db62 ("gpio: 74xx-mmio: Check MMIO_74XX_DIR_IN flag
+> in mmio_74xx_dir_in()") missed that. Switch definitions to be defined bits
+> for the correct comparison.
+>
+> Fixes: d3054ba1db62 ("gpio: 74xx-mmio: Check MMIO_74XX_DIR_IN flag in mmio_74xx_dir_in()")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  .../devicetree/bindings/bus/wiegand-gpio.yaml | 66 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/bus/wiegand-gpio.yaml
-> 
+>  drivers/gpio/gpio-74xx-mmio.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-74xx-mmio.c b/drivers/gpio/gpio-74xx-mmio.c
+> index cd399898ed12..0464f1ecd20d 100644
+> --- a/drivers/gpio/gpio-74xx-mmio.c
+> +++ b/drivers/gpio/gpio-74xx-mmio.c
+> @@ -13,8 +13,8 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+>
+> -#define MMIO_74XX_DIR_IN       (0 << 8)
+> -#define MMIO_74XX_DIR_OUT      (1 << 8)
+> +#define MMIO_74XX_DIR_IN       BIT(8)
+> +#define MMIO_74XX_DIR_OUT      BIT(9)
+>  #define MMIO_74XX_BIT_CNT(x)   ((x) & GENMASK(7, 0))
+>
+>  struct mmio_74xx_gpio_priv {
+> --
+> 2.35.1
+>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Applied, thanks!
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/bus/wiegand-gpio.example.dts:22.47-48 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:383: Documentation/devicetree/bindings/bus/wiegand-gpio.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1404: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Bart

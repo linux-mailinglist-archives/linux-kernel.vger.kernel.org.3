@@ -2,174 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7EC583AE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72D8583AE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 11:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235365AbiG1JCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 05:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S235397AbiG1JDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 05:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235350AbiG1JCo (ORCPT
+        with ESMTP id S235388AbiG1JDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 05:02:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE7B6566C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:02:43 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oGzPc-0004ja-6B; Thu, 28 Jul 2022 11:02:32 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        Thu, 28 Jul 2022 05:03:08 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8CA65674
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 02:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1658998982;
+        bh=KQLaUEDK/p9raCwKFYx9LJ2k60Kkx8nJCoIDjwmyquQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=fQ1LAVN+re3U570saqSf87LFaF7V6g1dWQUrh5X33NR/gKEPQMyAhz086u3kTagyC
+         C9WkNl+M5W7OP8wUKG9VtdF/9/MdnkoqwfCkusF8VeFqDwgmnzqSQy1LQbBNVy3Zfe
+         qJqLEKeWA0C8Ohnq73jh/7XZWCShrhvOxLHTFG6E=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C4EBBBCB24;
-        Thu, 28 Jul 2022 09:02:29 +0000 (UTC)
-Date:   Thu, 28 Jul 2022 11:02:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
- register (btr)
-Message-ID: <20220728090228.nckgpmfe7rpnfcyr@pengutronix.de>
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
- <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
- <20220727113054.ffcckzlcipcxer2c@pengutronix.de>
- <20220727192839.707a3453.max@enpas.org>
- <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
- <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id C7463667C2;
+        Thu, 28 Jul 2022 05:03:00 -0400 (EDT)
+Message-ID: <00914cf65b64e06f370213fdc079111aa2a27145.camel@xry111.site>
+Subject: Re: [PATCH 1/5] LoongArch: Add section of GOT for kernel module
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Youling Tang <tangyouling@loongson.cn>, loongarch@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 28 Jul 2022 17:02:58 +0800
+In-Reply-To: <849f514e-f78a-72a2-b94e-6974074b75eb@loongson.cn>
+References: <385f63bcbee8e37c42f479ce9cdc7e7d731d419b.camel@xry111.site>
+         <3f43d51d530344f73a0a7087407799ff9dff3ba8.camel@xry111.site>
+         <849f514e-f78a-72a2-b94e-6974074b75eb@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5tukwidie4thhway"
-Content-Disposition: inline
-In-Reply-To: <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---5tukwidie4thhway
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 28.07.2022 09:36:21, Dario Binacchi wrote:
-> > Most of the other CAN drivers write the BTR values into the register of
-> > the hardware. How are these BTR values transported into the driver?
-> >
-> > There are 2 ways:
-> >
-> > 1) - user space configures a bitrate
-> >    - the kernel calculates with the "struct can_bittiming_const" [1] gi=
-ven
-> >      by driver and the CAN clock rate the low level timing parameters.
-> >
-> >      [1] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/lin=
-ux/can/netlink.h#L47
-> >
-> > 2) - user space configures low level bit timing parameter
-> >      (Sample point in one-tenth of a percent, Time quanta (TQ) in
-> >       nanoseconds, Propagation segment in TQs, Phase buffer segment 1 in
-> >       TQs, Phase buffer segment 2 in TQs, Synchronisation jump width in
-> >       TQs)
-> >     - the kernel calculates the Bit-rate prescaler from the given TQ and
-> >       CAN clock rate
-> >
-> > Both ways result in a fully calculated "struct can_bittiming" [2]. The
-> > driver translates this into the hardware specific BTR values and writes
-> > the into the registers.
-> >
-> > If you know the CAN clock and the bit timing const parameters of the
-> > slcan's BTR register you can make use of the automatic BTR calculation,
-> > too. Maybe the framework needs some tweaking if the driver supports both
-> > fixed CAN bit rate _and_ "struct can_bittiming_const".
+On Thu, 2022-07-28 at 16:29 +0800, Youling Tang wrote:
+> On 07/28/2022 12:26 AM, Xi Ruoyao wrote:
+> > +	mod->arch.got.shdr->sh_type =3D SHT_NOBITS;
+> > +	mod->arch.got.shdr->sh_flags =3D SHF_ALLOC;
+> > +	mod->arch.got.shdr->sh_addralign =3D L1_CACHE_BYTES;
+> > +	mod->arch.got.shdr->sh_size =3D (num_plts + 1) *
+> > sizeof(struct plt_entry);
+> > +	mod->arch.got.num_entries =3D 0;
+> > +	mod->arch.got.max_entries =3D num_plts;
+> =C2=A0Hi, Ruoyao
 >=20
-> Does it make sense to use the device tree
+> =C2=A0=C2=A0We should use num_gots instead of num_plts when creating .got
+> section.
 
-The driver doesn't support DT and DT only works for static serial
-interfaces.
+Yes, it's a stupid error and I'll fix it in V2.
 
-> to provide the driver with those
-> parameters required for the automatic calculation of the BTR (clock rate,
-> struct can_bittiming_const, ...) that depend on the connected
-> controller?
-
-The device tree usually says it's a CAN controller compatible to X and
-the following clock(s) are connected. The driver for CAN controller X
-knows the bit timing const. Some USB CAN drivers query the bit timing
-const from the USB device.
-
-> In this way the solution should be generic and therefore scalable. I
-> think we should also add some properties to map the calculated BTR
-> value on the physical register of the controller.
-
-The driver knows how to map the "struct can_bittiming" to the BTR
-register values of the hardware.
-
-What does the serial protocol say to the BTR values? Are these standard
-SJA1000 layout with 8 MHz CAN clock or are those adapter specific?
-
-> Or, use the device tree to extend the bittates supported by the controller
-> to the fixed ones (struct can_priv::bitrate_const)?
-
-The serial protocol defines fixed bit rates, no need to describe them in
-the DT:
-
-|           0            10 Kbit/s
-|           1            20 Kbit/s
-|           2            50 Kbit/s
-|           3           100 Kbit/s
-|           4           125 Kbit/s
-|           5           250 Kbit/s
-|           6           500 Kbit/s
-|           7           800 Kbit/s
-|           8          1000 Kbit/s
-
-Are there more bit rates?
-
-regards,
-Marc
+But why didn't this cause a malfunction on my system? :(.
 
 --=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---5tukwidie4thhway
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLiUKEACgkQrX5LkNig
-0117QggAjrRUz25+oJjtGLVN5SEFPDVNMFeaVARhoxHZX/v7IfAyQpAT/HjiT/Sx
-5YyBaN98+KS86zMu5qjHrdlhjqbIH+uOYdN/y42hEhiRXGkOSnC2l8cKuuYowOgO
-U9QfZrOIFv4pfstQ+yRRSNG30wGUezJtISk1U+TkYaxwFcihU1SIMm9p1hhofjQJ
-iIPc41SbKRzgTtzyAjBS0d2Ti6gXKv4k7vCVfjgEM5ai/jRcIvlqf5xvEmhxfP2I
-tqabd4hSh8rDZe1I9eaNrpOslOVx1bWW6Vycycoq8oN1QcNkng1BHvF/xFctmfoN
-MKZ/u90EzFCwX/H2Ndc/dsrm2RnN6g==
-=+ALT
------END PGP SIGNATURE-----
-
---5tukwidie4thhway--
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

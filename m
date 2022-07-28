@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F35258420C
+	by mail.lfdr.de (Postfix) with ESMTP id 788C758420D
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 16:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiG1OoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 10:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
+        id S231624AbiG1Oo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 10:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiG1OoW (ORCPT
+        with ESMTP id S232254AbiG1OoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 10:44:22 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB974F5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:44:21 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3ACC05C006D;
-        Thu, 28 Jul 2022 10:44:21 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 28 Jul 2022 10:44:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1659019461; x=1659105861; bh=Fje/wPKfeK
-        kA3zBSKNSFSbZIQmOsCAPH58zdG4srTYc=; b=SvvxdDah5oDoydmCwKaabHpvww
-        uLFfTX1SncpEKbnfhDAAB4sFtjzYJdgMFInB2B31VJp/+JtoS8L4HuhcnzWH+/QO
-        LSuVzUGoFepbdmV7MXdPNerHwKDPyJ9Mz0PzCxqPgThSahSHp1ShgHGrirgZFxBE
-        E2WeyXIWIO1BGwWjYuB2zWRcn5jB0Eq5Zh5eWygGXI85SfOBdp6DGpDNPSs3bcn3
-        1CJ3CU/uU3ojxgkA5PTQ9OcBJMQFPPknKhaYUpVifb+lgLNAkS2AQXMfhSu6XYDz
-        erzQLzSoGE1wGq1qKX2AdcV92D48hxurpRo72GWKAKmEN+GnOD65QshtqogQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659019461; x=1659105861; bh=Fje/wPKfeKkA3zBSKNSFSbZIQmOs
-        CAPH58zdG4srTYc=; b=Fcr58LC4fnDMv9jXrbHWX0xj/45IzOXtOLwxUsl40C5/
-        vxE4QtO3C5fokOgcUkrCKO7TmWWEOZ5M0FRBt02bDcnn/5YBykfZrtYRCYO+QK8k
-        lba+HYY8mA9qxYwm2xQUjPlI6Fo4MMXs7LD8ZBQKzS/C7toQm3IUsfwpWibnylP0
-        c/JkRUoDzr4b4naxj/hug+16G6gGzCbg6hRGk85w0ppuBznYZ61jo42YGgPJAB3I
-        1AQ+IzVtZk0dHm2ZsuWOvsfuWtTMwXb8gBF5Horm8nApt7Uh2FppBK8EL/XYA5yA
-        oh4KDFYyFLwedPxLHT0slQTz5ef38lmWFFGqIXmziw==
-X-ME-Sender: <xms:xaDiYlXJ9v_EGuSYWn_sXW9JbhLPJlhNoKbnAitMgaYHTxkxz0CMbw>
-    <xme:xaDiYlkzSE0D7ordSQJYA452n3Lv0RMIAM8JZTCuIppJriE38kTx4g-W7DTwWVtFr
-    cCvVHnhixLqER72Zxk>
-X-ME-Received: <xmr:xaDiYhYrTEEGMZ_hzoBP-3LG7k9GiPotk-V6IqYVRvag7n7UeSVIIBQPTyU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduhedgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehgtd
-    erredttddvnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegt
-    vghrnhhordhtvggthheqnecuggftrfgrthhtvghrnhepteefffefgfektdefgfeludfgtd
-    ejfeejvddttdekteeiffejvdfgheehfffhvedunecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:xaDiYoWIT037gzHTMlUY78lQdIQmAqWJrOt50ZdZ4oQ-2o87nj0G3g>
-    <xmx:xaDiYvliZMzPd2-dvItolYw7Vhvs633dBuiijhIeU30i60dovplo6w>
-    <xmx:xaDiYld2HOQCnGn0WTzvoYwrokRqjXItS-UwcWM4pcQ1fCA3XdFqLQ>
-    <xmx:xaDiYqui1FnXdXBHOpJGwhbRALddYYZSUV-PgAxA5O9vWDdPKYq_lg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Jul 2022 10:44:18 -0400 (EDT)
-Date:   Thu, 28 Jul 2022 16:44:13 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     emma@anholt.net, daniel@ffwll.ch, dakr@redhat.com,
-        airlied@linux.ie, christian.koenig@amd.com
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 00/10] drm: use idr_init_base() over idr_init() if
- applicable
-Message-ID: <20220728144413.nebc2js26vlwovr3@penduick>
-References: <20220701185303.284082-1-dakr@redhat.com>
- <165901911294.5946.5075667196143577988.b4-ty@cerno.tech>
+        Thu, 28 Jul 2022 10:44:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB8AF5;
+        Thu, 28 Jul 2022 07:44:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C8E9F20A80;
+        Thu, 28 Jul 2022 14:44:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659019461; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DUx+MWMoJx3rj7YLGpNF515BhD3DfyJeCTB/nJKgRCk=;
+        b=MHJHRYEZfylLqaLT6NoEWTI/QBRAymRiDK0CUqh5mdBBeYtTx6qCLSiiiJlKDbXH2CtuML
+        ELg0DUMKWzPeLpTK+ErUV7mFx6fxMZpMc7rnXtt9XGWtBGIt5ltP3AO/QF24jIC/h4u+UH
+        iAHGylfhM2L1Jq106PrL+B58hQ2xPus=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 77DB513A7E;
+        Thu, 28 Jul 2022 14:44:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3t49HMWg4mL+ZgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 28 Jul 2022 14:44:21 +0000
+Date:   Thu, 28 Jul 2022 16:44:20 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
+ affinity was explicitly set
+Message-ID: <20220728144420.GA27407@blackbody.suse.cz>
+References: <20220728005815.1715522-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="r2toc7lzoajpzjnz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <165901911294.5946.5075667196143577988.b4-ty@cerno.tech>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+In-Reply-To: <20220728005815.1715522-1-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,53 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello.
 
---r2toc7lzoajpzjnz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 27, 2022 at 08:58:14PM -0400, Waiman Long <longman@redhat.com> wrote:
+> It was found that any change to the current cpuset hierarchy may reset
+> the cpus_allowed list of the tasks in the affected cpusets to the
+> default cpuset value even if those tasks have cpus affinity explicitly
+> set by the users before.
 
-On Thu, Jul 28, 2022 at 04:41:41PM +0200, Maxime Ripard wrote:
-> On Fri, 1 Jul 2022 20:52:53 +0200, dakr@redhat.com wrote:
-> > From: Danilo Krummrich <dakr@redhat.com>
-> >=20
-> > This patch series initializes IDRs with idr_init_base(&idr, 1) rather t=
-han
-> > idr_init(&idr) in case for the particular IDR no IDs < 1 are ever reque=
-sted -
-> > this avoids unnecessary tree walks.
-> >=20
-> > Danilo Krummrich (10):
-> >   drm/amdgpu: use idr_init_base() to initialize mgr->ctx_handles
-> >   drm/amdgpu: use idr_init_base() to initialize fpriv->bo_list_handles
-> >   drm: use idr_init_base() to initialize master->magic_map
-> >   drm: use idr_init_base() to initialize master->lessee_idr
-> >   drm: use idr_init_base() to initialize mode_config.object_idr
-> >   drm: use idr_init_base() to initialize mode_config.tile_idr
-> >   drm/sis: use idr_init_base() to initialize dev_priv->object_idr
-> >   drm/v3d: use idr_init_base() to initialize v3d_priv->perfmon.idr
-> >   drm/via: use idr_init_base() to initialize dev_priv->object_idr
-> >   drm/todo: remove task for idr_init_base()
-> >=20
-> > [...]
->=20
-> Applied to drm/drm-misc (drm-misc-next).
+I'm surprised this went so long unnoticed / unreported.
 
-The via driver had changed a bit and the patch 9 didn't apply at all.
-I've moved the change to where it looked like it belonged, but you might
-want to double check.
+Could it be users relied on that implicit affinity reset?
 
-Maxime
+> That is especially easy to trigger under a cgroup v2 environment where
+> writing "+cpuset" to the root cgroup's cgroup.subtree_control file
+> will reset the cpus affinity of all the processes in the system.
 
---r2toc7lzoajpzjnz
-Content-Type: application/pgp-signature; name="signature.asc"
+This should apply only to tasks that were extracted out of the root
+cgroup, no? (OK, those are all processes practically.)
 
------BEGIN PGP SIGNATURE-----
+(Even without your second patch, the scope should be limited because of
+src_cset==dst_cset check in cgroup_migrate_prepare_dst().)
 
-iHUEABMIAB0WIQTXEe0+DlZaRlgM8LOIQ8rmN6G3ywUCYuKgvQAKCRCIQ8rmN6G3
-y57YAP4+m/e9OsvwjRt/iw8zIFBZKoLxAE0IPwnFlSHrNn2tUAD/WS/gzyTd6/LJ
-oF1hmSuR64Ar+Q/JsOPP81uQ+9wHJ7g=
-=UBYt
------END PGP SIGNATURE-----
+> That is especially problematic in a nohz_full environment where the
+> tasks running in the nohz_full CPUs usually have their cpus affinity
+> explicitly set and will behave incorrectly if cpus affinity changes.
 
---r2toc7lzoajpzjnz--
+One could also argue that for such processes, cgroup hierarchy should be
+first configured and only then they start and set own affinity.
+
+> Fix this problem by adding a flag in the task structure to indicate that
+> a task has their cpus affinity explicitly set before and make cpuset
+> code not to change their cpus_allowed list unless the user chosen cpu
+> list is no longer a subset of the cpus_allowed list of the cpuset itself.
+
+I'm uneasy with the occasional revert of this flag, i.e. the task who
+set their affinity would sometimes have it overwritten and sometimes
+not (which might have been relied on, especially with writes into
+cpuset.cpus).
+(But I have no better answer than the counter-argument above since
+there's no easier way to detect the implicit migrations.)
+
+Also, is there similar effect with memory binding?
+
+Thanks,
+Michal

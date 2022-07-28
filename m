@@ -2,194 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11649583997
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A18158399A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234543AbiG1Hgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S234546AbiG1HiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234504AbiG1Hgr (ORCPT
+        with ESMTP id S233032AbiG1HiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:36:47 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9883A5FAEF
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:36:45 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id s14so1070412ljh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZG/9vTrhrJOGq1JMvZgN00L9EckSKmvxBa3lwJVO5XI=;
-        b=NpoUcjH9gI6oaJAHyufhchIG2LTeKnUkwqOYm9jzZMGbSfxc5ZPCOKknpLI2H85x9V
-         AV+FWpYJbtRIBX99aIPeNp3BmURZlWQW/ue3eP56ub9c1eVYrrFzwjcwBit9p+oELGFj
-         cO7dPnQIyyLlMOjA7YBVmf2jAsK/2UTcDEy6E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZG/9vTrhrJOGq1JMvZgN00L9EckSKmvxBa3lwJVO5XI=;
-        b=galvb71KHJ/Y/o52TXM6njjJDUz5ZsAIoaCyt3wtLDaSg0EjKpwuVp51eqmBxN5Q+4
-         XTyzp+sxpVR/bXm49m6Sn9oC2bAlf3WXyqUBnC4XGqXsaexhqnj5VAM0OFHSH46TeUFp
-         MTg78/mFVHTRrnawVpcR0vO55g7W8eY25PylJy99YIfEPvLCRVzcjuPE5S6HlMx/HZHW
-         eDZRYs1fgN4Pzr0lQyDGktBojuk/XALPDa85OL6ZkP+bKL4cTHOqnkFWZFSvT5QhSvco
-         sdpqS0Q6HEfx6FUXOJ/KNYJkBXlOM8jK0K5K7OcbILxwWcFFhTJ9RkeHMC39uAKqKiQQ
-         ut9g==
-X-Gm-Message-State: AJIora+rz5KLj+XEZLXxEzpZy2tTS5U22n23EYET3+P8rm5yJPE9k9RG
-        VTvVn8vQV6sTGkqpcYuihczrpVhnVD3ajmDxTJBrMaSoEWGrNQ==
-X-Google-Smtp-Source: AGRyM1vvV2nin3ftThzTZy5ebCxmO+6Vhwz+IiuVMJgfl9sUVNg3FTrLZEcOrypcNPB6p5mMx0GngzlFMABXHYQQz8Y=
-X-Received: by 2002:a05:6512:c08:b0:48a:7cfe:44c8 with SMTP id
- z8-20020a0565120c0800b0048a7cfe44c8mr8653288lfu.120.1658993793285; Thu, 28
- Jul 2022 00:36:33 -0700 (PDT)
+        Thu, 28 Jul 2022 03:38:05 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A6452E54;
+        Thu, 28 Jul 2022 00:38:02 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oGy5o-0000kv-Ci; Thu, 28 Jul 2022 09:38:00 +0200
+Message-ID: <62df64ca-dc79-c308-a8e0-7c2b2c45248a@leemhuis.info>
+Date:   Thu, 28 Jul 2022 09:37:59 +0200
 MIME-Version: 1.0
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
- <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
- <20220727113054.ffcckzlcipcxer2c@pengutronix.de> <20220727192839.707a3453.max@enpas.org>
- <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
-In-Reply-To: <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Thu, 28 Jul 2022 09:36:21 +0200
-Message-ID: <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
- register (btr)
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev,
+        Jan Kara <jack@suse.cz>
+References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
+ <Yt6xsyy3+qEMn08y@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <0840b428-3a77-2339-354f-7fbd3295bb4d@i2se.com>
+ <Yt+M+JgW6KuZFMvc@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <e9aa5629-b6a8-3e5d-422e-eb79ac333fdc@i2se.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
+ Raspberry Pi
+In-Reply-To: <e9aa5629-b6a8-3e5d-422e-eb79ac333fdc@i2se.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1658993883;e2a7abd8;
+X-HE-SMSGID: 1oGy5o-0000kv-Ci
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marc,
-
-On Wed, Jul 27, 2022 at 8:24 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 27.07.2022 19:28:39, Max Staudt wrote:
-> > On Wed, 27 Jul 2022 13:30:54 +0200
-> > Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> >
-> > > As far as I understand, setting the btr is an alternative way to set the
-> > > bitrate, right? I don't like the idea of poking arbitrary values into a
-> > > hardware from user space.
-> >
-> > I agree with Marc here.
-> >
-> > This is a modification across the whole stack, specific to a single
-> > device, when there are ways around.
-> >
-> > If I understand correctly, the CAN232 "S" command sets one of the fixed
-> > bitrates, whereas "s" sets the two BTR registers. Now the question is,
-> > what do BTR0/BTR1 mean, and what are they? If they are merely a divider
-> > in a CAN controller's master clock, like in ELM327, then you could
-> >
-> >   a) Calculate the BTR values from the bitrate userspace requests, or
->
-> Most of the other CAN drivers write the BTR values into the register of
-> the hardware. How are these BTR values transported into the driver?
->
-> There are 2 ways:
->
-> 1) - user space configures a bitrate
->    - the kernel calculates with the "struct can_bittiming_const" [1] given
->      by driver and the CAN clock rate the low level timing parameters.
->
->      [1] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L47
->
-> 2) - user space configures low level bit timing parameter
->      (Sample point in one-tenth of a percent, Time quanta (TQ) in
->       nanoseconds, Propagation segment in TQs, Phase buffer segment 1 in
->       TQs, Phase buffer segment 2 in TQs, Synchronisation jump width in
->       TQs)
->     - the kernel calculates the Bit-rate prescaler from the given TQ and
->       CAN clock rate
->
-> Both ways result in a fully calculated "struct can_bittiming" [2]. The
-> driver translates this into the hardware specific BTR values and writes
-> the into the registers.
->
-> If you know the CAN clock and the bit timing const parameters of the
-> slcan's BTR register you can make use of the automatic BTR calculation,
-> too. Maybe the framework needs some tweaking if the driver supports both
-> fixed CAN bit rate _and_ "struct can_bittiming_const".
-
-Does it make sense to use the device tree to provide the driver with those
-parameters required for the automatic calculation of the BTR (clock rate,
-struct can_bittiming_const, ...) that depend on the connected controller? In
-this way the solution should be generic and therefore scalable. I think we
-should also add some properties to map the calculated BTR value on the
-physical register of the controller.
-
-Or, use the device tree to extend the bittates supported by the controller
-to the fixed ones (struct can_priv::bitrate_const)?
-
-Thanks and regards,
-Dario
-
->
-> [2] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L31
->
-> >   b) pre-calculate a huge table of possible bitrates and present them
-> >      all to userspace. Sounds horrible, but that's what I did in can327,
-> >      haha. Maybe I should have reigned them in a little, to the most
-> >      useful values.
->
-> If your adapter only supports fixed values, then that's the only way to
-> go.
->
-> >   c) just limit the bitrates to whatever seems most useful (like the
-> >      "S" command's table), and let users complain if they really need
-> >      something else. In the meantime, they are still free to slcand or
-> >      minicom to their heart's content before attaching slcan, thanks to
-> >      your backwards compatibility efforts.
->
-> In the early stages of the non-mainline CAN framework we had tables for
-> BTR values for some fixed bit rates, but that turned out to be not
-> scaleable.
->
-> > In short, to me, this isn't a deal breaker for your patch series.
->
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
+On 26.07.22 17:54, Stefan Wahren wrote:
+> Hi Ojaswin,
+> 
+> Am 26.07.22 um 08:43 schrieb Ojaswin Mujoo:
+>> On Mon, Jul 25, 2022 at 09:09:32PM +0200, Stefan Wahren wrote:
+>>> Hi Ojaswin,
+>>>
+>>> Am 25.07.22 um 17:07 schrieb Ojaswin Mujoo:
+>>>> On Mon, Jul 18, 2022 at 03:29:47PM +0200, Stefan Wahren wrote:
+>>>>> Hi,
+>>>>>
+>>>>> i noticed that since Linux 5.18 (Linux 5.19-rc6 is still affected) i'm
+>>>>> unable to run "rpi-update" without massive performance regression
+>>>>> on my
+>>>>> Raspberry Pi 4 (multi_v7_defconfig + CONFIG_ARM_LPAE). Using Linux
+>>>>> 5.17 this
+>>>>> tool successfully downloads the latest firmware (> 100 MB) on my
+>>>>> development
+>>>>> micro SD card (Kingston 16 GB Industrial) with a ext4 filesystem
+>>>>> within ~ 1
+>>>>> min. The same scenario on Linux 5.18 shows the following symptoms:
+>>>>>
+>>>>> - download takes endlessly much time and leads to an abort by
+>>>>> userspace in
+>>>>> most cases because of the poor performance
+>>>>> - massive system load during download even after download has been
+>>>>> aborted
+>>>>> (heartbeat LED goes wild)
+>>>>> - whole system becomes nearly unresponsive
+>>>>> - system load goes back to normal after > 10 min
+>>>>> - dmesg doesn't show anything suspicious
+>>>>>
+>>>>> I was able to bisect this issue:
+>>>>>
+>>>>> ff042f4a9b050895a42cae893cc01fa2ca81b95c good
+>>>>> 4b0986a3613c92f4ec1bdc7f60ec66fea135991f bad
+>>>>> 25fd2d41b505d0640bdfe67aa77c549de2d3c18a bad
+>>>>> b4bc93bd76d4da32600795cd323c971f00a2e788 bad
+>>>>> 3fe2f7446f1e029b220f7f650df6d138f91651f2 bad
+>>>>> b080cee72ef355669cbc52ff55dc513d37433600 good
+>>>>> ad9c6ee642a61adae93dfa35582b5af16dc5173a good
+>>>>> 9b03992f0c88baef524842e411fbdc147780dd5d bad
+>>>>> aab4ed5816acc0af8cce2680880419cd64982b1d good
+>>>>> 14705fda8f6273501930dfe1d679ad4bec209f52 good
+>>>>> 5c93e8ecd5bd3bfdee013b6da0850357eb6ca4d8 good
+>>>>> 8cb5a30372ef5cf2b1d258fce1711d80f834740a bad
+>>>>> 077d0c2c78df6f7260cdd015a991327efa44d8ad bad
+>>>>> cc5095747edfb054ca2068d01af20be3fcc3634f good
+>>>>> 27b38686a3bb601db48901dbc4e2fc5d77ffa2c1 good
+>>>>>
+>>>>> commit 077d0c2c78df6f7260cdd015a991327efa44d8ad
+>>>>> Author: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+>>>>> Date:   Tue Mar 8 15:22:01 2022 +0530
+>>>>>
+>>>>> ext4: make mb_optimize_scan performance mount option work with extents
+>>>>>
+>>>>> If i revert this commit with Linux 5.19-rc6 the performance regression
+>>>>> disappears.
+>>>>>
+>>>>> Please ask if you need more information.
+>>>> Hi Stefan,
+>>>>
+>>>> Apologies, I had missed this email initially. So this particular patch
+>>>> simply changed a typo in an if condition which was preventing the
+>>>> mb_optimize_scan option to be enabled correctly (This feature was
+>>>> introduced in the following commit [1]). I think with the
+>>>> mb_optimize_scan now working, it is somehow causing the firmware
+>>>> download/update to take a longer time.
+>>>>
+>>>> I'll try to investigate this and get back with my findings.
+>>> thanks. I wasn't able to reproduce this heavy load symptoms with
+>>> every SD
+>>> card. Maybe this depends on the write performance of the SD card to
+>>> trigger
+>>> the situation (used command to measure write performance: dd
+>>> if=/dev/zero
+>>> of=/boot/test bs=1M count=30 oflag=dsync,direct ).
+>>>
+>>> I tested a Kingston consumer 32 GB which had nearly constant write
+>>> performance of 13 MB/s and didn't had the heavy load symptoms. The
+>>> firmware
+>>> update was done in a few seconds, so hard to say that at least the
+>>> performance regression is reproducible.
+>>>
+>>> I also tested 2x Kingston industrial 16 GB which had a floating write
+>>> performance between 5 and 10 MB/s (wear leveling?) and both had the
+>>> heavy
+>>> load symptoms.
+>>>
+>>> All SD cards has been detected as ultra high speed DDR50 by the emmc2
+>>> interface.
+>>>
+>>> Best regards
+>>>
+>>>> Regard,
+>>>> Ojaswin
+>>>>
+>>>> [1]
+>>>>     commit 196e402adf2e4cd66f101923409f1970ec5f1af3
+>>>>     From: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+>>>>     Date: Thu, 1 Apr 2021 10:21:27 -0700
+>>>>     
+>>>>     ext4: improve cr 0 / cr 1 group scanning
+>>>>
+>>>>> Regards
+>>>>>
+>> Thanks for the info Stefan, I'm still trying to reproduce the issue but
+>> it's slightly challenging since I don't have my RPi handy at the moment.
+>>
+>> In the meantime, would you please try out the mb_optmize_scan=0 command
+>> line options to see if that helps bypass the issue. This will help
+>> confirm if the issue lies in mb_optmize_scan itself or if its something
+>> else.
+>>
+> I run the firmware update 5 times with mb_optimize_scan=0 on my
+> Raspberry Pi 4 and the industrial SD card and everytime the update worked.
+>>
 
--- 
+[CCing Jan]
 
-Dario Binacchi
+FYI, Jan yesterday reported benchmark regresses that might or might not
+be related Stefan's regression on the Raspberry Pi:
+https://lore.kernel.org/all/20220727105123.ckwrhbilzrxqpt24@quack3/
 
-Embedded Linux Developer
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-dario.binacchi@amarulasolutions.com
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
 
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+#regzbot monitor
+https://lore.kernel.org/all/20220727105123.ckwrhbilzrxqpt24@quack3/

@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9FB584520
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4B0584518
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbiG1RmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        id S232579AbiG1RmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiG1RmF (ORCPT
+        with ESMTP id S230248AbiG1RmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:42:05 -0400
+        Thu, 28 Jul 2022 13:42:08 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 702C0743EC
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:42:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2EF1743EC
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:42:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659030123;
+        s=mimecast20190719; t=1659030126;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9a6NZdMEdZG5y53q1uQm90K94xiWKcbcChVBIA+iZFQ=;
-        b=ADJhzpuTNgUTV1DSNtOlI3+o00dnQ8czGglGLjK3szsVeSF3YJBEg2ITDmUwJorkECHbCG
-        6bFb7+bUtCznbAVT2irJmkSpoBdbKCkGuYXn9wv8K5ZMz4PIx7I2JdxG9+AJepeaaZ2vGC
-        2VpWRr8bKY0S++NfhltB7TxaPAVbkXY=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=osQ+/ROGDL1CS+JW7FUiX/rfJGzXDL7QFiEzVel9WBs=;
+        b=KK7JfAQPscIaYoYM1hAX5N+HC2q5N0xKUsO8KFR2vBJcUHF2KFDlYZWoJodhnrvfYNJ301
+        k8Ysc1ij9+Efp1Htrl3O/56FeswYxhtifPL/I4svBDUgQDOhdJfZEjal+/H429hvdc7Byr
+        a8Oo1a5AjIQ61eGWkD9DxZac4dB2+9g=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-331-KR2Eq946NQS_SkFYPpGdZQ-1; Thu, 28 Jul 2022 13:42:02 -0400
-X-MC-Unique: KR2Eq946NQS_SkFYPpGdZQ-1
-Received: by mail-ed1-f70.google.com with SMTP id f18-20020a056402355200b0043be3af7a63so1495359edd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:42:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9a6NZdMEdZG5y53q1uQm90K94xiWKcbcChVBIA+iZFQ=;
-        b=u5IBN7ujAtGfQdkMgS6Jlo52jshMPYa/EfZUalXQAnt+PwCZK0f7UMUKTyg/zNWYnT
-         KJe5jX/9+xJAEEMfFQSWcq59WstZxmE7DrHwDeNbyI5y7/Yl2kV4rNkcSkPD8fXdaze0
-         N5uWFMf6ahtHD4IYxRosTAZa/LRGAkYQL4ZIW31L/2MtKezSIBNjDge4y391haaWe6Pl
-         sELU+jFZlYSx0mMEsfkDDBQ+wGUBgVPkJgpm73Gt3EHHB3hvRCsJFo4ynKNs37HtNMWB
-         m8DaFWduOTnBnI0lMTOzzkVCiu/9mdHv+iPZ3Bc6isHuZS0Oh/mLs+ZJOFx6pjty+W2P
-         0PCA==
-X-Gm-Message-State: AJIora9Y4spc4wbGwIXYybvedEHqXs/ks+M6yAH8b+Jp1Nxvt8NnQD1k
-        jm7QFmmXwwANMUOkNZV41RbBdtbqxIkAV7GyiEZmoavobgoYg5Zr+38QUQWgSE5KpHtdBNhpXrC
-        j8BCJCGeXCNfnfH12JbAS4/T/
-X-Received: by 2002:a05:6402:27c6:b0:43c:45e6:4c0a with SMTP id c6-20020a05640227c600b0043c45e64c0amr66815ede.342.1659030121198;
-        Thu, 28 Jul 2022 10:42:01 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tVJz3TvC+dD25tmjb1a0J069KY26YBH+Pi5z+5OAnEGzeL3gSGmyZKeN8qthNWH7GtdL9ERQ==
-X-Received: by 2002:a05:6402:27c6:b0:43c:45e6:4c0a with SMTP id c6-20020a05640227c600b0043c45e64c0amr66795ede.342.1659030120852;
-        Thu, 28 Jul 2022 10:42:00 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id sy13-20020a1709076f0d00b00722d5b26ecesm627263ejc.205.2022.07.28.10.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 10:42:00 -0700 (PDT)
-Message-ID: <846d5138-f846-1f5b-39bd-2bd20595a9a2@redhat.com>
-Date:   Thu, 28 Jul 2022 19:41:59 +0200
+ us-mta-445-kbElYJGYP7e0wjYiY39SOA-1; Thu, 28 Jul 2022 13:42:03 -0400
+X-MC-Unique: kbElYJGYP7e0wjYiY39SOA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BBCFE101A586;
+        Thu, 28 Jul 2022 17:42:02 +0000 (UTC)
+Received: from [10.22.9.86] (unknown [10.22.9.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 82D371121315;
+        Thu, 28 Jul 2022 17:42:01 +0000 (UTC)
+Message-ID: <d00a8b5b-86c6-2d57-36a5-894ca70f2472@redhat.com>
+Date:   Thu, 28 Jul 2022 13:42:01 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] platform/x86: remove useless comparisons in
- sony_pic_read_possible_resource()
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
+ affinity was explicitly set
 Content-Language: en-US
-To:     Andrey Strachuk <strochuk@ispras.ru>,
-        Mattia Dongili <malattia@linux.it>
-Cc:     Mark Gross <markgross@kernel.org>, Len Brown <len.brown@intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-References: <20220719110341.7239-1-strochuk@ispras.ru>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220719110341.7239-1-strochuk@ispras.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Valentin Schneider <vschneid@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220728005815.1715522-1-longman@redhat.com>
+ <20220728144420.GA27407@blackbody.suse.cz>
+ <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
+ <xhsmhbkt9dvwm.mognet@vschneid.remote.csb>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <xhsmhbkt9dvwm.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,65 +78,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 7/28/22 12:50, Valentin Schneider wrote:
+> On 28/07/22 10:59, Waiman Long wrote:
+>> On 7/28/22 10:44, Michal Koutný wrote:
+>>> This should apply only to tasks that were extracted out of the root
+>>> cgroup, no? (OK, those are all processes practically.)
+>> The reset is done on all cgroups in a particular subtree. In the case of
+>> cgroup root, it is all the processes in the system.
+> I've been briefly playing with this, tasks in the cgroup root don't seem
+> affected on my end (QEMU + buildroot + latest tip/sched/core):
+>
+>    $ mount -t cgroup2 none /sys/fs/cgroup
+>    $ /root/loop.sh &
+>    $ PID=$!
+>    $ taskset -pc 2-3 $PID
+>    pid 177's current affinity list: 0-3
+>    pid 177's new affinity list: 2,3
+>    $ echo +cpuset > /sys/fs/cgroup/cgroup.subtree_control
+>    $ taskset -pc $PID
+>    pid 177's current affinity list: 2,3
+>
+> However tasks extracted out as mentioned by Michal definitely are:
+>
+>    $ mount -t cgroup2 none /sys/fs/cgroup
+>    $ /root/loop.sh &
+>    $ PID=$!
+>    $ taskset -pc 2-3 $PID
+>    pid 172's current affinity list: 0-3
+>    pid 172's new affinity list: 2,3
+>    $ mkdir /sys/fs/cgroup/foobar
+>    $ echo $PID > /sys/fs/cgroup/foobar/cgroup.procs
+>    $ taskset -pc $PID
+>    pid 172's current affinity list: 2,3
+>    $ echo +cpuset > /sys/fs/cgroup/cgroup.subtree_control
+>    $ taskset -pc $PID
+>    pid 172's current affinity list: 0-3
+>
+> IIUC this is just what happens anytime a task gets migrated to a new
+> cpuset. Initially loop.sh remains attached to the root cpuset, and the echo
+> +cpuset migrates it to the /foobar one.
+>
+> Does that match what you're seeing?
+>
+Yes. echo "+cpuset" to subtree_control means tasks in the child cgroups 
+will move to new cpusets. Those new cpusets will have the same cpu lists 
+as the parent unless the cpuset.cpus files are explicitly written to. 
+This patch will ensure that tasks that have explicitly set their cpu 
+affinity won't be affected by this change.
 
-On 7/19/22 13:03, Andrey Strachuk wrote:
-> Local variable 'p' is initialized by an address
-> of field of acpi_resource structure, so it does
-> not make sense to compare 'p' with NULL.
-> 
-> Local variable 'io' is initialized by an address
-> of field of acpi_resource structure, so it does
-> not make sense to compare 'io' with NULL.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
-> Fixes: 41b16dce3905 ("create drivers/platform/x86/ from drivers/misc/")
-
-Thank you for your patch, I've applied this patch (minus the
-invalid fixes tag) to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-> ---
->  drivers/platform/x86/sony-laptop.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/sony-laptop.c b/drivers/platform/x86/sony-laptop.c
-> index d8d0c0bed5e9..07ef05f727a2 100644
-> --- a/drivers/platform/x86/sony-laptop.c
-> +++ b/drivers/platform/x86/sony-laptop.c
-> @@ -4341,7 +4341,7 @@ sony_pic_read_possible_resource(struct acpi_resource *resource, void *context)
->  		{
->  			struct acpi_resource_irq *p = &resource->data.irq;
->  			struct sony_pic_irq *interrupt = NULL;
-> -			if (!p || !p->interrupt_count) {
-> +			if (!p->interrupt_count) {
->  				/*
->  				 * IRQ descriptors may have no IRQ# bits set,
->  				 * particularly those those w/ _STA disabled
-> @@ -4374,11 +4374,6 @@ sony_pic_read_possible_resource(struct acpi_resource *resource, void *context)
->  			struct acpi_resource_io *io = &resource->data.io;
->  			struct sony_pic_ioport *ioport =
->  				list_first_entry(&dev->ioports, struct sony_pic_ioport, list);
-> -			if (!io) {
-> -				dprintk("Blank IO resource\n");
-> -				return AE_OK;
-> -			}
-> -
->  			if (!ioport->io1.minimum) {
->  				memcpy(&ioport->io1, io, sizeof(*io));
->  				dprintk("IO1 at 0x%.4x (0x%.2x)\n", ioport->io1.minimum,
+Cheers,
+Longman
 

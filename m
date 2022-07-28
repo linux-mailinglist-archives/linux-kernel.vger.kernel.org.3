@@ -2,172 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E2358447B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D509358447E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiG1Q4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S232116AbiG1Q5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 12:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiG1Q4j (ORCPT
+        with ESMTP id S229747AbiG1Q5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:56:39 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD165FACE
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:56:37 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-31bf3656517so25597767b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:56:37 -0700 (PDT)
+        Thu, 28 Jul 2022 12:57:05 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32125F134
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:56:59 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10e4449327aso3032071fac.4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=semihalf.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oc0lYZZen+n96H3YkJlz8amsnvCsXfd6yw7H3HRAv34=;
-        b=LvEPmb5gwSpnB2b/XfP2TsjWKUpKxjPvyNp/0TXuTe4dFBociwyBIFRmRBMgLufeqQ
-         JbU7CU+ASwWDDo1aahIXU8O8h5SOOSRK/N7ugORv963f/VE1GEuPnMhMlQm0dNeH/unJ
-         nZhQsjgzp0g4VX+AN+FU04VjYDYJp7WRZiDRl6Yk8NynNfO4fn8O01ME0GF3gijiDDkt
-         k/OamyyajXQvcH/bO9zXFot9OOwaauBMAUwcR/pb/W4OfhawaBwLPrHvpv3AsRGuYRqF
-         k9kdy25z5AKsLkQFzaEWhfsA7PJhpB9XiDCdiUa/axhtsSe6qASTK67wSRx9/5cXQE8v
-         g74g==
+         :cc:content-transfer-encoding;
+        bh=+neT7drnhUVN6IEwt5cqIrCpyz1zNkYGzrU5Sn+25po=;
+        b=N/sgs+QuFpuUwFiUZBjJm6IQrlOlMhIiDya+kN2jqxag5eodzaya5QHHvG90yHGR6J
+         ilM6y/ORThHfyVxS8edWpoQPrqBRXQiG9Wo7TpM26TPXMMvOZWJFi4ILQ1s/nARzg30c
+         Jz9kIepJRc+HYrdrE5UP2EoKTLpt++h1/3cnDxUP7bFAR+uGKhL2Cb4OQdr2JkMAR1xf
+         yaN/x3fcTzhubwXLDbPNia9IbwL/tUfDyMNVSoYLqEjY9NvkcrtSTP4CJbHyx1luCNbk
+         5aW0yJzTpZ5Q1duc0tw4HOY+tlAl9w1M1fcmapGLnqz6FyOj+iSeG7NOC/mY1Y9kvowb
+         izaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oc0lYZZen+n96H3YkJlz8amsnvCsXfd6yw7H3HRAv34=;
-        b=DaY1OfmurZc7BU3HhYzvqPzXH2OYomSqpifayeTeQsIqvDhGXGLgkasxbA5P5/9fx4
-         OBZBoRpWpOuNXl9/aiUyfRbIWveMPPUgGlcrWLfH37xwgPgj4Ze+I3cjkygG7I6w4HaL
-         XxPq0/nTQRhGkDA5rvNQKMQlPaYT8RWDfis2PLyEAaHUxOz7iSgjgLk0OOna21aacj+C
-         ITLWpNbwYESlla/Jt2qmesDFj0HcC6BjTLhYfpWqdvUFF0+3XXU9M01gog8PmRF2ozRS
-         +os0RBpsnzoddRO9Sn/URACShf2tN87NnqRDyggYhwxpaTUusvgs4HgUEAQhmO07eNGp
-         iAFw==
-X-Gm-Message-State: ACgBeo0TYZq4iEA31sl8zbvXDfvo3GmfucFNdNowhEUS0vFuyEN//p5Q
-        jaosN1q6TJtO1LvVjuHe0smv4D8jUpS2vFEnOPk4/w==
-X-Google-Smtp-Source: AA6agR42EGEUyzYTo3gBZ8QlvPbpFDUMcDOY9xlNbtBF0J/wWPwVHlB4+Nl+tb/UgglFFTHYed3NhawdldcN4gc+Y2E=
-X-Received: by 2002:a81:6a07:0:b0:323:8614:10c2 with SMTP id
- f7-20020a816a07000000b00323861410c2mr1192910ywc.191.1659027396641; Thu, 28
- Jul 2022 09:56:36 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+neT7drnhUVN6IEwt5cqIrCpyz1zNkYGzrU5Sn+25po=;
+        b=vNSpOPVVNIm0c43Uuv9Tft1Mgvr7/dxV41k8nrR6cP/6Bc80mEmsOO1UHy5aidQ6ev
+         RGhA+wGzUIHDJ7Xl/AdKeCBb7sRs9dGcXpssxaDHRxEpnJT19CtGMpJzAkwGylbzLSLe
+         A/3DTh52utOJqVW5fjHpdWI+uAfRnos4icRIHp5rLWjpqiTein6uBAIXlOSlYrloJi1Y
+         MEfd/+XJa++bt/Har8K22ihX7aPjaIDZQhBUdEMAzLHAaCzWvgJp0ADBu5kU2WoP7Kqe
+         wHpQypaaQaCbzrB36ISHF+dxF5J792U4qA8350QWwWTpUDd9Gw4w9IsixlHv6mUgTCRz
+         p1Eg==
+X-Gm-Message-State: AJIora/22ntni7fVyM87YaoKNjpeOzR0qc0sJIkUtX2ChMHPt9wJQrdL
+        tP0PFSljPh5Ap7UgTm6NIh4JG0848iWGtFK2kwl7cg==
+X-Google-Smtp-Source: AGRyM1s2wYwcYRLI1t8oGbHlSkYF7nki9R79iqP4GkO+sJM610lF9/jDXBRf6KuYUgt99I2pgHY/3R8xIXBCqcBgUmo=
+X-Received: by 2002:a05:6870:4186:b0:101:17ef:d966 with SMTP id
+ y6-20020a056870418600b0010117efd966mr173601oac.97.1659027418891; Thu, 28 Jul
+ 2022 09:56:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com> <20220726143005.wt4be7yo7sbd3xut@bogus>
- <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com> <20220726154138.74avqs6iqlzqpzjk@bogus>
- <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com> <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
- <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com> <20220727132437.pjob3z2nyxsuxgam@bogus>
- <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
- <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com> <CAC_iWjLWBJLth26ifFfHvimProHZu_w5SjQNWSH_D2Fs_JXjbA@mail.gmail.com>
- <b703f678-b2c5-cdeb-ac40-9646e043d1c3@gmail.com>
-In-Reply-To: <b703f678-b2c5-cdeb-ac40-9646e043d1c3@gmail.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Thu, 28 Jul 2022 19:56:00 +0300
-Message-ID: <CAC_iWjLrntWuJUzVuRi0ZOtG6JXNwz7SbS2mrqpuTgU5TV6rQA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220727064321.2953971-1-mw@semihalf.com> <20220727064321.2953971-7-mw@semihalf.com>
+ <20220727143147.u6yd6wqslilspyhw@skbuf> <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
+ <20220727163848.f4e2b263zz3vl2hc@skbuf> <CAPv3WKe+e6sFd6+7eoZbA2iRTPhBorD+mk6W+kJr-f9P8SFh+w@mail.gmail.com>
+ <CAHp75VfGfKx1fggoE7wf4ndmUv4FEVfV=-EaO0ypescmNqDFkw@mail.gmail.com>
+ <CAPv3WKeXtwJRPSaERzo+so+_ZAPSNk5RjxzE+N7u-uNUTMaeKA@mail.gmail.com> <20220728091643.m6c5d36pseenrw6l@skbuf>
+In-Reply-To: <20220728091643.m6c5d36pseenrw6l@skbuf>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Thu, 28 Jul 2022 18:56:48 +0200
+Message-ID: <CAPv3WKd0rbwN2AyGRSG1hUji3KzCdG2S=HfCxk7=Ut3VbmPXGA@mail.gmail.com>
+Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to fwnode_find_net_device_by_node()
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        "upstream@semihalf.com" <upstream@semihalf.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 15:49, Maximilian Luz <luzmaximilian@gmail.com> wrote:
+czw., 28 lip 2022 o 11:16 Vladimir Oltean <olteanv@gmail.com> napisa=C5=82(=
+a):
 >
-
-[...]
-
-> >>
-> >>> I have an ancient branch somewhere that I can polish up and send an
-> >>> RFC [1],  but the way I enabled that was to install an empty config
-> >>> table from the firmware.  That empty table is basically an indication
-> >>> to the kernel saying "Hey I can't store variables, can you do that for
-> >>> me".
-> >>>
-> >>> Is there any chance we can do something similar on that device (or
-> >>> find a reasonable way of inferring that we need to replace some
-> >>> services).  That way we could at least have a common entry point to
-> >>> the kernel and leave out the DT changes.
-> >>>
-> >>> [1] https://git.linaro.org/people/ilias.apalodimas/net-next.git/log/?h=setvar_rt_optee_3
-> >>
-> >> I would very much like to avoid the need for special bootloaders. The
-> >> devices we're talking about are WoA devices, meaning they _should_
-> >> ideally boot just fine with EFI and ACPI.
-> >
-> > I've already responded to following email, but I'll repeat it here for
-> > completeness. It's not a special bootloader.  It's the opposite, it's
-> > a generic UEFI compliant bootloader which takes advantage of the fact
-> > EFI is extensible. We are doing something very similar in how we load
-> > our initrd via the EFI_LOAD_FILE2 protocol.  Whether Qualcomm can add
-> > that to their bootloaders is a different topic though.  But at some
-> > point we need to draw a line than keep overloading the DT because a
-> > vendor decided to go down it's own path.
+> On Thu, Jul 28, 2022 at 08:52:04AM +0200, Marcin Wojtas wrote:
+> > Yes, indeed. After recent update, I think we can assume the current
+> > implementation of fwnode_find_parent_dev_match should work fine with
+> > all existing cases.
 >
-> But still, you're asking users to install an extra thing in the boot
-> chain.
-
-Not users.  EFI firmware implementations that want to support this in
-a generic way.
-
-> That's what I mean by "special". So the situation would then be
-> this: User needs a) GRUB (or something similar) for booting the kernel
-> (or dual-booting, ...), b) DTBLoader for loading the device-tree because
-> we don't support the ACPI Qualcomm provided, and c) your thing for EFI
-> variables and potentially other firmware fix-ups. b) and c) are both
-> things that "normal" users don't expect. IMHO we should try to get rid
-> of those "non-standard" things, not add more.
-
-But that's exactly why EFI is extensible .  You can have non standard
-functionality on your firmware for cases like this which doesn't need
-to land in the spec.
-
+> What you should really be fixing is the commit message of patch 4,
+> that's what threw me off:
 >
-> >>   From an end-user perspective, it's annoying enough that we'll have to
-> >> stick with DTs for the time being due to the use of PEPs in ACPI. I
-> >> really don't want to add some special bootloader for fixups to that.
-> >> Also, this would just move the problem from kernel to bootloader.
-> >
-> > But it *is* a bootloader problem.  The bootloader is aware of the fact
-> > that it can't provide runtime services for X reasons and that's
-> > exactly why we are trying to set EFI_RT_PROPERTIES_TABLE correctly
-> > from the firmware.  All we are doing is install a config table to tell
-> > the OS "I can't do that, can you find a way around it?".
+> | As a preparation to switch the DSA subsystem from using
+> | of_find_net_device_by_node() to its more generic fwnode_
+> | equivalent, the port's device structure should be updated
+> | with its fwnode pointer, similarly to of_node - see analogous
+> | commit c4053ef32208 ("net: mvpp2: initialize port of_node pointer").
+> |
+> | This patch is required to prevent a regression before updating
+> | the DSA API on boards that connect the mvpp2 port to switch,
+> | such as Clearfog GT-8K or CN913x CEx7 Evaluation Board.
 >
-> Sure, but is making the Linux installation process more device
-> dependent and complicated really the best way to solve this?
+> There's no regression to speak of. DSA didn't work with ACPI before, and
+> fwnode_find_net_device_by_node() still works with the plain dev->of_node
+> assignment.
 
-Isn't it device dependent already?  That boat has sailed already since
-we need to change the very definition of runtime services and replace
-them with OS specific ones.  If we add it on the DT, you'll end up
-with different DTs per OS and potentially per use case.  In my head
-the DTs should be part of the firmware (and authenticated by the
-firmware as well) instead of loading whatever we want each time.  By
-using a config table we can add a u64 (random thought),  that tells
-the kernel which TEE implementation will handle variable storage.  So
-we can have a common extension to boot loaders, which at least uses
-EFI interfaces to communicate the functionality.
+There was a regression even for OF in v1, but after switching to
+device_match_fwnode() it works indeed. Anyway patch v4 is imo useful,
+I'll only reword the commit message.
 
-I really prefer this to adding it on a DT, but I am not that picky.
-Your email raises an important topic of replacing runtime services
-with OS specific ones,  which is unfortunately very much needed and we
-should fix that.
-
-Thanks
-/Ilias
->
-> Regards,
-> Max
+Thanks,
+Marcin

@@ -2,153 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F8D583991
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11649583997
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiG1Hf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
+        id S234543AbiG1Hgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233608AbiG1Hf4 (ORCPT
+        with ESMTP id S234504AbiG1Hgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:35:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA584BD31;
-        Thu, 28 Jul 2022 00:35:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6875361B4B;
-        Thu, 28 Jul 2022 07:35:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85905C433C1;
-        Thu, 28 Jul 2022 07:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658993754;
-        bh=wQZZqAL+kFVdUJWp5ooVgLp9Rrxami8eilCXEiS5KqM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=r1w1vzS2BhHizZTBRkOlJ+pRrEiu5vFFIrU6oLsUx4k+uqmdAcJ1vMmV/ReSPVpG0
-         8UOLUKnZuu1dTbOKOGDVA6hKhDVSp6+cXPO7TwbmC4nDUECQh+hBrPKS46P8YRgnsu
-         /1LBKXagj6gZLWGk8Tw8ujcfoeQj2NxXCLVnRrs3BeIlIHDNgwJgLmEGhXod6PDGv3
-         TcUEJs6ZAQMhg44c9Em2MU0Lw7rDllyvM2syS1IYq7KujnJJY6+fbkWVi2uHGniKcA
-         +tynTk0mC880vFhIkQ7MbnyHbrmxnIJf+As+DrxtdZPGnl2P1HA25p2pEFe1OmyoMq
-         uxqKvhZeDPa3w==
-Message-ID: <8aa6228e-e6a2-b1f7-688e-8b4aa614c882@kernel.org>
-Date:   Thu, 28 Jul 2022 09:35:49 +0200
+        Thu, 28 Jul 2022 03:36:47 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9883A5FAEF
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:36:45 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id s14so1070412ljh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZG/9vTrhrJOGq1JMvZgN00L9EckSKmvxBa3lwJVO5XI=;
+        b=NpoUcjH9gI6oaJAHyufhchIG2LTeKnUkwqOYm9jzZMGbSfxc5ZPCOKknpLI2H85x9V
+         AV+FWpYJbtRIBX99aIPeNp3BmURZlWQW/ue3eP56ub9c1eVYrrFzwjcwBit9p+oELGFj
+         cO7dPnQIyyLlMOjA7YBVmf2jAsK/2UTcDEy6E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZG/9vTrhrJOGq1JMvZgN00L9EckSKmvxBa3lwJVO5XI=;
+        b=galvb71KHJ/Y/o52TXM6njjJDUz5ZsAIoaCyt3wtLDaSg0EjKpwuVp51eqmBxN5Q+4
+         XTyzp+sxpVR/bXm49m6Sn9oC2bAlf3WXyqUBnC4XGqXsaexhqnj5VAM0OFHSH46TeUFp
+         MTg78/mFVHTRrnawVpcR0vO55g7W8eY25PylJy99YIfEPvLCRVzcjuPE5S6HlMx/HZHW
+         eDZRYs1fgN4Pzr0lQyDGktBojuk/XALPDa85OL6ZkP+bKL4cTHOqnkFWZFSvT5QhSvco
+         sdpqS0Q6HEfx6FUXOJ/KNYJkBXlOM8jK0K5K7OcbILxwWcFFhTJ9RkeHMC39uAKqKiQQ
+         ut9g==
+X-Gm-Message-State: AJIora+rz5KLj+XEZLXxEzpZy2tTS5U22n23EYET3+P8rm5yJPE9k9RG
+        VTvVn8vQV6sTGkqpcYuihczrpVhnVD3ajmDxTJBrMaSoEWGrNQ==
+X-Google-Smtp-Source: AGRyM1vvV2nin3ftThzTZy5ebCxmO+6Vhwz+IiuVMJgfl9sUVNg3FTrLZEcOrypcNPB6p5mMx0GngzlFMABXHYQQz8Y=
+X-Received: by 2002:a05:6512:c08:b0:48a:7cfe:44c8 with SMTP id
+ z8-20020a0565120c0800b0048a7cfe44c8mr8653288lfu.120.1658993793285; Thu, 28
+ Jul 2022 00:36:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
- related bindings
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jian-Jia Su <jjsu@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Nikola Milosavljevic <mnidza@outlook.com>
-References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
- <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
- <3bb0ffa0-8091-0848-66af-180a41a68bf7@linaro.org>
- <CAODwPW89xZQZiZdQNt6+CcRjz=nbEAAFH0h_dBFSE5v3aFU4rQ@mail.gmail.com>
- <8f51aed8-956b-ac09-3baf-2b4572db1352@linaro.org>
- <CAODwPW9MvYJo8QbKOoVcUAKJ8Hxon2MCv_H5qpv=yaSTLLc+ug@mail.gmail.com>
- <628a7302-1409-81f7-f72b-6b1645df9225@linaro.org>
- <CAODwPW-4i+idH8Nz6=EmNUXYWgWkoOHs3wOZ7BbrH5GwGDZ1Ww@mail.gmail.com>
- <1f3189ef-7d3f-27b3-a691-b9649090b650@linaro.org>
- <CAODwPW-GDkfyFaNSnEngpSfz8LSXRetu+xwp3QrFHP1rH1O06w@mail.gmail.com>
- <86b9c6d6-e8e5-7f6d-0970-460baf9b6fcc@linaro.org>
- <CAD=FV=U8rgxuymX6hurS96rg1fjDUfh60b0X4UbpPp+TA+ck5g@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <CAD=FV=U8rgxuymX6hurS96rg1fjDUfh60b0X4UbpPp+TA+ck5g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
+ <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
+ <20220727113054.ffcckzlcipcxer2c@pengutronix.de> <20220727192839.707a3453.max@enpas.org>
+ <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
+In-Reply-To: <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Thu, 28 Jul 2022 09:36:21 +0200
+Message-ID: <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
+ register (btr)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/07/2022 16:07, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Jul 27, 2022 at 1:47 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 21/07/2022 01:42, Julius Werner wrote:
->>> Sorry, got distracted from this for a bit. Sounds like we were pretty
->>> much on the same page about how the updated binding should look like
->>> here, the remaining question was just about the compatible string.
->>>
->>>>>> Yes, we can. You still would need to generate the compatible according
->>>>>> to the current bindings. Whether we can change it I am not sure. I think
->>>>>> it depends how much customization is possible per vendor, according to
->>>>>> JEDEC spec. If we never ever have to identify specific part, because
->>>>>> JEDEC spec and registers tell us everything, then we could skip it,
->>>>>> similarly to lpddr2 and jedec,spi-nor.
->>>>>
->>>>> Shouldn't that be decided per use case? In general LPDDR is a pretty
->>>>> rigid set of standards and memory controllers are generally compatible
->>>>> with any vendor without hardcoding vendor-specific behavior, so I
->>>>> don't anticipate that this would be likely (particularly since there
->>>>> is no "real" kernel device driver that needs to initialize the full
->>>>> memory controller, after all, these bindings are mostly
->>>>> informational).
->>>>
->>>> If decided per use case understood as "decided depending how to use the
->>>> bindings" then answer is rather not. For example Linux implementation is
->>>> usually not the best argument to shape the bindings and usually to such
->>>> arguments answer is: "implementation does not matter".
->>>>
->>>> If by "use case" you mean actual hardware or specification
->>>> characteristics, then yes, of course. This is why I wrote "it depends".
->>>
->>> By "use case" I mean our particular platform and firmware requirements
->>> -- or rather, the realities of building devices with widely
->>> multi-sourced LPDDR parts. One cannot efficiently build firmware that
->>> can pass an exact vendor-and-part-specific compatible string to Linux
->>> for this binding for every single LPDDR part used on such a platform.
->>
->> Why cannot? You want to pass them as numerical values which directly map
->> to vendor ID and some part, don't they?
-> 
-> If you really want this to be in the "compatible" string, maybe the
-> right answer is to follow the lead of USB which encodes the VID/PID in
-> the compatible string
-> (Documentation/devicetree/bindings/usb/usb-device.yaml). It's solving
-> this exact same problem of avoiding needing a table translating from
-> an ID provided by a probable device to an human-readable string.
+Hello Marc,
 
-This makes sense. I would still argue that number of vendors is small
-thus strings could be translated (there is like 20 of them in JEP166D -
-JC-42.6), but for device ID this would work.
+On Wed, Jul 27, 2022 at 8:24 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 27.07.2022 19:28:39, Max Staudt wrote:
+> > On Wed, 27 Jul 2022 13:30:54 +0200
+> > Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> >
+> > > As far as I understand, setting the btr is an alternative way to set the
+> > > bitrate, right? I don't like the idea of poking arbitrary values into a
+> > > hardware from user space.
+> >
+> > I agree with Marc here.
+> >
+> > This is a modification across the whole stack, specific to a single
+> > device, when there are ways around.
+> >
+> > If I understand correctly, the CAN232 "S" command sets one of the fixed
+> > bitrates, whereas "s" sets the two BTR registers. Now the question is,
+> > what do BTR0/BTR1 mean, and what are they? If they are merely a divider
+> > in a CAN controller's master clock, like in ELM327, then you could
+> >
+> >   a) Calculate the BTR values from the bitrate userspace requests, or
+>
+> Most of the other CAN drivers write the BTR values into the register of
+> the hardware. How are these BTR values transported into the driver?
+>
+> There are 2 ways:
+>
+> 1) - user space configures a bitrate
+>    - the kernel calculates with the "struct can_bittiming_const" [1] given
+>      by driver and the CAN clock rate the low level timing parameters.
+>
+>      [1] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L47
+>
+> 2) - user space configures low level bit timing parameter
+>      (Sample point in one-tenth of a percent, Time quanta (TQ) in
+>       nanoseconds, Propagation segment in TQs, Phase buffer segment 1 in
+>       TQs, Phase buffer segment 2 in TQs, Synchronisation jump width in
+>       TQs)
+>     - the kernel calculates the Bit-rate prescaler from the given TQ and
+>       CAN clock rate
+>
+> Both ways result in a fully calculated "struct can_bittiming" [2]. The
+> driver translates this into the hardware specific BTR values and writes
+> the into the registers.
+>
+> If you know the CAN clock and the bit timing const parameters of the
+> slcan's BTR register you can make use of the automatic BTR calculation,
+> too. Maybe the framework needs some tweaking if the driver supports both
+> fixed CAN bit rate _and_ "struct can_bittiming_const".
 
-> 
-> 
->>> And I don't see why that should be needed, either... that's kinda the
->>> point of having an interoperability standard, after all, that you can
->>> just assume the devices all work according to the same spec and don't
->>> need to hardcode details about each specific instance.
->>
->> If we talk about standard, then DT purpose is not for autodetectable
->> pieces. These values are autodetectable, so such properties should not
->> be encoded in DT.
-> 
-> In the case of DDR, I think that the firmware can auto-detect them but
-> not the kernel. So from the kernel's point of view the DDR info should
-> be in DT, right?
+Does it make sense to use the device tree to provide the driver with those
+parameters required for the automatic calculation of the BTR (clock rate,
+struct can_bittiming_const, ...) that depend on the connected controller? In
+this way the solution should be generic and therefore scalable. I think we
+should also add some properties to map the calculated BTR value on the
+physical register of the controller.
 
-True, I thought memory controllers could provide such information, but
-now I checked Exynos5422 DMC and it does not expose such register.
+Or, use the device tree to extend the bittates supported by the controller
+to the fixed ones (struct can_priv::bitrate_const)?
+
+Thanks and regards,
+Dario
+
+>
+> [2] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L31
+>
+> >   b) pre-calculate a huge table of possible bitrates and present them
+> >      all to userspace. Sounds horrible, but that's what I did in can327,
+> >      haha. Maybe I should have reigned them in a little, to the most
+> >      useful values.
+>
+> If your adapter only supports fixed values, then that's the only way to
+> go.
+>
+> >   c) just limit the bitrates to whatever seems most useful (like the
+> >      "S" command's table), and let users complain if they really need
+> >      something else. In the meantime, they are still free to slcand or
+> >      minicom to their heart's content before attaching slcan, thanks to
+> >      your backwards compatibility efforts.
+>
+> In the early stages of the non-mainline CAN framework we had tables for
+> BTR values for some fixed bit rates, but that turned out to be not
+> scaleable.
+>
+> > In short, to me, this isn't a deal breaker for your patch series.
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
-Best regards,
-Krzysztof
+
+-- 
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

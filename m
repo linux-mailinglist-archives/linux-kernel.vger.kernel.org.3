@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EEE583FD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0128F583FED
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238502AbiG1NU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S236466AbiG1NZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238292AbiG1NUY (ORCPT
+        with ESMTP id S234892AbiG1NZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:20:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1282832DAD;
-        Thu, 28 Jul 2022 06:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F6F961D24;
-        Thu, 28 Jul 2022 13:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CE87C433C1;
-        Thu, 28 Jul 2022 13:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659014421;
-        bh=tHDTyq2hdN96B8IB/iVj5p+CrqNlScGtW51Z07fePSI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pZeSXlfmSi4bs66UnUuv/RfkhzPunN+pJb8couQVgnafx+rIPUx9cpEzO71+yAiif
-         NmVvug172XK3zCzP+dQHb3oFKb9L4qvkxzZsNOqrAK3ZpA44DSFYHdeTXC6Cubi2iM
-         ZHh5sZoxq7SuTujceywxey7Ob80D3Reui1kuAp8M=
-Date:   Thu, 28 Jul 2022 15:20:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/201] 5.15.58-rc1 review
-Message-ID: <YuKNE2wtpJEXAgWj@kroah.com>
-References: <20220727161026.977588183@linuxfoundation.org>
- <fa5fd00e-d71f-da29-0242-058026f90128@roeck-us.net>
+        Thu, 28 Jul 2022 09:25:48 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECB732045;
+        Thu, 28 Jul 2022 06:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=peZ+13VgmLg1pDFTO+fq8ryBpDliOWbSHN81NMjexw0=; b=ORrgfgodViWK5Uxl3mST9lVpLX
+        zJlKUu7oAHHRWhZH9i7vAj0jgfPeaXdtw7TWdHF6x7akxEFQ/0l+u1uJE1e2ydfT1MSahrOtiKQwC
+        g7bKpUgQxfCqt5CJkSSoLc1KW5/jcE9HfnFXRDip/YFfsaCRSjCkPqaB6VrJZHEG9mfs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oH3WB-00Bo9r-QO; Thu, 28 Jul 2022 15:25:35 +0200
+Date:   Thu, 28 Jul 2022 15:25:35 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net v1 1/1] net: dsa: microchip: don't try do read Gbit
+ registers on non Gbit chips
+Message-ID: <YuKOTzS89D2+O8Ye@lunn.ch>
+References: <20220728131725.40492-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fa5fd00e-d71f-da29-0242-058026f90128@roeck-us.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220728131725.40492-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 06:13:42AM -0700, Guenter Roeck wrote:
-> On 7/27/22 09:08, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.58 release.
-> > There are 201 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> > Anything received after that time might be too late.
-> > 
+On Thu, Jul 28, 2022 at 03:17:25PM +0200, Oleksij Rempel wrote:
+> Do not try to read not existing or wrong register on chips without
+> GBIT_SUPPORT.
 > 
-> Building i386:allyesconfig ... failed
-> --------------
-> Error log:
-> In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/os_types.h:37,
->                  from drivers/gpu/drm/amd/amdgpu/../display/dc/dm_services_types.h:29,
->                  from drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:29:
-> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'dm_dmub_outbox1_low_irq':
-> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:761:51: error: format '%ld' expects argument of type 'long int', but argument 3 has type 'unsigned int'
+> Fixes: c2e866911e25 ("net: dsa: microchip: break KSZ9477 DSA driver into two files")
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/net/dsa/microchip/ksz9477.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> Needs commit 655c167edc8c26 ("drm/amd/display: Fix wrong format specifier
-> in amdgpu_dm.c").
+> diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+> index c73bb6d383ad..f6bbd9646c85 100644
+> --- a/drivers/net/dsa/microchip/ksz9477.c
+> +++ b/drivers/net/dsa/microchip/ksz9477.c
+> @@ -316,7 +316,13 @@ void ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
+>  			break;
+>  		}
+>  	} else {
+> -		ksz_pread16(dev, addr, 0x100 + (reg << 1), &val);
+> +		/* No gigabit support.  Do not read wrong registers. */
+> +		if (!(dev->features & GBIT_SUPPORT) &&
+> +		    (reg == MII_CTRL1000 || reg == MII_ESTATUS ||
+> +		     reg == MII_STAT1000))
 
-Thanks, now added.  I'll push out a -rc2 now with that fix as well.
+Does this actually happen?
 
-greg k-h
+If i remember this code correctly, it tries to make the oddly looking
+PHY look like a normal PHY. phylib is then used to drive the PHY?
+
+If i have that correct, why is phylib trying to read these registers?
+It should know there is no 1G support, and should skip them.
+
+   Andrew

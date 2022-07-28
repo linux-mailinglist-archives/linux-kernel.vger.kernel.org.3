@@ -2,133 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF665844EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076D45844F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 19:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbiG1RYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 13:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S232487AbiG1RZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 13:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiG1RYX (ORCPT
+        with ESMTP id S230438AbiG1RZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 13:24:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D52CE5FAED
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659029061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BTCAQ/2O9rI/7HtP9wa4OSuDQhJYkbO4HcHfXDMOkEc=;
-        b=Xo5iGVdz2emTlwcGPL9VlQjCaQ6ulwWTyqtNbzscX09yLdmMyd8r6F5pO8RqVT6EHu/Q1J
-        gboYztbnmkFDOf50kRR+jCVmn0s8Uo2D32kgGc3h4WHyRR3CA59W9DlKD3IAsJRNnrGoMe
-        l3M/4jX9wHU6BYCsgSD6bWSfmIkvLUo=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-oopDrEpmOi-e2t_pJFAKtA-1; Thu, 28 Jul 2022 13:24:19 -0400
-X-MC-Unique: oopDrEpmOi-e2t_pJFAKtA-1
-Received: by mail-wr1-f72.google.com with SMTP id m2-20020adfc582000000b0021e28acded7so599072wrg.13
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:24:19 -0700 (PDT)
+        Thu, 28 Jul 2022 13:25:21 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EC96367
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:25:16 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id g1so1917886qki.7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 10:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rJljmSyv8w2VGn14si1kaNQ7bWs8OfRzJatRimvQO6Y=;
+        b=CfRo5oBkcztfAwLnAzZIUzpKexeCvxCHJMUJKzRww2U7OEoRyVjvJpexbqWSjQxBdA
+         qL+OEIx8n0OE+R6HQ4z2++cp1adc9RBIWZpjQHxCC6IXy0soY1sQQL21u8IFjIR7oNjt
+         JugLaK4fjGaz2dR3U1bSiPhJUDOVj70Y5UW7dUzdzA2kYz8qFBSUen71AWX+ctzp6S65
+         vzIcqCTDPa37qDWAmKNZegbLDxgy4fW2TAybnzYvDfd2nJsqc6WNRYsccjdZiJb3Q1uO
+         WxYfnaOByYHvcmwd1Wql+a+RKDG/g4/EN2QSmOiTsp20OWZa9UL2gZbXDZtGnJ1v2b4E
+         ulhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=BTCAQ/2O9rI/7HtP9wa4OSuDQhJYkbO4HcHfXDMOkEc=;
-        b=J7273pA2tMNPlqDT1FIvW86O0EfgwKGabeqlCItkzEy2DQZa2m0+Z3t8JEAkBxNzOP
-         n5qUz1rxMXnSxKy9AfSf9AcR9JwqTFBjlps+Btr/eFmurFkTxPQrktTRbCQ+nkePix+K
-         UiYyr97kcfWJBRsq90BeGNFu6nlD/hApbtzGk7th9e0Q9bZXLtMMOY662eLyWr2WNyhS
-         eFJUqbB/hPPMjgyead3b0P6Nzy91UA3fc+/Q67FtQfukgApZy88+z4pMFX5yF0aulrIj
-         0GbT3kH4NHmTNTPCMTe26tJhIorC4+ZCCUZZYHvWCyuU1qqfZYPSpONMusEiJOyyIBY2
-         PDnQ==
-X-Gm-Message-State: AJIora+L2K0eDrjCJpF2q6Uw3A7DXHMp6nfjjOuaC2MNOSowQFC+qnX2
-        pKHoLgxCJIAHdDxpG5vs7VMQrL3AiRaF2af6dfL8F8Et2UopLk2YPHMsJwVgQCPPb0WSKAUsF18
-        9ODeDrcazzjW/5eFbHL6Q01cd
-X-Received: by 2002:a7b:ce87:0:b0:3a3:19bf:35e0 with SMTP id q7-20020a7bce87000000b003a319bf35e0mr291365wmj.120.1659029058581;
-        Thu, 28 Jul 2022 10:24:18 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t3YZybr+YnX6CcQA+ryVcN/sTw+U4A0+0EYIenQp5eA6drZXWQb/MeyYub2TCAaLfoxlf52w==
-X-Received: by 2002:a7b:ce87:0:b0:3a3:19bf:35e0 with SMTP id q7-20020a7bce87000000b003a319bf35e0mr291356wmj.120.1659029058427;
-        Thu, 28 Jul 2022 10:24:18 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id l15-20020a05600c2ccf00b003a327f19bf9sm7315026wmc.14.2022.07.28.10.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 10:24:17 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [RFC PATCH v2 1/2] workqueue: Unbind workers before sending
- them to exit()
-In-Reply-To: <YuK6zzmlFJ376UeD@slm.duckdns.org>
-References: <20220727115327.2273547-1-vschneid@redhat.com>
- <20220727115327.2273547-2-vschneid@redhat.com>
- <CAJhGHyCeraX1jcea9kt_FBC561zBgECuw5qx8TAdCG0EHnT6kA@mail.gmail.com>
- <xhsmhedy5ecdg.mognet@vschneid.remote.csb>
- <YuK6zzmlFJ376UeD@slm.duckdns.org>
-Date:   Thu, 28 Jul 2022 18:24:17 +0100
-Message-ID: <xhsmh8roddubi.mognet@vschneid.remote.csb>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rJljmSyv8w2VGn14si1kaNQ7bWs8OfRzJatRimvQO6Y=;
+        b=3R6emMS/pi925S+1mo2VsNB+v3OBf39roznaJhvKDURrahsmj+1UKmLkIsUtYixZ/l
+         /SY252uYcig3UMtHsXD69Ek33PVb9H/QE/Z+uYPQpUwJVVZj6EOhs70C/3MymybOkSnp
+         o+s2S5S/ZAMz4UOYU6/Ffs/hTNsnGfahr0xelI1u+09K6d0PRvRQuuqMGX7odFEqSMVF
+         D9n/xxdDf8/z5xlSWDwgCiUUoX/YbfQ9TJgTpdFRHZzrq6AQSOCLputMTntfWOxPWR2k
+         wDJL77Gp4K2WdBKkL4TNOIIXu8j+2Wie2gKB/T05+ptfJ1wmklgeLrmv5f2UqQ6ivy53
+         J6aQ==
+X-Gm-Message-State: AJIora+qWP0HGSn14fL6geXobm11ddLW4cdDEn4Qp4Wq7OZEaoZuUUtW
+        N9emw0B6H9q039lrI+8eRQMruUVLvMHgAxY3y6pelQ==
+X-Google-Smtp-Source: AGRyM1s34s2C8L8L6uMgqt3nFoWY9qyNFbZJMALBMfTBELK21q7kEDV7vlTw/azuCicE0iNfwcdKVXQ2Ze0M8BZdk3k=
+X-Received: by 2002:a05:620a:1927:b0:6b5:fe70:9acc with SMTP id
+ bj39-20020a05620a192700b006b5fe709accmr21200732qkb.669.1659029115045; Thu, 28
+ Jul 2022 10:25:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722174829.3422466-1-yosryahmed@google.com>
+ <20220722174829.3422466-5-yosryahmed@google.com> <c7ebc0c6-b301-de70-b5ae-1f62d360acb6@fb.com>
+In-Reply-To: <c7ebc0c6-b301-de70-b5ae-1f62d360acb6@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 28 Jul 2022 10:25:04 -0700
+Message-ID: <CA+khW7hvLgCKVA0kiKhREW-PZ4aOYvkGHoEqKAggEdyY9TRp7Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/8] bpf: Introduce cgroup iter
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/22 06:35, Tejun Heo wrote:
-> On Thu, Jul 28, 2022 at 11:54:19AM +0100, Valentin Schneider wrote:
->> On 28/07/22 01:13, Lai Jiangshan wrote:
->> > system_unbound_wq doesn't have a rescuer.
->> >
->> > A new workqueue with a rescuer needs to be created and used for
->> > this purpose.
->> >
->>
->> Right, I think it makes sense for those work items to be attached to a
->> WQ_MEM_RECLAIM workqueue. Should I add that as a workqueue-internal
->> thing?
+On Wed, Jul 27, 2022 at 10:49 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> I don't understand why this would need MEM_RECLAIM when it isn't sitting in
-> the memory reclaim path. Nothing in mm side can wait on this.
+>
+>
+> On 7/22/22 10:48 AM, Yosry Ahmed wrote:
+> > From: Hao Luo <haoluo@google.com>
+> >
+> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in three modes:
+> >
+> >   - walking a cgroup's descendants in pre-order.
+> >   - walking a cgroup's descendants in post-order.
+> >   - walking a cgroup's ancestors.
+> >
+> > When attaching cgroup_iter, one can set a cgroup to the iter_link
+> > created from attaching. This cgroup is passed as a file descriptor and
+> > serves as the starting point of the walk. If no cgroup is specified,
+> > the starting point will be the root cgroup.
+> >
+> > For walking descendants, one can specify the order: either pre-order or
+> > post-order. For walking ancestors, the walk starts at the specified
+> > cgroup and ends at the root.
+> >
+> > One can also terminate the walk early by returning 1 from the iter
+> > program.
+> >
+> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > program is called with cgroup_mutex held.
+> >
+> > Currently only one session is supported, which means, depending on the
+> > volume of data bpf program intends to send to user space, the number
+> > of cgroups that can be walked is limited. For example, given the current
+> > buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > cgroup, the total number of cgroups that can be walked is 512. This is
+>
+> PAGE_SIZE needs to be 4KB in order to conclude that the total number of
+> walked cgroups is 512.
 >
 
-Vaguely reading the doc I thought that'd be for anything that would
-directly or indirectly help with reclaiming memory (not explicitly sitting
-in some *mm reclaim* path), and I assumed freeing up a worker would count as
-that - but that's the understanding of someone who doesn't know much about
-all that :-)
+Sure. Will change that.
 
->> > Since WORKER_DIE is set, the worker can be possible freed now
->> > if there is another source to wake it up.
->> >
->>
->> My understanding for having reap_worker() be "safe" to use outside of
->> raw_spin_lock_irq(pool->lock) is that pool->idle_list is never accessed
->> outside of the pool->lock, and wake_up_worker() only wakes a worker that
->> is in that list. So with destroy_worker() detaching the worker from
->> pool->idle_list under pool->lock, I'm not aware of a codepath other than
->> reap_worker() that could wake it up.
+> > a limitation of cgroup_iter. If the output data is larger than the
+> > buffer size, the second read() will signal EOPNOTSUPP. In order to work
+> > around, the user may have to update their program to reduce the volume
+> > of data sent to output. For example, skip some uninteresting cgroups.
+> > In future, we may extend bpf_iter flags to allow customizing buffer
+> > size.
+> >
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > ---
+> >   include/linux/bpf.h                           |   8 +
+> >   include/uapi/linux/bpf.h                      |  30 +++
+> >   kernel/bpf/Makefile                           |   3 +
+> >   kernel/bpf/cgroup_iter.c                      | 252 ++++++++++++++++++
+> >   tools/include/uapi/linux/bpf.h                |  30 +++
+> >   .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+> >   6 files changed, 325 insertions(+), 2 deletions(-)
+> >   create mode 100644 kernel/bpf/cgroup_iter.c
 >
-> There actually are spurious wakeups. We can't depend on there being no
-> wakeups than ours.
+> This patch cannot apply to bpf-next cleanly, so please rebase
+> and post again.
 >
 
-Myes, I suppose if a to-be-destroyed kworker spuriously wakes before having
-been unbound then there's not much point in having the unbinding (harm has
-been done and the kworker can do_exit(), though arguably we could reduce
-the harm and still move it away), but let me see what I can do here.
+Sorry about that. Will do.
 
-> Thanks.
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index a97751d845c9..9061618fe929 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -47,6 +47,7 @@ struct kobject;
+> >   struct mem_cgroup;
+> >   struct module;
+> >   struct bpf_func_state;
+> > +struct cgroup;
+> >
+> >   extern struct idr btf_idr;
+> >   extern spinlock_t btf_idr_lock;
+> > @@ -1717,7 +1718,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
+> >       int __init bpf_iter_ ## target(args) { return 0; }
+> >
+> >   struct bpf_iter_aux_info {
+> > +     /* for map_elem iter */
+> >       struct bpf_map *map;
+> > +
+> > +     /* for cgroup iter */
+> > +     struct {
+> > +             struct cgroup *start; /* starting cgroup */
+> > +             int order;
+> > +     } cgroup;
+> >   };
+> >
+> >   typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index ffcbf79a556b..fe50c2489350 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -87,10 +87,30 @@ struct bpf_cgroup_storage_key {
+> >       __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+> >   };
+> >
+> > +enum bpf_iter_cgroup_traversal_order {
+> > +     BPF_ITER_CGROUP_PRE = 0,        /* pre-order traversal */
+> > +     BPF_ITER_CGROUP_POST,           /* post-order traversal */
+> > +     BPF_ITER_CGROUP_PARENT_UP,      /* traversal of ancestors up to the root */
+> > +};
+> > +
+> >   union bpf_iter_link_info {
+> >       struct {
+> >               __u32   map_fd;
+> >       } map;
+> > +
+> > +     /* cgroup_iter walks either the live descendants of a cgroup subtree, or the
+> > +      * ancestors of a given cgroup.
+> > +      */
+> > +     struct {
+> > +             /* Cgroup file descriptor. This is root of the subtree if walking
+> > +              * descendants; it's the starting cgroup if walking the ancestors.
+> > +              * If it is left 0, the traversal starts from the default cgroup v2
+> > +              * root. For walking v1 hierarchy, one should always explicitly
+> > +              * specify the cgroup_fd.
+> > +              */
 >
-> --
-> tejun
+> I did see how the above cgroup v1/v2 scenarios are enforced.
+>
 
+Do you mean _not_ see? Yosry and I experimented a bit. We found even
+on systems where v2 is not enabled, cgroup v2 root always exists and
+can be attached to, and can be iterated on (only trivially). We didn't
+find a way to tell v1 and v2 apart and deemed a comment to instruct v1
+users is fine?
+
+> > +             __u32   cgroup_fd;
+> > +             __u32   traversal_order;
+> > +     } cgroup;
+> >   };
+> >
+> >   /* BPF syscall commands, see bpf(2) man-page for more details. */
+> > @@ -6136,6 +6156,16 @@ struct bpf_link_info {
+> >                                       __u32 map_id;
+> >                               } map;
+> >                       };
+> > +                     union {
+> > +                             struct {
+> > +                                     __u64 cgroup_id;
+> > +                                     __u32 traversal_order;
+> > +                             } cgroup;
+> > +                     };
+> > +                     /* For new iters, if the first field is larger than __u32,
+> > +                      * the struct should be added in the second union. Otherwise,
+> > +                      * it will create holes before map_id, breaking uapi.
+> > +                      */
+>
+> Please put the comment above the union. Let us just say, if
+> the iter specific field is __u32, it can be put in the first or
+> second union. Otherwise, it is put in second union.
+>
+
+Ok.
+
+> >               } iter;
+> >               struct  {
+> >                       __u32 netns_ino;
+> > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> > index 057ba8e01e70..00e05b69a4df 100644
+> > --- a/kernel/bpf/Makefile
+> > +++ b/kernel/bpf/Makefile
+> > @@ -24,6 +24,9 @@ endif
+> >   ifeq ($(CONFIG_PERF_EVENTS),y)
+> >   obj-$(CONFIG_BPF_SYSCALL) += stackmap.o
+> >   endif
+> > +ifeq ($(CONFIG_CGROUPS),y)
+> > +obj-$(CONFIG_BPF_SYSCALL) += cgroup_iter.o
+> > +endif
+> >   obj-$(CONFIG_CGROUP_BPF) += cgroup.o
+> >   ifeq ($(CONFIG_INET),y)
+> >   obj-$(CONFIG_BPF_SYSCALL) += reuseport_array.o
+> > diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
+> > new file mode 100644
+> > index 000000000000..1027faed0b8b
+> > --- /dev/null
+> > +++ b/kernel/bpf/cgroup_iter.c
+> > @@ -0,0 +1,252 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/* Copyright (c) 2022 Google */
+> > +#include <linux/bpf.h>
+> > +#include <linux/btf_ids.h>
+> > +#include <linux/cgroup.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/seq_file.h>
+> > +
+> > +#include "../cgroup/cgroup-internal.h"  /* cgroup_mutex and cgroup_is_dead */
+> > +
+> > +/* cgroup_iter provides three modes of traversal to the cgroup hierarchy.
+> > + *
+> > + *  1. Walk the descendants of a cgroup in pre-order.
+> > + *  2. Walk the descendants of a cgroup in post-order.
+> > + *  2. Walk the ancestors of a cgroup.
+> > + *
+> > + * For walking descendants, cgroup_iter can walk in either pre-order or
+> > + * post-order. For walking ancestors, the iter walks up from a cgroup to
+> > + * the root.
+> > + *
+> > + * The iter program can terminate the walk early by returning 1. Walk
+> > + * continues if prog returns 0.
+> > + *
+> > + * The prog can check (seq->num == 0) to determine whether this is
+> > + * the first element. The prog may also be passed a NULL cgroup,
+> > + * which means the walk has completed and the prog has a chance to
+> > + * do post-processing, such as outputing an epilogue.
+> > + *
+> > + * Note: the iter_prog is called with cgroup_mutex held.
+> > + *
+> > + * Currently only one session is supported, which means, depending on the
+> > + * volume of data bpf program intends to send to user space, the number
+> > + * of cgroups that can be walked is limited. For example, given the current
+> > + * buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > + * cgroup, the total number of cgroups that can be walked is 512. This is
+>
+> Again, let us specify PAGE_SIZE = 4KB here.
+>
+
+Ok.
+
+> > + * a limitation of cgroup_iter. If the output data is larger than the
+> > + * buffer size, the second read() will signal EOPNOTSUPP. In order to work
+> > + * around, the user may have to update their program to reduce the volume
+> > + * of data sent to output. For example, skip some uninteresting cgroups.
+> > + */
+> > +
+> > +struct bpf_iter__cgroup {
+> > +     __bpf_md_ptr(struct bpf_iter_meta *, meta);
+> > +     __bpf_md_ptr(struct cgroup *, cgroup);
+> > +};
+> > +
+> > +struct cgroup_iter_priv {
+> > +     struct cgroup_subsys_state *start_css;
+> > +     bool terminate;
+> > +     int order;
+> > +};
+> > +
+> > +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
+> > +{
+> > +     struct cgroup_iter_priv *p = seq->private;
+> > +
+> > +     mutex_lock(&cgroup_mutex);
+> > +
+> > +     /* cgroup_iter doesn't support read across multiple sessions. */
+> > +     if (*pos > 0)
+> > +             return ERR_PTR(-EOPNOTSUPP);
+>
+> This is not quite right. Let us say, the number of cgroups is 1,
+> after bpf program run, pos = 1, and the control return to user
+> space. Now the second read() will return -EOPNOTSUPP which is not
+> right. -EOPNOTSUPP should be returned ONLY if the previous cgroup
+> iterations do not traverse all cgroups.
+> So you might need to record additional information in cgroup_iter_priv
+> to record such information.
+>
+
+Oh, I missed seeing this scenario. Then we need a flag in
+cgroup_iter_priv indicating whether iter is happening. Only when
+during iter hasn't ended, we return -EOPNOTSUPP.
+
+> > +
+> > +     ++*pos;
+> > +     p->terminate = false;
+> > +     if (p->order == BPF_ITER_CGROUP_PRE)
+> > +             return css_next_descendant_pre(NULL, p->start_css);
+> > +     else if (p->order == BPF_ITER_CGROUP_POST)
+> > +             return css_next_descendant_post(NULL, p->start_css);
+> > +     else /* BPF_ITER_CGROUP_PARENT_UP */
+> > +             return p->start_css;
+> > +}
+> > +
+> > +static int __cgroup_iter_seq_show(struct seq_file *seq,
+> > +                               struct cgroup_subsys_state *css, int in_stop);
+> > +
+> > +static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
+> > +{
+> > +     /* pass NULL to the prog for post-processing */
+> > +     if (!v)
+> > +             __cgroup_iter_seq_show(seq, NULL, true);
+> > +     mutex_unlock(&cgroup_mutex);
+> > +}
+> > +
+> > +static void *cgroup_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+> > +{
+> > +     struct cgroup_subsys_state *curr = (struct cgroup_subsys_state *)v;
+> > +     struct cgroup_iter_priv *p = seq->private;
+> > +
+> > +     ++*pos;
+> > +     if (p->terminate)
+> > +             return NULL;
+> > +
+> > +     if (p->order == BPF_ITER_CGROUP_PRE)
+> > +             return css_next_descendant_pre(curr, p->start_css);
+> > +     else if (p->order == BPF_ITER_CGROUP_POST)
+> > +             return css_next_descendant_post(curr, p->start_css);
+> > +     else
+> > +             return curr->parent;
+> > +}
+> > +
+> [...]

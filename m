@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09D5583FFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC7E584002
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 15:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbiG1NcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 09:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S231716AbiG1NcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 09:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiG1NcH (ORCPT
+        with ESMTP id S229932AbiG1NcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 09:32:07 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCC045040;
-        Thu, 28 Jul 2022 06:32:07 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id c3so1918309pfb.13;
-        Thu, 28 Jul 2022 06:32:07 -0700 (PDT)
+        Thu, 28 Jul 2022 09:32:09 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528FC14095;
+        Thu, 28 Jul 2022 06:32:09 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id f7so2120890pjp.0;
+        Thu, 28 Jul 2022 06:32:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1MQM/vL3QNNnRpEU6OSTQU5od8eHLRMAbnHqrveeBzc=;
-        b=LDXtjSsO5y+3XlkpTdytIB+0iFlhU2pnoZ5PgHpNo8lniWCAX/ETlCgn2f/1vMKFPT
-         AFva0N6R5wqMePnu2iaIWeM5769l/gj52jCB/8q3xIaxWCnRCnptL9CQGMzA5q+r4Juk
-         XORgboOQUMfOtWT41L+3vLnceLgKIT9mkFO11f/nC+KOJ/xYwCMmtV4sAP2HdRYIeeKm
-         F3DLWjsx4kuLG1dUfdLG4GnhnBl9pND6iMfXPi7RT8AY51YizObounXVQDSXn7RDxDzL
-         yvqBlrHAUEqQufp5OGYkizZIs+5QmeYWu100yErm1ua4199Crzcd9MW3+Ome1iXbT116
-         wXeA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lmQYtc1hSA2dj1fab7+3HzZDSuHervzNbSwsZTrDXjc=;
+        b=QXUxjVv/gljXab51PFwJL1C/wua/AScPk2bmSfmz6gdfQHtCzkhJTi+xGfkdYw+exf
+         TGQfnxDkwloVWUF3030IK9oe/TJVHbU6xS8yrMGCo0g3207kXuwarKDjBROixk+4nG6S
+         V7mKEhgXUJ3Qugvr9Z/igXxLXBCTjYZPK5jPWoZXKsMLPyQRgYpq1dbNnKA1NZH6315C
+         gQwhk1ZzN9HeJMBtVBivGQHolmf/FVomggU2LYS1k7r3MhdZnnotRTCuHHD48lCxFSwQ
+         T80wHrZEP/g0Qm064hTopGqRwyQsBzsDeyGIL0fY2HgftkPfdJhVExkTs/BK3sZkZqB5
+         p0dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1MQM/vL3QNNnRpEU6OSTQU5od8eHLRMAbnHqrveeBzc=;
-        b=aCvpGFZAwNVNQ0ygea/zxAYJtZtjgKA/COqvL2nJ2Cnf0cIDXjjq7y2HHZavQM5SFQ
-         57UzEuI320dUl8UlwGnr9heQmFZMGeQ79HeBGiHfwUIHdyN4044xFRc1qp5+2L1gT2lY
-         6J3JLJoEoDnLm3oLKRktbAJnfEcVB5kt29n6wXnGOUwb9OJRDQHtDmfeu2gcG6sK9Vlt
-         qnhw+6UNhRi85l3uossIB0+J50OkIt9jVCnAjHWvM1KGw578PZc9I7rxsPnOPgbUz51A
-         36om/4/F35S5p6sleesQ1iILv9dSX2sWGN/uhxPMiDkoXBFzcSKxR1kvQUz7HlHnXeoM
-         lX2Q==
-X-Gm-Message-State: AJIora+5cteQAycuwPheJKZkv/FdEVUdA59QBuehk2IObWKLODPnlAPx
-        d4aiOyPMTKdXBJpG6A6cNsHlfpZlz5JAaw==
-X-Google-Smtp-Source: AGRyM1uxM5zACYMiOC0mk+eJyjekRabvgtsXaPA0VX/lWAst3HVU6fWfE76JZwt0wyi9TWPNyKRxnQ==
-X-Received: by 2002:a65:4cc7:0:b0:41a:4df2:4839 with SMTP id n7-20020a654cc7000000b0041a4df24839mr23948737pgt.37.1659015126614;
-        Thu, 28 Jul 2022 06:32:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lmQYtc1hSA2dj1fab7+3HzZDSuHervzNbSwsZTrDXjc=;
+        b=d0G+57BPYI29oXuKqfeh9mFe29sqlofEqtoID+H95wJoZ+OrB351yyN9nHGZWmCZBr
+         0lEq7R1/CZo3qa6x9djbijnpqZxhzSY61vVgpjGLuo58RgxkVTkmGGAIf8vjyplCUUwX
+         9iiUI/6rBJUjCnTgi2EebxkzPLaFWURAYK3rfytSiTVLsAbPhb2Yab0DBSEPTuG4nm3A
+         ObIYAE2LnwT9xI3qxnfufuZ2FhjNltqg/HaT+TisWulerzva4sY6boplsQF6Wj7xvEMT
+         oxy9r0tWnz4NHR4EqpOhU22N/7dM7Rj/VB5I0JyBSWzmD4f2jMbVjaLNy2cV7FAzSOmm
+         0SUQ==
+X-Gm-Message-State: AJIora9SCo2TqddipHdbiwOTrl/qAK/Bu0l+KNxZc+lR7L/ZSTYb2lb+
+        i9zo4DsPbmOKEI/F+k+XznkztrBq7zPrRQ==
+X-Google-Smtp-Source: AGRyM1vie/uVlJ1G36FoIXDt6/36i5WBdxQFflygh4kQtsKlRuTN5pA2cmd600APZ8MDePZw9OBoPA==
+X-Received: by 2002:a17:90b:4c50:b0:1f2:c763:52fc with SMTP id np16-20020a17090b4c5000b001f2c76352fcmr10184248pjb.233.1659015128869;
+        Thu, 28 Jul 2022 06:32:08 -0700 (PDT)
 Received: from localhost.localdomain (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id u188-20020a6379c5000000b00419b128cf98sm928474pgc.54.2022.07.28.06.32.04
+        by smtp.gmail.com with ESMTPSA id u188-20020a6379c5000000b00419b128cf98sm928474pgc.54.2022.07.28.06.32.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 06:32:05 -0700 (PDT)
+        Thu, 28 Jul 2022 06:32:08 -0700 (PDT)
 From:   Potin Lai <potin.lai.pt@gmail.com>
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jonathan Cameron <jic23@kernel.org>,
@@ -55,10 +55,12 @@ To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
 Cc:     Patrick Williams <patrick@stwcx.xyz>,
         Potin Lai <potin.lai@quantatw.com>, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org, Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH v5 0/2] iio: humidity: hdc100x: add manufacturer and device ID check
-Date:   Thu, 28 Jul 2022 12:54:33 +0000
-Message-Id: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
+Subject: [PATCH v5 1/2] iio: humidity: hdc100x: switch to probe_new callback
+Date:   Thu, 28 Jul 2022 12:54:34 +0000
+Message-Id: <20220728125435.3336618-2-potin.lai.pt@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
+References: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,38 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this patch series, we move the callback from probe to probe_new, and add
-manufacturer and device ID check for hdc100x driver.
+Switch to probe_new callback due to probe is deprecated soon.
 
-LINK: [v1] https://lore.kernel.org/all/20220722172035.44977-1-potin.lai.pt@gmail.com/
-LINK: [v2] https://lore.kernel.org/all/20220727064415.940690-1-potin.lai.pt@gmail.com/
-LINK: [v3] https://lore.kernel.org/all/20220727164133.973930-1-potin.lai.pt@gmail.com/
-LINK: [v4] https://lore.kernel.org/all/20220728003417.3083353-1-potin.lai.pt@gmail.com/
+Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+ drivers/iio/humidity/hdc100x.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-changes v1 --> v2:
-- fix typo in commit message
-- change to use probe_new
-- use device_get_match_data instead of i2c_of_match_device
-
-changes v2 --> v3:
-- move probe_new part into a separate patch
-- remove unsed variable
-- remove redundant checking of matched data
-
-changes v3 --> v4:
-- move ID support checking to probe()
-- add hdc100x_chip_data pointer into hdc100x_data for accessing in future
-
-changes v4 --> v5:
-- remove hdc100x_chip_data pointer from hdc100x_data structure
-
-Potin Lai (2):
-  iio: humidity: hdc100x: switch to probe_new callback
-  iio: humidity: hdc100x: add manufacturer and device ID check
-
- drivers/iio/humidity/hdc100x.c | 72 +++++++++++++++++++++++++++-------
- 1 file changed, 58 insertions(+), 14 deletions(-)
-
+diff --git a/drivers/iio/humidity/hdc100x.c b/drivers/iio/humidity/hdc100x.c
+index 9e0fce917ce4c..0d514818635cb 100644
+--- a/drivers/iio/humidity/hdc100x.c
++++ b/drivers/iio/humidity/hdc100x.c
+@@ -351,8 +351,7 @@ static const struct iio_info hdc100x_info = {
+ 	.attrs = &hdc100x_attribute_group,
+ };
+ 
+-static int hdc100x_probe(struct i2c_client *client,
+-			 const struct i2c_device_id *id)
++static int hdc100x_probe(struct i2c_client *client)
+ {
+ 	struct iio_dev *indio_dev;
+ 	struct hdc100x_data *data;
+@@ -422,7 +421,7 @@ static struct i2c_driver hdc100x_driver = {
+ 		.name	= "hdc100x",
+ 		.of_match_table = hdc100x_dt_ids,
+ 	},
+-	.probe = hdc100x_probe,
++	.probe_new = hdc100x_probe,
+ 	.id_table = hdc100x_id,
+ };
+ module_i2c_driver(hdc100x_driver);
 -- 
 2.31.1
 

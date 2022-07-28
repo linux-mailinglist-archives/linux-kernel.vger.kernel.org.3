@@ -2,91 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39ED5839B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0EB5839B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 09:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbiG1Hnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 03:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S234719AbiG1HpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 03:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234641AbiG1Hnh (ORCPT
+        with ESMTP id S233440AbiG1HpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 03:43:37 -0400
-X-Greylist: delayed 187 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Jul 2022 00:43:36 PDT
-Received: from smtp86.ord1d.emailsrvr.com (smtp86.ord1d.emailsrvr.com [184.106.54.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4394461109
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
-        s=20170822-45nk5nwl; t=1658994214;
-        bh=COnHq0q10jhFOxbkwvLuP4sHO7hzKD2UTU9fvogld5o=;
-        h=Date:Subject:To:From:From;
-        b=imTyKsUTDpVzxEuwveDG9Vi/iPpqKWnZg0vHRucblp1d5tQO6MuTx+7WB+8L2f2dk
-         YW9WYmM4V2DSzo6pGqIjf7+RQEdfKJZq1B33HaqSQhxGDR/ErZ21+856eJAyrStgrV
-         eaPQ4qTYUGlrESkf2GsmhGL5N4yvZI+rwrVuiJxg=
-X-Auth-ID: antonio@openvpn.net
-Received: by smtp3.relay.ord1d.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id 9B1F460090;
-        Thu, 28 Jul 2022 03:43:33 -0400 (EDT)
-Message-ID: <d645f6e1-d977-e2ea-1f8e-0b5458c9438e@openvpn.net>
-Date:   Thu, 28 Jul 2022 09:44:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220719014704.21346-1-antonio@openvpn.net>
- <20220719014704.21346-2-antonio@openvpn.net> <YtbPtkF1Ah9xrBam@lunn.ch>
-From:   Antonio Quartulli <antonio@openvpn.net>
-Organization: OpenVPN Inc.
-In-Reply-To: <YtbPtkF1Ah9xrBam@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Classification-ID: 8cf5a843-5e45-45b4-8822-23f11e9ecabf-1-1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 28 Jul 2022 03:45:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E1660687
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 00:45:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7CDA61B50
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 07:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D70C433C1;
+        Thu, 28 Jul 2022 07:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658994301;
+        bh=8wAwxJHj72HBZYIRbP52E2RJVCjjZw/lFPUg234x34E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OnMF6WSRoFlELzImTeG4w6aj8DsFNilwkuiHoyAECiKioWFsHHkg0KS9OyCHFYdI2
+         NFfulpCZDhYEhuLI6Qe5BiBjWHvPX7/IGkKMPPWO2tP33tLZWWUCfwcvjxb4+apk9q
+         Orw3n4FOa5MgywQZwWySFDpgBXi/A3RmZEUylnkXlmglYHGIx+Oo8fI5dWAz2agBpD
+         OmtBsQ++bOlai18NBGDNOUmfQvSMUCLqYdB+cmY9vkXOR2KVxRMuuow5yMxBn817ns
+         FqXSTwQL40FLra9eTZX2+SpB9fdK+h2NkUDI7e/9vHroru21KZSSrwimJ3KwVLalcA
+         gsRpcxsoBOrSg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oGyCY-00AbRB-W0;
+        Thu, 28 Jul 2022 08:44:59 +0100
+Date:   Thu, 28 Jul 2022 08:44:58 +0100
+Message-ID: <87zggtwuit.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
+        Biwen Li <biwen.li@nxp.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: Re: [PATCH v3] irqchip/ls-extirq: fix invalid wait context by avoiding to use regmap
+In-Reply-To: <20220727160915.3648155-1-vladimir.oltean@nxp.com>
+References: <20220727160915.3648155-1-vladimir.oltean@nxp.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vladimir.oltean@nxp.com, linux-kernel@vger.kernel.org, lee.jones@linaro.org, tglx@linutronix.de, linux@rasmusvillemoes.dk, arnd@arndb.de, Zhiqiang.Hou@nxp.com, biwen.li@nxp.com, sean.anderson@seco.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 19/07/2022 17:37, Andrew Lunn wrote:
->> +static int ovpn_net_change_mtu(struct net_device *dev, int new_mtu)
->> +{
->> +	if (new_mtu < IPV4_MIN_MTU ||
->> +	    new_mtu + dev->hard_header_len > IP_MAX_MTU)
->> +		return -EINVAL;
+On Wed, 27 Jul 2022 17:09:15 +0100,
+Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
 > 
-> If you set dev->min_mtu and dev->max_mtu, the core will validate this
-> for you, see dev_validate_mtu().
+> The irqchip->irq_set_type method is called by __irq_set_trigger() under
+> the desc->lock raw spinlock.
+> 
+> The ls-extirq implementation, ls_extirq_irq_set_type(), uses an MMIO
+> regmap created by of_syscon_register(), which uses plain spinlocks
+> (the kind that are sleepable on RT).
+> 
+> Therefore, this is an invalid locking scheme for which we get a kernel
+> splat stating just that ("[ BUG: Invalid wait context ]"), because the
+> context in which the plain spinlock may sleep is atomic due to the raw
+> spinlock. We need to go raw spinlocks all the way.
 
-Yeah, thanks for the pointer.
+Interesting you say that...
 
 > 
->> +static int ovpn_get_link_ksettings(struct net_device *dev,
->> +				   struct ethtool_link_ksettings *cmd)
->> +{
->> +	ethtool_convert_legacy_u32_to_link_mode(cmd->link_modes.supported, 0);
->> +	ethtool_convert_legacy_u32_to_link_mode(cmd->link_modes.advertising, 0);
+> Make this driver ioremap its INTPCR register on its own, and stop
+> relying on syscon to provide a regmap. Since the regmap we got from
+> syscon belonged to the parent and the newly ioremapped region belongs
+> just to us, the offset to the INTPCR register is now 0, because of the
+> address translation that takes place through the device tree.
 > 
-> These two should not be needed. Look at tun, veth etc, they don't set
-> them.
+> One complication, due to the fact that this driver uses IRQCHIP_DECLARE
+> rather than traditional platform devices with probe and remove methods,
+> is that we cannot use devres, so we need to implement a full-blown
+> cleanup procedure on the error path.
+> 
+> Fixes: 0dcd9f872769 ("irqchip: Add support for Layerscape external interrupt lines")
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+> v2->v3:
+> - stop using regmap, do the rmw manually using function pointers for BE/LE
+> - adapt comment style to the subsystem
+> - use of_device_is_big_endian
+> - reword commit message
+> 
+> v1->v2:
+> - create a separate regmap for the ls-extirq driver rather than relying
+>   on the one provided by syscon or modifying that.
+> 
+> For reference, v1 is at:
+> https://lore.kernel.org/lkml/20210825205041.927788-3-vladimir.oltean@nxp.com/
+> and v2 is at:
+> https://lore.kernel.org/lkml/20220722204019.969272-1-vladimir.oltean@nxp.com/
+> 
+> For extra reviewer convenience, the ls-extirq appears in the following
+> SoC device trees:
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi#L289
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi#L249
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi#L319
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi#L325
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi#L682
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm/boot/dts/ls1021a.dtsi#L182
+> 
+> Patch tested on LX2160A and LS1021A.
+> 
+>  drivers/irqchip/irq-ls-extirq.c | 91 ++++++++++++++++++++++++---------
+>  1 file changed, 66 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-ls-extirq.c b/drivers/irqchip/irq-ls-extirq.c
+> index 853b3972dbe7..cfbbe5959c8e 100644
+> --- a/drivers/irqchip/irq-ls-extirq.c
+> +++ b/drivers/irqchip/irq-ls-extirq.c
+> @@ -6,8 +6,7 @@
+>  #include <linux/irqchip.h>
+>  #include <linux/irqdomain.h>
+>  #include <linux/of.h>
+> -#include <linux/mfd/syscon.h>
+> -#include <linux/regmap.h>
+> +#include <linux/of_address.h>
+>  #include <linux/slab.h>
+>  
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+> @@ -16,19 +15,40 @@
+>  #define LS1021A_SCFGREVCR 0x200
+>  
+>  struct ls_extirq_data {
+> -	struct regmap		*syscon;
+> -	u32			intpcr;
+> +	void __iomem		*intpcr;
+> +	u32			(*read)(void __iomem *addr);
+> +	void			(*write)(void __iomem *addr, u32 val);
+>  	bool			is_ls1021a_or_ls1043a;
+>  	u32			nirq;
+>  	struct irq_fwspec	map[MAXIRQ];
+>  };
+>  
+> +static u32 ls_extirq_read_be(void __iomem *addr)
+> +{
+> +	return ioread32be(addr);
+> +}
+> +
+> +static u32 ls_extirq_read(void __iomem *addr)
+> +{
+> +	return ioread32(addr);
+> +}
+> +
+> +static void ls_extirq_write_be(void __iomem *addr, u32 val)
+> +{
+> +	iowrite32be(val, addr);
+> +}
+> +
+> +static void ls_extirq_write(void __iomem *addr, u32 val)
+> +{
+> +	iowrite32(val, addr);
+> +}
+> +
+>  static int
+>  ls_extirq_set_type(struct irq_data *data, unsigned int type)
+>  {
+>  	struct ls_extirq_data *priv = data->chip_data;
+>  	irq_hw_number_t hwirq = data->hwirq;
+> -	u32 value, mask;
+> +	u32 intpcr, value, mask;
+>  
+>  	if (priv->is_ls1021a_or_ls1043a)
+>  		mask = 1U << (31 - hwirq);
+> @@ -51,7 +71,11 @@ ls_extirq_set_type(struct irq_data *data, unsigned int type)
+>  	default:
+>  		return -EINVAL;
+>  	}
+> -	regmap_update_bits(priv->syscon, priv->intpcr, mask, value);
+> +
+> +	intpcr = priv->read(priv->intpcr);
+> +	intpcr &= ~mask;
+> +	intpcr |= value;
+> +	priv->write(priv->intpcr, intpcr);
 
-I found this in tun.c:
+Which really begs a few questions:
 
-3512         ethtool_link_ksettings_zero_link_mode(cmd, supported);
-3513         ethtool_link_ksettings_zero_link_mode(cmd, advertising);
+- Where is the locking gone? Sure, the warning is gone. But the driver
+  is now broken for *all* configurations, and not only RT. Result!
 
-Which seems a more appropriate version of my code, no?
+- Is it *really* worth it to have 4 dumb helpers that bring nothing in
+  terms of abstraction, and two indirections for something that could
+  equally be expressed with a conditional?
 
-Regards,
+	M.
 
 -- 
-Antonio Quartulli
-OpenVPN Inc.
+Without deviation from the norm, progress is not possible.

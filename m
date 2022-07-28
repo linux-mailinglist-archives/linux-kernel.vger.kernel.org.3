@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFD9583C71
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7096E583C7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236314AbiG1Ksj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S236534AbiG1Ks4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236441AbiG1KsV (ORCPT
+        with ESMTP id S236413AbiG1Kso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:48:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB94CB71;
-        Thu, 28 Jul 2022 03:47:14 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4141D6601B41;
-        Thu, 28 Jul 2022 11:47:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659005232;
-        bh=52n7PHwmDL6kd/nck7jvKAORL1LBHXn0wmr3omuwlBY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AFvQ9LOuwaw0rEK8BdCFvFrI6MdC7fwdOpvPQQ9YZTCAUefSKlOMaEnCMKmsOMA/h
-         mvIavrISnspLyNInaQ2/X3/bLjCdaGCVV1f6/7iVcBwTaaaTNgk3eCFeFzyPRyVzHs
-         tzKupXQkpH93I7E6mSVwpD1lKfEdnbmwozdWJEbaFfggd04L0dUJ3HTsmD9T0SBuoI
-         MpGOV515alobiIHhwlS9TYyEBHcNMaIZwwpYYR4I4RYrNq68FKKW/rOtvDTYGeO8T8
-         6RCE5ZBJZZwrDmenZz6Vq375eMkKcEAdwhRE1YJrczdWD1EcnxnreKMYz2XDfqDNFu
-         hwAHD1WZXEjHA==
-Message-ID: <caa39600-d56f-9748-9a93-aa9be2f88924@collabora.com>
-Date:   Thu, 28 Jul 2022 12:47:09 +0200
+        Thu, 28 Jul 2022 06:48:44 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E191573B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:48:40 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id w16so1078562ljh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EYLN2VgFPShJvkoh7oJtGxXStSJxN1cfz1bpPXRcJLM=;
+        b=a+Dj/mYhB8H1Bp+5HLk5zHgeUYIKBPfd7Yo+ipogyQ3BXiEoDKeRLhR1S/YwL2OmaS
+         E1A06DTnla0zeAljOyHhRQMruZlceg6qHB9sQGGoJrvAPWsJot3Zvi8gJBXzakTKzYhP
+         7sZ1Nz+zP+fVgCfS2JlVWNUeXkWgJNZyHBbKuT6BOmWOr/7L9y8N9AurxpWGAb1nf338
+         mmPyfVLmA70r8mCWrfeNwPur8tNSKVSth3eixf4nGGuSrIrHJA812nUGMCPns59eXjR9
+         iTtB0qopT7eOf4W2US7gjDOS+JfO3InU/ZOaYdYSKEobdJMyBu/tVYAjV3JIvyvIrtic
+         f/gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EYLN2VgFPShJvkoh7oJtGxXStSJxN1cfz1bpPXRcJLM=;
+        b=6j72RtTuOuwu2PbbSR++/SmTf0K/ofIdh2FR3l6uIqSiYzBjdLBFjCATezGOjMq3iH
+         wf2AyyNZgT7TcJJ3o3vZFU9SRxhi0uQIN3+YXClZvmrr7qDXJ3BMpqsmPCv0Tk5ntZzl
+         63WyDFUvV7KgwFv+i8tYOQBStvhjKvP15+V3HXbdIKfglQ2fLAzolZWbk5IKgviU5XOD
+         Apgyzjw58lWrzz6DCj4fKaYlzAKOv2gpl6GXbhLnXm96HBS6oDfucjhc4tBGAzFfwQlO
+         QvByxnMAHT9pbkzYImbdz0pzRMb92DIZc3fT7LwaGtlbG4eMaR1uenfoNXhpmJ0VHSgl
+         xshg==
+X-Gm-Message-State: AJIora+RIPHLTeD4tnbwI23LmwvjIObpAvH9n9F18YhLw/wLmDXrX4J1
+        vcBrUOo47Qf+eKIEsJr37xuoJzc0HnRGo61jFyRV+A==
+X-Google-Smtp-Source: AGRyM1v0PalcgYlIcJ0DZQcgyrxJwJ31CaZnUffSCZOp+2Ho1FbpEAoopHkS2fCpuqbTQnTWL1WcoxUwQCKwOJPqYTo=
+X-Received: by 2002:a05:651c:1147:b0:25d:eb36:755d with SMTP id
+ h7-20020a05651c114700b0025deb36755dmr8521602ljo.16.1659005319133; Thu, 28 Jul
+ 2022 03:48:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: pinctrl: mediatek: Add support for
- mt8188
-Content-Language: en-US
-To:     Hui Liu <hui.liu@mediatek.com>, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        jianguo.zhang@mediatek.com, zhiyong.tao@mediatek.com,
-        sean.wang@mediatek.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220728084951.22102-1-hui.liu@mediatek.com>
- <20220728084951.22102-2-hui.liu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220728084951.22102-2-hui.liu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220727185012.3255200-1-saravanak@google.com> <20220727185012.3255200-4-saravanak@google.com>
+In-Reply-To: <20220727185012.3255200-4-saravanak@google.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 28 Jul 2022 12:48:02 +0200
+Message-ID: <CAPDyKFrBuNfs5-mQbtGMjokxAFrbJ5rmQw3tgks16p0mO0uuNg@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, naresh.kamboju@linaro.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/07/22 10:49, Hui Liu ha scritto:
-> From: "Hui.Liu" <hui.liu@mediatek.com>
-> 
-> Add the pinctrl header file on MediaTek mt8188.
-> Add the new binding document for pinctrl on MediaTek mt8188.
-> 
-> Signed-off-by: Hui.Liu <hui.liu@mediatek.com>
+On Wed, 27 Jul 2022 at 20:50, Saravana Kannan <saravanak@google.com> wrote:
+>
+> This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
+>
+> There are a few more issues to fix that have been reported in the thread
+> for the original series [1]. We'll need to fix those before this will
+> work. So, revert it for now.
+>
+> [1] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
+>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
 > ---
->   .../pinctrl/mediatek,mt8188-pinctrl.yaml      |  224 +++
->   .../pinctrl/mediatek,mt8188-pinfunc.h         | 1280 +++++++++++++++++
->   2 files changed, 1504 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
->   create mode 100644 include/dt-bindings/pinctrl/mediatek,mt8188-pinfunc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..87c72b621188
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
-> @@ -0,0 +1,224 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/mediatek,mt8188-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek MT8188 Pin Controller
-> +
-> +maintainers:
-> +  - Hui Liu <hui.liu@mediatek.com>
-> +
-> +description: |
-> +  The MediaTek's MT8188 Pin controller is used to control SoC pins.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8188-pinctrl
-> +
-> +  gpio-controller: true
-> +
-> +  '#gpio-cells':
-> +    description: |
-> +      Number of cells in GPIO specifier, should be two. The first cell
-> +      is the pin number, the second cell is used to specify optional
-> +      parameters which are defined in <dt-bindings/gpio/gpio.h>.
-> +    const: 2
-> +
-> +  gpio-ranges:
-> +    maxItems: 1
-> +
-
-Please allow to specify gpio names
-
-   gpio-line-names: true
-
-after which:
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> +  reg:
-> +    items:
-> +      - description: gpio registers base address
-> +      - description: rm group io configuration registers base address
-> +      - description: lt group io configuration registers base address
-> +      - description: lm group io configuration registers base address
-> +      - description: rt group io configuration registers base address
-> +      - description: enit registers base address
-> +
+>  drivers/base/power/domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 3e86772d5fac..739e52cd4aba 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                 mutex_unlock(&gpd_list_lock);
+>                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+>                         __func__, PTR_ERR(pd));
+> -               return -ENODEV;
+> +               return driver_deferred_probe_check_state(base_dev);
+>         }
+>
+>         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
+> --
+> 2.37.1.359.gd136c6c3e2-goog
+>

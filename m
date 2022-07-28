@@ -2,205 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FEF584868
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EA958486C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 00:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiG1Wtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 18:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S232781AbiG1WwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 18:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiG1Wtx (ORCPT
+        with ESMTP id S229614AbiG1Wv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 18:49:53 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC50051A10
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:49:51 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id e69so2499541iof.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 15:49:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csp-edu.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=zp3s0H17eNS8RLeZJwuDNDBm2rORUB76Sr+0ULT5CUY=;
-        b=6PGeof5tavB8xZZTMvnmR1G9QRO/mLfOjc0reQCxtLSivzfi9q8iDpINmOG3CqIk1J
-         V/4tvnXKugAAt21XfV/Z2uiIxw+8hXzLA2dsAv/uoXinTF4o8Nqwz1gfVxY8qwjGwY/g
-         ufPTjRpLHsKTfLpawEKVoX2rNyPWNAmDWeHmOBct8AVx0zYE3CiPQ8jV0V4RIpUngPKE
-         1fnLh+jaLYGb+QbWJx0XiPPLS/1W7idEyupyUBwnk3IYA1WWk6ObCbHxbzGlYOeQ7hMS
-         srTT0S2fMC/rzOYu2eNTUrB+cZyNdLRlHtwIcSDAz3Wu+lGFtnno1DSP3IU7TtdWciEa
-         si1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=zp3s0H17eNS8RLeZJwuDNDBm2rORUB76Sr+0ULT5CUY=;
-        b=j69y/oKtf9p27CUApvdKiP5km5XG1pyw08SuFO+PN1KehRIM6XVQQICI81WuegZ4pZ
-         6LMsAmIuVYDpzdKmv2e/n3lSBCsfmY0i7tu1g4NSh1856jp61o70mnPt+y2QEKe78OgJ
-         ADu57PUAQZyuKAn7g8LEjl/DIkPV2SG84lR/OJg1iSaXC4sQjdMAvDpSSrD+krm9VOPb
-         8EYH1orKn4uaUd/ylCjNCrECr1o3GSlPo5yApr6h4W3pgoa3G0F+R/0/qVgAZX4FSz05
-         2l9d+NV0y9aRlFhM+aFOg5vWn+S2pWYaf/UvqHmYYtnxENd0QC/GpP8ACv7VQZk88ZFZ
-         TZvQ==
-X-Gm-Message-State: AJIora8BhRW0V4cCNiIkNg3WBOshkHFjeqcXiHZPpNrDo9Y9O/tKYPhO
-        qQBRYoW2nDTLQsMPTCepZI1fTHk2ol+wwyGQ
-X-Google-Smtp-Source: AGRyM1uqTbWLghcYSIroC35qIH2sScjpChjXWce93/xlSm9BiJZwYwxOvdmB3S0gh0B1moTqmpnYeQ==
-X-Received: by 2002:a05:6638:270d:b0:33f:3f96:468c with SMTP id m13-20020a056638270d00b0033f3f96468cmr394388jav.272.1659048591254;
-        Thu, 28 Jul 2022 15:49:51 -0700 (PDT)
-Received: from kernel-dev-1 (75-168-113-69.mpls.qwest.net. [75.168.113.69])
-        by smtp.gmail.com with ESMTPSA id w11-20020a056602034b00b0067bd23bb692sm853686iou.27.2022.07.28.15.49.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 15:49:50 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 17:49:49 -0500
-From:   Coleman Dietsch <dietschc@csp.edu>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-Subject: Re: [PATCH] KVM: x86/xen: Fix bug in kvm_xen_vcpu_set_attr()
-Message-ID: <YuMSjQ3Y2ADA40KV@kernel-dev-1>
-References: <20220728194736.383727-1-dietschc@csp.edu>
- <YuL0auT3lFhfQHeY@google.com>
+        Thu, 28 Jul 2022 18:51:59 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698C14F1A1;
+        Thu, 28 Jul 2022 15:51:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lv5Vx1qmBz4x1N;
+        Fri, 29 Jul 2022 08:51:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659048713;
+        bh=JddId/71HJJ4bainsai6Zd4G+egkNDy/Bpv8mjqhd1o=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=UHgrRSsSBo0LKfF+3SWgSYSy16szwpZcEKdO9eD09QBV+L7WudC1qtrX+ZEbno4Na
+         LViJXHscU+GHvW8lmaiTWi5PIp0X1BcXUdLNTwrsrbKQa9Cdz3kEVfciBcbiIt7JwS
+         clOt3C2HfakqrylUxYAfvBHpOGyH0YCX0L3vMGqCESQil7EE4vzS/sztu4HIwGHg5t
+         nWfYntY9tO5okEg80p57knmCKyjJoRXA9dF+m9aiY3JPZhsP2ZLoMq4qO13YaUd8fG
+         Gi8wWTUVyT1sGK80I+/g8EKhDWFeyz4ZXkW6h+ZWYxtRpdzq59wSIk2o7OY6no95Am
+         T5Fc/OL406nCg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Melissa Wen <mwen@igalia.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the amdgpu and
+ powerpc-fixes trees
+In-Reply-To: <ff2ea1b1-8039-369b-cc4c-b1d01d5cb02b@amd.com>
+References: <20220726205458.0b5ca446@canb.auug.org.au>
+ <87leseabci.fsf@mpe.ellerman.id.au>
+ <CADnq5_OkWWO+hNz-n+bw5Wptn3JsfyuXe+ScXYTKwFz6JJf8fQ@mail.gmail.com>
+ <ff2ea1b1-8039-369b-cc4c-b1d01d5cb02b@amd.com>
+Date:   Fri, 29 Jul 2022 08:51:51 +1000
+Message-ID: <87v8rgc0l4.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuL0auT3lFhfQHeY@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 08:41:14PM +0000, Sean Christopherson wrote:
-> Be more specific in the shortlog.  "Fix a bug in XYZ" doesn't provide any info
-> about the bug itself, and can even become frustratingly stale if XYZ is renamed.
-> I believe we should end up with two patches (see below), e.g.
-> 
->   KVM: x86/xen: Initialize Xen timer only once (when it's NOT running)
-> 
-> and
->   
->   KVM: x86/xen: Stop Xen timer before changing the IRQ vector
-> 
+Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com> writes:
+> Hi Stephen/Michael,
+>
+> I made this fix:
+>
+> https://patchwork.freedesktop.org/series/106824/
+>
+> Could you check if it fixes the issue for you?
 
-Got it, I will work on splitting the v2 into a patch set as you suggested
-(with better names of course).
+Thanks that fixes it here.
 
-> Note, I'm assuming timer_virq is a vector of some form, I haven't actually looked
-> that far into the code.
-> 
-> On Thu, Jul 28, 2022, Coleman Dietsch wrote:
-> > This crash appears to be happening when vcpu->arch.xen.timer is already set
-> 
-> Instead of saying "This crash", provide the actual splat (sanitized to make it
-> more readable).  That way readers, reviewers, and archaeologists don't need to
-> open up a hyperlink to get details on what broken.
-> 
-> > and kvm_xen_init_timer(vcpu) is called.
-> 
-> Wrap changelogs at ~75 chars.
-> 
-> > During testing with the syzbot reproducer code it seemed apparent that the
-> > else if statement in the KVM_XEN_VCPU_ATTR_TYPE_TIMER switch case was not
-> > being reached, which is where the kvm_xen_stop_timer(vcpu) call is located.
-> 
-> Neither the shortlog nor the changelog actually says anything about what is actually
-> being changed.
-> 
+> If so, could you undo your revert?
 
-I will make sure to address all these issues in the v2 patch set.
+Stephen is on vacation and not doing linux-next today, so I guess for
+testing you'll have to do a local revert.
 
-> > Link: https://syzkaller.appspot.com/bug?id=8234a9dfd3aafbf092cc5a7cd9842e3ebc45fc42
-> > Reported-and-tested-by: syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com
-> > Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
-> > ---
-> >  arch/x86/kvm/xen.c | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> > index 610beba35907..4b4b985813c5 100644
-> > --- a/arch/x86/kvm/xen.c
-> > +++ b/arch/x86/kvm/xen.c
-> > @@ -707,6 +707,12 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
-> >  		break;
-> >  
-> >  	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
-> > +		/* Stop current timer if it is enabled */
-> > +		if (kvm_xen_timer_enabled(vcpu)) {
-> > +			kvm_xen_stop_timer(vcpu);
-> > +			vcpu->arch.xen.timer_virq = 0;
-> > +		}
-> > +
-> >  		if (data->u.timer.port) {
-> >  			if (data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
-> >  				r = -EINVAL;
-> 
-> I'm not entirely sure this is correct.  Probably doesn't matter, but there's a
-> subtle ABI change here in that invoking the ioctl with a "bad" priority will
-> cancel any existing timer.
-> 
-
-I will try to get some clarification before I send in the next patch.
-
-> And there appear to be two separate bugs: initializing the hrtimer while it's
-> running, and not canceling a running timer before changing timer_virq.
-> 
-
-This does seem to be the case so I will be splitting v2 into a patch
-set.
-
-> Calling kvm_xen_init_timer() on "every" KVM_XEN_VCPU_ATTR_TYPE_TIMER is odd and
-> unnecessary, it only needs to be called once during vCPU setup.  If Xen doesn't
-> have such a hook, then a !ULL check can be done on vcpu->arch.xen.timer.function
-> to initialize the timer on-demand.
-> 
-
-Yes I also thought that was a bit odd that kvm_xen_init_timer() is called on "every" KVM_XEN_VCPU_ATTR_TYPE_TIMER 
-
-> With that out of the way, the code can be streamlined a bit, e.g. something like
-> this?
-> 
-> 	case KVM_XEN_VCPU_ATTR_TYPE_TIMER:
-> 		if (data->u.timer.port &&
-> 		    data->u.timer.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL) {
-> 			r = -EINVAL;
-> 			break;
-> 		}
-> 
-> 		if (!vcpu->arch.xen.timer.function)
-> 			kvm_xen_init_timer(vcpu);
-> 
-> 		/* Stop the timer (if it's running) before changing the vector. */
-> 		kvm_xen_stop_timer(vcpu);
-> 		vcpu->arch.xen.timer_virq = data->u.timer.port;
-> 
-> 		if (data->u.timer.port && data->u.timer.expires_ns)
-> 			kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
-> 					    data->u.timer.expires_ns -
-> 					    get_kvmclock_ns(vcpu->kvm));
-> 		r = 0;
-> 		break;
-> 
-
-I agree this code could use some cleanup, I'll see what I can do.
-
-> > @@ -720,9 +726,6 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
-> >  				kvm_xen_start_timer(vcpu, data->u.timer.expires_ns,
-> >  						    data->u.timer.expires_ns -
-> >  						    get_kvmclock_ns(vcpu->kvm));
-> > -		} else if (kvm_xen_timer_enabled(vcpu)) {
-> > -			kvm_xen_stop_timer(vcpu);
-> > -			vcpu->arch.xen.timer_virq = 0;
-> >  		}
-> >  
-> >  		r = 0;
-> > -- 
-> > 2.34.1
-> > 
-
-Thank you for the feedback Sean, it has been most helpful!
+cheers

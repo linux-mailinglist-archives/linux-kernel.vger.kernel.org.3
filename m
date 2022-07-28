@@ -2,115 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334E5583A03
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDC7583A04
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234979AbiG1IGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
+        id S234998AbiG1IHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233818AbiG1IG3 (ORCPT
+        with ESMTP id S234983AbiG1IG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:06:29 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375EE61D54;
-        Thu, 28 Jul 2022 01:06:28 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Thu, 28 Jul
- 2022 16:06:25 +0800
-Message-ID: <032b3c3f-f899-bf53-ecbb-35191d39392b@amlogic.com>
-Date:   Thu, 28 Jul 2022 16:06:25 +0800
+        Thu, 28 Jul 2022 04:06:59 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EDC61D5F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:06:58 -0700 (PDT)
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LtjnQ1NTCz67Lgb;
+        Thu, 28 Jul 2022 16:03:06 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 10:06:56 +0200
+Received: from [10.126.174.188] (10.126.174.188) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 09:06:56 +0100
+Message-ID: <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com>
+Date:   Thu, 28 Jul 2022 09:06:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 0/3] Add S4 SoC clock controller driver
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <1j8rodhfn9.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1j8rodhfn9.fsf@starbuckisacylon.baylibre.com>
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+ <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+ <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.174.188]
+X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi JB，
+trim list
 
-On 2022/7/28 15:08, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
+On 25/07/2022 13:51, Arnd Bergmann wrote:
+>>> CONFIG_SLIMBUS=m
+>> Config 5bd773242f75 added a kconfig "imply" on config SLIMBUS from
+>> config SOUNDWIRE_QCOM, and this happens to mean that we don't explicitly
+>> require config SLIMBUS enabled in the defconfig.
+> That 'imply' looks like it was added to solve a problem using the old 'imply'
+> semantics that are not what this keyword does today. I suspect it's still
+> broken when CONFIG=SOUNDWIRE_QCOM=y and CONFIG_SLIBMUS=m,
+> and the correct fix is to use a dependency like
 > 
+>        depends on SLIMBUS || !SLIMBUS
 > 
-> On Thu 28 Jul 2022 at 13:41, Yu Tu <yu.tu@amlogic.com> wrote:
+> so the defconfig symbol should stay.
 > 
->> 1. Add clock controller driver for S4 SOC.
->>
->> Yu Tu (3):
->>    dt-bindings: clk: meson: add S4 SoC clock controller bindings
->>    arm64: dts: meson: add S4 Soc clock controller in DT
->>    clk: meson: s4: add s4 SoC clock controller driver
->>
->> V1 -> V2: Change format as discussed in the email.
->>
->> Link:https://lore.kernel.org/linux-amlogic/20220708062757.3662-1-yu.tu@amlogic.com/
->>
->>   .../bindings/clock/amlogic,gxbb-clkc.txt      |    1 +
->>   MAINTAINERS                                   |    1 +
->>   arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |   11 +
->>   drivers/clk/meson/Kconfig                     |   15 +
->>   drivers/clk/meson/Makefile                    |    1 +
->>   drivers/clk/meson/s4.c                        | 4732 +++++++++++++++++
->>   drivers/clk/meson/s4.h                        |  296 ++
->>   include/dt-bindings/clock/s4-clkc.h           |  146 +
->>   8 files changed, 5203 insertions(+)
->>   create mode 100644 drivers/clk/meson/s4.c
->>   create mode 100644 drivers/clk/meson/s4.h
->>   create mode 100644 include/dt-bindings/clock/s4-clkc.h
->>
->>
->> base-commit: b293bc9286ee21824e93f0fcfed3b78fdfee01e6
-> 
-> Please don't post until you have addressed *ALL* the comments from the
-> previous version.
-The last email asked you to adopt A1 method, but you did not reply?
 
-> 
-> At first glance, I can see that this is still a single driver for
-> what is obviously 2 controllers with 2 register spaces. Simple comments
-> like the "<< 2" in the register declaration have not been addressed either.
-I understand that this should be a controller, just two address 
-descriptions. One is the various PLL registers and one is the clock for 
-the peripherals. And PLL is to provide a clock source for various 
-peripheral clocks. So a clock controller is reasonable. I think you got 
-it wrong.
+JFYI, building for CONFIG_SOUNDWIRE_QCOM=y and CONFIG_SLIBMUS=m is ok. 
+The driver has a runtime check for CONFIG_SLIMBUS in qcom_swrm_probe().
 
-Ok, if you insist on using two clock controllers,, please provide your 
-the reason and example code?
+That implementation seems consistent with guidance in 
+kconfig-language.rst - so do you think that there is still a problem?
 
-> 
-> Seeing that, I have not reviewed this version further.
-> I won't until all the comments from v1 are either addressed or answer
-> 
-> Regards
-> Jerome
-> 
-> .
+thanks,
+John

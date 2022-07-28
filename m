@@ -2,139 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3257D58440E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B9D584414
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiG1QWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        id S231703AbiG1QZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 12:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiG1QWT (ORCPT
+        with ESMTP id S231358AbiG1QZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:22:19 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA81C6FA3C;
-        Thu, 28 Jul 2022 09:22:17 -0700 (PDT)
-Received: from localhost.localdomain (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 1074140755C7;
-        Thu, 28 Jul 2022 16:22:16 +0000 (UTC)
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        Sujith Manoharan <Sujith.Manoharan@atheros.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org
-Subject: [PATCH] ath9k: hif_usb: Fix use-after-free in ath9k_hif_usb_reg_in_cb()
-Date:   Thu, 28 Jul 2022 19:21:49 +0300
-Message-Id: <20220728162149.212306-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
+        Thu, 28 Jul 2022 12:25:00 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FE370E58
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:24:59 -0700 (PDT)
+Received: from [192.168.1.101] (abxi232.neoplus.adsl.tpnet.pl [83.9.2.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id E13361F888;
+        Thu, 28 Jul 2022 18:24:55 +0200 (CEST)
+Message-ID: <ef8f8b68-1a21-6984-8373-4bf6f1d7ad72@somainline.org>
+Date:   Thu, 28 Jul 2022 18:24:55 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com>
+ <20220726154138.74avqs6iqlzqpzjk@bogus>
+ <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
+ <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
+ <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
+ <20220727132437.pjob3z2nyxsuxgam@bogus>
+ <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
+ <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com>
+ <20220728113347.ver6argevzmlsc2c@bogus>
+ <CAMj1kXHYb-zrKOS_titU79c487ab9WPyKwJBXuj7pdqum=ygaA@mail.gmail.com>
+ <20220728161611.qc6ksoecg64rkov5@bogus>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220728161611.qc6ksoecg64rkov5@bogus>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible that skb is freed in ath9k_htc_rx_msg(), then
-usb_submit_urb() fails and we try to free skb again. It causes
-use-after-free bug. Moreover, if alloc_skb() fails, urb->context becomes
-NULL but rx_buf is not freed and there can be a memory leak.
 
-The patch removes unnecessary nskb and makes skb processing more clear: it
-is supposed that ath9k_htc_rx_msg() either frees old skb or passes its
-managing to another callback function.
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+On 28.07.2022 18:16, Sudeep Holla wrote:
+> On Thu, Jul 28, 2022 at 08:05:58AM -0700, Ard Biesheuvel wrote:
+>> On Thu, 28 Jul 2022 at 04:33, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>>>
+>>> On Thu, Jul 28, 2022 at 12:48:19PM +0200, Maximilian Luz wrote:
+>>>
+>>> [...]
+>>>
+>>>>
+>>>> I would very much like to avoid the need for special bootloaders. The
+>>>> devices we're talking about are WoA devices, meaning they _should_
+>>>> ideally boot just fine with EFI and ACPI.
+>>>>
+>>>
+>>> Completely agreed.
+>>>
+>>>> From an end-user perspective, it's annoying enough that we'll have to
+>>>> stick with DTs for the time being due to the use of PEPs in ACPI.
+>>>
+>>> But have we explored or investigated what it takes to rewrite ACPI f/w
+>>> to just use standard methods ? Does it require more firmware changes or
+>>> new firmware entities or impossible at any cost ?
+>>>
+>>> For me that is more important than just getting this one on DT. Because
+>>> if you take that path, we will have to keep doing that, with loads of
+>>> unnecessary drivers if they are not shared with any other SoC with DT
+>>> support upstream. We might also miss chance to get things added to the ACPI
+>>> spec as we don't care which means that we never be able to use ACPI on
+>>> similar future platforms even though they get shipped with ACPI.
+>>>
+>>> It will be a loop where we constantly keep converting this ACPI shipped
+>>> platform into DT upstream. IMHO we don't want to be there.
+>>>
+>>
+>> Supporting these devices in Linux in ACPI mode would involve
+>> reimplementing the PEP subsystem, and reimplementing PEP drivers for
+>> all these QCOM peripherals to manage the probing and the power states.
+>> I don't think this is realistic at all, and a huge waste of
+>> engineering effort otherwise.
+>>
+> 
+> I am aware of that and hence I am happy to see these as one off drivers
+> if needed. But if we don't stop that or keep converting them to DT,
+> IMO we will be in vicious circle of this conversion and will never be
+> able to support ACPI natively on these platforms. 
+I think that people have given up on ACPI on Snapdragon, as it was not
+providing enough information in some cases (such as TLMM pins that are
+not accessible from the AP due to being marked 'secure') that needed to
+be hardcoded.
 
-Fixes: 3deff76095c4 ("ath9k_htc: Increase URB count for REG_IN pipe")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
- drivers/net/wireless/ath/ath9k/hif_usb.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+New WoA laptop support is added using FDT and I haven't seen any patches
+even adding ACPI matchlists for a long long time.
 
-diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
-index 518deb5098a2..b70128d1594d 100644
---- a/drivers/net/wireless/ath/ath9k/hif_usb.c
-+++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
-@@ -708,14 +708,13 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
- 	struct rx_buf *rx_buf = (struct rx_buf *)urb->context;
- 	struct hif_device_usb *hif_dev = rx_buf->hif_dev;
- 	struct sk_buff *skb = rx_buf->skb;
--	struct sk_buff *nskb;
- 	int ret;
- 
- 	if (!skb)
- 		return;
- 
- 	if (!hif_dev)
--		goto free;
-+		goto free_skb;
- 
- 	switch (urb->status) {
- 	case 0:
-@@ -724,7 +723,7 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
- 	case -ECONNRESET:
- 	case -ENODEV:
- 	case -ESHUTDOWN:
--		goto free;
-+		goto free_skb;
- 	default:
- 		skb_reset_tail_pointer(skb);
- 		skb_trim(skb, 0);
-@@ -740,20 +739,19 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
- 				 skb->len, USB_REG_IN_PIPE);
- 
- 
--		nskb = alloc_skb(MAX_REG_IN_BUF_SIZE, GFP_ATOMIC);
--		if (!nskb) {
-+		skb = alloc_skb(MAX_REG_IN_BUF_SIZE, GFP_ATOMIC);
-+		if (!skb) {
- 			dev_err(&hif_dev->udev->dev,
- 				"ath9k_htc: REG_IN memory allocation failure\n");
--			urb->context = NULL;
--			return;
-+			goto free_rx_buf;
- 		}
- 
--		rx_buf->skb = nskb;
-+		rx_buf->skb = skb;
- 
- 		usb_fill_int_urb(urb, hif_dev->udev,
- 				 usb_rcvintpipe(hif_dev->udev,
- 						 USB_REG_IN_PIPE),
--				 nskb->data, MAX_REG_IN_BUF_SIZE,
-+				 skb->data, MAX_REG_IN_BUF_SIZE,
- 				 ath9k_hif_usb_reg_in_cb, rx_buf, 1);
- 	}
- 
-@@ -762,12 +760,13 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
- 	ret = usb_submit_urb(urb, GFP_ATOMIC);
- 	if (ret) {
- 		usb_unanchor_urb(urb);
--		goto free;
-+		goto free_skb;
- 	}
- 
- 	return;
--free:
-+free_skb:
- 	kfree_skb(skb);
-+free_rx_buf:
- 	kfree(rx_buf);
- 	urb->context = NULL;
- }
--- 
-2.25.1
-
+Konrad
+I know it is huge
+> effort and not expecting that to be done here, but we need to convey the
+> message to use ACPI standards or improve it if there is a need. Using
+> PEP is not helpful to run Linux in the long run. Also we may hit a point
+> when it may not be trivial to do that ACPI<->DT conversion.
+> 
+>> It is also orthogonal to the discussion, as far as I understand: ACPI
+>> is not telling the system whether or not these TZ services should be
+>> used instead of EFI runtime calls.
+>>
+> 
+> Agreed and I don't want to block any such discussions. Sorry if I derailed
+> the discussion, that was not my intentions.
+> 
+> --
+> Regards,
+> Sudeep

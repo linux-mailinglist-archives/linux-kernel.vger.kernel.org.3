@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B380583C47
+	by mail.lfdr.de (Postfix) with ESMTP id 04A1E583C45
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235987AbiG1KoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S236188AbiG1KoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236067AbiG1KoD (ORCPT
+        with ESMTP id S236082AbiG1KoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:44:03 -0400
+        Thu, 28 Jul 2022 06:44:05 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FB2558CD;
-        Thu, 28 Jul 2022 03:44:03 -0700 (PDT)
-Date:   Thu, 28 Jul 2022 10:44:00 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A61E57263;
+        Thu, 28 Jul 2022 03:44:04 -0700 (PDT)
+Date:   Thu, 28 Jul 2022 10:44:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659005041;
+        s=2020; t=1659005042;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6dym8jQwKNJfRrMbWAQAa+tsSzahSV/26AMvapoU0zw=;
-        b=K0dlb2Aka0j56S2aCT5cJvp3Ne/qaimMsOriJ1z+tDvNJSIzmGJh06wlpL8zZDVSOtuwkN
-        dEqrRF9K/WdJMBhplo3OjiNVrZcu8ID3K5GDXbNExIKY/SKui3xsNF5tpx8Qy4vz9OVMRa
-        IroyweTSChK052q4CKpNUG6dlrVGk88nBKiJDSMQ/mHiNUowK98VoFh7gG4Wq9rX6kOJUV
-        Z//OG6tIXkioqeLF7X5NrGZ8uMN46uKI5JR+dve2weoxYK9kRnbMBU1bL1BN/nMqevbrzF
-        KlwEDfadLsE7RfWm1IrRZ1X/v3SWabv3JJGmhu0WODbohR+f0oqnHgFwT65iaw==
+        bh=VUS0xp6fB/bN90KSCuUvJRR+c+gHiKZyzDPGK6ohrRA=;
+        b=DFtUR3yRIss1w74z27aQeV6JCHv0QKbDNdTHdpTs5QUI8Q0MkDXe8G1eK64s/R9aP7L3uB
+        AIUEKBdWRCAJ0Er7PBj2DXLZcIH3UYwlBlwQdRPlk34bDEsgL6MVBbHaaoNnFTmSRUt7ct
+        rcQXYvpO3OBrqbhtscCfi9kvQBdHEbc1GAoMuXKScFs0reOmbId8eU6DXo/zmzcKSNHAr/
+        gpGLeEOdpBDPw9N49F3ot8qvyr0DaM3hBsTRGtDrePivJFaiHG1XZ7Yj27iZNbmgUIs3Qw
+        DFM5eUT7HsANQ1cnQxAuWa+5LL+XT3jsjP5ikM21t041UchddRHAfiGBl3LL+A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659005041;
+        s=2020e; t=1659005042;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6dym8jQwKNJfRrMbWAQAa+tsSzahSV/26AMvapoU0zw=;
-        b=JjnNaBFC5h6LWtqv/snBstvwxNTR7aemt3mzcqGdSoF7zJpjZcpXxAvlLVZjIs6AZU9P9N
-        U3e6fS/wYjYdg8DA==
-From:   "tip-bot2 for Krzysztof Kozlowski" <tip-bot2@linutronix.de>
+        bh=VUS0xp6fB/bN90KSCuUvJRR+c+gHiKZyzDPGK6ohrRA=;
+        b=DyhZgCiJphs6zEOvZUWKLQfMwNPeJoaHWPUJVdKdNKlc06q6CViLUzmSb8ptmF41EFxaZC
+        8slJ5b/jZuaHKhDg==
+From:   "tip-bot2 for XU pengfei" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] dt-bindings: timer: ingenic,tcu: use absolute path
- to other schema
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
+Subject: [tip: timers/core] clocksource/drivers/sun4i: Remove unnecessary
+ (void*) conversions
+Cc:     XU pengfei <xupengfei@nfschina.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220726115937.101432-1-krzysztof.kozlowski@linaro.org>
-References: <20220726115937.101432-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720020735.3771-1-xupengfei@nfschina.com>
+References: <20220720020735.3771-1-xupengfei@nfschina.com>
 MIME-Version: 1.0
-Message-ID: <165900504071.15455.4947109577211210102.tip-bot2@tip-bot2>
+Message-ID: <165900504167.15455.6354118034471744933.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,44 +67,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     561a0846182ef6fe87c20426d43fd956a644687a
-Gitweb:        https://git.kernel.org/tip/561a0846182ef6fe87c20426d43fd956a644687a
-Author:        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-AuthorDate:    Tue, 26 Jul 2022 13:59:37 +02:00
+Commit-ID:     7a93d490900edcdbd3833d8bb9a01b23d8bb461e
+Gitweb:        https://git.kernel.org/tip/7a93d490900edcdbd3833d8bb9a01b23d8bb461e
+Author:        XU pengfei <xupengfei@nfschina.com>
+AuthorDate:    Wed, 20 Jul 2022 10:07:35 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Wed, 27 Jul 2022 17:01:52 +02:00
 
-dt-bindings: timer: ingenic,tcu: use absolute path to other schema
+clocksource/drivers/sun4i: Remove unnecessary (void*) conversions
 
-Absolute path to other DT schema is preferred over relative one.
+Remove unnecessary void* type casting.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-Link: https://lore.kernel.org/r/20220726115937.101432-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: XU pengfei <xupengfei@nfschina.com>
+Link: https://lore.kernel.org/r/20220720020735.3771-1-xupengfei@nfschina.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- Documentation/devicetree/bindings/timer/ingenic,tcu.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clocksource/timer-sun4i.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-index d541cf2..0a01e4f 100644
---- a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-+++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
-@@ -113,7 +113,7 @@ properties:
- patternProperties:
-   "^watchdog@[a-f0-9]+$":
-     type: object
--    $ref: ../watchdog/watchdog.yaml#
-+    $ref: /schemas/watchdog/watchdog.yaml#
-     properties:
-       compatible:
-         oneOf:
-@@ -145,7 +145,7 @@ patternProperties:
+diff --git a/drivers/clocksource/timer-sun4i.c b/drivers/clocksource/timer-sun4i.c
+index bb6ea6c..94dc6e4 100644
+--- a/drivers/clocksource/timer-sun4i.c
++++ b/drivers/clocksource/timer-sun4i.c
+@@ -128,7 +128,7 @@ static void sun4i_timer_clear_interrupt(void __iomem *base)
  
-   "^pwm@[a-f0-9]+$":
-     type: object
--    $ref: ../pwm/pwm.yaml#
-+    $ref: /schemas/pwm/pwm.yaml#
-     properties:
-       compatible:
-         oneOf:
+ static irqreturn_t sun4i_timer_interrupt(int irq, void *dev_id)
+ {
+-	struct clock_event_device *evt = (struct clock_event_device *)dev_id;
++	struct clock_event_device *evt = dev_id;
+ 	struct timer_of *to = to_timer_of(evt);
+ 
+ 	sun4i_timer_clear_interrupt(timer_of_base(to));

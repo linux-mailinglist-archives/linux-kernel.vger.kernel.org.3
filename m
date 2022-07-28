@@ -2,72 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A5D584301
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBBB584302
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 17:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiG1PX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 11:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        id S229920AbiG1PYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 11:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiG1PXz (ORCPT
+        with ESMTP id S231277AbiG1PX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:23:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442FF61B0C;
-        Thu, 28 Jul 2022 08:23:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 28 Jul 2022 11:23:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FADB664C7;
+        Thu, 28 Jul 2022 08:23:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79679B8248C;
-        Thu, 28 Jul 2022 15:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96B1C433C1;
-        Thu, 28 Jul 2022 15:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659021831;
-        bh=0hhABROJReg1rrWg4K/jP9yLbgvWogyJo+5SUx6dOo8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ATvISLUXENUsFt/tUzzSdmivFILNgad9AuZUJgvCsGvmz6hgsxnP02vWUIyQvYUBO
-         UObN4hQfktdD4DiwR+sCL+me24agDRVIFwk3CulLpBXVG7BmzrKQmeRLfAUEVEnopw
-         cm64iUF6BaN4tyB1xSSJTptliTjnnbBJHxm3+cUoT/E6a+iTcKWOu/CQFvHa/+Chxe
-         /o2/PWHvXJrV+aZVFj829aQh1f57PIqJpN2KE1RGnyUO6ddt++I1IRLblpjRV747No
-         4x220HtVDjtnBsYa5RzGvcnOZKJ4Z0aoTIOM/UuJ8XH+FOkLnv7k9PTz11gEoDDUe0
-         f7WHSyalcX1ig==
-Date:   Thu, 28 Jul 2022 08:23:49 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Tariq Toukan <tariqt@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7878A33F11;
+        Thu, 28 Jul 2022 15:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659021837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SRF9MyYDxSMz1004MAxo6xxMYmTRoIn6prKJRfvdun8=;
+        b=Q1KNd85cVzSSFmi42M5onWHVuxuR4JxQDTShGHvzT1UF7YE5YJzw5A621cajhDejtlunGg
+        cF3/xOafEk+snEKjU50p1two9rp8NCu6vZNHWEk4ViJjp6+mM/vvZjVfLrpXYqEsSJgAXV
+        9/tOOOmYkta+W2r/j5AnczQdehm85hc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2D69913427;
+        Thu, 28 Jul 2022 15:23:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ek4rCg2q4mLJdwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 28 Jul 2022 15:23:57 +0000
+Date:   Thu, 28 Jul 2022 17:23:55 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        Gal Pressman <gal@nvidia.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next V3 1/3] sched/topology: Add NUMA-based CPUs
- spread API
-Message-ID: <20220728082349.2ba6deae@kernel.org>
-In-Reply-To: <20220719162339.23865-2-tariqt@nvidia.com>
-References: <20220719162339.23865-1-tariqt@nvidia.com>
-        <20220719162339.23865-2-tariqt@nvidia.com>
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
+ affinity was explicitly set
+Message-ID: <20220728152355.GB25894@blackbody.suse.cz>
+References: <20220728005815.1715522-1-longman@redhat.com>
+ <20220728144420.GA27407@blackbody.suse.cz>
+ <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a58852b4-313a-9271-f31d-f79a91ec188b@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 19:23:37 +0300 Tariq Toukan wrote:
-> +static inline void sched_cpus_set_spread(int node, u16 *cpus, int ncpus)
-> +{
-> +}
+On Thu, Jul 28, 2022 at 10:59:01AM -0400, Waiman Long <longman@redhat.com> wrote:
+> Cgroup v1 doesn't have this problem.
 
-I was going to poke Peter again, but before doing that - shouldn't we
-memset() the cpus here? Just to keep the semantics that the array is
-always initialized?
+v1 analogy would be:
+
+	echo 2-3 >$dst/cpuset.cpus
+	# job runs in $dst
+	# one task T in $dst sets affinity just to one cpu
+	# I rethink my config, I want to allow $dst more space
+	echo 2-5 >$dst/cpuset.cpus
+
+Most tasks in $dst happily utilize the new cpus but it breaks affinity
+for T -- this must have been broken since ever.
+
+(Or I'd argue that per-thread affinities are just recommendations, if I
+have a task for nohz CPU, I should enforce its placement with cpuset
+from the beginning.)
+
+Michal

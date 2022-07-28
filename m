@@ -2,119 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B85D583C08
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8279583C0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 12:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235512AbiG1K3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 06:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S235679AbiG1Kah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 06:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233296AbiG1K3a (ORCPT
+        with ESMTP id S233296AbiG1Kaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 06:29:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA7E34F18E
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659004168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AH5AHXQpKW9TM4hLyxgQDgxfcLQzOb+ZHRHzNnKNRlI=;
-        b=VQXkJAUjqodZM3UTdYJsV6p7DJvtRNEc9nHpOs9eBIfTGXAHknlPvE3/wPf0JC4b0FBYxu
-        dbfiM4U7dDL4aI3qIC0gXjsNwbfbyATjZJ2vH4jkKxfo5vNg11qng+7r6nykxnAoLO2cqV
-        VqjyDOclu1JxmhnA62q8CELtzIKWaaM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-146-NyewbF_MP-yh5ZOK2Nx21A-1; Thu, 28 Jul 2022 06:29:27 -0400
-X-MC-Unique: NyewbF_MP-yh5ZOK2Nx21A-1
-Received: by mail-wm1-f71.google.com with SMTP id v24-20020a7bcb58000000b003a37681b861so311030wmj.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 03:29:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=AH5AHXQpKW9TM4hLyxgQDgxfcLQzOb+ZHRHzNnKNRlI=;
-        b=5JSAI+GlQTE4tTZuQpHOlr/dxIrSSX5DAT5Q3PzGEG4oDVqngZxd2B4X3ChZp0FXg8
-         QN32l2Sh1thg7HhyAqijg8u5Vbbzo46So5c97DhXDApMMwAW0d2Zc6sc4tXvyxnjmVBF
-         uGj8ngRReuJKu7R0EJDU1BiNtaozQ0ly6SThHsTj4vDW0JN0TnEWUPAjdiBCKt66/31n
-         wDHOH9dhpVea4dycDqtfjJKX3S4TXgs4uTXAh+ocbj7ApZLsE3b8OjaLrHD6RXR7ewcV
-         LzpahIbN6mHkn78P6y2IsSEctDD+JquZg5oUZbFiZf9/enYuQTiof4cweR6mx6soUsbo
-         R1Kw==
-X-Gm-Message-State: AJIora/WH+TCga2zomD9DF138vJfHkGOP1+ILTdRpPxZzK7slq0bhBga
-        zMlnORq80MBEnbylK2q5vQcgYucB67DAoMn/B3AJdU91FWmqza+1VElfAlaykev2quM3sLAE9or
-        yZNNm/qwZiMAqBb/po265bo59
-X-Received: by 2002:a5d:6da4:0:b0:21d:7e96:c040 with SMTP id u4-20020a5d6da4000000b0021d7e96c040mr16711404wrs.417.1659004166390;
-        Thu, 28 Jul 2022 03:29:26 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s5deH9Gfj4ORlIhYT/45d+PL+yGHBjETUQY6Hznd2ejWLj2s3cfl/et+/hO0t4l2bqS+dOYA==
-X-Received: by 2002:a5d:6da4:0:b0:21d:7e96:c040 with SMTP id u4-20020a5d6da4000000b0021d7e96c040mr16711378wrs.417.1659004166067;
-        Thu, 28 Jul 2022 03:29:26 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-104-164.dyn.eolo.it. [146.241.104.164])
-        by smtp.gmail.com with ESMTPSA id e6-20020a5d65c6000000b0021d888e1132sm582945wrw.43.2022.07.28.03.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 03:29:25 -0700 (PDT)
-Message-ID: <912fa3cd876d6f385043cea4e94de7ab7fed109d.camel@redhat.com>
-Subject: Re: [PATCH v2 2/2] net: cdns,macb: use correct xlnx prefix for
- Xilinx
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Harini Katakam <harini.katakam@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Date:   Thu, 28 Jul 2022 12:29:23 +0200
-In-Reply-To: <8a043e89-0ac8-52ad-d935-3c43d1c41592@linaro.org>
-References: <20220726070802.26579-1-krzysztof.kozlowski@linaro.org>
-         <20220726070802.26579-2-krzysztof.kozlowski@linaro.org>
-         <87d8327b85ae54e4c9d080d0ef6645eda6f92e98.camel@redhat.com>
-         <8a043e89-0ac8-52ad-d935-3c43d1c41592@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 28 Jul 2022 06:30:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AE7643C;
+        Thu, 28 Jul 2022 03:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=U3nI+Dk03TsFhKliasBzCqNdnQznxo+muaRKiNshSuY=; b=DoknfXSTWH6Zj0VygdQvr0QmiU
+        n3MBGvZvhPEFAiDYNcsplITEjAUg8GjB0EjIdovXr9DMAWKceqzB1X00wpuAfOPT0rd14gfho5lej
+        Cea7D/u12vnurMUcIqiJUIVdZ7fxAY2iHbUkSlC4ghl7mLfwL+46das3fo0EemF3c0MCYQaDOoWE/
+        Gpdw7ThlFbzXOJYPg1N8thEeDwUQ/0eOakgSxbfT1lF340nCCBAc1+Oo9XL+StraJ1EeOTvqvwj+S
+        w2bhehT6r2x+aMyEKKmGn2cive6opClxIfPNulf55c6iZfVzSev7RjV84AJaerI1G3Na5uq2NqbC6
+        C7gY0xbA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oH0mM-003kPI-If; Thu, 28 Jul 2022 10:30:06 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 09FD998040A; Thu, 28 Jul 2022 12:30:05 +0200 (CEST)
+Date:   Thu, 28 Jul 2022 12:30:04 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yu Zhe <yuzhe@nfschina.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        liqiong@nfschina.com
+Subject: Re: [PATCH] x86/aperfmperf: use time_is_before_jiffies(a + b) to
+ replace "jiffies - a > b"
+Message-ID: <YuJlLK4x9aUuqHQZ@worktop.programming.kicks-ass.net>
+References: <20220727031405.26892-1-yuzhe@nfschina.com>
+ <YuFhIgsUgNJ+o9xG@worktop.programming.kicks-ass.net>
+ <ecd4dcc3-321c-e228-96a3-bac08c56794a@nfschina.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ecd4dcc3-321c-e228-96a3-bac08c56794a@nfschina.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-28 at 10:45 +0200, Krzysztof Kozlowski wrote:
-> On 28/07/2022 09:49, Paolo Abeni wrote:
-> > Hello,
-> > 
-> > On Tue, 2022-07-26 at 09:08 +0200, Krzysztof Kozlowski wrote:
-> > > Use correct vendor for Xilinx versions of Cadence MACB/GEM Ethernet
-> > > controller.  The Versal compatible was not released, so it can be
-> > > changed. 
-> > 
-> > I'm keeping this in PW a little extra time to allow for xilinx's
-> > review.
-> > 
-> > @Harini, @Radhey: could you please confirm the above?
+On Thu, Jul 28, 2022 at 10:55:51AM +0800, Yu Zhe wrote:
+> 在 2022年07月28日 00:00, Peter Zijlstra 写道:
 > 
-> The best would be if it still get merged for v5.20 to replace the
-> cdns,versal-gem with xlnx (as it is not released yet), 
+> > On Wed, Jul 27, 2022 at 11:14:05AM +0800, Yu Zhe wrote:
+> > > time_is_before_jiffies deals with timer wrapping correctly.
+> > Please explain how the current code does not.
+> 
+> 1. If the timer wrap changes in the future you won't have to alter your code.
+> 
+> 2. unsigned long ut;
+> 
+>    ut = ULONG_MAX + 4;
+> 
+>    printf("time_after(ut, ULONG_MAX), ut:%d, %d --> %d\n", ut,
+>              time_after(ut, ULONG_MAX), (ULONG_MAX - ut) < 0);
+> 
+> 
+>    In this case, time_after returns true, it's correct.
 
-Makes sense. Also I misread the commit message in a very dumb way.
-
-> so we are a bit
-> tight here on timing. 
-
-It should make it.
-
-Cheers,
-
-Paolo
-
+Now try the same with the existing code...

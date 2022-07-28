@@ -2,96 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0211583E30
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80451583E33
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236958AbiG1MAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S237102AbiG1MBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235664AbiG1MAp (ORCPT
+        with ESMTP id S235664AbiG1MBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:00:45 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DC02250F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:00:44 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id r14so1730869ljp.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=C/eKsc2uKJWdGdBPl+AbBqhtWo8lXeOLPWLk2KCcm1s=;
-        b=nKujWu5wmdQkM5cn/pFm6/mFjkqKtmL5qBXs81oT2GuPmaqbHrBRI7ZEO0M/Hmo+tR
-         mpoPpSJzQ7L2XxpzsaXdcDecYGINCjG3Pmy3NSLXBHMOlBFHJu6wtty5eVmieRZwh4x1
-         y6Byb+QckvrtnLdH1YCQBBEaNR5hy6pFbDwil/uzVkteZ/VSjMUNgc0oRnxgj7/Cnlae
-         cddpApIV/fGSzVb+JuHFMYQGG+LbeEEnoFNtHJTCfhJnmhbb5Ugv2ZJlhWyUNioYEJTo
-         xqTDudeK+1uqeoAW4uVpilYkEH2TWhxZKr6gD0iG5+WW8mbGfIGqLJDEPhRpPM5kBaqh
-         CTfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=C/eKsc2uKJWdGdBPl+AbBqhtWo8lXeOLPWLk2KCcm1s=;
-        b=gYBmGKeBZ1nrThaO5VB+KlXfES8LWnQdK7UOWI9QKb7ZL2pP5HtHiUw6RNZEr/Dy0k
-         x/ZN2a2SSiiFcyKPqJQFOZ/ruwGLwDN5ogHSH4mqyYy9BcpsMgUYmNjPrRlpBnTANRNq
-         vX0gxP1bmgCYoY1jvUMUw+AzGFBigb496lyBwBFk1bzVUiCUZ0PHrrOa0cikShiJucfi
-         agv+0sye0C0/ozQW48lHDUsQWGJKwBv9pV4eXm+G4WtcsU8pUTIPZecJ6X4+KZP0GkAM
-         xjJV7cWcr/DUHNeeuCCKJMsgO08zTHEggZkoCMIVyRutb/NKqNtiNyo6osl4eLgzZHYf
-         3I4w==
-X-Gm-Message-State: AJIora8xMiMfuJrzUFKKZBKfs8Cw5uFFLYeiayLR0lZZVZ1GHZQsEHj8
-        SVuKAWT6mvAdON77nAoiyNZvow==
-X-Google-Smtp-Source: AGRyM1uOky7iW93JbEjxtl3fFNWBwgD0p9PteIplGukiC60P+gU7cqklc02N0r7zrgQOigBXsrxzfA==
-X-Received: by 2002:a05:651c:150b:b0:25d:ead1:dfa1 with SMTP id e11-20020a05651c150b00b0025dead1dfa1mr8794465ljf.172.1659009642849;
-        Thu, 28 Jul 2022 05:00:42 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id p6-20020ac24ec6000000b0048a9b0fe780sm163033lfr.286.2022.07.28.05.00.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 05:00:42 -0700 (PDT)
-Message-ID: <3e00dd43-3c0b-207e-ba41-d46b0759006e@linaro.org>
-Date:   Thu, 28 Jul 2022 14:00:41 +0200
+        Thu, 28 Jul 2022 08:01:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCEC1D6;
+        Thu, 28 Jul 2022 05:01:16 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ltpzg6SlXzWfZT;
+        Thu, 28 Jul 2022 19:57:19 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 20:01:08 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 20:01:07 +0800
+Subject: Re: [RFC v3 06/17] perf kwork: Implement perf kwork report
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     <peterz@infradead.org>, <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <pc@us.ibm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
+References: <20220709015033.38326-1-yangjihong1@huawei.com>
+ <20220709015033.38326-7-yangjihong1@huawei.com> <YuAnEBpYSf53PkXI@kernel.org>
+ <b865f96a-856c-6a7d-a66a-c3343097ee5a@huawei.com>
+ <YuFF83qDSyzBrhBm@kernel.org>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <e3be9062-ade9-56c7-71f3-a8cce1db0583@huawei.com>
+Date:   Thu, 28 Jul 2022 20:01:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] dt-bindings: spmi: add compatible for mt8188
+In-Reply-To: <YuFF83qDSyzBrhBm@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sen Chu <sen.chu@mediatek.com>, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Hui Liu <hui.liu@mediatek.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220726103729.24525-1-sen.chu@mediatek.com>
- <a7230c4d-94dc-c0fb-e39b-50de971da511@linaro.org>
-In-Reply-To: <a7230c4d-94dc-c0fb-e39b-50de971da511@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/07/2022 12:26, Krzysztof Kozlowski wrote:
-> On 26/07/2022 12:37, Sen Chu wrote:
->> Add dt-binding documentation of spmi for Mediatek MT8188 SoC platform.
+Hello Arnaldo,
+
+On 2022/7/27 22:04, Arnaldo Carvalho de Melo wrote:
+> Em Wed, Jul 27, 2022 at 08:39:33AM +0800, Yang Jihong escreveu:
+>> Hello,
 >>
->> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+>> On 2022/7/27 1:40, Arnaldo Carvalho de Melo wrote:
+>>> Em Sat, Jul 09, 2022 at 09:50:22AM +0800, Yang Jihong escreveu:
+>>>> +
+>>>> +static void report_print_work(struct perf_kwork *kwork,
+>>>> +			      struct kwork_work *work)
+>>>> +{
+>>>> +	int ret = 0;
+>>>> +	char kwork_name[PRINT_KWORK_NAME_WIDTH];
+>>>> +	char max_runtime_start[32], max_runtime_end[32];
+>>>
+>>> Committer notes:
+>>>
+>>> - Add some {} for multiline for/if blocks
+>>>
+>>> - Return the calculated number of printed bytes in report_print_work,
+>>>     otherwise soem compilers will complain that variable isn't used, e.g.:
+>>>
+>>>      2    92.64 almalinux:9                   : FAIL clang version 13.0.1 (Red Hat 13.0.1-1.el9)
+>>>       builtin-kwork.c:1061:6: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
+>>>               int ret = 0;
+>>>
+>>>
+>> OK, I'll fix it in next version.
 > 
+> your work with these fixups is already at acme/perf/core:
 > 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
 > 
+> Please continue from there. Please let me know if I made some mistake.
+> 
+> Thanks for working on this!
+>
+Thanks to these fixups.
+OK, I'll send fix patches according to review comments based on this branch.
 
-Un-ack.
-
-
-Best regards,
-Krzysztof
+Regards,
+Jihong

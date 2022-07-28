@@ -2,77 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D197584775
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC38D58477C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 23:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbiG1VE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 17:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S232123AbiG1VFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 17:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiG1VEZ (ORCPT
+        with ESMTP id S229735AbiG1VFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 17:04:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E24233A9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 14:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659042264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PRBCCH+EkIgUpXOLdlJYEsIwuOxdedTFnF9t4CuFePQ=;
-        b=GfJP0q1dnCjsYDHjhnofuklOFFJJrNIWqpfIt7XNEkJjbc83xPmgHzrFaczVmprwHQvIFx
-        isQb2DgCIOBjA56V+nuhZZkyDklOCJJxOTFPvMJL106TuSdmeL6JmLuvzKzCMTeGIF7QjU
-        RNyYtC8SDZFtD/nuzc8ieBSk8UJi02o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-hc4-0P1tNrmW5ouNv8cVHw-1; Thu, 28 Jul 2022 17:04:22 -0400
-X-MC-Unique: hc4-0P1tNrmW5ouNv8cVHw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA6EE280303F;
-        Thu, 28 Jul 2022 21:04:21 +0000 (UTC)
-Received: from [10.22.9.86] (unknown [10.22.9.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C582D140EBE3;
-        Thu, 28 Jul 2022 21:04:19 +0000 (UTC)
-Message-ID: <c470d3f7-f0f8-b8e6-4a95-7b334f0a824b@redhat.com>
-Date:   Thu, 28 Jul 2022 17:04:19 -0400
+        Thu, 28 Jul 2022 17:05:05 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA706246;
+        Thu, 28 Jul 2022 14:05:04 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id j22so5209472ejs.2;
+        Thu, 28 Jul 2022 14:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=MGd+LwdnoFiDkdx9krfKLdtj5Dt+fVCB4Sh2nY5wr3c=;
+        b=XF5dl8tQGdES7zL4V8n959l0CmDhfnXFccMVTbYlBUZLfCjQCW2qPMmfbke3Yd/FlX
+         9fABsmDUHF7O04RUphiNEmVpnNa0o23+ZIp6qz2Az2maaFB95cUS2ePsseQJdQ3OSfP2
+         DThFEvF+SzgTIl3wbZG0rnpOug+EUOHtBqSFTlOlcuBSXE6F8myfgnBWOZOVb8hoCvRn
+         8p7q8CTOwd6agOrclnY9O5I0Se3vNDlRCzTK7hrjbwu0o0sJN6ID6fRP9CHGgWB+HAAs
+         Xnv1Czpa6LOkvjKxnkvJ9XZjINUpRvoqhTQCCbHWn+wKOjPVhKAQyOeKNsajyvA2Tl0o
+         /GCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=MGd+LwdnoFiDkdx9krfKLdtj5Dt+fVCB4Sh2nY5wr3c=;
+        b=Uug6i2tfZ03Hlh9SFk2zAHtDZwCS6JWrhQNFoo7vdXqvbFhmDjO9G4U1u0E8T3fqHZ
+         PFQF8lJzzPqGIQxuQBAbdqQJPXANtzHypvPy4CQGy18ntT0Rz/2kX9voFB16SdzDV2HF
+         eFDPeiMxMEKOTgI4iOlvfFEJzKlbddVw2H5gJ0zePX3wJtbPZB2M7gtEuMMwqUdQLz1d
+         qB9RTon9rD84AQ+t4uSUCtCRErUP5+M78pJbMOPrM4YCPwXe5OmodZTnBwixkiskSg+2
+         21ZUeH97Da58eeuPZIZvphN6ZYbp5pdMky6sntxiXTtzFXQs2//lDm/KsgeXDbFSGAEd
+         H55A==
+X-Gm-Message-State: AJIora/ZF89RFcqf8JtHEwd/NuaiySMZf9sVCmZjUSgtNFtHzcTNiEpN
+        mmFMJ1/XXTHafzrwcVbAyrSTCv+9yZt3B3zVJEAQzEF6
+X-Google-Smtp-Source: AGRyM1vIJyFbUCmOiimEZBEdct0ZkX1TyGOZoJ6hXXMz38/QWz/mBQddZF4BdD7EfWT5LvGdGdK4c7G8zYJPWMb/alg=
+X-Received: by 2002:a17:907:28d6:b0:72b:7497:76b with SMTP id
+ en22-20020a17090728d600b0072b7497076bmr523196ejc.365.1659042302373; Thu, 28
+ Jul 2022 14:05:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220728005815.1715522-1-longman@redhat.com>
- <YuLF+xXaCzwWi2BR@slm.duckdns.org>
- <1ae1cc6c-dca9-4958-6b22-24a5777c5e8d@redhat.com>
- <YuLdX7BYGvo57LNU@slm.duckdns.org>
- <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
- <YuL1NijxSEv2xadk@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YuL1NijxSEv2xadk@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220728142824.3836-1-markuss.broks@gmail.com>
+ <20220728142824.3836-2-markuss.broks@gmail.com> <YuKfaVG/ZbYtFjS/@kroah.com>
+In-Reply-To: <YuKfaVG/ZbYtFjS/@kroah.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 28 Jul 2022 23:04:24 +0200
+Message-ID: <CAHp75Vfz8e1j4qZ6XY6WqMR4E9fKFxrTxj7P6KraXzSLk_NhxQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drivers: serial: earlycon: Pass device-tree node
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Petr Mladek <pmladek@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,55 +92,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 16:44, Tejun Heo wrote:
-> Hello,
+On Thu, Jul 28, 2022 at 4:41 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Thu, Jul 28, 2022 at 05:28:18PM +0300, Markuss Broks wrote:
+> > Pass a pointer to device-tree node in case the driver probed from
+> > OF. This makes early console drivers able to fetch options from
+> > device-tree node properties.
+
+...
+
+> > +     unsigned long node;
 >
-> On Thu, Jul 28, 2022 at 03:21:26PM -0400, Waiman Long wrote:
->> On 7/28/22 15:02, Tejun Heo wrote:
->>> On Thu, Jul 28, 2022 at 02:57:28PM -0400, Waiman Long wrote:
->>>> There can be a counter argument that if a user found out that there is not
->>>> enough cpus in a cpuset to meet its performance target, one can always
->>>> increase the number of cpus in the cpuset. Generalizing this behavior to all
->>>> the tasks irrespective if they have explicitly set cpus affinity before will
->>>> disallow this use case.
->>> This is nasty.
->> That is a nasty example, I know. There may be users depending on the
->> existing behavior even if they don't know it. So I am a bit hesitant to
->> change the default behavior like that. On the other hand, tasks that have
->> explicitly set its cpu affinity certainly don't want to have unexpected
->> change to that.
-> Yeah, I hear you. I'm on the same page.
->
->>> The real solution here is separating out what user requested
->>> and the mask that cpuset (or cpu hotplug) needs to apply on top. ie.
->>> remember what the user requested in a separate cpumask and compute the
->>> intersection into p->cpus_maks whenever something changes and apply
->>> fallbacks on that final mask. Multiple parties updating the same variable is
->>> never gonna lead to anything consistent and we're patching up for whatever
->>> the immediate use case seems to need at the moment. That said, I'm not
->>> necessarily against patching it up but if you're interested in delving into
->>> it deeper, that'd be great.
->> I believe the current code is already restricting what cpu affinity that a
->> user can request by limiting to those allowed by the current cpuset. Hotplug
->> is another issue that may need to be addressed. I will update my patch to
->> make it handle hotplug in a more graceful way.
-> af
-> So, the patch you proposed is making the code remember one special aspect of
-> user requested configuration - whether it configured it or not, and trying
-> to preserve that particular state as cpuset state changes. It addresses the
-> immediate problem but it is a very partial approach. Let's say a task wanna
-> be affined to one logical thread of each core and set its mask to 0x5555.
-> Now, let's say cpuset got enabled and enforced 0xff and affined the task to
-> 0xff. After a while, the cgroup got more cpus allocated and its cpuset now
-> has 0xfff. Ideally, what should happen is the task now having the effective
-> mask of 0x555. In practice, tho, it either would get 0xf55 or 0x55 depending
-> on which way we decide to misbehave.
+> That should not be an unsigned long, but rather an 'int'.  Something got
+> messed up, of_setup_earlycon() should be changed to reflect this before
+> propagating the error to other places in the kernel.
 
-OK, I see what you want to accomplish. To fully address this issue, we 
-will need to have a new cpumask variable in the the task structure which 
-will be allocated if sched_setaffinity() is ever called. I can rework my 
-patch to use this approach.
+It's a pointer, but what puzzles me, why it can't be declared as a such:
 
-Thanks,
-Longman
+ struct device_node *node;
 
+?
+
+> And it's not really a "node" but an "offset", right?
+
+Seems no.
+
+-- 
+With Best Regards,
+Andy Shevchenko

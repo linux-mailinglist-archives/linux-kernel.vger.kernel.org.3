@@ -2,236 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329135848CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217D85848D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbiG1XxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 19:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
+        id S232593AbiG1Xzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 19:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231925AbiG1Xwu (ORCPT
+        with ESMTP id S232316AbiG1XzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 19:52:50 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA10272ECF;
-        Thu, 28 Jul 2022 16:52:49 -0700 (PDT)
-Received: from localhost.localdomain (unknown [76.135.27.191])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 47EC520FE9B1;
-        Thu, 28 Jul 2022 16:52:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 47EC520FE9B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1659052369;
-        bh=5eRwg6MlWo573EnBgxRRM6VTU+gEpz5q8Hd5iRDGIg8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cuSi9laXedSlBVsCx5ELVW8t2t4+PyF4tx4kgYARfCeMYRJmgknvB0VRD1XuEntk+
-         PlXqDY49fBlhGFDXqHja2dmL3Lcm+nIzS/9WSGlAspf0JWhxH3ZeDc+UNe/Ni4YAuI
-         QF/jycic2z6seY8Snc6VGYnfZcFZr4csqgN93ig8=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org,
-        mathieu.desnoyers@efficios.com
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 7/7] tracing/user_events: Add self-test for namespace integration
-Date:   Thu, 28 Jul 2022 16:52:41 -0700
-Message-Id: <20220728235241.2249-8-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220728235241.2249-1-beaub@linux.microsoft.com>
-References: <20220728235241.2249-1-beaub@linux.microsoft.com>
+        Thu, 28 Jul 2022 19:55:18 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147011928B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:55:17 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id i13so3996024edj.11
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=PR2g7EG7sP3ZrKB5jtxwTJwCSPOaOLj4Nh76QscH7Q0=;
+        b=C94F3jKJb6dzeORs7XX/pGVTpxhjREhHluNRo9dqoQEx9YnN4qsCcY6GRdCa/8j4DI
+         +iIQt1T2yzhkNLYedmfrfmdBJsOPDg5u1CyaXD5xbA9/OpDecgOFJNosiGdBlN3W367U
+         uLhyCcWZ4otNM3/bp50wHK31vUP+eJ0YxFDR0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=PR2g7EG7sP3ZrKB5jtxwTJwCSPOaOLj4Nh76QscH7Q0=;
+        b=g7z3TyEGDUaN2B3dlB+9GvKakzv1OxTbpXQn1knI2v6Jg4BCZhrrc060t0vvpZFUoJ
+         xAZidxagTMd5dDzXcUvZHRYnJpjMJbI9dKQTqzeHnEhMvtM7F7gYw4C6RZ4XT36n4PEO
+         VbIOpScNpjyl3ZquKk7a9TCCTh3StrOJ51WUaScBhLnQDZviurOBZD0Ksx8xFckmx8pL
+         kwymzV54z07OSvyhBhUHh7Gi6qH+t9rxng7OJy9KmTnYEMQvYBmgBpVG8CyhdviN0xCW
+         ddQfbJzxURzNzcQ0u4zx1z8VReuCdF5jOV8Nxe4dRPsK/O23LB920kDmN0J5nc8cTj/x
+         rS4w==
+X-Gm-Message-State: AJIora/bRMlzlgRSSflMOhzk1+QqR0MwOg/ttzwzQLsFTQRyA+wiW7yP
+        ZYE64wpBUPCF1O2nhZWsJnheaAx39eS5Lw==
+X-Google-Smtp-Source: AGRyM1vqW8H84F0zeaHSSa6xgxseUIZe6OkYYIVJveO7Ku6P+EHynMnmekorcGus6dCFNxce5Mghnw==
+X-Received: by 2002:aa7:cd84:0:b0:43c:532b:65e9 with SMTP id x4-20020aa7cd84000000b0043c532b65e9mr1271957edv.330.1659052515697;
+        Thu, 28 Jul 2022 16:55:15 -0700 (PDT)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id 5-20020a170906308500b0072b32de7794sm950648ejv.70.2022.07.28.16.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 16:55:15 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] documentation: debugfs: add a missing closing parenthesis
+Date:   Fri, 29 Jul 2022 01:55:03 +0200
+Message-Id: <20220728235503.651254-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests to ensure namespace cases are working correctly. Ensures that
-namespaces work as before for status/write cases and validates removing
-a namespace with open files, tracing enabled, etc.
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+The two impacted sentences ought to be one, concatenated at the point of
+the missing parenthesis that has been added.
+
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 ---
- .../selftests/user_events/ftrace_test.c       | 150 ++++++++++++++++++
- 1 file changed, 150 insertions(+)
+v1 -> v2:
 
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index 404a2713dcae..5d384c1b31c4 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -22,6 +22,16 @@ const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_e
- const char *trace_file = "/sys/kernel/debug/tracing/trace";
- const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
+In disgrace, I made typo in the subject of v1. Here is a v2 without that
+typo.
+---
+ Documentation/filesystems/debugfs.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/filesystems/debugfs.rst b/Documentation/filesystems/debugfs.rst
+index 71b1fee56d2a..a810eee40a8b 100644
+--- a/Documentation/filesystems/debugfs.rst
++++ b/Documentation/filesystems/debugfs.rst
+@@ -155,8 +155,8 @@ any code which does so in the mainline.  Note that all files created with
+ debugfs_create_blob() are read-only.
  
-+const char *namespace_dir = "/sys/kernel/debug/tracing/namespaces/self_test";
-+const char *ns_data_file = "/sys/kernel/debug/tracing/namespaces/self_test/"
-+			   "root/user_events_data";
-+const char *ns_status_file = "/sys/kernel/debug/tracing/namespaces/self_test/"
-+			     "root/user_events_status";
-+const char *ns_enable_file = "/sys/kernel/debug/tracing/events/"
-+			     "user_events.self_test/__test_event/enable";
-+const char *ns_options_file = "/sys/kernel/debug/tracing/namespaces/self_test/"
-+			      "options";
-+
- static inline int status_check(char *status_page, int status_bit)
- {
- 	return status_page[status_bit >> 3] & (1 << (status_bit & 7));
-@@ -160,6 +170,53 @@ static int check_print_fmt(const char *event, const char *expected)
- 	return strcmp(print_fmt, expected);
- }
+ If you want to dump a block of registers (something that happens quite
+-often during development, even if little such code reaches mainline.
+-Debugfs offers two functions: one to make a registers-only file, and
++often during development, even if little such code reaches mainline),
++debugfs offers two functions: one to make a registers-only file, and
+ another to insert a register block in the middle of another sequential
+ file::
  
-+FIXTURE(ns) {
-+	int status_fd;
-+	int data_fd;
-+	int enable_fd;
-+	int options_fd;
-+};
-+
-+FIXTURE_SETUP(ns) {
-+	if (mkdir(namespace_dir, 770)) {
-+		ASSERT_EQ(EEXIST, errno);
-+	}
-+
-+	self->status_fd = open(ns_status_file, O_RDONLY);
-+	ASSERT_NE(-1, self->status_fd);
-+
-+	self->data_fd = open(ns_data_file, O_RDWR);
-+	ASSERT_NE(-1, self->data_fd);
-+
-+	self->options_fd = open(ns_options_file, O_RDWR);
-+	ASSERT_NE(-1, self->options_fd);
-+
-+	self->enable_fd = -1;
-+}
-+
-+FIXTURE_TEARDOWN(ns) {
-+	if (self->status_fd != -1)
-+		close(self->status_fd);
-+
-+	if (self->data_fd != -1)
-+		close(self->data_fd);
-+
-+	if (self->options_fd != -1)
-+		close(self->options_fd);
-+
-+	if (self->enable_fd != -1) {
-+		write(self->enable_fd, "0", sizeof("0"));
-+		close(self->enable_fd);
-+		self->enable_fd = -1;
-+	}
-+
-+	ASSERT_EQ(0, clear());
-+
-+	if (rmdir(namespace_dir)) {
-+		ASSERT_EQ(ENOENT, errno);
-+	}
-+}
-+
- FIXTURE(user) {
- 	int status_fd;
- 	int data_fd;
-@@ -477,6 +534,99 @@ TEST_F(user, print_fmt) {
- 	ASSERT_EQ(0, ret);
- }
- 
-+TEST_F(ns, namespaces) {
-+	struct user_reg reg = {0};
-+	struct iovec io[3];
-+	__u32 field1, field2;
-+	int before = 0, after = 0;
-+	int page_size = sysconf(_SC_PAGESIZE);
-+	char *status_page;
-+
-+	reg.size = sizeof(reg);
-+	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
-+
-+	field1 = 1;
-+	field2 = 2;
-+
-+	io[0].iov_base = &reg.write_index;
-+	io[0].iov_len = sizeof(reg.write_index);
-+	io[1].iov_base = &field1;
-+	io[1].iov_len = sizeof(field1);
-+	io[2].iov_base = &field2;
-+	io[2].iov_len = sizeof(field2);
-+
-+	/* Limit to 1 event */
-+	ASSERT_NE(-1, write(self->options_fd,
-+			    "user_events_limit=1\n",
-+			    sizeof("user_events_limit=1\n") - 1));
-+
-+	/* Register should work */
-+	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
-+	ASSERT_EQ(0, reg.write_index);
-+	ASSERT_NE(0, reg.status_bit);
-+
-+	status_page = mmap(NULL, page_size, PROT_READ, MAP_SHARED,
-+			   self->status_fd, 0);
-+
-+	/* MMAP should work and be zero'd */
-+	ASSERT_NE(MAP_FAILED, status_page);
-+	ASSERT_NE(NULL, status_page);
-+	ASSERT_EQ(0, status_check(status_page, reg.status_bit));
-+
-+	/* Enable event (start tracing) */
-+	self->enable_fd = open(ns_enable_file, O_RDWR);
-+	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
-+
-+	/* Event should now be enabled */
-+	ASSERT_NE(0, status_check(status_page, reg.status_bit));
-+
-+	/* Write should make it out to ftrace buffers */
-+	before = trace_bytes();
-+	ASSERT_NE(-1, writev(self->data_fd, (const struct iovec *)io, 3));
-+	after = trace_bytes();
-+	ASSERT_GT(after, before);
-+
-+	/* Register above limit should fail */
-+	reg.name_args = (__u64)"__test_event_nope u32 field1; u32 field2";
-+	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
-+	ASSERT_EQ(EMFILE, errno);
-+
-+	/* Removing namespace while files open should fail */
-+	ASSERT_EQ(-1, rmdir(namespace_dir));
-+
-+	close(self->options_fd);
-+	self->options_fd = -1;
-+
-+	/* Removing namespace while files open should fail */
-+	ASSERT_EQ(-1, rmdir(namespace_dir));
-+
-+	close(self->status_fd);
-+	self->status_fd = -1;
-+
-+	/* Removing namespace while files open should fail */
-+	ASSERT_EQ(-1, rmdir(namespace_dir));
-+
-+	close(self->data_fd);
-+	self->data_fd = -1;
-+
-+	/* Removing namespace while mmaps are open should fail */
-+	ASSERT_EQ(-1, rmdir(namespace_dir));
-+
-+	/* Unmap */
-+	ASSERT_EQ(0, munmap(status_page, page_size));
-+
-+	/* Removing namespace with no files but tracing should fail */
-+	ASSERT_EQ(-1, rmdir(namespace_dir));
-+
-+	/* Disable event (stop tracing) */
-+	ASSERT_NE(-1, write(self->enable_fd, "0", sizeof("0")))
-+	close(self->enable_fd);
-+	self->enable_fd = -1;
-+
-+	/* Removing namespace should now work */
-+	ASSERT_EQ(0, rmdir(namespace_dir));
-+}
-+
- int main(int argc, char **argv)
- {
- 	return test_harness_run(argc, argv);
 -- 
-2.25.1
+2.37.0
 

@@ -2,141 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8455B5838F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2565838F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 08:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiG1Gmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 02:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S233805AbiG1GqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 02:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbiG1Gmw (ORCPT
+        with ESMTP id S230043AbiG1GqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 02:42:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0105073E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658990571; x=1690526571;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=oxenFSWl0b21ZqPIX8MvBCx5pTHlfIRH+XxI/P8UVmw=;
-  b=RKl+gIzkI0AzssJH+SWobBQx6G7hc/LEgSXA1nxLedL6iBWt8In1YLRh
-   GyLksZ5kGJ8O+JM2CbVfO7N3a/xxi39mFQ0golFignPBafaAPP/+Y0wZv
-   f6aRuXBwslDfGgtN4h5TdeDt/qBH39Ue9tMYIZWcPggsBiWnUA89hm+BS
-   4H971X54lKbbgvqjXIZdQN5a+4HiyHNDMPE7YuRpYpyzk7tgZaKOrk76B
-   UgJDckPt/Fep/VRwwgypZrUmtUQpp6qq/nbIBkc2zslgG7nFZu8JyYi03
-   g3jxslhd1wQiMnEO3n0/ujd3WsbkJsA7JYpChPRsMynhzynKcRycATixx
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="314222608"
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="314222608"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 23:42:47 -0700
-X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="633534477"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 23:42:44 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v10 3/8] mm/demotion: Add hotplug callbacks to handle
- new numa node onlined
-References: <20220720025920.1373558-1-aneesh.kumar@linux.ibm.com>
-        <20220720025920.1373558-4-aneesh.kumar@linux.ibm.com>
-        <87fsiowmdt.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <28582201-b438-9ac9-ca6b-1ee6e5794dd2@linux.ibm.com>
-        <87czdruxs0.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <87h733rwzr.fsf@linux.ibm.com>
-Date:   Thu, 28 Jul 2022 14:42:40 +0800
-In-Reply-To: <87h733rwzr.fsf@linux.ibm.com> (Aneesh Kumar K. V.'s message of
-        "Wed, 27 Jul 2022 10:08:16 +0530")
-Message-ID: <8735elohzz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 28 Jul 2022 02:46:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62AD04B4A6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658990760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dySmMr3XE6Y2DZ+UTqy4HFm8XEDkjL730Qh4ZxkIk0E=;
+        b=arOOgevxVXwhyV1OZXtwukoJWKrbr0MOk9KyuKZXnWviZXNR6PQqHlLQ6FwzeKgqoBHbJT
+        HHkUv9lTAKumcbM5tRJ7rRVo9RPnCvMb3SAIt/PLTtTgT5XCj7rGw1v3xq/KRq6aOGBrXA
+        5+YLIemDFC4BGZfBRBYUhZvLKZTEC+8=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-197-3wtUNbZ8OCS5d-uyZ0ojGQ-1; Thu, 28 Jul 2022 02:45:50 -0400
+X-MC-Unique: 3wtUNbZ8OCS5d-uyZ0ojGQ-1
+Received: by mail-lj1-f200.google.com with SMTP id x7-20020a05651c104700b0025e2f0ded1fso96776ljm.23
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 23:45:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dySmMr3XE6Y2DZ+UTqy4HFm8XEDkjL730Qh4ZxkIk0E=;
+        b=5inEAFv3trvxQmCrqi64i1ybaeSBrGwaK5ZyCWwfZ8o6rLMnHkwEHbbRCj08roinXq
+         LL/2fBwEMKvO2qU3xAhFSc5opHYGfr3tQAje6NBlNFZy5TX6yJT1n6tf1CRqfaBUVkCs
+         UY11RKf/ZC4oBpSp3kwnz22jRs+8zjbAQHLulYnBUsitsj0lclguaU8F/0eokFnBcIi5
+         3Sw1x8nv35+x6BjzMQDaM1emxLPIZVhw/MjlKB7olUjA5whvoraPmbCEq5MaGrLz9EiF
+         dTjNRcvjfZ0A6D5Ia8EJ9OLKygJEGUK5urlXOEVZBEJJzJ0L6y3EtnHNAOOu8At0x/PY
+         Mj6Q==
+X-Gm-Message-State: AJIora+x6mFriuE1TYBN1faRTKt2PPZdxKAm9gS1FDrHSOZdILhbuoPG
+        R8uXRqyCHUdwgfC5cWBlwhbp67G3CvWPlU1V+squZYEZKCsdZu8WcvRRICR1lbGkqA963Qf2eC4
+        //d8MxR6Nda+ZcWGbWcFrACcxLXya5g1xOC4qau41
+X-Received: by 2002:a2e:9e1a:0:b0:25d:f9db:92f7 with SMTP id e26-20020a2e9e1a000000b0025df9db92f7mr8230364ljk.243.1658990749370;
+        Wed, 27 Jul 2022 23:45:49 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tH1Q7TY/ZV4QNhhL/XnK7bne/Y8apL0+dHhqk+6H2/FqgTpGY6xlOKC0cW/jXWoJCJgfKOTSmXfYi9SMA6pEs=
+X-Received: by 2002:a2e:9e1a:0:b0:25d:f9db:92f7 with SMTP id
+ e26-20020a2e9e1a000000b0025df9db92f7mr8230357ljk.243.1658990749155; Wed, 27
+ Jul 2022 23:45:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220728032000.127-1-xieyongji@bytedance.com> <20220728032000.127-6-xieyongji@bytedance.com>
+ <CACGkMEuN0zqyLQ6vD7MvjAhtJVvmMhsn_T4b5ww0vviwq5hBrg@mail.gmail.com> <CACycT3uYFWvmdJ1MzQZv=L7N0WzEiFvx5wJX+OwM1ew5Z0w0jw@mail.gmail.com>
+In-Reply-To: <CACycT3uYFWvmdJ1MzQZv=L7N0WzEiFvx5wJX+OwM1ew5Z0w0jw@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 28 Jul 2022 14:45:38 +0800
+Message-ID: <CACGkMEtru8qaebnTXVu94oCV21JovkjshxYxdyzeSf=FTN0=xA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] vduse: Support querying information of IOVA regions
+To:     Yongji Xie <xieyongji@bytedance.com>
+Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
-
-> "Huang, Ying" <ying.huang@intel.com> writes:
+On Thu, Jul 28, 2022 at 2:36 PM Yongji Xie <xieyongji@bytedance.com> wrote:
 >
->> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>
->>> On 7/26/22 9:33 AM, Huang, Ying wrote:
->>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
-
-[snip]
-
->>>>>  
->>>>> +static struct memory_tier *__node_get_memory_tier(int node)
->>>>> +{
->>>>> +	struct memory_tier *memtier;
->>>>> +
->>>>> +	list_for_each_entry(memtier, &memory_tiers, list) {
->>>>> +		if (node_isset(node, memtier->nodelist))
->>>>> +			return memtier;
->>>>> +	}
->>>>> +	return NULL;
->>>>> +}
->>>>> +
->>>>> +static void init_node_memory_tier(int node)
->>>> 
->>>> set_node_memory_tier()?
->>>
->>> That was done based on feedback from Alistair 
->>>
->>> https://lore.kernel.org/linux-mm/87h73iapg1.fsf@nvdebian.thelocal
->>>
->>>> 
->>>>> +{
->>>>> +	int perf_level;
->>>>> +	struct memory_tier *memtier;
->>>>> +
->>>>> +	mutex_lock(&memory_tier_lock);
->>>>> +
->>>>> +	memtier = __node_get_memory_tier(node);
->>>>> +	if (!memtier) {
->>>>> +		perf_level = node_devices[node]->perf_level;
->>>>> +		memtier = find_create_memory_tier(perf_level);
->>>>> +		node_set(node, memtier->nodelist);
->>>>> +	}
->>
->> It's related to Alistair's comments too.  When will memtier != NULL
->> here?  We may need just VM_WARN_ON() here?
+> On Thu, Jul 28, 2022 at 1:58 PM Jason Wang <jasowang@redhat.com> wrote:
+> >
+> > On Thu, Jul 28, 2022 at 11:20 AM Xie Yongji <xieyongji@bytedance.com> wrote:
+> > >
+> > > This introduces a new ioctl: VDUSE_IOTLB_GET_INFO to
+> > > support querying some information of IOVA regions.
+> > >
+> > > Now it can be used to query whether the IOVA region
+> > > supports userspace memory registration.
+> > >
+> > > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> > > ---
+> > >  drivers/vdpa/vdpa_user/vduse_dev.c | 39 ++++++++++++++++++++++++++++++
+> > >  include/uapi/linux/vduse.h         | 24 ++++++++++++++++++
+> > >  2 files changed, 63 insertions(+)
+> > >
+> > > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > index eedff0a3885a..e820c37dcba8 100644
+> > > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > > @@ -1228,6 +1228,45 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+> > >                                            umem.size);
+> > >                 break;
+> > >         }
+> > > +       case VDUSE_IOTLB_GET_INFO: {
+> > > +               struct vduse_iova_info info;
+> > > +               struct vhost_iotlb_map *map;
+> > > +               struct vduse_iova_domain *domain = dev->domain;
+> > > +
+> > > +               ret = -EFAULT;
+> > > +               if (copy_from_user(&info, argp, sizeof(info)))
+> > > +                       break;
+> > > +
+> > > +               ret = -EINVAL;
+> > > +               if (info.start > info.last)
+> > > +                       break;
+> > > +
+> > > +               if (!is_mem_zero((const char *)info.reserved,
+> > > +                                sizeof(info.reserved)))
+> > > +                       break;
+> > > +
+> > > +               spin_lock(&domain->iotlb_lock);
+> > > +               map = vhost_iotlb_itree_first(domain->iotlb,
+> > > +                                             info.start, info.last);
+> > > +               if (map) {
+> > > +                       info.start = map->start;
+> > > +                       info.last = map->last;
+> > > +                       info.capability = 0;
+> > > +                       if (domain->bounce_map && map->start >= 0 &&
+> > > +                           map->last < domain->bounce_size)
+> > > +                               info.capability |= VDUSE_IOVA_CAP_UMEM;
+> > > +               }
+> > > +               spin_unlock(&domain->iotlb_lock);
+> > > +               if (!map)
+> > > +                       break;
+> > > +
+> > > +               ret = -EFAULT;
+> > > +               if (copy_to_user(argp, &info, sizeof(info)))
+> > > +                       break;
+> > > +
+> > > +               ret = 0;
+> > > +               break;
+> > > +       }
+> > >         default:
+> > >                 ret = -ENOIOCTLCMD;
+> > >                 break;
+> > > diff --git a/include/uapi/linux/vduse.h b/include/uapi/linux/vduse.h
+> > > index 9885e0571f09..11bd48c72c6c 100644
+> > > --- a/include/uapi/linux/vduse.h
+> > > +++ b/include/uapi/linux/vduse.h
+> > > @@ -233,6 +233,30 @@ struct vduse_iova_umem {
+> > >  /* De-register the userspace memory. Caller should set iova and size field. */
+> > >  #define VDUSE_IOTLB_DEREG_UMEM _IOW(VDUSE_BASE, 0x19, struct vduse_iova_umem)
+> > >
+> > > +/**
+> > > + * struct vduse_iova_info - information of one IOVA region
+> > > + * @start: start of the IOVA region
+> > > + * @last: last of the IOVA region
+> > > + * @capability: capability of the IOVA regsion
+> > > + * @reserved: for future use, needs to be initialized to zero
+> > > + *
+> > > + * Structure used by VDUSE_IOTLB_GET_INFO ioctl to get information of
+> > > + * one IOVA region.
+> > > + */
+> > > +struct vduse_iova_info {
+> > > +       __u64 start;
+> > > +       __u64 last;
+> > > +#define VDUSE_IOVA_CAP_UMEM (1 << 0)
+> > > +       __u64 capability;
+> > > +       __u64 reserved[3];
+> > > +};
+> > > +
+> > > +/*
+> > > + * Find the first IOVA region that overlaps with the range [start, last]
+> >
+> > So the code is actually find the IOVA region that is the super range
+> > of [start, last] instead of overlap:
+> >
 >
-> When the platform driver sets memory tier directly. With the old code
-> it can happen when dax/kmem register a node to a memory tier. With
-> memory_type proposal this can happen if the node is part of memory
-> type that is already added to a memory tier. 
+> This is achieved by vhost_iotlb_itree_first(). And can't the super
+> range of [start,last] be considered overlapping?
 
-Let's look at what it looks like with memory_type in place.
+Ok, but what I want to ask is, under which condition can we hit the
+following case
 
-Best Regards,
-Huang, Ying
+map->last >= domain->bounce_size ?
 
->>
->>>>> +	mutex_unlock(&memory_tier_lock);
->>>>> +}
->>>>> +
+Thanks
 
-[snip]
+>
+> >
+> > > +                       if (domain->bounce_map && map->start >= 0 &&
+> > > +                           map->last < domain->bounce_size)
+> > > +                               info.capability |= VDUSE_IOVA_CAP_UMEM;
+> >
+> > Which part is wrong?
+> >
+>
+> We will first call vhost_iotlb_itree_first() which will find the first
+> IOVA region that overlaps with the range [start, last]. Then the flag
+> will only be set if the IOVA region is within the bounce range.
+>
+> Thanks,
+> Yongji
+>
+

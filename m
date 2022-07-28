@@ -2,121 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDEA584474
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E2358447B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 18:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiG1Qzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 12:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S231941AbiG1Q4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 12:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiG1Qzj (ORCPT
+        with ESMTP id S229747AbiG1Q4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 12:55:39 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAE5550A5;
-        Thu, 28 Jul 2022 09:55:36 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id f11-20020a17090a4a8b00b001f2f7e32d03so5522593pjh.0;
-        Thu, 28 Jul 2022 09:55:36 -0700 (PDT)
+        Thu, 28 Jul 2022 12:56:39 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD165FACE
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:56:37 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-31bf3656517so25597767b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 09:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc;
-        bh=/v3Gcn+hTL0SOyI/tztq8lNP5D0RrTqazuF4o/1KF3k=;
-        b=KhZWRDXn2xsiTaRpuC25WJC2oEAedK39KKmcClr8IAYxJKLTnKimRaDfLzkdZcQN0O
-         yhKQ1DOrbZYICCUCx7cFxq0fQbI3q/V/4/IcFYnleE9gemq31ZU9e+Vf8sryx0qKVHu0
-         taudKvAkkTIflxzG55p9RIeN1ji5KjqbvTr8wRNt6/ybqVSm9CLEIHsh0B6c3nrqeJkb
-         kz2oJruSwXOeZdvyOieGQotwUPsfmJWgVM38LrcLHIVXo0UQdqgPLqOhyf9ErM1VP0Mq
-         kyD9+JIyR7g/q/CNR7jAn/+uArIZcSFGqY3L0dUPjQBvffcMuHTqB9eMgI79oKVC8wSH
-         /R1Q==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oc0lYZZen+n96H3YkJlz8amsnvCsXfd6yw7H3HRAv34=;
+        b=LvEPmb5gwSpnB2b/XfP2TsjWKUpKxjPvyNp/0TXuTe4dFBociwyBIFRmRBMgLufeqQ
+         JbU7CU+ASwWDDo1aahIXU8O8h5SOOSRK/N7ugORv963f/VE1GEuPnMhMlQm0dNeH/unJ
+         nZhQsjgzp0g4VX+AN+FU04VjYDYJp7WRZiDRl6Yk8NynNfO4fn8O01ME0GF3gijiDDkt
+         k/OamyyajXQvcH/bO9zXFot9OOwaauBMAUwcR/pb/W4OfhawaBwLPrHvpv3AsRGuYRqF
+         k9kdy25z5AKsLkQFzaEWhfsA7PJhpB9XiDCdiUa/axhtsSe6qASTK67wSRx9/5cXQE8v
+         g74g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc;
-        bh=/v3Gcn+hTL0SOyI/tztq8lNP5D0RrTqazuF4o/1KF3k=;
-        b=OXoi0Jw7HVvNcRlTB6vSVJeJouXG741tL6P3Z6LZZarPd1rRXV9xUkYxq76kGG9gXQ
-         aGQoYXsg8NFkD2EhYrZDJuoPlSs+2gNNUqG34p4t4ipCkeSpYynvFwmkfR+N6Q9N2Qb2
-         n0sWaCyh4R9xsGWz1E3cdwiFDhRRFrowuQcxAL2kmT3YgI7b7/RbvEUMi/Z4xr38BYRI
-         G+MihBRrbqCjWpDMepwxR/g3j9UAHgYRCJ4ZHYxLntZy8LKa5olGZVdapuVEL3ZA4FFv
-         Ad3Rl95RqxHVTh31rxeWO0FMgBCUUDgokQoETMC0F2WsPiA+5dogJPWZk2yOxxgtn5c1
-         oqag==
-X-Gm-Message-State: AJIora8xisGpsWUnRCIGwrK5mlBMMny7rjQGB3D0G8zgJIgojogcRhqY
-        4G5UFBVUZ1/GhpRJyPTjAA0=
-X-Google-Smtp-Source: AGRyM1v91WoHUfzBJ1uaof84UM74engDsn1pKS4xnYLdVfhv/5BBIuniD7LFRW3JxEk6r72ET/ecgw==
-X-Received: by 2002:a17:902:7089:b0:16c:91d7:e422 with SMTP id z9-20020a170902708900b0016c91d7e422mr27423533plk.73.1659027335302;
-        Thu, 28 Jul 2022 09:55:35 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id f77-20020a623850000000b00528d41a998csm1066688pfa.15.2022.07.28.09.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 09:55:34 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 28 Jul 2022 06:55:33 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        axboe@kernel.dk, ming.lei@redhat.com, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH RESEND v6 4/8] blk-throttle: fix io hung due to config
- updates
-Message-ID: <YuK/hXnFA+qu5EMB@slm.duckdns.org>
-References: <20220701093441.885741-1-yukuai1@huaweicloud.com>
- <20220701093441.885741-5-yukuai1@huaweicloud.com>
- <YuGGVxdlOVk/eF2l@slm.duckdns.org>
- <20220728093346.GA2281@blackbody.suse.cz>
- <0bbf3d0c-88c4-8120-3df3-960dda041864@huaweicloud.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oc0lYZZen+n96H3YkJlz8amsnvCsXfd6yw7H3HRAv34=;
+        b=DaY1OfmurZc7BU3HhYzvqPzXH2OYomSqpifayeTeQsIqvDhGXGLgkasxbA5P5/9fx4
+         OBZBoRpWpOuNXl9/aiUyfRbIWveMPPUgGlcrWLfH37xwgPgj4Ze+I3cjkygG7I6w4HaL
+         XxPq0/nTQRhGkDA5rvNQKMQlPaYT8RWDfis2PLyEAaHUxOz7iSgjgLk0OOna21aacj+C
+         ITLWpNbwYESlla/Jt2qmesDFj0HcC6BjTLhYfpWqdvUFF0+3XXU9M01gog8PmRF2ozRS
+         +os0RBpsnzoddRO9Sn/URACShf2tN87NnqRDyggYhwxpaTUusvgs4HgUEAQhmO07eNGp
+         iAFw==
+X-Gm-Message-State: ACgBeo0TYZq4iEA31sl8zbvXDfvo3GmfucFNdNowhEUS0vFuyEN//p5Q
+        jaosN1q6TJtO1LvVjuHe0smv4D8jUpS2vFEnOPk4/w==
+X-Google-Smtp-Source: AA6agR42EGEUyzYTo3gBZ8QlvPbpFDUMcDOY9xlNbtBF0J/wWPwVHlB4+Nl+tb/UgglFFTHYed3NhawdldcN4gc+Y2E=
+X-Received: by 2002:a81:6a07:0:b0:323:8614:10c2 with SMTP id
+ f7-20020a816a07000000b00323861410c2mr1192910ywc.191.1659027396641; Thu, 28
+ Jul 2022 09:56:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0bbf3d0c-88c4-8120-3df3-960dda041864@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <20220723224949.1089973-5-luzmaximilian@gmail.com> <20220726143005.wt4be7yo7sbd3xut@bogus>
+ <829c8fee-cae5-597d-933d-784b4b57bd73@gmail.com> <20220726154138.74avqs6iqlzqpzjk@bogus>
+ <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com> <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
+ <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com> <20220727132437.pjob3z2nyxsuxgam@bogus>
+ <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
+ <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com> <CAC_iWjLWBJLth26ifFfHvimProHZu_w5SjQNWSH_D2Fs_JXjbA@mail.gmail.com>
+ <b703f678-b2c5-cdeb-ac40-9646e043d1c3@gmail.com>
+In-Reply-To: <b703f678-b2c5-cdeb-ac40-9646e043d1c3@gmail.com>
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date:   Thu, 28 Jul 2022 19:56:00 +0300
+Message-ID: <CAC_iWjLrntWuJUzVuRi0ZOtG6JXNwz7SbS2mrqpuTgU5TV6rQA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 06:34:44PM +0800, Yu Kuai wrote:
-> Hi
-> 
-> 在 2022/07/28 17:33, Michal Koutný 写道:
-> > On Wed, Jul 27, 2022 at 08:39:19AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> > > I'm not quiet sure this is correct. What if the limit keeps changing across
-> > > different values? Then we'd be calculating the skipped amount based on the
-> > > last configuration only which would be incorrect.
-> > 
-> > When one change of configuration is correct, then all changes must be
-> > correct by induction. It's sufficient to take into account only the one
-> > old config and the new one.
-> > 
-> > This __tg_update_skipped() calculates bytes_skipped with the limit
-> > before the change and bytes_skipped are used (divided by) the new limit
-> > in tg_with_in_bps_limit().
-> > The accumulation of bytes_skipped across multiple changes (until slice
-> > properly ends) is proportional to how bytes_allowed would grow over
-> > time.
-> > That's why I find this correct (I admit I had to look back into my
-> > notes when this was first discussed).
-> > 
-> > HTH,
-> > Michal
-> > 
-> 
-> Hi, Tejun
-> 
-> Michal already explain it very well, please let me know if you still
-> thinks there are better ways.
+On Thu, 28 Jul 2022 at 15:49, Maximilian Luz <luzmaximilian@gmail.com> wrote:
+>
 
-Ah, I see, so it's integrating into the skipped counters across multiple
-updates. I think it can definitely use comments explaining how it's working
-but that looks okay.
+[...]
 
-Thanks.
+> >>
+> >>> I have an ancient branch somewhere that I can polish up and send an
+> >>> RFC [1],  but the way I enabled that was to install an empty config
+> >>> table from the firmware.  That empty table is basically an indication
+> >>> to the kernel saying "Hey I can't store variables, can you do that for
+> >>> me".
+> >>>
+> >>> Is there any chance we can do something similar on that device (or
+> >>> find a reasonable way of inferring that we need to replace some
+> >>> services).  That way we could at least have a common entry point to
+> >>> the kernel and leave out the DT changes.
+> >>>
+> >>> [1] https://git.linaro.org/people/ilias.apalodimas/net-next.git/log/?h=setvar_rt_optee_3
+> >>
+> >> I would very much like to avoid the need for special bootloaders. The
+> >> devices we're talking about are WoA devices, meaning they _should_
+> >> ideally boot just fine with EFI and ACPI.
+> >
+> > I've already responded to following email, but I'll repeat it here for
+> > completeness. It's not a special bootloader.  It's the opposite, it's
+> > a generic UEFI compliant bootloader which takes advantage of the fact
+> > EFI is extensible. We are doing something very similar in how we load
+> > our initrd via the EFI_LOAD_FILE2 protocol.  Whether Qualcomm can add
+> > that to their bootloaders is a different topic though.  But at some
+> > point we need to draw a line than keep overloading the DT because a
+> > vendor decided to go down it's own path.
+>
+> But still, you're asking users to install an extra thing in the boot
+> chain.
 
--- 
-tejun
+Not users.  EFI firmware implementations that want to support this in
+a generic way.
+
+> That's what I mean by "special". So the situation would then be
+> this: User needs a) GRUB (or something similar) for booting the kernel
+> (or dual-booting, ...), b) DTBLoader for loading the device-tree because
+> we don't support the ACPI Qualcomm provided, and c) your thing for EFI
+> variables and potentially other firmware fix-ups. b) and c) are both
+> things that "normal" users don't expect. IMHO we should try to get rid
+> of those "non-standard" things, not add more.
+
+But that's exactly why EFI is extensible .  You can have non standard
+functionality on your firmware for cases like this which doesn't need
+to land in the spec.
+
+>
+> >>   From an end-user perspective, it's annoying enough that we'll have to
+> >> stick with DTs for the time being due to the use of PEPs in ACPI. I
+> >> really don't want to add some special bootloader for fixups to that.
+> >> Also, this would just move the problem from kernel to bootloader.
+> >
+> > But it *is* a bootloader problem.  The bootloader is aware of the fact
+> > that it can't provide runtime services for X reasons and that's
+> > exactly why we are trying to set EFI_RT_PROPERTIES_TABLE correctly
+> > from the firmware.  All we are doing is install a config table to tell
+> > the OS "I can't do that, can you find a way around it?".
+>
+> Sure, but is making the Linux installation process more device
+> dependent and complicated really the best way to solve this?
+
+Isn't it device dependent already?  That boat has sailed already since
+we need to change the very definition of runtime services and replace
+them with OS specific ones.  If we add it on the DT, you'll end up
+with different DTs per OS and potentially per use case.  In my head
+the DTs should be part of the firmware (and authenticated by the
+firmware as well) instead of loading whatever we want each time.  By
+using a config table we can add a u64 (random thought),  that tells
+the kernel which TEE implementation will handle variable storage.  So
+we can have a common extension to boot loaders, which at least uses
+EFI interfaces to communicate the functionality.
+
+I really prefer this to adding it on a DT, but I am not that picky.
+Your email raises an important topic of replacing runtime services
+with OS specific ones,  which is unfortunately very much needed and we
+should fix that.
+
+Thanks
+/Ilias
+>
+> Regards,
+> Max

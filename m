@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32907583F27
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC070583F28
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 14:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237007AbiG1Mps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 08:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S237179AbiG1Mqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 08:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237340AbiG1Mpl (ORCPT
+        with ESMTP id S229725AbiG1Mqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 08:45:41 -0400
-Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED4A0248C3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:45:39 -0700 (PDT)
+        Thu, 28 Jul 2022 08:46:49 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA6C226AE2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 05:46:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=zFbZL
-        17nGL4pVWSrFgSLqXgwNxxFONbEFRuzb2D+CqY=; b=RE32iP5dk4SPFMxv31Pou
-        +Zd7v4nBa0j6gn+o7uKHHgqDuh7JwoyptrF0p803DNSO6OlwEFhI/tl4J8fDKkjZ
-        fL/8EHZ3PO1TGwa/1RJ4+Bo8Xmef1A1ipQnKWSelAMI7xy+PPDZAN8Jwe6rLB1MQ
-        0l2Mmj4vMWiCnGdFtJI59g=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=kbj3q
+        Tqnrg1aWomJ8FUCn9visdKTYiERh+eNV2ZOAfI=; b=lnZIBy2vMQJ+2fMYDRric
+        oHtUcDGBR50ePIXtA2WOVutVijYm3AAQ/Hr/BILheXDKrMFQp/R63PDOMQrcItfm
+        zamswVMIiwn1qOEWRfyyZ6Y5c4oblgMWuY61wrBJkhyc2WAkt51W4T+zQdBlJchT
+        Zj64K/HeSBGn8Ai8fCyo80=
 Received: from zd-ThinkPad-X390.kernelci.com (unknown [175.9.180.245])
-        by smtp14 (Coremail) with SMTP id EsCowAC31bG0hOJihOXfPg--.2209S2;
-        Thu, 28 Jul 2022 20:44:38 +0800 (CST)
+        by smtp11 (Coremail) with SMTP id D8CowADHHQrihOJiQy8BBQ--.1286S2;
+        Thu, 28 Jul 2022 20:45:25 +0800 (CST)
 From:   zhangduo <zduo006@163.com>
 To:     zduo006@163.com
 Cc:     anil.s.keshavamurthy@intel.com, davem@davemloft.net,
         linux-kernel@vger.kernel.org, mhiramat@kernel.org,
         naveen.n.rao@linux.ibm.com, zhangduo@kylinos.cn
-Subject: [PATCH 1/2] kprobes: fix the comments error
-Date:   Thu, 28 Jul 2022 20:44:27 +0800
-Message-Id: <20220728124427.59746-1-zduo006@163.com>
+Subject: [PATCH 2/2] kprobes: modify the copy_kprobe to make more clearly
+Date:   Thu, 28 Jul 2022 20:45:16 +0800
+Message-Id: <20220728124516.60621-1-zduo006@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EsCowAC31bG0hOJihOXfPg--.2209S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrAFyfKFW3uw4UZw15Xr17GFg_yoWxGwb_Cw
-        18KrW29r4Y9rW0vrn0kw4Fqrs2kry3WF4rC34UGFZ7tw43Jry5tFs8Wr1qqa93W34DGFWD
-        Aw15Wr4qqF43ZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRRNeoUUUUUU==
+X-CM-TRANSID: D8CowADHHQrihOJiQy8BBQ--.1286S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw1DGryxKFW5Aw1DGrWrGrg_yoW8Zr4kpF
+        s8Cw45tFWkXay8uFyqqw48Zr1Fkw47ZryxGrWYyw1Syr1UXr1UX3WIvrWUJF98GrZakr4S
+        yF10qrWjyrZ7Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRfHUkUUUUU=
 X-Originating-IP: [175.9.180.245]
-X-CM-SenderInfo: p2gx0iiqw6il2tof0z/1tbiYxZMc1aEKMWpJwAAs7
+X-CM-SenderInfo: p2gx0iiqw6il2tof0z/1tbiYxZMc1aEKMWpKAABs1
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,26 +54,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: zhangduo <zhangduo@kylinos.cn>
 
-fix the comments to 'Copy the insn slot of ap to p'
+  copy_kprobe() are called in init_aggr_kprobe() to copy opcode
+  and insn from 'p' to 'ap',but in copy_kprobe(p,ap) implemtation
+  'p' pass to 'struct kprobe *ap' , 'ap' pass to 'struct kprobe *p',
+  it looks strange, because p means orig kprobe instance, ap
+  means aggregator kprobe, not the same.  and before the add_new_kprobe()
+  calling used the opposite copy from 'ap' to 'p', so modify copy_kprobe's
+  parameter name as 'p_src' and 'p_dst' to fit all.
 
 Signed-off-by: zhangduo <zhangduo@kylinos.cn>
 ---
- kernel/kprobes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/kprobes.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index f214f8c08..4f3e84343 100644
+index 4f3e84343..8bcef7d3c 100644
 --- a/kernel/kprobes.c
 +++ b/kernel/kprobes.c
-@@ -1349,7 +1349,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
- 			    | KPROBE_FLAG_DISABLED;
+@@ -405,10 +405,10 @@ static inline bool kprobe_unused(struct kprobe *p)
+ }
+ 
+ /* Keep all fields in the kprobe consistent. */
+-static inline void copy_kprobe(struct kprobe *ap, struct kprobe *p)
++static inline void copy_kprobe(struct kprobe *p_dst, struct kprobe *p_src)
+ {
+-	memcpy(&p->opcode, &ap->opcode, sizeof(kprobe_opcode_t));
+-	memcpy(&p->ainsn, &ap->ainsn, sizeof(struct arch_specific_insn));
++	memcpy(&p_dst->opcode, &p_src->opcode, sizeof(kprobe_opcode_t));
++	memcpy(&p_dst->ainsn, &p_src->ainsn, sizeof(struct arch_specific_insn));
+ }
+ 
+ #ifdef CONFIG_OPTPROBES
+@@ -1277,7 +1277,7 @@ static int add_new_kprobe(struct kprobe *ap, struct kprobe *p)
+ static void init_aggr_kprobe(struct kprobe *ap, struct kprobe *p)
+ {
+ 	/* Copy the insn slot of 'p' to 'ap'. */
+-	copy_kprobe(p, ap);
++	copy_kprobe(ap, p);
+ 	flush_insn_slot(ap);
+ 	ap->addr = p->addr;
+ 	ap->flags = p->flags & ~KPROBE_FLAG_OPTIMIZED;
+@@ -1350,7 +1350,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
  	}
  
--	/* Copy the insn slot of 'p' to 'ap'. */
-+	/* Copy the insn slot of 'ap' to 'p'. */
- 	copy_kprobe(ap, p);
+ 	/* Copy the insn slot of 'ap' to 'p'. */
+-	copy_kprobe(ap, p);
++	copy_kprobe(p, ap);
  	ret = add_new_kprobe(ap, p);
  
+ out:
 -- 
 2.25.1
 

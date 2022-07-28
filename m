@@ -2,142 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E028E583A7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92E1583A82
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 10:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235228AbiG1IlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 04:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S235237AbiG1Imb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 04:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234631AbiG1IlJ (ORCPT
+        with ESMTP id S234631AbiG1Im3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 04:41:09 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E040A4D802
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:41:07 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id a13so1197970ljr.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:41:07 -0700 (PDT)
+        Thu, 28 Jul 2022 04:42:29 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12262A60
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:42:28 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id t28so977384vsr.11
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 01:42:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=qNuYEjp7WeXIJ9ePRdLMLsHm6eHVbqcc9mreMlXusBM=;
-        b=T6rixmhUatWGToZ2WePBF7ExJxbbNLXwrPSTZsIotzvYO5UME86v74npwnrBqHJPms
-         fOQczzq5bJ4diI6T0lTWdkv8wfVEJerbNqKV/tO18z/j50ofdkcaeWzdwHj+ncxFJSQT
-         AUby0P0gqCd6YU0W8j3j5Vd4eJ/a+hYdxtUqTAXS3bdL4EKu024EsMfCL7jGTD+Am1gJ
-         td47eKhbYeglYbBBbNVwOLje5bVN6OCWtimYrifFPvKZgHZPXTS7jgAzkzfBItrupe6t
-         57FGTYN1Z6g0diW+wmfqdn/cXW/eiOGxpI3ZxCKbhFRbMVIvhujaaXus1U8uCDzN0qy8
-         tGwQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L69tTE2sH+PMx280GbvtDkw3gNuAyH0o9/0HeA0+XoA=;
+        b=j/c5UpIF73D7K3bcNVXSTIOMPDPw1ZZIwrFEIHGEmQ2hfCs63+1CtBLnwvtBjNcHIT
+         W/R6yLZZlLhLjUBi0wstREns8Vn6JQNPqmYAJoK9jU3jJhhuXZT5P6P3Jeup5fcHa4mm
+         xSzvcnkeWa1v1ggGp791wpOThlGf35ucdfr8bqJeQcUKz1speVD2qtWFDYGJ41Ay1DXH
+         lNSj+PW0I4YOKeH0heh12zUvSg+cR3/8+X0U1mVkoRbdHUX+hyX6j1g/CymkL0M17yOF
+         b4ePaT4/tswlLBf3LDopM8gfJZvgN9qdMbwbrN2ql7ZWxQW7rhlmpQLBfC8Y7Q/ynbfR
+         3d8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qNuYEjp7WeXIJ9ePRdLMLsHm6eHVbqcc9mreMlXusBM=;
-        b=mpsiwnEzD+DVBivWXJWwzzjRQRpG5jdF1Moh6NdCz3t+ZkoIlzQiX9ALmvwLBy80Ue
-         cj7JY5+FA1t6sIsmtKpJ5AwL7eNXBKTAMenS4m2WkF+pNn25ES7+UuHF8bfOL7jLP9qc
-         wVaSN+HqYQ3X0bDgiM2ALjUJr6cpbjYt4Pna2jqPemErKcy/Cmrj+SmovUAKpKQC+Wo1
-         NlTCQNOxNPsgqd+uCN2EUvthpiuSbu5ICLQYXAFxOZpv1L01xog9vB2JGEhm9t8QARpu
-         6Lxvi8xSCx3iWoHCpyufXv4uk1QNWMLny6AMvxtXM5HqRTS8rlq2XTSrJQ7P2rCWzZGp
-         sHgw==
-X-Gm-Message-State: AJIora+jV5jDUzmnGbvkFq5k5rvI+IxHgLdB44jem1KwvlznMwtKg5dV
-        aJcu939gcMhyZb2YgGPPmwz9Ng==
-X-Google-Smtp-Source: AGRyM1sDoEXB5/FNKjHlS/zvqoBlUUeT2luECMbU/cwhNDKKkdOvFAaAuNscnU+XY5m7mUFR1n8DRg==
-X-Received: by 2002:a2e:a58d:0:b0:25e:d96:3281 with SMTP id m13-20020a2ea58d000000b0025e0d963281mr5597695ljp.379.1658997665641;
-        Thu, 28 Jul 2022 01:41:05 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id t20-20020a2e8e74000000b0025a724f2935sm10541ljk.137.2022.07.28.01.41.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 01:41:05 -0700 (PDT)
-Message-ID: <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
-Date:   Thu, 28 Jul 2022 10:41:03 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L69tTE2sH+PMx280GbvtDkw3gNuAyH0o9/0HeA0+XoA=;
+        b=78FOPjYoTx0LiEoeQsRyAigQ/XkXnfNCGr0am7tBTUGDxGpxEqUY16qL4WbW92y2Sh
+         hZWeeIaPf9VqvwmHBUyzKfh2Keqc0OJXH7vCDJ1gyuZ6OcfevWvs1nMHF7CcMSE5fIly
+         pHqp6NljnINK/7LbWNcU50T9PJ+YuhfMrUPODAP4VbA5PoxywG7e099G3ZbRMFi6zvRI
+         rlzLaIRGHwS6g2kZNmOoWAhjXIKbr24s3xqcuXfS0LNhTXzL4PflKJOJ53lOBD3gxSHp
+         TqIutCGFnGEIJvofMBnd9iPzM0Q1Fok3GEVgIOAm+u+4wTwm+hwf1xeUaaxu+H4bKOaO
+         GGFQ==
+X-Gm-Message-State: AJIora+wjrjLvc6w9lHO1r6KEMqB0o7IuwoLihmAXpd23gb2gGcc1vxx
+        +nqxl63+DA/9EbmvosJSgbbufZoanww437J0BwaDpg==
+X-Google-Smtp-Source: AGRyM1vmeHmNdG+8W3+/i8ug6s6VPZStYQfUcfiEivq89bhT6FaV5XmJFQju73GNHE+yl0qP0wG4zWViYFrmeDzIW98=
+X-Received: by 2002:a67:c191:0:b0:358:5ca6:f98d with SMTP id
+ h17-20020a67c191000000b003585ca6f98dmr6818737vsj.71.1658997747795; Thu, 28
+ Jul 2022 01:42:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
- controller bindings
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <20220728054202.6981-2-yu.tu@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220728054202.6981-2-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220713005221.1926290-1-davidgow@google.com> <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
+ <Ytbw1T6uspICqj5B@bombadil.infradead.org> <CABVgOSkpT2kqVec2F7BsTF5tyABO43bseETC2Dz238zN+sTfQw@mail.gmail.com>
+ <YthllWFPAjq5YHpL@bombadil.infradead.org>
+In-Reply-To: <YthllWFPAjq5YHpL@bombadil.infradead.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 28 Jul 2022 16:42:16 +0800
+Message-ID: <CABVgOSnYQyRg8+nysnRAqn9-jEG+UzEdU7gSUOOEzU-aqYLSMQ@mail.gmail.com>
+Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-modules@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/2022 07:42, Yu Tu wrote:
-> Add new clock controller compatible and dt-bindings header for the
-> Everything-Else domain of the S4 SoC.
-> 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+On Thu, Jul 21, 2022 at 4:29 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Wed, Jul 20, 2022 at 05:26:02PM +0800, David Gow wrote:
+> > On Wed, Jul 20, 2022 at 1:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > >
+> > > On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
+> > > > On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
+> > > > >
+> > > > > The new KUnit module handling has KUnit test suites listed in a
+> > > > > .kunit_test_suites section of each module. This should be loaded when
+> > > > > the module is, but at the moment this only happens if KUnit is built-in.
+> > > > >
+> > > > > Also load this when KUnit is enabled as a module: it'll not be usable
+> > > > > unless KUnit is loaded, but such modules are likely to depend on KUnit
+> > > > > anyway, so it's unlikely to ever be loaded needlessly.
+> > > >
+> > > > This seems reasonable to me.
+> > > >
+> > > > Question: what happens in this case?
+> > > > 1. insmod <test-module>
+> > > > 2. insmod kunit
+> > > > 3. rmmod <test-module>
+> > > >
+> > > > I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
+> > > > for <test-module>, I think?
+> > > > But we never called __kunit_test_suites_init().
+> > > > My fear is what breaks as a result of this precondition break.
+> >
+> > I don't think this should be possible: any module with KUnit tests
+> > will depend on the 'kunit' module (or, at least, kunit symbols), so
+> > shouldn't load without kunit already present.
+> >
+> > If modprobe is used, kunit will automatically be loaded. If insmod is
+> > used directly, loading the first module should error out with
+> > something like:
+> > [   82.393629] list_test: loading test module taints kernel.
+> > [   82.409607] list_test: Unknown symbol kunit_binary_ptr_assert_format (err -2)
+> > [   82.409657] list_test: Unknown symbol kunit_do_failed_assertion (err -2)
+> > [   82.409799] list_test: Unknown symbol kunit_binary_assert_format (err -2)
+> > [   82.409820] list_test: Unknown symbol kunit_unary_assert_format (err -2)
+> > insmod: ERROR: could not insert module
+> > /lib/modules/5.19.0-rc1-15284-g9ec67db0c271/kernel/lib/list-test.ko:
+> > Unknown symbol in module
+>
+> This can be fixed with a request_module() call. And since this is a
+> generic requirement, you can have the wrappers do it for you.
+>
 
+I'm not convinced that this is worth the trouble, particularly since
+KUnit needs to be loaded already before any test-specific code in a
+module is run. _Maybe_ we could put it in the code which looks for the
+.kunit_test_suites section, but even then it seems like a bit of an
+ugly hack.
 
+Personally, I'm not particularly concerned about test modules failing
+to load if KUnit isn't already present -- if people want all of a
+module's dependencies loaded, that's what modprobe is for.
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c1abc53f9e91..f872d0c0c253 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
->  F:	drivers/clk/meson/
->  F:	include/dt-bindings/clock/gxbb*
->  F:	include/dt-bindings/clock/meson*
-> +F:	include/dt-bindings/clock/s4-clkc.h
->  
->  ARM/Amlogic Meson SoC Crypto Drivers
->  M:	Corentin Labbe <clabbe@baylibre.com>
-> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
-> new file mode 100644
-> index 000000000000..b686c8877419
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/s4-clkc.h
+That being said, if you feel particularly strongly about it, this is
+something we can look at. Let's do so in a separate patch though: this
+one does fix a regression as-is.
 
-Filename with vendor prefix, so:
-amlogic,s4-clkc.h
+> > Maybe you could get into some trouble by force-removing modules at
+> > various points, but you're in undefined behaviour generally at that
+> > point, so I don't think there's much point going out-of-our-way to try
+> > to support that.
+>
+> You can prevent that by refcounting the kunit module / symbols, by each test.
+>
 
-> @@ -0,0 +1,146 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> +/*
-> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
-> + * Author: Yu Tu <yu.tu@amlogic.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLOCK_S4_CLKC_H
-> +#define _DT_BINDINGS_CLOCK_S4_CLKC_H
-> +
-> +/*
-> + * CLKID index values
-> + */
-> +
-> +#define CLKID_FIXED_PLL			1
-> +#define CLKID_FCLK_DIV2			3
-> +#define CLKID_FCLK_DIV3			5
-> +#define CLKID_FCLK_DIV4			7
-> +#define CLKID_FCLK_DIV5			9
-> +#define CLKID_FCLK_DIV7			11
+Again, I don't think KUnit is any more special than any other module
+here. I don't think we need to do this ourselves, as it shouldn't be
+possible to remove kunit without first removing any dependent modules.
 
-Why these aren't continuous? IDs are expected to be incremented by 1.
+Of course, happy to look into this again if anyone can come up with an
+actual crash, but I'd rather get this fix in first. At the very least,
+this patch shouldn't introduce any _new_ issues.
 
-> +
-> +#endif /* _DT_BINDINGS_CLOCK_S4_CLKC_H */
-
-
-Best regards,
-Krzysztof
+Cheers,
+-- David
+>   Luis

@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F948584893
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57146584898
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbiG1XMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 19:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
+        id S233517AbiG1XPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 19:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiG1XME (ORCPT
+        with ESMTP id S231174AbiG1XPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 19:12:04 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA8D4C638
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:12:02 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id h8so4055351wrw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:12:02 -0700 (PDT)
+        Thu, 28 Jul 2022 19:15:44 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF767393A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:15:43 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id z23so5606911eju.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:15:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iOMs7BLkqwBB1UyXezQZ04RHJK4IHCUkM0ubSij7BbY=;
-        b=TvgWxQ1YU4CH0+n1gsKJEid55d9jKIcmFtMQOw0CZFaHfwluaTrU+wGzMpSwJo2fdO
-         JpKRA8uvvt5OAJt/ocPjjpo19sfI3aFcSrN0SBWMLeR951R1yh67AzlzTC62HI3WtPlJ
-         zWfGmw7s3Q+D4Y+fDQpO4mWBW4TCG80pXnF2Dqs2Xlg+0cGDedBUs5qC6oSwuV0ZGtrT
-         dJqHSXbF+wOy3WDYisoHFmTipvNOrOxJACnGPfDSgjAZOQz5swY8NVyf7oXWEZSsth4n
-         SqznWV5UJZBkf6EqyaSSLvbKBtSMEYlqbIeWoU93f7WAZe+ATFd2bu7+8IIRV9uefqCS
-         wbcw==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=EMgR3r/5USP32zGR0vJlVbcUsNeEC3RV1rZfC68/TZ4=;
+        b=DFmAxk+++JyHq3e6SsxFu2Lej6OEn+mKsyCIELvgqpY6A6MW0gKmnVGyFlju8Cyrl+
+         atep2zO0iCCeUo75O3924iv/YN5TyG0aeEqRLknHNgFtg+9u8hQGoqwYPH6oJps5xCCX
+         qTQVZbCWgsROJPygaqSZTDwBZ8XyOzeRPsInQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iOMs7BLkqwBB1UyXezQZ04RHJK4IHCUkM0ubSij7BbY=;
-        b=x5NillEFN3v8D0kCBe/FzF+wPcaCfINMhHAReI3lpdrh1qSEDuf5jvB0Eu7+Nw4ilO
-         0Oq1dnbxqnRkVVMFMXtkbgYSISSG0RypoyJM1KyKbDJJelddirMwaCGCLJzNXdN/0jBh
-         STBHf2WSEKrZ3r6VQ35FG5C/bAQBqbDFk2uy8ju78yl/Rdj+U2LDdmAhnU+LiDF3W/8T
-         vSM2iuiQZgxHvJ+8xUU/lWSm3UbMDzUQszKJ63+V1jPzsIbedKTVfEnC0vV53z7ALnoC
-         n/rVp8RgORfZsMzfYYaltAEoTh16pLU+ahXVJPbJg1/oUXk5OFP3fOKt8Z4OUkC3oxQr
-         3Y9Q==
-X-Gm-Message-State: ACgBeo2/bWJSZsrnKahMW2D68Svq0xtJQMVc5pmdRnpKugPR9HpjlQNP
-        DzX8X79aTu7SasN4GGrfTTOppA==
-X-Google-Smtp-Source: AA6agR6BuhN5Yz1o0mDQQ2XeVvUQLLBpBJKf9VdtE9hzY5hN+7oicLyfoD+qYRPAxwy8Ry9O0rHoDw==
-X-Received: by 2002:a05:6000:80b:b0:21e:d62e:b282 with SMTP id bt11-20020a056000080b00b0021ed62eb282mr614545wrb.557.1659049920763;
-        Thu, 28 Jul 2022 16:12:00 -0700 (PDT)
-Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
-        by smtp.gmail.com with ESMTPSA id m20-20020a056000181400b0021e571a99d5sm2089419wrh.17.2022.07.28.16.11.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 16:12:00 -0700 (PDT)
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, dan.carpenter@oracle.com,
-        paskripkin@gmail.com, martin@kaiser.cx, straube.linux@gmail.com,
-        fmdefrancesco@gmail.com, abdun.nihaal@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] staging: r8188eu: convert rtw_set_802_11_add_wep error code semantics
-Date:   Fri, 29 Jul 2022 00:11:50 +0100
-Message-Id: <20220728231150.972-3-phil@philpotter.co.uk>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220728231150.972-1-phil@philpotter.co.uk>
-References: <20220728231150.972-1-phil@philpotter.co.uk>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=EMgR3r/5USP32zGR0vJlVbcUsNeEC3RV1rZfC68/TZ4=;
+        b=ahYPBiYPzHQ70voDEhVAd3n64F15VJqZmoBQqatQB/dASbTv0159+vCtaRyoZAWoAn
+         UZi3/ZRl2b/bxeum2KFpWwJD28x1lmFKM+W3GIIkt5A6f4NmoDgEomOYLKwciGelNEMX
+         vF4KF6EXdxgALQiyR4dmMkYp4Nkgx6Z4oxDzYvwjgcNwKUj5GNrphBPy38ZLEzf7DkOF
+         sKW2BHSBXrWx9wS3XfUCau/3Y4a29WHHpW/6On0QlIDgdi6hZMEVJlxCJqeX/4oEY1XJ
+         qkhp4p38L4kFO6so93wF9bHsvGAUmpA2k5q1jf2p/mlioted7dVMnDKr6Grqolg3d7qF
+         ZYVg==
+X-Gm-Message-State: AJIora9Rtjgt5QkCeok8asLLmSsaK4Y6kYpflPJZcJflhzRQ2LYxoIog
+        KD7kcj8mhjrEM1QM2HDWIjWjsucKn1YUsETg
+X-Google-Smtp-Source: AGRyM1uOWHqRUJ3aia5+thXQL1yAgsD6KN/KsroZvC8i9qCBMC/PxUf3TvCz/sJ1pVMFi6dj14B5Yw==
+X-Received: by 2002:a17:906:93ef:b0:72b:44e2:bdd8 with SMTP id yl15-20020a17090693ef00b0072b44e2bdd8mr845536ejb.192.1659050141693;
+        Thu, 28 Jul 2022 16:15:41 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id y6-20020a1709064b0600b0072fa1571c9asm919731eju.104.2022.07.28.16.15.40
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 16:15:41 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso3315209wma.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:15:40 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
+ g16-20020a05600c4ed000b003a33ef3c8d1mr951437wmq.154.1659050140559; Thu, 28
+ Jul 2022 16:15:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
+In-Reply-To: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 28 Jul 2022 16:15:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgdnnAmDopTKXbS5u3Ty8GgAfuFOSOycsCfe6pSAqunHg@mail.gmail.com>
+Message-ID: <CAHk-=wgdnnAmDopTKXbS5u3Ty8GgAfuFOSOycsCfe6pSAqunHg@mail.gmail.com>
+Subject: Re: [GIT PULL 0/6] SoC branches for 5.20
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     SoC Team <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,98 +74,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the rtw_set_802_11_add_wep function to use 0 on success and an
-appropriate error code on error. Also convert return type to int to allow
-negative return values. For the first failure block where keyid >= 4,
-use -EOPNOTSUPP as this is most appropriate, and for the second failure
-block where rtw_set_key is called, use -ENOMEM, as this is the cause of
-failure in that function anyway - in due course, rtw_set_key can be
-converted as well.
+On Thu, Jul 28, 2022 at 3:28 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> This is another large merge window for us, with over 1000 patches from 177
+> contributors. I'm sending these early since I'll be out of office for the next
+> few days.
 
-Finally, convert both call-sites of rtw_set_802_11_add_wep to use the
-new semantics, passing through the error code where we can for one of
-them.
+Hmm. I'm missing 2/6. I don't see it on lore either, so I don't think
+the problem is on my end..
 
-This gets the driver closer to removal of the non-standard _SUCCESS and
-_FAIL definitions, which are inverted compared to the standard in-kernel
-error code mechanism.
-
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
----
- drivers/staging/r8188eu/core/rtw_ioctl_set.c    | 8 ++++----
- drivers/staging/r8188eu/include/rtw_ioctl_set.h | 2 +-
- drivers/staging/r8188eu/os_dep/ioctl_linux.c    | 5 ++---
- 3 files changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-index 17f6bcbeebf4..a5b5d7f6a864 100644
---- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-+++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-@@ -390,16 +390,16 @@ u8 rtw_set_802_11_authentication_mode(struct adapter *padapter, enum ndis_802_11
- 	return ret;
- }
- 
--u8 rtw_set_802_11_add_wep(struct adapter *padapter, struct ndis_802_11_wep *wep)
-+int rtw_set_802_11_add_wep(struct adapter *padapter, struct ndis_802_11_wep *wep)
- {
- 	int		keyid, res;
- 	struct security_priv *psecuritypriv = &padapter->securitypriv;
--	u8		ret = _SUCCESS;
-+	int		ret = 0;
- 
- 	keyid = wep->KeyIndex & 0x3fffffff;
- 
- 	if (keyid >= 4) {
--		ret = false;
-+		ret = -EOPNOTSUPP;
- 		goto exit;
- 	}
- 
-@@ -424,7 +424,7 @@ u8 rtw_set_802_11_add_wep(struct adapter *padapter, struct ndis_802_11_wep *wep)
- 	res = rtw_set_key(padapter, psecuritypriv, keyid, 1);
- 
- 	if (res == _FAIL)
--		ret = false;
-+		ret = -ENOMEM;
- exit:
- 
- 	return ret;
-diff --git a/drivers/staging/r8188eu/include/rtw_ioctl_set.h b/drivers/staging/r8188eu/include/rtw_ioctl_set.h
-index 7365079c704f..761b30bdb8ec 100644
---- a/drivers/staging/r8188eu/include/rtw_ioctl_set.h
-+++ b/drivers/staging/r8188eu/include/rtw_ioctl_set.h
-@@ -11,7 +11,7 @@ typedef u8 NDIS_802_11_PMKID_VALUE[16];
- u8 rtw_set_802_11_authentication_mode(struct adapter *adapt,
- 				      enum ndis_802_11_auth_mode authmode);
- u8 rtw_set_802_11_bssid(struct adapter*adapter, u8 *bssid);
--u8 rtw_set_802_11_add_wep(struct adapter *adapter, struct ndis_802_11_wep *wep);
-+int rtw_set_802_11_add_wep(struct adapter *adapter, struct ndis_802_11_wep *wep);
- u8 rtw_set_802_11_disassociate(struct adapter *adapter);
- u8 rtw_set_802_11_bssid_list_scan(struct adapter*adapter,
- 				  struct ndis_802_11_ssid *pssid,
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 7f91dac2e41b..4d8dbc2a9ef2 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -422,8 +422,7 @@ static int wpa_set_encryption(struct net_device *dev, struct ieee_param *param,
- 		pwep->KeyIndex |= 0x80000000;
- 		memcpy(pwep->KeyMaterial,  param->u.crypt.key, pwep->KeyLength);
- 		if (param->u.crypt.set_tx) {
--			if (rtw_set_802_11_add_wep(padapter, pwep) == (u8)_FAIL)
--				ret = -EOPNOTSUPP;
-+			ret = rtw_set_802_11_add_wep(padapter, pwep);
- 		} else {
- 			if (wep_key_idx >= WEP_KEYS) {
- 				ret = -EOPNOTSUPP;
-@@ -1613,7 +1612,7 @@ static int rtw_wx_set_enc(struct net_device *dev,
- 
- 	memcpy(wep.KeyMaterial, keybuf, wep.KeyLength);
- 
--	if (!rtw_set_802_11_add_wep(padapter, &wep)) {
-+	if (rtw_set_802_11_add_wep(padapter, &wep)) {
- 		if (rf_on == pwrpriv->rf_pwrstate)
- 			ret = -EOPNOTSUPP;
- 		goto exit;
--- 
-2.36.1
-
+            Linus

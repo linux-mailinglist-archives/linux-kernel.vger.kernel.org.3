@@ -2,105 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489D958381A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 07:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C5958381B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 07:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbiG1FJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 01:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S232157AbiG1FJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 01:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiG1FJb (ORCPT
+        with ESMTP id S229637AbiG1FJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 01:09:31 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F9543306
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:09:30 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id q23so1254812lfr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6yrB/ZBc4AaM3PTfukDFFQkMrZq8R3ioHC18SLmmnCE=;
-        b=SFbshZNfUR6fj3yOlseyUXmASXN7Ndx1R2N114OGFVKoPkMztestZ8+XD0sQ8vwgbT
-         NNC3vqpUnhH7bkcbj4maY6IXvwePDvlrKkLUrjvykaK3iTUGsv0aAL7LWQzm6+terH77
-         xxToBOr6pza3KlooBagacWXTgLIyaz+TGKQfKxcMLyfQS1b3zbRISM7lYte8ubSx7s3H
-         hebKfPmgsldIC5ZtXBUmasGm1Tneynr/dyp58j3UdEEj12QffQcZYq1+3Is3iVzBbPkA
-         lyvpmc51URJu9nZX6yp6sQ6i57IFy5MKRCncvHuHhxCx6eiKA5RB0C+ZwPrEbPBezUk0
-         oiEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6yrB/ZBc4AaM3PTfukDFFQkMrZq8R3ioHC18SLmmnCE=;
-        b=LKpcAXqIXxwFPSFDa12Kpr01WVL+Y4YBGL2ECZEurUi1+8pXjkIfXwkZGEsY0s8+VU
-         YMP2a090Xyg2dsZp9HleNSuInk5+kWbz2xMgT92PApnYFWbyTazqAqCyGSPvJ805pFwc
-         9LoCJgRhZ5PJL0Mzxyi0pqI7p63Px8y5Pvs5EZwd2or5h5/9RdauUPPhGVeJrgZdzliF
-         ZsNLdLyPhzilHd6ujIOscUEOXuwFg7y/lnlJg8vZI5zAgatQcMhRmUcELAUqNFAUYT6B
-         RTWktQIms95RlwSXj2niK5UGkzoawSIQBJOGhdUXUgLdy9oGIfIgZKBxW/Ee7LHOZjeO
-         E5aQ==
-X-Gm-Message-State: AJIora+4W1YCQxjSmS1EV9/2fwbcZV50fp6vOHY+XLuINhiWjD6oX26B
-        7g/B8K/b79vqFE5JCly1XtIdOg==
-X-Google-Smtp-Source: AGRyM1ukyRHrsKJyCxB1lHW61Pb2+N2oTKS6DJ1xfcjXT7zFr/hyTS5v2MYD/uVnObDEvnDV+pCWoA==
-X-Received: by 2002:a19:6715:0:b0:48a:be20:6ffd with SMTP id b21-20020a196715000000b0048abe206ffdmr1652390lfc.383.1658984968405;
-        Wed, 27 Jul 2022 22:09:28 -0700 (PDT)
-Received: from localhost (91-154-92-55.elisa-laajakaista.fi. [91.154.92.55])
-        by smtp.gmail.com with ESMTPSA id 3-20020ac24843000000b0048ac922aba2sm6419lfy.103.2022.07.27.22.09.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 22:09:27 -0700 (PDT)
-From:   Jarkko Sakkinen <jarkko@profian.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jarkko Sakkinen <jarkko@profian.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Harald Hoyer <harald@profian.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>,
-        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)),
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT))
-Subject: [PATCH] KVM: SVM: Dump Virtual Machine Save Area (VMSA) to klog
-Date:   Thu, 28 Jul 2022 08:09:19 +0300
-Message-Id: <20220728050919.24113-1-jarkko@profian.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 28 Jul 2022 01:09:47 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBC04330E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Jul 2022 22:09:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658984986; x=1690520986;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=R/MLE1I3N6MphxUQrwD8V3PrgFgijQNUcXB8tMpsx7I=;
+  b=ThxWlaQyyp8RafYCCZ8tJ7oBuG5uKSY6QJ1kbHa+15Dl/555IMr9CYzD
+   EBRbdqRxlmtb/cs166KoVVUzMwHb2yge49VX0wpcFwAUuaLinydLnmM61
+   /ijrboiwBGjiWGmdQxKtzpcJ5VO8rPL+Jkacf/Starjij2Nfp082dgnbL
+   2yA+wIw/2RRn4bWUxSfLBjVOFjQnUjuNzjTSwkd4OhOwtUM/THpJrHliC
+   r06IyFxz068/TXsX/CH84PK+qXtnY66WdyvOlJAE4jjjs5F4Ld/2IlPPk
+   U5UBLLaxliZ2I+NKsjvi6v4MZQMlXBtnCzXOCLaqqV2TBTjbqUVjcR9zi
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="275302901"
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="275302901"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 22:09:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
+   d="scan'208";a="633497920"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 27 Jul 2022 22:09:45 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGvmK-0009hs-0y;
+        Thu, 28 Jul 2022 05:09:44 +0000
+Date:   Thu, 28 Jul 2022 13:09:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/tracing_multi_4 24/34] kernel/bpf/syscall.c:3157:22:
+ error: implicit declaration of function 'bpf_trampoline_multi_detach'
+Message-ID: <202207281336.jdMajwn0-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Virtual Machine Save Area (VMSA) is essential in troubleshooting
-attestation, dump it to the klog with the KERN_DEBUG level of priority.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_4
+head:   1637b6b5bec11596e52cdc0a6eadfa45a15276c3
+commit: ddb4a6defabce7658e7c6be7397bd5e714279b48 [24/34] bpf: Add support for tracing multi link
+config: riscv-randconfig-r042-20220728 (https://download.01.org/0day-ci/archive/20220728/202207281336.jdMajwn0-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=ddb4a6defabce7658e7c6be7397bd5e714279b48
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tracing_multi_4
+        git checkout ddb4a6defabce7658e7c6be7397bd5e714279b48
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/bpf/ kernel/trace/
 
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Suggested-by: Harald Hoyer <harald@profian.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@profian.com>
----
- arch/x86/kvm/svm/sev.c | 3 +++
- 1 file changed, 3 insertions(+)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 0c240ed04f96..6d44aaba321a 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -603,6 +603,9 @@ static int sev_es_sync_vmsa(struct vcpu_svm *svm)
- 	save->xss  = svm->vcpu.arch.ia32_xss;
- 	save->dr6  = svm->vcpu.arch.dr6;
- 
-+	pr_debug("Virtual Machine Save Area (VMSA):\n");
-+	print_hex_dump(KERN_CONT, "", DUMP_PREFIX_NONE, 16, 1, save, sizeof(*save), false);
-+
- 	return 0;
- }
- 
+All errors (new ones prefixed by >>):
+
+   kernel/bpf/syscall.c: In function 'bpf_prog_load':
+   kernel/bpf/syscall.c:2523:22: error: implicit declaration of function 'is_tracing_multi' [-Werror=implicit-function-declaration]
+    2523 |         multi_func = is_tracing_multi(attr->expected_attach_type);
+         |                      ^~~~~~~~~~~~~~~~
+   In file included from arch/riscv/include/asm/bug.h:83,
+                    from include/linux/ktime.h:26,
+                    from include/linux/timer.h:6,
+                    from include/linux/workqueue.h:9,
+                    from include/linux/bpf.h:10,
+                    from kernel/bpf/syscall.c:4:
+   kernel/bpf/syscall.c: In function 'bpf_tracing_multi_link_release':
+>> kernel/bpf/syscall.c:3157:22: error: implicit declaration of function 'bpf_trampoline_multi_detach' [-Werror=implicit-function-declaration]
+    3157 |         WARN_ON_ONCE(bpf_trampoline_multi_detach(&tr_link->tp, tr_link->id));
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:110:32: note: in definition of macro 'WARN_ON_ONCE'
+     110 |         int __ret_warn_on = !!(condition);                      \
+         |                                ^~~~~~~~~
+   kernel/bpf/syscall.c: In function 'bpf_tracing_multi_link_dealloc':
+>> kernel/bpf/syscall.c:3165:9: error: implicit declaration of function 'bpf_tramp_id_put'; did you mean 'bpf_trampoline_put'? [-Werror=implicit-function-declaration]
+    3165 |         bpf_tramp_id_put(tr_link->id);
+         |         ^~~~~~~~~~~~~~~~
+         |         bpf_trampoline_put
+   kernel/bpf/syscall.c: In function 'bpf_tracing_multi_attach':
+>> kernel/bpf/syscall.c:3328:14: error: implicit declaration of function 'bpf_tramp_id_alloc'; did you mean 'bpf_tramp_id_resolve'? [-Werror=implicit-function-declaration]
+    3328 |         id = bpf_tramp_id_alloc(cnt);
+         |              ^~~~~~~~~~~~~~~~~~
+         |              bpf_tramp_id_resolve
+   kernel/bpf/syscall.c:3328:12: warning: assignment to 'struct bpf_tramp_id *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    3328 |         id = bpf_tramp_id_alloc(cnt);
+         |            ^
+>> kernel/bpf/syscall.c:3369:15: error: implicit declaration of function 'bpf_trampoline_multi_attach'; did you mean 'bpf_tracing_multi_attach'? [-Werror=implicit-function-declaration]
+    3369 |         err = bpf_trampoline_multi_attach(&link->tp, id);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |               bpf_tracing_multi_attach
+   cc1: some warnings being treated as errors
+
+
+vim +/bpf_trampoline_multi_detach +3157 kernel/bpf/syscall.c
+
+  3151	
+  3152	static void bpf_tracing_multi_link_release(struct bpf_link *link)
+  3153	{
+  3154		struct bpf_tracing_multi_link *tr_link =
+  3155			container_of(link, struct bpf_tracing_multi_link, link);
+  3156	
+> 3157		WARN_ON_ONCE(bpf_trampoline_multi_detach(&tr_link->tp, tr_link->id));
+  3158	}
+  3159	
+  3160	static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
+  3161	{
+  3162		struct bpf_tracing_multi_link *tr_link =
+  3163			container_of(link, struct bpf_tracing_multi_link, link);
+  3164	
+> 3165		bpf_tramp_id_put(tr_link->id);
+  3166		kfree(tr_link);
+  3167	}
+  3168	
+  3169	static void bpf_tracing_multi_link_show_fdinfo(const struct bpf_link *link,
+  3170						       struct seq_file *seq)
+  3171	{
+  3172		struct bpf_tracing_multi_link *tr_link =
+  3173			container_of(link, struct bpf_tracing_multi_link, link);
+  3174	
+  3175		seq_printf(seq, "attach_type:\t%d\n", tr_link->attach_type);
+  3176	}
+  3177	
+  3178	static int bpf_tracing_multi_link_fill_link_info(const struct bpf_link *link,
+  3179							 struct bpf_link_info *info)
+  3180	{
+  3181		struct bpf_tracing_multi_link *tr_link =
+  3182			container_of(link, struct bpf_tracing_multi_link, link);
+  3183	
+  3184		info->tracing.attach_type = tr_link->attach_type;
+  3185		return 0;
+  3186	}
+  3187	
+  3188	static const struct bpf_link_ops bpf_tracing_multi_link_lops = {
+  3189		.release = bpf_tracing_multi_link_release,
+  3190		.dealloc = bpf_tracing_multi_link_dealloc,
+  3191		.show_fdinfo = bpf_tracing_multi_link_show_fdinfo,
+  3192		.fill_link_info = bpf_tracing_multi_link_fill_link_info,
+  3193	};
+  3194	
+  3195	static int check_multi_prog_type(struct bpf_prog *prog)
+  3196	{
+  3197		if (prog->expected_attach_type != BPF_TRACE_FENTRY_MULTI &&
+  3198		    prog->expected_attach_type != BPF_TRACE_FEXIT_MULTI)
+  3199			return -EINVAL;
+  3200		return 0;
+  3201	}
+  3202	
+  3203	static int btf_ids_cmp(const void *a, const void *b)
+  3204	{
+  3205		const u32 *x = a;
+  3206		const u32 *y = b;
+  3207	
+  3208		if (*x == *y)
+  3209			return 0;
+  3210		return *x < *y ? -1 : 1;
+  3211	}
+  3212	
+  3213	struct resolve_id {
+  3214		const char *name;
+  3215		void *addr;
+  3216		u32 id;
+  3217	};
+  3218	
+  3219	static int rid_name_cmp(const void *a, const void *b)
+  3220	{
+  3221		const struct resolve_id *x = a;
+  3222		const struct resolve_id *y = b;
+  3223	
+  3224		return strcmp(x->name, y->name);
+  3225	}
+  3226	
+  3227	static int rid_id_cmp(const void *a, const void *b)
+  3228	{
+  3229		const struct resolve_id *x = a;
+  3230		const struct resolve_id *y = b;
+  3231	
+  3232		if (x->id == y->id)
+  3233			return 0;
+  3234		return x->id < y->id ? -1 : 1;
+  3235	}
+  3236	
+  3237	struct kallsyms_data {
+  3238		struct resolve_id *rid;
+  3239		u32 cnt;
+  3240		u32 found;
+  3241	};
+  3242	
+  3243	static int kallsyms_callback(void *data, const char *name,
+  3244				     struct module *mod, unsigned long addr)
+  3245	{
+  3246		struct kallsyms_data *args = data;
+  3247		struct resolve_id *rid, id = {
+  3248			.name = name,
+  3249		};
+  3250	
+  3251		rid = bsearch(&id, args->rid, args->cnt, sizeof(*rid), rid_name_cmp);
+  3252		if (rid && !rid->addr) {
+  3253			rid->addr = (void *) addr;
+  3254			args->found++;
+  3255		}
+  3256		return args->found == args->cnt ? 1 : 0;
+  3257	}
+  3258	
+  3259	static int bpf_tramp_id_resolve(struct bpf_tramp_id *id, struct bpf_prog *prog)
+  3260	{
+  3261		struct kallsyms_data args;
+  3262		const struct btf_type *t;
+  3263		struct resolve_id *rid;
+  3264		const char *name;
+  3265		struct btf *btf;
+  3266		int err = 0;
+  3267		u32 i;
+  3268	
+  3269		btf = prog->aux->attach_btf;
+  3270		if (!btf)
+  3271			return -EINVAL;
+  3272	
+  3273		rid = kzalloc(id->cnt * sizeof(*rid), GFP_KERNEL);
+  3274		if (!rid)
+  3275			return -ENOMEM;
+  3276	
+  3277		err = -EINVAL;
+  3278		for (i = 0; i < id->cnt; i++) {
+  3279			t = btf_type_by_id(btf, id->id[i]);
+  3280			if (!t)
+  3281				goto out_free;
+  3282	
+  3283			name = btf_name_by_offset(btf, t->name_off);
+  3284			if (!name)
+  3285				goto out_free;
+  3286	
+  3287			rid[i].name = name;
+  3288			rid[i].id = id->id[i];
+  3289		}
+  3290	
+  3291		sort(rid, id->cnt, sizeof(*rid), rid_name_cmp, NULL);
+  3292	
+  3293		args.rid = rid;
+  3294		args.cnt = id->cnt;
+  3295		args.found = 0;
+  3296		kallsyms_on_each_symbol(kallsyms_callback, &args);
+  3297	
+  3298		sort(rid, id->cnt, sizeof(*rid), rid_id_cmp, NULL);
+  3299	
+  3300		for (i = 0; i < id->cnt; i++) {
+  3301			if (!rid[i].addr) {
+  3302				err = -EINVAL;
+  3303				goto out_free;
+  3304			}
+  3305			id->addr[i] = rid[i].addr;
+  3306		}
+  3307		err = 0;
+  3308	out_free:
+  3309		kfree(rid);
+  3310		return err;
+  3311	}
+  3312	
+  3313	static int bpf_tracing_multi_attach(struct bpf_prog *prog,
+  3314					    const union bpf_attr *attr)
+  3315	{
+  3316		void __user *uids = u64_to_user_ptr(attr->link_create.tracing_multi.btf_ids);
+  3317		u32 cnt_size, cnt = attr->link_create.tracing_multi.btf_ids_cnt;
+  3318		struct bpf_tracing_multi_link *link = NULL;
+  3319		struct bpf_link_primer link_primer;
+  3320		struct bpf_tramp_id *id = NULL;
+  3321		int err = -EINVAL;
+  3322	
+  3323		if (check_multi_prog_type(prog))
+  3324			return -EINVAL;
+  3325		if (!cnt || !uids)
+  3326			return -EINVAL;
+  3327	
+> 3328		id = bpf_tramp_id_alloc(cnt);
+  3329		if (!id)
+  3330			return -ENOMEM;
+  3331	
+  3332		err = -EFAULT;
+  3333		cnt_size = cnt * sizeof(id->id[0]);
+  3334		if (copy_from_user(id->id, uids, cnt_size))
+  3335			goto out_free_id;
+  3336	
+  3337		id->cnt = cnt;
+  3338		id->obj_id = btf_obj_id(prog->aux->attach_btf);
+  3339	
+  3340		/* Sort user provided BTF ids, so we can use memcmp
+  3341		 * and bsearch on top of it later.
+  3342		 */
+  3343		sort(id->id, cnt, sizeof(u32), btf_ids_cmp, NULL);
+  3344	
+  3345		err = bpf_tramp_id_resolve(id, prog);
+  3346		if (err)
+  3347			goto out_free_id;
+  3348	
+  3349		link = kzalloc(sizeof(*link), GFP_KERNEL);
+  3350		if (!link) {
+  3351			err = -ENOMEM;
+  3352			goto out_free_id;
+  3353		}
+  3354	
+  3355		bpf_link_init(&link->link, BPF_LINK_TYPE_TRACING_MULTI,
+  3356			      &bpf_tracing_multi_link_lops, prog);
+  3357		link->attach_type = prog->expected_attach_type;
+  3358	
+  3359		err = bpf_link_prime(&link->link, &link_primer);
+  3360		if (err) {
+  3361			kfree(link);
+  3362			goto out_free_id;
+  3363		}
+  3364	
+  3365		link->id = id;
+  3366		link->tp.cookie = 0;
+  3367		link->tp.prog = prog;
+  3368	
+  3369		err = bpf_trampoline_multi_attach(&link->tp, id);
+  3370		if (err) {
+  3371			bpf_link_cleanup(&link_primer);
+  3372			goto out_free_id;
+  3373		}
+  3374		return bpf_link_settle(&link_primer);
+  3375	out_free_id:
+  3376		kfree(id);
+  3377		return err;
+  3378	}
+  3379	
+
 -- 
-2.37.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

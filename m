@@ -2,137 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5DF584725
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8579658472B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Jul 2022 22:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbiG1Uop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 16:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S231745AbiG1Up2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 16:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiG1Uon (ORCPT
+        with ESMTP id S232454AbiG1UpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 16:44:43 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8603F6D2CD;
-        Thu, 28 Jul 2022 13:44:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a7-20020a17090a008700b001f325db8b90so1855166pja.0;
-        Thu, 28 Jul 2022 13:44:42 -0700 (PDT)
+        Thu, 28 Jul 2022 16:45:20 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D99E2A41F;
+        Thu, 28 Jul 2022 13:45:19 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id b11so5071432eju.10;
+        Thu, 28 Jul 2022 13:45:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=zEBR1Ky5G7KTNBelOELZjj3LDNqMPsUpTpOuJi2OqTg=;
-        b=Vm+WbZZse7CT3sDU0lYolZ3mhefbqlwbQBYN/UAU0F8JiRqHSZBzfnSWzucq+4hhLu
-         j6+ozXndQXd9WCCaXO9a9sMcuHjAzyJARs8DgbvUB+rQCPAzUHX1MbNIvEkpCHpe3kHt
-         jjhHOhd+pYA+XbD5JbQMjo8hBGEKm5UexIvk+V6w+d31/y/N8kFiOrLATmyGCpAKR9l+
-         /kONg+NMwMVyPs1zhKcCtCaTKxyytjwAGNTkJLazYcpBTcf9vuVFqUfH5CqlpQYeRVEv
-         6b3oOuWAg8y8eJK0iT5VmtqkI4k5V4l+j7tD/Bpn9BaNjwmjEoe9DWTPcptFk6atOUGy
-         tQ0g==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=jdpil24lO0iEvMW3eA1lw/j938uWspxlfFkfnuxPIOA=;
+        b=q6d5bp+qm+ovYAMuOGiMthRlJgbO7sF2yg1GwO9Qkd0SgrvwwOK78OHE6CMdSa53Z7
+         36se4wO1CwIa2Z2OuOfXa2lHEkDcrJr82aJ9RvFxAvIqBcIcCULYICBR0VK++0ydO3rc
+         Gm1/MiAAkQL2zN7gf2FqnEMoVNJ18jTva9OWJHQcdJIfAlEq2aPz75MY4kMHwWnrLJLr
+         8/FklTQB4mDa5lBN31MAwNIVs6YS2qBYa8UMFtd39rZJxK9oLa84wgrrnKWMOJGPMHC+
+         zsbFqh+dvlCnNRTANE/794EvJxfgYEuyMvdmiYhdUMTUn5ME8kUNEV4boVGqt+2iCdGz
+         Hcfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=zEBR1Ky5G7KTNBelOELZjj3LDNqMPsUpTpOuJi2OqTg=;
-        b=hvJs46aqdyRxM5xywlZB0Z1UOxJ3vtiZ3SGR7SRQPH+T1bO24TugivD8U13N3Bt2nw
-         zPLmBDZ9IhFPS82raMzBEc17TNE37OPfBLsraZs+uwWZVGXk0mAxfu+zo+MjcnoR55zk
-         V7Lr6NtXeBS+2dgoOby2q2908FypC65SIU8x2CkBygebKFCrHqZxJoV0osGLNeWud1W2
-         ACeraJBJIK3jSg0xCfZ8sdgAMV2gnxfGQ5ULK5fzVWiYFyQKyBKIwQDlcLdp1yI5YLTn
-         jREZkNHi3i6QJQb9QYG8y8bEAiWeBeynYDETogGVGtKJzjJFePlfcC0I7XyAMPTghlU6
-         hXTA==
-X-Gm-Message-State: ACgBeo1o56zImgD0GzelgCeOBAV/40rO3x4p5vzX3aXvo7303YC8P5tN
-        sFxJwKvYoh0b1jhibOczv6b6CuI95b0=
-X-Google-Smtp-Source: AA6agR4NJeonS2cJ+HFzH46XzQhbj1kWHezl9LtVmnH3LAN8Irv0cfx9aEAoLWt/4l0BVJaaN5vHHQ==
-X-Received: by 2002:a17:90b:3a84:b0:1f2:8d9d:46f3 with SMTP id om4-20020a17090b3a8400b001f28d9d46f3mr1172274pjb.174.1659041081677;
-        Thu, 28 Jul 2022 13:44:41 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:23b6])
-        by smtp.gmail.com with ESMTPSA id d70-20020a621d49000000b0052ab9f1fe45sm1180234pfd.120.2022.07.28.13.44.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 13:44:40 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 28 Jul 2022 10:44:38 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-Message-ID: <YuL1NijxSEv2xadk@slm.duckdns.org>
-References: <20220728005815.1715522-1-longman@redhat.com>
- <YuLF+xXaCzwWi2BR@slm.duckdns.org>
- <1ae1cc6c-dca9-4958-6b22-24a5777c5e8d@redhat.com>
- <YuLdX7BYGvo57LNU@slm.duckdns.org>
- <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=jdpil24lO0iEvMW3eA1lw/j938uWspxlfFkfnuxPIOA=;
+        b=1exvdQsQtLX3Ggy08/5TYVlAq6MKgmNjx5QxKKwKsMh/w7XArefKof9Gk/vCqfGsUO
+         3scI9wkktLfRNSo8LqTdRaKmpjtWPLCwYtsfnkRUQoa9EIdgddSU6YnNoRG6trbE4l3T
+         SIoWEwoCruYMqcV0x7njOumAyiAQcbcoTDGbjzi6xXMiOUkGpdyGGYN0HlViIpPIXvZj
+         16R2AOIR9+7EdEw3Su8DpF7jJ/HovWNiuFv6u9M6OP3FRaKusc0noIkGHGraCN33rrXG
+         0O7kJlfwK3o4sIkqMYYMrJyXLr0hELAo8kayGzXtERHW1aKL0GF75EVGSVC0IULRlCtf
+         QdzQ==
+X-Gm-Message-State: AJIora8sPfoymftA8GzW7n1hbqrIoX6pE3ExXxixhvdaojkWmFh8K34w
+        CIWnoZtYP74pUFxG6FoGugYWK15sFXQ5S3uZVgM=
+X-Google-Smtp-Source: AGRyM1uNY/QrMsYf49zn72vdG57jOa1NZfj0c+6Nr/xRD8fkS1eiRj6UOgHY6ibgiWKyVjxbeALVoOKx5wNeDW1Iso4=
+X-Received: by 2002:a17:906:9b14:b0:72b:313b:2df4 with SMTP id
+ eo20-20020a1709069b1400b0072b313b2df4mr490764ejc.99.1659041117836; Thu, 28
+ Jul 2022 13:45:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220728003417.3083353-1-potin.lai.pt@gmail.com>
+ <20220728003417.3083353-3-potin.lai.pt@gmail.com> <CAHp75VfEfirG+aALEhoSLgcLrFTJq7AQc=_BJg7p7QUykpZHhA@mail.gmail.com>
+ <cd033ada-f990-9b19-9aad-8cdf7970a64d@gmail.com>
+In-Reply-To: <cd033ada-f990-9b19-9aad-8cdf7970a64d@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 28 Jul 2022 22:44:39 +0200
+Message-ID: <CAHp75VdGH6g2TBPFyds3Qz4PJNb5jC01aKMour1AfpbV5kqynA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] iio: humidity: hdc100x: add manufacturer and
+ device ID check
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jul 28, 2022 at 2:40 PM Potin Lai <potin.lai.pt@gmail.com> wrote:
+> Andy Shevchenko =E6=96=BC 7/28/2022 7:58 PM =E5=AF=AB=E9=81=93:
+> > On Thursday, July 28, 2022, Potin Lai <potin.lai.pt@gmail.com> wrote:
 
-On Thu, Jul 28, 2022 at 03:21:26PM -0400, Waiman Long wrote:
-> On 7/28/22 15:02, Tejun Heo wrote:
-> > On Thu, Jul 28, 2022 at 02:57:28PM -0400, Waiman Long wrote:
-> > > There can be a counter argument that if a user found out that there is not
-> > > enough cpus in a cpuset to meet its performance target, one can always
-> > > increase the number of cpus in the cpuset. Generalizing this behavior to all
-> > > the tasks irrespective if they have explicitly set cpus affinity before will
-> > > disallow this use case.
-> > This is nasty.
-> 
-> That is a nasty example, I know. There may be users depending on the
-> existing behavior even if they don't know it. So I am a bit hesitant to
-> change the default behavior like that. On the other hand, tasks that have
-> explicitly set its cpu affinity certainly don't want to have unexpected
-> change to that.
+Please, remove the unneeded context when replying!
 
-Yeah, I hear you. I'm on the same page.
+...
 
-> > The real solution here is separating out what user requested
-> > and the mask that cpuset (or cpu hotplug) needs to apply on top. ie.
-> > remember what the user requested in a separate cpumask and compute the
-> > intersection into p->cpus_maks whenever something changes and apply
-> > fallbacks on that final mask. Multiple parties updating the same variable is
-> > never gonna lead to anything consistent and we're patching up for whatever
-> > the immediate use case seems to need at the moment. That said, I'm not
-> > necessarily against patching it up but if you're interested in delving into
-> > it deeper, that'd be great.
-> 
-> I believe the current code is already restricting what cpu affinity that a
-> user can request by limiting to those allowed by the current cpuset. Hotplug
-> is another issue that may need to be addressed. I will update my patch to
-> make it handle hotplug in a more graceful way.
 
-So, the patch you proposed is making the code remember one special aspect of
-user requested configuration - whether it configured it or not, and trying
-to preserve that particular state as cpuset state changes. It addresses the
-immediate problem but it is a very partial approach. Let's say a task wanna
-be affined to one logical thread of each core and set its mask to 0x5555.
-Now, let's say cpuset got enabled and enforced 0xff and affined the task to
-0xff. After a while, the cgroup got more cpus allocated and its cpuset now
-has 0xfff. Ideally, what should happen is the task now having the effective
-mask of 0x555. In practice, tho, it either would get 0xf55 or 0x55 depending
-on which way we decide to misbehave.
+> Sorry, I think I misunderstood your comment in your previous reply.
+> (Introducing a temporary variable for struct device pointer might also he=
+lp in future to refactor to make code neater.)
 
-Thanks.
+It was about
 
--- 
-tejun
+  struct device *dev =3D &client->dev;
+
+but as I said it may be done in a separate patch.
+
+--=20
+With Best Regards,
+Andy Shevchenko

@@ -2,128 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D483584F59
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BC5584F5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235678AbiG2LH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 07:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S235032AbiG2LJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 07:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234581AbiG2LHx (ORCPT
+        with ESMTP id S235625AbiG2LJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 07:07:53 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F3A39B84
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:07:52 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id e1so4547420pjl.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:07:52 -0700 (PDT)
+        Fri, 29 Jul 2022 07:09:24 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6573571718
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:09:23 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id w15so6785049lft.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:09:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Dg0qE236j75IPYm3gyWWoQDxRHaWsFT0nXvPkft/ED8=;
-        b=ilJK0XZe2/X1mmOKGXUe7ww8k5aJC6BxG3gXRHNND8F9mB8+Kjx0cnfWcbP8b4RiAT
-         FkwHtfg+0/u3L2aUSr9sjPsbwa04Ub7LAT02BB151HyxlDC2bL+z68H4SwxIl6U4S17G
-         1x2LjCsYwmFl56sS3FCrBsK4e7K6iLoWClhOWazEUfls0CnI00erWFu8a9/mFfdU8mG7
-         gPKlckyLVb3daPgBDIJsAM4JCkdPNwbkgaCCW1RhS8AUpXEb69wwnUec+JURsmQrW7ja
-         fNyDQuOGSOezjnw4fkqvgQPnVXxk5mB0+KibcEdJ9pnSMzGsDMHg0ka+hZ1eLo3tSLPH
-         c/KQ==
+        d=semihalf.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=I1jjF3teWXwIXWhjG2K4l3lswL2POP7iGvppKXLJfOo=;
+        b=uDtLGan9oxoNLOE1+DLxNadposAOgT51BLm1P0nx3Jsza3mVlhuHXEJu7V3UN1rPAb
+         4f5tpfn5Plrm4DSv7/mBmN0BDpJy+7xTr/MixiBBm7VeK7rfi5pD0J6ySzWjMluXejMY
+         YCfPIXmNtBh0hEHEEJTF1ZDUowEbiCdJ0PWK/QxOirZNflMOb0EuK1VHJ84aHsVcPlgm
+         HVdKCBHB7oLeEjOvc6DrWgObHDkWEGJpa6BKV2ivUR1YMP/czGsYPWhIAArLGcRbEjhR
+         UGWPhqe5F/8rv5dwUPS/+gGmNNBv9BxZ8CVc+m8qyMb2V3jVVlBacI4hKvHHYe+ET+EO
+         iujg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Dg0qE236j75IPYm3gyWWoQDxRHaWsFT0nXvPkft/ED8=;
-        b=q2EkO69CmOiE+wePUD8wtE2LqX0m28DZioq1fk74ZSH162KnL9K7kGhE8yRD5Ac9FU
-         iTYI/8gg7PJF4Sjk0sQY8WlcWlEV+MNlo745z37vcHgAcnBCek6BSfGRRkAuMOcZ7VXs
-         ZXQrk2SMbyyMkZ+1xSr7PqQ/zOtKtokuuJvUvMspjrO4CErBc9qgoPD5vdh56xrb8NQp
-         LRenr4T3WFNHSGs1HZtjrJNQo6hJH6GMbrJrHSWsCGQMqHQybcnLNQJyJbKmtMQz45ub
-         tUgieLXwGyAiOH2KYjgAqIjdhzbpVa7TX7nAJZVO1OGJwIQqCHBoBPT+9peTHqVJBpfk
-         7L0g==
-X-Gm-Message-State: ACgBeo1YnrdScfLMtVllAykdxrU4OkkK9rmQWDktlF+zbXbWy4K4V96e
-        Pm5CKCDVCuO9LmdX1+Uc+MWGNpwvndM=
-X-Google-Smtp-Source: AA6agR7K0DVPsqc7kshSFFkVsCLalRuyPMUBZgOkbFEOCB/w9q23UDpCLSXXq6fl+CpHWKhDOs+3nA==
-X-Received: by 2002:a17:903:40c4:b0:16d:d2a9:43ae with SMTP id t4-20020a17090340c400b0016dd2a943aemr2322406pld.57.1659092871617;
-        Fri, 29 Jul 2022 04:07:51 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id d11-20020a17090abf8b00b001efa332d365sm2719340pjs.33.2022.07.29.04.07.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 04:07:51 -0700 (PDT)
-From:   Stafford Horne <shorne@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Stafford Horne <shorne@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org
-Subject: [PATCH] openrisc: io: Define iounmap argument as volatile
-Date:   Fri, 29 Jul 2022 20:07:25 +0900
-Message-Id: <20220729110726.3635262-1-shorne@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        bh=I1jjF3teWXwIXWhjG2K4l3lswL2POP7iGvppKXLJfOo=;
+        b=iJlmBFEsbFG33Dm7fsjE7ZBpZS4pmPSC0I6EY0cxoJdr+ZpRKgRhP2z1aS1q7Cf9nb
+         ucZCl1nmPzNk3F05mQ7RXby649Qf8vVhfuuOssUwIJmuPYpQkDbljOZ5Ic6SCP1C0qyW
+         DJzxx5uQphXeaH5nhGAOnpcuT3USZxaEQnyCd84tHXrNPYMs+1pToOUuNzLktCqjzYNV
+         NZmqp2lzyV9CCDoIdeQwj7OSUFRJ4lo9EI2WCxPTG++WzAmKc3fZiEQsl1AoEtc/2+L7
+         v/sFRL/3W6XB91GP5S9D1JsEAS8a5dy4Sa4BJENj2ImUiX7AoWGf8Jh7rb5oFFbmPq2h
+         WxrQ==
+X-Gm-Message-State: AJIora8T/XnJ6SFFtC2jKn/1UMfXxNc5v90EQv9gZauyOaaaS8O5dn4f
+        A42IHUGs50+il+zG3iQbw2xLcQ==
+X-Google-Smtp-Source: AGRyM1v+xj5pQJMfZ4lmaVj4tdX9ZjkVQL/6zKCe6bRcDdJznwYtm5d2uSEFrnBGcvR62TftvBoSZQ==
+X-Received: by 2002:a05:6512:1293:b0:48a:8759:db42 with SMTP id u19-20020a056512129300b0048a8759db42mr1155666lfs.558.1659092961692;
+        Fri, 29 Jul 2022 04:09:21 -0700 (PDT)
+Received: from [10.43.1.253] ([83.142.187.84])
+        by smtp.gmail.com with ESMTPSA id t24-20020a056512209800b0048a9d43b978sm622785lfr.239.2022.07.29.04.09.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Jul 2022 04:09:21 -0700 (PDT)
+Message-ID: <1cdff41c-c917-1344-02bc-ad5cf5c79ab1@semihalf.com>
+Date:   Fri, 29 Jul 2022 13:09:19 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] KVM: x86: Move kvm_(un)register_irq_mask_notifier()
+ to generic KVM
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Dmitry Torokhov <dtor@google.com>
+References: <20220715155928.26362-1-dmy@semihalf.com>
+ <20220715155928.26362-2-dmy@semihalf.com> <YuLZng8mW0qn4MFk@google.com>
+From:   Dmytro Maluka <dmy@semihalf.com>
+In-Reply-To: <YuLZng8mW0qn4MFk@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When OpenRISC enables PCI it allows for more drivers to be compiled
-resulting in exposing the following with -Werror.
+On 7/28/22 20:46, Sean Christopherson wrote:
+> On Fri, Jul 15, 2022, Dmytro Maluka wrote:
+>> In preparation for implementing postponing resamplefd event until the
+>> interrupt is unmasked, move kvm_(un)register_irq_mask_notifier() from
+>> x86 to arch-independent code to make it usable by irqfd.
+> 
+> This patch needs to move more than just the helpers, e.g. mask_notifier_list
+> needs to be in "struct kvm", not "stuct kvm_arch".
+> 
+> arch/arm64/kvm/../../../virt/kvm/eventfd.c: In function ‘kvm_register_irq_mask_notifier’:
+> arch/arm64/kvm/../../../virt/kvm/eventfd.c:528:51: error: ‘struct kvm_arch’ has no member named ‘mask_notifier_list’
+>   528 |         hlist_add_head_rcu(&kimn->link, &kvm->arch.mask_notifier_list);
+>       |                                                   ^
+> make[3]: *** [scripts/Makefile.build:249: arch/arm64/kvm/../../../virt/kvm/eventfd.o] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+>   AR      kernel/entry/built-in.a
 
-    drivers/video/fbdev/riva/fbdev.c: In function 'rivafb_probe':
-    drivers/video/fbdev/riva/fbdev.c:2062:42: error:
-	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
+Oops, sorry.
 
-    drivers/video/fbdev/nvidia/nvidia.c: In function 'nvidiafb_probe':
-    drivers/video/fbdev/nvidia/nvidia.c:1414:20: error:
-	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
+> And kvm_fire_mask_notifiers() should probably be moved as well, otherwise there's
+> no point in moving the registration to common code.
 
-    drivers/scsi/aic7xxx/aic7xxx_osm.c: In function 'ahc_platform_free':
-    drivers/scsi/aic7xxx/aic7xxx_osm.c:1231:41: error:
-	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
+Good point, we can move it right away, even though it is not called on
+other architectures for now.
 
-Most architectures define the iounmap argument to be volatile.  To fix this
-issue we do the same for OpenRISC.  This patch must go before PCI is enabled on
-OpenRISC to avoid any compile failures.
+> The other option would be to make the generic functions wrappers around arch-specific
+> hooks.  But IIRC won't this eventually be needed for other architectures?
 
-Link: https://lore.kernel.org/lkml/20220729033728.GA2195022@roeck-us.net/
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Stafford Horne <shorne@gmail.com>
----
- arch/openrisc/include/asm/io.h | 2 +-
- arch/openrisc/mm/ioremap.c     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Right, I assume we will eventually need it for ARM at least. Not in the
+near future though, and at the moment I have no non-x86 hardware on hand
+to implement it for other architectures.
 
-diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
-index 625ac6ad1205..ee6043a03173 100644
---- a/arch/openrisc/include/asm/io.h
-+++ b/arch/openrisc/include/asm/io.h
-@@ -31,7 +31,7 @@
- void __iomem *ioremap(phys_addr_t offset, unsigned long size);
- 
- #define iounmap iounmap
--extern void iounmap(void __iomem *addr);
-+extern void iounmap(volatile void __iomem *addr);
- 
- #include <asm-generic/io.h>
- 
-diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-index daae13a76743..8ec0dafecf25 100644
---- a/arch/openrisc/mm/ioremap.c
-+++ b/arch/openrisc/mm/ioremap.c
-@@ -77,7 +77,7 @@ void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
- }
- EXPORT_SYMBOL(ioremap);
- 
--void iounmap(void __iomem *addr)
-+void iounmap(volatile void __iomem *addr)
- {
- 	/* If the page is from the fixmap pool then we just clear out
- 	 * the fixmap mapping.
--- 
-2.37.1
+Actually I feel a bit uncomfortable with generic irqfd relying on
+kvm_register_irq_mask_notifier() which silently has no effect on other
+architectures. Maybe it's better to keep
+kvm_(un)register_irq_mask_notifier() in the x86 code, and for the
+generic code add a weak version which e.g. just prints a warning like
+"irq mask notifiers not implemented on this arch". (Or maybe instead of
+weak functions introduce arch-specific hooks as you suggested, and print
+such a warning if no hook is provided.) What do you think?
+
+Thanks,
+Dmytro
 

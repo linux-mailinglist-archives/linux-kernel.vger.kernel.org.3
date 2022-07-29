@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C89C585612
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C41585616
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239079AbiG2UYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 16:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S239086AbiG2U1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 16:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiG2UYk (ORCPT
+        with ESMTP id S230499AbiG2U1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 16:24:40 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF8088741
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 13:24:39 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z18so7101747edb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 13:24:39 -0700 (PDT)
+        Fri, 29 Jul 2022 16:27:35 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF546FA36;
+        Fri, 29 Jul 2022 13:27:35 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b9so5556326pfp.10;
+        Fri, 29 Jul 2022 13:27:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=DD5ZTUFuKAP0HflbyT4tZofzegaYKmqv/uxWG1vqBO4=;
-        b=Jm3l9HhHkx5hqABQOnfdln7qyATxQaRlBiOS5jsXIeXPzxxoAoLnBwmesVJ4gbG2cq
-         Jm3PvjjOK+aW/VJqiIiPG1ccR5fKellIuDnzJ3J85hU++B35mEU9gMlNeK2AxEbScH27
-         YZ1DrToUrRUkJRdKhmH72EMr2YW6Xv2WTp+X8rOqKxKZnKsxxam2whmLHQMXJlpfT5f1
-         RrMlid5be+mecjbVQPP18JzrPep22/VkW7CnjW2b4CFY4GhOkk2wBT4+ms5aosZmhfut
-         62jNX0H8y9n06SWlIoZ4FaRheLKx4sTeyYuo8QLpYoSGqQZ7wmXcT21Kgjz40dejhudN
-         Xa8g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=U36cxZBBBAsWK0SgXU07/6cSCngvofZtFK0Cv/h7b5Q=;
+        b=B6/ndEJPHc4+9jyYT5GDz7FcNNUlakcC9XrRLetuqsQ9Hcy9CP512PPT2A5QM530vm
+         izqu82rxhPC3e5vWCVDpoSSOE09mO8AfJEG2hF27RmKLOv/icjyHhwE4chwslxx+GVi5
+         u1F4QwHrMgH22/KQkwKVxj9gkKZC4yyWrZkp8FcvJp0WmAS2C0v5ut7PluaFXRQItP2Q
+         +K73SAK2Wo8v2C7LGnLsjDAofYfR3kzjEEYVxD+KxfL602ubXQHkbeRxgTY24kXapPb9
+         rYIe5I+q3Bbyp0cmqpcQOLAUgGNqlWFY619rT6ocl0TCk2faUXHmWZLURo28k6UNDJGr
+         HLVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=DD5ZTUFuKAP0HflbyT4tZofzegaYKmqv/uxWG1vqBO4=;
-        b=7wKaLFkR3V1FIlRKxHHhuKPx+GRK2Uxc5NRhVEJdyaRWCoguAbB+3tOu+EmsXvOLWG
-         SBZ0HN6YWtEoXPi3i+g43P+b+e0DTmAQiL+uDRh1ZSyo5p8NBR7zhKFx0n0M/2Qhu8Db
-         w191mNf9LiNCk/qCWnhLcEk885zW8nkBdD8x9BIyUZopIHaEOeBnK9fYEGNtavG4wt6i
-         DyalWPmorop8hZeIASr9FtfpHkyXlPynq2GA/qSYzcMf4puTLKfSJ/5ZyxmnqawDe04R
-         Pis2KXKEotxTp3al3+YZW2P7RpLVsk0EzYgbvh/U8IPcHaY8TMgay5zilEpxOQE6NpcZ
-         MU0A==
-X-Gm-Message-State: AJIora/YmJXi+wbfOm/beOUxxetiu96pMPTuWQnGBjyZkb/gGDZIt2o6
-        bnPQQmwiDPWuRbxuvLddogLPryzIBs8exKH8HrAkcrlo7pFwuA==
-X-Google-Smtp-Source: AGRyM1sJGV43E1lWJdEwZnroFIFGxZkNFN0msL97/FHFmAUUBBTVi+g8K85bUi4sl3c8G/yjvwrPQMLOY30kIxj91pg=
-X-Received: by 2002:a05:6402:e93:b0:43b:6a49:7e88 with SMTP id
- h19-20020a0564020e9300b0043b6a497e88mr5288547eda.132.1659126277931; Fri, 29
- Jul 2022 13:24:37 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=U36cxZBBBAsWK0SgXU07/6cSCngvofZtFK0Cv/h7b5Q=;
+        b=rDNhA1N2wjk04GOtJ8se3so8MhDcU73wPIh4OQRvzahH5Zq8NQKiC3tjgkNYaWpT0G
+         rQpX97g1s8Wm4FiJoaaRRBKQtyFDoaHxXze7zCcG6B6eMd8pTtYwmbXf6v8adrMm5/E2
+         HMDK98KVmYKNC9wlkZK8l0LmspU6nZ7ZFI3wvHwfmNy2EgfU/GRZBFclZlSGqb8UcoZT
+         053Jorr9yjawOWaMywucYuxjIFCVW1RMH7vTapdxNDZO1ULSM+YGrDxt+15JPLCQnHcn
+         k/hQBypg5/Hx0VSJS7cJ6hEkZmSFVSvqbaovHkLFhCUTEPZPL6AxHVqwte25eMN+/3H9
+         FfHA==
+X-Gm-Message-State: AJIora8bPPrD6MFq7mGkf5TB8wsuJzA6Z8ljvKWwuJkPWVryxWckhnOj
+        bhyPkon0PirrNY1tAUWvROfErlywRA==
+X-Google-Smtp-Source: AGRyM1sL8lAt8k/dgJPWI7c5WieHBqLG3euAM6eaRzH7JwksAuL2l81l0uFq+aZb0oBXQ4+tE7CKPg==
+X-Received: by 2002:a05:6a00:2401:b0:52b:cd67:d997 with SMTP id z1-20020a056a00240100b0052bcd67d997mr5105428pfh.70.1659126454733;
+        Fri, 29 Jul 2022 13:27:34 -0700 (PDT)
+Received: from jevburton3.c.googlers.com.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id mg20-20020a17090b371400b001f30b100e04sm6235945pjb.15.2022.07.29.13.27.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 13:27:34 -0700 (PDT)
+From:   Joe Burton <jevburton.kernel@gmail.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Joe Burton <jevburton@google.com>
+Subject: [PATCH v3 bpf-next] libbpf: Add bpf_obj_get_opts()
+Date:   Fri, 29 Jul 2022 20:27:27 +0000
+Message-Id: <20220729202727.3311806-1-jevburton.kernel@gmail.com>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Sat, 30 Jul 2022 06:24:26 +1000
-Message-ID: <CAPM=9twcrq24uhTF4yYR2v1tJsK76D_S4=fjE=K4s+78Wds91Q@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.19 final (part 2)
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -64,60 +76,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+From: Joe Burton <jevburton@google.com>
 
-Maxime had the dog^Wmailing list server eat his homework^Wmisc pull
-request. Two more small fixes, one in nouveau svm code and the other
-in simpledrm.
+Add an extensible variant of bpf_obj_get() capable of setting the
+`file_flags` parameter.
 
-Thanks,
-Dave.
+This parameter is needed to enable unprivileged access to BPF maps.
+Without a method like this, users must manually make the syscall.
 
-drm-fixes-2022-07-30:
-drm fixes for 5.19 final (part 2)
+Signed-off-by: Joe Burton <jevburton@google.com>
+---
+ tools/lib/bpf/bpf.c      |  9 +++++++++
+ tools/lib/bpf/bpf.h      | 11 +++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 21 insertions(+)
 
-nouveau:
-- page migration fix
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 5eb0df90eb2b..efcc06dafbd9 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -578,12 +578,21 @@ int bpf_obj_pin(int fd, const char *pathname)
+ }
+ 
+ int bpf_obj_get(const char *pathname)
++{
++	return bpf_obj_get_opts(pathname, NULL);
++}
++
++int bpf_obj_get_opts(const char *pathname, const struct bpf_obj_get_opts *opts)
+ {
+ 	union bpf_attr attr;
+ 	int fd;
+ 
++	if (!OPTS_VALID(opts, bpf_obj_get_opts))
++		return libbpf_err(-EINVAL);
++
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.pathname = ptr_to_u64((void *)pathname);
++	attr.file_flags = OPTS_GET(opts, file_flags, 0);
+ 
+ 	fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
+ 	return libbpf_err_errno(fd);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 88a7cc4bd76f..9c50beabdd14 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -270,8 +270,19 @@ LIBBPF_API int bpf_map_update_batch(int fd, const void *keys, const void *values
+ 				    __u32 *count,
+ 				    const struct bpf_map_batch_opts *opts);
+ 
++struct bpf_obj_get_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++
++	__u32 file_flags;
++
++	size_t :0;
++};
++#define bpf_obj_get_opts__last_field file_flags
++
+ LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
+ LIBBPF_API int bpf_obj_get(const char *pathname);
++LIBBPF_API int bpf_obj_get_opts(const char *pathname,
++				const struct bpf_obj_get_opts *opts);
+ 
+ struct bpf_prog_attach_opts {
+ 	size_t sz; /* size of this struct for forward/backward compatibility */
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 0625adb9e888..119e6e1ea7f1 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
+ 
+ LIBBPF_1.0.0 {
+ 	global:
++		bpf_obj_get_opts;
+ 		bpf_prog_query_opts;
+ 		bpf_program__attach_ksyscall;
+ 		btf__add_enum64;
+-- 
+2.37.1.455.g008518b4e5-goog
 
-simpledrm:
-- fix mode_valid return value
-The following changes since commit f16a2f593d0095e82e6b7f9d776f869c8ab45952:
-
-  Merge tag 'drm-intel-fixes-2022-07-28-1' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2022-07-29
-11:39:13 +1000)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-07-30
-
-for you to fetch changes up to ce156c8a1811c96a243590abd0e9b5a3b72c1f3a:
-
-  Merge tag 'drm-misc-fixes-2022-07-29' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-07-30
-06:09:57 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.19 final (part 2)
-
-nouveau:
-- page migration fix
-
-simpledrm:
-- fix mode_valid return value
-
-----------------------------------------------------------------
-Alistair Popple (1):
-      nouveau/svm: Fix to migrate all requested pages
-
-Dave Airlie (1):
-      Merge tag 'drm-misc-fixes-2022-07-29' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-
-Nathan Chancellor (1):
-      drm/simpledrm: Fix return type of
-simpledrm_simple_display_pipe_mode_valid()
-
- drivers/gpu/drm/nouveau/nouveau_dmem.c | 6 +++++-
- drivers/gpu/drm/tiny/simpledrm.c       | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)

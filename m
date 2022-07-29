@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822F3585479
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E6758547B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237507AbiG2R1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
+        id S237782AbiG2R2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236725AbiG2R1h (ORCPT
+        with ESMTP id S236725AbiG2R2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:27:37 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31D54B0FA
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:27:35 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id r1-20020a05600c35c100b003a326685e7cso4541425wmq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:27:35 -0700 (PDT)
+        Fri, 29 Jul 2022 13:28:19 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430A52ED64
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:28:18 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id e132so4510727pgc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p70W5DALEOG9SLhFgBtYzTJ5yCtC0YN1DUXpXgjKl8g=;
-        b=AxMmTRCGvclAqvg60X4DSM4OgPj2VsXe1SIEWzECo9CRSmt9JjBvBPjetBjHChjQN8
-         QuwV2BnDmH+jOjvK7zYYALdT0SVhDEJMHFX/4puIM1YA1SCTyZUOEDuFyv/bSItrw1Pk
-         9VFGl1EGmVqa7skyLeKgwZCojYWtAm/ze+8h57UPtdctosvAroe5TefjMJqf9kPDFdDs
-         SNKffuwfsn7GMsmMhOj6IhJ0t8gAd7bUfg86/l/ZLKdmBp4fACPjgh+U0RZzF7Z2cq8J
-         cS8B907Qv+p7o01wm4bYaCp6MpQyaY1B4PWPs02YDwcDmDIZl7+/w2VJO2t7TgRNaNE6
-         5rxg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=i2DBZrmp1kG353wRp96OgDU8tzPdFdzK0pwSzpxJdZc=;
+        b=tVwRBWf78Wbh6/fPKmOlTPNDHU3CtchgusUguhARSF1nK1Ajl6bZcHNVrq+AIZanL5
+         0oe1+ifvnRQZH5Hzr1dkyH6tJZjwNOrFwxSiFM57vXE3ZzUXaVHe2FzTjk0CfCzf+3bX
+         RbDTAwEIXN7ofyk8vIcof72+TXql0JZEwMAJ7vIBzs12O1Y/Dm80jeZkMZ0zOuUrGA+d
+         ec+ZmkIhNadLbrKsGMQ6e29uaoprUH5Uivk/iawP3pkAgvWw6Dgz4tKV3Go39oE1NaaF
+         EZqAoPS0ReMyQIK6E4S8U8e890s3DOvLLspty8+dQKobbqX3rvR4HNPcOvs+mM1Fw7a7
+         nHuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p70W5DALEOG9SLhFgBtYzTJ5yCtC0YN1DUXpXgjKl8g=;
-        b=KOZ6lO0p3+sn2RcSqCnVCwXHladJKgrM3CZk4m8FXSEAC8ta8Csjt307cbzSS/V4VA
-         D+E4MdRnnKqXINLWbvZZdiBNnpIdTfAryhQfSR726rrp1KoBRvf9J/SWYDbQ7wbteh+b
-         GLaasUAoeOblETRtY1MPOKn3jL66qNloTEJdKt9xqJASpF0RtaqlahcSxP70pHD6BESj
-         dy9vNbvmsNwgYv+3u/1oKqIu0Zjz8v0o6ylYmrGKhYtHsFJH1xAWFF68vwnJiIdREVKB
-         Tep3/KWidBKWz3uqXbpq/JPzBe3ZPnxKMbb32R1FDbKA5dYNEGaMqJWgXfQ16n2Jm1k6
-         NI2Q==
-X-Gm-Message-State: AJIora95PV3wfw2a2P/fBNzoOZXXfJ7j9WTtAUKLbsHllQTzGC4sXEoU
-        nY340F2BujSFICDtpDJ+3VzTMxJWXBSib9QwTmq9uA==
-X-Google-Smtp-Source: AGRyM1voLcR9SmYxVNNgUCcyd3Kdi6OPTUqqPDb2VqySb84vBHRv58HZ+n6YiwE9syedRYkNfL9ME0K3+UoYKfC4ZlI=
-X-Received: by 2002:a05:600c:2854:b0:3a3:1551:d7d with SMTP id
- r20-20020a05600c285400b003a315510d7dmr3076822wmb.174.1659115654150; Fri, 29
- Jul 2022 10:27:34 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=i2DBZrmp1kG353wRp96OgDU8tzPdFdzK0pwSzpxJdZc=;
+        b=ar8LSRTFOK9DTOaj0kqxXP2ubWcnFzR7p7ZZ26yB+q7d5COsMoIo1aCClgazikedfr
+         iillNOPziBnD/7LaCg8mx7lw1yVNpM7uLACm/7EK4WqvlwBloELCu5tm/FLFWdOSNbCj
+         sVb094jgFkuCFKmLPDv6iCM6vv+I5/59mJckvgSumiKtDvs8wardX1XrUk6A80VgHr+a
+         mAZP2dX77pFL5s0u21dX1OZgNt6HYQYGuXtbse2EyAfxpnitfzjAsLLxanj3rhSH6/4W
+         RYLyzH+O9hlq68VlOCWRWzdb65PYai6v8U4hEty4A8j2l9oZ3td5/TesaG9t3fyncCET
+         f8Uw==
+X-Gm-Message-State: AJIora+o4Frkzlwvt+uSZ50fESUdV53hqpn75jILaxtYeuuvuXVFuK5J
+        g+BygI8HYzTEXMf1mukDkbHyrA==
+X-Google-Smtp-Source: AGRyM1vHJN8qYtPdiXH7MyYyyOd3p95/ovUuMPEQUsqsWZ3fHGRxiHuDWhHAoR7vwoHIs12YOhRMbg==
+X-Received: by 2002:a63:fd14:0:b0:41a:20e8:c1e2 with SMTP id d20-20020a63fd14000000b0041a20e8c1e2mr3760595pgh.286.1659115697490;
+        Fri, 29 Jul 2022 10:28:17 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 139-20020a621991000000b0050dc76281e0sm3126784pfz.186.2022.07.29.10.28.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 10:28:16 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 17:28:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] KVM: VMX: Adjust number of LBR records for
+ PERF_CAPABILITIES at refresh
+Message-ID: <YuQYrBhJB1rNxkyp@google.com>
+References: <20220727233424.2968356-1-seanjc@google.com>
+ <20220727233424.2968356-4-seanjc@google.com>
+ <2d932ad7-899b-ed26-d77c-f149fb2afc36@gmail.com>
 MIME-Version: 1.0
-References: <20220729074351.138260-1-irogers@google.com> <d8356ddc-56e7-7324-5330-ff2bd54bcba4@huawei.com>
-In-Reply-To: <d8356ddc-56e7-7324-5330-ff2bd54bcba4@huawei.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 29 Jul 2022 10:27:21 -0700
-Message-ID: <CAP-5=fV0CMpBGkNOBMRjbdZfdw1mQjrDhLVG38jLtpsdWXtQ_Q@mail.gmail.com>
-Subject: Re: [PATCH v3 00/17] Compress the pmu_event tables
-To:     John Garry <john.garry@huawei.com>
-Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; boundary="dx/GFEplJzZRgpXz"
+Content-Disposition: inline
+In-Reply-To: <2d932ad7-899b-ed26-d77c-f149fb2afc36@gmail.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -83,262 +74,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 8:03 AM John Garry <john.garry@huawei.com> wrote:
->
-> On 29/07/2022 08:43, Ian Rogers wrote:
-> > jevents.py creates a number of large arrays from the json events. The
-> > arrays contain pointers to strings that need relocating. The
-> > relocations have file size, run time and memory costs. These changes
-> > refactor the pmu_events API so that the storage of the pmu_event
-> > struct isn't exposed. The format is then changed to an offset within a
-> > combined big string, with adjacent pmu_event struct variables being
-> > next to each other in the string separated by \0 - meaning only the
-> > first variable of the struct needs its offset recording.
-> >
-> > Some related fixes are contained with the patches. The architecture
-> > jevents.py creates tables for can now be set by the JEVENTS_ARCH make
-> > variable, with a new 'all' that generates the events and metrics for
-> > all architectures.
->
-> Hi Ian,
->
-> I am going through this series currently.
->
-> But I just wanted to mention my idea again on how to compress the
-> tables. Maybe you thought that there was no value in my idea or didn't
-> get it, but I'll mention it again just in case...
->
-> Background:
-> There is much duplication in events between cores. And currently we have
-> something like this:
->
-> pmu-events/pmu-events.c:
-> struct pmu_event core0[] {
-> {
->         .name = event0,
->         .event = "event=0x0",
-> },
-> {
->         .name = event1,
->         .event = "event=0x1",
-> },
-> {
->         .name = event2,
->         .event = "event=0x2",
->         .desc = "event2 common desc",
-> },
-> ...
-> };
->
-> struct pmu_event core1[] {
-> {
->         .name = event0,
->         .event = "event=0x0",
-> },
-> {
->         .name = event1,
->         .event = "event=0x1",
-> },
-> {
->         .name = event2,
->         .event = "event=0x2",
->         .desc = "event2 desc for core1",
-> },
-> ...
-> };
->
->
-> struct pmu_evenets_map map[] = {
-> {
->         .cpuid = "0000",
->         .table = core0,
-> },
-> {
->         .cpuid = "0001",
->         .table = core1,
-> },
-> ...
-> };
->
-> If you check broadwell and broadwellde frontent.json you will notice
-> that they are identical, which is an extreme example of duplication.
->
-> Proposal for change:
-> Make each event in the per-core pmu event table point to common event.
-> Each common event is unique, and each event per-core will point to a
-> common event. So if 2x cores have same event but small difference, then
-> there would be still 2x common events.
->
-> pmu-events/pmu-events.c:
-> struct pmu_event common_events[] {
-> {
->         .name = event0,
->         .event = "event=0x0",
-> },
-> {
->         .name = event1,
->         .event = "event=0x1",
-> },
-> {
->         .name = event2,
->         .event = "event=0x2",
->         .desc = "event2 common desc",
-> },
-> {
->         .name = event2,
->         .event = "event=0x2",
->         .desc = "event2 desc for core1",
-> },
-> ...
-> };
->
-> struct pmu_event_ptr {
->         struct pmu_event *pmu_event;
-> }
->
-> struct pmu_event_ptr core0[] {
-> {
->         .pmu_event = &common_events[0],
-> },
-> {
->         .pmu_event = &common_events[1],
-> },
-> {
->         .pmu_event = &common_events[2],
-> },
-> ...
-> };
->
-> struct pmu_event_ptr core0[] {
-> {
->         .pmu_event = &common_events[0],
-> },
-> {
->         .pmu_event = &common_events[1],
-> },
-> {
->         .pmu_event = &common_events[3],
-> },
-> ...
-> };
->
-> struct pmu_evenets_map map[] = {
-> {
->         .cpuid = "0000",
->         .table = core0,
-> },
-> {
->         .cpuid = "0001",
->         .table = core1,
-> },
-> ...
-> };
->
-> For x86, first step in JSON parsing would be to go through the JSON
-> files and compile a list of unique events. Then second step is to
-> process each per-core JSON to create the pmu events table, using the
-> common events. Using a per common event hash would make the lookup quicker.
->
-> I'm not sure what you think. From figures below you seem to be saving
-> ~20% at best - I would guess (with a capital G) that my method could
-> save a lot more.
->
-> This implementation would require core pmu.c to be changed, but there is
-> ways that this could be done without needing to change core pmu.c
->
-> Thanks,
-> John
 
-Thanks John!
+--dx/GFEplJzZRgpXz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-You are right about broadwell, it is an extreme case of sharing. IIRC
-BDX is the server core/uncore events, BDW is the consumer core/uncore
-and BDW-DE is consumer core with server uncore - so the sharing is
-inherent in this. Metrics become interesting as they may mix core and
-uncore, but I'll ignore that here.
+On Fri, Jul 29, 2022, Like Xu wrote:
+> On 28/7/2022 7:34 am, Sean Christopherson wrote:
+> > guest_cpuid_has() is expensive due to the linear search of guest CPUID
+> > entries, intel_pmu_lbr_is_enabled() is checked on every VM-Enter,_and_
+> > simply enumerating the same "Model" as the host causes KVM to set the
+> > number of LBR records to a non-zero value.
+> 
+> Before reconsidering vcpu->arch.perf_capabilities to reach a conclusion,
+> how about this minor inline change help reduce my sins ?
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 0ecbbae42976..06a21d66be13 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7039,7 +7039,8 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+>  	pt_guest_enter(vmx);
+> 
+>  	atomic_switch_perf_msrs(vmx);
+> -	if (intel_pmu_lbr_is_enabled(vcpu))
+> +	if (vmx->lbr_desc.records.nr &&
+> +	    (vcpu->arch.perf_capabilities & PMU_CAP_LBR_FMT))
 
-In the old code every event needs 15 char*s, with 64-bit that is 15*8
-bytes per entry with 741 core and 23 uncore entries for BDW, and 372
-core and 1284 uncore for BDX. I expect the strings themselves will be
-shared by the C compiler, and so I just focus on the pointer sizes.
-With the new code every event is just 1 32-bit int. So for BDW we go
-from 15*8*(741+23)=91,680 to 4*(741+23)=3056, BDX is
-15*8*(372+1284)=198720 to 4*(372+1284)=6624. This means we've gone
-from 290,400bytes to 9,680bytes for BDW and BDX. BDW-DE goes from
-243,000bytes to 8,100bytes - we can ignore the costs of the strings as
-they should be fully shared, especially for BDW-DE.
+That doesn't do the right thing if X86_FEATURE_PDCM is cleared in guest CPUID.
+It doesn't even require odd userspace behavior since intel_pmu_init() does:
 
-If we added some kind of table sharing, so BDW-DE was core from BDW
-and uncore from BDX and the tables shared, then in the old code you
-could save nearly 0.25MB but with the new code the saving is only
-around 8KB. I think we can go after that 8KB but it is less urgent
-after this change which gets 96% of the benefit. We have 72
-architectures for jevents at the moment and so I'd ball park (assuming
-they all saved as much as BDW-DE) the max saving as about 0.5MB, which
-is 12% of what is saved here.
+	vcpu->arch.perf_capabilities = vmx_get_perf_capabilities();
 
-Longer term I'd like to make the pmu-events.c logic look closer to the
-sysfs API. Perhaps we can unify the uncore events for BDX and BDW-DE
-with some notion of a common PMU, or PMUs with common events and
-tables, and automate deduction of this. It also isn't clear to me the
-advantage of storing the metrics inside the events, separate tables
-feel cleaner. Anyway, there's lots of follow up.
+E.g. older userspace that doesn't set MSR_IA32_PERF_CAPABILITIES will clear PDCM
+without touching the vCPU's MSR value.
 
-Thanks,
-Ian
+In the unlikely scenario we can't figure out a solution for PERF_CAPABILITIES,
+the alternative I tried first is to implement a generic CPUID feature "caching"
+scheme and use it to expedite the PDCM lookup.  I scrapped that approach when I
+realized that KVM really should be able to consume PERF_CAPABILITIES during PMU
+refresh.
+
+I'm hesitant to even suggest a generic caching implementation because I suspect 
+most performance critical uses of guest CPUID will be similar to PDMC, i.e. can
+be captured during KVM_SET_CPUID2 without requiring an explicit cache.  And for
+PERF_CAPABILITIES, IMO a robust implementation is a must have, i.e. we've failed
+if we can't handle it during PMU refresh.
+
+--dx/GFEplJzZRgpXz
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-KVM-x86-Add-CPUID-cache-for-frequent-X86_FEATURE_-gu.patch"
+
+From 2b5621e0a504c821125d24475ee83d9e1cf24e96 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 26 Jul 2022 09:20:37 -0700
+Subject: [PATCH 1/2] KVM: x86: Add CPUID cache for frequent X86_FEATURE_*
+ guest lookups
+
+Implement a small "cache" for expediting guest_cpuid_has() lookups of
+frequently used features.  Guest CPUID lookups are slow, especially if
+the associated leaf has no entry, as KVM uses a linear walk of all CPUID
+entries to find the associated leaf, e.g. adding a guest_cpuid_has()
+lookup in the VM-Enter path is slow enough that it shows up on perf
+traces.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/kvm_host.h |  1 +
+ arch/x86/kvm/cpuid.c            |  9 +++++++++
+ arch/x86/kvm/cpuid.h            | 28 ++++++++++++++++++++++++++--
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index e8281d64a431..8cdb5c46815d 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -759,6 +759,7 @@ struct kvm_vcpu_arch {
+ 	int cpuid_nent;
+ 	struct kvm_cpuid_entry2 *cpuid_entries;
+ 	u32 kvm_cpuid_base;
++	u32 kvm_cpuid_x86_feature_cache;
+ 
+ 	u64 reserved_gpa_bits;
+ 	int maxphyaddr;
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 75dcf7a72605..27b25fdb4335 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -377,6 +377,12 @@ u64 kvm_vcpu_reserved_gpa_bits_raw(struct kvm_vcpu *vcpu)
+ 	return rsvd_bits(cpuid_maxphyaddr(vcpu), 63);
+ }
+ 
++#define kvm_cpuid_cache_update(__vcpu, x86_feature)						\
++do {												\
++	if (__guest_cpuid_has(__vcpu, x86_feature))						\
++		(__vcpu)->arch.kvm_cpuid_x86_feature_cache |= BIT(KVM_CACHED_ ## x86_feature);	\
++} while (0)
++
+ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+                         int nent)
+ {
+@@ -412,6 +418,9 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	vcpu->arch.cpuid_entries = e2;
+ 	vcpu->arch.cpuid_nent = nent;
+ 
++	/* Update the cache before doing anything else. */
++	vcpu->arch.kvm_cpuid_x86_feature_cache = 0;
++
+ 	kvm_update_kvm_cpuid_base(vcpu);
+ 	kvm_vcpu_after_set_cpuid(vcpu);
+ 
+diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+index b1658c0de847..49009d16022a 100644
+--- a/arch/x86/kvm/cpuid.h
++++ b/arch/x86/kvm/cpuid.h
+@@ -85,8 +85,21 @@ static __always_inline u32 *guest_cpuid_get_register(struct kvm_vcpu *vcpu,
+ 	return __cpuid_entry_get_reg(entry, cpuid.reg);
+ }
+ 
+-static __always_inline bool guest_cpuid_has(struct kvm_vcpu *vcpu,
+-					    unsigned int x86_feature)
++enum kvm_cpuid_cached_feature {
++	NR_KVM_CACHED_X86_FEATURES,
++};
++
++static __always_inline int guest_cpuid_get_cache_bit(unsigned int x86_feature)
++{
++	int cache_bytes = sizeof((struct kvm_vcpu_arch *)0)->kvm_cpuid_x86_feature_cache;
++
++	BUILD_BUG_ON(NR_KVM_CACHED_X86_FEATURES > cache_bytes * BITS_PER_BYTE);
++
++	return NR_KVM_CACHED_X86_FEATURES;
++}
++
++static __always_inline bool __guest_cpuid_has(struct kvm_vcpu *vcpu,
++					      unsigned int x86_feature)
+ {
+ 	u32 *reg;
+ 
+@@ -97,6 +110,17 @@ static __always_inline bool guest_cpuid_has(struct kvm_vcpu *vcpu,
+ 	return *reg & __feature_bit(x86_feature);
+ }
+ 
++static __always_inline bool guest_cpuid_has(struct kvm_vcpu *vcpu,
++					    unsigned int x86_feature)
++{
++	int cache_bit = guest_cpuid_get_cache_bit(x86_feature);
++
++	if (cache_bit != NR_KVM_CACHED_X86_FEATURES)
++		return vcpu->arch.kvm_cpuid_x86_feature_cache & BIT(cache_bit);
++
++	return __guest_cpuid_has(vcpu, x86_feature);
++}
++
+ static __always_inline void guest_cpuid_clear(struct kvm_vcpu *vcpu,
+ 					      unsigned int x86_feature)
+ {
+
+base-commit: 1a4d88a361af4f2e91861d632c6a1fe87a9665c2
+-- 
+2.37.1.455.g008518b4e5-goog
 
 
-> >
-> > An example of the improvement to the file size on x86 is:
-> > no jevents - the same 19,788,464bytes
-> > x86 jevents - ~16.7% file size saving 23,744,288bytes vs 28,502,632bytes
-> > all jevents - ~19.5% file size saving 24,469,056bytes vs 30,379,920bytes
-> > default build options plus NO_LIBBFD=1.
-> >
-> > I originally suggested fixing this problem in:
-> > https://lore.kernel.org/linux-perf-users/CAP-5=fVB8G4bdb9T=FncRTh9oBVKCS=+=eowAO+YSgAhab+Dtg@mail.gmail.com/
-> >
-> > v3. Fix an ARM build issue with a missed weak symbol. Perform some
-> >      pytype clean up.
-> > v2. Split the substring folding optimization to its own patch and
-> >      comment tweaks as suggested by Namhyung Kim
-> >      <namhyung@kernel.org>. Recompute the file size savings with the
-> >      latest json events and metrics.
-> >
-> > Ian Rogers (17):
-> >    perf jevents: Clean up pytype warnings
-> >    perf jevents: Simplify generation of C-string
-> >    perf jevents: Add JEVENTS_ARCH make option
-> >    perf jevent: Add an 'all' architecture argument
-> >    perf jevents: Remove the type/version variables
-> >    perf jevents: Provide path to json file on error
-> >    perf jevents: Sort json files entries
-> >    perf pmu-events: Hide pmu_sys_event_tables
-> >    perf pmu-events: Avoid passing pmu_events_map
-> >    perf pmu-events: Hide pmu_events_map
-> >    perf test: Use full metric resolution
-> >    perf pmu-events: Move test events/metrics to json
-> >    perf pmu-events: Don't assume pmu_event is an array
-> >    perf pmu-events: Hide the pmu_events
-> >    perf metrics: Copy entire pmu_event in find metric
-> >    perf jevents: Compress the pmu_events_table
-> >    perf jevents: Fold strings optimization
-> >
-> >   tools/perf/arch/arm64/util/pmu.c              |   4 +-
-> >   tools/perf/pmu-events/Build                   |   6 +-
-> >   .../arch/test/test_soc/cpu/metrics.json       |  64 +++
-> >   tools/perf/pmu-events/empty-pmu-events.c      | 204 +++++++-
-> >   tools/perf/pmu-events/jevents.py              | 495 ++++++++++++++----
-> >   tools/perf/pmu-events/pmu-events.h            |  40 +-
-> >   tools/perf/tests/expand-cgroup.c              |  25 +-
-> >   tools/perf/tests/parse-metric.c               |  77 +--
-> >   tools/perf/tests/pmu-events.c                 | 466 +++++++----------
-> >   tools/perf/util/metricgroup.c                 | 275 ++++++----
-> >   tools/perf/util/metricgroup.h                 |   5 +-
-> >   tools/perf/util/pmu.c                         | 139 ++---
-> >   tools/perf/util/pmu.h                         |   8 +-
-> >   tools/perf/util/s390-sample-raw.c             |  50 +-
-> >   14 files changed, 1140 insertions(+), 718 deletions(-)
-> >   create mode 100644 tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
-> >
->
+--dx/GFEplJzZRgpXz
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0002-KVM-x86-Cache-guest-CPUID-s-PDMC-for-fast-lookup.patch"
+
+From fd2d041407ce8c3c8c643d9d64c63a8a05ba85af Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 26 Jul 2022 09:37:49 -0700
+Subject: [PATCH 2/2] KVM: x86: Cache guest CPUID's PDMC for fast lookup
+
+Add a cache entry for X86_FEATURE_PDCM to allow for expedited lookups.
+For all intents and purposes, VMX queries X86_FEATURE_PDCM by default on
+every VM-Enter.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/cpuid.c | 1 +
+ arch/x86/kvm/cpuid.h | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 27b25fdb4335..fd32fddd7bc1 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -420,6 +420,7 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 
+ 	/* Update the cache before doing anything else. */
+ 	vcpu->arch.kvm_cpuid_x86_feature_cache = 0;
++	kvm_cpuid_cache_update(vcpu, X86_FEATURE_PDCM);
+ 
+ 	kvm_update_kvm_cpuid_base(vcpu);
+ 	kvm_vcpu_after_set_cpuid(vcpu);
+diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+index 49009d16022a..65114cf7742e 100644
+--- a/arch/x86/kvm/cpuid.h
++++ b/arch/x86/kvm/cpuid.h
+@@ -86,6 +86,7 @@ static __always_inline u32 *guest_cpuid_get_register(struct kvm_vcpu *vcpu,
+ }
+ 
+ enum kvm_cpuid_cached_feature {
++	KVM_CACHED_X86_FEATURE_PDCM,
+ 	NR_KVM_CACHED_X86_FEATURES,
+ };
+ 
+@@ -95,6 +96,10 @@ static __always_inline int guest_cpuid_get_cache_bit(unsigned int x86_feature)
+ 
+ 	BUILD_BUG_ON(NR_KVM_CACHED_X86_FEATURES > cache_bytes * BITS_PER_BYTE);
+ 
++	/* Use a "dumb" if statement, this is all resolved at compile time. */
++	if (x86_feature == X86_FEATURE_PDCM)
++		return KVM_CACHED_X86_FEATURE_PDCM;
++
+ 	return NR_KVM_CACHED_X86_FEATURES;
+ }
+ 
+-- 
+2.37.1.455.g008518b4e5-goog
+
+
+--dx/GFEplJzZRgpXz--

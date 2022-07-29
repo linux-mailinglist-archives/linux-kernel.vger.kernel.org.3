@@ -2,130 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44855856A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 23:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7F85856AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 23:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239452AbiG2Vqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 17:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S239472AbiG2Vwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 17:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiG2Vqa (ORCPT
+        with ESMTP id S238276AbiG2Vwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 17:46:30 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67E28B4BB;
-        Fri, 29 Jul 2022 14:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659131189; x=1690667189;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yuBKFOjdVhm5xzW7H39ySAdNm5fv6KOJ8EcoqSoFYzU=;
-  b=THCA0SQ1LA5dwrX08XtGDLW9+oZrOJHcfy43kbwYuIIa+G//7fin0buK
-   qZS7BA4Bqoo95V9h6hlRyumzKN42BhvdXMA4GCJaMYgoSnhFqxWatWB5l
-   Q9yThBJJaodwTL9iFxkOUiNMO3+Ir88d4wWIKMDRAeCnIpp/tRfZ7SL2X
-   FRYNq+1fkx3tr2rP3PLvGbPjdrwLWU+60/yETplXEJ95ajb1B7/wh3Ljt
-   I2af0PcUwTr2FAYua2cqBKhKVDehQ95va/8Ql+UbpLNOXnamIIROjm1f2
-   ElHZs8uJhi7YB9vblDicA/ofnJ7+y4gHtvccTyUsEel7uWAqby6rGa3Kr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="375157939"
-X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
-   d="scan'208";a="375157939"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 14:46:29 -0700
-X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
-   d="scan'208";a="598375994"
-Received: from unknown (HELO desk) ([10.252.135.102])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 14:46:28 -0700
-Date:   Fri, 29 Jul 2022 14:46:27 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
- Stale Data
-Message-ID: <20220729214627.wowu5sny226c5pe4@desk>
-References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
- <YuJ6TQpSTIeXLNfB@zn.tnic>
- <20220729022851.mdj3wuevkztspodh@desk>
- <YuPpKa6OsG9e9nTj@zn.tnic>
- <20220729173609.45o7lllpvsgjttqt@desk>
- <YuRDbuQPYiYBZghm@zn.tnic>
+        Fri, 29 Jul 2022 17:52:37 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB836715C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 14:52:36 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id w17-20020a17090a8a1100b001f326c73df6so4812242pjn.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 14:52:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SgHDJUiOkS7miIyL7LpVzR5WDmqzLdFMNFDQ4k5m+II=;
+        b=S6IsfuP/AS5LnyXDjhqLEZhysQNh9np7P0PVtML73SC5YHnQ3RoeLeKKGnv3hKArSp
+         2sJucdbqRlcFSXkLWcPNAwclYCIVQjWPyjN3UFjKle4a5FMYxfX6fN7huaNgS6+2ZfkH
+         NfbkE7mO7evc4XtGYzbVHfAyONwvhloMY57l0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SgHDJUiOkS7miIyL7LpVzR5WDmqzLdFMNFDQ4k5m+II=;
+        b=SEFMyizcHP7FgZQGhAkYmC2KIzKtRKSRoqOAYXhDuTG3AkLLJnJQu+c8j0Xe5p9xd6
+         tT0NuhrZ8tITuM4aG6SCY/tiJWFL1YUQG2D+jwkrtPHPlaaAd56gufSDRZ2EYD8MKPPF
+         wO0xYosmLKJO4KWm4U3QgZI3BHiR6FyQn3STApmBazztV7Vsa8eCN8OJGWj52inf2NTV
+         ovmtXILwiI32bj0h0kCnXVr1BE9sw+6YExJGc7dLtdZrRh6yuXpfaZS54rtO0aAbWiz6
+         kzPSX6J07Gh3sKIGwv0OIfd25tCe/iUg44SeArBtszVTnhanvjG7Dki7womYE+DzoSvP
+         e3bA==
+X-Gm-Message-State: ACgBeo0Fs8t5Ikq8wgSe0m0GCeoog+Aiwcav6Lxes23VNi3bzgHCRKor
+        0rFytPsY4+vRQoxMe2/oG9KiScFM8JUGEv8s
+X-Google-Smtp-Source: AA6agR6eh/nvWxLzgIj3QH2UD39HgpPvwOF/Kd0gbiLoBuxJn5BFill6VJt0GRPS8r6JDRZHh//TdA==
+X-Received: by 2002:a17:902:ca0b:b0:16d:d562:42dc with SMTP id w11-20020a170902ca0b00b0016dd56242dcmr3928192pld.26.1659131555937;
+        Fri, 29 Jul 2022 14:52:35 -0700 (PDT)
+Received: from khazhy-linux.svl.corp.google.com ([2620:15c:2d4:203:3ea0:edff:78ae:d482])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090a410400b001f2e20edd14sm6323609pjf.45.2022.07.29.14.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 14:52:35 -0700 (PDT)
+From:   Khazhismel Kumykov <khazhy@chromium.org>
+X-Google-Original-From: Khazhismel Kumykov <khazhy@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jan Kara <jack@suse.cz>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Khazhismel Kumykov <khazhy@google.com>
+Subject: [PATCH] writeback: check wb shutdown for bw_dwork
+Date:   Fri, 29 Jul 2022 14:51:23 -0700
+Message-Id: <20220729215123.1998585-1-khazhy@google.com>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuRDbuQPYiYBZghm@zn.tnic>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 10:30:38PM +0200, Borislav Petkov wrote:
-> On Fri, Jul 29, 2022 at 10:36:09AM -0700, Pawan Gupta wrote:
-> > Does this look okay:
-> > 
-> > -       if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
-> > -           !arch_cap_mmio_immune(ia32_cap))
-> > -               setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-> > +       if (!boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN)) {
-> > +               if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
-> > +                   !arch_cap_mmio_immune(ia32_cap)) {
-> > +                       setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-> > +               }
-> > +       }
-> 
-> Yeah, I had initially X86_BUG_MMIO_UNKNOWN set unconditionally on all.
-> 
-> Then I thought I should set it only on older but as dhansen said, Intel
-> is going in and out of servicing period so we better set it on all
-> initially and then clear it when the CPU is not in the vuln blacklist.
+This fixes a KASAN splat in timer interrupt after removing a device
 
-Setting all to "unknown" initially can lead to some CPUs incorrectly
-reporting "Unknown".
+Move wb->work_lock to be irq-safe, as complete may be called from irq
 
-Let me see if there is a way to distinguish between 4. and 5. below:
+Fixes: 45a2966fd641 ("writeback: fix bandwidth estimate for spiky workload")
+Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+---
+ fs/fs-writeback.c   | 12 ++++++------
+ mm/backing-dev.c    | 10 +++++-----
+ mm/page-writeback.c |  6 +++++-
+ 3 files changed, 16 insertions(+), 12 deletions(-)
 
-   CPU category				  X86_BUG_MMIO_STALE_DATA	X86_BUG_MMIO_UNKNOWN
------------------------------------------------------------------------------------------------
-1. Known affected (in cpu list)			1				0
-2. CPUs with HW immunity (MMIO_NO=1)		0				0
-3. Other vendors				0				0
-4. Older Intel CPUs				0				1
-5. Not affected current CPUs (but MMIO_NO=0)	0				?
+diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+index 05221366a16d..08a1993ab7fd 100644
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -134,10 +134,10 @@ static bool inode_io_list_move_locked(struct inode *inode,
+ 
+ static void wb_wakeup(struct bdi_writeback *wb)
+ {
+-	spin_lock_bh(&wb->work_lock);
++	spin_lock_irq(&wb->work_lock);
+ 	if (test_bit(WB_registered, &wb->state))
+ 		mod_delayed_work(bdi_wq, &wb->dwork, 0);
+-	spin_unlock_bh(&wb->work_lock);
++	spin_unlock_irq(&wb->work_lock);
+ }
+ 
+ static void finish_writeback_work(struct bdi_writeback *wb,
+@@ -164,7 +164,7 @@ static void wb_queue_work(struct bdi_writeback *wb,
+ 	if (work->done)
+ 		atomic_inc(&work->done->cnt);
+ 
+-	spin_lock_bh(&wb->work_lock);
++	spin_lock_irq(&wb->work_lock);
+ 
+ 	if (test_bit(WB_registered, &wb->state)) {
+ 		list_add_tail(&work->list, &wb->work_list);
+@@ -172,7 +172,7 @@ static void wb_queue_work(struct bdi_writeback *wb,
+ 	} else
+ 		finish_writeback_work(wb, work);
+ 
+-	spin_unlock_bh(&wb->work_lock);
++	spin_unlock_irq(&wb->work_lock);
+ }
+ 
+ /**
+@@ -2082,13 +2082,13 @@ static struct wb_writeback_work *get_next_work_item(struct bdi_writeback *wb)
+ {
+ 	struct wb_writeback_work *work = NULL;
+ 
+-	spin_lock_bh(&wb->work_lock);
++	spin_lock_irq(&wb->work_lock);
+ 	if (!list_empty(&wb->work_list)) {
+ 		work = list_entry(wb->work_list.next,
+ 				  struct wb_writeback_work, list);
+ 		list_del_init(&work->list);
+ 	}
+-	spin_unlock_bh(&wb->work_lock);
++	spin_unlock_irq(&wb->work_lock);
+ 	return work;
+ }
+ 
+diff --git a/mm/backing-dev.c b/mm/backing-dev.c
+index 95550b8fa7fe..de65cb1e5f76 100644
+--- a/mm/backing-dev.c
++++ b/mm/backing-dev.c
+@@ -260,10 +260,10 @@ void wb_wakeup_delayed(struct bdi_writeback *wb)
+ 	unsigned long timeout;
+ 
+ 	timeout = msecs_to_jiffies(dirty_writeback_interval * 10);
+-	spin_lock_bh(&wb->work_lock);
++	spin_lock_irq(&wb->work_lock);
+ 	if (test_bit(WB_registered, &wb->state))
+ 		queue_delayed_work(bdi_wq, &wb->dwork, timeout);
+-	spin_unlock_bh(&wb->work_lock);
++	spin_unlock_irq(&wb->work_lock);
+ }
+ 
+ static void wb_update_bandwidth_workfn(struct work_struct *work)
+@@ -334,12 +334,12 @@ static void cgwb_remove_from_bdi_list(struct bdi_writeback *wb);
+ static void wb_shutdown(struct bdi_writeback *wb)
+ {
+ 	/* Make sure nobody queues further work */
+-	spin_lock_bh(&wb->work_lock);
++	spin_lock_irq(&wb->work_lock);
+ 	if (!test_and_clear_bit(WB_registered, &wb->state)) {
+-		spin_unlock_bh(&wb->work_lock);
++		spin_unlock_irq(&wb->work_lock);
+ 		return;
+ 	}
+-	spin_unlock_bh(&wb->work_lock);
++	spin_unlock_irq(&wb->work_lock);
+ 
+ 	cgwb_remove_from_bdi_list(wb);
+ 	/*
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index 55c2776ae699..3c34db15cf70 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -2867,6 +2867,7 @@ static void wb_inode_writeback_start(struct bdi_writeback *wb)
+ 
+ static void wb_inode_writeback_end(struct bdi_writeback *wb)
+ {
++	unsigned long flags;
+ 	atomic_dec(&wb->writeback_inodes);
+ 	/*
+ 	 * Make sure estimate of writeback throughput gets updated after
+@@ -2875,7 +2876,10 @@ static void wb_inode_writeback_end(struct bdi_writeback *wb)
+ 	 * that if multiple inodes end writeback at a similar time, they get
+ 	 * batched into one bandwidth update.
+ 	 */
+-	queue_delayed_work(bdi_wq, &wb->bw_dwork, BANDWIDTH_INTERVAL);
++	spin_lock_irqsave(&wb->work_lock, flags);
++	if (test_bit(WB_registered, &wb->state))
++		queue_delayed_work(bdi_wq, &wb->bw_dwork, BANDWIDTH_INTERVAL);
++	spin_unlock_irqrestore(&wb->work_lock, flags);
+ }
+ 
+ bool __folio_end_writeback(struct folio *folio)
+-- 
+2.37.1.455.g008518b4e5-goog
 
-> > >  	if (!cpu_has(c, X86_FEATURE_BTC_NO)) {
-> > >  		if (cpu_matches(cpu_vuln_blacklist, RETBLEED) || (ia32_cap & ARCH_CAP_RSBA))
-> > > diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> > > index 663f6e6dd288..5b2508adc38a 100644
-> > > --- a/arch/x86/kernel/cpu/intel.c
-> > > +++ b/arch/x86/kernel/cpu/intel.c
-> > > @@ -372,6 +372,10 @@ static void early_init_intel(struct cpuinfo_x86 *c)
-> > >  static void bsp_init_intel(struct cpuinfo_x86 *c)
-> > >  {
-> > >  	resctrl_cpu_detect(c);
-> > > +
-> > > +	/* Set on older crap */
-> > > +	if (c->x86_model < INTEL_FAM6_IVYBRIDGE)
-> 
-> i.e., remove this check.
-
-This check actually solves the above problem, but consider it gone.
-
-> > > +		setup_force_cpu_bug(X86_BUG_MMIO_UNKNOWN);
-> > 
-> > Thanks for suggesting this approach.
-> 
-> You're welcome. I'm assuming you're gonna finish it or should I?
-
-I will finish it, working on it.

@@ -2,98 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB595854DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1342F5854E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238512AbiG2SBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 14:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S238516AbiG2SCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 14:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238498AbiG2SBC (ORCPT
+        with ESMTP id S238452AbiG2SCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 14:01:02 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13A33CBF4;
-        Fri, 29 Jul 2022 11:00:59 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id sz17so9825804ejc.9;
-        Fri, 29 Jul 2022 11:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=dkyNFKwAIzKazQRhw8FwKZF2MPV+YOonGzJk/uNvBtU=;
-        b=YqwyjahSRQnOMWaZ+ntOUwAXMBHw+G0SrfSUMIvnSv55FbcGex4ajMQumoHDcHHGVR
-         ymd85ytmGQvUwOhtpRSo8foOa7fF6I1TyHc/l8mcmg8DAN3TcbUcqcPnHS2ghPhl8+uc
-         yaYZfdJdQoMWIddt0mwe/wDtz13T92xJRYAYdJ0AMXHS5pBuuZTlB2l8FbU/WRrZB8Gg
-         4C435Qzfcs4AkJN/OJDq0ogN3S8u5QpiRsGQccK5Q1UBIV1YrFXGuEKNjM4htemBZRfb
-         cbJ2vbWw2PY3Elw56GVN/zCAKC+A4paF3xgfb5xD0GK0Q+LP+bt5ML2HSre/HqUQXVDl
-         My2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=dkyNFKwAIzKazQRhw8FwKZF2MPV+YOonGzJk/uNvBtU=;
-        b=z4+/HtN79Jr0e4gJlviQXvPQ9R8vsgEbSneVbqRHEIf75e8R0op653KwbNhcXA7Eqp
-         mrnAz3lXidI/HvQdWk6rtFnvcKX/HNG9GIk3W/DpM98s0pLIwkvikspIiWOPFwpIogaq
-         /x2Pk/ZanxEjShCzs5i5PqG/Qds+9k9ISA0GdzjYnxYES6Wrmp7yfH8ffberzV0Za1KM
-         p5618LCy39C9NFhWlert3pqgXSTbv+nRxqSDwPfnoQk+vh17Ji5WtFqyv+O6GtqZRn5z
-         h2ClpbfUuLHhuU0yQY8LUg6PNhOj1/6phjtbaijrUNpKcciyErtfIll9AQXNTMNe/my5
-         piSQ==
-X-Gm-Message-State: AJIora96nG5drWakUGQxYSlvkNWKTyrHUXzxSrB22BTc4IeE+1B/Si4A
-        yVDmBybVg+foEMx/37BAf88SIxj8bRylk3FbU+c=
-X-Google-Smtp-Source: AGRyM1tMbrZmFlSWJiSeVLHoOcVgck5TivbsVn6ZGgBeJ3wmOdwFWLLkAJUcr93tbxBVy7y4xJ6RtHVbnZqyyBeiMOc=
-X-Received: by 2002:a17:907:9706:b0:72b:4b0d:86a2 with SMTP id
- jg6-20020a170907970600b0072b4b0d86a2mr3643600ejc.242.1659117658496; Fri, 29
- Jul 2022 11:00:58 -0700 (PDT)
+        Fri, 29 Jul 2022 14:02:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D7087C20;
+        Fri, 29 Jul 2022 11:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659117752; x=1690653752;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Y0+P/vHWqaRgVIxlZZfHJ7Fd2MGWeehyke55xUiYtkk=;
+  b=g1PMCXTHGQsqulMzRFcaEjcHlrqECD0YqkVB5ouyhCqdfz8yLSE87EoV
+   sLcSEUoy4vsWoAWdWZjGDXMcfxUHPIUL3hLqg0RsHrJy22kHt5xm4s7a6
+   rMZlvt0eOOl+lNhFfRAOfINluqOW8aM08MtxFejgk9RLj170rsBg6vpj1
+   TeUPl5RBMDUi/JJaZTltRiLd5xyU+XroIImcO8hJkv2hpNuB2uNJy/ieA
+   bUfk2shhaRGcf8+36QQrHP6qyiVNecsFEEm+WJlH1jLpqpQMq4u/kce5X
+   WeSXdxHZThOjN0WaRoN5aiWGPRILWeQTIYMe2Ga/O0tNJGMfUK8G9gZWp
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="314624637"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="314624637"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 11:02:31 -0700
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="669348643"
+Received: from svdas-mobl.amr.corp.intel.com (HELO [10.209.20.175]) ([10.209.20.175])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 11:02:30 -0700
+Message-ID: <d71dc25e-ef26-b6c3-6c8e-fc5727b76a23@intel.com>
+Date:   Fri, 29 Jul 2022 11:02:30 -0700
 MIME-Version: 1.0
-References: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
- <20220728125435.3336618-2-potin.lai.pt@gmail.com> <CAHp75Vf+4Ew2eaccPb3sQY4wAjjsqR7o_uyTUb7eguY=JeDtQA@mail.gmail.com>
- <d5f6a7e0-60e7-5afe-30c7-8ba76ab12a5c@gmail.com>
-In-Reply-To: <d5f6a7e0-60e7-5afe-30c7-8ba76ab12a5c@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 29 Jul 2022 20:00:22 +0200
-Message-ID: <CAHp75VfEksu-yG=6cFpDNLYzsg98KJ2Jf_G8zYiQvQch9yeMzQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] iio: humidity: hdc100x: switch to probe_new callback
-To:     Potin Lai <potin.lai.pt@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Content-Language: en-US
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <f173a7c0-b4f8-17f3-a65d-e581fed32368@intel.com>
+ <20220729175959.w7gd5z7dsbxrnydn@desk>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220729175959.w7gd5z7dsbxrnydn@desk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 2:45 AM Potin Lai <potin.lai.pt@gmail.com> wrote:
-> On 7/29/22 04:41, Andy Shevchenko wrote:
-> > On Thu, Jul 28, 2022 at 3:32 PM Potin Lai <potin.lai.pt@gmail.com> wrote:
-> >> Switch to probe_new callback due to probe is deprecated soon.
-> > Just noticed that commit message is a bit not okay in a few ways:
-> > 1) we refer to the callbacks like ->probe_new();
+On 7/29/22 10:59, Pawan Gupta wrote:
+>> +       if (!boot_cpu_unknown_bug(bug))
+>> +               return sprintf(buf, "Unknown\n");
+>>
+>> Thoughts?
+> Sounds good. Similar to this Borislav suggested to add
+> X86_BUG_MMIO_UNKNOWN. I will see if I can combine both approaches.
 
-> > 2) we don't know when we deprecate it, the point here is not that, but
-> > unused id parameter in the current code.
+I'd say Borislav's is better if there is going to be a small number of
+"unknown" things in total.  Mine might be better if we expect a *bunch*
+of them.
 
-^^^ read this again and follow below.
-
-> Thanks for point it out, is it OK leave the message as it is? or you prefer to submit another version to fix it?
-> If new version required, I will also add another patch for struct device pointer you mentioned in the other reply.
->
-> Just want to confirm that is the new message looks OK?
-> New message:
-> Switch ->porbe() to new callback ->probe_new()
-
-You need to answer the question "why?" you are doing this and that.
-The above is just saying "what?". See above.
-
--- 
-With Best Regards,
-Andy Shevchenko
+In other words, I'm rooting for Borislav's.

@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DD7584D79
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FAC584D89
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235138AbiG2Ij0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 04:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S234694AbiG2Ilq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 04:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235312AbiG2IjT (ORCPT
+        with ESMTP id S235539AbiG2Ijq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 04:39:19 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BBD82465;
-        Fri, 29 Jul 2022 01:39:18 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id w10so4038610plq.0;
-        Fri, 29 Jul 2022 01:39:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2AbhP7nYSXJ/AwHwJRTqRpQ/jkqcGYTg4SSpWNa0cho=;
-        b=cTPOeA4SNer+m/gzVeE7O8aiqdYLyPd0xJW13gu9Au9jVb0lnxPQE9p6pnVesSvgiP
-         vAuToV1S8trG+5Rc4sx9PO/Iy+ZXrnDSAUpSLQ6h69NpdmALkIMmvqBENdEBuOAH46OD
-         OWxA/AEdwjYAFDZ+n1Uz4helnj27lBNWiZ1T5pZiZabFQeqGIcpqxwIGKpHNnuTuSXgK
-         RmEGJu0ZrPlTyFhzylF/I0kvUftrCmZGwxREbW2qLjO7Sufvbfhqqo5eGoEoLNKUWVq1
-         Ck7DpuJm/jUlR28ZgHxuiC5tPnzLBHEApE8Cn3zvN5ZGblGYaFW5QONGRASCvX6Z4r+c
-         d4eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2AbhP7nYSXJ/AwHwJRTqRpQ/jkqcGYTg4SSpWNa0cho=;
-        b=2/PfmM5YUOGRje7rwULPJyOQ42ujabHs4sjNqSE4R5RvMqL/6+lKh+kA16zWy98MZI
-         tE8IspkfdQwdfxdpPsAk+6rVclIvyY6sb/Nz3OBHAnzQUKFZ5BWLUIeGbb65y77PApeu
-         APzO/x2Chy1MbDkeaomctsPP1/ItLKWJYL8t5z0KVtFyKbIOrtgfmlXhXs3EqaE+lu2+
-         ck6TzL33jfEs8BpZNwT+M+c7d2pai3K/g2jStzG9Jms66MtK5KR+dhbNB9QPPNd3VrhV
-         e13hi4mx9v6gCDXmxcpZz4qSTktnMncyv6DGXy3q5Zin5eXQ1FMP2xoIN0ledWDgSQTK
-         Bcqg==
-X-Gm-Message-State: ACgBeo0t99VorJxCElRldFCF6X1ytGc4GF6/Exlu+ftvxNXELvOvgrt6
-        ggrXJg+VFJ6hzGuH0V7GcUidvtkMicQxYg==
-X-Google-Smtp-Source: AA6agR6VLy0FI44h+215DMEk8iu1CRWcjFQblN+FTlbd6OKxYClom6nK0LRkzmfFffvmcSCrh7D0DQ==
-X-Received: by 2002:a17:90a:5b0d:b0:1f3:137d:7927 with SMTP id o13-20020a17090a5b0d00b001f3137d7927mr2926251pji.18.1659083957512;
-        Fri, 29 Jul 2022 01:39:17 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id x26-20020aa79a5a000000b00525521a288dsm2284407pfj.28.2022.07.29.01.39.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 01:39:16 -0700 (PDT)
-Message-ID: <5f93760c-cb93-2c58-11d7-f9ddef7f640c@gmail.com>
-Date:   Fri, 29 Jul 2022 16:39:07 +0800
+        Fri, 29 Jul 2022 04:39:46 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6EA83F06
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 01:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1659083979;
+        bh=Pr7+lAk3BpHjZc9aaO+tL3K4NBHyUQwC5PAB5P1mSzc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=hhY7WEjFNEGVj5jCb9WOp06Z4p5gVcblRZkf0YUy9nnCjHO36bMrRYnRKEpp2wbEZ
+         gxCf8oujMj25mKTHFsRouFMg/Tj9sK+TSn7Hi49ZzWJPk6TMXMuie637CubdbFWOvu
+         Lg0vYiWC++dKyOaVvY3Qu5IzE0Z9mGribUxAt+4s=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id B6F28669EB;
+        Fri, 29 Jul 2022 04:39:37 -0400 (EDT)
+Message-ID: <f80a1c26cc0062995613546da16797deb0de7c36.camel@xry111.site>
+Subject: [PATCH v4 1/4] LoongArch: Add section of GOT for kernel module
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     loongarch@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Date:   Fri, 29 Jul 2022 16:39:35 +0800
+In-Reply-To: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
+References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] KVM: VMX: Use proper type-safe functions for vCPU =>
- LBRs helpers
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220727233424.2968356-1-seanjc@google.com>
- <20220727233424.2968356-3-seanjc@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20220727233424.2968356-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,81 +54,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/7/2022 7:34 am, Sean Christopherson wrote:
-> Turn vcpu_to_lbr_desc() and vcpu_to_lbr_records() into functions in order
-> to provide type safety, to document exactly what they return, and to
+The address of external symbols will locate more than 32-bit offset.  We
+were using the `-Wa,-mla-global-with-abs` and `-Wa,-mla-local-with-abs`
+to prevent the compiler and assembler from generating GOT relocations,
+but these options are undocumented hacks and do not work anymore with
+GAS 2.40 and GCC 13.
 
-Considering the prevalence of similar practices, perhaps we (at least me)
-need doc more benefits of "type safety" or the risks of not doing so.
+Let the module loader emit GOT entries for data symbols so we would be
+able to handle GOT relocations.  The GOT entry is just the data symbol
+address.
 
-> allow consuming the helpers in vmx.h.  Move the definitions as necessary
-> (the macros "reference" to_vmx() before its definition).
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/vmx/vmx.h | 26 +++++++++++++++++---------
->   1 file changed, 17 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index 286c88e285ea..690421b7d26c 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -6,6 +6,7 @@
->   
->   #include <asm/kvm.h>
->   #include <asm/intel_pt.h>
-> +#include <asm/perf_event.h>
->   
->   #include "capabilities.h"
->   #include "kvm_cache_regs.h"
-> @@ -91,15 +92,6 @@ union vmx_exit_reason {
->   	u32 full;
->   };
->   
-> -#define vcpu_to_lbr_desc(vcpu) (&to_vmx(vcpu)->lbr_desc)
-> -#define vcpu_to_lbr_records(vcpu) (&to_vmx(vcpu)->lbr_desc.records)
+In module.lds, emit a stub .got section for a section header entry.
+The actual content of the entry will be filled at runtime by
+module_frob_arch_sections.
 
-More targets can be found in the arch/x86/kvm/pmu.h:
+A special symbol named "_GLOBAL_OFFSET_TABLE_" is used by stack-based
+relocations for the PC-relative offset of a GOT entry, like:
 
-#define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu)
-#define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
-#define pmc_to_pmu(pmc)   (&(pmc)->vcpu->arch.pmu)
+    R_LARCH_SOP_PUSH_PCREL _GLOBAL_OFFSET_TABLE_
+    R_LARCH_SOP_PUSH_GPREL foo
+    R_LARCH_SOP_ADD
 
-> -
-> -void intel_pmu_cross_mapped_check(struct kvm_pmu *pmu);
-> -bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu);
-> -
-> -int intel_pmu_create_guest_lbr_event(struct kvm_vcpu *vcpu);
-> -void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu);
+Each kernel module has its own GOT (like a shared object), so we need
+to generate _GLOBAL_OFFSET_TABLE_ as a local symbol for each module.
 
-Unrelated move, but no reason not to do so opportunistically.
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+---
+ arch/loongarch/include/asm/module.h     | 23 +++++++++++++
+ arch/loongarch/include/asm/module.lds.h |  1 +
+ arch/loongarch/kernel/module-sections.c | 43 ++++++++++++++++++++++---
+ 3 files changed, 63 insertions(+), 4 deletions(-)
 
-> -
->   struct lbr_desc {
->   	/* Basic info about guest LBR records. */
->   	struct x86_pmu_lbr records;
-> @@ -524,6 +516,22 @@ static inline struct vcpu_vmx *to_vmx(struct kvm_vcpu *vcpu)
->   	return container_of(vcpu, struct vcpu_vmx, vcpu);
->   }
->   
-> +static inline struct lbr_desc *vcpu_to_lbr_desc(struct kvm_vcpu *vcpu)
-> +{
-> +	return &to_vmx(vcpu)->lbr_desc;
-> +}
-> +
-> +static inline struct x86_pmu_lbr *vcpu_to_lbr_records(struct kvm_vcpu *vcpu)
-> +{
-> +	return &vcpu_to_lbr_desc(vcpu)->records;
-> +}
-> +
-> +void intel_pmu_cross_mapped_check(struct kvm_pmu *pmu);
-> +bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu);
-> +
-> +int intel_pmu_create_guest_lbr_event(struct kvm_vcpu *vcpu);
-> +void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu);
-> +
->   static inline unsigned long vmx_get_exit_qual(struct kvm_vcpu *vcpu)
->   {
->   	struct vcpu_vmx *vmx = to_vmx(vcpu);
+diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/a=
+sm/module.h
+index 9f6718df1854..76a98a0ab8a0 100644
+--- a/arch/loongarch/include/asm/module.h
++++ b/arch/loongarch/include/asm/module.h
+@@ -19,6 +19,7 @@ struct mod_section {
+ struct mod_arch_specific {
+ 	struct mod_section plt;
+ 	struct mod_section plt_idx;
++	struct mod_section got;
+ };
+=20
+ struct plt_entry {
+@@ -28,11 +29,16 @@ struct plt_entry {
+ 	u32 inst_jirl;
+ };
+=20
++struct got_entry {
++	Elf_Addr symbol_addr;
++};
++
+ struct plt_idx_entry {
+ 	unsigned long symbol_addr;
+ };
+=20
+ Elf_Addr module_emit_plt_entry(struct module *mod, unsigned long val);
++Elf_Addr module_emit_got_entry(struct module *mod, Elf_Addr val);
+=20
+ static inline struct plt_entry emit_plt_entry(unsigned long val)
+ {
+@@ -51,6 +57,11 @@ static inline struct plt_idx_entry emit_plt_idx_entry(un=
+signed long val)
+ 	return (struct plt_idx_entry) { val };
+ }
+=20
++static inline struct got_entry emit_got_entry(Elf_Addr val)
++{
++	return (struct got_entry) { val };
++}
++
+ static inline int get_plt_idx(unsigned long val, const struct mod_section =
+*sec)
+ {
+ 	int i;
+@@ -77,4 +88,16 @@ static inline struct plt_entry *get_plt_entry(unsigned l=
+ong val,
+ 	return plt + plt_idx;
+ }
+=20
++static inline struct got_entry *get_got_entry(Elf_Addr val,
++					      const struct mod_section *sec)
++{
++	struct got_entry *got =3D (struct got_entry *)sec->shdr->sh_addr;
++	int i;
++
++	for (i =3D 0; i < sec->num_entries; i++)
++		if (got[i].symbol_addr =3D=3D val)
++			return &got[i];
++	return NULL;
++}
++
+ #endif /* _ASM_MODULE_H */
+diff --git a/arch/loongarch/include/asm/module.lds.h b/arch/loongarch/inclu=
+de/asm/module.lds.h
+index 31c1c0db11a3..42b7cca0b947 100644
+--- a/arch/loongarch/include/asm/module.lds.h
++++ b/arch/loongarch/include/asm/module.lds.h
+@@ -4,4 +4,5 @@ SECTIONS {
+ 	. =3D ALIGN(4);
+ 	.plt : { BYTE(0) }
+ 	.plt.idx : { BYTE(0) }
++	.got : { HIDDEN(_GLOBAL_OFFSET_TABLE_ =3D .); BYTE(0) }
+ }
+diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kerne=
+l/module-sections.c
+index 6d498288977d..36a77771d18c 100644
+--- a/arch/loongarch/kernel/module-sections.c
++++ b/arch/loongarch/kernel/module-sections.c
+@@ -33,6 +33,25 @@ Elf_Addr module_emit_plt_entry(struct module *mod, unsig=
+ned long val)
+ 	return (Elf_Addr)&plt[nr];
+ }
+=20
++Elf_Addr module_emit_got_entry(struct module *mod, Elf_Addr val)
++{
++	struct mod_section *got_sec =3D &mod->arch.got;
++	int i =3D got_sec->num_entries;
++	struct got_entry *got =3D get_got_entry(val, got_sec);
++
++	if (got)
++		return (Elf_Addr)got;
++
++	/* There is no GOT entry existing for val yet.  Create a new one.  */
++	got =3D (struct got_entry *)got_sec->shdr->sh_addr;
++	got[i] =3D emit_got_entry(val);
++
++	got_sec->num_entries++;
++	BUG_ON(got_sec->num_entries > got_sec->max_entries);
++
++	return (Elf_Addr)&got[i];
++}
++
+ static int is_rela_equal(const Elf_Rela *x, const Elf_Rela *y)
+ {
+ 	return x->r_info =3D=3D y->r_info && x->r_addend =3D=3D y->r_addend;
+@@ -50,7 +69,8 @@ static bool duplicate_rela(const Elf_Rela *rela, int idx)
+ 	return false;
+ }
+=20
+-static void count_max_entries(Elf_Rela *relas, int num, unsigned int *plts=
+)
++static void count_max_entries(Elf_Rela *relas, int num,
++			      unsigned int *plts, unsigned int *gots)
+ {
+ 	unsigned int i, type;
+=20
+@@ -59,14 +79,16 @@ static void count_max_entries(Elf_Rela *relas, int num,=
+ unsigned int *plts)
+ 		if (type =3D=3D R_LARCH_SOP_PUSH_PLT_PCREL) {
+ 			if (!duplicate_rela(relas, i))
+ 				(*plts)++;
+-		}
++		} else if (type =3D=3D R_LARCH_SOP_PUSH_GPREL)
++			if (!duplicate_rela(relas, i))
++				(*gots)++;
+ 	}
+ }
+=20
+ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 			      char *secstrings, struct module *mod)
+ {
+-	unsigned int i, num_plts =3D 0;
++	unsigned int i, num_plts =3D 0, num_gots =3D 0;
+=20
+ 	/*
+ 	 * Find the empty .plt sections.
+@@ -76,6 +98,8 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *s=
+echdrs,
+ 			mod->arch.plt.shdr =3D sechdrs + i;
+ 		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt.idx"))
+ 			mod->arch.plt_idx.shdr =3D sechdrs + i;
++		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".got"))
++			mod->arch.got.shdr =3D sechdrs + i;
+ 	}
+=20
+ 	if (!mod->arch.plt.shdr) {
+@@ -86,6 +110,10 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr =
+*sechdrs,
+ 		pr_err("%s: module PLT.IDX section(s) missing\n", mod->name);
+ 		return -ENOEXEC;
+ 	}
++	if (!mod->arch.got.shdr) {
++		pr_err("%s: module GOT section(s) missing\n", mod->name);
++		return -ENOEXEC;
++	}
+=20
+ 	/* Calculate the maxinum number of entries */
+ 	for (i =3D 0; i < ehdr->e_shnum; i++) {
+@@ -100,7 +128,7 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr =
+*sechdrs,
+ 		if (!(dst_sec->sh_flags & SHF_EXECINSTR))
+ 			continue;
+=20
+-		count_max_entries(relas, num_rela, &num_plts);
++		count_max_entries(relas, num_rela, &num_plts, &num_gots);
+ 	}
+=20
+ 	mod->arch.plt.shdr->sh_type =3D SHT_NOBITS;
+@@ -117,5 +145,12 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr=
+ *sechdrs,
+ 	mod->arch.plt_idx.num_entries =3D 0;
+ 	mod->arch.plt_idx.max_entries =3D num_plts;
+=20
++	mod->arch.got.shdr->sh_type =3D SHT_NOBITS;
++	mod->arch.got.shdr->sh_flags =3D SHF_ALLOC;
++	mod->arch.got.shdr->sh_addralign =3D L1_CACHE_BYTES;
++	mod->arch.got.shdr->sh_size =3D (num_gots + 1) * sizeof(struct got_entry)=
+;
++	mod->arch.got.num_entries =3D 0;
++	mod->arch.got.max_entries =3D num_gots;
++
+ 	return 0;
+ }
+--=20
+2.37.0
+
+

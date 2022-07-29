@@ -2,133 +2,398 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB0C58499C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7638C5849B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiG2CKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S233354AbiG2C0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiG2CJ6 (ORCPT
+        with ESMTP id S229535AbiG2C0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:09:58 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB30479EE4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:09:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1659060594;
-        bh=eKojhGSrp5Nzdwbp8zmcNPFzO/9cxIKBEXrBgbRon5Q=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=INJrpYgHv2XlnNjM4pbSiZAbH0MW6V2t5UKFYKfWXk3q4ctNIAA15gp0axYAKqkI3
-         xszjq0BkKPashPapR2nhymh8LpfgQxTKrhXNxpY/NUyPF+bku/oNdq36ScE8oh9TjE
-         uwp21KUPp1dmVQZ1I9jsSwPPZSEVrqL/ijk9Re8U=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 2E83A65929;
-        Thu, 28 Jul 2022 22:09:52 -0400 (EDT)
-Message-ID: <4da7ce6a6e5b6d609c37ebf6815caacc3b3b8297.camel@xry111.site>
-Subject: [PATCH v3 3/4] LoongArch: Remove -fplt and -Wa,-mla-* from CFLAGS
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     loongarch@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Date:   Fri, 29 Jul 2022 10:09:51 +0800
-In-Reply-To: <bb7824d39a694b13069718c2b8193379f79229b4.camel@xry111.site>
-References: <bb7824d39a694b13069718c2b8193379f79229b4.camel@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 22:26:39 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6584A826;
+        Thu, 28 Jul 2022 19:26:37 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2E03D1A3123;
+        Fri, 29 Jul 2022 04:26:36 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A77361A311C;
+        Fri, 29 Jul 2022 04:26:35 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D56E6180031A;
+        Fri, 29 Jul 2022 10:26:33 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shengjiu.wang@gmail.com
+Subject: [PATCH v3] ASoC: dt-bindings: fsl,sai: Convert format to json-schema
+Date:   Fri, 29 Jul 2022 10:10:32 +0800
+Message-Id: <1659060632-4880-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--fplt is the default of all supported compilers (GCC, and maybe Clang in
-the future), so it needs not to be explicitly specified.
+Convert the NXP SAI binding to DT schema format using json-schema.
 
--Wa,-mla-* options were used to prevent the assembler from generating
-GOT accesses for "la.local" and "la.global" macros.  But GCC >=3D 13 will
-generate GOT access explicitly without use of these macros, so these
-options are ineffective for symbol addressing in C code with GCC >=3D 13.
-Now we can handle GOT and GOT-based relocations properly, so we can
-remove these options and use GOT access for both GCC 12 and 13
-(or newer).
+The Synchronous Audio Interface (SAI) provides an interface that
+supports full-duplex serial interfaces with frame synchronization
+formats such as I2S, AC97, TDM, and codec/DSP interfaces.
 
-GAS <=3D 2.39 does not support "la.got [reg], [sym] + [offset]" with a
-non-zero offset.  So in the assembly code we explicitly use "la.pcrel"
-instead of "la" (now defaulted to "la.got") where a PC-relative
-addressing is suitable, in order to work around this limitation and keep
-the compatibility with old toolchains.
+Beside conversion, 'fsl,shared-interrupt' and '#sound-dai-cells'
+are added for they are already used by some dts.
 
-Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 ---
- arch/loongarch/Makefile      |  4 ----
- arch/loongarch/kernel/head.S | 10 +++++-----
- 2 files changed, 5 insertions(+), 9 deletions(-)
+changes in v3
+- address comments from Krzysztof
 
-diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-index 039dcc4fe1f3..800349ea9310 100644
---- a/arch/loongarch/Makefile
-+++ b/arch/loongarch/Makefile
-@@ -40,10 +40,6 @@ endif
-=20
- cflags-y			+=3D -G0 -pipe -msoft-float
- LDFLAGS_vmlinux			+=3D -G0 -static -n -nostdlib
--KBUILD_AFLAGS_KERNEL		+=3D -Wa,-mla-global-with-pcrel
--KBUILD_CFLAGS_KERNEL		+=3D -Wa,-mla-global-with-pcrel
--KBUILD_AFLAGS_MODULE		+=3D -Wa,-mla-global-with-abs
--KBUILD_CFLAGS_MODULE		+=3D -fplt -Wa,-mla-global-with-abs,-mla-local-with-=
-abs
-=20
- cflags-y +=3D -ffreestanding
- cflags-y +=3D $(call cc-option, -mno-check-zero-division)
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index 74ea7bf6c8d6..193329ed6e8c 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -60,17 +60,17 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 	la.abs		t0, 0f
- 	jirl		zero, t0, 0
- 0:
--	la		t0, __bss_start		# clear .bss
-+	la.pcrel	t0, __bss_start		# clear .bss
- 	st.d		zero, t0, 0
--	la		t1, __bss_stop - LONGSIZE
-+	la.pcrel	t1, __bss_stop - LONGSIZE
- 1:
- 	addi.d		t0, t0, LONGSIZE
- 	st.d		zero, t0, 0
- 	bne		t0, t1, 1b
-=20
--	la		t0, fw_arg0
-+	la.pcrel	t0, fw_arg0
- 	st.d		a0, t0, 0		# firmware arguments
--	la		t0, fw_arg1
-+	la.pcrel	t0, fw_arg1
- 	st.d		a1, t0, 0
-=20
- 	/* KSave3 used for percpu base, initialized as 0 */
-@@ -78,7 +78,7 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 	/* GPR21 used for percpu base (runtime), initialized as 0 */
- 	or		u0, zero, zero
-=20
--	la		tp, init_thread_union
-+	la.pcrel	tp, init_thread_union
- 	/* Set the SP after an empty pt_regs.  */
- 	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
- 	PTR_ADD		sp, sp, tp
---=20
-2.37.0
+changes in v2
+- fix exclusive property issue
+- fix order issue of compatible, clock-names, dma-names
 
+ .../devicetree/bindings/sound/fsl,sai.yaml    | 221 ++++++++++++++++++
+ .../devicetree/bindings/sound/fsl-sai.txt     |  95 --------
+ 2 files changed, 221 insertions(+), 95 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/fsl,sai.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/fsl-sai.txt
+
+diff --git a/Documentation/devicetree/bindings/sound/fsl,sai.yaml b/Documentation/devicetree/bindings/sound/fsl,sai.yaml
+new file mode 100644
+index 000000000000..86ee46755b0c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/fsl,sai.yaml
+@@ -0,0 +1,221 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/fsl,sai.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Freescale Synchronous Audio Interface (SAI).
++
++maintainers:
++  - Shengjiu Wang <shengjiu.wang@nxp.com>
++
++description: |
++  The SAI is based on I2S module that used communicating with audio codecs,
++  which provides a synchronous audio interface that supports fullduplex
++  serial interfaces with frame synchronization such as I2S, AC97, TDM, and
++  codec/DSP interfaces.
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - fsl,vf610-sai
++          - fsl,imx6sx-sai
++          - fsl,imx6ul-sai
++          - fsl,imx7ulp-sai
++          - fsl,imx8mq-sai
++          - fsl,imx8qm-sai
++          - fsl,imx8ulp-sai
++      - items:
++          - enum:
++              - fsl,imx8mm-sai
++              - fsl,imx8mn-sai
++              - fsl,imx8mp-sai
++          - const: fsl,imx8mq-sai
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    items:
++      - description: receive and transmit interrupt
++
++  dmas:
++    maxItems: 2
++
++  dma-names:
++    maxItems: 2
++
++  clocks:
++    items:
++      - description: The ipg clock for register access
++      - description: master clock source 0 (obsoleted)
++      - description: master clock source 1
++      - description: master clock source 2
++      - description: master clock source 3
++      - description: PLL clock source for 8kHz series
++      - description: PLL clock source for 11kHz series
++    minItems: 4
++
++  clock-names:
++    oneOf:
++      - items:
++          - const: bus
++          - const: mclk0
++          - const: mclk1
++          - const: mclk2
++          - const: mclk3
++          - const: pll8k
++          - const: pll11k
++        minItems: 4
++      - items:
++          - const: bus
++          - const: mclk1
++          - const: mclk2
++          - const: mclk3
++          - const: pll8k
++          - const: pll11k
++        minItems: 4
++
++  lsb-first:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      Configures whether the LSB or the MSB is transmitted
++      first for the fifo data. If this property is absent,
++      the MSB is transmitted first as default, or the LSB
++      is transmitted first.
++    type: boolean
++
++  big-endian:
++    description: |
++      required if all the SAI registers are big-endian rather than little-endian.
++    type: boolean
++
++  fsl,sai-synchronous-rx:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      SAI will work in the synchronous mode (sync Tx with Rx) which means
++      both the transmitter and the receiver will send and receive data by
++      following receiver's bit clocks and frame sync clocks.
++    type: boolean
++
++  fsl,sai-asynchronous:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      SAI will work in the asynchronous mode, which means both transmitter
++      and receiver will send and receive data by following their own bit clocks
++      and frame sync clocks separately.
++      If both fsl,sai-asynchronous and fsl,sai-synchronous-rx are absent, the
++      default synchronous mode (sync Rx with Tx) will be used, which means both
++      transmitter and receiver will send and receive data by following clocks
++      of transmitter.
++    type: boolean
++
++  fsl,dataline:
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    description: |
++      Configure the dataline. It has 3 value for each configuration
++    maxItems: 16
++    items:
++      items:
++        - description: format Default(0), I2S(1) or PDM(2)
++          enum: [0, 1, 2]
++        - description: dataline mask for 'rx'
++        - description: dataline mask for 'tx'
++
++  fsl,sai-mclk-direction-output:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: SAI will output the SAI MCLK clock.
++    type: boolean
++
++  fsl,shared-interrupt:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: Interrupt is shared with other modules.
++    type: boolean
++
++  "#sound-dai-cells":
++    const: 0
++    description: optional, some dts node didn't add it.
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: fsl,vf610-sai
++    then:
++      properties:
++        dmas:
++          items:
++            - description: DMA controller phandle and request line for TX
++            - description: DMA controller phandle and request line for RX
++        dma-names:
++          items:
++            - const: tx
++            - const: rx
++    else:
++      properties:
++        dmas:
++          items:
++            - description: DMA controller phandle and request line for RX
++            - description: DMA controller phandle and request line for TX
++        dma-names:
++          items:
++            - const: rx
++            - const: tx
++  - if:
++      required:
++        - fsl,sai-asynchronous
++    then:
++      properties:
++        fsl,sai-synchronous-rx: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - dmas
++  - dma-names
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/vf610-clock.h>
++    sai2: sai@40031000 {
++        compatible = "fsl,vf610-sai";
++        reg = <0x40031000 0x1000>;
++        interrupts = <86 IRQ_TYPE_LEVEL_HIGH>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_sai2_1>;
++        clocks = <&clks VF610_CLK_PLATFORM_BUS>,
++                 <&clks VF610_CLK_SAI2>,
++                 <&clks 0>, <&clks 0>;
++        clock-names = "bus", "mclk1", "mclk2", "mclk3";
++        dma-names = "tx", "rx";
++        dmas = <&edma0 0 21>,
++               <&edma0 0 20>;
++        big-endian;
++        lsb-first;
++    };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/imx8mm-clock.h>
++    sai1: sai@30010000 {
++        compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
++        reg = <0x30010000 0x10000>;
++        interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clk IMX8MM_CLK_SAI1_IPG>,
++                 <&clk IMX8MM_CLK_DUMMY>,
++                 <&clk IMX8MM_CLK_SAI1_ROOT>,
++                 <&clk IMX8MM_CLK_DUMMY>, <&clk IMX8MM_CLK_DUMMY>;
++        clock-names = "bus", "mclk0", "mclk1", "mclk2", "mclk3";
++        dmas = <&sdma2 0 2 0>, <&sdma2 1 2 0>;
++        dma-names = "rx", "tx";
++        fsl,dataline = <1 0xff 0xff 2 0xff 0x11>;
++        #sound-dai-cells = <0>;
++    };
+diff --git a/Documentation/devicetree/bindings/sound/fsl-sai.txt b/Documentation/devicetree/bindings/sound/fsl-sai.txt
+deleted file mode 100644
+index fbdefc3fade7..000000000000
+--- a/Documentation/devicetree/bindings/sound/fsl-sai.txt
++++ /dev/null
+@@ -1,95 +0,0 @@
+-Freescale Synchronous Audio Interface (SAI).
+-
+-The SAI is based on I2S module that used communicating with audio codecs,
+-which provides a synchronous audio interface that supports fullduplex
+-serial interfaces with frame synchronization such as I2S, AC97, TDM, and
+-codec/DSP interfaces.
+-
+-Required properties:
+-
+-  - compatible		: Compatible list, contains "fsl,vf610-sai",
+-			  "fsl,imx6sx-sai", "fsl,imx6ul-sai",
+-			  "fsl,imx7ulp-sai", "fsl,imx8mq-sai",
+-			  "fsl,imx8qm-sai", "fsl,imx8mm-sai",
+-			  "fsl,imx8mn-sai", "fsl,imx8mp-sai", or
+-			  "fsl,imx8ulp-sai".
+-
+-  - reg			: Offset and length of the register set for the device.
+-
+-  - clocks		: Must contain an entry for each entry in clock-names.
+-
+-  - clock-names		: Must include the "bus" for register access and
+-			  "mclk1", "mclk2", "mclk3" for bit clock and frame
+-			  clock providing.
+-                          "pll8k", "pll11k" are optional, they are the clock
+-                          source for root clock, one is for 8kHz series rates
+-                          another one is for 11kHz series rates.
+-  - dmas		: Generic dma devicetree binding as described in
+-			  Documentation/devicetree/bindings/dma/dma.txt.
+-
+-  - dma-names		: Two dmas have to be defined, "tx" and "rx".
+-
+-  - pinctrl-names	: Must contain a "default" entry.
+-
+-  - pinctrl-NNN		: One property must exist for each entry in
+-			  pinctrl-names. See ../pinctrl/pinctrl-bindings.txt
+-			  for details of the property values.
+-
+-  - lsb-first		: Configures whether the LSB or the MSB is transmitted
+-			  first for the fifo data. If this property is absent,
+-			  the MSB is transmitted first as default, or the LSB
+-			  is transmitted first.
+-
+-  - fsl,sai-synchronous-rx: This is a boolean property. If present, indicating
+-			  that SAI will work in the synchronous mode (sync Tx
+-			  with Rx) which means both the transmitter and the
+-			  receiver will send and receive data by following
+-			  receiver's bit clocks and frame sync clocks.
+-
+-  - fsl,sai-asynchronous: This is a boolean property. If present, indicating
+-			  that SAI will work in the asynchronous mode, which
+-			  means both transmitter and receiver will send and
+-			  receive data by following their own bit clocks and
+-			  frame sync clocks separately.
+-
+-  - fsl,dataline        : configure the dataline. it has 3 value for each configuration
+-                          first one means the type: I2S(1) or PDM(2)
+-                          second one is dataline mask for 'rx'
+-                          third one is dataline mask for 'tx'.
+-                          for example: fsl,dataline = <1 0xff 0xff 2 0xff 0x11>;
+-                          it means I2S type rx mask is 0xff, tx mask is 0xff, PDM type
+-                          rx mask is 0xff, tx mask is 0x11 (dataline 1 and 4 enabled).
+-
+-Optional properties:
+-
+-  - big-endian		: Boolean property, required if all the SAI
+-			  registers are big-endian rather than little-endian.
+-
+-Optional properties (for mx6ul):
+-
+-  - fsl,sai-mclk-direction-output: This is a boolean property. If present,
+-			 indicates that SAI will output the SAI MCLK clock.
+-
+-Note:
+-- If both fsl,sai-asynchronous and fsl,sai-synchronous-rx are absent, the
+-  default synchronous mode (sync Rx with Tx) will be used, which means both
+-  transmitter and receiver will send and receive data by following clocks
+-  of transmitter.
+-- fsl,sai-asynchronous and fsl,sai-synchronous-rx are exclusive.
+-
+-Example:
+-sai2: sai@40031000 {
+-	      compatible = "fsl,vf610-sai";
+-	      reg = <0x40031000 0x1000>;
+-	      pinctrl-names = "default";
+-	      pinctrl-0 = <&pinctrl_sai2_1>;
+-	      clocks = <&clks VF610_CLK_PLATFORM_BUS>,
+-		     <&clks VF610_CLK_SAI2>,
+-		     <&clks 0>, <&clks 0>;
+-	      clock-names = "bus", "mclk1", "mclk2", "mclk3";
+-	      dma-names = "tx", "rx";
+-	      dmas = <&edma0 0 VF610_EDMA_MUXID0_SAI2_TX>,
+-		   <&edma0 0 VF610_EDMA_MUXID0_SAI2_RX>;
+-	      big-endian;
+-	      lsb-first;
+-};
+-- 
+2.34.1
 

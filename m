@@ -2,85 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E055584E9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD36C584EA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235864AbiG2KVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        id S235894AbiG2KWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235837AbiG2KVb (ORCPT
+        with ESMTP id S235375AbiG2KV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:21:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814B7820DD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:21:30 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 12:21:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659090088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mU0xv5GIVQEO071aHdUVMKejqCkW/YRvDhGbr8xHAu4=;
-        b=LEFeMOgdcP4/lzafhGLvJCTbRBTWfd/lCoUQWes3rr5x8qTos5EbkXAKEvRvSdnvGRHJsJ
-        8lGtyETxGPmd1eiIFYS8Ib7AhfdREAobYYpWubdQKsBCon0Ovu3GzTSyqVcw0P/MMDWT5k
-        60EgGZw9bhl+v/TPTgGgJZJnA2dOeuGaTBTAb77VSjLE0NhUwvzOrfuL2AeFiysdtw1Iig
-        HLaOpaRYBM0umMJbdi3p2Vei/KHvy10KegC5/OlalwJyw4uzwPXsZjdeE67Ar3FlDQqWsw
-        oUxLrwBwFYSugtkMCMGx3owKU5qYbAYHkzBOlwJES+DMU7iwWIY9+NQtI6+eHQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659090088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mU0xv5GIVQEO071aHdUVMKejqCkW/YRvDhGbr8xHAu4=;
-        b=GaiQyhwgxVv1fv8i00zX9zKE5VC5XrHw4oiXDX8d9/5RbpJk73cL5wd/uiRzRe5GNG5whh
-        as//sdT2sEiFENDw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] random: Initialize vsprintf's pointer hash once the
- random core is ready.
-Message-ID: <YuO0p8lMhVmQj/K2@linutronix.de>
-References: <YuOf6qu453dOkR+S@linutronix.de>
- <YuOyeJu8PPAVnXiN@zx2c4.com>
+        Fri, 29 Jul 2022 06:21:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08C677579
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:21:57 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1oHN7j-0002Ai-P4; Fri, 29 Jul 2022 12:21:39 +0200
+Message-ID: <e78ff391-3141-bf0b-6fe1-4ff7204414fb@pengutronix.de>
+Date:   Fri, 29 Jul 2022 12:21:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YuOyeJu8PPAVnXiN@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1] Moving init_completion before request_irq
+Content-Language: en-US
+To:     Kshitiz Varshney <kshitiz.varshney@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Iuliana Prodan <iuliana.prodan@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Rahul Kumar Yadav <rahulkumar.yadav@nxp.com>,
+        Vabhav Sharma <vabhav.sharma@nxp.com>,
+        Sahil Malhotra <sahil.malhotra@nxp.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>
+Cc:     linux-imx@nxp.com, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220729100211.2204126-1-kshitiz.varshney@nxp.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220729100211.2204126-1-kshitiz.varshney@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-29 12:12:08 [+0200], Jason A. Donenfeld wrote:
-> Hi Sebastian,
-Hi Jason,
+Hello Kshitiz,
 
-> Gumming up random.c with these sorts of things isn't alright. vsprintf
-> isn't special in any regard here.
+On 29.07.22 12:02, Kshitiz Varshney wrote:
+> Issue:
+> While servicing interrupt, trying to access variable rng_op_done,
+> which is not yet initalized hence causing kernel to crash
+> while booting.
 > 
-> If you can't do this from ordinary context inside of vsprintf, just
-> launch a workqueue to do it. This is already needed for changing
-> vsprintf's static branch, so just move the get_random_bytes() call into
-> there on RT (leaving it alone on non-RT, I guess).
+> Fix:
+> Moving initialization of rng_op_done before request_irq.
+> 
+> Fixes: 1d5449445bd0 (hwrng: mx-rngc - add a driver for Freescale RNGC)
+> Signed-off-by: Kshitiz Varshney <kshitiz.varshney@nxp.com>
 
-So launching a worker to obtain the random data? That would mean that
-the first %p print won't have nothing, right? I could do it as part of
-an init-call but I don't know when the random pool is ready. And trying
-it again every other second if the random core isn't ready looks kind of
-wasteful.
+Thanks for your patch.
 
-> Jason
+> +	init_completion(&rngc->rng_op_done);
+> +
+>  	ret = devm_request_irq(&pdev->dev,
+>  			irq, imx_rngc_irq, 0, pdev->name, (void *)rngc);
 
-Sebastian
+This should probably be moved below imx_rngc_irq_mask_clear(rngc).
+init_completion can stay where it is. That way:
+
+ - You initialize rngc fully before registering the IRQ handler
+ - You don't handle pending IRQs that you want to dismiss anyway
+ - If the IRQ happens to be because of a SEED_DONE due to a previous
+   boot stage, you don't end up completing the completion prematurely.
+
+Cheers,
+Ahmad
+
+>  	if (ret) {
+> @@ -277,7 +279,6 @@ static int imx_rngc_probe(struct platform_device *pdev)
+>  		goto err;
+>  	}
+>  
+> -	init_completion(&rngc->rng_op_done);
+>  
+>  	rngc->rng.name = pdev->name;
+>  	rngc->rng.init = imx_rngc_init;
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

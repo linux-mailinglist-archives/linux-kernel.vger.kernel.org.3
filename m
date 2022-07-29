@@ -2,139 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E9F585161
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20824585168
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236927AbiG2OPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
+        id S236925AbiG2OSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236483AbiG2OPv (ORCPT
+        with ESMTP id S236061AbiG2OSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:15:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8DCA79EC8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659104149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rFA+uxNGNsudolD18ZmOlov1noIaWvtogHjG67RGCQY=;
-        b=AoFFYk9aGKHH9UjwkvrbkdA9164xIah9vbHb0oZ7hxbbbbxCZ0dar1ZNXmZ9/hXw0Qm0Qt
-        T2X8naO+qd1y/8sJBEkRFOXL9fIrf92Mwu2GdjeMszxXku3yfD+m5bQ5CgTpTL/Thukq3R
-        Fo74Mz3t57N83S/M7lMgj0W149xOGBM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-Wb4umgugPXqogFhzQf3MXw-1; Fri, 29 Jul 2022 10:15:48 -0400
-X-MC-Unique: Wb4umgugPXqogFhzQf3MXw-1
-Received: by mail-wr1-f70.google.com with SMTP id h9-20020adfa4c9000000b0021ee4a48ea7so1246241wrb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:15:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=rFA+uxNGNsudolD18ZmOlov1noIaWvtogHjG67RGCQY=;
-        b=FVRVwzwtwd/dsRljbnbwo8irMuR9W+H3f5knZKBumPO0nDaOyPeKt8z83lvPSFIZdn
-         mZhp/zbZ+Q3wnv1U2D8XnhIzLAZ/yue8j2YZTHJUL4b8JE7Ql5gP6trLHaZPupqgc6X0
-         fM/fAae7ZfAmEkSoMJM4zD/EQyXjN693amkeXk4bRPiYD/dTxx5cetj4ic7g0iooBPVk
-         /FT7oQa6iAL8WVHJhRuqr2VPaiX77g/zqsKAR6QwbaeOE4P62jE70uJVURxKvi3/oKBP
-         PGUeE5KhEwtosXv8xDcfL5BpW52hRDkzcZ4inDdprl2Y/xUcKrMyIn94GYLDUK9+QsaA
-         U8PA==
-X-Gm-Message-State: AJIora+CEL3UJOCUCN2uNPrjOGbDLmIux+rFPey6KP2bkgvPB7aftuO5
-        BlumhR0bxm8JrdGXoST+3AfsJ49Zffpka2FxsaPY8my5CpO+KBcbmLY2ywmNr5y02HGvr38AtIB
-        qfOdYNcQvK2oa6xjkNlV4vydc0Bl8PDz+rh/W1WZSM3X156Qn3p8/aPz2ZUIx2/oxyuDWoDK9aB
-        wk
-X-Received: by 2002:a05:600c:1e8a:b0:3a3:20fc:a651 with SMTP id be10-20020a05600c1e8a00b003a320fca651mr2700422wmb.39.1659104147139;
-        Fri, 29 Jul 2022 07:15:47 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u/OiyyNpQFBL5eR2cI25OBjX69l2o77DctSBOzjH5C7szig2PiUhKPK6V052IXgZtMuA1mQA==
-X-Received: by 2002:a05:600c:1e8a:b0:3a3:20fc:a651 with SMTP id be10-20020a05600c1e8a00b003a320fca651mr2700386wmb.39.1659104146777;
-        Fri, 29 Jul 2022 07:15:46 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id l21-20020a05600c1d1500b003a326b84340sm9677332wms.44.2022.07.29.07.15.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 07:15:46 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-In-Reply-To: <YuMCB86fH2K3NcqM@slm.duckdns.org>
-References: <20220728005815.1715522-1-longman@redhat.com>
- <YuLF+xXaCzwWi2BR@slm.duckdns.org>
- <1ae1cc6c-dca9-4958-6b22-24a5777c5e8d@redhat.com>
- <YuLdX7BYGvo57LNU@slm.duckdns.org>
- <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
- <YuL1NijxSEv2xadk@slm.duckdns.org>
- <c470d3f7-f0f8-b8e6-4a95-7b334f0a824b@redhat.com>
- <YuMCB86fH2K3NcqM@slm.duckdns.org>
-Date:   Fri, 29 Jul 2022 15:15:45 +0100
-Message-ID: <xhsmhy1wcc8dq.mognet@vschneid.remote.csb>
+        Fri, 29 Jul 2022 10:18:03 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EDC79ECC
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659104283; x=1690640283;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WemGgDS6zuvQ+FbBLR0dwfq/9jtZtc/gA6NP2qy1hE8=;
+  b=lT1/N/zvFjjYNaYA6O0NqTfLr36weSNtb9oSnh59IvmnlpfcOl0XvLfI
+   ED2UoK1oK33+rVEY64b/su4Yd0odpskhxgXN7itrl3j2NnLVckB3fceLD
+   4OGGz4A5X1ZwQMMmB6nwBwRntyL2FKjxO5sXc/FhL7EyHZ+Iuj/eQEFnc
+   PbLZd/PlKdgfGPLLX2ep5FfGDhpxQG4vvMjDzrPcZ3sTPeHmHZ03JzW7o
+   8yct3js56IHlbhUcY+Z75LX1hxC5GTTjmuD0eCzyi6nqupUEGuKyj3FCC
+   ivBHPR1368uvg6XXd8ravE4iup8aiEaxPqQQfNtR5zh80vbxF+SfdcIeT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="289973025"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="289973025"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 07:18:02 -0700
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="598263734"
+Received: from svdas-mobl.amr.corp.intel.com (HELO [10.209.20.175]) ([10.209.20.175])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 07:18:02 -0700
+Message-ID: <d27e42a8-b2af-f922-4cea-b1ddaa2a0af0@intel.com>
+Date:   Fri, 29 Jul 2022 07:18:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 1/2] x86/sev: Use per-CPU PSC structure in prep for
+ unaccepted memory support
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <cover.1659103274.git.thomas.lendacky@amd.com>
+ <658c455c40e8950cb046dd885dd19dc1c52d060a.1659103274.git.thomas.lendacky@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <658c455c40e8950cb046dd885dd19dc1c52d060a.1659103274.git.thomas.lendacky@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/22 11:39, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Thu, Jul 28, 2022 at 05:04:19PM -0400, Waiman Long wrote:
->> > So, the patch you proposed is making the code remember one special aspect of
->> > user requested configuration - whether it configured it or not, and trying
->> > to preserve that particular state as cpuset state changes. It addresses the
->> > immediate problem but it is a very partial approach. Let's say a task wanna
->> > be affined to one logical thread of each core and set its mask to 0x5555.
->> > Now, let's say cpuset got enabled and enforced 0xff and affined the task to
->> > 0xff. After a while, the cgroup got more cpus allocated and its cpuset now
->> > has 0xfff. Ideally, what should happen is the task now having the effective
->> > mask of 0x555. In practice, tho, it either would get 0xf55 or 0x55 depending
->> > on which way we decide to misbehave.
->>
->> OK, I see what you want to accomplish. To fully address this issue, we will
->> need to have a new cpumask variable in the the task structure which will be
->> allocated if sched_setaffinity() is ever called. I can rework my patch to
->> use this approach.
->
-> Yeah, we'd need to track what user requested separately from the currently
-> effective cpumask. Let's make sure that the scheduler folks are on board
-> before committing to the idea tho. Peter, Ingo, what do you guys think?
->
+On 7/29/22 07:01, Tom Lendacky wrote:
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index c05f0124c410..1f7f6205c4f6 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -104,6 +104,15 @@ struct sev_es_runtime_data {
+>  	 * is currently unsupported in SEV-ES guests.
+>  	 */
+>  	unsigned long dr7;
+> +
+> +	/*
+> +	 * Page State Change structure for use when accepting memory or when
+> +	 * changing page state. Interrupts are disabled when using the structure
+> +	 * but an NMI could still be raised, so use a flag to indicate when the
+> +	 * structure is in use and use the MSR protocol in these cases.
+> +	 */
+> +	struct snp_psc_desc psc_desc;
+> +	bool psc_active;
+>  };
 
-FWIW on a runtime overhead side of things I think it'll be OK as that
-should be just an extra mask copy  in sched_setaffinity() and a subset
-check / cpumask_and() in set_cpus_allowed_ptr(). The policy side is a bit
-less clear (when, if ever, do we clear the user-defined mask? Will it keep
-haunting us even after moving a task to a disjoint cpuset partition?).
+This thing:
 
-There's also if/how that new mask should be exposed, because attaching a
-task to a cpuset will now yield a not-necessarily-obvious affinity -
-e.g. in the thread affinity example above, if the initial affinity setting
-was done ages ago by some system tool, IMO the user needs a way to be able
-to expect/understand the result of 0x555 rather than 0xfff.
+struct snp_psc_desc {
+        struct psc_hdr hdr;
+        struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
+} __packed;
 
-While I'm saying this, I don't think anything exposes p->user_cpus_ptr, but
-then again that one is for "special" hardware...
+is 16k, right?  Being per-cpu, this might eat up a MB or two of memory
+on a big server?
 
-> Thanks.
->
-> --
-> tejun
+Considering that runtime acceptance is already single-threaded[1] *and*
+there's a fallback method, why not just have a single copy of this
+guarded by a single lock?
 
+1.
+https://lore.kernel.org/all/20220614120231.48165-10-kirill.shutemov@linux.intel.com/

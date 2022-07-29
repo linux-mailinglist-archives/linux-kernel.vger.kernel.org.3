@@ -2,118 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462A8584E9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E055584E9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235806AbiG2KVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S235864AbiG2KVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiG2KVR (ORCPT
+        with ESMTP id S235837AbiG2KVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:21:17 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD8F74CD1;
-        Fri, 29 Jul 2022 03:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659090076; x=1690626076;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Yxu2G4VGiPVcwxTHTFYMsriLmADUxTrXB7PoN2zpY4s=;
-  b=FMOrT/uAQ9gYo1OYN6e13DfEqfByalfc7BtGvQDSzrz5pQ1ZFBDQuWbv
-   Ib84QesuM31xg82yYVBgkcy236Z6L7Re6NNMWPXI63tc7cwFhVPsGLUZp
-   FJnzMTV28H1ktuy6IBl4v1ml/ljuiLiZ2iBV2Cox0n7gnb9yq3/U7BWnS
-   +0I/STe+LzubbcHIr1r8LQneQfP+kiwLo48Q+i0KHQ7JqbXvIAkE/EW4+
-   7NPDcPS4DIZT0XjKLfkJ6KSZ1Fp/SrIp4g2Pfscunx7N+rICq5hQjtRbV
-   2bMG0S1mUOCDDvHG9pnME/eb6LlWAEFrL6Hizli04lVSDu8eSPiVivzxW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="275623948"
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="275623948"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 03:21:15 -0700
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="660179185"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.46.142])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 03:21:13 -0700
-Message-ID: <ec9422fa-664b-3c40-f5d5-283bca81f099@intel.com>
-Date:   Fri, 29 Jul 2022 13:21:11 +0300
+        Fri, 29 Jul 2022 06:21:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814B7820DD
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:21:30 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 12:21:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659090088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mU0xv5GIVQEO071aHdUVMKejqCkW/YRvDhGbr8xHAu4=;
+        b=LEFeMOgdcP4/lzafhGLvJCTbRBTWfd/lCoUQWes3rr5x8qTos5EbkXAKEvRvSdnvGRHJsJ
+        8lGtyETxGPmd1eiIFYS8Ib7AhfdREAobYYpWubdQKsBCon0Ovu3GzTSyqVcw0P/MMDWT5k
+        60EgGZw9bhl+v/TPTgGgJZJnA2dOeuGaTBTAb77VSjLE0NhUwvzOrfuL2AeFiysdtw1Iig
+        HLaOpaRYBM0umMJbdi3p2Vei/KHvy10KegC5/OlalwJyw4uzwPXsZjdeE67Ar3FlDQqWsw
+        oUxLrwBwFYSugtkMCMGx3owKU5qYbAYHkzBOlwJES+DMU7iwWIY9+NQtI6+eHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659090088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mU0xv5GIVQEO071aHdUVMKejqCkW/YRvDhGbr8xHAu4=;
+        b=GaiQyhwgxVv1fv8i00zX9zKE5VC5XrHw4oiXDX8d9/5RbpJk73cL5wd/uiRzRe5GNG5whh
+        as//sdT2sEiFENDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] random: Initialize vsprintf's pointer hash once the
+ random core is ready.
+Message-ID: <YuO0p8lMhVmQj/K2@linutronix.de>
+References: <YuOf6qu453dOkR+S@linutronix.de>
+ <YuOyeJu8PPAVnXiN@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH V2 1/1] mmc: sdhci-pci-o2micro: fix some SD cards
- compatibility issue at DDR50 mode
-Content-Language: en-US
-To:     Chevron Li <chevron.li@bayhubtech.com>, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shaper.liu@bayhubtech.com, shirley.her@bayhubtech.com,
-        xiaoguang.yu@bayhubtech.com
-References: <20220729100524.387-1-chevron.li@bayhubtech.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220729100524.387-1-chevron.li@bayhubtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YuOyeJu8PPAVnXiN@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/07/22 13:05, Chevron Li wrote:
-> Bayhub chips have better compatibility support for SDR50 than DDR50
-> and both mode have the same R/W performance when clock frequency >= 100MHz.
-> Disable DDR50 mode and use SDR50 instead.
-> 
-> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+On 2022-07-29 12:12:08 [+0200], Jason A. Donenfeld wrote:
+> Hi Sebastian,
+Hi Jason,
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> Gumming up random.c with these sorts of things isn't alright. vsprintf
+> isn't special in any regard here.
+> 
+> If you can't do this from ordinary context inside of vsprintf, just
+> launch a workqueue to do it. This is already needed for changing
+> vsprintf's static branch, so just move the get_random_bytes() call into
+> there on RT (leaving it alone on non-RT, I guess).
 
-> ---
-> Changes on V1:
-> 1.Set quirks2 flag SDHCI_QUIRK2_BROKEN_DDR50 for bayhub chips.
-> 2.Use bayhub hardware input tuning for SDR50 mode instead of standard tuning flow.
-> 
-> Changes on V2:
-> Update commit format and information.
-> ---
->  drivers/mmc/host/sdhci-pci-o2micro.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
-> index 0d4d343dbb77..ad457cd9cbaa 100644
-> --- a/drivers/mmc/host/sdhci-pci-o2micro.c
-> +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
-> @@ -317,11 +317,12 @@ static int sdhci_o2_execute_tuning(struct mmc_host *mmc, u32 opcode)
->  	u32 reg_val;
->  
->  	/*
-> -	 * This handler only implements the eMMC tuning that is specific to
-> +	 * This handler implements the hardware tuning that is specific to
->  	 * this controller.  Fall back to the standard method for other TIMING.
->  	 */
->  	if ((host->timing != MMC_TIMING_MMC_HS200) &&
-> -		(host->timing != MMC_TIMING_UHS_SDR104))
-> +		(host->timing != MMC_TIMING_UHS_SDR104) &&
-> +		(host->timing != MMC_TIMING_UHS_SDR50))
->  		return sdhci_execute_tuning(mmc, opcode);
->  
->  	if (WARN_ON((opcode != MMC_SEND_TUNING_BLOCK_HS200) &&
-> @@ -631,6 +632,8 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
->  		if (reg & 0x1)
->  			host->quirks |= SDHCI_QUIRK_MULTIBLOCK_READ_ACMD12;
->  
-> +		host->quirks2 |= SDHCI_QUIRK2_BROKEN_DDR50;
-> +
->  		sdhci_pci_o2_enable_msi(chip, host);
->  
->  		if (chip->pdev->device == PCI_DEVICE_ID_O2_SEABIRD0) {
-> 
-> base-commit: 68e77ffbfd06ae3ef8f2abf1c3b971383c866983
+So launching a worker to obtain the random data? That would mean that
+the first %p print won't have nothing, right? I could do it as part of
+an init-call but I don't know when the random pool is ready. And trying
+it again every other second if the random core isn't ready looks kind of
+wasteful.
 
+> Jason
+
+Sebastian

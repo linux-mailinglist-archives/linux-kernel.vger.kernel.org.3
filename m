@@ -2,252 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C3B585498
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CD958549C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238326AbiG2RgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S237298AbiG2Rgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbiG2RgM (ORCPT
+        with ESMTP id S231669AbiG2Rgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:36:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D15558C5;
-        Fri, 29 Jul 2022 10:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659116171; x=1690652171;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nFNqgikl3WWL9NcWcxWKbMwXIUo1OKIzdWPoKUTNJlI=;
-  b=eTebB7C8MqDGTQ+W+sVfPLCH8GbbXPQFjlPTdg9pNWJkXsLHzwxHEtjf
-   VRrZ+tKaweg1L1mQlgdS8C81zPuPy0rRF2dDXDFU189Jr9sz9UhVzcWux
-   m5OSiCvcyCJ2EnfFkZlkiz0laCSIJp1X2doSSyBcyqRN73kdSXijDL9I5
-   Wynbxl6xQJj8oerKy7TyqFheaQOj8xmszDR1kPhYIW+K3vdI/t57AEWFw
-   shH54UI7qtzfSlaaHnBLBxgDNQ1WF6JZM1FPOXlyjadJZAkkNk3NKub7i
-   LyGF/hyFEPfe2tYTT6suxdCaK+51r+LCvo1fP+uTuLVsMlLkw8dIgu9+s
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="268582020"
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="268582020"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 10:36:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="577023530"
-Received: from aahmedsi-mobl.amr.corp.intel.com (HELO desk) ([10.209.118.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 10:36:10 -0700
-Date:   Fri, 29 Jul 2022 10:36:09 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
- Stale Data
-Message-ID: <20220729173609.45o7lllpvsgjttqt@desk>
-References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
- <YuJ6TQpSTIeXLNfB@zn.tnic>
- <20220729022851.mdj3wuevkztspodh@desk>
- <YuPpKa6OsG9e9nTj@zn.tnic>
+        Fri, 29 Jul 2022 13:36:39 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75D3683FF
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:36:37 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id l14so3815205qtv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eVMmcjZdpoYkfAfcG11mdG+DM47ViTyLlI/HvC0NVqs=;
+        b=hrGaOCnwS06hYR6y6b1XfcUUnaDFW93EvujdUgaK7Ka1oAslOsoQxI+GrU6NDwkrRm
+         Bm/Oa2nrMa2QlCUPi2rwlMhDvM8LHxk5y1toex4ln/EOra9ZW1TWaPfT1p6nfAKF7wcZ
+         IX8ksKXqVjWZSFtHzQsp2hpzy/rIRcdeCVIS5QR14U5wN7UB7U+RZZNnXplmxBT6VUeP
+         Pa/gyCFzbAhxsgL3w5kZQndZItJQAj/WT20YCzfZhILOuqdyL1iLoHIq/vN2o1DWFIp5
+         Qa6OP91GDqftH6j4Ker359n7z+m5ajtPmTPun+GXwGgSaQSpMyuCsG36Xyoo/lchRbqW
+         BBhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eVMmcjZdpoYkfAfcG11mdG+DM47ViTyLlI/HvC0NVqs=;
+        b=qTijmB+jdcAMY2Wcynwzl/MyAccB79fJim503upm0u1jXzETWHmEvLUwOG140OZqrx
+         3Rlibg30LkxUi+hDcdujmTawUZUL/LG63PISMgsInu+WMuxARo0ibPZZjMPn8hZUDFMm
+         dNez0EsAwdTQqcBDTiu+WiVgusKm5UAg2AnNEOYpY4S1B74onERoBT0o0YDYolqkBZYH
+         hIKdDbVbn1gwov0H8FBVVR5hReeprF9WCF0EDchyho+2P81rBQBY6PPzWsDu5nNeaR9u
+         Qrsl6alZfbJDSjGaV1L35LjRKbiNVVuApP4kZEK+W2GHgibRHbwdOgv5V1nkBU+Pvn2l
+         K1ew==
+X-Gm-Message-State: AJIora87a8dmJpiph1VG2TgX/3qtLJzKBcao6pBVPuYKasdklTzs4sZj
+        4klJ41oJHIpRUJhdtk5Oyeah57iT4fenp34O1t4yuw==
+X-Google-Smtp-Source: AGRyM1slVTpXxL9pYoNgjLsi+9/WTrO27xA4AXRHV33/su5TUnhjLAt00WIq4cQj8BLtAOuBlwj1Vlry8zAIla3id60=
+X-Received: by 2002:a05:622a:190c:b0:31e:fc7b:e017 with SMTP id
+ w12-20020a05622a190c00b0031efc7be017mr4420798qtc.168.1659116196846; Fri, 29
+ Jul 2022 10:36:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuPpKa6OsG9e9nTj@zn.tnic>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722174829.3422466-1-yosryahmed@google.com>
+ <20220722174829.3422466-9-yosryahmed@google.com> <CAEf4BzZQwMeJ5xfzEWWRcTf1Hick862x2qSZ3O0DX47Q++2-4w@mail.gmail.com>
+In-Reply-To: <CAEf4BzZQwMeJ5xfzEWWRcTf1Hick862x2qSZ3O0DX47Q++2-4w@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Fri, 29 Jul 2022 10:36:26 -0700
+Message-ID: <CA+khW7ikSexgprouA6tpbWfsT2fDdgEd7OfXMF4qhDWkxgxf1g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 8/8] bpf: add a selftest for cgroup
+ hierarchical stats collection
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 04:05:29PM +0200, Borislav Petkov wrote:
-> On Thu, Jul 28, 2022 at 07:28:51PM -0700, Pawan Gupta wrote:
-> > To keep things simple, can this stay in cpu/common.c?
-> 
-> I know, right?
-> 
-> The gullible maintainer should simply take your half-baked patch so that
-> you can check off that box and then he can clean it up later.
+Hi Andrii,
 
-I am sorry if it felt like that, its really not my intention.
+Thanks for taking a look.
 
-I did also say:
+On Thu, Jul 28, 2022 at 3:40 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Jul 22, 2022 at 10:49 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+[...]
+> > +
+> > +#define CGROUP_PATH(p, n) {.path = #p"/"#n, .name = #n}
+> > +
+> > +static struct {
+> > +       const char *path, *name;
+> > +       unsigned long long id;
+> > +       int fd;
+> > +} cgroups[] = {
+> > +       CGROUP_PATH(/, test),
+> > +       CGROUP_PATH(/test, child1),
+> > +       CGROUP_PATH(/test, child2),
+> > +       CGROUP_PATH(/test/child1, child1_1),
+> > +       CGROUP_PATH(/test/child1, child1_2),
+> > +       CGROUP_PATH(/test/child2, child2_1),
+> > +       CGROUP_PATH(/test/child2, child2_2),
+>
+> nit: why are these arguments not explicit string literals?...
+> CGROUP_PATH("/test/child1", "child1_1") explicitly shows that those
+> values are used as strings
+>
 
-  "And if there is a compelling reason, I am willing to make the
-  required changes."
+No particular reason I think. String literals are good. Will fix in v6.
 
-I was genuinely curious about why not to use cpu/common.c for mmio.
+> > +};
+> > +
+> > +#define N_CGROUPS ARRAY_SIZE(cgroups)
+> > +#define N_NON_LEAF_CGROUPS 3
+> > +
+> > +int root_cgroup_fd;
+> > +bool mounted_bpffs;
+> > +
+>
+> static?
+>
 
-cpu/common.c is heavily used for bugs infrastructure. It already has the
-affected tables, bug enumerations and helper functions for previous
-bugs. Maybe it needs a cleanup as a whole.
+Yeah, we were careless about 'static' or 'inline'. I am going to go
+over the code and mark functions/vars 'static' properly.
 
-> See if this works:
+> > +static int read_from_file(const char *path, char *buf, size_t size)
+> > +{
+> > +       int fd, len;
+> > +
+> > +       fd = open(path, O_RDONLY);
+> > +       if (fd < 0) {
+> > +               log_err("Open %s", path);
+> > +               return 1;
+> > +       }
+> > +       len = read(fd, buf, size);
+> > +       if (len < 0)
+> > +               log_err("Read %s", path);
+> > +       else
+> > +               buf[len] = 0;
+> > +       close(fd);
+> > +       return len < 0;
+> > +}
+> > +
+>
+> [...]
+>
+> > +       /* Also dump stats for root */
+> > +       err = setup_cgroup_iter(obj, root_cgroup_fd, CG_ROOT_NAME);
+> > +       if (!ASSERT_OK(err, "setup_cgroup_iter"))
+> > +               return err;
+> > +
+> > +       /* Attach rstat flusher */
+> > +       link = bpf_program__attach(obj->progs.vmscan_flush);
+> > +       if (!ASSERT_OK_PTR(link, "attach rstat"))
+> > +               return libbpf_get_error(link);
+>
+> this is dangerous, because ASSERT_OK_PTR might overwrite errno by the
+> time we get to libbpf_get_error() call. link is NULL and
+> libbpf_get_error() extracts error from errno. It's best to just return
+> fixed error code here, or otherwise you'd need to remember err before
+> ASSERT_OK_PTR() call.
+>
 
-Thanks for this.
+Ack. We can just return a fixed error code here. Thanks.
 
-> ---
-> diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-> index 9393c50b5afc..14cd3c6ddec6 100644
-> --- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-> +++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-> @@ -230,6 +230,21 @@ The possible values in this file are:
->       * - 'Mitigation: Clear CPU buffers'
->         - The processor is vulnerable and the CPU buffer clearing mitigation is
->           enabled.
-> +     * - 'Unknown: CPU is beyond its servicing period'
-> +       - The processor vulnerability status is unknown because it is
-> +	 out of Servicing period. Mitigation is not attempted.
-> +
-> +
-> +Definitions:
-> +------------
-> +
-> +Servicing period: The process of providing functional and security
-> +updates to Intel processors or platforms, utilizing the Intel Platform
-> +Update (IPU) process or other similar mechanisms.
-> +
-> +End of Servicing Updates (ESU): ESU is the date at which Intel will no
-> +longer provide Servicing, such as through IPU or other similar update
-> +processes. ESU dates will typically be aligned to end of quarter.
->  
->  If the processor is vulnerable then the following information is appended to
->  the above information:
-> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-> index ea34cc31b047..fe66e94d7b86 100644
-> --- a/arch/x86/include/asm/cpufeature.h
-> +++ b/arch/x86/include/asm/cpufeature.h
-> @@ -154,6 +154,7 @@ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
->  } while (0)
->  
->  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
-> +#define setup_clear_cpu_bug(bit) setup_clear_cpu_cap(bit)
->  
->  #if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
->  
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 5fe7f6c8a7a4..130cb46ecaf9 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -454,7 +454,8 @@
->  #define X86_BUG_TAA			X86_BUG(22) /* CPU is affected by TSX Async Abort(TAA) */
->  #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
->  #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
-> -#define X86_BUG_MMIO_STALE_DATA		X86_BUG(25) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
-> -#define X86_BUG_RETBLEED		X86_BUG(26) /* CPU is affected by RETBleed */
-> +#define X86_BUG_MMIO_UNKNOWN		X86_BUG(25) /* CPU is too old and its MMIO Stale Data status is unknown */
-> +#define X86_BUG_MMIO_STALE_DATA		X86_BUG(26) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
-> +#define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
->  
->  #endif /* _ASM_X86_CPUFEATURES_H */
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index 6454bc767f0f..a83d1c4265ae 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -433,7 +433,8 @@ static void __init mmio_select_mitigation(void)
->  	u64 ia32_cap;
->  
->  	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
-> -	    cpu_mitigations_off()) {
-> +	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
-> +	     cpu_mitigations_off()) {
->  		mmio_mitigation = MMIO_MITIGATION_OFF;
->  		return;
->  	}
+> > +       obj->links.vmscan_flush = link;
+> > +
+> > +       /* Attach tracing programs that will calculate vmscan delays */
+> > +       link = bpf_program__attach(obj->progs.vmscan_start);
+> > +       if (!ASSERT_OK_PTR(obj, "attach raw_tracepoint"))
+> > +               return libbpf_get_error(link);
+> > +       obj->links.vmscan_start = link;
+> > +
+> > +       link = bpf_program__attach(obj->progs.vmscan_end);
+> > +       if (!ASSERT_OK_PTR(obj, "attach raw_tracepoint"))
+> > +               return libbpf_get_error(link);
+> > +       obj->links.vmscan_end = link;
+> > +
+> > +       *skel = obj;
+> > +       return 0;
+> > +}
+> > +
+> > +void destroy_progs(struct cgroup_hierarchical_stats *skel)
+>
+> static?
+>
 
+Ack.
 
+> > +{
+> > +       char path[128];
+> > +       int i;
+> > +
+> > +       for (i = 0; i < N_CGROUPS; i++) {
+> > +               /* Delete files in bpffs that cgroup_iters are pinned in */
+> > +               snprintf(path, 128, "%s%s", BPFFS_VMSCAN,
+> > +                        cgroups[i].name);
+> > +               ASSERT_OK(remove(path), "remove cgroup_iter pin");
+> > +       }
+> > +
+> > +       /* Delete root file in bpffs */
+> > +       snprintf(path, 128, "%s%s", BPFFS_VMSCAN, CG_ROOT_NAME);
+> > +       ASSERT_OK(remove(path), "remove cgroup_iter root pin");
+> > +       cgroup_hierarchical_stats__destroy(skel);
+> > +}
+> > +
+> > +void test_cgroup_hierarchical_stats(void)
+> > +{
+> > +       struct cgroup_hierarchical_stats *skel = NULL;
+> > +
+> > +       if (setup_hierarchy())
+> > +               goto hierarchy_cleanup;
+> > +       if (setup_progs(&skel))
+> > +               goto cleanup;
+> > +       if (induce_vmscan())
+> > +               goto cleanup;
+> > +       check_vmscan_stats();
+> > +cleanup:
+> > +       destroy_progs(skel);
+> > +hierarchy_cleanup:
+> > +       destroy_hierarchy();
+> > +}
+> > diff --git a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+> > new file mode 100644
+> > index 000000000000..85a65a72482e
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+> > @@ -0,0 +1,239 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Functions to manage eBPF programs attached to cgroup subsystems
+> > + *
+> > + * Copyright 2022 Google LLC.
+> > + */
+> > +#include "vmlinux.h"
+> > +#include <bpf/bpf_helpers.h>
+> > +#include <bpf/bpf_tracing.h>
+> > +
+> > +char _license[] SEC("license") = "GPL";
+> > +
+> > +/*
+> > + * Start times are stored per-task, not per-cgroup, as multiple tasks in one
+> > + * cgroup can perform reclain concurrently.
+>
+> typo: reclaim?
+>
 
+Ack. Will fix.
 
-> @@ -2247,6 +2248,9 @@ static ssize_t tsx_async_abort_show_state(char *buf)
->  
->  static ssize_t mmio_stale_data_show_state(char *buf)
->  {
-> +	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-> +		return sysfs_emit(buf, "Unknown: CPU is beyond its servicing period\n");
-> +
->  	if (mmio_mitigation == MMIO_MITIGATION_OFF)
->  		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
->  
-> @@ -2378,6 +2382,7 @@ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr
->  		return srbds_show_state(buf);
->  
->  	case X86_BUG_MMIO_STALE_DATA:
-> +	case X86_BUG_MMIO_UNKNOWN:
->  		return mmio_stale_data_show_state(buf);
->  
->  	case X86_BUG_RETBLEED:
-> @@ -2437,7 +2442,10 @@ ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *
->  
->  ssize_t cpu_show_mmio_stale_data(struct device *dev, struct device_attribute *attr, char *buf)
->  {
-> -	return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
-> +	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-> +		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_UNKNOWN);
-> +	else
-> +		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
->  }
->  
->  ssize_t cpu_show_retbleed(struct device *dev, struct device_attribute *attr, char *buf)
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 736262a76a12..fb3e8576a3b4 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -1356,9 +1356,13 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
->  	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
->  	 * not want the guest to enumerate the bug.
->  	 */
-> -	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
-> -	    !arch_cap_mmio_immune(ia32_cap))
-> -		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-> +	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN)) {
+> > + */
+> > +struct {
+> > +       __uint(type, BPF_MAP_TYPE_TASK_STORAGE);
+> > +       __uint(map_flags, BPF_F_NO_PREALLOC);
+> > +       __type(key, int);
+> > +       __type(value, __u64);
+> > +} vmscan_start_time SEC(".maps");
+> > +
+>
+> [...]
+>
+> > +static inline int create_vmscan_percpu_elem(__u64 cg_id, __u64 state)
+> > +{
+> > +       struct vmscan_percpu pcpu_init = {.state = state, .prev = 0};
+> > +       int err;
+> > +
+> > +       err = bpf_map_update_elem(&pcpu_cgroup_vmscan_elapsed, &cg_id,
+> > +                                 &pcpu_init, BPF_NOEXIST);
+> > +       if (err) {
+> > +               bpf_printk("failed to create pcpu entry for cgroup %llu: %d\n"
+> > +                          , cg_id, err);
+> > +               return 1;
+> > +       }
+> > +       return 0;
+> > +}
+> > +
+> > +static inline int create_vmscan_elem(__u64 cg_id, __u64 state, __u64 pending)
+>
+> all those inlines above are not necessary, they don't have to be
+> actually inlined, right?
+>
 
-This should be !boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN). Otherwise
-X86_BUG_MMIO_STALE_DATA will not be set on affected systems.
+No. They don't have to. Will fix this.
 
-> +		if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
-> +		    !arch_cap_mmio_immune(ia32_cap)) {
-> +			setup_clear_cpu_bug(X86_BUG_MMIO_UNKNOWN);
+> > +{
+> > +       struct vmscan init = {.state = state, .pending = pending};
+> > +       int err;
+> > +
+> > +       err = bpf_map_update_elem(&cgroup_vmscan_elapsed, &cg_id,
+> > +                                 &init, BPF_NOEXIST);
+> > +       if (err) {
+> > +               bpf_printk("failed to create entry for cgroup %llu: %d\n"
+> > +                          , cg_id, err);
+> > +               return 1;
+> > +       }
+> > +       return 0;
+> > +}
+> > +
+> > +SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
+> > +int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
+> > +{
+> > +       struct task_struct *task = bpf_get_current_task_btf();
+> > +       __u64 *start_time_ptr;
+> > +
+> > +       start_time_ptr = bpf_task_storage_get(&vmscan_start_time, task, 0,
+> > +                                         BPF_LOCAL_STORAGE_GET_F_CREATE);
+> > +       if (!start_time_ptr) {
+> > +               bpf_printk("error retrieving storage\n");
+>
+> does user-space part read these trace_printk messages? If not, let's
+> remove them from the test
+>
 
-Clearing X86_BUG_MMIO_UNKNOWN wont be required then.
+No. I will remove them in v6.
 
-> +			setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-> +		}
-> +	}
-
-Does this look okay:
-
--       if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
--           !arch_cap_mmio_immune(ia32_cap))
--               setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-+       if (!boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN)) {
-+               if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
-+                   !arch_cap_mmio_immune(ia32_cap)) {
-+                       setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-+               }
-+       }
-
->  	if (!cpu_has(c, X86_FEATURE_BTC_NO)) {
->  		if (cpu_matches(cpu_vuln_blacklist, RETBLEED) || (ia32_cap & ARCH_CAP_RSBA))
-> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> index 663f6e6dd288..5b2508adc38a 100644
-> --- a/arch/x86/kernel/cpu/intel.c
-> +++ b/arch/x86/kernel/cpu/intel.c
-> @@ -372,6 +372,10 @@ static void early_init_intel(struct cpuinfo_x86 *c)
->  static void bsp_init_intel(struct cpuinfo_x86 *c)
->  {
->  	resctrl_cpu_detect(c);
-> +
-> +	/* Set on older crap */
-> +	if (c->x86_model < INTEL_FAM6_IVYBRIDGE)
-> +		setup_force_cpu_bug(X86_BUG_MMIO_UNKNOWN);
-
-Thanks for suggesting this approach.
+> > +               return 0;
+> > +       }
+> > +
+> > +       *start_time_ptr = bpf_ktime_get_ns();
+> > +       return 0;
+> > +}
+> > +
+>
+> [...]

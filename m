@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E415585624
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02313585626
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238544AbiG2Uaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 16:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S238734AbiG2Ua6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 16:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiG2Uai (ORCPT
+        with ESMTP id S239250AbiG2Uaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 16:30:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2033618E12;
-        Fri, 29 Jul 2022 13:30:38 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 29 Jul 2022 16:30:55 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CE81BEA0;
+        Fri, 29 Jul 2022 13:30:48 -0700 (PDT)
+Received: from zn.tnic (p57969665.dip0.t-ipconnect.de [87.150.150.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 003A16601B8B;
-        Fri, 29 Jul 2022 21:30:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659126636;
-        bh=k1k8s7Za97TaDukHb1io/Pph036btg+/OCzVr3A+DLc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P5qxbh8llQDpysSkuzEFTSd//A+YhN8kKGDj8/zg7fh6Nixht1vZ3Wj4Yai8aPCAW
-         vXdULCcrjsoFSDnuqvXNrRGEYcvl6r8A7WifuB7//iLYZDBVT4xmc3QlUCRu8v6Prb
-         xtaMl8oo5e+9BL5FtEucFu5VfWT1dcXvnIf2OKHSVen4rKrYJMRZ8NVANfJyM2kHwA
-         XO0fOpyA2NYcYWmBhx3w7PEMki61C2LQE034mNgpJid2SjZwP44aUljIb/lLaeHB9Z
-         SUZigHRbser2iQUSFR7gn6KeUVuK9FqVLNM2Nf39R+za5Nwu+AzM3coMs1CFe4q8in
-         SSqWJYX0B4x1w==
-Date:   Fri, 29 Jul 2022 16:30:30 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Balsam CHIHI <bchihi@baylibre.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Subject: Re: [PATCH v8 3/6] thermal: mediatek: Add LVTS drivers for SoC
- theraml zones for mt8192
-Message-ID: <20220729203030.p645ccnpa4bd6sdn@notapiano>
-References: <20220726135506.485108-1-bchihi@baylibre.com>
- <20220726135506.485108-4-bchihi@baylibre.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 260A81EC06C1;
+        Fri, 29 Jul 2022 22:30:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1659126643;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Reva7c533rvViROlencOmIQvzuYlzhCaWdAsP+xz+QM=;
+        b=DgUX22PSlqWuOAtG4DrDV1QmWPRHYB4omO7lDFv3A7P+FPsbl4tg9KNrU+dwi9B3eUyLSD
+        55gFZu+S7B+Sxu1a8NAhxime5YCGlcdlvYNA6bhdwFwSpZdR56cXbZGPbzYErWUSzRu7+q
+        tTcN1t6mL1Mya1vmA9pnQ4i5P1djT70=
+Date:   Fri, 29 Jul 2022 22:30:38 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Message-ID: <YuRDbuQPYiYBZghm@zn.tnic>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <YuJ6TQpSTIeXLNfB@zn.tnic>
+ <20220729022851.mdj3wuevkztspodh@desk>
+ <YuPpKa6OsG9e9nTj@zn.tnic>
+ <20220729173609.45o7lllpvsgjttqt@desk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220726135506.485108-4-bchihi@baylibre.com>
+In-Reply-To: <20220729173609.45o7lllpvsgjttqt@desk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -64,71 +62,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 03:55:03PM +0200, Balsam CHIHI wrote:
-> Add a LVTS (Low voltage thermal sensor) driver to report junction
-> temperatures in Mediatek SoC mt8192 and register the maximum temperature
-> of sensors and each sensor as a thermal zone.
+On Fri, Jul 29, 2022 at 10:36:09AM -0700, Pawan Gupta wrote:
+> Does this look okay:
 > 
-> Signed-off-by: Yu-Chia Chang <ethan.chang@mediatek.com>
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> ---
->  drivers/thermal/mediatek/Kconfig         |  27 +
->  drivers/thermal/mediatek/Makefile        |   2 +
->  drivers/thermal/mediatek/lvts_mt8192.c   | 241 ++++++
->  drivers/thermal/mediatek/soc_temp.c      |   2 +-
->  drivers/thermal/mediatek/soc_temp_lvts.c | 928 +++++++++++++++++++++++
->  drivers/thermal/mediatek/soc_temp_lvts.h | 365 +++++++++
->  6 files changed, 1564 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/thermal/mediatek/lvts_mt8192.c
->  create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
->  create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
+> -       if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
+> -           !arch_cap_mmio_immune(ia32_cap))
+> -               setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
+> +       if (!boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN)) {
+> +               if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
+> +                   !arch_cap_mmio_immune(ia32_cap)) {
+> +                       setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
+> +               }
+> +       }
+
+Yeah, I had initially X86_BUG_MMIO_UNKNOWN set unconditionally on all.
+
+Then I thought I should set it only on older but as dhansen said, Intel
+is going in and out of servicing period so we better set it on all
+initially and then clear it when the CPU is not in the vuln blacklist.
+
 > 
-> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
-> index 9c41e9079fc3..7fc04237dd50 100644
-> --- a/drivers/thermal/mediatek/Kconfig
-> +++ b/drivers/thermal/mediatek/Kconfig
-> @@ -20,4 +20,31 @@ config MTK_SOC_THERMAL
->  		configures thermal controllers to collect temperature
->  		via AUXADC interface.
->  
-> +config MTK_SOC_THERMAL_LVTS
-> +	tristate "LVTS (Low voltage thermal sensor) driver for Mediatek SoCs"
-> +	depends on HAS_IOMEM
-> +	depends on NVMEM
-> +	depends on RESET_TI_SYSCON
+> >  	if (!cpu_has(c, X86_FEATURE_BTC_NO)) {
+> >  		if (cpu_matches(cpu_vuln_blacklist, RETBLEED) || (ia32_cap & ARCH_CAP_RSBA))
+> > diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+> > index 663f6e6dd288..5b2508adc38a 100644
+> > --- a/arch/x86/kernel/cpu/intel.c
+> > +++ b/arch/x86/kernel/cpu/intel.c
+> > @@ -372,6 +372,10 @@ static void early_init_intel(struct cpuinfo_x86 *c)
+> >  static void bsp_init_intel(struct cpuinfo_x86 *c)
+> >  {
+> >  	resctrl_cpu_detect(c);
+> > +
+> > +	/* Set on older crap */
+> > +	if (c->x86_model < INTEL_FAM6_IVYBRIDGE)
 
-Both mt8192 and mt8195 use the reset controller provided by infracfg [1], so
-there's no need to depend on RESET_TI_SYSCON. (Same thing below)
+i.e., remove this check.
 
-[1] https://lore.kernel.org/all/20220523093346.28493-1-rex-bc.chen@mediatek.com/
+> > +		setup_force_cpu_bug(X86_BUG_MMIO_UNKNOWN);
+> 
+> Thanks for suggesting this approach.
 
-Thanks,
-Nícolas
+You're welcome. I'm assuming you're gonna finish it or should I?
 
-> +	help
-> +		Enable this option if you want to get SoC temperature
-> +		information for MediaTek platforms. This driver
-> +		configures LVTS thermal controllers to collect temperatures
-> +		via Analog Serial Interface(ASIF).
-> +
-> +endif
-> +
-> +if MTK_SOC_THERMAL_LVTS
-> +
-> +config LVTS_MT8192
-> +	tristate "LVTS driver for MediaTek MT8192 SoC"
-> +	depends on HAS_IOMEM
-> +	depends on NVMEM
-> +	depends on RESET_TI_SYSCON
-> +	depends on MTK_SOC_THERMAL_LVTS
-> +	help
-> +		Enable this option if you want to get SoC temperature
-> +		information for MT8192. This driver
-> +		configures LVTS thermal controllers to collect temperatures
-> +		via ASIF.
-> +
->  endif
-[..]
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

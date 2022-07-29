@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE34C5856D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008895856D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239330AbiG2WWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S239362AbiG2W11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 18:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238561AbiG2WWo (ORCPT
+        with ESMTP id S229950AbiG2W1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:22:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3233F318;
-        Fri, 29 Jul 2022 15:22:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44D49B829DA;
-        Fri, 29 Jul 2022 22:22:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960F2C433C1;
-        Fri, 29 Jul 2022 22:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659133360;
-        bh=bOE0cFSfd9j0Ebec4rZcMchvAjKnySFjPVmPPm0v4SM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IBnQ9kguUzE0r+FypL9wCXYrfXepKex/VI76VfwXTyN8nhXho0sLaY7Q5pzNCkpY6
-         XHyPeQ0uu/En8bP9RQdZf6j0uGYoinTiwYE13v/kjE7c/Q3H8xDfggOyVsqJPPxqWs
-         NugTwjKjY/7x+821a08n1tSJS+007L9Tk20sU6+VE4YdmuFi4Me1+xyi6tTkYKxKpV
-         i+F6qqsgy71d8rh0XPFAT5GUGcNTOgYOqd3o9+K5+fmdcrkvikOCG+W/p/nUZU43Yl
-         zpOP/Ln3QrDpEcMGFbPOYncBeg26GB9WChyrqWplvKTxQyJ1dO1CJaMAMH2KB5qsl+
-         Hb9AQMD/iomXA==
-Date:   Fri, 29 Jul 2022 17:22:38 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        it+x86@molgen.mpg.de, Robert Dinse <nanook@eskimo.com>
-Subject: Re: acpi PNP0A03:00: fail to add MMCONFIG information, can't access
- extended PCI configuration space under this bridge.
-Message-ID: <20220729222238.GA491273@bhelgaas>
+        Fri, 29 Jul 2022 18:27:25 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4758AB2B;
+        Fri, 29 Jul 2022 15:27:24 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id e15so7384298edj.2;
+        Fri, 29 Jul 2022 15:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=iVLkBvqvxxQmzM1anS4jAEK5JqYhmqqjCIgQmNoi7rg=;
+        b=Q2Fr4ogA0UKbX/4KTDe6Ln4UfSgAt+oVpF7n1I4/L9l6vxMdaPpFof+vfnPSCX77jo
+         pY89Eg+oEc+jW9Oz+tm4taoCb1r8OwFyaCffG/1ouprQG3PAugTMXWVv8ppnDun0rKAh
+         AVC8JliqTTM8Idxu3kERXCVwa6VJj3AHoQy1SKDH23XQcZV5xCk2nvE6MAhe8XNVrOAC
+         ScedkdWaxejc7w/3QxsLs6X84+nwWWMJbxGxZWFE5XkvZNuk262hMRUyhGxknqm1+enL
+         DCJ23fXGUMZ+HNFvnBgEjA2gjWip5P2Fw8M/sFAsL4ZfiSbrlcpzhlnj8sVPt3Llxriy
+         rw3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=iVLkBvqvxxQmzM1anS4jAEK5JqYhmqqjCIgQmNoi7rg=;
+        b=xBCDDpgSxxMqsd+i7C0D2/RsGljI379QiNbdpYgs8vDdBnERvcx1XQQehcDH6gwc/h
+         5mxAbCSH0U8Yuv6Vi9SRJUGJyUaEVk5b2B8besHhSK1KPl+S+SIZqe4JuBKQmrrk+zJD
+         79Jibjq5KwHt1Wu3/m5TovYHtvr16zNm5tUTwt7KyH8TWFiN9ehVqeURmnriEricHtQX
+         DdFfhH7uqTjfXg9VfFbHriveOrPjZQYMYkhecEwHr7oYL98/8cJqYYbpijKsXLSEElMk
+         uRee9ohYiCrrfkGZZ7e6ioVwmBQmxlVQqre+WMXN0XrBOfvdD+7xrx1/CGjmM9O67uPZ
+         FI6w==
+X-Gm-Message-State: AJIora/jsIJn+mEMlRv17U+D1LVHTMJFjkjUvkh+mLbbybino6u3VVAx
+        S+Sr5hLxpV98yxXLVKIoRSDQtQSmAd5JZ6/PRaRmM6Qedfw=
+X-Google-Smtp-Source: AGRyM1tsKByFdoTIvffANQ2Z6isozBuT+TmFj3YqaWCB5qS89G1yoG/RrpMYffg2MydThKPycJF08fv7GCBV1hzvwak=
+X-Received: by 2002:a05:6402:1945:b0:43b:d456:daf8 with SMTP id
+ f5-20020a056402194500b0043bd456daf8mr5338515edz.81.1659133642700; Fri, 29 Jul
+ 2022 15:27:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f42e3f0f-2156-669a-e15e-51970b438ed4@molgen.mpg.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <2c105a1ff3071796189093c536218e44ea3b1aa0.1659122785.git.dxu@dxuuu.xyz>
+In-Reply-To: <2c105a1ff3071796189093c536218e44ea3b1aa0.1659122785.git.dxu@dxuuu.xyz>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 29 Jul 2022 15:27:11 -0700
+Message-ID: <CAEf4BzbnQJ0cTU6NsaLSTVs6CB-JTmoXpR_aWRVO-V1GppNPKg@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Fix oudated __bpf_skc_lookup() comment
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Robert]
+On Fri, Jul 29, 2022 at 12:47 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> The function returns a pointer now.
+>
+> Fixes: edbf8c01de5a ("bpf: add skc_lookup_tcp helper")
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
 
-On Mon, Feb 15, 2021 at 05:53:51PM +0100, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> All the way up to QEMU emulator version 5.2.0 (Debian 1:5.2+dfsg-5) and
-> Linux 5.10.13, Linux logs the warning below:
-> 
->     acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended
-> PCI configuration space under this bridge.
-> 
-> One way to reproduce it:
-> 
->     qemu-system-x86_64 -enable-kvm -m 2G -hda /dev/shm/debian.img -kernel
-> /boot/vmlinuz-5.10.0-3-amd64 -initrd /boot/initrd.img-5.10.0-3-amd64 -append
-> root="/dev/sda1 console=ttyS0,115200" -serial stdio
-> 
-> Please find more details and the full log in the Bugzilla issue #211765 [1].
-> 
-> 
-> Kind regards,
-> 
-> Paul
-> 
-> 
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=211765
->      "[Bug 211765] acpi PNP0A03:00: fail to add MMCONFIG information, can't
-> access extended PCI configuration space under this bridge."
+This was already done in [0] in bpf-next.
 
-Do you know whether qemu implements extended config space?  Extended
-config space is offsets 0x100-0xfff.  I think Linux only supports
-extended capabilities in that area (AER, VC, ACS, SR-IOV, etc).  Most
-of these are probably not of interest in a virtualized environment, so
-I wouldn't be surprised if qemu doesn't support them.
+  [0] f5be22c64bd6 ("bpf: Fix bpf_skc_lookup comment wrt. return type")
 
-Bjorn
+
+>  net/core/filter.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 5d16d66727fc..866ca05f95e0 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -6463,8 +6463,6 @@ static struct sock *sk_lookup(struct net *net, struct bpf_sock_tuple *tuple,
+>
+>  /* bpf_skc_lookup performs the core lookup for different types of sockets,
+>   * taking a reference on the socket if it doesn't have the flag SOCK_RCU_FREE.
+> - * Returns the socket as an 'unsigned long' to simplify the casting in the
+> - * callers to satisfy BPF_CALL declarations.
+>   */
+>  static struct sock *
+>  __bpf_skc_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+> --
+> 2.37.1
+>

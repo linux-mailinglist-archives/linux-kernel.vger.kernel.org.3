@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9C55848D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DDC5848DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbiG2ABO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 20:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+        id S232968AbiG2ACq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 20:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiG2ABK (ORCPT
+        with ESMTP id S232909AbiG2ACl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 20:01:10 -0400
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD902317B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:01:09 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 9618B1003FEE9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:00:58 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id HDR4o3euAUff9HDR4oUz4S; Fri, 29 Jul 2022 00:00:58 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=e7XD9Yl/ c=1 sm=1 tr=0 ts=62e3233a
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RgO8CyIxsXoA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IlCN+LVpZZv/2wDtMkGzYjGWueiFl8LKY4901R8Cdgg=; b=QDSoXFBoKQSXvUgomcigUHL6/R
-        QrHONW297aedlyIX8UzgQPJxEvJ+gOcgBFWS+H2I1nrQ3B+qDY32/PVWpp0orrhQzb371o5rJdJMf
-        PDqHWBKzdkGdPZDMSJELut77X1R23IrrUmE/Rmvz4/Sa5PjWoSQXvNYV+Sn/SQSD0ziDPpEa1Uo0S
-        hIWj12EHMntf3OnGBGT7VKJMT3cVnWGNI0KZOuhzLWAiuTx92NH39JrnQnNP4PqWccG6Voqz6of1o
-        3cyyKYXAGv37MzK4UNMuIG/24t3djaXKajbwJ3cbZUM/eMpUoYCGTKnrdTjDkzr4xDtLpvtnXLmep
-        wwfYgE1g==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:37872 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oHDR2-001hZx-Mp;
-        Thu, 28 Jul 2022 18:00:56 -0600
-Subject: Re: [PATCH 5.15 000/202] 5.15.58-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220728133327.660846209@linuxfoundation.org>
-In-Reply-To: <20220728133327.660846209@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <9737730d-9015-e8f8-1309-98aab0aeb3b3@w6rz.net>
-Date:   Thu, 28 Jul 2022 17:00:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 28 Jul 2022 20:02:41 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 361FD4C62D;
+        Thu, 28 Jul 2022 17:02:41 -0700 (PDT)
+Received: from kbox (unknown [76.135.27.191])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C693820FE893;
+        Thu, 28 Jul 2022 17:02:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C693820FE893
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1659052960;
+        bh=5HsiSU6m/N6TMarfRdE3+yKjdjkRJvzIxn0ww+MA5EQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G3wnN+IxGKceZ3K5xAhgyW4p7SUtOA5jHr6JAFv1X7+vk02/skz386Uve2498aWq7
+         LiObo1cOVNJrUHdjfE1jJdKCqpjuVWW6DVONZrS6MIDdozga1kI8x8bdqJFc7IoDD2
+         iVsQw6wmdjvybihrILNDnuSbu29/vnz6mZ4wB52I=
+Date:   Thu, 28 Jul 2022 17:02:34 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org,
+        mathieu.desnoyers@efficios.com
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        beaub@linux.microsoft.com
+Subject: Re: tracing/user_events: Tracking broken status and feedback
+Message-ID: <20220729000234.GA2746@kbox>
+References: <20220725231900.GA2389@kbox>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oHDR2-001hZx-Mp
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:37872
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725231900.GA2389@kbox>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 6:33 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.58 release.
-> There are 202 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 30 Jul 2022 13:32:45 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.58-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Jul 25, 2022 at 04:19:00PM -0700, Beau Belgrave wrote:
+> To help keep track of what is required to remove the broken status from
+> user_events I am starting this thread. I would like to use this thread
+> to provide status on the work that has been done so far and to have a
+> discussion about when the broken status can be removed.
+> 
+> Feedback threads from 5.18 version of user_events:
+> 1. https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
+> 2. https://lore.kernel.org/all/1651771383.54437.1652370439159.JavaMail.zimbra@efficios.com/
+> 
+> All the feedback has been addressed in the patchsets 1 and 2 (see below).
+> Here are the details: 
+> 
+> 1. Use bits vs bytes in event enabled memory mappings.
+> Fixed in patchset 1.
+> 
+> 2. Pack ABI structures where size is used.
+> Fixed in patchset 1.
+> 
+> 3. Don't trust user strings for string formatting.
+> Fixed in patchset 1.
+> 
+> 4. Move to refcount APIs vs atomic for tracking references.
+> Fixed in patchset 1.
+> 
+> 5. Ensure event_mutex is held during registration.
+> Fixed in patchset 2.
+> 
+> With these, I believe I have addressed all issues to remove the
+> "broken status".
+> 
+> Here is the list of additional feedback (and status) that I don't believe
+> should have a bearing on removing the "broken status":
+> 
+> 1. Kernel vs user tracers in ABI.
+> This is not done, the plan is to build a libtracepoint library that allows
+> working with both kernel and user tracers in user programs. Steven is
+> working on this at the moment. I don't believe this is required to remove
+> the broken status, but it will help prove the ABI by having it.
+> 
+> No patchset yet.
+> 
+> 2. Container/namespace isolation of events.
+> user_events utilizes tracefs for user facing files in the ABI. I've created
+> an RFC patchset showing how if tracefs offered an isolated directory
+> structure per-namespace the user_events ABI is unaffected. This is true for
+> other ABIs that tracefs hosts, if they would like to integrate. I don't
+> believe this is required to remove the broken status, however, it's useful
+> to have to see how the ABI is unaffected while we work toward enabling
+> isolation within tracing.
+> 
+> See patchset 3.
+> 
+> Patchsets:
+> 1. https://lore.kernel.org/all/20220425184631.2068-1-beaub@linux.microsoft.com/
+> 2. https://lore.kernel.org/all/20220328223225.1992-1-beaub@linux.microsoft.com/
+> 3. https://lore.kernel.org/all/20220707215828.2021-1-beaub@linux.microsoft.com/
+> 
+> Thanks,
+> -Beau
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Steven had feedback on patchset 1 here:
+https://lore.kernel.org/all/20220726180115.69320865@gandalf.local.home/
 
-Tested-by: Ron Economos <re@w6rz.net>
+I've updated patchset 1 and 3 to address this feedback.
 
+Updated patchsets:
+1. https://lore.kernel.org/all/20220728233309.1896-1-beaub@linux.microsoft.com/
+3. https://lore.kernel.org/all/20220728235241.2249-1-beaub@linux.microsoft.com/
+
+Thanks,
+-Beau

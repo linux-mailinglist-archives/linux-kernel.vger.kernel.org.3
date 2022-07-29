@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3E058567F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 23:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892B0585682
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 23:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238801AbiG2Vcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 17:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
+        id S239358AbiG2Vdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 17:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiG2Vcj (ORCPT
+        with ESMTP id S239200AbiG2Vdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 17:32:39 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F408AEDD;
-        Fri, 29 Jul 2022 14:32:39 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id w17-20020a17090a8a1100b001f326c73df6so4779863pjn.3;
-        Fri, 29 Jul 2022 14:32:39 -0700 (PDT)
+        Fri, 29 Jul 2022 17:33:47 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E7E8C146;
+        Fri, 29 Jul 2022 14:33:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso6712999pjq.4;
+        Fri, 29 Jul 2022 14:33:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=xjH10rLqfqkr/3tCURQKF3STurdTTHn/fdTjGaWVXuo=;
-        b=cInOSJkbeo+MRnO3/Jh2dtf/dUDVr10ZbHe8PwjnmKV2K54J6aDZ5FD5qxitqpX6SB
-         Tta4sA/m7s5CI4rvQhbyD5Zj+sHlpW8kXgLAGFc5H8agXiBom01MBN5p1pi+IU3/sQhV
-         VAQ3zLOBKtlUU5tGKs7hnco8FyBQ9t9LSQnYOUHJNKDgTbkRTVVrxL/GhC+LC44q/YVm
-         3T4CkF2Dl5Ul5i87FTV0bsw/JG7IkiQL8Te16Qh3z5n+rv2D7r+ILNByJUrEGwyutyUi
-         9HNiw/NEXnOGYvZEquUvDEAVIHvuafeWMQgSmr8IfRHK4p/Z9y8y984pfqIemZk4wlLd
-         PTNA==
+        bh=BbVFV3CzLjSBAtIW3aA4/l44zfKyATja+dAsWsQP5C4=;
+        b=FiwD9lZRGjEo7PbZ1eZ4omDEV/3UnuBnYmVfoum02F5Gpu6I3CMneZxDYMJ+85kI2e
+         xhVhE9Hm3boPGcxRlt5mFbkCMYRHaWMBunKBccRdYd87oFEkCrbcddMZEA1sKQynlj5H
+         jfSqquG9LzYSJ2wiVR66PDCovYwJVdGY2wMuou4XIPf0BIiN5AXQ0BG2UAFUHxoHOYZf
+         czNO7NfIpz5W77jAsxi05wXq0AVDOnzyll/+a0eK71+KoTHBTh1wisH5KkLwLv8/XqJw
+         bY/QncLel1zcDpHKA9204Y/mWJTuK/ngakcqxrgX0OLHJ+HPQROb/zl13q7D0G1Z6KCN
+         ILCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=xjH10rLqfqkr/3tCURQKF3STurdTTHn/fdTjGaWVXuo=;
-        b=G7Ea7UlONtrFJtHNeOQ9aQWWCVxZAmk+glgDRVsnUTL1mUkNsK/iO2dV39lrwumMtk
-         VdxSVt4lQ3wgTd7WDacBiwd899gkJV1YdtyciQMaaNzqee4uRJzGz9KrIgnbSvyWQZIY
-         zZeru32RxbL3T8gZWXnqGvGxpwWBP/VNzRXZAbXkHSfUi8zMFcnOgfIuT5d/CvyA9svq
-         GXxfPCjPQcnkzgqomLek0nb/G/X05gn6tb2kLP7GqIwbAwSmD710QFB+YT8Vz0p0SdVX
-         mUAlT1cZQea0xGrgdmn5/EAeeBtraiPud2ehMj5TysV90a6HQBJFaafXxmAmtfx0PUso
-         lx4g==
-X-Gm-Message-State: ACgBeo3k+fslRubR6AU9gz55ba6qrH7UuGJ6jL6dR7CPBIuulpGT08Xt
-        lc+G6UL1KuNw02Y2X8OhK2E=
-X-Google-Smtp-Source: AA6agR4lErwI/WTj49aG38zT0V7oK4P1emzQw8VIcZqAKNT1hzchXJd2VUMYeiwF8dsiOVuKYQO5Uw==
-X-Received: by 2002:a17:903:230a:b0:16d:5b82:db2b with SMTP id d10-20020a170903230a00b0016d5b82db2bmr5752175plh.138.1659130358436;
-        Fri, 29 Jul 2022 14:32:38 -0700 (PDT)
+        bh=BbVFV3CzLjSBAtIW3aA4/l44zfKyATja+dAsWsQP5C4=;
+        b=YkCgn4Vo2oJ0dbv+Iu6ITme5Wr8Mbgmx7Db52FvS+0C4gv318Nh6ordp78YqQo6Asv
+         FMCd51H6KH3RWP8YrEalhtcNzAeZhwFGl9IuKrUpm3NfYniB9xtAiTckM79j/Jo9EuJr
+         9broEgXi5hmr+LRb4vFURmy2FwNR2X7HuuFB86OmBMh8/jm5xYwZSrwqgWJcdtek4Uzi
+         mWTDIHfehquPtKzcgdADIAY+RqxWCDxyG6W+xSa0XGgPEDzfFOInNZuUJAjGLdR4AG8n
+         nRmJys/4lGbj7HhxDHtTM983R6kmQOWWvIRnAK9sl0JwQuXqGutEluW2VaAr5GTkELix
+         GjeA==
+X-Gm-Message-State: ACgBeo0RcOqFjC/MRWyzK5s31qHmIaOxRRUGRhey5WDtE3D1aa3UF81U
+        px54JBOirzdPMVgIRH3H75aVDjSbM1g=
+X-Google-Smtp-Source: AA6agR7PT8CV9RVlF8hI0YW2yCuGdC1uHxPU0Jkgplh9SmMVTZEKBqFvHGV5hYu0K0DskPcX3oA1XA==
+X-Received: by 2002:a17:902:ce09:b0:16b:ec52:760b with SMTP id k9-20020a170902ce0900b0016bec52760bmr5631876plg.155.1659130426700;
+        Fri, 29 Jul 2022 14:33:46 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id a11-20020a1709027e4b00b0016cbb46806asm3995511pln.278.2022.07.29.14.32.35
+        by smtp.googlemail.com with ESMTPSA id w10-20020a63490a000000b0041aeb36088asm2931249pga.16.2022.07.29.14.33.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 14:32:38 -0700 (PDT)
-Message-ID: <44a0f864-0768-e2f5-1a0b-4698a30959ff@gmail.com>
-Date:   Fri, 29 Jul 2022 14:32:32 -0700
+        Fri, 29 Jul 2022 14:33:46 -0700 (PDT)
+Message-ID: <d9d6eeb1-c0c5-12c2-71b1-93b236411c54@gmail.com>
+Date:   Fri, 29 Jul 2022 14:33:40 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [net-next PATCH v5 02/14] net: dsa: qca8k: make mib autocast
- feature optional
+Subject: Re: [net-next PATCH v5 03/14] net: dsa: qca8k: move mib struct to
+ common code
 Content-Language: en-US
 To:     Christian Marangi <ansuelsmth@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -70,9 +70,9 @@ To:     Christian Marangi <ansuelsmth@gmail.com>,
         Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
 References: <20220727113523.19742-1-ansuelsmth@gmail.com>
- <20220727113523.19742-3-ansuelsmth@gmail.com>
+ <20220727113523.19742-4-ansuelsmth@gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220727113523.19742-3-ansuelsmth@gmail.com>
+In-Reply-To: <20220727113523.19742-4-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,12 +86,11 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 7/27/22 04:35, Christian Marangi wrote:
-> Some switch may not support mib autocast feature and require the legacy
-> way of reading the regs directly.
-> Make the mib autocast feature optional and permit to declare support for
-> it using match_data struct in a dedicated qca8k_info_ops struct.
+> The same MIB struct is used by drivers based on qca8k family switch. Move
+> it to common code to make it accessible also by other drivers.
 > 
 > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 

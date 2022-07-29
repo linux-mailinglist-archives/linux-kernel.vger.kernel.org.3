@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66EE584B79
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416D7584B86
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234235AbiG2GOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S234677AbiG2GPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiG2GOU (ORCPT
+        with ESMTP id S234673AbiG2GPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:14:20 -0400
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852B67E835
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:14:18 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1659075238t28h5q6i
-Received: from smtpclient.apple ( [111.193.9.146])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 29 Jul 2022 14:13:57 +0800 (CST)
-X-QQ-SSF: 01400000000000B0V000000A0000000
-X-QQ-FEAT: XSXWadnVjOQ/cwvcZHolvRFzZWW29l/wu70fdE/ClqLW2tUxKIdarmnhLiAym
-        45Vfoa8BO113Z6/mLCwvQB+Qb4EmlfM1JpLk/aPP6fkRZEIQC0P1WaxnKx4hQvU4oaiEjGy
-        PejTiJr6+RB/9+vN2ux62GbC8eUfDMQR3rY7WzaQGDIbWunGd0d9SPjJ6koo1PvB6QjRszX
-        dZ2o677DDYc4S1+qY6kx9KivFx4OjCdOA8YyaVyiJ+EaXDxWHkIeRq4m+XOfRNVgdOE7D/Q
-        xGF0FtRbyUV7By1nPG7k0UB375oDLwtz0t49vSaCln06cQVh7A76pA+cZ9gUCtyywIFs4AM
-        +isLKFlipIOCVvMNY60E02Z58R4IKZ6WNvxWfX4hiu2ssruYTyrCCIW5gjr+w==
-X-QQ-GoodBg: 2
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
-From:   sdlyyxy <sdlyyxy@bupt.edu.cn>
-In-Reply-To: <Yt1WfSZk03Plpnan@hovoldconsulting.com>
-Date:   Fri, 29 Jul 2022 14:13:56 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Reinhard Speyerer <rspmn@arcor.de>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <B47DDA3C-3CE2-4E25-B764-1744A4AA04A0@bupt.edu.cn>
-References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
- <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
- <YtKrbucYNulPEKUp@arcor.de> <YtRtswctFMLxeglu@kroah.com>
- <YtXG3EVrRKAG7WVx@arcor.de> <YtwjiWG5ZFBvCZ1M@hovoldconsulting.com>
- <Yt1QhCIiUf97Dl3D@kroah.com> <Yt1WfSZk03Plpnan@hovoldconsulting.com>
-To:     Johan Hovold <johan@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign8
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        Fri, 29 Jul 2022 02:15:24 -0400
+Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443A11153
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:15:07 -0700 (PDT)
+Received: by mail-il1-x14a.google.com with SMTP id l17-20020a056e02067100b002dc8a10b55eso2464200ilt.1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:15:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=hjVlZubyermfSkZizgaaxGB+KlUF18YguF7xhPiT/Ik=;
+        b=mpb2InHEhH2Sm2XbOc+6nFidWtRjX48upV3ID2C0mZq33mBbL2LkFJDrwU0RgRfcfp
+         CGD/5pjCizX/0U2QYQDrmNV6cxJPPVVrXc6JoqnuC3S6TlIgPIOgiv4JMFfw5iX1yQwZ
+         uVQOwuh108d/qhSCddg4TYbrkdw8qB1afCSPXDA3StlvbI+X88SxRkRzNULWeei6GS+l
+         LqAP3YzqRqGidDfaT7SlBaH/HCFCczYSPbdiaDKp23k/W0m+RwmMD1ZTNx6y51UlCnJG
+         CFEn7BKNrVf2EHB0NrXGZ8i7oz8R8rUar3ilz/J444yv+8rBH8lb34dAI+B8yLNbkzI5
+         CP7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=hjVlZubyermfSkZizgaaxGB+KlUF18YguF7xhPiT/Ik=;
+        b=DSfTyj1zcv0GnywE7JtJPMt4ubY1dxW53gpkdwXHDt950voI9BaDlzTVpPFDtZae4J
+         PTCS7Oiz0JRUxWZooWaoTjAjO1M30S4yhCI3EiLlfcFJlkIaVgKXv0Gm8kQ5JoR0ZY0L
+         Hxb1T/G+cdxalZgwKK/LGAPHDBuhi5tK9tEqs5+eBVIgeyuX9u5/8NBhPHwbD7Hdb+UU
+         MXBQVxCmIdnJhdTgMLcfCfdQO/8afh5ljX7StMKj2yierAbS2m2L9wSq2J0KW20MRTIF
+         he1dIlXy5PDMJhLWjXpV7hSJb+xwjlsHiq7yo8eM1TPxThV8SRwPNAqwXM2f3/TsQep3
+         i8RQ==
+X-Gm-Message-State: AJIora+IWrQjvxWz46Wl8Ke6MjLXFLPlp6AvLHHi9DWiBMgIi9Gi/Zxf
+        tfbpsn8X6IZZbZKUH5O94SuaneAHZ+0=
+X-Google-Smtp-Source: AGRyM1sNSfg4OzUat+/XKg7JS3pq2fMNP0DXAZQDKp78R0vaRsinGs45PmzZCFSPn5h/qfz1QMFtWKG16Bw=
+X-Received: from jeffxuk510a.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:65b])
+ (user=jeffxu job=sendgmr) by 2002:a05:6602:2e8d:b0:67c:c24c:fec4 with SMTP id
+ m13-20020a0566022e8d00b0067cc24cfec4mr683187iow.134.1659075307329; Thu, 28
+ Jul 2022 23:15:07 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 06:15:03 +0000
+In-Reply-To: <6f71a4f3-8f8e-926b-883c-1df630cfc1a0@linuxfoundation.org>
+Message-Id: <20220729061504.744140-1-jeffxu@google.com>
+Mime-Version: 1.0
+References: <6f71a4f3-8f8e-926b-883c-1df630cfc1a0@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+Subject: [PATCH 3/4] selftests/memfd: add tests for F_SEAL_EXEC
+From:   Jeff Xu <jeffxu@google.com>
+To:     skhan@linuxfoundation.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, mnissler@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,49 +71,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Daniel Verkamp <dverkamp@chromium.org>
 
-> On Jul 24, 2022, at 22:26, Johan Hovold <johan@kernel.org> wrote:
-> 
-> On Sun, Jul 24, 2022 at 04:00:36PM +0200, Greg Kroah-Hartman wrote:
->> On Sat, Jul 23, 2022 at 06:36:25PM +0200, Johan Hovold wrote:
->>> On Mon, Jul 18, 2022 at 10:47:24PM +0200, Reinhard Speyerer wrote:
-> 
->>>> Please don't give the OPPO R11 diag port on Linux a bad name by letting
->>>> the usb-serial-simple driver handle it.
->>> 
->>> So while I'm not sure bandwidth is really a problem, I still tend to
->>> agree that we should add this one to the option driver for now as that
->>> is how we handle (non-GOBI) Qualcomm modems and their QCDM ports.
->> 
->> If you want it to stay on the option driver, that's fine, but I still
->> think it feels odd as it obviously does not follow the vendor-specific
->> protocol that the option driver supports.
-> 
-> But we've been dumping modem device-id entries in there since forever.
-> 
-> The entries added to option have been for devices whose interfaces did
-> not follow any particular pattern (e.g. unlike the old GOBI modems).
-> 
-> And as Reinhard mentioned, the line-control requests (which follow CDC)
-> are actually required by some Qualcomm modems so moving things out would
-> need to be done carefully.
-> 
-> On the other hand, that request likely isn't needed for any QCDM/DIAG
-> ports, but who knows for sure.
+Basic tests to ensure that user/group/other execute bits cannot be
+changed after applying F_SEAL_EXEC to a memfd.
 
-Test result for bandwidth problem:
-Sending 0x1f mask (diag command: 0x7d0500001f000000) and running LTE
-speedtest on the device, both option and simple can dump more than 80Mbps.
-The CRC of diag packets is OK at this high speed, so it seems that
-there is no message loss. I think this bandwidth is enough.
+Co-developed-by: Jeff Xu <jeffxu@google.com>
+Signed-off-by: Jeff Xu <jeffxu@google.com>
+Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
+---
+ tools/testing/selftests/memfd/memfd_test.c | 129 ++++++++++++++++++++-
+ 1 file changed, 128 insertions(+), 1 deletion(-)
 
-For the flow control problem, it seems the SetControlLineState request
-send by option (usb_wwan) has no effect on the device. Both with and
-without this request the diag port works the same.
-
-Hope this can help you decide which driver to choose :)
-
-Thanks,
-sdlyyxy
-
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index 94df2692e6e4..1d7e7b36bbdd 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -28,12 +28,44 @@
+ #define MFD_DEF_SIZE 8192
+ #define STACK_SIZE 65536
+ 
++#ifndef F_SEAL_EXEC
++#define F_SEAL_EXEC	0x0020
++#endif
++
++#ifndef MAX_PATH
++#define MAX_PATH 256
++#endif
++
+ /*
+  * Default is not to test hugetlbfs
+  */
+ static size_t mfd_def_size = MFD_DEF_SIZE;
+ static const char *memfd_str = MEMFD_STR;
+ 
++static ssize_t fd2name(int fd, char *buf, size_t bufsize)
++{
++	char buf1[MAX_PATH];
++	int size;
++	ssize_t nbytes;
++
++	size = snprintf(buf1, MAX_PATH, "/proc/self/fd/%d", fd);
++	if (size < 0) {
++		printf("snprintf(%d) failed on %m\n", fd);
++		abort();
++	}
++
++	/*
++	 * reserver one byte for string termination.
++	 */
++	nbytes = readlink(buf1, buf, bufsize-1);
++	if (nbytes == -1) {
++		printf("readlink(%s) failed %m\n", buf1);
++		abort();
++	}
++	buf[nbytes] = '\0';
++	return nbytes;
++}
++
+ static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
+ {
+ 	int r, fd;
+@@ -98,11 +130,14 @@ static unsigned int mfd_assert_get_seals(int fd)
+ 
+ static void mfd_assert_has_seals(int fd, unsigned int seals)
+ {
++	char buf[MAX_PATH];
++	int nbytes;
+ 	unsigned int s;
++	fd2name(fd, buf, MAX_PATH);
+ 
+ 	s = mfd_assert_get_seals(fd);
+ 	if (s != seals) {
+-		printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
++		printf("%u != %u = GET_SEALS(%s)\n", seals, s, buf);
+ 		abort();
+ 	}
+ }
+@@ -594,6 +629,64 @@ static void mfd_fail_grow_write(int fd)
+ 	}
+ }
+ 
++static void mfd_assert_mode(int fd, int mode)
++{
++	struct stat st;
++	char buf[MAX_PATH];
++	int nbytes;
++
++	fd2name(fd, buf, MAX_PATH);
++
++	if (fstat(fd, &st) < 0) {
++		printf("fstat(%s) failed: %m\n", buf);
++		abort();
++	}
++
++	if ((st.st_mode & 07777) != mode) {
++		printf("fstat(%s) wrong file mode 0%04o, but expected 0%04o\n",
++		       buf, (int)st.st_mode & 07777, mode);
++		abort();
++	}
++}
++
++static void mfd_assert_chmod(int fd, int mode)
++{
++	char buf[MAX_PATH];
++	int nbytes;
++
++	fd2name(fd, buf, MAX_PATH);
++
++	if (fchmod(fd, mode) < 0) {
++		printf("fchmod(%s, 0%04o) failed: %m\n", buf, mode);
++		abort();
++	}
++
++	mfd_assert_mode(fd, mode);
++}
++
++static void mfd_fail_chmod(int fd, int mode)
++{
++	struct stat st;
++	char buf[MAX_PATH];
++	int nbytes;
++
++	fd2name(fd, buf, MAX_PATH);
++
++	if (fstat(fd, &st) < 0) {
++		printf("fstat(%s) failed: %m\n", buf);
++		abort();
++	}
++
++	if (fchmod(fd, mode) == 0) {
++		printf("fchmod(%s, 0%04o) didn't fail as expected\n",
++		       buf, mode);
++		abort();
++	}
++
++	/* verify that file mode bits did not change */
++	mfd_assert_mode(fd, st.st_mode & 07777);
++}
++
+ static int idle_thread_fn(void *arg)
+ {
+ 	sigset_t set;
+@@ -880,6 +973,39 @@ static void test_seal_resize(void)
+ 	close(fd);
+ }
+ 
++/*
++ * Test SEAL_EXEC
++ * Test that chmod() cannot change x bits after sealing
++ */
++static void test_seal_exec(void)
++{
++	int fd;
++
++	printf("%s SEAL-EXEC\n", memfd_str);
++
++	fd = mfd_assert_new("kern_memfd_seal_exec",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
++
++	mfd_assert_mode(fd, 0777);
++
++	mfd_assert_chmod(fd, 0644);
++
++	mfd_assert_has_seals(fd, 0);
++	mfd_assert_add_seals(fd, F_SEAL_EXEC);
++	mfd_assert_has_seals(fd, F_SEAL_EXEC);
++
++	mfd_assert_chmod(fd, 0600);
++	mfd_fail_chmod(fd, 0777);
++	mfd_fail_chmod(fd, 0670);
++	mfd_fail_chmod(fd, 0605);
++	mfd_fail_chmod(fd, 0700);
++	mfd_fail_chmod(fd, 0100);
++	mfd_assert_chmod(fd, 0666);
++
++	close(fd);
++}
++
+ /*
+  * Test sharing via dup()
+  * Test that seals are shared between dupped FDs and they're all equal.
+@@ -1059,6 +1185,7 @@ int main(int argc, char **argv)
+ 	test_seal_shrink();
+ 	test_seal_grow();
+ 	test_seal_resize();
++	test_seal_exec();
+ 
+ 	test_share_dup("SHARE-DUP", "");
+ 	test_share_mmap("SHARE-MMAP", "");
+-- 
+2.37.1.455.g008518b4e5-goog
 

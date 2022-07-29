@@ -2,148 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5553C584B1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEC1584B31
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbiG2FaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 01:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
+        id S234569AbiG2Fav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 01:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiG2FaE (ORCPT
+        with ESMTP id S234391AbiG2Fa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 01:30:04 -0400
+        Fri, 29 Jul 2022 01:30:26 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ECF7D798;
-        Thu, 28 Jul 2022 22:30:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE851193E5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 22:30:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659072603; x=1690608603;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=65lutXwR82vlbd6BkQYFiUVNizzeZdhZc7RJSTidSdc=;
-  b=huRUxMx3i2YxHyijt/+HIzuYEeCntlOTbcqdVSHRMZIEzZSAXYNpO7D/
-   15vCcQWUCcChm2sKbaQmrsR0/B50oMlMvHYYWg/FfN3EH7/yLeGKgW26K
-   vnXsoEDZQRnDcdkDD3FF59Y3UoOCDLsaTc44oVgdQIOuxaiyrwpm+1t9j
-   WfzGzCgxiiqYwcLfauJfrY45yXom6bGJUhZGjdG/cI/8yRryUKb8+5Hlb
-   p91W4ZCNglKo3bYk3z30OcfSlsl4rpBMszxkOCga/bG7aN9heXxq5yDcR
-   91XQzKD/IWWt5Huv15ZED0NLw3jrSNzMkFBTmA+ts5NZhQH4s8TxKqc1E
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="286244792"
+  t=1659072622; x=1690608622;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=ercbijlouhtyzIM3o1wUqu+SodLfktbd6L58SWuUJoI=;
+  b=kR9hdSnnc8MpgLjfbbNY+GGjhw+RKnzOmWDwX7b8yMguA2F6+/ggDflT
+   87BSuM7bqnjkeR8MhCeSIufWidZ14NVAI2hxJU/AShSQb1Dux6Z3fFhFn
+   nqEGy2f6nLgQM4Qx9+eIIUsVTMQUNfRJCf1PHJiWls00Yjku/fvw2a6eg
+   SsONYdm7qAiWVaznVMN89nPlUCHRZiss3fS/OGgC6O4HIg5wbICbWmA8s
+   RN6tk/VLSWxCeGBm+t3BvaGYMHYt/HgxtteQRD3ukIohFJp1hEGGrv3YJ
+   WbfyzF0IfMSwkO8lpQZmnEEVVaym4kmKSNv6/WSFeWyRIoqTAZBtN0VtF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="286244831"
 X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="286244792"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 22:30:03 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="286244831"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 22:30:22 -0700
 X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="601172208"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jul 2022 22:30:03 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 28 Jul 2022 22:30:02 -0700
-Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 28 Jul 2022 22:30:02 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Thu, 28 Jul 2022 22:30:02 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Thu, 28 Jul 2022 22:30:01 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JURus6uFHJc90fSPwhRZ5drnQ14+w7yXcr4k/9c1d0EJRM/xzmAB9CL19QUYHKYy2cFN6TrEEzGbrq4Qc9XkMDUj7A9shV/BBTn/WkUYoodZKDWmUc86UWc6Ev0pFzfL73dGYcYD4XnWYNpdFA2Uv0t1XisJ73Wwerr7yL+SVEbZ2yzmeSY46N3da/g6+9M7wp6toAgr9pf7VCA8PAwJFGsXJKoxqzSkRtxrgTX0YEJYU8ebzEdp87da+wGl1ug93gR//6sy7FvBikncRyAN9fLwWIiB9waIU3IMEZYIFfIEyLqJP2NnfEZLc4ZL1FZVwRsOevRSAAcqSUXwypLDCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zVk4pidyhBBRkytDsabaHMeIi8eC0eIEQbVZPXK7wzg=;
- b=Y3i8WOdPwdvLdvGrvq9FVE739ZTZhvXdZHyGgZOC2JCBmYR4DX5e5Rb6iKZeF/oDIel5a/1TlornCYurYzn8wBNtlpATkVMQEKQU0ZB6/rD+vkYkbYUUctBpo5QoO66Qi7G6CXuGAmRRHL3YrkWSf0Fy026kwBV7rNH1B/pgZA3uJjM+EAW66LQeTGT601tvdXEgGERP1X11WArHRW6P+tweasXwDSL/TuGeIPyjrWUFlfwcN8YKeGDCCVFDRJNoFgi5xmlnoDGLgQwo2kfGu6sUrRqfDYncayNFHEbLAwuuTod9FYRWpwaifEAWSPSN8o8F4Jlzl2JCLwxsZrpT2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ1PR11MB6297.namprd11.prod.outlook.com (2603:10b6:a03:458::8)
- by CY5PR11MB6487.namprd11.prod.outlook.com (2603:10b6:930:31::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Fri, 29 Jul
- 2022 05:30:00 +0000
-Received: from SJ1PR11MB6297.namprd11.prod.outlook.com
- ([fe80::35b8:ff0a:4f99:419c]) by SJ1PR11MB6297.namprd11.prod.outlook.com
- ([fe80::35b8:ff0a:4f99:419c%6]) with mapi id 15.20.5458.024; Fri, 29 Jul 2022
- 05:30:00 +0000
-Date:   Fri, 29 Jul 2022 13:29:50 +0800
-From:   Oliver Sang <oliver.sang@intel.com>
-To:     Jeff Layton <jlayton@kernel.org>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <lkp@lists.01.org>,
-        <lkp@intel.com>, dri-devel <dri-devel@lists.freedesktop.org>
-Subject: Re: [fs/lock]  0064b3d9f9:
- BUG:kernel_NULL_pointer_dereference,address
-Message-ID: <YuNwTtT9gWLdUZiF@xsang-OptiPlex-9020>
-References: <Yt/oonNim732exkh@xsang-OptiPlex-9020>
- <7614df1720c5cd5b35fc18d14114d1aba2144f98.camel@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7614df1720c5cd5b35fc18d14114d1aba2144f98.camel@kernel.org>
-X-ClientProxiedBy: SG2PR01CA0132.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::36) To SJ1PR11MB6297.namprd11.prod.outlook.com
- (2603:10b6:a03:458::8)
+   d="scan'208";a="928616797"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 22:30:19 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v11 0/8] mm/demotion: Memory tiers and demotion
+References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
+Date:   Fri, 29 Jul 2022 13:30:08 +0800
+In-Reply-To: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Fri, 29 Jul 2022 00:34:28 +0530")
+Message-ID: <87a68smqov.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d27cac98-c328-4b0c-689d-08da7123614b
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6487:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1YQsNUi3PDyfcTRWLA2YTI4bXB6ezUugUC+33PlhJUz/lPRcb5pcJdzFNUvZsJrjy5r8Kvac2wYfk3kvhcUkPWL3h5CxuPWNAQIX8Nhj63IhV8xy+ojdcK4NwIcIVJ5jXkPEVQTcNBHggrL5LyE94o0vMS61FJOktnGy9pfL0O0A/3G+qpJkVYk2nH/RbByUUxl9rd2Vc8VYnHE1nJc6YFlG3yxkWJPHyeEgoM+bLBFT0iwafWwjD4z9B6fmf5nhzXLqezQr8/nmN7SN8Lgk5QNbTvwmVgI9jznoDUbHsx6z4knFXZx0iI0SkqG2GbbWUGaokgV/cNItLvyOuTFgAWAWmjgspEQmPbQOAseAEkANqmSV4sATrmAOMUgyPeI0yrN75EJ30tdohw+BF5y+7s51/NI2vGy62te/Rk2UA/3QRbC/9y5cLpyP3WGDZvi1rF9D6ZBCKtY0emeYAK4HgOxK35ASEclQm2Ix8oZawySFriVtLpoaMfmYitCVDHNa7YV86nxIc9GCAoEHtNhaz4HkFH9CtbxEdp9ssO/mGRbtt2WmgvpO5nidq9iT4l9qE2P1fdCkgYjslrQFMTawg6A85yvC/tsMiwI7U+FjJXO3TVCiK4aUNLZ98YwCA0DX2iZX6nz8fS6G5qNVsFcva6mRQHNecUtMPR8Zboliqq56UVxmY8NYlTeQX2C1AAv6TxPXzi8TeTrp5LmiMN+/zmW9IA4c7QRhnxp+oQmp1ViWKr/88BU4I1XTb0L0LWzbwo22yVa+vzev4XbphKPXxSSiEh6s1VacMv0DlbCBj/i4BOcOcRZ2OkADsyNG0cqZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6297.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(39860400002)(366004)(346002)(376002)(396003)(83380400001)(82960400001)(186003)(316002)(41300700001)(86362001)(54906003)(6486002)(478600001)(966005)(33716001)(66556008)(45080400002)(38100700002)(6916009)(5660300002)(6512007)(9686003)(26005)(66476007)(8936002)(66946007)(8676002)(44832011)(2906002)(6506007)(4326008)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tcczkSibafL0s7JCPaWZakmP+V/knrahJrdQxYBSQD7+cdszumjaUb38/TfO?=
- =?us-ascii?Q?bGWljvDQeoL5n0Im/+OcrD6W8Vjpnbls4tVY2cIZ6VmLYAq0pchDwXatekzM?=
- =?us-ascii?Q?vN3bUhyxWzSAoLfg8mSyiIbsdkFv6iTmWfqZolNnXl6/Xgr1Y++vZ3INYwdQ?=
- =?us-ascii?Q?CC/sdH83NGNHMP4v/7IvTjNGilDoL5sfh/ZRNRjMJIrTDZOCqIvuduInNGXF?=
- =?us-ascii?Q?1IvbSuuspWLdcl4XwSzbsnRN9QoBt2KzntU7gfDZ9sNRNafuKppYltgiMS1+?=
- =?us-ascii?Q?a76i4wCd4XdE3fTEeeq5JGTXkhoSuAB4x1fOchu35DNCj4Z1vzuZU/YHJjXl?=
- =?us-ascii?Q?2b0WacrcGEHYPohl3mNa11h2E8xb0i5yEoQQbPE27nzg32XxZSGnYrqJQMMq?=
- =?us-ascii?Q?4v4lWskxNUcKT4aD4oNfGd3Y03W+cjAnMMuU2wgrpxc1KA9JaYuPqmmKfWdx?=
- =?us-ascii?Q?5OK5vAMp3SyrYEbPVlCwlMuY2EdyLeXhRwP2CPMmlWjZQXMrv+yMeYS/ULRr?=
- =?us-ascii?Q?2i4B5D7gPkaK5u0D7QgFpZNrIwkCYMAHGYJ1N1xGjadIgfU0skq3u9lsxwx0?=
- =?us-ascii?Q?8JOfzKVA0j6rjusbCUDmXg4yJHGMx8eVUAzFmFX4HM99Jk+oj1SILEdVAk1m?=
- =?us-ascii?Q?U0HyyP4VCrBlifx0YgQtpnQ85VVWQi/Kbgxc8fYxzLk1RImr20c/yTBcgazq?=
- =?us-ascii?Q?1vFdd1qx/dP236VCVrq1ZJez1mVIguiLr+MYhMNPrd6/tRbdpdCwubtKR/od?=
- =?us-ascii?Q?iT2IliaQOGt713EjV6nuLoqb5Uv5j2AcjgCKaAilOKfrHtV2ra2bROKRRZ1K?=
- =?us-ascii?Q?wELrBHpvv6ZXQQ0zZ5m5jx2yjW4x+MKnGKpcUBULdpb28+Mr5leM2WXA0GdW?=
- =?us-ascii?Q?+MmU/hTKEyIo63fhBRpj2OEriy9j3OOhmwPQ3mX1XOfvpste4zYZ8f+NagEz?=
- =?us-ascii?Q?8S5rcdDVKCL5ix2atC4zcq9tVmjTtpZYrJg88t45uExMGYJGiqoO/o9GWFBI?=
- =?us-ascii?Q?b9Z4lDBQMbDHKdvm9fVsuD/FVgcv5Md+kxurZJNLI1MFMukxKAv0x733nhxu?=
- =?us-ascii?Q?Pa16U8y9jpPpkmS5BLmaNsTkTCRcn03tZ61uumqb/cQ1VP09maCpxEY6LaYe?=
- =?us-ascii?Q?l5FzLaAidqn7k6HJZvmBm274AJPCeknB5Yt4PKfIYCxBwfkY3hHpIoyeTs+a?=
- =?us-ascii?Q?BLCKL5r8avJTW/5f88GI/kh0YiNfhPu7poRYQp2HzeEbL+4Rcnvv3C05EgQy?=
- =?us-ascii?Q?hawmrf8gIQeeehScfqAT/YO5Kj44113lVSfzwY6/fQxMq9KqRo3v+uFr6J7I?=
- =?us-ascii?Q?O/BIZatQYxLH/TAXqJVW68+D4ATAQGwngCH0ADNC+xdqSj3oVRivcLC+Bsze?=
- =?us-ascii?Q?nTkvMTtwVcD7NoeOdtXNBPsGLkwZYH64oO1BowqOsrAH9AW7ZlAWAXi/varc?=
- =?us-ascii?Q?Gy0cTLI/76jJXXBOYvLvAzN/umTh1tHuxRFRTkFiNNlA9414a+2rf7NHAWK1?=
- =?us-ascii?Q?xOkCchLb0Cq8ccmg9SQXAlOqzb0MdKbewdkbUzpbt23WssWpb0hnKYN2s+G2?=
- =?us-ascii?Q?ZZQ5eJKT5HKJKpHMb3yqZrGZMLicHi9yBG+StWGqf3pxnmAketC6HLvG8kBL?=
- =?us-ascii?Q?Mw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d27cac98-c328-4b0c-689d-08da7123614b
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6297.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 05:29:59.9753
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 84PHlsmKJj9ei0rOLrQJw4t3+sxKKG5E4LjV8Z+1KvsWHjnS53/5NOfPGiIaZkRrk+lvVQq2wdxbEQhiXm2CyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6487
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -153,210 +69,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff, and all,
+"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
-we should say Sorry that, after more checks, we confirmed this report is a
-false positive.
-the initial investigation points out it could be caused by the way we use
-clang. we will do more study and send report to clang team if necessary.
+> The current kernel has the basic memory tiering support: Inactive pages on a
+> higher tier NUMA node can be migrated (demoted) to a lower tier NUMA node to
+> make room for new allocations on the higher tier NUMA node. Frequently accessed
+> pages on a lower tier NUMA node can be migrated (promoted) to a higher tier NUMA
+> node to improve the performance.
+>
+> In the current kernel, memory tiers are defined implicitly via a demotion path
+> relationship between NUMA nodes, which is created during the kernel
+> initialization and updated when a NUMA node is hot-added or hot-removed. The
+> current implementation puts all nodes with CPU into the top tier, and builds the
+> tier hierarchy tier-by-tier by establishing the per-node demotion targets based
+> on the distances between nodes.
+>
+> This current memory tier kernel interface needs to be improved for several
+> important use cases:
+>
+> * The current tier initialization code always initializes each memory-only NUMA
+>   node into a lower tier. But a memory-only NUMA node may have a high
+>   performance memory device (e.g. a DRAM device attached via CXL.mem or a
+>   DRAM-backed memory-only node on a virtual machine) and should be put into a
+>   higher tier.
+>
+> * The current tier hierarchy always puts CPU nodes into the top tier. But on a
+>   system with HBM (e.g. GPU memory) devices, these memory-only HBM NUMA nodes
+>   should be in the top tier, and DRAM nodes with CPUs are better to be placed
+>   into the next lower tier.
+>
+> * Also because the current tier hierarchy always puts CPU nodes into the top
+>   tier, when a CPU is hot-added (or hot-removed) and triggers a memory node from
+>   CPU-less into a CPU node (or vice versa), the memory tier hierarchy gets
+>   changed, even though no memory node is added or removed. This can make the
+>   tier hierarchy unstable and make it difficult to support tier-based memory
+>   accounting.
+>
+> * A higher tier node can only be demoted to selected nodes on the next lower
+>   tier as defined by the demotion path, not any other node from any lower tier.
+>   This strict, hard-coded demotion order does not work in all use cases (e.g.
+>   some use cases may want to allow cross-socket demotion to another node in the
+>   same demotion tier as a fallback when the preferred demotion node is out of
+>   space), and has resulted in the feature request for an interface to override
+>   the system-wide, per-node demotion order from the userspace. This demotion
+>   order is also inconsistent with the page allocation fallback order when all
+>   the nodes in a higher tier are out of space: The page allocation can fall back
+>   to any node from any lower tier, whereas the demotion order doesn't allow
+>   that.
+>
+> This patch series make the creation of memory tiers explicit under
+> the control of device driver.
+>
+> Memory Tier Initialization
+> ==========================
+>
+> Linux kernel presents memory devices as NUMA nodes and each memory device is of
+> a specific type. The memory type of a device is represented by its abstract 
+> distance. A memory tier corresponds to a range of abstract distance. This allows
+> for classifying memory devices with a specific performance range into a memory
+> tier.
+>
+> By default, all memory nodes are assigned to the default tier with
+> abstract distance 512.
+>
+> A device driver can move its memory nodes from the default tier. For example,
+> PMEM can move its memory nodes below the default tier, whereas GPU can move its
+> memory nodes above the default tier.
+>
+> The kernel initialization code makes the decision on which exact tier a memory
+> node should be assigned to based on the requests from the device drivers as well
+> as the memory device hardware information provided by the firmware.
+>
+> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
 
-please just ignore this report. thanks
+Some patch description of [0/8] is same as that of [1/8] originally.  It
+appears that you revised [1/8], but forget to revise [0/8] too.  Please
+do that.
 
-On Tue, Jul 26, 2022 at 09:55:31AM -0400, Jeff Layton wrote:
-> (cc'ing dri-devel)
-> 
-> This looks like it died down in the DRM code. It seems doubtful that the
-> flock code would be affecting this, but let me know if I'm incorrect
-> here.
-> 
-> Thanks,
-> Jeff
-> 
-> On Tue, 2022-07-26 at 21:14 +0800, kernel test robot wrote:
-> > Greeting,
-> > 
-> > FYI, we noticed the following commit (built with clang-15):
-> > 
-> > commit: 0064b3d9f96f3dc466e44a6fc716910cea56dbbf ("fs/lock: Rearrange ops in flock syscall.")
-> > https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
-> > 
-> > in testcase: boot
-> > 
-> > on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 4G
-> > 
-> > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> > 
-> > 
-> > 
-> > If you fix the issue, kindly add following tag
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > 
-> > 
-> > [    3.564403][    T1] BUG: kernel NULL pointer dereference, address: 00000b2c
-> > [    3.565351][    T1] #PF: supervisor read access in kernel mode
-> > [    3.565351][    T1] #PF: error_code(0x0000) - not-present page
-> > [    3.565351][    T1] *pde = 00000000
-> > [    3.565351][    T1] Oops: 0000 [#1]
-> > [    3.565351][    T1] CPU: 0 PID: 1 Comm: swapper Tainted: G                T 5.19.0-rc6-00004-g0064b3d9f96f #1
-> > [    3.565351][    T1] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> > [ 3.565351][ T1] EIP: drm_atomic_helper_setup_commit (??:?) 
-> > [ 3.565351][ T1] Code: 45 ec eb b5 89 d8 83 c4 0c 5e 5f 5b 5d 31 c9 31 d2 c3 90 90 90 90 90 90 90 55 89 e5 53 57 56 83 ec 38 89 55 d4 89 c2 8b 40 04 <8b> 88 2c 07 00 00 89 4d c4 83 b8 30 05 00 00 00 89 55 ec 0f 8e fa
-> > All code
-> > ========
-> >    0:	45 ec                	rex.RB in (%dx),%al
-> >    2:	eb b5                	jmp    0xffffffffffffffb9
-> >    4:	89 d8                	mov    %ebx,%eax
-> >    6:	83 c4 0c             	add    $0xc,%esp
-> >    9:	5e                   	pop    %rsi
-> >    a:	5f                   	pop    %rdi
-> >    b:	5b                   	pop    %rbx
-> >    c:	5d                   	pop    %rbp
-> >    d:	31 c9                	xor    %ecx,%ecx
-> >    f:	31 d2                	xor    %edx,%edx
-> >   11:	c3                   	retq   
-> >   12:	90                   	nop
-> >   13:	90                   	nop
-> >   14:	90                   	nop
-> >   15:	90                   	nop
-> >   16:	90                   	nop
-> >   17:	90                   	nop
-> >   18:	90                   	nop
-> >   19:	55                   	push   %rbp
-> >   1a:	89 e5                	mov    %esp,%ebp
-> >   1c:	53                   	push   %rbx
-> >   1d:	57                   	push   %rdi
-> >   1e:	56                   	push   %rsi
-> >   1f:	83 ec 38             	sub    $0x38,%esp
-> >   22:	89 55 d4             	mov    %edx,-0x2c(%rbp)
-> >   25:	89 c2                	mov    %eax,%edx
-> >   27:	8b 40 04             	mov    0x4(%rax),%eax
-> >   2a:*	8b 88 2c 07 00 00    	mov    0x72c(%rax),%ecx		<-- trapping instruction
-> >   30:	89 4d c4             	mov    %ecx,-0x3c(%rbp)
-> >   33:	83 b8 30 05 00 00 00 	cmpl   $0x0,0x530(%rax)
-> >   3a:	89 55 ec             	mov    %edx,-0x14(%rbp)
-> >   3d:	0f                   	.byte 0xf
-> >   3e:	8e fa                	mov    %edx,%?
-> > 
-> > Code starting with the faulting instruction
-> > ===========================================
-> >    0:	8b 88 2c 07 00 00    	mov    0x72c(%rax),%ecx
-> >    6:	89 4d c4             	mov    %ecx,-0x3c(%rbp)
-> >    9:	83 b8 30 05 00 00 00 	cmpl   $0x0,0x530(%rax)
-> >   10:	89 55 ec             	mov    %edx,-0x14(%rbp)
-> >   13:	0f                   	.byte 0xf
-> >   14:	8e fa                	mov    %edx,%?
-> > [    3.565351][    T1] EAX: 00000400 EBX: 401ebc64 ECX: 414f8750 EDX: 401ebc64
-> > [    3.565351][    T1] ESI: 401ebc64 EDI: 414f8750 EBP: 401ebbc8 ESP: 401ebb84
-> > [    3.565351][    T1] DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010206
-> > [    3.565351][    T1] CR0: 80050033 CR2: 00000b2c CR3: 02e5b000 CR4: 000406d0
-> > [    3.565351][    T1] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
-> > [    3.565351][    T1] DR6: fffe0ff0 DR7: 00000400
-> > [    3.565351][    T1] Call Trace:
-> > [ 3.565351][ T1] ? __lock_acquire (lockdep.c:?) 
-> > [ 3.565351][ T1] ? drm_atomic_helper_async_commit (??:?) 
-> > [ 3.565351][ T1] ? drm_atomic_helper_commit (??:?) 
-> > [ 3.565351][ T1] ? drm_get_format_info (??:?) 
-> > [ 3.565351][ T1] ? drm_internal_framebuffer_create (??:?) 
-> > [ 3.565351][ T1] ? lock_is_held_type (??:?) 
-> > [ 3.565351][ T1] ? drm_mode_addfb2 (??:?) 
-> > [ 3.565351][ T1] ? sched_clock (??:?) 
-> > [ 3.565351][ T1] ? drm_mode_addfb (??:?) 
-> > [ 3.565351][ T1] ? drm_client_framebuffer_create (??:?) 
-> > [ 3.565351][ T1] ? drm_fb_helper_generic_probe (drm_fb_helper.c:?) 
-> > [ 3.565351][ T1] ? __drm_fb_helper_initial_config_and_unlock (drm_fb_helper.c:?) 
-> > [ 3.565351][ T1] ? drm_fbdev_client_hotplug (drm_fb_helper.c:?) 
-> > [ 3.565351][ T1] ? drm_fbdev_generic_setup (??:?) 
-> > [ 3.565351][ T1] ? vkms_init (vkms_drv.c:?) 
-> > [ 3.565351][ T1] ? drm_sched_fence_slab_init (vkms_drv.c:?) 
-> > [ 3.565351][ T1] ? do_one_initcall (??:?) 
-> > [ 3.565351][ T1] ? drm_sched_fence_slab_init (vkms_drv.c:?) 
-> > [ 3.565351][ T1] ? tick_program_event (??:?) 
-> > [ 3.565351][ T1] ? error_context (??:?) 
-> > [ 3.565351][ T1] ? trace_hardirqs_on (??:?) 
-> > [ 3.565351][ T1] ? irqentry_exit (??:?) 
-> > [ 3.565351][ T1] ? sysvec_apic_timer_interrupt (??:?) 
-> > [ 3.565351][ T1] ? handle_exception (init_task.c:?) 
-> > [ 3.565351][ T1] ? parse_args (??:?) 
-> > [ 3.565351][ T1] ? error_context (??:?) 
-> > [ 3.565351][ T1] ? parse_args (??:?) 
-> > [ 3.565351][ T1] ? do_initcall_level (main.c:?) 
-> > [ 3.565351][ T1] ? rest_init (main.c:?) 
-> > [ 3.565351][ T1] ? do_initcalls (main.c:?) 
-> > [ 3.565351][ T1] ? do_basic_setup (main.c:?) 
-> > [ 3.565351][ T1] ? kernel_init_freeable (main.c:?) 
-> > [ 3.565351][ T1] ? kernel_init (main.c:?) 
-> > [ 3.565351][ T1] ? ret_from_fork (??:?) 
-> > [    3.565351][    T1] Modules linked in:
-> > [    3.565351][    T1] CR2: 0000000000000b2c
-> > [    3.565351][    T1] ---[ end trace 0000000000000000 ]---
-> > [ 3.565351][ T1] EIP: drm_atomic_helper_setup_commit (??:?) 
-> > [ 3.565351][ T1] Code: 45 ec eb b5 89 d8 83 c4 0c 5e 5f 5b 5d 31 c9 31 d2 c3 90 90 90 90 90 90 90 55 89 e5 53 57 56 83 ec 38 89 55 d4 89 c2 8b 40 04 <8b> 88 2c 07 00 00 89 4d c4 83 b8 30 05 00 00 00 89 55 ec 0f 8e fa
-> > All code
-> > ========
-> >    0:	45 ec                	rex.RB in (%dx),%al
-> >    2:	eb b5                	jmp    0xffffffffffffffb9
-> >    4:	89 d8                	mov    %ebx,%eax
-> >    6:	83 c4 0c             	add    $0xc,%esp
-> >    9:	5e                   	pop    %rsi
-> >    a:	5f                   	pop    %rdi
-> >    b:	5b                   	pop    %rbx
-> >    c:	5d                   	pop    %rbp
-> >    d:	31 c9                	xor    %ecx,%ecx
-> >    f:	31 d2                	xor    %edx,%edx
-> >   11:	c3                   	retq   
-> >   12:	90                   	nop
-> >   13:	90                   	nop
-> >   14:	90                   	nop
-> >   15:	90                   	nop
-> >   16:	90                   	nop
-> >   17:	90                   	nop
-> >   18:	90                   	nop
-> >   19:	55                   	push   %rbp
-> >   1a:	89 e5                	mov    %esp,%ebp
-> >   1c:	53                   	push   %rbx
-> >   1d:	57                   	push   %rdi
-> >   1e:	56                   	push   %rsi
-> >   1f:	83 ec 38             	sub    $0x38,%esp
-> >   22:	89 55 d4             	mov    %edx,-0x2c(%rbp)
-> >   25:	89 c2                	mov    %eax,%edx
-> >   27:	8b 40 04             	mov    0x4(%rax),%eax
-> >   2a:*	8b 88 2c 07 00 00    	mov    0x72c(%rax),%ecx		<-- trapping instruction
-> >   30:	89 4d c4             	mov    %ecx,-0x3c(%rbp)
-> >   33:	83 b8 30 05 00 00 00 	cmpl   $0x0,0x530(%rax)
-> >   3a:	89 55 ec             	mov    %edx,-0x14(%rbp)
-> >   3d:	0f                   	.byte 0xf
-> >   3e:	8e fa                	mov    %edx,%?
-> > 
-> > Code starting with the faulting instruction
-> > ===========================================
-> >    0:	8b 88 2c 07 00 00    	mov    0x72c(%rax),%ecx
-> >    6:	89 4d c4             	mov    %ecx,-0x3c(%rbp)
-> >    9:	83 b8 30 05 00 00 00 	cmpl   $0x0,0x530(%rax)
-> >   10:	89 55 ec             	mov    %edx,-0x14(%rbp)
-> >   13:	0f                   	.byte 0xf
-> >   14:	8e fa                	mov    %edx,%?
-> > 
-> > 
-> > To reproduce:
-> > 
-> >         # build kernel
-> > 	cd linux
-> > 	cp config-5.19.0-rc6-00004-g0064b3d9f96f .config
-> > 	make HOSTCC=clang-15 CC=clang-15 ARCH=i386 olddefconfig prepare modules_prepare bzImage modules
-> > 	make HOSTCC=clang-15 CC=clang-15 ARCH=i386 INSTALL_MOD_PATH=<mod-install-dir> modules_install
-> > 	cd <mod-install-dir>
-> > 	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
-> > 
-> > 
-> >         git clone https://github.com/intel/lkp-tests.git
-> >         cd lkp-tests
-> >         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
-> > 
-> >         # if come across any failure that blocks the test,
-> >         # please remove ~/.lkp and /lkp dir to run from a clean state.
-> > 
-> > 
-> > 
-> 
-> -- 
-> Jeff Layton <jlayton@kernel.org>
+Best Regards,
+Huang, Ying
+
+> Changes from v10:
+> * rename performance level to abstract distance
+> * Thanks to all the good feedback from Huang, Ying <ying.huang@intel.com>.
+>   Updated the patchset to cover most of the review feedback.
+>
+> Changes from v9:
+> * Use performance level for initializing memory tiers.
+>
+> Changes from v8:
+> * Drop the sysfs interface patches and  related documentation changes.
+>
+> Changes from v7:
+> * Fix kernel crash with demotion.
+> * Improve documentation.
+>
+> Changes from v6:
+> * Drop the usage of rank.
+> * Address other review feedback.
+>
+> Changes from v5:
+> * Remove patch supporting N_MEMORY node removal from memory tiers. memory tiers
+>   are going to be used for features other than demotion. Hence keep all N_MEMORY
+>   nodes in memory tiers irrespective of whether they want to participate in promotion or demotion.
+> * Add NODE_DATA->memtier
+> * Rearrage patches to add sysfs files later.
+> * Add support to create memory tiers from userspace.
+> * Address other review feedback.
+>
+>
+> Changes from v4:
+> * Address review feedback.
+> * Reverse the meaning of "rank": higher rank value means higher tier.
+> * Add "/sys/devices/system/memtier/default_tier".
+> * Add node_is_toptier
+>
+> v4:
+> Add support for explicit memory tiers and ranks.
+>
+> v3:
+> - Modify patch 1 subject to make it more specific
+> - Remove /sys/kernel/mm/numa/demotion_targets interface, use
+>   /sys/devices/system/node/demotion_targets instead and make
+>   it writable to override node_states[N_DEMOTION_TARGETS].
+> - Add support to view per node demotion targets via sysfs
+>
+> v2:
+> In v1, only 1st patch of this patch series was sent, which was
+> implemented to avoid some of the limitations on the demotion
+> target sharing, however for certain numa topology, the demotion
+> targets found by that patch was not most optimal, so 1st patch
+> in this series is modified according to suggestions from Huang
+> and Baolin. Different examples of demotion list comparasion
+> between existing implementation and changed implementation can
+> be found in the commit message of 1st patch.
+>
+>
+>
+> Aneesh Kumar K.V (7):
+>   mm/demotion: Add support for explicit memory tiers
+>   mm/demotion: Move memory demotion related code
+>   mm/demotion: Add hotplug callbacks to handle new numa node onlined
+>   mm/demotion/dax/kmem: Set node's abstract distance to
+>     MEMTIER_ADISTANCE_PMEM
+>   mm/demotion: Build demotion targets based on explicit memory tiers
+>   mm/demotion: Add pg_data_t member to track node memory tier details
+>   mm/demotion: Update node_is_toptier to work with memory tiers
+>
+> Jagdish Gediya (1):
+>   mm/demotion: Demote pages according to allocation fallback order
+>
+>  drivers/dax/kmem.c           |   9 +
+>  include/linux/memory-tiers.h |  79 +++++
+>  include/linux/migrate.h      |  15 -
+>  include/linux/mmzone.h       |   3 +
+>  include/linux/node.h         |   5 -
+>  mm/Makefile                  |   1 +
+>  mm/huge_memory.c             |   1 +
+>  mm/memory-tiers.c            | 586 +++++++++++++++++++++++++++++++++++
+>  mm/migrate.c                 | 453 +--------------------------
+>  mm/mprotect.c                |   1 +
+>  mm/vmscan.c                  |  59 +++-
+>  mm/vmstat.c                  |   4 -
+>  12 files changed, 725 insertions(+), 491 deletions(-)
+>  create mode 100644 include/linux/memory-tiers.h
+>  create mode 100644 mm/memory-tiers.c

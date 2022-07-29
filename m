@@ -2,168 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CFD58521B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39B4585222
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235911AbiG2PJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S231408AbiG2PLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236938AbiG2PJJ (ORCPT
+        with ESMTP id S236384AbiG2PLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:09:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C7F814A7;
-        Fri, 29 Jul 2022 08:09:08 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A0E7E6601B74;
-        Fri, 29 Jul 2022 16:09:04 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659107346;
-        bh=Zu5lk7Kl9pg8ut4UYb658O2221sGO1uY27/4BJ1EJpI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ALRWAU0Dk1gyRmwutC10tNbALQXKw6pp8/2KdYMwYngVlFsnRHjW0JWAK7tEBcPWY
-         YFrmYbHAse5lIXwnpsUVwc3I6mxZ+1Idql/av/NY8vmL7W9jASsSl+KK3/gEI7wY/f
-         jqGXsChbiL3YEWJC3A6NNNIpoD15dJ3LBF/6VLOS4L2QiMkwROkmyMxdw9Znn+eNx4
-         FrFUpVQ2Dt2kcltwgWZYy9VcuIJKSA2HuqrGvNrL27kJqpS2VW41qXLVuc8eUXe50Q
-         IYneHHZKRLN1hr5WTNP7x/zBdOYd/u6fjX1ayNOd57S/rVxCJNcTtQ9mOEZ4Pdwc3y
-         O5J36eqMgoMRg==
-Message-ID: <8ae4bf37a743755d046f9d0a9e8ad303c7a5041d.camel@collabora.com>
-Subject: Re: [PATCH v5, 0/8] Support H264 multi-core encoder on MT8195
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        angelogioacchino.delregno@collabora.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Fri, 29 Jul 2022 11:08:55 -0400
-In-Reply-To: <20220729035129.3634-1-irui.wang@mediatek.com>
-References: <20220729035129.3634-1-irui.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Fri, 29 Jul 2022 11:11:08 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC06175BB;
+        Fri, 29 Jul 2022 08:11:07 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id q30so1960181wra.11;
+        Fri, 29 Jul 2022 08:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xpR3E29/A9nc5RITUNo9yzDkYexPEEQLAxJsqHGPRlM=;
+        b=GjySXkZbiKSHDRXi8/iFiMbWWJUy3IxxGLhr28E6V2rGQ4FLfZzBUQs9xfOw1jSW7N
+         dmaw+ZHVRqt1DXkUGxkiC2qpmefkigwbJZf9L+byvQL+7yAZbucJaRhRT8LDnQn8+hxV
+         qnlIEfbX2IEg8MQfQnBvsKWcxZguQNAdrOzqSt/jNmuge9joluAClgP4LunWcKaUBOTT
+         sHH7bqiMzNkxCSA9C/KYEc2uNpVMng/lVxRqR+Okar7M9VMVpgcPdTqL4L06kkJPlvG+
+         ukDrThmZw+TXIpz5ktJqYjZ2KU+92ENdrTi8AFvy5RSD3TyfjIe0F3uu4c6YA7BTVgLZ
+         myFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xpR3E29/A9nc5RITUNo9yzDkYexPEEQLAxJsqHGPRlM=;
+        b=WxJWzvrlN/D8Ti+sViWF706SgIbQeYd8qq1xJVF18V5U2pYqG2zf6VQmni7kR9Sn40
+         z1s3fiUwoy2lY5b19ceLRR2i0IzjGmVmE9WJqrA1bdvaVhgC60X5+ksaS75VLjfTs1qG
+         enOBK2hzeylsBvhR1L3mgSXtbFb6rCv23hgHpSgctiAi1l0beEpT3qlY3MuGpblZe1+k
+         dcauVBCoDgEZgFZBJT5050l58xtLGCwPQTUIC+16mmMhPG/y1Saaf55RpzSgVgKNwEVl
+         ydBtAIKUWVs5Hg/784o7Wx/cMOkDpmiXiOtukYnljy+Gk8tcg0sCmgSnvTGJAgDY00nQ
+         6hfw==
+X-Gm-Message-State: ACgBeo20zUpNvM6NBz0bV/xaBOvmAcU+HHlGiCgougqVN375gjWX76el
+        hev7yBd86DB2//ry3VITlzk=
+X-Google-Smtp-Source: AA6agR7e2boDjM41jCQg2pq7nhx4wFbSqs4syky7BvMUTysFCiJEc7ktjZY47bTJ99nZpteZJak1BQ==
+X-Received: by 2002:a5d:5c08:0:b0:21d:854a:7009 with SMTP id cc8-20020a5d5c08000000b0021d854a7009mr2670770wrb.263.1659107465544;
+        Fri, 29 Jul 2022 08:11:05 -0700 (PDT)
+Received: from [192.168.2.202] (pd9ea3777.dip0.t-ipconnect.de. [217.234.55.119])
+        by smtp.gmail.com with ESMTPSA id bh15-20020a05600c3d0f00b003a4a5bcd37esm1494237wmb.23.2022.07.29.08.11.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Jul 2022 08:11:05 -0700 (PDT)
+Message-ID: <097eb672-ee9f-523c-d52d-79e723a7bf2c@gmail.com>
+Date:   Fri, 29 Jul 2022 17:11:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
+ Application client
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
+ <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
+ <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
+ <20220727132437.pjob3z2nyxsuxgam@bogus>
+ <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
+ <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com>
+ <CAC_iWjLWBJLth26ifFfHvimProHZu_w5SjQNWSH_D2Fs_JXjbA@mail.gmail.com>
+ <b703f678-b2c5-cdeb-ac40-9646e043d1c3@gmail.com>
+ <CAC_iWjLrntWuJUzVuRi0ZOtG6JXNwz7SbS2mrqpuTgU5TV6rQA@mail.gmail.com>
+ <d5a19e17-08eb-8bd6-ea18-5da638d13622@gmail.com>
+ <20220729085214.bh2cak5g2hcqun4i@bogus>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20220729085214.bh2cak5g2hcqun4i@bogus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Irui,
+On 7/29/22 10:52, Sudeep Holla wrote:
+> On Thu, Jul 28, 2022 at 07:27:19PM +0200, Maximilian Luz wrote:
+> 
+> [...]
+> 
+>> My current suggestion (already sent to Sudeep earlier) is (roughly)
+>> this: Add one compatible for the TrEE / TrustZone interface.
+> 
+> Still I don't understand why you need extra compatible if you know
+> this laptop(with a unique compatible to identify it) always runs this
+> TrEE interface.
 
-Le vendredi 29 juillet 2022 =C3=A0 11:51 +0800, Irui Wang a =C3=A9crit=C2=
-=A0:
-> MT8195 has two H264 encoder hardware, named core0 and core1, this two
-> cores can encode two input frames separately at the same time to achieve
-> higher performance.
+First of all, to recap: I suggest adding a device and driver for the TrEE
+interface, with a compatible for that. That then (based on platform)
+instantiates devices and drivers for the applications running in TrEE. The
+compatible I'm talking about is for that general TrEE interface. Not any
+specific application.
 
-I suspect you could provide some performance numbers on that specific HW be=
-fore
-and after your change ? This could help integrator regarding what type of g=
-ain
-they can expect of back-porting this feature. This is not strictly mandator=
-y
-though.
+a) Because this better reflects the ACPI tables on those devices. As I've said,
+    there is a HID specifically for the TrEE interface. You were concerned
+    earlier that we should try to add support for that, and now you want to
+    create a purely artificial divide between ACPI and DT? Ideally, we can have
+    the driver load via both the DT compatible and the ACPI HID depending on
+    whether we use one or the other without many other changes.
 
->=20
-> This series of patches are used to enable the two H264 encoder cores,
-> the difference between encoding process before and after enable two
-> cores is just like as below:
-> As-Is: Synchronous
-> V4L2_VIDIOC_QBUF#0 --> device_run(triger encoder) --> wait encoder IRQ
-> -->
-> encoding done with result --> job_finish
-> V4l2_VIDIOC_QBUF#1 --> device_run(triger encoder) --> wait encoder IRQ
-> -->
-> encoding done with result --> job_finish
-> ...
-> To-Be: Asynchronous
-> V4L2_VIDIOC_QBUF#0 --> device_run(triger encoder) --> job_finish
-> ..V4l2_VIDIOC_QBUF#1 --> device_run(triger encoder) --> job_finish
-> (venc core0 may encode done here, done the encoding result to client)
-> V4L2_VIDIOC_QBUF#2 --> device_run(triger encoder) --> job_finish.
->=20
-> ---
-> changes compared with v4:
-> - reabse to the newer linux media stage tree.
-> - remove "mediatek,venc-multi-core" property since sub-device can
->   be probed by of_platform_populate api directly.
-> - some modifications for patch v4's review comments.
->=20
-> changes compared with v3:
-> - rebase to the newer linux media stage.
-> - add a capability to indicate scp firmware support multi-core.
-> - probe core0 as main device, core1 as sub-device.
->=20
-> changes compared with v2:
-> - update venc core dt-bindings, add two new properties for current
->   usage.
-> - parse venc multi_core mode from device tree.
-> - rebase to the newer linux media stage.
->=20
-> changes compared with v1:
-> - of_platform_populate was used in place of the component framework.
-> - new yaml file for venc cores.
-> - some modifications for patch v1's review comments.
-> ---
->=20
-> Irui Wang (8):
->   dt-bindings: media: mediatek: vcodec: Adds encoder cores dt-bindings
->     for mt8195
->   media: mediatek: vcodec: Enable venc dual core usage
->   media: mediatek: vcodec: Refactor venc power manage function
->   media: mediatek: vcodec: Add more extra processing for multi-core
->     encoding
->   media: mediatek: vcodec: Add venc power on/off function
->   media: mediatek: vcodec: Refactor encoder clock on/off function
->   media: mediatek: vcodec: Add multi-core encoding process
->   media: mediatek: vcodec: Return encoding result in asynchronous mode
->=20
->  .../media/mediatek,vcodec-encoder-core.yaml   | 218 ++++++++++++++++
->  .../media/mediatek,vcodec-encoder.yaml        |   1 -
->  .../media/platform/mediatek/vcodec/Makefile   |   4 +-
->  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  28 +-
->  .../platform/mediatek/vcodec/mtk_vcodec_enc.c | 113 ++++++--
->  .../platform/mediatek/vcodec/mtk_vcodec_enc.h |  11 +-
->  .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |  44 +++-
->  .../mediatek/vcodec/mtk_vcodec_enc_hw.c       | 156 +++++++++++
->  .../mediatek/vcodec/mtk_vcodec_enc_hw.h       |  34 +++
->  .../mediatek/vcodec/mtk_vcodec_enc_pm.c       | 178 +++++++++++--
->  .../mediatek/vcodec/mtk_vcodec_enc_pm.h       |  11 +-
->  .../mediatek/vcodec/mtk_vcodec_util.c         |  19 ++
->  .../mediatek/vcodec/mtk_vcodec_util.h         |   3 +
->  .../mediatek/vcodec/venc/venc_h264_if.c       | 243 ++++++++++++++----
->  .../mediatek/vcodec/venc/venc_vp8_if.c        |   3 +-
->  .../platform/mediatek/vcodec/venc_drv_if.c    |  75 ++++--
->  .../platform/mediatek/vcodec/venc_drv_if.h    |   6 +
->  .../platform/mediatek/vcodec/venc_vpu_if.c    |   9 +-
->  .../platform/mediatek/vcodec/venc_vpu_if.h    |   3 +-
->  19 files changed, 1028 insertions(+), 131 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcod=
-ec-encoder-core.yaml
->  create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc=
-_hw.c
->  create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc=
-_hw.h
->=20
+    Would you equally suggest that we not load the driver by its ACPI HID and
+    instead do DMI matching?
 
+b) Qualcomm also has a DT compatible for this (qcom,qseecom), see e.g. [1].
+    Note: they seem to have changed the name from Secure Execution Environment
+    to Trusted Execution Environment, at least in their Windows driver. This is
+    why I used "tee" instead of "see" (also their naming of things is somewhat
+    confusing and seems to change randomly). Fundamentally, this is the same
+    interface (they just implement a lot more things in their driver, the couple
+    of functions I proposed here handle the absolute minimum required for
+    uefisecapp, it can always be extended later when needed).
+
+c) Given their naming of the DT compatible, this interface itself is pretty
+    much guaranteed to be stable. It's definitely not going away with some
+    firmware update. So your earlier concerns about having to update the DT in
+    case of firmware changes do simply not apply here. It is a core component of
+    these platforms. As far as I can see, your "let's load the TrEE driver via
+    the platform compatible" suggestion is now exactly the same as a "let's load
+    some PCIe controller via the platform/SoC compatible". It's an interface
+    that is either present or not present, depending on the device. We're not
+    encoding any firmware specifics (ie. what's running inside the TrEE) in the
+    DT, we just say that it's there (the rest is decided by the driver, e.g. via
+    platform compatibles or DMI matching).
+
+d) By specifying it in the DT, we can properly link it up via a phandle to the
+    SCM and properly model the supplier/client relation between them. While we
+    can't do that with ACPI, I think it's still a good idea to handle this
+    properly in times we can.
+
+Regards,
+Max
+
+[1]: https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/blob/auto-kernel.lnx.4.14.c34/drivers/misc/qseecom.c

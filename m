@@ -2,83 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199A95856BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B8B5856BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239482AbiG2WCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S239497AbiG2WD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 18:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiG2WCq (ORCPT
+        with ESMTP id S231449AbiG2WDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:02:46 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694CA8BA9A;
-        Fri, 29 Jul 2022 15:02:45 -0700 (PDT)
-Received: from zn.tnic (p57969665.dip0.t-ipconnect.de [87.150.150.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 853D51EC0138;
-        Sat, 30 Jul 2022 00:02:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1659132159;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wrKILRxKPGwT6wk7Ajnr1TkkdTUDvWFahFhfVMdrEgo=;
-        b=pF1+1BfCwH1/XXlJBgjJaV3EOTk7Sb+S85dpADswCkM4pOFd9M1e5rnX5mLTii8V7XMaZM
-        tlVZsJmBjozOkuVowGtAo+7tV7vNoCfN3CZRuy90COxQzqHWmY3c79eWu9xL6gM+npY3pG
-        Xta7lO/9dqvyipNeTNUNOfck0CH2Df0=
-Date:   Sat, 30 Jul 2022 00:02:34 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
- Stale Data
-Message-ID: <YuRY+rKaocoV8ECn@zn.tnic>
-References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
- <YuJ6TQpSTIeXLNfB@zn.tnic>
- <20220729022851.mdj3wuevkztspodh@desk>
- <YuPpKa6OsG9e9nTj@zn.tnic>
- <20220729173609.45o7lllpvsgjttqt@desk>
- <YuRDbuQPYiYBZghm@zn.tnic>
- <20220729214627.wowu5sny226c5pe4@desk>
+        Fri, 29 Jul 2022 18:03:24 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037588BAB1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:03:24 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id z12-20020a056830128c00b0061c8168d3faso4190513otp.7
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=RXWJjLRz7P9r1hNunIcpGJfPNUX5gzjTNT3qhw4Q8tc=;
+        b=gBbVHOZCRQEC/xR/pKz52eY39CztxQaMuB22gkEz7v9ovzBeQZMjKvcNa58SKpeB6S
+         X6ZR3csKR+tXv9VglmLTq4euN/XKZy3Q9iNNzEVEALpSkbjUms9TbORc9guZWmW3grMi
+         WaFa1M7NCo0JqeOHqfYCLNXMNlyq0gpcnkQGh65L5TOx57hAM/+FF/2/0cW+h4fmhUgv
+         EBTs9SIrjot83v/AdgBdAuiswROLcorb4eAs44X2WNwmXAZaDyJE/spadOkGzCguK3it
+         ju+qZPUum7YY/JYJz+N3oBUqukxeudtyd3XvPi3wa6vKSTJ7VtPBUaalDsoeyoCQlkIK
+         ZVsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=RXWJjLRz7P9r1hNunIcpGJfPNUX5gzjTNT3qhw4Q8tc=;
+        b=Nv6APnylBgSQn0Yaa8Dtze3+6DVsx4kNW+oIa77FAVPPCIziQqtH4MpdY6WDFDJZlO
+         bal2Xug9+901Ae4uVBi9F/MB/4phebvVfM7K9+hlzuHe/0jCXidL3Le6rrf0eSZZG9bq
+         YrCeUKMwiUmJdL5SoUGi86n2bvnITnRcEnhEMDGRIGcQINRnYZk/euEz0XLhSmxTYazB
+         kEI9kSY9+QEiu+1RnEyy2ajKORPEknWY8A9Gz+S8x+yxPqxeZ4O5pponmZAzrYP0oxkh
+         /7qsUWrSNgBHIy61BXXHzqr+PxRzI9960p6P6RqhcZwLXHKnTeFcdrfOq/4Dn8JfmT5e
+         52ug==
+X-Gm-Message-State: AJIora9UsNZpt7GyEwbtXFAdAZWlaCUhSm/os1CbRrl7FG8M5Nm71uAZ
+        KKlIi1wEYjrMRv6iIdN710yCHWHrFos=
+X-Google-Smtp-Source: AGRyM1uxHqelv+2GP2cScl0HPfPe/tNoB5TLIAlvzfnUV2iBsdEDFUzqiKtuYqVT8K7ao4TXZ2JUNA==
+X-Received: by 2002:a9d:c65:0:b0:61c:bed2:622e with SMTP id 92-20020a9d0c65000000b0061cbed2622emr2144718otr.292.1659132202981;
+        Fri, 29 Jul 2022 15:03:22 -0700 (PDT)
+Received: from bertie (072-190-140-095.res.spectrum.com. [72.190.140.95])
+        by smtp.gmail.com with ESMTPSA id 69-20020a9d02cb000000b0061c80736666sm1452425otl.28.2022.07.29.15.03.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 15:03:22 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 17:03:21 -0500
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     shaoqin.huang@intel.com
+Cc:     rppt@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] memblock test: Modify the obsolete description in
+ README
+Message-ID: <YuRZKTNl+USWFR5H@bertie>
+References: <20220729161125.190845-1-shaoqin.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729214627.wowu5sny226c5pe4@desk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220729161125.190845-1-shaoqin.huang@intel.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 02:46:27PM -0700, Pawan Gupta wrote:
-> Let me see if there is a way to distinguish between 4. and 5. below:
+On Fri, Jul 29, 2022 at 10:11:25AM -0600, shaoqin.huang@intel.com wrote:
+> From: Shaoqin Huang <shaoqin.huang@intel.com>
 > 
->    CPU category				  X86_BUG_MMIO_STALE_DATA	X86_BUG_MMIO_UNKNOWN
-> -----------------------------------------------------------------------------------------------
-> 1. Known affected (in cpu list)			1				0
-> 2. CPUs with HW immunity (MMIO_NO=1)		0				0
-> 3. Other vendors				0				0
-> 4. Older Intel CPUs				0				1
-> 5. Not affected current CPUs (but MMIO_NO=0)	0				?
+> The VERBOSE option in Makefile has been moved, but there still have the
+> description left in README. For now, we use `-v` options when running
+> memblock test to print information, so using the new to replace the
+> obsolete items.
+> 
+> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
+> ---
+> Changelog:
+> ----------
+> v3:
+>   - Using `build options` replace `options` to make it more clear.
+> v2:
+>   - Tweak the sentence to make it more clear and continuesly.
+>   - Commit log changes.
+> 
+Looks good!
 
-Not affected current CPUs should be arch_cap_mmio_immune() == true, no?
+Acked-by: Rebecca Mckeever <remckee0@gmail.com>
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>  tools/testing/memblock/README | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/memblock/README b/tools/testing/memblock/README
+> index 058146b528a5..72162b5f4a76 100644
+> --- a/tools/testing/memblock/README
+> +++ b/tools/testing/memblock/README
+> @@ -33,20 +33,23 @@ To run the tests, build the main target and run it:
+>  
+>  $ make && ./main
+>  
+> -A successful run produces no output. It is also possible to override different
+> -configuration parameters. For example, to include verbose output, specify the
+> -VERBOSE flag when building the main target:
+> +A successful run produces no output. It is possible to control the behavior
+> +by passing options from command line. For example, to include verbose output,
+> +append the `-v` options when you run the tests:
+>  
+> -$ make VERBOSE=1
+> +$ ./main -v
+>  
+>  This will print information about which functions are being tested and the
+>  number of test cases that passed.
+>  
+> -To simulate enabled NUMA, use:
+> +For the full list of options from command line, see `./main --help`.
+> +
+> +It is also possible to override different configuration parameters to change it
+> +test functions. For example, To simulate enabled NUMA, use:
+>  
+>  $ make NUMA=1
+>  
+> -For the full list of options, see `make help`.
+> +For the full list of build options, see `make help`.
+>  
+>  Project structure
+>  =================
+> -- 
+> 2.30.2
+> 
+> 
+Thanks,
+Rebecca

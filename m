@@ -2,127 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9EB5851BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001D25851C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbiG2OmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S237157AbiG2Op2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233837AbiG2OmI (ORCPT
+        with ESMTP id S235283AbiG2Op0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:42:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E6E1121;
-        Fri, 29 Jul 2022 07:42:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0156A61826;
-        Fri, 29 Jul 2022 14:42:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CE0C433C1;
-        Fri, 29 Jul 2022 14:42:02 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch fixes for v5.19-final
-Date:   Fri, 29 Jul 2022 22:42:05 +0800
-Message-Id: <20220729144205.3412161-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Fri, 29 Jul 2022 10:45:26 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7981C1DA45;
+        Fri, 29 Jul 2022 07:45:25 -0700 (PDT)
+X-UUID: 4de445ca28454f598c49d8e03df570d0-20220729
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:da8af049-5e5a-460a-bf28-3c3581f45f67,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:82b8c4cf-a6cf-4fb6-be1b-c60094821ca2,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 4de445ca28454f598c49d8e03df570d0-20220729
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1218352668; Fri, 29 Jul 2022 22:45:21 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 29 Jul 2022 22:43:52 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 29 Jul 2022 22:43:52 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>
+CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
+        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
+        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
+        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
+        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
+        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
+        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
+        <steve.lee@mediatek.com>, <jsiuda@google.com>,
+        <frankgor@google.com>, <abhishekpandit@google.com>,
+        <michaelfsun@google.com>, <mcchou@chromium.org>,
+        <shawnku@google.com>, <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, "Jing Cai" <jing.cai@mediatek.com>
+Subject: [PATCH RESEND v3] Bluetooth: btusb: mediatek: fix WMT command failure during runtime suspend
+Date:   Fri, 29 Jul 2022 22:43:49 +0800
+Message-ID: <96994209776d6643585426b4341bbe2dcd9f5116.1659105441.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e0dccc3b76fb35bb257b4118367a883073d7390e:
+From: Sean Wang <sean.wang@mediatek.com>
 
-  Linux 5.19-rc8 (2022-07-24 13:26:27 -0700)
+WMT cmd/event doesn't follow up the generic HCI cmd/event handling, it
+needs constantly polling control pipe until the host received the WMT
+event, thus, we should require to specifically acquire PM counter on the
+USB to prevent the interface from entering auto suspended while WMT
+cmd/event in progress.
 
-are available in the Git repository at:
+Fixes: a1c49c434e15 ("Bluetooth: btusb: Add protocol support for MediaTek MT7668U USB devices")
+Co-developed-by: Jing Cai <jing.cai@mediatek.com>
+Signed-off-by: Jing Cai <jing.cai@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+---
+v2:
+1. move usb_autopm_[get, put]_interface to btusb_mtk_hci_wmt_sync whenever
+wmt cmd is invoked.
+2. add the explanation why we needed the specific
+usb_autopm_[get, put]_interface there.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-5.19-5
+v3: correct the version and there is no logic changed
+---
+ drivers/bluetooth/btusb.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-for you to fetch changes up to 45b53c9051770c0d9145083a328548745ee2e75b:
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 480ea891c09a..bdcfc3deea6c 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2453,15 +2453,29 @@ static int btusb_mtk_hci_wmt_sync(struct hci_dev *hdev,
+ 
+ 	set_bit(BTUSB_TX_WAIT_VND_EVT, &data->flags);
+ 
++	/* WMT cmd/event doesn't follow up the generic HCI cmd/event handling,
++	 * it needs constantly polling control pipe until the host received the
++	 * WMT event, thus, we should require to specifically acquire PM counter
++	 * on the USB to prevent the interface from entering auto suspended
++	 * while WMT cmd/event in progress.
++	 */
++	err = usb_autopm_get_interface(data->intf);
++	if (err < 0)
++		goto err_free_wc;
++
+ 	err = __hci_cmd_send(hdev, 0xfc6f, hlen, wc);
+ 
+ 	if (err < 0) {
+ 		clear_bit(BTUSB_TX_WAIT_VND_EVT, &data->flags);
++		usb_autopm_put_interface(data->intf);
+ 		goto err_free_wc;
+ 	}
+ 
+ 	/* Submit control IN URB on demand to process the WMT event */
+ 	err = btusb_mtk_submit_wmt_recv_urb(hdev);
++
++	usb_autopm_put_interface(data->intf);
++
+ 	if (err < 0)
+ 		goto err_free_wc;
+ 
+-- 
+2.25.1
 
-  LoongArch: Fix wrong "ROM Size" of boardinfo (2022-07-29 18:22:33 +0800)
-
-----------------------------------------------------------------
-LoongArch fixes for v5.19-final
-
-1, Fix cache size calculation, stack protection attributes, ptrace's
-   fpr_set and "ROM Size" in boardinfo;
-2, Some cleanups and improvements of assembly.
-3, Some cleanups of unused code and useless code.
-----------------------------------------------------------------
-Bibo Mao (2):
-      LoongArch: Remove clock setting during cpu hotplug stage
-      LoongArch: Remove unused variables
-
-Huacai Chen (2):
-      LoongArch: Disable executable stack by default
-      LoongArch: Fix shared cache size calculation
-
-Jun Yi (1):
-      LoongArch: Remove useless header compiler.h
-
-Qi Hu (1):
-      LoongArch: Fix missing fcsr in ptrace's fpr_set
-
-Tiezhu Yang (1):
-      LoongArch: Fix wrong "ROM Size" of boardinfo
-
-WANG Xuerui (8):
-      LoongArch: Use ABI names of registers where appropriate
-      LoongArch: Use the "jr" pseudo-instruction where applicable
-      LoongArch: Use the "move" pseudo-instruction where applicable
-      LoongArch: Simplify "BEQ/BNE foo, zero" with BEQZ/BNEZ
-      LoongArch: Simplify "BLT foo, zero" with BLTZ
-      LoongArch: Simplify "BGT foo, zero" with BGTZ
-      LoongArch: Re-tab the assembly files
-      LoongArch: Remove several syntactic sugar macros for branches
-
- arch/loongarch/Kconfig                   |   1 -
- arch/loongarch/include/asm/asmmacro.h    |  12 ---
- arch/loongarch/include/asm/atomic.h      |  37 +++----
- arch/loongarch/include/asm/barrier.h     |   4 +-
- arch/loongarch/include/asm/cmpxchg.h     |   4 +-
- arch/loongarch/include/asm/compiler.h    |  15 ---
- arch/loongarch/include/asm/elf.h         |   2 -
- arch/loongarch/include/asm/futex.h       |  11 +-
- arch/loongarch/include/asm/irqflags.h    |   1 -
- arch/loongarch/include/asm/local.h       |   1 -
- arch/loongarch/include/asm/loongson.h    |  16 +--
- arch/loongarch/include/asm/stacktrace.h  |  12 +--
- arch/loongarch/include/asm/thread_info.h |   4 +-
- arch/loongarch/include/asm/uaccess.h     |   2 +-
- arch/loongarch/kernel/cacheinfo.c        |  11 +-
- arch/loongarch/kernel/entry.S            |   4 +-
- arch/loongarch/kernel/env.c              |  20 ----
- arch/loongarch/kernel/fpu.S              | 174 +++++++++++++++----------------
- arch/loongarch/kernel/genex.S            |  12 +--
- arch/loongarch/kernel/head.S             |   8 +-
- arch/loongarch/kernel/ptrace.c           |  12 ++-
- arch/loongarch/kernel/reset.c            |   1 -
- arch/loongarch/kernel/setup.c            |   2 +-
- arch/loongarch/kernel/smp.c              | 113 +++-----------------
- arch/loongarch/kernel/switch.S           |   4 +-
- arch/loongarch/lib/clear_user.S          |   2 +-
- arch/loongarch/lib/copy_user.S           |   2 +-
- arch/loongarch/lib/delay.c               |   1 -
- arch/loongarch/mm/page.S                 | 118 ++++++++++-----------
- arch/loongarch/mm/tlbex.S                |  98 ++++++++---------
- include/linux/cpuhotplug.h               |   1 -
- 31 files changed, 277 insertions(+), 428 deletions(-)
- delete mode 100644 arch/loongarch/include/asm/compiler.h

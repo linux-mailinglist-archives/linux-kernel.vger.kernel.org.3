@@ -2,83 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D8B584C7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9F7584C81
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234307AbiG2HUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 03:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        id S234746AbiG2HWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 03:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbiG2HU3 (ORCPT
+        with ESMTP id S234103AbiG2HWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 03:20:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBB22DAA7;
-        Fri, 29 Jul 2022 00:20:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D207B61AA9;
-        Fri, 29 Jul 2022 07:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8625C433D6;
-        Fri, 29 Jul 2022 07:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659079226;
-        bh=fLxpLT/v3uJAppJRz9ZqKAGqo3FC41KKuVJ8GM2Z8/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tSCp8NKWaxvfniZv/eZ9PItjbs6Np01rMih4WCedqv1WqzpeD/zpE+9g8JQHkvzRC
-         dyczKl9abBwywLXkLTuLU3/J6p3NRQ4Avn9x+BVfEGg++le1WnC1VpsTYmZtSzfXOH
-         VKINi1YMsu7f0QVo3ydgkL2LTe96JbcaF1c2YqE0=
-Date:   Fri, 29 Jul 2022 09:20:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Daniil Lunev <dlunev@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2] ufs: core: print capabilities in controller's sysfs
- node
-Message-ID: <YuOKNX4mWCb1LUrg@kroah.com>
-References: <20220729090521.v2.1.Id612b86fd30936dfd4c456b3341547c15cecf321@changeid>
- <3f96d798-e9bb-15d8-65b9-2383e112c654@acm.org>
+        Fri, 29 Jul 2022 03:22:43 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4EB7D784
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:22:43 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26T7DOA4037697;
+        Fri, 29 Jul 2022 07:22:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=pp1; bh=DBM5ySA5g0r2dZVDe9Jwxay5z+uFtZLDHYvlpDeRg/Q=;
+ b=r/ZS29FLP/JGCEO5L1tQs7Ac+nCxbUned4WyKqVHy3b/xv+Y/qLIJDRWfi/8ShltFqVv
+ qgTl3Iz4Kg4C4812GTQE2SmEUZwe1BgEV+5bv1mU+i/Ur3CYKNdp6BYLLSlh4ULgCvGL
+ QBoD2qDVPTMHqMTXJdUy+5wN6QB5orciOpJ3tAARJltnMb/+rrW4SloRFetTQpNOsKX6
+ S5Yaq8CNs5eF0h4w2AWeDPl1iWw13cFVnNyrP90AjzmPH7lvRcZhtxfcTtYBtvwk0cO2
+ HjzoCaBJzlri9C2UZ/CnsJYboDIgWw2MBqQs74dXrJ8y42Q/u3d2Sq88BMiA4MGYHmSG vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hmaydr90u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 07:22:24 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26T7GFeU012876;
+        Fri, 29 Jul 2022 07:22:23 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hmaydr90j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 07:22:23 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26T7Jrnp015895;
+        Fri, 29 Jul 2022 07:22:22 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02dal.us.ibm.com with ESMTP id 3hhfpj9ssp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 07:22:22 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26T7ML7V43647244
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Jul 2022 07:22:21 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B5EDBE053;
+        Fri, 29 Jul 2022 07:22:21 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1F97BE04F;
+        Fri, 29 Jul 2022 07:22:15 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.86.244])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Jul 2022 07:22:15 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v11 5/8] mm/demotion: Build demotion targets based on
+ explicit memory tiers
+In-Reply-To: <87wnbwl92w.fsf@yhuang6-desk2.ccr.corp.intel.com>
+References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
+ <20220728190436.858458-6-aneesh.kumar@linux.ibm.com>
+ <87wnbwl92w.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Date:   Fri, 29 Jul 2022 12:52:13 +0530
+Message-ID: <878rocs7ru.fsf@linux.ibm.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: KySSwqCNwEFSknFiAkUe-GNaF_tB5zpE
+X-Proofpoint-ORIG-GUID: 3pSJE4HUNA2SUiCpfZHrZ5uJlvdE6lwe
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f96d798-e9bb-15d8-65b9-2383e112c654@acm.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-28_06,2022-07-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
+ impostorscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207290028
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 04:23:16PM -0700, Bart Van Assche wrote:
-> On 7/28/22 16:05, Daniil Lunev wrote:
-> > +What:		/sys/bus/platform/drivers/ufshcd/*/caps
-> > +What:		/sys/bus/platform/devices/*.ufs/caps
-> > +Date:		July 2022
-> > +Contact:	Daniil Lunev <dlunev@chromium.org>
-> > +Description:	Read-only attribute. Enabled capabilities of the UFS driver. The
-> > +		enabled capabilities are determined by what is supported by the
-> > +		host controller and the UFS device.
-> > +		Format: 0x%08llx
-> 
-> This documentation is useless since the meaning of the individual bits has
-> not been documented.
+"Huang, Ying" <ying.huang@intel.com> writes:
 
-Yeah, that's not ok, where are these bits coming from and what userspace
-tools will be using them?
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+> + */
 
-thanks,
+....
 
-greg k-h
+>> +int next_demotion_node(int node)
+>> +{
+>> +	struct demotion_nodes *nd;
+>> +	int target;
+>> +
+>> +	if (!node_demotion)
+>> +		return NUMA_NO_NODE;
+>> +
+>> +	nd = &node_demotion[node];
+>> +
+>> +	/*
+>> +	 * node_demotion[] is updated without excluding this
+>> +	 * function from running.
+>> +	 *
+>> +	 * Make sure to use RCU over entire code blocks if
+>> +	 * node_demotion[] reads need to be consistent.
+>> +	 */
+>> +	rcu_read_lock();
+>> +	/*
+>> +	 * If there are multiple target nodes, just select one
+>> +	 * target node randomly.
+>> +	 *
+>> +	 * In addition, we can also use round-robin to select
+>> +	 * target node, but we should introduce another variable
+>> +	 * for node_demotion[] to record last selected target node,
+>> +	 * that may cause cache ping-pong due to the changing of
+>> +	 * last target node. Or introducing per-cpu data to avoid
+>> +	 * caching issue, which seems more complicated. So selecting
+>> +	 * target node randomly seems better until now.
+>> +	 */
+>> +	target = node_random(&nd->preferred);
+>
+> Don't find code to optimize node_random() for weight == 1 case, forget
+> to do that?
+
+I guess you suggested to do that as the patch for node_random or did I
+got the review feedback wrong?
+
+https://lore.kernel.org/linux-mm/87y1wdn30p.fsf@yhuang6-desk2.ccr.corp.intel.com
+
+The change for node_random will be patch outside this series.
+
+-aneesh

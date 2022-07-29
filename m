@@ -2,97 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3795A584C43
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FD9584C45
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234086AbiG2HAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 03:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S234171AbiG2HBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 03:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233974AbiG2HAN (ORCPT
+        with ESMTP id S229973AbiG2HBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 03:00:13 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5441ACD1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:00:11 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id oy13so6954134ejb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:00:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mwmHuLtF9G2EKODNbwTWiEpF4Sr2BhGxktiOGdwitQQ=;
-        b=usBS4rgvXuy+sJxNC+QJXAnpQETBKSXJvLHaQrfLvFa7XRaa3LPSXOFKVqNow43eTc
-         KNiJ6ArbLaWLEuuSSqL3JguiFIhqBleecXijNMpzsO7WiMxkONj+eczEFxsD3KkjYjhN
-         eWANkL5QIkONppjks4jjlgGGD8nenrSE6pWIhVRvVJIeL2KggjtauuIb1vAKeaacqp0F
-         +/5KvJhDA75INWx+q0RytS5XNPal/bNbmmcFn6IJw+pGdo5I6YDtu7+8F5xvct18IOZ9
-         jrXSDSRZScXdNJZPRWuSycff+3CEKxVzBpifDhG1UL0qWnmhggGiNdqPSEPDDSa5251p
-         nOBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mwmHuLtF9G2EKODNbwTWiEpF4Sr2BhGxktiOGdwitQQ=;
-        b=ggaPMrr1RpTR886rAqMXbduz7poL3c6JvwT9nLB+MHkfKLhqsi4i8obnfo0cVtuOc7
-         eMv7bO2c3MYGSIjz/PiXAoGd/EKa2VnwJfr3MFgxii6hSHfRZQjaJNy5bkDWzbAjjMDp
-         RxSTQdgNN8e+fGuSV7nr1hd7669PAHwmTpKLqzpoHoMSIKjnyBqGr1X5JJEhW/l8yxuH
-         AwcY6h98+H5S6redY10lySoIeIWBnAxALBEswRopCar9w9lwj1oyEgs+8etkP/bC9qdr
-         Qm48nFRLrPyrd0nfGcWvK8dzCqeu5ZLrVEs4BZ01ZND5kzF4bmzKOYAzsFiUktOHpyh1
-         PCbQ==
-X-Gm-Message-State: AJIora+A0P5YNosJgnNJfPsdgpjk//ATljbqFEXqcoGxyOLhJhSXnzFm
-        CXOqySBqvVCSIYdnsokR6Dw5hnso+xOUkkUr
-X-Google-Smtp-Source: AGRyM1v7XxiRD+Ovqiy+Qb4zbzzo0ihjFJmtt45i2tVcNdyqYOzftdqePHq7shdpWsyykKpvtJtnpQ==
-X-Received: by 2002:a17:906:5d16:b0:72f:248d:525a with SMTP id g22-20020a1709065d1600b0072f248d525amr1940654ejt.441.1659078009966;
-        Fri, 29 Jul 2022 00:00:09 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id o22-20020a170906769600b0072f5fa175b2sm1295648ejm.8.2022.07.29.00.00.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 00:00:08 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 09:00:07 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Li zeming <zeming@nfschina.com>, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/net/act: Remove temporary state variables
-Message-ID: <YuOFd2oqA1Cbl+at@nanopsycho>
-References: <20220727094146.5990-1-zeming@nfschina.com>
- <20220728201556.230b9efd@kernel.org>
- <YuN+i2WtzfA0wDQb@nanopsycho>
- <20220728235121.43bedc43@kernel.org>
+        Fri, 29 Jul 2022 03:01:38 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08272F39D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:01:35 -0700 (PDT)
+Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id AF672302C2B;
+        Fri, 29 Jul 2022 09:01:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1659078092;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=J/enTjqwQ6ehBMZ4hE1b6W8ThYSd1GY4baEv+hNepcQ=;
+        b=u21q9ipjDdR8JP3owajA06bnZHsjqv2mVp6Dj2nGJfa9uSTXFXFba4JgbABjlx/Yl25C/A
+        yfoERyj1fFhOC1MSipyqV9UBWCrR/rD4mQJAXcF7jJnvM9Ll78y0lUg3BPTluWn07PceD/
+        mkSFlaWLGa9cUVW3gwH+YH8uvFtFQIgNAbucBt/5WMHK2xb/fBvWdSflZ6qs+Un2VsxJhr
+        sSz8YvwLuuOqxfSdiXSLHHVvauZcxDSn93cQdnipQB+2XVyznalU/6DfOU1HDB1KhoC9GQ
+        69A7/x6QrwnuX3OsEg2Et4u2WUg0qgd9l7e2lOyX5mSG+wknM1VhnlGL97tWYA==
+From:   Sander Vanheule <sander@svanheule.net>
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Gow <davidgow@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>
+Subject: [PATCH v5 0/5] cpumask: fix invalid uniprocessor assumptions
+Date:   Fri, 29 Jul 2022 09:01:17 +0200
+Message-Id: <cover.1659077534.git.sander@svanheule.net>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728235121.43bedc43@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Jul 29, 2022 at 08:51:21AM CEST, kuba@kernel.org wrote:
->On Fri, 29 Jul 2022 08:30:35 +0200 Jiri Pirko wrote:
->>> How many case like this are there in the kernel?
->>> What tool are you using to find this?
->>> We should focus on creating CI tools which can help catch instances of
->>> this pattern in new code before it gets added, rather than cleaning up
->>> old code. It just makes backports harder for hardly any gain.  
->> 
->> What backports do you have in mind exactly?
->
->Code backports. I don't understand the question.
+On uniprocessor builds, it is currently assumed that any cpumask will
+contain the single CPU: cpu0. This assumption is used to provide
+optimised implementations.
 
-Code backports of what where?
-Are you talking about:
-1) mainline kernels
-2) distrubutions kernels? Or even worse, in-house kernels of companies?
+The current assumption also appears to be wrong, by ignoring the fact
+that users can provide empty cpumasks. This can result in bugs as
+explained in [1] - for_each_cpu() will run one iteration of the loop
+even when passed an empty cpumask.
 
-If 2), I believe it is not relevant for the upstream discussion, at all.
+This series introduces some basic tests, and updates the optimisations
+for uniprocessor builds.
 
+The x86 patch was written after the kernel test robot [2] ran into a
+failed build. I have tried to list the files potentially affected by the
+changes to cpumask.h, in an attempt to find any other cases that fail on
+!SMP. I've gone through some of the files manually, and ran a few cross
+builds, but nothing else popped up. I (build) checked about half of the
+potientally affected files, but I do not have the resources to do them
+all. I hope we can fix other issues if/when they pop up later.
 
+[1] https://lore.kernel.org/all/20220530082552.46113-1-sander@svanheule.net/
+[2] https://lore.kernel.org/all/202206060858.wA0FOzRy-lkp@intel.com/
 
->There's little benefit and we're getting multiple such patches a day.
+Changes since v4:
+Link: https://lore.kernel.org/all/cover.1656777646.git.sander@svanheule.net/
+  - Move new for_each_*_cpu() optimisations ahead, so they come before
+    the fixes.
+  - Update test cases for cpu_possible_mask for nr_cpu_ids < CONFIG_NR_CPUS
+  - Improve KUnit style compliance on tests
+  - Collect tags and add Cc: tags
+
+Changes since v3:
+Link: https://lore.kernel.org/all/cover.1654410109.git.sander@svanheule.net/
+  - Guard against CPU hotplugging while testing cpu online/present masks
+  - Add fix for cpu_llc_shared_map on x86
+
+Changes since v2:
+Link: https://lore.kernel.org/all/cover.1654362935.git.sander@svanheule.net/
+  - Put new tests after patch fixes
+  - Update for_each_* macros
+
+Changes since v1:
+Link: https://lore.kernel.org/all/cover.1654201862.git.sander@svanheule.net/
+  - Place tests in lib/test_cpumask.c
+  - Drop the modified UP code in favor of the generic SMP implementation
+  - Update declaration of cpumask_next_wrap()
+
+Sander Vanheule (5):
+  x86/cacheinfo: move shared cache map definitions
+  cpumask: add UP optimised for_each_*_cpu versions
+  cpumask: fix invalid uniprocessor mask assumption
+  lib/test: introduce cpumask KUnit test suite
+  cpumask: update cpumask_next_wrap() signature
+
+ arch/x86/kernel/cpu/cacheinfo.c |   6 ++
+ arch/x86/kernel/smpboot.c       |   4 -
+ include/linux/cpumask.h         | 108 ++++++-----------------
+ lib/Kconfig.debug               |  12 +++
+ lib/Makefile                    |   4 +-
+ lib/cpumask.c                   |   2 +
+ lib/cpumask_test.c              | 147 ++++++++++++++++++++++++++++++++
+ 7 files changed, 196 insertions(+), 87 deletions(-)
+ create mode 100644 lib/cpumask_test.c
+
+-- 
+2.37.1
+

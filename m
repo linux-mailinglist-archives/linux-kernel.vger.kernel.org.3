@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7321758511C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAC158511F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbiG2NvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 09:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S236071AbiG2Nv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 09:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiG2NvI (ORCPT
+        with ESMTP id S236803AbiG2NvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 09:51:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DB34E61E
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 06:51:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7673C61F5B
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 13:51:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8F1C433D6;
-        Fri, 29 Jul 2022 13:50:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659102659;
-        bh=IwvVpuGzmpujh0W6rRT+/Kr7v0ZN242P+UO+ZSURpDM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wZVJ8wgrmjx65QWipukHfWz4wpWTgVbMSFRi/iJJjcjOAZC56O+r+YhCSeEitNMGA
-         318yfjRTzoo+Q7uF9fyGNxfDc+OElI1H/MqSc24jl5o/7dBpm8ovH0TZxZODGbfx4q
-         6xFtzyfmRvUqh/NMhpaK/astWrKDINqFjc3PdS5g=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     alsa-devel@alsa-project.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] soundwire: sysfs: remove unneeded ATTRIBUTE_GROUPS() comments
-Date:   Fri, 29 Jul 2022 15:50:41 +0200
-Message-Id: <20220729135041.2285908-5-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220729135041.2285908-1-gregkh@linuxfoundation.org>
-References: <20220729135041.2285908-1-gregkh@linuxfoundation.org>
+        Fri, 29 Jul 2022 09:51:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E3045073;
+        Fri, 29 Jul 2022 06:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659102662; x=1690638662;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=GXm/43zYBsV5VKNSUng5oQyzYVOlSSfKZxtWgq3e5Ew=;
+  b=Dta9YSVgwBjmeEB90tMW8HPSJ76HCEp4iLlUp8SJE3wEg47B/BMruOPa
+   /USkDBA1ljDhuvtMVvSushrXLJlidugQ5I5Sz8d+6Ma99hhFRvfxVl2cj
+   2TfY8460yyUQFmAjFgVvGftX4qnB9Ul2xXqsuxIb719BreIplGlWgJXkZ
+   q3XS1twJ6ui6n2FJTSR9lswDHGwCrFDxTVSDYjskqWYqXKSbh3tGPh8Lr
+   hjTCRJayi53yurGZIMWA1tND8EBi7NC7Vla8KWAQ6qGDiaB4nTtAUFz97
+   PB0+5yNDYMto6mL1mr0Xc9QxtFVcjmLEyu63S6jD0UFTo9VCDNUt13KSB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="350475468"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="350475468"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 06:51:02 -0700
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="743536255"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 06:50:59 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oHQOG-001eXm-2B;
+        Fri, 29 Jul 2022 16:50:56 +0300
+Date:   Fri, 29 Jul 2022 16:50:56 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Luca Ellero <luca.ellero@brickedbrain.com>,
+        dmitry.torokhov@gmail.com, daniel@zonque.org,
+        m.felsch@pengutronix.de, mkl@pengutronix.de,
+        miquel.raynal@bootlin.com, imre.deak@nokia.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Ellero <l.ellero@asem.it>
+Subject: Re: [PATCH v2 1/3] ads7846: don't report pressure for ads7845
+Message-ID: <YuPlwMP+W1zGKG1D@smile.fi.intel.com>
+References: <20220721083458.6412-1-luca.ellero@brickedbrain.com>
+ <20220721083458.6412-2-luca.ellero@brickedbrain.com>
+ <20220721204835.fobidbnsvhea7r3w@pengutronix.de>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1409; i=gregkh@linuxfoundation.org; h=from:subject; bh=IwvVpuGzmpujh0W6rRT+/Kr7v0ZN242P+UO+ZSURpDM=; b=owGbwMvMwCRo6H6F97bub03G02pJDEmPn25QXj3nyzudMMbWJ8GyYqkvAhI3ak9oOpfhuF3BXalT KdGzI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACbyZhrDgkkTV0/Y6bNmtnpxwvvV4s qcBizFuxgWdJa9T3LOq2N+U9x192PHotTtV56oAwA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220721204835.fobidbnsvhea7r3w@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we manually created our own attribute group list, the outdated
-ATTRIBUTE_GROUPS() comments can be removed as they are not needed at
-all.
+On Thu, Jul 21, 2022 at 10:48:35PM +0200, Uwe Kleine-König wrote:
+> On Thu, Jul 21, 2022 at 10:34:56AM +0200, Luca Ellero wrote:
+> > From: Luca Ellero <l.ellero@asem.it>
+> > 
+> > ADS7845 doesn't support pressure.
+> > This patch avoids the following error reported by libinput-list-devices:
+> > "ADS7845 Touchscreen: kernel bug: device has min == max on ABS_PRESSURE".
+> > 
+> > Signed-off-by: Luca Ellero <l.ellero@asem.it>
+> 
+> I don't know how picky Dmitry is, but some maintainers would ask you to
+> either add a Signed-off-by with the email address you sent this patch
+> from, or make sure to send it from the asem.it address.
 
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc: Sanyog Kale <sanyog.r.kale@intel.com>
-Cc: alsa-devel@alsa-project.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/soundwire/sysfs_slave.c | 8 --------
- 1 file changed, 8 deletions(-)
+It's fine to be sent from different email of the same person.
+But like you said, some maintainers are really picky and that
+may block contribution (I have been seen a case, where actually
+allowing to do as above unblocks contribution since person can't
+re-sent properly the change from another address by some reasons).
 
-diff --git a/drivers/soundwire/sysfs_slave.c b/drivers/soundwire/sysfs_slave.c
-index 070e0d84be94..5b7666d27722 100644
---- a/drivers/soundwire/sysfs_slave.c
-+++ b/drivers/soundwire/sysfs_slave.c
-@@ -129,10 +129,6 @@ static struct attribute *slave_dev_attrs[] = {
- 	NULL,
- };
- 
--/*
-- * we don't use ATTRIBUTES_GROUP here since we want to add a subdirectory
-- * for device-level properties
-- */
- static const struct attribute_group sdw_slave_dev_attr_group = {
- 	.attrs	= slave_dev_attrs,
- 	.name = "dev-properties",
-@@ -194,10 +190,6 @@ static struct attribute *dp0_attrs[] = {
- 	NULL,
- };
- 
--/*
-- * we don't use ATTRIBUTES_GROUP here since we want to add a subdirectory
-- * for dp0-level properties
-- */
- static const struct attribute_group dp0_group = {
- 	.attrs = dp0_attrs,
- 	.is_visible = dp0_is_visible,
+
 -- 
-2.37.1
+With Best Regards,
+Andy Shevchenko
+
 

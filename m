@@ -2,99 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB03A584E85
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE32584E7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbiG2KHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S235530AbiG2KFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiG2KHI (ORCPT
+        with ESMTP id S235308AbiG2KFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:07:08 -0400
-X-Greylist: delayed 7805 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Jul 2022 03:07:02 PDT
-Received: from 4.mo548.mail-out.ovh.net (4.mo548.mail-out.ovh.net [188.165.42.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16F381B01
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:07:02 -0700 (PDT)
-Received: from mxplan5.mail.ovh.net (unknown [10.109.143.183])
-        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 69E68227C8;
-        Fri, 29 Jul 2022 07:39:23 +0000 (UTC)
-Received: from kaod.org (37.59.142.102) by DAG4EX2.mxp5.local (172.16.2.32)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Fri, 29 Jul
- 2022 09:39:21 +0200
-Authentication-Results: garm.ovh; auth=pass (GARM-102R0041218b063-a24c-41c6-87ed-1d34e970e8a6,
-                    FAFF5065920E43DA0D2CF6C40E58A39B80E28978) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 90.89.72.120
-Message-ID: <32c4045d-7fce-5954-9710-4f6b0c6b0d2a@kaod.org>
-Date:   Fri, 29 Jul 2022 09:39:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH linux dev-5.15] soc: aspeed: abr: Add sysfs attrs for
- flash toggle
-Content-Language: en-US
-To:     Andrew Jeffery <andrew@aj.id.au>,
-        Jian Zhang <zhangjian.3032@bytedance.com>,
-        <openbmc@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>
-CC:     <zhangjian_linux@163.com>, Mark Brown <broonie@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        Fri, 29 Jul 2022 06:05:09 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1AC325
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:05:07 -0700 (PDT)
+X-UUID: 41362e145cef41d0bd3fb14a0cc4419f-20220729
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:c28dbf4f-a38f-4bd2-ba0d-5121ab3cfeb9,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:15f6b924-a982-4824-82d2-9da3b6056c2a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 41362e145cef41d0bd3fb14a0cc4419f-20220729
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <chunxu.li@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 546010780; Fri, 29 Jul 2022 18:05:00 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
+ Fri, 29 Jul 2022 10:03:29 +0000
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 29 Jul 2022 17:14:15 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 29 Jul 2022 17:14:14 +0800
+From:   Chunxu Li <chunxu.li@mediatek.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <matthias.bgg@gmail.com>, <jiaxin.yu@mediatek.com>,
+        <tzungbi@google.com>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>
-References: <20220501105644.355062-1-zhangjian.3032@bytedance.com>
- <62143648-8a90-4ff4-bfe1-f311b40cd50c@www.fastmail.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <62143648-8a90-4ff4-bfe1-f311b40cd50c@www.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [37.59.142.102]
-X-ClientProxiedBy: DAG9EX1.mxp5.local (172.16.2.81) To DAG4EX2.mxp5.local
- (172.16.2.32)
-X-Ovh-Tracer-GUID: a6453bd3-2138-4703-b325-6e2aced1d2b3
-X-Ovh-Tracer-Id: 10280310576058174386
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduiedgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeelleeiiefgkeefiedtvdeigeetueetkeffkeelheeugfetteegvdekgfehgffgkeenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgrshhpvggvugeslhhishhtshdrohiilhgrsghsrdhorhhgpdfovfetjfhoshhtpehmohehgeek
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        <linux-mediatek@lists.infradead.org>,
+        <project_global_chrome_upstream_group@mediatek.com>,
+        Chunxu Li <chunxu.li@mediatek.com>
+Subject: [PATCH 2/3] ASoC: mediatek: mt8186: add SOF support on mt8186-mt6366-rt1019-rt5682s
+Date:   Fri, 29 Jul 2022 17:14:03 +0800
+Message-ID: <20220729091404.7799-3-chunxu.li@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220729091404.7799-1-chunxu.li@mediatek.com>
+References: <20220729091404.7799-1-chunxu.li@mediatek.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+1. Add widgets, routes and dai-links required by SOF
 
-On 7/29/22 04:37, Andrew Jeffery wrote:
-> Hi Jian Zhang,
-> 
-> On Sun, 1 May 2022, at 20:26, Jian Zhang wrote:
->> Implement the flash toggle function in soc ast2600.
->> Add two sysfs attrs named "access_primary" and "access_backup"
-> 
-> If you're proposing this patch for upstream then it needs to be based on
-> an upstream kernel tree, not the OpenBMC kernel tree. You also should
-> not use e.g. `linux dev-5.15` in the patch subject prefix, as that would
-> be inappropriate for an upstream patch.
-> 
-> As you're adding sysfs attributes you'll also need to add the
-> corresponding ABI documentation.
+2. Only when adsp phandle could be retrieved from DTS, the SOF related part
+of machine driver is executed.
 
-Yes. I think we need to discuss the ABI/sysfs files a bit. I am not
-sure we should toggle the sysfs files depending on the boot mode :
-primary vs. alternate. We could have the same files always and return
-EIO if some conditions are not met. Something like :
+3. Support dai-links could be specified from DTS, so that
+we can disable AP side hardware controls when DSP SOF controls the same
+audio FE.
 
-* boot mode : primary/alternate. Write changes the next boot.
-* watchdog management
+Signed-off-by: Chunxu Li <chunxu.li@mediatek.com>
+---
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 168 ++++++++++++++++--
+ 1 file changed, 155 insertions(+), 13 deletions(-)
 
-Also, there is no need to introduce a new include file with large
-inline functions.
+diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
+index 891146fd6c2b..6c41706a5621 100644
+--- a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
++++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
+@@ -19,6 +19,8 @@
+ #include "../../codecs/mt6358.h"
+ #include "../../codecs/rt5682.h"
+ #include "../common/mtk-afe-platform-driver.h"
++#include "../common/mtk-dsp-sof-common.h"
++#include "../common/mtk-soc-card.h"
+ #include "mt8186-afe-common.h"
+ #include "mt8186-afe-clk.h"
+ #include "mt8186-afe-gpio.h"
+@@ -30,6 +32,11 @@
+ #define RT5682S_CODEC_DAI	"rt5682s-aif1"
+ #define RT5682S_DEV0_NAME	"rt5682s.5-001a"
+ 
++#define SOF_DMA_DL1 "SOF_DMA_DL1"
++#define SOF_DMA_DL2 "SOF_DMA_DL2"
++#define SOF_DMA_UL1 "SOF_DMA_UL1"
++#define SOF_DMA_UL2 "SOF_DMA_UL2"
++
+ struct mt8186_mt6366_rt1019_rt5682s_priv {
+ 	struct snd_soc_jack headset_jack, hdmi_jack;
+ };
+@@ -51,8 +58,9 @@ static struct snd_soc_codec_conf mt8186_mt6366_rt1019_rt5682s_codec_conf[] = {
+ 
+ static int mt8186_rt5682s_init(struct snd_soc_pcm_runtime *rtd)
+ {
+-	struct mt8186_mt6366_rt1019_rt5682s_priv *priv =
++	struct mtk_soc_card_data *soc_card_data =
+ 		snd_soc_card_get_drvdata(rtd->card);
++	struct mt8186_mt6366_rt1019_rt5682s_priv *priv = soc_card_data->mach_priv;
+ 	struct snd_soc_jack *jack = &priv->headset_jack;
+ 	struct snd_soc_component *cmpnt_codec =
+ 		asoc_rtd_to_codec(rtd, 0)->component;
+@@ -130,8 +138,9 @@ static int mt8186_mt6366_rt1019_rt5682s_hdmi_init(struct snd_soc_pcm_runtime *rt
+ {
+ 	struct snd_soc_component *cmpnt_codec =
+ 		asoc_rtd_to_codec(rtd, 0)->component;
+-	struct mt8186_mt6366_rt1019_rt5682s_priv *priv =
++	struct mtk_soc_card_data *soc_card_data =
+ 		snd_soc_card_get_drvdata(rtd->card);
++	struct mt8186_mt6366_rt1019_rt5682s_priv *priv = soc_card_data->mach_priv;
+ 	int ret;
+ 
+ 	ret = snd_soc_card_jack_new(rtd->card, "HDMI Jack", SND_JACK_LINEOUT, &priv->hdmi_jack);
+@@ -177,6 +186,24 @@ static int mt8186_it6505_i2s_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
+ 	return mt8186_hw_params_fixup(rtd, params, SNDRV_PCM_FORMAT_S32_LE);
+ }
+ 
++/* fixup the BE DAI link to match any values from topology */
++static int mt8186_sof_dai_link_fixup(struct snd_soc_pcm_runtime *rtd,
++				     struct snd_pcm_hw_params *params)
++{
++	int ret;
++
++	ret = mtk_sof_dai_link_fixup(rtd, params);
++
++	if (!strcmp(rtd->dai_link->name, "I2S0") ||
++	    !strcmp(rtd->dai_link->name, "I2S1") ||
++	    !strcmp(rtd->dai_link->name, "I2S2"))
++		mt8186_i2s_hw_params_fixup(rtd, params);
++	else if (!strcmp(rtd->dai_link->name, "I2S3"))
++		mt8186_it6505_i2s_hw_params_fixup(rtd, params);
++
++	return ret;
++}
++
+ static int mt8186_mt6366_rt1019_rt5682s_playback_startup(struct snd_pcm_substream *substream)
+ {
+ 	static const unsigned int rates[] = {
+@@ -450,6 +477,33 @@ SND_SOC_DAILINK_DEFS(hostless_src_aaudio,
+ 		     DAILINK_COMP_ARRAY(COMP_CPU("Hostless SRC AAudio DAI")),
+ 		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
+ 		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
++SND_SOC_DAILINK_DEFS(AFE_SOF_DL1,
++		     DAILINK_COMP_ARRAY(COMP_CPU("SOF_DL1")),
++		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
++		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
++
++SND_SOC_DAILINK_DEFS(AFE_SOF_DL2,
++		     DAILINK_COMP_ARRAY(COMP_CPU("SOF_DL2")),
++		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
++		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
++
++SND_SOC_DAILINK_DEFS(AFE_SOF_UL1,
++		     DAILINK_COMP_ARRAY(COMP_CPU("SOF_UL1")),
++		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
++		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
++
++SND_SOC_DAILINK_DEFS(AFE_SOF_UL2,
++		     DAILINK_COMP_ARRAY(COMP_CPU("SOF_UL2")),
++		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
++		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
++
++static const struct sof_conn_stream g_sof_conn_streams[] = {
++	{ "I2S1", "AFE_SOF_DL1", SOF_DMA_DL1, SNDRV_PCM_STREAM_PLAYBACK},
++	{ "I2S3", "AFE_SOF_DL2", SOF_DMA_DL2, SNDRV_PCM_STREAM_PLAYBACK},
++	{ "Primary Codec", "AFE_SOF_UL1", SOF_DMA_UL1, SNDRV_PCM_STREAM_CAPTURE},
++	{ "I2S0", "AFE_SOF_UL2", SOF_DMA_UL2, SNDRV_PCM_STREAM_CAPTURE},
++};
++
+ static struct snd_soc_dai_link mt8186_mt6366_rt1019_rt5682s_dai_links[] = {
+ 	/* Front End DAI links */
+ 	{
+@@ -824,12 +878,41 @@ static struct snd_soc_dai_link mt8186_mt6366_rt1019_rt5682s_dai_links[] = {
+ 		.ignore_suspend = 1,
+ 		SND_SOC_DAILINK_REG(hostless_ul6),
+ 	},
++	/* SOF BE */
++	{
++		.name = "AFE_SOF_DL1",
++		.no_pcm = 1,
++		.dpcm_playback = 1,
++		SND_SOC_DAILINK_REG(AFE_SOF_DL1),
++	},
++	{
++		.name = "AFE_SOF_DL2",
++		.no_pcm = 1,
++		.dpcm_playback = 1,
++		SND_SOC_DAILINK_REG(AFE_SOF_DL2),
++	},
++	{
++		.name = "AFE_SOF_UL1",
++		.no_pcm = 1,
++		.dpcm_capture = 1,
++		SND_SOC_DAILINK_REG(AFE_SOF_UL1),
++	},
++	{
++		.name = "AFE_SOF_UL2",
++		.no_pcm = 1,
++		.dpcm_capture = 1,
++		SND_SOC_DAILINK_REG(AFE_SOF_UL2),
++	},
+ };
+ 
+ static const struct snd_soc_dapm_widget
+ mt8186_mt6366_rt1019_rt5682s_widgets[] = {
+ 	SND_SOC_DAPM_SPK("Speakers", NULL),
+ 	SND_SOC_DAPM_OUTPUT("HDMI1"),
++	SND_SOC_DAPM_MIXER(SOF_DMA_DL1, SND_SOC_NOPM, 0, 0, NULL, 0),
++	SND_SOC_DAPM_MIXER(SOF_DMA_DL2, SND_SOC_NOPM, 0, 0, NULL, 0),
++	SND_SOC_DAPM_MIXER(SOF_DMA_UL1, SND_SOC_NOPM, 0, 0, NULL, 0),
++	SND_SOC_DAPM_MIXER(SOF_DMA_UL2, SND_SOC_NOPM, 0, 0, NULL, 0),
+ };
+ 
+ static const struct snd_soc_dapm_route
+@@ -838,6 +921,14 @@ mt8186_mt6366_rt1019_rt5682s_routes[] = {
+ 	{ "Speakers", NULL, "Speaker" },
+ 	/* HDMI */
+ 	{ "HDMI1", NULL, "TX" },
++	/* SOF Uplink */
++	{SOF_DMA_UL1, NULL, "UL1_CH1"},
++	{SOF_DMA_UL1, NULL, "UL1_CH2"},
++	{SOF_DMA_UL2, NULL, "UL2_CH1"},
++	{SOF_DMA_UL2, NULL, "UL2_CH2"},
++	/* SOF Downlink */
++	{"DSP_DL1_VIRT", NULL, SOF_DMA_DL1},
++	{"DSP_DL2_VIRT", NULL, SOF_DMA_DL2},
+ };
+ 
+ static const struct snd_kcontrol_new
+@@ -865,8 +956,10 @@ static int mt8186_mt6366_rt1019_rt5682s_dev_probe(struct platform_device *pdev)
+ {
+ 	struct snd_soc_card *card;
+ 	struct snd_soc_dai_link *dai_link;
+-	struct mt8186_mt6366_rt1019_rt5682s_priv *priv;
+-	struct device_node *platform_node, *headset_codec, *playback_codec;
++	struct mtk_soc_card_data *soc_card_data;
++	struct mt8186_mt6366_rt1019_rt5682s_priv *mach_priv;
++	struct device_node *platform_node, *headset_codec, *playback_codec, *adsp_node;
++	int sof_on = 0;
+ 	int ret, i;
+ 
+ 	card = (struct snd_soc_card *)device_get_match_data(&pdev->dev);
+@@ -874,11 +967,60 @@ static int mt8186_mt6366_rt1019_rt5682s_dev_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	card->dev = &pdev->dev;
+ 
++	soc_card_data = devm_kzalloc(&pdev->dev, sizeof(*soc_card_data), GFP_KERNEL);
++	if (!soc_card_data)
++		return -ENOMEM;
++	mach_priv = devm_kzalloc(&pdev->dev, sizeof(*mach_priv), GFP_KERNEL);
++	if (!mach_priv)
++		return -ENOMEM;
++
++	soc_card_data->mach_priv = mach_priv;
++
++	adsp_node = of_parse_phandle(pdev->dev.of_node, "mediatek,adsp", 0);
++	if (adsp_node) {
++		struct mtk_sof_priv *sof_priv;
++
++		sof_priv = devm_kzalloc(&pdev->dev, sizeof(*sof_priv), GFP_KERNEL);
++		if (!sof_priv) {
++			ret = -ENOMEM;
++			goto err_adsp_node;
++		}
++		sof_priv->conn_streams = g_sof_conn_streams;
++		sof_priv->num_streams = ARRAY_SIZE(g_sof_conn_streams);
++		sof_priv->sof_dai_link_fixup = mt8186_sof_dai_link_fixup;
++		soc_card_data->sof_priv = sof_priv;
++		card->probe = mtk_sof_card_probe;
++		card->late_probe = mtk_sof_card_late_probe;
++		if (!card->topology_shortname_created) {
++			snprintf(card->topology_shortname, 32, "sof-%s", card->name);
++			card->topology_shortname_created = true;
++		}
++		card->name = card->topology_shortname;
++		sof_on = 1;
++	} else {
++		dev_info(&pdev->dev, "Probe without adsp\n");
++	}
++
++	if (of_property_read_bool(pdev->dev.of_node, "mediatek,dai-link")) {
++		ret = mtk_sof_dailink_parse_of(card, pdev->dev.of_node,
++					       "mediatek,dai-link",
++					       mt8186_mt6366_rt1019_rt5682s_dai_links,
++					       ARRAY_SIZE(mt8186_mt6366_rt1019_rt5682s_dai_links));
++		if (ret) {
++			dev_dbg(&pdev->dev, "Parse dai-link fail\n");
++			goto err_adsp_node;
++		}
++	} else {
++		if (!sof_on)
++			card->num_links = ARRAY_SIZE(mt8186_mt6366_rt1019_rt5682s_dai_links)
++					- ARRAY_SIZE(g_sof_conn_streams);
++	}
++
+ 	platform_node = of_parse_phandle(pdev->dev.of_node, "mediatek,platform", 0);
+ 	if (!platform_node) {
+ 		ret = -EINVAL;
+ 		dev_err_probe(&pdev->dev, ret, "Property 'platform' missing or invalid\n");
+-		return ret;
++		goto err_platform_node;
+ 	}
+ 
+ 	playback_codec = of_get_child_by_name(pdev->dev.of_node, "playback-codecs");
+@@ -917,17 +1059,14 @@ static int mt8186_mt6366_rt1019_rt5682s_dev_probe(struct platform_device *pdev)
+ 			goto err_probe;
+ 		}
+ 
+-		if (!dai_link->platforms->name)
+-			dai_link->platforms->of_node = platform_node;
+-	}
++		if (!strncmp(dai_link->name, "AFE_SOF", strlen("AFE_SOF")) && sof_on)
++			dai_link->platforms->of_node = adsp_node;
+ 
+-	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+-	if (!priv) {
+-		ret = -ENOMEM;
+-		goto err_probe;
++		if (!dai_link->platforms->name && !dai_link->platforms->of_node)
++			dai_link->platforms->of_node = platform_node;
+ 	}
+ 
+-	snd_soc_card_set_drvdata(card, priv);
++	snd_soc_card_set_drvdata(card, soc_card_data);
+ 
+ 	ret = mt8186_afe_gpio_init(&pdev->dev);
+ 	if (ret) {
+@@ -945,6 +1084,9 @@ static int mt8186_mt6366_rt1019_rt5682s_dev_probe(struct platform_device *pdev)
+ 	of_node_put(playback_codec);
+ err_playback_codec:
+ 	of_node_put(platform_node);
++err_platform_node:
++err_adsp_node:
++	of_node_put(adsp_node);
+ 
+ 	return ret;
+ }
+-- 
+2.18.0
 
-Thanks,
-
-C.

@@ -2,138 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27A2584F38
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D665584F41
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiG2Ktt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 29 Jul 2022 06:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S235173AbiG2Kyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234819AbiG2Ktr (ORCPT
+        with ESMTP id S230301AbiG2Ky3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:49:47 -0400
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9FF5B52
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:49:46 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2048.outbound.protection.outlook.com [104.47.22.48]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-38-502i-sN2NTO6hUvOzNcbVA-2; Fri, 29 Jul 2022 12:49:41 +0200
-X-MC-Unique: 502i-sN2NTO6hUvOzNcbVA-2
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- GVAP278MB0261.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:38::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5482.12; Fri, 29 Jul 2022 10:49:39 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::3510:6f55:f14a:380f]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::3510:6f55:f14a:380f%7]) with mapi id 15.20.5482.011; Fri, 29 Jul 2022
- 10:49:39 +0000
-Date:   Fri, 29 Jul 2022 12:49:38 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
-Subject: Re: [PATCH v1 0/2] arm64: dts: imx8mm-verdin: update CAN clock and
- interrupt type
-Message-ID: <20220729104938.GA93488@francesco-nb.int.toradex.com>
-References: <20220708124205.59564-1-andrejs.cainikovs@toradex.com>
-In-Reply-To: <20220708124205.59564-1-andrejs.cainikovs@toradex.com>
-X-ClientProxiedBy: MR1P264CA0138.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:51::19) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        Fri, 29 Jul 2022 06:54:29 -0400
+X-Greylist: delayed 954 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Jul 2022 03:54:27 PDT
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC4186899;
+        Fri, 29 Jul 2022 03:54:27 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LvP954M6qzkk2B;
+        Fri, 29 Jul 2022 18:37:29 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgB32mmnuONiUgtOBQ--.27701S4;
+        Fri, 29 Jul 2022 18:38:31 +0800 (CST)
+From:   Zhang Wensheng <zhangwensheng@huaweicloud.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, yukuai3@huawei.com,
+        zhangwensheng@huaweicloud.com
+Subject: [PATCH -next] [RFC] block: fix null-deref in percpu_ref_put
+Date:   Fri, 29 Jul 2022 18:50:36 +0800
+Message-Id: <20220729105036.2202791-1-zhangwensheng@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 953bd025-8b26-44e5-e8ad-08da71500919
-X-MS-TrafficTypeDiagnostic: GVAP278MB0261:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: FCNVNcmsFWj6a75P1ncGB2e3DoSSnPROsrHVL5Fai2VHyLAV0TEEQnmn6qLA4rG6k7stiP1RY7rzybrl+g/YkMKtORylOvSMDyxd9IILQxe3oHEKSM/imTBNjaMJddDw8XGKhQn/AdCra/ZMLM9OTJ4vUlhUCjcIzR9JELCByZeRMLXROP1SLbwlvq+UjyyyIxDzjNWiGWGi7L4ndcGCfLZo4RmA7RrLmgzndiWcu37zabN0plVFZXENWn2874vyN76e6NMrDdeKQK3EZoq5x4rbu7+oAW9cI+Pj5F4pz5Yr205NEugEbdHmlet6r1i3qh3a1QDGEcSKrjaNDOl4rIeXCyRW8A8IhD+HRQtncKZTL2uQYB8SOn2eWHExf4XO4XTzD8hMbaQv4iQrqvDOCzG706Nytt3M4lxjiqIjdSezUmpvj10BhztRj6h/QHuOfoTSZUSOgfNPW/FJxjEFQg8Xgbp3/EBN+kDup+CMUNv7uhBqzLTpesFLw98TJGXZaE/+dLZUZjPjWBWL/p2DH8sIBCeTktQd6wzufWk1QP4kzsq2XCABsnj7QF99NefsfNcTl1ijXlb4ht2cbxs41kRm/REjKl09TJElM/smaejSeRLgXrGO1XZ8Sl4KalktJQ0nZEetTY2t2eEDD0H2w6HU6UQQYqrDUyYhPFtBDZWneThIT6wIgKWKieAEDNhYtbsVFKYZgUkCHrsmCNvnEgk2CRWZO9ubhO53HieS0+UYb/vhnvmaim2bpC+CWfK1RudEkgpBlXZ0mHf2SMexnwutkFBu4PIHNDjgUmkizv0ejohQWrUfQi4jALMuSLgha3llaV7stSlIgIGbR1NBNw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39840400004)(366004)(396003)(376002)(136003)(346002)(38350700002)(38100700002)(41300700001)(6486002)(8936002)(7416002)(5660300002)(478600001)(83380400001)(66946007)(4326008)(8676002)(66556008)(66476007)(316002)(1076003)(186003)(52116002)(6506007)(54906003)(6916009)(26005)(6512007)(4744005)(2906002)(44832011)(86362001)(107886003)(33656002)(15650500001)(32563001);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y2ltT2DfVOQTYkscph1X9NNzqwR9C0DxZP66JJsEOKmd7dbrexSvdDaGutp5?=
- =?us-ascii?Q?76E0LSdzfgjGHKoLOn1iJSTeaHtYMbmx3k+wyXa+PCxiNH/ZDbl4O066Ik3f?=
- =?us-ascii?Q?ckN0OULyqYXOtyZS0DWiG8Zfjcks8ynhI+jb/Vy2kUAoFNAFKUQZbuIC5jp+?=
- =?us-ascii?Q?dGc5Kpr3+aUrat0n+wrXdFSeUyxjbPGfY7VeuqZCjX3obVmdwaCP/s8/ZW27?=
- =?us-ascii?Q?tLOzzHNgMY8M0iaX7F0obboyDWpCs4ppMs9Je0c4ow81s8vn5MQZ21y3/A9c?=
- =?us-ascii?Q?9a+6K5a/5gpR1QUOmUaTFVDPz886o81yGUaG5bO4ctsoKnQXwLUZAp+D1m3d?=
- =?us-ascii?Q?mWX2MPObGSbN5NfRCJ6JT1D/Vv+TdV0J0ZBeVTlqCpsEoH/KBUf1/s3eygKi?=
- =?us-ascii?Q?nXWAqc9jNfMWciW78VSt6fWsseL+EiVNQAucpsOviEpNKBNmdy8NHDNWxa+m?=
- =?us-ascii?Q?vRvKWGk/TEeBHIFf65h5kKYtYmPn3vrFy3P0RC6VR//VR1IlLAqR3MzbZZOF?=
- =?us-ascii?Q?RslqwUrNycqJ1CDZiaiDV5brVIr0esOTcviujuWvGo861Z0rqgct81g8C0/C?=
- =?us-ascii?Q?oPFKVGFZCZ58QOLEFUwaBAYj4X/e6pPkmsrzXJI8S04D3TlSkbfntvSpBiYy?=
- =?us-ascii?Q?GSwcJp9xbAtv35T5LA0MbH4vK5gdp3ELHZyn412ZAIMAs21IDrZM82nGy1tI?=
- =?us-ascii?Q?eHP/6TQzwolklxb9J/6od7RmmnpFmRwLuS70HS9c/QGIX7InlbZWBOx1fDY1?=
- =?us-ascii?Q?AlYaMiMcP1WDrhV8C3NEdQQVZsJkbB9xi7nCOGavFjDrS1V3zBEY+/TOzRBE?=
- =?us-ascii?Q?EI1c7qYc59V/iYEzG3qH0XGmk9wUCrH3b8nXma34gGDkdwWrMOpi3C3FHh6V?=
- =?us-ascii?Q?hUrECDVR7vKINg22PgHVu4fUImameLN4IOEdePIa0oE6u0l/OasFx83LJuHq?=
- =?us-ascii?Q?htlTSSyivCkWBm4lpD44qzNREMr4OvaOOYATFfxX/oB1cDFvt3truwL2oWKG?=
- =?us-ascii?Q?DBW4/KO7/2YJk5YaG/64M3uafXiBYXs/Ek3DWmC0iFw/zcdUccVRN+DlzYUs?=
- =?us-ascii?Q?8Q9VXJJRg3CKHC2WXgdzEYINUmeejzAj88q9fOuzc3+hi6fSl9HTbWDu2D8U?=
- =?us-ascii?Q?nDhEiOB722VTQbPLayGH3t4KpLwDNH5tOAZTn5WGcB95qw4Jd4llUqjmyzOt?=
- =?us-ascii?Q?2a7gy39+wRfezv45+b6XOLbTBj+KsthMo/Mgy7XDSHCb+Hdl40Z1zc548g8j?=
- =?us-ascii?Q?hwg+0Pba2IlzOSKov54xWbcVy19MVDP24uimFb4kEyasIfmQNvA0j+h1xGdv?=
- =?us-ascii?Q?YM7ry2/g84QGt84uuvAKpzeS1PPzg+HS1b661ztJslm8CXteWH3OPlyv+zsI?=
- =?us-ascii?Q?DKoi47DgjvdnX9L4f7VDlY1Dwn5XiIunchhwgzXyN/1ofuo7w/cTmFGNv4AI?=
- =?us-ascii?Q?8kap16Z+8fZyVdKtrSi74o2iHOTEtYjVwfTke5jRWRqLPiYnKZe+Z0Z4J2C2?=
- =?us-ascii?Q?DR1fawzs3Z6WQ28GVx0zHwoTJnedknTAW+h40P6hGanr0cCjpO4ucdbu0m6B?=
- =?us-ascii?Q?h+K1FzNgsM7YYX9oGodQudnw3SMDThVzck1zqshjI9mfQ5zt+7JE2FKlG06U?=
- =?us-ascii?Q?YQ=3D=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 953bd025-8b26-44e5-e8ad-08da71500919
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 10:49:39.1455
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7u1j0CEt+bk1LXDLD/cCbp+SsVSMesXweUrH2iX1CUtaywTBpDDcmxoyDzdSrO/tRo4YTWn7fRUfBMqzwF9vxHj3SpW7JokZCOPVhlXadQk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0261
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgB32mmnuONiUgtOBQ--.27701S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxArWDJrW5tFykKw1rCFyfWFg_yoWrZF4UpF
+        WDGF4akw10gr4DWry8Jw47ZasFgw4qkFy3CayfKrWYyF1qgFn2vr18Crs8XF48Cr4kArW5
+        ZrWDWwsIkryUWFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: x2kd0wpzhq2xhhqjqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Shawn,
-just a gently ping.
+From: Zhang Wensheng <zhangwensheng5@huawei.com>
 
-On Fri, Jul 08, 2022 at 02:42:03PM +0200, Andrejs Cainikovs wrote:
-> This patch set updates CAN controller clock and changes interrupt type.
-> 
-> Andrejs Cainikovs (2):
->   arm64: dts: imx8mm-verdin: update CAN clock to 40MHz
->   arm64: dts: imx8mm-verdin: use level interrupt for mcp251xfd
-> 
->  arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+A problem was find in stable 5.10 and the root cause of it like below.
 
-It's too late for the merge window? These 2 commits do not have a fixes
-tag, but they are really fixes (we just did not bother having those
-backported initially).
+In the use of q_usage_counter of request_queue, blk_cleanup_queue using
+"wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter))"
+to wait q_usage_counter becoming zero. however, if the q_usage_counter
+becoming zero quickly, and percpu_ref_exit will execute and ref->data
+will be freed, maybe another process will cause a null-defef problem
+like below:
 
-Francesco
+	CPU0                             CPU1
+blk_cleanup_queue
+ blk_freeze_queue
+  blk_mq_freeze_queue_wait
+				scsi_end_request
+				 percpu_ref_get
+				 ...
+				 percpu_ref_put
+				  atomic_long_sub_and_test
+  percpu_ref_exit
+   ref->data -> NULL
+   				   ref->data->release(ref) -> null-deref
+
+Fix it by setting flag(QUEUE_FLAG_USAGE_COUNT_SYNC) to add synchronization
+mechanism, when ref->data->release is called, the flag will be setted,
+and the "wait_event" in blk_mq_freeze_queue_wait must wait flag becoming
+true as well, which will limit percpu_ref_exit to execute ahead of time.
+
+Although the problem was not reproduced in mainline, it may also has
+problem when the passthrough IO which will go directly to
+blk_cleanup_queue and cause the problem as well.
+
+Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
+---
+ block/blk-core.c       | 4 +++-
+ block/blk-mq.c         | 7 +++++++
+ include/linux/blk-mq.h | 1 +
+ include/linux/blkdev.h | 2 ++
+ 4 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 27fb1357ad4b..4b73f46e62ec 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -312,7 +312,8 @@ void blk_cleanup_queue(struct request_queue *q)
+ 	 * prevent that blk_mq_run_hw_queues() accesses the hardware queues
+ 	 * after draining finished.
+ 	 */
+-	blk_freeze_queue(q);
++	blk_freeze_queue_start(q);
++	blk_mq_freeze_queue_wait_sync(q);
+ 
+ 	blk_queue_flag_set(QUEUE_FLAG_DEAD, q);
+ 
+@@ -403,6 +404,7 @@ static void blk_queue_usage_counter_release(struct percpu_ref *ref)
+ 	struct request_queue *q =
+ 		container_of(ref, struct request_queue, q_usage_counter);
+ 
++	blk_queue_flag_set(QUEUE_FLAG_USAGE_COUNT_SYNC, q);
+ 	wake_up_all(&q->mq_freeze_wq);
+ }
+ 
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 93d9d60980fb..44e764257511 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -165,6 +165,7 @@ void blk_freeze_queue_start(struct request_queue *q)
+ {
+ 	mutex_lock(&q->mq_freeze_lock);
+ 	if (++q->mq_freeze_depth == 1) {
++		blk_queue_flag_clear(QUEUE_FLAG_USAGE_COUNT_SYNC, q);
+ 		percpu_ref_kill(&q->q_usage_counter);
+ 		mutex_unlock(&q->mq_freeze_lock);
+ 		if (queue_is_mq(q))
+@@ -175,6 +176,12 @@ void blk_freeze_queue_start(struct request_queue *q)
+ }
+ EXPORT_SYMBOL_GPL(blk_freeze_queue_start);
+ 
++void blk_mq_freeze_queue_wait_sync(struct request_queue *q)
++{
++	wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter) &&
++			test_bit(QUEUE_FLAG_USAGE_COUNT_SYNC, &q->queue_flags));
++}
++
+ void blk_mq_freeze_queue_wait(struct request_queue *q)
+ {
+ 	wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter));
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index e2d9daf7e8dd..50fd56f85b31 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -868,6 +868,7 @@ void blk_mq_freeze_queue(struct request_queue *q);
+ void blk_mq_unfreeze_queue(struct request_queue *q);
+ void blk_freeze_queue_start(struct request_queue *q);
+ void blk_mq_freeze_queue_wait(struct request_queue *q);
++void blk_mq_freeze_queue_wait_sync(struct request_queue *q);
+ int blk_mq_freeze_queue_wait_timeout(struct request_queue *q,
+ 				     unsigned long timeout);
+ 
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 2f7b43444c5f..93ed8b166d66 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -575,6 +575,8 @@ struct request_queue {
+ #define QUEUE_FLAG_HCTX_ACTIVE	28	/* at least one blk-mq hctx is active */
+ #define QUEUE_FLAG_NOWAIT       29	/* device supports NOWAIT */
+ #define QUEUE_FLAG_SQ_SCHED     30	/* single queue style io dispatch */
++/* sync for q_usage_counter */
++#define QUEUE_FLAG_USAGE_COUNT_SYNC    31
+ 
+ #define QUEUE_FLAG_MQ_DEFAULT	((1 << QUEUE_FLAG_IO_STAT) |		\
+ 				 (1 << QUEUE_FLAG_SAME_COMP) |		\
+-- 
+2.31.1
 

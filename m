@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35FB5851B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C9A5851B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236075AbiG2Oje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S236290AbiG2Ol3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiG2Oja (ORCPT
+        with ESMTP id S236279AbiG2Ol0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:39:30 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321BC7E01B
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:39:28 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id m13so2295998wrq.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:39:28 -0700 (PDT)
+        Fri, 29 Jul 2022 10:41:26 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90130CF9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:41:25 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id z19so4808549plb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:41:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ccyQEp70PgUTExpVZ+kylw0PAR4mA5YvPy+or/e3ado=;
-        b=pYb7soAL2U25017/5t6iFxmWqARIP39Py1vHsfQp+rQTGn5GwApCdx4/v7N5CBMJqR
-         n/wXxr8NQBMg9bhOrilxKSQtHkWSVLX98YEMMLVG8o2Qlh7hauM4BK6s5UAZBxoqzdtO
-         wlmBiz26vaLcgZNbyNHO3Aj14ZvK5/Z1kdUQ1R1Rev9j54KJ0afJbD+JOy0ZaYHYjdk1
-         rLV+t2dIMwSLm3EAPcp5M/WqqWong7KzXBwXL6cD5qgwfTKz13X4omBmD9qg0OqNcAVD
-         YkKomrjx2mcfP4wtuAbADyVUdwRUPsc85tees66PJd4xuG+2qgmcBQNYx8jRAYRblEQ3
-         9r0A==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=l6vl6ca73afFDe1dwkZCvYaT2HbaszVLHWeIgM0p68Q=;
+        b=DGnbOED8lHCv9LKFZzoznPEAMqQykB8lamD3rHMLRweCz609+UyPI8tVXZ17ZvA3B6
+         9YfSbQWrwRCcUCgg0uxXYFkBZLyEPIkzBJo5xl7S0ir2fu37zg+sqUndtw9Ba8FKYJm/
+         bT1xp4d/7ffTswlbmEw6zuOCGf5JVzlF11J+k6Fw0CrqMuu6aHVrqxmZu/yZBQ8VFkE1
+         9k3yKvif/D7bohRnpGFp8GQ9+lVa/kbi1D+eFKHzJ8ObBJ437+RXe5a+b4lYdgOKJNP1
+         h6ABub5bOJUu9ke5+xL4zkjlJoSvEBSOaCJ3f2w6fhNWgBve5NFeAaxN6Pasf/Iuxk0U
+         5+YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ccyQEp70PgUTExpVZ+kylw0PAR4mA5YvPy+or/e3ado=;
-        b=5w577O5PigBQQkMHa0OnaSuxg+BdMo8tFUw4YHES8Wc7ITPJOPH3F4lPIfuD3FT13M
-         VtLCfA1K4r59kKfEDZOYJOy6e165jv+Vx1XWvFP7RNiHAJWI2IsmZfovV8Fv5/YKx1A3
-         rYHjh5s9CBOutObMTqpSTd6N3V8bANpELcAXvLEQNKwdqe+XG4XVDZxBDpuDJVvJ3QoD
-         4TXQ5CIZ3OlTUitUmamgQHZN2dWHxpMSypsXrMz7uU85F/m4ao8fKhuyT43knDQkGp3x
-         +xApcbYniSzuXt73FP2+ytNzTE7mfOfGuNfuqY6MCe5YMkkzVe4CeuqEciNoEl3FdCs4
-         H+5w==
-X-Gm-Message-State: ACgBeo057Q4H0Zlj/J9Prq/oIeV73hpoUcPKKTXk5R+g536oiONfJNdU
-        EIhydjbA3h1dBndbmOa/H0VsG+T0RMxvk8aLoeVZIQ==
-X-Google-Smtp-Source: AA6agR6azsiUOCd6hqvIYIcu93cG1wUj06gQB5edVSSZxI53u6BuJLo2aLac7oDdvR39BuhQX82KIEhxTpsQYQa83nc=
-X-Received: by 2002:a5d:6d4e:0:b0:21e:660e:55bf with SMTP id
- k14-20020a5d6d4e000000b0021e660e55bfmr2521559wri.343.1659105566496; Fri, 29
- Jul 2022 07:39:26 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=l6vl6ca73afFDe1dwkZCvYaT2HbaszVLHWeIgM0p68Q=;
+        b=uZMWFjUe0Whllx5e7Rn5dRTij974qmWuvnVFBDgrcxoQggP13HtxrdwqAhkdf58IXf
+         411pQFdV88FRbmuYgMjfYhwdCUw/+AJz+Kon20C3ye5Mn49R44RrN+qXCX6A6I5mLXpW
+         POyoPuOOfys+XAsDqkXBCY18F41ABwrjdYX48Su32ucixmShLjvXHUaUwMtzFaYeGJpq
+         bdBWfK7njo+erX/RoLzTUh+///yg96Bk8YOa2KTi2iaYYdCS6IcAsiv+3NRT0vNyT5Uo
+         bV424mbR643BUNFCwsCUzwZIybg5xPzW6aDbsqUpjNaDbkkzT7QZHHNaB9lLqXsWtytt
+         /yyA==
+X-Gm-Message-State: ACgBeo3a24fM13GQ/e2MH6jKUVXGrYeV+/lxB0thZIA6YV+RyHiuqVby
+        iu09hnChQf3AOe/yKq4Kh6Vf8Q==
+X-Google-Smtp-Source: AA6agR4X7fAFXTDw6OjZ5xRKI0Lw6Or/jMev9hgZVz//3MiEjIpKJ8O97KNwiTbXNAAu8OJZrokubQ==
+X-Received: by 2002:a17:90b:1d8f:b0:1f0:270a:b556 with SMTP id pf15-20020a17090b1d8f00b001f0270ab556mr4557647pjb.192.1659105684880;
+        Fri, 29 Jul 2022 07:41:24 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l1-20020a170902ec0100b0016d338160d6sm3651019pld.155.2022.07.29.07.41.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 07:41:24 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 14:41:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Shukla, Santosh" <santosh.shukla@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 4/7] KVM: SVM: Report NMI not allowed when Guest busy
+ handling VNMI
+Message-ID: <YuPxkMW2aZxrw57n@google.com>
+References: <20220709134230.2397-1-santosh.shukla@amd.com>
+ <20220709134230.2397-5-santosh.shukla@amd.com>
+ <Yth5hl+RlTaa5ybj@google.com>
+ <20c2142a-ec88-02cf-01f2-cf7f8dfcef77@amd.com>
 MIME-Version: 1.0
-References: <20220707191209.273065-1-irogers@google.com> <YuPIIgJabRkPLvvn@krava>
-In-Reply-To: <YuPIIgJabRkPLvvn@krava>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 29 Jul 2022 07:39:14 -0700
-Message-ID: <CAP-5=fUyzrahbkBj5_WN1=pB8E=5YitOn=RvBjZE-zcsnmuLmg@mail.gmail.com>
-Subject: Re: [PATCH v2] perf parse-events: Break out tracepoint and printing.
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20c2142a-ec88-02cf-01f2-cf7f8dfcef77@amd.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,31 +80,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 4:44 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Thu, Jul 07, 2022 at 12:12:09PM -0700, Ian Rogers wrote:
-> > Move print_*_events functions out of parse-events.c into a new
-> > print-events.c. Move tracepoint code into tracepoint.c or
-> > trace-event-info.c (sole user). This reduces the dependencies of
->
-> it seems like it'd be better to have those changes in separated
-> patches, at least for review
+On Fri, Jul 29, 2022, Shukla, Santosh wrote:
+> Hello Sean,
+> 
+> On 7/21/2022 3:24 AM, Sean Christopherson wrote:
+> > On Sat, Jul 09, 2022, Santosh Shukla wrote:
 
-Agreed. I'll follow up with a v3.
+...
 
-Thanks,
-Ian
+> >> @@ -3609,6 +3612,9 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+> >>  {
+> >>  	struct vcpu_svm *svm = to_svm(vcpu);
+> >>  
+> >> +	if (is_vnmi_enabled(svm))
+> >> +		return;
+> > 
+> > Ugh, is there really no way to trigger an exit when NMIs become unmasked?  Because
+> > if there isn't, this is broken for KVM.
+> > 
+> 
+> Yes. there is.
+> 
+> NMI_INTERCEPT will trigger VMEXIT when second NMI arrives while guest is busy handling first NMI.
 
-> jirka
->
-> > parse-events.c and makes it more amenable to being a library in the
-> > future.
-> > Remove some unnecessary definitions from parse-events.h. Fix a
-> > checkpatch.pl warning on using unsigned rather than unsigned int.
-> > Fix some line length warnings too.
-> >
-> > v2. Rebase in particular after hybrid PMU changes.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
->
-> SNIP
+But NMI_INTERCEPT only applies to "real" NMIs.  The scenario laid out below is where
+KVM wants to inject a virtual NMI without an associated hardware/real NMI, e.g. if
+multiple vCPUs send NMI IPIs to the target.
+
+> And in that scenario, Guest will exit with V_NMI_MASK set to 1, KVM can inject pending(Second)
+> NMI(V_NMI=1). Guest will resume handling the first NMI, then HW will
+> clear the V_NMI_MASK and later HW will take the pending V_NMI in side the guest. 
+> 
+> I'll handle above case in v3.
+> 
+> Thanks,
+> Santosh
+> 
+> > On bare metal, if two NMIs arrive "simultaneously", so long as NMIs aren't blocked,
+> > the first NMI will be delivered and the second will be pended, i.e. software will
+> > see both NMIs.  And if that doesn't hold true, the window for a true collision is
+> > really, really tiny.
+> > 
+> > But in KVM, because a vCPU may not be run a long duration, that window becomes
+> > very large.  To not drop NMIs and more faithfully emulate hardware, KVM allows two
+> > NMIs to be _pending_.  And when that happens, KVM needs to trigger an exit when
+> > NMIs become unmasked _after_ the first NMI is injected.
+> > 
+> >> +
+> >>  	if ((vcpu->arch.hflags & (HF_NMI_MASK | HF_IRET_MASK)) == HF_NMI_MASK)
+> >>  		return; /* IRET will cause a vm exit */
+> >>  
+> >> -- 
+> >> 2.25.1
+> >>

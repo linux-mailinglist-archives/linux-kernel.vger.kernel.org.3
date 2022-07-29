@@ -2,73 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C41585616
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8E258561B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbiG2U1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 16:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S239225AbiG2U3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 16:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiG2U1f (ORCPT
+        with ESMTP id S230499AbiG2U3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 16:27:35 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF546FA36;
-        Fri, 29 Jul 2022 13:27:35 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id b9so5556326pfp.10;
-        Fri, 29 Jul 2022 13:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=U36cxZBBBAsWK0SgXU07/6cSCngvofZtFK0Cv/h7b5Q=;
-        b=B6/ndEJPHc4+9jyYT5GDz7FcNNUlakcC9XrRLetuqsQ9Hcy9CP512PPT2A5QM530vm
-         izqu82rxhPC3e5vWCVDpoSSOE09mO8AfJEG2hF27RmKLOv/icjyHhwE4chwslxx+GVi5
-         u1F4QwHrMgH22/KQkwKVxj9gkKZC4yyWrZkp8FcvJp0WmAS2C0v5ut7PluaFXRQItP2Q
-         +K73SAK2Wo8v2C7LGnLsjDAofYfR3kzjEEYVxD+KxfL602ubXQHkbeRxgTY24kXapPb9
-         rYIe5I+q3Bbyp0cmqpcQOLAUgGNqlWFY619rT6ocl0TCk2faUXHmWZLURo28k6UNDJGr
-         HLVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=U36cxZBBBAsWK0SgXU07/6cSCngvofZtFK0Cv/h7b5Q=;
-        b=rDNhA1N2wjk04GOtJ8se3so8MhDcU73wPIh4OQRvzahH5Zq8NQKiC3tjgkNYaWpT0G
-         rQpX97g1s8Wm4FiJoaaRRBKQtyFDoaHxXze7zCcG6B6eMd8pTtYwmbXf6v8adrMm5/E2
-         HMDK98KVmYKNC9wlkZK8l0LmspU6nZ7ZFI3wvHwfmNy2EgfU/GRZBFclZlSGqb8UcoZT
-         053Jorr9yjawOWaMywucYuxjIFCVW1RMH7vTapdxNDZO1ULSM+YGrDxt+15JPLCQnHcn
-         k/hQBypg5/Hx0VSJS7cJ6hEkZmSFVSvqbaovHkLFhCUTEPZPL6AxHVqwte25eMN+/3H9
-         FfHA==
-X-Gm-Message-State: AJIora8bPPrD6MFq7mGkf5TB8wsuJzA6Z8ljvKWwuJkPWVryxWckhnOj
-        bhyPkon0PirrNY1tAUWvROfErlywRA==
-X-Google-Smtp-Source: AGRyM1sL8lAt8k/dgJPWI7c5WieHBqLG3euAM6eaRzH7JwksAuL2l81l0uFq+aZb0oBXQ4+tE7CKPg==
-X-Received: by 2002:a05:6a00:2401:b0:52b:cd67:d997 with SMTP id z1-20020a056a00240100b0052bcd67d997mr5105428pfh.70.1659126454733;
-        Fri, 29 Jul 2022 13:27:34 -0700 (PDT)
-Received: from jevburton3.c.googlers.com.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id mg20-20020a17090b371400b001f30b100e04sm6235945pjb.15.2022.07.29.13.27.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 13:27:34 -0700 (PDT)
-From:   Joe Burton <jevburton.kernel@gmail.com>
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Joe Burton <jevburton@google.com>
-Subject: [PATCH v3 bpf-next] libbpf: Add bpf_obj_get_opts()
-Date:   Fri, 29 Jul 2022 20:27:27 +0000
-Message-Id: <20220729202727.3311806-1-jevburton.kernel@gmail.com>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+        Fri, 29 Jul 2022 16:29:35 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47791868A1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 13:29:34 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id HWbyoIDVr81u5HWbyoaAVQ; Fri, 29 Jul 2022 22:29:31 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 29 Jul 2022 22:29:31 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH v2] timers: Optimize usleep_range()
+Date:   Fri, 29 Jul 2022 22:28:56 +0200
+Message-Id: <a896e176f0f0b819f8ec5ab8935355d01a642506.1659126514.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,83 +43,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Burton <jevburton@google.com>
+Most of the time the 'min' and 'max' parameters of usleep_range() are
+constant. We can take advantage of it to pre-compute at compile time
+some values otherwise computer at run-time in usleep_range_state().
 
-Add an extensible variant of bpf_obj_get() capable of setting the
-`file_flags` parameter.
+Replace usleep_range_state() by a new __nsleep_range_delta_state() function
+that takes as parameters the pre-computed values.
 
-This parameter is needed to enable unprivileged access to BPF maps.
-Without a method like this, users must manually make the syscall.
+The main benefit is to save a few instructions, especially 2
+multiplications (x1000 when converting us to ns).
 
-Signed-off-by: Joe Burton <jevburton@google.com>
+
+Some hand simplified diff of the generated asm are given below. They were
+produced on a Intel(R) Core(TM) i7-3770, with gcc 11.2.0.
+
+drivers/clk/clk-si514.c (taken as an example)
+-----------------------
+In this driver we have:
+   usleep_range(10000, 12000);
+
+--- clk_before.asm	2022-07-29 21:49:05.702289425 +0200
++++ clk_after.asm	2022-07-29 21:50:23.801548963 +0200
+@@ -972,8 +972,8 @@
+  ea0:	45 85 e4             	test   %r12d,%r12d
+  ea3:	0f 88 f6 fc ff ff    	js     b9f <si514_set_rate+0x9f>
+  ea9:	e8 00 00 00 00       	call   eae <si514_set_rate+0x3ae>
+- eae:	be e0 2e 00 00       	mov    $0x2ee0,%esi             ;     12.000
+- eb3:	bf 10 27 00 00       	mov    $0x2710,%edi             ;     10.000
++ eae:	be 80 84 1e 00       	mov    $0x1e8480,%esi           ;  2.000.000
++ eb3:	bf 80 96 98 00       	mov    $0x989680,%edi           ; 10.000.000
+  eb8:	ba 02 00 00 00       	mov    $0x2,%edx
+  ebd:	e8 00 00 00 00       	call   ec2 <si514_set_rate+0x3c2>
+  ec2:	44 8b 74 24 30       	mov    0x30(%rsp),%r14d
+
+The asm produced in the caller is mostly the same. Only constant values
+passed to usleep_range_state() or __nsleep_range_delta_state() are
+different. No other instructions or whatever is different.
+
+
+kernel/time/timer.c
+-------------------
+-0000000000000000 <usleep_range_state>:
++0000000000000000 <__nsleep_range_delta_state>:
+  f3 0f 1e fa          	endbr64
+  e8 00 00 00 00       	call   ...
+  48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+@@ -10692,16 +10692,14 @@
+  41 56                	push   %r14
+  49 c7 c6 00 00 00 00 	mov    $0x0,%r14
+  41 55                	push   %r13
+- 41 89 d5             	mov    %edx,%r13d
++ 49 89 f5             	mov    %rsi,%r13
+  41 54                	push   %r12
+- 49 89 f4             	mov    %rsi,%r12
++ 41 89 d4             	mov    %edx,%r12d
+  55                   	push   %rbp
+- 44 89 ed             	mov    %r13d,%ebp
++ 44 89 e5             	mov    %r12d,%ebp
+  53                   	push   %rbx
+  48 89 fb             	mov    %rdi,%rbx
+  81 e5 cc 00 00 00    	and    $0xcc,%ebp
+- 49 29 dc             	sub    %rbx,%r12              ; (max - min)
+- 4d 69 e4 e8 03 00 00 	imul   $0x3e8,%r12,%r12       ; us --> ns (x 1000)
+  48 83 ec 68          	sub    $0x68,%rsp
+  48 c7 44 24 08 b3 8a 	movq   $0x41b58ab3,0x8(%rsp)
+  b5 41
+@@ -10721,18 +10719,16 @@
+  31 c0                	xor    %eax,%eax
+  e8 00 00 00 00       	call   ...
+  e8 00 00 00 00       	call   ...
+- 49 89 c0             	mov    %rax,%r8
+- 48 69 c3 e8 03 00 00 	imul   $0x3e8,%rbx,%rax       ; us --> ns (x 1000)
++ 48 01 d8             	add    %rbx,%rax
++ 48 89 44 24 28       	mov    %rax,0x28(%rsp)
+  65 48 8b 1c 25 00 00 	mov    %gs:0x0,%rbx
+  00 00
+- 4c 01 c0             	add    %r8,%rax
+- 48 89 44 24 28       	mov    %rax,0x28(%rsp)
+  e8 00 00 00 00       	call   ...
+  31 ff                	xor    %edi,%edi
+  89 ee                	mov    %ebp,%esi
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- tools/lib/bpf/bpf.c      |  9 +++++++++
- tools/lib/bpf/bpf.h      | 11 +++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 21 insertions(+)
+v1 -> v2
+  - Simplify and avoid use of __buildint_constant_p() [John Stultz <jstultz@google.com>]
+  - Also update usleep_idle_range()
+  - Axe usleep_range_state()  [John Stultz <jstultz@google.com>]
+  - Fix kerneldoc  [John Stultz <jstultz@google.com>]
+  - Update log message accordingly
+https://lore.kernel.org/all/d7fc85736adee02ce52ee88a54fa7477fbd18ed2.1653236802.git.christophe.jaillet@wanadoo.fr/
+---
+ include/linux/delay.h | 17 +++++++++++++----
+ kernel/time/timer.c   | 17 ++++++++---------
+ 2 files changed, 21 insertions(+), 13 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 5eb0df90eb2b..efcc06dafbd9 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -578,12 +578,21 @@ int bpf_obj_pin(int fd, const char *pathname)
+diff --git a/include/linux/delay.h b/include/linux/delay.h
+index 039e7e0c7378..27938a49c701 100644
+--- a/include/linux/delay.h
++++ b/include/linux/delay.h
+@@ -59,17 +59,26 @@ void calibrate_delay(void);
+ void __attribute__((weak)) calibration_delay_done(void);
+ void msleep(unsigned int msecs);
+ unsigned long msleep_interruptible(unsigned int msecs);
+-void usleep_range_state(unsigned long min, unsigned long max,
+-			unsigned int state);
++void __nsleep_range_delta_state(u64 min, u64 delta, unsigned int state);
+ 
+ static inline void usleep_range(unsigned long min, unsigned long max)
+ {
+-	usleep_range_state(min, max, TASK_UNINTERRUPTIBLE);
++	/*
++	 * Most of the time min and max are constant, so the time delta and the
++	 * convertion to ns will be optimized-out at compile time.
++	 */
++	u64 delta = (u64)(max - min) * NSEC_PER_USEC;
++
++	__nsleep_range_delta_state(min * NSEC_PER_USEC, delta,
++				   TASK_UNINTERRUPTIBLE);
  }
  
- int bpf_obj_get(const char *pathname)
-+{
-+	return bpf_obj_get_opts(pathname, NULL);
-+}
-+
-+int bpf_obj_get_opts(const char *pathname, const struct bpf_obj_get_opts *opts)
+ static inline void usleep_idle_range(unsigned long min, unsigned long max)
  {
- 	union bpf_attr attr;
- 	int fd;
- 
-+	if (!OPTS_VALID(opts, bpf_obj_get_opts))
-+		return libbpf_err(-EINVAL);
+-	usleep_range_state(min, max, TASK_IDLE);
++	u64 delta = (u64)(max - min) * NSEC_PER_USEC;
 +
- 	memset(&attr, 0, sizeof(attr));
- 	attr.pathname = ptr_to_u64((void *)pathname);
-+	attr.file_flags = OPTS_GET(opts, file_flags, 0);
++	__nsleep_range_delta_state(min * NSEC_PER_USEC, delta,
++				   TASK_IDLE);
+ }
  
- 	fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
- 	return libbpf_err_errno(fd);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 88a7cc4bd76f..9c50beabdd14 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -270,8 +270,19 @@ LIBBPF_API int bpf_map_update_batch(int fd, const void *keys, const void *values
- 				    __u32 *count,
- 				    const struct bpf_map_batch_opts *opts);
+ static inline void ssleep(unsigned int seconds)
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 717fcb9fb14a..475b1c0406d7 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -2109,22 +2109,21 @@ unsigned long msleep_interruptible(unsigned int msecs)
+ EXPORT_SYMBOL(msleep_interruptible);
  
-+struct bpf_obj_get_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+
-+	__u32 file_flags;
-+
-+	size_t :0;
-+};
-+#define bpf_obj_get_opts__last_field file_flags
-+
- LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
- LIBBPF_API int bpf_obj_get(const char *pathname);
-+LIBBPF_API int bpf_obj_get_opts(const char *pathname,
-+				const struct bpf_obj_get_opts *opts);
+ /**
+- * usleep_range_state - Sleep for an approximate time in a given state
+- * @min:	Minimum time in usecs to sleep
+- * @max:	Maximum time in usecs to sleep
++ * __nsleep_range_delta_state - Sleep for an approximate time in a given state
++ * @min:	Minimum time in nsecs to sleep
++ * @delta:	Duration in nsecs that can be tolerated after @min
+  * @state:	State of the current task that will be while sleeping
+  *
+  * In non-atomic context where the exact wakeup time is flexible, use
+- * usleep_range_state() instead of udelay().  The sleep improves responsiveness
++ * usleep_[idle_]range() instead of udelay().  The sleep improves responsiveness
+  * by avoiding the CPU-hogging busy-wait of udelay(), and the range reduces
+  * power usage by allowing hrtimers to take advantage of an already-
+  * scheduled interrupt instead of scheduling a new one just for this sleep.
+  */
+-void __sched usleep_range_state(unsigned long min, unsigned long max,
+-				unsigned int state)
++void __sched __nsleep_range_delta_state(u64 min, u64 delta,
++				        unsigned int state)
+ {
+-	ktime_t exp = ktime_add_us(ktime_get(), min);
+-	u64 delta = (u64)(max - min) * NSEC_PER_USEC;
++	ktime_t exp = ktime_add_ns(ktime_get(), min);
  
- struct bpf_prog_attach_opts {
- 	size_t sz; /* size of this struct for forward/backward compatibility */
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 0625adb9e888..119e6e1ea7f1 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
- 
- LIBBPF_1.0.0 {
- 	global:
-+		bpf_obj_get_opts;
- 		bpf_prog_query_opts;
- 		bpf_program__attach_ksyscall;
- 		btf__add_enum64;
+ 	for (;;) {
+ 		__set_current_state(state);
+@@ -2133,4 +2132,4 @@ void __sched usleep_range_state(unsigned long min, unsigned long max,
+ 			break;
+ 	}
+ }
+-EXPORT_SYMBOL(usleep_range_state);
++EXPORT_SYMBOL(__nsleep_range_delta_state);
 -- 
-2.37.1.455.g008518b4e5-goog
+2.34.1
 

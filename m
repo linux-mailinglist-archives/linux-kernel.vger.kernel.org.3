@@ -2,217 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76047584AC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 06:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395A5584ACB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 06:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbiG2Es0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 00:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S233535AbiG2Eu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 00:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiG2EsY (ORCPT
+        with ESMTP id S231570AbiG2Euz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 00:48:24 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD4F48E90
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659070103; x=1690606103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GwIJZ/2I+Nh+IzmWCA7HuykA1BfbRTab2WxplwBqde4=;
-  b=ByRb/Kifo7UcZ4merX9MtI576fTgeXrjY5ZO8dyZuH9TBod6AEyOxwNS
-   6VWF1XAa2uF0CbW7tPcPTIBlGjmq80Juz54L15Ga+YHK/hqqUy4lyrrWb
-   FqnKRP7CJkhG8e1xuQriIidFKdsg7qRGh32jxZa5rNlBW50WiiRZ3YoPg
-   Q4ZY9pymNt/g+pmnxwUBhsEHXGverqW9G0RVclz4zGhgkGJmPH66gAXYN
-   UWuI0KGkV7hnZmSzQ4MVwKWU1k4Tj5vGRqEepXqyRjF3DG8D/yqBu423s
-   idbK0l3rwk1uJTiNPa+7SMvL34da2CNvty7UxBPMiQyajzAvklIVMwA88
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="287444305"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="287444305"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 21:48:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="669150026"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jul 2022 21:48:21 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHHvA-000B74-2g;
-        Fri, 29 Jul 2022 04:48:20 +0000
-Date:   Fri, 29 Jul 2022 12:48:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-4.19.y 437/3409] net/core/sock.c:1090: Error:
- unrecognized opcode `csrs sstatus,s11'
-Message-ID: <202207291224.I3LLPz5B-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        Fri, 29 Jul 2022 00:50:55 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CCD1EEC3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:50:51 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220729045046epoutp01a9f1572432fc8d0dc7605ffe82908dbf~GM5ltCiBM0228102281epoutp01X
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:50:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220729045046epoutp01a9f1572432fc8d0dc7605ffe82908dbf~GM5ltCiBM0228102281epoutp01X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659070246;
+        bh=vyeZZJfOSClnlIwgoX4qFgtMQTpokyQF/v6Q12nU+og=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=KVto/YgJO8AarOHbBj8NKWQYH+6Q4CZkpZqcChAIDPYWuoa0cynPvV+kphhdCKrec
+         J6i8jpl2c2X041K+13mzOMCGc7kVukxqZNtgWt/sveX17SBF4EXeuexPj5RtrAGflY
+         wFtELjxzOtGVpoz8lqUZS2e28/bjTNmT36oxeG3s=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220729045046epcas2p39387f886e27581049b616438043d788d~GM5lbVWnu0418904189epcas2p3d;
+        Fri, 29 Jul 2022 04:50:46 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4LvFT213Jfz4x9QP; Fri, 29 Jul
+        2022 04:50:46 +0000 (GMT)
+X-AuditID: b6c32a48-9e1ff700000025be-10-62e36725a0a3
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5C.30.09662.52763E26; Fri, 29 Jul 2022 13:50:46 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v5 0/6] scsi: ufs: wb: Add sysfs attribute and cleanup
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p8>
+Date:   Fri, 29 Jul 2022 13:50:45 +0900
+X-CMS-MailID: 20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHJsWRmVeSWpSXmKPExsWy7bCmha5a+uMkg+9/GC1OPlnDZvFg3jY2
+        i5c/r7JZHHzYyWIx7cNPZouXhzQtFt3YxmRxedccNovu6zvYLJYf/8fkwOVx+Yq3x+I9L5k8
+        Jiw6wOjxfX0Hm8fHp7dYPPq2rGL0+LxJzqP9QDdTAEdUtk1GamJKapFCal5yfkpmXrqtkndw
+        vHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0IlKCmWJOaVAoYDE4mIlfTubovzSklSFjPzi
+        Elul1IKUnALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMyZtOsBW0cVXs+r6BpYHxGnsXIyeH
+        hICJxJLPG5m7GLk4hAR2MEos/dTA2MXIwcErICjxd4cwSI2wgJvEr7NrWEBsIQEliXNrZoGV
+        CAsYSNzqNQcJswnoSfxcMoMNZIyIwFlmiYUPpzBBzOeVmNH+lAXClpbYvnwrI4StIfFjWS8z
+        hC0qcXP1W3YY+/2x+VA1IhKt985C1QhKPPi5GyouKXHo0Fc2kBskBPIlNhwIhAjXSLxdfgCq
+        RF/iWsdGsLW8Ar4S2z9cA4uzCKhK9L9cxApR4yKxoQ/iLWYBeYntb+cwg4xkFtCUWL9LH2K6
+        ssSRWywwjzRs/M2OzmYW4JPoOPwXLr5j3hMmiFY1iUVNRhBhGYmvh+ezQ4Q9JE79NJvAqDgL
+        EcizkFwwC+GCBYzMqxjFUguKc9NTi40KTODxmpyfu4kRnFC1PHYwzn77Qe8QIxMH4yFGCQ5m
+        JRFegYDHSUK8KYmVValF+fFFpTmpxYcYTYF+n8gsJZqcD0zpeSXxhiaWBiZmZobmRqYG5kri
+        vF4pGxKFBNITS1KzU1MLUotg+pg4OKUamEpvuHkmJH87O9lJ9oUk95onjsxy+XObo65aanO+
+        7apoe5xyknOxpKLlR/8aLvbrof9Ccp5pvp/nvOzqskvzL1tHlNkreE6Y1C3QOr/EWepCjN0t
+        50eccyq3L7EI+6z74PyWm6LPfi9tWbCnwLStw01DtSafZccMXam6Cp+bbybs1fk62TLHKElG
+        43qTUbJWtpRIY57qwqzjy9KCzObXuJ8UuSZhsvyubvWkgKXM5oVCs/i6loVX7bPbevzrPfbD
+        Qeu6Am0Ulv5c9bMvd+IpOSGb+hnb1vkUeH3fuiZ247Ld+qHpqfmf9iVnmDKdXZKmopi2+Kvw
+        tiD9XwydW2d3yG7f3LNV2HHd95mfSl1ilViKMxINtZiLihMBYoq8xzEEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368
+References: <CGME20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p8>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-head:   f68ffa0f9e2ab245b3284831e972b55c677ce706
-commit: 0512a9aede6e4417c4fa6e0042a7ca8bc7e06b86 [437/3409] af_unix: fix races in sk_peer_pid and sk_peer_cred accesses
-config: riscv-randconfig-r012-20220726 (https://download.01.org/0day-ci/archive/20220729/202207291224.I3LLPz5B-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=0512a9aede6e4417c4fa6e0042a7ca8bc7e06b86
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-4.19.y
-        git checkout 0512a9aede6e4417c4fa6e0042a7ca8bc7e06b86
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/core/
+This patch series is to clean up UFS's Write Booster code and
+adds sysfs attribute which can control the specific feature of it.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+V2:
+	- modify commit message
+	- move & modify err messages
+	- remove unnesscessary debug messages
+V3:
+	- split patch (functional, non-functional)
+V4:
+	- split patch (The number of patches from 2 to 7)
+	- modify dev messages
+	- modify commit message
+V5:
+	- drop (scsi: ufs: wb: Move ufshcd_is_wb_allowed() to callee)
+	- fix condition check
+	- add Document for sysfs attribute
+	- move ufshcd_is_wb_buf_flush_allowed() to ufs-priv.h
 
-All errors (new ones prefixed by >>):
+Jinyoung Choi (6):
+  scsi: ufs: wb: Change wb_enabled condition test
+  scsi: ufs: wb: Change functions name and modify parameter name
+  scsi: ufs: wb: Add explicit flush sysfs attribute
+  scsi: ufs: wb: Add ufshcd_is_wb_buf_flush_allowed()
+  scsi: ufs: wb: Modify messages
+  scsi: ufs: wb: Move the comment to the right position
 
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/linux/jump_label.h:419:41: note: in expansion of macro 'unlikely'
-     419 | #define static_branch_unlikely(x)       unlikely(static_key_enabled(&(x)->key))
-         |                                         ^~~~~~~~
-   include/linux/memcontrol.h:1247:36: note: in expansion of macro 'static_branch_unlikely'
-    1247 | #define mem_cgroup_sockets_enabled static_branch_unlikely(&memcg_sockets_enabled_key)
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~
-   net/core/sock.c:2530:13: note: in expansion of macro 'mem_cgroup_sockets_enabled'
-    2530 |         if (mem_cgroup_sockets_enabled && sk->sk_memcg)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:61:31: warning: ignoring attribute 'section ("_ftrace_branch")' because it conflicts with previous 'section ("_ftrace_annotated_branch")' [-Wattributes]
-      61 |                 static struct ftrace_branch_data                        \
-         |                               ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:49: note: in definition of macro '__trace_if'
-      58 |         if (__builtin_constant_p(!!(cond)) ? !!(cond) :                 \
-         |                                                 ^~~~
-   net/core/sock.c:2530:9: note: in expansion of macro 'if'
-    2530 |         if (mem_cgroup_sockets_enabled && sk->sk_memcg)
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/linux/jump_label.h:419:41: note: in expansion of macro 'unlikely'
-     419 | #define static_branch_unlikely(x)       unlikely(static_key_enabled(&(x)->key))
-         |                                         ^~~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/linux/jump_label.h:327:9: note: in expansion of macro 'if'
-     327 |         if (!__builtin_types_compatible_p(typeof(*x), struct static_key) &&     \
-         |         ^~
-   include/linux/jump_label.h:419:50: note: in expansion of macro 'static_key_enabled'
-     419 | #define static_branch_unlikely(x)       unlikely(static_key_enabled(&(x)->key))
-         |                                                  ^~~~~~~~~~~~~~~~~~
-   include/linux/memcontrol.h:1247:36: note: in expansion of macro 'static_branch_unlikely'
-    1247 | #define mem_cgroup_sockets_enabled static_branch_unlikely(&memcg_sockets_enabled_key)
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~
-   net/core/sock.c:2530:13: note: in expansion of macro 'mem_cgroup_sockets_enabled'
-    2530 |         if (mem_cgroup_sockets_enabled && sk->sk_memcg)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:28:33: note: previous declaration here
-      28 |                                 ______f = {                             \
-         |                                 ^~~~~~~
-   include/linux/compiler.h:58:49: note: in definition of macro '__trace_if'
-      58 |         if (__builtin_constant_p(!!(cond)) ? !!(cond) :                 \
-         |                                                 ^~~~
-   net/core/sock.c:2530:9: note: in expansion of macro 'if'
-    2530 |         if (mem_cgroup_sockets_enabled && sk->sk_memcg)
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/linux/jump_label.h:419:41: note: in expansion of macro 'unlikely'
-     419 | #define static_branch_unlikely(x)       unlikely(static_key_enabled(&(x)->key))
-         |                                         ^~~~~~~~
-   include/linux/memcontrol.h:1247:36: note: in expansion of macro 'static_branch_unlikely'
-    1247 | #define mem_cgroup_sockets_enabled static_branch_unlikely(&memcg_sockets_enabled_key)
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~
-   net/core/sock.c:2530:13: note: in expansion of macro 'mem_cgroup_sockets_enabled'
-    2530 |         if (mem_cgroup_sockets_enabled && sk->sk_memcg)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:69:30: note: in definition of macro '__trace_if'
-      69 |                 ______r = !!(cond);                                     \
-         |                              ^~~~
-   net/core/sock.c:2530:9: note: in expansion of macro 'if'
-    2530 |         if (mem_cgroup_sockets_enabled && sk->sk_memcg)
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/linux/jump_label.h:419:41: note: in expansion of macro 'unlikely'
-     419 | #define static_branch_unlikely(x)       unlikely(static_key_enabled(&(x)->key))
-         |                                         ^~~~~~~~
-   include/linux/memcontrol.h:1247:36: note: in expansion of macro 'static_branch_unlikely'
-    1247 | #define mem_cgroup_sockets_enabled static_branch_unlikely(&memcg_sockets_enabled_key)
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~
-   net/core/sock.c:2530:13: note: in expansion of macro 'mem_cgroup_sockets_enabled'
-    2530 |         if (mem_cgroup_sockets_enabled && sk->sk_memcg)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   net/core/sock.c:2530:9: note: in expansion of macro 'if'
-    2530 |         if (mem_cgroup_sockets_enabled && sk->sk_memcg)
-         |         ^~
-   net/core/sock.c: Assembler messages:
-   net/core/sock.c:610: Error: unrecognized opcode `csrs sstatus,a5'
-   net/core/sock.c:610: Error: unrecognized opcode `csrc sstatus,a5'
-   net/core/sock.c:1112: Error: unrecognized opcode `csrs sstatus,a4'
-   net/core/sock.c:1112: Error: unrecognized opcode `csrc sstatus,a4'
-   net/core/sock.c:1267: Error: unrecognized opcode `csrs sstatus,a4'
-   net/core/sock.c:1267: Error: unrecognized opcode `csrc sstatus,a4'
->> net/core/sock.c:1090: Error: unrecognized opcode `csrs sstatus,s11'
->> net/core/sock.c:1090: Error: unrecognized opcode `csrc sstatus,s11'
-   net/core/sock.c:1420: Error: unrecognized opcode `csrs sstatus,a4'
-   net/core/sock.c:1420: Error: unrecognized opcode `csrc sstatus,a4'
-   net/core/sock.c:673: Error: unrecognized opcode `csrs sstatus,a4'
-   net/core/sock.c:673: Error: unrecognized opcode `csrc sstatus,a4'
-
-
-vim +1090 net/core/sock.c
-
-3f551f9436c05a Eric W. Biederman 2010-06-13  1083  
-28b5ba2aa0f55d David Herrmann    2017-06-21  1084  static int groups_to_user(gid_t __user *dst, const struct group_info *src)
-28b5ba2aa0f55d David Herrmann    2017-06-21  1085  {
-28b5ba2aa0f55d David Herrmann    2017-06-21  1086  	struct user_namespace *user_ns = current_user_ns();
-28b5ba2aa0f55d David Herrmann    2017-06-21  1087  	int i;
-28b5ba2aa0f55d David Herrmann    2017-06-21  1088  
-28b5ba2aa0f55d David Herrmann    2017-06-21  1089  	for (i = 0; i < src->ngroups; i++)
-28b5ba2aa0f55d David Herrmann    2017-06-21 @1090  		if (put_user(from_kgid_munged(user_ns, src->gid[i]), dst + i))
-28b5ba2aa0f55d David Herrmann    2017-06-21  1091  			return -EFAULT;
-28b5ba2aa0f55d David Herrmann    2017-06-21  1092  
-28b5ba2aa0f55d David Herrmann    2017-06-21  1093  	return 0;
-28b5ba2aa0f55d David Herrmann    2017-06-21  1094  }
-28b5ba2aa0f55d David Herrmann    2017-06-21  1095  
-
-:::::: The code at line 1090 was first introduced by commit
-:::::: 28b5ba2aa0f55d80adb2624564ed2b170c19519e net: introduce SO_PEERGROUPS getsockopt
-
-:::::: TO: David Herrmann <dh.herrmann@gmail.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+ Documentation/ABI/testing/sysfs-driver-ufs | 10 ++++
+ drivers/ufs/core/ufs-sysfs.c               | 46 +++++++++++++++-
+ drivers/ufs/core/ufshcd-priv.h             |  6 ++
+ drivers/ufs/core/ufshcd.c                  | 64 ++++++++++++----------
+ include/ufs/ufshcd.h                       |  1 +
+ 5 files changed, 96 insertions(+), 31 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1

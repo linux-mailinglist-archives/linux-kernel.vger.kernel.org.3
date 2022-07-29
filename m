@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F23584CCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37755584CCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234953AbiG2HoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 03:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
+        id S234980AbiG2HoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 03:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234154AbiG2HoF (ORCPT
+        with ESMTP id S234946AbiG2HoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 03:44:05 -0400
+        Fri, 29 Jul 2022 03:44:08 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39A465809
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:44:04 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id y13-20020a5b09cd000000b0067114eb5b50so3287354ybq.17
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:44:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1D37B37E
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:44:07 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id j4-20020a5b0304000000b00676ba2ed7e9so323155ybp.23
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:44:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=gJpUpfYLbWgWjOwgXjGO+9lnopmpvExo4+EzC9HEZTY=;
-        b=dGCDlxqp0N92i8FI8IxZI0RMts2CVs6exeUrA29GDqYZd2sk37RGoacdGjeaGAaPEl
-         veyYOZBOQmOc24vq5FT0+v67NmYoZPupwBcSbyu/TNItgl51jakqAeFTk7FmNHcuwF5s
-         pyIEjbOqMtfjIMC0SNfrA/UQR/Pr/nXMZCMoS2MA3Tz7jvRTZwt4bIihGAMsFxtssia9
-         seAGqe9IhHByUB8BHUkgIW6PmueRB80GtUkYVRFSbRtaBOL1aiIn8a/sQ1FGp59m7yT7
-         JqR4pii4eZKYpIEeR1WUkTYi/kra01qzW5F6bRMrxFc4RW5XMmwU+T37ESVmuzmhsVCX
-         WIqg==
+        bh=envuPbzzq2H54VKr3RstW6kg8N0kUvXDq8KS/IJYJi4=;
+        b=oRwQiy17hOjBg79amu8cXv0HG3YS23fNp9hgX4XS6A3pX3ZvRQVEU3+98y70aFyWbQ
+         3knxj5i78Ot4CR/NK5LytuHU6ia5SqlDgp4WKLsoyqk2HV3YMNCadVKE0aGhmW9Klgsz
+         WT7Ozg6cYj4AAr5pD4BASrxxeA36XGonvNb4Hq6IA7XLE2uhUtQ3xprXG+MOXXRn+uon
+         wlxC8z6+D640QlNVWRHrAlCeZA0aw3W5TGUUL199sGO8Rg0Ew4PyTFReek2ogfesAZ0f
+         /9zKy6CsSJDOe7vqxxRNl7IBxDDYepJJkVmm77pUlaYFiPC/hDLDPoT5Ub0jRQvocfZg
+         uakA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=gJpUpfYLbWgWjOwgXjGO+9lnopmpvExo4+EzC9HEZTY=;
-        b=VZK6sTwo1VbeYywkK/KbxdC2GnidrKvhx2biUFKS9TLp7oxsci93UOAnSvjbOJ/CwS
-         zvuo6t/PIOKoFyzgtrR46rOgRqFA76RPiyb8gxEqsKwBWLNNVgwAC1O2xp1jtJZBhXiM
-         +SPlUURLW8PQS5TIFOUGTeo1U2MH3tcNpTmtqp26zmBEkqjnANozi1BrGx3B5aGtClGa
-         lAy1+UNfei4tHWDqDFBDsbe+U/cicue1qE0t9oBIe7fFDNldS+B+yVq9Ziy33eChWsB+
-         wMdgQZCWL0AQWJvlmmciL+6PFm3Stcc+KW7kMY6SceTLtrpKPXzFKtTmvR3v5R+KVs5e
-         Fg+w==
-X-Gm-Message-State: ACgBeo3G45o1Fq13sC1lB3+vCU/+PQ3OEC7n9YK1h601pdYp9VX+4XAt
-        hsEqoaotmzq1UFaHtHaHp5SHEre4ti4w
-X-Google-Smtp-Source: AA6agR4xDcMfnB3k6eIsa+YSBZau3gw42uQA+UFZp9uzUXHPo8lYPYIQ1NrBgvJdmk8BPuBm/TWyurtIPhKV
+        bh=envuPbzzq2H54VKr3RstW6kg8N0kUvXDq8KS/IJYJi4=;
+        b=rR23rwr9rlE0uNcyNjw7k0ry+9MG54LsgrVqcOD8crcQm5UQsTHmpSzNgbDzNZZIUr
+         2WBdT+5gcof/Sv98CqhySpE+mCYyQcW5vfgLgYG+pHfrtten5jppzL5gZRQhmljkc8wD
+         AyQnHf9sT5Yqzo0a3Cbbdxhgd8dSdXI2gTJD6cl6l5ZJKKgOkWzOF00W8kUwhGd76xIh
+         m0UNZ0cUCtikHjdMSbmaI/c3ycOrO9iGu/FvIMNyGtJtJzVw3anEjUXQWaKisD3V5KIy
+         N/hqViMAbQzuYCx/C3pS1tM3DZ7az8lIezsXNhY+R2StZslcMTCLR9qlgNzVAncv38VN
+         mwgA==
+X-Gm-Message-State: ACgBeo3pjd/yKwVEyEDUnuOkTJrcS5qTYah+YIqJcgA3VfcMPZKVb0Q2
+        8GqEC2HDYM8R7FneePiepbzjpNTYFCCa
+X-Google-Smtp-Source: AA6agR4cBEhcuit+eTvxeDSrr/fqU2sZZsNPKXEiBrGn3UWxvMJCZdiwO7Liknsg7sbmU0z0rRHmeY40o8Kh
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:524b:47b4:2aeb:1b49])
- (user=irogers job=sendgmr) by 2002:a05:6902:70c:b0:670:bb85:766e with SMTP id
- k12-20020a056902070c00b00670bb85766emr1640653ybt.428.1659080644298; Fri, 29
- Jul 2022 00:44:04 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 00:43:35 -0700
+ (user=irogers job=sendgmr) by 2002:a25:c1c6:0:b0:66f:5acc:7fb8 with SMTP id
+ r189-20020a25c1c6000000b0066f5acc7fb8mr1570670ybf.634.1659080647103; Fri, 29
+ Jul 2022 00:44:07 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 00:43:36 -0700
 In-Reply-To: <20220729074351.138260-1-irogers@google.com>
-Message-Id: <20220729074351.138260-2-irogers@google.com>
+Message-Id: <20220729074351.138260-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20220729074351.138260-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [PATCH v3 01/17] perf jevents: Clean up pytype warnings
+Subject: [PATCH v3 02/17] perf jevents: Simplify generation of C-string
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
         James Clark <james.clark@arm.com>,
@@ -85,72 +85,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Improve type hints to clean up pytype warnings.
+Previous implementation wanted variable order and '(null)' string output
+to match the C implementation. The '(null)' string output was a
+quirk/bug and so there is no need to carry it forward.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/jevents.py | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ tools/perf/pmu-events/jevents.py | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 83e0dcbeac9a..5b72048d50da 100755
+index 5b72048d50da..cdfa4e0e7557 100755
 --- a/tools/perf/pmu-events/jevents.py
 +++ b/tools/perf/pmu-events/jevents.py
-@@ -6,8 +6,7 @@ import csv
- import json
- import os
- import sys
--from typing import Callable
--from typing import Sequence
-+from typing import (Callable, Optional, Sequence)
+@@ -203,7 +203,7 @@ class JsonEvent:
+     """Representation of the event as a C struct initializer."""
  
- # Global command line arguments.
- _args = None
-@@ -57,7 +56,7 @@ class JsonEvent:
-                                        '. '), '.').replace('\n', '\\n').replace(
-                                            '\"', '\\"').replace('\r', '\\r')
+     def attr_string(attr: str, value: str) -> str:
+-      return '\t.%s = \"%s\",\n' % (attr, value)
++      return f'\t.{attr} = \"{value}\",\n'
  
--    def convert_aggr_mode(aggr_mode: str) -> str:
-+    def convert_aggr_mode(aggr_mode: str) -> Optional[str]:
-       """Returns the aggr_mode_class enum value associated with the JSON string."""
-       if not aggr_mode:
-         return None
-@@ -67,7 +66,7 @@ class JsonEvent:
-       }
-       return aggr_mode_to_enum[aggr_mode]
+     def str_if_present(self, attr: str) -> str:
+       if not getattr(self, attr):
+@@ -211,17 +211,11 @@ class JsonEvent:
+       return attr_string(attr, getattr(self, attr))
  
--    def lookup_msr(num: str) -> str:
-+    def lookup_msr(num: str) -> Optional[str]:
-       """Converts the msr number, or first in a list to the appropriate event field."""
-       if not num:
-         return None
-@@ -79,7 +78,7 @@ class JsonEvent:
-       }
-       return msrmap[int(num.split(',', 1)[0], 0)]
- 
--    def real_event(name: str, event: str) -> str:
-+    def real_event(name: str, event: str) -> Optional[str]:
-       """Convert well known event names to an event string otherwise use the event argument."""
-       fixed = {
-           'inst_retired.any': 'event=0xc0,period=2000003',
-@@ -95,7 +94,7 @@ class JsonEvent:
-         return fixed[name.lower()]
-       return event
- 
--    def unit_to_pmu(unit: str) -> str:
-+    def unit_to_pmu(unit: str) -> Optional[str]:
-       """Convert a JSON Unit to Linux PMU name."""
-       if not unit:
-         return None
-@@ -154,7 +153,7 @@ class JsonEvent:
-     if self.metric_expr:
-       self.metric_expr = self.metric_expr.replace('\\', '\\\\')
-     arch_std = jd.get('ArchStdEvent')
--    if precise and self.desc and not '(Precise Event)' in self.desc:
-+    if precise and self.desc and '(Precise Event)' not in self.desc:
-       extra_desc += ' (Must be precise)' if precise == '2' else (' (Precise '
-                                                                  'event)')
-     event = f'config={llx(configcode)}' if configcode is not None else f'event={llx(eventcode)}'
+     s = '{\n'
+-    for attr in ['name', 'event']:
+-      s += str_if_present(self, attr)
+-    if self.desc is not None:
+-      s += attr_string('desc', self.desc)
+-    else:
+-      s += attr_string('desc', '(null)')
+-    s += str_if_present(self, 'compat')
+     s += f'\t.topic = "{topic_local}",\n'
+     for attr in [
+-        'long_desc', 'pmu', 'unit', 'perpkg', 'aggr_mode', 'metric_expr',
+-        'metric_name', 'metric_group', 'deprecated', 'metric_constraint'
++        'aggr_mode', 'compat', 'deprecated', 'desc', 'event', 'long_desc',
++        'metric_constraint', 'metric_expr', 'metric_group', 'metric_name',
++        'name', 'perpkg', 'pmu', 'unit'
+     ]:
+       s += str_if_present(self, attr)
+     s += '},\n'
 -- 
 2.37.1.455.g008518b4e5-goog
 

@@ -2,294 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E610158575B
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08358585762
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbiG2Xc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 19:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S239719AbiG2Xl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 19:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiG2XcZ (ORCPT
+        with ESMTP id S231683AbiG2XlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 19:32:25 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BA631DCC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 16:32:24 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id m7-20020a056e021c2700b002ddc7d2d529so3542126ilh.9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 16:32:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=I8Ob+O+PNrOlj9GfENzUL+MK99llxYcgTACfwbVdlDc=;
-        b=QfTETMKCTH7JM9ja6cgQWswS6gQi5lshYbBhc+PsYtHHTrHt39biks98Rexy1OqN9a
-         pJsJQa+wBp6mtyPtlBEi2ibxHgWRQpaebjwrCVWrMIkRPKiTgZmJEny0zAnsSj7onelh
-         u1Z1r1bc3u0YYB6vIPOWEU3Z1eeX3ScWUVt3RLPmb3CiDP3zkLmwKYJahxEF+ul7zJyc
-         DNMwT6RKe45SyK8drHpWOwZ33SzkGbvgoJ8+4vHDOR3PY0QIhmiAG+X7OlJdu9tdpomW
-         Nntao1Hx5XI1mLJKmNGWGppwJAPZIeM8Y2oBx6spm0fi+n74KldmLhWy/yyusqSHij5y
-         afeA==
-X-Gm-Message-State: AJIora8TnsPZiDr4SFRGvR3ZfDRjndhGNe+VO33G6BZ6XS2ZI90DMTzF
-        cYxf1VsKBqFOcllDKaS0BELhXqdBvnP1Yew5Anv01P55okgy
-X-Google-Smtp-Source: AGRyM1toAajZrHrmv+exMo73Bd40szZlEVAzG1lYwFrJ4muY4skqDfYUhZDxVEeEucabB37ij7BqQ3TRwJWrx6+9BVoovDah8cqv
+        Fri, 29 Jul 2022 19:41:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E65474349;
+        Fri, 29 Jul 2022 16:41:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11A29B82A07;
+        Fri, 29 Jul 2022 23:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1F9C433D7;
+        Fri, 29 Jul 2022 23:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659138081;
+        bh=4+EkarCy89gK1+2w7AQftCu8+S5fGMb83z7dEUIiXOE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=GOZWVzk7d3J6nYjVSRz85NkTzdsL6jKyMZUilc9VqjdvCxKp2asJ9swXC7v6c2aUG
+         TFVUv989BaI2SbUoKdqN1h5Lu4uWz1v2O4UYZyMIj/MkN2ZXQfioqAdQ4YCC3jde7f
+         KHmpNY9al8F3CxJtCaNR0gIMxoGgE2D8AgFQmb9RTmT/1SN83FmJwsP7wnIBnQtYcM
+         lqIDPSrw5gjsM1wcDf1Qw0WUB2xzKK+JStxtOeMF8oJtBFHGY8BKo9hQtJ8lADzyuJ
+         B+fnHDmRi4wCVWQuF1z7Zexou7RWP27IKr8obtOyY7lqF9O/2TcGVOB6ouiAPZoqkt
+         QrSOhfsc2LlZQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:35a8:b0:341:64c4:8c59 with SMTP id
- v40-20020a05663835a800b0034164c48c59mr2228049jal.175.1659137543624; Fri, 29
- Jul 2022 16:32:23 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 16:32:23 -0700
-In-Reply-To: <000000000000921fd405db62096a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ebdf3505e4fa0f84@google.com>
-Subject: Re: [syzbot] possible deadlock in throtl_pending_timer_fn
-From:   syzbot <syzbot+934ebb67352c8a490bf3@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ming.lei@redhat.com, syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <192c5f16-8415-dfa1-39d2-8b404553ecd7@linaro.org>
+References: <20220629225331.357308-1-marijn.suijten@somainline.org> <192c5f16-8415-dfa1-39d2-8b404553ecd7@linaro.org>
+Subject: Re: [PATCH v3 00/11] drm/msm/dsi_phy: Replace parent names with clk_hw pointers
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Date:   Fri, 29 Jul 2022 16:41:19 -0700
+User-Agent: alot/0.10
+Message-Id: <20220729234121.9F1F9C433D7@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Quoting Dmitry Baryshkov (2022-07-14 03:19:12)
+> On 30/06/2022 01:53, Marijn Suijten wrote:
+> > Marijn Suijten (11):
+> >    clk: divider: Introduce devm_clk_hw_register_divider_parent_hw()
+> >    clk: mux: Introduce devm_clk_hw_register_mux_parent_hws()
+> >    clk: fixed-factor: Introduce *clk_hw_register_fixed_factor_parent_hw=
+()
+>=20
+> Stephen, do we stand a chance of landing patches 1-3 into 5.20? We would =
 
-HEAD commit:    cb71b93c2dc3 Add linux-next specific files for 20220628
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=154438f2080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=934ebb67352c8a490bf3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17713dee080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d24952080000
+> like to merge the series into 5.21 through the msm-next. Landing clk=20
+> patches in 5.20 would save us from using immutable branches, etc.
+>=20
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+934ebb67352c8a490bf3@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-5.19.0-rc4-next-20220628-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor358/3597 is trying to acquire lock:
-ffff888146f83aa0 (&q->queue_lock){..-.}-{2:2}, at: spin_lock_irq include/linux/spinlock.h:385 [inline]
-ffff888146f83aa0 (&q->queue_lock){..-.}-{2:2}, at: throtl_pending_timer_fn+0xf7/0x1690 block/blk-throttle.c:1152
-
-but task is already holding lock:
-ffffc900001e0d70 ((&sq->pending_timer)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:31 [inline]
-ffffc900001e0d70 ((&sq->pending_timer)){+.-.}-{0:0}, at: call_timer_fn+0xd5/0x6b0 kernel/time/timer.c:1464
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 ((&sq->pending_timer)){+.-.}-{0:0}:
-       del_timer_sync+0x5b/0x1b0 kernel/time/timer.c:1417
-       throtl_pd_free+0x15/0x40 block/blk-throttle.c:500
-       blkcg_deactivate_policy block/blk-cgroup.c:1520 [inline]
-       blkcg_deactivate_policy+0x2d2/0x4e0 block/blk-cgroup.c:1498
-       blk_throtl_exit+0x8a/0x1a0 block/blk-throttle.c:2336
-       blkcg_init_queue+0x19b/0x620 block/blk-cgroup.c:1301
-       __alloc_disk_node+0x260/0x610 block/genhd.c:1365
-       __blk_mq_alloc_disk+0x133/0x1c0 block/blk-mq.c:3927
-       loop_add+0x3e2/0xaf0 drivers/block/loop.c:1978
-       loop_control_ioctl+0x133/0x540 drivers/block/loop.c:2151
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
--> #1 (&blkcg->lock){....}-{2:2}:
-       __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-       _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
-       spin_lock include/linux/spinlock.h:360 [inline]
-       blkg_create+0x45e/0x1000 block/blk-cgroup.c:344
-       blkcg_init_queue+0xb2/0x620 block/blk-cgroup.c:1282
-       __alloc_disk_node+0x260/0x610 block/genhd.c:1365
-       __blk_alloc_disk+0x35/0x70 block/genhd.c:1405
-       brd_alloc.part.0+0x27f/0x7a0 drivers/block/brd.c:391
-       brd_alloc drivers/block/brd.c:374 [inline]
-       brd_init+0x1b8/0x24b drivers/block/brd.c:477
-       do_one_initcall+0xfe/0x650 init/main.c:1300
-       do_initcall_level init/main.c:1375 [inline]
-       do_initcalls init/main.c:1391 [inline]
-       do_basic_setup init/main.c:1410 [inline]
-       kernel_init_freeable+0x6b1/0x73a init/main.c:1617
-       kernel_init+0x1a/0x1d0 init/main.c:1506
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
--> #0 (&q->queue_lock){..-.}-{2:2}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
-       lock_acquire kernel/locking/lockdep.c:5665 [inline]
-       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
-       __raw_spin_lock_irq include/linux/spinlock_api_smp.h:119 [inline]
-       _raw_spin_lock_irq+0x32/0x50 kernel/locking/spinlock.c:170
-       spin_lock_irq include/linux/spinlock.h:385 [inline]
-       throtl_pending_timer_fn+0xf7/0x1690 block/blk-throttle.c:1152
-       call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
-       expire_timers kernel/time/timer.c:1519 [inline]
-       __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
-       __run_timers kernel/time/timer.c:1768 [inline]
-       run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
-       __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
-       invoke_softirq kernel/softirq.c:445 [inline]
-       __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
-       irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
-       sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1106
-       asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
-       lock_acquire+0x1ef/0x570 kernel/locking/lockdep.c:5633
-       __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-       _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
-       spin_lock include/linux/spinlock.h:360 [inline]
-       new_inode_pseudo fs/inode.c:1022 [inline]
-       new_inode+0x48/0x270 fs/inode.c:1047
-       debugfs_get_inode+0x1a/0x130 fs/debugfs/inode.c:72
-       debugfs_create_dir+0xdc/0x4d0 fs/debugfs/inode.c:578
-       bdi_debug_register mm/backing-dev.c:112 [inline]
-       bdi_register_va.part.0+0x22d/0x800 mm/backing-dev.c:880
-       bdi_register_va mm/backing-dev.c:908 [inline]
-       bdi_register+0x12a/0x140 mm/backing-dev.c:905
-       device_add_disk+0x83c/0xe20 block/genhd.c:513
-       add_disk include/linux/blkdev.h:768 [inline]
-       loop_add+0x884/0xaf0 drivers/block/loop.c:2031
-       loop_control_ioctl+0x133/0x540 drivers/block/loop.c:2151
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-other info that might help us debug this:
-
-Chain exists of:
-  &q->queue_lock --> &blkcg->lock --> (&sq->pending_timer)
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock((&sq->pending_timer));
-                               lock(&blkcg->lock);
-                               lock((&sq->pending_timer));
-  lock(&q->queue_lock);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor358/3597:
- #0: ffff888140c48b70 (&sb->s_type->i_mutex_key#3){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:761 [inline]
- #0: ffff888140c48b70 (&sb->s_type->i_mutex_key#3){+.+.}-{3:3}, at: start_creating.part.0+0xb2/0x280 fs/debugfs/inode.c:348
- #1: ffff8880761cf340 (&sb->s_type->i_lock_key#7){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
- #1: ffff8880761cf340 (&sb->s_type->i_lock_key#7){+.+.}-{2:2}, at: new_inode_pseudo fs/inode.c:1022 [inline]
- #1: ffff8880761cf340 (&sb->s_type->i_lock_key#7){+.+.}-{2:2}, at: new_inode+0x48/0x270 fs/inode.c:1047
- #2: ffffc900001e0d70 ((&sq->pending_timer)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:31 [inline]
- #2: ffffc900001e0d70 ((&sq->pending_timer)){+.-.}-{0:0}, at: call_timer_fn+0xd5/0x6b0 kernel/time/timer.c:1464
-
-stack backtrace:
-CPU: 1 PID: 3597 Comm: syz-executor358 Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- __raw_spin_lock_irq include/linux/spinlock_api_smp.h:119 [inline]
- _raw_spin_lock_irq+0x32/0x50 kernel/locking/spinlock.c:170
- spin_lock_irq include/linux/spinlock.h:385 [inline]
- throtl_pending_timer_fn+0xf7/0x1690 block/blk-throttle.c:1152
- call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
- expire_timers kernel/time/timer.c:1519 [inline]
- __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
- __run_timers kernel/time/timer.c:1768 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
- invoke_softirq kernel/softirq.c:445 [inline]
- __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1106
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
-RIP: 0010:lock_acquire+0x1ef/0x570 kernel/locking/lockdep.c:5633
-Code: e7 a3 7e 83 f8 01 0f 85 e8 02 00 00 9c 58 f6 c4 02 0f 85 fb 02 00 00 48 83 7c 24 08 00 74 01 fb 48 b8 00 00 00 00 00 fc ff df <48> 01 c3 48 c7 03 00 00 00 00 48 c7 43 08 00 00 00 00 48 8b 84 24
-RSP: 0018:ffffc90002fffaa0 EFLAGS: 00000206
-RAX: dffffc0000000000 RBX: 1ffff920005fff56 RCX: ffffffff815e3c0e
-RDX: 1ffff11004088899 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 0000000000000001 R08: 0000000000000000 R09: ffffffff906a5967
-R10: fffffbfff20d4b2c R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: ffff8880761cf340 R15: 0000000000000000
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:360 [inline]
- new_inode_pseudo fs/inode.c:1022 [inline]
- new_inode+0x48/0x270 fs/inode.c:1047
- debugfs_get_inode+0x1a/0x130 fs/debugfs/inode.c:72
- debugfs_create_dir+0xdc/0x4d0 fs/debugfs/inode.c:578
- bdi_debug_register mm/backing-dev.c:112 [inline]
- bdi_register_va.part.0+0x22d/0x800 mm/backing-dev.c:880
- bdi_register_va mm/backing-dev.c:908 [inline]
- bdi_register+0x12a/0x140 mm/backing-dev.c:905
- device_add_disk+0x83c/0xe20 block/genhd.c:513
- add_disk include/linux/blkdev.h:768 [inline]
- loop_add+0x884/0xaf0 drivers/block/loop.c:2031
- loop_control_ioctl+0x133/0x540 drivers/block/loop.c:2151
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f92d80b4079
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcc0861258 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f92d80b4079
-RDX: 0000000000000000 RSI: 0000000000004c80 RDI: 0000000000000003
-RBP: 00007ffcc0861270 R08: 0000000000000002 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	e7 a3                	out    %eax,$0xa3
-   2:	7e 83                	jle    0xffffff87
-   4:	f8                   	clc
-   5:	01 0f                	add    %ecx,(%rdi)
-   7:	85 e8                	test   %ebp,%eax
-   9:	02 00                	add    (%rax),%al
-   b:	00 9c 58 f6 c4 02 0f 	add    %bl,0xf02c4f6(%rax,%rbx,2)
-  12:	85 fb                	test   %edi,%ebx
-  14:	02 00                	add    (%rax),%al
-  16:	00 48 83             	add    %cl,-0x7d(%rax)
-  19:	7c 24                	jl     0x3f
-  1b:	08 00                	or     %al,(%rax)
-  1d:	74 01                	je     0x20
-  1f:	fb                   	sti
-  20:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  27:	fc ff df
-* 2a:	48 01 c3             	add    %rax,%rbx <-- trapping instruction
-  2d:	48 c7 03 00 00 00 00 	movq   $0x0,(%rbx)
-  34:	48 c7 43 08 00 00 00 	movq   $0x0,0x8(%rbx)
-  3b:	00
-  3c:	48                   	rex.W
-  3d:	8b                   	.byte 0x8b
-  3e:	84                   	.byte 0x84
-  3f:	24                   	.byte 0x24
-
+Sure I can land the first three patches now for 5.20

@@ -2,96 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96FA5854D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761EF5854DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238463AbiG2R7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S238481AbiG2SAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 14:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbiG2R7o (ORCPT
+        with ESMTP id S238468AbiG2SAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:59:44 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D7D89AA0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:59:44 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a7-20020a17090a008700b001f325db8b90so4525069pja.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc;
-        bh=/ENQqPLRoJRbMVkX1wmQ6qae0JX0xPSFKgibdKp4RAs=;
-        b=SH/B04hsFCmdpKcsyBYcqXgZl2Wr0HD0iKMyOb2J4hz+YsNfHUJzoLG0qMeLQ0PD3N
-         xFs+37LTkgg5PqBWZ4UkrLp7+WcYkLvHaHZ7aesOSxw1o6SZZ2JNXxhFnanPry1o0AUF
-         KncJTaJH2hC74Pzxmnb+9+gMDE6j2dNnfTNo4qLW4AA4if/KRWVLIyFnsW1P30Vo9JNS
-         pPutWi1E7ULqZ5BLpJjmc93M0nctsbqjPW7qKTe3FmMcT3DGSwxlPjuNa19NQADkvS/N
-         bII1whd1DQf/PQClvxbWRndA5ORfFBjb3BPJHiOGNthAKRouCWLjOA9QtGWXbYIGYJvB
-         NtUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc;
-        bh=/ENQqPLRoJRbMVkX1wmQ6qae0JX0xPSFKgibdKp4RAs=;
-        b=HoSiTk4GUftj7h2Ug1dksDrgzIBdM/Xy3bb5z8JsXmnIj/D6OKfjlTGjdi/JxYkbD+
-         /2O/z/2CY/4jvuJR0s03jglU6PqXcM5VnzQImEgiitc5RkPp14lW5k3RbtkQRUdi3oTB
-         VfDDiELKM8vLp6+rqaRqM/S8dnz5yMquo+juzo/Eega0Pmg/N3nxkOtwYVrU12nDaeSV
-         +0iCzIEBpoOyqu8fRnJWcMJRI7tqtxiSwfi6Fis4o1MsmygPEsatQNxKWLjCc5wsWHLs
-         FmA7voWJUjG1jYVXg6oGXZvmxkhS0ZQWvzbVV+81H7OwW9M/e1aYSQjRYW5WknB7wesg
-         VoTg==
-X-Gm-Message-State: ACgBeo07tZGoYGwteounFWp6L2EHc/MCZZjW8KGfs/zk6KuAhDwHxrl1
-        SjP0PwEJLyuyiETK08G14vk=
-X-Google-Smtp-Source: AA6agR4ZNrj5L0AXfPUftArB5o85fgtf6hImcDDlQ0fqoOLa1eqD6dBIoD3j3roEGVP0erQrkzkpyg==
-X-Received: by 2002:a17:902:bd86:b0:16d:b0eb:974b with SMTP id q6-20020a170902bd8600b0016db0eb974bmr4988732pls.84.1659117583424;
-        Fri, 29 Jul 2022 10:59:43 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:df80])
-        by smtp.gmail.com with ESMTPSA id q17-20020aa78431000000b0052badc0f3d7sm3214490pfn.50.2022.07.29.10.59.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 10:59:42 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 29 Jul 2022 07:59:40 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: [GIT PULL] workqueue fixes for 5.19-rc8
-Message-ID: <YuQgDORbY8eFIJU1@slm.duckdns.org>
+        Fri, 29 Jul 2022 14:00:02 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE4689AA0;
+        Fri, 29 Jul 2022 11:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659117601; x=1690653601;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mXZW/CQJ/ErcFEYDlw85Mljff6yNsGMgn0EWXI0B0DM=;
+  b=DDKbsZJ2+x1h7vrw2QhLdHgQ1iisyJIzRuUw0gP2xWn2rWyLfGRweH6l
+   uDs8/6tGK9g0Jy96Vt7UUyfus8CyXTfIL7/tIpt49pVEAUuhRMMHLsIHb
+   UlKMpjDWiNQ0OLaUVJY2WdUuSvAw3FbtF42z5ITdCR0MleNHzcU7dit9J
+   WZ023jrjgx18fWCs+4ezzyQ30Pj0r2Rltr19+8dDXrLqm2fX1OZ4K09aK
+   rYKKeDhVBXg2Ff9tVHq/YAriqYd9OtfqToeyYo4jVqiXyrttGHRPuBDCK
+   JU5K6mGPEwyHQAKrX+Euv7jy7E/UjZI//foaPMdjOHQKjAovgQwyMxo/K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="288831034"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="288831034"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 11:00:01 -0700
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="928821579"
+Received: from aahmedsi-mobl.amr.corp.intel.com (HELO desk) ([10.209.118.55])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 11:00:00 -0700
+Date:   Fri, 29 Jul 2022 10:59:59 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Message-ID: <20220729175959.w7gd5z7dsbxrnydn@desk>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <f173a7c0-b4f8-17f3-a65d-e581fed32368@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <f173a7c0-b4f8-17f3-a65d-e581fed32368@intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 8bee9dd953b69c634d1c9a3241a8b357469ad4aa:
+On Thu, Jul 28, 2022 at 12:08:39PM -0700, Dave Hansen wrote:
+> On 7/14/22 18:30, Pawan Gupta wrote:
+> > Older CPUs beyond its Servicing period are not listed in the affected
+> > processor list for MMIO Stale Data vulnerabilities. These CPUs currently
+> > report "Not affected" in sysfs, which may not be correct.
+> 
+> I'd kinda like to remove the talk about the "servicing period" in this
+> patch.  First, it's a moving target.  CPUs can move in and out of their
+> servicing period as Intel changes its mind, or simply as time passes.
+> 
+> Intel could also totally choose to report a CPU as vulnerable *AND* have
+> it be outside its service period.  Or, some good Samaritan community
+> member might be able to test a crusty old CPU and determine if it's
+> vulnerable.
+> 
+> > diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> > index 9393c50b5afc..55524e0798da 100644
+> > --- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> > +++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> > @@ -230,6 +230,9 @@ The possible values in this file are:
+> >       * - 'Mitigation: Clear CPU buffers'
+> >         - The processor is vulnerable and the CPU buffer clearing mitigation is
+> >           enabled.
+> > +     * - 'Unknown: CPU is beyond its Servicing period'
+> > +       - The processor vulnerability status is unknown because it is
+> > +	 out of Servicing period. Mitigation is not attempted.
+> 
+> Unknown: Processor vendor did not provide vulnerability status.
+> 
+> >  If the processor is vulnerable then the following information is appended to
+> >  the above information:
+> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> > index 0dd04713434b..dd6e78d370bc 100644
+> > --- a/arch/x86/kernel/cpu/bugs.c
+> > +++ b/arch/x86/kernel/cpu/bugs.c
+> > @@ -416,6 +416,7 @@ enum mmio_mitigations {
+> >  	MMIO_MITIGATION_OFF,
+> >  	MMIO_MITIGATION_UCODE_NEEDED,
+> >  	MMIO_MITIGATION_VERW,
+> > +	MMIO_MITIGATION_UNKNOWN,
+> >  };
+> >  
+> >  /* Default mitigation for Processor MMIO Stale Data vulnerabilities */
+> > @@ -426,12 +427,18 @@ static const char * const mmio_strings[] = {
+> >  	[MMIO_MITIGATION_OFF]		= "Vulnerable",
+> >  	[MMIO_MITIGATION_UCODE_NEEDED]	= "Vulnerable: Clear CPU buffers attempted, no microcode",
+> >  	[MMIO_MITIGATION_VERW]		= "Mitigation: Clear CPU buffers",
+> > +	[MMIO_MITIGATION_UNKNOWN]	= "Unknown: CPU is beyond its servicing period",
+> >  };
+> 
+> Let's just say:
+> 
+> 	Unknown: no mitigations
+> 
+> or even just: "Unknown"
+> 
+> >  static void __init mmio_select_mitigation(void)
+> >  {
+> >  	u64 ia32_cap;
+> >  
+> > +	if (mmio_stale_data_unknown()) {
+> > +		mmio_mitigation = MMIO_MITIGATION_UNKNOWN;
+> > +		return;
+> > +	}
+> > +
+> >  	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
+> >  	    cpu_mitigations_off()) {
+> >  		mmio_mitigation = MMIO_MITIGATION_OFF;
+> > @@ -1638,6 +1645,7 @@ void cpu_bugs_smt_update(void)
+> >  			pr_warn_once(MMIO_MSG_SMT);
+> >  		break;
+> >  	case MMIO_MITIGATION_OFF:
+> > +	case MMIO_MITIGATION_UNKNOWN:
+> >  		break;
+> >  	}
+> >  
+> > @@ -2235,7 +2243,8 @@ static ssize_t tsx_async_abort_show_state(char *buf)
+> >  
+> >  static ssize_t mmio_stale_data_show_state(char *buf)
+> >  {
+> > -	if (mmio_mitigation == MMIO_MITIGATION_OFF)
+> > +	if (mmio_mitigation == MMIO_MITIGATION_OFF ||
+> > +	    mmio_mitigation == MMIO_MITIGATION_UNKNOWN)
+> >  		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
+> >  
+> >  	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
+> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> > index 736262a76a12..82088410870e 100644
+> > --- a/arch/x86/kernel/cpu/common.c
+> > +++ b/arch/x86/kernel/cpu/common.c
+> > @@ -1286,6 +1286,22 @@ static bool arch_cap_mmio_immune(u64 ia32_cap)
+> >  		ia32_cap & ARCH_CAP_SBDR_SSDP_NO);
+> >  }
+> >  
+> > +bool __init mmio_stale_data_unknown(void)
+> > +{
+> > +	u64 ia32_cap = x86_read_arch_cap_msr();
+> > +
+> > +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+> > +		return false;
+> 
+> Let's say why Intel is the special snowflake.  Maybe:
+> 
+> 	/*
+> 	 * Intel does not document vulnerability information for old
+> 	 * CPUs.  This means that only Intel CPUs can have unknown
+> 	 * vulnerability state.
+> 	 */
+> 
+> > +	/*
+> > +	 * CPU vulnerability is unknown when, hardware doesn't set the
+> > +	 * immunity bits and CPU is not in the known affected list.
+> > +	 */
+> > +	if (!cpu_matches(cpu_vuln_blacklist, MMIO) &&
+> > +	    !arch_cap_mmio_immune(ia32_cap))
+> > +		return true;
+> > +	return false;
+> > +}
+> > +
+> >  static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+> >  {
+> >  	u64 ia32_cap = x86_read_arch_cap_msr();
+> > @@ -1349,14 +1365,8 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+> >  	    cpu_matches(cpu_vuln_blacklist, SRBDS | MMIO_SBDS))
+> >  		    setup_force_cpu_bug(X86_BUG_SRBDS);
+> >  
+> > -	/*
+> > -	 * Processor MMIO Stale Data bug enumeration
+> > -	 *
+> > -	 * Affected CPU list is generally enough to enumerate the vulnerability,
+> > -	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
+> > -	 * not want the guest to enumerate the bug.
+> > -	 */
+> > -	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
+> > +	 /* Processor MMIO Stale Data bug enumeration */
+> > +	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
+> >  	    !arch_cap_mmio_immune(ia32_cap))
+> >  		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
+> 
+> Yeah, this is all looking a little clunky.
+> 
+> Maybe we just need a third state of cpu_has_bug() for all this and we
+> shouldn't try cramming it in the MMIO-specific code and diluting the
+> specificity of boot_cpu_has_bug().
+> 
+> Then the selection logic becomes simple:
+> 
+> 	if (!arch_cap_mmio_immune(ia32_cap))) {
+> 		if (cpu_matches(cpu_vuln_blacklist, MMIO))
+> 			setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
+> 		else if (x86_vendor == X86_VENDOR_INTEL)
+> 			setup_force_unknown_bug(X86_BUG_MMIO...);
+> 	}
+> 
+> ... and then spit out the "Unknown" in the common code, just like the
+> treatment "Not affected" gets.
+> 
+> static ssize_t cpu_show_common(...)
+> {
+>         if (!boot_cpu_has_bug(bug))
+>                 return sprintf(buf, "Not affected\n");
+> +
+> +       if (!boot_cpu_unknown_bug(bug))
+> +               return sprintf(buf, "Unknown\n");
+> 
+> Thoughts?
 
-  workqueue: Switch to new kerneldoc syntax for named variable macro argument (2022-06-11 14:16:42 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-5.19-rc8-fixes
-
-for you to fetch changes up to 46a4d679ef88285ea17c3e1e4fed330be2044f21:
-
-  workqueue: Avoid a false warning in unbind_workers() (2022-07-29 07:49:02 -1000)
-
-----------------------------------------------------------------
-wq fixes for v5.19-rc8
-
-Just one commit to suppress a spurious warning added during the 5.19 cycle.
-
-----------------------------------------------------------------
-Lai Jiangshan (1):
-      workqueue: Avoid a false warning in unbind_workers()
-
- kernel/workqueue.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
--- 
-tejun
+Sounds good. Similar to this Borislav suggested to add
+X86_BUG_MMIO_UNKNOWN. I will see if I can combine both approaches.

@@ -2,235 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9B45853AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA1F5853B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237719AbiG2QmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 12:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
+        id S237405AbiG2Qme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 12:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238129AbiG2QmK (ORCPT
+        with ESMTP id S238037AbiG2QmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 12:42:10 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E1388F0F
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 09:41:40 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 986255C00BF;
-        Fri, 29 Jul 2022 12:41:39 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 29 Jul 2022 12:41:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1659112899; x=1659199299; bh=vwJQ7sD4dG
-        7A8X3sl4630p9ybNJbGIZPkCYHWDFRHOw=; b=nrQh9TATJ0OuMlig2AOr1ZntXY
-        KU4u61qMFVMlEBwNZ4IZZcc5MmGTz9EOcLvKr3kSzlrdHZXfF0P8d8WtjLrppS3k
-        PvgBE9jz0VEqnJBi2K9+z1Cl3/O69lXCwEXQW+zKYajT63PJHroXCFhQg8d6Jorb
-        rIQcFR5uNXqe8E8A8qKc1SwDSXwdr6S9tiI5JgbzmLyITAFJeFWNgw/N24wBfl7q
-        E9XhlD62gB6Gxs/lhHkjjfiKpijtmIMPoN08uOIXAb3BRZH6ZtFSRzEou0SaHCCi
-        CssmSeayqZ49dZkI7Tw+JlhQZ5NtaLllvavpr5B+2s+8i64NHjKlLWnisSkQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659112899; x=1659199299; bh=vwJQ7sD4dG7A8X3sl4630p9ybNJb
-        GIZPkCYHWDFRHOw=; b=vspUWQJZtY3/RMVDt3OwYtIZFUFyfUI0y/KyDGjjqo7s
-        v6XuTaLxcuw3bU+2p5M4666jwTAVvcVAIPgHEdEWdremwHGkHzvUKWlTqq8228wJ
-        VMWhfY33skzOver9P9k36SEct7mYuzEiUx53lhDK+wdYaUgpA3DebKepWNKtAIIV
-        uucp2awRnstfO0pVqgMa/4fsJyZPPLD1+lZpR+fU0NDp/iGFmlEAzg0WFD1RAdGP
-        I5aWrxTXj+lKqhPQ01CFu9V9ZU9MgNXT765qUctvRzQuvhu2mtwx/rESKrhu/GnG
-        FLBlQpUudD8l+dI1qQRp6xL8IdPE33C54J8Reip9yQ==
-X-ME-Sender: <xms:ww3kYt9nIZ_NZQkj-7yXIDhmxVEjy3lT25ITx0BMatv2SWHoEF7wEg>
-    <xme:ww3kYhuwFTBY8YgMbnJLIwvlsuHwassnPtzRKRGsD6BWNBgoRJnWORK95SfrpGRt1
-    TZBRuYC-sE6LFEUyww>
-X-ME-Received: <xmr:ww3kYrCVuK90gokBAUGueeKioFX53eU84Iln3c9-1PofaodJ7bch3e3h7XNkZg_AVcq5_tISYeE1HziFvMI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddujedguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
-    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:ww3kYhdIN4vbnHbTvJazERlLA8AMdkclpSR-AJxLgUc6zDD3S4crsA>
-    <xmx:ww3kYiMgxpTzUwDxt62LMntejyIGGl_qdM2he3BD1PkNgk5vSsyVnA>
-    <xmx:ww3kYjm9ZdQOoWNH8_r-ljnc1W2f_lWjFBiA0Zmn7HX9ItHz8Nw1ZQ>
-    <xmx:ww3kYpqcGi_8EgEjNqoOjPu0dDOqcyj9x6RSOxG3DLHNe4Tj0ovYsA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 29 Jul 2022 12:41:38 -0400 (EDT)
-Date:   Fri, 29 Jul 2022 18:41:36 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Subject: Re: [RFC PATCH] drm/edid: Make 144 Hz not preferred on Sharp
- LQ140M1JW46
-Message-ID: <20220729164136.opucqg64qz4ypmvo@penduick>
-References: <20220721152314.RFC.1.Ie333b3e4aff6e4a5b58c4aa805e030e561be8773@changeid>
- <269f2610-425b-f296-dcfc-89bdc2e1d587@quicinc.com>
- <CAD=FV=XSVXasU5PMR2kL0WQjQ458xDePuTGd1m14_v9JO5B6oA@mail.gmail.com>
- <CAF6AEGv_Vikf80v-7ccz90fvGPrk5pV1tOxRoWKxKHYuEW8=aA@mail.gmail.com>
- <5c8ca71c-5f0b-d5f5-9f16-e312dec0d01b@quicinc.com>
- <CAD=FV=UGYV1mZenDCRrbpC+gpE12-Uis7fm_=H3PeEjK=t36yA@mail.gmail.com>
- <20220729075118.ofnpk52tk4usm3n3@penduick>
- <CAD=FV=WUB68-DQ-pAFjGaG-kid33ve4Qc3iqb8OUh61xTBohmg@mail.gmail.com>
+        Fri, 29 Jul 2022 12:42:15 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B9E45066
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 09:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659112932; x=1690648932;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nAAmuEMRTOluKqezs5cXfmMpYvyr3ZN4FTsrdJtzU2c=;
+  b=dH4Hx0kgBajm6MpUXwstoCKfaXUACizY9DaflsQc0AWCM5Td8fS4T4gc
+   I9FSBcRjGRjDuSTgmqn9+cnE42P+niLH62sicY2JPMWO5jLzm7SgHZ7cx
+   OSmyqMqE3Y2cBA+C1YEmjnPo5WHmtPOyY2BvEoBLbIe4nKBXOWkmkYo3y
+   u7XP2KDmI3bgmKt6LfAzNf98bevtNbDKQwNe+LXYOhCKUWN7ZX7dgJ/Om
+   EdtZRVmU5qizRv4OM/IrimSdln8N/504ULuJ9bTVqx/qX2bxW4ZNDYF0n
+   rlBi2+ciG2sdpX9Wx5LouHJfSWa8FDZfq8kVuAWPcXIVbMh3qbjZsfa9u
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="288816562"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="288816562"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 09:42:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="743588403"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Jul 2022 09:42:11 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHT3y-000BsA-1n;
+        Fri, 29 Jul 2022 16:42:10 +0000
+Date:   Sat, 30 Jul 2022 00:41:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/vdso 8/8]
+ include/vdso/processor.h:10:10: fatal error: asm/vdso/processor.h: No such
+ file or directory
+Message-ID: <202207300010.uSYFJfOe-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nmnf5qri3rvyhvwr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=WUB68-DQ-pAFjGaG-kid33ve4Qc3iqb8OUh61xTBohmg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
+head:   02d56061c924adece19bdfad05ea4add32de4b63
+commit: 02d56061c924adece19bdfad05ea4add32de4b63 [8/8] random: implement getrandom() in vDSO
+config: arc-randconfig-r043-20220729 (https://download.01.org/0day-ci/archive/20220730/202207300010.uSYFJfOe-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/02d56061c924adece19bdfad05ea4add32de4b63
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
+        git checkout 02d56061c924adece19bdfad05ea4add32de4b63
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/char/
 
---nmnf5qri3rvyhvwr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Fri, Jul 29, 2022 at 07:50:20AM -0700, Doug Anderson wrote:
-> On Fri, Jul 29, 2022 at 12:51 AM Maxime Ripard <maxime@cerno.tech> wrote:
-> >
-> > On Thu, Jul 28, 2022 at 02:18:38PM -0700, Doug Anderson wrote:
-> > > Hi,
-> > >
-> > > On Thu, Jul 28, 2022 at 10:34 AM Abhinav Kumar
-> > > <quic_abhinavk@quicinc.com> wrote:
-> > > >
-> > > > Hi Rob and Doug
-> > > >
-> > > > On 7/22/2022 10:36 AM, Rob Clark wrote:
-> > > > > On Fri, Jul 22, 2022 at 9:48 AM Doug Anderson <dianders@chromium.=
-org> wrote:
-> > > > >>
-> > > > >> Hi,
-> > > > >>
-> > > > >> On Fri, Jul 22, 2022 at 9:37 AM Abhinav Kumar <quic_abhinavk@qui=
-cinc.com> wrote:
-> > > > >>>
-> > > > >>> + sankeerth
-> > > > >>>
-> > > > >>> Hi Doug
-> > > > >>>
-> > > > >>> On 7/21/2022 3:23 PM, Douglas Anderson wrote:
-> > > > >>>> The Sharp LQ140M1JW46 panel is on the Qualcomm sc7280 CRD refe=
-rence
-> > > > >>>> board. This panel supports 144 Hz and 60 Hz. In the EDID, the =
-144 Hz
-> > > > >>>> mode is listed first and thus is marked preferred. The EDID de=
-code I
-> > > > >>>> ran says:
-> > > > >>>>
-> > > > >>>>     First detailed timing includes the native pixel format and=
- preferred
-> > > > >>>>     refresh rate.
-> > > > >>>>
-> > > > >>>>     ...
-> > > > >>>>
-> > > > >>>>     Detailed Timing Descriptors:
-> > > > >>>>       DTD 1:  1920x1080  143.981 Hz  16:9   166.587 kHz  346.5=
-00 MHz
-> > > > >>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
-> > > > >>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
-> > > > >>>>       DTD 2:  1920x1080   59.990 Hz  16:9    69.409 kHz  144.3=
-70 MHz
-> > > > >>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
-> > > > >>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
-> > > > >>>>
-> > > > >>>> I'm proposing here that the above is actually a bug and that t=
-he 60 Hz
-> > > > >>>> mode really should be considered preferred by Linux.
-> > > >
-> > > > Its a bit tricky to say that this is a bug but I think we can certa=
-inly
-> > > > add here that for an internal display we would have ideally had the
-> > > > lower resolution first to indicate it as default.
-> > >
-> > > Yeah, it gets into the vagueness of the EDID spec in general. As far
-> > > as I can find it's really up to the monitor to decide by what means it
-> > > chooses the "preferred" refresh rate if the monitor can support many.
-> > > Some displays may decide that the normal rate is "preferred" and some
-> > > may decide that the high refresh rate is "preferred". Neither display
-> > > is "wrong" per say, but it's nice to have some consistency here and to
-> > > make it so that otherwise "dumb" userspace will get something
-> > > reasonable by default. I'll change it to say:
-> > >
-> > > While the EDID spec appears to allow a display to use any criteria for
-> > > picking which refresh mode is "preferred" or "optimal", that vagueness
-> > > is a bit annoying. From Linux's point of view let's choose the 60 Hz
-> > > one as the default.
-> >
-> > And if we start making that decision, it should be for all panels with a
-> > similar constraint, so most likely handled by the core, and the new
-> > policy properly documented.
-> >
-> > Doing that just for a single panel is weird.
->=20
-> Yeah, though having a "general policy" in the core can be problematic.
->=20
-> In general I think panel EDIDs are only trustworthy as far as you can
-> throw them. They are notorious for having wrong and incorrect
-> information, which is why the EDID quirk list exists to begin with.
-> Trying to change how we're going to interpret all EDIDs, even all
-> EDIDs for eDP panels, seems like it will break someone somewhere.
-> Maybe there are EDIDs out there that were only ever validated at the
-> higher refresh rate and they don't work / flicker / cause digitizer
-> noise at the lower refresh rate. Heck, we've seen eDP panel vendors
-> that can't even get their checksum correct, so I'm not sure I want to
-> make a global assertion that all panels validated their "secondary"
-> display mode.
->
-> In this particular case, we have validated that this particular Sharp
-> panel works fine at the lower refresh rate.
->=20
-> I would also note that, as far as I understand it, ODMs actually can
-> request different EDIDs from the panel vendors. In the past we have
-> been able to get panel vendors to change EDIDs. Thus for most panels
-> I'd expect that we would discover this early, change the EDID default,
-> and be done with it. The case here is a little unusual in that by the
-> time we got involved and started digging into this panel too many were
-> created and nobody wants to throw away those old panels. This is why
-> I'm treating it as a quirk/bug. Really: we should have updated the
-> EDID of the panel but we're unable to in this case.
+All errors (new ones prefixed by >>):
 
-You raise some good points, but most of the discussion around that patch
-were mostly around performances, power consumption and so on.
+   In file included from include/vdso/datapage.h:17,
+                    from drivers/char/random.c:62:
+>> include/vdso/processor.h:10:10: fatal error: asm/vdso/processor.h: No such file or directory
+      10 | #include <asm/vdso/processor.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
-This is very much a policy decision, and if there is some panel where
-the EDID reports 60Hz but is broken, then that panel should be the
-exception to the policy
 
-But doing it for a single panel is just odd
+vim +10 include/vdso/processor.h
 
-Maxime
+d8bb6993d871f5 Vincenzo Frascino 2020-03-20   9  
+d8bb6993d871f5 Vincenzo Frascino 2020-03-20 @10  #include <asm/vdso/processor.h>
+d8bb6993d871f5 Vincenzo Frascino 2020-03-20  11  
 
---nmnf5qri3rvyhvwr
-Content-Type: application/pgp-signature; name="signature.asc"
+:::::: The code at line 10 was first introduced by commit
+:::::: d8bb6993d871f5d3cd6d65d3772e4b1f4ef17380 common: Introduce processor.h
 
------BEGIN PGP SIGNATURE-----
+:::::: TO: Vincenzo Frascino <vincenzo.frascino@arm.com>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
-iHUEABMIAB0WIQTXEe0+DlZaRlgM8LOIQ8rmN6G3ywUCYuQNwAAKCRCIQ8rmN6G3
-y5K/AQDd8eMgde6zHk1UUtFFYseaBoCI45v37aTnSvYvhz5dGAD9HdDh4twH58Ei
-LYXUH5k7b/x3Tui590b7dKKqyxIT+9E=
-=5sio
------END PGP SIGNATURE-----
-
---nmnf5qri3rvyhvwr--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

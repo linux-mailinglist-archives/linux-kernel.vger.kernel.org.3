@@ -2,108 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF085856D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE34C5856D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238894AbiG2WVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S239330AbiG2WWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 18:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238561AbiG2WVC (ORCPT
+        with ESMTP id S238561AbiG2WWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:21:02 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3EC10570
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:21:01 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-32269d60830so64060167b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
-        bh=6d5jMCrauedgyT6F3RzrXl4yXsf77OwIiAgFmSDNs60=;
-        b=KND3DX2oNAnvBZSYAP9l0+wMQn4NM1c8v+cm6KmmOk5YgsenBcGER8LTTVidfdvBVz
-         wLmZgm7JgZaXR3MLfLW6nA3DhBoULSckK4/YBlGSuJp2OaKzrMH6NC3IOt5bi4ax/Sci
-         4JAUkA97QPjqcKhea/qNKO7v+OGDmrH48oXqmfSbGIAmhcjMvFOugl/tQyDhOe8GINE7
-         lfwiBMQbl54sXQlj80BUynK722Zbc4bHLiJDZXEpAZJ+LdjemqvPZX0yFkHSTQziHTmO
-         qOa489xnknNxYXeZy3x37/uU2HxZNSgvi5jmwe3bplgCIOUL2i3Hz2lJJK6ixPWYY4W+
-         +J4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=6d5jMCrauedgyT6F3RzrXl4yXsf77OwIiAgFmSDNs60=;
-        b=mZMBV8+0XJ3KIVxEwZaIYpmVOLKHFonAiMSXkgwTp34DriB/pwU580JfGscYTAr8+1
-         QLme6rRM8gZ2SwMltCfGUegTV885HJYr4xSrciGtrcAucCX2NtkvKHf7N8v4cvv542Km
-         KnVz2e+PX881Pg+vXUudDXJ3+1VNxBvh/bL822o2G9nVKbypF7N+iLa4eE6Fy/D7JlFR
-         PWQfugTY1j79wxlGrj9bPZtcL5Kv3xZi+mcA9IuTN4QMYqGpO2Ix9XsaH7Axmibctvvh
-         8pweLbEoyGd2QB3di/OnTsGdCyz0D1x4o/W/v7lsdMVTQeip+VfFQD6lozwWYH0LDcMC
-         1QCw==
-X-Gm-Message-State: ACgBeo1Z4pYY4cFhtVSH0ONIGoccwtXcn1gZUrMnvVmeRnhMleWAmMjJ
-        jYim80g/+8w6HVhG7iR9WcN8K9/nsfbqQeAmZ3E=
-X-Google-Smtp-Source: AA6agR7txTsTRXtBYKOmUw4MWDkbmdn1opjTDbXw9teYLPVNY6GsyqR8MBJkwCF/oBQCvHHq9G87ABE1sCj339GYlMg=
-X-Received: by 2002:a81:178d:0:b0:31f:5b19:6f1c with SMTP id
- 135-20020a81178d000000b0031f5b196f1cmr4844374ywx.116.1659133260155; Fri, 29
- Jul 2022 15:21:00 -0700 (PDT)
+        Fri, 29 Jul 2022 18:22:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3233F318;
+        Fri, 29 Jul 2022 15:22:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44D49B829DA;
+        Fri, 29 Jul 2022 22:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960F2C433C1;
+        Fri, 29 Jul 2022 22:22:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659133360;
+        bh=bOE0cFSfd9j0Ebec4rZcMchvAjKnySFjPVmPPm0v4SM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IBnQ9kguUzE0r+FypL9wCXYrfXepKex/VI76VfwXTyN8nhXho0sLaY7Q5pzNCkpY6
+         XHyPeQ0uu/En8bP9RQdZf6j0uGYoinTiwYE13v/kjE7c/Q3H8xDfggOyVsqJPPxqWs
+         NugTwjKjY/7x+821a08n1tSJS+007L9Tk20sU6+VE4YdmuFi4Me1+xyi6tTkYKxKpV
+         i+F6qqsgy71d8rh0XPFAT5GUGcNTOgYOqd3o9+K5+fmdcrkvikOCG+W/p/nUZU43Yl
+         zpOP/Ln3QrDpEcMGFbPOYncBeg26GB9WChyrqWplvKTxQyJ1dO1CJaMAMH2KB5qsl+
+         Hb9AQMD/iomXA==
+Date:   Fri, 29 Jul 2022 17:22:38 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        it+x86@molgen.mpg.de, Robert Dinse <nanook@eskimo.com>
+Subject: Re: acpi PNP0A03:00: fail to add MMCONFIG information, can't access
+ extended PCI configuration space under this bridge.
+Message-ID: <20220729222238.GA491273@bhelgaas>
 MIME-Version: 1.0
-Sender: mr.musa.ahmed7@gmail.com
-Received: by 2002:a05:7010:7208:b0:2e8:68d5:94de with HTTP; Fri, 29 Jul 2022
- 15:20:59 -0700 (PDT)
-From:   Aisha Al-Qaddafi <aisha.gdaff21@gmail.com>
-Date:   Fri, 29 Jul 2022 15:20:59 -0700
-X-Google-Sender-Auth: P55Cj0d5-sZnbG96jgBG9ZJOnUc
-Message-ID: <CAAz8YJ9rPAZC17nxjYNAkTQQr3gwu+BJ_A1OGyYW24PFJmCrNQ@mail.gmail.com>
-Subject: My Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MONEY_FRAUD_5,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:112f listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8907]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aisha.gdaff21[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mr.musa.ahmed7[at]gmail.com]
-        *  1.7 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f42e3f0f-2156-669a-e15e-51970b438ed4@molgen.mpg.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about the investment
-funds
+[+cc Robert]
+
+On Mon, Feb 15, 2021 at 05:53:51PM +0100, Paul Menzel wrote:
+> Dear Linux folks,
+> 
+> 
+> All the way up to QEMU emulator version 5.2.0 (Debian 1:5.2+dfsg-5) and
+> Linux 5.10.13, Linux logs the warning below:
+> 
+>     acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended
+> PCI configuration space under this bridge.
+> 
+> One way to reproduce it:
+> 
+>     qemu-system-x86_64 -enable-kvm -m 2G -hda /dev/shm/debian.img -kernel
+> /boot/vmlinuz-5.10.0-3-amd64 -initrd /boot/initrd.img-5.10.0-3-amd64 -append
+> root="/dev/sda1 console=ttyS0,115200" -serial stdio
+> 
+> Please find more details and the full log in the Bugzilla issue #211765 [1].
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> 
+> 
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=211765
+>      "[Bug 211765] acpi PNP0A03:00: fail to add MMCONFIG information, can't
+> access extended PCI configuration space under this bridge."
+
+Do you know whether qemu implements extended config space?  Extended
+config space is offsets 0x100-0xfff.  I think Linux only supports
+extended capabilities in that area (AER, VC, ACS, SR-IOV, etc).  Most
+of these are probably not of interest in a virtualized environment, so
+I wouldn't be surprised if qemu doesn't support them.
+
+Bjorn

@@ -2,305 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2115853A6
+	by mail.lfdr.de (Postfix) with ESMTP id 657ED5853A5
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237599AbiG2Qkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 12:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S238011AbiG2Qkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 12:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238020AbiG2QkH (ORCPT
+        with ESMTP id S237719AbiG2Qkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 12:40:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D68588F2E
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 09:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659112790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W4C8W7j5NPnrdc51G4S7kr3EYmKJKbvXbbULFwZwTJw=;
-        b=AIVPagwfIqfV9SaYPCM6FBxuakt9gGIeavdelQuHJJCiNWI4IoeFm5eog2rpGwplZmii9Y
-        FKIuJZXwX1O5egPhWTs8eaNE8MSsCwpdOUEtc3a/iuosaxCkaegzary3BuDAZ+vigz5KTW
-        s7xlhehR9PsPYcOw4dFeg1w4E5IgBJs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-4KoOxIzUM5uZbWW_z2vvLA-1; Fri, 29 Jul 2022 12:39:46 -0400
-X-MC-Unique: 4KoOxIzUM5uZbWW_z2vvLA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A308A3C0ED67;
-        Fri, 29 Jul 2022 16:39:45 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E328C2026D64;
-        Fri, 29 Jul 2022 16:39:44 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 2/2] afs: Fix access after dec in put functions
-From:   David Howells <dhowells@redhat.com>
-To:     linux-afs@lists.infradead.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>, dhowells@redhat.com,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 29 Jul 2022 17:39:44 +0100
-Message-ID: <165911278430.3745403.16526310736054780645.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165911277121.3745403.18238096564862303683.stgit@warthog.procyon.org.uk>
-References: <165911277121.3745403.18238096564862303683.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
-MIME-Version: 1.0
+        Fri, 29 Jul 2022 12:40:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6DF21E1D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 09:40:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659112830; x=1690648830;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=CYque/qqe8+sxkoN3DLojI44Tx36I/xTy+0UfACcqsM=;
+  b=AjzjmUO0Dz5Of4jL0WLtNu418m4dJGadPeFQnQfUg21YpGDy6ltuwt9x
+   k8j41Tn57OdH72eSWUEhqRQtk2v6sO00hRW9+fWeeahs9Ds7fTRim9Ije
+   scUyxFEjEGrbbSZmF7mSgPNxD1t4kon4/Du/7OTimnPvCsls7K4UMujMm
+   lnf2dXEBthMk/lfW/127UmLdSstw25wkn7yApFEcU4auz53Y0mdaD9dxD
+   wEUbH4u9FtOUJeJu/f4M6jWOy99hs8Dd0IPXQVainijiTkSeJ54I+YKRK
+   pRcT15qGm9FCUaAugzoYa46J8kXGrfb4TYuME3zXSs2GzTYW9i+isuAsG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="350508951"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="350508951"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 09:40:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="660306122"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Jul 2022 09:40:29 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Fri, 29 Jul 2022 09:40:29 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Fri, 29 Jul 2022 09:40:29 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Fri, 29 Jul 2022 09:40:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XCa6ZokproKq7gsM1/s+U1t0xAIqIS58et4UiTUIIVcKCVPcxHDUCdTOhu82PofwNbcGcdV7oUmLdncutBa3qRf3OmBNnawN6FDFRI6IYuR8Cb6AI7Jhvo7uplPMg+qOqmMZgvw7UFvm5mgwvR9uVaDnTFYXUEA1+HVBfEIlqza1spUoZcIordHZGrgSYwqYe2RPbMZOQn7AK/VOBVzRSRzj810ZySAsXJFDqmC2dpVPHM59XoCiENGfaIGiVSW18WAZcfMMtZHJ2ww8U5RdOHGw1yiVcb4yQxoPUpAHKmVbFEU+KQ+8G+ti5L1oCf4PEG33gQCgU22aRZ6MYU2bxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CYque/qqe8+sxkoN3DLojI44Tx36I/xTy+0UfACcqsM=;
+ b=WfScZZLwaDKJ68oSKBLCc55DNu9A8/SkBW0f3mTSNdqQyWeHourIc8X/MBihFbrDQQIN2iEiL7/j8vK+m7fhOFSW+ixVynB1NrAB6zxGH1JUipCKR9nZAmCAqqEtUz8+Jzgom6QnhqHAXKPnXDJ8KDA/kR7lGBX9+yGDoUTGJiQbxagOzQrwg2WhCqGxiw3C4n0410T1VbK9ceWKMhzmYqOozSlq635Jl1ZCJA9np1zMFTVPMHVpxQ0Lmalgx6zEGBwRLXgHLkH2oRQslqTUpfmFuwkUrgQmksLmoZqXdu+7ngd4eoZm+N2NZ4t+3BTDLcWfBeHI6gkY+D4kzGdMzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BY5PR11MB4182.namprd11.prod.outlook.com (2603:10b6:a03:183::10)
+ by DM6PR11MB3355.namprd11.prod.outlook.com (2603:10b6:5:5d::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.23; Fri, 29 Jul
+ 2022 16:40:27 +0000
+Received: from BY5PR11MB4182.namprd11.prod.outlook.com
+ ([fe80::5c0d:3883:7fe4:627b]) by BY5PR11MB4182.namprd11.prod.outlook.com
+ ([fe80::5c0d:3883:7fe4:627b%7]) with mapi id 15.20.5482.012; Fri, 29 Jul 2022
+ 16:40:27 +0000
+From:   "Chrisanthus, Anitha" <anitha.chrisanthus@intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Zeng Jingxiang <zengjx95@gmail.com>,
+        "edmund.j.dea@intel.com" <edmund.j.dea@intel.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "maxime@cerno.tech" <maxime@cerno.tech>,
+        "ville.syrjala@linux.intel.com" <ville.syrjala@linux.intel.com>
+CC:     Zeng Jingxiang <linuszeng@tencent.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: RE: [PATCH] drm/kmb: fix dereference before NULL check in
+ kmb_plane_atomic_update()
+Thread-Topic: [PATCH] drm/kmb: fix dereference before NULL check in
+ kmb_plane_atomic_update()
+Thread-Index: AQHYovha9jwL5q3OmE+pLUQWk+vsja2VZ5GAgAAArQCAACP6YA==
+Date:   Fri, 29 Jul 2022 16:40:26 +0000
+Message-ID: <BY5PR11MB41828228EF0D27174703431B8C999@BY5PR11MB4182.namprd11.prod.outlook.com>
+References: <20220729030711.2117849-1-zengjx95@gmail.com>
+ <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
+ <fef74b28-80f1-9184-efa5-25f3343ace40@suse.de>
+In-Reply-To: <fef74b28-80f1-9184-efa5-25f3343ace40@suse.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.500.17
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f290c150-3ef5-48d7-4d20-08da71810aab
+x-ms-traffictypediagnostic: DM6PR11MB3355:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Mt947Z0NCUtBuCh2aHOO2PRgUiBBk4OFK1s3k3ocm9AFlgqmxWxWnRZAt7U/qsUey/1Y4nXdNqqdayC8l6eRQtbZoM4K78rA0qo28oLNxFfRJHwVONTLwfAgDVBtdeDZseoTAgjYTbWDNbdLnhmUIxByxByfyGBjwWXdG56jECI5Fn2/RZ2UVIyo7tJyVDcM0v3o34rCLUSBud5lDsrKX3fySh/1GXR49jiyau8+R20EsoW9yzc8Gvt1LCinmz3GZXQRUUAkPVX1/+MLm5SnoFuvGA9ShMdgxnKsgwXwNtIXex/ed2ZZbZo2h2pA6gcKVax4fB3YzNpX9bcg2HKz8d4mcJRiCNubIJnsfNF9koDJ2lzdkAPNZcawRVLsOzOHzirZiSRz/nGZ2ApLRvEVc1xmP+Vmp7devWpBX3UQltAaRSz6ANQW9NlvBA84SFCrqMENsZ+hH3sGIevR1CPzKP+8fWtKsGlJRLp8qcBx/s92rxoAECSJa9Wmwo83wtQafz/WwKkfQYsBlBEZoFbGkL48W6gq1cBUJPYvchT7rRPFrfg/fFSs14XBMDUF0HrG4q2XRwyqxNxP3234BvcZI8Sr06WSIxvLq9zLRSac+1xQfl2ScD5W34DsXHibxfRJJQ+I0iFdnTYml+wkv9SyvQdOtLV12bq5F08VjwV3DStm8KgOVS7dv9ZkeS6ZuHubXRahVRUFs1xX1pJTRPdfyGm4mgHlrTH/gVPi5kxFPwnqRlw+IzeUe4Jg9mB5Azi2YfiYdsxYySx7JZe1N2qREi1MSOIPUwf3VcWP4fV6EsArj4fIvzoEwzX6fL7ntUr0
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4182.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(376002)(366004)(39860400002)(346002)(396003)(53546011)(71200400001)(82960400001)(83380400001)(2906002)(122000001)(86362001)(66556008)(76116006)(54906003)(38100700002)(8676002)(66476007)(66446008)(110136005)(38070700005)(26005)(66946007)(64756008)(5660300002)(6506007)(8936002)(33656002)(316002)(41300700001)(7696005)(4326008)(55016003)(52536014)(66574015)(9686003)(7416002)(478600001)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZXYySHltWlBtTG5CRFI1c1ppbDNuQm1ad1NkTmNBZEpUOFJOdGpFSzFxWXBX?=
+ =?utf-8?B?djVicGV5YTJvU2VZaThSQ0N6S0YyS2JXczRFYlMvUHJldEZwbVhsTE5UTnJ5?=
+ =?utf-8?B?cGc0NTZGc201OUUwTGtsRXhpWmE2cVduTDNsRXlScnYwdFYzYjEvUTdOSWhn?=
+ =?utf-8?B?bDV4d2oxZ2NHZTZNUWpiOGdOdXBMTEUxR0trdFBzZU9pVFR0YUF3OUF4UHhj?=
+ =?utf-8?B?cDlpSW1rZjA0S3p3U3NpUnFmS0pUVW0zMTY5VkxLNE5rZk1QV2VoU1pkUUlD?=
+ =?utf-8?B?L3ZPYTU1OHBOK3ZGTUdUZzBpRVJYZDI4MVNBUCtrNVhvZWFiSjZ4SWhCMWVY?=
+ =?utf-8?B?MXFKZi9qdTIxY3lwMUkvWE9wODltMk8vaDhtaVh5SkhrUVVUN0czSzBTcURR?=
+ =?utf-8?B?NDFNYU42WEVtdkpIaVcvZHp4ZEVOLzJLNkJXc01rSWgwQThoVXp1QXo2QnU5?=
+ =?utf-8?B?cEpJOFpZbVBaZmR4SUVMRUhBWDR3Y3pUaXdVck9xTE9FQThMc2d1L2xlQ1pN?=
+ =?utf-8?B?TmkzR2ZveEdwZEYrQjAxY3BZYkx6UFoycXhsQVdWc3kxNHJyOXVPSkpBSGZ5?=
+ =?utf-8?B?MWZJamtzcm5PdlVrM21mMjNiYXoyUWozNkVmZzE3bzg3RE1YakV4T3U2V0tP?=
+ =?utf-8?B?ZjB3RnAwWlFMdU9jU0t3MWpJUE5lbXViTkVsZVlWd3FhbUFrQThpZ08zZ2x2?=
+ =?utf-8?B?ajMwN0lBVjZndXJLbVVZM29XZDZHNzd5N2ZldlpHVzdhSDQreTJxTnpXcVp2?=
+ =?utf-8?B?Y3NqQjdpUm56NGs2Y2ZpUmcwSTNZcWxEVCtWV3hSYzZwSncrZVA0K09NZzRQ?=
+ =?utf-8?B?WFk2OTE0eUhsR0pGMGNpSjRCL2FibFNFaFE1dFl4NTBOMVgzMlY5dFgwMEFM?=
+ =?utf-8?B?ZEdwTE1FcFZBdVpDTUJ3VUZwQTNFWFdwTFFkdm93R05uaHlFT2tJcDNzdHZz?=
+ =?utf-8?B?SEZia0FoN2Q1WXdmc0NaNnhSK05zOXZuNDhOS1RuQ3cyMnd0aUtSYXdVTVl5?=
+ =?utf-8?B?T2lGM2RyaCtoTTBWTllwU09yOE5tWklFZlpQbFZNSDFuVmx5UmhuZ1BKWGRv?=
+ =?utf-8?B?UGRBZGtyS051RDZwUWxLR0ZmZ1B2Wk1nUjBidzdYamF4TmRyVU5JOUpwdGk0?=
+ =?utf-8?B?RzNBQ0pYOFcxVEpJOGRQUnZLSFhWMmJYY3dPdThCVXRQMDVwWkIwTUhzR1R2?=
+ =?utf-8?B?cVFiUDRtdWliR0V2SkZYOEcvSTJsS0VLSFBaaGtaSytUUXNPTnRNTG9MZGVv?=
+ =?utf-8?B?Y3Byd1FlWEFwSVBwYTcvclhObEhCaUdlZ2x2L1FmQWkxTG5ZYWNkdXRjS1Rn?=
+ =?utf-8?B?emtmMmt4cWdrOW90TDNIc2NPRGkrVEZ3aWNVcWREL25WdmlHaXlnellaWEhC?=
+ =?utf-8?B?S2NpZEdyTStSVHJhcnBWL0dHWFJ2RC9Tdm9PYXk3RllzRXM4cGdYSmhCZjY2?=
+ =?utf-8?B?eWs5OVlTWU1xekZOOGpGWW1qWEtKTm1zMFhDc1hZcEZrRTZnRlhVdlhxUlJH?=
+ =?utf-8?B?d0thV3BCcGNzVU5KRVY0L3pwY01KNHlrdUpvd3dZY3ZqLzY1eXd0NzVPcVJQ?=
+ =?utf-8?B?QXdlczlyeVlmZVdZVy94MzlCekdXazlmdmgxNE0rSE9jL0plb08wblZvalJT?=
+ =?utf-8?B?UVRpTjZxR0J3d0tFNnA1Q1pOOFBJWXhpTFVvWHIzYWJwVVZ5WXZZcVFRaklR?=
+ =?utf-8?B?K0ovUTVTN3pha245R0orMURLbUVzTGMwOUJYVG45QUpUYm5rTmNtVW1ibEMz?=
+ =?utf-8?B?c3ZYTEpLUTNZd1prQWEwVGZOUE5RaUNLbGhsb3R4dTlkRkdlc1Z1ZURiOTM1?=
+ =?utf-8?B?djZQSjNEVVFkdXVUcDFZZHBqaWc4a2lXMGNybUluaDBjcXFPYlRvYlQ4MEJD?=
+ =?utf-8?B?d0RqUGRKdkYvbnpNdmQvV1RuQ0xXNER1TjgrdElwTTd4WXlJMWQ1Y0ViWnBI?=
+ =?utf-8?B?U0QyTE5vQVdGL1Y2S0JHclZ1TE1PaE9oWWN1d2ZZVFA4NHk1bHlzbWRvVmVD?=
+ =?utf-8?B?WTVLanZuSHo4cEI5QkhEQWtqelJNekhMNjVVUldJM2ZHOEhvZkFwbnExSUFK?=
+ =?utf-8?B?QlFheGZFRk5jRTRhWlkwR2FSSEo2SWsvZGFXZjcrdGgyZzhtYlRnTkR0S0xH?=
+ =?utf-8?B?ejdpeHJLamR2UjNZR0h6a1Z3eXV3T0tEeFZUUFNkZjRKeTVMY2lJdHdpV2Jy?=
+ =?utf-8?B?b0E9PQ==?=
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB4182.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f290c150-3ef5-48d7-4d20-08da71810aab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jul 2022 16:40:26.9596
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EtxHRy9vDF4IOfGVeTEPT0hFCOj9enXZLyrATlvJjpyNEaJBz01p9qcfVopDM9ILzNS/P19sEGF4GvGAm0x+vKiaF/C3qjf1+jvLGlgDsbE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3355
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reference-putting functions should not access the object being put after
-decrementing the refcount unless they reduce the refcount to zero.
-
-Fix a couple of instances of this in afs by copying the information to be
-logged by tracepoint to local variables before doing the decrement.
-
-Fixes: 341f741f04be ("afs: Refcount the afs_call struct")
-Fixes: 452181936931 ("afs: Trace afs_server usage")
-Fixes: 977e5f8ed0ab ("afs: Split the usage count on struct afs_server")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
-
- fs/afs/cmservice.c         |    2 +-
- fs/afs/rxrpc.c             |   11 ++++++-----
- fs/afs/server.c            |   22 +++++++++++++---------
- include/trace/events/afs.h |   12 ++++++------
- 4 files changed, 26 insertions(+), 21 deletions(-)
-
-diff --git a/fs/afs/cmservice.c b/fs/afs/cmservice.c
-index cedd627e1fae..0a090d614e76 100644
---- a/fs/afs/cmservice.c
-+++ b/fs/afs/cmservice.c
-@@ -212,7 +212,7 @@ static void SRXAFSCB_CallBack(struct work_struct *work)
- 	 * to maintain cache coherency.
- 	 */
- 	if (call->server) {
--		trace_afs_server(call->server,
-+		trace_afs_server(call->server->debug_id,
- 				 refcount_read(&call->server->ref),
- 				 atomic_read(&call->server->active),
- 				 afs_server_trace_callback);
-diff --git a/fs/afs/rxrpc.c b/fs/afs/rxrpc.c
-index d9acc43cb6f0..d5c4785c862d 100644
---- a/fs/afs/rxrpc.c
-+++ b/fs/afs/rxrpc.c
-@@ -152,7 +152,7 @@ static struct afs_call *afs_alloc_call(struct afs_net *net,
- 	call->iter = &call->def_iter;
- 
- 	o = atomic_inc_return(&net->nr_outstanding_calls);
--	trace_afs_call(call, afs_call_trace_alloc, 1, o,
-+	trace_afs_call(call->debug_id, afs_call_trace_alloc, 1, o,
- 		       __builtin_return_address(0));
- 	return call;
- }
-@@ -163,12 +163,13 @@ static struct afs_call *afs_alloc_call(struct afs_net *net,
- void afs_put_call(struct afs_call *call)
- {
- 	struct afs_net *net = call->net;
-+	unsigned int debug_id = call->debug_id;
- 	bool zero;
- 	int r, o;
- 
- 	zero = __refcount_dec_and_test(&call->ref, &r);
- 	o = atomic_read(&net->nr_outstanding_calls);
--	trace_afs_call(call, afs_call_trace_put, r - 1, o,
-+	trace_afs_call(debug_id, afs_call_trace_put, r - 1, o,
- 		       __builtin_return_address(0));
- 
- 	if (zero) {
-@@ -186,7 +187,7 @@ void afs_put_call(struct afs_call *call)
- 		afs_put_addrlist(call->alist);
- 		kfree(call->request);
- 
--		trace_afs_call(call, afs_call_trace_free, 0, o,
-+		trace_afs_call(call->debug_id, afs_call_trace_free, 0, o,
- 			       __builtin_return_address(0));
- 		kfree(call);
- 
-@@ -203,7 +204,7 @@ static struct afs_call *afs_get_call(struct afs_call *call,
- 
- 	__refcount_inc(&call->ref, &r);
- 
--	trace_afs_call(call, why, r + 1,
-+	trace_afs_call(call->debug_id, why, r + 1,
- 		       atomic_read(&call->net->nr_outstanding_calls),
- 		       __builtin_return_address(0));
- 	return call;
-@@ -677,7 +678,7 @@ static void afs_wake_up_async_call(struct sock *sk, struct rxrpc_call *rxcall,
- 	call->need_attention = true;
- 
- 	if (__refcount_inc_not_zero(&call->ref, &r)) {
--		trace_afs_call(call, afs_call_trace_wake, r + 1,
-+		trace_afs_call(call->debug_id, afs_call_trace_wake, r + 1,
- 			       atomic_read(&call->net->nr_outstanding_calls),
- 			       __builtin_return_address(0));
- 
-diff --git a/fs/afs/server.c b/fs/afs/server.c
-index ffed828622b6..bca4b4c55c14 100644
---- a/fs/afs/server.c
-+++ b/fs/afs/server.c
-@@ -243,7 +243,7 @@ static struct afs_server *afs_alloc_server(struct afs_cell *cell,
- 	server->rtt = UINT_MAX;
- 
- 	afs_inc_servers_outstanding(net);
--	trace_afs_server(server, 1, 1, afs_server_trace_alloc);
-+	trace_afs_server(server->debug_id, 1, 1, afs_server_trace_alloc);
- 	_leave(" = %p", server);
- 	return server;
- 
-@@ -352,10 +352,12 @@ void afs_servers_timer(struct timer_list *timer)
- struct afs_server *afs_get_server(struct afs_server *server,
- 				  enum afs_server_trace reason)
- {
-+	unsigned int a;
- 	int r;
- 
- 	__refcount_inc(&server->ref, &r);
--	trace_afs_server(server, r + 1, atomic_read(&server->active), reason);
-+	a = atomic_read(&server->active);
-+	trace_afs_server(server->debug_id, r + 1, a, reason);
- 	return server;
- }
- 
-@@ -372,7 +374,7 @@ static struct afs_server *afs_maybe_use_server(struct afs_server *server,
- 		return NULL;
- 
- 	a = atomic_inc_return(&server->active);
--	trace_afs_server(server, r + 1, a, reason);
-+	trace_afs_server(server->debug_id, r + 1, a, reason);
- 	return server;
- }
- 
-@@ -387,7 +389,7 @@ struct afs_server *afs_use_server(struct afs_server *server, enum afs_server_tra
- 	__refcount_inc(&server->ref, &r);
- 	a = atomic_inc_return(&server->active);
- 
--	trace_afs_server(server, r + 1, a, reason);
-+	trace_afs_server(server->debug_id, r + 1, a, reason);
- 	return server;
- }
- 
-@@ -397,14 +399,16 @@ struct afs_server *afs_use_server(struct afs_server *server, enum afs_server_tra
- void afs_put_server(struct afs_net *net, struct afs_server *server,
- 		    enum afs_server_trace reason)
- {
-+	unsigned int a;
- 	bool zero;
- 	int r;
- 
- 	if (!server)
- 		return;
- 
-+	a = atomic_inc_return(&server->active);
- 	zero = __refcount_dec_and_test(&server->ref, &r);
--	trace_afs_server(server, r - 1, atomic_read(&server->active), reason);
-+	trace_afs_server(server->debug_id, r - 1, a, reason);
- 	if (unlikely(zero))
- 		__afs_put_server(net, server);
- }
-@@ -441,7 +445,7 @@ static void afs_server_rcu(struct rcu_head *rcu)
- {
- 	struct afs_server *server = container_of(rcu, struct afs_server, rcu);
- 
--	trace_afs_server(server, refcount_read(&server->ref),
-+	trace_afs_server(server->debug_id, refcount_read(&server->ref),
- 			 atomic_read(&server->active), afs_server_trace_free);
- 	afs_put_addrlist(rcu_access_pointer(server->addresses));
- 	kfree(server);
-@@ -492,7 +496,7 @@ static void afs_gc_servers(struct afs_net *net, struct afs_server *gc_list)
- 
- 		active = atomic_read(&server->active);
- 		if (active == 0) {
--			trace_afs_server(server, refcount_read(&server->ref),
-+			trace_afs_server(server->debug_id, refcount_read(&server->ref),
- 					 active, afs_server_trace_gc);
- 			next = rcu_dereference_protected(
- 				server->uuid_next, lockdep_is_held(&net->fs_lock.lock));
-@@ -558,7 +562,7 @@ void afs_manage_servers(struct work_struct *work)
- 		_debug("manage %pU %u", &server->uuid, active);
- 
- 		if (purging) {
--			trace_afs_server(server, refcount_read(&server->ref),
-+			trace_afs_server(server->debug_id, refcount_read(&server->ref),
- 					 active, afs_server_trace_purging);
- 			if (active != 0)
- 				pr_notice("Can't purge s=%08x\n", server->debug_id);
-@@ -638,7 +642,7 @@ static noinline bool afs_update_server_record(struct afs_operation *op,
- 
- 	_enter("");
- 
--	trace_afs_server(server, refcount_read(&server->ref),
-+	trace_afs_server(server->debug_id, refcount_read(&server->ref),
- 			 atomic_read(&server->active),
- 			 afs_server_trace_update);
- 
-diff --git a/include/trace/events/afs.h b/include/trace/events/afs.h
-index aa60f42a9763..e9d412d19dbb 100644
---- a/include/trace/events/afs.h
-+++ b/include/trace/events/afs.h
-@@ -727,10 +727,10 @@ TRACE_EVENT(afs_cb_call,
- 	    );
- 
- TRACE_EVENT(afs_call,
--	    TP_PROTO(struct afs_call *call, enum afs_call_trace op,
-+	    TP_PROTO(unsigned int call_debug_id, enum afs_call_trace op,
- 		     int ref, int outstanding, const void *where),
- 
--	    TP_ARGS(call, op, ref, outstanding, where),
-+	    TP_ARGS(call_debug_id, op, ref, outstanding, where),
- 
- 	    TP_STRUCT__entry(
- 		    __field(unsigned int,		call		)
-@@ -741,7 +741,7 @@ TRACE_EVENT(afs_call,
- 			     ),
- 
- 	    TP_fast_assign(
--		    __entry->call = call->debug_id;
-+		    __entry->call = call_debug_id;
- 		    __entry->op = op;
- 		    __entry->ref = ref;
- 		    __entry->outstanding = outstanding;
-@@ -1433,10 +1433,10 @@ TRACE_EVENT(afs_cb_miss,
- 	    );
- 
- TRACE_EVENT(afs_server,
--	    TP_PROTO(struct afs_server *server, int ref, int active,
-+	    TP_PROTO(unsigned int server_debug_id, int ref, int active,
- 		     enum afs_server_trace reason),
- 
--	    TP_ARGS(server, ref, active, reason),
-+	    TP_ARGS(server_debug_id, ref, active, reason),
- 
- 	    TP_STRUCT__entry(
- 		    __field(unsigned int,		server		)
-@@ -1446,7 +1446,7 @@ TRACE_EVENT(afs_server,
- 			     ),
- 
- 	    TP_fast_assign(
--		    __entry->server = server->debug_id;
-+		    __entry->server = server_debug_id;
- 		    __entry->ref = ref;
- 		    __entry->active = active;
- 		    __entry->reason = reason;
-
-
+QWdyZWUgd2l0aCBUaG9tYXMsIGRybV9hdG9taWNfY29tbWl0KCkgd2lsbCBub3QgY2FsbCBrbWJf
+YXRvbWljX3VwZGF0ZSgpIHdpdGggYSBOVUxMIHBsYW5lLiBUaGlzIGlzIG5vdCBhbiBhY3R1YWwg
+YnVnLg0KDQpUaGFua3MsDQpBbml0aGEgDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0N
+Cj4gRnJvbTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+IFNlbnQ6
+IEZyaWRheSwgSnVseSAyOSwgMjAyMiA3OjI2IEFNDQo+IFRvOiBaZW5nIEppbmd4aWFuZyA8emVu
+Z2p4OTVAZ21haWwuY29tPjsgQ2hyaXNhbnRodXMsIEFuaXRoYQ0KPiA8YW5pdGhhLmNocmlzYW50
+aHVzQGludGVsLmNvbT47IGVkbXVuZC5qLmRlYUBpbnRlbC5jb207IGFpcmxpZWRAbGludXguaWU7
+DQo+IGRhbmllbEBmZndsbC5jaDsgbGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQuY29tOyBt
+YXhpbWVAY2Vybm8udGVjaDsNCj4gdmlsbGUuc3lyamFsYUBsaW51eC5pbnRlbC5jb20NCj4gQ2M6
+IFplbmcgSmluZ3hpYW5nIDxsaW51c3plbmdAdGVuY2VudC5jb20+OyBsaW51eC1rZXJuZWxAdmdl
+ci5rZXJuZWwub3JnOw0KPiBkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnDQo+IFN1Ympl
+Y3Q6IFJlOiBbUEFUQ0hdIGRybS9rbWI6IGZpeCBkZXJlZmVyZW5jZSBiZWZvcmUgTlVMTCBjaGVj
+ayBpbg0KPiBrbWJfcGxhbmVfYXRvbWljX3VwZGF0ZSgpDQo+IA0KPiBIaQ0KPiANCj4gQW0gMjku
+MDcuMjIgdW0gMTY6MjMgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoNCj4gPiBIaQ0KPiA+DQo+
+ID4gQW0gMjkuMDcuMjIgdW0gMDU6MDcgc2NocmllYiBaZW5nIEppbmd4aWFuZzoNCj4gPj4gRnJv
+bTogWmVuZyBKaW5neGlhbmcgPGxpbnVzemVuZ0B0ZW5jZW50LmNvbT4NCj4gPj4NCj4gPj4gVGhl
+ICJwbGFuZSIgcG9pbnRlciB3YXMgYWNjZXNzIGJlZm9yZSBjaGVja2luZyBpZiBpdCB3YXMgTlVM
+TC4NCj4gPj4NCj4gPj4gVGhlIGRybV9hdG9taWNfZ2V0X29sZF9wbGFuZV9zdGF0ZSgpIGZ1bmN0
+aW9uIHdpbGwgZGVyZWZlcmVuY2UNCj4gPj4gdGhlIHBvaW50ZXIgInBsYW5lIi4NCj4gPj4gMzQ1
+wqDCoMKgIHN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKm9sZF9wbGFuZV9zdGF0ZSA9DQo+ID4+IMKg
+wqDCoMKgwqDCoMKgIGRybV9hdG9taWNfZ2V0X29sZF9wbGFuZV9zdGF0ZShzdGF0ZSwgcGxhbmUp
+Ow0KPiA+PiAzNDbCoMKgwqAgc3RydWN0IGRybV9wbGFuZV9zdGF0ZSAqbmV3X3BsYW5lX3N0YXRl
+ID0NCj4gPj4gwqDCoMKgwqDCoMKgwqAgZHJtX2F0b21pY19nZXRfbmV3X3BsYW5lX3N0YXRlKHN0
+YXRlLCBwbGFuZSk7DQo+ID4+DQo+ID4+IEEgTlVMTCBjaGVjayBmb3IgInBsYW5lIiBpbmRpY2F0
+ZXMgdGhhdCBpdCBtYXkgYmUgTlVMTA0KPiA+PiAzNjPCoMKgwqAgaWYgKCFwbGFuZSB8fCAhbmV3
+X3BsYW5lX3N0YXRlIHx8ICFvbGRfcGxhbmVfc3RhdGUpDQo+ID4NCj4gPiBJcyB0aGlzIGFuIGFj
+dHVhbCBidWcgdGhhdCBoYXBwZW5zPw0KPiA+DQo+ID4gQWxsIHBsYW5lcyBzaG91bGQgYWx3YXlz
+IGhhdmUgYSBzdGF0ZS4gVGhlcmVmb3JlIHRoZSB0ZXN0cyBmb3INCj4gPiAhbmV3X3BsYW5lX3N0
+YXRlIGFuZCAhb2xkX3BsYW5lX3N0YXRlIGNhbiBiZSByZW1vdmVkLCBJJ2Qgc2F5Lg0KPiANCj4g
+SnVzdCB0byBjbGFyaWZ5OiBtb3ZpbmcgdGhlIHRlc3QgZm9yICFwbGFuZSBiZWZvcmUgdXNpbmcg
+b25lIG9mIHRoZQ0KPiBnZXRfcGxhbmVfc3RhdGUgZnVuY3Rpb25zIGlzIGEgY29ycmVjdCBidWdm
+aXguDQo+IA0KPiBCZXN0IHJlZ2FyZHMNCj4gVGhvbWFzDQo+IA0KPiA+DQo+ID4gQmVzdCByZWdh
+cmRzDQo+ID4gVGhvbWFzDQo+ID4NCj4gPj4NCj4gPj4gRml4ZXM6IDk3NzY5N2UyMGIzZCAoImRy
+bS9hdG9taWM6IFBhc3MgdGhlIGZ1bGwgc3RhdGUgdG8gcGxhbmVzIGF0b21pYw0KPiA+PiBkaXNh
+YmxlIGFuZCB1cGRhdGUiKQ0KPiA+PiBGaXhlczogMzc0MThiZjE0YzEzICgiZHJtOiBVc2Ugc3Rh
+dGUgaGVscGVyIGluc3RlYWQgb2YgdGhlIHBsYW5lIHN0YXRlDQo+ID4+IHBvaW50ZXIiKQ0KPiA+
+PiBTaWduZWQtb2ZmLWJ5OiBaZW5nIEppbmd4aWFuZyA8bGludXN6ZW5nQHRlbmNlbnQuY29tPg0K
+PiA+PiAtLS0NCj4gPj4gwqAgZHJpdmVycy9ncHUvZHJtL2ttYi9rbWJfcGxhbmUuYyB8IDEzICsr
+KysrKysrLS0tLS0NCj4gPj4gwqAgMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgNSBk
+ZWxldGlvbnMoLSkNCj4gPj4NCj4gPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9rbWIv
+a21iX3BsYW5lLmMNCj4gPj4gYi9kcml2ZXJzL2dwdS9kcm0va21iL2ttYl9wbGFuZS5jDQo+ID4+
+IGluZGV4IDI3MzViOGViMzUzNy4uZDJiYzk5OGI2NWNlIDEwMDY0NA0KPiA+PiAtLS0gYS9kcml2
+ZXJzL2dwdS9kcm0va21iL2ttYl9wbGFuZS5jDQo+ID4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9r
+bWIva21iX3BsYW5lLmMNCj4gPj4gQEAgLTM0MiwxMCArMzQyLDcgQEAgc3RhdGljIHZvaWQga21i
+X3BsYW5lX3NldF9hbHBoYShzdHJ1Y3QNCj4gPj4ga21iX2RybV9wcml2YXRlICprbWIsDQo+ID4+
+IMKgIHN0YXRpYyB2b2lkIGttYl9wbGFuZV9hdG9taWNfdXBkYXRlKHN0cnVjdCBkcm1fcGxhbmUg
+KnBsYW5lLA0KPiA+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+c3RydWN0IGRybV9hdG9taWNfc3RhdGUgKnN0YXRlKQ0KPiA+PiDCoCB7DQo+ID4+IC3CoMKgwqAg
+c3RydWN0IGRybV9wbGFuZV9zdGF0ZSAqb2xkX3BsYW5lX3N0YXRlID0NCj4gPj4gZHJtX2F0b21p
+Y19nZXRfb2xkX3BsYW5lX3N0YXRlKHN0YXRlLA0KPiA+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgcGxhbmUpOw0KPiA+PiAtwqDCoMKgIHN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKm5ld19wbGFu
+ZV9zdGF0ZSA9DQo+ID4+IGRybV9hdG9taWNfZ2V0X25ld19wbGFuZV9zdGF0ZShzdGF0ZSwNCj4g
+Pj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBsYW5lKTsNCj4gPj4gK8KgwqDCoCBzdHJ1Y3Qg
+ZHJtX3BsYW5lX3N0YXRlICpvbGRfcGxhbmVfc3RhdGUsICpuZXdfcGxhbmVfc3RhdGU7DQo+ID4+
+IMKgwqDCoMKgwqAgc3RydWN0IGRybV9mcmFtZWJ1ZmZlciAqZmI7DQo+ID4+IMKgwqDCoMKgwqAg
+c3RydWN0IGttYl9kcm1fcHJpdmF0ZSAqa21iOw0KPiA+PiDCoMKgwqDCoMKgIHVuc2lnbmVkIGlu
+dCB3aWR0aDsNCj4gPj4gQEAgLTM2MCw3ICszNTcsMTMgQEAgc3RhdGljIHZvaWQga21iX3BsYW5l
+X2F0b21pY191cGRhdGUoc3RydWN0DQo+ID4+IGRybV9wbGFuZSAqcGxhbmUsDQo+ID4+IMKgwqDC
+oMKgwqAgc3RhdGljIGRtYV9hZGRyX3QgYWRkcltNQVhfU1VCX1BMQU5FU107DQo+ID4+IMKgwqDC
+oMKgwqAgc3RydWN0IGRpc3BfY2ZnICppbml0X2Rpc3BfY2ZnOw0KPiA+PiAtwqDCoMKgIGlmICgh
+cGxhbmUgfHwgIW5ld19wbGFuZV9zdGF0ZSB8fCAhb2xkX3BsYW5lX3N0YXRlKQ0KPiA+PiArwqDC
+oMKgIGlmICghcGxhbmUpDQo+ID4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm47DQo+ID4+ICsNCj4g
+Pj4gK8KgwqDCoCBvbGRfcGxhbmVfc3RhdGUgPSBkcm1fYXRvbWljX2dldF9vbGRfcGxhbmVfc3Rh
+dGUoc3RhdGUsIHBsYW5lKTsNCj4gPj4gK8KgwqDCoCBuZXdfcGxhbmVfc3RhdGUgPSBkcm1fYXRv
+bWljX2dldF9uZXdfcGxhbmVfc3RhdGUoc3RhdGUsIHBsYW5lKTsNCj4gPj4gKw0KPiA+PiArwqDC
+oMKgIGlmICghbmV3X3BsYW5lX3N0YXRlIHx8ICFvbGRfcGxhbmVfc3RhdGUpDQo+ID4+IMKgwqDC
+oMKgwqDCoMKgwqDCoCByZXR1cm47DQo+ID4+IMKgwqDCoMKgwqAgZmIgPSBuZXdfcGxhbmVfc3Rh
+dGUtPmZiOw0KPiA+DQo+IA0KPiAtLQ0KPiBUaG9tYXMgWmltbWVybWFubg0KPiBHcmFwaGljcyBE
+cml2ZXIgRGV2ZWxvcGVyDQo+IFNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
+PiBNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCj4gKEhSQiAzNjgwOSwg
+QUcgTsO8cm5iZXJnKQ0KPiBHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=

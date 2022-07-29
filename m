@@ -2,176 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1B25855CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 551135855CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238979AbiG2Tzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S239007AbiG2T40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiG2Tzo (ORCPT
+        with ESMTP id S238989AbiG2T4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:55:44 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F3E81480
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:55:43 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id x11so4070208qts.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:55:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
-        bh=lI7ivcAwRUifQnRI706c0+q8Lpzh40+rYKLKoU1I3oA=;
-        b=qy/Ws0vsozgufqZWtXL2So+xVlSE6SGi5kFtkvmzaaaUA6pw/RkbUFS5Zigm83YVGi
-         ox6/EDOITHju9acHoHBNF5GJjMNZwIn+seu1/hmrT05Pwdezn1CcbCcttGXXRZ5n7jRs
-         zqZO9U6cPEN9Nf6021Lm1e9bcHKf97lWQ/HA0m/4cMBtZBkQGm60W6O8vimRYEms6Zer
-         AwnEEzoFgGR0abgEviTkD5HQfZ4vL77+qiUvQ8w6MnCjm+/nDEyzebrASriyyrI4wNXz
-         MXjfKq764z3kntKCkl8ctPRfMDtPkLY+7tuK5yF1ILgZEkPjAU8ihT2B6H/A939UMjTj
-         T5jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=lI7ivcAwRUifQnRI706c0+q8Lpzh40+rYKLKoU1I3oA=;
-        b=lMgH4UDZ7+69RZqZILtF5zXkQRZF5gVys+VerjQQPygPRRAHCAAZ6n1GYGdi5xiCGq
-         FoDWXFTQOve9EX/HbJCwGKeg5W+fECMpMQxtAmV0i0dIxFzqGZSOPtji+FtN2THiL/Ck
-         Gk/ambfNlSBhXWvcF7NGdIok6zaeYYKyCBND08uq/vxiTFjHPWbowSj51K0RfR6SubtS
-         eGe5OUsBNQ3TZSUtrN8UTmsDezhaJLF2KwlYeVJXZiLGrdS9UiHyCOmt9Q68CYaEWOiw
-         n7H0lMhaCPWe0Sqdw0kxpXvJsBfj6pjA+LZqEdwyjvn3rANh2IhngoWzRTPkhfGTnZUe
-         0YmQ==
-X-Gm-Message-State: AJIora/xA69UhqMrKGXSUBxknUKL1MHd4p1AqvvMRYFVOkkSo1za15Fx
-        3MfA9Xu/NLLPfFcc1ywtJTtYZg==
-X-Google-Smtp-Source: AGRyM1sihhA5ZddLZrESE9GSeP9Ji0UMQqbh8Np5eaWnEHtLDvdLpVQGIvqn5AwYAh7DONLDcge0mA==
-X-Received: by 2002:a05:622a:3cb:b0:31f:36f5:f6c8 with SMTP id k11-20020a05622a03cb00b0031f36f5f6c8mr4833145qtx.428.1659124542531;
-        Fri, 29 Jul 2022 12:55:42 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id t7-20020a375f07000000b006af50b6f10csm3037958qkb.61.2022.07.29.12.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 12:55:42 -0700 (PDT)
-Message-ID: <0bc68659aa225a0623751b82e9a8636d701cece9.camel@ndufresne.ca>
-Subject: Re: [PATCH 1/4] media: add nv12_8l128 and nv12_10be_8l128 video
- format.
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        xiahong.bao@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Fri, 29 Jul 2022 15:55:40 -0400
-In-Reply-To: <687fb73b648b897426899c6a313f35a5e2451d69.1659082839.git.ming.qian@nxp.com>
-References: <cover.1659082839.git.ming.qian@nxp.com>
-         <687fb73b648b897426899c6a313f35a5e2451d69.1659082839.git.ming.qian@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Fri, 29 Jul 2022 15:56:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A754B87C20;
+        Fri, 29 Jul 2022 12:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659124583; x=1690660583;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=icmzx4g7Va0EWQGiMBuf7Cg0LU8Z1mCtK02FJnlNI/8=;
+  b=R+SiDLDqvrnH+Z9rK98gj7U1yYvKcQD6GpTBdHNdhdWHpPSRA/LJ9c/D
+   3n5Udx1mUiOBeK5g8XX3YUl8EHdEbf6k9jPtA+j2UuCtxs7Q7fwIBLOmQ
+   phBySzpZw2ifx9w3v9gG4izHlreZSyfrgyzDkCXXAVs+v9hvOVFAx9IzL
+   risS0an/rtGOybzujc9sVX/RhslRj0kvF8OLekoZBztbqwS/5xAtxx3MJ
+   DL3Zes/uY/bxWEzs+xAIH3lkSE9VfNP/TYrNqS4WUbEdWByt8E9iDU2cw
+   uTGvpha4Mv/+1UzEXCFBEBG7T2yRRnyomVgewPITVqayDa0vejKfCUUyL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="286394159"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="286394159"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 12:56:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="690834908"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Jul 2022 12:56:20 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHW5s-000C2s-05;
+        Fri, 29 Jul 2022 19:56:20 +0000
+Date:   Sat, 30 Jul 2022 03:56:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH RESEND v6 07/23] ata: libahci_platform: Convert to using
+ devm bulk clocks API
+Message-ID: <202207300343.gBqrivXn-lkp@intel.com>
+References: <20220728111905.12427-8-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728111905.12427-8-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le vendredi 29 juillet 2022 =C3=A0 16:38 +0800, Ming Qian a =C3=A9crit=C2=
-=A0:
-> add contiguous nv12 tiled format nv12_8l128 and nv12_10be_8l128
->=20
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Hi Serge,
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+I love your patch! Yet something to improve:
 
-cheer,
-Nicolas
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on axboe-block/for-next linus/master v5.19-rc8 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> ---
->  .../userspace-api/media/v4l/pixfmt-yuv-planar.rst         | 8 ++++++++
->  drivers/media/v4l2-core/v4l2-ioctl.c                      | 2 ++
->  include/uapi/linux/videodev2.h                            | 2 ++
->  3 files changed, 12 insertions(+)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst =
-b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> index 10b1feeb0b57..f1d5bb7b806d 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> @@ -273,7 +273,9 @@ of the luma plane.
->  .. _V4L2-PIX-FMT-NV12-16L16:
->  .. _V4L2-PIX-FMT-NV12-32L32:
->  .. _V4L2-PIX-FMT-NV12M-8L128:
-> +.. _V4L2-PIX-FMT-NV12-8L128:
->  .. _V4L2-PIX-FMT-NV12M-10BE-8L128:
-> +.. _V4L2-PIX-FMT-NV12-10BE-8L128:
->  .. _V4L2-PIX-FMT-MM21:
-> =20
->  Tiled NV12
-> @@ -319,6 +321,9 @@ pixels in 2D 8x128 tiles, and stores tiles linearly i=
-n memory.
->  The image height must be aligned to a multiple of 128.
->  The layouts of the luma and chroma planes are identical.
-> =20
-> +``V4L2_PIX_FMT_NV12_8L128`` is similar to ``V4L2_PIX_FMT_NV12M_8L128`` b=
-ut stores
-> +two planes in one memory.
-> +
->  ``V4L2_PIX_FMT_NV12M_10BE_8L128`` is similar to ``V4L2_PIX_FMT_NV12M`` b=
-ut stores
->  10 bits pixels in 2D 8x128 tiles, and stores tiles linearly in memory.
->  the data is arranged in big endian order.
-> @@ -334,6 +339,9 @@ byte 2: Y1(bits 3-0) Y2(bits 9-6)
->  byte 3: Y2(bits 5-0) Y3(bits 9-8)
->  byte 4: Y3(bits 7-0)
-> =20
-> +``V4L2_PIX_FMT_NV12_10BE_8L128`` is similar to ``V4L2_PIX_FMT_NV12M_10BE=
-_8L128`` but stores
-> +two planes in one memory.
-> +
->  ``V4L2_PIX_FMT_MM21`` store luma pixel in 16x32 tiles, and chroma pixels
->  in 16x16 tiles. The line stride must be aligned to a multiple of 16 and =
-the
->  image height must be aligned to a multiple of 32. The number of luma and=
- chroma
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
-re/v4l2-ioctl.c
-> index c314025d977e..d973bd2ff750 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1444,7 +1444,9 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
-mt)
->  	case V4L2_META_FMT_VIVID:       descr =3D "Vivid Metadata"; break;
->  	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr =3D "Rockchip ISP1 3A Paramete=
-rs"; break;
->  	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr =3D "Rockchip ISP1 3A Statist=
-ics"; break;
-> +	case V4L2_PIX_FMT_NV12_8L128:	descr =3D "NV12 (8x128 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12M_8L128:	descr =3D "NV12M (8x128 Linear)"; break;
-> +	case V4L2_PIX_FMT_NV12_10BE_8L128:	descr =3D "10-bit NV12 (8x128 Linear=
-, BE)"; break;
->  	case V4L2_PIX_FMT_NV12M_10BE_8L128:	descr =3D "10-bit NV12M (8x128 Line=
-ar, BE)"; break;
-> =20
->  	default:
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
-2.h
-> index cd66e01ed3c3..64f16490dd2b 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -655,6 +655,8 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_NV12_16L16 v4l2_fourcc('H', 'M', '1', '2') /* 12  Y=
-/CbCr 4:2:0 16x16 tiles */
->  #define V4L2_PIX_FMT_NV12_32L32 v4l2_fourcc('S', 'T', '1', '2') /* 12  Y=
-/CbCr 4:2:0 32x32 tiles */
->  #define V4L2_PIX_FMT_P010_4L4 v4l2_fourcc('T', '0', '1', '0') /* 12  Y/C=
-bCr 4:2:0 10-bit 4x4 macroblocks */
-> +#define V4L2_PIX_FMT_NV12_8L128       v4l2_fourcc('A', 'T', '1', '2') /*=
- Y/CbCr 4:2:0 8x128 tiles */
-> +#define V4L2_PIX_FMT_NV12_10BE_8L128  v4l2_fourcc_be('A', 'X', '1', '2')=
- /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
-> =20
->  /* Tiled YUV formats, non contiguous planes */
->  #define V4L2_PIX_FMT_NV12MT  v4l2_fourcc('T', 'M', '1', '2') /* 12  Y/Cb=
-Cr 4:2:0 64x32 tiles */
+url:    https://github.com/intel-lab-lkp/linux/commits/Serge-Semin/ata-ahci-Add-DWC-Baikal-T1-AHCI-SATA-support/20220728-192315
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: m68k-randconfig-s052-20220729 (https://download.01.org/0day-ci/archive/20220730/202207300343.gBqrivXn-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/a84e837dd293db69f2510f3036f2c83ce8b0167c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Serge-Semin/ata-ahci-Add-DWC-Baikal-T1-AHCI-SATA-support/20220728-192315
+        git checkout a84e837dd293db69f2510f3036f2c83ce8b0167c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   m68k-linux-ld: drivers/ata/libahci_platform.o: in function `ahci_platform_get_resources':
+>> drivers/ata/libahci_platform.c:428: undefined reference to `__clk_get_name'
+
+
+vim +428 drivers/ata/libahci_platform.c
+
+   347	
+   348	/**
+   349	 * ahci_platform_get_resources - Get platform resources
+   350	 * @pdev: platform device to get resources for
+   351	 * @flags: bitmap representing the resource to get
+   352	 *
+   353	 * This function allocates an ahci_host_priv struct, and gets the following
+   354	 * resources, storing a reference to them inside the returned struct:
+   355	 *
+   356	 * 1) mmio registers (IORESOURCE_MEM 0, mandatory)
+   357	 * 2) regulator for controlling the targets power (optional)
+   358	 *    regulator for controlling the AHCI controller (optional)
+   359	 * 3) all clocks specified in the devicetree node, or a single
+   360	 *    clock for non-OF platforms (optional)
+   361	 * 4) resets, if flags has AHCI_PLATFORM_GET_RESETS (optional)
+   362	 * 5) phys (optional)
+   363	 *
+   364	 * RETURNS:
+   365	 * The allocated ahci_host_priv on success, otherwise an ERR_PTR value
+   366	 */
+   367	struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+   368							   unsigned int flags)
+   369	{
+   370		int child_nodes, rc = -ENOMEM, enabled_ports = 0;
+   371		struct device *dev = &pdev->dev;
+   372		struct ahci_host_priv *hpriv;
+   373		struct device_node *child;
+   374		u32 mask_port_map = 0;
+   375	
+   376		if (!devres_open_group(dev, NULL, GFP_KERNEL))
+   377			return ERR_PTR(-ENOMEM);
+   378	
+   379		hpriv = devres_alloc(ahci_platform_put_resources, sizeof(*hpriv),
+   380				     GFP_KERNEL);
+   381		if (!hpriv)
+   382			goto err_out;
+   383	
+   384		devres_add(dev, hpriv);
+   385	
+   386		/*
+   387		 * If the DT provided an "ahci" named resource, use it. Otherwise,
+   388		 * fallback to using the default first resource for the device node.
+   389		 */
+   390		if (platform_get_resource_byname(pdev, IORESOURCE_MEM, "ahci"))
+   391			hpriv->mmio = devm_platform_ioremap_resource_byname(pdev, "ahci");
+   392		else
+   393			hpriv->mmio = devm_platform_ioremap_resource(pdev, 0);
+   394		if (IS_ERR(hpriv->mmio)) {
+   395			rc = PTR_ERR(hpriv->mmio);
+   396			goto err_out;
+   397		}
+   398	
+   399		/*
+   400		 * Bulk clocks getting procedure can fail to find any clock due to
+   401		 * running on a non-OF platform or due to the clocks being defined in
+   402		 * bypass of the DT firmware (like da850, spear13xx). In that case we
+   403		 * fallback to getting a single clock source right from the dev clocks
+   404		 * list.
+   405		 */
+   406		rc = devm_clk_bulk_get_all(dev, &hpriv->clks);
+   407		if (rc < 0)
+   408			goto err_out;
+   409	
+   410		if (rc > 0) {
+   411			/* Got clocks in bulk */
+   412			hpriv->n_clks = rc;
+   413		} else {
+   414			/*
+   415			 * No clock bulk found: fallback to manually getting
+   416			 * the optional clock.
+   417			 */
+   418			hpriv->clks = devm_kzalloc(dev, sizeof(*hpriv->clks), GFP_KERNEL);
+   419			if (!hpriv->clks) {
+   420				rc = -ENOMEM;
+   421				goto err_out;
+   422			}
+   423			hpriv->clks->clk = devm_clk_get_optional(dev, NULL);
+   424			if (IS_ERR(hpriv->clks->clk)) {
+   425				rc = PTR_ERR(hpriv->clks->clk);
+   426				goto err_out;
+   427			} else if (hpriv->clks->clk) {
+ > 428				hpriv->clks->id = __clk_get_name(hpriv->clks->clk);
+   429				hpriv->n_clks = 1;
+   430			}
+   431		}
+   432	
+   433		hpriv->ahci_regulator = devm_regulator_get(dev, "ahci");
+   434		if (IS_ERR(hpriv->ahci_regulator)) {
+   435			rc = PTR_ERR(hpriv->ahci_regulator);
+   436			if (rc != 0)
+   437				goto err_out;
+   438		}
+   439	
+   440		hpriv->phy_regulator = devm_regulator_get(dev, "phy");
+   441		if (IS_ERR(hpriv->phy_regulator)) {
+   442			rc = PTR_ERR(hpriv->phy_regulator);
+   443			goto err_out;
+   444		}
+   445	
+   446		if (flags & AHCI_PLATFORM_GET_RESETS) {
+   447			hpriv->rsts = devm_reset_control_array_get_optional_shared(dev);
+   448			if (IS_ERR(hpriv->rsts)) {
+   449				rc = PTR_ERR(hpriv->rsts);
+   450				goto err_out;
+   451			}
+   452		}
+   453	
+   454		hpriv->nports = child_nodes = of_get_child_count(dev->of_node);
+   455	
+   456		/*
+   457		 * If no sub-node was found, we still need to set nports to
+   458		 * one in order to be able to use the
+   459		 * ahci_platform_[en|dis]able_[phys|regulators] functions.
+   460		 */
+   461		if (!child_nodes)
+   462			hpriv->nports = 1;
+   463	
+   464		hpriv->phys = devm_kcalloc(dev, hpriv->nports, sizeof(*hpriv->phys), GFP_KERNEL);
+   465		if (!hpriv->phys) {
+   466			rc = -ENOMEM;
+   467			goto err_out;
+   468		}
+   469		/*
+   470		 * We cannot use devm_ here, since ahci_platform_put_resources() uses
+   471		 * target_pwrs after devm_ have freed memory
+   472		 */
+   473		hpriv->target_pwrs = kcalloc(hpriv->nports, sizeof(*hpriv->target_pwrs), GFP_KERNEL);
+   474		if (!hpriv->target_pwrs) {
+   475			rc = -ENOMEM;
+   476			goto err_out;
+   477		}
+   478	
+   479		if (child_nodes) {
+   480			for_each_child_of_node(dev->of_node, child) {
+   481				u32 port;
+   482				struct platform_device *port_dev __maybe_unused;
+   483	
+   484				if (!of_device_is_available(child))
+   485					continue;
+   486	
+   487				if (of_property_read_u32(child, "reg", &port)) {
+   488					rc = -EINVAL;
+   489					of_node_put(child);
+   490					goto err_out;
+   491				}
+   492	
+   493				if (port >= hpriv->nports) {
+   494					dev_warn(dev, "invalid port number %d\n", port);
+   495					continue;
+   496				}
+   497				mask_port_map |= BIT(port);
+   498	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

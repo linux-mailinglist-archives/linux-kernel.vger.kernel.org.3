@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3915849DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 359845849DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbiG2CjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S233578AbiG2Ciw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiG2CjK (ORCPT
+        with ESMTP id S231277AbiG2Civ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:39:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6037B34C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659062350; x=1690598350;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=q3zrx4UCHlK57YlBLf4pbI7diFMk4njT/phr3YEwp7Y=;
-  b=TS/+YBCDIIyy13ydAImTq1yBhU4XX0Ov4nQuIvlpROkskkIAfrS92i+B
-   hw43exBWdWrpDEfUXgLQ6R1du/YEB12vWSWueBFUS3vfyiFwkQPl1ck9i
-   0H0zdxQlOlMOWfPGhDm9iDWjVcLdttUt0v5MagLtAf4B00Cw8GxGK3EYx
-   gp+AEaxtjtILpFpg7OJq9oy8LSUDR9avZSG0kM/qRLE0ZiwumR9qPv5/o
-   K0aVGrWjD982KBOVnqcs0au6T5VhdU+8Ild3RRz72rZCnT6uqIaswal3W
-   kZLkhUBv95RIKzBM2MBNAYBr+cuSwYwBvgkr8v+pNdlhfJcikZfXjGlyy
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="268438797"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="268438797"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:39:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="604823463"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Jul 2022 19:39:08 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHFu8-000AwU-0i;
-        Fri, 29 Jul 2022 02:39:08 +0000
-Date:   Fri, 29 Jul 2022 10:38:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/core] BUILD SUCCESS
- a1a5482a2c6e38a3ebed32e571625c56a8cc41a6
-Message-ID: <62e34810.psKhsnpD/CFysWf/%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 28 Jul 2022 22:38:51 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EBC63912
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:38:50 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id h205-20020a1c21d6000000b003a34ac64bdfso351760wmh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sPEPmu8XCL40rZ4gGMx6kz9w4dOJZlBtYNldzFCtl5M=;
+        b=c7/mVGqzjJQAcMZSmKootfDYCC92C6paHGFLMmVpSlM1mLRUCHvvz1GXBnRx1LzcYw
+         xVIRAP62xzobEfLZINUAe7UoA0kvYswM2tu/JLWWdEO9kh44KMe5Du7OtC7ztHLZHhZx
+         eBmnL8sGEMpXV1gZztae6GGUBcGvzY3UO+7+9NCBY/5aI6KT4DBCI7Ioz+sFhsysNGd7
+         pCtbVHbMlhC+j/t3SrnNSuhQu8B21gEYKxp3QK8WVyjw2m2SolOJBBHi66ZNs4JZCwmU
+         DJN25kC3OAYUAklQkKQQWp+3jFVuWyFG2wdrlhantifYMOYi4sla66pZHY4t2QF9z545
+         1nww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sPEPmu8XCL40rZ4gGMx6kz9w4dOJZlBtYNldzFCtl5M=;
+        b=SwLHA2wSmgWhyuGqp0ToxgYSDD2Nah7k/N5qapISNI12cs+qQaYIwNEMqgilbyElXs
+         0NBXfFNFpv4vgIwavKzRSROVRq7PL7k2cCvg7+fM+Foi397dIPnZhkZNDKVO+7wscKyx
+         gnGU/URmawhpOry68ehVibjqtlC6fyJWKK8eyg70y2wkshd5I4WyRKK1CIIAOAVYGyZw
+         nkInPwoPYp9lkjNBE8NCRLIAOTPECm6LqGQkJN+kEtnrKotfwTgNCvkU7hYG778EFRZb
+         KoJdrb7iXpkpLXo6zB4ddTH77B2SYtU6kdQFLHcCZGj+LYhwnLGCZG+zEv9xSdpoJa0D
+         1xsA==
+X-Gm-Message-State: AJIora/Tk4aoZxct4Q/YGp7oU8OEKtWe7bSS8n9SfEP1uOfcD5WHdFA7
+        jdJB/0+h6lNIk8Su9GyrgzokxJT4MzQ5G6LyoiA=
+X-Google-Smtp-Source: AGRyM1tGi8xQ/en/Nbppmcx+mzWLdGBfK3AZG3aPixUQ40WVDeXUh6nyW0pW2DilAH0SnDih6briT30oedxckYrpB34=
+X-Received: by 2002:a05:600c:1c9d:b0:3a3:2631:2fcb with SMTP id
+ k29-20020a05600c1c9d00b003a326312fcbmr1244237wms.161.1659062328486; Thu, 28
+ Jul 2022 19:38:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
+In-Reply-To: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Fri, 29 Jul 2022 10:38:36 +0800
+Message-ID: <CAJhGHyCbEn-gTaK57-QA7cszRS2hyBPWt2wPhmiGDY5M9x5eKg@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: don't skip lockdep wq dependency in cancel_work_sync()
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Berg <johannes.berg@intel.com>,
+        Hillf Danton <hdanton@sina.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,216 +67,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/core
-branch HEAD: a1a5482a2c6e38a3ebed32e571625c56a8cc41a6  x86/extable: Fix ex_handler_msr() print condition
+On Thu, Jul 28, 2022 at 8:23 PM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> Like Hillf Danton mentioned
+>
+>   syzbot should have been able to catch cancel_work_sync() in work context
+>   by checking lockdep_map in __flush_work() for both flush and cancel.
+>
+> in [1], being unable to report an obvious deadlock scenario shown below is
+> broken. From locking dependency perspective, sync version of cancel request
+> should behave as if flush request, for it waits for completion of work if
+> that work has already started execution.
+>
+>   ----------
+>   #include <linux/module.h>
+>   #include <linux/sched.h>
+>   static DEFINE_MUTEX(mutex);
+>   static void work_fn(struct work_struct *work)
+>   {
+>     schedule_timeout_uninterruptible(HZ / 5);
+>     mutex_lock(&mutex);
+>     mutex_unlock(&mutex);
+>   }
+>   static DECLARE_WORK(work, work_fn);
+>   static int __init test_init(void)
+>   {
+>     schedule_work(&work);
+>     schedule_timeout_uninterruptible(HZ / 10);
+>     mutex_lock(&mutex);
+>     cancel_work_sync(&work);
+>     mutex_unlock(&mutex);
+>     return -EINVAL;
+>   }
+>   module_init(test_init);
+>   MODULE_LICENSE("GPL");
+>   ----------
+>
+> Link: https://lkml.kernel.org/r/20220504044800.4966-1-hdanton@sina.com [1]
+> Reported-by: Hillf Danton <hdanton@sina.com>
+> Fixes: d6e89786bed977f3 ("workqueue: skip lockdep wq dependency in cancel_work_sync()")
+> Cc: Johannes Berg <johannes.berg@intel.com>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> ---
+>  kernel/workqueue.c | 45 ++++++++++++++++++---------------------------
+>  1 file changed, 18 insertions(+), 27 deletions(-)
+>
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 1ea50f6be843..e6df688f84db 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -3000,8 +3000,7 @@ void drain_workqueue(struct workqueue_struct *wq)
+>  }
+>  EXPORT_SYMBOL_GPL(drain_workqueue);
+>
+> -static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
+> -                            bool from_cancel)
+> +static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr)
+>  {
+>         struct worker *worker = NULL;
+>         struct worker_pool *pool;
+> @@ -3043,8 +3042,7 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
+>          * workqueues the deadlock happens when the rescuer stalls, blocking
+>          * forward progress.
+>          */
+> -       if (!from_cancel &&
+> -           (pwq->wq->saved_max_active == 1 || pwq->wq->rescuer)) {
+> +       if (pwq->wq->saved_max_active == 1 || pwq->wq->rescuer) {
+>                 lock_map_acquire(&pwq->wq->lockdep_map);
+>                 lock_map_release(&pwq->wq->lockdep_map);
+>         }
+> @@ -3056,7 +3054,18 @@ static bool start_flush_work(struct work_struct *work, struct wq_barrier *barr,
+>         return false;
+>  }
+>
+> -static bool __flush_work(struct work_struct *work, bool from_cancel)
+> +/**
+> + * flush_work - wait for a work to finish executing the last queueing instance
+> + * @work: the work to flush
+> + *
+> + * Wait until @work has finished execution.  @work is guaranteed to be idle
+> + * on return if it hasn't been requeued since flush started.
+> + *
+> + * Return:
+> + * %true if flush_work() waited for the work to finish execution,
+> + * %false if it was already idle.
+> + */
+> +bool flush_work(struct work_struct *work)
+>  {
+>         struct wq_barrier barr;
+>
+> @@ -3066,12 +3075,10 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
+>         if (WARN_ON(!work->func))
+>                 return false;
+>
+> -       if (!from_cancel) {
+> -               lock_map_acquire(&work->lockdep_map);
+> -               lock_map_release(&work->lockdep_map);
+> -       }
+> +       lock_map_acquire(&work->lockdep_map);
+> +       lock_map_release(&work->lockdep_map);
 
-elapsed time: 2441m
 
-configs tested: 188
-configs skipped: 5
+IIUC, I think the change of these 5 lines of code (-3+2) is enough
+to fix the problem described in the changelog.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+If so, could you make a minimal patch?
 
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-i386                             allyesconfig
-i386                                defconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-powerpc                      ppc40x_defconfig
-sparc64                             defconfig
-powerpc                     ep8248e_defconfig
-parisc                              defconfig
-arm                         at91_dt_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-mips                     decstation_defconfig
-powerpc                      bamboo_defconfig
-ia64                        generic_defconfig
-m68k                        m5307c3_defconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-arm                            lart_defconfig
-ia64                          tiger_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                          rsk7269_defconfig
-sh                           sh2007_defconfig
-openrisc                            defconfig
-i386                          randconfig-c001
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-powerpc                    amigaone_defconfig
-arm                           tegra_defconfig
-parisc                generic-64bit_defconfig
-sh                          landisk_defconfig
-sh                           se7343_defconfig
-powerpc                     asp8347_defconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220727
-nios2                            allyesconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-m68k                                defconfig
-sh                      rts7751r2d1_defconfig
-loongarch                 loongson3_defconfig
-sh                          urquell_defconfig
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
-m68k                         amcore_defconfig
-powerpc                     sequoia_defconfig
-sh                           se7712_defconfig
-arc                        vdk_hs38_defconfig
-mips                            ar7_defconfig
-m68k                        stmark2_defconfig
-sh                          lboxre2_defconfig
-nios2                               defconfig
-sh                        sh7763rdp_defconfig
-powerpc                         wii_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                      makalu_defconfig
-sparc                       sparc64_defconfig
-arm                           sama5_defconfig
-arm                            qcom_defconfig
-sh                          rsk7264_defconfig
-mips                  decstation_64_defconfig
-arm                         assabet_defconfig
-sh                         ecovec24_defconfig
-xtensa                    smp_lx200_defconfig
-mips                 randconfig-c004-20220728
-powerpc              randconfig-c003-20220728
-s390                 randconfig-r044-20220728
-riscv                randconfig-r042-20220728
-arc                  randconfig-r043-20220728
-powerpc                 mpc837x_rdb_defconfig
-csky                             alldefconfig
-arm                           viper_defconfig
-powerpc                     taishan_defconfig
-arm                            hisi_defconfig
-m68k                        m5272c3_defconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-arm                  randconfig-c002-20220728
-s390                       zfcpdump_defconfig
-openrisc                         alldefconfig
-arm                            mps2_defconfig
-openrisc                    or1ksim_defconfig
-xtensa                  cadence_csp_defconfig
-mips                           ip32_defconfig
-arc                            hsdk_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                     sh7710voipgw_defconfig
-m68k                        m5407c3_defconfig
-sh                         ap325rxa_defconfig
-powerpc                      tqm8xx_defconfig
-arm                          lpd270_defconfig
-m68k                            mac_defconfig
+I believe what the commit d6e89786bed977f3 ("workqueue: skip lockdep
+wq dependency in cancel_work_sync()") fixes is real.  It is not a good
+idea to revert it.
 
-clang tested configs:
-hexagon              randconfig-r041-20220727
-hexagon              randconfig-r045-20220727
-s390                 randconfig-r044-20220727
-riscv                randconfig-r042-20220727
-powerpc                 mpc8315_rdb_defconfig
-powerpc                 mpc832x_mds_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-x86_64                        randconfig-k001
-powerpc                  mpc885_ads_defconfig
-arm                         socfpga_defconfig
-riscv                    nommu_virt_defconfig
-mips                        maltaup_defconfig
-powerpc                     ksi8560_defconfig
-arm                         bcm2835_defconfig
-powerpc                        icon_defconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                           ip27_defconfig
-arm                          ixp4xx_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                        fsp2_defconfig
-mips                     decstation_defconfig
-powerpc                      pasemi_defconfig
-powerpc                     tqm5200_defconfig
-arm                         s5pv210_defconfig
-arm                        neponset_defconfig
-hexagon              randconfig-r041-20220728
-hexagon              randconfig-r045-20220728
-powerpc                    mvme5100_defconfig
-powerpc                      pmac32_defconfig
-arm                        spear3xx_defconfig
-arm                     davinci_all_defconfig
-mips                      pic32mzda_defconfig
-hexagon                             defconfig
-powerpc                 mpc836x_mds_defconfig
-riscv                             allnoconfig
-mips                 randconfig-c004-20220728
-x86_64                        randconfig-c007
-s390                 randconfig-c005-20220728
-powerpc              randconfig-c003-20220728
-i386                          randconfig-c001
-riscv                randconfig-c006-20220728
-arm                  randconfig-c002-20220728
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-powerpc                      katmai_defconfig
-powerpc                   microwatt_defconfig
-powerpc                      ppc64e_defconfig
-mips                          rm200_defconfig
-arm                  colibri_pxa270_defconfig
-arm                      pxa255-idp_defconfig
+P.S.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The commit fd1a5b04dfb8("workqueue: Remove now redundant lock
+acquisitions wrt. workqueue flushes") removed this lockdep check.
+
+And the commit 87915adc3f0a("workqueue: re-add lockdep
+dependencies for flushing") added it back for non-canceling cases.
+
+It seems the commit fd1a5b04dfb8 is the culprit and 87915adc3f0a
+didn't fixes all the problem of it.
+
+So it is better to complete 87915adc3f0a by making __flush_work()
+does lock_map_acquire(&work->lockdep_map) for both canceling and
+non-canceling cases.

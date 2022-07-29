@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4E2584C29
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F308584C0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbiG2Gw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        id S235000AbiG2Gdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234662AbiG2Gwy (ORCPT
+        with ESMTP id S234968AbiG2Gch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:52:54 -0400
+        Fri, 29 Jul 2022 02:32:37 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E307E80F;
-        Thu, 28 Jul 2022 23:52:51 -0700 (PDT)
-X-UUID: d56f6323df484c0b8e3066487bf781ad-20220729
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6F5804A1;
+        Thu, 28 Jul 2022 23:32:27 -0700 (PDT)
+X-UUID: 25a87aaf01964111b5f6b391a7d5ca5f-20220729
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:2301e810-4447-47e2-b67a-8bb389999c70,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:a9e1b324-a982-4824-82d2-9da3b6056c2a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: d56f6323df484c0b8e3066487bf781ad-20220729
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.8,REQID:c75d76e4-2d82-4692-92f9-3a5e469383ec,OB:0,LO
+        B:30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:95
+X-CID-INFO: VERSION:1.1.8,REQID:c75d76e4-2d82-4692-92f9-3a5e469383ec,OB:0,LOB:
+        30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:95
+X-CID-META: VersionHash:0f94e32,CLOUDID:04f2b224-a982-4824-82d2-9da3b6056c2a,C
+        OID:592ffac3a016,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 25a87aaf01964111b5f6b391a7d5ca5f-20220729
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
         (envelope-from <tinghan.shen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1243112495; Fri, 29 Jul 2022 14:52:47 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
- Fri, 29 Jul 2022 06:52:29 +0000
+        with ESMTP id 1524624662; Fri, 29 Jul 2022 14:32:16 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Fri, 29 Jul 2022 14:32:15 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -64,7 +64,7 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net

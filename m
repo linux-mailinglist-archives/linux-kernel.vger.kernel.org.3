@@ -2,97 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256B2585133
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D095585136
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbiG2N6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 09:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
+        id S236749AbiG2N65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 09:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbiG2N6X (ORCPT
+        with ESMTP id S236714AbiG2N6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 09:58:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B6071736;
-        Fri, 29 Jul 2022 06:58:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 29 Jul 2022 09:58:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A55AC71BDD
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 06:58:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659103129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KJ/dTGRKY5+i0pAGUfeAsafS5YcWMs3vOgIRft+7hTg=;
+        b=fsXml2gvoyHqzYyuGkGNV5WJ1lyW+M7o2vgDeGGf7gkvHyaOM7cFkGC9eDZQ/OAPH79XFN
+        Ryv7jJ+4GX4cRXQzq+ON+i22qbBJNHBEPCaHp3K+Bo0Pe2T8OS9JCPtx63wGnkwUHqkb2s
+        MdMvdxlQm52A27kqHgF/U4zNO5Pziiw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-265-89npC9uvNP2GoxXiZhxWDg-1; Fri, 29 Jul 2022 09:58:46 -0400
+X-MC-Unique: 89npC9uvNP2GoxXiZhxWDg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DEAC61F70;
-        Fri, 29 Jul 2022 13:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C54C433D6;
-        Fri, 29 Jul 2022 13:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659103100;
-        bh=jaUjsv1PVnXc526rmanhZp9VEH+hoxg6XeDwxPCiOOA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HV8VUJkgX9NAwSeaIs3MdC4LKBMuuTABvG2n/RwJG39e71c6CFeWFTyalg1K6A7gx
-         prjZndMzoU22mWAxOn7cPhJyGMndlYuvwI4d9A0Qt152dVSd3k64pSNzA+fZM6E8Id
-         60MbbzZop0t2PWQOW7jEEvjgvm16YoentaBvb6Ws=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-input@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "jingle.wu" <jingle.wu@emc.com.tw>, linux-kernel@vger.kernel.org
-Subject: [PATCH] Input: elan_i2c - convert to use dev_groups
-Date:   Fri, 29 Jul 2022 15:58:16 +0200
-Message-Id: <20220729135816.2306989-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.1
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 009AA8039A3;
+        Fri, 29 Jul 2022 13:58:46 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 156D22166B2D;
+        Fri, 29 Jul 2022 13:58:41 +0000 (UTC)
+Date:   Fri, 29 Jul 2022 21:58:36 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Zhang Wensheng <zhangwensheng@huaweicloud.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        yukuai3@huawei.com
+Subject: Re: [PATCH -next] [RFC] block: fix null-deref in percpu_ref_put
+Message-ID: <YuPnjI8oHx4dO3nr@T590>
+References: <20220729105036.2202791-1-zhangwensheng@huaweicloud.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1627; i=gregkh@linuxfoundation.org; h=from:subject; bh=jaUjsv1PVnXc526rmanhZp9VEH+hoxg6XeDwxPCiOOA=; b=owGbwMvMwCRo6H6F97bub03G02pJDEmPn1fEW+xoVncOX/nw4VGXtWdWpSby3/FcwtLJtddrY3kr R/+cjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZgIvwTDgplV3VIXShKu3umukfCv5f /10PJiEMOCw5dKKxVLFkpN3yv67yn7nvMJzr9vAQA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220729105036.2202791-1-zhangwensheng@huaweicloud.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver core supports the ability to handle the creation and removal
-of device-specific sysfs files in a race-free manner.  Take advantage of
-that by converting this driver to use this by moving the sysfs
-attributes into a group and assigning the dev_groups pointer to it.
+On Fri, Jul 29, 2022 at 06:50:36PM +0800, Zhang Wensheng wrote:
+> From: Zhang Wensheng <zhangwensheng5@huawei.com>
+> 
+> A problem was find in stable 5.10 and the root cause of it like below.
+> 
+> In the use of q_usage_counter of request_queue, blk_cleanup_queue using
+> "wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter))"
+> to wait q_usage_counter becoming zero. however, if the q_usage_counter
+> becoming zero quickly, and percpu_ref_exit will execute and ref->data
+> will be freed, maybe another process will cause a null-defef problem
+> like below:
+> 
+> 	CPU0                             CPU1
+> blk_cleanup_queue
+>  blk_freeze_queue
+>   blk_mq_freeze_queue_wait
+> 				scsi_end_request
+> 				 percpu_ref_get
+> 				 ...
+> 				 percpu_ref_put
+> 				  atomic_long_sub_and_test
+>   percpu_ref_exit
+>    ref->data -> NULL
+>    				   ref->data->release(ref) -> null-deref
+> 
 
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "jingle.wu" <jingle.wu@emc.com.tw>
-Cc: linux-input@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/input/mouse/elan_i2c_core.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Looks it is one generic issue in percpu_ref, I think the following patch
+should address it.
 
-diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
-index e1758d5ffe42..d4eb59b55bf1 100644
---- a/drivers/input/mouse/elan_i2c_core.c
-+++ b/drivers/input/mouse/elan_i2c_core.c
-@@ -1311,12 +1311,6 @@ static int elan_probe(struct i2c_client *client,
- 		return error;
- 	}
+
+diff --git a/include/linux/percpu-refcount.h b/include/linux/percpu-refcount.h
+index d73a1c08c3e3..07308bd36d83 100644
+--- a/include/linux/percpu-refcount.h
++++ b/include/linux/percpu-refcount.h
+@@ -331,8 +331,12 @@ static inline void percpu_ref_put_many(struct percpu_ref *ref, unsigned long nr)
  
--	error = devm_device_add_groups(dev, elan_sysfs_groups);
--	if (error) {
--		dev_err(dev, "failed to create sysfs attributes: %d\n", error);
--		return error;
--	}
--
- 	error = input_register_device(data->input);
- 	if (error) {
- 		dev_err(dev, "failed to register input device: %d\n", error);
-@@ -1442,6 +1436,7 @@ static struct i2c_driver elan_driver = {
- 		.acpi_match_table = ACPI_PTR(elan_acpi_id),
- 		.of_match_table = of_match_ptr(elan_of_match),
- 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-+		.dev_groups = elan_sysfs_groups,
- 	},
- 	.probe		= elan_probe,
- 	.id_table	= elan_id,
--- 
-2.37.1
+ 	if (__ref_is_percpu(ref, &percpu_count))
+ 		this_cpu_sub(*percpu_count, nr);
+-	else if (unlikely(atomic_long_sub_and_test(nr, &ref->data->count)))
+-		ref->data->release(ref);
++	else {
++		percpu_ref_func_t	*release = ref->data->release;
++
++		if (unlikely(atomic_long_sub_and_test(nr, &ref->data->count)))
++			release(ref);
++	}
+ 
+ 	rcu_read_unlock();
+ }
+
+
+Thanks,
+Ming
 

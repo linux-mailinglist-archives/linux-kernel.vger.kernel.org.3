@@ -2,77 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3637F584FA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE9E584FA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235402AbiG2LdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 07:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S235983AbiG2Ldy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 07:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbiG2LdH (ORCPT
+        with ESMTP id S235559AbiG2Ldv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 07:33:07 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDB046DB9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:33:05 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y11so6896614lfs.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:33:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=T3lyyxd0KP2STslbGMoYEWzFv8XZ5XnehzpgSY0LnyI=;
-        b=P+CKl8Vclb7nppRLsuEQ4KbidbQV2Ruu443ArQM94iKZAkxacw3raTwYOEI0bzdcEA
-         A9f7HiLkW4aSpW9eFi/C7uIOFaP3VViEKS0EVnkM2vvgeZp3oODP1pEwCYpsZtoO06gd
-         OAmTY482BkwlvshK8K9khx5/OkUSSWEMwENv5IBoPZgwN/Td/ceiM+FcTx9g8/yFR7DJ
-         RNwaN9vhx3888pB6AJyE7avLmiQT5NeldP5auJRl0+YVjl1kDVn6esYy1D+pRAGY7+j+
-         7W+M8RuHHhz6iL27tvQnY0+GWGNlzt1n5Ul7XmIz9/Gsa6vQGwBzp6L0362zrqBKm2Wi
-         WRyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T3lyyxd0KP2STslbGMoYEWzFv8XZ5XnehzpgSY0LnyI=;
-        b=sBDDt/UFBLh8g1qG4mW2QaU1/YOUvw2xPBShsfcWx/OSz9runv7J5UGUQg6F06Q3SK
-         ZraNo+NJd8YtvsG6M1Vj95FShfVhidR2rc67+rC4TOryc9ee2RjaIM8qMQ6zFNlSSDbF
-         OQRYt8FiYF7KTvQScsWz2dUB4soWB1FY0TT53JZiXF4q4wpHHvmcf0OKugryj3A48iYN
-         t5d0rOvNgU4QwEc6PgKitA9ifdUx7quPPFqC6T/jfWNeehUKD6FLZ5ZY8EvEsJmorIBO
-         1ASyh4j/JSKric+Qq6/aQO1gV5lN5/bV8xC9DIdCsO8KTpiwazRo0k7dq2ooCccNRuC4
-         k3iw==
-X-Gm-Message-State: ACgBeo2PSEwWf4xJeN1+ya080PKoUdJs8oJwBko3mlN/2BN1pQ+CXvK9
-        thpvp+escfH6l6o5PEk3a49aXA==
-X-Google-Smtp-Source: AA6agR6JOOke7r3XaAOM3ixhkIu9pO6CxBd+pt5kplHnHvvUAtmQNHvEfUPP/0ZIFYZt4+gi5HzCaA==
-X-Received: by 2002:a05:6512:3b3:b0:48a:e4d5:e77a with SMTP id v19-20020a05651203b300b0048ae4d5e77amr371426lfp.247.1659094383912;
-        Fri, 29 Jul 2022 04:33:03 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id q19-20020a05651c055300b0025e15fe421bsm620540ljp.17.2022.07.29.04.33.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 04:33:03 -0700 (PDT)
-Message-ID: <f932415d-3bee-0948-a016-a2e837dd7256@linaro.org>
-Date:   Fri, 29 Jul 2022 14:33:02 +0300
+        Fri, 29 Jul 2022 07:33:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4B02AE13;
+        Fri, 29 Jul 2022 04:33:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3055EB82748;
+        Fri, 29 Jul 2022 11:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F10FC433C1;
+        Fri, 29 Jul 2022 11:33:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659094427;
+        bh=tMQuEz9/O5iN9YupqcwyAfC6BmIM2k+OavS4lms+KSU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=JU8FkWo6Tq2G0bmNjIfJvnViN9ubzzOgmUtjEW+UPyKj0J8ADt71vHiviOb65+qys
+         TFcCpC67YRVqggywTtDsU+6HIQos8D/o6NXgouFBm3lJLZWF07M06OSSeT1y0Pvze1
+         DGHNWg1+wCfg/tKfiYVum2kxW9Ho419ZwpARx85NdOw7JRQX/+FnFavQ69I4AcKHP0
+         gXUOUWvKs8whgz4PUUX7i/sKTfyR7T8xJJVQDlO7FZK56A8+DRQBWTK7eJUhDj11Ab
+         J60web7Uh9kyk4O0a8stKw7a8zA5GgZEdy1DkeNL3Nd8ZNdSNhbNp/Q22m74gn/ZPO
+         N6BGJbRM7r/Ew==
+Date:   Fri, 29 Jul 2022 06:33:45 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 15/15] PCI: dwc: Introduce dma-ranges property
+ support for RC-host
+Message-ID: <20220729113345.GA445581@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] ARM: dts: qcom: msm8960: add reference to sleep_clk
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Shinjo Park <peremen@gmail.com>
-Cc:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220728111603.30503-1-peremen@gmail.com>
- <66e15d42-96fd-5b02-b7c8-a284d3f8d21f@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <66e15d42-96fd-5b02-b7c8-a284d3f8d21f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220729045220.akdabli5szd5lbdt@mobilestation>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,38 +65,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/07/2022 14:51, Krzysztof Kozlowski wrote:
-> On 28/07/2022 13:16, Shinjo Park wrote:
->> Change the reference of sleep_clk to the same as qcom-apq8064.dtsi.
+On Fri, Jul 29, 2022 at 07:52:20AM +0300, Serge Semin wrote:
+> On Thu, Jul 28, 2022 at 05:11:20PM -0500, Bjorn Helgaas wrote:
+> > On Fri, Jun 24, 2022 at 05:39:47PM +0300, Serge Semin wrote:
+> > > In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
+> > > property has the same format as the "ranges" property. The only difference
+> > > is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
+> > > memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
+> > > property. Even though the DW PCIe controllers are normally equipped with
+> > > the internal Address Translation Unit which inbound and outbound tables
+> > > can be used to implement both properties semantics, it was surprising for
+> > > me to discover that the host-related part of the DW PCIe driver currently
+> > > supports the "ranges" property only while the "dma-ranges" windows are
+> > > just ignored. Having the "dma-ranges" supported in the driver would be
+> > > very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
+> > > mapping and require a customized PCIe memory layout. So let's fix that by
+> > > introducing the "dma-ranges" property support.
 > 
-> You add label, not change something.
+> > Do we have a platform that requires this yet?  Or does this fix a bug?
+> > 
+> > I see that dw_pcie_host_init() calls devm_pci_alloc_host_bridge(),
+> > which eventually parses "dma-ranges", but I don't see any DWC DT
+> > bindings that use it yet.
+> > 
+> > I'm not clear on what value this adds today.
 > 
->>
->> Signed-off-by: Shinjo Park <peremen@gmail.com>
->> Reviewed-by: David Heidelberg <david@ixit.cz>
->> ---
->>   arch/arm/boot/dts/qcom-msm8960.dtsi | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
->> index e8cd1c9c0..991eb1948 100644
->> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
->> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
->> @@ -71,7 +71,7 @@ pxo_board: pxo_board {
->>   			clock-output-names = "pxo_board";
->>   		};
->>   
->> -		sleep_clk {
->> +		sleep_clk: sleep_clk {
-> 
-> Since you touch the line, make the device node sleep-clk (device node
-> names should not have underscores) and mention this in commit msg.
+> There are several points of having this supported.
+> First of all, generic PCIe DT-bindings permit having the dma-ranges
+> specified for the PCIe RCs. If so having it unsupported by the driver
+> just breaks the bindings or at least makes it incomplete.
 
+Are there bindings in the tree that are broken and will be fixed by
+this?
 
-Then we are back to the compat issues, since the gcc expects the 
-'sleep_clk' clock.
+> Second, the main point of this patchset is to add the dma-ranges
+> support.) Especially seeing some other PCIe RC drivers do have it
+> supported too.
+> Finally. It is required for our platform (and for all the platforms
+> with similar issues). The problem is that the outbound source window
+> base address (on CPU-side) is size-unaligned. It resides at the 128MB
+> base address (size is somewhat about ~335MB). In case of the
+> one-on-one CPU->PCI mapping the peripherals with relatively big BARs
+> (at least of 256MB) and which need the BARs having size-aligned memory
+> won't be supported. So we had to remap the PCIe space to the
+> size-aligned base address. But in its turn that caused the PCIe-CPU
+> memory overlap. So PCIe DMA stopped working for the overlapped memory
+> due to the implicit P2P transactions. In order to fix that we had to
+> add the dma-ranges support to the DW PCIe driver and use it to remap
+> the overlapped memory. So please add this patch to the repo. We really
+> need it.
 
+Does the above apply to the pending Baikal-T1 driver?  If so, let's
+just include this patch in that series.  Then we'll have a user of
+this functionality and we'll be able to exercise and test this code.
 
--- 
-With best wishes
-Dmitry
+Bjorn

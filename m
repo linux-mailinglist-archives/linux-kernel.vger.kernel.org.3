@@ -2,116 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D7E5849A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F14B5849A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbiG2COl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        id S232967AbiG2COy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbiG2COj (ORCPT
+        with ESMTP id S231495AbiG2COx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:14:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA17A7AB0B;
-        Thu, 28 Jul 2022 19:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659060878; x=1690596878;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Hk7ObuyZNKuFnFxw79jUB5kZnRA2hTB7PWYDIHqm9xw=;
-  b=MPe2rJYRAR2iXBsfNoJTXQ7Sj0BRIi4qXXAgp3wsaIz66kyeRVFput6W
-   SUggjWK0VTcU1VMNLo82cZSfZOBEoC1Nbzbtr73yqJSBbZYbaJ2VXkFKd
-   n5LPWjNyWTa0Imtx4z/Jf7TFiLLzzVoXWoCkqLfI0tmsiDXCLFEcxBS9Z
-   1oGgjAufGFqY8olTPlQ1Ci7/HmGUuvwLEdb9InWhobTthhJeEyJWWnLY2
-   TUWObctqvuLPW+ifrLHulgEpm1ldTJ5kFX6z+/+EcGi7iBFCAScoweh6k
-   vmqUPxsOQ5bL+0QrSFepXrZaTZ+h87ZT/8tyqOYSvLFFuAH3bwEZ9YBTK
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="269053241"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="269053241"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:14:38 -0700
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="633966880"
-Received: from mdharmap-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.28.140])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:14:36 -0700
-Message-ID: <83343080fe848fea9f2318e1d1a6ff5066c6a65c.camel@intel.com>
-Subject: Re: [PATCH 1/4] KVM: x86: Tag kvm_mmu_x86_module_init() with __init
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Roth <michael.roth@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Date:   Fri, 29 Jul 2022 14:14:34 +1200
-In-Reply-To: <20220728221759.3492539-2-seanjc@google.com>
-References: <20220728221759.3492539-1-seanjc@google.com>
-         <20220728221759.3492539-2-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Thu, 28 Jul 2022 22:14:53 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FEC67AB0B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:14:51 -0700 (PDT)
+Received: from localhost.localdomain (unknown [111.9.175.10])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGeGUQuNigMdAAA--.27510S3;
+        Fri, 29 Jul 2022 10:14:46 +0800 (CST)
+Subject: Re: [PATCH 2/3] LoongArch: Add prologue unwinder support
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+References: <20220728140519.5420-1-zhangqing@loongson.cn>
+ <20220728140519.5420-2-zhangqing@loongson.cn>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <ddddff68-cae3-24e7-d0b7-d08abc94baf2@loongson.cn>
+Date:   Fri, 29 Jul 2022 10:14:44 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220728140519.5420-2-zhangqing@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxGeGUQuNigMdAAA--.27510S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr4kCF1DAw48Gw1rGFyDJrb_yoWrCrWDpF
+        yDAF93GF4jgr92gr9rXrs8Zr95Grsagr12gF9xJry8CF1DXr93GFnYk34vvan5J3ykG3W8
+        ZF4FyrW29anrtaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
+        zVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoO
+        J5UUUUU
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-28 at 22:17 +0000, Sean Christopherson wrote:
-> Mark kvm_mmu_x86_module_init() with __init, the entire reason it exists
-> is to initialize variables when kvm.ko is loaded, i.e. it must never be
-> called after module initialization.
->=20
-> Fixes: 1d0e84806047 ("KVM: x86/mmu: Resolve nx_huge_pages when kvm.ko is =
-loaded")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 2 +-
->  arch/x86/kvm/mmu/mmu.c          | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
-ost.h
-> index e8281d64a431..5ffa578cafe1 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1704,7 +1704,7 @@ static inline int kvm_arch_flush_remote_tlb(struct =
-kvm *kvm)
->  #define kvm_arch_pmi_in_guest(vcpu) \
->  	((vcpu) && (vcpu)->arch.handling_intr_from_guest)
-> =20
-> -void kvm_mmu_x86_module_init(void);
-> +void __init kvm_mmu_x86_module_init(void);
->  int kvm_mmu_vendor_module_init(void);
->  void kvm_mmu_vendor_module_exit(void);
-> =20
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 8e477333a263..2975fcb14c86 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6700,7 +6700,7 @@ static int set_nx_huge_pages(const char *val, const=
- struct kernel_param *kp)
->   * nx_huge_pages needs to be resolved to true/false when kvm.ko is loade=
-d, as
->   * its default value of -1 is technically undefined behavior for a boole=
-an.
->   */
-> -void kvm_mmu_x86_module_init(void)
-> +void __init kvm_mmu_x86_module_init(void)
->  {
->  	if (nx_huge_pages =3D=3D -1)
->  		__set_nx_huge_pages(get_nx_auto_mode());
+Hi, Qing,
 
-Reviewed-by: Kai Huang <kai.huang@intel.com>
 
---=20
+On 07/28/2022 10:05 PM, Qing Zhang wrote:
+> It unwind the stack frame based on prologue code analyze.
+> CONFIG_KALLSYMS is needed, at least the address and length
+> of each function.
+>
+> Three stages when we do unwind,
+>    (1)unwind_start(), the prapare of unwinding, fill unwind_state.
+>    (2)unwind_done(), judge whether the unwind process is finished or not.
+>    (3)unwind_next_frame(), unwind the next frame.
+>
+> Dividing unwinder helps to add new unwinders in the future, eg:
+> unwind_frame, unwind_orc .etc
+>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>
+>   
+> +static inline bool is_stack_alloc_ins(union loongarch_instruction *ip)
+> +{
+> +	/* addi.d $sp, $sp, -imm */
+> +	return ip->reg2i12_format.opcode == addid_op &&
+> +		ip->reg2i12_format.rj == LOONGARCH_GPR_SP &&
+> +		ip->reg2i12_format.rd == LOONGARCH_GPR_SP &&
+> +		ip->reg2i12_format.immediate & (1 << 11);
+Checking the sign bit can be used in other place.
+> +}
+> +
+> +static inline bool is_ra_save_ins(union loongarch_instruction *ip)
+> +{
+> +	/* st.d $ra, $sp, offset */
+> +	return ip->reg2i12_format.opcode == std_op &&
+> +		ip->reg2i12_format.rj == LOONGARCH_GPR_SP &&
+> +		ip->reg2i12_format.rd == LOONGARCH_GPR_RA;
+> +}
+> +
+> +static inline bool is_branch_insn(union loongarch_instruction insn)
+Does it by using pointer parameter as above functions do.
+> +{
+> +	return insn.reg1i21_format.opcode >= beqz_op &&
+> +			insn.reg1i21_format.opcode <= bgeu_op;
+> +}
+> +
+>   u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
+>   u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+>   u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned long pc, unsigned long dest);
+> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
+> index 243330b39d0d..09394e536ea9 100644
+> --- a/arch/loongarch/include/asm/unwind.h
+> +++ b/arch/loongarch/include/asm/unwind.h
+> @@ -14,6 +14,10 @@
+>   struct unwind_state {
+>   	struct stack_info stack_info;
+>   	struct task_struct *task;
+> +#if defined(CONFIG_UNWINDER_PROLOGUE)
+> +	unsigned long ra;
+> +	bool enable;
+Annotating here is appreciating. Enable is the way of prologue analysis
+while !enable is the way of guess.
+> +#endif
+>   	unsigned long sp, pc;
+>   	bool first;
+>   	bool error;
+[...]
+> +
+> +unsigned long unwind_get_return_address(struct unwind_state *state)
+> +{
+> +
+> +	if (unwind_done(state))
+> +		return 0;
+> +
+> +	if (state->enable)
+> +		return state->pc;
+> +	else if (state->first)
+> +		return state->pc;
+Combine conditions.
+> +
+> +	return *(unsigned long *)(state->sp);
+> +
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_get_return_address);
+> +
+> +static bool unwind_by_prologue(struct unwind_state *state)
+> +{
+> +	struct stack_info *info = &state->stack_info;
+> +	union loongarch_instruction *ip, *ip_end;
+> +	unsigned long frame_size = 0, frame_ra = -1;
+> +	unsigned long size, offset, pc = state->pc;
+> +
+> +	if (state->sp >= info->end || state->sp < info->begin)
+> +		return false;
+> +
+> +	if (!kallsyms_lookup_size_offset(pc, &size, &offset))
+> +		return false;
+> +
+> +	ip = (union loongarch_instruction *)(pc - offset);
+> +	ip_end = (union loongarch_instruction *)pc;
+> +
+> +	while (ip < ip_end) {
+> +		if (is_stack_alloc_ins(ip)) {
+> +			frame_size = (1 << 12) - ip->reg2i12_format.immediate;
+Due to there will be other place convert unsigned to signed, we have
+a chance that create a inline function in inst.h. Do it as same as
+checking the sign bit.
+
+> +			ip++;
+> +			break;
+> +		}
+> +		ip++;
+> +	}
+> +
+[...]
+> +
+> +	do {
+> +		if (state->enable) {
+> +			if (unwind_by_prologue(state))
+> +				return true;
+> +
+> +			if (info->type == STACK_TYPE_IRQ &&
+> +				info->end == state->sp) {
+> +				regs = (struct pt_regs *)info->next_sp;
+> +				pc = regs->csr_era;
+> +				if (user_mode(regs) || !__kernel_text_address(pc))
+> +					return false;
+> +
+> +				state->pc = pc;
+> +				state->sp = regs->regs[3];
+> +				state->ra = regs->regs[1];
+> +				state->first = true;
+> +				get_stack_info(state->sp, state->task, info);
+> +
+> +				return true;
+> +			}
+> +		} else {
+> +			if (state->first)
+> +				state->first = false;
+> +
+> +			if (unwind_by_guess(state))
+> +				return true;
+> +		}
+I'd prefer separate the block of 'if...else...' into two inline
+functions, that makes codes clear.
+
 Thanks,
--Kai
-
+Jinyang
 

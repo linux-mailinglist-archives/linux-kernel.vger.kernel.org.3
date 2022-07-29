@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5B1584F66
+	by mail.lfdr.de (Postfix) with ESMTP id EA922584F67
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235895AbiG2LNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 07:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S235951AbiG2LNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 07:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235871AbiG2LNc (ORCPT
+        with ESMTP id S235560AbiG2LNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 07:13:32 -0400
+        Fri, 29 Jul 2022 07:13:35 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CD5A7B34C
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:13:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E88067AC0E
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:13:33 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A061B1570;
-        Fri, 29 Jul 2022 04:13:31 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 572501576;
+        Fri, 29 Jul 2022 04:13:34 -0700 (PDT)
 Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A39E33F73D;
-        Fri, 29 Jul 2022 04:13:28 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 558AF3F73D;
+        Fri, 29 Jul 2022 04:13:31 -0700 (PDT)
 From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
 To:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -32,9 +32,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@redhat.com>,
         Mel Gorman <mgorman@suse.de>, Ben Segall <bsegall@google.com>,
         Luca Abeni <luca.abeni@santannapisa.it>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] sched/deadline: Make dl_cpuset_cpumask_can_shrink() capacity-aware
-Date:   Fri, 29 Jul 2022 13:13:04 +0200
-Message-Id: <20220729111305.1275158-3-dietmar.eggemann@arm.com>
+Subject: [PATCH v2 3/3] sched/deadline: Use sched_dl_entity's dl_density in dl_task_fits_capacity()
+Date:   Fri, 29 Jul 2022 13:13:05 +0200
+Message-Id: <20220729111305.1275158-4-dietmar.eggemann@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220729111305.1275158-1-dietmar.eggemann@arm.com>
 References: <20220729111305.1275158-1-dietmar.eggemann@arm.com>
@@ -48,85 +48,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dl_cpuset_cpumask_can_shrink() is used to validate whether there is
-still enough CPU capacity for DL tasks in the reduced cpuset.
+Save a multiplication in dl_task_fits_capacity() by using already
+maintained per-sched_dl_entity (i.e. per-task) `dl_runtime/dl_deadline`
+(dl_density).
 
-Currently it still operates on `# remaining CPUs in the cpuset` (1).
-Change this to use the already capacity-aware DL admission control
-__dl_overflow() for the `cpumask can shrink` test.
+  cap_scale(dl_deadline, cap) >= dl_runtime
 
-  dl_b->bw = sched_rt_period << BW_SHIFT / sched_rt_period
+  dl_deadline * cap >> SCHED_CAPACITY_SHIFT >= dl_runtime
 
-  dl_b->bw * (1) >= currently allocated bandwidth in root_domain (rd)
+  cap >= dl_runtime << SCHED_CAPACITY_SHIFT / dl_deadline
 
-  Replace (1) w/ `\Sum CPU capacity in rd >> SCHED_CAPACITY_SHIFT`
+  cap >= (dl_runtime << BW_SHIFT / dl_deadline) >>
+				BW_SHIFT - SCHED_CAPACITY_SHIFT
 
-Adapt __dl_bw_capacity() to take a cpumask instead of a CPU number
-argument so that `rd->span` and `cpumask of the reduced cpuset` can
-be used here.
+  cap >= dl_density >> BW_SHIFT - SCHED_CAPACITY_SHIFT
+
+__sched_setscheduler()->__checkparam_dl() ensures that the 2 corner
+cases (if conditions) `runtime == RUNTIME_INF (-1)` and `period == 0`
+of to_ratio(deadline, runtime) are not met when setting dl_density in
+__sched_setscheduler()-> __setscheduler_params()->__setparam_dl().
 
 Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 ---
- kernel/sched/deadline.c | 24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ kernel/sched/sched.h | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 3f9d90b8a8b6..34de6060dea6 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -124,15 +124,12 @@ static inline int dl_bw_cpus(int i)
- 	return cpus;
- }
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 72704b2b4a45..cdfe52cd8d39 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -320,21 +320,6 @@ struct dl_bw {
+ 	u64			total_bw;
+ };
  
--static inline unsigned long __dl_bw_capacity(int i)
-+static inline unsigned long __dl_bw_capacity(const struct cpumask *mask)
- {
--	struct root_domain *rd = cpu_rq(i)->rd;
- 	unsigned long cap = 0;
-+	int i;
- 
--	RCU_LOCKDEP_WARN(!rcu_read_lock_sched_held(),
--			 "sched RCU must be held");
+-/*
+- * Verify the fitness of task @p to run on @cpu taking into account the
+- * CPU original capacity and the runtime/deadline ratio of the task.
+- *
+- * The function will return true if the CPU original capacity of the
+- * @cpu scaled by SCHED_CAPACITY_SCALE >= runtime/deadline ratio of the
+- * task and false otherwise.
+- */
+-static inline bool dl_task_fits_capacity(struct task_struct *p, int cpu)
+-{
+-	unsigned long cap = arch_scale_cpu_capacity(cpu);
 -
--	for_each_cpu_and(i, rd->span, cpu_active_mask)
-+	for_each_cpu_and(i, mask, cpu_active_mask)
- 		cap += capacity_orig_of(i);
+-	return cap_scale(p->dl.dl_deadline, cap) >= p->dl.dl_runtime;
+-}
+-
+ extern void init_dl_bw(struct dl_bw *dl_b);
+ extern int  sched_dl_global_validate(void);
+ extern void sched_dl_do_global(void);
+@@ -2894,6 +2879,21 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 				 enum cpu_util_type type,
+ 				 struct task_struct *p);
  
- 	return cap;
-@@ -148,7 +145,10 @@ static inline unsigned long dl_bw_capacity(int i)
- 	    capacity_orig_of(i) == SCHED_CAPACITY_SCALE) {
- 		return dl_bw_cpus(i) << SCHED_CAPACITY_SHIFT;
- 	} else {
--		return __dl_bw_capacity(i);
-+		RCU_LOCKDEP_WARN(!rcu_read_lock_sched_held(),
-+				 "sched RCU must be held");
++/*
++ * Verify the fitness of task @p to run on @cpu taking into account the
++ * CPU original capacity and the runtime/deadline ratio of the task.
++ *
++ * The function will return true if the original capacity of @cpu is
++ * greater than or equal to task's deadline density right shifted by
++ * (BW_SHIFT - SCHED_CAPACITY_SHIFT) and false otherwise.
++ */
++static inline bool dl_task_fits_capacity(struct task_struct *p, int cpu)
++{
++	unsigned long cap = arch_scale_cpu_capacity(cpu);
 +
-+		return __dl_bw_capacity(cpu_rq(i)->rd->span);
- 	}
- }
- 
-@@ -3004,17 +3004,15 @@ bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr)
- int dl_cpuset_cpumask_can_shrink(const struct cpumask *cur,
- 				 const struct cpumask *trial)
++	return cap >= p->dl.dl_density >> (BW_SHIFT - SCHED_CAPACITY_SHIFT);
++}
++
+ static inline unsigned long cpu_bw_dl(struct rq *rq)
  {
--	int ret = 1, trial_cpus;
-+	unsigned long flags, cap;
- 	struct dl_bw *cur_dl_b;
--	unsigned long flags;
-+	int ret = 1;
- 
- 	rcu_read_lock_sched();
- 	cur_dl_b = dl_bw_of(cpumask_any(cur));
--	trial_cpus = cpumask_weight(trial);
--
-+	cap = __dl_bw_capacity(trial);
- 	raw_spin_lock_irqsave(&cur_dl_b->lock, flags);
--	if (cur_dl_b->bw != -1 &&
--	    cur_dl_b->bw * trial_cpus < cur_dl_b->total_bw)
-+	if (__dl_overflow(cur_dl_b, cap, 0, 0))
- 		ret = 0;
- 	raw_spin_unlock_irqrestore(&cur_dl_b->lock, flags);
- 	rcu_read_unlock_sched();
+ 	return (rq->dl.running_bw * SCHED_CAPACITY_SCALE) >> BW_SHIFT;
 -- 
 2.25.1
 

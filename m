@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C560258530C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D15585310
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbiG2Po4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S238003AbiG2Pre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237892AbiG2Pox (ORCPT
+        with ESMTP id S237540AbiG2PrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:44:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5282E87366;
-        Fri, 29 Jul 2022 08:44:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4FF4B8283F;
-        Fri, 29 Jul 2022 15:44:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C3DC433B5;
-        Fri, 29 Jul 2022 15:44:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659109489;
-        bh=XRDAP0R73Isjq5OKuXb3XBsHRnvHuJUJz236d0YAmT8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gS1PRcPtxzIKKHkPMVQ9EH4aR3W0hjJBxXs+raEr8Ntga2Lyatvm+Uxrf+3fSkpmc
-         XtRlRfLLYGl7OlAYGuRxEayU5Hpt/SMIUex62kSALDCiaz7L232RWCO0tkwwca5zX6
-         ftykw5LfTsp8Fx3Jxnp7tZoajTF2iH1wZasYPVXTaX+XJ+bN0hDd4/wqQ1g+znQde1
-         sY2SKutso+dqdsfwXviFZOth+X6N9+betfbQtEBk86chaMwq/VIPpB87ZG8C2OpYgk
-         zvCPoLWNH7/N0nfmVKRPVLCouYn+e8bwMB2ITOF28Bb22pKN6lvL2jm4JJENyYFuMH
-         3APeCaWJNDByQ==
-Date:   Fri, 29 Jul 2022 08:44:48 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        kuniyu@amazon.co.jp, richard_siegfried@systemli.org,
-        joannelkoong@gmail.com, socketcan@hartkopp.net,
-        gerrit@erg.abdn.ac.uk, tomasz@grobelny.oswiecenia.net,
-        dccp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dccp: put dccp_qpolicy_full() and dccp_qpolicy_push()
- in the same lock
-Message-ID: <20220729084448.5a4492cc@kernel.org>
-In-Reply-To: <f77aebb0-129a-bc73-0976-854eeea33ae5@gmail.com>
-References: <20220727080609.26532-1-hbh25y@gmail.com>
-        <20220728200139.1e7d9bc6@kernel.org>
-        <f77aebb0-129a-bc73-0976-854eeea33ae5@gmail.com>
+        Fri, 29 Jul 2022 11:47:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A4D87219
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:47:22 -0700 (PDT)
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659109640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=O4rhr1rYV4QRyupGwy8qDV2MfT3JnDU8vIVTHPUsjls=;
+        b=o9iX21ZXcpZfC+HXL49xoDJLQxGvgfp/6/lG+cepb7a9/QwE0IOjulOq0YUcDpFa42Tk4D
+        d274YISWxwTscXc6nK5TVA23y/s5z39w7RXDT8yvdHQi9VjHqzTYtkC8t8t02b3tWHYaN3
+        hieFDjaVR5s0lYr5EbEnuEDTZOX8OEE1lq89DmUxWlhgGeGLSVbJblPWKhM4tZYH/Mhz5i
+        5dw61/TcAhQsa6uhLvdP5MmwDJWbRlW5A1VIRVPxeeEeZImuZP95AlRkh7QseFGS+jLLf2
+        2FV0dF9DQ3sA48CslRZXfHdwJEGWRS+NPAmsar4/byItGIfpsfTFwm0txKtIJA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659109640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=O4rhr1rYV4QRyupGwy8qDV2MfT3JnDU8vIVTHPUsjls=;
+        b=iyvYaivEsVsLGJP9BYRZeH6InJOTgCDC8EAqxUDVdGRQbpS7hEf3uHjYWExqG7E1+gaoDc
+        6y1arEfxmjWo4kDA==
+To:     linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 0/2 v2] Init the hashed pointer from a worker.
+Date:   Fri, 29 Jul 2022 17:47:14 +0200
+Message-Id: <20220729154716.429964-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Jul 2022 18:34:39 +0800 Hangyu Hua wrote:
-> >> thread1--->lock
-> >> thread1--->dccp_qpolicy_full: queue is full. drop a skb  
-> > 
-> > This linie should say "not full"?  
-> 
-> dccp_qpolicy_full only call dccp_qpolicy_drop when queue is full. You 
-> can check out qpolicy_prio_full. qpolicy_prio_full will drop a skb to 
-> make suer there is enough space for the next data. So I think it should 
-> be "full" here.
+Hi,
 
-Oh, I see what you're saying. That's unnecessarily complicated, 
-I reckon. The "simple" policy suffers from the same problem and 
-is easier to understand. Anyway, you already sent v2 and it doesn't
-matter enough to warrant v3, so fine.
+this mini series is a follow up to=20
+	https://lore.kernel.org/all/YuOf6qu453dOkR+S@linutronix.de/
+
+v1=E2=80=A6v2:
+   - Remove the static_branch_likely() as suggested by Petr Mladek.
+   - Jason wasn't onboard with fiddling in random core to get the job
+     done. Instead a worker is scheduled from an initcall and
+     get_random_bytes_wait() is used to get the date once it is
+     available.
+
+Sebastian
+
+

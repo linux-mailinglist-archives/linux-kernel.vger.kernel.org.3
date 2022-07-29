@@ -2,113 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD695849B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1FB5849B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbiG2CXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S231410AbiG2CYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiG2CX3 (ORCPT
+        with ESMTP id S229535AbiG2CYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:23:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2619E7AB09
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:23:27 -0700 (PDT)
-Received: from [10.130.0.193] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9GcRONiRspAAA--.45504S3;
-        Fri, 29 Jul 2022 10:23:25 +0800 (CST)
-Subject: Re: [PATCH v3 0/4] LoongArch: Support new relocation types
-To:     Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev
-References: <bb7824d39a694b13069718c2b8193379f79229b4.camel@xry111.site>
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jinyang He <hejinyang@loongson.cn>
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <879dc428-0407-3280-617d-840352aa6d08@loongson.cn>
-Date:   Fri, 29 Jul 2022 10:23:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 28 Jul 2022 22:24:10 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D467AB35
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:24:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659061449; x=1690597449;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mMhcYlnsww9WFVCsxeD5qaNs2SGNqJrxRSw7IojEUQs=;
+  b=igmqplUttH3Ni5Zjne+Vc4M714JPFsMGfn1XJn8605Q1TOjfOqpeUIXq
+   3p2y4ybGlY77fWuuW6dATcR2v+fyewxgN6YfXwvTLnviZcDUeaxfJs6TK
+   Dt/oSJ6uGehyzG4bzX2Htjh6QMf2S9FdXfZVbpqnBM01ZQUbtiHPDcdnW
+   9wHlvktc8dgK/xh5oXU8VOk807YKGgT+4i+f9d+rvkD3Ol4WbEsfBL4Lm
+   kt2qlI2s4wUn/UndwwLPE9NBedUPMSJaubt8/rWZEF3GSPrzutyzMj5Pq
+   q8XKVrckyBcEyiN/hBpiYvRuto5D09siS9bVY3P4ghaJY3MKOvyZps8RD
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="352671820"
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="352671820"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:24:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="576764384"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2022 19:24:07 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHFfa-000Auk-2b;
+        Fri, 29 Jul 2022 02:24:06 +0000
+Date:   Fri, 29 Jul 2022 10:23:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/urgent] BUILD SUCCESS
+ ddfc710395cccc61247348df9eb18ea50321cbed
+Message-ID: <62e344b9.oBGH41OCXqBgy2Xl%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <bb7824d39a694b13069718c2b8193379f79229b4.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxn9GcRONiRspAAA--.45504S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF1xCFyxtr48JrWrJFW5ZFb_yoW8uw13pr
-        9xCrn5JFZ7Grn3Xa1aq3WUWF15Ga97G3yaqay3t34rArnxXF1UCF15tw15AFy7Xws3KF40
-        gFyaga409a1UAwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvmb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
-        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
-        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
-        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
-        8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7IU5Ssj5UUUUU==
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ruoyao
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/urgent
+branch HEAD: ddfc710395cccc61247348df9eb18ea50321cbed  sched/deadline: Fix BUG_ON condition for deboosted tasks
 
-On 07/29/2022 10:07 AM, Xi Ruoyao wrote:
-> The version 2.00 of LoongArch ELF ABI specification introduced new
-> relocation types, and the development tree of Binutils and GCC has
-> started to use them.  If the kernel is built with the latest snapshot of
-> Binutils or GCC, it will fail to load the modules because of unrecognized
-> relocation types in modules.
->
-> Add support for GOT and new relocation types for the module loader, so
-> the kernel (with modules) can be built with the "normal" code model and
-> function properly.
->
-> This series does not break the compatibility with old toolchain using
-> stack-based relocation types, so with the patches applied the kernel can
-> be be built with both old and new toolchains.
->
-> Tested by building the kernel with both Binutils & GCC master branch and
-> my system Binutils & GCC (without new relocation type support), running
-> both the builds with 35 in-tree modules loaded, and loading one module
-> with 20 GOT loads (loaded addresses verified by comparing with
-> /proc/kallsyms).
->
-> Changes from v2 to v3:
->
-> - Use `union loongarch_instruction` instead of explicit bit shifts
->   applying the relocation.  Suggested by Youling.
-> - For R_LARCH_B26, move the alignment check before the range check to be
->   consistent with stack pop relocations.  Suggested by Youling.
-> - Reword the commit message of the 3rd patch.  Suggested by Huacai.
+elapsed time: 2427m
 
-The log of changes from v1 to v2 should be preserved.
+configs tested: 185
+configs skipped: 5
 
-Thanks,
-Youling
->
-> Xi Ruoyao (4):
->   LoongArch: Add section of GOT for kernel module
->   LoongArch: Support R_LARCH_SOP_PUSH_GPREL relocation type in kernel
->     module
->   LoongArch: Remove -fplt and -Wa,-mla-* from CFLAGS
->   LoongArch: Support modules with new relocation types
->
->  arch/loongarch/Makefile                 |  4 --
->  arch/loongarch/include/asm/elf.h        | 37 ++++++++++
->  arch/loongarch/include/asm/module.h     | 23 ++++++
->  arch/loongarch/include/asm/module.lds.h |  1 +
->  arch/loongarch/kernel/head.S            | 10 +--
->  arch/loongarch/kernel/module-sections.c | 51 +++++++++++--
->  arch/loongarch/kernel/module.c          | 96 +++++++++++++++++++++++++
->  7 files changed, 209 insertions(+), 13 deletions(-)
->
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+powerpc                      ppc40x_defconfig
+sparc64                             defconfig
+powerpc                     ep8248e_defconfig
+parisc                              defconfig
+arm                         at91_dt_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+mips                     decstation_defconfig
+powerpc                      bamboo_defconfig
+ia64                        generic_defconfig
+m68k                        m5307c3_defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+arm                            lart_defconfig
+ia64                          tiger_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                          rsk7269_defconfig
+sh                           sh2007_defconfig
+openrisc                            defconfig
+i386                          randconfig-c001
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+powerpc                    amigaone_defconfig
+arm                           tegra_defconfig
+parisc                generic-64bit_defconfig
+sh                          landisk_defconfig
+sh                           se7343_defconfig
+powerpc                     asp8347_defconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220727
+nios2                            allyesconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+m68k                                defconfig
+sh                      rts7751r2d1_defconfig
+loongarch                 loongson3_defconfig
+sh                          urquell_defconfig
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+m68k                         amcore_defconfig
+powerpc                     sequoia_defconfig
+sh                           se7712_defconfig
+arc                        vdk_hs38_defconfig
+mips                            ar7_defconfig
+m68k                        stmark2_defconfig
+sh                          lboxre2_defconfig
+nios2                               defconfig
+sh                        sh7763rdp_defconfig
+powerpc                         wii_defconfig
+sh                ecovec24-romimage_defconfig
+powerpc                      makalu_defconfig
+sparc                       sparc64_defconfig
+arm                           sama5_defconfig
+arm                            qcom_defconfig
+sh                          rsk7264_defconfig
+mips                  decstation_64_defconfig
+arm                         assabet_defconfig
+sh                         ecovec24_defconfig
+xtensa                    smp_lx200_defconfig
+mips                 randconfig-c004-20220728
+powerpc              randconfig-c003-20220728
+s390                 randconfig-r044-20220728
+riscv                randconfig-r042-20220728
+arc                  randconfig-r043-20220728
+powerpc                 mpc837x_rdb_defconfig
+csky                             alldefconfig
+arm                           viper_defconfig
+powerpc                     taishan_defconfig
+arm                            hisi_defconfig
+m68k                        m5272c3_defconfig
+arm                  randconfig-c002-20220728
+s390                       zfcpdump_defconfig
+openrisc                         alldefconfig
+arm                            mps2_defconfig
+openrisc                    or1ksim_defconfig
+xtensa                  cadence_csp_defconfig
+mips                           ip32_defconfig
+arc                            hsdk_defconfig
+sh                 kfr2r09-romimage_defconfig
+sh                     sh7710voipgw_defconfig
+m68k                        m5407c3_defconfig
+sh                         ap325rxa_defconfig
+powerpc                      tqm8xx_defconfig
+arm                          lpd270_defconfig
+m68k                            mac_defconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20220727
+hexagon              randconfig-r045-20220727
+s390                 randconfig-r044-20220727
+riscv                randconfig-r042-20220727
+powerpc                 mpc8315_rdb_defconfig
+powerpc                 mpc832x_mds_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+x86_64                        randconfig-k001
+powerpc                  mpc885_ads_defconfig
+arm                         socfpga_defconfig
+riscv                    nommu_virt_defconfig
+mips                        maltaup_defconfig
+powerpc                     ksi8560_defconfig
+arm                         bcm2835_defconfig
+powerpc                        icon_defconfig
+powerpc               mpc834x_itxgp_defconfig
+mips                           ip27_defconfig
+arm                          ixp4xx_defconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                        fsp2_defconfig
+mips                     decstation_defconfig
+powerpc                      pasemi_defconfig
+powerpc                     tqm5200_defconfig
+arm                         s5pv210_defconfig
+arm                        neponset_defconfig
+hexagon              randconfig-r041-20220728
+hexagon              randconfig-r045-20220728
+powerpc                    mvme5100_defconfig
+powerpc                      pmac32_defconfig
+arm                        spear3xx_defconfig
+arm                     davinci_all_defconfig
+mips                      pic32mzda_defconfig
+hexagon                             defconfig
+powerpc                 mpc836x_mds_defconfig
+riscv                             allnoconfig
+mips                 randconfig-c004-20220728
+x86_64                        randconfig-c007
+s390                 randconfig-c005-20220728
+powerpc              randconfig-c003-20220728
+i386                          randconfig-c001
+riscv                randconfig-c006-20220728
+arm                  randconfig-c002-20220728
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+powerpc                      katmai_defconfig
+powerpc                   microwatt_defconfig
+powerpc                      ppc64e_defconfig
+mips                          rm200_defconfig
+arm                  colibri_pxa270_defconfig
+arm                      pxa255-idp_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

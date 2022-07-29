@@ -2,210 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18B158517F
+	by mail.lfdr.de (Postfix) with ESMTP id 9473558517E
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237009AbiG2OY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
+        id S236990AbiG2OY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236981AbiG2OY0 (ORCPT
+        with ESMTP id S231230AbiG2OYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:24:26 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210D86C138
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:24:25 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso2574405wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:24:25 -0700 (PDT)
+        Fri, 29 Jul 2022 10:24:25 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9414D56B8B
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:24:24 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id w10so4785723plq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:24:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LypYebNOHjfta90jCiEF7l4jJITyPo34Kh+cxFf5b7k=;
-        b=o/VoIs1FYnbSYgcdN1Mey6VbgelHyJu1ATCEWwD53mdKhrXpjQui5rDM7ZZlXtE+fS
-         MUVqTmYxWlsowO+bpTuzy/oVsaembdjMiLzApJgcq5dArVqtptZevLreiKLD8CgRs3kr
-         MvGq1W04Uy8IEEITpzUTp2vB2QhQnKKJbVTNG/vMkIIndei2g1G9H7zRpNz4iiHkULmI
-         aLRqDypMhjfFvunZDaLYNnqjmaQ2WYJwoTKglmL55DegwMx48k5zXYGUUqM2NuAYGUGM
-         qrHPV7ks4LLs2lJBqSSgv7wmY90Cr7frvWqbTwKpyYEZDWXTz9+9QBM7I40bXPwPR1Na
-         1OBw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:from:to:mime-version;
+        bh=UConN5gGUaEKejzmj0/FeH3qdQlU3JzNGuCzI1IImJs=;
+        b=ie0Fsxa6BJS/R/ucTt6BbbZY2nH/R5Ghz+cihlgyZHEslUpxe/OsloQHsjd3SC0uhF
+         4SfN3XO3t5wYLbuDqlZFoYp2jqMdc1UYyqMpuG2RI4LVjvrkEPQU6SR4NH8o05hd2+28
+         5t7fjn7N1IuGIRWr66+aZd9toKEkYoqGSCE/svsE9Actdk7T2vkFHN4mV/lXf4w9xZn7
+         FwEipySPT0rFQkTT+BDwB8PXdIAXD8M8C4PZnj0mLwDj1PyBPGjTqDNWHd0z8nc/3R7A
+         T8FUiiz04Nu2Ds/ADzMc8UOzANSAa+CYF6WCliga7PaSiKgJhyDl0Exee1QwMsbvKW9g
+         4r/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LypYebNOHjfta90jCiEF7l4jJITyPo34Kh+cxFf5b7k=;
-        b=ziaXryLJQgkenpovo2zzA2SJp7CovkHjUdIf3iwdkt4cCqUNxdqft/tmNlpwMMj1Sd
-         yEc8Yt3s4+2LmXqnTp1pKzMfZI28zpUNYYniMJOO4CUOMjAQwqSCNy7tRbI4B2Mrpurt
-         3hrq18rl7NB/KFd/rgcZfOogq6j/sJcSCXvIcYtAJWBlRcf/kXklM1ksuENqhKvNgMBK
-         +6dzlZq3Z02xhMNeya+oExmyNfCXypBSlIbsSPoDC3gm/bQ+7sO0Y8eo+D1S7CIoe9hZ
-         H+gkwjJ33GF8XkpZYJfkHkGfDaCZyH8wxb5opJwQD681xhF3qA6q9jT/uIXdQPJ8M78r
-         CpIg==
-X-Gm-Message-State: AJIora+u3Yw7Z3chOlnAO3AvyqofizXrflBDWqTgejWqM7we/k+vNOVS
-        at8P4AWArC2MFpBxLyJ/DJpkCf0+6ubJ/nUDvWGbMw==
-X-Google-Smtp-Source: AGRyM1vcvoixpQIqXoSvh3g/D9PPji8zVRLepMsp2jSLV0A+j/g1kK1tqIHam+9nDFHK6ZhaYv+FN2GWeQvomzERy5c=
-X-Received: by 2002:a05:600c:19d2:b0:3a3:2cdb:cc02 with SMTP id
- u18-20020a05600c19d200b003a32cdbcc02mr3018045wmq.182.1659104663337; Fri, 29
- Jul 2022 07:24:23 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:subject:from:to:mime-version;
+        bh=UConN5gGUaEKejzmj0/FeH3qdQlU3JzNGuCzI1IImJs=;
+        b=0OkwqKDxC4FuQaZXa8OmTS7nxn35gUEMQ5VTqQABzylPJcExMQDPbjbiUqadA0xxQZ
+         ntcB7VYTjkdeSit0UMVendF5z4NAnyerGhROfN5VuPw1EDmooApoBpUpHZUspDwHfgim
+         xt2qmKVemxvKw2dQT/jOdtOLTtmWyZJT7duI/nD36Lg8mAR42mzP8LLMmdu4/JJbe2MQ
+         67sDV2IVaHlBwbyAZZJf6JOqFybd7OyTocDwAimLMvXgdGD2JnQtqcOM+4zYrg0qOI//
+         sxZvo4tLAgKkJ31H0IRmt5nbeOaM+d4xmquHtl6KO1AdY4jQxnvUmzr1fGjqFp8kIZHp
+         5Lvg==
+X-Gm-Message-State: ACgBeo1avaOeaaJ5sGJlYaO5fNEJd3P4f/QN7vd3YeXRB0Q/E7ICHII2
+        b4OjK3fryu6vSocLYm3cI/arVRFxBBI=
+X-Google-Smtp-Source: AA6agR7V8NxMV0KCFdI0LcFRIlsaytitehvoL81NcR1G3XKcKSxzn4Rbyr3xZkE5ZMHku4p44tUkRw==
+X-Received: by 2002:a17:903:2683:b0:16e:c630:fb2e with SMTP id jf3-20020a170903268300b0016ec630fb2emr666485plb.52.1659104663845;
+        Fri, 29 Jul 2022 07:24:23 -0700 (PDT)
+Received: from [10.2.0.2] ([185.230.126.2])
+        by smtp.gmail.com with ESMTPSA id ij19-20020a170902ab5300b0016daee46b72sm394895plb.237.2022.07.29.07.24.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 07:24:23 -0700 (PDT)
+Message-ID: <62e3ed97.170a0220.77fc4.08a7@mx.google.com>
+Date:   Fri, 29 Jul 2022 07:24:23 -0700 (PDT)
+Subject: Your E Receipt has been renewed on July 25, 202242488611 of item
+From:   hdhgyhcjgnhuy57475bhfnch@gmail.com
+To:     linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-References: <20220729074351.138260-1-irogers@google.com> <20220729074351.138260-6-irogers@google.com>
- <393770c6-8469-a5b5-5106-a98420bb6e00@huawei.com>
-In-Reply-To: <393770c6-8469-a5b5-5106-a98420bb6e00@huawei.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 29 Jul 2022 07:24:10 -0700
-Message-ID: <CAP-5=fUQ2nAHyN5Egxfpyotc0u4O1wsZ8VKzwffOhGhV++L6=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 05/17] perf jevents: Remove the type/version variables
-To:     John Garry <john.garry@huawei.com>
-Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="===============9033940074199228714=="
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FREEMAIL_DOC_PDF
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 1:30 AM John Garry <john.garry@huawei.com> wrote:
->
-> On 29/07/2022 08:43, Ian Rogers wrote:
-> > pmu_events_map has a type variable that is always initialized to "core"
-> > and a version variable that is never read. Remove these from the API as
-> > it is straightforward to add them back when necessary.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
->
-> Reviewed-by: John Garry <john.garry@huawei.com>
->
-> Please note the questions, below.
->
-> > ---
-> >   tools/perf/pmu-events/empty-pmu-events.c | 6 ++----
-> >   tools/perf/pmu-events/jevents.py         | 6 ------
-> >   tools/perf/pmu-events/pmu-events.h       | 2 --
-> >   tools/perf/tests/expand-cgroup.c         | 2 --
-> >   tools/perf/tests/parse-metric.c          | 2 --
-> >   5 files changed, 2 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
-> > index 77e655c6f116..4182a986f505 100644
-> > --- a/tools/perf/pmu-events/empty-pmu-events.c
-> > +++ b/tools/perf/pmu-events/empty-pmu-events.c
-> > @@ -110,15 +110,13 @@ static const struct pmu_event pme_test_soc_cpu[] = {
-> >
-> >   const struct pmu_events_map pmu_events_map[] = {
-> >       {
-> > +             .arch = "testarch",
->
-> Is this really supposed to be part of this patch?
+--===============9033940074199228714==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Agreed. Looks like it should have been in the previous.
+To linux-kernel@vger.kernel.org,
 
-Thanks,
-Ian
+Congratulations! You=C3=A2=E2=82=AC=E2=84=A2re now a part of the GEEK SQUAD f=
+amily.
+=20
+You=C3=A2=E2=82=AC=E2=84=A2ve made a great decision and we=C3=A2=E2=82=AC=E2=
+=84=A2re eager to hear about your impression about the SUBSCRIPTION you=C3=A2=
+=E2=82=AC=E2=84=A2ve recently purchased.
+=20
+Find Your 67267869203.
 
-> >               .cpuid = "testcpu",
-> > -             .version = "v1",
-> > -             .type = "core",
-> >               .table = pme_test_soc_cpu,
-> >       },
-> >       {
-> > +             .arch = 0,
->
-> Same as above
->
-> >               .cpuid = 0,
-> > -             .version = 0,
-> > -             .type = 0,
-> >               .table = 0,
-> >       },
-> >   };
-> > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-> > index e6e6c42c3f8a..98d18d5c3830 100755
-> > --- a/tools/perf/pmu-events/jevents.py
-> > +++ b/tools/perf/pmu-events/jevents.py
-> > @@ -312,8 +312,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
-> >         _args.output_file.write("""{
-> >   \t.arch = "testarch",
-> >   \t.cpuid = "testcpu",
-> > -\t.version = "v1",
-> > -\t.type = "core",
-> >   \t.table = pme_test_soc_cpu,
-> >   },
-> >   """)
-> > @@ -329,8 +327,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
-> >               _args.output_file.write(f"""{{
-> >   \t.arch = "{arch}",
-> >   \t.cpuid = "{cpuid}",
-> > -\t.version = "{row[1]}",
-> > -\t.type = "{row[3]}",
-> >   \t.table = {tblname}
-> >   }},
-> >   """)
-> > @@ -339,8 +335,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
-> >     _args.output_file.write("""{
-> >   \t.arch = 0,
-> >   \t.cpuid = 0,
-> > -\t.version = 0,
-> > -\t.type = 0,
-> >   \t.table = 0,
-> >   }
-> >   };
-> > diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
-> > index 7a360792635f..a491b117c8ac 100644
-> > --- a/tools/perf/pmu-events/pmu-events.h
-> > +++ b/tools/perf/pmu-events/pmu-events.h
-> > @@ -40,8 +40,6 @@ struct pmu_event {
-> >   struct pmu_events_map {
-> >       const char *arch;
-> >       const char *cpuid;
-> > -     const char *version;
-> > -     const char *type;               /* core, uncore etc */
-> >       const struct pmu_event *table;
-> >   };
-> >
-> > diff --git a/tools/perf/tests/expand-cgroup.c b/tools/perf/tests/expand-cgroup.c
-> > index dfefe5b60eb2..dc4038f997d7 100644
-> > --- a/tools/perf/tests/expand-cgroup.c
-> > +++ b/tools/perf/tests/expand-cgroup.c
-> > @@ -197,8 +197,6 @@ static int expand_metric_events(void)
-> >       };
-> >       const struct pmu_events_map ev_map = {
-> >               .cpuid          = "test",
-> > -             .version        = "1",
-> > -             .type           = "core",
-> >               .table          = pme_test,
-> >       };
-> >
-> > diff --git a/tools/perf/tests/parse-metric.c b/tools/perf/tests/parse-metric.c
-> > index 07b6f4ec024f..1b811a26f4ee 100644
-> > --- a/tools/perf/tests/parse-metric.c
-> > +++ b/tools/perf/tests/parse-metric.c
-> > @@ -81,8 +81,6 @@ static struct pmu_event pme_test[] = {
-> >
-> >   static const struct pmu_events_map map = {
-> >       .cpuid          = "test",
-> > -     .version        = "1",
-> > -     .type           = "core",
-> >       .table          = pme_test,
-> >   };
-> >
->
+Order Number   : 672545678
+Order Date     : 29-JULY-2022
+Product Key    : 2FABF-766CDAGH
+
+Product : SUBSCRIPTION RENEWED FOR THE MONTH OF JULY 2022
+Quantity Term Price  (US) : $349.99
+
+Grand Total: $349.99
+For any queries like installations, error or cancellation regarding this orde=
+r feel free to contact us at (+1 888 314 7528). We hope for a positive reply.
+
+--===============9033940074199228714==
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="Bill42488611.pdf"
+MIME-Version: 1.0
+
+JVBERi0xLjQKMSAwIG9iago8PAovVGl0bGUgKP7/KQovQ3JlYXRvciAo/v8AdwBrAGgAdABtAGwA
+dABvAHAAZABmACAAMAAuADEAMgAuADYpCi9Qcm9kdWNlciAo/v8AUQB0ACAANAAuADgALgA3KQov
+Q3JlYXRpb25EYXRlIChEOjIwMjIwNzI5MTQyNDIyWikKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5
+cGUgL0V4dEdTdGF0ZQovU0EgdHJ1ZQovU00gMC4wMgovY2EgMS4wCi9DQSAxLjAKL0FJUyBmYWxz
+ZQovU01hc2sgL05vbmU+PgplbmRvYmoKNCAwIG9iagpbL1BhdHRlcm4gL0RldmljZVJHQl0KZW5k
+b2JqCjYgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDIgMCBSCj4+CmVuZG9iago1IDAg
+b2JqCjw8Ci9UeXBlIC9QYWdlCi9QYXJlbnQgMiAwIFIKL0NvbnRlbnRzIDcgMCBSCi9SZXNvdXJj
+ZXMgOSAwIFIKL0Fubm90cyAxMCAwIFIKL01lZGlhQm94IFswIDAgNTk1IDg0Ml0KPj4KZW5kb2Jq
+CjkgMCBvYmoKPDwKL0NvbG9yU3BhY2UgPDwKL1BDU3AgNCAwIFIKL0NTcCAvRGV2aWNlUkdCCi9D
+U3BnIC9EZXZpY2VHcmF5Cj4+Ci9FeHRHU3RhdGUgPDwKL0dTYSAzIDAgUgo+PgovUGF0dGVybiA8
+PAo+PgovRm9udCA8PAo+PgovWE9iamVjdCA8PAo+Pgo+PgplbmRvYmoKMTAgMCBvYmoKWyBdCmVu
+ZG9iago3IDAgb2JqCjw8Ci9MZW5ndGggOCAwIFIKL0ZpbHRlciAvRmxhdGVEZWNvZGUKPj4Kc3Ry
+ZWFtCnic03cPTlRIL1bQdw4uUEiG0s7BXAZ65qYGEKAAgrrIAkYWelC2goWhMZStkJzLVahQyBXI
+FQgkYTRIby6XuaG5HkiNoSmQm4PMNTQwMdMzszS0tACKG6BzQYozuMK1FPK4kAxWCOQCABQNJg4K
+ZW5kc3RyZWFtCmVuZG9iago4IDAgb2JqCjEwOQplbmRvYmoKMiAwIG9iago8PAovVHlwZSAvUGFn
+ZXMKL0tpZHMgClsKNSAwIFIKXQovQ291bnQgMQovUHJvY1NldCBbL1BERiAvVGV4dCAvSW1hZ2VC
+IC9JbWFnZUNdCj4+CmVuZG9iagp4cmVmCjAgMTEKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAw
+MDA5IDAwMDAwIG4gCjAwMDAwMDA4MzQgMDAwMDAgbiAKMDAwMDAwMDE1NyAwMDAwMCBuIAowMDAw
+MDAwMjUyIDAwMDAwIG4gCjAwMDAwMDAzMzggMDAwMDAgbiAKMDAwMDAwMDI4OSAwMDAwMCBuIAow
+MDAwMDAwNjMyIDAwMDAwIG4gCjAwMDAwMDA4MTUgMDAwMDAgbiAKMDAwMDAwMDQ1NyAwMDAwMCBu
+IAowMDAwMDAwNjEyIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgMTEKL0luZm8gMSAwIFIKL1Jv
+b3QgNiAwIFIKPj4Kc3RhcnR4cmVmCjkzMgolJUVPRgo=
+
+--===============9033940074199228714==--

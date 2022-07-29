@@ -2,108 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEE65854FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDD4585500
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238431AbiG2SX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 14:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
+        id S238529AbiG2SbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 14:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbiG2SXZ (ORCPT
+        with ESMTP id S238012AbiG2SbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 14:23:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0377A62A67
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 11:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659119004; x=1690655004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X2VF3pNp8E/hZzwDvRsZjaNCBkmtMXVopMiWXQZ7zTY=;
-  b=ICv9sTvPXKXviwoSVJlnrvRBuq6DR5284aAxslYdveaUeiOIam7Sn90G
-   qWpfwra8rOwMjKZ7uaZsP9+3wQWfIalh1zix4dMAWD4BENSi7/bnKbBsi
-   XKuQJTrPaBh36pmYfpY/hJZ0fTcSw7bzU/6VcfR738zZ8QBu5ZZayMdem
-   /JKOwM4/KLOOJ8aquoz1szsewWXXf0ZqJx63N1qJr4MqfoZxednkb4QN2
-   grtD9aCWS10rRGIt71D3d97ZuQzFjXWwK5EWAEVk35HgFhnHAQEGmYdIi
-   jtBIScyvYnHw4n6hLjar2sXiE3Nd76ePxoMRIq7yezkpsnbgDqEU97OIU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="375126867"
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="375126867"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 11:23:12 -0700
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="743616506"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 11:23:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oHUdg-001eiV-3C;
-        Fri, 29 Jul 2022 21:23:08 +0300
-Date:   Fri, 29 Jul 2022 21:23:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] firmware: dmi: Don't take garbage into
- consideration in dmi_smbios3_present()
-Message-ID: <YuQljCM4LZXhSkbh@smile.fi.intel.com>
-References: <20220726094329.1725-1-andriy.shevchenko@linux.intel.com>
- <20220727102504.6bbefcf9@endymion.delvare>
+        Fri, 29 Jul 2022 14:31:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD6562A428
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 11:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659119467;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aWKVK6OoM1bKr67knlvEgc7AaGfjBxkEmDKqD2fNc5c=;
+        b=FvSs/QFXfug/OSrscBmjFpVaM/o/U5QVY2xoPBBwccKmnTImOQt1GL3TM//HO8/Dix4ypb
+        SxfPbLYfJyU9vB2oc2uPQXmO9N622Cd3HTvIS6ZFT0aglPg5kiLn5f58kjHuxTJGxVol47
+        EpyUgwKH32x31nfIARvRQPU+oHusF1I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-HEfqHrfIM6a6xvhRHbdgkQ-1; Fri, 29 Jul 2022 14:31:03 -0400
+X-MC-Unique: HEfqHrfIM6a6xvhRHbdgkQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D87AC185A7A4;
+        Fri, 29 Jul 2022 18:31:02 +0000 (UTC)
+Received: from [10.22.34.17] (unknown [10.22.34.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AF117404D883;
+        Fri, 29 Jul 2022 18:31:01 +0000 (UTC)
+Message-ID: <c9d82d78-b47d-0f4a-f1ca-81df78e1baa6@redhat.com>
+Date:   Fri, 29 Jul 2022 14:31:00 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727102504.6bbefcf9@endymion.delvare>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
+ affinity was explicitly set
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+To:     Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
+References: <20220728005815.1715522-1-longman@redhat.com>
+ <YuLF+xXaCzwWi2BR@slm.duckdns.org>
+ <1ae1cc6c-dca9-4958-6b22-24a5777c5e8d@redhat.com>
+ <YuLdX7BYGvo57LNU@slm.duckdns.org>
+ <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
+ <YuL1NijxSEv2xadk@slm.duckdns.org>
+ <c470d3f7-f0f8-b8e6-4a95-7b334f0a824b@redhat.com>
+ <YuMCB86fH2K3NcqM@slm.duckdns.org> <xhsmhy1wcc8dq.mognet@vschneid.remote.csb>
+ <92f68392-12d2-f64a-9bb9-1a3a15f99d02@redhat.com>
+In-Reply-To: <92f68392-12d2-f64a-9bb9-1a3a15f99d02@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 10:25:04AM +0200, Jean Delvare wrote:
-> On Tue, 26 Jul 2022 12:43:29 +0300, Andy Shevchenko wrote:
-> > The byte at offset 6 represent length. Don't take it and drop it immediately
-> > by using proper accessor, i.e. get_unaligned_be24().
-> 
-> The subject sounds like you are fixing a bug, while this is only, at
-> best, a minor optimization.
+On 7/29/22 10:50, Waiman Long wrote:
+> On 7/29/22 10:15, Valentin Schneider wrote:
+>> On 28/07/22 11:39, Tejun Heo wrote:
+>>> Hello, Waiman.
+>>>
+>>> On Thu, Jul 28, 2022 at 05:04:19PM -0400, Waiman Long wrote:
+>>>>> So, the patch you proposed is making the code remember one special 
+>>>>> aspect of
+>>>>> user requested configuration - whether it configured it or not, 
+>>>>> and trying
+>>>>> to preserve that particular state as cpuset state changes. It 
+>>>>> addresses the
+>>>>> immediate problem but it is a very partial approach. Let's say a 
+>>>>> task wanna
+>>>>> be affined to one logical thread of each core and set its mask to 
+>>>>> 0x5555.
+>>>>> Now, let's say cpuset got enabled and enforced 0xff and affined 
+>>>>> the task to
+>>>>> 0xff. After a while, the cgroup got more cpus allocated and its 
+>>>>> cpuset now
+>>>>> has 0xfff. Ideally, what should happen is the task now having the 
+>>>>> effective
+>>>>> mask of 0x555. In practice, tho, it either would get 0xf55 or 0x55 
+>>>>> depending
+>>>>> on which way we decide to misbehave.
+>>>> OK, I see what you want to accomplish. To fully address this issue, 
+>>>> we will
+>>>> need to have a new cpumask variable in the the task structure which 
+>>>> will be
+>>>> allocated if sched_setaffinity() is ever called. I can rework my 
+>>>> patch to
+>>>> use this approach.
+>>> Yeah, we'd need to track what user requested separately from the 
+>>> currently
+>>> effective cpumask. Let's make sure that the scheduler folks are on 
+>>> board
+>>> before committing to the idea tho. Peter, Ingo, what do you guys think?
+>>>
+>> FWIW on a runtime overhead side of things I think it'll be OK as that
+>> should be just an extra mask copy  in sched_setaffinity() and a subset
+>> check / cpumask_and() in set_cpus_allowed_ptr(). The policy side is a 
+>> bit
+>> less clear (when, if ever, do we clear the user-defined mask? Will it 
+>> keep
+>> haunting us even after moving a task to a disjoint cpuset partition?).
+>
+> The runtime overhead should be minimal. It is the behavioral side that 
+> we should be careful about. It is a change in existing behavior and we 
+> don't want to cause surprise to the users. Currently, a task that set 
+> its cpu affinity explicitly will have its affinity reset whenever 
+> there is any change to the cpuset it belongs to or a hotplug event 
+> touch any cpu in the current cpuset. The new behavior we are proposing 
+> here is that it will try its best to keep the cpu affinity that the 
+> user requested within the constraint of the current cpuset as well as 
+> the cpu hotplug state.
+>
+>
+>>
+>> There's also if/how that new mask should be exposed, because attaching a
+>> task to a cpuset will now yield a not-necessarily-obvious affinity -
+>> e.g. in the thread affinity example above, if the initial affinity 
+>> setting
+>> was done ages ago by some system tool, IMO the user needs a way to be 
+>> able
+>> to expect/understand the result of 0x555 rather than 0xfff.
+>
+> Users can use sched_getaffinity(2) to retrieve the current cpu 
+> affinity. It is up to users to set another one if they don't like the 
+> current one. I don't think we need to return what the previous 
+> requested cpu affinity is. They are suppose to know that or they can 
+> set their own if they don't like it. \
 
-I don't know how to improve it, but it kinda a bug in a logic for non-prepared
-reader, esp. as specification suggests different thing about version offset.
+Looking at Will's series that introduced user_cpus_ptr, I think we can 
+overlay our proposal on top of that. So calling sched_setaffinity() will 
+also update user_cpus_ptr. We may still need a flag to indicate whether 
+user_cpus_ptr is set up because of sched_setaffinity() or due to a call 
+to force_compatible_cpus_allowed_ptr() from arm64 arch code. That will 
+make our work easier as some of the infrastructure is already there. I 
+am looking forward for your feedback.
 
-...
-
-> > -		dmi_ver = get_unaligned_be32(buf + 6) & 0xFFFFFF;
-> > +		dmi_ver = get_unaligned_be24(buf + 7);
-
-> I admit I did not know about get_unaligned_be24(). While I agree that
-> it makes the source code look better, one downside is that it actually
-> increases the binary size on x86_64. The reason is that
-> get_unaligned_be32() is optimized by assembly instruction bswapl, while
-> get_unaligned_be24() is not. Situation appears to be the same on ia64
-> and arm. Only arm64 would apparently benefit from your proposed
-> change.
-
-Good to know!
-But here it's not a hot path, right?
-
-> I'm not too sure what is preferred in such situations.
-
-For cold paths I think the correctness prevail the performance.
-
-Alternatively we might add a comment in the code explaining the trick,
-although I won't like to do it.
-
-Another way is to have a subset of 24-/48-bit unaligned accessors that
-use the trick specifically for hot paths with a caveat that they may
-access data out of the 24-/48-bit boundaries.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Thanks,
+Longman
 

@@ -2,186 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5743D584959
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 03:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CD858495F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 03:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbiG2Bkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 21:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S233671AbiG2Bku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 21:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiG2Bk3 (ORCPT
+        with ESMTP id S233613AbiG2Bkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 21:40:29 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4475D19295
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 18:40:28 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id t2so3320131ply.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 18:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Eo5jg5ayRXB4TdtAm0z0aMnd75D86Seh8rqM2BVtt0g=;
-        b=P3M3foQMfiWgTL/sHFJ7271NI6TvT4WVkvA+FGQWv7+tZqNkeTX2bWtnKB1RQrPUZa
-         4TRoSXuttiWVO4mEMG3u5QAJScRUvftwxqXptpBWLZHFA2rEKLRFt9BnURVKIfw4yRj9
-         9BujrM0AsW6sL2OaawPi/ywCTWl2ofk1t8uVgppjAJeKG75G9scTlXb8EhtTMfAIUFBx
-         K4lj3F4GQZV9t1U1/HYKP8ziWM0MT+93fgRPcycJgl/XFOkQFU8PCbpFGoG5E22H/5+T
-         E2grnHHVvgUyMCTyWxyq8x2UU5O9EV8TH3XxQ0g1qFSmdrE+9Up3ow//3xmcmMpQs/Ns
-         PCgg==
+        Thu, 28 Jul 2022 21:40:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D5EC1C12B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 18:40:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659058845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YhoWXCGcYHtMETdYFmNXJciqsK6lpwzX/oxTkeK81lg=;
+        b=ab6p5yxQLq6nMf31cTGWy8kmFwrVOeoIjrpQEhppXgVS40SKNv2KTsc39O1aH0D72GuWHc
+        eMzWszdwRJAsLTcBu2c/45dQt9xBNNBfHgU9RJYlElXpq9CKIiwu3aTwg971m8rPQjud/4
+        7pzZSqPqZ9VH8AaL2Uc4pwZndG2hFn8=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-278-Ki9L22w4PKWMa1KoGA5TMw-1; Thu, 28 Jul 2022 21:40:44 -0400
+X-MC-Unique: Ki9L22w4PKWMa1KoGA5TMw-1
+Received: by mail-qk1-f200.google.com with SMTP id v13-20020a05620a0f0d00b006b5f0ec742eso2623691qkl.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 18:40:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Eo5jg5ayRXB4TdtAm0z0aMnd75D86Seh8rqM2BVtt0g=;
-        b=Cjc0AnYSY30fvUH9D2/eKgqYsBLfVN2Dr27sgKjWvZBGEkrWdjTqIB7wn6K/AAHNEK
-         qjR+hH6vlxVz+uFm86w1mphI/aPO7wCHQew8bR3Qs6GQ7jeuOrjGwP5R2mYYimEtm47m
-         yubiJ8kjGrIqW83RbtIq4mUYCjUc4tC7BZuUw1OxU6bi38MPnREY1qYnVhPbtnM7YvY0
-         b3KBSG0XfEg/5tchgmskE8sZW/8dVqqHoNra5Gerok0tOQMOEEd/WcRhRprk/H95j6JG
-         B/Qg5dY7/8zbfCYRSRQ/4r+9I7lPwMvcdh8veMlW8bIhmxuwZNfyeNqFXmgUMLZ9U55G
-         MZgw==
-X-Gm-Message-State: ACgBeo0/u/Nm5ifnr67/7Xfmu7woffBs6Ttqc2qHYV1GD0+4sEoyRSaw
-        zvvGwGd57JtRAtejGqRxyhjx1dUJCGI=
-X-Google-Smtp-Source: AA6agR4B1pqzCZhfkZmQ8SaJ8TZYx/l++yWdW3ONhv+xiQdW7xTKP9QU5dBiVN8oO9xGdyWFKBjNrg==
-X-Received: by 2002:a17:90b:388f:b0:1f2:c9fb:e58a with SMTP id mu15-20020a17090b388f00b001f2c9fbe58amr1504569pjb.162.1659058827729;
-        Thu, 28 Jul 2022 18:40:27 -0700 (PDT)
-Received: from [192.168.0.10] (KD106168128197.ppp-bb.dion.ne.jp. [106.168.128.197])
-        by smtp.gmail.com with ESMTPSA id t1-20020a1709027fc100b0016db1b67fb9sm1965003plb.224.2022.07.28.18.40.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 18:40:27 -0700 (PDT)
-Message-ID: <67f1741d-343c-f704-b5a8-3bc84e1c0e7e@gmail.com>
-Date:   Fri, 29 Jul 2022 10:40:24 +0900
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YhoWXCGcYHtMETdYFmNXJciqsK6lpwzX/oxTkeK81lg=;
+        b=oEodgaBrsX2Fx3D6hFSMxMt6nFc6eAQZdq1OyzNUYArjsBY5mqy6nGRsGnEWozYyhv
+         pMkGXks4mznWLEZxO/r32CnMqLWZBXCikuTwMemTyMO/eq1NjJGt0UY6RF7G/jWEy5Eq
+         mlYRBX+wDwstE9Ghe54aJnkdlKgUDSbNDS2aaHN3INkLvlxCVgZ1PaPiJ0V+P9p/rS4n
+         mWzrW7TTd7A/QM2rlk4UKzBy44kA5d+ZenWm+7neTMx+3aKmiCAe7VV9yBBaOF6SF+aS
+         lJCioiGrLJ2bmS6SATinXrvK5m7vTiaidt3om7G5u9VJxQscHQS9inXhDZMIaXySFXK9
+         rr2Q==
+X-Gm-Message-State: AJIora8RKc0otaWMRx3nRNDaShsgtxHRhhBiG0qoRSpialYog0uhoOPM
+        Ew7mbxDfTLVouPqmKR9XGSPV0Sy3fOYi6Rd4KeEwKmAdfAAeSv7a4srMzv9vCGPizIGmc7m6zBe
+        KLgRhzuvwxZjObXEbOmiu66sS
+X-Received: by 2002:ac8:5753:0:b0:31e:eb8e:6c5b with SMTP id 19-20020ac85753000000b0031eeb8e6c5bmr1562678qtx.630.1659058843489;
+        Thu, 28 Jul 2022 18:40:43 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sisuiIowjvve1UXIMx1jFjzxHrHqZwm4h1E+tG7ztTiMUWChTU59F22LS70qME7O9B4M8GqQ==
+X-Received: by 2002:ac8:5753:0:b0:31e:eb8e:6c5b with SMTP id 19-20020ac85753000000b0031eeb8e6c5bmr1562671qtx.630.1659058843257;
+        Thu, 28 Jul 2022 18:40:43 -0700 (PDT)
+Received: from localhost.localdomain (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id u9-20020a05620a454900b006b259b5dd12sm1584531qkp.53.2022.07.28.18.40.42
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 28 Jul 2022 18:40:42 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Huang Ying <ying.huang@intel.com>, peterx@redhat.com,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH RFC 0/4] mm: Remember young bit for migration entries
+Date:   Thu, 28 Jul 2022 21:40:37 -0400
+Message-Id: <20220729014041.21292-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5/6] mtd: spi-nor: add generic flash driver
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-References: <20220513133520.3945820-1-michael@walle.cc>
- <20220513133520.3945820-6-michael@walle.cc>
-From:   Takahiro Kuwano <tkuw584924@gmail.com>
-In-Reply-To: <20220513133520.3945820-6-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/13/2022 10:35 PM, Michael Walle wrote:
-> Our SFDP is parsing is everything we need to support all basic
-redundant "is"?
+[Marking as RFC; only x86 is supported for now, plan to add a few more
+ archs when there's a formal version]
 
-> operations of a flash device. If the flash isn't found in our in-kernel
-> flash database, gracefully fall back to a driver described solely by its
-> SFDP tables.
-> 
-> It is still recommended to add the flash to the in-kernel database.
-> First, we get a proper partname and secondly, for all features not
-> described by the SFDP like OTP we need the entry anyway.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  drivers/mtd/spi-nor/core.c | 13 +++++++++++++
->  drivers/mtd/spi-nor/core.h |  1 +
->  drivers/mtd/spi-nor/sfdp.c | 27 +++++++++++++++++++++++++++
->  3 files changed, 41 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 65cd8e668579..ee193a61310a 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -1632,6 +1632,11 @@ static const struct spi_nor_manufacturer *manufacturers[] = {
->  	&spi_nor_xmc,
->  };
->  
-> +static const struct flash_info spi_nor_generic_flash = {
-> +	.name = "spi-nor-generic",
-> +	.parse_sfdp = true,
-> +};
-> +
->  static const struct flash_info *spi_nor_match_id(struct spi_nor *nor,
->  						 const u8 *id)
->  {
-> @@ -1670,6 +1675,14 @@ static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
->  		return ERR_PTR(-ENOMEM);
->  
->  	info = spi_nor_match_id(nor, id);
-> +
-> +	/* Fallback to a generic flash described only by its SFDP data. */
-> +	if (!info) {
-> +		ret = spi_nor_check_sfdp_signature(nor);
-> +		if (!ret)
-> +			info = &spi_nor_generic_flash;
-> +	}
-> +
->  	if (!info) {
->  		dev_err(nor->dev, "unrecognized JEDEC id bytes: %*ph\n",
->  			SPI_NOR_MAX_ID_LEN, id);
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index 3a19b8092ab8..aa9f218245a5 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -694,6 +694,7 @@ int spi_nor_controller_ops_read_reg(struct spi_nor *nor, u8 opcode,
->  int spi_nor_controller_ops_write_reg(struct spi_nor *nor, u8 opcode,
->  				     const u8 *buf, size_t len);
->  
-> +int spi_nor_check_sfdp_signature(struct spi_nor *nor);
->  int spi_nor_parse_sfdp(struct spi_nor *nor);
->  
->  static inline struct spi_nor *mtd_to_spi_nor(struct mtd_info *mtd)
-> diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-> index a5211543d30d..9bdb3d5dc7e8 100644
-> --- a/drivers/mtd/spi-nor/sfdp.c
-> +++ b/drivers/mtd/spi-nor/sfdp.c
-> @@ -1247,6 +1247,33 @@ static void spi_nor_post_sfdp_fixups(struct spi_nor *nor)
->  		nor->info->fixups->post_sfdp(nor);
->  }
->  
-> +/**
-> + * spi_nor_check_sfdp_header() - check for a valid SFDP header
-> + * @nor:		pointer to a 'struct spi_nor'
-> + *
-> + * Used to detect if the flash supports the RDSFDP command as well as the
-> + * presence of a valid SFDP table.
-> + *
-> + * Return: 0 on success, -errno otherwise.
-> + */
-> +int spi_nor_check_sfdp_signature(struct spi_nor *nor)
-> +{
-> +	u32 signature;
-> +	int err;
-> +
-> +	/* Get the SFDP header. */
-> +	err = spi_nor_read_sfdp_dma_unsafe(nor, 0, sizeof(signature),
-> +					   &signature);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	/* Check the SFDP signature. */
-> +	if (le32_to_cpu(signature) != SFDP_SIGNATURE)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
+Problem
+=======
 
-Nice to use this function from spi_nor_parse_sfdp() as well, but I found it's
-not straightforward...
+When migrate a page, right now we always mark the migrated page as old.
+The reason could be that we don't really know whether the page is hot or
+cold, so we could have taken it a default negative assuming that's safer.
 
-Reviewed-by: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+However that could lead to at least two problems:
 
-Thanks,
-Takahiro
+  (1) We lost the real hot/cold information while we could have persisted.
+      That information shouldn't change even if the backing page is changed
+      after the migration,
+
+  (2) There can be always extra overhead on the immediate next access to
+      any migrated page, because hardware MMU needs cycles to set the young
+      bit again (as long as the MMU supports).
+
+Many of the recent upstream works showed that (2) is not something trivial
+and actually very measurable.  In my test case, reading 1G chunk of memory
+- jumping in page size intervals - could take 99ms just because of the
+extra setting on the young bit on a generic x86_64 system, comparing to 4ms
+if young set.
+
+This issue is originally reported by Andrea Arcangeli.
+
+Solution
+========
+
+To solve this problem, this patchset tries to remember the young bit in the
+migration entries and carry it over when recovering the ptes.
+
+We have the chance to do so because in many systems the swap offset is not
+really fully used.  Migration entries use swp offset to store PFN only,
+while the PFN is normally not as large as swp offset and normally smaller.
+It means we do have some free bits in swp offset that we can use to store
+things like young, and that's how this series tried to approach this
+problem.
+
+One tricky thing here is even though we're embedding the information into
+swap entry which seems to be a very generic data structure, the number of
+bits that are free is still arch dependent.  Not only because the size of
+swp_entry_t differs, but also due to the different layouts of swap ptes on
+different archs.
+
+Here, this series requires specific arch to define an extra macro called
+__ARCH_SWP_OFFSET_BITS represents the size of swp offset.  With this
+information, the swap logic can know whether there's extra bits to use,
+then it'll remember the young bits when possible.  By default, it'll keep
+the old behavior of keeping all migrated pages cold.
+
+Tests
+=====
+
+After the patchset applied, the immediate read access test [1] of above 1G
+chunk after migration can shrink from 99ms to 4ms.  The test is done by
+moving 1G pages from node 0->1->0 then read it in page size jumps.
+
+Currently __ARCH_SWP_OFFSET_BITS is only defined on x86 for this series and
+only tested on x86_64 with Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz.
+
+Patch Layout
+============
+
+Patch 1:  Add swp_offset_pfn() and apply to all pfn swap entries, we should
+          also stop treating swp_offset() as PFN anymore because it can
+          contain more information starting from next patch.
+Patch 2:  The core patch to remember young bit in swap offsets.
+Patch 3:  A cleanup for x86 32 bits pgtable.h.
+Patch 4:  Define __ARCH_SWP_OFFSET_BITS on x86, enable young bit for migration
+
+Please review, thanks.
+
+[1] https://github.com/xzpeter/clibs/blob/master/misc/swap-young.c
+
+Peter Xu (4):
+  mm/swap: Add swp_offset_pfn() to fetch PFN from swap entry
+  mm: Remember young bit for page migrations
+  mm/x86: Use SWP_TYPE_BITS in 3-level swap macros
+  mm/x86: Define __ARCH_SWP_OFFSET_BITS
+
+ arch/arm64/mm/hugetlbpage.c           |  2 +-
+ arch/x86/include/asm/pgtable-2level.h |  6 ++
+ arch/x86/include/asm/pgtable-3level.h | 15 +++--
+ arch/x86/include/asm/pgtable_64.h     |  5 ++
+ include/linux/swapops.h               | 85 +++++++++++++++++++++++++--
+ mm/hmm.c                              |  2 +-
+ mm/huge_memory.c                      | 10 +++-
+ mm/memory-failure.c                   |  2 +-
+ mm/migrate.c                          |  4 +-
+ mm/migrate_device.c                   |  2 +
+ mm/page_vma_mapped.c                  |  6 +-
+ mm/rmap.c                             |  3 +-
+ 12 files changed, 122 insertions(+), 20 deletions(-)
+
+-- 
+2.32.0
+

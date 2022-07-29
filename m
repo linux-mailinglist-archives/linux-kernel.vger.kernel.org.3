@@ -2,132 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F159584AD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 06:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18AF584AD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 06:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbiG2ExD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 00:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S233816AbiG2EyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 00:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233800AbiG2Ew7 (ORCPT
+        with ESMTP id S230360AbiG2EyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 00:52:59 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A642558C7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:52:57 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220729045254epoutp036e30e421bb35b7d18ade2b9f2423248d~GM7czGIrX1168011680epoutp03L
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:52:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220729045254epoutp036e30e421bb35b7d18ade2b9f2423248d~GM7czGIrX1168011680epoutp03L
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659070374;
-        bh=fsSA4Sh0mG9so9uVC+TBMYuxX7h98OOminCH5vQQ8/A=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=RKBuGzCFkla9p1S4avQMYaiU9zZ/F/xlXe5rVI7tsQ/wS6znIFc5YH7hWaef0+K8Q
-         ROeXnrQo/F2Wva9PMCZQOiOv1/rIsrZV6ZQTXhvQHa0ptIdy69BxX2G2ebIdSEEFu2
-         614qW5gbw6iNk30WQEZYOMQHlEfFOwPVWKFVzpdA=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220729045253epcas2p1e05e80457c3d97aaec56220731ccd9ce~GM7b5FC-g2692626926epcas2p1i;
-        Fri, 29 Jul 2022 04:52:53 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.70]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4LvFWT1Bglz4x9QH; Fri, 29 Jul
-        2022 04:52:53 +0000 (GMT)
-X-AuditID: b6c32a48-9f7ff700000025be-f6-62e367a5147f
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        69.31.09662.5A763E26; Fri, 29 Jul 2022 13:52:53 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v5 1/6] scsi: ufs: wb: Change wb_enabled condition test
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p8>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220729045252epcms2p7fee5c1cdca5e4bef02a833e40f80649b@epcms2p7>
-Date:   Fri, 29 Jul 2022 13:52:52 +0900
-X-CMS-MailID: 20220729045252epcms2p7fee5c1cdca5e4bef02a833e40f80649b
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmhe7S9MdJBhM2sVucfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Vi2oefzBYvD2laLLqxjcni8q45bBbd13ewWSw//o/Jgcvj8hVvj8V7XjJ5
-        TFh0gNHj+/oONo+PT2+xePRtWcXo8XmTnEf7gW6mAI6obJuM1MSU1CKF1Lzk/JTMvHRbJe/g
-        eOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoBOVFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnF
-        JbZKqQUpOQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZT3duYy6Yzl7RsugKSwNjK1sXIyeH
-        hICJxKazG1m6GLk4hAR2MEo82TyDuYuRg4NXQFDi7w5hkBphAXeJaQs+soDYQgJKEufWzGIE
-        KREWMJC41WsOEmYT0JP4uWQGG8gYEYGzzBILH05hgpjPKzGj/SkLhC0tsX35VkYQm1PAT+LT
-        5otQcQ2JH8t6mSFsUYmbq9+yw9jvj81nhLBFJFrvnYWqEZR48HM3VFxS4tChr2wg90gI5Ets
-        OBAIEa6ReLv8AFSJvsS1jo1gq3gFfCXm/54ENp5FQFXi1epLUCNdJK7ffAd2MrOAvMT2t3PA
-        ocAsoCmxfpc+xHRliSO3WGCeatj4mx2dzSzAJ9Fx+C9cfMe8J0wQrWoSi5qMIMIyEl8Pz2ef
-        wKg0CxHKs5CsnYWwdgEj8ypGsdSC4tz01GKjAhN4xCbn525iBKdULY8djLPfftA7xMjEwXiI
-        UYKDWUmEVyDgcZIQb0piZVVqUX58UWlOavEhRlOghycyS4km5wOTel5JvKGJpYGJmZmhuZGp
-        gbmSOK9XyoZEIYH0xJLU7NTUgtQimD4mDk6pBiZRE6sL6VuvWKrWrGB+u2WJ2+mXXBpr2acm
-        NN20lbGp+/Sk5EeK6pJip5SFtXM554r899PdePGkI69tqnTg/tuGd1VzzyWUXgwMWnNS3SH6
-        rXj4wXkfqkz9fE+3NGYF7Yk+08/0t22m4qZjPxN/6t3wu3lm60239r5H298l/r971jehma+F
-        +8VV4WUev40ONj3h3ZjAJbpmz5ljYR6dF6b5xhwM9HiycdNVi2M1FleFHNvsWgPPqU3gqZ3v
-        xVnE8l1UaL337fPWZpNCnd9rGk3jCT1nHNV8l5GraKN28wW/PAmvaJEg2SW/QzImdPa9W/Mo
-        POfPt7nv+1qbP21LUY8Nq7CoTt3RWOPKd9LFWYmlOCPRUIu5qDgRACtJtd0yBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368
-References: <20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p8>
-        <CGME20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p7>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Jul 2022 00:54:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C39856B8B;
+        Thu, 28 Jul 2022 21:54:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40D6F61E5C;
+        Fri, 29 Jul 2022 04:54:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9200BC433C1;
+        Fri, 29 Jul 2022 04:54:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659070452;
+        bh=r+29KtQL8GX5O6yNf3ncNF/wVf3L2fZKUgMfQpxeBzY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fJr/UZKTrPIqn2V8TgJJDX5phjAuqJHF0TUTfF/H7HBl7xdbIXJ9cofvVRCetJvEa
+         LPideJ5gfrQ7IvJoM1uEbQ9hMoWGei19TR2LoJ1vbtxcF1wcsei/GOb8wPgK6pGKd1
+         widV38RrDNozmGqv5p/LbAEor4Xee4380dLaw93MKmgccrhdY4QpKWkfTuKAOeroGI
+         REanbewENM3vGfvR6qGvEvlAyQwE2vRimpWCCVh8e39IKGMKcQugDGb+pe2dpJ20ap
+         E9sweR3OWdLbfq8ay+5mUBstMxDMN+goCC9rClnutf3MMkOb6CYrKFkXCFEGoNX5AG
+         x24BAPXW+TBPw==
+Date:   Thu, 28 Jul 2022 21:54:12 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     "ruansy.fnst@fujitsu.com" <ruansy.fnst@fujitsu.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "hch@infradead.org" <hch@infradead.org>
+Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
+Message-ID: <YuNn9NkUFofmrXRG@magnolia>
+References: <20220609143435.393724-1-ruansy.fnst@fujitsu.com>
+ <Yr5AV5HaleJXMmUm@magnolia>
+ <74b0a034-8c77-5136-3fbd-4affb841edcb@fujitsu.com>
+ <Ytl7yJJL1fdC006S@magnolia>
+ <7fde89dc-2e8f-967b-d342-eb334e80255c@fujitsu.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7fde89dc-2e8f-967b-d342-eb334e80255c@fujitsu.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changed to improve readability.
-As implemented in ufshcd_wb_togle_flush(), the conditional test is
-modified in the same way.
+On Fri, Jul 29, 2022 at 03:55:24AM +0000, ruansy.fnst@fujitsu.com wrote:
+> 
+> 
+> 在 2022/7/22 0:16, Darrick J. Wong 写道:
+> > On Thu, Jul 21, 2022 at 02:06:10PM +0000, ruansy.fnst@fujitsu.com wrote:
+> >> 在 2022/7/1 8:31, Darrick J. Wong 写道:
+> >>> On Thu, Jun 09, 2022 at 10:34:35PM +0800, Shiyang Ruan wrote:
+> >>>> Failure notification is not supported on partitions.  So, when we mount
+> >>>> a reflink enabled xfs on a partition with dax option, let it fail with
+> >>>> -EINVAL code.
+> >>>>
+> >>>> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> >>>
+> >>> Looks good to me, though I think this patch applies to ... wherever all
+> >>> those rmap+reflink+dax patches went.  I think that's akpm's tree, right?
+> >>>
+> >>> Ideally this would go in through there to keep the pieces together, but
+> >>> I don't mind tossing this in at the end of the 5.20 merge window if akpm
+> >>> is unwilling.
+> >>
+> >> BTW, since these patches (dax&reflink&rmap + THIS + pmem-unbind) are
+> >> waiting to be merged, is it time to think about "removing the
+> >> experimental tag" again?  :)
+> > 
+> > It's probably time to take up that question again.
+> > 
+> > Yesterday I tried running generic/470 (aka the MAP_SYNC test) and it
+> > didn't succeed because it sets up dmlogwrites atop dmthinp atop pmem,
+> > and at least one of those dm layers no longer allows fsdax pass-through,
+> > so XFS silently turned mount -o dax into -o dax=never. :(
+> 
+> Hi Darrick,
+> 
+> I tried generic/470 but it didn't run:
+>    [not run] Cannot use thin-pool devices on DAX capable block devices.
+> 
+> Did you modify the _require_dm_target() in common/rc?  I added thin-pool 
+> to not to check dax capability:
+> 
+>          case $target in
+>          stripe|linear|log-writes|thin-pool)  # add thin-pool here
+>                  ;;
+> 
+> then the case finally ran and it silently turned off dax as you said.
+> 
+> Are the steps for reproduction correct? If so, I will continue to 
+> investigate this problem.
 
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- drivers/ufs/core/ufshcd.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Ah, yes, I did add thin-pool to that case statement.  Sorry I forgot to
+mention that.  I suspect that the removal of dm support for pmem is
+going to force us to completely redesign this test.  I can't really
+think of how, though, since there's no good way that I know of to gain a
+point-in-time snapshot of a pmem device.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 8f11f118c30e..bbf12aa6a5ae 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -5730,10 +5730,8 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
- 
--	if (!ufshcd_is_wb_allowed(hba))
--		return 0;
--
--	if (!(enable ^ hba->dev_info.wb_enabled))
-+	if (!ufshcd_is_wb_allowed(hba) ||
-+	    hba->dev_info.wb_enabled == enable)
- 		return 0;
- 
- 	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
--- 
-2.25.1
+--D
+
+> 
+> --
+> Thanks,
+> Ruan.
+> 
+> 
+> 
+> > 
+> > I'm not sure how to fix that...
+> > 
+> > --D
+> > 
+> >>
+> >> --
+> >> Thanks,
+> >> Ruan.
+> >>
+> >>>
+> >>> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> >>>
+> >>> --D
+> >>>
+> >>>> ---
+> >>>>    fs/xfs/xfs_super.c | 6 ++++--
+> >>>>    1 file changed, 4 insertions(+), 2 deletions(-)
+> >>>>
+> >>>> diff --git a/fs/xfs/xfs_super.c b/fs/xfs/xfs_super.c
+> >>>> index 8495ef076ffc..a3c221841fa6 100644
+> >>>> --- a/fs/xfs/xfs_super.c
+> >>>> +++ b/fs/xfs/xfs_super.c
+> >>>> @@ -348,8 +348,10 @@ xfs_setup_dax_always(
+> >>>>    		goto disable_dax;
+> >>>>    	}
+> >>>>    
+> >>>> -	if (xfs_has_reflink(mp)) {
+> >>>> -		xfs_alert(mp, "DAX and reflink cannot be used together!");
+> >>>> +	if (xfs_has_reflink(mp) &&
+> >>>> +	    bdev_is_partition(mp->m_ddev_targp->bt_bdev)) {
+> >>>> +		xfs_alert(mp,
+> >>>> +			"DAX and reflink cannot work with multi-partitions!");
+> >>>>    		return -EINVAL;
+> >>>>    	}
+> >>>>    
+> >>>> -- 
+> >>>> 2.36.1
+> >>>>
+> >>>>
+> >>>>

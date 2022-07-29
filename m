@@ -2,241 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA60584B3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406B9584B45
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbiG2Fjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 01:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S234038AbiG2FpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 01:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiG2Fje (ORCPT
+        with ESMTP id S229445AbiG2FpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 01:39:34 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5D027D7AF
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 22:39:32 -0700 (PDT)
-Received: from [10.130.0.63] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxQ9CPcuNiiCpBAA--.27529S3;
-        Fri, 29 Jul 2022 13:39:27 +0800 (CST)
-Subject: Re: [PATCH 2/3] LoongArch: Add prologue unwinder support
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20220728140519.5420-1-zhangqing@loongson.cn>
- <20220728140519.5420-2-zhangqing@loongson.cn>
- <ddddff68-cae3-24e7-d0b7-d08abc94baf2@loongson.cn>
-From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <dc76df52-eb46-5039-a008-de3c9a7e3363@loongson.cn>
-Date:   Fri, 29 Jul 2022 13:39:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 29 Jul 2022 01:45:21 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E201D0FE;
+        Thu, 28 Jul 2022 22:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659073519; x=1690609519;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=cOw/1I8hdpHG5yNduPttkH/vkQCakyoB8DYPrD2av+U=;
+  b=hn2JDV22PQ/AcRjAZGTR5x+Y84KtG80WX3JHxXAgciNXACNm1cmDcnvv
+   UpRMNZzUS1DhAbbapGSoGSZeBNASzGH8np4y+KuBvQv13hYpiTNZX4+Fy
+   wUV/XpKLHeJJdfrTL/GPHoVGGi282ivY+pLhwvPaaMDWZgctcJkpTspwf
+   t4yfU8KkuA0oRqi7A+VWvP54dOf+9IHOdhRGx46AE7e5S2C87WlCvZmU6
+   94oqlOx+va6u/NWqXCD5OcBl2kM/WnA/w48GvGmaPksAK7UzPcbfTzUC8
+   niaT6uZzwHBMKJY7Oulk06+Cps4sgnvr86J/jS+NdWV7vMfxcfR51FAdN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="374999041"
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="374999041"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 22:45:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="928619823"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jul 2022 22:45:19 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 28 Jul 2022 22:45:18 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Thu, 28 Jul 2022 22:45:18 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Thu, 28 Jul 2022 22:45:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=co70ZO4zXnXVzdvavYZgLDZAkfAQjyfyFrBCIubEYKgpZ3L8hKOBglP1RxCN8plbRjdEcRm2l7xm8go8Aiuxa2X4Vjau8TJBy9NBiGZvkjdw76oGWKiipKjVo7qAoY57+4MriXcUPo7X7QrbgOgpogFdTSeHXM4fuRRiAGW4Glnf5wyXHx16+0DBaW6HILAwbdvpC5TyloKDIyJ4d/mzzPGNo84fAlNo7KOaUZ05XmgBm+Gq0N4KXfROGEqE+lNWg4I7m/mLUy2o6Wtv7O3SjMPvhbUy32+MZ8NoXS9+9MpEZC2fni9QmHYBgGjLBLHjl/8FSOmDUypq7Hrerku8HQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RK67rgnfW/NjKbBGxkEl0czqOBumkTJu7XKaAHNeP9A=;
+ b=G7VMORNkaffyHOQUT5r/dcFYFOPxSDX6UCi6z36HIrfcXvX6sS8eeVfpxsTQ8AnqTynMN3NMbvzG5q/VAJ2LyBSrnTxZzbULDEmC2TC1w/hkFDnqZ2RcUvQEoljdP1/wH9QkxXZfWz1fkTTbXdZvuLO22mOa6Zg2c9aterdJu2XdVUDUJzFsyQnKLaSw5YHeJjr9IYBg64WXQbrQg40WJumIJxUl/iPTSMN0R8p6P9CX9juIlzzWYB6xYQPprSjy74cbAlKb2GYI9/meB3iTQpZovf7Amd8f8S0ViXHupfSS0Q8KXfz9BTShTfL3XBNzwY5n9Qv5yIG/P14hYOA2EQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6297.namprd11.prod.outlook.com (2603:10b6:a03:458::8)
+ by CY4PR1101MB2135.namprd11.prod.outlook.com (2603:10b6:910:1d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.20; Fri, 29 Jul
+ 2022 05:45:16 +0000
+Received: from SJ1PR11MB6297.namprd11.prod.outlook.com
+ ([fe80::35b8:ff0a:4f99:419c]) by SJ1PR11MB6297.namprd11.prod.outlook.com
+ ([fe80::35b8:ff0a:4f99:419c%6]) with mapi id 15.20.5458.024; Fri, 29 Jul 2022
+ 05:45:16 +0000
+Date:   Fri, 29 Jul 2022 13:45:04 +0800
+From:   Oliver Sang <oliver.sang@intel.com>
+To:     Joanne Koong <joannelkoong@gmail.com>
+CC:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, <dccp@vger.kernel.org>,
+        <lkp@lists.01.org>, "Paolo Abeni" <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@davemloft.net>, <yujie.liu@intel.com>,
+        <fengwei.yin@intel.com>
+Subject: Re: [net] 03d56978dd: BUG:Bad_page_map_in_process
+Message-ID: <YuNz4FTXA1MshsjK@xsang-OptiPlex-9020>
+References: <20220722195406.1304948-2-joannelkoong@gmail.com>
+ <Yt1RXVnI27iLwxr0@xsang-OptiPlex-9020>
+ <CAJnrk1aX6x79AzFPVk1QwU4ivd5AeYwz6Fe2z6HLunBSBA20yg@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAJnrk1aX6x79AzFPVk1QwU4ivd5AeYwz6Fe2z6HLunBSBA20yg@mail.gmail.com>
+X-ClientProxiedBy: SGAP274CA0014.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::26)
+ To SJ1PR11MB6297.namprd11.prod.outlook.com (2603:10b6:a03:458::8)
 MIME-Version: 1.0
-In-Reply-To: <ddddff68-cae3-24e7-d0b7-d08abc94baf2@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9BxQ9CPcuNiiCpBAA--.27529S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xr4UJr1fJr13ZFyUtF4Dtwb_yoWxXrW7pr
-        1kAFZ5GrW7Grn5Jr1Utrn8ZF98Ar1kGw1DJF1kXF1UJr4UXry0gr15Wryv9F1UJr48Gr1U
-        Ar15XrnruF17JrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVAFwVW8WwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r4j6FyUMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JU6mhwUUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 335a1f25-5f5a-4e91-4fe4-08da71258373
+X-MS-TrafficTypeDiagnostic: CY4PR1101MB2135:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: h9S6M/5PlLoHvQfZUvz+68VHcJZv5CYVi9ETExO+ba/V01G22lrhQupFf0FbUZDdIEYoWucCfb8e1+ugXsFeYFbbAav1pPRFGrbkII5/SzjOEaBO7A2URgvKhz6t4OvYZQ4ZR/tCOtYtxRYcNNtqD7txOx56cQIL9Z8p/LF88dSqhZ1oLZVHWUqHoGSORNpTwPDmmZOiRNyK36gmj3hvPo5/TwmiMMu1OYQCq93ViuxojJpJD2WS5iBjhpzjqMDQ3LRaRhtPsVH9GRMFYczkY0DV8P3TUr6zXZe3riGzdpW8UG2A6roqXoEtGgkRMneAAzXIhjRTQAQrpnqfucolVOTVpmBG6ma/263tT4hSr/IgfXnCvY2e3zNEGXapddUWYXfu23RAAfu3xEMgtuNEZ5gdmXe4RjHNMTAdG+hUo0I4rlTEuz7zEaQdfHFoHJ/zkGGLvam4DoSG0ZN4ykzg85KDNmo+oElv+pPDGkYiwFtp2cS10OnzTX77k4Y8N4CUb4PQGJC7LJ7Bs+m8MjuMlz0UFOF+HoNI5UO7YE0mBJdma2e0jc65sytwZ1XvyN/l6yIpyu8jNc/X5bECQh8f07n8KorpEaHR458LDhjBWpzWc6AsCBG2yfBtJ6zNiKsanBDDgy4jww2sNRrpgVZZtGUEy55oBDrNqJzIXlxNSBae1j4T0wg8bbqPEsmYrDy73j6hAMw4UAIxdGAcxGpt2JsGF+iT2JjNvmEI1rVsVwFPYkNrlFX5JGDU5EftlDxPn+hHQgRbcckU3C5lQ5Egdg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6297.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39860400002)(376002)(136003)(396003)(346002)(366004)(4744005)(2906002)(7416002)(5660300002)(8676002)(4326008)(54906003)(8936002)(316002)(6666004)(44832011)(86362001)(6506007)(66946007)(33716001)(966005)(478600001)(66476007)(6486002)(26005)(6916009)(66556008)(41300700001)(107886003)(9686003)(6512007)(186003)(83380400001)(82960400001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SIQ6EgB9+mDsNESOAfFJZQ8s9e6Zcbmv+QF5W1ZiMP1Fik5qNbUVlu0dzGwN?=
+ =?us-ascii?Q?uQQUhr24SckJgjZKBI8GblNMfVuAaRmSZ2p0bNUSolHpuz6FTbQSTfEShcc+?=
+ =?us-ascii?Q?j9BFDZ5K+EfGBM4YftsWmwUlrO41Wx8n82g+K7q8fiuegRM9df2H/z2TRj1M?=
+ =?us-ascii?Q?T1bRPvwBPbZ6BC0szBj51tsKKrzz4gayXTLQOFFb0l8Vqq8VExmz3rXHQQjL?=
+ =?us-ascii?Q?ECf1pE6twQDTiWDNWf0dF5KhclgrcFHQiP3yHHfetpqQ2QOJtT0sOPbPdm7f?=
+ =?us-ascii?Q?ZfMtlH7Ig8lhm+/zLE5/DdzztTRFVUG5+p04ugeEJOleoczAWLggkEgeijPy?=
+ =?us-ascii?Q?isl//NzQViFNRU302LsF91MJyKTE6YMbKydeP9RI3lzMJLpyFb1VsmPzUg/w?=
+ =?us-ascii?Q?XBD7Fmw+WIaW3l0Yw0BPqEoqhpzuUZNXOjHIXO+Xf9yv/R9DtGiWbT8FPYLy?=
+ =?us-ascii?Q?oJgR6YGUH2cyrbCpTgtQ5h7wqbnGlVmGBKaOLW3uoS3dQLYfaSNCWx10FzgX?=
+ =?us-ascii?Q?JlmVUCSk1o6FFQUunpx4h2ievfgwD5WYjFpFj3u7TwkgZ+i/LTe2sUG1Fb9y?=
+ =?us-ascii?Q?xMjNgm9ngFStsI9Uu6W/ndMY7EPwG8cRRLy+cuglC4onKE6v7q2ScPNemytD?=
+ =?us-ascii?Q?YS1k0kJ32a29zwjsgkSNPlsoSf2JI9Gz6/6TFrOQ5JC0djRctyY7seRh4ld2?=
+ =?us-ascii?Q?ZNibUuZQPi880XXvHGFLljkiBMt12k7zGw/4f2go1Nb/Rko0y/Qvldy6F940?=
+ =?us-ascii?Q?alXLVyldMsR+ylsbeBeWN0AOsp7gtePrn1FTV7VljnLTh1ntg2ElFE+/UhtU?=
+ =?us-ascii?Q?H3ddLopbLqSd0x3bXHRpae7buIkCX8QpkVBrHILUNnIkmHIPn6fuAtnsgvlq?=
+ =?us-ascii?Q?yOkcCnqXK89GyyMstDd2WUeLTVKNxBPUNgWOZKRsAaQ0q9Uf+MeVyi1OWxBW?=
+ =?us-ascii?Q?qhCf+HZ9Sr3+wvoOSclarWd3on2l1jm4+VA0Amy0JBbXRUmkoD70fuW3IFk9?=
+ =?us-ascii?Q?AXbsDcVW6y7xTecb6m8X+RJLm2DUZf+pvnvIQHdKNJixz0pSzyIgzbdgSRV7?=
+ =?us-ascii?Q?aDo6SLVd2Lcxxp40av3qV9JtWGioRgfnZCwW31KZuqFn/oqR4Uz3+ehsTh7y?=
+ =?us-ascii?Q?qXsUqKk7Mlmq67Y1ZXe7NRZAFwbWP62ImH3hzA+0K1kVom9bI9dLMGvDROuO?=
+ =?us-ascii?Q?ggDd9IGCZLMjbmFyjzRnEaHLBvpYHriqQkvYm8Vw9ZzkpyNcdN/jpD1PIJn0?=
+ =?us-ascii?Q?eV/jd/ZpMfNxu2oPsaeFW72QnbkC7LFluUp7EwwFWKIpftKlt8VjAmDBZX8R?=
+ =?us-ascii?Q?lk3vgLkV1vmwpYNf0/F9zxW3zB/m5EUdAVCvkwoMiKGhJiz/Eg1oGxqRdM9s?=
+ =?us-ascii?Q?d9v3wQZ/Gx3QfSdpgUyoMC7dGdiCafmPrfZcG10r09QG1Q5pXamfNtG8ojG3?=
+ =?us-ascii?Q?/R4+OgbUiFURw397TgfpEqq5+5cn/pQxcQeEAgp8nko7kUy2Tr9Gl8u3RMHC?=
+ =?us-ascii?Q?FAqVT26lCireiKqJzA+PWZR0VXgh9Z2xIndfFrbithC745i4BdxH4Tod3Unv?=
+ =?us-ascii?Q?yhqgKqMR+k/imtbGWV48vL37YSGzRNLuZnPFsEJIGaB11K+rX17kF/YvIdc3?=
+ =?us-ascii?Q?jQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 335a1f25-5f5a-4e91-4fe4-08da71258373
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6297.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 05:45:16.0697
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +qLvxL/jO1c/XEL3mNlShlnANSHR7mY6imC9NSlmqz1ue8JKE0ybvlfIoT3bUn2gmXQvB2s6mAG/U4eFcU4oMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2135
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/7/29 上午10:14, Jinyang He wrote:
-> Hi, Qing,
+hi, Joanne,
+ 
+On Wed, Jul 27, 2022 at 04:41:04PM -0700, Joanne Koong wrote:
 > 
+> I examined more closely the changes between v2 and v3 and I don't see
+> anything that would lead to this error either (I'm assuming  v2 is
+> okay because this report wasn't generated for it). Looking at the
+> stack trace too, I'm not seeing anything that sticks out (eg this
+> looks like a memory mapping failure and bhash2 didn't modify mapping
+> or paging code).
 > 
-> On 07/28/2022 10:05 PM, Qing Zhang wrote:
->> It unwind the stack frame based on prologue code analyze.
->> CONFIG_KALLSYMS is needed, at least the address and length
->> of each function.
->>
->> Three stages when we do unwind,
->>    (1)unwind_start(), the prapare of unwinding, fill unwind_state.
->>    (2)unwind_done(), judge whether the unwind process is finished or not.
->>    (3)unwind_next_frame(), unwind the next frame.
->>
->> Dividing unwinder helps to add new unwinders in the future, eg:
->> unwind_frame, unwind_orc .etc
->>
->> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->>
->> +static inline bool is_stack_alloc_ins(union loongarch_instruction *ip)
->> +{
->> +    /* addi.d $sp, $sp, -imm */
->> +    return ip->reg2i12_format.opcode == addid_op &&
->> +        ip->reg2i12_format.rj == LOONGARCH_GPR_SP &&
->> +        ip->reg2i12_format.rd == LOONGARCH_GPR_SP &&
->> +        ip->reg2i12_format.immediate & (1 << 11);
-> Checking the sign bit can be used in other place.
->> +}
->> +
->> +static inline bool is_ra_save_ins(union loongarch_instruction *ip)
->> +{
->> +    /* st.d $ra, $sp, offset */
->> +    return ip->reg2i12_format.opcode == std_op &&
->> +        ip->reg2i12_format.rj == LOONGARCH_GPR_SP &&
->> +        ip->reg2i12_format.rd == LOONGARCH_GPR_RA;
->> +}
->> +
->> +static inline bool is_branch_insn(union loongarch_instruction insn)
-> Does it by using pointer parameter as above functions do.
->> +{
->> +    return insn.reg1i21_format.opcode >= beqz_op &&
->> +            insn.reg1i21_format.opcode <= bgeu_op;
->> +}
->> +
->>   u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
->>   u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr 
->> rj, int imm);
->>   u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr 
->> rj, unsigned long pc, unsigned long dest);
->> diff --git a/arch/loongarch/include/asm/unwind.h 
->> b/arch/loongarch/include/asm/unwind.h
->> index 243330b39d0d..09394e536ea9 100644
->> --- a/arch/loongarch/include/asm/unwind.h
->> +++ b/arch/loongarch/include/asm/unwind.h
->> @@ -14,6 +14,10 @@
->>   struct unwind_state {
->>       struct stack_info stack_info;
->>       struct task_struct *task;
->> +#if defined(CONFIG_UNWINDER_PROLOGUE)
->> +    unsigned long ra;
->> +    bool enable;
-> Annotating here is appreciating. Enable is the way of prologue analysis
-> while !enable is the way of guess.
->> +#endif
->>       unsigned long sp, pc;
->>       bool first;
->>       bool error;
-> [...]
->> +
->> +unsigned long unwind_get_return_address(struct unwind_state *state)
->> +{
->> +
->> +    if (unwind_done(state))
->> +        return 0;
->> +
->> +    if (state->enable)
->> +        return state->pc;
->> +    else if (state->first)
->> +        return state->pc;
-> Combine conditions.
->> +
->> +    return *(unsigned long *)(state->sp);
->> +
->> +}
->> +EXPORT_SYMBOL_GPL(unwind_get_return_address);
->> +
->> +static bool unwind_by_prologue(struct unwind_state *state)
->> +{
->> +    struct stack_info *info = &state->stack_info;
->> +    union loongarch_instruction *ip, *ip_end;
->> +    unsigned long frame_size = 0, frame_ra = -1;
->> +    unsigned long size, offset, pc = state->pc;
->> +
->> +    if (state->sp >= info->end || state->sp < info->begin)
->> +        return false;
->> +
->> +    if (!kallsyms_lookup_size_offset(pc, &size, &offset))
->> +        return false;
->> +
->> +    ip = (union loongarch_instruction *)(pc - offset);
->> +    ip_end = (union loongarch_instruction *)pc;
->> +
->> +    while (ip < ip_end) {
->> +        if (is_stack_alloc_ins(ip)) {
->> +            frame_size = (1 << 12) - ip->reg2i12_format.immediate;
-> Due to there will be other place convert unsigned to signed, we have
-> a chance that create a inline function in inst.h. Do it as same as
-> checking the sign bit.Hi,
-Jinyang
+> I don't think this bug report is related to the bhash2 changes. But
+> please let me know if you disagree.
 
-I will fix all in v2.
-eg:
-#define is_imm12_negative(val)  is_imm_negative(val, 12)
-static inline bool is_imm_negative(unsigned long val, unsigned int bit)
-{
-         return val & (1UL << (bit-1));
-}
+thanks for detail information. we are running more tests to confirm now.
+will update you later.
 
-static inline bool is_stack_alloc_ins(union loongarch_instruction *ip)
-{
-...
-                 ip->reg2i12_format.rd == LOONGARCH_GPR_SP &&
-                 is_imm12_negative(ip->reg2i12_format.immediate);
-}
-
-static inline bool is_ra_save_ins(union loongarch_instruction *ip)
-{
-...
-                 !is_imm12_negative(ip->reg2i12_format.immediate);
-}
-
-Thanks,
-Qing
-> 
->> +            ip++;
->> +            break;
->> +        }
->> +        ip++;
->> +    }
->> +
-> [...]
->> +
->> +    do {
->> +        if (state->enable) {
->> +            if (unwind_by_prologue(state))
->> +                return true;
->> +
->> +            if (info->type == STACK_TYPE_IRQ &&
->> +                info->end == state->sp) {
->> +                regs = (struct pt_regs *)info->next_sp;
->> +                pc = regs->csr_era;
->> +                if (user_mode(regs) || !__kernel_text_address(pc))
->> +                    return false;
->> +
->> +                state->pc = pc;
->> +                state->sp = regs->regs[3];
->> +                state->ra = regs->regs[1];
->> +                state->first = true;
->> +                get_stack_info(state->sp, state->task, info);
->> +
->> +                return true;
->> +            }
->> +        } else {
->> +            if (state->first)
->> +                state->first = false;
->> +
->> +            if (unwind_by_guess(state))
->> +                return true;
->> +        }
-> I'd prefer separate the block of 'if...else...' into two inline
-> functions, that makes codes clear.
 > 
 > Thanks,
-> Jinyang
-
+> Joanne
+> 
+> >
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://01.org/lkp
+> >
+> >

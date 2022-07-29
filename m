@@ -2,302 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE7858535B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4A258535E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237207AbiG2QSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 12:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        id S237226AbiG2QVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 12:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiG2QSr (ORCPT
+        with ESMTP id S229979AbiG2QU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 12:18:47 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C952788CEE;
-        Fri, 29 Jul 2022 09:18:45 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 18:18:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659111524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=ccHi5rpdoxagvk/VMmpwdyqLPl6kfS83BVw+V7teFMs=;
-        b=EXsW3S2hMw9RB5yAYHiTJzh7sLUDN/pEhVwOMBoD2EAk4Tfe9vO+q5TDgvkvQcDRp1pIOp
-        9wCUsfnEHZXvQviXglQhFDunsbcb1ViTQmKAgM//wAqbeioyHkitaie2tGlP0iBELuJUbX
-        7ItjfHTHFisvrttTr8RXtCoZikqJGXVbIOIoDGdwLuoEX4b5DMrphNmy6QrRDo0WUpfShW
-        gloBtgT6YDzR2UJYoXTaqmrjpqQ9jfgBonUb98EFhM4K/0K4IdVoGzGnbeRsvuzPUkGC+N
-        X7dDm4HTCuaekGamtlysS6Bb27s9whQbM/IpMr9E3I6FXUKwWvCzEBeEzpn8Gw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659111524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=ccHi5rpdoxagvk/VMmpwdyqLPl6kfS83BVw+V7teFMs=;
-        b=kib4G+q7LID5qN7Q/Nrs9+zjt800o+Vyi6fMK1ybYqM5xZOrUlYmWx+b4iio0QzOfrwH8h
-        EL+JyJzjp5vWfkCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [ANNOUNCE] v5.19-rc8-rt9
-Message-ID: <YuQIY/NA2o5j9HVR@linutronix.de>
+        Fri, 29 Jul 2022 12:20:57 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F5187363;
+        Fri, 29 Jul 2022 09:20:55 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id tk8so9383953ejc.7;
+        Fri, 29 Jul 2022 09:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0fH5jllVFqMSEJxCgYVeoVoO2vhQofVpCBdQLjkkMaQ=;
+        b=T2cdYKOUcrfbZenlYRnBZPOM85RT/qd65fs/xTRFTWGCSMBUXn0HZeZa6AyrqUWcbM
+         ewEICxlW1vfLf9pHCTOkgypWmUe/bqNd8EzE2OWi4Vy2h22bIQn8+4DmcsOupE9iuM/C
+         JdZnndHLopzIAzvMbUZgl4tSRFIGo22uV+1ULURpNuSU9Ql25SmK398AFLb5uJpKBasL
+         /SnX/yWdHUSGrWnHiGtviEY32TLlj21Gd/wnrcROAnT8x/RH4U97JLlshe14wFfA3zUT
+         ydY8Zie+mzvO3R+AphCkgB/6uE54re5cmxq18TvQYIas2qVJZuT01M5F0IjIzFACSYvX
+         Frvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0fH5jllVFqMSEJxCgYVeoVoO2vhQofVpCBdQLjkkMaQ=;
+        b=GdUubhyPctDC97eQ63lIGntviTescevP5UyMKoWbYaKjfP9tZGWcFRGho7PzQEiWOb
+         JXAqnoIArk9mj73qdPqTvY43J34qfHc5CIqKGIzRvgoocmNvWhJN9QS4e3Je+V2lEBFp
+         PTgt9UG9wirULhxXI7W9AdEjwP/2fTW1bEM8sEf36I77okiwrlzA0XEd9+84jkw48LDK
+         RqMh8O9bhT4ikBhGDJ3duDs7prAf1xnNieU9TQfC1060/3lh+rDXmU0fTCw7ZCaUOZcA
+         UpMlqZUGePKb4q56YkiQdtRs/MFIOIR7DlfB6N0EfzJJPrRpLYh5Wgi9uZO3BahZy5oD
+         tUEg==
+X-Gm-Message-State: AJIora8j44z9AgxQElmdrrB7GuDHOlgV76Rmson2g7iG25Zd10SjgEdy
+        9InY2Fs+BTHuEUN7ILk8xFM=
+X-Google-Smtp-Source: AGRyM1sYQvmyI4/jn52FywFyZpQOXmxUe3ueHWulpxVI8dgZ8FNAwrilrHN9PqH04wM11rgovhRmxg==
+X-Received: by 2002:a17:907:9491:b0:72f:2827:37c3 with SMTP id dm17-20020a170907949100b0072f282737c3mr3530866ejc.306.1659111654181;
+        Fri, 29 Jul 2022 09:20:54 -0700 (PDT)
+Received: from localhost (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id u10-20020a17090626ca00b007262b7afa05sm1849422ejc.213.2022.07.29.09.20.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 09:20:53 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] pwm: Changes for v5.20-rc1
+Date:   Fri, 29 Jul 2022 18:20:50 +0200
+Message-Id: <20220729162050.2866901-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear RT folks!
+Hi Linus,
 
-I'm pleased to announce the v5.19-rc8-rt9 patch set. 
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-Changes since v5.19-rc8-rt8:
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-  - Redo the dcache patch based on feedback from upstream.
+are available in the Git repository at:
 
-  - Add a comment to the scheduler code based on feedback from upstream.
+  git://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git tags/pwm/for-5.20-rc1
 
-  - Printing a pointer usually leads to warning on PREEMPT_RT. Reported
-    by Mike Galbraith.
+for you to fetch changes up to 8933d30c5f468d6cc1e4bf9bb535149da35f202e:
 
+  pwm: lpc18xx: Fix period handling (2022-07-29 13:41:18 +0200)
 
-Known issues
-     - Valentin Schneider reported a few splats on ARM64, see
-          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
+Thanks,
+Thierry
 
-The delta patch against v5.19-rc8-rt8 is appended below and can be found here:
- 
-     https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.19/incr/patch-5.19-rc8-rt8-rt9.patch.xz
+----------------------------------------------------------------
+pwm: Changes for v5.20-rc1
 
-You can get this release via the git tree at:
+After v5.19 had all drivers converted to the new atomic API and nobody
+has reported any breakage, this set of changes starts by dropping the
+legacy support.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.19-rc8-rt9
+Some existing drivers get improvements and broader chip support and a
+new driver is added that emulates a PWM controller using a clock output.
 
-The RT patch against v5.19-rc8 can be found here:
+Other than that there's the usual bits of cleanups and minor fixes.
 
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.19/older/patch-5.19-rc8-rt9.patch.xz
+----------------------------------------------------------------
+Fabien Parent (3):
+      dt-bindings: pwm: Add MT8365 SoC binding
+      pwm: mediatek: Add MT8365 support
+      dt-bindings: pwm: mediatek: Add compatible string for MT8195
 
-The split quilt queue is available at:
+Julia Lawall (1):
+      pwm: atmel-tcb: Fix typo in comment
 
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.19/older/patches-5.19-rc8-rt9.tar.xz
+Lee Jones (1):
+      MAINTAINERS: Remove myself as PWM maintainer
 
-Sebastian
+Lukas Bulwahn (1):
+      MAINTAINERS: Add include/dt-bindings/pwm to PWM SUBSYSTEM
 
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 0b5fd3a17ff7c..a95064f972c80 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -2239,6 +2239,7 @@ struct dentry *d_add_ci(struct dentry *dentry, struct inode *inode,
- 		} 
- 	}
- 	res = d_splice_alias(inode, found);
-+	d_lookup_done(found);
- 	if (res) {
- 		dput(found);
- 		return res;
-@@ -2580,11 +2581,13 @@ static inline unsigned start_dir_add(struct inode *dir)
- 	}
- }
- 
--static inline void end_dir_add(struct inode *dir, unsigned n)
-+static inline void end_dir_add(struct inode *dir, unsigned int n,
-+			       wait_queue_head_t *d_wait)
- {
- 	smp_store_release(&dir->i_dir_seq, n + 2);
- 	if (IS_ENABLED(CONFIG_PREEMPT_RT))
- 		preempt_enable();
-+	wake_up_all(d_wait);
- }
- 
- static void d_wait_lookup(struct dentry *dentry)
-@@ -2735,13 +2738,13 @@ static wait_queue_head_t *__d_lookup_unhash(struct dentry *dentry)
- 	return d_wait;
- }
- 
--void __d_lookup_done(struct dentry *dentry)
-+void __d_lookup_unhash_wake(struct dentry *dentry)
- {
- 	spin_lock(&dentry->d_lock);
- 	wake_up_all(__d_lookup_unhash(dentry));
- 	spin_unlock(&dentry->d_lock);
- }
--EXPORT_SYMBOL(__d_lookup_done);
-+EXPORT_SYMBOL(__d_lookup_unhash_wake);
- 
- /* inode->i_lock held if inode is non-NULL */
- 
-@@ -2750,7 +2753,6 @@ static inline void __d_add(struct dentry *dentry, struct inode *inode)
- 	wait_queue_head_t *d_wait;
- 	struct inode *dir = NULL;
- 	unsigned n;
--
- 	spin_lock(&dentry->d_lock);
- 	if (unlikely(d_in_lookup(dentry))) {
- 		dir = dentry->d_parent->d_inode;
-@@ -2766,10 +2768,8 @@ static inline void __d_add(struct dentry *dentry, struct inode *inode)
- 		fsnotify_update_flags(dentry);
- 	}
- 	__d_rehash(dentry);
--	if (dir) {
--		end_dir_add(dir, n);
--		wake_up_all(d_wait);
--	}
-+	if (dir)
-+		end_dir_add(dir, n, d_wait);
- 	spin_unlock(&dentry->d_lock);
- 	if (inode)
- 		spin_unlock(&inode->i_lock);
-@@ -2982,10 +2982,8 @@ static void __d_move(struct dentry *dentry, struct dentry *target,
- 	write_seqcount_end(&target->d_seq);
- 	write_seqcount_end(&dentry->d_seq);
- 
--	if (dir) {
--		end_dir_add(dir, n);
--		wake_up_all(d_wait);
--	}
-+	if (dir)
-+		end_dir_add(dir, n, d_wait);
- 
- 	if (dentry->d_parent != old_parent)
- 		spin_unlock(&dentry->d_parent->d_lock);
-diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-index a07a51c858fb4..c73e5e327e76f 100644
---- a/include/linux/dcache.h
-+++ b/include/linux/dcache.h
-@@ -349,7 +349,7 @@ static inline void dont_mount(struct dentry *dentry)
- 	spin_unlock(&dentry->d_lock);
- }
- 
--extern void __d_lookup_done(struct dentry *dentry);
-+extern void __d_lookup_unhash_wake(struct dentry *dentry);
- 
- static inline int d_in_lookup(const struct dentry *dentry)
- {
-@@ -359,7 +359,7 @@ static inline int d_in_lookup(const struct dentry *dentry)
- static inline void d_lookup_done(struct dentry *dentry)
- {
- 	if (unlikely(d_in_lookup(dentry)))
--		__d_lookup_done(dentry);
-+		__d_lookup_unhash_wake(dentry);
- }
- 
- extern void dput(struct dentry *);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 377e7d4139d87..fd7b06dcab48f 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3300,6 +3300,36 @@ int migrate_swap(struct task_struct *cur, struct task_struct *p,
- #endif /* CONFIG_NUMA_BALANCING */
- 
- #ifdef CONFIG_PREEMPT_RT
-+
-+/*
-+ * Consider:
-+ *
-+ *  set_special_state(X);
-+ *
-+ *  do_things()
-+ *    // Somewhere in there is an rtlock that can be contended:
-+ *    current_save_and_set_rtlock_wait_state();
-+ *    [...]
-+ *    schedule_rtlock(); (A)
-+ *    [...]
-+ *    current_restore_rtlock_saved_state();
-+ *
-+ *  schedule(); (B)
-+ *
-+ * If p->saved_state is anything else than TASK_RUNNING, then p blocked on an
-+ * rtlock (A) *before* voluntarily calling into schedule() (B) after setting its
-+ * state to X. For things like ptrace (X=TASK_TRACED), the task could have more
-+ * work to do upon acquiring the lock in do_things() before whoever called
-+ * wait_task_inactive() should return. IOW, we have to wait for:
-+ *
-+ *   p.saved_state = TASK_RUNNING
-+ *   p.__state     = X
-+ *
-+ * which implies the task isn't blocked on an RT lock and got to schedule() (B).
-+ *
-+ * Also see comments in ttwu_state_match().
-+ */
-+
- static __always_inline bool state_mismatch(struct task_struct *p, unsigned int match_state)
- {
- 	unsigned long flags;
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 3c1853a9d1c09..371d6f5abaad5 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -750,37 +750,40 @@ static int __init debug_boot_weak_hash_enable(char *str)
- }
- early_param("debug_boot_weak_hash", debug_boot_weak_hash_enable);
- 
--static DEFINE_STATIC_KEY_FALSE(filled_random_ptr_key);
-+static bool filled_random_ptr_key;
-+static siphash_key_t ptr_key __read_mostly;
- 
--static void enable_ptr_key_workfn(struct work_struct *work)
-+static void fill_ptr_key_workfn(struct work_struct *work)
- {
--	static_branch_enable(&filled_random_ptr_key);
-+	int ret;
-+
-+	ret = get_random_bytes_wait(&ptr_key, sizeof(ptr_key));
-+	if (WARN_ON(ret < 0))
-+		return;
-+	/* Pairs with smp_rmb() before reading ptr_key. */
-+	smp_wmb();
-+	WRITE_ONCE(filled_random_ptr_key, true);
- }
- 
-+static int vsprintf_init_hashval(void)
-+{
-+	static DECLARE_WORK(fill_ptr_key_work, fill_ptr_key_workfn);
-+
-+	queue_work(system_unbound_wq, &fill_ptr_key_work);
-+	return 0;
-+}
-+subsys_initcall(vsprintf_init_hashval)
-+
- /* Maps a pointer to a 32 bit unique identifier. */
- static inline int __ptr_to_hashval(const void *ptr, unsigned long *hashval_out)
- {
--	static siphash_key_t ptr_key __read_mostly;
- 	unsigned long hashval;
- 
--	if (!static_branch_likely(&filled_random_ptr_key)) {
--		static bool filled = false;
--		static DEFINE_SPINLOCK(filling);
--		static DECLARE_WORK(enable_ptr_key_work, enable_ptr_key_workfn);
--		unsigned long flags;
--
--		if (!system_unbound_wq || !rng_is_initialized() ||
--		    !spin_trylock_irqsave(&filling, flags))
--			return -EAGAIN;
--
--		if (!filled) {
--			get_random_bytes(&ptr_key, sizeof(ptr_key));
--			queue_work(system_unbound_wq, &enable_ptr_key_work);
--			filled = true;
--		}
--		spin_unlock_irqrestore(&filling, flags);
--	}
-+	if (!READ_ONCE(filled_random_ptr_key))
-+		return -EBUSY;
- 
-+	/* Pairs with smp_wmb() after writing ptr_key. */
-+	smp_rmb();
- 
- #ifdef CONFIG_64BIT
- 	hashval = (unsigned long)siphash_1u64((u64)ptr, &ptr_key);
-diff --git a/localversion-rt b/localversion-rt
-index 700c857efd9ba..22746d6390a42 100644
---- a/localversion-rt
-+++ b/localversion-rt
-@@ -1 +1 @@
---rt8
-+-rt9
+Nikita Travkin (2):
+      dt-bindings: pwm: Document clk based PWM controller
+      pwm: Add clock based PWM output driver
+
+Uwe Kleine-König (13):
+      pwm: Drop support for legacy drivers
+      pwm: Reorder header file to get rid of struct pwm_capture forward declaration
+      pwm: Drop unused forward declaration from pwm.h
+      pwm: sifive: Simplify offset calculation for PWMCMP registers
+      pwm: sifive: Fold pwm_sifive_enable() into its only caller
+      pwm: sifive: Reduce time the controller lock is held
+      pwm: sifive: Enable clk only after period check in .apply()
+      pwm: sifive: Simplify clk handling
+      pwm: sifive: Ensure the clk is enabled exactly once per running PWM
+      pwm: sifive: Shut down hardware only after pwmchip_remove() completed
+      pwm: twl-led: Document some limitations and link to the reference manual
+      pwm: lpc18xx: Convert to use dev_err_probe()
+      pwm: lpc18xx: Fix period handling
+
+ Documentation/devicetree/bindings/pwm/clk-pwm.yaml |  46 +++++++
+ .../devicetree/bindings/pwm/pwm-mediatek.txt       |   3 +
+ MAINTAINERS                                        |   2 +-
+ drivers/pwm/Kconfig                                |  10 ++
+ drivers/pwm/Makefile                               |   1 +
+ drivers/pwm/core.c                                 |  82 +-----------
+ drivers/pwm/pwm-atmel-tcb.c                        |   2 +-
+ drivers/pwm/pwm-clk.c                              | 148 +++++++++++++++++++++
+ drivers/pwm/pwm-lpc18xx-sct.c                      |  67 ++++++----
+ drivers/pwm/pwm-mediatek.c                         |   7 +
+ drivers/pwm/pwm-sifive.c                           | 117 ++++++++--------
+ drivers/pwm/pwm-twl-led.c                          |  16 +++
+ include/linux/pwm.h                                |  35 ++---
+ 13 files changed, 349 insertions(+), 187 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pwm/clk-pwm.yaml
+ create mode 100644 drivers/pwm/pwm-clk.c

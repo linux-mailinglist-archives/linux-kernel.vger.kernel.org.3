@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473B1585465
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3E8585468
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238303AbiG2RXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        id S238405AbiG2RXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236678AbiG2RXn (ORCPT
+        with ESMTP id S237393AbiG2RXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Jul 2022 13:23:43 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDFD82F97;
-        Fri, 29 Jul 2022 10:23:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DA988752;
+        Fri, 29 Jul 2022 10:23:41 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id BF4E65FD05;
-        Fri, 29 Jul 2022 20:23:38 +0300 (MSK)
+        by mail.sberdevices.ru (Postfix) with ESMTP id A1F405FD08;
+        Fri, 29 Jul 2022 20:23:39 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1659115418;
-        bh=w/d+593NX4cY87g/IJF8H7+dzrWxIdSP3VvXY0TJc5w=;
+        s=mail; t=1659115419;
+        bh=PyxBA2BnLYxW1rMCm26qSJkySETPdFlB7N+MFu9zNgM=;
         h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=nDxW8OCVWMmMeHvLKs+R5bzS/NcZd7WOMHdIAdd7WyzbqLhrlM4UHVqMcj7XWMmkC
-         GIqpJleRovQHaaqB03RnBKjbjmSZCIcHkc00tLWpcGhvRAlnOPkxDiryueUlWSVhuJ
-         GQ3LKXD538QiKiKVdaRjrIf/4CPWqom0uxKr+HGo1TmvyCTifoh2XFIv6UWpUeJK5V
-         06stLLkkk+UIREMEH7SsbzDNtILK5iof4xXTl78A/Rk6MqzYtdOiA+LcfohebeqDv9
-         1rNkRKQd64w60o6L95ofcZYBembu3XLRg/4Ooo/o5fweZu99alopJtJc5LrVj2Djch
-         zKhvV8gEoG4EA==
+        b=oe4GcA4kRHmGtk9d0AcBZYjZzhXsM810HW6dLxRsV8aVZLYCW1637TqHT+VXtN7ak
+         DBeoG2ENgldW4TQIPY1VFfzGXqyZ8UVP3m35N7xBkHUzvZbmEDIdVD/SNTFAhXdBqe
+         C34m2GM/eEr9I5ze6fQXsnQmbXtiiWkgbRLa3O4UFnmDbE/Cd/bzTC/he6Y2wZAHPr
+         m/PyqkXuKNF0+M0f5nckJDjpkvV0QUyMX1gAZfnVauHfGgJmpnxOeMjnfk35qRjplq
+         GYF1haejajXZlQiwxlkSc+kExoa5TUrKD78d0YC4omy8JlSQsZcpnGJhtPfxZWg3/E
+         bpVv5F0HM4lmA==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mail.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 29 Jul 2022 20:23:38 +0300 (MSK)
+        Fri, 29 Jul 2022 20:23:39 +0300 (MSK)
 From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
 To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "andriy.shevchenko@linux.intel.com" 
@@ -46,11 +46,12 @@ CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         kernel <kernel@sberdevices.ru>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v2 2/3] iio: accel: adxl345: use HZ macro from units.h
-Thread-Topic: [PATCH v2 2/3] iio: accel: adxl345: use HZ macro from units.h
-Thread-Index: AQHYo2/fZE/2bgRE9kWT1kuC+3KB3g==
-Date:   Fri, 29 Jul 2022 17:23:08 +0000
-Message-ID: <20220729172332.19118-3-ddrokosov@sberdevices.ru>
+Subject: [PATCH v2 3/3] iio: common: scmi_sensors: use HZ macro from units.h
+Thread-Topic: [PATCH v2 3/3] iio: common: scmi_sensors: use HZ macro from
+ units.h
+Thread-Index: AQHYo2/ffOY1iq+jkk6eezTkPE4aJA==
+Date:   Fri, 29 Jul 2022 17:23:09 +0000
+Message-ID: <20220729172332.19118-4-ddrokosov@sberdevices.ru>
 References: <20220729172332.19118-1-ddrokosov@sberdevices.ru>
 In-Reply-To: <20220729172332.19118-1-ddrokosov@sberdevices.ru>
 Accept-Language: ru-RU, en-US
@@ -77,34 +78,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove duplicated definition of NHZ_PER_HZ, because it's available in
+Remove duplicated definition of UHZ_PER_HZ, because it's available in
 the units.h.
 
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 ---
- drivers/iio/accel/adxl345_core.c | 2 +-
+ drivers/iio/common/scmi_sensors/scmi_iio.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/accel/adxl345_core.c b/drivers/iio/accel/adxl345_c=
-ore.c
-index 370bfec1275a..94189133fe8f 100644
---- a/drivers/iio/accel/adxl345_core.c
-+++ b/drivers/iio/accel/adxl345_core.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/property.h>
- #include <linux/regmap.h>
+diff --git a/drivers/iio/common/scmi_sensors/scmi_iio.c b/drivers/iio/commo=
+n/scmi_sensors/scmi_iio.c
+index 793d628db55f..c6d2cf5504cb 100644
+--- a/drivers/iio/common/scmi_sensors/scmi_iio.c
++++ b/drivers/iio/common/scmi_sensors/scmi_iio.c
+@@ -18,6 +18,7 @@
+ #include <linux/scmi_protocol.h>
+ #include <linux/time.h>
+ #include <linux/types.h>
 +#include <linux/units.h>
 =20
- #include <linux/iio/iio.h>
- #include <linux/iio/sysfs.h>
-@@ -32,7 +33,6 @@
+ #define SCMI_IIO_NUM_OF_AXIS 3
 =20
- #define ADXL345_BW_RATE			GENMASK(3, 0)
- #define ADXL345_BASE_RATE_NANO_HZ	97656250LL
--#define NHZ_PER_HZ			1000000000LL
-=20
- #define ADXL345_POWER_CTL_MEASURE	BIT(3)
- #define ADXL345_POWER_CTL_STANDBY	0x00
+@@ -130,7 +131,6 @@ static const struct iio_buffer_setup_ops scmi_iio_buffe=
+r_ops =3D {
+ static int scmi_iio_set_odr_val(struct iio_dev *iio_dev, int val, int val2=
+)
+ {
+ 	struct scmi_iio_priv *sensor =3D iio_priv(iio_dev);
+-	const unsigned long UHZ_PER_HZ =3D 1000000UL;
+ 	u64 sec, mult, uHz, sf;
+ 	u32 sensor_config;
+ 	char buf[32];
 --=20
 2.36.0

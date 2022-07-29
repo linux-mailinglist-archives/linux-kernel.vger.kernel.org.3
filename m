@@ -2,144 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E01585552
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D1558553D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238738AbiG2TDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
+        id S238310AbiG2TCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238597AbiG2TC5 (ORCPT
+        with ESMTP id S233409AbiG2TCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:02:57 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FD188E29;
-        Fri, 29 Jul 2022 12:02:50 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 055D431901A;
-        Fri, 29 Jul 2022 15:02:49 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id uCippXD8KXZi; Fri, 29 Jul 2022 15:02:48 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 35903318E98;
-        Fri, 29 Jul 2022 15:02:45 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 35903318E98
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1659121365;
-        bh=SlksVcAEQwHXv/2n1z59vggbF/JR7rR40IRrV+e+NmA=;
-        h=From:To:Date:Message-Id;
-        b=dom/woOiwwNfE+wiiNMkWguctUUrw2JryzhuC7UabwX1Tw1LbQRRc3xehozmHcJvs
-         xwqFcp8epyeqhH107olHOwiMsyC+DH8Dm8jKJMspgHs9KkdFjAF0+8ohR68j7GwwAF
-         TtsveO+8pvg6X4qIN5htU+ZsFQlJv7MOUh08Ac2LBOX4ft9xjI7hyCsi/erlJ0WBr1
-         aJcwmLZT2QIeiubqVO6RkjXmVTDHnXtYW8UG0no7fBYbwzveVjaXnCRiDRQIFRnJoH
-         gO9GxbMMVPqIXNNenl11ThtU3OC9sReD4cyvUXJEorzT7WluUA61B30cNLjk6TTxUM
-         pUfOpPLBUobBw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id V-BhCphR6MiV; Fri, 29 Jul 2022 15:02:45 -0400 (EDT)
-Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id E4E0A318E1A;
-        Fri, 29 Jul 2022 15:02:43 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH v3 10/23] rseq: extend struct rseq with per memory space vcpu id
-Date:   Fri, 29 Jul 2022 15:02:12 -0400
-Message-Id: <20220729190225.12726-11-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220729190225.12726-1-mathieu.desnoyers@efficios.com>
-References: <20220729190225.12726-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Jul 2022 15:02:18 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABFF86C29
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:02:17 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id v18so5378595plo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=LkO9SgTZ2fPl2HYX0gFonlaXjyZgw7WltwbfzzP2PWU=;
+        b=LcCMO/BfHtLr67gbUfFYeZ2DnL0Qe15D/zjxvFdRRh7VmNk7LN5oMsc24VO/GmbV/U
+         PuV6l97/eHoUtKDyH52SVtPAZ87OnqBus/o63uyQuFgufZzCyq9XsxfOUYAdERS1Jgqd
+         Z8e1N8bqzr0z8QDItDcXKcyyEaabrG/16s5zoaP1WRFBF4Ue7XuTf8xaQCPaAoBgg974
+         KUIBiMYBx36eqSObwBq4p2WXddbpg1bPZ34gDbt+XQiuHO4akXNCCqBoLF/FeCnzUG2i
+         XE9mksL3i7ZMYBmA4SOK8RBlplgWMUQ4wTuOLsTMqyyIK0ibz34Lq8CE9D2iQAq/i5AS
+         iEgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=LkO9SgTZ2fPl2HYX0gFonlaXjyZgw7WltwbfzzP2PWU=;
+        b=644d1F7t8sY3WhP7+b0iT58r9ctlnQ1U5dccKct/T+RobXjVHzrk9eIwtIRaehC80h
+         12xCfSVKSsxFDr6ooL7xZqp4xUYTlEYvVJ1MQIYSEY76+H9DFuGZ7ywO1gfZJu+xZZqN
+         /Ppgzn2XvPmOpM2vBwHbIu/l0bAh4zQQ+iXXL2QaHNaz0j4MKT5/YK1vMJ7g7IUotaBd
+         5pRLrCSd7KnX3EGh6RTKFOz8YUiNjhCjWudxVNpZynBWdynwUyDM4MkggOMjokPKo03n
+         7C5IHG01Cn7fvNvh1J+GBS/8sKf8Vv3D8t5CYkSWLKZ5h+bbxzDJ9xAoqiYAyAxEE0cy
+         97hw==
+X-Gm-Message-State: ACgBeo2xZw67kjowMlQc5Etbnbd4DaRbz5PHoOZsNbT8N5nuZExGn8Gv
+        W/iBlDnnNxHXCR4At+XazlmdAQ==
+X-Google-Smtp-Source: AA6agR6iqcQsub1nBR7JRnM5qfcyEbknlTLsOfU5kvnAs7e7vtoc0LC7cubgKQlDwv2I4efPq2wL9Q==
+X-Received: by 2002:a17:90a:2ec5:b0:1f2:ea66:c832 with SMTP id h5-20020a17090a2ec500b001f2ea66c832mr6318473pjs.31.1659121336897;
+        Fri, 29 Jul 2022 12:02:16 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n16-20020a170902e55000b0016d5cf36ff8sm4042180plf.274.2022.07.29.12.02.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 12:02:16 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 19:02:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
+Message-ID: <YuQutJAhKWcsrrYl@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a memory space has fewer threads than cores, or is limited to run on
-few cores concurrently through sched affinity or cgroup cpusets, the
-virtual cpu ids will be values close to 0, thus allowing efficient use
-of user-space memory for per-cpu data structures.
+On Wed, Jul 06, 2022, Chao Peng wrote:
+> The sync mechanism between mmu_notifier and page fault handler employs
+> fields mmu_notifier_seq/count and mmu_notifier_range_start/end. For the
+> to be added private memory, there is the same mechanism needed but not
+> rely on mmu_notifier (It uses new introduced memfile_notifier). This
+> patch renames the existing fields and related helper functions to a
+> neutral name mmu_updating_* so private memory can reuse.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- include/uapi/linux/rseq.h |  9 +++++++++
- kernel/rseq.c             | 10 +++++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+mmu_updating_* is too broad of a term, e.g. page faults and many other operations
+also update the mmu.  Although the name most definitely came from the mmu_notifier,
+it's not completely inaccurate for other sources, e.g. KVM's MMU is still being
+notified of something, even if the source is not the actual mmu_notifier.
 
-diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-index 1cb90a435c5c..77a136586ac6 100644
---- a/include/uapi/linux/rseq.h
-+++ b/include/uapi/linux/rseq.h
-@@ -139,6 +139,15 @@ struct rseq {
- 	 */
- 	__u32 node_id;
- 
-+	/*
-+	 * Restartable sequences vm_vcpu_id field. Updated by the kernel. Read by
-+	 * user-space with single-copy atomicity semantics. This field should
-+	 * only be read by the thread which registered this data structure.
-+	 * Aligned on 32-bit. Contains the current thread's virtual CPU ID
-+	 * (allocated uniquely within a memory space).
-+	 */
-+	__u32 vm_vcpu_id;
-+
- 	/*
- 	 * Flexible array member at end of structure, after last feature field.
- 	 */
-diff --git a/kernel/rseq.c b/kernel/rseq.c
-index cb7d8a5afc82..1b00339c341b 100644
---- a/kernel/rseq.c
-+++ b/kernel/rseq.c
-@@ -89,12 +89,14 @@ static int rseq_update_cpu_node_id(struct task_struct *t)
- 	struct rseq __user *rseq = t->rseq;
- 	u32 cpu_id = raw_smp_processor_id();
- 	u32 node_id = cpu_to_node(cpu_id);
-+	u32 vm_vcpu_id = task_mm_vcpu_id(t);
- 
- 	if (!user_write_access_begin(rseq, t->rseq_len))
- 		goto efault;
- 	unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
- 	unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
- 	unsafe_put_user(node_id, &rseq->node_id, efault_end);
-+	unsafe_put_user(vm_vcpu_id, &rseq->vm_vcpu_id, efault_end);
- 	/*
- 	 * Additional feature fields added after ORIG_RSEQ_SIZE
- 	 * need to be conditionally updated only if
-@@ -112,7 +114,8 @@ static int rseq_update_cpu_node_id(struct task_struct *t)
- 
- static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
- {
--	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0;
-+	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0,
-+	    vm_vcpu_id = 0;
- 
- 	/*
- 	 * Reset cpu_id_start to its initial state (0).
-@@ -131,6 +134,11 @@ static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
- 	 */
- 	if (put_user(node_id, &t->rseq->node_id))
- 		return -EFAULT;
-+	/*
-+	 * Reset vm_vcpu_id to its initial state (0).
-+	 */
-+	if (put_user(vm_vcpu_id, &t->rseq->vm_vcpu_id))
-+		return -EFAULT;
- 	/*
- 	 * Additional feature fields added after ORIG_RSEQ_SIZE
- 	 * need to be conditionally reset only if
--- 
-2.17.1
+If we really want a different name, I'd vote for nomenclature that captures the
+invalidation aspect, which is really what the variables are all trackng, e.g.
+
+  mmu_invalidate_seq
+  mmu_invalidate_in_progress
+  mmu_invalidate_range_start
+  mmu_invalidate_range_end
 

@@ -2,108 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58A45855C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1B25855CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238968AbiG2TyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
+        id S238979AbiG2Tzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238947AbiG2TyQ (ORCPT
+        with ESMTP id S231817AbiG2Tzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:54:16 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE9888F2B
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:54:14 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id 17so5568372pfy.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:54:14 -0700 (PDT)
+        Fri, 29 Jul 2022 15:55:44 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F3E81480
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:55:43 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id x11so4070208qts.13
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=1EqMgjnyhc4WRsC/xGOtxHSz8izgvjHhHYaPjqj6I7s=;
-        b=HLB5f+s+ntjkI17+2jp2WegSk0Ip1A1bt9XeV1pSaqeITXDi12YjSrxcIgZXHrMp59
-         UrkPVO6LhvZWQkYzIfyeY3oLoZKArVvjkRclfgyghVmxV8STbNsdGoFjh3pa12HmBMQl
-         ZtFdRossZIy8OZmwKbexSgbozQy0t+BsKx3y85dydYJVmRQ0UfauaYy+YRuqV7R2JVVT
-         Pwmk0Ug1XScP+SUhKwaLYZwcdNCu+i+DjGxkiIBDdXbnnPgK/7oaJTnfrjbSGXfZjqAn
-         +yrErgsE08MPBUhSKuwXkcKKsySktnGs6hlT7NDtjtcK0DoVRdqMsEYM6+1flcqF3Q78
-         34ag==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
+        bh=lI7ivcAwRUifQnRI706c0+q8Lpzh40+rYKLKoU1I3oA=;
+        b=qy/Ws0vsozgufqZWtXL2So+xVlSE6SGi5kFtkvmzaaaUA6pw/RkbUFS5Zigm83YVGi
+         ox6/EDOITHju9acHoHBNF5GJjMNZwIn+seu1/hmrT05Pwdezn1CcbCcttGXXRZ5n7jRs
+         zqZO9U6cPEN9Nf6021Lm1e9bcHKf97lWQ/HA0m/4cMBtZBkQGm60W6O8vimRYEms6Zer
+         AwnEEzoFgGR0abgEviTkD5HQfZ4vL77+qiUvQ8w6MnCjm+/nDEyzebrASriyyrI4wNXz
+         MXjfKq764z3kntKCkl8ctPRfMDtPkLY+7tuK5yF1ILgZEkPjAU8ihT2B6H/A939UMjTj
+         T5jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1EqMgjnyhc4WRsC/xGOtxHSz8izgvjHhHYaPjqj6I7s=;
-        b=402Na0Hzdmn11uta4ASCOF+sPfBXL0w653MW/h1WPvwIEfmrAycNnuD9W18WIZU4f/
-         pvTHut5Xeytb6YLdAMNZwovX8m1g1dofMz5QFqQZy20rEYz5AodUvBOqQQU2HwDXndLQ
-         7hPszmhQS7Sag+irTlbqAfcxAUc8d2r69HUDzyhnW3nhrNJyXXV6N20mTN0KXms4abbm
-         YvrnWxl+hz81bb4kWIijoVN/4xp3cB0YyhNAw3i5wK8ASCeQX+/BN+NdScOrefSsFbOT
-         PH/huuBE4BUtMP41HrGwA2FH+ofHhQkWK3fVoZKBBV75B1PlwOIEHKLTMq429LEz0Fta
-         bSNQ==
-X-Gm-Message-State: AJIora/CgM1Jh952YOc5JS08LI4t065BeFRrRL6IUj1GMa9QGj+KMegX
-        TtpMTbmYGGlriIvLThWca887Ow==
-X-Google-Smtp-Source: AGRyM1sksopPXKQjAD2apX+GAbdmTP47VUrtEH0MoOErsIDT2svJe3Hlaz8mC5fBxKu7A6Sbx+StHA==
-X-Received: by 2002:a05:6a00:1d26:b0:52b:f8ab:6265 with SMTP id a38-20020a056a001d2600b0052bf8ab6265mr5063293pfx.54.1659124453469;
-        Fri, 29 Jul 2022 12:54:13 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 129-20020a621787000000b00518e1251197sm3332537pfx.148.2022.07.29.12.54.12
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc;
+        bh=lI7ivcAwRUifQnRI706c0+q8Lpzh40+rYKLKoU1I3oA=;
+        b=lMgH4UDZ7+69RZqZILtF5zXkQRZF5gVys+VerjQQPygPRRAHCAAZ6n1GYGdi5xiCGq
+         FoDWXFTQOve9EX/HbJCwGKeg5W+fECMpMQxtAmV0i0dIxFzqGZSOPtji+FtN2THiL/Ck
+         Gk/ambfNlSBhXWvcF7NGdIok6zaeYYKyCBND08uq/vxiTFjHPWbowSj51K0RfR6SubtS
+         eGe5OUsBNQ3TZSUtrN8UTmsDezhaJLF2KwlYeVJXZiLGrdS9UiHyCOmt9Q68CYaEWOiw
+         n7H0lMhaCPWe0Sqdw0kxpXvJsBfj6pjA+LZqEdwyjvn3rANh2IhngoWzRTPkhfGTnZUe
+         0YmQ==
+X-Gm-Message-State: AJIora/xA69UhqMrKGXSUBxknUKL1MHd4p1AqvvMRYFVOkkSo1za15Fx
+        3MfA9Xu/NLLPfFcc1ywtJTtYZg==
+X-Google-Smtp-Source: AGRyM1sihhA5ZddLZrESE9GSeP9Ji0UMQqbh8Np5eaWnEHtLDvdLpVQGIvqn5AwYAh7DONLDcge0mA==
+X-Received: by 2002:a05:622a:3cb:b0:31f:36f5:f6c8 with SMTP id k11-20020a05622a03cb00b0031f36f5f6c8mr4833145qtx.428.1659124542531;
+        Fri, 29 Jul 2022 12:55:42 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id t7-20020a375f07000000b006af50b6f10csm3037958qkb.61.2022.07.29.12.55.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 12:54:12 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 19:54:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <YuQ64RgWqdoAAGdY@google.com>
-References: <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
- <20220719140843.GA84779@chaop.bj.intel.com>
- <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
- <20220720150706.GB124133@chaop.bj.intel.com>
- <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
- <YtgrkXqP/GIi9ujZ@google.com>
- <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
- <20220721092906.GA153288@chaop.bj.intel.com>
- <YtmT2irvgInX1kPp@google.com>
- <20220725130417.GA304216@chaop.bj.intel.com>
+        Fri, 29 Jul 2022 12:55:42 -0700 (PDT)
+Message-ID: <0bc68659aa225a0623751b82e9a8636d701cece9.camel@ndufresne.ca>
+Subject: Re: [PATCH 1/4] media: add nv12_8l128 and nv12_10be_8l128 video
+ format.
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        xiahong.bao@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Fri, 29 Jul 2022 15:55:40 -0400
+In-Reply-To: <687fb73b648b897426899c6a313f35a5e2451d69.1659082839.git.ming.qian@nxp.com>
+References: <cover.1659082839.git.ming.qian@nxp.com>
+         <687fb73b648b897426899c6a313f35a5e2451d69.1659082839.git.ming.qian@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725130417.GA304216@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,61 +76,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022, Chao Peng wrote:
-> On Thu, Jul 21, 2022 at 05:58:50PM +0000, Sean Christopherson wrote:
-> > On Thu, Jul 21, 2022, Chao Peng wrote:
-> > > On Thu, Jul 21, 2022 at 03:34:59PM +0800, Wei Wang wrote:
-> > > > 
-> > > > 
-> > > > On 7/21/22 00:21, Sean Christopherson wrote:
-> > > > Maybe you could tag it with cgs for all the confidential guest support
-> > > > related stuff: e.g. kvm_vm_ioctl_set_cgs_mem()
-> > > > 
-> > > > bool is_private = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-> > > > ...
-> > > > kvm_vm_ioctl_set_cgs_mem(, is_private)
-> > > 
-> > > If we plan to widely use such abbr. through KVM (e.g. it's well known),
-> > > I'm fine.
-> > 
-> > I'd prefer to stay away from "confidential guest", and away from any VM-scoped
-> > name for that matter.  User-unmappable memmory has use cases beyond hiding guest
-> > state from the host, e.g. userspace could use inaccessible/unmappable memory to
-> > harden itself against unintentional access to guest memory.
-> > 
-> > > I actually use mem_attr in patch: https://lkml.org/lkml/2022/7/20/610
-> > > But I also don't quite like it, it's so generic and sounds say nothing.
-> > > 
-> > > But I do want a name can cover future usages other than just 
-> > > private/shared (pKVM for example may have a third state).
-> > 
-> > I don't think there can be a third top-level state.  Memory is either private to
-> > the guest or it's not.  There can be sub-states, e.g. memory could be selectively
-> > shared or encrypted with a different key, in which case we'd need metadata to
-> > track that state.
-> > 
-> > Though that begs the question of whether or not private_fd is the correct
-> > terminology.  E.g. if guest memory is backed by a memfd that can't be mapped by
-> > userspace (currently F_SEAL_INACCESSIBLE), but something else in the kernel plugs
-> > that memory into a device or another VM, then arguably that memory is shared,
-> > especially the multi-VM scenario.
-> > 
-> > For TDX and SNP "private vs. shared" is likely the correct terminology given the
-> > current specs, but for generic KVM it's probably better to align with whatever
-> > terminology is used for memfd.  "inaccessible_fd" and "user_inaccessible_fd" are
-> > a bit odd since the fd itself is accesible.
-> > 
-> > What about "user_unmappable"?  E.g.
-> > 
-> >   F_SEAL_USER_UNMAPPABLE, MFD_USER_UNMAPPABLE, KVM_HAS_USER_UNMAPPABLE_MEMORY,
-> >   MEMFILE_F_USER_INACCESSIBLE, user_unmappable_fd, etc...
-> 
-> For KVM I also think user_unmappable looks better than 'private', e.g.
-> user_unmappable_fd/KVM_HAS_USER_UNMAPPABLE_MEMORY sounds more
-> appropriate names. For memfd however, I don't feel that strong to change
-> it from current 'inaccessible' to 'user_unmappable', one of the reason
-> is it's not just about unmappable, but actually also inaccessible
-> through direct ioctls like read()/write().
+Le vendredi 29 juillet 2022 =C3=A0 16:38 +0800, Ming Qian a =C3=A9crit=C2=
+=A0:
+> add contiguous nv12 tiled format nv12_8l128 and nv12_10be_8l128
+>=20
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
 
-Heh, I _knew_ there had to be a catch.  I agree that INACCESSIBLE is better for
-memfd.
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+
+cheer,
+Nicolas
+
+> ---
+>  .../userspace-api/media/v4l/pixfmt-yuv-planar.rst         | 8 ++++++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c                      | 2 ++
+>  include/uapi/linux/videodev2.h                            | 2 ++
+>  3 files changed, 12 insertions(+)
+>=20
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst =
+b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> index 10b1feeb0b57..f1d5bb7b806d 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> @@ -273,7 +273,9 @@ of the luma plane.
+>  .. _V4L2-PIX-FMT-NV12-16L16:
+>  .. _V4L2-PIX-FMT-NV12-32L32:
+>  .. _V4L2-PIX-FMT-NV12M-8L128:
+> +.. _V4L2-PIX-FMT-NV12-8L128:
+>  .. _V4L2-PIX-FMT-NV12M-10BE-8L128:
+> +.. _V4L2-PIX-FMT-NV12-10BE-8L128:
+>  .. _V4L2-PIX-FMT-MM21:
+> =20
+>  Tiled NV12
+> @@ -319,6 +321,9 @@ pixels in 2D 8x128 tiles, and stores tiles linearly i=
+n memory.
+>  The image height must be aligned to a multiple of 128.
+>  The layouts of the luma and chroma planes are identical.
+> =20
+> +``V4L2_PIX_FMT_NV12_8L128`` is similar to ``V4L2_PIX_FMT_NV12M_8L128`` b=
+ut stores
+> +two planes in one memory.
+> +
+>  ``V4L2_PIX_FMT_NV12M_10BE_8L128`` is similar to ``V4L2_PIX_FMT_NV12M`` b=
+ut stores
+>  10 bits pixels in 2D 8x128 tiles, and stores tiles linearly in memory.
+>  the data is arranged in big endian order.
+> @@ -334,6 +339,9 @@ byte 2: Y1(bits 3-0) Y2(bits 9-6)
+>  byte 3: Y2(bits 5-0) Y3(bits 9-8)
+>  byte 4: Y3(bits 7-0)
+> =20
+> +``V4L2_PIX_FMT_NV12_10BE_8L128`` is similar to ``V4L2_PIX_FMT_NV12M_10BE=
+_8L128`` but stores
+> +two planes in one memory.
+> +
+>  ``V4L2_PIX_FMT_MM21`` store luma pixel in 16x32 tiles, and chroma pixels
+>  in 16x16 tiles. The line stride must be aligned to a multiple of 16 and =
+the
+>  image height must be aligned to a multiple of 32. The number of luma and=
+ chroma
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
+re/v4l2-ioctl.c
+> index c314025d977e..d973bd2ff750 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1444,7 +1444,9 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
+mt)
+>  	case V4L2_META_FMT_VIVID:       descr =3D "Vivid Metadata"; break;
+>  	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr =3D "Rockchip ISP1 3A Paramete=
+rs"; break;
+>  	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr =3D "Rockchip ISP1 3A Statist=
+ics"; break;
+> +	case V4L2_PIX_FMT_NV12_8L128:	descr =3D "NV12 (8x128 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12M_8L128:	descr =3D "NV12M (8x128 Linear)"; break;
+> +	case V4L2_PIX_FMT_NV12_10BE_8L128:	descr =3D "10-bit NV12 (8x128 Linear=
+, BE)"; break;
+>  	case V4L2_PIX_FMT_NV12M_10BE_8L128:	descr =3D "10-bit NV12M (8x128 Line=
+ar, BE)"; break;
+> =20
+>  	default:
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
+2.h
+> index cd66e01ed3c3..64f16490dd2b 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -655,6 +655,8 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_NV12_16L16 v4l2_fourcc('H', 'M', '1', '2') /* 12  Y=
+/CbCr 4:2:0 16x16 tiles */
+>  #define V4L2_PIX_FMT_NV12_32L32 v4l2_fourcc('S', 'T', '1', '2') /* 12  Y=
+/CbCr 4:2:0 32x32 tiles */
+>  #define V4L2_PIX_FMT_P010_4L4 v4l2_fourcc('T', '0', '1', '0') /* 12  Y/C=
+bCr 4:2:0 10-bit 4x4 macroblocks */
+> +#define V4L2_PIX_FMT_NV12_8L128       v4l2_fourcc('A', 'T', '1', '2') /*=
+ Y/CbCr 4:2:0 8x128 tiles */
+> +#define V4L2_PIX_FMT_NV12_10BE_8L128  v4l2_fourcc_be('A', 'X', '1', '2')=
+ /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
+> =20
+>  /* Tiled YUV formats, non contiguous planes */
+>  #define V4L2_PIX_FMT_NV12MT  v4l2_fourcc('T', 'M', '1', '2') /* 12  Y/Cb=
+Cr 4:2:0 64x32 tiles */
+

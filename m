@@ -2,184 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E08E584ABF
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 06:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55333584AC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 06:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbiG2EZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 00:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
+        id S233909AbiG2Eak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 00:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbiG2EZk (ORCPT
+        with ESMTP id S229973AbiG2Eai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 00:25:40 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A647D77A74
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:25:39 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id m8so4415089edd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BheXqPnhOLt2IMNV2xWB3SWJU/Ur46AJopM+n6Fj6zc=;
-        b=Z1UZJHRRoS7XtmrnTmBGffyagC5KDymIdt5bnnSDJGl3pv3jeXxeVII2PuwIlmG+i6
-         aEU3ZD2795IBbp4R00aKn243ZBvWDR17CZlrFSfUJG4ns8HzGHXzUhbXvpL4QEgE6jcL
-         hN+CvTacOOI6rJ1PCvsmWYjMS8LmrwMm+1mZTLY0Cg9TLb2CqbPUfy0OsZvuT/8wDBXX
-         hW//Fe/xFfmZ73pH+vLEVqe/4LD0rYpa3xsowUN3eWJXbFFrri/m8bAU3JbHBXpbqtLc
-         wUaXYtIw9RnluLuXCGll7f/bkXrNZHo9eX7GU4uXDFbp7AxspaqJUu/TqRcnShYtkDse
-         n9Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BheXqPnhOLt2IMNV2xWB3SWJU/Ur46AJopM+n6Fj6zc=;
-        b=4e5txt+1Xw3DrNQjkxOjLvgobKmasDupX2lDi59ow2h+8+RpyF7cLDybBbNOOcas2L
-         lG4dkA1C3vBbG9KjVuGid4SdFADDxD899OkkDvBoCRAc7tt4P719Rqh5tYx9rfoUU6mW
-         ySx7XYGoAGfwDZd2YSOZIYpGM70XrIutDqmdAsc593b6hvFuXdCwVJ+sKB3pTHvMwyzw
-         stTIObuZUwl3ZId0SYN9XSibhZvccQ3jVOl1QuQTuZy5f0sH1atgjmaKX5YcWFX52zCK
-         dkVo6TVsPXb45s8PaeqwckHQiKhKvVAPVDtn2LpzMyIZg2MGlMR0AjVom/fcshLei0Bt
-         AuiA==
-X-Gm-Message-State: AJIora9c5mjgMj9iJ4kIHrrjSq1bHTnEEu+eMX07t/fMTBUBrp/P+diP
-        D27VbPGFnHqN9hGv+uyuXhlNdYVeyOjHrgxGVx4LtQ==
-X-Google-Smtp-Source: AGRyM1uAWabekOEiuMnZt/UmvjPKgjeulSdFYFLjFdXobcTZukwl7ZCDoI0UrdElC/mjD0yT8OcxkJMw6UBwCqaRPCc=
-X-Received: by 2002:aa7:da93:0:b0:43d:1d9d:1e5 with SMTP id
- q19-20020aa7da93000000b0043d1d9d01e5mr1020049eds.55.1659068738042; Thu, 28
- Jul 2022 21:25:38 -0700 (PDT)
+        Fri, 29 Jul 2022 00:30:38 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3112A41B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:30:36 -0700 (PDT)
+Received: from fsav313.sakura.ne.jp (fsav313.sakura.ne.jp [153.120.85.144])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26T4UNfe011972;
+        Fri, 29 Jul 2022 13:30:23 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav313.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp);
+ Fri, 29 Jul 2022 13:30:23 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26T4UNRi011962
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 29 Jul 2022 13:30:23 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <77d47eed-6a22-7e81-59de-4d45852ca4de@I-love.SAKURA.ne.jp>
+Date:   Fri, 29 Jul 2022 13:30:23 +0900
 MIME-Version: 1.0
-References: <20220728150340.045826831@linuxfoundation.org>
-In-Reply-To: <20220728150340.045826831@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 29 Jul 2022 09:55:26 +0530
-Message-ID: <CA+G9fYsdeJK8ELEvyCT+WFHLYuPvBBKo-MW5NNU6CNkecCxOiQ@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/101] 5.10.134-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: [PATCH v3] workqueue: don't skip lockdep work dependency in
+ cancel_work_sync()
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Johannes Berg <johannes.berg@intel.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Tejun Heo <tj@kernel.org>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
+ <YuK78Jiy12BJG/Tp@slm.duckdns.org>
+ <0ad532b2-df5f-331a-ae7f-21460fc62fe2@I-love.SAKURA.ne.jp>
+ <97cbf8a9-d5e1-376f-6a49-3474871ea6b4@I-love.SAKURA.ne.jp>
+ <afa1ac2c-a023-a91e-e596-60931b38247e@I-love.SAKURA.ne.jp>
+ <7d034f7b-af42-4dbc-0887-60f4bdb3dcca@I-love.SAKURA.ne.jp>
+ <0a85696a-b0b9-0f4a-7c00-cd89edc9304c@I-love.SAKURA.ne.jp>
+In-Reply-To: <0a85696a-b0b9-0f4a-7c00-cd89edc9304c@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 at 20:36, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.134 release.
-> There are 101 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 30 Jul 2022 15:03:14 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.134-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Like Hillf Danton mentioned
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+  syzbot should have been able to catch cancel_work_sync() in work context
+  by checking lockdep_map in __flush_work() for both flush and cancel.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+in [1], being unable to report an obvious deadlock scenario shown below is
+broken. From locking dependency perspective, sync version of cancel request
+should behave as if flush request, for it waits for completion of work if
+that work has already started execution.
 
-## Build
-* kernel: 5.10.134-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 3dbf5c047ca925a0666cd82f39563e9921294ca6
-* git describe: v5.10.133-102-g3dbf5c047ca9
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.133-102-g3dbf5c047ca9
+  ----------
+  #include <linux/module.h>
+  #include <linux/sched.h>
+  static DEFINE_MUTEX(mutex);
+  static void work_fn(struct work_struct *work)
+  {
+    schedule_timeout_uninterruptible(HZ / 5);
+    mutex_lock(&mutex);
+    mutex_unlock(&mutex);
+  }
+  static DECLARE_WORK(work, work_fn);
+  static int __init test_init(void)
+  {
+    schedule_work(&work);
+    schedule_timeout_uninterruptible(HZ / 10);
+    mutex_lock(&mutex);
+    cancel_work_sync(&work);
+    mutex_unlock(&mutex);
+    return -EINVAL;
+  }
+  module_init(test_init);
+  MODULE_LICENSE("GPL");
+  ----------
 
-## Test Regressions (compared to v5.10.133)
-No test regressions found.
+The check this patch restores was added by commit 0976dfc1d0cd80a4
+("workqueue: Catch more locking problems with flush_work()").
 
-## Metric Regressions (compared to v5.10.133)
-No metric regressions found.
+Then, lockdep's crossrelease feature was added by commit b09be676e0ff25bd
+("locking/lockdep: Implement the 'crossrelease' feature"). As a result,
+this check was once removed by commit fd1a5b04dfb899f8 ("workqueue: Remove
+now redundant lock acquisitions wrt. workqueue flushes").
 
-## Test Fixes (compared to v5.10.133)
-No test fixes found.
+But lockdep's crossrelease feature was removed by commit e966eaeeb623f099
+("locking/lockdep: Remove the cross-release locking checks"). At this
+point, this check should have been restored.
 
-## Metric Fixes (compared to v5.10.133)
-No metric fixes found.
+Then, commit d6e89786bed977f3 ("workqueue: skip lockdep wq dependency in
+cancel_work_sync()") introduced a boolean flag in order to distinguish
+flush_work() and cancel_work_sync(), for checking "struct workqueue_struct"
+dependency when called from cancel_work_sync() was causing false positives.
 
-## Test result summary
-total: 119905, pass: 106363, fail: 551, skip: 12232, xfail: 759
+Then, commit 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for
+flushing") tried to restore "struct work_struct" dependency check, but by
+error checked this boolean flag. Like an example shown above indicates,
+"struct work_struct" dependency needs to be checked for both flush_work()
+and cancel_work_sync().
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 306 total, 306 passed, 0 failed
-* arm64: 62 total, 60 passed, 2 failed
-* i386: 52 total, 50 passed, 2 failed
-* mips: 45 total, 45 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 51 total, 51 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 55 total, 53 passed, 2 failed
+Link: https://lkml.kernel.org/r/20220504044800.4966-1-hdanton@sina.com [1]
+Reported-by: Hillf Danton <hdanton@sina.com>
+Suggested-by: Lai Jiangshan <jiangshanlai@gmail.com>
+Fixes: 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for flushing")
+Cc: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+---
+Changes in v3:
+  Update patch description.
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
+Changes in v2:
+  Check work's dependency and do not check workqueue's dependency.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+ kernel/workqueue.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 1ea50f6be843..01c5abf7fc61 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -3066,10 +3066,8 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
+ 	if (WARN_ON(!work->func))
+ 		return false;
+ 
+-	if (!from_cancel) {
+-		lock_map_acquire(&work->lockdep_map);
+-		lock_map_release(&work->lockdep_map);
+-	}
++	lock_map_acquire(&work->lockdep_map);
++	lock_map_release(&work->lockdep_map);
+ 
+ 	if (start_flush_work(work, &barr, from_cancel)) {
+ 		wait_for_completion(&barr.done);
+-- 
+2.18.4
+

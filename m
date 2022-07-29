@@ -2,119 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75850584E73
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB03A584E85
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234497AbiG2KAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        id S235593AbiG2KHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiG2KAG (ORCPT
+        with ESMTP id S231878AbiG2KHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:00:06 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A50F3CBC4;
-        Fri, 29 Jul 2022 03:00:04 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id p5so5175283edi.12;
-        Fri, 29 Jul 2022 03:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=F8cMzvkhyXMKKrJL4HV7iWQsiCgB3iVXXWwPTPW7oIU=;
-        b=AgNSahQ21UQuNFBOAO5lkmuNaIWFqTOn8yPy9G6JAr2B3bsHWHmYOAH9WWpGmh7f7J
-         wOXFIcECW85zg79JjH3eZJn2jgKtRChA6ph9tTzKFDDYYO6GmESmQYv7bIB/z1x4zln3
-         Hc8ODB8HZiiGLcUix9BP9NRERrcwVAB3jChkc0jDC7k8terC76IJd7/YrSRyMOa/DE8e
-         w9i5IRuHeoANK+6TMALLyox6ZS7SAD4qolb2Xt0F6rM9vHw2em34jGlKIu85Lhy8FESt
-         V9nPZvZofM3ftmG4v38M+/EHtS+Q7dbowfi+H12X9c2jV50zpjdifHUpvGA3SxbSnbzu
-         P3OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=F8cMzvkhyXMKKrJL4HV7iWQsiCgB3iVXXWwPTPW7oIU=;
-        b=XaUeKFJBrwPHM8zispYrIKi/Sp2A89FwCzp1bMJQpVp4yNiBvYamk/Bkj52XrHI0jP
-         ae7wL5B6CtjVvJo1Xq+otLeFq78fs80cCVLeTcT10p2JJjyHevP9r8ckesAweGLT50Ny
-         dNEb58bkFNyZy59wjdyXSyWoGQwb5hgRvrJ5PhrnBPs1MeIOpE/AT+LO8TmirBAqCh3y
-         g2PQ7fKzdB6XWPefqMLKVDMbaENHcC1DDRW2HzggWLdkfW5w3163S/2f6GbR193xzUmi
-         TaT9ruhSdP7RAWhmj+qI1MjOL4lHL/H1E9hXsBaCHxO86Gs4AMYpKqXyf3hcYj6ODwI0
-         u+0g==
-X-Gm-Message-State: AJIora/RFTaeKguXGF/pWmdYRYHDptjp5U6PRy6jI95VS3DHwluB2y11
-        kxwNh6bEmefiD/fPsxIf7UklzgaMO4hrVeZSsZY=
-X-Google-Smtp-Source: AGRyM1tzQ0rc7C26HZnE/M+YU4aI0xsjQDwS92N1L5ZCjqCDLmO279LxoDRplaJuYPaAN99qtPUJAiqoUAGTWSRixeY=
-X-Received: by 2002:a05:6402:501d:b0:437:e000:a898 with SMTP id
- p29-20020a056402501d00b00437e000a898mr2800261eda.265.1659088802585; Fri, 29
- Jul 2022 03:00:02 -0700 (PDT)
+        Fri, 29 Jul 2022 06:07:08 -0400
+X-Greylist: delayed 7805 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Jul 2022 03:07:02 PDT
+Received: from 4.mo548.mail-out.ovh.net (4.mo548.mail-out.ovh.net [188.165.42.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16F381B01
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:07:02 -0700 (PDT)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.143.183])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 69E68227C8;
+        Fri, 29 Jul 2022 07:39:23 +0000 (UTC)
+Received: from kaod.org (37.59.142.102) by DAG4EX2.mxp5.local (172.16.2.32)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Fri, 29 Jul
+ 2022 09:39:21 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-102R0041218b063-a24c-41c6-87ed-1d34e970e8a6,
+                    FAFF5065920E43DA0D2CF6C40E58A39B80E28978) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 90.89.72.120
+Message-ID: <32c4045d-7fce-5954-9710-4f6b0c6b0d2a@kaod.org>
+Date:   Fri, 29 Jul 2022 09:39:19 +0200
 MIME-Version: 1.0
-References: <20220727064321.2953971-7-mw@semihalf.com> <20220727143147.u6yd6wqslilspyhw@skbuf>
- <CAPv3WKc88KQN=athEqBg=Z5Bd1SC3QSOPZpDH7dfuYGHhR+oVg@mail.gmail.com>
- <20220727163848.f4e2b263zz3vl2hc@skbuf> <CAPv3WKe+e6sFd6+7eoZbA2iRTPhBorD+mk6W+kJr-f9P8SFh+w@mail.gmail.com>
- <20220727211112.kcpbxbql3tw5q5sx@skbuf> <CAPv3WKcc2i6HsraP3OSrFY0YiBOAHwBPxJUErg_0p7mpGjn3Ug@mail.gmail.com>
- <20220728195607.co75o3k2ggjlszlw@skbuf> <YuLvFQiZP6qmWcME@lunn.ch>
- <CAPv3WKeD_ZXeH-Y_YP91Ba6nZagzBVPoWbmFE8WtRw-NYxdEaA@mail.gmail.com> <YuMLwlqfhQoaNh6K@lunn.ch>
-In-Reply-To: <YuMLwlqfhQoaNh6K@lunn.ch>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 29 Jul 2022 11:59:22 +0200
-Message-ID: <CAHp75VeV-pFJzam_42c1w7eESWhwnxsJ4eHX5wzwLCHjKC2neQ@mail.gmail.com>
-Subject: Re: [net-next: PATCH v3 6/8] net: core: switch to fwnode_find_net_device_by_node()
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH linux dev-5.15] soc: aspeed: abr: Add sysfs attrs for
+ flash toggle
+Content-Language: en-US
+To:     Andrew Jeffery <andrew@aj.id.au>,
+        Jian Zhang <zhangjian.3032@bytedance.com>,
+        <openbmc@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>
+CC:     <zhangjian_linux@163.com>, Mark Brown <broonie@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>
+References: <20220501105644.355062-1-zhangjian.3032@bytedance.com>
+ <62143648-8a90-4ff4-bfe1-f311b40cd50c@www.fastmail.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <62143648-8a90-4ff4-bfe1-f311b40cd50c@www.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [37.59.142.102]
+X-ClientProxiedBy: DAG9EX1.mxp5.local (172.16.2.81) To DAG4EX2.mxp5.local
+ (172.16.2.32)
+X-Ovh-Tracer-GUID: a6453bd3-2138-4703-b325-6e2aced1d2b3
+X-Ovh-Tracer-Id: 10280310576058174386
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduiedgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeelleeiiefgkeefiedtvdeigeetueetkeffkeelheeugfetteegvdekgfehgffgkeenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgrshhpvggvugeslhhishhtshdrohiilhgrsghsrdhorhhgpdfovfetjfhoshhtpehmohehgeek
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 12:29 AM Andrew Lunn <andrew@lunn.ch> wrote:
-> On Thu, Jul 28, 2022 at 11:23:31PM +0200, Marcin Wojtas wrote:
+Hello,
 
-...
+On 7/29/22 04:37, Andrew Jeffery wrote:
+> Hi Jian Zhang,
+> 
+> On Sun, 1 May 2022, at 20:26, Jian Zhang wrote:
+>> Implement the flash toggle function in soc ast2600.
+>> Add two sysfs attrs named "access_primary" and "access_backup"
+> 
+> If you're proposing this patch for upstream then it needs to be based on
+> an upstream kernel tree, not the OpenBMC kernel tree. You also should
+> not use e.g. `linux dev-5.15` in the patch subject prefix, as that would
+> be inappropriate for an upstream patch.
+> 
+> As you're adding sysfs attributes you'll also need to add the
+> corresponding ABI documentation.
 
-> ACPI and DT are different things, so i don't see why they need to
-> share code.
+Yes. I think we need to discuss the ABI/sysfs files a bit. I am not
+sure we should toggle the sysfs files depending on the boot mode :
+primary vs. alternate. We could have the same files always and return
+EIO if some conditions are not met. Something like :
 
-Yes and no.
+* boot mode : primary/alternate. Write changes the next boot.
+* watchdog management
 
-ACPI _DSD extension allows us to share a lot of code when it comes to
-specific device properties (that are not standardized anyhow by ACPI
-specification, and for the record many of them even may not, but some
-are, like MIPI camera). Maybe you want to have something like a
-property standard for DSA that can be published as MIPI or so and then
-that part of the code of course may very well be shared. Discussed
-MDIOSerialBus() resource type is pure ACPI thingy if going to be
-standardized and indeed, that part can't be shared.
+Also, there is no need to introduce a new include file with large
+inline functions.
 
-Entire exercise with fwnodes allows to make drivers (most of or most
-of the parts of) to be shared between different resource providers.
-And this is a cool part about it.
+Thanks,
 
--- 
-With Best Regards,
-Andy Shevchenko
+C.

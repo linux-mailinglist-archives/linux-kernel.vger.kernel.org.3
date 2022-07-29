@@ -2,90 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A2E585742
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5388D585746
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239623AbiG2XTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 19:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S239565AbiG2XWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 19:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiG2XS7 (ORCPT
+        with ESMTP id S231536AbiG2XWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 19:18:59 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CF04E854;
-        Fri, 29 Jul 2022 16:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659136738; x=1690672738;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1Fw0WZLKvo2oyc4VCQcZ7xgjGE2qBBBrJnQzUXlechQ=;
-  b=KAyPx2QdeJvE8s9kkoUSUmhNGZ9LkDQ9B0I+D22eC1ZjS1RxOR6H1Alh
-   eDDsiFmLSvT6WGLZ9XV8IwoxGfIg/Hc6nNIx0oJV6pZsdfdJ8EZfiP7a/
-   17zNewnGgqPkraxMfGyKkvw5s5mp1NvJVrySVF9PfX5w+3JLaJ0tFEV6I
-   RyoWaV+/zpAl3YhTjxaN36dPriljP0G8fswXa3VgGw7MU/kBIOt89bkxi
-   SIg2PNIteD9sV4gy9Y9U0pJTuWUWSMlUdHK+k6AOkfMD8uqqCrmZ6XgXw
-   7iHRk9RSL+Ft6TKtZ/N68jA11QasnN1Is4lOrenhDs0jXbU1pIRLioFWK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="314674424"
-X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
-   d="scan'208";a="314674424"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 16:18:58 -0700
-X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
-   d="scan'208";a="601431913"
-Received: from svdas-mobl.amr.corp.intel.com (HELO [10.209.20.175]) ([10.209.20.175])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 16:18:58 -0700
-Message-ID: <31d026f3-a356-d7bd-26f1-32d163a7f5b4@intel.com>
-Date:   Fri, 29 Jul 2022 16:18:58 -0700
+        Fri, 29 Jul 2022 19:22:52 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4364E50065;
+        Fri, 29 Jul 2022 16:22:51 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id o2so4671349iof.8;
+        Fri, 29 Jul 2022 16:22:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=0AOLCG1NTy8Zh8NrZUMZYBr5WD2rLOm1rI0WWJyHoXE=;
+        b=2JC6e3J/gI3Nn9Ft1Qn7l5/j9h/AjljbqFiLykYW0rnRS43oICQNe494OZv19iENYn
+         uh8FLHN9fPlAvb6IKRRkCoNrg0X4R6OYDkepNg7BA9/qPTW1M8s6Txa4wWtJu8jGMIj/
+         tshvcxEl01Hg6WqvZhKCo5IX7TWdofs3koilWxTxEg4PUmJTnYhNHB/Af+N+a3yrdQW8
+         NiwAuaop5mPYLtyOjN8usjuethVNMwL1/QwzMG5NB4dDODuocySVglyETYK/4sDZiq+q
+         6LXGZikPMN/1D7Y77biocPx+MxalLExV+AmHvsdoMwy1oO32vxZMh9WYUPZw0ysAHNKD
+         oo/w==
+X-Gm-Message-State: AJIora+A5Ym+fwdqp9BcGqd5bxThXHlppCU4kRmkea+ItH2arhFvmoXc
+        Wo7LXtaIvhT/qedlr6UnKUJJ8sTFzg==
+X-Google-Smtp-Source: AGRyM1tB97C6ctbit302MqTEFIpjr4tyMng5IykEoSCRqP5gd+519HFVQRNIMVQhX575tVHqrqLmig==
+X-Received: by 2002:a05:6638:dcb:b0:33f:8242:4131 with SMTP id m11-20020a0566380dcb00b0033f82424131mr2137232jaj.80.1659136970510;
+        Fri, 29 Jul 2022 16:22:50 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id w15-20020a02b0cf000000b00339f1d1c090sm2213808jah.113.2022.07.29.16.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 16:22:49 -0700 (PDT)
+Received: (nullmailer pid 130433 invoked by uid 1000);
+        Fri, 29 Jul 2022 23:22:47 -0000
+Date:   Fri, 29 Jul 2022 17:22:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Heiko Schocher <hs@denx.de>,
+        David Lechner <david@lechnology.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH] dt-bindings: display: use spi-peripheral-props.yaml
+Message-ID: <20220729232247.GA130318-robh@kernel.org>
+References: <20220727164312.385836-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
- Stale Data
-Content-Language: en-US
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
-References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
- <YuJ6TQpSTIeXLNfB@zn.tnic> <20220729022851.mdj3wuevkztspodh@desk>
- <YuPpKa6OsG9e9nTj@zn.tnic> <20220729173609.45o7lllpvsgjttqt@desk>
- <YuRDbuQPYiYBZghm@zn.tnic> <20220729214627.wowu5sny226c5pe4@desk>
- <1bcf0b54-6ddf-b343-87c5-f7fd7538759c@intel.com>
- <YuRoOCUxGUJ/8QVH@agluck-desk3.sc.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YuRoOCUxGUJ/8QVH@agluck-desk3.sc.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220727164312.385836-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 16:07, Tony Luck wrote:
-> https://www.intel.com/content/www/us/en/developer/topic-technology/software-security-guidance/processors-affected-consolidated-product-cpu-model.html
+On Wed, 27 Jul 2022 18:43:12 +0200, Krzysztof Kozlowski wrote:
+> Instead of listing directly properties typical for SPI peripherals,
+> reference the spi-peripheral-props.yaml schema.  This allows using all
+> properties typical for SPI-connected devices, even these which device
+> bindings author did not tried yet.
 > 
-> Click to the 2022 tab. The MMIO affected/not-affected status is there
-> (you'll need to use the horizontal scroll to shift over to see those
-> columns).
+> Remove the spi-* properties which now come via spi-peripheral-props.yaml
+> schema, except for the cases when device schema adds some constraints
+> like maximum frequency.
 > 
-> This table lists all the CPUs that were not "older".
+> While changing additionalProperties->unevaluatedProperties, put it in
+> typical place, just before example DTS.
 > 
-> Any CPU not on that list is out of servicing period.
+> The sitronix,st7735r references also panel-common.yaml and lists
+> explicitly allowed properties, thus here reference only
+> spi-peripheral-props.yaml for purpose of documenting the SPI slave
+> device and bringing spi-max-frequency type validation.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Technically, this depends on [1] merged to SPI tree, if we want to
+> preserve existing behavior of not allowing SPI CPHA and CPOL in each of
+> schemas in this patch.
+> 
+> If this patch comes independently via different tree, the SPI CPHA and
+> CPOL will be allowed for brief period of time, before [1] is merged.
+> This will not have negative impact, just DT schema checks will be
+> loosened for that period.
+> 
+> [1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
+> ---
+>  .../devicetree/bindings/display/panel/lg,lg4573.yaml       | 2 +-
+>  .../devicetree/bindings/display/sitronix,st7735r.yaml      | 1 +
+>  .../devicetree/bindings/display/solomon,ssd1307fb.yaml     | 7 +++----
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+> 
 
-Perfect!  Thanks, Tony!
+Applied, thanks!

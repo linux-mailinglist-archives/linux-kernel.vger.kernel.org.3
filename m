@@ -2,448 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677D058523E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE659585231
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237146AbiG2PTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S237026AbiG2PRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237308AbiG2PTB (ORCPT
+        with ESMTP id S231158AbiG2PRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:19:01 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE3B820D3;
-        Fri, 29 Jul 2022 08:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659107939; x=1690643939;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Shuy9iGIy3e1bElJke/MLRaI0NEiRx4O4lziejrQgyI=;
-  b=oWXkOezlsKgnrKk0EIfOFj/lj9QmCumGTEDDO13FfsHbuAl0YJZBDUp7
-   rAl8DNBFA/b9C+yS/rDBBZDtMjTquG0e7eByPAdTiZP2GQfKF0hF3Fzoq
-   AzNjYUUYdeP9GcSt2J87R0abr5Y1Fwmg7/g6SpxD5LRlHgyJapAqW6rzV
-   /zpk1kwKOXdaeYYN1ZMZ4eSFga+Lmh9+l3xhhDuglQ/aS15Jho3oa2FEk
-   dPERj2r/UW4LERTRWh02x4TsTrXS7OltTcbuOc86K2TyXCLz5blt457o+
-   LhzRpSMorUMtz8mYRHXKo0zxfO4ph61a4DW3cSweA48poQFwViH8ZsYmp
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="174162834"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jul 2022 08:18:59 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 29 Jul 2022 08:18:57 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 29 Jul 2022 08:18:47 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Woojung Huh <woojung.huh@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Russell King" <linux@armlinux.org.uk>
-Subject: [Patch RFC net-next 4/4] net: dsa: microchip: use private pvid for bridge_vlan_unwaware
-Date:   Fri, 29 Jul 2022 20:47:33 +0530
-Message-ID: <20220729151733.6032-5-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220729151733.6032-1-arun.ramadoss@microchip.com>
-References: <20220729151733.6032-1-arun.ramadoss@microchip.com>
+        Fri, 29 Jul 2022 11:17:45 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E01E459B6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:17:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ss3so9041109ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8uOzxUeHyhbXm38NMH0o9xKNocW39uZURlmCfdDfHVQ=;
+        b=X5JFM6ncTKhP0dvBkT3+YMgOXuX7B74bsPN/NF0g+oPNYeC1Ct5yDA690tfkf1XHu7
+         GwVt67m+Jb57vP0D/EEdsBmctPZCaptJeV7rTU8Jo/I1sqdIPycTLh0uIArioQ59k/4W
+         MIa4fLHpde6VL+mfDFfo/+Pt09NJvWxRLImMv0CuoWiggS5ADBEBOAFchKqPnlENnmKV
+         2j7EsqvvumTYVHn7dnmOpYTrv55QmTZ3Bjf00AmvFMyy2/rRV58cXuOhGPev4PTmpwVY
+         uemEFnPVxYNOrretMEd0T+AOIYDo8r9/wOLrt3kcmw/YYN1EX/tPDbu906tCsFAZvaPT
+         V8PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8uOzxUeHyhbXm38NMH0o9xKNocW39uZURlmCfdDfHVQ=;
+        b=L3AsB/FSFXzI0n8SN877VsKWHU7tTWCApBvvC6Oenmso0F89WhZP+m+ux/td705iZQ
+         hMIrS45Z0GvJ+lCt7BB8PyG0Rt+ykAchFRcHQFn3mFQXXIA6wH/3yVZ0o2Gv+42rD/r5
+         Gm3AEbUxkxbjC+AjLqAj0YAH/1+20VH/wdaaAhOzfXeF2DfdnYC5THHLbFlbSEvUguXE
+         hw8WUX6k3S64bKY/82zK+3aKmV1XRkL435An/kgEjrIf5s8naT6BKECb9V9Yjb89Siyk
+         z7K4vphjdd7v0YdmcSTdoruTHi2pl98mP2IKlUlLyffPOloULcysi5+o5sfrDOgM3yRd
+         foFA==
+X-Gm-Message-State: AJIora9lUBFiqFFjw9rJ/11YSbsOJ1dIiRUqPQ1sIGzy30DH6C8eVg1k
+        n4NDOseNxxob4/jD9g3ITw==
+X-Google-Smtp-Source: AGRyM1unZD4CDaqGRE4CcewGTDSkgkSwfbx6+pGS5X/ZxyjvhfDPVd5wl1V9pG7ZMKxGNSQeMm5MRQ==
+X-Received: by 2002:a17:907:3ea6:b0:72b:4a06:989a with SMTP id hs38-20020a1709073ea600b0072b4a06989amr3359081ejc.168.1659107862822;
+        Fri, 29 Jul 2022 08:17:42 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.249.83])
+        by smtp.gmail.com with ESMTPSA id c12-20020a056402120c00b0043cc2c9f5adsm2433441edw.40.2022.07.29.08.17.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 08:17:40 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 18:17:38 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ying.huang@intel.com, dave.hansen@intel.com,
+        Jonathan.Cameron@huawei.com, akpm@linux-foundation.org,
+        rf@opensource.cirrus.com, pmladek@suse.com, will@kernel.org
+Subject: Re: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
+ kstrtobool()
+Message-ID: <YuP6Evijb2oZqD3D@localhost.localdomain>
+References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
+ <Yt6u34sigPEkeZ0Y@FVFF77S0Q05N.cambridge.arm.com>
+ <Yt605xj898VSAsA3@casper.infradead.org>
+ <YuPwLq+D8k53GZa3@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YuPwLq+D8k53GZa3@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To remove ds->configure_vlan_while_not_filtering, for the bridge vlan
-unaware the private pvid of 4095 is used. The bridged vlan pvid is
-stored in the ksz port structure and it is used only when vlan_filtering
-is enabled. If vlan_filtering is disabled then private pvid is used.
+On Fri, Jul 29, 2022 at 05:35:26PM +0300, Andy Shevchenko wrote:
+> On Mon, Jul 25, 2022 at 04:21:11PM +0100, Matthew Wilcox wrote:
+> > On Mon, Jul 25, 2022 at 03:55:27PM +0100, Mark Rutland wrote:
+> > > On Tue, Apr 26, 2022 at 11:32:02PM +0530, Jagdish Gediya wrote:
+> > > > At many places in kernel, It is necessary to convert sysfs input
+> > > > to corrosponding bool value e.g. "false" or "0" need to be converted
+> > > > to bool false, "true" or "1" need to be converted to bool true,
+> > > > places where such conversion is needed currently check the input
+> > > > string manually, kstrtobool() can be utilized at such places but
+> > > > currently it doesn't have support to accept "false"/"true".
+> > > > 
+> > > > Add support to accept "false"/"true" as valid string in kstrtobool().
+> > > > 
+> > > > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > > > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > 
+> > > I've just spotted that this broke arm64's "rodata=full" command line option,
+> > 
+> > That isn't a documented option.
+> > 
+> >         rodata=         [KNL]
+> >                 on      Mark read-only kernel memory as read-only (default).
+> >                 off     Leave read-only kernel memory writable for debugging.
+> > 
+> > Hopefully this is an object lesson in why you need to update the
+> > documentation when you extend a feature.
+> > 
+> > > since "full" gets parsed as 'f' = FALSE, when previously that would have been
+> > > rejected. So anyone passing "rodata=full" on the command line will have rodata
+> > > disabled, which is not what they wanted.
+> > > 
+> > > The current state of things is a bit messy (we prase the option twice because
+> > > arch code needs it early), and we can probably fix that with some refactoring,
+> > > but I do wonder if we actually want to open up the sysfs parsing to accept
+> > > anything *beginning* with [tTfF] rather than the full "true" and "false"
+> > > strings as previously, or whether it's worth reverting this for now in case
+> > > anything else is affected.
+> > 
+> > Well, that's going to break people who've started using the new option.
+> > As a quick fix, how about only allowing either "f\0" or "fa"?
+> 
+> I think we need to be more strict in kstrtobool(), i.e. 'f\0' ('t\0') and 'fal'
+> ('tru') perhaps?
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- drivers/net/dsa/microchip/ksz8.h       |  1 +
- drivers/net/dsa/microchip/ksz8795.c    | 23 +-------
- drivers/net/dsa/microchip/ksz9477.c    | 19 ++----
- drivers/net/dsa/microchip/ksz9477.h    |  1 +
- drivers/net/dsa/microchip/ksz_common.c | 81 ++++++++++++++++++++++++--
- drivers/net/dsa/microchip/ksz_common.h | 10 +++-
- 6 files changed, 95 insertions(+), 40 deletions(-)
+lol what?
 
-diff --git a/drivers/net/dsa/microchip/ksz8.h b/drivers/net/dsa/microchip/ksz8.h
-index 6529f2e2426a..c5b0ab031427 100644
---- a/drivers/net/dsa/microchip/ksz8.h
-+++ b/drivers/net/dsa/microchip/ksz8.h
-@@ -42,6 +42,7 @@ int ksz8_port_vlan_add(struct ksz_device *dev, int port, u16 vlan_vid,
- 		       u16 flags);
- int ksz8_port_vlan_del(struct ksz_device *dev, int port,
- 		       const struct switchdev_obj_port_vlan *vlan);
-+void ksz8_port_enable_pvid(struct ksz_device *dev, int port, bool state);
- int ksz8_port_mirror_add(struct ksz_device *dev, int port,
- 			 struct dsa_mall_mirror_tc_entry *mirror,
- 			 bool ingress, struct netlink_ext_ack *extack);
-diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-index b8843697c5a5..16709949d079 100644
---- a/drivers/net/dsa/microchip/ksz8795.c
-+++ b/drivers/net/dsa/microchip/ksz8795.c
-@@ -952,7 +952,7 @@ int ksz8_port_vlan_filtering(struct ksz_device *dev, int port, bool flag,
- 	return 0;
- }
- 
--static void ksz8_port_enable_pvid(struct ksz_device *dev, int port, bool state)
-+void ksz8_port_enable_pvid(struct ksz_device *dev, int port, bool state)
- {
- 	if (ksz_is_ksz88x3(dev)) {
- 		ksz_cfg(dev, REG_SW_INSERT_SRC_PVID,
-@@ -967,8 +967,8 @@ int ksz8_port_vlan_add(struct ksz_device *dev, int port, u16 vlan_vid,
- {
- 	bool untagged = flags & BRIDGE_VLAN_INFO_UNTAGGED;
- 	struct ksz_port *p = &dev->ports[port];
--	u16 data, new_pvid = 0;
- 	u8 fid, member, valid;
-+	u16 data;
- 
- 	if (ksz_is_ksz88x3(dev))
- 		return -ENOTSUPP;
-@@ -1015,32 +1015,18 @@ int ksz8_port_vlan_add(struct ksz_device *dev, int port, u16 vlan_vid,
- 	ksz8_to_vlan(dev, fid, member, valid, &data);
- 	ksz8_w_vlan_table(dev, vlan_vid, data);
- 
--	/* change PVID */
--	if (flags & BRIDGE_VLAN_INFO_PVID)
--		new_pvid = vlan_vid;
--
--	if (new_pvid) {
--
--		ksz_set_pvid(dev, port, new_pvid);
--
--		ksz8_port_enable_pvid(dev, port, true);
--	}
--
- 	return 0;
- }
- 
- int ksz8_port_vlan_del(struct ksz_device *dev, int port,
- 		       const struct switchdev_obj_port_vlan *vlan)
- {
--	u16 data, pvid;
-+	u16 data;
- 	u8 fid, member, valid;
- 
- 	if (ksz_is_ksz88x3(dev))
- 		return -ENOTSUPP;
- 
--	ksz_get_pvid(dev, port, &pvid);
--	pvid = pvid & 0xFFF;
--
- 	ksz8_r_vlan_table(dev, vlan->vid, &data);
- 	ksz8_from_vlan(dev, data, &fid, &member, &valid);
- 
-@@ -1055,9 +1041,6 @@ int ksz8_port_vlan_del(struct ksz_device *dev, int port,
- 	ksz8_to_vlan(dev, fid, member, valid, &data);
- 	ksz8_w_vlan_table(dev, vlan->vid, data);
- 
--	if (pvid == vlan->vid)
--		ksz8_port_enable_pvid(dev, port, false);
--
- 	return 0;
- }
- 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index a43a581520fb..b423aebe4473 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -354,6 +354,12 @@ void ksz9477_flush_dyn_mac_table(struct ksz_device *dev, int port)
- 	}
- }
- 
-+void ksz9477_port_drop_untagged(struct ksz_device *dev, int port, bool state)
-+{
-+	ksz_port_cfg(dev, port, REG_PORT_MRI_MAC_CTRL, PORT_DROP_NON_VLAN,
-+		     state);
-+}
-+
- int ksz9477_port_vlan_filtering(struct ksz_device *dev, int port,
- 				bool flag, struct netlink_ext_ack *extack)
- {
-@@ -394,10 +400,6 @@ int ksz9477_port_vlan_add(struct ksz_device *dev, int port, u16 vlan_vid,
- 	if (err)
- 		return err;
- 
--	/* change PVID */
--	if (flags & BRIDGE_VLAN_INFO_PVID)
--		ksz_set_pvid(dev, port, vlan_vid);
--
- 	return 0;
- }
- 
-@@ -406,10 +408,6 @@ int ksz9477_port_vlan_del(struct ksz_device *dev, int port,
- {
- 	bool untagged = vlan->flags & BRIDGE_VLAN_INFO_UNTAGGED;
- 	u32 vlan_table[3];
--	u16 pvid;
--
--	ksz_get_pvid(dev, port, &pvid);
--	pvid = pvid & 0xFFF;
- 
- 	if (ksz9477_get_vlan_table(dev, vlan->vid, vlan_table)) {
- 		dev_dbg(dev->dev, "Failed to get vlan table\n");
-@@ -418,9 +416,6 @@ int ksz9477_port_vlan_del(struct ksz_device *dev, int port,
- 
- 	vlan_table[2] &= ~BIT(port);
- 
--	if (pvid == vlan->vid)
--		pvid = 1;
--
- 	if (untagged)
- 		vlan_table[1] &= ~BIT(port);
- 
-@@ -429,8 +424,6 @@ int ksz9477_port_vlan_del(struct ksz_device *dev, int port,
- 		return -ETIMEDOUT;
- 	}
- 
--	ksz_set_pvid(dev, port, pvid);
--
- 	return 0;
- }
- 
-diff --git a/drivers/net/dsa/microchip/ksz9477.h b/drivers/net/dsa/microchip/ksz9477.h
-index 30a1fff9b8ec..2bd88319a2c0 100644
---- a/drivers/net/dsa/microchip/ksz9477.h
-+++ b/drivers/net/dsa/microchip/ksz9477.h
-@@ -28,6 +28,7 @@ int ksz9477_port_vlan_filtering(struct ksz_device *dev, int port,
- int ksz9477_port_vlan_add(struct ksz_device *dev, int port, u16 vid, u16 flags);
- int ksz9477_port_vlan_del(struct ksz_device *dev, int port,
- 			  const struct switchdev_obj_port_vlan *vlan);
-+void ksz9477_port_drop_untagged(struct ksz_device *dev, int port, bool state);
- int ksz9477_port_mirror_add(struct ksz_device *dev, int port,
- 			    struct dsa_mall_mirror_tc_entry *mirror,
- 			    bool ingress, struct netlink_ext_ack *extack);
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index 516fb9d35c87..8a5583b1f2f4 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -161,6 +161,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
- 	.vlan_filtering = ksz8_port_vlan_filtering,
- 	.vlan_add = ksz8_port_vlan_add,
- 	.vlan_del = ksz8_port_vlan_del,
-+	.drop_untagged = ksz8_port_enable_pvid,
- 	.mirror_add = ksz8_port_mirror_add,
- 	.mirror_del = ksz8_port_mirror_del,
- 	.get_caps = ksz8_get_caps,
-@@ -187,6 +188,7 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
- 	.vlan_filtering = ksz9477_port_vlan_filtering,
- 	.vlan_add = ksz9477_port_vlan_add,
- 	.vlan_del = ksz9477_port_vlan_del,
-+	.drop_untagged = ksz9477_port_drop_untagged,
- 	.mirror_add = ksz9477_port_mirror_add,
- 	.mirror_del = ksz9477_port_mirror_del,
- 	.get_caps = ksz9477_get_caps,
-@@ -220,6 +222,7 @@ static const struct ksz_dev_ops lan937x_dev_ops = {
- 	.vlan_filtering = ksz9477_port_vlan_filtering,
- 	.vlan_add = ksz9477_port_vlan_add,
- 	.vlan_del = ksz9477_port_vlan_del,
-+	.drop_untagged = ksz9477_port_drop_untagged,
- 	.mirror_add = ksz9477_port_mirror_add,
- 	.mirror_del = ksz9477_port_mirror_del,
- 	.get_caps = lan937x_phylink_get_caps,
-@@ -1254,6 +1257,9 @@ static int ksz_enable_port(struct dsa_switch *ds, int port,
- {
- 	struct ksz_device *dev = ds->priv;
- 
-+	dev->dev_ops->vlan_add(dev, port, KSZ_DEFAULT_VLAN,
-+			       BRIDGE_VLAN_INFO_UNTAGGED);
-+
- 	if (!dsa_is_user_port(ds, port))
- 		return 0;
- 
-@@ -1335,7 +1341,7 @@ static enum dsa_tag_protocol ksz_get_tag_protocol(struct dsa_switch *ds,
- 	return proto;
- }
- 
--void ksz_get_pvid(struct ksz_device *dev, int port, u16 *pvid)
-+static void ksz_get_pvid(struct ksz_device *dev, int port, u16 *pvid)
- {
- 	const u16 *regs = dev->info->regs;
- 	u16 val;
-@@ -1345,45 +1351,110 @@ void ksz_get_pvid(struct ksz_device *dev, int port, u16 *pvid)
- 	*pvid = val & VLAN_VID_MASK;
- }
- 
--void ksz_set_pvid(struct ksz_device *dev, int port, u16 pvid)
-+static void ksz_set_pvid(struct ksz_device *dev, int port, u16 pvid)
- {
- 	const u16 *regs = dev->info->regs;
- 
- 	ksz_prmw16(dev, port, regs[P_DEFAULT_PVID], VLAN_VID_MASK, pvid);
- }
- 
-+static int ksz_commit_pvid(struct dsa_switch *ds, int port)
-+{
-+	struct dsa_port *dp = dsa_to_port(ds, port);
-+	struct net_device *br = dsa_port_bridge_dev_get(dp);
-+	struct ksz_device *dev = ds->priv;
-+	u16 pvid = KSZ_DEFAULT_VLAN;
-+	bool drop_untagged = false;
-+	struct ksz_port *p;
-+
-+	p = &dev->ports[port];
-+
-+	if (br && br_vlan_enabled(br)) {
-+		pvid = p->bridge_pvid.vid;
-+		drop_untagged = !p->bridge_pvid.valid;
-+	}
-+
-+	ksz_set_pvid(dev, port, pvid);
-+
-+	if (dev->dev_ops->drop_untagged)
-+		dev->dev_ops->drop_untagged(dev, port, drop_untagged);
-+
-+	return 0;
-+}
-+
- static int ksz_port_vlan_filtering(struct dsa_switch *ds, int port,
- 				   bool flag, struct netlink_ext_ack *extack)
- {
- 	struct ksz_device *dev = ds->priv;
-+	int ret;
- 
- 	if (!dev->dev_ops->vlan_filtering)
- 		return -EOPNOTSUPP;
- 
--	return dev->dev_ops->vlan_filtering(dev, port, flag, extack);
-+	ret = dev->dev_ops->vlan_filtering(dev, port, flag, extack);
-+	if (ret)
-+		return ret;
-+
-+	return ksz_commit_pvid(ds, port);
- }
- 
- static int ksz_port_vlan_add(struct dsa_switch *ds, int port,
- 			     const struct switchdev_obj_port_vlan *vlan,
- 			     struct netlink_ext_ack *extack)
- {
-+	bool pvid = vlan->flags & BRIDGE_VLAN_INFO_PVID;
- 	struct ksz_device *dev = ds->priv;
-+	struct ksz_port *p;
-+	int ret;
-+
-+	p = &dev->ports[port];
- 
- 	if (!dev->dev_ops->vlan_add)
- 		return -EOPNOTSUPP;
- 
--	return dev->dev_ops->vlan_add(dev, port, vlan->vid, vlan->flags);
-+	ret = dev->dev_ops->vlan_add(dev, port, vlan->vid, vlan->flags);
-+	if (ret)
-+		return ret;
-+
-+	if (pvid) {
-+		p->bridge_pvid.vid = vlan->vid;
-+		p->bridge_pvid.valid = true;
-+	} else if (vlan->vid && p->bridge_pvid.vid == vlan->vid) {
-+		/* The old pvid was reinstalled as a non-pvid VLAN */
-+		p->bridge_pvid.valid = false;
-+	}
-+
-+	return ksz_commit_pvid(ds, port);
- }
- 
- static int ksz_port_vlan_del(struct dsa_switch *ds, int port,
- 			     const struct switchdev_obj_port_vlan *vlan)
- {
- 	struct ksz_device *dev = ds->priv;
-+	struct ksz_port *p;
-+	u16 pvid;
-+	int ret;
-+
-+	p = &dev->ports[port];
- 
- 	if (!dev->dev_ops->vlan_del)
- 		return -EOPNOTSUPP;
- 
--	return dev->dev_ops->vlan_del(dev, port, vlan);
-+	ksz_get_pvid(dev, port, &pvid);
-+
-+	ret = dev->dev_ops->vlan_del(dev, port, vlan);
-+	if (ret)
-+		return ret;
-+
-+	if (vlan->vid == pvid) {
-+		p->bridge_pvid.valid = false;
-+
-+		ret = ksz_commit_pvid(ds, port);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
- }
- 
- static int ksz_port_mirror_add(struct dsa_switch *ds, int port,
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index 3bcd4e20bfaa..3d7eb170e3ec 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -15,6 +15,7 @@
- #include <net/dsa.h>
- 
- #define KSZ_MAX_NUM_PORTS 8
-+#define KSZ_DEFAULT_VLAN			(VLAN_N_VID - 1)
- 
- struct vlan_table {
- 	u32 table[3];
-@@ -63,6 +64,11 @@ struct ksz_chip_data {
- 	bool internal_phy[KSZ_MAX_NUM_PORTS];
- };
- 
-+struct ksz_vlan {
-+	u16	vid;
-+	bool	valid;
-+};
-+
- struct ksz_port {
- 	bool remove_tag;		/* Remove Tag flag set, for ksz8795 only */
- 	int stp_state;
-@@ -81,6 +87,7 @@ struct ksz_port {
- 	u16 max_frame;
- 	u32 rgmii_tx_val;
- 	u32 rgmii_rx_val;
-+	struct ksz_vlan bridge_pvid;
- };
- 
- struct ksz_device {
-@@ -271,6 +278,7 @@ struct ksz_dev_ops {
- 	int  (*vlan_add)(struct ksz_device *dev, int port, u16 vid, u16 flags);
- 	int  (*vlan_del)(struct ksz_device *dev, int port,
- 			 const struct switchdev_obj_port_vlan *vlan);
-+	void (*drop_untagged)(struct ksz_device *dev, int port, bool untagged);
- 	int (*mirror_add)(struct ksz_device *dev, int port,
- 			  struct dsa_mall_mirror_tc_entry *mirror,
- 			  bool ingress, struct netlink_ext_ack *extack);
-@@ -320,8 +328,6 @@ void ksz_port_stp_state_set(struct dsa_switch *ds, int port, u8 state);
- bool ksz_get_gbit(struct ksz_device *dev, int port);
- phy_interface_t ksz_get_xmii(struct ksz_device *dev, int port, bool gbit);
- extern const struct ksz_chip_data ksz_switch_chips[];
--void ksz_get_pvid(struct ksz_device *dev, int port, u16 *pvid);
--void ksz_set_pvid(struct ksz_device *dev, int port, u16 pvid);
- 
- /* Common register access functions */
- 
--- 
-2.36.1
-
+the only way to be strict is to accept "0" and "1" with optional
+newline and delete all the rubbish entirely.

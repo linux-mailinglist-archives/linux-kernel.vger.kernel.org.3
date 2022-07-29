@@ -2,276 +2,430 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E740584C54
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1ED584C5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234499AbiG2HEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 03:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        id S234686AbiG2HFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 03:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbiG2HEB (ORCPT
+        with ESMTP id S234459AbiG2HFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 03:04:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B276952;
-        Fri, 29 Jul 2022 00:04:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39CD861A2B;
-        Fri, 29 Jul 2022 07:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A132C433B5;
-        Fri, 29 Jul 2022 07:03:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659078239;
-        bh=2pBgez34jdxSq2XeGH8AFY1z97ZArOQJw9kuBPer8g8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qL9ZvuzdzoFSyPKBkfMxxITJ1fiVmiBoVdwUJU/9ZH1OijAVuluh6OMlVqJvZRIZk
-         fDmBx0nBO1BzLQdzFk2xG2Q15rXLsHsafrxLWUshfDK7UHnOJQkyp/abKVFXttPuW6
-         XgY2pDU5+desMxhtOIMzG9dcs7NZ8uLI1NsxwSADZEC8+sMA3tFJC0zGRK/wLO1cc6
-         d5udp+mAY+bNf7Up4reFe6zpCBurO5ibi/2i6ghxxewOmqF6gZRUGBRge2a9wcDMbH
-         Yiu9peycpeYmcS6hkh9N5dNO18zdLcJ7nBbYOa107ACD8K9RX+Fus0surt+4c+ShLf
-         thoMgVLtW+KyA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1oHK2P-005nBw-3O;
-        Fri, 29 Jul 2022 09:03:57 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] drm/i915/gt: document TLB cache invalidation functions
-Date:   Fri, 29 Jul 2022 09:03:55 +0200
-Message-Id: <ebb5f34f223626038f241fdf00a0dcfd33a19606.1659077372.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1659077372.git.mchehab@kernel.org>
-References: <cover.1659077372.git.mchehab@kernel.org>
+        Fri, 29 Jul 2022 03:05:09 -0400
+Received: from esa5.hc3370-68.iphmx.com (esa5.hc3370-68.iphmx.com [216.71.155.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1474881B07
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1659078278;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Jq4vj1RzUhUFD8chOtnp1zUxZquW4wk6DMoEc5oQx0w=;
+  b=QBR3Bp9bfTXoRVtQajCeu9NoVMlt1lPS1btoaAPyyRW7bX5hXQ4kUlom
+   dkD7y1i/aWJ6Cs1UqFoC8XDpMKp8ALYVYJYPnKkGBGArzY9ph0HWXlfZx
+   Ou/mQ2rxqaZgucEKTtBvtr3qzNtwxVfHTTZ6S/USknu+PajaPfoXp5put
+   U=;
+Authentication-Results: esa5.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+X-SBRS: 2.7
+X-MesageID: 76181499
+X-Ironport-Server: esa5.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.83
+X-Policy: $RELAYED
+IronPort-Data: A9a23:ki9Ej6rdfjn3IQcXgiWvvWXVZnFeBmJ+YhIvgKrLsJaIsI4StFCzt
+ garIBmFM/mINmLwf9h/aIW08kIFucXTmNVgSFFk/y5kFyMW9JuZCYyVIHmrMnLJJKUvbq7GA
+ +byyDXkBJppJpMJjk71atANlVEliefSAOKU5NfsYkhZXRVjRDoqlSVtkus4hp8AqdWiCkaGt
+ MiaT/f3YTdJ4BYpdDNPg06/gEk35q6q52lJ5gVWic1j5zcyqVFEVPrzGonpR5fIatE8NvK3Q
+ e/F0Ia48gvxl/v6Ior4+lpTWhRiro/6ZWBiuFIPM0SRqkEqShgJ+rQ6LJIhhXJ/0F1lqTzTJ
+ OJl7vRcQS9xVkHFdX90vxNwS0mSNoUekFPLzOTWXWV+ACQqflO1q8iCAn3aMqUk5/RbHXMTt
+ scUKQBTQCuoqsjrm6mkH7wEasQLdKEHPasas3BkizrYEewnUdbIRKCiCd1whWlqwJoURLCHO
+ pRfOWEHgBfoOnWjPn81AZQz2sKhgnD7ejtVgFmUubA28y7YywkZPL3Fb4SMKoXWFJQ9ckCwq
+ kH+707kAQsgO+OdzH2Y1mqvn/bGknauMG4VPOLhraM76LGJ/UQUDBAVTlK9reOOll+lW9lfJ
+ koX/QIjtaE3skesS7HVRAakqXSJuhodXdt4EOAg7gyJjK3O7G6xFjhaZj1MctorsIkxXzNC/
+ l2GhdTyHhR0raaYD3ma89+8vT60fCQYM2IGTSsFVhcepcnuppkpiRDCRcolF7S65vXwGTzhx
+ T2ipS03lbIVy8IGv425913ahzOnprDSUxU4oA7QWwqN8gx9dKahZoq19ULc6/dQaoqUJnGLu
+ 2IFgI6Z9/wUCo+Wlz2lR/8EF7Wkof2CNVX0hV9pAolk9Dm3/XOnVZ5f7Ss4J0pzNMsAPzjzb
+ yf7vAJX65h7JnambaZrJYm2DqwCzbDpPcb0SvfOKNFJZ/BZeAaZ8WdubEiL0mbFlEkqjLF5O
+ JGHfMLqBnEfYYxt1BK/Q+YQ1+9tyi1W+I/IbcmllVL9i+PYPSPLD+deWLeTUgwnxJ+ZsinJ4
+ YscDMeL+0txa8bTSHSM6pFGeDjmMkMH6YDKR91/L7Dec1I7STx5Wpc90pt6JdU7wv09evPgu
+ yjkBxQGkAeXaWjvc13iV5x1VF/4sX+TR1ofNDdkA1un0mNLjW2HvPZGLMtfkVXKGYVeIR9Io
+ xotIZzo7gxnEGivxtjkRcCVQHZeXBqqnxmSGCGufSIyeZVtLySQpIK1JlC0r3lSUXDo3Sfbn
+ 1FH/lqBKafvuiw4VJqGAB5R5wjZUYchdBJaABKTf4g7lLTE+4l2MS3h5sIKzzU3AUyanlOyi
+ lfJaSr0UMGX/OfZBvGV2v3fx2poesMidndn857ztOvvaneGpDb5nOetko+gJFjgaY89w436D
+ c098h02GKdvcIpi22akL4tW8A==
+IronPort-HdrOrdr: A9a23:/Mq4x64O5NXyLOROZQPXwMTXdLJyesId70hD6qhwISY6TiX+rb
+ HIoB17726RtN9/YhEdcLy7VJVoIkmskKKdg7NhXotKNTOO0ADDQb2KhbGSpQEIcBeeygcy78
+ hdmtBFeb/NMWQ=
+X-IronPort-AV: E=Sophos;i="5.93,200,1654574400"; 
+   d="scan'208";a="76181499"
+From:   Jane Malalane <jane.malalane@citrix.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+CC:     Jane Malalane <jane.malalane@citrix.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        "Maximilian Heyne" <mheyne@amazon.de>,
+        <xen-devel@lists.xenproject.org>
+Subject: [PATCH v4] x86/xen: Add support for HVMOP_set_evtchn_upcall_vector
+Date:   Fri, 29 Jul 2022 08:04:16 +0100
+Message-ID: <20220729070416.23306-1-jane.malalane@citrix.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a description for the TLB cache invalidation algorithm and for
-the related kAPI functions.
+Implement support for the HVMOP_set_evtchn_upcall_vector hypercall in
+order to set the per-vCPU event channel vector callback on Linux and
+use it in preference of HVM_PARAM_CALLBACK_IRQ.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+If the per-VCPU vector setup is successful on BSP, use this method
+for the APs. If not, fallback to the global vector-type callback.
+
+Also register callback_irq at per-vCPU event channel setup to trick
+toolstack to think the domain is enlightened.
+
+Suggested-by: "Roger Pau Monné" <roger.pau@citrix.com>
+Signed-off-by: Jane Malalane <jane.malalane@citrix.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 ---
+CC: Juergen Gross <jgross@suse.com>
+CC: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: x86@kernel.org
+CC: "H. Peter Anvin" <hpa@zytor.com>
+CC: Stefano Stabellini <sstabellini@kernel.org>
+CC: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+CC: Jan Beulich <jbeulich@suse.com>
+CC: Maximilian Heyne <mheyne@amazon.de>
+CC: xen-devel@lists.xenproject.org
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH v2 0/2] at: https://lore.kernel.org/all/cover.1659077372.git.mchehab@kernel.org/
+v4:
+ * amend code comment
 
- Documentation/gpu/i915.rst          |   7 ++
- drivers/gpu/drm/i915/gt/intel_tlb.c |  25 +++++++
- drivers/gpu/drm/i915/gt/intel_tlb.h | 101 ++++++++++++++++++++++++++++
- 3 files changed, 133 insertions(+)
+v3:
+ * comment style
+ * add comment on toolstack trick
+ * remove unnecessary variable and function call
+ * surround x86-specific code with #ifdef
 
-diff --git a/Documentation/gpu/i915.rst b/Documentation/gpu/i915.rst
-index 4e59db1cfb00..46911fdd79e8 100644
---- a/Documentation/gpu/i915.rst
-+++ b/Documentation/gpu/i915.rst
-@@ -58,6 +58,13 @@ Intel GVT-g Host Support(vGPU device model)
- .. kernel-doc:: drivers/gpu/drm/i915/intel_gvt.c
-    :internal:
+v2:
+ * remove no_vector_callback
+ * make xen_have_vector_callback a bool
+ * rename xen_ack_upcall to xen_percpu_upcall
+ * fail to bring CPU up on init instead of crashing kernel
+ * add and use xen_set_upcall_vector where suitable
+ * xen_setup_upcall_vector -> xen_init_setup_upcall_vector for clarity
+---
+ arch/x86/include/asm/xen/cpuid.h   |  2 ++
+ arch/x86/include/asm/xen/events.h  |  3 ++-
+ arch/x86/xen/enlighten.c           |  2 +-
+ arch/x86/xen/enlighten_hvm.c       | 24 ++++++++++++-----
+ arch/x86/xen/suspend_hvm.c         | 10 ++++++-
+ drivers/xen/events/events_base.c   | 53 +++++++++++++++++++++++++++++++++-----
+ include/xen/hvm.h                  |  2 ++
+ include/xen/interface/hvm/hvm_op.h | 19 ++++++++++++++
+ 8 files changed, 100 insertions(+), 15 deletions(-)
+
+diff --git a/arch/x86/include/asm/xen/cpuid.h b/arch/x86/include/asm/xen/cpuid.h
+index 78e667a31d6c..6daa9b0c8d11 100644
+--- a/arch/x86/include/asm/xen/cpuid.h
++++ b/arch/x86/include/asm/xen/cpuid.h
+@@ -107,6 +107,8 @@
+  * ID field from 8 to 15 bits, allowing to target APIC IDs up 32768.
+  */
+ #define XEN_HVM_CPUID_EXT_DEST_ID      (1u << 5)
++/* Per-vCPU event channel upcalls */
++#define XEN_HVM_CPUID_UPCALL_VECTOR    (1u << 6)
  
-+TLB cache invalidation
-+----------------------
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_tlb.h
-+
-+.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_tlb.c
-+
- Workarounds
- -----------
+ /*
+  * Leaf 6 (0x40000x05)
+diff --git a/arch/x86/include/asm/xen/events.h b/arch/x86/include/asm/xen/events.h
+index 068d9b067c83..62bdceb594f1 100644
+--- a/arch/x86/include/asm/xen/events.h
++++ b/arch/x86/include/asm/xen/events.h
+@@ -23,7 +23,7 @@ static inline int xen_irqs_disabled(struct pt_regs *regs)
+ /* No need for a barrier -- XCHG is a barrier on x86. */
+ #define xchg_xen_ulong(ptr, val) xchg((ptr), (val))
  
-diff --git a/drivers/gpu/drm/i915/gt/intel_tlb.c b/drivers/gpu/drm/i915/gt/intel_tlb.c
-index af8cae979489..4873b7ecc015 100644
---- a/drivers/gpu/drm/i915/gt/intel_tlb.c
-+++ b/drivers/gpu/drm/i915/gt/intel_tlb.c
-@@ -145,6 +145,18 @@ static void mmio_invalidate_full(struct intel_gt *gt)
- 	intel_uncore_forcewake_put_delayed(uncore, FORCEWAKE_ALL);
+-extern int xen_have_vector_callback;
++extern bool xen_have_vector_callback;
+ 
+ /*
+  * Events delivered via platform PCI interrupts are always
+@@ -34,4 +34,5 @@ static inline bool xen_support_evtchn_rebind(void)
+ 	return (!xen_hvm_domain() || xen_have_vector_callback);
  }
  
-+/**
-+ * intel_gt_invalidate_tlb_full - do full TLB cache invalidation
-+ * @gt: GT structure
-+ * @seqno: sequence number
-+ *
-+ * Do a full TLB cache invalidation if the @seqno is bigger than the last
-+ * full TLB cache invalidation.
-+ *
-+ * Note:
-+ * The TLB cache invalidation logic depends on GEN-specific registers.
-+ * It currently supports MMIO-based TLB flush for GEN8 to GEN12.
-+ */
- void intel_gt_invalidate_tlb_full(struct intel_gt *gt, u32 seqno)
++extern bool xen_percpu_upcall;
+ #endif /* _ASM_X86_XEN_EVENTS_H */
+diff --git a/arch/x86/xen/enlighten.c b/arch/x86/xen/enlighten.c
+index 30c6e986a6cd..b8db2148c07d 100644
+--- a/arch/x86/xen/enlighten.c
++++ b/arch/x86/xen/enlighten.c
+@@ -51,7 +51,7 @@ EXPORT_SYMBOL_GPL(xen_start_info);
+ 
+ struct shared_info xen_dummy_shared_info;
+ 
+-__read_mostly int xen_have_vector_callback;
++__read_mostly bool xen_have_vector_callback = true;
+ EXPORT_SYMBOL_GPL(xen_have_vector_callback);
+ 
+ /*
+diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
+index 8b71b1dd7639..198d3cd3e9a5 100644
+--- a/arch/x86/xen/enlighten_hvm.c
++++ b/arch/x86/xen/enlighten_hvm.c
+@@ -7,6 +7,8 @@
+ 
+ #include <xen/features.h>
+ #include <xen/events.h>
++#include <xen/hvm.h>
++#include <xen/interface/hvm/hvm_op.h>
+ #include <xen/interface/memory.h>
+ 
+ #include <asm/apic.h>
+@@ -30,6 +32,9 @@
+ 
+ static unsigned long shared_info_pfn;
+ 
++__ro_after_init bool xen_percpu_upcall;
++EXPORT_SYMBOL_GPL(xen_percpu_upcall);
++
+ void xen_hvm_init_shared_info(void)
  {
- 	intel_wakeref_t wakeref;
-@@ -171,12 +183,25 @@ void intel_gt_invalidate_tlb_full(struct intel_gt *gt, u32 seqno)
+ 	struct xen_add_to_physmap xatp;
+@@ -125,6 +130,9 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_xen_hvm_callback)
+ {
+ 	struct pt_regs *old_regs = set_irq_regs(regs);
+ 
++	if (xen_percpu_upcall)
++		ack_APIC_irq();
++
+ 	inc_irq_stat(irq_hv_callback_count);
+ 
+ 	xen_hvm_evtchn_do_upcall();
+@@ -168,6 +176,15 @@ static int xen_cpu_up_prepare_hvm(unsigned int cpu)
+ 	if (!xen_have_vector_callback)
+ 		return 0;
+ 
++	if (xen_percpu_upcall) {
++		rc = xen_set_upcall_vector(cpu);
++		if (rc) {
++			WARN(1, "HVMOP_set_evtchn_upcall_vector"
++			     " for CPU %d failed: %d\n", cpu, rc);
++			return rc;
++		}
++	}
++
+ 	if (xen_feature(XENFEAT_hvm_safe_pvclock))
+ 		xen_setup_timer(cpu);
+ 
+@@ -188,8 +205,6 @@ static int xen_cpu_dead_hvm(unsigned int cpu)
+ 	return 0;
+ }
+ 
+-static bool no_vector_callback __initdata;
+-
+ static void __init xen_hvm_guest_init(void)
+ {
+ 	if (xen_pv_domain())
+@@ -211,9 +226,6 @@ static void __init xen_hvm_guest_init(void)
+ 
+ 	xen_panic_handler_init();
+ 
+-	if (!no_vector_callback && xen_feature(XENFEAT_hvm_callback_vector))
+-		xen_have_vector_callback = 1;
+-
+ 	xen_hvm_smp_init();
+ 	WARN_ON(xen_cpuhp_setup(xen_cpu_up_prepare_hvm, xen_cpu_dead_hvm));
+ 	xen_unplug_emulated_devices();
+@@ -239,7 +251,7 @@ early_param("xen_nopv", xen_parse_nopv);
+ 
+ static __init int xen_parse_no_vector_callback(char *arg)
+ {
+-	no_vector_callback = true;
++	xen_have_vector_callback = false;
+ 	return 0;
+ }
+ early_param("xen_no_vector_callback", xen_parse_no_vector_callback);
+diff --git a/arch/x86/xen/suspend_hvm.c b/arch/x86/xen/suspend_hvm.c
+index 9d548b0c772f..0c4f7554b7cc 100644
+--- a/arch/x86/xen/suspend_hvm.c
++++ b/arch/x86/xen/suspend_hvm.c
+@@ -5,6 +5,7 @@
+ #include <xen/hvm.h>
+ #include <xen/features.h>
+ #include <xen/interface/features.h>
++#include <xen/events.h>
+ 
+ #include "xen-ops.h"
+ 
+@@ -14,6 +15,13 @@ void xen_hvm_post_suspend(int suspend_cancelled)
+ 		xen_hvm_init_shared_info();
+ 		xen_vcpu_restore();
+ 	}
+-	xen_setup_callback_vector();
++	if (xen_percpu_upcall) {
++		unsigned int cpu;
++
++		for_each_online_cpu(cpu)
++			BUG_ON(xen_set_upcall_vector(cpu));
++	} else {
++		xen_setup_callback_vector();
++	}
+ 	xen_unplug_emulated_devices();
+ }
+diff --git a/drivers/xen/events/events_base.c b/drivers/xen/events/events_base.c
+index 46d9295d9a6e..206d4b466e44 100644
+--- a/drivers/xen/events/events_base.c
++++ b/drivers/xen/events/events_base.c
+@@ -45,6 +45,7 @@
+ #include <asm/irq.h>
+ #include <asm/io_apic.h>
+ #include <asm/i8259.h>
++#include <asm/xen/cpuid.h>
+ #include <asm/xen/pci.h>
+ #endif
+ #include <asm/sync_bitops.h>
+@@ -2183,6 +2184,7 @@ static struct irq_chip xen_percpu_chip __read_mostly = {
+ 	.irq_ack		= ack_dynirq,
+ };
+ 
++#ifdef CONFIG_X86
+ #ifdef CONFIG_XEN_PVHVM
+ /* Vector callbacks are better than PCI interrupts to receive event
+  * channel notifications because we can receive vector callbacks on any
+@@ -2195,11 +2197,48 @@ void xen_setup_callback_vector(void)
+ 		callback_via = HVM_CALLBACK_VECTOR(HYPERVISOR_CALLBACK_VECTOR);
+ 		if (xen_set_callback_via(callback_via)) {
+ 			pr_err("Request for Xen HVM callback vector failed\n");
+-			xen_have_vector_callback = 0;
++			xen_have_vector_callback = false;
+ 		}
  	}
  }
  
-+/**
-+ * intel_gt_init_tlb - initialize TLB-specific vars
-+ * @gt: GT structure
-+ *
-+ * TLB cache invalidation logic internally uses some resources that require
-+ * initialization. Should be called before doing any TLB cache invalidation.
++/*
++ * Setup per-vCPU vector-type callbacks. If this setup is unavailable,
++ * fallback to the global vector-type callback.
 + */
- void intel_gt_init_tlb(struct intel_gt *gt)
- {
- 	mutex_init(&gt->tlb.invalidate_lock);
- 	seqcount_mutex_init(&gt->tlb.seqno, &gt->tlb.invalidate_lock);
- }
- 
-+/**
-+ * intel_gt_fini_tlb - initialize TLB-specific vars
-+ * @gt: GT structure
-+ *
-+ * Frees any resources needed by TLB cache invalidation logic.
-+ */
- void intel_gt_fini_tlb(struct intel_gt *gt)
- {
- 	mutex_destroy(&gt->tlb.invalidate_lock);
-diff --git a/drivers/gpu/drm/i915/gt/intel_tlb.h b/drivers/gpu/drm/i915/gt/intel_tlb.h
-index 46ce25bf5afe..dca70c33bd61 100644
---- a/drivers/gpu/drm/i915/gt/intel_tlb.h
-+++ b/drivers/gpu/drm/i915/gt/intel_tlb.h
-@@ -11,16 +11,117 @@
- 
- #include "intel_gt_types.h"
- 
-+/**
-+ * DOC: TLB cache invalidation logic
-+ *
-+ * The way the current algorithm works is that a struct drm_i915_gem_object can
-+ * be created on any order. At unbind/evict time, the object is warranted that
-+ * it won't be used anymore. So, a sequence number provided by
-+ * intel_gt_next_invalidate_tlb_full() is stored on it. This can happen either
-+ * at __vma_put_pages() - for VMA sync unbind, or at ppgtt_unbind_vma() - for
-+ * VMA async VMA bind.
-+ *
-+ * At __i915_gem_object_unset_pages(), intel_gt_invalidate_tlb_full() is called,
-+ * where it checks if the sequence number of the object was already invalidated
-+ * or not. If not, it flushes the TLB and increments the sequence number::
-+ *
-+ *   void intel_gt_invalidate_tlb_full(struct intel_gt *gt, u32 seqno)
-+ *   {
-+ *   ...
-+ * 	with_intel_gt_pm_if_awake(gt, wakeref) {
-+ * 		mutex_lock(&gt->tlb.invalidate_lock);
-+ * 		if (tlb_seqno_passed(gt, seqno))
-+ * 				goto unlock;
-+ *
-+ * 		// Some code to do TLB invalidation
-+ *   ...
-+ *
-+ * 		write_seqcount_invalidate(&gt->tlb.seqno); // increment seqno
-+ * 		mutex_lock(&gt->tlb.invalidate_lock);
-+ *      }
-+ *
-+ * So, let's say the current seqno is 2 and 3 new objects were created,
-+ * on this order::
-+ *
-+ * 	obj1
-+ * 	obj2
-+ * 	obj3
-+ *
-+ * They can be unbind/evict on a different order. At unbind/evict time,
-+ * the mm.tlb will be stamped with the sequence number, using the number
-+ * from the last TLB flush, plus 1.
-+ *
-+ * Different threads may be used on unbind/evict and/or unset pages.
-+ * As the logic at void intel_gt_invalidate_tlb_full() is protected by a mutex,
-+ * for simplicity, let's consider just two threads:
-+ *
-+ * +-------------------+-------------------------+---------------------------------+
-+ * | sequence number   | Thread 0                | Thread 1                        +
-+ * +===================+=========================+=================================+
-+ * | seqno=2           |                         |                                 |
-+ * |                   +-------------------------+---------------------------------+
-+ * |                   | unbind/evict obj3.      |                                 |
-+ * |                   |                         |                                 |
-+ * |                   | obj3.mm.tlb = seqno | 1 |                                 |
-+ * |                   | // obj3.mm.tlb = 3      |                                 |
-+ * |                   +-------------------------+---------------------------------+
-+ * |                   | unbind/evict obj1.      |                                 |
-+ * |                   |                         |                                 |
-+ * |                   | obj1.mm.tlb = seqno | 1 |                                 |
-+ * |                   | // obj1.mm.tlb = 3      |                                 |
-+ * |                   +-------------------------+---------------------------------+
-+ * |                   |                         | __i915_gem_object_unset_pages() |
-+ * |                   |                         | called for obj3 => TLB flush    |
-+ * |                   |                         | invalidating both obj1 and obj2.|
-+ * |                   |                         |                                 |
-+ * |                   |                         | seqno += 2                      |
-+ * +-------------------+-------------------------+---------------------------------+
-+ * | seqno=4           |                         |                                 |
-+ * |                   +-------------------------+---------------------------------+
-+ * |                   | unbind/evict obj2.      |                                 |
-+ * |                   |                         |                                 |
-+ * |                   | obj2.mm.tlb = seqno | 1 |                                 |
-+ * |                   | // obj2.mm.tlb = 5      |                                 |
-+ * |                   +-------------------------+---------------------------------+
-+ * |                   |                         | __i915_gem_object_unset_pages() |
-+ * |                   |                         | called for obj1, don't flush    |
-+ * |                   |                         | as past flush invalidated obj1. |
-+ * |                   +-------------------------+---------------------------------+
-+ * |                   |                         | __i915_gem_object_unset_pages() |
-+ * |                   |                         | called for obj2 => TLB flush.   |
-+ * |                   |                         | invalidating obj2.              |
-+ * |                   |                         |                                 |
-+ * |                   |                         | seqno += 2                      |
-+ * +-------------------+-------------------------+---------------------------------+
-+ * | seqno=6           |                         |                                 |
-+ * +-------------------+-------------------------+---------------------------------+
-+ */
++static __init void xen_init_setup_upcall_vector(void)
++{
++	if (!xen_have_vector_callback)
++		return;
 +
- void intel_gt_invalidate_tlb_full(struct intel_gt *gt, u32 seqno);
- 
- void intel_gt_init_tlb(struct intel_gt *gt);
- void intel_gt_fini_tlb(struct intel_gt *gt);
- 
-+/**
-+ * intel_gt_tlb_seqno - Returns the current TLB invlidation sequence number
-+ *
-+ * @gt: GT structure
-+ *
-+ * There's no need to lock while calling it, as seqprop_sequence is thread-safe
-+ */
- static inline u32 intel_gt_tlb_seqno(const struct intel_gt *gt)
++	if ((cpuid_eax(xen_cpuid_base() + 4) & XEN_HVM_CPUID_UPCALL_VECTOR) &&
++	    !xen_set_upcall_vector(0))
++		xen_percpu_upcall = true;
++	else if (xen_feature(XENFEAT_hvm_callback_vector))
++		xen_setup_callback_vector();
++	else
++		xen_have_vector_callback = false;
++}
++
++int xen_set_upcall_vector(unsigned int cpu)
++{
++	int rc;
++	xen_hvm_evtchn_upcall_vector_t op = {
++		.vector = HYPERVISOR_CALLBACK_VECTOR,
++		.vcpu = per_cpu(xen_vcpu_id, cpu),
++	};
++
++	rc = HYPERVISOR_hvm_op(HVMOP_set_evtchn_upcall_vector, &op);
++	if (rc)
++		return rc;
++
++	/* Trick toolstack to think we are enlightened. */
++	if (!cpu)
++		rc = xen_set_callback_via(1);
++
++	return rc;
++}
++
+ static __init void xen_alloc_callback_vector(void)
  {
- 	return seqprop_sequence(&gt->tlb.seqno);
+ 	if (!xen_have_vector_callback)
+@@ -2210,8 +2249,11 @@ static __init void xen_alloc_callback_vector(void)
  }
+ #else
+ void xen_setup_callback_vector(void) {}
++static inline void xen_init_setup_upcall_vector(void) {}
++int xen_set_upcall_vector(unsigned int cpu) {}
+ static inline void xen_alloc_callback_vector(void) {}
+-#endif
++#endif /* CONFIG_XEN_PVHVM */
++#endif /* CONFIG_X86 */
  
-+/**
-+ * intel_gt_next_invalidate_tlb_full - Returns the next TLB full invalidation
-+ *	sequence number
-+ *
-+ * @gt: GT structure
-+ *
-+ * There's no need to lock while calling it, as seqprop_sequence is thread-safe
+ bool xen_fifo_events = true;
+ module_param_named(fifo_events, xen_fifo_events, bool, 0);
+@@ -2271,10 +2313,9 @@ void __init xen_init_IRQ(void)
+ 		if (xen_initial_domain())
+ 			pci_xen_initial_domain();
+ 	}
+-	if (xen_feature(XENFEAT_hvm_callback_vector)) {
+-		xen_setup_callback_vector();
+-		xen_alloc_callback_vector();
+-	}
++	xen_init_setup_upcall_vector();
++	xen_alloc_callback_vector();
++
+ 
+ 	if (xen_hvm_domain()) {
+ 		native_init_IRQ();
+diff --git a/include/xen/hvm.h b/include/xen/hvm.h
+index b7fd7fc9ad41..8da7a6747058 100644
+--- a/include/xen/hvm.h
++++ b/include/xen/hvm.h
+@@ -60,4 +60,6 @@ static inline int hvm_get_parameter(int idx, uint64_t *value)
+ 
+ void xen_setup_callback_vector(void);
+ 
++int xen_set_upcall_vector(unsigned int cpu);
++
+ #endif /* XEN_HVM_H__ */
+diff --git a/include/xen/interface/hvm/hvm_op.h b/include/xen/interface/hvm/hvm_op.h
+index f3097e79bb03..03134bf3cec1 100644
+--- a/include/xen/interface/hvm/hvm_op.h
++++ b/include/xen/interface/hvm/hvm_op.h
+@@ -46,4 +46,23 @@ struct xen_hvm_get_mem_type {
+ };
+ DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_get_mem_type);
+ 
++#if defined(__i386__) || defined(__x86_64__)
++
++/*
++ * HVMOP_set_evtchn_upcall_vector: Set a <vector> that should be used for event
++ *                                 channel upcalls on the specified <vcpu>. If set,
++ *                                 this vector will be used in preference to the
++ *                                 domain global callback via (see
++ *                                 HVM_PARAM_CALLBACK_IRQ).
 + */
- static inline u32 intel_gt_next_invalidate_tlb_full(const struct intel_gt *gt)
- {
- 	return intel_gt_tlb_seqno(gt) | 1;
++#define HVMOP_set_evtchn_upcall_vector 23
++struct xen_hvm_evtchn_upcall_vector {
++    uint32_t vcpu;
++    uint8_t vector;
++};
++typedef struct xen_hvm_evtchn_upcall_vector xen_hvm_evtchn_upcall_vector_t;
++DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_evtchn_upcall_vector_t);
++
++#endif /* defined(__i386__) || defined(__x86_64__) */
++
+ #endif /* __XEN_PUBLIC_HVM_HVM_OP_H__ */
 -- 
-2.36.1
+2.11.0
 

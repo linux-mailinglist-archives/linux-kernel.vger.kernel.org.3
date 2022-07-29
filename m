@@ -2,129 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AB7585456
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D3B585460
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238324AbiG2RUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S238353AbiG2RXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbiG2RUB (ORCPT
+        with ESMTP id S237541AbiG2RXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:20:01 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24EB83225;
-        Fri, 29 Jul 2022 10:20:00 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so5872185pjf.2;
-        Fri, 29 Jul 2022 10:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=hxBFRTN1LZRoFnahsiKcdK0tbZNGdjelWAHFypZYkFw=;
-        b=eiq04DaxAgViGZ9EjXJAweUo+d5rfzN0ZcDsnWBuTVAbrBldprM1+hXUHba9T/4yJa
-         Dfflm8wSp8C681mf5fMlGS0yPjfW38NmFqJbW+39mcFA9u+YjxX+zpB3rnKuGPvmoaCG
-         VMIHDm2ztN7RI+qdvlrDfD86Fngq/U1Tj6Yb1umPyx3nVj1K75u47/ryQMhjVU1tKa2v
-         qHSyD6s/gTlxlRcWAnErIpS1Xa7O1qogS2n4GfwNgYYRSUM/OsLO3H1tLUUo4n5zQivs
-         F7vpYEAWdZ89AvkwKQ4cJGpmLP15VViBvgiBmI1ideW0NrYN/p0WGJvmnm3iSqwoFuLJ
-         5owg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=hxBFRTN1LZRoFnahsiKcdK0tbZNGdjelWAHFypZYkFw=;
-        b=CscgOhR9kFcinc8BeOW+gU8EDiOtdqX25CwXkV0lcmIkVBnvjPiIOnjwXOgyYV9hOb
-         6wt1H4pfdcJWQ39gwj0rMh/sMAohwGcs4xIfHPQnbNGM/aQ7Icu9JXDHxWtMEP0NevHy
-         zsa/9vfqmk3DIp4RGrjZREhNAU/fUPPoT7TAtxDJky+vB3frxu81cco5KObjd/7ZxCHT
-         euFlKcYMHdmZjF9sMJtlAK6I+mJf4n69z4DZO9V+PIPGP4S4TWSOEVbgTi9ALRuRZSP0
-         3435IUutWDFypPuoq4y5F5lni0FpGGvcXERsQuTH81IxNJ7bZCQjs5ZKHbcS84ro7zqR
-         ElhQ==
-X-Gm-Message-State: ACgBeo0SimLQjVPHsfNAbxY/OTzNDbALl5GMLVh/oCGO4nAG7SSO0ncV
-        QxTrV7AZtNSCT5JcyjAw+FI=
-X-Google-Smtp-Source: AA6agR41uGgoEk7+NXJL+sFLmDGhuy+Mni8pojmb/mVvHl4PEVuWbXu8RbyWs4i0T2dCXz60Kcq39w==
-X-Received: by 2002:a17:90b:1d91:b0:1f0:7824:1297 with SMTP id pf17-20020a17090b1d9100b001f078241297mr5773562pjb.126.1659115200308;
-        Fri, 29 Jul 2022 10:20:00 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id m14-20020a63710e000000b0041b667a1b69sm2818592pgc.36.2022.07.29.10.19.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 10:19:59 -0700 (PDT)
-Message-ID: <056164ec-3525-479b-3b71-834af48d323c@gmail.com>
-Date:   Fri, 29 Jul 2022 10:19:54 -0700
+        Fri, 29 Jul 2022 13:23:15 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43717FE54
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659115394; x=1690651394;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PLCAarZGI7hpr9r7eHrgAdxDGDJ/3HldmTRROgaVA9g=;
+  b=COVLw49He54UGqQkava4qA3hr1WnuHiHxQnH6lfZD9oayN7Rknx//+07
+   iXbVgqXZSBaXIR2nfkx+6kdXG6DaW2zDrLtKsFFJdWyvrNuuAC9U2OlzR
+   9fLNN/KDq1AZ0KTv0w9CJOH9Rr8ongB1axCFkwQEiVQ10NzNFSIzM1Hhc
+   GhN/5aMq4vasA8YIas7G6AKNBHkTKFe1XFTOtqgzd4dxnXyI/BlblD8Gm
+   Leq7PXL01vhX/ZNsPce1fkeMhN3XaoXK2KpwBJQHm8UB1NVSaknE2HH3K
+   ZbrcOfHs0yjo93AR2xVlrBtiT/6UTWWqvD6y6bK1JSkuUSpZs26dcmSgo
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="289579951"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="289579951"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 10:23:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="928811697"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2022 10:23:12 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHThg-000Bup-0d;
+        Fri, 29 Jul 2022 17:23:12 +0000
+Date:   Sat, 30 Jul 2022 01:22:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/vdso 8/8]
+ arch/x86/include/asm/vdso/gettimeofday.h:248:34: error: 'VDSO_CLOCKMODE_TSC'
+ undeclared; did you mean 'VDSO_CLOCKMODE_MAX'?
+Message-ID: <202207300138.IedUdmKn-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next v3 3/4] net: phy: Add helper to derive the number
- of ports from a phy mode
-Content-Language: en-US
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Richard Cochran <richardcochran@gmail.com>,
-        Horatiu.Vultur@microchip.com, Allan.Nielsen@microchip.com,
-        UNGLinuxDriver@microchip.com
-References: <20220729153356.581444-1-maxime.chevallier@bootlin.com>
- <20220729153356.581444-4-maxime.chevallier@bootlin.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220729153356.581444-4-maxime.chevallier@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 08:33, Maxime Chevallier wrote:
-> Some phy modes such as QSGMII multiplex several MAC<->PHY links on one
-> single physical interface. QSGMII used to be the only one supported, but
-> other modes such as QUSGMII also carry multiple links.
-> 
-> This helper allows getting the number of links that are multiplexed
-> on a given interface.
-> 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> ---
-> V1->V2 : New patch
-> V2->V3 : Made PHY_INTERFACE_MODE_INTERNAL 1 port, and added the MAX
-> case.
-> 
->  drivers/net/phy/phy-core.c | 52 ++++++++++++++++++++++++++++++++++++++
->  include/linux/phy.h        |  2 ++
->  2 files changed, 54 insertions(+)
-> 
-> diff --git a/drivers/net/phy/phy-core.c b/drivers/net/phy/phy-core.c
-> index 1f2531a1a876..f8ec12d3d6ae 100644
-> --- a/drivers/net/phy/phy-core.c
-> +++ b/drivers/net/phy/phy-core.c
-> @@ -74,6 +74,58 @@ const char *phy_duplex_to_str(unsigned int duplex)
->  }
->  EXPORT_SYMBOL_GPL(phy_duplex_to_str);
->  
-> +/**
-> + * phy_interface_num_ports - Return the number of links that can be carried by
-> + *			     a given MAC-PHY physical link. Returns 0 if this is
-> + *			     unknown, the number of links else.
-> + *
-> + * @interface: The interface mode we want to get the number of ports
-> + */
-> +int phy_interface_num_ports(phy_interface_t interface)
-> +{
-> +	switch (interface) {
-> +	case PHY_INTERFACE_MODE_NA:
-> +		return 0;
-> +	case PHY_INTERFACE_MODE_INTERNAL:
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
+head:   02d56061c924adece19bdfad05ea4add32de4b63
+commit: 02d56061c924adece19bdfad05ea4add32de4b63 [8/8] random: implement getrandom() in vDSO
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20220730/202207300138.IedUdmKn-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/02d56061c924adece19bdfad05ea4add32de4b63
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
+        git checkout 02d56061c924adece19bdfad05ea4add32de4b63
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
 
-Maybe this was covered in the previous iteration, but cannot the default case return 1, and all of the cases that need an explicit non-1 return value are handled? Enumeration all of those that do need to return 1 does not really scale.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/vdso/processor.h:10,
+                    from include/vdso/datapage.h:17,
+                    from drivers/char/random.c:62:
+>> arch/x86/include/asm/vdso/processor.h:11:29: error: redefinition of 'rep_nop'
+      11 | static __always_inline void rep_nop(void)
+         |                             ^~~~~~~
+   In file included from include/linux/rcupdate.h:30,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from include/linux/utsname.h:6,
+                    from drivers/char/random.c:28:
+   arch/x86/um/asm/processor.h:25:29: note: previous definition of 'rep_nop' with type 'void(void)'
+      25 | static __always_inline void rep_nop(void)
+         |                             ^~~~~~~
+   In file included from include/vdso/processor.h:10,
+                    from include/vdso/datapage.h:17,
+                    from drivers/char/random.c:62:
+>> arch/x86/include/asm/vdso/processor.h:16:29: error: redefinition of 'cpu_relax'
+      16 | static __always_inline void cpu_relax(void)
+         |                             ^~~~~~~~~
+   In file included from include/linux/rcupdate.h:30,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from include/linux/utsname.h:6,
+                    from drivers/char/random.c:28:
+   arch/x86/um/asm/processor.h:30:29: note: previous definition of 'cpu_relax' with type 'void(void)'
+      30 | static __always_inline void cpu_relax(void)
+         |                             ^~~~~~~~~
+   In file included from arch/x86/include/asm/mshyperv.h:10,
+                    from include/clocksource/hyperv_timer.h:18,
+                    from arch/x86/include/asm/vdso/gettimeofday.h:21,
+                    from include/vdso/datapage.h:143,
+                    from drivers/char/random.c:62:
+   arch/x86/include/asm/nospec-branch.h: In function 'mds_clear_cpu_buffers':
+>> arch/x86/include/asm/nospec-branch.h:332:31: error: '__KERNEL_DS' undeclared (first use in this function)
+     332 |         static const u16 ds = __KERNEL_DS;
+         |                               ^~~~~~~~~~~
+   arch/x86/include/asm/nospec-branch.h:332:31: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from include/asm-generic/bug.h:5,
+                    from ./arch/um/include/generated/asm/bug.h:1,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/um/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from include/linux/utsname.h:6,
+                    from drivers/char/random.c:28:
+   arch/x86/include/asm/vdso/gettimeofday.h: In function '__arch_get_hw_counter':
+>> arch/x86/include/asm/vdso/gettimeofday.h:248:34: error: 'VDSO_CLOCKMODE_TSC' undeclared (first use in this function); did you mean 'VDSO_CLOCKMODE_MAX'?
+     248 |         if (likely(clock_mode == VDSO_CLOCKMODE_TSC))
+         |                                  ^~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+
+
+vim +248 arch/x86/include/asm/vdso/gettimeofday.h
+
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  244  
+4c5a116ada953b8 Thomas Gleixner   2020-08-04  245  static inline u64 __arch_get_hw_counter(s32 clock_mode,
+4c5a116ada953b8 Thomas Gleixner   2020-08-04  246  					const struct vdso_data *vd)
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  247  {
+b95a8a27c300d1a Thomas Gleixner   2020-02-07 @248  	if (likely(clock_mode == VDSO_CLOCKMODE_TSC))
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  249  		return (u64)rdtsc_ordered();
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  250  	/*
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  251  	 * For any memory-mapped vclock type, we need to make sure that gcc
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  252  	 * doesn't cleverly hoist a load before the mode check.  Otherwise we
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  253  	 * might end up touching the memory-mapped page even if the vclock in
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  254  	 * question isn't enabled, which will segfault.  Hence the barriers.
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  255  	 */
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  256  #ifdef CONFIG_PARAVIRT_CLOCK
+b95a8a27c300d1a Thomas Gleixner   2020-02-07  257  	if (clock_mode == VDSO_CLOCKMODE_PVCLOCK) {
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  258  		barrier();
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  259  		return vread_pvclock();
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  260  	}
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  261  #endif
+3e2d94535adb2df Vitaly Kuznetsov  2019-08-22  262  #ifdef CONFIG_HYPERV_TIMER
+b95a8a27c300d1a Thomas Gleixner   2020-02-07  263  	if (clock_mode == VDSO_CLOCKMODE_HVCLOCK) {
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  264  		barrier();
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  265  		return vread_hvclock();
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  266  	}
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  267  #endif
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  268  	return U64_MAX;
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  269  }
+7ac8707479886c7 Vincenzo Frascino 2019-06-21  270  
+
+:::::: The code at line 248 was first introduced by commit
+:::::: b95a8a27c300d1a39a4e36f63a518ef36e4b966c x86/vdso: Use generic VDSO clock mode storage
+
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
 -- 
-Florian
+0-DAY CI Kernel Test Service
+https://01.org/lkp

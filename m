@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C50584DA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33D5584DA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbiG2IsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 04:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S235166AbiG2Is5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 04:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiG2IsO (ORCPT
+        with ESMTP id S234622AbiG2Isw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 04:48:14 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67D2491D8;
-        Fri, 29 Jul 2022 01:48:12 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id r13so5175700oie.1;
-        Fri, 29 Jul 2022 01:48:12 -0700 (PDT)
+        Fri, 29 Jul 2022 04:48:52 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F0080F47
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 01:48:51 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q16so3516293pgq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 01:48:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=laMWqx0m1gEvtHXryf/5VSlLItHKJgHOSN6E953Gx6k=;
-        b=ga5AGFgSIzWkg1Pik3P+bsRUx+XIAAKbDZNug6DoIuhSp9uItHQ7MOwB69pxNIvQlW
-         iqUJzC0LPMpyORfjo0wdFKGl6JFvNlDW8LF85eKpncc3g/bXss2ZoepeiyII53frGd09
-         1BKVd1ys5TYYg64rV3J0soy6HofvR7pv1kuqisBFp9oHRh/jNvfmzKPlDbMX8mUBvi+y
-         a/AXlRIqu+pP7PRXwOFnqY/FnvJH7MVEzcnkfV5FZdCyFxkZ8t/SHusr1XJZLarBHBp5
-         t5O50OQ4T6QoSofx7Vc1hOgajOnHoSlkE3xr+8BF3cTZbNVGRmrhcuNmdr8HIjA4IZ5r
-         2Y6g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wgsqotyBOfZqy1W9KnKshpP046wKgYKrPJ2KCRawRzE=;
+        b=eGPLof6qAfDzxFOJCPcERm02FQ+hj43MXgSOA6Ib/cVIE6lu6+uuejwvmd+uTGGMaI
+         NXP29LbjnKT6uafpFas6wGtB6lOj9E1GTWjcrsoQhNNNboO/uiZcxyundIAZuqvmuDr1
+         lxHuk00U8pogYQYNq5AJUiwFuKah5ptzPaFLukmGtzBJQxTPQMyJUuhoBMnCDDUTYK1V
+         28ncmf/J4Y24KtF0XNMFwq9JPU/7JKTtMUyaaITcXMCD/1X4DnJ4+BfqJSn7o+SN0e7x
+         36GxhqbdLI9dLoSlUqIBlY0Gf9gIj4ZkEtzDMfVQ2VprMmKrI/zsNSoa39htsm9RyQl3
+         XAbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=laMWqx0m1gEvtHXryf/5VSlLItHKJgHOSN6E953Gx6k=;
-        b=fYTB+kwzthiRU34RaQJnn3qWvbWreLlJdXg2qwqLCVtxt+AFmN4wrosQQp0JntrruV
-         MDY4e2hxzPq0RozObbUbHTOBgiWbSz32hTNSFFLVK+OzdMzq4n2C3fCBpPtujszBcQlt
-         Z1sfdqG+Oup0OFv6Fd1iwBwgZVrE783xQY47FMfC9hNRDxCzdt6AAKQK+E1piSPxrml1
-         A0RhxYi/u+xCvIyg9Aroe9iDWKP1rIKorEY9KN11ipZn/dsH1eDmRicv1bvbVujqiVcf
-         F29Zcs1O+ERSwSpnnB1PIDc0FpU7AGofs4lEwMzMXawFo+hNbvrz3ltWDGEkB54fMNet
-         MOLg==
-X-Gm-Message-State: AJIora8B1TrHDFf3+wmHvWQal501NiT55XN3+10tWH748P0SQrbScAVY
-        nN/x5mPzd3rTO+Rp18lzd8xwh0OzXdAEugo5Gzc=
-X-Google-Smtp-Source: AGRyM1tbgq1Ruh+N226UjmC0fbw0tJKJDLF3TlQIzAoa9ELkJbgs+4GjaAbKEid8VvxB6293x6sVyzMiVDClkremBZU=
-X-Received: by 2002:a05:6808:bd2:b0:33a:c532:54e6 with SMTP id
- o18-20020a0568080bd200b0033ac53254e6mr1170530oik.252.1659084492032; Fri, 29
- Jul 2022 01:48:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wgsqotyBOfZqy1W9KnKshpP046wKgYKrPJ2KCRawRzE=;
+        b=dn6burl6ggnTd6Dv7Smcq2SiYUT0mDCcp+do6LOaJzvHLuY7vCMmTB0wnjPf5v6BhZ
+         XuLbzweKSlo8eVgTwU//FEd06RMSAhE+l8NQN9kkndlMjOruv+YV78M2sTjmls0I+v92
+         iqgH2CT1qsAQriWBpwcrru4cSlGMzobFecnFS0F9dgFdEgmUwN+QE51+YfcfT6b5uvuG
+         pjRW9tdKwPW3ZjcAZ2TsJQAZylkS3qNBz45oXunDjGS89QvEZYXGk/d2y2hzwumz3d0R
+         wVu0unFgh272OOg3oFHkbz0u5zhTPzHad7mpG7kGf2wqHmzEka6XaPPWOcZX54j92iR5
+         KgXg==
+X-Gm-Message-State: AJIora/iN7Vph66km/XWQLmZBa/5k7gT6qq2EaV3DjZZ2iR5sw3GNx81
+        j08zeyTd7y75/0a8VSXW4FpZ0Ywm4LEi
+X-Google-Smtp-Source: AGRyM1tBddUjXNgNbie6OEGtgEB6z3OWa8S/Kr55dyHPzFPfG534mZPHiB4LDG2Y83J+mxIXAPujrw==
+X-Received: by 2002:a63:d14b:0:b0:419:57b9:d444 with SMTP id c11-20020a63d14b000000b0041957b9d444mr2129847pgj.619.1659084530521;
+        Fri, 29 Jul 2022 01:48:50 -0700 (PDT)
+Received: from localhost.localdomain ([120.239.75.76])
+        by smtp.gmail.com with ESMTPSA id w13-20020aa79a0d000000b0052b36de51cdsm2231977pfj.111.2022.07.29.01.48.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 01:48:50 -0700 (PDT)
+From:   Mingyi Kang <jerrykang026@gmail.com>
+To:     gregkh@linuxfoundation.org, martyn@welchs.me.uk,
+        manohar.vanga@gmail.com, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Cc:     Mingyi Kang <jerrykang026@gmail.com>
+Subject: [PATCH] staging: vme_user: Put quoted string in a single line
+Date:   Fri, 29 Jul 2022 16:48:06 +0800
+Message-Id: <20220729084806.22479-1-jerrykang026@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220727220832.2865794-1-irogers@google.com> <20220727220832.2865794-22-irogers@google.com>
- <CA+icZUU-AmzdkWqBCWw=izbWJfpw4GP+UUaOE6SRs3tiAtmKng@mail.gmail.com>
-In-Reply-To: <CA+icZUU-AmzdkWqBCWw=izbWJfpw4GP+UUaOE6SRs3tiAtmKng@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 29 Jul 2022 10:47:35 +0200
-Message-ID: <CA+icZUUG6GajshrWUsH-KDnwYc-C19k0hZ9uNUH3b=E32e2TUA@mail.gmail.com>
-Subject: Re: [PATCH v3 21/30] perf vendor events: Update Intel sandybridge
-To:     Ian Rogers <irogers@google.com>
-Cc:     perry.taylor@intel.com, caleb.biggers@intel.com,
-        kshipra.bopardikar@intel.com,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,362 +69,273 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 10:41 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Thu, Jul 28, 2022 at 12:09 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Update to v17, the metrics are based on TMA 4.4 full.
-> >
-> > Use script at:
-> > https://github.com/intel/event-converter-for-linux-perf/blob/master/dow=
-nload_and_gen.py
-> >
-> > to download and generate the latest events and metrics. Manually copy
-> > the sandybridge files into perf and update mapfile.csv.
-> >
-> > Tested on a non-sandybridge with 'perf test':
-> >  10: PMU events                                                      :
-> >  10.1: PMU event table sanity                                        : =
-Ok
-> >  10.2: PMU event map aliases                                         : =
-Ok
-> >  10.3: Parsing of PMU event table metrics                            : =
-Ok
-> >  10.4: Parsing of PMU event table metrics with fake PMUs             : =
-Ok
-> >
->
-> Hi Ian,
->
-> thanks for v3 patchset.
->
-> I used latest perf/core Git branch from Arnaldo's tree plus some
-> custom patches (to fix binutils v2.38.90 and opennssl-v3 issues plus
-> gnu11 tools patches) and build with LLVM-14.
->
-> When I run on my Intel SandyBridge CPU...
->
-> $ ~/bin/perf test
-> ...
->  10: PMU events                                                      :
-> 10.1: PMU event table sanity                                        : Ok
-> 10.2: PMU event map aliases                                         : Ok
-> 10.3: Parsing of PMU event table metrics                            : Ok
-> 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
-> ...
->
-> First time I ran perf with option test.
->
-> Looks that good to you?
->
+This patch resolves the follwing checkpatch warnings:
 
-Nice.
+WARNING: quoted string split across lines
++			dev_err(tsi148_bridge->parent, "VME Mailbox %d received"
++				": 0x%x\n", i, val);
 
-$~/bin/perf test list
-...
- 10: PMU events
-10:1: PMU event table sanity
-10:2: PMU event map aliases
-10:3: Parsing of PMU event table metrics
-10:4: Parsing of PMU event table metrics with fake PMUs
-...
+WARNING: quoted string split across lines
++	dev_err(tsi148_bridge->parent, "PCI Exception at address: 0x%08x:%08x, "
++		"attributes: %08x\n",
 
-$ ~/bin/perf test 10
-10: PMU events                                                      :
-10.1: PMU event table sanity                                        : Ok
-10.2: PMU event map aliases                                         : Ok
-10.3: Parsing of PMU event table metrics                            : Ok
-10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+WARNING: quoted string split across lines
++	dev_err(tsi148_bridge->parent, "PCI-X attribute reg: %08x, PCI-X split "
++		"completion reg: %08x\n",
 
-New perf lessons learned.
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "VME Bus Exception Overflow "
++			"Occurred\n");
 
--Sedat-
->
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/pmu-events/arch/x86/mapfile.csv            |  2 +-
-> >  tools/perf/pmu-events/arch/x86/sandybridge/cache.json |  2 +-
-> >  .../arch/x86/sandybridge/floating-point.json          |  2 +-
-> >  .../pmu-events/arch/x86/sandybridge/frontend.json     |  4 ++--
-> >  .../perf/pmu-events/arch/x86/sandybridge/memory.json  |  2 +-
-> >  tools/perf/pmu-events/arch/x86/sandybridge/other.json |  2 +-
-> >  .../pmu-events/arch/x86/sandybridge/pipeline.json     | 10 +++++-----
-> >  .../pmu-events/arch/x86/sandybridge/snb-metrics.json  | 11 +++++++++--
-> >  .../pmu-events/arch/x86/sandybridge/uncore-other.json |  2 +-
-> >  .../arch/x86/sandybridge/virtual-memory.json          |  2 +-
-> >  10 files changed, 23 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pm=
-u-events/arch/x86/mapfile.csv
-> > index 2f9419ee2d29..0b56c4a8a3a8 100644
-> > --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-> > +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> > @@ -19,12 +19,12 @@ GenuineIntel-6-(57|85),v9,knightslanding,core
-> >  GenuineIntel-6-AA,v1.00,meteorlake,core
-> >  GenuineIntel-6-1[AEF],v3,nehalemep,core
-> >  GenuineIntel-6-2E,v3,nehalemex,core
-> > +GenuineIntel-6-2A,v17,sandybridge,core
-> >  GenuineIntel-6-[4589]E,v24,skylake,core
-> >  GenuineIntel-6-A[56],v24,skylake,core
-> >  GenuineIntel-6-37,v13,silvermont,core
-> >  GenuineIntel-6-4D,v13,silvermont,core
-> >  GenuineIntel-6-4C,v13,silvermont,core
-> > -GenuineIntel-6-2A,v15,sandybridge,core
-> >  GenuineIntel-6-2C,v2,westmereep-dp,core
-> >  GenuineIntel-6-25,v2,westmereep-sp,core
-> >  GenuineIntel-6-2F,v2,westmereex,core
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/cache.json b/to=
-ols/perf/pmu-events/arch/x86/sandybridge/cache.json
-> > index 92a7269eb444..a1d622352131 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/cache.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/cache.json
-> > @@ -1876,4 +1876,4 @@
-> >          "SampleAfterValue": "100003",
-> >          "UMask": "0x10"
-> >      }
-> > -]
-> > \ No newline at end of file
-> > +]
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/floating-point.=
-json b/tools/perf/pmu-events/arch/x86/sandybridge/floating-point.json
-> > index 713878fd062b..eb2ff2cfdf6b 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/floating-point.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/floating-point.json
-> > @@ -135,4 +135,4 @@
-> >          "SampleAfterValue": "2000003",
-> >          "UMask": "0x1"
-> >      }
-> > -]
-> > \ No newline at end of file
-> > +]
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/frontend.json b=
-/tools/perf/pmu-events/arch/x86/sandybridge/frontend.json
-> > index fa22f9463b66..e2c82e43a2de 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/frontend.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/frontend.json
-> > @@ -176,7 +176,7 @@
-> >          "CounterMask": "1",
-> >          "EventCode": "0x79",
-> >          "EventName": "IDQ.MS_CYCLES",
-> > -        "PublicDescription": "This event counts cycles during which th=
-e microcode sequencer assisted the front-end in delivering uops.  Microcode=
- assists are used for complex instructions or scenarios that can't be handl=
-ed by the standard decoder.  Using other instructions, if possible, will us=
-ually improve performance.  See the Intel 64 and IA-32 Architectures Optimi=
-zation Reference Manual for more information.",
-> > +        "PublicDescription": "This event counts cycles during which th=
-e microcode sequencer assisted the front-end in delivering uops.  Microcode=
- assists are used for complex instructions or scenarios that can't be handl=
-ed by the standard decoder.  Using other instructions, if possible, will us=
-ually improve performance.  See the Intel(R) 64 and IA-32 Architectures Opt=
-imization Reference Manual for more information.",
-> >          "SampleAfterValue": "2000003",
-> >          "UMask": "0x30"
-> >      },
-> > @@ -311,4 +311,4 @@
-> >          "SampleAfterValue": "2000003",
-> >          "UMask": "0x1"
-> >      }
-> > -]
-> > \ No newline at end of file
-> > +]
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/memory.json b/t=
-ools/perf/pmu-events/arch/x86/sandybridge/memory.json
-> > index 931892d34076..3c283ca309f3 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/memory.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/memory.json
-> > @@ -442,4 +442,4 @@
-> >          "SampleAfterValue": "100003",
-> >          "UMask": "0x1"
-> >      }
-> > -]
-> > \ No newline at end of file
-> > +]
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/other.json b/to=
-ols/perf/pmu-events/arch/x86/sandybridge/other.json
-> > index e251f535ec09..2f873ab14156 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/other.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/other.json
-> > @@ -55,4 +55,4 @@
-> >          "SampleAfterValue": "2000003",
-> >          "UMask": "0x1"
-> >      }
-> > -]
-> > \ No newline at end of file
-> > +]
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json b=
-/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-> > index b9a3f194a00a..2c3b6c92aa6b 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-> > @@ -609,7 +609,7 @@
-> >          "UMask": "0x3"
-> >      },
-> >      {
-> > -        "BriefDescription": "Number of occurences waiting for the chec=
-kpoints in Resource Allocation Table (RAT) to be recovered after Nuke due t=
-o all other cases except JEClear (e.g. whenever a ucode assist is needed li=
-ke SSE exception, memory disambiguation, etc...).",
-> > +        "BriefDescription": "Number of occurrences waiting for the che=
-ckpoints in Resource Allocation Table (RAT) to be recovered after Nuke due =
-to all other cases except JEClear (e.g. whenever a ucode assist is needed l=
-ike SSE exception, memory disambiguation, etc...).",
-> >          "Counter": "0,1,2,3",
-> >          "CounterHTOff": "0,1,2,3,4,5,6,7",
-> >          "CounterMask": "1",
-> > @@ -652,7 +652,7 @@
-> >          "CounterHTOff": "0,1,2,3,4,5,6,7",
-> >          "EventCode": "0x03",
-> >          "EventName": "LD_BLOCKS.STORE_FORWARD",
-> > -        "PublicDescription": "This event counts loads that followed a =
-store to the same address, where the data could not be forwarded inside the=
- pipeline from the store to the load.  The most common reason why store for=
-warding would be blocked is when a load's address range overlaps with a pre=
-ceeding smaller uncompleted store.  See the table of not supported store fo=
-rwards in the Intel 64 and IA-32 Architectures Optimization Reference Manua=
-l.  The penalty for blocked store forwarding is that the load must wait for=
- the store to complete before it can be issued.",
-> > +        "PublicDescription": "This event counts loads that followed a =
-store to the same address, where the data could not be forwarded inside the=
- pipeline from the store to the load.  The most common reason why store for=
-warding would be blocked is when a load's address range overlaps with a pre=
-ceeding smaller uncompleted store.  See the table of not supported store fo=
-rwards in the Intel(R) 64 and IA-32 Architectures Optimization Reference Ma=
-nual.  The penalty for blocked store forwarding is that the load must wait =
-for the store to complete before it can be issued.",
-> >          "SampleAfterValue": "100003",
-> >          "UMask": "0x2"
-> >      },
-> > @@ -778,7 +778,7 @@
-> >          "CounterMask": "1",
-> >          "EventCode": "0x59",
-> >          "EventName": "PARTIAL_RAT_STALLS.FLAGS_MERGE_UOP_CYCLES",
-> > -        "PublicDescription": "This event counts the number of cycles s=
-pent executing performance-sensitive flags-merging uops. For example, shift=
- CL (merge_arith_flags). For more details, See the Intel 64 and IA-32 Archi=
-tectures Optimization Reference Manual.",
-> > +        "PublicDescription": "This event counts the number of cycles s=
-pent executing performance-sensitive flags-merging uops. For example, shift=
- CL (merge_arith_flags). For more details, See the Intel(R) 64 and IA-32 Ar=
-chitectures Optimization Reference Manual.",
-> >          "SampleAfterValue": "2000003",
-> >          "UMask": "0x20"
-> >      },
-> > @@ -797,7 +797,7 @@
-> >          "CounterHTOff": "0,1,2,3,4,5,6,7",
-> >          "EventCode": "0x59",
-> >          "EventName": "PARTIAL_RAT_STALLS.SLOW_LEA_WINDOW",
-> > -        "PublicDescription": "This event counts the number of cycles w=
-ith at least one slow LEA uop being allocated. A uop is generally considere=
-d as slow LEA if it has three sources (for example, two sources and immedia=
-te) regardless of whether it is a result of LEA instruction or not. Example=
-s of the slow LEA uop are or uops with base, index, and offset source opera=
-nds using base and index reqisters, where base is EBR/RBP/R13, using RIP re=
-lative or 16-bit addressing modes. See the Intel 64 and IA-32 Architectures=
- Optimization Reference Manual for more details about slow LEA instructions=
-.",
-> > +        "PublicDescription": "This event counts the number of cycles w=
-ith at least one slow LEA uop being allocated. A uop is generally considere=
-d as slow LEA if it has three sources (for example, two sources and immedia=
-te) regardless of whether it is a result of LEA instruction or not. Example=
-s of the slow LEA uop are or uops with base, index, and offset source opera=
-nds using base and index reqisters, where base is EBR/RBP/R13, using RIP re=
-lative or 16-bit addressing modes. See the Intel(R) 64 and IA-32 Architectu=
-res Optimization Reference Manual for more details about slow LEA instructi=
-ons.",
-> >          "SampleAfterValue": "2000003",
-> >          "UMask": "0x40"
-> >      },
-> > @@ -1209,4 +1209,4 @@
-> >          "SampleAfterValue": "2000003",
-> >          "UMask": "0x1"
-> >      }
-> > -]
-> > \ No newline at end of file
-> > +]
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.jso=
-n b/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
-> > index c8e7050d9c26..ae7ed267b2a2 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
-> > @@ -124,7 +124,7 @@
-> >          "MetricName": "FLOPc_SMT"
-> >      },
-> >      {
-> > -        "BriefDescription": "Instruction-Level-Parallelism (average nu=
-mber of uops executed when there is at least 1 uop executed)",
-> > +        "BriefDescription": "Instruction-Level-Parallelism (average nu=
-mber of uops executed when there is execution) per-core",
-> >          "MetricExpr": "UOPS_DISPATCHED.THREAD / (( cpu@UOPS_DISPATCHED=
-.CORE\\,cmask\\=3D1@ / 2 ) if #SMT_on else cpu@UOPS_DISPATCHED.CORE\\,cmask=
-\\=3D1@)",
-> >          "MetricGroup": "Backend;Cor;Pipeline;PortsUtil",
-> >          "MetricName": "ILP"
-> > @@ -141,6 +141,12 @@
-> >          "MetricGroup": "Summary;TmaL1",
-> >          "MetricName": "Instructions"
-> >      },
-> > +    {
-> > +        "BriefDescription": "Average number of Uops retired in cycles =
-where at least one uop has retired.",
-> > +        "MetricExpr": "UOPS_RETIRED.RETIRE_SLOTS / cpu@UOPS_RETIRED.RE=
-TIRE_SLOTS\\,cmask\\=3D1@",
-> > +        "MetricGroup": "Pipeline;Ret",
-> > +        "MetricName": "Retire"
-> > +    },
-> >      {
-> >          "BriefDescription": "Fraction of Uops delivered by the DSB (ak=
-a Decoded ICache; or Uop Cache)",
-> >          "MetricExpr": "IDQ.DSB_UOPS / (( IDQ.DSB_UOPS + LSD.UOPS + IDQ=
-.MITE_UOPS + IDQ.MS_UOPS ) )",
-> > @@ -163,7 +169,8 @@
-> >          "BriefDescription": "Giga Floating Point Operations Per Second=
-",
-> >          "MetricExpr": "( ( 1 * ( FP_COMP_OPS_EXE.SSE_SCALAR_SINGLE + F=
-P_COMP_OPS_EXE.SSE_SCALAR_DOUBLE ) + 2 * FP_COMP_OPS_EXE.SSE_PACKED_DOUBLE =
-+ 4 * ( FP_COMP_OPS_EXE.SSE_PACKED_SINGLE + SIMD_FP_256.PACKED_DOUBLE ) + 8=
- * SIMD_FP_256.PACKED_SINGLE ) / 1000000000 ) / duration_time",
-> >          "MetricGroup": "Cor;Flops;HPC",
-> > -        "MetricName": "GFLOPs"
-> > +        "MetricName": "GFLOPs",
-> > +        "PublicDescription": "Giga Floating Point Operations Per Secon=
-d. Aggregate across all supported options of: FP precisions, scalar and vec=
-tor instructions, vector-width and AMX engine."
-> >      },
-> >      {
-> >          "BriefDescription": "Average Frequency Utilization relative no=
-minal frequency",
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/uncore-other.js=
-on b/tools/perf/pmu-events/arch/x86/sandybridge/uncore-other.json
-> > index 6278068908cf..88f1e326205f 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/uncore-other.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/uncore-other.json
-> > @@ -82,10 +82,10 @@
-> >      {
-> >          "BriefDescription": "This 48-bit fixed counter counts the UCLK=
- cycles.",
-> >          "Counter": "Fixed",
-> > +        "EventCode": "0xff",
-> >          "EventName": "UNC_CLOCK.SOCKET",
-> >          "PerPkg": "1",
-> >          "PublicDescription": "This 48-bit fixed counter counts the UCL=
-K cycles.",
-> > -        "UMask": "0x01",
-> >          "Unit": "ARB"
-> >      }
-> >  ]
-> > diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/virtual-memory.=
-json b/tools/perf/pmu-events/arch/x86/sandybridge/virtual-memory.json
-> > index 4dd136d00a10..98362abba1a7 100644
-> > --- a/tools/perf/pmu-events/arch/x86/sandybridge/virtual-memory.json
-> > +++ b/tools/perf/pmu-events/arch/x86/sandybridge/virtual-memory.json
-> > @@ -146,4 +146,4 @@
-> >          "SampleAfterValue": "100007",
-> >          "UMask": "0x20"
-> >      }
-> > -]
-> > \ No newline at end of file
-> > +]
-> > --
-> > 2.37.1.359.gd136c6c3e2-goog
-> >
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Can't get assigned pci irq "
++			"vector %02X\n", pdev->irq);
+
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Failed to allocate mem "
++			"resource for window %d size 0x%lx start 0x%lx\n",
+
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Invalid VME Window "
++			"alignment\n");
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Size must be non-zero for "
++			"enabled windows\n");
+
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Unable to allocate memory for "
++			"resource\n");
+
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Invalid VME Offset "
++			"alignment\n");
+
+WARNING: quoted string split across lines
++		dev_warn(tsi148_bridge->parent, "Currently not setting "
++			"Broadcast Select Registers\n");
+
+WARNING: quoted string split across lines
++		dev_err(dev, "Currently not setting Broadcast Select "
++			"Registers\n");
+
+WARNING: quoted string split across lines
++		dev_err(dev, "Currently not setting Broadcast Select "
++			"Registers\n");
+
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Descriptor not aligned to 8 "
++			"byte boundary as required: %p\n",
+
+warning: quoted string split across lines
++			dev_err(tsi148_bridge->parent, "location monitor "
++				"callback attached, can't reset\n");
+
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Location monitor not properly "
++			"configured\n");
+
+WARNING: quoted string split across lines
++		dev_err(tsi148_bridge->parent, "Failed to allocate memory for "
++			"CR/CSR image\n");
+
+WARNING: quoted string split across lines
++			dev_err(tsi148_bridge->parent, "Configuring flush image"
++				" failed\n");
+
+Signed-off-by: Mingyi Kang <jerrykang026@gmail.com>
+---
+ drivers/staging/vme_user/vme_tsi148.c | 57 +++++++++------------------
+ 1 file changed, 19 insertions(+), 38 deletions(-)
+
+diff --git a/drivers/staging/vme_user/vme_tsi148.c b/drivers/staging/vme_user/vme_tsi148.c
+index 956476213241..40bb432861c8 100644
+--- a/drivers/staging/vme_user/vme_tsi148.c
++++ b/drivers/staging/vme_user/vme_tsi148.c
+@@ -125,8 +125,7 @@ static u32 tsi148_MB_irqhandler(struct vme_bridge *tsi148_bridge, u32 stat)
+ 	for (i = 0; i < 4; i++) {
+ 		if (stat & TSI148_LCSR_INTS_MBS[i]) {
+ 			val = ioread32be(bridge->base +	TSI148_GCSR_MBOX[i]);
+-			dev_err(tsi148_bridge->parent, "VME Mailbox %d received"
+-				": 0x%x\n", i, val);
++			dev_err(tsi148_bridge->parent, "VME Mailbox %d received: 0x%x\n", i, val);
+ 			serviced |= TSI148_LCSR_INTC_MBC[i];
+ 		}
+ 	}
+@@ -143,14 +142,12 @@ static u32 tsi148_PERR_irqhandler(struct vme_bridge *tsi148_bridge)
+ 
+ 	bridge = tsi148_bridge->driver_priv;
+ 
+-	dev_err(tsi148_bridge->parent, "PCI Exception at address: 0x%08x:%08x, "
+-		"attributes: %08x\n",
++	dev_err(tsi148_bridge->parent, "PCI Exception at address: 0x%08x:%08x, attributes: %08x\n",
+ 		ioread32be(bridge->base + TSI148_LCSR_EDPAU),
+ 		ioread32be(bridge->base + TSI148_LCSR_EDPAL),
+ 		ioread32be(bridge->base + TSI148_LCSR_EDPAT));
+ 
+-	dev_err(tsi148_bridge->parent, "PCI-X attribute reg: %08x, PCI-X split "
+-		"completion reg: %08x\n",
++	dev_err(tsi148_bridge->parent, "PCI-X attribute reg: %08x, PCI-X split completion reg: %08x\n",
+ 		ioread32be(bridge->base + TSI148_LCSR_EDPXA),
+ 		ioread32be(bridge->base + TSI148_LCSR_EDPXS));
+ 
+@@ -181,8 +178,7 @@ static u32 tsi148_VERR_irqhandler(struct vme_bridge *tsi148_bridge)
+ 
+ 	/* Check for exception register overflow (we have lost error data) */
+ 	if (error_attrib & TSI148_LCSR_VEAT_VEOF) {
+-		dev_err(tsi148_bridge->parent, "VME Bus Exception Overflow "
+-			"Occurred\n");
++		dev_err(tsi148_bridge->parent, "VME Bus Exception Overflow Occurred\n");
+ 	}
+ 
+ 	if (err_chk)
+@@ -317,8 +313,7 @@ static int tsi148_irq_init(struct vme_bridge *tsi148_bridge)
+ 			     IRQF_SHARED,
+ 			     driver_name, tsi148_bridge);
+ 	if (result) {
+-		dev_err(tsi148_bridge->parent, "Can't get assigned pci irq "
+-			"vector %02X\n", pdev->irq);
++		dev_err(tsi148_bridge->parent, "Can't get assigned pci irq vector %02X\n", pdev->irq);
+ 		return result;
+ 	}
+ 
+@@ -529,8 +524,7 @@ static int tsi148_slave_set(struct vme_slave_resource *image, int enabled,
+ 		return -EINVAL;
+ 	}
+ 	if (pci_offset_low & (granularity - 1)) {
+-		dev_err(tsi148_bridge->parent, "Invalid PCI Offset "
+-			"alignment\n");
++		dev_err(tsi148_bridge->parent, "Invalid PCI Offset alignment\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -762,8 +756,7 @@ static int tsi148_alloc_resource(struct vme_master_resource *image,
+ 		&image->bus_resource, size, 0x10000, PCIBIOS_MIN_MEM,
+ 		0, NULL, NULL);
+ 	if (retval) {
+-		dev_err(tsi148_bridge->parent, "Failed to allocate mem "
+-			"resource for window %d size 0x%lx start 0x%lx\n",
++		dev_err(tsi148_bridge->parent, "Failed to allocate mem resource for window %d size 0x%lx start 0x%lx\n",
+ 			image->number, (unsigned long)size,
+ 			(unsigned long)image->bus_resource.start);
+ 		goto err_resource;
+@@ -827,15 +820,13 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
+ 
+ 	/* Verify input data */
+ 	if (vme_base & 0xFFFF) {
+-		dev_err(tsi148_bridge->parent, "Invalid VME Window "
+-			"alignment\n");
++		dev_err(tsi148_bridge->parent, "Invalid VME Window alignment\n");
+ 		retval = -EINVAL;
+ 		goto err_window;
+ 	}
+ 
+ 	if ((size == 0) && (enabled != 0)) {
+-		dev_err(tsi148_bridge->parent, "Size must be non-zero for "
+-			"enabled windows\n");
++		dev_err(tsi148_bridge->parent, "Size must be non-zero for enabled windows\n");
+ 		retval = -EINVAL;
+ 		goto err_window;
+ 	}
+@@ -849,8 +840,7 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
+ 	retval = tsi148_alloc_resource(image, size);
+ 	if (retval) {
+ 		spin_unlock(&image->lock);
+-		dev_err(tsi148_bridge->parent, "Unable to allocate memory for "
+-			"resource\n");
++		dev_err(tsi148_bridge->parent, "Unable to allocate memory for resource\n");
+ 		goto err_res;
+ 	}
+ 
+@@ -890,8 +880,7 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
+ 	}
+ 	if (vme_offset_low & 0xFFFF) {
+ 		spin_unlock(&image->lock);
+-		dev_err(tsi148_bridge->parent, "Invalid VME Offset "
+-			"alignment\n");
++		dev_err(tsi148_bridge->parent, "Invalid VME Offset alignment\n");
+ 		retval = -EINVAL;
+ 		goto err_gran;
+ 	}
+@@ -937,8 +926,7 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
+ 		temp_ctl |= TSI148_LCSR_OTAT_TM_2eSST;
+ 	}
+ 	if (cycle & VME_2eSSTB) {
+-		dev_warn(tsi148_bridge->parent, "Currently not setting "
+-			"Broadcast Select Registers\n");
++		dev_warn(tsi148_bridge->parent, "Currently not setting Broadcast Select Registers\n");
+ 		temp_ctl &= ~TSI148_LCSR_OTAT_TM_M;
+ 		temp_ctl |= TSI148_LCSR_OTAT_TM_2eSSTB;
+ 	}
+@@ -1451,8 +1439,7 @@ static int tsi148_dma_set_vme_src_attributes(struct device *dev, __be32 *attr,
+ 		val |= TSI148_LCSR_DSAT_TM_2eSST;
+ 
+ 	if (cycle & VME_2eSSTB) {
+-		dev_err(dev, "Currently not setting Broadcast Select "
+-			"Registers\n");
++		dev_err(dev, "Currently not setting Broadcast Select Registers\n");
+ 		val |= TSI148_LCSR_DSAT_TM_2eSSTB;
+ 	}
+ 
+@@ -1550,8 +1537,7 @@ static int tsi148_dma_set_vme_dest_attributes(struct device *dev, __be32 *attr,
+ 		val |= TSI148_LCSR_DDAT_TM_2eSST;
+ 
+ 	if (cycle & VME_2eSSTB) {
+-		dev_err(dev, "Currently not setting Broadcast Select "
+-			"Registers\n");
++		dev_err(dev, "Currently not setting Broadcast Select Registers\n");
+ 		val |= TSI148_LCSR_DDAT_TM_2eSSTB;
+ 	}
+ 
+@@ -1639,8 +1625,7 @@ static int tsi148_dma_list_add(struct vme_dma_list *list,
+ 
+ 	/* Test descriptor alignment */
+ 	if ((unsigned long)&entry->descriptor & 0x7) {
+-		dev_err(tsi148_bridge->parent, "Descriptor not aligned to 8 "
+-			"byte boundary as required: %p\n",
++		dev_err(tsi148_bridge->parent, "Descriptor not aligned to 8 byte boundary as required: %p\n",
+ 			&entry->descriptor);
+ 		retval = -EINVAL;
+ 		goto err_align;
+@@ -1935,8 +1920,7 @@ static int tsi148_lm_set(struct vme_lm_resource *lm, unsigned long long lm_base,
+ 	for (i = 0; i < lm->monitors; i++) {
+ 		if (bridge->lm_callback[i]) {
+ 			mutex_unlock(&lm->mtx);
+-			dev_err(tsi148_bridge->parent, "Location monitor "
+-				"callback attached, can't reset\n");
++			dev_err(tsi148_bridge->parent, "Location monitor callback attached, can't reset\n");
+ 			return -EBUSY;
+ 		}
+ 	}
+@@ -2051,8 +2035,7 @@ static int tsi148_lm_attach(struct vme_lm_resource *lm, int monitor,
+ 	lm_ctl = ioread32be(bridge->base + TSI148_LCSR_LMAT);
+ 	if ((lm_ctl & (TSI148_LCSR_LMAT_PGM | TSI148_LCSR_LMAT_DATA)) == 0) {
+ 		mutex_unlock(&lm->mtx);
+-		dev_err(tsi148_bridge->parent, "Location monitor not properly "
+-			"configured\n");
++		dev_err(tsi148_bridge->parent, "Location monitor not properly configured\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -2196,8 +2179,7 @@ static int tsi148_crcsr_init(struct vme_bridge *tsi148_bridge,
+ 						  VME_CRCSR_BUF_SIZE,
+ 						  &bridge->crcsr_bus, GFP_KERNEL);
+ 	if (!bridge->crcsr_kernel) {
+-		dev_err(tsi148_bridge->parent, "Failed to allocate memory for "
+-			"CR/CSR image\n");
++		dev_err(tsi148_bridge->parent, "Failed to allocate memory for CR/CSR image\n");
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -2237,8 +2219,7 @@ static int tsi148_crcsr_init(struct vme_bridge *tsi148_bridge,
+ 			(vstat * 0x80000), 0x80000, VME_CRCSR, VME_SCT,
+ 			VME_D16);
+ 		if (retval)
+-			dev_err(tsi148_bridge->parent, "Configuring flush image"
+-				" failed\n");
++			dev_err(tsi148_bridge->parent, "Configuring flush image failed\n");
+ 	}
+ 
+ 	return 0;
+-- 
+2.25.1
+

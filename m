@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDC558499D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0407A5849A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbiG2CKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
+        id S232261AbiG2CLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiG2CKv (ORCPT
+        with ESMTP id S232133AbiG2CLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:10:51 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A843B7968B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1659060648;
-        bh=rcLqsq6zGpUEl1DJZyTxmkc4RA2vFFdgR8IfyXZm0Dc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=GPsVCk1/p7ltOX+uH/HxodPxmQWkyIead67nGhczHUtcTfpmTFWZ3B2lPco12X2Of
-         nD0qWxD9gO39ZElxd8Jye75tLV5GHz5z2dJTn9Grqf/ciikMdUkAYAizKmv7+IW3hx
-         mhEi3Gv6Wo+WfditXfB4vQLadTRx+dpCqvWsHmto=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id EE85766939;
-        Thu, 28 Jul 2022 22:10:46 -0400 (EDT)
-Message-ID: <5ecc0813d90990d6db7b401ddff57ec847874d14.camel@xry111.site>
-Subject: [PATCH v3 4/4] LoongArch: Support modules with new relocation types
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     loongarch@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Date:   Fri, 29 Jul 2022 10:10:44 +0800
-In-Reply-To: <bb7824d39a694b13069718c2b8193379f79229b4.camel@xry111.site>
-References: <bb7824d39a694b13069718c2b8193379f79229b4.camel@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
+        Thu, 28 Jul 2022 22:11:16 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B706779EE7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:11:15 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id o4so3251117vsc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2WcddWcFdt7fAP9+AWjH8FT0p8wf4uBGYcr1CKODSic=;
+        b=T87Qq00pcI1Wcz7YeyyoSQI07uEY91bTIhm50/q8dPnHemS2oTTLFpbS85qVQgfzKe
+         oicMFDhqSGTIbnAnayOGQyNCNhkGqjAv6PFH12UEl4ZuRohXz3PvapyBpZFhCgY4QvW7
+         bqSTNKEe6n/k7+jOvRnH6+szE6ERYA/DHdLiw2n3W0V3SM30a6R9wEGF65wOujiPFrEe
+         f4gNbnnMreOzzlMTj5ir4EKYG0bUssrXLQxfjgGRuDh9iV4zsJ2Gy14ftM/cvG9JT0vB
+         IlBJnLf3XXtwt8peVFTqoBY3zji4PHoNc0V7GLImLhHPH1n8VSvW6Sf2vTyLisGD+o2f
+         U+zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2WcddWcFdt7fAP9+AWjH8FT0p8wf4uBGYcr1CKODSic=;
+        b=xo7Vt9pr9gAB+8koFHSJ9GDE7Rzz6STSeRfNo38UxRUj0IslNXAbgxsiXZZ8mNN4Zp
+         9p7BiFHLvGmposwDmhIL/o6eSSLtJ5XlmqdA5h7qllH1S2xyZyD9jLrMOSvRrC1lEfqP
+         UPlaIbWTGpJkpF6YUSqujxXvXzBVWwXJ0eGZ2MePwCAui9FpFVGq4YTAAllrgcvpakcC
+         tw4iw13UDkokHV5zuV3L/B9mdLYQvl5mO9uPQgI9f9sqHDIsoGdUF999IBW57s9+YI60
+         4ZtFMSnbfsaQEH0Vr4hNMY02Dy8e8nvJtDLwbwmZJU0eVcm/pFO+IT146OxyGIX6ZAC4
+         6pGw==
+X-Gm-Message-State: AJIora8jMwFQOgXiqOU7629m/kPZwCByWTY7SLAjT2FuIp6H6OHKRl3/
+        cBp6e/5JvKfm8JKFbSULkWdLcKrfKqBTURkXfgb5Rw==
+X-Google-Smtp-Source: AGRyM1ubhYZ7kSrnERbL6wT+pDfjGCL3qN7xOpT8+q6L3xJutPXRsQP+/EEE+PL99SJ4h4DhxzWVgAqLh4lWywl0CFY=
+X-Received: by 2002:a05:6102:a30:b0:358:58ed:3d2 with SMTP id
+ 16-20020a0561020a3000b0035858ed03d2mr549619vsb.32.1659060674829; Thu, 28 Jul
+ 2022 19:11:14 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20220728091341.20820-1-tujinjiang@bytedance.com> <YuJ2UeYVpSe+21Xs@dhcp22.suse.cz>
+In-Reply-To: <YuJ2UeYVpSe+21Xs@dhcp22.suse.cz>
+From:   Jinjiang Tu <tujinjiang@bytedance.com>
+Date:   Fri, 29 Jul 2022 10:11:04 +0800
+Message-ID: <CAF77dw_j+4ziV+wuXw0WWSTHqs0Usy-TDzC91skPxcPfKT66-Q@mail.gmail.com>
+Subject: Re: Re: [PATCH v2] vmscan: Do not free nr_deferred for memcg aware shrinkers
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Yang Shi <shy828301@gmail.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,210 +65,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If GAS 2.40 and/or GCC 13 is used to build the kernel, the modules will
-contain R_LARCH_B26, R_LARCH_PCALA_HI20, R_LARCH_PCALA_LO12,
-R_LARCH_GOT_PC_HI20, and R_LARCH_GOT_PC_LO12 relocations.  Support them
-in the module loader to allow a kernel built with latest toolchain
-capable to load the modules.
-
-Signed-off-by: Xi Ruoyao <xry111@xry111.site>
----
- arch/loongarch/include/asm/elf.h        | 37 +++++++++++
- arch/loongarch/kernel/module-sections.c | 12 +++-
- arch/loongarch/kernel/module.c          | 85 +++++++++++++++++++++++++
- 3 files changed, 132 insertions(+), 2 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/=
-elf.h
-index 5f3ff4781fda..7af0cebf28d7 100644
---- a/arch/loongarch/include/asm/elf.h
-+++ b/arch/loongarch/include/asm/elf.h
-@@ -74,6 +74,43 @@
- #define R_LARCH_SUB64				56
- #define R_LARCH_GNU_VTINHERIT			57
- #define R_LARCH_GNU_VTENTRY			58
-+#define R_LARCH_B16				64
-+#define R_LARCH_B21				65
-+#define R_LARCH_B26				66
-+#define R_LARCH_ABS_HI20			67
-+#define R_LARCH_ABS_LO12			68
-+#define R_LARCH_ABS64_LO20			69
-+#define R_LARCH_ABS64_HI12			70
-+#define R_LARCH_PCALA_HI20			71
-+#define R_LARCH_PCALA_LO12			72
-+#define R_LARCH_PCALA64_LO20			73
-+#define R_LARCH_PCALA64_HI12			74
-+#define R_LARCH_GOT_PC_HI20			75
-+#define R_LARCH_GOT_PC_LO12			76
-+#define R_LARCH_GOT64_PC_LO20			77
-+#define R_LARCH_GOT64_PC_HI12			78
-+#define R_LARCH_GOT_HI20			79
-+#define R_LARCH_GOT_LO12			80
-+#define R_LARCH_GOT64_LO20			81
-+#define R_LARCH_GOT64_HI12			82
-+#define R_LARCH_TLS_LE_HI20			83
-+#define R_LARCH_TLS_LE_LO12			84
-+#define R_LARCH_TLS_LE64_LO20			85
-+#define R_LARCH_TLS_LE64_HI12			86
-+#define R_LARCH_TLS_IE_PC_HI20			87
-+#define R_LARCH_TLS_IE_PC_LO12			88
-+#define R_LARCH_TLS_IE64_PC_LO20		89
-+#define R_LARCH_TLS_IE64_PC_HI12		90
-+#define R_LARCH_TLS_IE_HI20			91
-+#define R_LARCH_TLS_IE_LO12			92
-+#define R_LARCH_TLS_IE64_LO20			93
-+#define R_LARCH_TLS_IE64_HI12			94
-+#define R_LARCH_TLS_LD_PC_HI20			95
-+#define R_LARCH_TLS_LD_HI20			96
-+#define R_LARCH_TLS_GD_PC_HI20			97
-+#define R_LARCH_TLS_GD_HI20			98
-+#define R_LARCH_32_PCREL			99
-+#define R_LARCH_RELAX				100
-=20
- #ifndef ELF_ARCH
-=20
-diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kerne=
-l/module-sections.c
-index 36a77771d18c..8c0e4ad048cc 100644
---- a/arch/loongarch/kernel/module-sections.c
-+++ b/arch/loongarch/kernel/module-sections.c
-@@ -76,12 +76,20 @@ static void count_max_entries(Elf_Rela *relas, int num,
-=20
- 	for (i =3D 0; i < num; i++) {
- 		type =3D ELF_R_TYPE(relas[i].r_info);
--		if (type =3D=3D R_LARCH_SOP_PUSH_PLT_PCREL) {
-+		switch (type) {
-+		case R_LARCH_SOP_PUSH_PLT_PCREL:
-+		case R_LARCH_B26:
- 			if (!duplicate_rela(relas, i))
- 				(*plts)++;
--		} else if (type =3D=3D R_LARCH_SOP_PUSH_GPREL)
-+			break;
-+		case R_LARCH_SOP_PUSH_GPREL:
-+		case R_LARCH_GOT_PC_HI20:
- 			if (!duplicate_rela(relas, i))
- 				(*gots)++;
-+			break;
-+		default:
-+			/* Do nothing. */
-+		}
- 	}
- }
-=20
-diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.=
-c
-index 3ac4fbb5f109..c7b40150e1f0 100644
---- a/arch/loongarch/kernel/module.c
-+++ b/arch/loongarch/kernel/module.c
-@@ -291,6 +291,86 @@ static int apply_r_larch_add_sub(struct module *mod, u=
-32 *location, Elf_Addr v,
- 	}
- }
-=20
-+static int apply_r_larch_b26(struct module *mod, u32 *location, Elf_Addr v=
-,
-+			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-+{
-+	ptrdiff_t offset =3D (void *)v - (void *)location;
-+	union loongarch_instruction *insn =3D (union loongarch_instruction *)loca=
-tion;
-+
-+	if (offset >=3D SZ_128M)
-+		v =3D module_emit_plt_entry(mod, v);
-+
-+	if (offset < -SZ_128M)
-+		v =3D module_emit_plt_entry(mod, v);
-+
-+	offset =3D (void *)v - (void *)location;
-+
-+	if (offset & 3) {
-+		pr_err("module %s: jump offset =3D 0x%llx unaligned! dangerous R_LARCH_B=
-26 (%u) relocation\n",
-+				mod->name, (long long)offset, type);
-+		return -ENOEXEC;
-+	}
-+
-+	if (!signed_imm_check(offset, 28)) {
-+		pr_err("module %s: jump offset =3D 0x%llx overflow! dangerous R_LARCH_B2=
-6 (%u) relocation\n",
-+				mod->name, (long long)offset, type);
-+		return -ENOEXEC;
-+	}
-+
-+	offset >>=3D 2;
-+	insn->reg0i26_format.immediate_l =3D offset & 0xffff;
-+	insn->reg0i26_format.immediate_h =3D (offset >> 16) & 0x3ff;
-+	return 0;
-+}
-+
-+static int apply_r_larch_pcala_hi20(struct module *mod, u32 *location,
-+		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-+		unsigned int type)
-+{
-+	ptrdiff_t offset =3D (void *)((v + 0x800) & ~0xfff) -
-+		(void *)((Elf_Addr)location & ~0xfff);
-+	union loongarch_instruction *insn =3D (union loongarch_instruction *)loca=
-tion;
-+
-+	if (!signed_imm_check(offset, 32)) {
-+		pr_err("module %s: PCALA offset =3D 0x%llx does not fit in 32-bit signed=
- and is unsupported by kernel! dangerous %s (%u) relocation\n",
-+				mod->name, (long long)offset, __func__, type);
-+		return -ENOEXEC;
-+	}
-+
-+	insn->reg1i20_format.immediate =3D (offset >> 12) & 0xfffff;
-+	return 0;
-+}
-+
-+static int apply_r_larch_got_pc_hi20(struct module *mod, u32 *location,
-+		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-+		unsigned int type)
-+{
-+	Elf_Addr got =3D module_emit_got_entry(mod, v);
-+
-+	return apply_r_larch_pcala_hi20(mod, location, got, rela_stack,
-+			rela_stack_top, type);
-+}
-+
-+static int apply_r_larch_pcala_lo12(struct module *mod, u32 *location,
-+		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-+		unsigned int type)
-+{
-+	union loongarch_instruction *insn =3D (union loongarch_instruction *)loca=
-tion;
-+
-+	insn->reg2i12_format.immediate =3D v & 0xfff;
-+	return 0;
-+}
-+
-+static int apply_r_larch_got_pc_lo12(struct module *mod, u32 *location,
-+		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-+		unsigned int type)
-+{
-+	Elf_Addr got =3D module_emit_got_entry(mod, v);
-+
-+	return apply_r_larch_pcala_lo12(mod, location, got, rela_stack,
-+			rela_stack_top, type);
-+}
-+
- /*
-  * reloc_handlers_rela() - Apply a particular relocation to a module
-  * @mod: the module to apply the reloc to
-@@ -321,6 +401,11 @@ static reloc_rela_handler reloc_rela_handlers[] =3D {
- 	[R_LARCH_SOP_SUB ... R_LARCH_SOP_IF_ELSE] 	     =3D apply_r_larch_sop,
- 	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] =3D apply_r_larch_so=
-p_imm_field,
- 	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     =3D apply_r_larch_add_sub,
-+	[R_LARCH_B26]					     =3D apply_r_larch_b26,
-+	[R_LARCH_PCALA_HI20]				     =3D apply_r_larch_pcala_hi20,
-+	[R_LARCH_PCALA_LO12]				     =3D apply_r_larch_pcala_lo12,
-+	[R_LARCH_GOT_PC_HI20]				     =3D apply_r_larch_got_pc_hi20,
-+	[R_LARCH_GOT_PC_LO12]				     =3D apply_r_larch_got_pc_lo12,
- };
-=20
- int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
---=20
-2.37.0
-
-
+On Thu, Jul 28, 2022 at 7:43 PM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Thu 28-07-22 17:13:41, tujinjiang@bytedance.com wrote:
+> > From: Jinjiang Tu <tujinjiang@bytedance.com>
+> >
+> > When a memcg aware shrinker is registered by register_shrinker(),
+> > shrinker->nr_deferred will not be initialized. But when the shrinker
+> > is unregistered by unregister_shrinker(), shrinker->nr_deferred
+> > will be freed.
+> >
+> > Luckily, the memcg aware shrinkers in the current kernel are pre-zeroed.
+> > But a new memcg aware shrinker may be added in the future, and we should
+> > not assume the shrinker is pre-zeroed.
+> >
+> > Another unregister API free_prealloced_shrinker() does not assume the
+> > shrinker is pre-zered and free shrinker->nr_deferred only if it is
+> > not memcg aware. So unregister_shrinker() should do like
+> > free_prealloced_shrinker().
+> >
+> > Signed-off-by: Jinjiang Tu <tujinjiang@bytedance.com>
+> > ---
+> >  mm/vmscan.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index f7d9a683e3a7..f8a9a5349b6e 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -675,8 +675,11 @@ void unregister_shrinker(struct shrinker *shrinker)
+> >       down_write(&shrinker_rwsem);
+> >       list_del(&shrinker->list);
+> >       shrinker->flags &= ~SHRINKER_REGISTERED;
+> > -     if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+> > +     if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
+> >               unregister_memcg_shrinker(shrinker);
+> > +             up_write(&shrinker_rwsem);
+> > +             return;
+> > +     }
+> >       up_write(&shrinker_rwsem);
+> >
+> >       kfree(shrinker->nr_deferred);
+>
+> Can we get rid of the code duplication?
+> ---
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index f7d9a683e3a7..308279414fe8 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -632,12 +632,10 @@ int prealloc_shrinker(struct shrinker *shrinker)
+>         return 0;
+>  }
+>
+> -void free_prealloced_shrinker(struct shrinker *shrinker)
+> +static void __free_shrinker(struct shrinker *shrinker)
+>  {
+>         if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
+> -               down_write(&shrinker_rwsem);
+>                 unregister_memcg_shrinker(shrinker);
+> -               up_write(&shrinker_rwsem);
+>                 return;
+>         }
+>
+> @@ -645,6 +643,13 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+>         shrinker->nr_deferred = NULL;
+>  }
+>
+> +void free_prealloced_shrinker(struct shrinker *shrinker)
+> +{
+> +       down_write(&shrinker_rwsem);
+> +       __free_shrinker(shrinker);
+> +       up_write(&shrinker_rwsem);
+> +}
+> +
+>  void register_shrinker_prepared(struct shrinker *shrinker)
+>  {
+>         down_write(&shrinker_rwsem);
+> @@ -675,12 +680,9 @@ void unregister_shrinker(struct shrinker *shrinker)
+>         down_write(&shrinker_rwsem);
+>         list_del(&shrinker->list);
+>         shrinker->flags &= ~SHRINKER_REGISTERED;
+> -       if (shrinker->flags & SHRINKER_MEMCG_AWARE)
+> -               unregister_memcg_shrinker(shrinker);
+> -       up_write(&shrinker_rwsem);
+>
+> -       kfree(shrinker->nr_deferred);
+> -       shrinker->nr_deferred = NULL;
+> +       __free_shrinker(shrinker);
+> +       up_write(&shrinker_rwsem);
+>  }
+>  EXPORT_SYMBOL(unregister_shrinker);
+>
+> --
+> Michal Hocko
+> SUSE Labs
+Yes, the code is clearer.

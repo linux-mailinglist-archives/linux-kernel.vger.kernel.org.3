@@ -2,149 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC454584934
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64148584935
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 03:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbiG2Ato (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 20:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
+        id S232531AbiG2BAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 21:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiG2Atm (ORCPT
+        with ESMTP id S229535AbiG2BAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 20:49:42 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB2E796BA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:49:42 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26T0Q76E002672;
-        Fri, 29 Jul 2022 00:49:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=Ezgnbwj2vZCxnalAwrv1h3iJGqONGw5JDecLQclWyw0=;
- b=QPFwBQYDeupPAMXTnL51YMVWKTlk2JT4+mBXznTyBcHwjXSKsOFC/va30X7MDC5xiIdc
- Gs+U4jyi08L3FyduHJ6Be+TUSNjdq6/fbdMfBXcw4xKI/KYRsrcKWz5iKY2N47zYbeYV
- 0UxlSfBVSdTIMIs9aFpVEV0ZgyiaKAfFtZqLI+NChl1ar5fdmRzN0vHAf2VXOrG199tD
- z48KTGFpEs6T0VtL659nbu7nx9sPjHX67QvnH2UZscjqwQBmGJVoZSa4aju7hZMZ5DF4
- //TJJhAp4z8RZRg0Daz+RdqMjZwv7eFDtQiS8+zMta1l06TQU7DJS4owm4Uiyy9BsFhy 1Q== 
-Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hm2s787c9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Jul 2022 00:49:27 +0000
-Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 26T0nOnV032290;
-        Fri, 29 Jul 2022 00:49:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hk4du4a65-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 29 Jul 2022 00:49:24 +0000
-Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26T0nONX032284;
-        Fri, 29 Jul 2022 00:49:24 GMT
-Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 26T0nNNd032283;
-        Fri, 29 Jul 2022 00:49:23 +0000
-Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
-        id 07BB72102E48; Fri, 29 Jul 2022 08:49:21 +0800 (CST)
-From:   Kassey Li <quic_yingangl@quicinc.com>
-To:     akpm@linux-foundation.org, vbabka@kernel.org
-Cc:     Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
-        iamjoonsoo.kim@lge.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v3] mm/page_owner.c: add llseek for page_owner
-Date:   Fri, 29 Jul 2022 08:49:20 +0800
-Message-Id: <20220729004920.8544-1-quic_yingangl@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _FafCE0wTpoj5N29BN_IzOlcOHWC-ksS
-X-Proofpoint-GUID: _FafCE0wTpoj5N29BN_IzOlcOHWC-ksS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-28_06,2022-07-28_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- mlxlogscore=778 priorityscore=1501 suspectscore=0 adultscore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207290001
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 21:00:14 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81205F80
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 18:00:12 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id f65so2815757pgc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 18:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=USR2zvqLThZbyU5A3Qws0c7W/e7hlltOBwwvVk3Sj2g=;
+        b=HT82TppWLVwueR0E/3j3UDnFBXBgTuLCOeGo3TkS8HaubmuKaiTh9JM217y+wu0938
+         tRbjooD8r7hxC7T5K98Zo3a7rP9pGWHuNcYi6guo3sNoLf+ZQI0WMkQr1AE46bNSmODj
+         k+oQDsiTvdvXA0zVltRYrPWFE/R0r+i69a/5H/3tA7X6hB3FlTJfYwYoo9WwQlDdBtjp
+         Wd3xtj0F7c4Up//ZKhb/3TraJz2U9Gu+MMVstmYIZZpcVYxUdlzhJfqBQ/UVjkW+UJWq
+         zSWo4sR/S3Sv4FLNjUeL6DZiQ6J12Ka6zTihhkIDGe5VVghLKL2dnICPXzjv0obNnMF8
+         C4eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=USR2zvqLThZbyU5A3Qws0c7W/e7hlltOBwwvVk3Sj2g=;
+        b=cfC4CJ7Xcr1u+enS2Mi6GCC56Ymk4rgABd4IDd03iCKSwFgrOkxlJrqPlKJwaZHk9E
+         KReiuoHAK/vZmwBjfK1JS26tprnpJGCzuMgwlem5CGbaGB2Ys+GWOPGF32Qh4OI5HOMy
+         1oIlANfK42AhN247OgpF/Ib3waakFuH5ivzZny/5jvqb6Dj3EP4thTvMLDrIFSk4EyUP
+         PnWhb0JqrpvUHrUQblutqUFOafQpCP9NGMLuRaE0CQbWiqyVMpfEJRrGEhZzkmPW/de2
+         z6FsVOsK2RghBWE9RjK/pz3s+aB/XrYS7pL0KdNy87Oca+7kVVS4SOq3TrRZScfCTxPu
+         wf+w==
+X-Gm-Message-State: AJIora8/FRVPV11WmCV7LylYOpGJmJLxczHU49s7NVETN/luf7bjyqD0
+        6m+5qPIUelSBvD6eleIRsNM=
+X-Google-Smtp-Source: AGRyM1si/DG3TbMHqNqDoIa0ug0YoGaiincrRbirQlQefwA0R5+uG1WpX1JVsOdnULZbN/qJrjFNAA==
+X-Received: by 2002:a63:1220:0:b0:411:f661:f819 with SMTP id h32-20020a631220000000b00411f661f819mr1064703pgl.250.1659056412359;
+        Thu, 28 Jul 2022 18:00:12 -0700 (PDT)
+Received: from [192.168.0.10] (KD106168128197.ppp-bb.dion.ne.jp. [106.168.128.197])
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090276ca00b0016d5cf36ff4sm1893361plt.289.2022.07.28.18.00.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 18:00:11 -0700 (PDT)
+Message-ID: <9db2f4c2-cc41-9c06-e0ec-7480529cad13@gmail.com>
+Date:   Fri, 29 Jul 2022 10:00:08 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/6] mtd: spi-nor: remember full JEDEC flash ID
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+References: <20220513133520.3945820-1-michael@walle.cc>
+ <20220513133520.3945820-4-michael@walle.cc>
+From:   Takahiro Kuwano <tkuw584924@gmail.com>
+In-Reply-To: <20220513133520.3945820-4-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is usage to dump a given cma region page_owner
-instead of all page's.
+On 5/13/2022 10:35 PM, Michael Walle wrote:
+> At the moment, we print the JEDEC ID that is stored in our database. The
+> generic flash support won't have such an entry in our database. To find
+> out the JEDEC ID later we will have to cache it. There is also another
+> advantage: If the flash is found in the database, the ID could be
+> truncated because the ID of the entry is used which can be shorter. Some
+> flashes still holds valuable information in the bytes after the JEDEC ID
+> and come in handy during debugging of when coping with INFO6() entries.
+> These are not accessible for now.
+> 
+> Save a copy of the ID bytes after reading and display it via debugfs.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/mtd/spi-nor/core.c    | 5 +++++
+>  drivers/mtd/spi-nor/debugfs.c | 2 +-
+>  include/linux/mtd/spi-nor.h   | 3 +++
+>  3 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index ce5d69317d46..65cd8e668579 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -1664,6 +1664,11 @@ static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
+>  		return ERR_PTR(ret);
+>  	}
+>  
+> +	/* Cache the complete flash ID. */
+> +	nor->id = devm_kmemdup(nor->dev, id, SPI_NOR_MAX_ID_LEN, GFP_KERNEL);
+> +	if (!nor->id)
+> +		return ERR_PTR(-ENOMEM);
+> +
+>  	info = spi_nor_match_id(nor, id);
+>  	if (!info) {
+>  		dev_err(nor->dev, "unrecognized JEDEC id bytes: %*ph\n",
+> diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
+> index eaf84f7a0676..23d51e7ba0a7 100644
+> --- a/drivers/mtd/spi-nor/debugfs.c
+> +++ b/drivers/mtd/spi-nor/debugfs.c
+> @@ -81,7 +81,7 @@ static int spi_nor_params_show(struct seq_file *s, void *data)
+>  	int i;
+>  
+>  	seq_printf(s, "name\t\t%s\n", info->name);
+> -	seq_printf(s, "id\t\t%*ph\n", info->id_len, info->id);
+> +	seq_printf(s, "id\t\t%*ph\n", SPI_NOR_MAX_ID_LEN, nor->id);
+>  	string_get_size(params->size, 1, STRING_UNITS_2, buf, sizeof(buf));
+>  	seq_printf(s, "size\t\t%s\n", buf);
+>  	seq_printf(s, "write size\t%u\n", params->writesize);
+> diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
+> index 1ede4c89805a..4dd6cd7389ca 100644
+> --- a/include/linux/mtd/spi-nor.h
+> +++ b/include/linux/mtd/spi-nor.h
+> @@ -349,6 +349,8 @@ struct spi_nor_flash_parameter;
+>   * @bouncebuf:		bounce buffer used when the buffer passed by the MTD
+>   *                      layer is not DMA-able
+>   * @bouncebuf_size:	size of the bounce buffer
+> + * @id:			The flash's ID bytes. Always contains
+> + *			SPI_NOR_MAX_ID_LEN bytes.
+>   * @info:		SPI NOR part JEDEC MFR ID and other info
+>   * @manufacturer:	SPI NOR manufacturer
+>   * @addr_width:		number of address bytes
+> @@ -379,6 +381,7 @@ struct spi_nor {
+>  	struct spi_mem		*spimem;
+>  	u8			*bouncebuf;
+>  	size_t			bouncebuf_size;
+> +	u8			*id;
+>  	const struct flash_info	*info;
+>  	const struct spi_nor_manufacturer *manufacturer;
+>  	u8			addr_width;
 
-This change allows to specify a ppos as start_pfn
-by fseek.
+Reviewed-by: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
 
-Any invalid ppos will be skipped, so it did not
-broken the origin dump feature.
-
-Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
----
- mm/page_owner.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index e4c6f3f1695b..231b1877af99 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -497,8 +497,8 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 		return -EINVAL;
- 
- 	page = NULL;
--	pfn = min_low_pfn + *ppos;
- 
-+	pfn = *ppos;
- 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
- 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
- 		pfn++;
-@@ -561,7 +561,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 			continue;
- 
- 		/* Record the next PFN to read in the file offset */
--		*ppos = (pfn - min_low_pfn) + 1;
-+		*ppos = pfn + 1;
- 
- 		return print_page_owner(buf, count, pfn, page,
- 				page_owner, handle);
-@@ -570,6 +570,21 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 	return 0;
- }
- 
-+static loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
-+{
-+	loff_t retval = 0;
-+	switch (whence) {
-+		case SEEK_CUR:
-+		case SEEK_SET:
-+			file->f_pos = offset;
-+			break;
-+		default:
-+			retval = -ENXIO;
-+	}
-+
-+	return retval;
-+}
-+
- static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
- {
- 	unsigned long pfn = zone->zone_start_pfn;
-@@ -660,6 +675,7 @@ static void init_early_allocated_pages(void)
- 
- static const struct file_operations proc_page_owner_operations = {
- 	.read		= read_page_owner,
-+	.llseek 	= llseek_page_owner,
- };
- 
- static int __init pageowner_init(void)
--- 
-2.17.1
+Thanks,
+Takahiro
 

@@ -2,114 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E217E585450
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA01585453
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238288AbiG2RRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
+        id S238306AbiG2RSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238233AbiG2RRh (ORCPT
+        with ESMTP id S234120AbiG2RSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:17:37 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2B983225
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:17:36 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id y9so3768200qtv.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r70+w3al1ROQRPaBuXhJ0H0gDgyn6xF2NDddnTHpRs4=;
-        b=LFTPTqnSo04+CdBlyLO7kZ0C8b+w7+bWYN1mbK3ONMZMbJt8dUCb9jeg7gJDfSDkRN
-         9qnzuEFFCVHGoT60xc8NeJ1Qy5LJxvNxzFwb8lWVZa8UwpL23X57Qjn6BX4M02aAYbdh
-         3G8bYNMSP8iubA6h05BZ5bNhFPKAZGue0J1VzwSNePd1kKvl+nxb3oLsqrXDD6bVKsAl
-         IaA+XphwurQgLv9EaG8oJLOCNh07LSZ0TTAJtHnvosmGlSNSuL+ISOZz59IlNRE0Wk13
-         Ui/HO9fWb6A7rfzZvlgTKc5FXRsH0m01u5Ct8k0iEFX9dgUVxJET3I728bk8Pm14oHSv
-         poVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r70+w3al1ROQRPaBuXhJ0H0gDgyn6xF2NDddnTHpRs4=;
-        b=d0ZEeiJXN2MH7X33NjjXmfkoonWtUWB5NlxAgkXyWtvOYpfwBDGziTdDTjVBK5VQCB
-         W4CoiJl4EL6wsrBKmPyM70KB6b/4Iyg7SQ9+xBhmgFvgcLQdRvbz40lRbVjA4bvdwXBK
-         ws74K/FU0+dWSFMuFgPxw0YkHQEGFWLrc6b6Jew4jqNIfdHLHPy0BJhO7qG0xKWp7Cy4
-         gVL795YpOlLkOPbaFKolffkTmkkC1i//e3cgK98Ua8BW1dPKVG3x3eHnEY+gOvbtTbxY
-         w9u6ll9K112BEi9wVZYGvT5bwQVIcOk9UpSMxN5eXXd02N6BITG6r5qxk/W2Xm1GZ4MR
-         AATg==
-X-Gm-Message-State: AJIora/grz16Hct3ZtQ9FPcXqEOwfCl1L7D1kqwDIh9t+9EUAgpQ3zlh
-        tvJpxb5UcRGbLs548erlT6W/IAWGosEM8z62YrRXUA==
-X-Google-Smtp-Source: AGRyM1t1ywN+fdskFuVcHLCpuuwhji63H8NqBqdnqvimInFkWaZp2IR5kFMd7JR6tttLcj+Q/fP6E4ONlzBjTpGDIUc=
-X-Received: by 2002:a05:622a:190c:b0:31e:fc7b:e017 with SMTP id
- w12-20020a05622a190c00b0031efc7be017mr4350291qtc.168.1659115055597; Fri, 29
- Jul 2022 10:17:35 -0700 (PDT)
+        Fri, 29 Jul 2022 13:18:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F109381489;
+        Fri, 29 Jul 2022 10:18:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6409B828C5;
+        Fri, 29 Jul 2022 17:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C15C433C1;
+        Fri, 29 Jul 2022 17:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659115107;
+        bh=e2HT1ixOuJoMonAGRNwr4kq3x5uFCATLmS986J+K4m8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=N4/Ovl3eVPp1FDYa5h1Ucx7QhWp9a8MJWxt1TzfWEQnnp3hmh8UVT7XtndgTbXUoz
+         tR3iaeYkjB9DNIxgz+msU6R8Wuw17Sxxg/CzJUdUZbDMXcDVkLyKu2BmXyh1ROOGYA
+         3OAW46UBhYsAvSH386Iwzs1xxRSx7jOgvzsdHBLI8ALWMU3jO7ID2/lxnE0HPPfPCK
+         5Cq77PztEvAL2CZJ3EH7e8X2UPumz+O1t/b2wGStWURZXr1C/Kef5BR6tIarlaW3iQ
+         KT10UVBTBzT0s6O6oUKgKLgVb4ualYaeTqx4jHkQx/M9Boi0nRJQG2xOW3HiSjwcoi
+         sZ9wilDCPE1sw==
+Date:   Fri, 29 Jul 2022 12:18:25 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v3] PCI: qcom: Allow L1 and its sub states
+Message-ID: <20220729171825.GA465668@bhelgaas>
 MIME-Version: 1.0
-References: <20220729054958.2151520-1-zengjx95@gmail.com> <e186cbd5-4c22-8069-717d-35bb8f8e4fff@fb.com>
-In-Reply-To: <e186cbd5-4c22-8069-717d-35bb8f8e4fff@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Fri, 29 Jul 2022 10:17:24 -0700
-Message-ID: <CA+khW7jRNNnRmAWKqSy3=d6v7aNiVeQv-KUvW-7LC187w1kycA@mail.gmail.com>
-Subject: Re: [PATCH] bpf/verifier: fix control flow issues in __reg64_bound_u32()
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Zeng Jingxiang <zengjx95@gmail.com>, ast@kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, kpsingh@kernel.org,
-        sdf@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zeng Jingxiang <linuszeng@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1657886366-32685-1-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 10:15 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 7/28/22 10:49 PM, Zeng Jingxiang wrote:
-> > From: Zeng Jingxiang <linuszeng@tencent.com>
-> >
-> > This greater-than-or-equal-to-zero comparison of an unsigned value
-> > is always true. "a >= U32_MIN".
-> > 1632  return a >= U32_MIN && a <= U32_MAX;
-> >
-> > Fixes: b9979db83401 ("bpf: Fix propagation of bounds from 64-bit min/max into 32-bit and var_off.")
-> > Signed-off-by: Zeng Jingxiang <linuszeng@tencent.com>
-> > ---
-> >   kernel/bpf/verifier.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 0efbac0fd126..dd67108fb1d7 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -1629,7 +1629,7 @@ static bool __reg64_bound_s32(s64 a)
-> >
-> >   static bool __reg64_bound_u32(u64 a)
-> >   {
-> > -     return a >= U32_MIN && a <= U32_MAX;
-> > +     return a <= U32_MAX;
-> >   }
->
-> I cannot find the related link. But IIRC, Alexei commented that
-> the code is written this way to express the intention (within
-> 32bit bounds) so this patch is unnecessary...
->
+On Fri, Jul 15, 2022 at 05:29:25PM +0530, Krishna chaitanya chundru wrote:
+> Allow L1 and its sub-states in the qcom pcie driver.
+> By default this is disabled in the qcom specific hardware.
+> So enabling it explicitly only for controllers belonging to
+> 2_7_0.
+> 
+> This patch will not affect any link capability registers, this
+> will allow the link transitions to L1 and its sub states only
+> if they are already supported.
+> 
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Yeah, I agree with Yonghong. I was about to reply.
+Applied to pci/ctrl/qcom for v5.20, thanks!
 
-Jingxiang, you are absolutely correct that a <= U32_MAX is redundant,
-but I feel having both sides checked explicitly makes code more
-readable.
-
-> >
-> >   static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
+> ----
+> 
+> Changes since v1 & v2:
+> 	- Update in the commit text only.
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index a7202f0..5ef444f 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -41,6 +41,9 @@
+>  #define L23_CLK_RMV_DIS				BIT(2)
+>  #define L1_CLK_RMV_DIS				BIT(1)
+>  
+> +#define PCIE20_PARF_PM_CTRL			0x20
+> +#define REQ_NOT_ENTR_L1				BIT(5)
+> +
+>  #define PCIE20_PARF_PHY_CTRL			0x40
+>  #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
+>  #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
+> @@ -1261,6 +1264,11 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+>  	val |= BIT(4);
+>  	writel(val, pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
+>  
+> +	/* Enable L1 and L1ss */
+> +	val = readl(pcie->parf + PCIE20_PARF_PM_CTRL);
+> +	val &= ~REQ_NOT_ENTR_L1;
+> +	writel(val, pcie->parf + PCIE20_PARF_PM_CTRL);
+> +
+>  	if (IS_ENABLED(CONFIG_PCI_MSI)) {
+>  		val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
+>  		val |= BIT(31);
+> -- 
+> 2.7.4
+> 

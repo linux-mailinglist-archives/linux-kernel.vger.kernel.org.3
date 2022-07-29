@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB70584DC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAB5584DC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235374AbiG2JFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 05:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S235586AbiG2JFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 05:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235431AbiG2JFf (ORCPT
+        with ESMTP id S235485AbiG2JFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 05:05:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C97D2610F
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 02:05:34 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oHLvo-0006wl-0v; Fri, 29 Jul 2022 11:05:16 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oHLvl-0000iK-61; Fri, 29 Jul 2022 11:05:13 +0200
-Date:   Fri, 29 Jul 2022 11:05:13 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: dsa: microchip: don't try do read Gbit
- registers on non Gbit chips
-Message-ID: <20220729090513.GA10850@pengutronix.de>
-References: <20220728131725.40492-1-o.rempel@pengutronix.de>
- <YuKOTzS89D2+O8Ye@lunn.ch>
+        Fri, 29 Jul 2022 05:05:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2D177A65;
+        Fri, 29 Jul 2022 02:05:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6A75ECE2586;
+        Fri, 29 Jul 2022 09:05:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2401C433C1;
+        Fri, 29 Jul 2022 09:05:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659085537;
+        bh=wvE5EHGmPigV4oD45oTwiHHUQ4e3yEtd8+Rek83/iZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u4XFhk2DKQ9ZhFdCgE/O1FOABLAVZrwk5XV7UmcIVw0wNVMKeJ8oCvvhbPIuruugH
+         lVJ16TpQyhX33sT2ppx+Igx96tQu+Ozi3VhO8Fp70k/RFxgMPRPKZr5MSGiWsvJ9GD
+         Wn1kY+HYPAecHr7gurrqG2aWeXQUfEWMgIiVr7Ps=
+Date:   Fri, 29 Jul 2022 11:05:34 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     yangyicong@hisilicon.com, alexander.shishkin@linux.intel.com,
+        leo.yan@linaro.org, james.clark@arm.com, will@kernel.org,
+        robin.murphy@arm.com, acme@kernel.org, peterz@infradead.org,
+        corbet@lwn.net, mathieu.poirier@linaro.org, mark.rutland@arm.com,
+        jonathan.cameron@huawei.com, john.garry@huawei.com,
+        helgaas@kernel.org, lorenzo.pieralisi@arm.com,
+        suzuki.poulose@arm.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
+        linux-doc@vger.kernel.org, prime.zeng@huawei.com,
+        liuqi115@huawei.com, zhangshaokun@hisilicon.com,
+        linuxarm@huawei.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v11 2/8] hwtracing: hisi_ptt: Add trace function support
+ for HiSilicon PCIe Tune and Trace device
+Message-ID: <YuOi3i0XHV++z1YI@kroah.com>
+References: <20220721130116.43366-1-yangyicong@huawei.com>
+ <20220721130116.43366-3-yangyicong@huawei.com>
+ <YuKZKGKMz+UcbETM@kroah.com>
+ <33f372f6-36bf-f84e-bca0-86347fa4d579@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuKOTzS89D2+O8Ye@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <33f372f6-36bf-f84e-bca0-86347fa4d579@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,55 +66,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 03:25:35PM +0200, Andrew Lunn wrote:
-> On Thu, Jul 28, 2022 at 03:17:25PM +0200, Oleksij Rempel wrote:
-> > Do not try to read not existing or wrong register on chips without
-> > GBIT_SUPPORT.
+On Fri, Jul 29, 2022 at 03:29:14PM +0800, Yicong Yang wrote:
+> >> +	/*
+> >> +	 * Handle the interrupt on the same cpu which starts the trace to avoid
+> >> +	 * context mismatch. Otherwise we'll trigger the WARN from the perf
+> >> +	 * core in event_function_local().
+> >> +	 */
+> >> +	WARN_ON(irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
+> >> +				 cpumask_of(cpu)));
 > > 
-> > Fixes: c2e866911e25 ("net: dsa: microchip: break KSZ9477 DSA driver into two files")
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  drivers/net/dsa/microchip/ksz9477.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > If this hits, you just crashed the machine :(
 > > 
-> > diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> > index c73bb6d383ad..f6bbd9646c85 100644
-> > --- a/drivers/net/dsa/microchip/ksz9477.c
-> > +++ b/drivers/net/dsa/microchip/ksz9477.c
-> > @@ -316,7 +316,13 @@ void ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
-> >  			break;
-> >  		}
-> >  	} else {
-> > -		ksz_pread16(dev, addr, 0x100 + (reg << 1), &val);
-> > +		/* No gigabit support.  Do not read wrong registers. */
-> > +		if (!(dev->features & GBIT_SUPPORT) &&
-> > +		    (reg == MII_CTRL1000 || reg == MII_ESTATUS ||
-> > +		     reg == MII_STAT1000))
 > 
-> Does this actually happen?
+> We'll likely to have a calltrace here without crash the machine and reboot in
+> most time, unless user has set panic_on_warn.
+
+Again, please do not use WARN_ON for this, please read:
+	https://elixir.bootlin.com/linux/v5.19-rc8/source/include/asm-generic/bug.h#L74
+
+If you want a traceback (what would you do with that?), then call the
+function to give you that.  Don't crash people's boxes.
+
+> > Please properly recover from errors if you hit them, like this.  Don't
+> > just give up and throw a message to userspace and watch the machine
+> > reboot with all data lost.
+> > 
+> > Same for the other WARN_ON() instances here.  Handle the error and
+> > report it properly up the call chain.
+> > 
 > 
-> If i remember this code correctly, it tries to make the oddly looking
-> PHY look like a normal PHY. phylib is then used to drive the PHY?
-> 
-> If i have that correct, why is phylib trying to read these registers?
-> It should know there is no 1G support, and should skip them.
+> The driver use WARN_ON() in two places, once in pmu::start() and another in cpu teardown's
+> callback, both when the irq_set_affinity() failed. This is common to behave so when driver
+> fails to set irq affinity in pmu::start() and cpu_teardown():
 
-It looks like currently undocumented silicon errata. According to the
-data sheet, the BMSR_ESTATEN should not be set BMSR_ERCAP, but this bits
-are set.
+Don't repeat broken patterns please.
 
-The question is what is the proper place to implement it. There is same
-PHYid for most KSZ switch PHYs, it is no possible to detect it by PHYid.
-I have following options:
-- add chips specific quirk in the ksz9477_r_phy(), just remove
-  BMSR_ESTATEN and BMSR_ERCAP.
-- notify about errata over get_phy_flags and implement get_caps quirk in
-  the PHY driver.
+> yangyicong@ubuntu:~/mainline_linux/linux/drivers$ grep -rn WARN_ON ./ | grep irq_set_affinity
+> ./perf/arm_smmuv3_pmu.c:649:    WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(target)));
+> ./perf/arm_smmuv3_pmu.c:895:    WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)));
+> ./perf/arm-ccn.c:1214:          WARN_ON(irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)));
+> ./perf/qcom_l2_pmu.c:796:       WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(cpu)));
+> ./perf/qcom_l2_pmu.c:834:       WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(target)));
+> ./perf/arm_dmc620_pmu.c:624:    WARN_ON(irq_set_affinity(irq->irq_num, cpumask_of(target)));
+> ./perf/fsl_imx8_ddr_perf.c:674: WARN_ON(irq_set_affinity(pmu->irq, cpumask_of(pmu->cpu)));
+> ./perf/xgene_pmu.c:1793:        WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
+> ./perf/xgene_pmu.c:1826:        WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
+> ./perf/hisilicon/hisi_pcie_pmu.c:658:           WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(cpu)));
+> ./perf/hisilicon/hisi_pcie_pmu.c:684:   WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(target)));
+> ./perf/hisilicon/hisi_uncore_pmu.c:495: WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(cpu)));
+> ./perf/hisilicon/hisi_uncore_pmu.c:528: WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(target)));
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Great, you can fix all of these up as well any time :)
+
+thanks,
+
+greg k-h

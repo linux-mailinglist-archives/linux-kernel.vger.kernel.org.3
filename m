@@ -2,135 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBC3584B93
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D46584B96
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234540AbiG2GR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S234615AbiG2GSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234402AbiG2GRZ (ORCPT
+        with ESMTP id S234550AbiG2GSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:17:25 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49822BEC;
-        Thu, 28 Jul 2022 23:17:24 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id f7so4038983pjp.0;
-        Thu, 28 Jul 2022 23:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EW499GBzYHaTH/WArZ0WtZvIkRlpsncxTw1RlPqz+v8=;
-        b=bBJrwZNNbNwZOSdpiHnZjxTBlhq5e5F5z/aB01/7Rhm7XVlQWB/jv1YB3Yg3stPpPN
-         SmPojYXgxob/8myvBqE/AYKB3hUIDzGgtgzp4td+2Rutu5SZSMSBz+TEPl7HNs7Bb9MW
-         W7TCxTINNO2IXJYHAUFDEo60ceS/hW+jhm95xlptfVEjnS/+i/uxEzpBJqVXlteEWYKP
-         MLSVJZ2NRzFuZR5K2IulKBp8EOOR/C3KOurSc/13nA+jBRKeS6G6Ni3gVaAmjbINYeTP
-         Y/exdADOpBiQOL0wbDkY7ixd3HtrsRWGX3QW7Rcr/xwq05d0Ejbdfk37De6Lis+ytz3+
-         Mzvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EW499GBzYHaTH/WArZ0WtZvIkRlpsncxTw1RlPqz+v8=;
-        b=cPmxhGU7MgqV4EBa4XWT5LuS360COaAYZ6cDzOzjw8SmwjaJ1rTeBi3L+mFbxZE6vS
-         DZZBOxxfbSv13xQrsElyP7O1Ee8NmkOjgT+KiyavRF84YVFLxHPqwX0oNdyCBIG7wcQP
-         4HXBZy/2TPS+Uk1Ml+ct/Snyc/3TJ9F8rJQifEr6WKMhhGqucrFEkMt36QSE4PzbQPn0
-         y9iYeBZtcA4w+D7ztS40tlnNGpTEbDTctwEXrisw9PDPucuw10AUC2P6TFhs+JzvOX47
-         nd2s87rEcXApCbW+oQd16cUPfixPX7jNKY6LS7gQHVbb5Ul/+HuTO5IeEu67SDSfXrHd
-         ggJQ==
-X-Gm-Message-State: ACgBeo17wSnN1z33QLUnK4eooIxonOjnmRpB2YaxDgyDCEzcj0SBt3Qc
-        9lTKE01qpSBls2DN+3OTgBcrpewOZyFK1U10NVc=
-X-Google-Smtp-Source: AA6agR5CfpBYT1/n0Fz3b0mpL30Y1BQpcR5ZJ1q53vOkI+o8r7h1QJKT9bGnP/JXhqgwA8TQcF5sWeEJfeZ5+jaoGc0=
-X-Received: by 2002:a17:902:f646:b0:168:e2da:8931 with SMTP id
- m6-20020a170902f64600b00168e2da8931mr2450692plg.84.1659075444381; Thu, 28 Jul
- 2022 23:17:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-13-peterwu.pub@gmail.com>
- <CAHp75Vf85_uzA9fRxTizbPJxODcXFpM4wuU6DxP2j9UA47B_2g@mail.gmail.com>
-In-Reply-To: <CAHp75Vf85_uzA9fRxTizbPJxODcXFpM4wuU6DxP2j9UA47B_2g@mail.gmail.com>
-From:   szuni chen <szunichen@gmail.com>
-Date:   Fri, 29 Jul 2022 14:17:13 +0800
-Message-ID: <CA+hk2fYcw0szJ7bBvfEjtyUE_Z61_A1vFWmPSdhe-gmd5jbC6g@mail.gmail.com>
-Subject: Re: [PATCH v6 12/13] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
+        Fri, 29 Jul 2022 02:18:03 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3554D12AE5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:18:02 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26T61jeZ001082;
+        Fri, 29 Jul 2022 06:17:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=Xtxiki/EPMi4MAjwNLuKgeSTBr+MppvzMGFAOZ67pUw=;
+ b=hz1z2Ph09Aifx53FCC9wrCuiOLcAaaLUY5D28nko6JesxduB9s2GS35D227Vz4nPTih2
+ UX5kp13FdHwCqlaBYsAIcwk7fHav1AVTulS0CTu8JavBZyxHtKFqDrzq5k+9UbWDT+BP
+ lMgIAwNN5tJCpiLW/HmIbOhggVFgCP/XcOrUjPndU3grnlKX85kWvWFTdb9JcZHAO6ax
+ e9hnpPxNen9rhXNjdkV0efiTXNNvjcZzXAB4XNL5jiVFUeuMxQyCtg6g5rmNFdf9jsXS
+ x6++iNHA1MnPioLtGurxlQZjbSsH6gdrpItSz63FzEZs7UyaxI/6v4zyRTAXdtCY2Thb vA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hm9x1rg0b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 06:17:47 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26T62vnF009581;
+        Fri, 29 Jul 2022 06:17:47 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hm9x1rfyw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 06:17:47 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26T65uTo013507;
+        Fri, 29 Jul 2022 06:17:46 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma03dal.us.ibm.com with ESMTP id 3hg9794u5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 06:17:46 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26T6Hj4K42336750
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Jul 2022 06:17:45 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A7FE136059;
+        Fri, 29 Jul 2022 06:17:45 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D30913605E;
+        Fri, 29 Jul 2022 06:17:40 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.86.244])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Jul 2022 06:17:40 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v11 0/8] mm/demotion: Memory tiers and demotion
+In-Reply-To: <87a68smqov.fsf@yhuang6-desk2.ccr.corp.intel.com>
+References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
+ <87a68smqov.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Date:   Fri, 29 Jul 2022 11:47:38 +0530
+Message-ID: <87edy4sarh.fsf@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ev1QFyMJhyf9eAV1KQSx-1o3DvFlAxe9
+X-Proofpoint-GUID: oRmxRDiqmTdaBijarp5k21uis49r95UK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-28_06,2022-07-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ malwarescore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 adultscore=0
+ spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207290023
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=
-=8825=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=884:51=E5=AF=AB=E9=81=93=
-=EF=BC=9A
+"Huang, Ying" <ying.huang@intel.com> writes:
+
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 >
-> On Fri, Jul 22, 2022 at 12:25 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> >
-> > From: Alice Chen <alice_chen@richtek.com>
-> >
-> > The MediaTek MT6370 is a highly-integrated smart power management IC,
-> > which includes a single cell Li-Ion/Li-Polymer switching battery
-> > charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
-> > LED current sources, a RGB LED driver, a backlight WLED driver,
-> > a display bias driver and a general LDO for portable devices.
-> >
-> > The Flash LED in MT6370 has 2 channels and support torch/strobe mode.
-> > Add the support of MT6370 FLASH LED.
-> >
-> > Signed-off-by: Alice Chen <alice_chen@richtek.com>
+>> The current kernel has the basic memory tiering support: Inactive pages on a
+>> higher tier NUMA node can be migrated (demoted) to a lower tier NUMA node to
+>> make room for new allocations on the higher tier NUMA node. Frequently accessed
+>> pages on a lower tier NUMA node can be migrated (promoted) to a higher tier NUMA
+>> node to improve the performance.
+>>
+>> In the current kernel, memory tiers are defined implicitly via a demotion path
+>> relationship between NUMA nodes, which is created during the kernel
+>> initialization and updated when a NUMA node is hot-added or hot-removed. The
+>> current implementation puts all nodes with CPU into the top tier, and builds the
+>> tier hierarchy tier-by-tier by establishing the per-node demotion targets based
+>> on the distances between nodes.
+>>
+>> This current memory tier kernel interface needs to be improved for several
+>> important use cases:
+>>
+>> * The current tier initialization code always initializes each memory-only NUMA
+>>   node into a lower tier. But a memory-only NUMA node may have a high
+>>   performance memory device (e.g. a DRAM device attached via CXL.mem or a
+>>   DRAM-backed memory-only node on a virtual machine) and should be put into a
+>>   higher tier.
+>>
+>> * The current tier hierarchy always puts CPU nodes into the top tier. But on a
+>>   system with HBM (e.g. GPU memory) devices, these memory-only HBM NUMA nodes
+>>   should be in the top tier, and DRAM nodes with CPUs are better to be placed
+>>   into the next lower tier.
+>>
+>> * Also because the current tier hierarchy always puts CPU nodes into the top
+>>   tier, when a CPU is hot-added (or hot-removed) and triggers a memory node from
+>>   CPU-less into a CPU node (or vice versa), the memory tier hierarchy gets
+>>   changed, even though no memory node is added or removed. This can make the
+>>   tier hierarchy unstable and make it difficult to support tier-based memory
+>>   accounting.
+>>
+>> * A higher tier node can only be demoted to selected nodes on the next lower
+>>   tier as defined by the demotion path, not any other node from any lower tier.
+>>   This strict, hard-coded demotion order does not work in all use cases (e.g.
+>>   some use cases may want to allow cross-socket demotion to another node in the
+>>   same demotion tier as a fallback when the preferred demotion node is out of
+>>   space), and has resulted in the feature request for an interface to override
+>>   the system-wide, per-node demotion order from the userspace. This demotion
+>>   order is also inconsistent with the page allocation fallback order when all
+>>   the nodes in a higher tier are out of space: The page allocation can fall back
+>>   to any node from any lower tier, whereas the demotion order doesn't allow
+>>   that.
+>>
+>> This patch series make the creation of memory tiers explicit under
+>> the control of device driver.
+>>
+>> Memory Tier Initialization
+>> ==========================
+>>
+>> Linux kernel presents memory devices as NUMA nodes and each memory device is of
+>> a specific type. The memory type of a device is represented by its abstract 
+>> distance. A memory tier corresponds to a range of abstract distance. This allows
+>> for classifying memory devices with a specific performance range into a memory
+>> tier.
+>>
+>> By default, all memory nodes are assigned to the default tier with
+>> abstract distance 512.
+>>
+>> A device driver can move its memory nodes from the default tier. For example,
+>> PMEM can move its memory nodes below the default tier, whereas GPU can move its
+>> memory nodes above the default tier.
+>>
+>> The kernel initialization code makes the decision on which exact tier a memory
+>> node should be assigned to based on the requests from the device drivers as well
+>> as the memory device hardware information provided by the firmware.
+>>
+>> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
 >
-> This SoB chain is wrong. Prioritize and read Submitting Patches!
->
-Hi Andy,
+> Some patch description of [0/8] is same as that of [1/8] originally.  It
+> appears that you revised [1/8], but forget to revise [0/8] too.  Please
+> do that.
 
-After reading the Submitted Patches,
-ChiaEn Wu wasn't involved in the development but he submitted the patch,
-So, ChiaEn Wu <chiaen_wu@richtek.com> should be the last SoB, right?
-I will revise SoB to
+I just sent v12 making sure smaller value of abstract distance imply
+faster(higher) memory tier. I missed in that in v11. 
 
-Signed-off-by: SzuNi Chen <alice_chen@richtek.com>
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-
-If there is anything else I need to fix, please let me know. Thank you.
-
-
-Best Regards,
-Szuni Chen
+-aneesh

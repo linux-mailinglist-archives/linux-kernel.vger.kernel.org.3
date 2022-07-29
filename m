@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71926585430
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1183E58543D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237665AbiG2RHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S233281AbiG2RMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbiG2RH2 (ORCPT
+        with ESMTP id S232488AbiG2RMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:07:28 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11B579EE1;
-        Fri, 29 Jul 2022 10:07:25 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso8979394pjo.1;
-        Fri, 29 Jul 2022 10:07:25 -0700 (PDT)
+        Fri, 29 Jul 2022 13:12:14 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E466C106
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:12:10 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id d1so2490699qvs.0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=mcGjaEjlp9E6N37UMib26cBF56AyQFK+2CInJ6FUTCo=;
-        b=qHCdQY3WlD0nJ+rn80athOrlbowIL0rs8FhkpgPJ9TYkDkOSEweR4R8EDy0KurACP1
-         n59UAWHzz6oBskR78bMIkTVPeug25bs4DvwgH6PBj6JwTR3BuZCKX4jZYxcJQRoTSsoB
-         EO102Ezzrh4+I044jkXZiL02C9FLZRyslCHTMx1j1WtJYGMxqJIWdGY8gr6wHV6hs+T7
-         1emmRtbUDGqpCaa7DIORSJRX219g92FvZ8cmIwneiVeIWpc4wZW2Z7p9R7lVfbzCTLBy
-         8VhRaW2OrcTpPvbbwkahlviDe3eIT8o6pPpWjPeGvjaGn0HRkdBBpuWyjt1APQaq71VF
-         sHOQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bB6h+a2TXAiaK1l6PDGK1rNQ6Pg8IYnzzV4HOHqvP7k=;
+        b=A6xFbfHz0XVqVR3JyFvyrvVoiH6xcHynYZYp8VD7cnQKWsQyvOjMtNHUV0k61x9Wj4
+         vVGWjLhg0jotH3/8HAGLQY5tGKWpHzj3XulucpR/XV/MgIkZhij+nRMLaZ2Bg5Fv5GnM
+         1ZBSKPN8DLTtt3+XiliESIeOEJS+JfcdgXlU4UfNDZrU4hMMyRx7lNjvaNG974HhwZCF
+         DSYulr3ikoMe21oEr0wf9Y3BWk40iL7EfeAvTqc4GGeeDyNt4Nn3iN9twq+MZnTcastO
+         axxgd0OohYfiI2y2g2J2rSFFOkdIC+cs6fpedqTpWIicIqT1FmzhXTqG5YycTFYdEQQx
+         +7JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=mcGjaEjlp9E6N37UMib26cBF56AyQFK+2CInJ6FUTCo=;
-        b=etW2bUhtbh8tr7YjraNq5+AjY/VOdbyunvQZ2FINezIGZ1C+8+QsDVksCIj2Bty9Tq
-         QpdCULgAJMnPQ1CD0085KG12zY0LCrxZKI0db9drSIAxxPMBh0kCN8s1Ud7VU5blxPY7
-         9saEKWy5ToI0n9Egzw+E1OCdFUuQAuXxyr1LlVp5TzTSqgNN0UU+8jYi1AZzlVYLxk0g
-         vSW1UiRx3qksG/Bg84fldz6T2bajSeykVlgVUofVknTtCpf9PTeFzNZb761gfGXXWbjO
-         Gt0WFzno4IrUEihX6AtKFoc+aKz5t6iVkTjhcCg58RHFaFgZzyvGqUCCf+9XjJ0OZxPJ
-         lgiQ==
-X-Gm-Message-State: ACgBeo0GXf2kHvVLdOm0PeiKgjeOr1lLgnb3LGyArgv8DKrIrVofktZl
-        X/YaBrFkKayaWaQXCfrKurc=
-X-Google-Smtp-Source: AA6agR7Ol2NVPUvGRtSIxjQvMtgte0Ibyz5jmLGwxyIAGSEGA6qUhCfnNE3RpvIl5YX2vO02JAWceg==
-X-Received: by 2002:a17:90a:d155:b0:1f2:4741:3b74 with SMTP id t21-20020a17090ad15500b001f247413b74mr5710102pjw.201.1659114445182;
-        Fri, 29 Jul 2022 10:07:25 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id g18-20020a63fa52000000b0041a13b1d451sm2805355pgk.59.2022.07.29.10.07.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 10:07:24 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] drm/msm/prime: Add mmap_info support
-Date:   Fri, 29 Jul 2022 10:07:42 -0700
-Message-Id: <20220729170744.1301044-4-robdclark@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220729170744.1301044-1-robdclark@gmail.com>
-References: <20220729170744.1301044-1-robdclark@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bB6h+a2TXAiaK1l6PDGK1rNQ6Pg8IYnzzV4HOHqvP7k=;
+        b=0BLwo22lnx4d8NO3FULurxxW3Q3hMbMw90EkVCCBYF4uGY1MmJ5NMeKrKYR2fGS5jL
+         256gHtsfiuqkwk4zthotZFC5jvNzcEuJJF/UGuNh8YKkqpi9zg4V93oAR+1wdAhM8vF6
+         EuqqurU3bLTswBSULvgm1fGP/wpOdSdXKlNAuMFPzNOYs0EX+1JKLu18Bq6eP2WLI/be
+         EIkQR63LY2x2pShwonw4pux/p0v2J7wb2iK7Xp9VIxR4pttYpIJvdbqetXXqQyVYTYOF
+         mfncas0s9a3B659az2Ur91faaXCe/GsV4IGjBISC+0xoh0gbk69mtmIHVIyFnQl6fCTc
+         RQiw==
+X-Gm-Message-State: ACgBeo3xoY2FedmVoT5FUh/19LM4vPFAw53C7C61JFnzcafY1BX9Bnv/
+        U2wa8hPliGYgCUBtLW321aKKG3fGYrQZXZDqxd4EAQ==
+X-Google-Smtp-Source: AA6agR4uP9KEwUm6KCouYMQ1SndV5cG0W/ceJ1ZOnlf8Qnb1n2DEYDZ938oj+gtj5eMS3FH7FJtdQ/CZcB41WlifjWw=
+X-Received: by 2002:a05:6214:20a5:b0:474:6a76:1ccd with SMTP id
+ 5-20020a05621420a500b004746a761ccdmr4162000qvd.44.1659114729470; Fri, 29 Jul
+ 2022 10:12:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CA+khW7hVwRQwXshymZCotPZyHmWXj7gjZvJO1_NnjnBSNjYj+A@mail.gmail.com>
+ <20220729044317.31975-1-liulin063@gmail.com>
+In-Reply-To: <20220729044317.31975-1-liulin063@gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Fri, 29 Jul 2022 10:11:54 -0700
+Message-ID: <CA+khW7iknv0hcn-D2tRt8HFseUnyTV7BwpohQHtEyctbA1k27w@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Do more tight ALU bounds tracking
+To:     Youlin Li <liulin063@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,68 +70,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Hi Youlin,
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_drv.c       |  1 +
- drivers/gpu/drm/msm/msm_drv.h       |  1 +
- drivers/gpu/drm/msm/msm_gem_prime.c | 11 +++++++++++
- 3 files changed, 13 insertions(+)
+On Thu, Jul 28, 2022 at 9:44 PM Youlin Li <liulin063@gmail.com> wrote:
+>
+> 32bit bounds and 64bit bounds are updated separately in
+> adjust_scalar_min_max_vals() currently, let them learn from each other to
+> get more tight bounds tracking. Similar operation can be found in
+> reg_set_min_max().
+>
+> Before:
+>
+>     func#0 @0
+>     0: R1=ctx(off=0,imm=0) R10=fp0
+>     0: (b7) r0 = 0                        ; R0_w=0
+>     1: (b7) r1 = 0                        ; R1_w=0
+>     2: (87) r1 = -r1                      ; R1_w=scalar()
+>     3: (87) r1 = -r1                      ; R1_w=scalar()
+>     4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+>     5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0xffffffff))  <--- [*]
+>     6: (95) exit
+>
+> It can be seen that even if the 64bit bounds is clear here, the 32bit
+> bounds is still in the state of 'UNKNOWN'.
+>
+> After:
+>
+>     func#0 @0
+>     0: R1=ctx(off=0,imm=0) R10=fp0
+>     0: (b7) r0 = 0                        ; R0_w=0
+>     1: (b7) r1 = 0                        ; R1_w=0
+>     2: (87) r1 = -r1                      ; R1_w=scalar()
+>     3: (87) r1 = -r1                      ; R1_w=scalar()
+>     4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+>     5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0x3))  <--- [*]
+>     6: (95) exit
+>
+> Fixes: 3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking")
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 1ca4a92ba96e..4979aa8187ec 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -1044,6 +1044,7 @@ static const struct drm_driver msm_driver = {
- 	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
- 	.gem_prime_import_sg_table = msm_gem_prime_import_sg_table,
- 	.gem_prime_mmap     = msm_gem_prime_mmap,
-+	.gem_prime_mmap_info= msm_gem_prime_mmap_info,
- #ifdef CONFIG_DEBUG_FS
- 	.debugfs_init       = msm_debugfs_init,
- #endif
-diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-index 7330d7b5de8e..b4ace34ec889 100644
---- a/drivers/gpu/drm/msm/msm_drv.h
-+++ b/drivers/gpu/drm/msm/msm_drv.h
-@@ -271,6 +271,7 @@ void msm_gem_shrinker_init(struct drm_device *dev);
- void msm_gem_shrinker_cleanup(struct drm_device *dev);
- 
- int msm_gem_prime_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma);
-+int msm_gem_prime_mmap_info(struct drm_gem_object *obj);
- struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj);
- int msm_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map);
- void msm_gem_prime_vunmap(struct drm_gem_object *obj, struct iosys_map *map);
-diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
-index c1d91863df05..2bacab7a1921 100644
---- a/drivers/gpu/drm/msm/msm_gem_prime.c
-+++ b/drivers/gpu/drm/msm/msm_gem_prime.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/dma-buf.h>
-+#include <uapi/linux/dma-buf.h>
- 
- #include <drm/drm_prime.h>
- 
-@@ -26,6 +27,16 @@ int msm_gem_prime_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
- 	return drm_gem_prime_mmap(obj, vma);
- }
- 
-+int msm_gem_prime_mmap_info(struct drm_gem_object *obj)
-+{
-+	struct msm_gem_object *msm_obj = to_msm_bo(obj);
-+
-+	if (msm_obj->flags & MSM_BO_WC)
-+		return DMA_BUF_VM_PROT_WC;
-+
-+	return DMA_BUF_VM_PROT_CACHED;
-+}
-+
- struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
- {
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
--- 
-2.36.1
+This change looks to me like an improvement, rather than a bug fix. We
+probably don't need this tag.
 
+> Signed-off-by: Youlin Li <liulin063@gmail.com>
+> ---
+>  kernel/bpf/verifier.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 0efbac0fd126..888aa50fbdc0 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -8934,10 +8934,13 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+>                 break;
+>         }
+>
+> -       /* ALU32 ops are zero extended into 64bit register */
+> -       if (alu32)
+> +       if (alu32) {
+> +               /* ALU32 ops are zero extended into 64bit register */
+>                 zext_32_to_64(dst_reg);
+> -       reg_bounds_sync(dst_reg);
+> +               __reg_combine_32_into_64(dst_reg);
+
+This __reg_combine_32_into_64 can be replaced with simply
+reg_bounds_sync, because the above zext_32_to_64 has already
+propagated 32 to 64. Using reg_bounds_sync would be more efficient.
+
+It turns out we can now fold reg_bounds_sync into zext_32_to_64. Can
+you do that and resend? IMO that will make the code slightly cleaner.
+
+> +       } else {
+> +               __reg_combine_64_into_32(dst_reg);
+> +       }
+>         return 0;
+>  }
+>
+> --
+> 2.25.1
+>

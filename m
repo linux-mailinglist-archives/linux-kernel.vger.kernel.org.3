@@ -2,131 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A7F584A39
+	by mail.lfdr.de (Postfix) with ESMTP id E38BF584A3A
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbiG2DhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 23:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
+        id S234082AbiG2Dhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 23:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233416AbiG2DhR (ORCPT
+        with ESMTP id S234056AbiG2Dhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 23:37:17 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CA47B375;
-        Thu, 28 Jul 2022 20:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659065835; x=1690601835;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C/xHBwduANxCzYkbEEJbzvCivYL1kPWDOwmRSCJDTzE=;
-  b=SUlZ/NA52Qm9UTCm9r5p8t+dexNyl3fstcuXNeHh9O33PQuca5kUrKK9
-   oMqZA8QYMRi8yZp1jfumdLoOvM+yreq3Q4ZsOsLUSPXTU/KWWigGuOdBR
-   HLQQBcria3LwtqkyoTSn5i0JqvHPvAmhS80hLNvDqYXdgQzCyj6Rq8Ey6
-   9BJWK7XhCK5TAlc5B9By2rTQDMCJWsgS/p4dL7if/5I6JM+4sIknu4ooK
-   mCMFyNXmlUH9Ka0YVJZvcDUHC3i9/9/dlHG0G5BqvI8KBQLMLnA/ez2Z2
-   2V10ch0ScgfOITPoHFoc0HEVJRSRSJMmrCF6BT33y9Q66SbfoZ4yJv0qf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="271721566"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="271721566"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 20:37:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="928588712"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jul 2022 20:37:13 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHGoL-000B0Y-0T;
-        Fri, 29 Jul 2022 03:37:13 +0000
-Date:   Fri, 29 Jul 2022 11:36:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] ata: libata-scsi: Refactor scsi_6_lba_len() with
- use of get_unaligned_be24()
-Message-ID: <202207291100.qslmQQl1-lkp@intel.com>
-References: <20220726154518.73248-1-andriy.shevchenko@linux.intel.com>
+        Thu, 28 Jul 2022 23:37:33 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C8A7C1AB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 20:37:32 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id j70so4555456oih.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 20:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jVbZ9bmsOHazMdxh0GDBgdwGjsfWr7pMUJNONrNaL9s=;
+        b=Aj0rVguqvsuZZ0t8pNqTKyCYkhPLraEXCjqKSqKsCd33Sp63cwyRHrEgurLEQru+A/
+         KR2SQWOaz2u/oDoYdltfXGP3Z8KCcFUvI5euVUjBENEVPg8YDEf0116AW1R/VwvzZ8JA
+         OyD/KkHdT4re5j9I3JO69aubXGTsC8uKnotHnI6M52pbMAvgzMXILDiLK1jisFXNMEN4
+         Vr5zzrWuLbvIVqhh0sxxeGij/zA3zGpYjDMsTFWwuza/iVNQ5G46JBSCUMmanxVL5hX1
+         4qLFiTKWeduwuHZz7BuYcIkZ5JvjbJStA07Z2zbnxnAIKBpml/GPl5ljPD8reotV8Hme
+         wlrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=jVbZ9bmsOHazMdxh0GDBgdwGjsfWr7pMUJNONrNaL9s=;
+        b=n8wTI+X1F7ybZl3Zxpm7cYswiw0XjlseFmlcrphM9zizPXOlNhd+KdX1hCcpkOWSQJ
+         cGRgDIx8Iyv6YW6cblield9oJ4mOy6B+QqONHZYf5y2Laln2tr80QD/GR10I0atY+JNy
+         wGEH9ApSJydmCSIVg6+fGQ3O0aJ2HCpfNj6VDQMH63lg2GxxERMaszNIVxK6qChTiVAV
+         2doNVyLmf0EXmfc67Sdg5SqF6engLyZSpa1VXzNN+aIyf9Y/TCOUsuHNuYS8rC5M20yP
+         0GOX6wy537Q+oa1pbONm0980WWshOK+GtbBaIGlkfhI23zeOXu18OZ4vBiPqG/oaUaNs
+         Yoew==
+X-Gm-Message-State: AJIora/zoEkyMwVBmsWKjKnFTD39EPuJKcwLuQZ8Hozjd32IKWTRTh8z
+        1mgYW+K0q/K4pdNaGiURd2w=
+X-Google-Smtp-Source: AGRyM1stmIDzT8euWFlVJw0SMcjwdX8Fvl215sWpa689RARkkMlG+uqN0oPR18jPdyDGOk0RgnyNrQ==
+X-Received: by 2002:a54:4086:0:b0:33a:6fc9:1f8c with SMTP id i6-20020a544086000000b0033a6fc91f8cmr789379oii.71.1659065851695;
+        Thu, 28 Jul 2022 20:37:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a40-20020a056870d62800b0010e00d6a1c0sm1196320oaq.51.2022.07.28.20.37.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 20:37:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 28 Jul 2022 20:37:28 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        openrisc@lists.librecores.org
+Subject: Re: [PATCH v3 2/3] openrisc: Add pci bus support
+Message-ID: <20220729033728.GA2195022@roeck-us.net>
+References: <20220725020737.1221739-1-shorne@gmail.com>
+ <20220725020737.1221739-3-shorne@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220726154518.73248-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220725020737.1221739-3-shorne@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Mon, Jul 25, 2022 at 11:07:36AM +0900, Stafford Horne wrote:
+> This patch adds required definitions to allow for PCI buses on OpenRISC.
+> This is being tested on the OpenRISC QEMU virt platform which is in
+> development.
+> 
+> OpenRISC does not have IO ports so we keep the definition of
+> IO_SPACE_LIMIT and PIO_RESERVED to be 0.
+> 
+> Note, since commit 66bcd06099bb ("parport_pc: Also enable driver for PCI
+> systems") all platforms that support PCI also need to support parallel
+> port.  We add a generic header to support compiling parallel port
+> drivers, though they generally will not work as they require IO ports.
+> 
+> Signed-off-by: Stafford Horne <shorne@gmail.com>
 
-I love your patch! Perhaps something to improve:
+This patch results in
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Building openrisc:allmodconfig ... failed
+--------------
+Error log:
+drivers/video/fbdev/riva/fbdev.c: In function 'rivafb_probe':
+drivers/video/fbdev/riva/fbdev.c:2062:42: error:
+	passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ata-libata-scsi-Refactor-scsi_6_lba_len-with-use-of-get_unaligned_be24/20220726-234746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e0dccc3b76fb35bb257b4118367a883073d7390e
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220729/202207291100.qslmQQl1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/ae9a00d0e0375aa2aea7a61dc2894d9d06005f8e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/ata-libata-scsi-Refactor-scsi_6_lba_len-with-use-of-get_unaligned_be24/20220726-234746
-        git checkout ae9a00d0e0375aa2aea7a61dc2894d9d06005f8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ata/
+drivers/video/fbdev/nvidia/nvidia.c: In function 'nvidiafb_probe':
+drivers/video/fbdev/nvidia/nvidia.c:1414:20: error:
+	passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+drivers/scsi/aic7xxx/aic7xxx_osm.c: In function 'ahc_platform_free':
+drivers/scsi/aic7xxx/aic7xxx_osm.c:1231:41: error:
+	passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
 
-All warnings (new ones prefixed by >>):
+... and so on.
 
-   drivers/ata/libata-scsi.c: In function 'scsi_6_lba_len':
->> drivers/ata/libata-scsi.c:1320:39: warning: passing argument 1 of 'get_unaligned_be24' makes pointer from integer without a cast [-Wint-conversion]
-    1320 |         *plba = get_unaligned_be24(cdb[1]) & 0x1fffff;
-         |                                    ~~~^~~
-         |                                       |
-         |                                       u8 {aka unsigned char}
-   In file included from ./arch/x86/include/generated/asm/unaligned.h:1,
-                    from drivers/ata/libata-scsi.c:33:
-   include/asm-generic/unaligned.h:90:50: note: expected 'const void *' but argument is of type 'u8' {aka 'unsigned char'}
-      90 | static inline u32 get_unaligned_be24(const void *p)
-         |                                      ~~~~~~~~~~~~^
+Prior to this patch, the code was not enabled because it depends on PCI.
 
+Bisect log attached.
 
-vim +/get_unaligned_be24 +1320 drivers/ata/libata-scsi.c
+Guenter
 
-  1307	
-  1308	/**
-  1309	 *	scsi_6_lba_len - Get LBA and transfer length
-  1310	 *	@cdb: SCSI command to translate
-  1311	 *
-  1312	 *	Calculate LBA and transfer length for 6-byte commands.
-  1313	 *
-  1314	 *	RETURNS:
-  1315	 *	@plba: the LBA
-  1316	 *	@plen: the transfer length
-  1317	 */
-  1318	static void scsi_6_lba_len(const u8 *cdb, u64 *plba, u32 *plen)
-  1319	{
-> 1320		*plba = get_unaligned_be24(cdb[1]) & 0x1fffff;
-  1321		*plen = cdb[4];
-  1322	}
-  1323	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+---
+# bad: [7c5e07b73ff3011c9b82d4a3286a3362b951ad2b] Add linux-next specific files for 20220728
+# good: [e0dccc3b76fb35bb257b4118367a883073d7390e] Linux 5.19-rc8
+git bisect start 'HEAD' 'v5.19-rc8'
+# bad: [96bce6a87ad9690eaa9b1ca9ace7c98444d7869f] Revert "Revert "drm/amdgpu: add drm buddy support to amdgpu""
+git bisect bad 96bce6a87ad9690eaa9b1ca9ace7c98444d7869f
+# bad: [08765bd733f4662c2ad80e813c933758b3c1dddc] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
+git bisect bad 08765bd733f4662c2ad80e813c933758b3c1dddc
+# good: [d40269b953fd9abba9aadaa57c6486990ab806d1] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+git bisect good d40269b953fd9abba9aadaa57c6486990ab806d1
+# bad: [3d810ed5c60843645c6a40cc5ebd66e399c94165] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
+git bisect bad 3d810ed5c60843645c6a40cc5ebd66e399c94165
+# good: [046537a939b089589a1a6e70df16b10a8f0c8ca8] Merge branch 'clk-next' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
+git bisect good 046537a939b089589a1a6e70df16b10a8f0c8ca8
+# good: [d6b551b8f90cc92c7d3c09cf38c748efe305ecb4] powerpc/64e: Fix build failure with GCC 12 (unrecognized opcode: `wrteei')
+git bisect good d6b551b8f90cc92c7d3c09cf38c748efe305ecb4
+# bad: [e30727fee2a25176c4558f49a102524eba973d49] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
+git bisect bad e30727fee2a25176c4558f49a102524eba973d49
+# bad: [36c4dbb3e78602ee750e12c85fadb3da4392eeac] Merge branch 'for-next' of git://github.com/openrisc/linux.git
+git bisect bad 36c4dbb3e78602ee750e12c85fadb3da4392eeac
+# good: [9db5e69af1f4de043ae962a908fc7ef1a40f7f51] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git
+git bisect good 9db5e69af1f4de043ae962a908fc7ef1a40f7f51
+# good: [62fb295ce7dd9df3e04b48a943f8cafaf1f32980] MIPS: dts: align gpio-key node names with dtschema
+git bisect good 62fb295ce7dd9df3e04b48a943f8cafaf1f32980
+# bad: [2479c96f5d3db2610a6d463077dd3dad087529fb] openrisc: Add virt defconfig
+git bisect bad 2479c96f5d3db2610a6d463077dd3dad087529fb
+# good: [a2912b45b0826c6fc0ca9b264d03a2dacb7a72e8] asm-generic: Add new pci.h and use it
+git bisect good a2912b45b0826c6fc0ca9b264d03a2dacb7a72e8
+# good: [3e2a6fbbbf34d230b9063f1ca885d5d625a0404c] asm-generic: Support NO_IOPORT_MAP in pci_iomap.h
+git bisect good 3e2a6fbbbf34d230b9063f1ca885d5d625a0404c
+# bad: [48ef4b584af7ba4ecdf2dd58b641fb8d0a9d0c63] openrisc: Add pci bus support
+git bisect bad 48ef4b584af7ba4ecdf2dd58b641fb8d0a9d0c63
+# first bad commit: [48ef4b584af7ba4ecdf2dd58b641fb8d0a9d0c63] openrisc: Add pci bus support

@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DD6585255
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7678658526D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbiG2PWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
+        id S237118AbiG2PYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237352AbiG2PVr (ORCPT
+        with ESMTP id S237468AbiG2PX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:21:47 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA42583219
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:21:18 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id v18so4874817plo.8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:21:18 -0700 (PDT)
+        Fri, 29 Jul 2022 11:23:59 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B435085FA6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:23:40 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id u76so6124817oie.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:23:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=1ZDw/3z/X+yx550UAQFNka6PWkeDe5NYwe15kEz7pHU=;
-        b=S+gy6IATbpJggKXSY94td4m53HXiZ93LJGa015Sm+3LWLcwnar5FJjly6k+l6xCw3r
-         mpAtrAsj50f2W5wiMzdu7cvxa8bYnCIbuSTYxt5bBeU5iEJEWpy6pMdHFuqN1EmDpH6x
-         St4aQXo8iVHekOOol7nnXEftYbdcyCqs0S0uv3EBNMkFiULBJTYjIlfpNKuQtqwJStww
-         SXGfrd/XRebdR/HpE/QudgSe/l1NjiSuBFvetuHCDoWz/Fs8dmtghb4wyoBFGPdrLsox
-         Lk296FG2V/jnYxdVvW9+NcgxxmmxWC5PUTRE7clcq9qE85hJQdYU7NSW1eYeYqVswuhM
-         Y6bg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4wO1MjeUsCDlwsXxvP/E1eIWCLhJk0oKRDyI5lcSaFI=;
+        b=WgESSMakprr85bnAIQPsz93hHqlVj8N5EH6D+DWehMU4PB6BlOaHdBjAkTgO/LJ0Rt
+         EEm6Rqosm6t46MPPgz5qOllPMZwC2TnrYVsdSK4VTAxsBocYtfk3hc7mR4iW+atazhhw
+         uDDk3khZEOrUq+CH1dHeKhoH6+QSbkYBfTVb9pa3oQk5H6IDBMFv8JYTJF+UVTOvXVlJ
+         +mnfFG1b5E682/EDOhbA7SF9QMgYcsFaT8f8u0gyAwfL6979t6yKtlvKATjgfhPgtAtw
+         7AwV/iZnBQ7m2870ZxKq/WfbviEeLlfZCzjnt8JZ9T8m9JpnrovfgOvL71Y2P4bRRCgM
+         wOqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=1ZDw/3z/X+yx550UAQFNka6PWkeDe5NYwe15kEz7pHU=;
-        b=LKzCpYvO7mdeEEeqyio27Xs8+wj1AbQUaIE/Du/X3Xw7g4AQ94lj1MVyU/1GhtEnmD
-         mlriZIFW6hQHfZl3KrLq8yW/YT9VDjxisXNEsQxxd5mkDxiZGY/uSCdgW+/+GsrRMWWk
-         unjqQ2baX1B0NF/yrL6ATWgCqClUUYSZiaYmAlOLvOAj1ydJn4S1Q6HBTWNIxKOjw0bV
-         GWOocX5+fL6CWoFGXTRK3YC7zG5uPZxZ69HEoeP+73OKsAwH7gkKih7lXiV3ha7pLGjf
-         9fhk2FtjpG1MbObGuArb4Zo/B29cxoyRNCTXRuY7DtLvLM5oCaLHvZJfK9Dr7xS90IgU
-         n+sQ==
-X-Gm-Message-State: ACgBeo2X9v0OZnezRiXRPK9GOq2BfIJN35z88lRL3ui9fzS8b5ZFnUrQ
-        qwhQDerDEAfqrNEhC7Q968XlwA==
-X-Google-Smtp-Source: AA6agR7NYs2c/zcNB15D0jIe7jgy3CA9rztzeX745HupFnJf/9qKLBj2eCo5rDYiX+iAeJhRNlSu7g==
-X-Received: by 2002:a17:90b:4a92:b0:1f2:a67b:296d with SMTP id lp18-20020a17090b4a9200b001f2a67b296dmr5383203pjb.149.1659108077936;
-        Fri, 29 Jul 2022 08:21:17 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o11-20020a170902d4cb00b0016a058b7547sm3773294plg.294.2022.07.29.08.21.17
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=4wO1MjeUsCDlwsXxvP/E1eIWCLhJk0oKRDyI5lcSaFI=;
+        b=5Jw9+RDwsAakExgWdfJivZZb/lWZC6tDyZF/wL+7HtwiSMJryLBd7SgR0R0QtvxvBe
+         hngZau1a8Q1wcLDH+p/5hU+MpJB37Uj3ju+vwrNPWuKYhRRc4wCcb3lvZxo2w1vqtW9a
+         GkwUfjswPsP6YkyubpvhmKkJGu65rHqfnE1+XFW8v40QyQjRofzLShBg0zoPGdsgGPp9
+         xq8lJjmH0cKsnBBfSLf5+e+034hUJCHXH7zmJ/Te4aK7zFhMOy5pfSvvVQe3itwfAic1
+         uZGFCc6+J+Ewb70Na+tzCvDm6G2M09UlFeUuttIZBx4IW+FXP/Ttdn1pYy73GnTIviGU
+         +FPQ==
+X-Gm-Message-State: AJIora/O4Ho2drD82ooghVm259nOZ8IO5BhbIC83AYwcccNij+wk6mS5
+        HnZa1FjnAJ7hU9VD9vVZ5RU0md8ryC08Ew==
+X-Google-Smtp-Source: AGRyM1s9mfSHeJiHkYhOkAbabMp3nfsDf8Y8VBHSW1TC3hP58L/6Rs9Y9EPWOom4qOR+6FOm1Op0PQ==
+X-Received: by 2002:a05:6808:1201:b0:325:75e1:25a8 with SMTP id a1-20020a056808120100b0032575e125a8mr2048230oil.18.1659108219452;
+        Fri, 29 Jul 2022 08:23:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g8-20020a9d6208000000b0061cbd18bd18sm1304415otj.45.2022.07.29.08.23.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 08:21:17 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 15:21:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Roth <michael.roth@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH 4/4] KVM: SVM: Disable SEV-ES support if MMIO caching is
- disable
-Message-ID: <YuP66QVxyeT4wd5H@google.com>
-References: <20220728221759.3492539-1-seanjc@google.com>
- <20220728221759.3492539-5-seanjc@google.com>
- <d09972481dede743dd0a77409cd8ecaecdbf86b3.camel@intel.com>
+        Fri, 29 Jul 2022 08:23:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 29 Jul 2022 08:23:35 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        openrisc@lists.librecores.org
+Subject: Re: [PATCH] openrisc: io: Define iounmap argument as volatile
+Message-ID: <20220729152335.GA431060@roeck-us.net>
+References: <20220729110726.3635262-1-shorne@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d09972481dede743dd0a77409cd8ecaecdbf86b3.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <20220729110726.3635262-1-shorne@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,58 +74,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022, Kai Huang wrote:
-> On Thu, 2022-07-28 at 22:17 +0000, Sean Christopherson wrote:
-> > Disable SEV-ES if MMIO caching is disabled as SEV-ES relies on MMIO SPTEs
-> > generating #NPF(RSVD), which are reflected by the CPU into the guest as
-> > a #VC.  With SEV-ES, the untrusted host, a.k.a. KVM, doesn't have access
-> > to the guest instruction stream or register state and so can't directly
-> > emulate in response to a #NPF on an emulated MMIO GPA.  Disabling MMIO
-> > caching means guest accesses to emulated MMIO ranges cause #NPF(!PRESENT),
-> > and those flavors of #NPF cause automatic VM-Exits, not #VC.
-> > 
-> > Fixes: b09763da4dd8 ("KVM: x86/mmu: Add module param to disable MMIO caching (for testing)")
-> > Reported-by: Michael Roth <michael.roth@amd.com>
-> > Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-
-...
-
-> > +	/*
-> > +	 * SEV-ES requires MMIO caching as KVM doesn't have access to the guest
-> > +	 * instruction stream, i.e. can't emulate in response to a #NPF and
-> > +	 * instead relies on #NPF(RSVD) being reflected into the guest as #VC
-> > +	 * (the guest can then do a #VMGEXIT to request MMIO emulation).
-> > +	 */
-> > +	if (!enable_mmio_caching)
-> > +		goto out;
-> > +
-> > 
+On Fri, Jul 29, 2022 at 08:07:25PM +0900, Stafford Horne wrote:
+> When OpenRISC enables PCI it allows for more drivers to be compiled
+> resulting in exposing the following with -Werror.
 > 
-> I am not familiar with SEV, but looks it is similar to TDX -- they both causes
-> #VE to guest instead of faulting into KVM.  And they both require explicit call
-> from guest to do MMIO.
+>     drivers/video/fbdev/riva/fbdev.c: In function 'rivafb_probe':
+>     drivers/video/fbdev/riva/fbdev.c:2062:42: error:
+> 	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
 > 
-> In this case, does existing MMIO caching logic still apply to them?
+>     drivers/video/fbdev/nvidia/nvidia.c: In function 'nvidiafb_probe':
+>     drivers/video/fbdev/nvidia/nvidia.c:1414:20: error:
+> 	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
+> 
+>     drivers/scsi/aic7xxx/aic7xxx_osm.c: In function 'ahc_platform_free':
+>     drivers/scsi/aic7xxx/aic7xxx_osm.c:1231:41: error:
+> 	    passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type
+> 
+> Most architectures define the iounmap argument to be volatile.  To fix this
+> issue we do the same for OpenRISC.  This patch must go before PCI is enabled on
+> OpenRISC to avoid any compile failures.
+> 
+> Link: https://lore.kernel.org/lkml/20220729033728.GA2195022@roeck-us.net/
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Stafford Horne <shorne@gmail.com>
 
-Yes, because TDX/SEV-ES+ need to generate #VE/#VC on emulated MMIO so that legacy
-(or intentionally unenlightened) software in the guest doesn't simply hang/die on
-memory accesses to emulated MMIO (as opposed to direct TDVMCALL/#VMGEXIT).
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-> Should we still treat SEV and TDX's MMIO handling as MMIO caching being
-> enabled?  Or perhaps another variable?
-
-I don't think a separate variable is necesary.  At its core, KVM is still caching
-MMIO GPAs via magic SPTE values.  The fact that it's required for functionality
-doesn't make the name wrong.
-
-SEV-ES+ in particular doesn't have a strong guarantee that inducing #VC via #NPF(RSVD)
-is always possible.  Theoretically, an SEV-ES+ capable CPU could ship with an effective
-MAXPHYADDR=51 (after reducing the raw MAXPHYADDR) and C-bit=51, in which case there are
-no resered PA bits and thus no reserved PTE bits at all.  That's obviously unlikely to
-happen, but if it does come up, then disabling SEV-ES+ due to MMIO caching not being
-possible is the desired behavior, e.g. either the CPU configuration is bad or KVM is
-lacking support for a newfangled way to support emulated MMIO (in a future theoretical
-SEV-* product).
+> ---
+>  arch/openrisc/include/asm/io.h | 2 +-
+>  arch/openrisc/mm/ioremap.c     | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
+> index 625ac6ad1205..ee6043a03173 100644
+> --- a/arch/openrisc/include/asm/io.h
+> +++ b/arch/openrisc/include/asm/io.h
+> @@ -31,7 +31,7 @@
+>  void __iomem *ioremap(phys_addr_t offset, unsigned long size);
+>  
+>  #define iounmap iounmap
+> -extern void iounmap(void __iomem *addr);
+> +extern void iounmap(volatile void __iomem *addr);
+>  
+>  #include <asm-generic/io.h>
+>  
+> diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
+> index daae13a76743..8ec0dafecf25 100644
+> --- a/arch/openrisc/mm/ioremap.c
+> +++ b/arch/openrisc/mm/ioremap.c
+> @@ -77,7 +77,7 @@ void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
+>  }
+>  EXPORT_SYMBOL(ioremap);
+>  
+> -void iounmap(void __iomem *addr)
+> +void iounmap(volatile void __iomem *addr)
+>  {
+>  	/* If the page is from the fixmap pool then we just clear out
+>  	 * the fixmap mapping.
+> -- 
+> 2.37.1
+> 

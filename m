@@ -2,76 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02E2584CF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C21584CF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiG2HuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 03:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
+        id S235077AbiG2Hvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 03:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiG2HuU (ORCPT
+        with ESMTP id S230167AbiG2Hv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 03:50:20 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4552013D63
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:50:18 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so2102766wmm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=5lOAn0h02VH6KBbt82jLFJtiXqqsxvMuF0TBeD3/U/s=;
-        b=ZBOLcnAHY9OMxqdtNB7a6+JfLEuMeEZ3yOldjwKnougUkx2y+HE5T/uo+ms/IUtSX+
-         hm0CuK3s+kQ60h3jiAFfoDo2tWBj4gZiLbq8bIJyGpPlL25lmuZIMj897BxEKrZpTpTI
-         E9sh1Q77sJwp7ku6A61eKtBf64LuDafWgFkKWdQi+YIqzxLEYNPx7pdqL3+Eg+4bnapA
-         H/Vm+eD5uifdBrca5YuhJwb0mUPEKrtMlPXa5QW5ZlnipWRxajtglCgsvTB2IFs9uyMR
-         iGP5wd/efqA0nVSw/PeHh/ZzEcxWxZYwmdlhnb9hAMzCCrCVV7+GQn4SgH8KqltgwUzB
-         Vmqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5lOAn0h02VH6KBbt82jLFJtiXqqsxvMuF0TBeD3/U/s=;
-        b=RDNdSQONvRmzH+6KHfni/7S5s59ft2DwRRGDosfJfp/4+IAYvMi33vI7zN8NGZxoIj
-         umjC+MOMXzMjlJgAK7zwu5QQVN1qNBhXjdWPF5JMzqfHUeeo8tZawx1yN94tA23zyq4S
-         3KPtRYLG/iQeifZLn1WlfDZgqWX42O3s6f7nOHXjU1I9cr0tLfLi8G7IJpJbd/qt/7LP
-         Dx+Yy8+FczaApSFD679R9Olfk1L7Uprdjn4w9ADkqUg0lLf+2XQI/dpjb9/Gl9XkIbV4
-         t5aEZyYL2ja3pqfI9kd6j5Si3Xn8VR8GGWGgjnZ92YO7C4yveHO/DuBJnNKtLX0P1sT8
-         zieQ==
-X-Gm-Message-State: AJIora+zvTWC4zb+QIet1UuyD7tte+9Xzfdwtoy6IfHMDdMfVXceHDoc
-        F77SnkS+HUBbqtwZuDrwHRKCNw==
-X-Google-Smtp-Source: AGRyM1udGOV6hEutqy9qMK9GUdJBG7rsDL3k+0eM+VMqDQV6f1A+Q0blzkBEsX7AJ7S6Ay6TVPxN5A==
-X-Received: by 2002:a05:600c:3b29:b0:3a3:1fa6:768 with SMTP id m41-20020a05600c3b2900b003a31fa60768mr1512480wms.193.1659081016616;
-        Fri, 29 Jul 2022 00:50:16 -0700 (PDT)
-Received: from [192.168.43.135] (40.164.185.81.rev.sfr.net. [81.185.164.40])
-        by smtp.gmail.com with ESMTPSA id q5-20020a1ce905000000b003a320e6f011sm3583283wmc.1.2022.07.29.00.50.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 00:50:15 -0700 (PDT)
-Message-ID: <7c14ebff-b449-84fc-f3da-af394b3fa371@baylibre.com>
-Date:   Fri, 29 Jul 2022 09:50:13 +0200
+        Fri, 29 Jul 2022 03:51:28 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3DC7E010
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:51:27 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 8BD2C320097D;
+        Fri, 29 Jul 2022 03:51:23 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 29 Jul 2022 03:51:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1659081083; x=1659167483; bh=x/uGRUiGzR
+        Dd3km1ZgnwtdHQHNmvSMC7sQG/+Jd4zoo=; b=DemEI6dSqK7EJVTyXhNlRLZ/jk
+        k7DuMlQ/vpPv6NeJz7Bsf8jOI+1qCyZvR4CAB/ZSSDgr2ORETFcrvwqd17nsVQQm
+        wMX/Bnc+EZDdc+cYEqzCMXjfuWhKjbNmxuB94eb5HFUlApQitdLn2iCXoUbmxAMo
+        dr1IvCPOySBmMkkS0vJlSfUKf7IFkX6PNUWB3CPmVgX+8/vUbbxZoEU47YvvDlRZ
+        iJTcTYFMhJsTbR7kPUXM/+aRPUG1wX/Rdizj/lBE5D53i2wqwUcWAAiSxjlYVvTv
+        XompauWC9IXADu9AkQVuVkl/EOKvskqqKB7cmP7wLzGS/LUqsa5haXoXFKEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659081083; x=1659167483; bh=x/uGRUiGzRDd3km1ZgnwtdHQHNmv
+        SMC7sQG/+Jd4zoo=; b=YRxavZe8a60Zm2BU6GWIO89qBmmH6m3uHtBgAo5dZZjK
+        xlNhYLJDOTnVRhfXL5fbhEKYyHeAMmOCupZTuDJeP8aXqofgfXYJxIBUM5HlbdTX
+        edIjwU3cu8P/L45pT8ivnU46u0uEmu0mZkcDOgMwPETKnrgUc5EbFhMT83+PRL3D
+        j38RG2eMBhCqgNcZqUdhV9X6Kok/pRIXVx4Tz9IM1eQz63u4xULwlt86sM6xVD6J
+        ZhrKu4y67fbC6PKQxkBuA9tEcHKDu1cUYNVX6wszaBBbQTUCpvHl2XJecTh0bvbT
+        nfW+UUDOBqvLx7do5AYAZS4aN3ngDyaiJdL7kZAYtg==
+X-ME-Sender: <xms:epHjYsGPGlfLbMJnIjGS219YhZe8iia-4GjqzkFPO1s_lMY-1xFRvA>
+    <xme:epHjYlW3WB_cEB9HU4F90CwFvzrNgsqrURaFCELLXD7RsgDp4p5o3VZEUOO8KzTSI
+    N6-172Gm7OYgkIMTgU>
+X-ME-Received: <xmr:epHjYmLFOL3FEU8_KR1zIkjoEBRTmyxWIjgP87-prKtA7l5PCZo-Iuvxc0nAnkqwWyxU52I0QTNA-fqgCJQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduiedgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:epHjYuGCvckobZGg9GCAjTHdxWPHM8UynsXwmU6WWQjtqkR2CIM5Ug>
+    <xmx:epHjYiWk9irHe7OTCgM7TgPYExB3KIYEhlRit_Yg76baHatbsXt0OQ>
+    <xmx:epHjYhO-f8uOdSaBFz8oRQtnh6nU9H6sBa6dZVjQzxaJDy5iJfb0Bw>
+    <xmx:e5HjYuQdLX9DQoA4-k3XGTf0wDmM4uT9Mi1wsjV0fIPo35pwH5jY7Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 29 Jul 2022 03:51:21 -0400 (EDT)
+Date:   Fri, 29 Jul 2022 09:51:18 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Subject: Re: [RFC PATCH] drm/edid: Make 144 Hz not preferred on Sharp
+ LQ140M1JW46
+Message-ID: <20220729075118.ofnpk52tk4usm3n3@penduick>
+References: <20220721152314.RFC.1.Ie333b3e4aff6e4a5b58c4aa805e030e561be8773@changeid>
+ <269f2610-425b-f296-dcfc-89bdc2e1d587@quicinc.com>
+ <CAD=FV=XSVXasU5PMR2kL0WQjQ458xDePuTGd1m14_v9JO5B6oA@mail.gmail.com>
+ <CAF6AEGv_Vikf80v-7ccz90fvGPrk5pV1tOxRoWKxKHYuEW8=aA@mail.gmail.com>
+ <5c8ca71c-5f0b-d5f5-9f16-e312dec0d01b@quicinc.com>
+ <CAD=FV=UGYV1mZenDCRrbpC+gpE12-Uis7fm_=H3PeEjK=t36yA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v3 2/2] iio: time: capture-tiecap: capture driver support
- for ECAP
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     devicetree@vger.kernel.org, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lars@metafoo.de,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mranostay@ti.com, robh+dt@kernel.org
-References: <20220728175124.468461-1-jpanis@baylibre.com>
- <20220728175124.468461-3-jpanis@baylibre.com>
- <3033c2bb-bfe7-459c-2a2b-e99bf33b28b5@wanadoo.fr>
-Content-Language: en-US
-From:   Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <3033c2bb-bfe7-459c-2a2b-e99bf33b28b5@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oklsttshcgwhfm5m"
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=UGYV1mZenDCRrbpC+gpE12-Uis7fm_=H3PeEjK=t36yA@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,53 +98,95 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--oklsttshcgwhfm5m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 28/07/2022 22:02, Christophe JAILLET wrote:
-> Le 28/07/2022 à 19:51, Julien Panis a écrit :
->> ECAP hardware on AM62x SoC supports capture feature. It can be used
->> to timestamp events (falling/rising edges) detected on signal input pin.
->>
->> This commit adds capture driver support for ECAP hardware on AM62x SoC.
->>
->> In the ECAP hardware, capture pin can also be configured to be in
->> PWM mode. Current implementation only supports capture operating mode.
->> Hardware also supports timebase sync between multiple instances, but
->> this driver supports simple independent capture functionality.
->>
->> Signed-off-by: Julien Panis 
->> <jpanis-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
->
-> [...]
->
->> +static int ecap_iio_remove(struct platform_device *pdev)
->> +{
->> +    struct iio_dev *indio_dev = platform_get_drvdata(pdev);
->> +    struct ecap_iio_dev *ecap_dev = iio_priv(indio_dev);
->> +
->> +    if (ecap_dev->enabled)
->> +        ecap_iio_capture_disable(indio_dev);
->> +
->> +    regmap_exit(ecap_dev->regmap);
->> +
->> +    pm_runtime_disable(&pdev->dev);
->
+On Thu, Jul 28, 2022 at 02:18:38PM -0700, Doug Anderson wrote:
 > Hi,
->
-> should these 2 functions be part of an error handling path of the 
-> probe, or handled with a devm_add_action_or_reset()?
->
-> Just my 2c,
->
-> CJ
+>=20
+> On Thu, Jul 28, 2022 at 10:34 AM Abhinav Kumar
+> <quic_abhinavk@quicinc.com> wrote:
+> >
+> > Hi Rob and Doug
+> >
+> > On 7/22/2022 10:36 AM, Rob Clark wrote:
+> > > On Fri, Jul 22, 2022 at 9:48 AM Doug Anderson <dianders@chromium.org>=
+ wrote:
+> > >>
+> > >> Hi,
+> > >>
+> > >> On Fri, Jul 22, 2022 at 9:37 AM Abhinav Kumar <quic_abhinavk@quicinc=
+=2Ecom> wrote:
+> > >>>
+> > >>> + sankeerth
+> > >>>
+> > >>> Hi Doug
+> > >>>
+> > >>> On 7/21/2022 3:23 PM, Douglas Anderson wrote:
+> > >>>> The Sharp LQ140M1JW46 panel is on the Qualcomm sc7280 CRD reference
+> > >>>> board. This panel supports 144 Hz and 60 Hz. In the EDID, the 144 =
+Hz
+> > >>>> mode is listed first and thus is marked preferred. The EDID decode=
+ I
+> > >>>> ran says:
+> > >>>>
+> > >>>>     First detailed timing includes the native pixel format and pre=
+ferred
+> > >>>>     refresh rate.
+> > >>>>
+> > >>>>     ...
+> > >>>>
+> > >>>>     Detailed Timing Descriptors:
+> > >>>>       DTD 1:  1920x1080  143.981 Hz  16:9   166.587 kHz  346.500 M=
+Hz
+> > >>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
+> > >>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
+> > >>>>       DTD 2:  1920x1080   59.990 Hz  16:9    69.409 kHz  144.370 M=
+Hz
+> > >>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
+> > >>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
+> > >>>>
+> > >>>> I'm proposing here that the above is actually a bug and that the 6=
+0 Hz
+> > >>>> mode really should be considered preferred by Linux.
+> >
+> > Its a bit tricky to say that this is a bug but I think we can certainly
+> > add here that for an internal display we would have ideally had the
+> > lower resolution first to indicate it as default.
+>=20
+> Yeah, it gets into the vagueness of the EDID spec in general. As far
+> as I can find it's really up to the monitor to decide by what means it
+> chooses the "preferred" refresh rate if the monitor can support many.
+> Some displays may decide that the normal rate is "preferred" and some
+> may decide that the high refresh rate is "preferred". Neither display
+> is "wrong" per say, but it's nice to have some consistency here and to
+> make it so that otherwise "dumb" userspace will get something
+> reasonable by default. I'll change it to say:
+>=20
+> While the EDID spec appears to allow a display to use any criteria for
+> picking which refresh mode is "preferred" or "optimal", that vagueness
+> is a bit annoying. From Linux's point of view let's choose the 60 Hz
+> one as the default.
 
-Hi Christophe,
-That's right, that will be cleaner. Thank you for your suggestion, that 
-will be done in next version.
-Julien
+And if we start making that decision, it should be for all panels with a
+similar constraint, so most likely handled by the core, and the new
+policy properly documented.
 
->
->> +
->> +    return 0;
->> +}
->> +
+Doing that just for a single panel is weird.
 
+Maxime
+
+--oklsttshcgwhfm5m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABMIAB0WIQTXEe0+DlZaRlgM8LOIQ8rmN6G3ywUCYuORdgAKCRCIQ8rmN6G3
+y0z+AP9ojmTlQhu5iNapifR8TkVj5GwhktAW8TUwGoGL14Ci4QEA9Otjl7UEG2oM
+Fy+ESHA52LQtiaNfS8fUHkPZnBQYz6Q=
+=cdJ8
+-----END PGP SIGNATURE-----
+
+--oklsttshcgwhfm5m--

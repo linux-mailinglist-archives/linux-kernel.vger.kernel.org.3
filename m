@@ -2,146 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A32584B88
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9B2584B89
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbiG2GP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S234140AbiG2GQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbiG2GPm (ORCPT
+        with ESMTP id S234409AbiG2GQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:15:42 -0400
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0C533A28
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:15:31 -0700 (PDT)
-Received: by mail-il1-x14a.google.com with SMTP id g8-20020a92cda8000000b002dcbd57f808so2481811ild.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=j24QTnRW2WQx+RjstTVyEuiliRIDIVKlQJ1Kiz8ekAE=;
-        b=TEY2CXEZm6Qhc3rYKvDwoWR/qoEJmmQ7Dv9aTFM4za8jX3EZDWIALRH/Jk0rO6tPEL
-         04GuD37Jd3MrehHYH11XBPPlg4Ar0TKo05/09sN/luz3mvH4iOyypcvdVRxfZxH1jiLq
-         z6KNyVuyRvOrF4sbUH0kFFCIH44cHkjk9Ca/vEhgLt5eCqosFqxT3Uv0lbcxlA1OinoY
-         eCy6RGBjPmwCDEiP+1BZ7XztqysMqUukHNaowrmkwQ9t25Av6nS4HGYTibxIvcKbm58T
-         b84If3L1S4cDWzjgsUdPA3aHu/qxczyKskkktR/6a1+RDH5qSMsEybpvE8wQhxHPmUoX
-         NgVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=j24QTnRW2WQx+RjstTVyEuiliRIDIVKlQJ1Kiz8ekAE=;
-        b=oTSxOdeSoeiGhKAAyOIe+/3kGcbWqNQHEda4Ghk9PGYtNelvQHgnvrZRXGHRPlJDDJ
-         dQqQWs1Csk4RM7oK4EuUDqLyY46nuhvjBolSWHqI0OG2O0soGht43xG98pO/3EEJ3Fre
-         dg9q8qeU/+cPSikrASrU85AZxz6bYojzlyGJCQPPRJ8qxTAG3RTgOtghOi9/98kTFDJL
-         u2ft0aZdBUEIdAVLLzrs2X2iomKXzxnczlHl/Omz6/m1yAwtUn35wsYAIbWhbHFQXbNU
-         DVK0nZjShZ3y9qmrcHWGGmX3XKeYzvoJscAteUaur172On9DvTVDqaGK9i87g+3TXSa2
-         vXZg==
-X-Gm-Message-State: AJIora+PxcMGgTUec90ZX0gZQEQ/Y0dzaXlUl68pRlA3dC92MIMq7AIE
-        okCc2Xd5NLvbwNbQCNH4CHk8qoQjEkY=
-X-Google-Smtp-Source: AGRyM1uskQwYHUNqkg5mvGxPHUBp/Ocjhd1K7H8Mnvd07a1z9dH1JiWMOc91PrXNG4arVs1JBvaBPDb8FW4=
-X-Received: from jeffxuk510a.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:65b])
- (user=jeffxu job=sendgmr) by 2002:a05:6638:13c2:b0:341:5b3f:399f with SMTP id
- i2-20020a05663813c200b003415b3f399fmr873301jaj.91.1659075330697; Thu, 28 Jul
- 2022 23:15:30 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 06:15:04 +0000
-In-Reply-To: <20220729061504.744140-1-jeffxu@google.com>
-Message-Id: <20220729061504.744140-2-jeffxu@google.com>
-Mime-Version: 1.0
-References: <6f71a4f3-8f8e-926b-883c-1df630cfc1a0@linuxfoundation.org> <20220729061504.744140-1-jeffxu@google.com>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [PATCH 4/4] selftests/memfd: add tests for MFD_NOEXEC
-From:   Jeff Xu <jeffxu@google.com>
-To:     skhan@linuxfoundation.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, mnissler@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Jul 2022 02:16:29 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2AD2AF6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659075388; x=1690611388;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XSZk6bvGXGWoh6yAStIVSnzdroxffXE+J0Cq7nDNA38=;
+  b=jXfjrU6yhH5BSpEbQUTPA+Yy5wgEQQhfEHprUePEjFMkOPmdpHPu7DWN
+   4ugwzV3HDhTki7s9sOZ7CoFsWNniM9U+qQY65rh6yCPo2SUFPA/6BtjvB
+   0xRI42ZDdo7PnEMT3Jkjay5wIXv9LIbHOhn0XTki+BEixPJ5sQNrlvvc9
+   djv/M84biK4xxDRbAP03Hat05YLroJS0Q0FlSxMMg9iuYMDLD40Rtzk7m
+   y8/FVw1WqiExXceQDDMKxoQEXbeTwj4xYZneVBNOSaU6Ine5OjK70A+xu
+   4W6pntvf7pntWD5akGKWLk/kCc/SP5K0w52HdoHr6sEJIjus8Z+1xYX5u
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="289471083"
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="289471083"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 23:16:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="576828302"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 28 Jul 2022 23:16:27 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHJIP-000BBO-2A;
+        Fri, 29 Jul 2022 06:16:25 +0000
+Date:   Fri, 29 Jul 2022 14:16:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 5469982f2cdacdb7d9757479a71633e35e4f1e63
+Message-ID: <62e37b24.+7G5EOFU9Z7fr422%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Verkamp <dverkamp@chromium.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git master
+branch HEAD: 5469982f2cdacdb7d9757479a71633e35e4f1e63  Merge x86/urgent into tip/master
 
-Tests that ensure MFD_NOEXEC memfds have the appropriate mode bits and
-cannot be chmod-ed into being executable.
+elapsed time: 1119m
 
-Co-developed-by: Jeff Xu <jeffxu@google.com>
-Signed-off-by: Jeff Xu <jeffxu@google.com>
-Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
----
- tools/testing/selftests/memfd/memfd_test.c | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+configs tested: 66
+configs skipped: 2
 
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 1d7e7b36bbdd..4906f778564e 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -36,6 +36,10 @@
- #define MAX_PATH 256
- #endif
- 
-+#ifndef MFD_NOEXEC
-+#define MFD_NOEXEC	0x0008U
-+#endif
-+
- /*
-  * Default is not to test hugetlbfs
-  */
-@@ -1006,6 +1010,35 @@ static void test_seal_exec(void)
- 	close(fd);
- }
- 
-+/*
-+ * Test memfd_create with MFD_NOEXEC flag
-+ * Test that MFD_NOEXEC applies F_SEAL_EXEC and prevents change of exec bits
-+ */
-+static void test_noexec(void)
-+{
-+	int fd;
-+
-+	printf("%s NOEXEC\n", memfd_str);
-+
-+	/* Create with NOEXEC and ALLOW_SEALING */
-+	fd = mfd_assert_new("kern_memfd_noexec",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_NOEXEC);
-+	mfd_assert_mode(fd, 0666);
-+	mfd_assert_has_seals(fd, F_SEAL_EXEC);
-+	mfd_fail_chmod(fd, 0777);
-+	close(fd);
-+
-+	/* Create with NOEXEC but without ALLOW_SEALING */
-+	fd = mfd_assert_new("kern_memfd_noexec",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_NOEXEC);
-+	mfd_assert_mode(fd, 0666);
-+	mfd_assert_has_seals(fd, F_SEAL_EXEC | F_SEAL_SEAL);
-+	mfd_fail_chmod(fd, 0777);
-+	close(fd);
-+}
-+
- /*
-  * Test sharing via dup()
-  * Test that seals are shared between dupped FDs and they're all equal.
-@@ -1179,6 +1212,7 @@ int main(int argc, char **argv)
- 
- 	test_create();
- 	test_basic();
-+	test_noexec();
- 
- 	test_seal_write();
- 	test_seal_future_write();
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                                defconfig
+powerpc                          allmodconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+arm                                 defconfig
+arc                  randconfig-r043-20220728
+sh                               allmodconfig
+x86_64                        randconfig-a013
+riscv                randconfig-r042-20220728
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+s390                 randconfig-r044-20220728
+mips                             allyesconfig
+i386                          randconfig-a014
+x86_64                        randconfig-a006
+powerpc                           allnoconfig
+i386                          randconfig-a012
+x86_64                        randconfig-a015
+i386                          randconfig-a016
+arm                              allyesconfig
+i386                          randconfig-a001
+arm64                            allyesconfig
+x86_64                           rhel-8.3-kvm
+i386                          randconfig-a003
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+ia64                             allmodconfig
+i386                          randconfig-a005
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+m68k                             allyesconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+m68k                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+s390                       zfcpdump_defconfig
+openrisc                         alldefconfig
+i386                          randconfig-c001
+
+clang tested configs:
+hexagon              randconfig-r045-20220728
+hexagon              randconfig-r041-20220728
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+x86_64                        randconfig-a005
+x86_64                        randconfig-a016
+x86_64                        randconfig-a001
+i386                          randconfig-a015
+x86_64                        randconfig-a012
+x86_64                        randconfig-a003
+i386                          randconfig-a011
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+arm                         hackkit_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                   microwatt_defconfig
+powerpc                      ppc64e_defconfig
+mips                          rm200_defconfig
+arm                  colibri_pxa270_defconfig
+
 -- 
-2.37.1.455.g008518b4e5-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

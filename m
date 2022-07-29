@@ -2,60 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12046584A18
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1442B584A1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbiG2DNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 23:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S233917AbiG2DNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 23:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiG2DNX (ORCPT
+        with ESMTP id S230081AbiG2DNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 23:13:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E31B7C18B;
-        Thu, 28 Jul 2022 20:13:21 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LvCFD0rpVzjXVw;
-        Fri, 29 Jul 2022 11:10:24 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Jul 2022 11:13:19 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Jul 2022 11:13:19 +0800
-Subject: Re: [PATCH v2] rcu: Display registers of self-detected stall as far
- as possible
-To:     <paulmck@kernel.org>
-CC:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220728024327.1202-1-thunder.leizhen@huawei.com>
- <20220728161520.GE2860372@paulmck-ThinkPad-P17-Gen-1>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <5dfe8c4e-9e88-d0f0-0882-d438affa436d@huawei.com>
-Date:   Fri, 29 Jul 2022 11:13:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20220728161520.GE2860372@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 23:13:45 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710E07C18E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 20:13:43 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id D35695C015E;
+        Thu, 28 Jul 2022 23:13:42 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Thu, 28 Jul 2022 23:13:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1659064422; x=1659150822; bh=jmTWaMJZZp
+        aHx/eRfunc9ygBCF1SRQEFNuZIY6+FOFY=; b=dfaSW5nvtDsxvb56KmVIpJaoRR
+        useKali9k/3zqjPVVSqfKz6r4rUSimIV6dbbpvedOtNLaBW5bJH2NU2V8O2PcrXO
+        zyTB5k+rja91KYDpsfPd2qyg1XZQgyBvIxqTy5Y73RPDr16JfRRQLlo5fvdAIWkd
+        /7ClLfjC84o1bMxnoIw8MMUIQMpm+bXatCBFKtFLmDPaOaSVonB55a9RF8nfA6ha
+        qFZDFwk7LAfj9S9z3e56n3CO3yN2g4cPABVmeNcBt89ChjGQmcD1XHsDF5MTLuwA
+        mVsI4LGkT4TP26/hkWek/MpLse8bBTKerSlFB3b2o1KOSClIA+vMqSh4t3Ww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659064422; x=1659150822; bh=jmTWaMJZZpaHx/eRfunc9ygBCF1S
+        RQEFNuZIY6+FOFY=; b=F/WdDtXIGQ44bvckNeMNE+SyZuVqW95jYqFoAzPzvcFx
+        tuOfOlqrU3ViMNVqXxJN+UWJ1v9yLDwpKxId0aBEQOLpRAFqtrC1HXQWour0gIfz
+        CkrS2piNViC0lpco7dsd/ubWdatz2jnQJFvG2gp4+uJX8JNHRXnqa+sZBv43bYV3
+        Ik2KzX5inDOROHOfY9WhrckkXBa4PabqxnrIFvHR4aHpL18fHC/C5awjjtQyILib
+        7NV6/fE6eduBhfmYOsf5bKa7XdHjf51Z7C6bqm6Nk5bdj0Ak4IfDLAVB4GyWrHlI
+        C6k6koNZX10siLw4vDemcEfj8Ls6x96rMieyWhHOXw==
+X-ME-Sender: <xms:ZlDjYn_eXxWETc7UI7n5OMhsZ8y2EJI7CwqmfSyh593HofxfRdxLBQ>
+    <xme:ZlDjYjvywcJv6TJvXxF7BRW05k_5FC4hxB6EXGXiwjDM6uDlFkttsoHFH_xc83h4y
+    l8lwMkpEQg4JS5N6g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduiedgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpefhheehgfekuddutedthfevfeejtefftddvveekgefgheffgeekjeet
+    vdeuveeuleenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgpdhgihhthhhusg
+    drtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
+    pegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:ZlDjYlB9-Zt7eKWAw-Y-WirLKQFtBs7AwrRl2KZ02BvEJ5PLeaGEhg>
+    <xmx:ZlDjYjenc7pY4RhIJhDxPesvzJveoZJf0Ws6UttDtipg92Qf9pEwvg>
+    <xmx:ZlDjYsNgcWBFomzA0fHTlL5WvmrQxZ1mgrybf1XjEr6Zgqk3XGQIPw>
+    <xmx:ZlDjYr0inz3-O1AtQxF9Z5UC_Zg5hJsJ_SdBSZYH5tHpjG0D40kaCw>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 82EA21700083; Thu, 28 Jul 2022 23:13:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-758-ge0d20a54e1-fm-20220729.001-ge0d20a54
+Mime-Version: 1.0
+Message-Id: <4c4462a6-e950-48cb-b9ba-822909a86867@www.fastmail.com>
+In-Reply-To: <SEZPR06MB5269DFE2CF762B62846D315EF2999@SEZPR06MB5269.apcprd06.prod.outlook.com>
+References: <20220516064900.30517-1-ryan_chen@aspeedtech.com>
+ <20220516064900.30517-3-ryan_chen@aspeedtech.com>
+ <5d863bc1-4f27-48b6-89ab-c3f02bc09057@www.fastmail.com>
+ <SEZPR06MB5269DFE2CF762B62846D315EF2999@SEZPR06MB5269.apcprd06.prod.outlook.com>
+Date:   Fri, 29 Jul 2022 12:43:22 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Ryan Chen" <ryan_chen@aspeedtech.com>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Cc:     BMC-SW <BMC-SW@aspeedtech.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: i2c-ast2600: Add bindings for AST2600 i2C
+ driver
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,147 +95,149 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/7/29 0:15, Paul E. McKenney wrote:
-> On Thu, Jul 28, 2022 at 10:43:27AM +0800, Zhen Lei wrote:
->> For architectures that do not support NMI interrupts, registers is not
->> printed when rcu stall is self-detected. However, this information is
->> useful for analyzing the root cause of the fault. Fortunately, the rcu
->> stall is always detected in the tick interrupt handler. So we can take
->> it through get_irq_regs() and display it through show_regs(). Further,
->> show_regs() unwind the call trace based on 'regs', the worthless call
->> trace associated with tick handling will be omitted, this helps us to
->> focus more on the problem.
->>
->> This is an example on arm64:
->> [   27.501721] rcu: INFO: rcu_preempt self-detected stall on CPU
->> [   27.502238] rcu:     0-....: (1250 ticks this GP) idle=4f7/1/0x4000000000000000 softirq=2594/2594 fqs=619
->> [   27.502632]  (t=1251 jiffies g=2989 q=29 ncpus=4)
->> [   27.503845] CPU: 0 PID: 306 Comm: test0 Not tainted 5.19.0-rc7-00009-g1c1a6c29ff99-dirty #46
->> [   27.504732] Hardware name: linux,dummy-virt (DT)
->> [   27.504947] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> [   27.504998] pc : arch_counter_read+0x18/0x24
->> [   27.505301] lr : arch_counter_read+0x18/0x24
->> [   27.505328] sp : ffff80000b29bdf0
->> [   27.505345] x29: ffff80000b29bdf0 x28: 0000000000000000 x27: 0000000000000000
->> [   27.505475] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
->> [   27.505553] x23: 0000000000001f40 x22: ffff800009849c48 x21: 000000065f871ae0
->> [   27.505627] x20: 00000000000025ec x19: ffff80000a6eb300 x18: ffffffffffffffff
->> [   27.505654] x17: 0000000000000001 x16: 0000000000000000 x15: ffff80000a6d0296
->> [   27.505681] x14: ffffffffffffffff x13: ffff80000a29bc18 x12: 0000000000000426
->> [   27.505709] x11: 0000000000000162 x10: ffff80000a2f3c18 x9 : ffff80000a29bc18
->> [   27.505736] x8 : 00000000ffffefff x7 : ffff80000a2f3c18 x6 : 00000000759bd013
->> [   27.505761] x5 : 01ffffffffffffff x4 : 0002dc6c00000000 x3 : 0000000000000017
->> [   27.505787] x2 : 00000000000025ec x1 : ffff80000b29bdf0 x0 : 0000000075a30653
->> [   27.505937] Call trace:
->> [   27.506002]  arch_counter_read+0x18/0x24
->> [   27.506171]  ktime_get+0x48/0xa0
->> [   27.506207]  test_task+0x70/0xf0
->> [   27.506227]  kthread+0x10c/0x110
->> [   27.506243]  ret_from_fork+0x10/0x20
->>
->> The old output is as follows:
->> [   27.944550] rcu: INFO: rcu_preempt self-detected stall on CPU
->> [   27.944980] rcu:     0-....: (1249 ticks this GP) idle=cbb/1/0x4000000000000000 softirq=2610/2610 fqs=614
->> [   27.945407]  (t=1251 jiffies g=2681 q=28 ncpus=4)
->> [   27.945731] Task dump for CPU 0:
->> [   27.945844] task:test0           state:R  running task     stack:    0 pid:  306 ppid:     2 flags:0x0000000a
->> [   27.946073] Call trace:
->> [   27.946151]  dump_backtrace.part.0+0xc8/0xd4
->> [   27.946378]  show_stack+0x18/0x70
->> [   27.946405]  sched_show_task+0x150/0x180
->> [   27.946427]  dump_cpu_task+0x44/0x54
->> [   27.947193]  rcu_dump_cpu_stacks+0xec/0x130
->> [   27.947212]  rcu_sched_clock_irq+0xb18/0xef0
->> [   27.947231]  update_process_times+0x68/0xac
->> [   27.947248]  tick_sched_handle+0x34/0x60
->> [   27.947266]  tick_sched_timer+0x4c/0xa4
->> [   27.947281]  __hrtimer_run_queues+0x178/0x360
->> [   27.947295]  hrtimer_interrupt+0xe8/0x244
->> [   27.947309]  arch_timer_handler_virt+0x38/0x4c
->> [   27.947326]  handle_percpu_devid_irq+0x88/0x230
->> [   27.947342]  generic_handle_domain_irq+0x2c/0x44
->> [   27.947357]  gic_handle_irq+0x44/0xc4
->> [   27.947376]  call_on_irq_stack+0x2c/0x54
->> [   27.947415]  do_interrupt_handler+0x80/0x94
->> [   27.947431]  el1_interrupt+0x34/0x70
->> [   27.947447]  el1h_64_irq_handler+0x18/0x24
->> [   27.947462]  el1h_64_irq+0x64/0x68                       <--- the above backtrace is worthless
->> [   27.947474]  arch_counter_read+0x18/0x24
->> [   27.947487]  ktime_get+0x48/0xa0
->> [   27.947501]  test_task+0x70/0xf0
->> [   27.947520]  kthread+0x10c/0x110
->> [   27.947538]  ret_from_fork+0x10/0x20
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> 
-> A nice improvement!
-> 
-> But wouldn't it be better to push this code down into dump_cpu_task()
-> itself, so that all callers could gain this benefit?
+On Fri, 29 Jul 2022, at 12:33, Ryan Chen wrote:
+> Hello Andrew,
+>
+>> -----Original Message-----
+>> From: Andrew Jeffery <andrew@aj.id.au>
+>> Sent: Friday, July 29, 2022 10:29 AM
+>> To: Ryan Chen <ryan_chen@aspeedtech.com>; Joel Stanley <joel@jms.id.au>;
+>> Philipp Zabel <p.zabel@pengutronix.de>; linux-arm-kernel@lists.infradead.org;
+>> linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org;
+>> openbmc@lists.ozlabs.org
+>> Cc: BMC-SW <BMC-SW@aspeedtech.com>
+>> Subject: Re: [PATCH v3 2/3] dt-bindings: i2c-ast2600: Add bindings for AST2600
+>> i2C driver
+>> 
+>> Hi Ryan,
+>> 
+>> On Mon, 16 May 2022, at 16:18, ryan_chen wrote:
+>> > AST2600 support new register set for I2C controller, add bindings
+>> > document to support driver of i2c new register mode controller
+>> >
+>> > Signed-off-by: ryan_chen <ryan_chen@aspeedtech.com>
+>> > ---
+>> >  .../bindings/i2c/aspeed,i2c-ast2600.ymal      | 78
+>> +++++++++++++++++++
+>> >  1 file changed, 78 insertions(+)
+>> >  create mode 100644
+>> > Documentation/devicetree/bindings/i2c/aspeed,i2c-ast2600.ymal
+>> >
+>> > diff --git
+>> > a/Documentation/devicetree/bindings/i2c/aspeed,i2c-ast2600.ymal
+>> > b/Documentation/devicetree/bindings/i2c/aspeed,i2c-ast2600.ymal
+>> > new file mode 100644
+>> > index 000000000000..7c75f5bac24f
+>> > --- /dev/null
+>> > +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c-ast2600.ymal
+>> > @@ -0,0 +1,78 @@
+>> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+>> > +---
+>> > +$id: http://devicetree.org/schemas/i2c/aspeed,i2c-ast2600.yaml#
+>> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> > +
+>> > +title: AST2600 I2C Controller on the AST26XX SoCs Device Tree
+>> > +Bindings
+>> > +
+>> > +maintainers:
+>> > +  - Ryan Chen <ryan_chen@aspeedtech.com>
+>> > +
+>> > +allOf:
+>> > +  - $ref: /schemas/i2c/i2c-controller.yaml#
+>> > +
+>> > +properties:
+>> > +  compatible:
+>> > +    enum:
+>> > +      - aspeed,ast2600-i2c
+>> 
+>> The original driver uses e.g. aspeed,ast2500-i2c-bus for the subordinate
+>> controllers. While the register layout changes, I'd prefer we try to use the
+>> existing compatibles rather than introducing a new set and causing some
+>> confusion.
+>> 
+>> Further, what you're proposing here is effectively being used to select the
+>> driver implementation, which isn't the purpose of the devicetree.
+>> 
+>> My preference would be to reuse the existing compatibles and instead select
+>> the driver implementation via Kconfig. Or, if we can figure out some way to do
+>> so, support both register interfaces in the one driver implementation and fall
+>> back to the old register interface where the new one isn't available (I don't
+>> think this is feasible though).
+>> 
+> Yes, that the reason go for another driver ast2600 to implement.
+> Like others SOC driver implement different generation have diff driver 
+> in Kconfig 
+> and Makefile.
+> Example :
+> https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/Makefile#L82-L84
+>
+>
+>> > +
+>> > +  reg:
+>> > +    minItems: 1
+>> > +    items:
+>> > +      - description: address offset and range of bus
+>> > +      - description: address offset and range of bus buffer
+>> > +
+>> > +  interrupts:
+>> > +    maxItems: 1
+>> > +
+>> > +  clocks:
+>> > +    maxItems: 1
+>> > +    description:
+>> > +      root clock of bus, should reference the APB
+>> > +      clock in the second cell
+>> > +
+>> > +  resets:
+>> > +    maxItems: 1
+>> > +
+>> > +  bus-frequency:
+>> > +    minimum: 500
+>> > +    maximum: 2000000
+>> > +    default: 100000
+>> > +    description: frequency of the bus clock in Hz defaults to 100 kHz
+>> > when not
+>> > +      specified
+>> > +
+>> > +  multi-master:
+>> > +    type: boolean
+>> > +    description:
+>> > +      states that there is another master active on this bus
+>> > +
+>> > +required:
+>> > +  - reg
+>> > +  - compatible
+>> > +  - clocks
+>> > +  - resets
+>> > +
+>> > +unevaluatedProperties: false
+>> > +
+>> > +examples:
+>> > +  - |
+>> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> > +    #include <dt-bindings/clock/ast2600-clock.h>
+>> > +
+>> > +    i2c_gr: i2c-global-regs@0 {
+>> > +      compatible = "aspeed,ast2600-i2c-global", "syscon";
+>> > +      reg = <0x0 0x20>;
+>> > +      resets = <&syscon ASPEED_RESET_I2C>;
+>> > +    };
+>> > +
+>> > +    i2c0: i2c-bus@80 {
+>> > +      #address-cells = <1>;
+>> > +      #size-cells = <0>;
+>> > +      #interrupt-cells = <1>;
+>> > +      compatible = "aspeed,ast2600-i2c-bus";
+>> 
+>> This isn't quite right with respect to your binding description above :)
+> Yes, the compatible need to be " aspeed,ast2600-i2c" is that your point ?
 
-Oh, right. I will move it into dump_cpu_task().
+Yes, but only if we agree that we should have different compatibles for 
+the different drivers. I'm not convinced about that yet.
 
-> 
-> 							Thanx, Paul
-> 
->> ---
->>  kernel/rcu/tree_stall.h | 18 +++++++++++++++++-
->>  1 file changed, 17 insertions(+), 1 deletion(-)
->>
->> v1 --> v2:
->> Fix C99 build warning:
->> kernel/rcu/tree_stall.h:358:10: error: call to undeclared function 'get_irq_regs';
->> ISO C99 and later do not support implicit function declarations
->>
->> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
->> index a001e1e7a99269c..23bfd755c3f6e5b 100644
->> --- a/kernel/rcu/tree_stall.h
->> +++ b/kernel/rcu/tree_stall.h
->> @@ -8,6 +8,7 @@
->>   */
->>  
->>  #include <linux/kvm_para.h>
->> +#include <asm/irq_regs.h>
->>  
->>  //////////////////////////////////////////////////////////////////////////////
->>  //
->> @@ -350,6 +351,21 @@ static int rcu_print_task_stall(struct rcu_node *rnp, unsigned long flags)
->>  }
->>  #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
->>  
->> +static void rcu_dump_cpu_task(int cpu)
->> +{
->> +	if (cpu == smp_processor_id() && in_irq()) {
->> +		struct pt_regs *regs;
->> +
->> +		regs = get_irq_regs();
->> +		if (regs) {
->> +			show_regs(regs);
->> +			return;
->> +		}
->> +	}
->> +
->> +	dump_cpu_task(cpu);
->> +}
->> +
->>  /*
->>   * Dump stacks of all tasks running on stalled CPUs.  First try using
->>   * NMIs, but fall back to manual remote stack tracing on architectures
->> @@ -369,7 +385,7 @@ static void rcu_dump_cpu_stacks(void)
->>  				if (cpu_is_offline(cpu))
->>  					pr_err("Offline CPU %d blocking current GP.\n", cpu);
->>  				else if (!trigger_single_cpu_backtrace(cpu))
->> -					dump_cpu_task(cpu);
->> +					rcu_dump_cpu_task(cpu);
->>  			}
->>  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
->>  	}
->> -- 
->> 2.25.1
->>
-> .
-> 
+I think it's enough to have different Kconfig symbols, and select the 
+old driver in aspeed_g4_defconfig, and the new driver in 
+aspeed_g5_defconfig. Won't that gives us the right outcome without
+requiring a new set of compatibles?
 
--- 
-Regards,
-  Zhen Lei
+Andrew

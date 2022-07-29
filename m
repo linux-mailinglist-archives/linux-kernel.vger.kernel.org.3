@@ -2,149 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6835848EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E811584903
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232909AbiG2ALU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 20:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S233592AbiG2AUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 20:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiG2ALS (ORCPT
+        with ESMTP id S233558AbiG2AUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 20:11:18 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26284F66C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:11:16 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-10d6ddda695so4684529fac.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j3vlQ1+c29TL6mpbmECY5+yY16HdPfE9WGc99Ei1lTA=;
-        b=gjG3hrkjszPaHeVvTBCRlrsS5Qgf8pBwLl35vWw0HlVci/jm11c5P23IRYoZvMcrf1
-         iQkjlo6thoZ8ODwjf14ufqWBQ+MsrEpfMnUjE1CmW4/NvlcrknXhSLL3rsfvZrPC+Dzd
-         4ml/iNJbLAeCUVKzLkptwOU0+JS3447Ju3Vw5Wef/f/NusiGAuPHx+5C+28FcnFUVWhr
-         Zq1dBphR89YdmGc0dXm5VNDRTZPOd2mzYCyAopUq5vn8L/2FwIg8ik2WgRw/qzyXkbID
-         JkMTjlXjPW5NIcB0ddlo3SEbqLkzZ5BPCGr1aEuPObP4OOGzH3uZa3h7m2HVpwgzxT9R
-         +WTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=j3vlQ1+c29TL6mpbmECY5+yY16HdPfE9WGc99Ei1lTA=;
-        b=U6xNf2ZB3EhlCxMm7f6Sjd4/8A6HG4GLIX7oYQ1kDYGiLAkKiNiiKJhSJROcRMAcDF
-         aw3h6GZf05loYZJM4L/ZwW7AanuP7H/n3D+mAez97NM0l1ZTYq0Mv0Uu5vmJNKKo+TI4
-         hu6wJHT48tG8mdYg8kQvqimOXRDL03kId69HToRDLTQSuF8ndKPDoEDe3NDxZJp7Kl3w
-         95F0U8jaLJdL2+OyNAwQOQjCOi5kIfxJy8kBwItjrRhgGXgcx9cCrBgMSfa8rHz2uUdl
-         wni42bFeFd0NgCuaJ9yQV3V+wfDDN+LIuOsSzz3RQRSt4S2Da1GmT084mEkK6bIYR1Eg
-         u4Sw==
-X-Gm-Message-State: AJIora9u2U9ZKvaeVY7qPpx66qcGjwgb+fKLM8lgDpYASMojBFaiL8IV
-        tgov/M6LeuborBEl9VXVo4k=
-X-Google-Smtp-Source: AGRyM1vdzFO/fulZy1Zr2qwsOG2c0IEwL0uxVw72ke/1PjyKZPx9VpShAVpSlwvn+5jjk00BQN/ceA==
-X-Received: by 2002:a05:6870:e997:b0:10c:6f42:b05e with SMTP id r23-20020a056870e99700b0010c6f42b05emr517826oao.89.1659053476019;
-        Thu, 28 Jul 2022 17:11:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w29-20020a056870339d00b00101bd4914f9sm1032441oae.43.2022.07.28.17.11.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 17:11:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 28 Jul 2022 17:11:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 5.19-rc8
-Message-ID: <20220729001113.GA1979316@roeck-us.net>
-References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
- <20220725161141.GA1306881@roeck-us.net>
- <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
- <Yt+v9brPqxun0nhA@shell.armlinux.org.uk>
- <YuLVRiblUzo18gST@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuLVRiblUzo18gST@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 20:20:48 -0400
+X-Greylist: delayed 357 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Jul 2022 17:20:47 PDT
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3841903F;
+        Thu, 28 Jul 2022 17:20:46 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 77CB758099B;
+        Thu, 28 Jul 2022 20:14:48 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Thu, 28 Jul 2022 20:14:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1659053688; x=1659060888; bh=1CqIgEzBLY
+        47OHaV4sSf/xZhANJWym0dF7Lbe51Gho8=; b=Prja2fJywNoccXxpjpow3zGOJ2
+        xOO4vfXVawIaKmJc0bhYtRFydLKuH0fHCgcVLRM1lUuLNu9BBN//3X9ouCnjhWE/
+        h6CzOrA/fHh2fcolx+w5V5tq6TCq2bQIPsf3ZACWLAKEpf25e8ZY9XU3KFQic2se
+        Jtce8nCqDD9jE+OjT6DxHmtBE41TY8DYxcrHiNxcyS8kN3p2GQxDzYsllntF8mJS
+        FS2T7PKKNAKPR8aJRiKi728rbnqI8yzpnLur/gXgoHLFMmia3zmPWCK9KTleynRy
+        jOxuw5ngIWElnzlSjMqsH07YSliZTA7wCA1cjU76B4SvQw24/jF2rPXTu1qg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659053688; x=1659060888; bh=1CqIgEzBLY47OHaV4sSf/xZhANJW
+        ym0dF7Lbe51Gho8=; b=rk1BZHZ1UaKHog5lKRuUrUckMq4BFSl4BtoMl4GVeEqA
+        uP8Q/U4l30FCDS6Lcw3xoSku/ZK/qU0Ppk3IwCHStdpczFzStmnmO+vC8fgdqtMF
+        L/9J11RH73L9sx+hzEM7Eu5L2OQZDiRt+J4fkyFq50/7oqrhR+fyh3f2zJfKWvbX
+        G5oB1PIDRUU4HJ25E1M0KtG9dyqUyrQTA3jbvGkorG2/yaqJAjlBAAjd5Q2fWxl8
+        Itq4r/XIBs9hQu2qdc6/UCMqpnavTMvAaMxWwoxGtCPMptiR3o/ZgbZKMSuVjAu9
+        GxafBtrfUIcHJLVFoN5Y5kI4k3zq1mPqBv0rN8j4eQ==
+X-ME-Sender: <xms:dibjYq61WULSSvHAb-Fw6g_a4fXhuLh8dvOAfkntuhZvcfdlvl7Pww>
+    <xme:dibjYj7LyoGVphHU_BmO-2rYwgaulvBbRFulbawl0I52oSGsa9-e4LnjM3ZcB2utm
+    iqBTBR4VqJXRHgcMw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduhedgudefiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhgurhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecugg
+    ftrfgrthhtvghrnhepkedvkeejkefgjeduffetteegjeekteetudevtdfftdeluddthfeh
+    veefteekieetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnughrvgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:dibjYpeVeo5Y5h9hpZreusiUaYr9cd-GNjqdKKjoELpg2MwQwS2j_g>
+    <xmx:dibjYnLHruoskZDhofIBZdqd2L6PUeOuHZh_12EOvd8nk4fKXELcKA>
+    <xmx:dibjYuIb9-it4epXA9PpIvUcVGm0Og35TN2M0qLz4e-5zACCQcRfjQ>
+    <xmx:eCbjYsQMVZNaGfoD93vj0O0QSde7ARYF5pisHwVHhhgcCI35mR2OAg>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 183BA1700083; Thu, 28 Jul 2022 20:14:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-757-gc3ad9c75d3-fm-20220722.001-gc3ad9c75
+Mime-Version: 1.0
+Message-Id: <833e10d7-ceb1-4859-8028-e724d41421f1@www.fastmail.com>
+In-Reply-To: <20220721141325.2413920-2-arnd@kernel.org>
+References: <20220721141325.2413920-1-arnd@kernel.org>
+ <20220721141325.2413920-2-arnd@kernel.org>
+Date:   Fri, 29 Jul 2022 09:44:25 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Arnd Bergmann" <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     "Andrew Lunn" <andrew@lunn.ch>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        linux-aspeed@lists.ozlabs.org,
+        "Neil Armstrong" <narmstrong@baylibre.com>,
+        "Tony Lindgren" <tony@atomide.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        "Liviu Dudau" <liviu.dudau@arm.com>,
+        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+        linux-kernel@vger.kernel.org,
+        "Thierry Reding" <thierry.reding@gmail.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Alexander Shiyan" <shc_work@mail.ru>,
+        "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Will Deacon" <will@kernel.org>,
+        "Gregory Clement" <gregory.clement@bootlin.com>,
+        linux-sh@vger.kernel.org,
+        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>,
+        "Chen-Yu Tsai" <wens@csie.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        "NXP Linux Team" <linux-imx@nxp.com>, linux-sunxi@lists.linux.dev,
+        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        "Arnd Bergmann" <arnd@arndb.de>, "Ray Jui" <rjui@broadcom.com>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Takao Orito" <orito.takao@socionext.com>,
+        "Vladimir Zapolskiy" <vz@mleia.com>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        "Scott Branden" <sbranden@broadcom.com>,
+        "Taichi Sugaya" <sugaya.taichi@socionext.com>,
+        "Samuel Holland" <samuel@sholland.org>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Sudeep Holla" <sudeep.holla@arm.com>, linux-oxnas@groups.io,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>
+Subject: Re: [PATCH 1/6] ARM: refresh defconfig files
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 07:28:22PM +0100, Russell King (Oracle) wrote:
-> On Tue, Jul 26, 2022 at 10:12:21AM +0100, Russell King (Oracle) wrote:
-> > First I'm aware of it. Was it reported to linux-arm-kernel? I'm guessing
-> > the report wasn't Cc'd to me - I can't find anything in my mailbox about
-> > it.
-> > 
-> > > I think the fix might be something like this:
-> > > 
-> > >   diff --git a/arch/arm/lib/findbit.S b/arch/arm/lib/findbit.S
-> > >   index b5e8b9ae4c7d..b36ca301892e 100644
-> > >   --- a/arch/arm/lib/findbit.S
-> > >   +++ b/arch/arm/lib/findbit.S
-> > >   @@ -83,6 +83,8 @@ ENDPROC(_find_first_bit_le)
-> > >    ENTRY(_find_next_bit_le)
-> > >                 teq     r1, #0
-> > >                 beq     3b
-> > >   +             cmp     r2, r1
-> > >   +             bhs     3b
-> > >                 ands    ip, r2, #7
-> > >                 beq     1b                      @ If new byte, goto old routine
-> > >     ARM(                ldrb    r3, [r0, r2, lsr #3]    )
-> > > 
-> > > but my ARM asm is so broken that the above is just really random noise
-> > > that may or may not build - much less work.
-> > > 
-> > > I'll leave it to Russell &co to have a tested and working patch.
-> > 
-> > I think it needs a bit more than that, but as you point out in later
-> > emails, the compiler may do a better job for this.
-> 
-> Okay, I've moved my patch that fixes this (without adding a single line
-> of code!) to my fixes branch, which I'll ask you to pull in the next
-> couple of days.
-> 
-I downloaded your patch and ran it through my testbed.
-With it applied, the problem is no longer seen.
-Feel free to add
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Thanks,
-Guenter
+On Thu, 21 Jul 2022, at 23:43, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> A lot of Kconfig options have changed over the years, and we tend
+> to not do a blind 'make defconfig' to refresh the files, to ensure
+> we catch options that should not have gone away.
+>
+> I used some a bit of scripting to only rework the bits where an
+> option moved around in any of the defconfig files, without also
+> dropping any of the other lines, to make it clearer which options
+> we no longer have.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/configs/am200epdkit_defconfig    |  26 ++---
+>  arch/arm/configs/aspeed_g4_defconfig      |  16 +--
+>  arch/arm/configs/aspeed_g5_defconfig      |  16 +--
 
-> Each of the _find_next_* functions had:
-> 
-> 	teq	r1, #0
-> 	beq	3b
-> 
-> at the beginning to catch the case where size == 0. This is now:
-> 
-> 	cmp	r2, r1
-> 	bhs	3b
-> 
-> which is the C equivalent of:
-> 
-> 	if (offset >= size)
-> 		goto 3b;
-> 
-> where both are unsigned, and nicely covers the case where size == 0 as
-> before (since if size is 0, the condition is always true irrespective
-> of the value of offset.)
-> 
-> We can sort out the question of keeping this code or not later, but I
-> think as this has been spotted as an issue, it's important to get it
-> fixed.
-> 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+For the Aspeed bits:
+
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>

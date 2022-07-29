@@ -2,235 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA03584B9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A29584B9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbiG2GU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S234586AbiG2GXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234515AbiG2GUz (ORCPT
+        with ESMTP id S233734AbiG2GXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:20:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0817AC03
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659075654; x=1690611654;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=p53zOWl9ehLCjjDCiyqYBG5Q0r1x8FuF8Dzv+TD7iFE=;
-  b=FccKIEEBX4XzASkb2pDcoW44zxHzqBi1zFgtaEAYytuP4uQ5d2U/s9cn
-   I0EO1BmMOB7Fr7uTH5d2XPS2klsv2lT0yyah1pF1dKdClCy2OlJJ3/nxg
-   P3KuDxisZaU9fiQBDugxBTtM3SJ4nmXGAWlo+IxBPdRyKzcwgG8Yg7/wh
-   BdZm3xn2B3+C4BbVO16fUQd8ir7mU+X34IURHC+CQDCUTIY0PLlJbPHXX
-   tyrbsglHYkwuXWJ+yi85KJhqk0QPyls3ji20ZUm72+koeU/BNIvuA8rIw
-   G6kYUKkmk2OB4kUMrEOB1Z2LVruwxJGxyaGO2PbKZrngG1vuh6tjp641T
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="269085202"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="269085202"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 23:20:54 -0700
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="928629089"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 23:20:51 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v11 4/8] mm/demotion/dax/kmem: Set node's abstract
- distance to MEMTIER_ADISTANCE_PMEM
-References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
-        <20220728190436.858458-5-aneesh.kumar@linux.ibm.com>
-Date:   Fri, 29 Jul 2022 14:20:47 +0800
-In-Reply-To: <20220728190436.858458-5-aneesh.kumar@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Fri, 29 Jul 2022 00:34:32 +0530")
-Message-ID: <875yjgmocg.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 29 Jul 2022 02:23:14 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630907AC03
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:23:13 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z22so4626645edd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=jn7iNHkpfjyvOcSRY1FS0eqnb8a81QxEYqDJzIKy0rg=;
+        b=VnPVkgWWYibvER1O6NFyX1pqmFaNRfiduYlMrdDL1OA04YSkzsNvhrM0c9oU3+bmWG
+         Oybps67yGl7FcLItPA+I+EtUyu599cgHgTh4burV1ONC3JZFmQfzLfc+Tr5gh0PNzUiD
+         9JafgKi+EtG4hRfb+N5Oq70Mb1bm5MreZ6lujTqkOFBkeZTchQ5xQVS2aBtgcbgKuR1/
+         Fawhi0MMrmDNxyMFye1m5Cns3+gk2Ae5e1jZmnrtk4v/bwt0hAtQtRGvDjgNXjN8c1My
+         TS8VewslcFTbjXkbhaHx8r5behOxYjTHqP10GEx+806xHYyqm7DLGKPBWVzGCHyy19fp
+         NCrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jn7iNHkpfjyvOcSRY1FS0eqnb8a81QxEYqDJzIKy0rg=;
+        b=6/RHw4HgwAI0O5Xv94vFce9qhFHM6B86eiDjOSNX8omAXcmlOVz9gE03KQ92bT5WGg
+         RhhTjD6FBxnUHoYVbCCSdBiXsqj7wUglNbAGAKC7OLAkmLuGVohAjXPttr5aQCS1ygi5
+         nuIscw/BZe0VJquXftmoaBxRkR4kwu+j87Uhmad/XV3WEgAnK3l9hZMQXtly3m0u0X6Z
+         OHTnmURR/32Xa05EXY7a4GKxXf9C4RuKYdcJoTU3bN0lElIKQy+Hyv6wzxa/ATe0ld7r
+         Ia2CK8GJjiEbbtnKwb3aK5Cw97HZXHAHAhqTrnrlnOMeJa3WlTAVyn4IE5sI2ox5yxDf
+         xl7A==
+X-Gm-Message-State: AJIora9uUEiBXzeoDLCVqQg+pMAuHeNJQZiDCmjZalfy9oFKuEPaQrOv
+        wkTW0ixjSG9pvo6cnIrkAKqGPxFQKJ0=
+X-Google-Smtp-Source: AGRyM1tXf55v379ZCanytz5h1ko9t5wwHGJa2S8Lwk2iHnQvBdetk7cvhPuE/58cGwUhBYcVeoRFyQ==
+X-Received: by 2002:a05:6402:2b8f:b0:43a:66d4:a025 with SMTP id fj15-20020a0564022b8f00b0043a66d4a025mr2082333edb.121.1659075791866;
+        Thu, 28 Jul 2022 23:23:11 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f2e:6989:9a7f:5736:fb10:795a? (p200300c78f2e69899a7f5736fb10795a.dip0.t-ipconnect.de. [2003:c7:8f2e:6989:9a7f:5736:fb10:795a])
+        by smtp.gmail.com with ESMTPSA id w1-20020aa7da41000000b0043a4de1d421sm1839407eds.84.2022.07.28.23.23.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 23:23:11 -0700 (PDT)
+Message-ID: <90a16ffd-5a08-0ed3-280e-bd5c4522525c@gmail.com>
+Date:   Fri, 29 Jul 2022 08:23:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/3] staging: rtl8192u: move debug stuff to its own
+ file
+Content-Language: en-US
+To:     Tong Zhang <ztong0001@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Saurav Girepunje <saurav.girepunje@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+References: <YuDdHMaB6jWARQzA@kroah.com>
+ <20220729035230.226172-1-ztong0001@gmail.com>
+ <20220729035230.226172-2-ztong0001@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220729035230.226172-2-ztong0001@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
-
-> By default, all nodes are assigned to the default memory tier which
-> is the memory tier designated for nodes with DRAM
->
-> Set dax kmem device node's tier to slower memory tier by assigning
-> abstract distance to MEMTIER_ADISTANCE_PMEM. PMEM tier
-> appears below the default memory tier in demotion order.
->
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+On 7/29/22 05:52, Tong Zhang wrote:
+> This is to prepare for moving them to debugfs and fix rmmod warn issue
+> when wlan0 is renamed to something else.
+> 
+> Reviewed-by: Dan Carpenter<dan.carpenter@oracle.com>
+> Signed-off-by: Tong Zhang<ztong0001@gmail.com>
 > ---
->  drivers/dax/kmem.c           |  9 +++++++++
->  include/linux/memory-tiers.h | 19 ++++++++++++++++++-
->  mm/memory-tiers.c            | 28 ++++++++++++++++------------
->  3 files changed, 43 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
-> index a37622060fff..6b0d5de9a3e9 100644
-> --- a/drivers/dax/kmem.c
-> +++ b/drivers/dax/kmem.c
-> @@ -11,6 +11,7 @@
->  #include <linux/fs.h>
->  #include <linux/mm.h>
->  #include <linux/mman.h>
-> +#include <linux/memory-tiers.h>
->  #include "dax-private.h"
->  #include "bus.h"
->  
-> @@ -41,6 +42,12 @@ struct dax_kmem_data {
->  	struct resource *res[];
->  };
->  
-> +static struct memory_dev_type default_pmem_type  = {
 
-Why is this named as default_pmem_type?  We will not change the memory
-type of a node usually.
+When I applied your first patch I got this hint:
 
-> +	.adistance = MEMTIER_ADISTANCE_PMEM,
-> +	.tier_sibiling = LIST_HEAD_INIT(default_pmem_type.tier_sibiling),
-> +	.nodes  = NODE_MASK_NONE,
-> +};
-> +
->  static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
->  {
->  	struct device *dev = &dev_dax->dev;
-> @@ -62,6 +69,8 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
->  		return -EINVAL;
->  	}
->  
-> +	init_node_memory_type(numa_node, &default_pmem_type);
-> +
+Applying: staging: rtl8192u: move debug stuff to its own file
+.git/rebase-apply/patch:399: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
 
-The memory hot-add below may fail.  So the error handling needs to be
-added.
+Not really an functional issue...but
 
-And, it appears that the memory type and memory tier of a node may be
-fully initialized here before NUMA hot-adding started.  So I suggest to
-set node_memory_types[] here only.  And set memory_dev_type->nodes in
-node hot-add callback.  I think there is the proper place to complete
-the initialization.
-
-And, in theory dax/kmem.c can be unloaded.  So we need to clear
-node_memory_types[] for nodes somewhere.
-
-Best Regards,
-Huang, Ying
-
->  	for (i = 0; i < dev_dax->nr_range; i++) {
->  		struct range range;
->  
-> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-> index 976f43a5e3be..4f4baf0bf430 100644
-> --- a/include/linux/memory-tiers.h
-> +++ b/include/linux/memory-tiers.h
-> @@ -2,6 +2,8 @@
->  #ifndef _LINUX_MEMORY_TIERS_H
->  #define _LINUX_MEMORY_TIERS_H
->  
-> +#include <linux/types.h>
-> +#include <linux/nodemask.h>
->  /*
->   * Each tier cover a abstrace distance chunk size of 128
->   */
-> @@ -15,12 +17,27 @@
->  #define MEMTIER_ADISTANCE_PMEM	(1 << MEMTIER_CHUNK_BITS)
->  #define MEMTIER_HOTPLUG_PRIO	100
->  
-> +struct memory_tier;
-> +struct memory_dev_type {
-> +	/* list of memory types that are are part of same tier as this type */
-> +	struct list_head tier_sibiling;
-> +	/* abstract distance for this specific memory type */
-> +	int adistance;
-> +	/* Nodes of same abstract distance */
-> +	nodemask_t nodes;
-> +	struct memory_tier *memtier;
-> +};
-> +
->  #ifdef CONFIG_NUMA
-> -#include <linux/types.h>
->  extern bool numa_demotion_enabled;
-> +struct memory_dev_type *init_node_memory_type(int node, struct memory_dev_type *default_type);
->  
->  #else
->  
->  #define numa_demotion_enabled	false
-> +static inline struct memory_dev_type *init_node_memory_type(int node, struct memory_dev_type *default_type)
-> +{
-> +	return ERR_PTR(-EINVAL);
-> +}
->  #endif	/* CONFIG_NUMA */
->  #endif  /* _LINUX_MEMORY_TIERS_H */
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> index c9854a394d9b..109be75fa554 100644
-> --- a/mm/memory-tiers.c
-> +++ b/mm/memory-tiers.c
-> @@ -1,6 +1,4 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -#include <linux/types.h>
-> -#include <linux/nodemask.h>
->  #include <linux/slab.h>
->  #include <linux/lockdep.h>
->  #include <linux/memory.h>
-> @@ -19,16 +17,6 @@ struct memory_tier {
->  	int adistance_start;
->  };
->  
-> -struct memory_dev_type {
-> -	/* list of memory types that are are part of same tier as this type */
-> -	struct list_head tier_sibiling;
-> -	/* abstract distance for this specific memory type */
-> -	int adistance;
-> -	/* Nodes of same abstract distance */
-> -	nodemask_t nodes;
-> -	struct memory_tier *memtier;
-> -};
-> -
->  static DEFINE_MUTEX(memory_tier_lock);
->  static LIST_HEAD(memory_tiers);
->  struct memory_dev_type *node_memory_types[MAX_NUMNODES];
-> @@ -141,6 +129,22 @@ static void clear_node_memory_tier(int node)
->  	mutex_unlock(&memory_tier_lock);
->  }
->  
-> +struct memory_dev_type *init_node_memory_type(int node, struct memory_dev_type *default_type)
-> +{
-> +	struct memory_dev_type *mem_type;
-> +
-> +	mutex_lock(&memory_tier_lock);
-> +	if (node_memory_types[node]) {
-> +		mem_type = node_memory_types[node];
-> +	} else {
-> +		node_memory_types[node] = default_type;
-> +		node_set(node, default_type->nodes);
-> +		mem_type = default_type;
-> +	}
-> +	mutex_unlock(&memory_tier_lock);
-> +	return mem_type;
-> +}
-> +
->  static int __meminit memtier_hotplug_callback(struct notifier_block *self,
->  					      unsigned long action, void *_arg)
->  {
+By Philipp

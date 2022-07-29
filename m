@@ -2,76 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116C65854C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A855854C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238386AbiG2RvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
+        id S238397AbiG2RyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236239AbiG2RvA (ORCPT
+        with ESMTP id S229985AbiG2RyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:51:00 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFB31CB10
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:50:59 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 6AFEF1C0003; Fri, 29 Jul 2022 19:50:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1659117057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KGdTkZwRAGxN6aLSYPReH7cuXV6ikerZ/Lcx0Mk9P+E=;
-        b=h31c87nHQb+KZ7bVrZKrOKoc45K7xw/hs4/MYSWECOyHpEkOKaJRvdbqy5iwV7/adwN1gU
-        uEy91ko75PAOVfKhUQH6PaffQik4QIrtbysLo0e/u/nJTINJOKs1kLzWFc9OGxbVCNbGhN
-        gaC6/sGSX7UanYGWuZ5EyrXrztqny4I=
-Date:   Fri, 29 Jul 2022 19:50:56 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Yelin Jeong <yelini.jeong@samsung.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>
-Subject: Re: [PATCH 0/9] Samsung Trinity NPU device driver
-Message-ID: <20220729175056.GA16905@localhost>
-References: <CAFCwf13JA+5vuAKqvBSs3MkcF-gbE_8vd9nSvStQga55vW80VA@mail.gmail.com>
- <20220725065308.2457024-1-jiho.chu@samsung.com>
- <Yt5cFBgiTLwGXv17@kroah.com>
- <CGME20220725065308epcas1p2f6de3d74792854bb312cca4b310badac@epcms1p5>
- <20220726020952epcms1p59c06fabb55776e195dcbeac549c98ef7@epcms1p5>
- <8b69b813-d030-2666-37f1-a731b1d52f4e@linaro.org>
- <CAK8P3a3xhAcokq1p0_PzK2JzR9BGNcaohA_nan9nS9NioW4_rQ@mail.gmail.com>
+        Fri, 29 Jul 2022 13:54:17 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EF489659
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659117256; x=1690653256;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=c7K2bcTaCn2zb7w1c8QB96hlXmv8XneMlS1HNZkUddU=;
+  b=bNIF+1zwSB7BFo8hfYH1WXMxLtAdfYLSGsSV3MojE6uOQn2hxOQ5TlSo
+   sPzo+EmXEbG9GjLTSx6aG9ZvgWJ4w6n0lhtW5eYwaksiS/dYVUpSINDcM
+   3Ul/gEVkXp8TmjpwPRoD70Uk+kUdkeXSRhjxO96JkZJjxFnntnYDLrlqN
+   DQrrX6KO0mVzVdvk7spQATD3lsmwEQ/ajIt/Kk28mlx9h4pJ37rdeuyNw
+   rf7zRSz6GFc7M8h26TheUVnIWQkUsn1Odt9lj8/33pVLlYK3D5MQuSROY
+   JoEr8mbjpZ9Q8xBvrXglX2dQFzO2bfjPmw4k3SEVuKexeuNWZq/iwedKh
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="350522183"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="350522183"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 10:54:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="551811422"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 29 Jul 2022 10:54:14 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHUBh-000BwX-0s;
+        Fri, 29 Jul 2022 17:54:13 +0000
+Date:   Sat, 30 Jul 2022 01:53:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/tracing_multi_4 13/35]
+ arch/arm64/net/bpf_jit_comp.c:1642:57: warning: 'struct bpf_tramp_link'
+ declared inside parameter list will not be visible outside of this
+ definition or declaration
+Message-ID: <202207300110.hDyOc57h-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a3xhAcokq1p0_PzK2JzR9BGNcaohA_nan9nS9NioW4_rQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_4
+head:   a63fc296e166a76b3f7250a966df4651e3a846f1
+commit: 26d4fcc23a14c838c4568a38b8d47bb7a92f0a8b [13/35] bpf: Store trampoline progs in arrays
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220730/202207300110.hDyOc57h-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=26d4fcc23a14c838c4568a38b8d47bb7a92f0a8b
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tracing_multi_4
+        git checkout 26d4fcc23a14c838c4568a38b8d47bb7a92f0a8b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/net/
 
-> This driver clearly does not fall into those categories. As long as there
-> is no subsystem for NPUs, the only sensible options are drivers/gpu
-> and drivers/misc/.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Well, we can create drivers/npu. I'm sure these will get more
-widespread.
+All warnings (new ones prefixed by >>):
 
-And GPU people really should be cc-ed.
+>> arch/arm64/net/bpf_jit_comp.c:1642:57: warning: 'struct bpf_tramp_link' declared inside parameter list will not be visible outside of this definition or declaration
+    1642 | static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+         |                                                         ^~~~~~~~~~~~~~
+   arch/arm64/net/bpf_jit_comp.c: In function 'invoke_bpf_prog':
+   arch/arm64/net/bpf_jit_comp.c:1649:31: error: invalid use of undefined type 'struct bpf_tramp_link'
+    1649 |         struct bpf_prog *p = l->link.prog;
+         |                               ^~
+   arch/arm64/net/bpf_jit_comp.c:1660:14: error: invalid use of undefined type 'struct bpf_tramp_link'
+    1660 |         if (l->cookie == 0) {
+         |              ^~
+   arch/arm64/net/bpf_jit_comp.c:1664:46: error: invalid use of undefined type 'struct bpf_tramp_link'
+    1664 |                 emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
+         |                                              ^~
+   arch/arm64/net/bpf_jit_comp.c: At top level:
+   arch/arm64/net/bpf_jit_comp.c:1714:60: warning: 'struct bpf_tramp_links' declared inside parameter list will not be visible outside of this definition or declaration
+    1714 | static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+         |                                                            ^~~~~~~~~~~~~~~
+   arch/arm64/net/bpf_jit_comp.c: In function 'invoke_bpf_mod_ret':
+   arch/arm64/net/bpf_jit_comp.c:1724:27: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1724 |         for (i = 0; i < tl->nr_links; i++) {
+         |                           ^~
+   arch/arm64/net/bpf_jit_comp.c:1725:40: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1725 |                 invoke_bpf_prog(ctx, tl->links[i], args_off, retval_off,
+         |                                        ^~
+   arch/arm64/net/bpf_jit_comp.c: At top level:
+   arch/arm64/net/bpf_jit_comp.c:1771:38: warning: 'struct bpf_tramp_links' declared inside parameter list will not be visible outside of this definition or declaration
+    1771 |                               struct bpf_tramp_links *tlinks, void *orig_call,
+         |                                      ^~~~~~~~~~~~~~~
+   arch/arm64/net/bpf_jit_comp.c: In function 'prepare_trampoline':
+   arch/arm64/net/bpf_jit_comp.c:1783:49: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1783 |         struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+         |                                                 ^
+   arch/arm64/net/bpf_jit_comp.c:1784:48: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1784 |         struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+         |                                                ^
+   arch/arm64/net/bpf_jit_comp.c:1785:51: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1785 |         struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+         |                                                   ^
+   arch/arm64/net/bpf_jit_comp.c:1889:31: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1889 |         for (i = 0; i < fentry->nr_links; i++)
+         |                               ^~
+   arch/arm64/net/bpf_jit_comp.c:1890:44: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1890 |                 invoke_bpf_prog(ctx, fentry->links[i], args_off,
+         |                                            ^~
+   arch/arm64/net/bpf_jit_comp.c:1894:21: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1894 |         if (fmod_ret->nr_links) {
+         |                     ^~
+   arch/arm64/net/bpf_jit_comp.c:1895:44: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1895 |                 branches = kcalloc(fmod_ret->nr_links, sizeof(u32 *),
+         |                                            ^~
+   arch/arm64/net/bpf_jit_comp.c:1900:41: error: passing argument 2 of 'invoke_bpf_mod_ret' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1900 |                 invoke_bpf_mod_ret(ctx, fmod_ret, args_off, retval_off,
+         |                                         ^~~~~~~~
+         |                                         |
+         |                                         struct bpf_tramp_links *
+   arch/arm64/net/bpf_jit_comp.c:1714:77: note: expected 'struct bpf_tramp_links *' but argument is of type 'struct bpf_tramp_links *'
+    1714 | static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+         |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~^~
+   arch/arm64/net/bpf_jit_comp.c:1917:33: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1917 |         for (i = 0; i < fmod_ret->nr_links && ctx->image != NULL; i++) {
+         |                                 ^~
+   arch/arm64/net/bpf_jit_comp.c:1922:30: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1922 |         for (i = 0; i < fexit->nr_links; i++)
+         |                              ^~
+   arch/arm64/net/bpf_jit_comp.c:1923:43: error: invalid use of undefined type 'struct bpf_tramp_links'
+    1923 |                 invoke_bpf_prog(ctx, fexit->links[i], args_off, retval_off,
+         |                                           ^~
+   arch/arm64/net/bpf_jit_comp.c: At top level:
+   arch/arm64/net/bpf_jit_comp.c:1970:51: warning: 'struct bpf_tramp_links' declared inside parameter list will not be visible outside of this definition or declaration
+    1970 |                                 u32 flags, struct bpf_tramp_links *tlinks,
+         |                                                   ^~~~~~~~~~~~~~~
+   arch/arm64/net/bpf_jit_comp.c:1968:5: error: conflicting types for 'arch_prepare_bpf_trampoline'; have 'int(struct bpf_tramp_image *, void *, void *, const struct btf_func_model *, u32,  struct bpf_tramp_links *, void *)' {aka 'int(struct bpf_tramp_image *, void *, void *, const struct btf_func_model *, unsigned int,  struct bpf_tramp_links *, void *)'}
+    1968 | int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/arm64/net/bpf_jit_comp.c:11:
+   include/linux/bpf.h:803:5: note: previous declaration of 'arch_prepare_bpf_trampoline' with type 'int(struct bpf_tramp_image *, void *, void *, const struct btf_func_model *, u32,  struct bpf_tramp_progs *, void *)' {aka 'int(struct bpf_tramp_image *, void *, void *, const struct btf_func_model *, unsigned int,  struct bpf_tramp_progs *, void *)'}
+     803 | int arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image, void *image_end,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/net/bpf_jit_comp.c: In function 'arch_prepare_bpf_trampoline':
+   arch/arm64/net/bpf_jit_comp.c:1985:44: error: passing argument 3 of 'prepare_trampoline' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1985 |         ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nargs, flags);
+         |                                            ^~~~~~
+         |                                            |
+         |                                            struct bpf_tramp_links *
+   arch/arm64/net/bpf_jit_comp.c:1771:55: note: expected 'struct bpf_tramp_links *' but argument is of type 'struct bpf_tramp_links *'
+    1771 |                               struct bpf_tramp_links *tlinks, void *orig_call,
+         |                               ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   arch/arm64/net/bpf_jit_comp.c:1996:44: error: passing argument 3 of 'prepare_trampoline' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1996 |         ret = prepare_trampoline(&ctx, im, tlinks, orig_call, nargs, flags);
+         |                                            ^~~~~~
+         |                                            |
+         |                                            struct bpf_tramp_links *
+   arch/arm64/net/bpf_jit_comp.c:1771:55: note: expected 'struct bpf_tramp_links *' but argument is of type 'struct bpf_tramp_links *'
+    1771 |                               struct bpf_tramp_links *tlinks, void *orig_call,
+         |                               ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   cc1: some warnings being treated as errors
 
-Best regards,
-							Pavel
+
+vim +1642 arch/arm64/net/bpf_jit_comp.c
+
+b2ad54e1533e914 Xu Kuohai 2022-07-11  1641  
+efc9909fdce00a8 Xu Kuohai 2022-07-11 @1642  static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1643  			    int args_off, int retval_off, int run_ctx_off,
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1644  			    bool save_ret)
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1645  {
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1646  	u32 *branch;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1647  	u64 enter_prog;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1648  	u64 exit_prog;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1649  	struct bpf_prog *p = l->link.prog;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1650  	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1651  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1652  	if (p->aux->sleepable) {
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1653  		enter_prog = (u64)__bpf_prog_enter_sleepable;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1654  		exit_prog = (u64)__bpf_prog_exit_sleepable;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1655  	} else {
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1656  		enter_prog = (u64)__bpf_prog_enter;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1657  		exit_prog = (u64)__bpf_prog_exit;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1658  	}
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1659  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1660  	if (l->cookie == 0) {
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1661  		/* if cookie is zero, one instruction is enough to store it */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1662  		emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1663  	} else {
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1664  		emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1665  		emit(A64_STR64I(A64_R(10), A64_SP, run_ctx_off + cookie_off),
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1666  		     ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1667  	}
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1668  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1669  	/* save p to callee saved register x19 to avoid loading p with mov_i64
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1670  	 * each time.
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1671  	 */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1672  	emit_addr_mov_i64(A64_R(19), (const u64)p, ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1673  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1674  	/* arg1: prog */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1675  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1676  	/* arg2: &run_ctx */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1677  	emit(A64_ADD_I(1, A64_R(1), A64_SP, run_ctx_off), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1678  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1679  	emit_call(enter_prog, ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1680  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1681  	/* if (__bpf_prog_enter(prog) == 0)
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1682  	 *         goto skip_exec_of_prog;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1683  	 */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1684  	branch = ctx->image + ctx->idx;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1685  	emit(A64_NOP, ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1686  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1687  	/* save return value to callee saved register x20 */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1688  	emit(A64_MOV(1, A64_R(20), A64_R(0)), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1689  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1690  	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1691  	if (!p->jited)
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1692  		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1693  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1694  	emit_call((const u64)p->bpf_func, ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1695  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1696  	if (save_ret)
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1697  		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1698  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1699  	if (ctx->image) {
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1700  		int offset = &ctx->image[ctx->idx] - branch;
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1701  		*branch = A64_CBZ(1, A64_R(0), offset);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1702  	}
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1703  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1704  	/* arg1: prog */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1705  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1706  	/* arg2: start time */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1707  	emit(A64_MOV(1, A64_R(1), A64_R(20)), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1708  	/* arg3: &run_ctx */
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1709  	emit(A64_ADD_I(1, A64_R(2), A64_SP, run_ctx_off), ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1710  
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1711  	emit_call(exit_prog, ctx);
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1712  }
+efc9909fdce00a8 Xu Kuohai 2022-07-11  1713  
+
+:::::: The code at line 1642 was first introduced by commit
+:::::: efc9909fdce00a827a37609628223cd45bf95d0b bpf, arm64: Add bpf trampoline for arm64
+
+:::::: TO: Xu Kuohai <xukuohai@huawei.com>
+:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
 
 -- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

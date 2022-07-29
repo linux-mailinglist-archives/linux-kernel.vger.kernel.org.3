@@ -2,147 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7A7585492
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C3B585498
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238350AbiG2Rek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S238326AbiG2RgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiG2Reh (ORCPT
+        with ESMTP id S232587AbiG2RgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:34:37 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2084.outbound.protection.outlook.com [40.107.212.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1682F88752;
-        Fri, 29 Jul 2022 10:34:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bBQOXxowL4IURDxMnLHlBrNXFlnrfJCe7zf4lrPMzL+ouxsvgUo1MJWI/10PiQAH3vbnFLjEoaXoPKKLUdZezEuULfQA5TkcIw/nkuaZxVUmaN/RNoOnzJyy/qxAZGxju1RBPkyDsCXaDU2QegE55mBPQDGmy9uAa4nvKKLmILzFbjJGSwUbSEaxc0b4HEbsBFDg7cW3WB05fYDt4cn6Eelv9kxX5rgew04Ejbwsrovr+YSDtdXWu/JzoOa1PYBie4z5NtplkDwQjb/w5WczSh5ZBq9XnXkJ497mNfsx+Ion3HK0PHkUpiz5upvoN/gbs5vNyK7ahJmOzksnuM/C2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3lLTMy9d1KzuOSTKTPPyJ9SvA1FZAap6HnwaG4duhuk=;
- b=d3eu7YkzJ5Abevi1G/XlqpzX1p+k9J49s8DLZUis5s3T8CBmrpou/h1VUkgsa6ayk0ggnRuU+8t5Y8/3MEVcrjH1cl2g9nkxIq5ikQ7lAnGYRxgpdlgzCt8OIb56p3wPWLKN/aKKvHz/bjRy5H8ZXuPvW1pLwx+nwijCu0sCFvU+nHlprxJbdOCSHmjFl56etRtz71I0J8dQNjRDpmpAVZvbTOglF9fQoaZDMXrpSKu4d/+z8qj/lP7Nm/UoMQUM1C3+oxIm0EJiasRp6PjHva+Tg0eOzbGqAi+c++nvr6Y7UWiEE9PmR/zxGjIjDXZ4Ks/JQE+FQ7+HLlh9EmMI2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3lLTMy9d1KzuOSTKTPPyJ9SvA1FZAap6HnwaG4duhuk=;
- b=LP/YSNDiwGAWZGSvAbMG1HBY+71DXhZy8xjjnxdyfqQh+ME9khjgtR3H+CbGbRfu0fBCU+Opgx/Ky5Zdgr5LgbYmb5yZTgPrsEIMmcldkV9U1JhfwrjvYosQNGRQFgP+E1hGsoAdzVo6DqHjCy6++xKNordGuM3SGnkAewXONwyx4OTR4VKRrxT0/B/i3ExELsZhtcIW54sT+yUy87m4dIx07xYs8hy3cn/0cWNvjtRbnjkBf5ltukoWVjPA23sTrIvjTZJMygVJCfh9IzhXBi1uWM94YlzWVDK1v6PS8Gt/+wxTLN0gi1ebCVapMwC1RGqK/sZz/bAwc/6f/tZqyA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by PH7PR12MB6561.namprd12.prod.outlook.com (2603:10b6:510:213::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.12; Fri, 29 Jul
- 2022 17:34:35 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::4cce:310f:93:5d58]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::4cce:310f:93:5d58%8]) with mapi id 15.20.5482.006; Fri, 29 Jul 2022
- 17:34:35 +0000
-Date:   Fri, 29 Jul 2022 14:34:34 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     joro@8bytes.org, will@kernel.org, marcan@marcan.st,
-        sven@svenpeter.dev, robin.murphy@arm.com, robdclark@gmail.com,
-        baolu.lu@linux.intel.com, orsonzhai@gmail.com,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        jean-philippe@linaro.org, alex.williamson@redhat.com,
-        kevin.tian@intel.com, suravee.suthikulpanit@amd.com,
-        alyssa@rosenzweig.io, dwmw2@infradead.org, mjrosato@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, thierry.reding@gmail.com,
-        vdumpa@nvidia.com, jonathanh@nvidia.com, cohuck@redhat.com,
-        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
-        chenxiang66@hisilicon.com, john.garry@huawei.com,
-        yangyingliang@huawei.com, iommu@lists.linux-foundation.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v5 4/5] vfio/iommu_type1: Clean up update_dirty_scope in
- detach_group()
-Message-ID: <YuQaKpvsJICiFC6N@nvidia.com>
-References: <20220701214455.14992-1-nicolinc@nvidia.com>
- <20220701214455.14992-5-nicolinc@nvidia.com>
+        Fri, 29 Jul 2022 13:36:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D15558C5;
+        Fri, 29 Jul 2022 10:36:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659116171; x=1690652171;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nFNqgikl3WWL9NcWcxWKbMwXIUo1OKIzdWPoKUTNJlI=;
+  b=eTebB7C8MqDGTQ+W+sVfPLCH8GbbXPQFjlPTdg9pNWJkXsLHzwxHEtjf
+   VRrZ+tKaweg1L1mQlgdS8C81zPuPy0rRF2dDXDFU189Jr9sz9UhVzcWux
+   m5OSiCvcyCJ2EnfFkZlkiz0laCSIJp1X2doSSyBcyqRN73kdSXijDL9I5
+   Wynbxl6xQJj8oerKy7TyqFheaQOj8xmszDR1kPhYIW+K3vdI/t57AEWFw
+   shH54UI7qtzfSlaaHnBLBxgDNQ1WF6JZM1FPOXlyjadJZAkkNk3NKub7i
+   LyGF/hyFEPfe2tYTT6suxdCaK+51r+LCvo1fP+uTuLVsMlLkw8dIgu9+s
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="268582020"
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="268582020"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 10:36:11 -0700
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="577023530"
+Received: from aahmedsi-mobl.amr.corp.intel.com (HELO desk) ([10.209.118.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 10:36:10 -0700
+Date:   Fri, 29 Jul 2022 10:36:09 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Message-ID: <20220729173609.45o7lllpvsgjttqt@desk>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <YuJ6TQpSTIeXLNfB@zn.tnic>
+ <20220729022851.mdj3wuevkztspodh@desk>
+ <YuPpKa6OsG9e9nTj@zn.tnic>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701214455.14992-5-nicolinc@nvidia.com>
-X-ClientProxiedBy: MN2PR19CA0006.namprd19.prod.outlook.com
- (2603:10b6:208:178::19) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5357f70d-8bab-4b1e-72b8-08da71889aba
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6561:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BaAMyycpgs/2MwT7wcuKhMnFN9J6lqDo7K0rPXm7Anp84Ms8AqF6JyUXsHRN1zO6I2saXCrFk7Y6EK2lQVZyTz4TuFPTP7JwkBbFdxS0ziXe/M9t+fxjCwMxZXJHkOuddpj/tB4BXPek0f5y6agPJhkW3os06jP1EPa3ZPQjUw0QlakUakTVsZRC7ku3dcY6p4k4BjBY1StOp6vUdCK0TfX5TF+/rAGeDAmUVa7+r1q2GhrD8pgg3zn1fVPQ68OPtmSTO0KafzirFI/eLj5TKQKaNw1NA/t9fatqoch4zxvG2kl+DY6Dmjamns6+SeigjKWx28rz4Q4QnBCe85LKrOf4EmFNMd2CVFG0nql9vcWCEhAp7BTF+VdaNt4BdUU6VHTw2kvsPkwgbIuqXXRol33d8Ap287h3Ir0BKe8e062gYK9f3x4qbRC2kkozgiGAL3lCou2IJWUrqsoYM/KufiSPC1d881Jp9jwZCeMdIvC4t7YsXE+vjIsACPfj/BZxh1e1hx1vCI8RAGAiU0SZu/PizILLm5xmBq45vsRMtVkAsnkllkRFrlxIsaTWCtEJv3d+QUYfmckyEa+dwzdd5nNfIT1MvDI5ae4ZCurvAI8zh0IS98EpUTAyi30RQjiE8edlbv3+ijZKc6/uYUvr5gRHFNq/i6NOYtyzvb9R5mVmxpN8iLLjTExI6ooyq+h3IrFL2yZDuc1QSpqW/PrMcXLBMbbqedclEuYPxPBf2EuqABtfHJLdesVqusWuryFRNzyCuLJm+kjUpRTXx5EPKun1YkzSzCZRkJI3d75WZOA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(396003)(376002)(136003)(346002)(38100700002)(7406005)(8936002)(6862004)(7416002)(478600001)(66556008)(41300700001)(83380400001)(8676002)(6486002)(4326008)(66476007)(316002)(5660300002)(66946007)(2616005)(186003)(37006003)(6506007)(6636002)(26005)(6512007)(2906002)(4744005)(86362001)(36756003)(15650500001)(14143004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xXLNeQHkwQQiP1+1Id5h0g+0mDMyy/BXnES1k1FMrrppQHQ0pbwggdd6HNK5?=
- =?us-ascii?Q?9gi4/evoEnauivSYSp9fMCt0/9wkI3dWvDDE3+FJgQP3ozUjsNMsA4gDaO1f?=
- =?us-ascii?Q?ED0PQTy2C98AYrIkLWXvvyqfD53pXVuZostHU75APt00N3a6T2AFnXtZ5eLN?=
- =?us-ascii?Q?f6hJ9NCgMUObFaR0YRxjQXK+Yn9AToOYpgaz5D+6ssyNG7FlfOkD1AZaLjTn?=
- =?us-ascii?Q?U0p5B2mCQ/s5a6DnXR1heRGvzCKR8B+wsFy++L6Qz3EEQuNf2158QNhlcbUU?=
- =?us-ascii?Q?6T0NqZHV3TEHA6vU0i45zT49lekpZzzyVuGzo/cP13BWuwVOjLA44x2TQNNn?=
- =?us-ascii?Q?bQ6hvcYXP8BVWF93S8CXgYraVt5YRMiymP30u7vW7EbaWnSloIh+pQ9p6a4S?=
- =?us-ascii?Q?sbdWbGHIFtmC3NVBvmxEpedCRsoD33jar9D3jL+86p2ey6WBYnOTOn4a3vw3?=
- =?us-ascii?Q?PTu9044Q2ZnmcQuBzB08Ep1x4BdAcrLHUPRf+ctxI+DqxQ9/F42uxWkIS6pl?=
- =?us-ascii?Q?i6hXg9FS28m7+g4iagwJa6Tgl2DZYDW42iZbefNpPxHG1f1XbUOUchRNoDUn?=
- =?us-ascii?Q?LJSEAhyZhjsQiHHeBy8pSn+t8Oy+KysdrAKeJ8u3Cf1POAVNr7oSqzS9zX8Q?=
- =?us-ascii?Q?srlS6TxcTgc3aqqsCjjjRNbLdr4CqeH1k9wql7bNdHq8CTGa7wK6F1kFBdeQ?=
- =?us-ascii?Q?Aub9d5YT9Vj8LWFpM7F2LVT1q6aiDeBBeKlZ2+Tm3a7Rf9yNN07eSTX4akSO?=
- =?us-ascii?Q?mLoZmq3tYhmkF00d0GXm+QWykTN/7tcYNMJT1+I68KjKWkUm4lt/9VxOmK++?=
- =?us-ascii?Q?MDMMRsbLgdPCr9dTK3DqXDa/TPy0e8yleIkz6TGE1FsZJHQ9BxRpMrwwSzPV?=
- =?us-ascii?Q?C5aFjDygb/PGHHDB+8wxQqN1HAxuZ2qw04yl9KrhQIifFQMVW1hG0xEtvPpm?=
- =?us-ascii?Q?JXsbATPUodsZFk4DY9oLOh84tLQ3Ona5TvOsH44QlnEPBwSNdQbPgGeQ7XIO?=
- =?us-ascii?Q?4xcS0OffvpPc+yldMjwDQFUit8OlK+7t3hqxwWu3/9ORuvAHzUW/tz7l5J67?=
- =?us-ascii?Q?OohSOagBmbTJKzEyxjXb+hIhyBkt1+MVgZ4yVqXQJ9EbUCpKePdMsL4fpme7?=
- =?us-ascii?Q?kMNqXhGbsP6/PBzrdWdthmpIiHKBHNkse9hLDGmm/G6suD8+FuiPn/nrdjct?=
- =?us-ascii?Q?X+8vuhbR35jkZnUmmopF5KAGW2h+GIynACbKrdl6YhgxYzhDIQwVdkbXPLk5?=
- =?us-ascii?Q?bSfEW+u8TXl56rxFd4I8BXys6N6B2gIglc+2Dl9K+Uw1he9MQO6BMuDMIWyl?=
- =?us-ascii?Q?lcEAOAOMn0sg8RknsYdZCQnLxJgx3lQK/p6o5OXIc3aCVfnsb/5Mtp8UsWh9?=
- =?us-ascii?Q?imHNJ21qGHqjB/SaOokZOXYwIqopXk006ApuEVa3kruT3+TcuX7YY0xUKvDM?=
- =?us-ascii?Q?jT+fjxhT2vtQfoYov7K90mVpUs7+wPiirrucsfRJQV73GWjWNH0Rln629Tgx?=
- =?us-ascii?Q?ezMKN1RW3PV5RrK0oPSIM75SYv0gLSFbpmmskWiaH2KYThp8+b0+T9dRy0JQ?=
- =?us-ascii?Q?YzgxgYgtC61yaXTZpt+sd7JEfz84cbw395z2obzr?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5357f70d-8bab-4b1e-72b8-08da71889aba
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 17:34:35.2997
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fcB1P6ULHGUPXY/teWBOHMMkBAWNQFaieoYSroe5OZ+zyChEM3bfeHZsukLrhA0P
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6561
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YuPpKa6OsG9e9nTj@zn.tnic>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 02:44:54PM -0700, Nicolin Chen wrote:
-> All devices in emulated_iommu_groups have pinned_page_dirty_scope
-> set, so the update_dirty_scope in the first list_for_each_entry
-> is always false. Clean it up, and move the "if update_dirty_scope"
-> part from the detach_group_done routine to the domain_list part.
+On Fri, Jul 29, 2022 at 04:05:29PM +0200, Borislav Petkov wrote:
+> On Thu, Jul 28, 2022 at 07:28:51PM -0700, Pawan Gupta wrote:
+> > To keep things simple, can this stay in cpu/common.c?
 > 
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> I know, right?
+> 
+> The gullible maintainer should simply take your half-baked patch so that
+> you can check off that box and then he can clean it up later.
+
+I am sorry if it felt like that, its really not my intention.
+
+I did also say:
+
+  "And if there is a compelling reason, I am willing to make the
+  required changes."
+
+I was genuinely curious about why not to use cpu/common.c for mmio.
+
+cpu/common.c is heavily used for bugs infrastructure. It already has the
+affected tables, bug enumerations and helper functions for previous
+bugs. Maybe it needs a cleanup as a whole.
+
+> See if this works:
+
+Thanks for this.
+
 > ---
->  drivers/vfio/vfio_iommu_type1.c | 27 ++++++++++++---------------
->  1 file changed, 12 insertions(+), 15 deletions(-)
+> diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> index 9393c50b5afc..14cd3c6ddec6 100644
+> --- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> +++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> @@ -230,6 +230,21 @@ The possible values in this file are:
+>       * - 'Mitigation: Clear CPU buffers'
+>         - The processor is vulnerable and the CPU buffer clearing mitigation is
+>           enabled.
+> +     * - 'Unknown: CPU is beyond its servicing period'
+> +       - The processor vulnerability status is unknown because it is
+> +	 out of Servicing period. Mitigation is not attempted.
+> +
+> +
+> +Definitions:
+> +------------
+> +
+> +Servicing period: The process of providing functional and security
+> +updates to Intel processors or platforms, utilizing the Intel Platform
+> +Update (IPU) process or other similar mechanisms.
+> +
+> +End of Servicing Updates (ESU): ESU is the date at which Intel will no
+> +longer provide Servicing, such as through IPU or other similar update
+> +processes. ESU dates will typically be aligned to end of quarter.
+>  
+>  If the processor is vulnerable then the following information is appended to
+>  the above information:
+> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
+> index ea34cc31b047..fe66e94d7b86 100644
+> --- a/arch/x86/include/asm/cpufeature.h
+> +++ b/arch/x86/include/asm/cpufeature.h
+> @@ -154,6 +154,7 @@ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
+>  } while (0)
+>  
+>  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
+> +#define setup_clear_cpu_bug(bit) setup_clear_cpu_cap(bit)
+>  
+>  #if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
+>  
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 5fe7f6c8a7a4..130cb46ecaf9 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -454,7 +454,8 @@
+>  #define X86_BUG_TAA			X86_BUG(22) /* CPU is affected by TSX Async Abort(TAA) */
+>  #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
+>  #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
+> -#define X86_BUG_MMIO_STALE_DATA		X86_BUG(25) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
+> -#define X86_BUG_RETBLEED		X86_BUG(26) /* CPU is affected by RETBleed */
+> +#define X86_BUG_MMIO_UNKNOWN		X86_BUG(25) /* CPU is too old and its MMIO Stale Data status is unknown */
+> +#define X86_BUG_MMIO_STALE_DATA		X86_BUG(26) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
+> +#define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
+>  
+>  #endif /* _ASM_X86_CPUFEATURES_H */
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> index 6454bc767f0f..a83d1c4265ae 100644
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+> @@ -433,7 +433,8 @@ static void __init mmio_select_mitigation(void)
+>  	u64 ia32_cap;
+>  
+>  	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
+> -	    cpu_mitigations_off()) {
+> +	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
+> +	     cpu_mitigations_off()) {
+>  		mmio_mitigation = MMIO_MITIGATION_OFF;
+>  		return;
+>  	}
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Jason
+
+
+> @@ -2247,6 +2248,9 @@ static ssize_t tsx_async_abort_show_state(char *buf)
+>  
+>  static ssize_t mmio_stale_data_show_state(char *buf)
+>  {
+> +	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
+> +		return sysfs_emit(buf, "Unknown: CPU is beyond its servicing period\n");
+> +
+>  	if (mmio_mitigation == MMIO_MITIGATION_OFF)
+>  		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
+>  
+> @@ -2378,6 +2382,7 @@ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr
+>  		return srbds_show_state(buf);
+>  
+>  	case X86_BUG_MMIO_STALE_DATA:
+> +	case X86_BUG_MMIO_UNKNOWN:
+>  		return mmio_stale_data_show_state(buf);
+>  
+>  	case X86_BUG_RETBLEED:
+> @@ -2437,7 +2442,10 @@ ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *
+>  
+>  ssize_t cpu_show_mmio_stale_data(struct device *dev, struct device_attribute *attr, char *buf)
+>  {
+> -	return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
+> +	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
+> +		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_UNKNOWN);
+> +	else
+> +		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
+>  }
+>  
+>  ssize_t cpu_show_retbleed(struct device *dev, struct device_attribute *attr, char *buf)
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 736262a76a12..fb3e8576a3b4 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -1356,9 +1356,13 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+>  	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
+>  	 * not want the guest to enumerate the bug.
+>  	 */
+> -	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
+> -	    !arch_cap_mmio_immune(ia32_cap))
+> -		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
+> +	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN)) {
+
+This should be !boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN). Otherwise
+X86_BUG_MMIO_STALE_DATA will not be set on affected systems.
+
+> +		if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
+> +		    !arch_cap_mmio_immune(ia32_cap)) {
+> +			setup_clear_cpu_bug(X86_BUG_MMIO_UNKNOWN);
+
+Clearing X86_BUG_MMIO_UNKNOWN wont be required then.
+
+> +			setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
+> +		}
+> +	}
+
+Does this look okay:
+
+-       if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
+-           !arch_cap_mmio_immune(ia32_cap))
+-               setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
++       if (!boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN)) {
++               if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
++                   !arch_cap_mmio_immune(ia32_cap)) {
++                       setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
++               }
++       }
+
+>  	if (!cpu_has(c, X86_FEATURE_BTC_NO)) {
+>  		if (cpu_matches(cpu_vuln_blacklist, RETBLEED) || (ia32_cap & ARCH_CAP_RSBA))
+> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+> index 663f6e6dd288..5b2508adc38a 100644
+> --- a/arch/x86/kernel/cpu/intel.c
+> +++ b/arch/x86/kernel/cpu/intel.c
+> @@ -372,6 +372,10 @@ static void early_init_intel(struct cpuinfo_x86 *c)
+>  static void bsp_init_intel(struct cpuinfo_x86 *c)
+>  {
+>  	resctrl_cpu_detect(c);
+> +
+> +	/* Set on older crap */
+> +	if (c->x86_model < INTEL_FAM6_IVYBRIDGE)
+> +		setup_force_cpu_bug(X86_BUG_MMIO_UNKNOWN);
+
+Thanks for suggesting this approach.

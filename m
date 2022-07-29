@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BB4584932
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC454584934
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbiG2Apo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 20:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S231959AbiG2Ato (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 20:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiG2Apm (ORCPT
+        with ESMTP id S229535AbiG2Atm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 20:45:42 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E573796BD;
-        Thu, 28 Jul 2022 17:45:37 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id z19so3234560plb.1;
-        Thu, 28 Jul 2022 17:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Yv1PtdcD7vG4XonP5wiRklbkcOgrxKWB5amAdWZBrU8=;
-        b=q7G5Nkzmq7URRivyuyip625fFmr7aCadj3OeknjknvbUGmgE/R5e7JeqsumKpzgxLm
-         fCmGiL2DWTOlBVEb5tSlW62HGMJRNvBTzKlJ2okH8gFpHqSbuayC1HmLvYfTWIuOMu4e
-         GB3lnA3y7ub9B+ks0m6e6GRPFS9Mm6FlS5eu+v400uuQHbcMLRS4nCmDOqhBQfSB1Ufu
-         12SM/bYa2pWYxIDB0WvwnMpAgFhAQConKvX1M9HrXQKhV0SkTeYCEYymA2IEIxqBER6c
-         AIv+JFRZjeTYCHhLhajf9CTmYGJ6qUUS2NiK8IMssD+GopMhgcOcIw3WMlLbSOkIbSWy
-         e7ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Yv1PtdcD7vG4XonP5wiRklbkcOgrxKWB5amAdWZBrU8=;
-        b=ICCbeyrSmf4gmIFoqbnN7O5fy3HeSzBwgkwkWDwys4gm5mclQEN+05sYCgOpLLt7n2
-         /vw7/CxsysvDdak+qlzUceMVqBPDrEPKKuKGisljWQY85cZLQ1cbDq2eHhSxu6l0GtX4
-         9A6LEb9uwmK1WR1hrHdfhz05vvv142mzAR/FR7EfWOLntuxpemuPfVIszbRXwH10w6/R
-         KUeh5jO6dtx33eJSF1ZHkPrTKMAKZacoffD5KzVXz0YrOhFf+x8vXUBCbs7J6oAW8QO4
-         aRgP6ebvm0yNQaCZZUi8rL9u1NKE1942LE4LZXaWkoDyD68YeNBt+hIVgVgpFeYhWxlv
-         ywXg==
-X-Gm-Message-State: ACgBeo0qVQBkbbJgCq4CgUWt0KB04cH8XQtq8IDw97PYZCAwEDIfH5hZ
-        sUMs2lm0OIhfL1ywuyNbv/E=
-X-Google-Smtp-Source: AA6agR680LUtpZw/1/PnvSyS9qa2Tk/Z2ka+nx33lF1adIOPPgGE3o9kj4Pm0wGY6tLfmUqbGyExUw==
-X-Received: by 2002:a17:90a:fb4b:b0:1f3:1cbb:8912 with SMTP id iq11-20020a17090afb4b00b001f31cbb8912mr1953056pjb.239.1659055537031;
-        Thu, 28 Jul 2022 17:45:37 -0700 (PDT)
-Received: from [10.10.4.41] (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id a21-20020a1709027d9500b0016c1cdd2de3sm1897761plm.281.2022.07.28.17.45.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 17:45:36 -0700 (PDT)
-Message-ID: <d5f6a7e0-60e7-5afe-30c7-8ba76ab12a5c@gmail.com>
-Date:   Fri, 29 Jul 2022 08:43:24 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 1/2] iio: humidity: hdc100x: switch to probe_new
- callback
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
- <20220728125435.3336618-2-potin.lai.pt@gmail.com>
- <CAHp75Vf+4Ew2eaccPb3sQY4wAjjsqR7o_uyTUb7eguY=JeDtQA@mail.gmail.com>
-From:   Potin Lai <potin.lai.pt@gmail.com>
-In-Reply-To: <CAHp75Vf+4Ew2eaccPb3sQY4wAjjsqR7o_uyTUb7eguY=JeDtQA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 28 Jul 2022 20:49:42 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB2E796BA
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:49:42 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26T0Q76E002672;
+        Fri, 29 Jul 2022 00:49:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=Ezgnbwj2vZCxnalAwrv1h3iJGqONGw5JDecLQclWyw0=;
+ b=QPFwBQYDeupPAMXTnL51YMVWKTlk2JT4+mBXznTyBcHwjXSKsOFC/va30X7MDC5xiIdc
+ Gs+U4jyi08L3FyduHJ6Be+TUSNjdq6/fbdMfBXcw4xKI/KYRsrcKWz5iKY2N47zYbeYV
+ 0UxlSfBVSdTIMIs9aFpVEV0ZgyiaKAfFtZqLI+NChl1ar5fdmRzN0vHAf2VXOrG199tD
+ z48KTGFpEs6T0VtL659nbu7nx9sPjHX67QvnH2UZscjqwQBmGJVoZSa4aju7hZMZ5DF4
+ //TJJhAp4z8RZRg0Daz+RdqMjZwv7eFDtQiS8+zMta1l06TQU7DJS4owm4Uiyy9BsFhy 1Q== 
+Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hm2s787c9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 00:49:27 +0000
+Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 26T0nOnV032290;
+        Fri, 29 Jul 2022 00:49:24 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hk4du4a65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 29 Jul 2022 00:49:24 +0000
+Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26T0nONX032284;
+        Fri, 29 Jul 2022 00:49:24 GMT
+Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 26T0nNNd032283;
+        Fri, 29 Jul 2022 00:49:23 +0000
+Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
+        id 07BB72102E48; Fri, 29 Jul 2022 08:49:21 +0800 (CST)
+From:   Kassey Li <quic_yingangl@quicinc.com>
+To:     akpm@linux-foundation.org, vbabka@kernel.org
+Cc:     Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
+        iamjoonsoo.kim@lge.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v3] mm/page_owner.c: add llseek for page_owner
+Date:   Fri, 29 Jul 2022 08:49:20 +0800
+Message-Id: <20220729004920.8544-1-quic_yingangl@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _FafCE0wTpoj5N29BN_IzOlcOHWC-ksS
+X-Proofpoint-GUID: _FafCE0wTpoj5N29BN_IzOlcOHWC-ksS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-28_06,2022-07-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ mlxlogscore=778 priorityscore=1501 suspectscore=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207290001
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,24 +78,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 04:41, Andy Shevchenko wrote:
-> On Thu, Jul 28, 2022 at 3:32 PM Potin Lai <potin.lai.pt@gmail.com> wrote:
->> Switch to probe_new callback due to probe is deprecated soon.
-> Just noticed that commit message is a bit not okay in a few ways:
-> 1) we refer to the callbacks like ->probe_new();
-> 2) we don't know when we deprecate it, the point here is not that, but
-> unused id parameter in the current code.
->
->
-Thanks for point it out, is it OK leave the message as it is? or you prefer to submit another version to fix it?
-If new version required, I will also add another patch for struct device pointer you mentioned in the other reply.
+There is usage to dump a given cma region page_owner
+instead of all page's.
 
-Just want to confirm that is the new message looks OK?
-New message:
-Switch ->porbe() to new callback ->probe_new()
+This change allows to specify a ppos as start_pfn
+by fseek.
 
-Thanks,
-Potin
+Any invalid ppos will be skipped, so it did not
+broken the origin dump feature.
 
+Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+---
+ mm/page_owner.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index e4c6f3f1695b..231b1877af99 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -497,8 +497,8 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 		return -EINVAL;
+ 
+ 	page = NULL;
+-	pfn = min_low_pfn + *ppos;
+ 
++	pfn = *ppos;
+ 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
+ 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
+ 		pfn++;
+@@ -561,7 +561,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 			continue;
+ 
+ 		/* Record the next PFN to read in the file offset */
+-		*ppos = (pfn - min_low_pfn) + 1;
++		*ppos = pfn + 1;
+ 
+ 		return print_page_owner(buf, count, pfn, page,
+ 				page_owner, handle);
+@@ -570,6 +570,21 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 	return 0;
+ }
+ 
++static loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
++{
++	loff_t retval = 0;
++	switch (whence) {
++		case SEEK_CUR:
++		case SEEK_SET:
++			file->f_pos = offset;
++			break;
++		default:
++			retval = -ENXIO;
++	}
++
++	return retval;
++}
++
+ static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
+ {
+ 	unsigned long pfn = zone->zone_start_pfn;
+@@ -660,6 +675,7 @@ static void init_early_allocated_pages(void)
+ 
+ static const struct file_operations proc_page_owner_operations = {
+ 	.read		= read_page_owner,
++	.llseek 	= llseek_page_owner,
+ };
+ 
+ static int __init pageowner_init(void)
+-- 
+2.17.1
 

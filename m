@@ -2,216 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3C7585625
+	by mail.lfdr.de (Postfix) with ESMTP id 5E415585624
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239234AbiG2Uar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 16:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S238544AbiG2Uaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 16:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239243AbiG2Uam (ORCPT
+        with ESMTP id S230089AbiG2Uai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 16:30:42 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486AC18E12;
-        Fri, 29 Jul 2022 13:30:41 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso4067233otb.6;
-        Fri, 29 Jul 2022 13:30:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=nzD++3Hnq8Jl3miMPq7Dm32aO2I1KwSGCsVt2On+yvI=;
-        b=Ot0MAiej63uI8gKPoHYenJArAvN2RS28MYqFqsC1TZN873kO3qSCV4Xc9TMCBHOeyd
-         pGhi/+fwV+LSdhyttJ5E+OQckbsfQR9N/X9scikQ4rt9H5gqiFQdjXdTGcCshe6Gbx3c
-         PMScNDHyTp6zcilyCw45vvADHD8chLkhL6xzq8e0+WkubtQ4ulB/1MYpOoy+ZEJWVyFZ
-         VNNdX8Vt0sMqVNtfp8REm1AYxdHuChWUjKKARMNP2AzlP5R3GUuKGSVYts9+fvP839EA
-         9F3ptqaZV5OtN2YYaQjxWhMkSEyS8TMLqe1jbSB6fp5Kn2kmPBdV0oBIvZELMOXCsra4
-         yR0w==
-X-Gm-Message-State: AJIora/tWkcnomsT+AV8QiSvUZIab1fTpmcaMg6F81mudM1RE2dyENev
-        Gk3bdax9+0fRvvsoLke2n7OclvOyqd0qaP1jxnI=
-X-Google-Smtp-Source: AGRyM1u6XMfZ2dp41165Y6KJg+tj3el3CgTSSr/ajLq9RE4Pk7T+bunFV24+9DB2zeoboKw/3lVEbMi9pB9nIMPKojc=
-X-Received: by 2002:a9d:3cc:0:b0:61c:7d1d:2056 with SMTP id
- f70-20020a9d03cc000000b0061c7d1d2056mr2171008otf.247.1659126640499; Fri, 29
- Jul 2022 13:30:40 -0700 (PDT)
+        Fri, 29 Jul 2022 16:30:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2033618E12;
+        Fri, 29 Jul 2022 13:30:38 -0700 (PDT)
+Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 003A16601B8B;
+        Fri, 29 Jul 2022 21:30:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659126636;
+        bh=k1k8s7Za97TaDukHb1io/Pph036btg+/OCzVr3A+DLc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P5qxbh8llQDpysSkuzEFTSd//A+YhN8kKGDj8/zg7fh6Nixht1vZ3Wj4Yai8aPCAW
+         vXdULCcrjsoFSDnuqvXNrRGEYcvl6r8A7WifuB7//iLYZDBVT4xmc3QlUCRu8v6Prb
+         xtaMl8oo5e+9BL5FtEucFu5VfWT1dcXvnIf2OKHSVen4rKrYJMRZ8NVANfJyM2kHwA
+         XO0fOpyA2NYcYWmBhx3w7PEMki61C2LQE034mNgpJid2SjZwP44aUljIb/lLaeHB9Z
+         SUZigHRbser2iQUSFR7gn6KeUVuK9FqVLNM2Nf39R+za5Nwu+AzM3coMs1CFe4q8in
+         SSqWJYX0B4x1w==
+Date:   Fri, 29 Jul 2022 16:30:30 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Balsam CHIHI <bchihi@baylibre.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Subject: Re: [PATCH v8 3/6] thermal: mediatek: Add LVTS drivers for SoC
+ theraml zones for mt8192
+Message-ID: <20220729203030.p645ccnpa4bd6sdn@notapiano>
+References: <20220726135506.485108-1-bchihi@baylibre.com>
+ <20220726135506.485108-4-bchihi@baylibre.com>
 MIME-Version: 1.0
-References: <YuQvcCrcgNWbtndU@slm.duckdns.org>
-In-Reply-To: <YuQvcCrcgNWbtndU@slm.duckdns.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 29 Jul 2022 13:30:29 -0700
-Message-ID: <CAM9d7cgrpORPW_jYAa-Xopw3+im1SPiR3O0omh-v0Odd7YGxGA@mail.gmail.com>
-Subject: Re: [PATCH cgroup/for-5.20] cgroup: Replace cgroup->ancestor_ids[]
- with ->ancestors[]
-To:     Tejun Heo <tj@kernel.org>
-Cc:     cgroups <cgroups@vger.kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220726135506.485108-4-bchihi@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tejun,
-
-On Fri, Jul 29, 2022 at 12:06 PM Tejun Heo <tj@kernel.org> wrote:
->
-> Every cgroup knows all its ancestors through its ->ancestor_ids[]. While all
-> the existing users only need the IDs, there's no advantage to remembering
-> the IDs instead of the pointers directly. Let's replace
-> cgroup->ancestor_ids[] with ->ancestors[] so that it's easy to access non-ID
-> ancestor fields.
->
-> This patch shouldn't cause any behavior differences.
->
-> Signed-off-by: Tejun Heo <tj@kernel.org>
+On Tue, Jul 26, 2022 at 03:55:03PM +0200, Balsam CHIHI wrote:
+> Add a LVTS (Low voltage thermal sensor) driver to report junction
+> temperatures in Mediatek SoC mt8192 and register the maximum temperature
+> of sensors and each sensor as a thermal zone.
+> 
+> Signed-off-by: Yu-Chia Chang <ethan.chang@mediatek.com>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 > ---
-> Namhyung, I think the change in bperf_cgroup is correct but couldn't figure
-> out how to test it (normal perf build wouldn't compile it). Can you please
-> see whether it's correct?
+>  drivers/thermal/mediatek/Kconfig         |  27 +
+>  drivers/thermal/mediatek/Makefile        |   2 +
+>  drivers/thermal/mediatek/lvts_mt8192.c   | 241 ++++++
+>  drivers/thermal/mediatek/soc_temp.c      |   2 +-
+>  drivers/thermal/mediatek/soc_temp_lvts.c | 928 +++++++++++++++++++++++
+>  drivers/thermal/mediatek/soc_temp_lvts.h | 365 +++++++++
+>  6 files changed, 1564 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/thermal/mediatek/lvts_mt8192.c
+>  create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
+>  create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
+> 
+> diff --git a/drivers/thermal/mediatek/Kconfig b/drivers/thermal/mediatek/Kconfig
+> index 9c41e9079fc3..7fc04237dd50 100644
+> --- a/drivers/thermal/mediatek/Kconfig
+> +++ b/drivers/thermal/mediatek/Kconfig
+> @@ -20,4 +20,31 @@ config MTK_SOC_THERMAL
+>  		configures thermal controllers to collect temperature
+>  		via AUXADC interface.
+>  
+> +config MTK_SOC_THERMAL_LVTS
+> +	tristate "LVTS (Low voltage thermal sensor) driver for Mediatek SoCs"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_TI_SYSCON
 
-Looks ok to me.  For the perf part,
+Both mt8192 and mt8195 use the reset controller provided by infracfg [1], so
+there's no need to depend on RESET_TI_SYSCON. (Same thing below)
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-
-Note that you need to pass BUILD_BPF_SKEL=1 when you build perf
-to enable BPF stuff.  IIRC Arnaldo will make it default at some point.
+[1] https://lore.kernel.org/all/20220523093346.28493-1-rex-bc.chen@mediatek.com/
 
 Thanks,
-Namhyung
+Nícolas
 
->
-> Thanks.
->
->  include/linux/cgroup-defs.h                 |   10 +++++-----
->  include/linux/cgroup.h                      |    2 +-
->  kernel/cgroup/cgroup.c                      |    7 +++----
->  net/netfilter/nft_socket.c                  |    5 +++--
->  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c |    2 +-
->  5 files changed, 13 insertions(+), 13 deletions(-)
->
-> diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-> index 63bf43c7ca3b..51fa744c2e9d 100644
-> --- a/include/linux/cgroup-defs.h
-> +++ b/include/linux/cgroup-defs.h
-> @@ -379,7 +379,7 @@ struct cgroup {
->         /*
->          * The depth this cgroup is at.  The root is at depth zero and each
->          * step down the hierarchy increments the level.  This along with
-> -        * ancestor_ids[] can determine whether a given cgroup is a
-> +        * ancestors[] can determine whether a given cgroup is a
->          * descendant of another without traversing the hierarchy.
->          */
->         int level;
-> @@ -499,8 +499,8 @@ struct cgroup {
->         /* Used to store internal freezer state */
->         struct cgroup_freezer_state freezer;
->
-> -       /* ids of the ancestors at each level including self */
-> -       u64 ancestor_ids[];
-> +       /* All ancestors including self */
-> +       struct cgroup *ancestors[];
->  };
->
->  /*
-> @@ -520,8 +520,8 @@ struct cgroup_root {
->         /* The root cgroup.  Root is destroyed on its release. */
->         struct cgroup cgrp;
->
-> -       /* for cgrp->ancestor_ids[0] */
-> -       u64 cgrp_ancestor_id_storage;
-> +       /* for cgrp->ancestors[0] */
-> +       u64 cgrp_ancestor_storage;
->
->         /* Number of cgroups in the hierarchy, used only for /proc/cgroups */
->         atomic_t nr_cgrps;
-> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> index ed53bfe7c46c..5334b6134399 100644
-> --- a/include/linux/cgroup.h
-> +++ b/include/linux/cgroup.h
-> @@ -574,7 +574,7 @@ static inline bool cgroup_is_descendant(struct cgroup *cgrp,
->  {
->         if (cgrp->root != ancestor->root || cgrp->level < ancestor->level)
->                 return false;
-> -       return cgrp->ancestor_ids[ancestor->level] == cgroup_id(ancestor);
-> +       return cgrp->ancestors[ancestor->level] == ancestor;
->  }
->
->  /**
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 85fa4c8587a8..ce587fe43dab 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -2047,7 +2047,7 @@ int cgroup_setup_root(struct cgroup_root *root, u16 ss_mask)
->         }
->         root_cgrp->kn = kernfs_root_to_node(root->kf_root);
->         WARN_ON_ONCE(cgroup_ino(root_cgrp) != 1);
-> -       root_cgrp->ancestor_ids[0] = cgroup_id(root_cgrp);
-> +       root_cgrp->ancestors[0] = root_cgrp;
->
->         ret = css_populate_dir(&root_cgrp->self);
->         if (ret)
-> @@ -5391,8 +5391,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
->         int ret;
->
->         /* allocate the cgroup and its ID, 0 is reserved for the root */
-> -       cgrp = kzalloc(struct_size(cgrp, ancestor_ids, (level + 1)),
-> -                      GFP_KERNEL);
-> +       cgrp = kzalloc(struct_size(cgrp, ancestors, (level + 1)), GFP_KERNEL);
->         if (!cgrp)
->                 return ERR_PTR(-ENOMEM);
->
-> @@ -5444,7 +5443,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
->
->         spin_lock_irq(&css_set_lock);
->         for (tcgrp = cgrp; tcgrp; tcgrp = cgroup_parent(tcgrp)) {
-> -               cgrp->ancestor_ids[tcgrp->level] = cgroup_id(tcgrp);
-> +               cgrp->ancestors[tcgrp->level] = tcgrp;
->
->                 if (tcgrp != cgrp) {
->                         tcgrp->nr_descendants++;
-> diff --git a/net/netfilter/nft_socket.c b/net/netfilter/nft_socket.c
-> index 05ae5a338b6f..d64784d4bd02 100644
-> --- a/net/netfilter/nft_socket.c
-> +++ b/net/netfilter/nft_socket.c
-> @@ -40,6 +40,7 @@ static noinline bool
->  nft_sock_get_eval_cgroupv2(u32 *dest, struct sock *sk, const struct nft_pktinfo *pkt, u32 level)
->  {
->         struct cgroup *cgrp;
-> +       u64 cgid;
->
->         if (!sk_fullsock(sk))
->                 return false;
-> @@ -48,8 +49,8 @@ nft_sock_get_eval_cgroupv2(u32 *dest, struct sock *sk, const struct nft_pktinfo
->         if (level > cgrp->level)
->                 return false;
->
-> -       memcpy(dest, &cgrp->ancestor_ids[level], sizeof(u64));
-> -
-> +       cgid = cgroup_id(cgrp->ancestors[level]);
-> +       memcpy(dest, &cgid, sizeof(u64));
->         return true;
->  }
->  #endif
-> diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> index 292c430768b5..bd6a420acc8f 100644
-> --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> @@ -68,7 +68,7 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
->                         break;
->
->                 // convert cgroup-id to a map index
-> -               cgrp_id = BPF_CORE_READ(cgrp, ancestor_ids[i]);
-> +               cgrp_id = BPF_CORE_READ(cgrp, ancestors[i], kn, id);
->                 elem = bpf_map_lookup_elem(&cgrp_idx, &cgrp_id);
->                 if (!elem)
->                         continue;
+> +	help
+> +		Enable this option if you want to get SoC temperature
+> +		information for MediaTek platforms. This driver
+> +		configures LVTS thermal controllers to collect temperatures
+> +		via Analog Serial Interface(ASIF).
+> +
+> +endif
+> +
+> +if MTK_SOC_THERMAL_LVTS
+> +
+> +config LVTS_MT8192
+> +	tristate "LVTS driver for MediaTek MT8192 SoC"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_TI_SYSCON
+> +	depends on MTK_SOC_THERMAL_LVTS
+> +	help
+> +		Enable this option if you want to get SoC temperature
+> +		information for MT8192. This driver
+> +		configures LVTS thermal controllers to collect temperatures
+> +		via ASIF.
+> +
+>  endif
+[..]

@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DF9584D31
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F416C584D33
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbiG2IME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 04:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S235468AbiG2IMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 04:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiG2IMC (ORCPT
+        with ESMTP id S235460AbiG2IMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 04:12:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C517FE58;
-        Fri, 29 Jul 2022 01:12:01 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 08:11:57 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659082319;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S6OXLj5CsWOBodkRXT3i4CgKhOtLFQplhD7nAMNeuq8=;
-        b=IXMSLSFqCwyyFh6aU4jMKAmR7MTyD/sG84Sa7lM7CXjLmtR1upxdGWz4BkMYF+GV4m32EA
-        jMv9K29KRTf6HmYabi8UHlP30D6Q8RWd3PE332UhiP6xHENK9XrwEef2ynhufTwgObO57g
-        v1HaR8MelonrubY33krXdKB8VuaxEX1WEspidbmLE4PLq4Vl4iaCUUwWX7qFjuRDVB44YK
-        kPjD+SB8I08uVpf1jIYupE2oMvkwbu6oypKnh1IabV1OMtXuEnYhr2tj61qvg6WKU9YczJ
-        vW5KzL7iSVsNLNducgMkZswnJQDidFgG+1U3JDqeCkG+8dYNJOzDbGzcHnOKkQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659082319;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S6OXLj5CsWOBodkRXT3i4CgKhOtLFQplhD7nAMNeuq8=;
-        b=97SmYFkWOoJ9ee+C/AkWZ3hHU/cU1TvhnUE/4LM5wp7y4IOnuipXIZpLLM+6cK+/rTJl9U
-        JaJolThG2RPaqRDg==
-From:   "tip-bot2 for Thadeu Lima de Souza Cascardo" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/bugs: Do not enable IBPB at firmware entry when
- IBPB is not available
-Cc:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Borislav Petkov <bp@suse.de>, <stable@vger.kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220728122602.2500509-1-cascardo@canonical.com>
-References: <20220728122602.2500509-1-cascardo@canonical.com>
+        Fri, 29 Jul 2022 04:12:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0067F52F;
+        Fri, 29 Jul 2022 01:12:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FD43B82701;
+        Fri, 29 Jul 2022 08:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D374CC433D6;
+        Fri, 29 Jul 2022 08:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659082330;
+        bh=lS6IOHyc0723JKW2Koe5554iUAaBJR0A5g1NPsHbWSQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M1fLyvzIS9bGi5L1b1Wo44D4VoXlMchvH4aVLVHRqIbG53kOv46eTJBTgBwe1X0oK
+         utEuzdFXLxv8TPgo1UqsS5Y+tz0FRB8RyqFdqHMxy0irIDM8T6Csch+MK8uAr1I30A
+         F736+XyoPVN43rCsgCpzOR1kmi4Pu4SqB8TQO4gs=
+Date:   Fri, 29 Jul 2022 10:12:07 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] ufs: core: print UFSHCD capabilities in
+ controller's sysfs node
+Message-ID: <YuOWV5uLVV2JYP1c@kroah.com>
+References: <20220729020508.4147751-1-dlunev@chromium.org>
+ <20220729120216.v3.2.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
 MIME-Version: 1.0
-Message-ID: <165908231771.15455.910099609203096597.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220729120216.v3.2.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Fri, Jul 29, 2022 at 12:05:08PM +1000, Daniil Lunev wrote:
+> Allows userspace to check if Clock Scaling, Write Booster and Inline
+> Crypto Engine functionality can be enabled.
+> 
+> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
+> 
+> ---
+> 
+> Changes in v3:
+> * Expose each capability individually.
+> * Update documentation to represent new scheme.
+> 
+> Changes in v2:
+> * Add documentation entry for the new sysfs node.
+> 
+>  Documentation/ABI/testing/sysfs-driver-ufs | 39 ++++++++++++++++++++
+>  drivers/ufs/core/ufs-sysfs.c               | 41 ++++++++++++++++++++++
+>  2 files changed, 80 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
+> index 6b248abb1bd71..805d76f7d7aef 100644
+> --- a/Documentation/ABI/testing/sysfs-driver-ufs
+> +++ b/Documentation/ABI/testing/sysfs-driver-ufs
+> @@ -1591,6 +1591,45 @@ Description:	This entry shows the status of HPB.
+>  
+>  		The file is read only.
+>  
+> +What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/clock_scaling
 
-Commit-ID:     571c30b1a88465a1c85a6f7762609939b9085a15
-Gitweb:        https://git.kernel.org/tip/571c30b1a88465a1c85a6f7762609939b9085a15
-Author:        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-AuthorDate:    Thu, 28 Jul 2022 09:26:02 -03:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 29 Jul 2022 10:02:35 +02:00
+This shouldn't be linked to as a driver file, it's a device file.  So no
+need for this line.
 
-x86/bugs: Do not enable IBPB at firmware entry when IBPB is not available
+> +What:		/sys/bus/platform/devices/*.ufs/capabilities/clock_scaling
 
-Some cloud hypervisors do not provide IBPB on very recent CPU processors,
-including AMD processors affected by Retbleed.
+Since when are all ufs devices platform devices?  Do we not have UFS
+controllers on other types of busses?
 
-Using IBPB before firmware calls on such systems would cause a GPF at boot
-like the one below. Do not enable such calls when IBPB support is not
-present.
+thanks,
 
-  EFI Variables Facility v0.08 2004-May-17
-  general protection fault, maybe for address 0x1: 0000 [#1] PREEMPT SMP NOPTI
-  CPU: 0 PID: 24 Comm: kworker/u2:1 Not tainted 5.19.0-rc8+ #7
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
-  Workqueue: efi_rts_wq efi_call_rts
-  RIP: 0010:efi_call_rts
-  Code: e8 37 33 58 ff 41 bf 48 00 00 00 49 89 c0 44 89 f9 48 83 c8 01 4c 89 c2 48 c1 ea 20 66 90 b9 49 00 00 00 b8 01 00 00 00 31 d2 <0f> 30 e8 7b 9f 5d ff e8 f6 f8 ff ff 4c 89 f1 4c 89 ea 4c 89 e6 48
-  RSP: 0018:ffffb373800d7e38 EFLAGS: 00010246
-  RAX: 0000000000000001 RBX: 0000000000000006 RCX: 0000000000000049
-  RDX: 0000000000000000 RSI: ffff94fbc19d8fe0 RDI: ffff94fbc1b2b300
-  RBP: ffffb373800d7e70 R08: 0000000000000000 R09: 0000000000000000
-  R10: 000000000000000b R11: 000000000000000b R12: ffffb3738001fd78
-  R13: ffff94fbc2fcfc00 R14: ffffb3738001fd80 R15: 0000000000000048
-  FS:  0000000000000000(0000) GS:ffff94fc3da00000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: ffff94fc30201000 CR3: 000000006f610000 CR4: 00000000000406f0
-  Call Trace:
-   <TASK>
-   ? __wake_up
-   process_one_work
-   worker_thread
-   ? rescuer_thread
-   kthread
-   ? kthread_complete_and_exit
-   ret_from_fork
-   </TASK>
-  Modules linked in:
-
-Fixes: 28a99e95f55c ("x86/amd: Use IBPB for firmware calls")
-Reported-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220728122602.2500509-1-cascardo@canonical.com
----
- arch/x86/kernel/cpu/bugs.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 6454bc7..6761668 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -1520,6 +1520,7 @@ static void __init spectre_v2_select_mitigation(void)
- 	 * enable IBRS around firmware calls.
- 	 */
- 	if (boot_cpu_has_bug(X86_BUG_RETBLEED) &&
-+	    boot_cpu_has(X86_FEATURE_IBPB) &&
- 	    (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
- 	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)) {
- 
+greg k-h

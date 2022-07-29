@@ -2,464 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE1C584EAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B838584ECB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235011AbiG2KZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
+        id S235080AbiG2K2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235691AbiG2KZK (ORCPT
+        with ESMTP id S230272AbiG2K20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:25:10 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7425382F86
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:25:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C367A20132;
-        Fri, 29 Jul 2022 10:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1659090302; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 29 Jul 2022 06:28:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DFFEB6C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659090504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9KTYwBoclDsntTpBY3mpAC97h8nm3hEyYfkY3eKqUms=;
-        b=WrPg6fP9BfrTXQ2SrZHBlwK7GkBqe8cjDsuBa6qU89KqcevxL2v7QuPdk+XN1cYrU6g3xk
-        bvK8kdpWYi2YVovDdjSkF4Mcyeealu0eGmhoe/EYeWd3SXJRZwf+G9xWek+pJzM2jt2CKI
-        06UhWtJx08pVY2dZElXbiNuh5VORVQ0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1659090302;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9KTYwBoclDsntTpBY3mpAC97h8nm3hEyYfkY3eKqUms=;
-        b=HxqjQaoBCXUtUhteWYjAzbGQXgqpXmthB0h9z3swugdsmv09SY4AdfojWDZ+DNj9+ALhQ4
-        S19sND2zo4XduDCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 88A3613A8E;
-        Fri, 29 Jul 2022 10:25:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id F396IH6142JWfAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 29 Jul 2022 10:25:02 +0000
-Message-ID: <790134e2-6e07-61de-a522-96dcf9e2f0f9@suse.cz>
-Date:   Fri, 29 Jul 2022 12:25:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 12/15] mm/sl[au]b: generalize kmalloc subsystem
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
+        bh=as0dSaDJ9Kz1ka/wV5ZX8Zqed6rUUwP8w5uBz6jTo54=;
+        b=Cx4FItA8GTlzS2V+4B/VuSwlcaJ32WcyUZnb2BGIjaiNm3flr6y5sS0/Qu20BV7OqM/kJc
+        YiDfAhx4eFMeusDEqKdbMIsRKiy/D1EUgCaRjQCX2p8xemTHVTCkk6t6yqs7DVzfWX0Sit
+        TNLgsihCjE4LWGD7ycp4Pgr0YEkyPXI=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-377-wPobRwnhMy6IoOvknihrCw-1; Fri, 29 Jul 2022 06:28:23 -0400
+X-MC-Unique: wPobRwnhMy6IoOvknihrCw-1
+Received: by mail-pj1-f72.google.com with SMTP id q5-20020a17090a7a8500b001f0253f5aa3so2241490pjf.4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:28:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=as0dSaDJ9Kz1ka/wV5ZX8Zqed6rUUwP8w5uBz6jTo54=;
+        b=6AYaQEk/myezfyJ4uCrsrUYO4iv4BYh8B591Q56oTpXb/v9Px6sRn5LNxE/txMAE+F
+         EU6uu+iWuDa0oGoPXDQzBmCxAoROFK3JcbPT2A5J0qu36PsdIvKr12wpbikdRcGjWLIG
+         pWN+mgZYESM2GIuXb663vHB9+0pnC+0Wdo6bLQIEnObY/6Q0nCAYJmmDPYkopv1g95qS
+         GrTW/wEAEOe+IHcGhh14PuSUU/NyTfiUNWHwDDOp0rwkIQ5RJFCrxxOE0QL9H8JxDhw4
+         qm3kZ9AC2lxvajQpOnC0sCHbbir4lGhXdf7fw7RPqYLR38mu2HFTJtd1y2iBOvMCyCMH
+         A30g==
+X-Gm-Message-State: ACgBeo3o+B3MsWnuAPNc2lHeB9vMhMiKxZOF15929J6TiCsYg0sTEYQ4
+        5X/jAlVGD8DslwGc2OCsrVpcZhTTWWd7+ZUMibHsbj21T2AheW9fsFjAmzCliTEdzVxFo62M5Yo
+        Q2VT8Zmy/XFB54Zl9WPeikinn
+X-Received: by 2002:a17:902:b948:b0:16d:93c8:403a with SMTP id h8-20020a170902b94800b0016d93c8403amr3216210pls.45.1659090501909;
+        Fri, 29 Jul 2022 03:28:21 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5hAd0t3DvlQMWZfOHeSmTJlLymjssvgghLzSj+panQJWzipIbxqyehtkXAIZsMvvBYYnvbCA==
+X-Received: by 2002:a17:902:b948:b0:16d:93c8:403a with SMTP id h8-20020a170902b94800b0016d93c8403amr3216163pls.45.1659090501513;
+        Fri, 29 Jul 2022 03:28:21 -0700 (PDT)
+Received: from localhost.localdomain ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id d14-20020aa797ae000000b005289eafbd08sm2618289pfq.18.2022.07.29.03.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 03:28:20 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 18:28:09 +0800
+From:   Tao Liu <ltao@redhat.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        virtualization@lists.linux-foundation.org,
+        Arvind Sankar <nivedita@alum.mit.edu>, hpa@zytor.com,
+        Jiri Slaby <jslaby@suse.cz>,
         David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joe Perches <joe@perches.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Matthew WilCox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
- <20220712133946.307181-13-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220712133946.307181-13-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Martin Radev <martin.b.radev@gmail.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Cfir Cohen <cfir@google.com>, linux-coco@lists.linux.dev,
+        Andy Lutomirski <luto@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Mike Stunes <mstunes@vmware.com>,
+        Sean Christopherson <seanjc@google.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Erdem Aktas <erdemaktas@google.com>
+Subject: Re: [PATCH v3 00/10] x86/sev: KEXEC/KDUMP support for SEV-ES guests
+Message-ID: <YuO2OUp4OmnXoqUa@localhost.localdomain>
+References: <20220127101044.13803-1-joro@8bytes.org>
+ <YmuqifsJltdh7rpv@localhost.localdomain>
+ <46b27b72-aabf-f37d-7304-29debeefd8ae@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46b27b72-aabf-f37d-7304-29debeefd8ae@amd.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 15:39, Hyeonggon Yoo wrote:
-> Now everything in kmalloc subsystem can be generalized.
-> Let's do it!
-> 
-> Generalize __do_kmalloc_node(), __kmalloc_node_track_caller(),
-> kfree(), __ksize(), __kmalloc(), __kmalloc_node() and move them
-> to slab_common.c.
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Hi Tom,
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
-> ---
->  mm/slab.c        | 108 -----------------------------------------------
->  mm/slab_common.c | 102 ++++++++++++++++++++++++++++++++++++++++++++
->  mm/slub.c        |  87 --------------------------------------
->  3 files changed, 102 insertions(+), 195 deletions(-)
+On Fri, Apr 29, 2022 at 08:08:28AM -0500, Tom Lendacky wrote:
+> On 4/29/22 04:06, Tao Liu wrote:
+> > On Thu, Jan 27, 2022 at 11:10:34AM +0100, Joerg Roedel wrote:
 > 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index 375e35c14430..6407dad13d5c 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3587,44 +3587,6 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
->  EXPORT_SYMBOL(kmem_cache_alloc_node_trace);
->  #endif
->  
-> -static __always_inline void *
-> -__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
-> -{
-> -	struct kmem_cache *cachep;
-> -	void *ret;
-> -
-> -	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
-> -		ret = kmalloc_large_node_notrace(size, flags, node);
-> -
-> -		trace_kmalloc_node(caller, ret, NULL, size,
-> -				   PAGE_SIZE << get_order(size),
-> -				   flags, node);
-> -		return ret;
-> -	}
-> -
-> -	cachep = kmalloc_slab(size, flags);
-> -	if (unlikely(ZERO_OR_NULL_PTR(cachep)))
-> -		return cachep;
-> -
-> -	ret = kmem_cache_alloc_node_trace(cachep, flags, node, size);
-> -	ret = kasan_kmalloc(cachep, ret, size, flags);
-> -
-> -	return ret;
-> -}
-> -
-> -void *__kmalloc_node(size_t size, gfp_t flags, int node)
-> -{
-> -	return __do_kmalloc_node(size, flags, node, _RET_IP_);
-> -}
-> -EXPORT_SYMBOL(__kmalloc_node);
-> -
-> -void *__kmalloc_node_track_caller(size_t size, gfp_t flags,
-> -		int node, unsigned long caller)
-> -{
-> -	return __do_kmalloc_node(size, flags, node, caller);
-> -}
-> -EXPORT_SYMBOL(__kmalloc_node_track_caller);
-> -
->  #ifdef CONFIG_PRINTK
->  void __kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
->  {
-> @@ -3647,12 +3609,6 @@ void __kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
->  }
->  #endif
->  
-> -void *__kmalloc(size_t size, gfp_t flags)
-> -{
-> -	return __do_kmalloc_node(size, flags, NUMA_NO_NODE, _RET_IP_);
-> -}
-> -EXPORT_SYMBOL(__kmalloc);
-> -
->  static __always_inline
->  void __do_kmem_cache_free(struct kmem_cache *cachep, void *objp,
->  			  unsigned long caller)
-> @@ -3730,43 +3686,6 @@ void kmem_cache_free_bulk(struct kmem_cache *orig_s, size_t size, void **p)
->  }
->  EXPORT_SYMBOL(kmem_cache_free_bulk);
->  
-> -/**
-> - * kfree - free previously allocated memory
-> - * @objp: pointer returned by kmalloc.
-> - *
-> - * If @objp is NULL, no operation is performed.
-> - *
-> - * Don't free memory not originally allocated by kmalloc()
-> - * or you will run into trouble.
-> - */
-> -void kfree(const void *objp)
-> -{
-> -	struct kmem_cache *c;
-> -	unsigned long flags;
-> -	struct folio *folio;
-> -
-> -	trace_kfree(_RET_IP_, objp);
-> -
-> -	if (unlikely(ZERO_OR_NULL_PTR(objp)))
-> -		return;
-> -
-> -	folio = virt_to_folio(objp);
-> -	if (!folio_test_slab(folio)) {
-> -		free_large_kmalloc(folio, (void *)objp);
-> -		return;
-> -	}
-> -
-> -	c = folio_slab(folio)->slab_cache;
-> -
-> -	local_irq_save(flags);
-> -	kfree_debugcheck(objp);
-> -	debug_check_no_locks_freed(objp, c->object_size);
-> -	debug_check_no_obj_freed(objp, c->object_size);
-> -	__cache_free(c, (void *)objp, _RET_IP_);
-> -	local_irq_restore(flags);
-> -}
-> -EXPORT_SYMBOL(kfree);
-> -
->  /*
->   * This initializes kmem_cache_node or resizes various caches for all nodes.
->   */
-> @@ -4169,30 +4088,3 @@ void __check_heap_object(const void *ptr, unsigned long n,
->  	usercopy_abort("SLAB object", cachep->name, to_user, offset, n);
->  }
->  #endif /* CONFIG_HARDENED_USERCOPY */
-> -
-> -/**
-> - * __ksize -- Uninstrumented ksize.
-> - * @objp: pointer to the object
-> - *
-> - * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
-> - * safety checks as ksize() with KASAN instrumentation enabled.
-> - *
-> - * Return: size of the actual memory used by @objp in bytes
-> - */
-> -size_t __ksize(const void *objp)
-> -{
-> -	struct kmem_cache *c;
-> -	struct folio *folio;
-> -
-> -	BUG_ON(!objp);
-> -	if (unlikely(objp == ZERO_SIZE_PTR))
-> -		return 0;
-> -
-> -	folio = virt_to_folio(objp);
-> -	if (!folio_test_slab(folio))
-> -		return folio_size(folio);
-> -
-> -	c = folio_slab(folio)->slab_cache;
-> -	return c->object_size;
-> -}
-> -EXPORT_SYMBOL(__ksize);
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 0dff46fb7193..1000e05c77df 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -924,6 +924,108 @@ void free_large_kmalloc(struct folio *folio, void *object)
->  			      -(PAGE_SIZE << order));
->  	__free_pages(folio_page(folio, 0), order);
->  }
-> +
-> +static __always_inline
-> +void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
-> +{
-> +	struct kmem_cache *s;
-> +	void *ret;
-> +
-> +	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
-> +		ret = kmalloc_large_node_notrace(size, flags, node);
-> +		trace_kmalloc_node(caller, ret, NULL,
-> +				   size, PAGE_SIZE << get_order(size),
-> +				   flags, node);
-> +		return ret;
-> +	}
-> +
-> +	s = kmalloc_slab(size, flags);
-> +
-> +	if (unlikely(ZERO_OR_NULL_PTR(s)))
-> +		return s;
-> +
-> +	ret = __kmem_cache_alloc_node(s, flags, node, size, caller);
-> +	ret = kasan_kmalloc(s, ret, size, flags);
-> +	trace_kmalloc_node(caller, ret, s, size,
-> +			   s->size, flags, node);
-> +	return ret;
-> +}
-> +
-> +void *__kmalloc_node(size_t size, gfp_t flags, int node)
-> +{
-> +	return __do_kmalloc_node(size, flags, node, _RET_IP_);
-> +}
-> +EXPORT_SYMBOL(__kmalloc_node);
-> +
-> +void *__kmalloc(size_t size, gfp_t flags)
-> +{
-> +	return __do_kmalloc_node(size, flags, NUMA_NO_NODE, _RET_IP_);
-> +}
-> +EXPORT_SYMBOL(__kmalloc);
-> +
-> +void *__kmalloc_node_track_caller(size_t size, gfp_t flags,
-> +				  int node, unsigned long caller)
-> +{
-> +	return __do_kmalloc_node(size, flags, node, caller);
-> +}
-> +EXPORT_SYMBOL(__kmalloc_node_track_caller);
-> +
-> +/**
-> + * kfree - free previously allocated memory
-> + * @objp: pointer returned by kmalloc.
-> + *
-> + * If @objp is NULL, no operation is performed.
-> + *
-> + * Don't free memory not originally allocated by kmalloc()
-> + * or you will run into trouble.
-> + */
-> +void kfree(const void *object)
-> +{
-> +	struct folio *folio;
-> +	struct slab *slab;
-> +	struct kmem_cache *s;
-> +
-> +	trace_kfree(_RET_IP_, object);
-> +
-> +	if (unlikely(ZERO_OR_NULL_PTR(object)))
-> +		return;
-> +
-> +	folio = virt_to_folio(object);
-> +	if (unlikely(!folio_test_slab(folio))) {
-> +		free_large_kmalloc(folio, (void *)object);
-> +		return;
-> +	}
-> +
-> +	slab = folio_slab(folio);
-> +	s = slab->slab_cache;
-> +	__kmem_cache_free(s, (void *)object, _RET_IP_);
-> +}
-> +EXPORT_SYMBOL(kfree);
-> +
-> +/**
-> + * __ksize -- Uninstrumented ksize.
-> + * @objp: pointer to the object
-> + *
-> + * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
-> + * safety checks as ksize() with KASAN instrumentation enabled.
-> + *
-> + * Return: size of the actual memory used by @objp in bytes
-> + */
-> +size_t __ksize(const void *object)
-> +{
-> +	struct folio *folio;
-> +
-> +	if (unlikely(object == ZERO_SIZE_PTR))
-> +		return 0;
-> +
-> +	folio = virt_to_folio(object);
-> +
-> +	if (unlikely(!folio_test_slab(folio)))
-> +		return folio_size(folio);
-> +
-> +	return slab_ksize(folio_slab(folio)->slab_cache);
-> +}
-> +EXPORT_SYMBOL(__ksize);
->  #endif /* !CONFIG_SLOB */
->  
->  gfp_t kmalloc_fix_flags(gfp_t flags)
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 74eb78678c98..836292c32e58 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -4388,49 +4388,6 @@ static int __init setup_slub_min_objects(char *str)
->  
->  __setup("slub_min_objects=", setup_slub_min_objects);
->  
-> -static __always_inline
-> -void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
-> -{
-> -	struct kmem_cache *s;
-> -	void *ret;
-> -
-> -	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
-> -		ret = kmalloc_large_node_notrace(size, flags, node);
-> -
-> -		trace_kmalloc_node(caller, ret, NULL,
-> -				   size, PAGE_SIZE << get_order(size),
-> -				   flags, node);
-> -
-> -		return ret;
-> -	}
-> -
-> -	s = kmalloc_slab(size, flags);
-> -
-> -	if (unlikely(ZERO_OR_NULL_PTR(s)))
-> -		return s;
-> -
-> -	ret = slab_alloc_node(s, NULL, flags, node, caller, size);
-> -
-> -	trace_kmalloc_node(caller, ret, s, size, s->size, flags, node);
-> -
-> -	ret = kasan_kmalloc(s, ret, size, flags);
-> -
-> -	return ret;
-> -}
-> -
-> -void *__kmalloc_node(size_t size, gfp_t flags, int node)
-> -{
-> -	return __do_kmalloc_node(size, flags, node, _RET_IP_);
-> -}
-> -EXPORT_SYMBOL(__kmalloc_node);
-> -
-> -void *__kmalloc(size_t size, gfp_t flags)
-> -{
-> -	return __do_kmalloc_node(size, flags, NUMA_NO_NODE, _RET_IP_);
-> -}
-> -EXPORT_SYMBOL(__kmalloc);
-> -
-> -
->  #ifdef CONFIG_HARDENED_USERCOPY
->  /*
->   * Rejects incorrectly sized objects and objects that are to be copied
-> @@ -4481,43 +4438,6 @@ void __check_heap_object(const void *ptr, unsigned long n,
->  }
->  #endif /* CONFIG_HARDENED_USERCOPY */
->  
-> -size_t __ksize(const void *object)
-> -{
-> -	struct folio *folio;
-> -
-> -	if (unlikely(object == ZERO_SIZE_PTR))
-> -		return 0;
-> -
-> -	folio = virt_to_folio(object);
-> -
-> -	if (unlikely(!folio_test_slab(folio)))
-> -		return folio_size(folio);
-> -
-> -	return slab_ksize(folio_slab(folio)->slab_cache);
-> -}
-> -EXPORT_SYMBOL(__ksize);
-> -
-> -void kfree(const void *x)
-> -{
-> -	struct folio *folio;
-> -	struct slab *slab;
-> -	void *object = (void *)x;
-> -
-> -	trace_kfree(_RET_IP_, x);
-> -
-> -	if (unlikely(ZERO_OR_NULL_PTR(x)))
-> -		return;
-> -
-> -	folio = virt_to_folio(x);
-> -	if (unlikely(!folio_test_slab(folio))) {
-> -		free_large_kmalloc(folio, object);
-> -		return;
-> -	}
-> -	slab = folio_slab(folio);
-> -	slab_free(slab->slab_cache, slab, object, NULL, &object, 1, _RET_IP_);
-> -}
-> -EXPORT_SYMBOL(kfree);
-> -
->  #define SHRINK_PROMOTE_MAX 32
->  
->  /*
-> @@ -4863,13 +4783,6 @@ int __kmem_cache_create(struct kmem_cache *s, slab_flags_t flags)
->  	return 0;
->  }
->  
-> -void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
-> -				  int node, unsigned long caller)
-> -{
-> -	return __do_kmalloc_node(size, gfpflags, node, caller);
-> -}
-> -EXPORT_SYMBOL(__kmalloc_node_track_caller);
-> -
->  #ifdef CONFIG_SYSFS
->  static int count_inuse(struct slab *slab)
->  {
+> > 
+> > Hi Joerg,
+> > 
+> > I tried the patch set with 5.17.0-rc1 kernel, and I have a few questions:
+> > 
+> > 1) Is it a bug or should qemu-kvm 6.2.0 be patched with specific patch? Because
+> >     I found it will exit with 0 when I tried to reboot the VM with sev-es enabled.
+> >     However with only sev enabled, the VM can do reboot with no problem:
+> 
+> Qemu was specifically patched to exit on reboot with SEV-ES guests. Qemu
+> performs a reboot by resetting the vCPU state, which can't be done with an
+> SEV-ES guest because the vCPU state is encrypted.
+> 
+
+Sorry for the late response, and thank you for the explanation!
+
+> > 
+> > [root@dell-per7525-03 ~]# virsh start TW-SEV-ES --console
+> > ....
+> > Fedora Linux 35 (Server Edition)
+> > Kernel 5.17.0-rc1 on an x86_64 (ttyS0)
+> > ....
+> > [root@fedora ~]# reboot
+> > .....
+> > [   48.077682] reboot: Restarting system
+> > [   48.078109] reboot: machine restart
+> >                         ^^^^^^^^^^^^^^^ guest vm reached restart
+> > [root@dell-per7525-03 ~]# echo $?
+> > 0
+> > ^^^ qemu-kvm exit with 0, no reboot back to normal VM kernel
+> > [root@dell-per7525-03 ~]#
+> > 
+> > 2) With sev-es enabled and the 2 patch sets applied: A) [PATCH v3 00/10] x86/sev:
+> > KEXEC/KDUMP support for SEV-ES guests, and B) [PATCH v6 0/7] KVM: SVM: Add initial
+> > GHCB protocol version 2 support. I can enable kdump and have vmcore generated:
+> > 
+> > [root@fedora ~]# dmesg|grep -i sev
+> > [    0.030600] SEV: Hypervisor GHCB protocol version support: min=1 max=2
+> > [    0.030602] SEV: Using GHCB protocol version 2
+> > [    0.296144] AMD Memory Encryption Features active: SEV SEV-ES
+> > [    0.450991] SEV: AP jump table Blob successfully set up
+> > [root@fedora ~]# kdumpctl status
+> > kdump: Kdump is operational
+> > 
+> > However without the 2 patch sets, I can also enable kdump and have vmcore generated:
+> > 
+> > [root@fedora ~]# dmesg|grep -i sev
+> > [    0.295754] AMD Memory Encryption Features active: SEV SEV-ES
+> >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ patch set A & B
+> > 	       not applied, so only have this string.
+> > [root@fedora ~]# echo c > /proc/sysrq-trigger
+> > ...
+> > [    2.759403] kdump[549]: saving vmcore-dmesg.txt to /sysroot/var/crash/127.0.0.1-2022-04-18-05:58:50/
+> > [    2.804355] kdump[555]: saving vmcore-dmesg.txt complete
+> > [    2.806915] kdump[557]: saving vmcore
+> >                             ^^^^^^^^^^^^^ vmcore can still be generated
+> > ...
+> > [    7.068981] reboot: Restarting system
+> > [    7.069340] reboot: machine restart
+> > 
+> > [root@dell-per7525-03 ~]# echo $?
+> > 0
+> > ^^^ same exit issue as question 1.
+> > 
+> > I doesn't have a complete technical background of the patch set, but isn't
+> > it the issue which this patch set is trying to solve? Or I missed something?
+> 
+> The main goal of this patch set is to really to solve the ability to perform
+> a kexec. I would expect kdump to work since kdump shuts down all but the
+> executing vCPU and performs its operations before "rebooting" (which will
+> exit Qemu as I mentioned above). But kexec requires the need to restart the
+> APs from within the guest after they have been stopped. That requires
+> specific support and actions on the part of the guest kernel in how the APs
+> are stopped and restarted.
+
+Recently I got one sev-es flaged machine borrowed and retested the patch, which
+worked fine for kexec when sev-es enabled. With the patchset applied in 5.17.0-rc1, 
+kexec'ed kernel can bring up all APs with no problem.
+
+However as for kdump, I find one issue. Although kdump kernel can work well on one
+cpu, but we can still enable multi-cpus by removing the "nr_cpus=1" kernel parameter
+in kdump sysconfig. I was expecting kdump kernel can bring up all APs as kexec did,
+however:
+
+[    0.000000] Command line: elfcorehdr=0x5b000000 BOOT_IMAGE=(hd0,gpt2)/vmlinuz-5.17.0-rc1+ ro resume=/dev/mapper/rhel-swap biosdevname=0 net.ifnames=0 console=ttyS0 irqpoll reset_devices cgroup_disable=memory mce=off numa=off udev.children-max=2 panic=10 rootflags=nofail acpi_no_memhotplug transparent_hugepage=never nokaslr novmcoredd hest_disable disable_cpu_apicid=0 iTCO_wdt.pretimeout=0
+...
+[    0.376663] smp: Bringing up secondary CPUs ...
+[    0.377599] x86: Booting SMP configuration:
+[    0.378342] .... node  #0, CPUs:      #1
+[   10.377698] smpboot: do_boot_cpu failed(-1) to wakeup CPU#1
+[   10.379882]  #2
+[   20.379645] smpboot: do_boot_cpu failed(-1) to wakeup CPU#2
+[   20.380648] smp: Brought up 1 node, 1 CPU
+[   20.381600] smpboot: Max logical packages: 4
+[   20.382597] smpboot: Total of 1 processors activated (4192.00 BogoMIPS)
+
+Turns out for kdump, the APs were not stopped properly, so I modified the following code:
+
+--- a/arch/x86/kernel/reboot.c
++++ b/arch/x86/kernel/reboot.c
+@@ -26,6 +26,7 @@
+ #include <asm/cpu.h>
+ #include <asm/nmi.h>
+ #include <asm/smp.h>
++#include <asm/sev.h>
+ 
+ #include <linux/ctype.h>
+ #include <linux/mc146818rtc.h>
+@@ -821,6 +822,7 @@ static int crash_nmi_callback(unsigned int val, struct pt_regs *regs)
+ 
+        atomic_dec(&waiting_for_crash_ipi);
+        /* Assume hlt works */
++       sev_es_stop_this_cpu();
+        halt();
+        for (;;)
+                cpu_relax();
+
+[    0.000000] Command line: elfcorehdr=0x5b000000 BOOT_IMAGE=(hd0,gpt2)/vmlinuz-5.17.0-rc1-hack+ ro resume=/dev/mapper/rhel-swap biosdevname=0 net.ifnames=0 console=ttyS0 irqpoll reset_devices cgroup_disable=memory mce=off numa=off udev.children-max=2 panic=10 rootflags=nofail acpi_no_memhotplug transparent_hugepage=never nokaslr novmcoredd hest_disable disable_cpu_apicid=0 iTCO_wdt.pretimeout=0
+...
+[    0.402618] smp: Bringing up secondary CPUs ...
+[    0.403308] x86: Booting SMP configuration:
+[    0.404171] .... node  #0, CPUs:      #1 #2 #3
+[    0.407362] smp: Brought up 1 node, 4 CPUs
+[    0.408907] smpboot: Max logical packages: 4
+[    0.409172] smpboot: Total of 4 processors activated (16768.01 BogoMIPS)
+
+Now all APs can work in kdump kernel.
+
+Thanks,
+Tao Liu
+
+> 
+> Thanks,
+> Tom
+> 
+> > 
+> > Thanks,
+> > Tao Liu
+> > > _______________________________________________
+> > > Virtualization mailing list
+> > > Virtualization@lists.linux-foundation.org
+> > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+> > 
+> 
 

@@ -2,285 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946B2584BA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DBA584BA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234611AbiG2GZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S234457AbiG2G0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbiG2GZP (ORCPT
+        with ESMTP id S233946AbiG2G0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:25:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08E012A82
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659075914; x=1690611914;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=iAb39NiQRMJo7JQGxri/hlWsnn5atvY2xRJlmiRgfaU=;
-  b=ZGurxiCPqEZkG/MSU9J4e3JtsG+LtYSehsK6lSjvqz8KKJ2OS8YlMYI+
-   5f5Hlux+w9mNHgcQFuLusrp1QkJ2ZZGeWJ/lODDhpJSYm8/vMP6RM9KgR
-   WhIFIv2SZYnGz59x6m07nuDELH4lcM/CCbwY/VleXo74/OGTLvFGR8zjy
-   O2TD3g646ry8FOGsWns4/W+rrluo9GP9K4lNVw9AHvzJ8D1Ut1CmW1a2W
-   lQ/gvjZv159a2TL8doqqadGDyQXW7q5IOc+YGhS6c1OGb94cXStHt3PLB
-   60CgGz03uerWLmG7sil5qMAFHnxb5pJDXqWyPAYG1nHLHbfMPDApJ2Sit
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="352702183"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="352702183"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 23:25:14 -0700
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="551632401"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 23:25:10 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: Re: [PATCH v11 1/8] mm/demotion: Add support for explicit memory tiers
-References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
-        <20220728190436.858458-2-aneesh.kumar@linux.ibm.com>
-Date:   Fri, 29 Jul 2022 14:25:05 +0800
-In-Reply-To: <20220728190436.858458-2-aneesh.kumar@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Fri, 29 Jul 2022 00:34:29 +0530")
-Message-ID: <871qu4mo5a.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 29 Jul 2022 02:26:18 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4211409D;
+        Thu, 28 Jul 2022 23:26:13 -0700 (PDT)
+X-UUID: 58dd79af1ca74237a62d2f2e143fa373-20220729
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:656a614f-45e1-4837-8844-11bc018f1c85,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:d1c5b224-a982-4824-82d2-9da3b6056c2a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 58dd79af1ca74237a62d2f2e143fa373-20220729
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1917766154; Fri, 29 Jul 2022 14:26:08 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 29 Jul 2022 14:26:06 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 29 Jul 2022 14:26:05 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>,
+        kyrie wu <kyrie.wu@mediatek.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <maoguang.meng@mediatek.com>
+Subject: [V6,0/8] Support multi-hardware jpeg decoder for MT8195
+Date:   Fri, 29 Jul 2022 14:25:55 +0800
+Message-ID: <20220729062603.5533-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+From: kyrie wu <kyrie.wu@mediatek.com>
 
-> In the current kernel, memory tiers are defined implicitly via a demotion path
-> relationship between NUMA nodes, which is created during the kernel
-> initialization and updated when a NUMA node is hot-added or hot-removed. The
-> current implementation puts all nodes with CPU into the highest tier, and builds
-> the tier hierarchy tier-by-tier by establishing the per-node demotion targets
-> based on the distances between nodes.
->
-> This current memory tier kernel implementation needs to be improved for several
-> important use cases,
->
-> The current tier initialization code always initializes each memory-only NUMA
-> node into a lower tier. But a memory-only NUMA node may have a high performance
-> memory device (e.g. a DRAM-backed memory-only node on a virtual machine) that
-> should be put into a higher tier.
->
-> The current tier hierarchy always puts CPU nodes into the top tier. But on a
-> system with HBM or GPU devices, the memory-only NUMA nodes mapping these devices
-> should be in the top tier, and DRAM nodes with CPUs are better to be placed into
-> the next lower tier.
->
-> With current kernel higher tier node can only be demoted to nodes with shortest
-> distance on the next lower tier as defined by the demotion path, not any other
-> node from any lower tier. This strict, demotion order does not work in all use
-> cases (e.g. some use cases may want to allow cross-socket demotion to another
-> node in the same demotion tier as a fallback when the preferred demotion node is
-> out of space), This demotion order is also inconsistent with the page allocation
-> fallback order when all the nodes in a higher tier are out of space: The page
-> allocation can fall back to any node from any lower tier, whereas the demotion
-> order doesn't allow that.
->
-> This patch series address the above by defining memory tiers explicitly.
->
-> Linux kernel presents memory devices as NUMA nodes and each memory device is of
-> a specific type. The memory type of a device is represented by its abstract
-> distance. A memory tier corresponds to a range of abstract distance. This allows
-> for classifying memory devices with a specific performance range into a memory
-> tier.
->
-> This patch configures the range/chunk size to be 128. The default DRAM
-> abstract distance is 512. We can have 4 memory tiers below the default DRAM
-> abstract distance which cover the range 0 - 127, 127 - 255, 256- 383, 384 - 511.
-> Slower memory devices like persistent memory will have abstract distance below
-> the default DRAM level and hence will be placed in these 4 lower tiers.
+This series adds support for multi hardware jpeg decoding,
+by first adding use of_platform_populate to manage each hardware
+information: interrupt, clock, register bases and power.
+Secondly add decoding work queue to deal with the decoding requests
+of multi-hardware at the same time. Lastly, add output picture
+reorder function interface to eliminate the out of order images.
 
-For abstract distance, the lower value means higher performance, higher
-value means lower performance.  So the abstract distance of PMEM should
-be smaller than that of DRAM.
+This series has been tested with both MT8195.
+Decoding worked for this chip.
 
-> A kernel parameter is provided to override the default memory tier.
+Patch 1 Adds jpeg decoder dt-bindings for mt8195
 
-Forget to delete?
+Patches 2 jpeg decoder builds three module for using Multi-HW,
+export some functions to make them visible by other modules.
 
-Best Regards,
-Huang, Ying
+Patch 3 use of_platform_populate to manage multi-hardware.
 
-> Link: https://lore.kernel.org/linux-mm/CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com
-> Link: https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
->
-> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> ---
->  include/linux/memory-tiers.h |  17 ++++++
->  mm/Makefile                  |   1 +
->  mm/memory-tiers.c            | 102 +++++++++++++++++++++++++++++++++++
->  3 files changed, 120 insertions(+)
->  create mode 100644 include/linux/memory-tiers.h
->  create mode 100644 mm/memory-tiers.c
->
-> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-> new file mode 100644
-> index 000000000000..8d7884b7a3f0
-> --- /dev/null
-> +++ b/include/linux/memory-tiers.h
-> @@ -0,0 +1,17 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_MEMORY_TIERS_H
-> +#define _LINUX_MEMORY_TIERS_H
-> +
-> +/*
-> + * Each tier cover a abstrace distance chunk size of 128
-> + */
-> +#define MEMTIER_CHUNK_BITS	7
-> +#define MEMTIER_CHUNK_SIZE	(1 << MEMTIER_CHUNK_BITS)
-> +/*
-> + * For now let's have 4 memory tier below default DRAM tier.
-> + */
-> +#define MEMTIER_ADISTANCE_DRAM	(1 << (MEMTIER_CHUNK_BITS + 2))
-> +/* leave one tier below this slow pmem */
-> +#define MEMTIER_ADISTANCE_PMEM	(1 << MEMTIER_CHUNK_BITS)
-> +
-> +#endif  /* _LINUX_MEMORY_TIERS_H */
-> diff --git a/mm/Makefile b/mm/Makefile
-> index 6f9ffa968a1a..d30acebc2164 100644
-> --- a/mm/Makefile
-> +++ b/mm/Makefile
-> @@ -92,6 +92,7 @@ obj-$(CONFIG_KFENCE) += kfence/
->  obj-$(CONFIG_FAILSLAB) += failslab.o
->  obj-$(CONFIG_MEMTEST)		+= memtest.o
->  obj-$(CONFIG_MIGRATION) += migrate.o
-> +obj-$(CONFIG_NUMA) += memory-tiers.o
->  obj-$(CONFIG_DEVICE_MIGRATION) += migrate_device.o
->  obj-$(CONFIG_TRANSPARENT_HUGEPAGE) += huge_memory.o khugepaged.o
->  obj-$(CONFIG_PAGE_COUNTER) += page_counter.o
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> new file mode 100644
-> index 000000000000..01cfd514c192
-> --- /dev/null
-> +++ b/mm/memory-tiers.c
-> @@ -0,0 +1,102 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/types.h>
-> +#include <linux/nodemask.h>
-> +#include <linux/slab.h>
-> +#include <linux/lockdep.h>
-> +#include <linux/memory-tiers.h>
-> +
-> +struct memory_tier {
-> +	/* hierarchy of memory tiers */
-> +	struct list_head list;
-> +	/* list of all memory types part of this tier */
-> +	struct list_head memory_types;
-> +	/*
-> +	 * start value of abstract distance. memory tier maps
-> +	 * an abstract distance  range,
-> +	 * adistance_start .. adistance_start + MEMTIER_CHUNK_SIZE
-> +	 */
-> +	int adistance_start;
-> +};
-> +
-> +struct memory_dev_type {
-> +	/* list of memory types that are are part of same tier as this type */
-> +	struct list_head tier_sibiling;
-> +	/* abstract distance for this specific memory type */
-> +	int adistance;
-> +	/* Nodes of same abstract distance */
-> +	nodemask_t nodes;
-> +	struct memory_tier *memtier;
-> +};
-> +
-> +static DEFINE_MUTEX(memory_tier_lock);
-> +static LIST_HEAD(memory_tiers);
-> +struct memory_dev_type *node_memory_types[MAX_NUMNODES];
-> +/*
-> + * For now let's have 4 memory tier below default DRAM tier.
-> + */
-> +static struct memory_dev_type default_dram_type  = {
-> +	.adistance = MEMTIER_ADISTANCE_DRAM,
-> +	.tier_sibiling = LIST_HEAD_INIT(default_dram_type.tier_sibiling),
-> +};
-> +
-> +static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memtype)
-> +{
-> +	bool found_slot = false;
-> +	struct memory_tier *memtier, *new_memtier;
-> +	int adistance = memtype->adistance;
-> +	unsigned int memtier_adistance_chunk_size = MEMTIER_CHUNK_SIZE;
-> +
-> +	lockdep_assert_held_once(&memory_tier_lock);
-> +
-> +	/*
-> +	 * If the memtype is already part of a memory tier,
-> +	 * just return that.
-> +	 */
-> +	if (memtype->memtier)
-> +		return memtype->memtier;
-> +
-> +	adistance = round_down(adistance, memtier_adistance_chunk_size);
-> +	list_for_each_entry(memtier, &memory_tiers, list) {
-> +		if (adistance == memtier->adistance_start) {
-> +			memtype->memtier = memtier;
-> +			list_add(&memtype->tier_sibiling, &memtier->memory_types);
-> +			return memtier;
-> +		} else if (adistance < memtier->adistance_start) {
-> +			found_slot = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	new_memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
-> +	if (!new_memtier)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	new_memtier->adistance_start = adistance;
-> +	INIT_LIST_HEAD(&new_memtier->list);
-> +	INIT_LIST_HEAD(&new_memtier->memory_types);
-> +	if (found_slot)
-> +		list_add_tail(&new_memtier->list, &memtier->list);
-> +	else
-> +		list_add_tail(&new_memtier->list, &memory_tiers);
-> +	memtype->memtier = new_memtier;
-> +	list_add(&memtype->tier_sibiling, &new_memtier->memory_types);
-> +	return new_memtier;
-> +}
-> +
-> +static int __init memory_tier_init(void)
-> +{
-> +	struct memory_tier *memtier;
-> +
-> +	mutex_lock(&memory_tier_lock);
-> +	/* CPU only nodes are not part of memory tiers. */
-> +	default_dram_type.nodes = node_states[N_MEMORY];
-> +
-> +	memtier = find_create_memory_tier(&default_dram_type);
-> +	if (IS_ERR(memtier))
-> +		panic("%s() failed to register memory tier: %ld\n",
-> +		      __func__, PTR_ERR(memtier));
-> +	mutex_unlock(&memory_tier_lock);
-> +
-> +	return 0;
-> +}
-> +subsys_initcall(memory_tier_init);
+Patch 4 add jpeg decoding timeout function to judge hardware timeout.
+
+Patch 5 add decoding work queue to deal with multi-hardware decoding
+at the same time.
+
+Patch 6 add output picture reorder function to order images.
+
+Patch 7 refactor jpegdec func interface for HW working.
+
+Patch 8 add stop cmd function to deal with EOS operation.
+
+---
+This series patches dependent on:
+media_stage tree:
+[1]
+https://git.linuxtv.org/media_stage.git/commit/?id=b3627647f9ea7473d10fb08a95fd7c4133a17ca4
+
+patch1 new jpegdec dt-bindings included files
+[2] MM IOMMU binding:
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220217113453.13658-2-yong.wu@mediatek.com/
+
+[3] MT8195 power domain:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=580579
+
+Changes compared with v5:
+- some modifications for patch v5's review comments.
+- fix yaml file check errors.
+
+Changes compared with v4:
+- some modifications for patch v4's review comments.
+- fix Gstreamer test errors.
+
+Changes compared with v3:
+- some modifications for patch v3's review comments.
+
+Changes compared with v2:
+- add stop cmd function.
+- some modifications for patch v1's review comments.
+
+Changes compared with v1:
+- new yaml file for mt8195 jpeg decoder.
+- some modifications for patch v1's review comments.
+
+kyrie wu (8):
+  dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
+  media: mtk-jpegdec: export jpeg decoder functions
+  media: mtk-jpegdec: manage jpegdec multi-hardware
+  media: mtk-jpegdec: add jpegdec timeout func interface
+  media: mtk-jpegdec: add jpeg decode worker interface
+  media: mtk-jpegdec: add output pic reorder interface
+  media: mtk-jpegdec: refactor jpegdec func interface
+  mtk-jpegdec: add stop cmd interface for jpgdec
+
+ .../media/mediatek,mt8195-jpegdec.yaml        | 160 +++++++++
+ drivers/media/platform/mediatek/jpeg/Makefile |   5 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 233 ++++++++++++-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  46 +++
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 314 ++++++++++++++++--
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |   3 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_reg.h |   1 +
+ 7 files changed, 730 insertions(+), 32 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+
+-- 
+2.18.0
+

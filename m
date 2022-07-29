@@ -2,147 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE335851D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2CA5851D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237269AbiG2Our (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
+        id S237233AbiG2OwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237148AbiG2Ouj (ORCPT
+        with ESMTP id S235283AbiG2OwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:50:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79AE7550BD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:50:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659106236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3RIbQJyAhz2h/kfb2kZEUdHUrU4dsqj9Ad5P96B1/m8=;
-        b=UOT3QiVql6aDzqNS9wZeMGwhe7bC2ghB6NUjUYzMwBRIZ8TpTnzzRHaflAEd/PeRTzxuZq
-        4+JyJhj39i/CfChOKNlEEgAHeL2zAWWtp+GcEyg6Oft9AIr3uWBaFCiK7LegGaZ975cK0S
-        1bpZ4v6lHwbttBLyNeofPiuAJCoe7hg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-wqQzFei2P0mGI0NyT2UEyQ-1; Fri, 29 Jul 2022 10:50:33 -0400
-X-MC-Unique: wqQzFei2P0mGI0NyT2UEyQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 29 Jul 2022 10:52:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401936D574
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:52:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8A8108037B3;
-        Fri, 29 Jul 2022 14:50:32 +0000 (UTC)
-Received: from [10.22.34.17] (unknown [10.22.34.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 60FEC1121314;
-        Fri, 29 Jul 2022 14:50:31 +0000 (UTC)
-Message-ID: <92f68392-12d2-f64a-9bb9-1a3a15f99d02@redhat.com>
-Date:   Fri, 29 Jul 2022 10:50:30 -0400
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC329B82816
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 14:52:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099A1C433D6;
+        Fri, 29 Jul 2022 14:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659106329;
+        bh=F3R+IOAPEQcMnDp1+HJeg+EseSWL8jzg1ZzFD/TqHPU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jx8RM2gZ0DRSCk7nSuPoQxG+jpm3VnWYi6IsuXN62pdo5x/bDUpQ0n/Z8sFwRNuLP
+         tO56S+uBmc5IAjpYCdRGQWSxe0PxLpYSABHXnr65omm4BltMbQzIu9+1SJjdkWh3Lp
+         3VPyYUk84A3A+HUQtcDIg1K4OBRMSMoXopRWibcI=
+Date:   Fri, 29 Jul 2022 16:52:05 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+Subject: Re: [PATCH 2/5] soundwire: sysfs: cleanup the logic for creating the
+ dp0 sysfs attributes
+Message-ID: <YuP0Ffs3G7ZBR0AC@kroah.com>
+References: <20220729135041.2285908-1-gregkh@linuxfoundation.org>
+ <20220729135041.2285908-2-gregkh@linuxfoundation.org>
+ <9365e038-2146-98f8-f989-02827f221c34@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-Content-Language: en-US
-To:     Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220728005815.1715522-1-longman@redhat.com>
- <YuLF+xXaCzwWi2BR@slm.duckdns.org>
- <1ae1cc6c-dca9-4958-6b22-24a5777c5e8d@redhat.com>
- <YuLdX7BYGvo57LNU@slm.duckdns.org>
- <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
- <YuL1NijxSEv2xadk@slm.duckdns.org>
- <c470d3f7-f0f8-b8e6-4a95-7b334f0a824b@redhat.com>
- <YuMCB86fH2K3NcqM@slm.duckdns.org> <xhsmhy1wcc8dq.mognet@vschneid.remote.csb>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <xhsmhy1wcc8dq.mognet@vschneid.remote.csb>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9365e038-2146-98f8-f989-02827f221c34@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 10:15, Valentin Schneider wrote:
-> On 28/07/22 11:39, Tejun Heo wrote:
->> Hello, Waiman.
->>
->> On Thu, Jul 28, 2022 at 05:04:19PM -0400, Waiman Long wrote:
->>>> So, the patch you proposed is making the code remember one special aspect of
->>>> user requested configuration - whether it configured it or not, and trying
->>>> to preserve that particular state as cpuset state changes. It addresses the
->>>> immediate problem but it is a very partial approach. Let's say a task wanna
->>>> be affined to one logical thread of each core and set its mask to 0x5555.
->>>> Now, let's say cpuset got enabled and enforced 0xff and affined the task to
->>>> 0xff. After a while, the cgroup got more cpus allocated and its cpuset now
->>>> has 0xfff. Ideally, what should happen is the task now having the effective
->>>> mask of 0x555. In practice, tho, it either would get 0xf55 or 0x55 depending
->>>> on which way we decide to misbehave.
->>> OK, I see what you want to accomplish. To fully address this issue, we will
->>> need to have a new cpumask variable in the the task structure which will be
->>> allocated if sched_setaffinity() is ever called. I can rework my patch to
->>> use this approach.
->> Yeah, we'd need to track what user requested separately from the currently
->> effective cpumask. Let's make sure that the scheduler folks are on board
->> before committing to the idea tho. Peter, Ingo, what do you guys think?
->>
-> FWIW on a runtime overhead side of things I think it'll be OK as that
-> should be just an extra mask copy  in sched_setaffinity() and a subset
-> check / cpumask_and() in set_cpus_allowed_ptr(). The policy side is a bit
-> less clear (when, if ever, do we clear the user-defined mask? Will it keep
-> haunting us even after moving a task to a disjoint cpuset partition?).
+On Fri, Jul 29, 2022 at 09:46:26AM -0500, Pierre-Louis Bossart wrote:
+> 
+> 
+> On 7/29/22 08:50, Greg Kroah-Hartman wrote:
+> > There's no need to special-case the dp0 sysfs attributes, the
+> > is_visible() callback in the attribute group can handle that for us, so
+> > add that and add it to the attribute group list making the logic simpler
+> > overall.
+> > 
+> > This is a step on the way to moving all of the sysfs attribute handling
+> > into the default driver core attribute group logic so that the soundwire
+> > core does not have to do any of it manually.
+> > 
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > Cc: Sanyog Kale <sanyog.r.kale@intel.com>
+> > Cc: alsa-devel@alsa-project.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/soundwire/sysfs_slave.c | 18 ++++++++++++------
+> >  1 file changed, 12 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/soundwire/sysfs_slave.c b/drivers/soundwire/sysfs_slave.c
+> > index 83e3f6cc3250..3723333a5c2b 100644
+> > --- a/drivers/soundwire/sysfs_slave.c
+> > +++ b/drivers/soundwire/sysfs_slave.c
+> > @@ -174,6 +174,16 @@ static ssize_t words_show(struct device *dev,
+> >  }
+> >  static DEVICE_ATTR_RO(words);
+> >  
+> > +static umode_t dp0_is_visible(struct kobject *kobj, struct attribute *attr,
+> > +			      int n)
+> > +{
+> > +	struct sdw_slave *slave = dev_to_sdw_dev(kobj_to_dev(kobj));
+> > +
+> > +	if (slave->prop.dp0_prop)
+> > +		return attr->mode;
+> > +	return 0;
+> > +}
+> 
+> This changes the results slightly by creating an empty 'dp0' directory
+> with no attributes inside.
+> 
+> Before:
+> 
+> [root@fedora ~]# cd /sys/bus/soundwire/devices/sdw:3:025d:0714:01
+> [root@fedora sdw:3:025d:0714:01]# ls dp0
+> ls: cannot access 'dp0': No such file or directory
+> 
+> After:
+> [root@fedora sdw:3:025d:0714:01]# ls dp0
 
-The runtime overhead should be minimal. It is the behavioral side that 
-we should be careful about. It is a change in existing behavior and we 
-don't want to cause surprise to the users. Currently, a task that set 
-its cpu affinity explicitly will have its affinity reset whenever there 
-is any change to the cpuset it belongs to or a hotplug event touch any 
-cpu in the current cpuset. The new behavior we are proposing here is 
-that it will try its best to keep the cpu affinity that the user 
-requested within the constraint of the current cpuset as well as the cpu 
-hotplug state.
+That should be fine, tools should just be looking for the attributes,
+not the existance of a directory, right?
 
+thanks,
 
->
-> There's also if/how that new mask should be exposed, because attaching a
-> task to a cpuset will now yield a not-necessarily-obvious affinity -
-> e.g. in the thread affinity example above, if the initial affinity setting
-> was done ages ago by some system tool, IMO the user needs a way to be able
-> to expect/understand the result of 0x555 rather than 0xfff.
-
-Users can use sched_getaffinity(2) to retrieve the current cpu affinity. 
-It is up to users to set another one if they don't like the current one. 
-I don't think we need to return what the previous requested cpu affinity 
-is. They are suppose to know that or they can set their own if they 
-don't like it. \
-
-Cheers,
-Longman
-
->
-> While I'm saying this, I don't think anything exposes p->user_cpus_ptr, but
-> then again that one is for "special" hardware...
->
->> Thanks.
->>
->> --
->> tejun
-
+greg k-h

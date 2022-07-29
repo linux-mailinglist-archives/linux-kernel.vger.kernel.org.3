@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BBC5855E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A0D5855E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238967AbiG2UGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 16:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
+        id S239033AbiG2UHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 16:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiG2UGM (ORCPT
+        with ESMTP id S229564AbiG2UHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 16:06:12 -0400
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135C363914;
-        Fri, 29 Jul 2022 13:06:09 -0700 (PDT)
-Received: by mail-pg1-f179.google.com with SMTP id r186so4807971pgr.2;
-        Fri, 29 Jul 2022 13:06:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=FB+0W8v8UDMpFz9rL6S4eZJw9kfVH7QjSk7HN7wEXkY=;
-        b=ZL2Nad0F5qbfqgqCmDIZh/o8X9lxNfaSlUUJguj9EgE24iF+8Lwx9B2uf5ozVPHP+L
-         6CiCO7ivF5wPW0EJMdE78UwPmPknQ5ayCDaQjeZHJ8PO19MZKXaY42DdLzLNsOcoxrkB
-         9WseFS/LL7IIdy9iy+DmzKn1CGpxdjac+kize8btUUOZC7QWAo7JuoQ80B5Kpeher3rz
-         sIigJJ5K/TjMU8xdRYz1AD1o3VzE5tsih1gno1G8lfLKInKAMWso8lapxFSvjxDhpOQW
-         A04GxNwmWkxBiszCYh9ewNiR+cl+vv7CNO/n26S0budgw+4FjMy001OsLSTROv93hD8x
-         TdKQ==
-X-Gm-Message-State: AJIora+ZSEvOhh7gLYVudxwTv8FCRdqdv7PC6q92Kbnx8T/q4ttisWVX
-        KRGraLste8rrLxAoudv7JeE=
-X-Google-Smtp-Source: AGRyM1tInMycz2iLxo2bv+KHymYOshzLCE6LdcJ59I+SaA75WRa0GNpXbX3yXBDfQg1M+2RWj8IR7A==
-X-Received: by 2002:aa7:8554:0:b0:52b:cfed:168b with SMTP id y20-20020aa78554000000b0052bcfed168bmr5148694pfn.4.1659125169057;
-        Fri, 29 Jul 2022 13:06:09 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:f090:7a49:3465:6a5? ([2620:15c:211:201:f090:7a49:3465:6a5])
-        by smtp.gmail.com with ESMTPSA id g197-20020a6252ce000000b0052531985e3esm3356171pfb.22.2022.07.29.13.06.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 13:06:08 -0700 (PDT)
-Message-ID: <d473f4b3-9aba-fe39-d88c-b762d9d779b0@acm.org>
-Date:   Fri, 29 Jul 2022 13:06:06 -0700
+        Fri, 29 Jul 2022 16:07:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5049177A56
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 13:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659125242; x=1690661242;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n9VPcmGyb4APXNfilDXyG45keSxqJQDhTPJwEDOtIIY=;
+  b=mE98cIO7PW8u3CxSShpSWT8/GAwo6yJY5DHQWZ2arpMtEJvADxhU/bjA
+   0gj4SfthEUNnfIWsY4oJttog1y+FaeJv46Soi5t9xduAl9AbDWWtlGL7k
+   1glhwi74DAUy7udVX41zQ0H5SvN9suzWsvokONoy7KgnmlsXPn3WFLA6J
+   uqbp7pfC4vj/3WOBCGMeCymBgrjEgVSJ6oxe3kqi/W9FFFtBzi6zsShka
+   uu5PAQfgFEx/S7BdhhKlE3LVMdWG30m4ibpxmzPmfLqDD07FccLIark/E
+   StB5fm/q2fmTu8dHekzvyscz4MFitLnkO/XRTRd2mTQPT7y8NfhmzwLEs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="288852654"
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="288852654"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 13:07:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="928857590"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Jul 2022 13:07:20 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHWGW-000C3N-1B;
+        Fri, 29 Jul 2022 20:07:20 +0000
+Date:   Sat, 30 Jul 2022 04:06:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame
+ size (1344) exceeds limit (1280) in 'atags_to_fdt'
+Message-ID: <202207300353.NK0xv7rn-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V3] scsi: ufs: Get boot device storage type from command
- line
-Content-Language: en-US
-To:     "Chetan Chinnadagudihundi Ravindranath (Consultant) (QUIC)" 
-        <quic_cchinnad@quicinc.com>
-Cc:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-References: <1659034814-3473-1-git-send-email-quic_cchinnad@quicinc.com>
- <77330f3a-5f73-e10f-7e85-f3df304aa4d7@acm.org>
- <f1cf652a-4a36-fe60-5a98-14b9d97c9a41@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <f1cf652a-4a36-fe60-5a98-14b9d97c9a41@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 05:54, Chetan Chinnadagudihundi Ravindranath (Consultant) 
-(QUIC) wrote:
-> Please suggest any efficient way of making ufs-cmdline part of vmlinux.
+Hi Ard,
 
-A patch description should not only explain what has been changed but 
-also why a change is being made. Information about why support is being 
-added for the androidboot.bootdevice parameter in the Qualcomm UFS host 
-controller driver is missing from the patch description.
+FYI, the error/warning still remains.
 
-Please also address Christoph's comment about this new command-line 
-parameter not being used anywhere in the upstream kernel tree.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   bb83c99d3d0aa2f51ba0b2abd7115002620118e6
+commit: 672513bf583157cc088a32e75bd850dd9f81564c ARM: decompressor: disable stack protector
+date:   8 months ago
+config: arm-randconfig-r016-20220724 (https://download.01.org/0day-ci/archive/20220730/202207300353.NK0xv7rn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 83882606dbd7ffb0bdd3460356202d97705809c8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=672513bf583157cc088a32e75bd850dd9f81564c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 672513bf583157cc088a32e75bd850dd9f81564c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Thanks,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Bart.
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame size (1344) exceeds limit (1280) in 'atags_to_fdt' [-Wframe-larger-than]
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+       ^
+   1 warning generated.
+
+
+vim +/atags_to_fdt +129 arch/arm/boot/compressed/atags_to_fdt.c
+
+31d0b9f9982f8e3 Ben Dooks          2018-10-12  120  
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  121  /*
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  122   * Convert and fold provided ATAGs into the provided FDT.
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  123   *
+4716e2e34a22a8c Geert Uytterhoeven 2021-05-19  124   * Return values:
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  125   *    = 0 -> pretend success
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  126   *    = 1 -> bad ATAG (may retry with another possible ATAG pointer)
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  127   *    < 0 -> error from libfdt
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13  128   */
+b90b9a38251e9c8 Nicolas Pitre      2011-09-13 @129  int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+
+:::::: The code at line 129 was first introduced by commit
+:::::: b90b9a38251e9c89c34179eccde57411ceb5f1aa ARM: zImage: allow supplementing appended DTB with traditional ATAG data
+
+:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
+:::::: CC: Nicolas Pitre <nico@fluxnic.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

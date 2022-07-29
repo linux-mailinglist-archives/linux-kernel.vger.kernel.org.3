@@ -2,589 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83B2585596
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62ED58559A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238751AbiG2Tbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
+        id S238688AbiG2Tgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbiG2Tbn (ORCPT
+        with ESMTP id S232823AbiG2Tgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:31:43 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABF1E0A3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:31:42 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id t15so2894132ilm.7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:31:42 -0700 (PDT)
+        Fri, 29 Jul 2022 15:36:50 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2055.outbound.protection.outlook.com [40.107.102.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048EE31DD4;
+        Fri, 29 Jul 2022 12:36:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iFxyiSgi3mim3GudfPoLjAPaYn/0UjKm6oxyQOLFCXbIuGPSKSvYeDGL/QBeKc7wTrquQs9ZFVwcOsIpDfdoPdIQPoQ1/mZf9BD4H0632O8JoJbfB/32xf8YJwFb92gDujZn6vrUF8uDzkW3XKIwHi6Ax71rw5zyvL3i2yqm24rH+s417NoHCcoHJFiefei9B0R31aJN4zEHEdj4yHvwSPK19l9YbSikFC0E8u+K9+J7eCt9e+tiyw0b/SsFLJr9Yxad7BeriJaeK1M4OFRliXxFgwAny5F3bAO06SiE6xfyM7Buri0C6+HxpSqBUdZVvL+Tiu9RZZ1pgE6Z76hYdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5fPu1LfLRvFBdFXPcfaT+Z3uOTnt5Q5hwhjTjhjquEw=;
+ b=DWH4JRvrbFQ4mpcEJRB3CbIb7nR/LdpEHhIvZQfxOlLGqFG6+c7tDv1O+m6mpF4Ldc6DpwkMc2yov3Wqxx1P3vNVzxwwAim7C/jlzqyLgE5uG+PZC3giuGXPvBy5ahxcAvxZAQumycK5GLckXlFqmz+I1gSmv87FhxEKuOY4u3YLD7d1wiKgcbdK1/YLQF31ZX+dKGMi2rlUOZgGlYh5ZGt9KAqqnqUJKetcO3q82KVL1an5yWOu31auCoq7NnN9qubizM04OUkxbqsledVdHrd2YIluTmEqjxchBR271aU8JDuuLM9fhWt0qtbKFUkVWeeAWDFmBwmHu07i+1fuew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=amd.com smtp.mailfrom=xilinx.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=6GXLhFn5AUZcr0XKccgrkCqVGuLZqmvdx86neava4i0=;
-        b=huMBJ0SQ71VdzCftzJd1AeXSzeK6AocvWzF8DmRg+iXKEDKAwPuT7TFtlwJ8+GX0hy
-         PeuwTrbkKtqICYNcsJTU5eNqcyJ3TyZXPvUmcNf7JGHZf4PETEsCc6Yag8H5E5GIn1TH
-         JAP/CAwS5RSRGGVbZPfiu3JRalt693g3XSGJU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=6GXLhFn5AUZcr0XKccgrkCqVGuLZqmvdx86neava4i0=;
-        b=OUZrrBUrQfCS0cNg0xRSmTUPJBkoAr/cOl82Nkyhze13Gm2o7ZvqMnY33oMOWg+708
-         aOy+ctafGuOhqvzZDxJ3bp8JYcRWldCx1N+wUY+b5ME794Htp2JrcGkDLvihloNVNAeq
-         POd3EMjJ5+l9nYtWVZfvzx6QGnIpLNgW2luRUL7cFzkhcmn4HAOSQUk4MVekWWV2SEXR
-         xwOb5omzQyVzWtvKXIEodLWLjWnGPNml3kSNUw3tXL1ZZUiKQaTu8An1oTeIpXaaQysB
-         E8+izW+BM92dNKF5hHQEHSVgomPg9NBaNKa0ql1mHngJOMQWP98DU2p4Zdfj0LC80xXA
-         HvBg==
-X-Gm-Message-State: AJIora+UthLBzYDggr3fPuodi3CSlwrZtpXr6Yb4FAT6VoKiYRXm2l/Z
-        hks/Cms2KMDnEyvjw49jzjDmDDJ4fmT2yQ==
-X-Google-Smtp-Source: AGRyM1shKLIWsKB6evzMUdB2/9QXnpNfJQ8u+eVPIEYXj21KHWs2D2xmCh1Nh6wf/xRXgXH7Rn2QJg==
-X-Received: by 2002:a92:db47:0:b0:2dd:5e7:fe99 with SMTP id w7-20020a92db47000000b002dd05e7fe99mr1903842ilq.238.1659123101042;
-        Fri, 29 Jul 2022 12:31:41 -0700 (PDT)
-Received: from jrosenth45.corp.google.com ([2601:285:8300:c23:c82a:e170:891f:5bf])
-        by smtp.gmail.com with ESMTPSA id f7-20020a028487000000b00341d28e07f4sm1996677jai.105.2022.07.29.12.31.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 12:31:40 -0700 (PDT)
-From:   Jack Rosenthal <jrosenth@chromium.org>
-To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Cc:     Jack Rosenthal <jrosenth@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Julius Werner <jwerner@chromium.org>
-Subject: [PATCH v3] firmware: google: Implement cbmem in sysfs driver
-Date:   Fri, 29 Jul 2022 13:31:07 -0600
-Message-Id: <20220729193107.2466530-1-jrosenth@chromium.org>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-In-Reply-To: <YuGTL79tPPoalk/j@chromium.org>
-References: <YuGTL79tPPoalk/j@chromium.org>
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5fPu1LfLRvFBdFXPcfaT+Z3uOTnt5Q5hwhjTjhjquEw=;
+ b=PbKB0sSjbiMz1SZOK9eSwJZnH3ys2GRWtrwOsuMoV3VKwIRmS3P3GjsdXFUBmnrMTPlhMT+zFEKc3EKTccF88xgvyQqZ9+AVvREEpHmIDGlijFYd1xu4Q6DVJUsxaEwVQ+DQuvr4sJLETzBqMAtITVIwBoAlOPTTOhM1mN5Mo9c=
+Received: from DM5PR08CA0041.namprd08.prod.outlook.com (2603:10b6:4:60::30) by
+ DM5PR02MB2315.namprd02.prod.outlook.com (2603:10b6:3:4f::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5458.19; Fri, 29 Jul 2022 19:36:46 +0000
+Received: from DM3NAM02FT038.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:4:60:cafe::9c) by DM5PR08CA0041.outlook.office365.com
+ (2603:10b6:4:60::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.20 via Frontend
+ Transport; Fri, 29 Jul 2022 19:36:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT038.mail.protection.outlook.com (10.13.5.131) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5482.10 via Frontend Transport; Fri, 29 Jul 2022 19:36:46 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 29 Jul 2022 12:36:45 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 29 Jul 2022 12:36:45 -0700
+Envelope-to: git@xilinx.com,
+ git@amd.com,
+ radhey.shyam.pandey@amd.com,
+ davem@davemloft.net,
+ edumazet@google.com,
+ kuba@kernel.org,
+ gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org,
+ claudiu.beznea@microchip.com,
+ nicolas.ferre@microchip.com,
+ pabeni@redhat.com,
+ linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org
+Received: from [172.23.64.3] (port=58451 helo=xhdvnc103.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <radhey.shyam.pandey@xilinx.com>)
+        id 1oHVmv-000Gvt-Bu; Fri, 29 Jul 2022 12:36:45 -0700
+Received: by xhdvnc103.xilinx.com (Postfix, from userid 13245)
+        id 3050F105461; Sat, 30 Jul 2022 01:06:43 +0530 (IST)
+From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To:     <michal.simek@xilinx.com>, <nicolas.ferre@microchip.com>,
+        <claudiu.beznea@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <git@amd.com>, <git@xilinx.com>,
+        "Radhey Shyam Pandey" <radhey.shyam.pandey@amd.com>
+Subject: [PATCH v2 net-next 0/2] macb: add zynqmp SGMII dynamic configuration support
+Date:   Sat, 30 Jul 2022 01:05:48 +0530
+Message-ID: <1659123350-10638-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1f953b9d-673b-4efc-d18b-08da7199acc6
+X-MS-TrafficTypeDiagnostic: DM5PR02MB2315:EE_
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DzmkALyFWo49crWOKNY+SGc5F8b1VeKUIZ8HOVsIuXCq4+FJ2pPz+SX/oRBcSvePJVWLDYUuyKtXXcZClsPOriqj780BRSaBAXpXfUi030ipKtm1Afn8+U2WUzjpBoqDwNmrc3ai3EY4M/0oEbV976os+XKP+PZbSCRD2fzN95pBC49OyKT2kNaw9pGIXqBa9D2Jw3HfC+qhg0SXJE9N/JXlB2+sd3ePA28X84GNX/3xr2doXPPoQmclYTVm2dmmTnntWO/xsTcwlYgMxXWTzYZrRKYaNH344KiknFnkXMKG699yIGhe/s0vFWfIbaFSaYuGblk3pJGOQ+fKFw3k/nmN2fZjDhyZnG5wL1ggwnzuqLfUce2OcE3oM7+0tVryiHtL5m1Z5E5FWeVUNEl8haTrYs89x7F0rJ06T2zFLU7s+sNjZzROPzo94vAiWGlJlf57X9yMdPaBV5XoaS/tZizp4z39LFiCs7OMvlgbqvemWQ7eodUuH0aRAEknhoI3IXtneYWMXtEutaACAb7WuziDAUno8Ab6AW3e2sfZkbw0UjaRvNNsskRModawQ8XjVlh8A10Aj2Yjzu8I4rBtgghDB8UzSA7D1FhFniZjC761w3RPZMeoShZJB92noMZ4V8gn2rz6rv4etzKz5uLVC9Iy8oNIiYf3KoQDjG+owDxU8QQsnL3AXWbNSDtS7IOq2kOLjqrg0DIGmejlHRP8mLU1fb6BJkk3dg2XRUMPujLANdABStLvAG9kJmT4SCP9IXuTSzb0VAikfyS/bOuR6e4XfAeU95NuNDi9FBppjdIC0YxX4oxxSO4rslxcY/xJ/aHmGAcVgq5gVBmOZZcroA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(376002)(39860400002)(396003)(40470700004)(36840700001)(46966006)(70206006)(47076005)(8676002)(7416002)(5660300002)(70586007)(336012)(26005)(41300700001)(40460700003)(82740400003)(40480700001)(6266002)(8936002)(82310400005)(356005)(478600001)(186003)(4744005)(2906002)(4326008)(7636003)(54906003)(110136005)(36860700001)(83170400001)(2616005)(42186006)(36756003)(316002)(42882007)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 19:36:46.8054
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f953b9d-673b-4efc-d18b-08da7199acc6
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT038.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2315
+X-Spam-Status: No, score=1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cbmem entries can be read from coreboot table
-0x31 (LB_TAG_CBMEM_ENTRY).  This commit exports access to cbmem
-entries in sysfs under /sys/firmware/coreboot/cbmem-*.
+This patchset add firmware and driver support to do SD/GEM dynamic
+configuration. In traditional flow GEM secure space configuration
+is done by FSBL. However in specific usescases like dynamic designs
+where GEM is not enabled in base vivado design, FSBL skips GEM
+initialization and we need a mechanism to configure GEM secure space
+in linux space at runtime. 
 
-Link: https://issuetracker.google.com/239604743
-Cc: Stephen Boyd <swboyd@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Julius Werner <jwerner@chromium.org>
-Tested-by: Jack Rosenthal <jrosenth@chromium.org>
-Signed-off-by: Jack Rosenthal <jrosenth@chromium.org>
----
- .../ABI/testing/sysfs-firmware-coreboot       |  16 +
- drivers/firmware/google/Kconfig               |   8 +
- drivers/firmware/google/Makefile              |   3 +
- drivers/firmware/google/cbmem.c               | 408 ++++++++++++++++++
- drivers/firmware/google/coreboot_table.h      |  11 +
- 5 files changed, 446 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-firmware-coreboot
- create mode 100644 drivers/firmware/google/cbmem.c
 
-diff --git a/Documentation/ABI/testing/sysfs-firmware-coreboot b/Documentation/ABI/testing/sysfs-firmware-coreboot
-new file mode 100644
-index 000000000000..c66ef96647e9
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-firmware-coreboot
-@@ -0,0 +1,16 @@
-+What:		/sys/firmware/coreboot/
-+Date:		July 2022
-+Contact:	Jack Rosenthal <jrosenth@chromium.org>
-+Description:
-+		Coreboot-based BIOS firmware provides a variety of information
-+		in CBMEM.  Each CBMEM entry can be found via Coreboot tables.
-+		For each CBMEM entry, the following are exposed:
-+
-+		address: A hexidecimal value of the memory address the data for
-+			the entry begins at.
-+		size: The size of the data stored.
-+		id: The id corresponding to the entry. A list of ids known to
-+			coreboot can be found in the coreboot tree at
-+			src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h
-+		alias: A common name for the id of the entry.
-+		mem: A file exposing the raw memory for the entry.
-diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
-index 983e07dc022e..bf8316d1cb31 100644
---- a/drivers/firmware/google/Kconfig
-+++ b/drivers/firmware/google/Kconfig
-@@ -19,6 +19,14 @@ config GOOGLE_SMI
- 	  driver provides an interface for reading and writing NVRAM
- 	  variables.
- 
-+config GOOGLE_CBMEM
-+	tristate "CBMEM entries in sysfs"
-+	depends on GOOGLE_COREBOOT_TABLE
-+	help
-+	  This option enables the kernel to search for Coreboot CBMEM
-+	  entries, and expose the memory for each entry in sysfs under
-+	  /sys/firmware/coreboot.
-+
- config GOOGLE_COREBOOT_TABLE
- 	tristate "Coreboot Table Access"
- 	depends on HAS_IOMEM && (ACPI || OF)
-diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
-index d17caded5d88..8151e323cc43 100644
---- a/drivers/firmware/google/Makefile
-+++ b/drivers/firmware/google/Makefile
-@@ -7,5 +7,8 @@ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
- obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
- obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
- 
-+# Must come after coreboot_table.o, as this driver depends on that bus type.
-+obj-$(CONFIG_GOOGLE_CBMEM)		+= cbmem.o
-+
- vpd-sysfs-y := vpd.o vpd_decode.o
- obj-$(CONFIG_GOOGLE_VPD)		+= vpd-sysfs.o
-diff --git a/drivers/firmware/google/cbmem.c b/drivers/firmware/google/cbmem.c
-new file mode 100644
-index 000000000000..71c5de17e243
---- /dev/null
-+++ b/drivers/firmware/google/cbmem.c
-@@ -0,0 +1,408 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * cbmem.c
-+ *
-+ * Driver for exporting cbmem entries in sysfs.
-+ *
-+ * Copyright 2022 Google Inc.
-+ */
-+
-+#include <linux/capability.h>
-+#include <linux/ctype.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/kobject.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/sysfs.h>
-+
-+#include "coreboot_table.h"
-+
-+#define LB_TAG_CBMEM_ENTRY 0x31
-+
-+/*
-+ * This list should be kept in sync with
-+ * src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h from coreboot.
-+ */
-+static const struct {
-+	const char *alias;
-+	u32 id;
-+} cbmem_aliases[] = {
-+	{ "acpi", 0x41435049 },
-+	{ "acpi-bert", 0x42455254 },
-+	{ "acpi-cnvs", 0x434e5653 },
-+	{ "acpi-gnvs", 0x474e5653 },
-+	{ "acpi-hest", 0x48455354 },
-+	{ "acpi-ucsi", 0x55435349 },
-+	{ "after-car", 0xc4787a93 },
-+	{ "agesa-runtime", 0x41474553 },
-+	{ "agesa-mtrr", 0xf08b4b9d },
-+	{ "amdmct-meminfo", 0x494d454e },
-+	{ "car-globals", 0xcac4e6a3 },
-+	{ "cbtable", 0x43425442 },
-+	{ "cbtable-fwd", 0x43425443 },
-+	{ "cb-early-dram", 0x4544524d },
-+	{ "console", 0x434f4e53 },
-+	{ "cpu-crashlog", 0x4350555f },
-+	{ "coverage", 0x47434f56 },
-+	{ "cse-update", 0x43534555 },
-+	{ "ehci-debug", 0xe4c1deb9 },
-+	{ "elog", 0x454c4f47 },
-+	{ "freespace", 0x46524545 },
-+	{ "fsp-reserved-memory", 0x46535052 },
-+	{ "fsp-runtime", 0x52505346 },
-+	{ "gdt", 0x4c474454 },
-+	{ "hob-pointer", 0x484f4221 },
-+	{ "igd-opregion", 0x4f444749 },
-+	{ "imd-root", 0xff4017ff },
-+	{ "imd-small", 0x53a11439 },
-+	{ "mdata-hash", 0x6873484d },
-+	{ "meminfo", 0x494d454d },
-+	{ "mma-data", 0x4d4d4144 },
-+	{ "mmc-status", 0x4d4d4353 },
-+	{ "mptable", 0x534d5054 },
-+	{ "mrcdata", 0x4d524344 },
-+	{ "pmc-crashlog", 0x504d435f },
-+	{ "var-mrcdata", 0x4d524345 },
-+	{ "mtc", 0xcb31d31c },
-+	{ "none", 0x00000000 },
-+	{ "pirq", 0x49525154 },
-+	{ "power-state", 0x50535454 },
-+	{ "ram-oops", 0x05430095 },
-+	{ "ramstage", 0x9a357a9e },
-+	{ "ramstage-cache", 0x9a3ca54e },
-+	{ "refcode", 0x04efc0de },
-+	{ "refcode-cache", 0x4efc0de5 },
-+	{ "resume", 0x5245534d },
-+	{ "resume-scratch", 0x52455343 },
-+	{ "romstage-info", 0x47545352 },
-+	{ "romstage-ram-stack", 0x90357ac4 },
-+	{ "root", 0xff4007ff },
-+	{ "smbios", 0x534d4254 },
-+	{ "smm-save-space", 0x07e9acee },
-+	{ "stagex-meta", 0x57a9e000 },
-+	{ "stagex-cache", 0x57a9e100 },
-+	{ "stagex-mem", 0x57a9e200 },
-+	{ "storage-data", 0x53746f72 },
-+	{ "tcpa-log", 0x54435041 },
-+	{ "tcpa-tcg-log", 0x54445041 },
-+	{ "timestamp", 0x54494d45 },
-+	{ "tpm2-tcg-log", 0x54504d32 },
-+	{ "tpm-ppi", 0x54505049 },
-+	{ "vboot-handoff", 0x780074f0 },
-+	{ "vboot-sel-reg", 0x780074f1 },
-+	{ "vboot-workbuf", 0x78007343 },
-+	{ "vpd", 0x56504420 },
-+	{ "wifi-calibration", 0x57494649 },
-+	{ "ec-hostevent", 0x63ccbbc3 },
-+	{ "ext-vbt", 0x69866684 },
-+	{ "vga-rom0", 0x524f4d30 },
-+	{ "vga-rom1", 0x524f4d31 },
-+	{ "vga-rom2", 0x524f4d32 },
-+	{ "vga-rom3", 0x524f4d33 },
-+	{ "fmap", 0x464d4150 },
-+	{ "cbfs-ro-mcache", 0x524d5346 },
-+	{ "cbfs-rw-mcache", 0x574d5346 },
-+	{ "fsp-logo", 0x4c4f474f },
-+	{ "smm-combuffer", 0x53534d32 },
-+	{ "type-c-info", 0x54595045 },
-+	{ "mem-chip-info", 0x5048434d },
-+};
-+
-+static const char *get_alias(u32 cbmem_id)
-+{
-+	for (int i = 0; i < ARRAY_SIZE(cbmem_aliases); i++) {
-+		if (cbmem_id == cbmem_aliases[i].id)
-+			return cbmem_aliases[i].alias;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct kobject *coreboot_kobj;
-+
-+struct cbmem_entry;
-+struct cbmem_entry_attr {
-+	struct kobj_attribute kobj_attr;
-+	struct cbmem_entry *entry;
-+};
-+
-+struct cbmem_entry {
-+	char *kobj_name;
-+	struct kobject *kobj;
-+	struct coreboot_device *dev;
-+	struct bin_attribute mem_file;
-+	char *mem_file_buf;
-+	struct cbmem_entry_attr address_file;
-+	struct cbmem_entry_attr size_file;
-+	struct cbmem_entry_attr id_file;
-+	const char *alias;
-+	struct cbmem_entry_attr alias_name_file;
-+	char *alias_link_name;
-+};
-+
-+static struct cbmem_entry_attr *to_cbmem_entry_attr(struct kobj_attribute *a)
-+{
-+	return container_of(a, struct cbmem_entry_attr, kobj_attr);
-+}
-+
-+static ssize_t cbmem_entry_mem_read(struct file *filp, struct kobject *kobp,
-+				    struct bin_attribute *bin_attr, char *buf,
-+				    loff_t pos, size_t count)
-+{
-+	struct cbmem_entry *entry = bin_attr->private;
-+
-+	return memory_read_from_buffer(buf, count, &pos, entry->mem_file_buf,
-+				       bin_attr->size);
-+}
-+
-+static ssize_t cbmem_entry_mem_write(struct file *filp, struct kobject *kobp,
-+				     struct bin_attribute *bin_attr, char *buf,
-+				     loff_t pos, size_t count)
-+{
-+	struct cbmem_entry *entry = bin_attr->private;
-+
-+	if (!capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+	if (pos < 0 || pos >= bin_attr->size)
-+		return -EINVAL;
-+	if (count > bin_attr->size - pos)
-+		count = bin_attr->size - pos;
-+
-+	memcpy(entry->mem_file_buf + pos, buf, count);
-+	return count;
-+}
-+
-+static ssize_t cbmem_entry_alias_name_show(struct kobject *kobj,
-+					   struct kobj_attribute *a, char *buf)
-+{
-+	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
-+
-+	return sysfs_emit(buf, "%s\n", entry_attr->entry->alias);
-+}
-+
-+static int cbmem_entry_setup_alias(struct cbmem_entry *entry)
-+{
-+	int ret;
-+
-+	entry->alias = get_alias(entry->dev->cbmem_entry.id);
-+	if (!entry->alias)
-+		return 0;
-+
-+	sysfs_attr_init(&entry->alias_name_file.kobj_attr.attr);
-+	entry->alias_name_file.kobj_attr.attr.name = "alias";
-+	entry->alias_name_file.kobj_attr.attr.mode = 0444;
-+	entry->alias_name_file.kobj_attr.show = cbmem_entry_alias_name_show;
-+	entry->alias_name_file.entry = entry;
-+	ret = sysfs_create_file(entry->kobj,
-+				&entry->alias_name_file.kobj_attr.attr);
-+	if (ret)
-+		return ret;
-+
-+	entry->alias_link_name =
-+		kasprintf(GFP_KERNEL, "cbmem-%s", entry->alias);
-+	if (!entry->alias_link_name) {
-+		ret = -ENOMEM;
-+		goto free_alias_name_file;
-+	}
-+
-+	ret = sysfs_create_link(coreboot_kobj, entry->kobj,
-+				entry->alias_link_name);
-+	if (ret)
-+		goto free_alias_link_name;
-+
-+	return 0;
-+
-+free_alias_link_name:
-+	kfree(entry->alias_link_name);
-+free_alias_name_file:
-+	sysfs_remove_file(entry->kobj, &entry->alias_name_file.kobj_attr.attr);
-+
-+	return ret;
-+}
-+
-+static ssize_t cbmem_entry_address_show(struct kobject *kobj,
-+					struct kobj_attribute *a, char *buf)
-+{
-+	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
-+
-+	return sysfs_emit(buf, "0x%llx\n",
-+			  entry_attr->entry->dev->cbmem_entry.address);
-+}
-+
-+static ssize_t cbmem_entry_size_show(struct kobject *kobj,
-+				     struct kobj_attribute *a, char *buf)
-+{
-+	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
-+
-+	return sysfs_emit(buf, "0x%x\n",
-+			  entry_attr->entry->dev->cbmem_entry.entry_size);
-+}
-+
-+static ssize_t cbmem_entry_id_show(struct kobject *kobj,
-+				   struct kobj_attribute *a, char *buf)
-+{
-+	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
-+
-+	return sysfs_emit(buf, "0x%x\n",
-+			  entry_attr->entry->dev->cbmem_entry.id);
-+}
-+
-+static int cbmem_entry_setup(struct cbmem_entry *entry)
-+{
-+	int ret;
-+
-+	entry->mem_file_buf = memremap(entry->dev->cbmem_entry.address,
-+				       entry->dev->cbmem_entry.entry_size,
-+				       MEMREMAP_WB);
-+	if (!entry->mem_file_buf)
-+		return -ENOMEM;
-+
-+	entry->kobj_name =
-+		kasprintf(GFP_KERNEL, "cbmem-%08x", entry->dev->cbmem_entry.id);
-+	if (!entry->kobj_name) {
-+		ret = -ENOMEM;
-+		goto memunmap;
-+	}
-+
-+	entry->kobj = kobject_create_and_add(entry->kobj_name, coreboot_kobj);
-+	if (!entry->kobj) {
-+		ret = -ENOMEM;
-+		goto free_name;
-+	}
-+
-+	sysfs_bin_attr_init(&entry->mem_file);
-+	entry->mem_file.attr.name = "mem";
-+	entry->mem_file.attr.mode = 0664;
-+	entry->mem_file.size = entry->dev->cbmem_entry.entry_size;
-+	entry->mem_file.read = cbmem_entry_mem_read;
-+	entry->mem_file.write = cbmem_entry_mem_write;
-+	entry->mem_file.private = entry;
-+	ret = sysfs_create_bin_file(entry->kobj, &entry->mem_file);
-+	if (ret)
-+		goto free_kobj;
-+
-+	sysfs_attr_init(&entry->address_file.kobj_attr.attr);
-+	entry->address_file.kobj_attr.attr.name = "address";
-+	entry->address_file.kobj_attr.attr.mode = 0444;
-+	entry->address_file.kobj_attr.show = cbmem_entry_address_show;
-+	entry->address_file.entry = entry;
-+	ret = sysfs_create_file(entry->kobj,
-+				&entry->address_file.kobj_attr.attr);
-+	if (ret)
-+		goto free_mem_file;
-+
-+	sysfs_attr_init(&entry->size_file.kobj_attr.attr);
-+	entry->size_file.kobj_attr.attr.name = "size";
-+	entry->size_file.kobj_attr.attr.mode = 0444;
-+	entry->size_file.kobj_attr.show = cbmem_entry_size_show;
-+	entry->size_file.entry = entry;
-+	ret = sysfs_create_file(entry->kobj, &entry->size_file.kobj_attr.attr);
-+	if (ret)
-+		goto free_address_file;
-+
-+	sysfs_attr_init(&entry->id_file.kobj_attr.attr);
-+	entry->id_file.kobj_attr.attr.name = "id";
-+	entry->id_file.kobj_attr.attr.mode = 0444;
-+	entry->id_file.kobj_attr.show = cbmem_entry_id_show;
-+	entry->id_file.entry = entry;
-+	ret = sysfs_create_file(entry->kobj, &entry->id_file.kobj_attr.attr);
-+	if (ret)
-+		goto free_size_file;
-+
-+	ret = cbmem_entry_setup_alias(entry);
-+	if (ret)
-+		goto free_id_file;
-+
-+	return 0;
-+
-+free_id_file:
-+	sysfs_remove_file(entry->kobj, &entry->id_file.kobj_attr.attr);
-+free_size_file:
-+	sysfs_remove_file(entry->kobj, &entry->size_file.kobj_attr.attr);
-+free_address_file:
-+	sysfs_remove_file(entry->kobj, &entry->address_file.kobj_attr.attr);
-+free_mem_file:
-+	sysfs_remove_bin_file(entry->kobj, &entry->mem_file);
-+free_kobj:
-+	kobject_put(entry->kobj);
-+free_name:
-+	kfree(entry->kobj_name);
-+memunmap:
-+	memunmap(entry->mem_file_buf);
-+	return ret;
-+}
-+
-+static int cbmem_entry_probe(struct coreboot_device *dev)
-+{
-+	int ret;
-+	struct cbmem_entry *entry;
-+
-+	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	dev_set_drvdata(&dev->dev, entry);
-+	entry->dev = dev;
-+	ret = cbmem_entry_setup(entry);
-+	if (ret) {
-+		kfree(entry);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void cbmem_entry_remove(struct coreboot_device *dev)
-+{
-+	struct cbmem_entry *entry = dev_get_drvdata(&dev->dev);
-+
-+	sysfs_remove_file(entry->kobj, &entry->alias_name_file.kobj_attr.attr);
-+	sysfs_remove_bin_file(entry->kobj, &entry->mem_file);
-+	if (entry->alias)
-+		sysfs_remove_link(entry->kobj, entry->alias_link_name);
-+	kfree(entry->alias_link_name);
-+	memunmap(entry->mem_file_buf);
-+	kobject_put(entry->kobj);
-+	kfree(entry->kobj_name);
-+	kfree(entry);
-+}
-+
-+static struct coreboot_driver cbmem_entry_driver = {
-+	.probe = cbmem_entry_probe,
-+	.remove = cbmem_entry_remove,
-+	.drv = {
-+		.name = "cbmem",
-+	},
-+	.tag = LB_TAG_CBMEM_ENTRY,
-+};
-+
-+static int __init cbmem_init(void)
-+{
-+	int ret;
-+
-+	coreboot_kobj = kobject_create_and_add("coreboot", firmware_kobj);
-+	if (!coreboot_kobj)
-+		return -ENOMEM;
-+
-+	ret = coreboot_driver_register(&cbmem_entry_driver);
-+	if (ret) {
-+		kobject_put(coreboot_kobj);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+module_init(cbmem_init);
-+
-+static void __exit cbmem_exit(void)
-+{
-+	kobject_put(coreboot_kobj);
-+	coreboot_driver_unregister(&cbmem_entry_driver);
-+}
-+module_exit(cbmem_exit);
-+
-+MODULE_AUTHOR("Google, Inc.");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/firmware/google/coreboot_table.h b/drivers/firmware/google/coreboot_table.h
-index beb778674acd..6c03a8852d1b 100644
---- a/drivers/firmware/google/coreboot_table.h
-+++ b/drivers/firmware/google/coreboot_table.h
-@@ -39,6 +39,16 @@ struct lb_cbmem_ref {
- 	u64 cbmem_addr;
- };
- 
-+/* Corresponds to LB_TAG_CBMEM_ENTRY. */
-+struct lb_cbmem_entry {
-+	u32 tag;
-+	u32 size;
-+
-+	u64 address;
-+	u32 entry_size;
-+	u32 id;
-+};
-+
- /* Describes framebuffer setup by coreboot */
- struct lb_framebuffer {
- 	u32 tag;
-@@ -65,6 +75,7 @@ struct coreboot_device {
- 	union {
- 		struct coreboot_table_entry entry;
- 		struct lb_cbmem_ref cbmem_ref;
-+		struct lb_cbmem_entry cbmem_entry;
- 		struct lb_framebuffer framebuffer;
- 	};
- };
+Changes for v2:
+- Add phy_exit() in error return paths.
+- Use tab indent for zynqmp_pm_set_sd/gem_config return documentation.
+
+Radhey Shyam Pandey (1):
+  net: macb: Add zynqmp SGMII dynamic configuration support
+
+Ronak Jain (1):
+  firmware: xilinx: add support for sd/gem config
+
+ drivers/firmware/xilinx/zynqmp.c         | 31 ++++++++++++++++++++++++++++++
+ drivers/net/ethernet/cadence/macb_main.c | 25 ++++++++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h     | 33 ++++++++++++++++++++++++++++++++
+ 3 files changed, 89 insertions(+)
+
 -- 
-2.37.1.455.g008518b4e5-goog
+2.1.1
 

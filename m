@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE659585231
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AE1585236
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237026AbiG2PRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
+        id S236814AbiG2PSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiG2PRp (ORCPT
+        with ESMTP id S230063AbiG2PSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:17:45 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E01E459B6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:17:44 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ss3so9041109ejc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:17:44 -0700 (PDT)
+        Fri, 29 Jul 2022 11:18:18 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A491A459B6;
+        Fri, 29 Jul 2022 08:18:17 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id l23so9082186ejr.5;
+        Fri, 29 Jul 2022 08:18:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8uOzxUeHyhbXm38NMH0o9xKNocW39uZURlmCfdDfHVQ=;
-        b=X5JFM6ncTKhP0dvBkT3+YMgOXuX7B74bsPN/NF0g+oPNYeC1Ct5yDA690tfkf1XHu7
-         GwVt67m+Jb57vP0D/EEdsBmctPZCaptJeV7rTU8Jo/I1sqdIPycTLh0uIArioQ59k/4W
-         MIa4fLHpde6VL+mfDFfo/+Pt09NJvWxRLImMv0CuoWiggS5ADBEBOAFchKqPnlENnmKV
-         2j7EsqvvumTYVHn7dnmOpYTrv55QmTZ3Bjf00AmvFMyy2/rRV58cXuOhGPev4PTmpwVY
-         uemEFnPVxYNOrretMEd0T+AOIYDo8r9/wOLrt3kcmw/YYN1EX/tPDbu906tCsFAZvaPT
-         V8PQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m+O4lYrHKgUVBwG7qSHfHs7iGGU+8cpiows8bQnp47A=;
+        b=iveYsw9mfb3TzlP217SkKdM8vhrxKjUYrNfzgYbuYBUXSGtrXzXcXsNxrjWQOWj8lF
+         pk4i1Y1W3nMdxvvxLqvuwLn3ExoJdomPX4ptRDy6molLoNo3afguxqLSuIKyfdFaw7dN
+         21wXn65Hi2DRNdStp4I9KcH0pkYh/QUpj8Yi6oJ3ZBkGvPHDO3jNHm/Hf75xAz+5/75c
+         XTPAzEirzqP333zWg7zi4N+PTpIQzHMw8AiwVonscJzWPRN1HV6zup32hSIzeDy00iEN
+         YHSdpEdKKdQphUiUeC+tDxTymqeN9geL4w82qSMt+SiYyxo2IGE4FgTbIONM5GtYqd4C
+         hDjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8uOzxUeHyhbXm38NMH0o9xKNocW39uZURlmCfdDfHVQ=;
-        b=L3AsB/FSFXzI0n8SN877VsKWHU7tTWCApBvvC6Oenmso0F89WhZP+m+ux/td705iZQ
-         hMIrS45Z0GvJ+lCt7BB8PyG0Rt+ykAchFRcHQFn3mFQXXIA6wH/3yVZ0o2Gv+42rD/r5
-         Gm3AEbUxkxbjC+AjLqAj0YAH/1+20VH/wdaaAhOzfXeF2DfdnYC5THHLbFlbSEvUguXE
-         hw8WUX6k3S64bKY/82zK+3aKmV1XRkL435An/kgEjrIf5s8naT6BKECb9V9Yjb89Siyk
-         z7K4vphjdd7v0YdmcSTdoruTHi2pl98mP2IKlUlLyffPOloULcysi5+o5sfrDOgM3yRd
-         foFA==
-X-Gm-Message-State: AJIora9lUBFiqFFjw9rJ/11YSbsOJ1dIiRUqPQ1sIGzy30DH6C8eVg1k
-        n4NDOseNxxob4/jD9g3ITw==
-X-Google-Smtp-Source: AGRyM1unZD4CDaqGRE4CcewGTDSkgkSwfbx6+pGS5X/ZxyjvhfDPVd5wl1V9pG7ZMKxGNSQeMm5MRQ==
-X-Received: by 2002:a17:907:3ea6:b0:72b:4a06:989a with SMTP id hs38-20020a1709073ea600b0072b4a06989amr3359081ejc.168.1659107862822;
-        Fri, 29 Jul 2022 08:17:42 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.249.83])
-        by smtp.gmail.com with ESMTPSA id c12-20020a056402120c00b0043cc2c9f5adsm2433441edw.40.2022.07.29.08.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 08:17:40 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 18:17:38 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ying.huang@intel.com, dave.hansen@intel.com,
-        Jonathan.Cameron@huawei.com, akpm@linux-foundation.org,
-        rf@opensource.cirrus.com, pmladek@suse.com, will@kernel.org
-Subject: Re: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
- kstrtobool()
-Message-ID: <YuP6Evijb2oZqD3D@localhost.localdomain>
-References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
- <Yt6u34sigPEkeZ0Y@FVFF77S0Q05N.cambridge.arm.com>
- <Yt605xj898VSAsA3@casper.infradead.org>
- <YuPwLq+D8k53GZa3@smile.fi.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m+O4lYrHKgUVBwG7qSHfHs7iGGU+8cpiows8bQnp47A=;
+        b=20z88Uc47dgOYIDaGCztv7SMscZp4n7fMs6JV+BlstWMQS0qFisK442iI8d7lCJ12T
+         pqOsjKHgeQ9N785u8FGk3Pz8vd9zXsFpALEplO/GOfBj5KBFEvwLFrMm+v1WpuSo/eO4
+         ArmMx7fzI46wRR0N0XJFYf0UPaedEqBc18LCpv7GOMgwl+oFYk0PjDyRi1p/fZ66lk3Y
+         VPYAaunoCZA4/mccGohI5liGaz+Vor39RlxlHH58VBYjWHZWep/ULNrLO8hpwVXHVWtZ
+         K4aKDAga1SKXPSRvAujzuIyApZT0LnzrMaYWez1FSW/LMR5Y/g4ToN9jmsW6IU0CxYy3
+         GrnA==
+X-Gm-Message-State: AJIora8oACBawbQlRzIGD541VLgo2IL7GTkDe+HBmnn2dor/vCh7iJFo
+        YsOjp4hMJoM5BoaAQBZBgx0f7gxXNObTvxXc7M2o/zLFZIU=
+X-Google-Smtp-Source: AGRyM1vvb6+mchGfXjJRTp1+ZGCw0IVKg00+3XBmmlF9Pb4aCHqrZLOxWAB0WyiGzDvJXgA99OQomfsv0OGHwMOaoTw=
+X-Received: by 2002:a17:907:2722:b0:72b:735a:d3b4 with SMTP id
+ d2-20020a170907272200b0072b735ad3b4mr3180478ejl.363.1659107895813; Fri, 29
+ Jul 2022 08:18:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YuPwLq+D8k53GZa3@smile.fi.intel.com>
+References: <20220728190810.1290857-1-robh@kernel.org> <CABb+yY2jV7c8oX7=F=nocfvGrOMHJAYov7zS2nT0=qFoNyoxJQ@mail.gmail.com>
+ <CABb+yY0JzztBB+giBu+RCt-dzgwYWF32sCR3WKKP9U5K9UvhxA@mail.gmail.com> <20220729111051.5me4vklrzskvsj4w@bogus>
+In-Reply-To: <20220729111051.5me4vklrzskvsj4w@bogus>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Fri, 29 Jul 2022 10:18:04 -0500
+Message-ID: <CABb+yY1=cppy9QAN=cLWmhvmYrQ5QpY5adE+nRev1rVrtp-QUw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mailbox: arm,mhu: Make secure interrupt optional
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,51 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 05:35:26PM +0300, Andy Shevchenko wrote:
-> On Mon, Jul 25, 2022 at 04:21:11PM +0100, Matthew Wilcox wrote:
-> > On Mon, Jul 25, 2022 at 03:55:27PM +0100, Mark Rutland wrote:
-> > > On Tue, Apr 26, 2022 at 11:32:02PM +0530, Jagdish Gediya wrote:
-> > > > At many places in kernel, It is necessary to convert sysfs input
-> > > > to corrosponding bool value e.g. "false" or "0" need to be converted
-> > > > to bool false, "true" or "1" need to be converted to bool true,
-> > > > places where such conversion is needed currently check the input
-> > > > string manually, kstrtobool() can be utilized at such places but
-> > > > currently it doesn't have support to accept "false"/"true".
-> > > > 
-> > > > Add support to accept "false"/"true" as valid string in kstrtobool().
-> > > > 
-> > > > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> > > > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > 
-> > > I've just spotted that this broke arm64's "rodata=full" command line option,
-> > 
-> > That isn't a documented option.
-> > 
-> >         rodata=         [KNL]
-> >                 on      Mark read-only kernel memory as read-only (default).
-> >                 off     Leave read-only kernel memory writable for debugging.
-> > 
-> > Hopefully this is an object lesson in why you need to update the
-> > documentation when you extend a feature.
-> > 
-> > > since "full" gets parsed as 'f' = FALSE, when previously that would have been
-> > > rejected. So anyone passing "rodata=full" on the command line will have rodata
-> > > disabled, which is not what they wanted.
-> > > 
-> > > The current state of things is a bit messy (we prase the option twice because
-> > > arch code needs it early), and we can probably fix that with some refactoring,
-> > > but I do wonder if we actually want to open up the sysfs parsing to accept
-> > > anything *beginning* with [tTfF] rather than the full "true" and "false"
-> > > strings as previously, or whether it's worth reverting this for now in case
-> > > anything else is affected.
-> > 
-> > Well, that's going to break people who've started using the new option.
-> > As a quick fix, how about only allowing either "f\0" or "fa"?
-> 
-> I think we need to be more strict in kstrtobool(), i.e. 'f\0' ('t\0') and 'fal'
-> ('tru') perhaps?
+On Fri, Jul 29, 2022 at 6:10 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> On Thu, Jul 28, 2022 at 04:07:45PM -0500, Jassi Brar wrote:
 
-lol what?
+> > >
+> > I could learn why specifying secure irq isn't desirable?
+> > No non-secure client node would ask for that secure irq/channel, which
+> > will simply lay unused.
+>
+> Did you mean would or wouldn't ?
+>
+I mean what's written.
 
-the only way to be strict is to accept "0" and "1" with optional
-newline and delete all the rubbish entirely.
+> Anyways I can insert a module that requests this channel and bring down
+> the system as accessing anything configure secure from non-secure side
+> on Juno results in system hang/error.
+>
+Why go to those lengths? These are already simpler options available  ;-)
+1)   while (1) ;      // preferably in some atomic context
+2)   *((int *) 0) = 0;   // you might want to iterate over offset for
+guaranteed results
+3) Slightly more work, but you also have the opportunity to erase your
+storage device
+
+
+> > index f6c55877fbd94..004b1566be74d 100644
+> > --- a/arch/arm64/boot/dts/arm/juno-base.dtsi
+> > +++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
+> > @@ -26,7 +26,8 @@ mailbox: mhu@2b1f0000 {
+> >         compatible = "arm,mhu", "arm,primecell";
+> >         reg = <0x0 0x2b1f0000 0x0 0x1000>;
+> >         interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>,
+> > -                <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+> > +                <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>,
+> > +                <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
+> >         interrupt-names = "mhu_lpri_rx",
+> >                   "mhu_hpri_rx";
+> >         #mbox-cells = <1>;
+> >
+> > If this works for you, I could submit a proper patch.
+>
+> No this doesn't work IMO.
+>
+If you _really_ tested and faced an error, please share it.
+
+> Yes standalone everything looks fine, but you can
+> insert a module requesting this channel and bring down the system.
+>
+If anyone other than a super-user is able to do that, then you have a
+serious security problem at hand.
+If you do that as a super-user, have fun.
+
+cheers.

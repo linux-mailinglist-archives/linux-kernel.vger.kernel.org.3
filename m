@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6D1584E45
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CBD584E48
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235790AbiG2Jkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 05:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
+        id S235805AbiG2JlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 05:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235902AbiG2Jk2 (ORCPT
+        with ESMTP id S235704AbiG2Jk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 05:40:28 -0400
+        Fri, 29 Jul 2022 05:40:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E508218C;
-        Fri, 29 Jul 2022 02:40:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901DD2DE7;
+        Fri, 29 Jul 2022 02:40:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3528261D97;
-        Fri, 29 Jul 2022 09:40:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F37AC4347C;
-        Fri, 29 Jul 2022 09:39:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3054D61D43;
+        Fri, 29 Jul 2022 09:40:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128B8C433C1;
+        Fri, 29 Jul 2022 09:40:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659087602;
-        bh=CCZnCiGIC2XrY3X8NeTs1iYP+uKvFbdPaa4pIVTAjAw=;
+        s=k20201202; t=1659087607;
+        bh=GB41tQKICNtDkQFxA/QWse4BCeG2/JC8OIwADKGp+BU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fVxasy3v50AjSlKBz9atN+FLSf8+QBuP8/8AOgiPUMVxIuyYrSMinl1aQndO17lLy
-         b13gTSdELcCTApA08Ddd6tx7zpXPIRhhTkTT0ZGgux2HDS2mNXkzrjKD5nRcYsGaad
-         E2Bym9HozZgJRa5k3xV9m7dk0tjyTzgZoWu+NoeAn5fGuyCua1K1DebDM7POHXs3wq
-         nmPPJ+ssAs8rIRDPfBygEoofew6JOexhjV8Jtk1o9dJIw3gKKxi46Yhm11gE3djoI2
-         QF/5/5wRUhLh1CJ3ayj1pScvx1VkchMhNgAHuUUEyzHAchjUMi3cjA0HH97lULXQHC
-         4WnQ/gOYV251A==
+        b=pvP9bRcs4U6a5SmepAWpwIoR+qz/7LIz2zGFSZPptkjsfslE3iQK58d14RCFnGdvd
+         SNMdS54F88ov9m1UE0re11B6pCEubY3CVmJVQuYEiwxo7CF3LIaPCGmVYVnpnsi2in
+         Gyxhlud23+XUFtL1t7z8j/lkJxb+bqn++t52TeTmVxAColqge5i73VNJ+FSSpQWbdB
+         8e9A2TmuFyjWCjvezAUmJC5jqEd+VPAdSToszJxjmYcFZWz6E1IG/+NLCRU56YlOKP
+         yOhjvQ3ahWd+3LAWOcRJfNqNSGbyWWtV5ziZxzqzP65MaqKqqoUidjIJ33XPsOf617
+         IfNf4ZERkj+oQ==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -54,9 +54,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-trace-devel@vger.kernel.org
-Subject: [PATCH V9 11/16] Documentation/rv: Add deterministic automata instrumentation documentation
-Date:   Fri, 29 Jul 2022 11:38:50 +0200
-Message-Id: <0557d5c68e2fc252f2643c2cc5295a67e2b73277.1659052063.git.bristot@kernel.org>
+Subject: [PATCH V9 12/16] rv/monitor: Add the wip monitor skeleton created by dot2k
+Date:   Fri, 29 Jul 2022 11:38:51 +0200
+Message-Id: <5eb7a9118917e8a814c5e49853a72fc62be0a101.1659052063.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1659052063.git.bristot@kernel.org>
 References: <cover.1659052063.git.bristot@kernel.org>
@@ -71,8 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the da_monitor_instrumentation.rst. It describes the basics
-of RV monitor instrumentation.
+THIS CODE IS NOT LINKED TO THE MAKEFILE.
+
+This model does not compile because it lacks the instrumentation
+part, which will be added next. In the typical case, there will be
+only one patch, but it was split into two patches for educational
+purposes.
+
+This is the direct output this command line:
+  $ dot2k -d tools/verification/models/wip.dot -t per_cpu
 
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
@@ -97,49 +104,74 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- .../trace/rv/da_monitor_instrumentation.rst   | 171 ++++++++++++++++++
- Documentation/trace/rv/index.rst              |   1 +
- 2 files changed, 172 insertions(+)
- create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+ kernel/trace/rv/monitors/wip/wip.c | 109 +++++++++++++++++++++++++++++
+ kernel/trace/rv/monitors/wip/wip.h |  46 ++++++++++++
+ 2 files changed, 155 insertions(+)
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.c
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.h
 
-diff --git a/Documentation/trace/rv/da_monitor_instrumentation.rst b/Documentation/trace/rv/da_monitor_instrumentation.rst
+diff --git a/kernel/trace/rv/monitors/wip/wip.c b/kernel/trace/rv/monitors/wip/wip.c
 new file mode 100644
-index 000000000000..6c67c7b57811
+index 000000000000..79a054ca0cde
 --- /dev/null
-+++ b/Documentation/trace/rv/da_monitor_instrumentation.rst
-@@ -0,0 +1,171 @@
-+Deterministic Automata Instrumentation
-+======================================
++++ b/kernel/trace/rv/monitors/wip/wip.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/ftrace.h>
++#include <linux/tracepoint.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/rv.h>
++#include <rv/instrumentation.h>
++#include <rv/da_monitor.h>
 +
-+The RV monitor file created by dot2k, with the name "$MODEL_NAME.c"
-+includes a section dedicated to instrumentation.
++#define MODULE_NAME "wip"
 +
-+In the example of the wip.dot monitor created on [1], it will look like::
++/*
++ * XXX: include required tracepoint headers, e.g.,
++ * #include <linux/trace/events/sched.h>
++ */
++#include <trace/events/rv.h>
 +
-+  /*
-+   * This is the instrumentation part of the monitor.
-+   *
-+   * This is the section where manual work is required. Here the kernel events
-+   * are translated into model's event.
-+   *
-+   */
-+  static void handle_preempt_disable(void *data, /* XXX: fill header */)
-+  {
++/*
++ * This is the self-generated part of the monitor. Generally, there is no need
++ * to touch this section.
++ */
++#include "wip.h"
++
++/*
++ * Declare the deterministic automata monitor.
++ *
++ * The rv monitor reference is needed for the monitor declaration.
++ */
++struct rv_monitor rv_wip;
++DECLARE_DA_MON_PER_CPU(wip, unsigned char);
++
++/*
++ * This is the instrumentation part of the monitor.
++ *
++ * This is the section where manual work is required. Here the kernel events
++ * are translated into model's event.
++ *
++ */
++static void handle_preempt_disable(void *data, /* XXX: fill header */)
++{
 +	da_handle_event_wip(preempt_disable_wip);
-+  }
++}
 +
-+  static void handle_preempt_enable(void *data, /* XXX: fill header */)
-+  {
++static void handle_preempt_enable(void *data, /* XXX: fill header */)
++{
 +	da_handle_event_wip(preempt_enable_wip);
-+  }
++}
 +
-+  static void handle_sched_waking(void *data, /* XXX: fill header */)
-+  {
++static void handle_sched_waking(void *data, /* XXX: fill header */)
++{
 +	da_handle_event_wip(sched_waking_wip);
-+  }
++}
 +
-+  static int enable_wip(void)
-+  {
++static int enable_wip(void)
++{
 +	int retval;
 +
 +	retval = da_monitor_init_wip();
@@ -151,143 +183,100 @@ index 000000000000..6c67c7b57811
 +	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
 +
 +	return 0;
-+  }
++}
 +
-+The comment at the top of the section explains the general idea: the
-+instrumentation section translates *kernel events* into the *model's
-+event*.
++static void disable_wip(void)
++{
++	rv_wip.enabled = 0;
 +
-+Tracing callback functions
-+--------------------------
++	rv_detach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
++	rv_detach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
++	rv_detach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
 +
-+The first three functions are the starting point of the callback *handler
-+functions* for each of the three events from the wip model. The developer
-+does not necessarily need to use them: they are just starting points.
++	da_monitor_destroy_wip();
++}
 +
-+Using the example of::
++/*
++ * This is the monitor register section.
++ */
++struct rv_monitor rv_wip = {
++	.name = "wip",
++	.description = "auto-generated wip",
++	.enable = enable_wip,
++	.disable = disable_wip,
++	.reset = da_monitor_reset_all_wip,
++	.enabled = 0,
++};
 +
-+ void handle_preempt_disable(void *data, /* XXX: fill header */)
-+ {
-+        da_handle_event_wip(preempt_disable_wip);
-+ }
++static int register_wip(void)
++{
++	rv_register_monitor(&rv_wip);
++	return 0;
++}
 +
-+The preempt_disable event from the model connects directly to the
-+preemptirq:preempt_disable. The preemptirq:preempt_disable event
-+has the following signature, from include/trace/events/preemptirq.h::
++static void unregister_wip(void)
++{
++	rv_unregister_monitor(&rv_wip);
++}
 +
-+  TP_PROTO(unsigned long ip, unsigned long parent_ip)
++module_init(register_wip);
++module_exit(unregister_wip);
 +
-+Hence, the handle_preempt_disable() function will look like::
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("dot2k: auto-generated");
++MODULE_DESCRIPTION("wip");
+diff --git a/kernel/trace/rv/monitors/wip/wip.h b/kernel/trace/rv/monitors/wip/wip.h
+new file mode 100644
+index 000000000000..c1c47e2305ef
+--- /dev/null
++++ b/kernel/trace/rv/monitors/wip/wip.h
+@@ -0,0 +1,46 @@
++/*
++ * Automatically generated C representation of wip automaton
++ * For further information about this format, see kernel documentation:
++ *   Documentation/trace/rv/deterministic_automata.rst
++ */
 +
-+  void handle_preempt_disable(void *data, unsigned long ip, unsigned long parent_ip)
++enum states_wip {
++	preemptive_wip = 0,
++	non_preemptive_wip,
++	state_max_wip
++};
 +
-+In this case, the kernel event translates one to one with the automata
-+event, and indeed, no other change is required for this function.
++#define INVALID_STATE state_max_wip
 +
-+The next handler function, handle_preempt_enable() has the same argument
-+list from the handle_preempt_disable(). The difference is that the
-+preempt_enable event will be used to synchronize the system to the model.
++enum events_wip {
++	preempt_disable_wip = 0,
++	preempt_enable_wip,
++	sched_waking_wip,
++	event_max_wip
++};
 +
-+Initially, the *model* is placed in the initial state. However, the *system*
-+might or might not be in the initial state. The monitor cannot start
-+processing events until it knows that the system has reached the initial state.
-+Otherwise, the monitor and the system could be out-of-sync.
++struct automaton_wip {
++	char *state_names[state_max_wip];
++	char *event_names[event_max_wip];
++	unsigned char function[state_max_wip][event_max_wip];
++	unsigned char initial_state;
++	bool final_states[state_max_wip];
++};
 +
-+Looking at the automata definition, it is possible to see that the system
-+and the model are expected to return to the initial state after the
-+preempt_enable execution. Hence, it can be used to synchronize the
-+system and the model at the initialization of the monitoring section.
-+
-+The start is informed via a special handle function, the
-+"da_handle_start_event_$(MONITOR_NAME)(event)", in this case::
-+
-+  da_handle_start_event_wip(preempt_enable_wip);
-+
-+So, the callback function will look like::
-+
-+  void handle_preempt_enable(void *data, unsigned long ip, unsigned long parent_ip)
-+  {
-+        da_handle_start_event_wip(preempt_enable_wip);
-+  }
-+
-+Finally, the "handle_sched_waking()" will look like::
-+
-+  void handle_sched_waking(void *data, struct task_struct *task)
-+  {
-+        da_handle_event_wip(sched_waking_wip);
-+  }
-+
-+And the explanation is left for the reader as an exercise.
-+
-+enable and disable functions
-+----------------------------
-+
-+dot2k automatically creates two special functions::
-+
-+  enable_$(MONITOR_NAME)()
-+  disable_$(MONITOR_NAME)()
-+
-+These functions are called when the monitor is enabled and disabled,
-+respectively.
-+
-+They should be used to *attach* and *detach* the instrumentation to the running
-+system. The developer must add to the relative function all that is needed to
-+*attach* and *detach* its monitor to the system.
-+
-+For the wip case, these functions were named::
-+
-+ enable_wip()
-+ disable_wip()
-+
-+But no change was required because: by default, these functions *attach* and
-+*detach* the tracepoints_to_attach, which was enough for this case.
-+
-+Instrumentation helpers
-+-----------------------
-+
-+To complete the instrumentation, the *handler functions* need to be attached to a
-+kernel event, at the monitoring enable phase.
-+
-+The RV interface also facilitates this step. For example, the macro "rv_attach_trace_probe()"
-+is used to connect the wip model events to the relative kernel event. dot2k automatically
-+adds "rv_attach_trace_probe()" function call for each model event in the enable phase, as
-+a suggestion.
-+
-+For example, from the wip sample model::
-+
-+  static int enable_wip(void)
-+  {
-+        int retval;
-+
-+        retval = da_monitor_init_wip();
-+        if (retval)
-+                return retval;
-+
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
-+
-+        return 0;
-+  }
-+
-+The probes then need to be detached at the disable phase.
-+
-+[1] The wip model is presented in::
-+
-+  Documentation/trace/rv/deterministic_automata.rst
-+
-+The wip monitor is presented in::
-+
-+  Documentation/trace/rv/da_monitor_synthesis.rst
-diff --git a/Documentation/trace/rv/index.rst b/Documentation/trace/rv/index.rst
-index 46d47f33052c..db2ae3f90b90 100644
---- a/Documentation/trace/rv/index.rst
-+++ b/Documentation/trace/rv/index.rst
-@@ -9,3 +9,4 @@ Runtime Verification
-    runtime-verification.rst
-    deterministic_automata.rst
-    da_monitor_synthesis.rst
-+   da_monitor_instrumentation.rst
++struct automaton_wip automaton_wip = {
++	.state_names = {
++		"preemptive",
++		"non_preemptive"
++	},
++	.event_names = {
++		"preempt_disable",
++		"preempt_enable",
++		"sched_waking"
++	},
++	.function = {
++		{ non_preemptive_wip,      INVALID_STATE,      INVALID_STATE },
++		{      INVALID_STATE,     preemptive_wip, non_preemptive_wip },
++	},
++	.initial_state = preemptive_wip,
++	.final_states = { 1, 0 },
++};
 -- 
 2.35.1
 

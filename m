@@ -2,237 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761EF5854DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95135854DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238481AbiG2SAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 14:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
+        id S238495AbiG2SAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 14:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238468AbiG2SAC (ORCPT
+        with ESMTP id S238494AbiG2SAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 14:00:02 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE4689AA0;
-        Fri, 29 Jul 2022 11:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659117601; x=1690653601;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mXZW/CQJ/ErcFEYDlw85Mljff6yNsGMgn0EWXI0B0DM=;
-  b=DDKbsZJ2+x1h7vrw2QhLdHgQ1iisyJIzRuUw0gP2xWn2rWyLfGRweH6l
-   uDs8/6tGK9g0Jy96Vt7UUyfus8CyXTfIL7/tIpt49pVEAUuhRMMHLsIHb
-   UlKMpjDWiNQ0OLaUVJY2WdUuSvAw3FbtF42z5ITdCR0MleNHzcU7dit9J
-   WZ023jrjgx18fWCs+4ezzyQ30Pj0r2Rltr19+8dDXrLqm2fX1OZ4K09aK
-   rYKKeDhVBXg2Ff9tVHq/YAriqYd9OtfqToeyYo4jVqiXyrttGHRPuBDCK
-   JU5K6mGPEwyHQAKrX+Euv7jy7E/UjZI//foaPMdjOHQKjAovgQwyMxo/K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="288831034"
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="288831034"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 11:00:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="928821579"
-Received: from aahmedsi-mobl.amr.corp.intel.com (HELO desk) ([10.209.118.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 11:00:00 -0700
-Date:   Fri, 29 Jul 2022 10:59:59 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
- Stale Data
-Message-ID: <20220729175959.w7gd5z7dsbxrnydn@desk>
-References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
- <f173a7c0-b4f8-17f3-a65d-e581fed32368@intel.com>
-MIME-Version: 1.0
+        Fri, 29 Jul 2022 14:00:44 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8337E33401
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 11:00:43 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26THxHm8009942;
+        Fri, 29 Jul 2022 18:00:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=g3If11pmNYL8vM4KRbfvTyWRoHcGkxqIdhNNPMm7b8s=;
+ b=mwWFDq3pYn6y9FAOfWgyHKZKiQipaTSoYw50Tk2ufW3AvU/UQ7c0kjMYzrVy3PfbkiA/
+ YJbXmeLleESzBV+GAvH5uoTG6bE5f/ylDHVJ6gwnIae3XSHBN2wFawCeHLiWCRPMHUd3
+ lPHK+NQWE7rr3mmztHuBaqSeerrLlzdCedIoRp2Xs5dMFC0hPLeckA1K7bup4OljOyRr
+ cmiacjiR3iDwSbxJJfZzaOmHibEWve1eZfxBV2E6JstLDCzvxLZ1diCtB9KBcrFIPVFZ
+ ghsWVrj/2hhvydYo43ZNJhm5M89w8EAoFptsWCalaEbPcw67a50I3/Z6L4Ra59neXc/N eA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hg9ht0j2a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Jul 2022 18:00:12 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26TH1vXb029652;
+        Fri, 29 Jul 2022 18:00:09 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hkt7d2scn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Jul 2022 18:00:09 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MbhYXJP3hu9wRqhL9UlUrwDhVDzk++t/eTAa9+BEpAYj9aCzpwBfdAiF40gAdakO99iKYErKt4pz3xfFiQcxxRn+7MasST0RoX3gK90dFzn1A6KjQtWtB0itQq8uuNaXM+1skdN1aKVoR9jmJEjc4T4gS3wxp/MN7SSDiUcGebh/xilAML6s2VBDctqpLDIxUgz0MZ7KWT3gSNwBU9fUlAxJQeUR3JrwjSsy49gLVgDwA+6xzPPnF8WUYeo4qsVQIO9OjUHo0OggzZ5Sm024mVSV9ggLZnOXd7JlBKtP8kb1b+12TsW+xisUXbbP9mo1O7wgvAjRx6+qqPAtTjpY/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g3If11pmNYL8vM4KRbfvTyWRoHcGkxqIdhNNPMm7b8s=;
+ b=Afz7zQjSZWSLr0HDbySZ+jmRKUAvGxljPlrBR01I4vzHwwFzkARaPhV8SQOb7Y7Wusdw2qGeOPXOMvSBJGkTRmCHFSE74KZCI1bjoQ31lPiaqaxwJpHrcfKWNiJelKqInjlvzdPobq0B1cwduKJdnTHgsuZB+qbgICFUwNU9kOCc2tMxuKzqe8Sm3hzgly9Hz7MSCa7iJE75ax97wVP/ENnkyd2hfQDZuFhw1iK+t70rSauhIYdiSkL0qCGGzbPXhZzNQuZ0q+WTdkIS5sb1En/iEBsz5+g4RjiBAn/576iBZa7iLuhqrgnoeWBAIsBBbcYSFjpV0QERvm2bb+sfnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g3If11pmNYL8vM4KRbfvTyWRoHcGkxqIdhNNPMm7b8s=;
+ b=HBE+BJ9VAfud6dZL3gRdUuaaSxv7t6yRn18p8SFXakLyOBLxwjO2hFyObf+r19wFrwrRJUSnXVrazpQqZbbAa3jtTLe9ChOBcEUNRscp/LC5GhU0n+Z1QZI501XgqZKwuw+bClwtPv8hfK9qb0vjL2+zSlv71MCajXkBjseDcdw=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by MN2PR10MB4288.namprd10.prod.outlook.com (2603:10b6:208:1dc::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Fri, 29 Jul
+ 2022 18:00:06 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0%6]) with mapi id 15.20.5482.006; Fri, 29 Jul 2022
+ 18:00:06 +0000
+Date:   Fri, 29 Jul 2022 11:00:03 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [RFC PATCH v4 6/8] hugetlb: add vma based lock for pmd sharing
+ synchronization
+Message-ID: <YuQgIwT+bjqX7Kcx@monkey>
+References: <20220706202347.95150-1-mike.kravetz@oracle.com>
+ <20220706202347.95150-7-mike.kravetz@oracle.com>
+ <5b8c6b49-e17a-2c0b-4440-ccf3c5493cb2@huawei.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f173a7c0-b4f8-17f3-a65d-e581fed32368@intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5b8c6b49-e17a-2c0b-4440-ccf3c5493cb2@huawei.com>
+X-ClientProxiedBy: MW4PR03CA0353.namprd03.prod.outlook.com
+ (2603:10b6:303:dc::28) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e02eec73-7934-4a59-ff97-08da718c2b59
+X-MS-TrafficTypeDiagnostic: MN2PR10MB4288:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m5SVvoYNJRu2kxIhSCFu9pyBXkBwUkCLnZtDt7IIxTF4OWqYUYv6pTyr9JVFrOFiRlk6zkTT6QUaiHxVO3Tw6rftGHOclA2Lxc0KNgIPo4LiF5jjMbr+Tv7k08CwWfKVkMGxl1NauRd/jlYqccWZHQmBKVlsScbNZnIi26A86cCEgHf4Vu33TYPHnxakBv2WFEWoRV33g/5c9IZAXWOY9HN3l/egYBE3hBetd2Y1sCzvs0SvOV+hnUCRI/KFVraV+xaMejrFlJSKoOKaH6xNpLf9uG4yCRZLf7Q0pl0bdr/e10Uopb7453LH9w48vmpnTyjOQivdLIP6YQhl43FmMdlxRysrc8yTMBk+nwiK5NO1U3yn0d0d7AXotJZ+Eg/j7ZH1L17TV11HwW/I+S7HF/BLcD/X0KRL+914ShCR7UQgrScoI2WBte9Bqm5inaz5OaWcPcVG0i8Iq7gF6jMsTOAfh3sgwNmDEld8zGrrPnKLpbwZaoXuR3PsJIUzhiY0U7P0BO01jQiQf6NcxzPTi0uZKJcQ7ZAFzLq45q/bl+vrhAIgjSWT5XC/DfMYvyni1cWHT29XlvPYOtLvEDNOWr6qaUr6PAH8OCDRJiXPNInqlZRHkyR5VfrNygvRt5W/SZ0mPmaYZ18xR034KcWfeJ5RK4ZXpyETOc8rhJn1XXP/4abw1pb4/VT7bjUGtaz7oBxYmZ3e0m4t6qry08ytB/pbZZ+fSo3wYf/3qgVD8h9S34NN4jsY7XNa3FU9Gkduqp03c25rxzB1B2JP4FXzNjYbJ+LUxDiVlSGsE1ll1Eg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(39860400002)(346002)(366004)(396003)(136003)(66946007)(44832011)(8676002)(4326008)(5660300002)(66476007)(8936002)(316002)(33716001)(7416002)(478600001)(6916009)(54906003)(66556008)(6486002)(6506007)(9686003)(2906002)(53546011)(26005)(41300700001)(6666004)(6512007)(186003)(83380400001)(86362001)(38100700002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BPxh3Sg4w7JVl2Q40ta4Sq045clmsL1UzbmwzLdMNGkQ3Ypy3IwrnjeSKbP2?=
+ =?us-ascii?Q?tKj0JK0c3J6MiweLWh6foSmU+pboFx9AFCRVUeCuVup4dxfm40bLqY5MQsHl?=
+ =?us-ascii?Q?f7O7y98eyMh9do3MsN5xDSkmfRO4312B1QOh4RBvswlCRf/OAV+7tjH0eWXK?=
+ =?us-ascii?Q?Lvrr/bharHu/9Vggw4J7bzFSCJnWuTwLdW7sxRcAqhW2Kfw7iT9Q5TaVaMAf?=
+ =?us-ascii?Q?5XEtwXeg1qdDZ3llm78MasHaAKccpVXu24c5QlLhgHGrhNvDI0gKCfgpgcGN?=
+ =?us-ascii?Q?8TIMRSgjlCuP1B/6dcQ/D0c8oa9trmKbLsoP/XtZaNmcPBkLg+e/GFc1fIvB?=
+ =?us-ascii?Q?1eH/dO/Uo4K7RnBf9Rm9otWlvUN2Z4zYXWne2PVUo2fDoImu8sE/um6gk1Bj?=
+ =?us-ascii?Q?sy0W6BYRxdLXleG+25OWTiR/BiBGLK/akCmEB5pUBwy98FLQvba3fuRWGjcq?=
+ =?us-ascii?Q?VxguLtlqCzqSxvCuBlC1fDmxuS6ZXTNCE9Al8iDr/G+itZdgFLoMsv41rYP9?=
+ =?us-ascii?Q?X5NmMZhhMazYEJccz5RkS9NVm8z8r28aAalRU4lbURxPymtI2HeZo5yrSrTO?=
+ =?us-ascii?Q?iGgHur7hIWSBVkUDJE1JeymnjWkDaXcnciO+dmK+h+qHQ1HsbFpg/38lWq8N?=
+ =?us-ascii?Q?Z8eB7VV3MXqIx8ET4jdoKjv3gueNEW+JMqoUURCT/QMaik4ElInh+kuQQxp0?=
+ =?us-ascii?Q?EeE5KcHRnyo8dIn50NvEGQc8JZJDRg/w+82L1dGLAhR1KTScFMIAShaTeokP?=
+ =?us-ascii?Q?X6xRYqM25L3jwgepF3PV9PtI6K0sUsitm1Sii9x9p4i4mPGgF5wcKi9Be/G3?=
+ =?us-ascii?Q?WqVMr95LMinpNwr4moDZVk2ZEzPyvGWANIZQ4lGf7XvxEpz1y520wJPihE20?=
+ =?us-ascii?Q?PUcIHmYkB28YGGGKaTAr0EWbDDHqqXef6zuwd0wGVpPp3tQh7oruV+mcxm7U?=
+ =?us-ascii?Q?0pJuLH2IOg0D1f8IgZnpnuWN71Jj+SoIATBovxZfDr1AP/GyoTcD1tAMHZpK?=
+ =?us-ascii?Q?IcqM2ix4td8PT6uFRYaBupcBiYO3Bz9rLgi4Fuzl8a1yu54xfG8feGkXCD/6?=
+ =?us-ascii?Q?9IZMYnQCrpf5LGWEX8ilZYtsWSFUCyxisjFEYcT4nW++qnQl7j7kXcLepvVt?=
+ =?us-ascii?Q?3dG8k5pmWfyGoI1yKfzM9nU3HR0YKESUjay05Mv1Koz4TZtkICeefNxsdD/u?=
+ =?us-ascii?Q?fMhNgGbjvmYHRxZ82aulq5QZNVHrYQ5D6E8Cga1d/8EQ6IUmuR6j5/394ZPv?=
+ =?us-ascii?Q?udgLjMrj+bcddBy2b2tUeh1//0x6EqUGsSu0GEAgx9spjxmU9TZ40Aj035Nv?=
+ =?us-ascii?Q?RHuF2W2YNUMw0O0oVXusDJjgdZH/fWhJasp7STS2aJ1ExznW70awf01cPAOF?=
+ =?us-ascii?Q?f2POL8Y6VyPr8tLgiX8oCwpLWLU46KS43XNZDzFFs8oONMqcWjKbokvIgsu0?=
+ =?us-ascii?Q?j8ryU1QFwzRn+lJa1Lv/SVeTi+cLAO0attEhxM1sfNcYPuej5mSP+MTUmceY?=
+ =?us-ascii?Q?ZRmZj/E8rhCwH8J8puEh2+sEoZOxRkXwQT37jgyAjGvqR9qUzMvLfNxhhuDD?=
+ =?us-ascii?Q?XCUE07vXoC39meXBQMPLrhMTu7+YqW54YhpOOa5ps684Vatep+jPioHtKeu+?=
+ =?us-ascii?Q?6A=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e02eec73-7934-4a59-ff97-08da718c2b59
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 18:00:06.5368
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zcjCfv1qSW8KiX+pXEDu5ZGnE6ULSyBfiWGjH5xyPceDZhyOWRKVx5epPfECR0ecGfm5EcS48RXflyDCjoeh0Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4288
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-29_19,2022-07-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ phishscore=0 spamscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207290076
+X-Proofpoint-ORIG-GUID: ujV37ccNojmKbSkaS1ylkzSKSPnzIhC2
+X-Proofpoint-GUID: ujV37ccNojmKbSkaS1ylkzSKSPnzIhC2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 12:08:39PM -0700, Dave Hansen wrote:
-> On 7/14/22 18:30, Pawan Gupta wrote:
-> > Older CPUs beyond its Servicing period are not listed in the affected
-> > processor list for MMIO Stale Data vulnerabilities. These CPUs currently
-> > report "Not affected" in sysfs, which may not be correct.
+On 07/29/22 10:55, Miaohe Lin wrote:
+> On 2022/7/7 4:23, Mike Kravetz wrote:
+> > Allocate a rw semaphore and hang off vm_private_data for
+> > synchronization use by vmas that could be involved in pmd sharing.  Only
+> > add infrastructure for the new lock here.  Actual use will be added in
+> > subsequent patch.
+> > 
+> > Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> > ---
+> >  include/linux/hugetlb.h |  36 +++++++++-
+> >  kernel/fork.c           |   6 +-
+> >  mm/hugetlb.c            | 150 ++++++++++++++++++++++++++++++++++++----
+> >  mm/rmap.c               |   8 ++-
+> >  4 files changed, 178 insertions(+), 22 deletions(-)
+> > 
 > 
-> I'd kinda like to remove the talk about the "servicing period" in this
-> patch.  First, it's a moving target.  CPUs can move in and out of their
-> servicing period as Intel changes its mind, or simply as time passes.
+> <snip>
 > 
-> Intel could also totally choose to report a CPU as vulnerable *AND* have
-> it be outside its service period.  Or, some good Samaritan community
-> member might be able to test a crusty old CPU and determine if it's
-> vulnerable.
-> 
-> > diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-> > index 9393c50b5afc..55524e0798da 100644
-> > --- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-> > +++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-> > @@ -230,6 +230,9 @@ The possible values in this file are:
-> >       * - 'Mitigation: Clear CPU buffers'
-> >         - The processor is vulnerable and the CPU buffer clearing mitigation is
-> >           enabled.
-> > +     * - 'Unknown: CPU is beyond its Servicing period'
-> > +       - The processor vulnerability status is unknown because it is
-> > +	 out of Servicing period. Mitigation is not attempted.
-> 
-> Unknown: Processor vendor did not provide vulnerability status.
-> 
-> >  If the processor is vulnerable then the following information is appended to
-> >  the above information:
-> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> > index 0dd04713434b..dd6e78d370bc 100644
-> > --- a/arch/x86/kernel/cpu/bugs.c
-> > +++ b/arch/x86/kernel/cpu/bugs.c
-> > @@ -416,6 +416,7 @@ enum mmio_mitigations {
-> >  	MMIO_MITIGATION_OFF,
-> >  	MMIO_MITIGATION_UCODE_NEEDED,
-> >  	MMIO_MITIGATION_VERW,
-> > +	MMIO_MITIGATION_UNKNOWN,
-> >  };
 > >  
-> >  /* Default mitigation for Processor MMIO Stale Data vulnerabilities */
-> > @@ -426,12 +427,18 @@ static const char * const mmio_strings[] = {
-> >  	[MMIO_MITIGATION_OFF]		= "Vulnerable",
-> >  	[MMIO_MITIGATION_UCODE_NEEDED]	= "Vulnerable: Clear CPU buffers attempted, no microcode",
-> >  	[MMIO_MITIGATION_VERW]		= "Mitigation: Clear CPU buffers",
-> > +	[MMIO_MITIGATION_UNKNOWN]	= "Unknown: CPU is beyond its servicing period",
-> >  };
-> 
-> Let's just say:
-> 
-> 	Unknown: no mitigations
-> 
-> or even just: "Unknown"
-> 
-> >  static void __init mmio_select_mitigation(void)
+> >  /* Forward declaration */
+> >  static int hugetlb_acct_memory(struct hstate *h, long delta);
+> > +static bool vma_pmd_shareable(struct vm_area_struct *vma);
+> >  
+> >  static inline bool subpool_is_free(struct hugepage_subpool *spool)
 > >  {
-> >  	u64 ia32_cap;
+> > @@ -904,6 +905,89 @@ resv_map_set_hugetlb_cgroup_uncharge_info(struct resv_map *resv_map,
+> >  #endif
+> >  }
 > >  
-> > +	if (mmio_stale_data_unknown()) {
-> > +		mmio_mitigation = MMIO_MITIGATION_UNKNOWN;
+> > +static bool __vma_shareable_flags_pmd(struct vm_area_struct *vma)
+> > +{
+> > +	return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
+> 
+> Should me make __vma_aligned_range_pmd_shareable check (VM_MAYSHARE | VM_SHARED) like above
+> instead of VM_MAYSHARE to make code more consistent?
+> 
+
+I 'think' we want them to be different.  Note this subtle code and
+explanation in __unmap_hugepage_range_final().
+
+	/*
+	 * Clear this flag so that x86's huge_pmd_share page_table_shareable
+	 * test will fail on a vma being torn down, and not grab a page table
+	 * on its way out.  We're lucky that the flag has such an appropriate
+	 * name, and can in fact be safely cleared here. We could clear it
+	 * before the __unmap_hugepage_range above, but all that's necessary
+	 * is to clear it before releasing the i_mmap_rwsem. This works
+	 * because in the context this is called, the VMA is about to be
+	 * destroyed and the i_mmap_rwsem is held.
+	 */
+	vma->vm_flags &= ~VM_MAYSHARE;
+
+So, when making a decision to share or not we need to only check VM_MAYSHARE.
+When making decisions about about the vma_lock, we need to check both.  In most
+cases, just VM_MAYSHARE would be sufficient but we need to handle this case
+where VM_SHARED and !VM_MAYSHARE.  Mostly in the unmap/cleanup cases.
+
+> > +		vma->vm_private_data;
+> > +}
+> > +
+> > +void hugetlb_vma_lock_read(struct vm_area_struct *vma)
+> > +{
+> > +	if (__vma_shareable_flags_pmd(vma))
+> > +		down_read((struct rw_semaphore *)vma->vm_private_data);
+> > +}
+> > +
+> > +void hugetlb_vma_unlock_read(struct vm_area_struct *vma)
+> > +{
+> > +	if (__vma_shareable_flags_pmd(vma))
+> > +		up_read((struct rw_semaphore *)vma->vm_private_data);
+> > +}
+> > +
+> > +void hugetlb_vma_lock_write(struct vm_area_struct *vma)
+> > +{
+> > +	if (__vma_shareable_flags_pmd(vma))
+> > +		down_write((struct rw_semaphore *)vma->vm_private_data);
+> > +}
+> > +
+> > +void hugetlb_vma_unlock_write(struct vm_area_struct *vma)
+> > +{
+> > +	if (__vma_shareable_flags_pmd(vma))
+> > +		up_write((struct rw_semaphore *)vma->vm_private_data);
+> > +}
+> > +
+> > +int hugetlb_vma_trylock_write(struct vm_area_struct *vma)
+> > +{
+> > +	if (!__vma_shareable_flags_pmd(vma))
+> > +		return 1;
+> > +
+> > +	return down_write_trylock((struct rw_semaphore *)vma->vm_private_data);
+> > +}
+> > +
+> > +void hugetlb_vma_assert_locked(struct vm_area_struct *vma)
+> > +{
+> > +	if (__vma_shareable_flags_pmd(vma))
+> > +		lockdep_assert_held((struct rw_semaphore *)
+> > +				vma->vm_private_data);
+> > +}
+> > +
+> > +static void hugetlb_free_vma_lock(struct vm_area_struct *vma)
+> > +{
+> > +	/* Only present in sharable vmas */
+> > +	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
+> > +		return;
+> > +
+> > +	if (vma->vm_private_data) {
+> > +		kfree(vma->vm_private_data);
+> > +		vma->vm_private_data = NULL;
+> > +	}
+> > +}
+> > +
+> > +static void hugetlb_alloc_vma_lock(struct vm_area_struct *vma)
+> > +{
+> > +	struct rw_semaphore *vma_sema;
+> > +
+> > +	/* Only establish in (flags) sharable vmas */
+> > +	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
+
+Based on my explanation above, I think this should only check VM_MAYSHARE.
+
+> > +		return;
+> > +> +	if (!vma_pmd_shareable(vma)) {
+> > +		vma->vm_private_data = NULL;
 > > +		return;
 > > +	}
 > > +
-> >  	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
-> >  	    cpu_mitigations_off()) {
-> >  		mmio_mitigation = MMIO_MITIGATION_OFF;
-> > @@ -1638,6 +1645,7 @@ void cpu_bugs_smt_update(void)
-> >  			pr_warn_once(MMIO_MSG_SMT);
-> >  		break;
-> >  	case MMIO_MITIGATION_OFF:
-> > +	case MMIO_MITIGATION_UNKNOWN:
-> >  		break;
-> >  	}
-> >  
-> > @@ -2235,7 +2243,8 @@ static ssize_t tsx_async_abort_show_state(char *buf)
-> >  
-> >  static ssize_t mmio_stale_data_show_state(char *buf)
-> >  {
-> > -	if (mmio_mitigation == MMIO_MITIGATION_OFF)
-> > +	if (mmio_mitigation == MMIO_MITIGATION_OFF ||
-> > +	    mmio_mitigation == MMIO_MITIGATION_UNKNOWN)
-> >  		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
-> >  
-> >  	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
-> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> > index 736262a76a12..82088410870e 100644
-> > --- a/arch/x86/kernel/cpu/common.c
-> > +++ b/arch/x86/kernel/cpu/common.c
-> > @@ -1286,6 +1286,22 @@ static bool arch_cap_mmio_immune(u64 ia32_cap)
-> >  		ia32_cap & ARCH_CAP_SBDR_SSDP_NO);
-> >  }
-> >  
-> > +bool __init mmio_stale_data_unknown(void)
-> > +{
-> > +	u64 ia32_cap = x86_read_arch_cap_msr();
-> > +
-> > +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-> > +		return false;
+> > +	vma_sema = kmalloc(sizeof(*vma_sema), GFP_KERNEL);
+> > +	if (!vma_sema) {
+> > +		/*
+> > +		 * If we can not allocate semaphore, then vma can not
+> > +		 * participate in pmd sharing.
+> > +		 */
+> > +		vma->vm_private_data = NULL;
+> > +	} else {
+> > +		init_rwsem(vma_sema);
+> > +		vma->vm_private_data = vma_sema;
+> > +	}
 > 
-> Let's say why Intel is the special snowflake.  Maybe:
-> 
-> 	/*
-> 	 * Intel does not document vulnerability information for old
-> 	 * CPUs.  This means that only Intel CPUs can have unknown
-> 	 * vulnerability state.
-> 	 */
-> 
-> > +	/*
-> > +	 * CPU vulnerability is unknown when, hardware doesn't set the
-> > +	 * immunity bits and CPU is not in the known affected list.
-> > +	 */
-> > +	if (!cpu_matches(cpu_vuln_blacklist, MMIO) &&
-> > +	    !arch_cap_mmio_immune(ia32_cap))
-> > +		return true;
-> > +	return false;
-> > +}
-> > +
-> >  static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
-> >  {
-> >  	u64 ia32_cap = x86_read_arch_cap_msr();
-> > @@ -1349,14 +1365,8 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
-> >  	    cpu_matches(cpu_vuln_blacklist, SRBDS | MMIO_SBDS))
-> >  		    setup_force_cpu_bug(X86_BUG_SRBDS);
-> >  
-> > -	/*
-> > -	 * Processor MMIO Stale Data bug enumeration
-> > -	 *
-> > -	 * Affected CPU list is generally enough to enumerate the vulnerability,
-> > -	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
-> > -	 * not want the guest to enumerate the bug.
-> > -	 */
-> > -	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
-> > +	 /* Processor MMIO Stale Data bug enumeration */
-> > +	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
-> >  	    !arch_cap_mmio_immune(ia32_cap))
-> >  		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-> 
-> Yeah, this is all looking a little clunky.
-> 
-> Maybe we just need a third state of cpu_has_bug() for all this and we
-> shouldn't try cramming it in the MMIO-specific code and diluting the
-> specificity of boot_cpu_has_bug().
-> 
-> Then the selection logic becomes simple:
-> 
-> 	if (!arch_cap_mmio_immune(ia32_cap))) {
-> 		if (cpu_matches(cpu_vuln_blacklist, MMIO))
-> 			setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-> 		else if (x86_vendor == X86_VENDOR_INTEL)
-> 			setup_force_unknown_bug(X86_BUG_MMIO...);
-> 	}
-> 
-> ... and then spit out the "Unknown" in the common code, just like the
-> treatment "Not affected" gets.
-> 
-> static ssize_t cpu_show_common(...)
-> {
->         if (!boot_cpu_has_bug(bug))
->                 return sprintf(buf, "Not affected\n");
-> +
-> +       if (!boot_cpu_unknown_bug(bug))
-> +               return sprintf(buf, "Unknown\n");
-> 
-> Thoughts?
+> This code is really subtle. If it's called from hugetlb_vm_op_open during fork after
+> hugetlb_dup_vma_private is done, there should already be a kmalloc-ed vma_sema for this
+> vma (because hugetlb_alloc_vma_lock is also called by hugetlb_dup_vma_private). So we
+> can't simply change the value of vm_private_data here or vma_sema will be leaked ?
 
-Sounds good. Similar to this Borislav suggested to add
-X86_BUG_MMIO_UNKNOWN. I will see if I can combine both approaches.
+Yes, I believe your analysis is correct.
+
+>                                                                                    But
+> when hugetlb_alloc_vma_lock is called from hugetlb_reserve_pages, it should work fine.
+> Or am I miss something?
+
+You are right.  This is an issue in the current code.  I will address in
+the next version.
+
+Thanks for all your comments on this series!
+-- 
+Mike Kravetz

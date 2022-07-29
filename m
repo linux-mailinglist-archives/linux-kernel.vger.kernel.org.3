@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C34584F3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BCB584F3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235721AbiG2KvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S234182AbiG2KyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiG2KvT (ORCPT
+        with ESMTP id S232387AbiG2Kx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:51:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FEEDF27
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:51:18 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 12:51:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659091876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BVT0gX+sjhINrg63wCZePpCeJDQ5FLRBslXE3pXrKFA=;
-        b=NnZTBBsfckoHY4uBEsfyzgjPArktQXWcZ6w3wHj0mgYBrCkoMJbT9N95e9YgFcfcjzLsmc
-        T2UFUwfUI6ER/1GOSOEm5lBMsWg8iP+b/l19dEIBNrsR23khbKIblzN18uAoz0A1ZPO9WX
-        OzbCtOmEGTc6G2rR5A4WTD65vF/DuNa0N8EDrk471cdUWTX1zy1RQued68RyLO7FkVVYMk
-        xyd4t1vlft8/gCz5Y8iDom3QYoEKhxZKKN3f2gaFht/QtkfU+Y5efkFq3Viu19SvP+POZT
-        QFLynKqWhx2tp9W/ew/fdVsBT83QtZ4kPGOnWB6R1EhkJ4g6/jsbbd7smsBbfQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659091876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BVT0gX+sjhINrg63wCZePpCeJDQ5FLRBslXE3pXrKFA=;
-        b=SWNCbpgPqlmjIe2gJlja5zeTrL4YpAOMxUokWQquj9LbgjXwunFFgffU0+bXyyf7CM5Xx0
-        BjUVDZ4KVmBVvEDQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] random: Initialize vsprintf's pointer hash once the
- random core is ready.
-Message-ID: <YuO7ommLFTSLQQ6h@linutronix.de>
-References: <YuOf6qu453dOkR+S@linutronix.de>
- <YuOyeJu8PPAVnXiN@zx2c4.com>
- <YuO0p8lMhVmQj/K2@linutronix.de>
- <YuO4jj8rg9hjHErN@zx2c4.com>
+        Fri, 29 Jul 2022 06:53:58 -0400
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D5686898
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:53:57 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id a89so5350480edf.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:53:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Xp9zvBEtNP0sLWBfliMYcm9HXkv6yC+SaOOe7WcEjlA=;
+        b=Jkd57X3PfNoC6i+t6yjqqQFwmaUIG1T6efiWJnieeSLwOL4/FxtGn+RA9o3MMEwSyP
+         f9e/l/QX9nY68foO+/vxdlypH4PX5tLz4d/wR88gvz85NKD6YegqbFAqdeJ/PMyrDqlE
+         XxTXTr2z7wXstC9sGKRmRDqAFpys4KsjtuLib90goBJ4EoHJ7aewvStK0HL63FBrPnoh
+         akLWzAKMBeMZN8uTcG3LuY4NM+A/WMpdy1cP/vKq3jKqx8cUIOp+kWB5XFpxznbYOXx8
+         7l3LD2alCAm11II8Xs46EIw9S4ujSw7nvWpgohZ7XXR2o75qsMM+Eo9cAuf9Ozd21boF
+         P9EQ==
+X-Gm-Message-State: AJIora+M3R6n4LTWnxaVq+9Wb72H5h1onKzE3Pj8tFsPCXct91YcklNn
+        uP30+aGHWJQiuysC6/FvGiL5uCkJ58NSrA==
+X-Google-Smtp-Source: AGRyM1sJog8zoXoYhoRgdRKzX/JyPkg0AG/pecwJreQTpr6foRxqBc+gEleJuDK4vScjCyOeKpGx/g==
+X-Received: by 2002:a05:6402:1cc8:b0:437:a61a:5713 with SMTP id ds8-20020a0564021cc800b00437a61a5713mr2998033edb.340.1659092035969;
+        Fri, 29 Jul 2022 03:53:55 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-019.fbsv.net. [2a03:2880:31ff:13::face:b00c])
+        by smtp.gmail.com with ESMTPSA id s21-20020aa7cb15000000b0043cfda1368fsm1972031edt.82.2022.07.29.03.53.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 03:53:55 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     scott.branden@broadcom.com, bcm-kernel-feedback-list@broadcom.com
+Cc:     leit@fb.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] misc: bcm_vk: Remove usage of deprecated functions
+Date:   Fri, 29 Jul 2022 03:52:40 -0700
+Message-Id: <20220729105240.748241-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YuO4jj8rg9hjHErN@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-29 12:38:06 [+0200], Jason A. Donenfeld wrote:
-> Hi Sebastian,
-Hi Jason,
+ida_simple_get() and ida_simple_remove() functions are deprecated now.
+These functions were replaced by ida_alloc() and ida_free()
+respectively. This patch modernize bcm_vk to use the replacement
+functions.
 
-> On Fri, Jul 29, 2022 at 12:21:27PM +0200, Sebastian Andrzej Siewior wrote:
-> > So launching a worker to obtain the random data? That would mean that
-> > the first %p print won't have nothing, right? I could do it as part of
->=20
-> "First" isn't very meaningful here. If the rng isn't initialized by
-> add_bootloader_randomness() or similar, then it'll almost miss some
-> amount of %p anyway.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ drivers/misc/bcm-vk/bcm_vk_dev.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-only if that printk happens during boot. But it could happen much later.
-In that case !RT won't lose that pointer but RT will.
+diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+index a16b99bdaa13..a3a82ebbc699 100644
+--- a/drivers/misc/bcm-vk/bcm_vk_dev.c
++++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+@@ -1401,7 +1401,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		bcm_vk_tty_set_irq_enabled(vk, i);
+ 	}
+ 
+-	id = ida_simple_get(&bcm_vk_ida, 0, 0, GFP_KERNEL);
++	id = ida_alloc(&bcm_vk_ida, GFP_KERNEL);
+ 	if (id < 0) {
+ 		err = id;
+ 		dev_err(dev, "unable to get id\n");
+@@ -1500,7 +1500,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	misc_device->name = NULL;
+ 
+ err_ida_remove:
+-	ida_simple_remove(&bcm_vk_ida, id);
++	ida_free(&bcm_vk_ida, id);
+ 
+ err_irq:
+ 	for (i = 0; i < vk->num_irqs; i++)
+@@ -1573,7 +1573,7 @@ static void bcm_vk_remove(struct pci_dev *pdev)
+ 	if (misc_device->name) {
+ 		misc_deregister(misc_device);
+ 		kfree(misc_device->name);
+-		ida_simple_remove(&bcm_vk_ida, vk->devid);
++		ida_free(&bcm_vk_ida, vk->devid);
+ 	}
+ 	for (i = 0; i < vk->num_irqs; i++)
+ 		devm_free_irq(&pdev->dev, pci_irq_vector(pdev, i), vk);
+-- 
+2.30.2
 
-> But anyway, it sounds like you only need to hoist into a worker IF
-> you're `IS_ENABLED(CONFIG_PREEMPT_RT) && in_hardirq()`, right? So just
-> conditionalize it on that, and this should have pretty minimal impact.
-
-I need always to hoist into a worker because there could warning in a
-preempt-off region leading to this error.
-Maybe I am putting too much importance into this. Let me do what you
-suggest and always lose that first pointer and if someone complains than
-maybe we think about something else=E2=80=A6
-
-> I don't think this patch will require touching random.c.
->=20
-> Jason
-
-Sebastian

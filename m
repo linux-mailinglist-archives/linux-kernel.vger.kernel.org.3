@@ -2,55 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053EC584F00
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C38584EFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235363AbiG2Kke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S235722AbiG2Kk3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 29 Jul 2022 06:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235421AbiG2Kk1 (ORCPT
+        with ESMTP id S234896AbiG2Kk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:40:27 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B16525E85;
-        Fri, 29 Jul 2022 03:40:26 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oHNPk-005oj6-OO; Fri, 29 Jul 2022 20:40:18 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 29 Jul 2022 18:40:17 +0800
-Date:   Fri, 29 Jul 2022 18:40:17 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: tcrypt - Remove the static variable
- initialisations to NULL
-Message-ID: <YuO5EUwke7Se/lIo@gondor.apana.org.au>
-References: <20220723092640.7559-1-wangborong@cdjrlc.com>
+        Fri, 29 Jul 2022 06:40:26 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5925319C1A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:40:25 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-55-5dMw4K_ePdyLrUnYWn3eJw-1; Fri, 29 Jul 2022 11:40:22 +0100
+X-MC-Unique: 5dMw4K_ePdyLrUnYWn3eJw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Fri, 29 Jul 2022 11:40:20 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Fri, 29 Jul 2022 11:40:20 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Pawan Gupta' <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+CC:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "antonio.gomez.iglesias@linux.intel.com" 
+        <antonio.gomez.iglesias@linux.intel.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: RE: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Thread-Topic: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Thread-Index: AQHYovL4+baeEq2rDkCp4WwQq32ghq2VJ0xw
+Date:   Fri, 29 Jul 2022 10:40:20 +0000
+Message-ID: <e7ba00885fca4ec9849d8525cbc46f7b@AcuMS.aculab.com>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <YuJ6TQpSTIeXLNfB@zn.tnic> <20220729022851.mdj3wuevkztspodh@desk>
+In-Reply-To: <20220729022851.mdj3wuevkztspodh@desk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723092640.7559-1-wangborong@cdjrlc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 05:26:40PM +0800, Jason Wang wrote:
-> Initialise global and static variable to NULL is always unnecessary.
-> Remove the unnecessary initialisations.
+From: Pawan Gupta
+> Sent: 29 July 2022 03:29
 > 
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-> ---
->  crypto/tcrypt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Thu, Jul 28, 2022 at 02:00:13PM +0200, Borislav Petkov wrote:
+> > On Thu, Jul 14, 2022 at 06:30:18PM -0700, Pawan Gupta wrote:
+> > > Older CPUs beyond its Servicing period are not listed in the affected
+> > > processor list for MMIO Stale Data vulnerabilities. These CPUs currently
+> > > report "Not affected" in sysfs, which may not be correct.
 
-Patch applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+I looked this up....
+
+The mitigations seem to rely on unprivileged code not being able
+to do MMIO accesses.
+That isn't true, device drivers can mmap PCIe addresses directly
+into user program address space.
+While unlikely, there is no reason this can't be supported for
+non-root processes.
+So if the underlying hardware doesn't correctly validate the
+byte enables then stale data can be read.
+
+It has to be said that I can't actually imagine getting anything
+useful unless you have co-operating processes using it as a
+security bypass side channel.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

@@ -2,131 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085E8584A2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D078584A31
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbiG2D01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 23:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S230521AbiG2DbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 23:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbiG2D0Q (ORCPT
+        with ESMTP id S230469AbiG2DbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 23:26:16 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891927AB2D;
-        Thu, 28 Jul 2022 20:26:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659065175; x=1690601175;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cwrrBPZE8wW6mZimDW7VC1IIGLYtzzJIzUEph9W6Ow4=;
-  b=Mxc4+DhCyVhC6tO02YCsts/tKKKFUNTC5FQuXzdCRZo6tGg0pDzM8u8l
-   b074Ue4/BU8T/Z1IMaVr6HBei35u+CaBUgtCRANWEalWTYHUmBcXJjYh6
-   wp1gUw2oium3NjP6qoi5QKIAWwPCo22qsVzINMy1sF/aBXOCtutZfAp0+
-   RWdj67e4v4rAoRoAhbBf4gSQyMpQ4fs/jBD5BhozH+BPzZ+6EZve+UwEz
-   qmlmASngUXKI6T7zblfhUTlaFD+huu1UfU9VBI18CZBngLmETMhwsyz+J
-   +svxN59GmyNkxqwwllyZnF8WGAhsuZHdGqMgg/CdxrMoB55mpm37vutTO
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="287434640"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="287434640"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 20:26:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="551594613"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jul 2022 20:26:13 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHGdg-000Azq-2E;
-        Fri, 29 Jul 2022 03:26:12 +0000
-Date:   Fri, 29 Jul 2022 11:25:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] ata: libata-scsi: Refactor scsi_6_lba_len() with
- use of get_unaligned_be24()
-Message-ID: <202207291116.SWCwVbB1-lkp@intel.com>
-References: <20220726154518.73248-1-andriy.shevchenko@linux.intel.com>
+        Thu, 28 Jul 2022 23:31:07 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E091A068;
+        Thu, 28 Jul 2022 20:31:06 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso7171590pjo.1;
+        Thu, 28 Jul 2022 20:31:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MxegPP+9eR+tqzB10w9UP7S+nttT/U9nMghcqqAW8Tc=;
+        b=ZuMiPGRjx2u0bWndPQFq3JctNqzjgqzlOstPsDNefFEgX6OnLCGcnYvMLQBvj8/C1v
+         A1YSL7zuNfm3bo5s63cvTnQOW2vqXQ2QaMV2D43USVKnaLc7ORTIC8pbeECuH6nnpsex
+         nk8635x9d7X9W2NgQWvEY5YGg9O1lBvEXHnoVcIq4+OTf44oSFE+N7REcC0F/v5OoiqD
+         Q+D1e1GT0Li23yQevFmaRuQJN4BSQfMFGSJoDP8FSOC5Hf888FTaBHdXIs5lPrXaFeh6
+         mA3h10NXUMjxbDxPj3sycbndDrkWJLubedxSBDzh8YI0SvwH+2m/tMJ0vALy9LXrMPCW
+         vrKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MxegPP+9eR+tqzB10w9UP7S+nttT/U9nMghcqqAW8Tc=;
+        b=gOAyHKsEiVQXxXaPNdVCsbsVWZ9iQzNbi+RDWMvhOjvvPNvzfFCy9Gve4wWbOGwvWO
+         4fVQIpH1ljK3ga+iZqa0akKj45Ecttni8K+t1gr3I7uMnvmf2ToPnZt1RWh6mZZw91p5
+         E68MwThajdxmy0Hw0qb5mgHgILQ9bMPN1hh1io5ap71N3CMaljfmnG9yhjddilwiaqLM
+         hJYDI1WqAd4xWnWcaB6vX8zVzV8Ews3AwLp3qmqpYoAVABbbQdkC0G151f2B4eLjvm6D
+         PaVENRn023E6h/LI/Dqf7ExNgCF8QFNeKjEcv7pXitCs6Mmp7RUEtFBhw51xJ89EmonV
+         4xdg==
+X-Gm-Message-State: ACgBeo0t95UoGoGdcZ5VkCC0BWuN2admLNIqPpDsqRaqtZZgGXpQTS7n
+        eOFidsprAx7xdrUAzn4rQZ0=
+X-Google-Smtp-Source: AA6agR6xpVkKhZ8x+zIF0whAenQYv9jNsIv574ISUsr7qXKwexYM5ARUhkEF/k9AHq0yD20N/VrGTA==
+X-Received: by 2002:a17:90b:1e4f:b0:1f2:b482:bab9 with SMTP id pi15-20020a17090b1e4f00b001f2b482bab9mr1909636pjb.9.1659065466045;
+        Thu, 28 Jul 2022 20:31:06 -0700 (PDT)
+Received: from Kk1r0a.localdomain ([220.158.232.156])
+        by smtp.gmail.com with ESMTPSA id l1-20020a170902ec0100b0016d338160d6sm2145840pld.155.2022.07.28.20.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 20:31:05 -0700 (PDT)
+From:   Kuee K1r0a <liulin063@gmail.com>
+To:     ast@kernel.org
+Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kuee K1r0a <liulin063@gmail.com>
+Subject: [PATCH bpf] bpf: Do more tight ALU bounds tracking
+Date:   Fri, 29 Jul 2022 11:30:33 +0800
+Message-Id: <20220729033033.3022-1-liulin063@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726154518.73248-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+32bit bounds and 64bit bounds are updated separately in
+adjust_scalar_min_max_vals() currently, let them learn from each other to
+get more tight bounds tracking. Similar operation can be found in
+reg_set_min_max().
 
-I love your patch! Perhaps something to improve:
+Before:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    func#0 @0
+    0: R1=ctx(off=0,imm=0) R10=fp0
+    0: (b7) r0 = 0                        ; R0_w=0
+    1: (b7) r1 = 0                        ; R1_w=0
+    2: (87) r1 = -r1                      ; R1_w=scalar()
+    3: (87) r1 = -r1                      ; R1_w=scalar()
+    4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+    5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0xffffffff))  <--- [*]
+    6: (95) exit
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/ata-libata-scsi-Refactor-scsi_6_lba_len-with-use-of-get_unaligned_be24/20220726-234746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e0dccc3b76fb35bb257b4118367a883073d7390e
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220729/202207291116.SWCwVbB1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/ae9a00d0e0375aa2aea7a61dc2894d9d06005f8e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/ata-libata-scsi-Refactor-scsi_6_lba_len-with-use-of-get_unaligned_be24/20220726-234746
-        git checkout ae9a00d0e0375aa2aea7a61dc2894d9d06005f8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/ata/
+It can be seen that even if the 64bit bounds is clear here, the 32bit
+bounds is still in the state of 'UNKNOWN'.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+After:
 
-All warnings (new ones prefixed by >>):
+    func#0 @0
+    0: R1=ctx(off=0,imm=0) R10=fp0
+    0: (b7) r0 = 0                        ; R0_w=0
+    1: (b7) r1 = 0                        ; R1_w=0
+    2: (87) r1 = -r1                      ; R1_w=scalar()
+    3: (87) r1 = -r1                      ; R1_w=scalar()
+    4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+    5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0x3))  <--- [*]
+    6: (95) exit
 
-   drivers/ata/libata-scsi.c: In function 'scsi_6_lba_len':
->> drivers/ata/libata-scsi.c:1320:39: warning: passing argument 1 of 'get_unaligned_be24' makes pointer from integer without a cast [-Wint-conversion]
-    1320 |         *plba = get_unaligned_be24(cdb[1]) & 0x1fffff;
-         |                                    ~~~^~~
-         |                                       |
-         |                                       u8 {aka unsigned char}
-   In file included from ./arch/x86/include/generated/asm/unaligned.h:1,
-                    from drivers/ata/libata-scsi.c:33:
-   include/asm-generic/unaligned.h:90:50: note: expected 'const void *' but argument is of type 'u8' {aka 'unsigned char'}
-      90 | static inline u32 get_unaligned_be24(const void *p)
-         |                                      ~~~~~~~~~~~~^
+Fixes: 3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking")
+Signed-off-by: Kuee K1r0a <liulin063@gmail.com>
+---
+ kernel/bpf/verifier.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-
-vim +/get_unaligned_be24 +1320 drivers/ata/libata-scsi.c
-
-  1307	
-  1308	/**
-  1309	 *	scsi_6_lba_len - Get LBA and transfer length
-  1310	 *	@cdb: SCSI command to translate
-  1311	 *
-  1312	 *	Calculate LBA and transfer length for 6-byte commands.
-  1313	 *
-  1314	 *	RETURNS:
-  1315	 *	@plba: the LBA
-  1316	 *	@plen: the transfer length
-  1317	 */
-  1318	static void scsi_6_lba_len(const u8 *cdb, u64 *plba, u32 *plen)
-  1319	{
-> 1320		*plba = get_unaligned_be24(cdb[1]) & 0x1fffff;
-  1321		*plen = cdb[4];
-  1322	}
-  1323	
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0efbac0fd126..888aa50fbdc0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -8934,10 +8934,13 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 		break;
+ 	}
+ 
+-	/* ALU32 ops are zero extended into 64bit register */
+-	if (alu32)
++	if (alu32) {
++		/* ALU32 ops are zero extended into 64bit register */
+ 		zext_32_to_64(dst_reg);
+-	reg_bounds_sync(dst_reg);
++		__reg_combine_32_into_64(dst_reg);
++	} else {
++		__reg_combine_64_into_32(dst_reg);
++	}
+ 	return 0;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

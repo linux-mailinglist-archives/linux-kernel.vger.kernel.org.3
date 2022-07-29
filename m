@@ -2,178 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE480585483
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A05585484
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238050AbiG2Ray (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S238131AbiG2RbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiG2Raw (ORCPT
+        with ESMTP id S229979AbiG2RbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:30:52 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C934F15702;
-        Fri, 29 Jul 2022 10:30:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ARq4JLa2TpLcf5Cv0Ua3QM2QZ08h/GgOqhaxJMSnADnKbhYES1bhH6ZGA7BN00pkh4RHlfLzX6FVSUs1ME4xW4Ou56ht1oUX6jBT3/9sIyCSP3QYkG9AKmyAhvmuFKdmsjemrsl9UsBVp8GL3KlL406DeJUYmMPzuerpn358cjeoSr4vlhP+nq9ofioUkgs+f77DcYCqATJ+kLTr+/tbn4oetCZ6oMirYTebZXScAC+peIU7Crt2QmAvz18b9yJWmQ+DOGskCRAQtjmnQMfI6z1HMuKGVROxlP5AqZsGRb/o7E3b1yqwB/xLEIMDtRIiMlvEYYr4KadSm7IKYk2A9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pqe+kn79OT7U5c0eVBU632BleNTIEotu1HEBxBf0+Kw=;
- b=fsZFGm944hi/HtXmifQLTUuGwRhXl+lVnlbh2hgvXjpSDyQN7MJGjDitBXbAZE6X+5VrteDhcYqnnONCPqvIRSnCmaxdYnYINRZbza3zXoGXrznxkDdGbn051Sp3fsv8ms5JahxGYHrUeshsGYxDeUTmUhbVqeR2eMqQ8tfM8sWeuLVOeBGthFTmAlF9escq5SkB4DdobHFFS/TOEkASx2cWraQP2Qp6jQhdoXZ7MtmFUWRwsaN9qGBzzMvkmAyJWxAjQQGJvg9970MFOK6oT6uFBymzIIfDTCY9v9V35V/h0/W2XfV/T8Zk8l2m1lG776I3FBYOEwrZzA+pBA/Cyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pqe+kn79OT7U5c0eVBU632BleNTIEotu1HEBxBf0+Kw=;
- b=rgyrYdgM2S8F7vPJsC7pKBskdZPXPZyTZQ5XMovrvEca4mk1qHwDttWZiQIN9EwnDt1/WJnUO9Su9kmXJGvV7QoAy+DFDIGNx5WZ+LmfgUVxGuUpy8IaE9L42kvxEOpSWGm5oZ1LmNuk5Qs0oFECcpwk4d7s8QkkKpEwYuytJlrAZGntqqjSgOh9k6wVbkApcORmO2m3/4rUAc4d54J2Og32ehLWEE6sm42oenxDAaLtbygJtUUWJgDEN+KyMZqGUPFwW4i8ENNG0/Ikvmoms5XV41XAMCxoOxEkHuU0am+7k4mGXOOSN0/eqkMIEv0fofjlL8hTWwySkrU37KsaCA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DS7PR12MB5909.namprd12.prod.outlook.com (2603:10b6:8:7a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Fri, 29 Jul
- 2022 17:30:50 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::4cce:310f:93:5d58]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::4cce:310f:93:5d58%8]) with mapi id 15.20.5482.006; Fri, 29 Jul 2022
- 17:30:50 +0000
-Date:   Fri, 29 Jul 2022 14:30:49 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     joro@8bytes.org, will@kernel.org, marcan@marcan.st,
-        sven@svenpeter.dev, robin.murphy@arm.com, robdclark@gmail.com,
-        baolu.lu@linux.intel.com, orsonzhai@gmail.com,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        jean-philippe@linaro.org, alex.williamson@redhat.com,
-        kevin.tian@intel.com, suravee.suthikulpanit@amd.com,
-        alyssa@rosenzweig.io, dwmw2@infradead.org, mjrosato@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, thierry.reding@gmail.com,
-        vdumpa@nvidia.com, jonathanh@nvidia.com, cohuck@redhat.com,
-        thunder.leizhen@huawei.com, christophe.jaillet@wanadoo.fr,
-        chenxiang66@hisilicon.com, john.garry@huawei.com,
-        yangyingliang@huawei.com, iommu@lists.linux-foundation.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v5 1/5] iommu: Return -EMEDIUMTYPE for incompatible
- domain and device/group
-Message-ID: <YuQZSfQtBTBtJOq2@nvidia.com>
-References: <20220701214455.14992-1-nicolinc@nvidia.com>
- <20220701214455.14992-2-nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701214455.14992-2-nicolinc@nvidia.com>
-X-ClientProxiedBy: MN2PR15CA0031.namprd15.prod.outlook.com
- (2603:10b6:208:1b4::44) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Fri, 29 Jul 2022 13:31:05 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD77315702
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:31:02 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31f445bd486so57686787b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ks2Xaq3aimkHGcY2BTkihJ+k/bcPqBj8oKyRR6HCXEw=;
+        b=qqeytMJyWaGHIOkiwfk0edsMlhdhvGZnezlc7rqmMiLvbbXp8qX+Otc/BkjD4zzKCA
+         IZ4coVKJrZFBxmJMeo1PZmk6RTgc1CQ13u1yRbU1Rs+XdEiWemOryygZnzjEAugS6lD4
+         s0n1ul7Mhzjon80HMvZ3VkcbAeZoS1/BtbxPXvqSBxzaVWoHLhuYdBsK1o1D5uz4e9rO
+         7zprjwooSB7/UXyNzJVR5ZW4fq2C284cPv6JT9q6d1+i/JIiZhOsToFP9tBibisit34c
+         zUio5qv40SWeZzEffuKQ4ui3iVeIepzQnATxSuDNBhR/nDFY9yEnFEORVituom0Nsd/E
+         yQ3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ks2Xaq3aimkHGcY2BTkihJ+k/bcPqBj8oKyRR6HCXEw=;
+        b=vL+pA9FcXrXSUWqe6jY2o5YGByLHqmAMcFeNN1eljpMknTTI//lQ0nUBhYlM3Yjpd8
+         idaZftQJDfLTCOUA4O7/c7r33gkyVvis6xJtVzwYAiENeJKTRg6lVGpOLS4vQtDlorfL
+         84kra9C4KdnZoJ4sXHcHrzVcuicnKzydmGrTnRXteuu+Cve9wnMVJgt0aSowV36GLOB5
+         f4UUEsArNbILvwNddw1ISDyo8ASwaMa5CptCN/pUL5w1XXC+kk/n3SuIOF1FDqCMwolB
+         YR5QUcmYru29eAv4i4t6iTfmdq1NGc7tytpbRJ+w5PwpBFNfNPp6qL56DDCjP6nZ6ery
+         8lKQ==
+X-Gm-Message-State: ACgBeo3gB40+HIYGxk3Jp1YpbYnfNOMrw9pNaPMTIv8JYOVLzfQFm1Yi
+        NXrR7l0MJRzOtVApQIEJYGRjBYobkl1n2Q9tV4U=
+X-Google-Smtp-Source: AA6agR5aHVWeIdVQn7lagAV2GwBcncryimhtMowoxBxSTFyYGC21RHTcj2zWwIR+SG7/hl5QydnPj+0AtQcxRmSzuT0=
+X-Received: by 2002:a81:78d:0:b0:2e5:d440:d921 with SMTP id
+ 135-20020a81078d000000b002e5d440d921mr3861530ywh.251.1659115861813; Fri, 29
+ Jul 2022 10:31:01 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 87e2ff84-ba7f-4720-ee4a-08da71881479
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5909:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9n9UroDb54XvkUGt+Q7JyxKJdHq+AqLoS+Ivj1cfkgciJ+GxL/qaOce2l+Q8aaGCp9tlO8GuRqjVLb4klRd1OfsipmijqLUBsVNmXRcCDkoihR1wnpi24+vzTDXuT50/rKkhcJbU/zDYkcP92A0REfHM8H8tiZgKkoZsl7Lw/TzJjXMdRAbiTxAP9c0rmgJkiGcjD5zZ/I5+UxMdf9XB4jBaCqKzPHG1c+v9Ld/0NuRxkgqjlsXY4sVA5OWOKcp8I8nl1PBKqFJdIau6pqx6KpqjTcRtEAfGhxpaljaXRvNdC07OaZ3/f1fqvZ1hxA99341kEX5XklQbsz54VwfkTRRQ/mntg0H/MfVz88ODe+ovE4MRScSgzMy3qqILcMAUWzYU/WnRRpY8cAxInmoOAeY+daaVksAtHmQJfeYLE9vpE0KT4UZ05C0xFjYQ44dQWda+HkRCVToHu3upybFcSLCm7lwTQqFL6TewCyW9ktr8/F15J6beGUZfyhl6zrht7YnLTjY4x4VzJm2QilYPq7X7EdkhA+veUWEaCzk/ve3ZiEQc+IuQzD6eGi9oZJEq6pnz0pg22QeCCI4mNOLTGWyCbYlEwt1w/uBWwtfT+KF0WWx7uITB1qqz34hjMQdyE9jCKH2LmaepafTwkqprVWSYcyTB8uB18iw3XPyWERzcNYgXVkk3z1U0jUS4hFMBPMJuKmHHOb29rpbkO4ozGfcwtkoFlEv0AgjjJPPkenZn4VIin8gTdGcgjvh3XsIs
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(136003)(39860400002)(396003)(346002)(41300700001)(26005)(6506007)(86362001)(6512007)(6486002)(38100700002)(2616005)(83380400001)(186003)(4326008)(6862004)(5660300002)(7406005)(7416002)(8936002)(66476007)(66556008)(66946007)(36756003)(37006003)(2906002)(8676002)(478600001)(316002)(6636002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pAf4BFuYy6/pnZBg47tXnnF7rsJt9qgpO9/+gm8EhGJDVyk3weqSpR5Z8P8J?=
- =?us-ascii?Q?JWqOnl/2vMYrJ5fT2sWJBx0O4Fhbsmu+FGL2cs3BqFjryxYVIy2F8AfEYC/G?=
- =?us-ascii?Q?ZZ2sDQ3/IeXT7IlODwGh+aFc1W2izwHPJMuFmzbG/pKg9Z9maZdRiDtgSHab?=
- =?us-ascii?Q?vSo71NK6IT1sEJ2DlTITflKSyI2fI77c7nTEbNKcW5LSID8yeWp56V/0mbcT?=
- =?us-ascii?Q?F8uXETRE42oPdOnqSb8imeHEvvHN7YnH51SHCgHhAUfQP0hCrDjatb1HOVsI?=
- =?us-ascii?Q?4Gs0j8q5MRT/q+QM7uuOTWDC5xEtKAWuXiCw9eskIRk+wxG1A+jijt7z95W2?=
- =?us-ascii?Q?4iPVRECK+/oHGpErVHjzannxZzt5NyQ8TYfsrmZsXnb3qD2A3ht2e7FEJR5Q?=
- =?us-ascii?Q?PDh7mcGBo3Z03fEwjWNdLY3zeBcs0fBLv7csRSI1MaDLBHBeb3z3EAJR4LDX?=
- =?us-ascii?Q?M/VA892y8QHaisvXDR+9altc15qI5VYK8UiYEr6uNEx11Bg9dWfq0toUbCBB?=
- =?us-ascii?Q?MZNCbk5issm4nPtYqVMwll3ql86Z8oZoPZm5sHkCTH+D5YeZPokucTRBS2Ck?=
- =?us-ascii?Q?Wcru1hZxlXgKFQaCQzU61ZQmwBzL1ODFxMmpUVCYKbj5jxv+O0Hc6OZgTc/h?=
- =?us-ascii?Q?bW1jxCmWJIjTrXMnrq1spSMMcbK/FR8OjRdyhAGDTe4Iu4L+zxL9Hn7IuhL1?=
- =?us-ascii?Q?vFTyauceDy2LODgckNBb6/bKhHF6S1DjiLDrkI0RLseYGLALDGMGUJllZD1h?=
- =?us-ascii?Q?Od3+bqPANTjEtTK4epN5WemyobvWAy20rqUouQOutFlTRvl8D65vb32/O2P+?=
- =?us-ascii?Q?xnDB6ZLnUk+sFSwmRJ94i7fmqwBHRnmWJcEy5AB2PGOeodBsiZdmdabvPGni?=
- =?us-ascii?Q?wv4SBPIPOWp2enHAjbrVjDS3MF0mT5lxYXuJdLvbRMTayLsbXR5d+vnybqM+?=
- =?us-ascii?Q?JPm/3WVwu/drkDoQY2HCwR+vaZeVToHsy4yvGazZeWLhJLGM7FYiLpC2g4b9?=
- =?us-ascii?Q?LMuaIGG0FaH3jIteP6KyEh7dzTIPqniZlXmf7c2KT92v7QXeCcyfUOUJInok?=
- =?us-ascii?Q?ZzhaPgt1aSRbhyopj6mxnogfHZvGAZkr5MvRxxWpL1w1MAV3CW2/Ei/h0ecY?=
- =?us-ascii?Q?W8XZLIOu75tzyO0R//ug1waH1CNj6lyZ3tDsmLFNMBBEBlhAaJPACLx32BBH?=
- =?us-ascii?Q?zq/phbYlnG8FFiqdLcvjVk6ewCvoz1ZQBfneJBl7cnmVPRyn0YI0K9k5QCHX?=
- =?us-ascii?Q?L72Q0vr1R93Rx++faCbgnbRieDtPPx7mU7Qc8BzNrTCfBDjniD/SQ4eU1yRa?=
- =?us-ascii?Q?qy74pIN6bu9/myqYoiAL/c38bPYIWfo+s/Tq8LOmaO42IOYHNWCA9VG9+paC?=
- =?us-ascii?Q?/v4XK0iCv1rzwcOXtk1ZTm91+AvG+QfGJevog2UcorBYyPYppEbLpmkjBt+F?=
- =?us-ascii?Q?cfApVYmh/OwUWwEsPKeAHDTMofHudD8Te555bySL9d5BFJdbkEmjs6vWgnmc?=
- =?us-ascii?Q?DQET+jZIpOHhu9+wa4p7AAdCEYMOWs/ACeGUZ9vLbKAGxJbHjRkDHaAtz+Fc?=
- =?us-ascii?Q?zsSUkHRWwScNUBmlAdu94zmS9Jbo6k0lAZIM4Uuu?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87e2ff84-ba7f-4720-ee4a-08da71881479
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 17:30:50.1247
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SG227D2e0Gq+RHV7KxGVYZsYYZdv6z2kuP/5esO/GzUanlRwXfpzHpXlLPBFsrpb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5909
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220718113609.154371-1-yebin10@huawei.com> <e82f0d90-7fda-c944-149f-d18491008f3f@kernel.org>
+In-Reply-To: <e82f0d90-7fda-c944-149f-d18491008f3f@kernel.org>
+From:   Daeho Jeong <daeho43@gmail.com>
+Date:   Fri, 29 Jul 2022 10:30:50 -0700
+Message-ID: <CACOAw_xCdz4rO-LGshaZin4CzsE+8MTb_DPe0h+=vJ8KGwXa1A@mail.gmail.com>
+Subject: Re: [PATCH -next RFC] f2fs: fix null-ptr-deref in f2fs_get_dnode_of_data
+To:     Chao Yu <chao@kernel.org>
+Cc:     Ye Bin <yebin10@huawei.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 02:44:51PM -0700, Nicolin Chen wrote:
-> Cases like VFIO wish to attach a device to an existing domain that was
-> not allocated specifically from the device. This raises a condition
-> where the IOMMU driver can fail the domain attach because the domain and
-> device are incompatible with each other.
-> 
-> This is a soft failure that can be resolved by using a different domain.
-> 
-> Provide a dedicated errno from the IOMMU driver during attach that the
-> reason attached failed is because of domain incompatability. EMEDIUMTYPE
-> is chosen because it is never used within the iommu subsystem today and
-> evokes a sense that the 'medium' aka the domain is incompatible.
-> 
-> VFIO can use this to know attach is a soft failure and it should continue
-> searching. Otherwise the attach will be a hard failure and VFIO will
-> return the code to userspace.
-> 
-> Update all drivers to return EMEDIUMTYPE in their failure paths that are
-> related to domain incompatability. Also remove adjacent error prints for
-> these soft failures, to prevent a kernel log spam, since -EMEDIUMTYPE is
-> clear enough to indicate an incompatability error.
-> 
-> Add kdocs describing this behavior.
-> 
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/iommu/amd/iommu.c                   |  2 +-
->  drivers/iommu/apple-dart.c                  |  4 +--
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 15 +++--------
->  drivers/iommu/arm/arm-smmu/arm-smmu.c       |  5 +---
->  drivers/iommu/arm/arm-smmu/qcom_iommu.c     |  9 ++-----
->  drivers/iommu/intel/iommu.c                 | 10 +++-----
->  drivers/iommu/iommu.c                       | 28 +++++++++++++++++++++
->  drivers/iommu/ipmmu-vmsa.c                  |  4 +--
->  drivers/iommu/omap-iommu.c                  |  3 +--
->  drivers/iommu/s390-iommu.c                  |  2 +-
->  drivers/iommu/sprd-iommu.c                  |  6 ++---
->  drivers/iommu/tegra-gart.c                  |  2 +-
->  drivers/iommu/virtio-iommu.c                |  3 +--
->  13 files changed, 47 insertions(+), 46 deletions(-)
+On Sun, Jul 24, 2022 at 3:21 AM Chao Yu <chao@kernel.org> wrote:
+>
+> On 2022/7/18 19:36, Ye Bin wrote:
+> > There is issue as follows when test f2fs atomic write:
+> > F2FS-fs (loop0): Can't find valid F2FS filesystem in 2th superblock
+> > F2FS-fs (loop0): invalid crc_offset: 0
+> > F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=1, run fsck to fix.
+> > F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=2, run fsck to fix.
+> > ==================================================================
+> > BUG: KASAN: null-ptr-deref in f2fs_get_dnode_of_data+0xac/0x16d0
+> > Read of size 8 at addr 0000000000000028 by task rep/1990
+> >
+> > CPU: 4 PID: 1990 Comm: rep Not tainted 5.19.0-rc6-next-20220715 #266
+> > Call Trace:
+> >   <TASK>
+> >   dump_stack_lvl+0x6e/0x91
+> >   print_report.cold+0x49a/0x6bb
+> >   kasan_report+0xa8/0x130
+> >   f2fs_get_dnode_of_data+0xac/0x16d0
+> >   f2fs_do_write_data_page+0x2a5/0x1030
+> >   move_data_page+0x3c5/0xdf0
+> >   do_garbage_collect+0x2015/0x36c0
+> >   f2fs_gc+0x554/0x1d30
+> >   f2fs_balance_fs+0x7f5/0xda0
+> >   f2fs_write_single_data_page+0xb66/0xdc0
+> >   f2fs_write_cache_pages+0x716/0x1420
+> >   f2fs_write_data_pages+0x84f/0x9a0
+> >   do_writepages+0x130/0x3a0
+> >   filemap_fdatawrite_wbc+0x87/0xa0
+> >   file_write_and_wait_range+0x157/0x1c0
+> >   f2fs_do_sync_file+0x206/0x12d0
+> >   f2fs_sync_file+0x99/0xc0
+> >   vfs_fsync_range+0x75/0x140
+> >   f2fs_file_write_iter+0xd7b/0x1850
+> >   vfs_write+0x645/0x780
+> >   ksys_write+0xf1/0x1e0
+> >   do_syscall_64+0x3b/0x90
+> >   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > As 3db1de0e582c commit changed atomic write way which new a cow_inode for
+> > atomic write file, and also mark cow_inode as FI_ATOMIC_FILE.
+> > When f2fs_do_write_data_page write cow_inode will use cow_inode's cow_inode
+> > which is NULL. Then will trigger null-ptr-deref.
+> > To solve above issue, don't mark cow_inode as FI_ATOMIC_FILE.
+> >
+> > Fiexes: 3db1de0e582c("f2fs: change the current atomic write way")
+> > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > ---
+> >   fs/f2fs/file.c | 1 -
+> >   1 file changed, 1 deletion(-)
+> >
+> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > index 466eb00aa516..735802b6b754 100644
+> > --- a/fs/f2fs/file.c
+> > +++ b/fs/f2fs/file.c
+> > @@ -2062,7 +2062,6 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+> >       spin_unlock(&sbi->inode_lock[ATOMIC_FILE]);
+> >
+> >       set_inode_flag(inode, FI_ATOMIC_FILE);
+> > -     set_inode_flag(fi->cow_inode, FI_ATOMIC_FILE);
+>
+> It needs to remove clear_inode_flag(fi->cow_inode, FI_ATOMIC_FILE) in
+> f2fs_abort_atomic_write()?
+>
+> To Daeho, could you please review this patch? IIUC, cow_inode doesn't
+> need to be set as atomic file?
+>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Sorry for the late reply, I was OOO.
 
-Jason
+I think I missed the FG GC case for COW inode. :(
+I used the FI_ATOMIC_FILE flag for COW inode in
+__get_segment_type_6(). Maybe we need another flag for the COW inode
+case in the function, if we remove the flag from the COW inode.
+Plus, we need to remove clear_inode_flag(fi->cow_inode,
+FI_ATOMIC_FILE) too in f2fs_abort_atomic_write().
+
+Thanks,
+
+> Thanks,
+>
+> >       clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
+> >       f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> >

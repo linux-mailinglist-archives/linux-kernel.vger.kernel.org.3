@@ -2,124 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57596584A90
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 06:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E08E584ABF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 06:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbiG2EXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 00:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S233788AbiG2EZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 00:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232910AbiG2EXE (ORCPT
+        with ESMTP id S233734AbiG2EZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 00:23:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EE677A51
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:23:03 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oHHWS-0001Up-I9; Fri, 29 Jul 2022 06:22:48 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oHHWP-0002bH-0o; Fri, 29 Jul 2022 06:22:45 +0200
-Date:   Fri, 29 Jul 2022 06:22:44 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: Re: [PATCH] can: j1939: fix memory leak of skbs
-Message-ID: <20220729042244.GC30201@pengutronix.de>
-References: <20220708175949.539064-1-pchelkin@ispras.ru>
+        Fri, 29 Jul 2022 00:25:40 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A647D77A74
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:25:39 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id m8so4415089edd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 21:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BheXqPnhOLt2IMNV2xWB3SWJU/Ur46AJopM+n6Fj6zc=;
+        b=Z1UZJHRRoS7XtmrnTmBGffyagC5KDymIdt5bnnSDJGl3pv3jeXxeVII2PuwIlmG+i6
+         aEU3ZD2795IBbp4R00aKn243ZBvWDR17CZlrFSfUJG4ns8HzGHXzUhbXvpL4QEgE6jcL
+         hN+CvTacOOI6rJ1PCvsmWYjMS8LmrwMm+1mZTLY0Cg9TLb2CqbPUfy0OsZvuT/8wDBXX
+         hW//Fe/xFfmZ73pH+vLEVqe/4LD0rYpa3xsowUN3eWJXbFFrri/m8bAU3JbHBXpbqtLc
+         wUaXYtIw9RnluLuXCGll7f/bkXrNZHo9eX7GU4uXDFbp7AxspaqJUu/TqRcnShYtkDse
+         n9Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BheXqPnhOLt2IMNV2xWB3SWJU/Ur46AJopM+n6Fj6zc=;
+        b=4e5txt+1Xw3DrNQjkxOjLvgobKmasDupX2lDi59ow2h+8+RpyF7cLDybBbNOOcas2L
+         lG4dkA1C3vBbG9KjVuGid4SdFADDxD899OkkDvBoCRAc7tt4P719Rqh5tYx9rfoUU6mW
+         ySx7XYGoAGfwDZd2YSOZIYpGM70XrIutDqmdAsc593b6hvFuXdCwVJ+sKB3pTHvMwyzw
+         stTIObuZUwl3ZId0SYN9XSibhZvccQ3jVOl1QuQTuZy5f0sH1atgjmaKX5YcWFX52zCK
+         dkVo6TVsPXb45s8PaeqwckHQiKhKvVAPVDtn2LpzMyIZg2MGlMR0AjVom/fcshLei0Bt
+         AuiA==
+X-Gm-Message-State: AJIora9c5mjgMj9iJ4kIHrrjSq1bHTnEEu+eMX07t/fMTBUBrp/P+diP
+        D27VbPGFnHqN9hGv+uyuXhlNdYVeyOjHrgxGVx4LtQ==
+X-Google-Smtp-Source: AGRyM1uAWabekOEiuMnZt/UmvjPKgjeulSdFYFLjFdXobcTZukwl7ZCDoI0UrdElC/mjD0yT8OcxkJMw6UBwCqaRPCc=
+X-Received: by 2002:aa7:da93:0:b0:43d:1d9d:1e5 with SMTP id
+ q19-20020aa7da93000000b0043d1d9d01e5mr1020049eds.55.1659068738042; Thu, 28
+ Jul 2022 21:25:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220708175949.539064-1-pchelkin@ispras.ru>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220728150340.045826831@linuxfoundation.org>
+In-Reply-To: <20220728150340.045826831@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 29 Jul 2022 09:55:26 +0530
+Message-ID: <CA+G9fYsdeJK8ELEvyCT+WFHLYuPvBBKo-MW5NNU6CNkecCxOiQ@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/101] 5.10.134-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fedor,
+On Thu, 28 Jul 2022 at 20:36, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.134 release.
+> There are 101 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 30 Jul 2022 15:03:14 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.134-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-thank you for work.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-On Fri, Jul 08, 2022 at 08:59:49PM +0300, Fedor Pchelkin wrote:
-> Syzkaller reported memory leak of skbs introduced with the commit
-> 2030043e616c ("can: j1939: fix Use-after-Free, hold skb ref while in use").
-> 
-> Link to Syzkaller info and repro: https://forge.ispras.ru/issues/11743
-> 
-> The suggested solution was tested on the new memory-leak Syzkaller repro
-> and on the old use-after-free repro (that use-after-free bug was solved
-> with aforementioned commit). Although there can probably be another
-> situations when the numbers of skb_get() and skb_unref() calls don't match
-> and I don't see it in right way.
-> 
-> Moreover, skb_unref() call can be harmlessly removed from line 338 in
-> j1939_session_skb_drop_old() (/net/can/j1939/transport.c). But then I
-> assume this removal ruins the whole reference counts logic...
-> 
-> Overall, there is definitely something not clear in skb reference counts
-> management with skb_get() and skb_unref(). The solution we suggested fixes
-> the leaks and use-after-free's induced by Syzkaller but perhaps the origin
-> of the problem can be somewhere else.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> ---
->  net/can/j1939/transport.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> index 307ee1174a6e..9600b339cbf8 100644
-> --- a/net/can/j1939/transport.c
-> +++ b/net/can/j1939/transport.c
-> @@ -356,7 +356,6 @@ void j1939_session_skb_queue(struct j1939_session *session,
->  
->  	skcb->flags |= J1939_ECU_LOCAL_SRC;
->  
-> -	skb_get(skb);
->  	skb_queue_tail(&session->skb_queue, skb);
->  }
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-This skb_get() is counter part of skb_unref()
-j1939_session_skb_drop_old().
+## Build
+* kernel: 5.10.134-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 3dbf5c047ca925a0666cd82f39563e9921294ca6
+* git describe: v5.10.133-102-g3dbf5c047ca9
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.133-102-g3dbf5c047ca9
 
-Initial issue can be reproduced by using real (slow) CAN with j1939cat[1]
-tool. Both parts should be started to make sure the j1939_session_tx_dat() will
-actually start using the queue. After pushing about 100K of data, application
-will try to close the socket and exit. After socket is closed, all skb related
-to this socket will be freed and j1939_session_tx_dat() will use freed skbs.
+## Test Regressions (compared to v5.10.133)
+No test regressions found.
 
-NACK for this patch.
+## Metric Regressions (compared to v5.10.133)
+No metric regressions found.
 
-1. https://github.com/linux-can/can-utils/blob/master/j1939cat.c
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+## Test Fixes (compared to v5.10.133)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.133)
+No metric fixes found.
+
+## Test result summary
+total: 119905, pass: 106363, fail: 551, skip: 12232, xfail: 759
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 306 total, 306 passed, 0 failed
+* arm64: 62 total, 60 passed, 2 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 53 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FD6585422
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751D258542A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbiG2RHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S233160AbiG2RHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiG2RHF (ORCPT
+        with ESMTP id S236684AbiG2RHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:07:05 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB8054ACD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:07:05 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id c3so5119497pfb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:07:05 -0700 (PDT)
+        Fri, 29 Jul 2022 13:07:16 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0806E2F6;
+        Fri, 29 Jul 2022 10:07:16 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q16so4468115pgq.6;
+        Fri, 29 Jul 2022 10:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=9o/kpxtwtGSAJRz7togZqH/jX2IzYG9txOU/MkOdGsk=;
-        b=d7rrhYFDw6/dZgg1zbGYEELi+Ig6rFIt8U9NslLM0uU54fjiN5LGx1yttndq6MRsU9
-         +7RsjMcHBPvo9jWret2P4sPOppbiMdG8cI1kd+akSPTG+EObbBmqLkCpNfuGcK8v3et/
-         00EpnIyAJBLgzqog02E2FLDm/yJUXIJ24ox/5REaSArOoUXct80bc5LcGQIzVSKmN6DM
-         Zv7n761ElhQDgSA1FTeDvln1HSKX32ZpEXSPVXF5BhIwAT4/VNDBqvWnrmu3oVxPtDXx
-         9fH7sPTJB4vfg1PdPzrZtt3Sh82x5Vf8NAASPWzFvLQmI4EvMB13nINjdJy2lWSs8Oo/
-         RhFQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=xOX9chVYPROOGAwdmaGgZcPW07GxLyOUqTmIVsiyRrY=;
+        b=MRLwlAUouciI2C7C4GlFSSMaiCgUFvFJHEtdHFSFik2hSiv0VP8gL4ZSfprY2hsTK1
+         71DIYxBGrwqXFBScOnqP+VzlVWE/yF7/4yB3mDGe+vThJBq8uPvmws21UEmirDlolpMy
+         x549Jju9p8IU2GkZyiWgwKVdtIHXMUNPMhzRBu+dYou1+wt+08d0lBPCrTdJXwzkiDN6
+         JGHGbeMh9SUdLwzzK3x2hd2GyvGvJjuGYxepwaCRt1WmmePQgRRw+KTKKuRl+7PDrYbw
+         HFD4qHEQTMrxQPUwhb11Op/lv6vtakCbR4692upCeChRxW01QL5PORt1xeQ8tBNUL24N
+         4sXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=9o/kpxtwtGSAJRz7togZqH/jX2IzYG9txOU/MkOdGsk=;
-        b=DSC6DNWWMseEBZqOzRcFP1LBoI3hWNkFshLxWbqwlFKCrPyQxGboGkuxHMeS+YTdrR
-         GYb7aicW1ARnA+KKuQeG/A47bM+Zn0ICRFhxmlEIjMMKX385M1N3RdIjN6s+p9vMkAky
-         XSg0NQifSYOpwpyXOeFzipkrZtdG/T5HdVFvspeM6ob4cfUNNQLZcSC0zLzpIswmpZ96
-         OAzbOF2u8k0O8qm4OPk2enYHCEruBYS4tU5zqxAWNgNMk+0DItdX/wP1nIv5Rpol5Uws
-         4i5XRSR+CoPbrUrI9McnW7Eadri8oDTvUfTRv9+pGyZ4ZAWY15qK0htViZSenzBYv0Rb
-         uPAA==
-X-Gm-Message-State: AJIora+Bpbbox3KcjKU9qlo3P2XQnoaZzJwn0zhgRF550iadNqu6gJDZ
-        KAOIEJHkUWvxgXYUIWD2xqU=
-X-Google-Smtp-Source: AGRyM1upLon9wbIMfbCwqO3JYhACcZurI2iHO4roReNV/ZHzKqhAtd1uue50i8179qkbq7tKRlvklA==
-X-Received: by 2002:a63:1213:0:b0:41a:8d6b:3e80 with SMTP id h19-20020a631213000000b0041a8d6b3e80mr3571086pgl.388.1659114424345;
-        Fri, 29 Jul 2022 10:07:04 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.113])
-        by smtp.gmail.com with ESMTPSA id y62-20020a62ce41000000b00528d580cb45sm3145326pfg.127.2022.07.29.10.07.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 29 Jul 2022 10:07:03 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH RFC 0/4] mm: Remember young bit for migration entries
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220729014041.21292-1-peterx@redhat.com>
-Date:   Fri, 29 Jul 2022 10:07:02 -0700
-Cc:     Linux MM <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Hugh Dickins <hughd@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6C0B267E-E36D-4014-8308-B948247D7FED@gmail.com>
-References: <20220729014041.21292-1-peterx@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=xOX9chVYPROOGAwdmaGgZcPW07GxLyOUqTmIVsiyRrY=;
+        b=djydbztGHXHBVun7LQFGeDSv4F8O1hGkLCilgo2P1rnLKapzFXjA7ImEJzMwDDqEWU
+         HdZ+mDcRQ2kfDpBj5WnPmcIoAUnWGHPy7Z+3MNHvbMIZZDlYmD5dJ4rpj+TdHa4xT6fB
+         ner89lx5gywO6XswhAeyB+QL8mmU8mPa9/0WgrSd/snyyJ1wXgVNig3IdejBeXxzQUDp
+         yXwplHUdjXoX5mWb0T5WANTBeluulvcKWiKJYdNS6WdGt8DhHwi2fSA/aW3bdrEUW+4m
+         QI2z2vFo2b8isOE0tz7DEngeYXCwSP65EvzIseKMT52OCiyQ6TvZfGYvMxwSrSageYfE
+         xSZA==
+X-Gm-Message-State: AJIora8yKJl4NJr/lDCdVpN0QHcmg2QSkxUgTJXYOpcRqyouzzZxsXU8
+        JNND5PZFzzdfLpiDMmE2IYc=
+X-Google-Smtp-Source: AGRyM1uGBuQ9vqrdjA1iXWiRUZ+wtLiHx4OPCFlykBcsRNNxwJRC70pXFBsgRPqQ7gjXtfmlRSztjQ==
+X-Received: by 2002:a63:4546:0:b0:41a:5e8f:508a with SMTP id u6-20020a634546000000b0041a5e8f508amr3767050pgk.419.1659114435380;
+        Fri, 29 Jul 2022 10:07:15 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id bg1-20020a056a02010100b00419a6f3c8f5sm2778376pgb.19.2022.07.29.10.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 10:07:14 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>,
+        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
+        FRAMEWORK),
+        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
+        linux-kernel@vger.kernel.org (open list),
+        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
+        Sean Paul <sean@poorly.run>
+Subject: [PATCH 0/3] dma-buf: map-info support
+Date:   Fri, 29 Jul 2022 10:07:39 -0700
+Message-Id: <20220729170744.1301044-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,28 +77,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jul 28, 2022, at 6:40 PM, Peter Xu <peterx@redhat.com> wrote:
+From: Rob Clark <robdclark@chromium.org>
 
-> [Marking as RFC; only x86 is supported for now, plan to add a few more
-> archs when there's a formal version]
->=20
-> Problem
-> =3D=3D=3D=3D=3D=3D=3D
->=20
-> When migrate a page, right now we always mark the migrated page as =
-old.
-> The reason could be that we don't really know whether the page is hot =
-or
-> cold, so we could have taken it a default negative assuming that's =
-safer.
+See 1/3 for motivation.
 
-Looks good to me.
+Rob Clark (3):
+  dma-buf: Add ioctl to query mmap info
+  drm/prime: Wire up mmap_info support
+  drm/msm/prime: Add mmap_info support
 
-I just wonder whether the order of the patches should be different. I =
-always
-understood that separating the =E2=80=9Cenabling=E2=80=9D patch from the =
-others is not a
-good practice, since it complicates bisection. I guess it is more of a =
-minor
-issue for such a small patch-set=E2=80=A6
+ drivers/dma-buf/dma-buf.c           | 26 ++++++++++++++++++++++++++
+ drivers/gpu/drm/drm_prime.c         | 12 ++++++++++++
+ drivers/gpu/drm/msm/msm_drv.c       |  1 +
+ drivers/gpu/drm/msm/msm_drv.h       |  1 +
+ drivers/gpu/drm/msm/msm_gem_prime.c | 11 +++++++++++
+ include/drm/drm_drv.h               |  7 +++++++
+ include/linux/dma-buf.h             |  7 +++++++
+ include/uapi/linux/dma-buf.h        | 28 ++++++++++++++++++++++++++++
+ 8 files changed, 93 insertions(+)
+
+-- 
+2.36.1
 

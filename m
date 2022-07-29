@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986BE584D8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8803C584D97
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiG2Imh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 04:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
+        id S235318AbiG2Ine (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 04:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiG2Imb (ORCPT
+        with ESMTP id S235072AbiG2Inb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 04:42:31 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E7DF580
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 01:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1659084150;
-        bh=rcLqsq6zGpUEl1DJZyTxmkc4RA2vFFdgR8IfyXZm0Dc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=P0njuex3OUTZGBSNK0zTohD3LhMK82QLrSm22A3Fq4aseIJ+EEcIfldV1HcV3CVNV
-         MvxAVoeE+ZMlbNQd2yq9bgNr765SEQNUt38Zr80gZXvzCOnjEOoByUDQmtj+bzTz4u
-         8QuR1ILvca3sE6zB8g6rbjSpdoOTKpsMr1sV2uzs=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 6E53E667A1;
-        Fri, 29 Jul 2022 04:42:28 -0400 (EDT)
-Message-ID: <7fbcd23074e58117c6bcfbd832679de2386ff995.camel@xry111.site>
-Subject: [PATCH v4 4/4] LoongArch: Support modules with new relocation types
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     loongarch@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Date:   Fri, 29 Jul 2022 16:42:26 +0800
-In-Reply-To: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
-References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
+        Fri, 29 Jul 2022 04:43:31 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04F51BE8B;
+        Fri, 29 Jul 2022 01:43:28 -0700 (PDT)
+X-UUID: 888e63f73bae4e7fa234be65a8758932-20220729
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:72468714-1fea-445b-9cf0-f078635e10ec,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:2f6faed0-841b-4e95-ad42-8f86e18f54fc,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 888e63f73bae4e7fa234be65a8758932-20220729
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <elvis.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2038370161; Fri, 29 Jul 2022 16:43:23 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 29 Jul 2022 16:43:21 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 29 Jul 2022 16:43:21 +0800
+From:   Elvis Wang <Elvis.Wang@mediatek.com>
+To:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        CK Hu <ck.hu@mediatek.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Elvis Wang <elvis.wang@mediatek.com>
+Subject: [PATCH 0/2] Add gce support for mt8188
+Date:   Fri, 29 Jul 2022 16:43:17 +0800
+Message-ID: <20220729084319.6880-1-Elvis.Wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,210 +63,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If GAS 2.40 and/or GCC 13 is used to build the kernel, the modules will
-contain R_LARCH_B26, R_LARCH_PCALA_HI20, R_LARCH_PCALA_LO12,
-R_LARCH_GOT_PC_HI20, and R_LARCH_GOT_PC_LO12 relocations.  Support them
-in the module loader to allow a kernel built with latest toolchain
-capable to load the modules.
+From: Elvis Wang <elvis.wang@mediatek.com>
 
-Signed-off-by: Xi Ruoyao <xry111@xry111.site>
----
- arch/loongarch/include/asm/elf.h        | 37 +++++++++++
- arch/loongarch/kernel/module-sections.c | 12 +++-
- arch/loongarch/kernel/module.c          | 85 +++++++++++++++++++++++++
- 3 files changed, 132 insertions(+), 2 deletions(-)
+Base on tag: next-20220728, linux-next/master
 
-diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/=
-elf.h
-index 5f3ff4781fda..7af0cebf28d7 100644
---- a/arch/loongarch/include/asm/elf.h
-+++ b/arch/loongarch/include/asm/elf.h
-@@ -74,6 +74,43 @@
- #define R_LARCH_SUB64				56
- #define R_LARCH_GNU_VTINHERIT			57
- #define R_LARCH_GNU_VTENTRY			58
-+#define R_LARCH_B16				64
-+#define R_LARCH_B21				65
-+#define R_LARCH_B26				66
-+#define R_LARCH_ABS_HI20			67
-+#define R_LARCH_ABS_LO12			68
-+#define R_LARCH_ABS64_LO20			69
-+#define R_LARCH_ABS64_HI12			70
-+#define R_LARCH_PCALA_HI20			71
-+#define R_LARCH_PCALA_LO12			72
-+#define R_LARCH_PCALA64_LO20			73
-+#define R_LARCH_PCALA64_HI12			74
-+#define R_LARCH_GOT_PC_HI20			75
-+#define R_LARCH_GOT_PC_LO12			76
-+#define R_LARCH_GOT64_PC_LO20			77
-+#define R_LARCH_GOT64_PC_HI12			78
-+#define R_LARCH_GOT_HI20			79
-+#define R_LARCH_GOT_LO12			80
-+#define R_LARCH_GOT64_LO20			81
-+#define R_LARCH_GOT64_HI12			82
-+#define R_LARCH_TLS_LE_HI20			83
-+#define R_LARCH_TLS_LE_LO12			84
-+#define R_LARCH_TLS_LE64_LO20			85
-+#define R_LARCH_TLS_LE64_HI12			86
-+#define R_LARCH_TLS_IE_PC_HI20			87
-+#define R_LARCH_TLS_IE_PC_LO12			88
-+#define R_LARCH_TLS_IE64_PC_LO20		89
-+#define R_LARCH_TLS_IE64_PC_HI12		90
-+#define R_LARCH_TLS_IE_HI20			91
-+#define R_LARCH_TLS_IE_LO12			92
-+#define R_LARCH_TLS_IE64_LO20			93
-+#define R_LARCH_TLS_IE64_HI12			94
-+#define R_LARCH_TLS_LD_PC_HI20			95
-+#define R_LARCH_TLS_LD_HI20			96
-+#define R_LARCH_TLS_GD_PC_HI20			97
-+#define R_LARCH_TLS_GD_HI20			98
-+#define R_LARCH_32_PCREL			99
-+#define R_LARCH_RELAX				100
-=20
- #ifndef ELF_ARCH
-=20
-diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kerne=
-l/module-sections.c
-index 36a77771d18c..8c0e4ad048cc 100644
---- a/arch/loongarch/kernel/module-sections.c
-+++ b/arch/loongarch/kernel/module-sections.c
-@@ -76,12 +76,20 @@ static void count_max_entries(Elf_Rela *relas, int num,
-=20
- 	for (i =3D 0; i < num; i++) {
- 		type =3D ELF_R_TYPE(relas[i].r_info);
--		if (type =3D=3D R_LARCH_SOP_PUSH_PLT_PCREL) {
-+		switch (type) {
-+		case R_LARCH_SOP_PUSH_PLT_PCREL:
-+		case R_LARCH_B26:
- 			if (!duplicate_rela(relas, i))
- 				(*plts)++;
--		} else if (type =3D=3D R_LARCH_SOP_PUSH_GPREL)
-+			break;
-+		case R_LARCH_SOP_PUSH_GPREL:
-+		case R_LARCH_GOT_PC_HI20:
- 			if (!duplicate_rela(relas, i))
- 				(*gots)++;
-+			break;
-+		default:
-+			/* Do nothing. */
-+		}
- 	}
- }
-=20
-diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.=
-c
-index 3ac4fbb5f109..c7b40150e1f0 100644
---- a/arch/loongarch/kernel/module.c
-+++ b/arch/loongarch/kernel/module.c
-@@ -291,6 +291,86 @@ static int apply_r_larch_add_sub(struct module *mod, u=
-32 *location, Elf_Addr v,
- 	}
- }
-=20
-+static int apply_r_larch_b26(struct module *mod, u32 *location, Elf_Addr v=
-,
-+			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-+{
-+	ptrdiff_t offset =3D (void *)v - (void *)location;
-+	union loongarch_instruction *insn =3D (union loongarch_instruction *)loca=
-tion;
-+
-+	if (offset >=3D SZ_128M)
-+		v =3D module_emit_plt_entry(mod, v);
-+
-+	if (offset < -SZ_128M)
-+		v =3D module_emit_plt_entry(mod, v);
-+
-+	offset =3D (void *)v - (void *)location;
-+
-+	if (offset & 3) {
-+		pr_err("module %s: jump offset =3D 0x%llx unaligned! dangerous R_LARCH_B=
-26 (%u) relocation\n",
-+				mod->name, (long long)offset, type);
-+		return -ENOEXEC;
-+	}
-+
-+	if (!signed_imm_check(offset, 28)) {
-+		pr_err("module %s: jump offset =3D 0x%llx overflow! dangerous R_LARCH_B2=
-6 (%u) relocation\n",
-+				mod->name, (long long)offset, type);
-+		return -ENOEXEC;
-+	}
-+
-+	offset >>=3D 2;
-+	insn->reg0i26_format.immediate_l =3D offset & 0xffff;
-+	insn->reg0i26_format.immediate_h =3D (offset >> 16) & 0x3ff;
-+	return 0;
-+}
-+
-+static int apply_r_larch_pcala_hi20(struct module *mod, u32 *location,
-+		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-+		unsigned int type)
-+{
-+	ptrdiff_t offset =3D (void *)((v + 0x800) & ~0xfff) -
-+		(void *)((Elf_Addr)location & ~0xfff);
-+	union loongarch_instruction *insn =3D (union loongarch_instruction *)loca=
-tion;
-+
-+	if (!signed_imm_check(offset, 32)) {
-+		pr_err("module %s: PCALA offset =3D 0x%llx does not fit in 32-bit signed=
- and is unsupported by kernel! dangerous %s (%u) relocation\n",
-+				mod->name, (long long)offset, __func__, type);
-+		return -ENOEXEC;
-+	}
-+
-+	insn->reg1i20_format.immediate =3D (offset >> 12) & 0xfffff;
-+	return 0;
-+}
-+
-+static int apply_r_larch_got_pc_hi20(struct module *mod, u32 *location,
-+		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-+		unsigned int type)
-+{
-+	Elf_Addr got =3D module_emit_got_entry(mod, v);
-+
-+	return apply_r_larch_pcala_hi20(mod, location, got, rela_stack,
-+			rela_stack_top, type);
-+}
-+
-+static int apply_r_larch_pcala_lo12(struct module *mod, u32 *location,
-+		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-+		unsigned int type)
-+{
-+	union loongarch_instruction *insn =3D (union loongarch_instruction *)loca=
-tion;
-+
-+	insn->reg2i12_format.immediate =3D v & 0xfff;
-+	return 0;
-+}
-+
-+static int apply_r_larch_got_pc_lo12(struct module *mod, u32 *location,
-+		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
-+		unsigned int type)
-+{
-+	Elf_Addr got =3D module_emit_got_entry(mod, v);
-+
-+	return apply_r_larch_pcala_lo12(mod, location, got, rela_stack,
-+			rela_stack_top, type);
-+}
-+
- /*
-  * reloc_handlers_rela() - Apply a particular relocation to a module
-  * @mod: the module to apply the reloc to
-@@ -321,6 +401,11 @@ static reloc_rela_handler reloc_rela_handlers[] =3D {
- 	[R_LARCH_SOP_SUB ... R_LARCH_SOP_IF_ELSE] 	     =3D apply_r_larch_sop,
- 	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] =3D apply_r_larch_so=
-p_imm_field,
- 	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     =3D apply_r_larch_add_sub,
-+	[R_LARCH_B26]					     =3D apply_r_larch_b26,
-+	[R_LARCH_PCALA_HI20]				     =3D apply_r_larch_pcala_hi20,
-+	[R_LARCH_PCALA_LO12]				     =3D apply_r_larch_pcala_lo12,
-+	[R_LARCH_GOT_PC_HI20]				     =3D apply_r_larch_got_pc_hi20,
-+	[R_LARCH_GOT_PC_LO12]				     =3D apply_r_larch_got_pc_lo12,
- };
-=20
- int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
---=20
-2.37.0
+Elvis Wang (2):
+  dt-bindings: mailbox: add definition for mt8188
+  dt-bindings: gce: add gce header file for mt8188
 
+ .../devicetree/bindings/mailbox/mtk-gce.txt   |    6 +-
+ include/dt-bindings/gce/mt8188-gce.h          | 1079 +++++++++++++++++
+ 2 files changed, 1082 insertions(+), 3 deletions(-)
+ create mode 100644 include/dt-bindings/gce/mt8188-gce.h
+
+-- 
+2.18.0
 

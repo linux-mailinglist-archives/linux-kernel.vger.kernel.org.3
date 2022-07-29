@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9473558517E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EB7585183
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236990AbiG2OY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S237014AbiG2OZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiG2OYZ (ORCPT
+        with ESMTP id S236921AbiG2OZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:24:25 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9414D56B8B
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:24:24 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id w10so4785723plq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:24:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:from:to:mime-version;
-        bh=UConN5gGUaEKejzmj0/FeH3qdQlU3JzNGuCzI1IImJs=;
-        b=ie0Fsxa6BJS/R/ucTt6BbbZY2nH/R5Ghz+cihlgyZHEslUpxe/OsloQHsjd3SC0uhF
-         4SfN3XO3t5wYLbuDqlZFoYp2jqMdc1UYyqMpuG2RI4LVjvrkEPQU6SR4NH8o05hd2+28
-         5t7fjn7N1IuGIRWr66+aZd9toKEkYoqGSCE/svsE9Actdk7T2vkFHN4mV/lXf4w9xZn7
-         FwEipySPT0rFQkTT+BDwB8PXdIAXD8M8C4PZnj0mLwDj1PyBPGjTqDNWHd0z8nc/3R7A
-         T8FUiiz04Nu2Ds/ADzMc8UOzANSAa+CYF6WCliga7PaSiKgJhyDl0Exee1QwMsbvKW9g
-         4r/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:subject:from:to:mime-version;
-        bh=UConN5gGUaEKejzmj0/FeH3qdQlU3JzNGuCzI1IImJs=;
-        b=0OkwqKDxC4FuQaZXa8OmTS7nxn35gUEMQ5VTqQABzylPJcExMQDPbjbiUqadA0xxQZ
-         ntcB7VYTjkdeSit0UMVendF5z4NAnyerGhROfN5VuPw1EDmooApoBpUpHZUspDwHfgim
-         xt2qmKVemxvKw2dQT/jOdtOLTtmWyZJT7duI/nD36Lg8mAR42mzP8LLMmdu4/JJbe2MQ
-         67sDV2IVaHlBwbyAZZJf6JOqFybd7OyTocDwAimLMvXgdGD2JnQtqcOM+4zYrg0qOI//
-         sxZvo4tLAgKkJ31H0IRmt5nbeOaM+d4xmquHtl6KO1AdY4jQxnvUmzr1fGjqFp8kIZHp
-         5Lvg==
-X-Gm-Message-State: ACgBeo1avaOeaaJ5sGJlYaO5fNEJd3P4f/QN7vd3YeXRB0Q/E7ICHII2
-        b4OjK3fryu6vSocLYm3cI/arVRFxBBI=
-X-Google-Smtp-Source: AA6agR7V8NxMV0KCFdI0LcFRIlsaytitehvoL81NcR1G3XKcKSxzn4Rbyr3xZkE5ZMHku4p44tUkRw==
-X-Received: by 2002:a17:903:2683:b0:16e:c630:fb2e with SMTP id jf3-20020a170903268300b0016ec630fb2emr666485plb.52.1659104663845;
-        Fri, 29 Jul 2022 07:24:23 -0700 (PDT)
-Received: from [10.2.0.2] ([185.230.126.2])
-        by smtp.gmail.com with ESMTPSA id ij19-20020a170902ab5300b0016daee46b72sm394895plb.237.2022.07.29.07.24.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 07:24:23 -0700 (PDT)
-Message-ID: <62e3ed97.170a0220.77fc4.08a7@mx.google.com>
-Date:   Fri, 29 Jul 2022 07:24:23 -0700 (PDT)
-Subject: Your E Receipt has been renewed on July 25, 202242488611 of item
-From:   hdhgyhcjgnhuy57475bhfnch@gmail.com
-To:     linux-kernel@vger.kernel.org
+        Fri, 29 Jul 2022 10:25:23 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8665D1B79D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:25:22 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26TBvJkh009269;
+        Fri, 29 Jul 2022 09:24:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ references : in-reply-to : subject : date : message-id : mime-version :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=hKCkz5vC7H4oaj3WOgNktGC6w/6bpup/y8bypzeNl/w=;
+ b=ipfhot+EiJE1rBF1BsY5/GxXpAndNRvv5oggGNp3yQ9P2KtzrW37Cjss0g40wYBrvLUn
+ 9bEB9qgi2At9Co9cVPYPGG3Hkfs0lzSDYWweL4lxJL9haYPrO9mfHZLZ0q4CQZ1kcKkO
+ AJfj+qxQiUpqgQhqfDVwulBUvlVmdpl0VhKaCEm0EjckolfI+QDZJPKTJn1vxwRNukrK
+ g+Tj6Kd4fFBOVvWkCSmXDrotqWUsN7z+RmZlpvp/ON6jGh5fvzv1A4q3HENLTQ49Ilh8
+ GiTvGPJ0g3PaH0eZZ9s5K/WnAgGmogglyuYowmgVDSMZpAdcPO+zpP3LqK5BAF1mjJ4t 1Q== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3hgddp868j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 09:24:43 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 29 Jul
+ 2022 09:24:42 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.9 via Frontend
+ Transport; Fri, 29 Jul 2022 09:24:42 -0500
+Received: from LONN2DGDQ73 (unknown [198.90.238.229])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 196552D4;
+        Fri, 29 Jul 2022 14:24:42 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     'Pierre-Louis Bossart' <pierre-louis.bossart@linux.intel.com>,
+        "'Mark Brown'" <broonie@kernel.org>,
+        'Liam Girdwood' <lgirdwood@gmail.com>,
+        "'Brent Lu'" <brent.lu@intel.com>, 'xliu' <xiang.liu@cirrus.com>
+CC:     'Vitaly Rodionov' <vitalyr@opensource.cirrus.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220727160051.3373125-1-sbinding@opensource.cirrus.com> <69713155-39b0-5492-4966-73dfdacd1fc1@linux.intel.com>
+In-Reply-To: <69713155-39b0-5492-4966-73dfdacd1fc1@linux.intel.com>
+Subject: RE: [PATCH v2] ASoC: Intel: cirrus-common: Use UID to map correct amp to prefix
+Date:   Fri, 29 Jul 2022 15:24:42 +0100
+Message-ID: <001c01d8a356$f1b4e9f0$d51ebdd0$@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9033940074199228714=="
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FREEMAIL_DOC_PDF
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-gb
+Thread-Index: AQIu+zYjutHUxuurajS4bthg+gYcqQJYYBCXrNXz4SA=
+X-Proofpoint-GUID: nQKP2W_n00lxkvd5lKGmylmeBuz7MNqn
+X-Proofpoint-ORIG-GUID: nQKP2W_n00lxkvd5lKGmylmeBuz7MNqn
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,59 +72,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---===============9033940074199228714==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-To linux-kernel@vger.kernel.org,
+> -----Original Message-----
+> From: Alsa-devel <alsa-devel-bounces@alsa-project.org> On Behalf Of
+> Pierre-Louis Bossart
+> Sent: 27 July 2022 17:37
+> To: Stefan Binding <sbinding@opensource.cirrus.com>; Mark Brown
+> <broonie@kernel.org>; Liam Girdwood <lgirdwood@gmail.com>;
+> Brent Lu <brent.lu@intel.com>; xliu <xiang.liu@cirrus.com>
+> Cc: Vitaly Rodionov <vitalyr@opensource.cirrus.com>;
+> patches@opensource.cirrus.com; alsa-devel@alsa-project.org; linux-
+> kernel@vger.kernel.org
+> Subject: Re: [PATCH v2] ASoC: Intel: cirrus-common: Use UID to map
+> correct amp to prefix
+>=20
+>=20
+>=20
+>=20
+> > +/*
+> > + * Expected UIDs are integers (stored as strings).
+> > + * UID Mapping is fixed:
+> > + * UID 0x0 -> WL
+> > + * UID 0x1 -> WR
+> > + * UID 0x2 -> TL
+> > + * UID 0x3 -> TR
+> > + * Note: If there are less than 4 Amps, UIDs still map to
+> WL/WR/TL/TR. Dynamic code will only create
+> > + * dai links for UIDs which exist, and ignore non-existant ones.
+>=20
+> is this intentional to support all variations of 1,2,3 and 4 =
+amplifiers
+> being present?
+>=20
+> Or is the intent to really support 2 or 4?
 
-Congratulations! You=C3=A2=E2=82=AC=E2=84=A2re now a part of the GEEK SQUAD f=
-amily.
-=20
-You=C3=A2=E2=82=AC=E2=84=A2ve made a great decision and we=C3=A2=E2=82=AC=E2=
-=84=A2re eager to hear about your impression about the SUBSCRIPTION you=C3=A2=
-=E2=82=AC=E2=84=A2ve recently purchased.
-=20
-Find Your 67267869203.
+The intent was to support 2 or 4, rather than any number of amps, in
+case something was released with 2 amps.
 
-Order Number   : 672545678
-Order Date     : 29-JULY-2022
-Product Key    : 2FABF-766CDAGH
+>=20
+> > + * Return number of codecs found.
+> > + */
+> > +static int cs35l41_compute_codec_conf(void)
+> > +{
+> > +	const char * const uid_strings[] =3D { "0", "1", "2", "3" };
+> > +	unsigned int uid, sz =3D 0;
+> > +	struct acpi_device *adev;
+> > +	struct device *physdev;
+> > +
+> > +	for (uid =3D 0; uid < CS35L41_MAX_AMPS; uid++) {
+> > +		adev =3D acpi_dev_get_first_match_dev(CS35L41_HID,
+> uid_strings[uid], -1);
+> > +		if (!adev) {
+> > +			pr_warn("Cannot find match for HID %s UID
+> %u (%s)\n", CS35L41_HID, uid,
+> > +				cs35l41_name_prefixes[uid]);
+>=20
+> A warning is a bit strong if some valid configurations don't expose =
+all
+> 4 codecs.
 
-Product : SUBSCRIPTION RENEWED FOR THE MONTH OF JULY 2022
-Quantity Term Price  (US) : $349.99
+I'll change this to a debug message, but also add an error if there is =
+not
+2 or 4 amps found.
 
-Grand Total: $349.99
-For any queries like installations, error or cancellation regarding this orde=
-r feel free to contact us at (+1 888 314 7528). We hope for a positive reply.
+>=20
+> > +			continue;
+> > +		}
+> > +		physdev =3D
+> get_device(acpi_get_first_physical_node(adev));
+> > +		cs35l41_components[sz].name =3D dev_name(physdev);
+> > +		cs35l41_components[sz].dai_name =3D
+> CS35L41_CODEC_DAI;
+> > +		cs35l41_codec_conf[sz].dlc.name =3D
+> dev_name(physdev);
+> > +		cs35l41_codec_conf[sz].name_prefix =3D
+> cs35l41_name_prefixes[uid];
+> > +		acpi_dev_put(adev);
+> > +		sz++;
+> > +	}
+> > +	return sz;
 
---===============9033940074199228714==
-Content-Type: application/octet-stream
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="Bill42488611.pdf"
-MIME-Version: 1.0
+Thanks,
+Stefan
 
-JVBERi0xLjQKMSAwIG9iago8PAovVGl0bGUgKP7/KQovQ3JlYXRvciAo/v8AdwBrAGgAdABtAGwA
-dABvAHAAZABmACAAMAAuADEAMgAuADYpCi9Qcm9kdWNlciAo/v8AUQB0ACAANAAuADgALgA3KQov
-Q3JlYXRpb25EYXRlIChEOjIwMjIwNzI5MTQyNDIyWikKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5
-cGUgL0V4dEdTdGF0ZQovU0EgdHJ1ZQovU00gMC4wMgovY2EgMS4wCi9DQSAxLjAKL0FJUyBmYWxz
-ZQovU01hc2sgL05vbmU+PgplbmRvYmoKNCAwIG9iagpbL1BhdHRlcm4gL0RldmljZVJHQl0KZW5k
-b2JqCjYgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDIgMCBSCj4+CmVuZG9iago1IDAg
-b2JqCjw8Ci9UeXBlIC9QYWdlCi9QYXJlbnQgMiAwIFIKL0NvbnRlbnRzIDcgMCBSCi9SZXNvdXJj
-ZXMgOSAwIFIKL0Fubm90cyAxMCAwIFIKL01lZGlhQm94IFswIDAgNTk1IDg0Ml0KPj4KZW5kb2Jq
-CjkgMCBvYmoKPDwKL0NvbG9yU3BhY2UgPDwKL1BDU3AgNCAwIFIKL0NTcCAvRGV2aWNlUkdCCi9D
-U3BnIC9EZXZpY2VHcmF5Cj4+Ci9FeHRHU3RhdGUgPDwKL0dTYSAzIDAgUgo+PgovUGF0dGVybiA8
-PAo+PgovRm9udCA8PAo+PgovWE9iamVjdCA8PAo+Pgo+PgplbmRvYmoKMTAgMCBvYmoKWyBdCmVu
-ZG9iago3IDAgb2JqCjw8Ci9MZW5ndGggOCAwIFIKL0ZpbHRlciAvRmxhdGVEZWNvZGUKPj4Kc3Ry
-ZWFtCnic03cPTlRIL1bQdw4uUEiG0s7BXAZ65qYGEKAAgrrIAkYWelC2goWhMZStkJzLVahQyBXI
-FQgkYTRIby6XuaG5HkiNoSmQm4PMNTQwMdMzszS0tACKG6BzQYozuMK1FPK4kAxWCOQCABQNJg4K
-ZW5kc3RyZWFtCmVuZG9iago4IDAgb2JqCjEwOQplbmRvYmoKMiAwIG9iago8PAovVHlwZSAvUGFn
-ZXMKL0tpZHMgClsKNSAwIFIKXQovQ291bnQgMQovUHJvY1NldCBbL1BERiAvVGV4dCAvSW1hZ2VC
-IC9JbWFnZUNdCj4+CmVuZG9iagp4cmVmCjAgMTEKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAw
-MDA5IDAwMDAwIG4gCjAwMDAwMDA4MzQgMDAwMDAgbiAKMDAwMDAwMDE1NyAwMDAwMCBuIAowMDAw
-MDAwMjUyIDAwMDAwIG4gCjAwMDAwMDAzMzggMDAwMDAgbiAKMDAwMDAwMDI4OSAwMDAwMCBuIAow
-MDAwMDAwNjMyIDAwMDAwIG4gCjAwMDAwMDA4MTUgMDAwMDAgbiAKMDAwMDAwMDQ1NyAwMDAwMCBu
-IAowMDAwMDAwNjEyIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgMTEKL0luZm8gMSAwIFIKL1Jv
-b3QgNiAwIFIKPj4Kc3RhcnR4cmVmCjkzMgolJUVPRgo=
-
---===============9033940074199228714==--

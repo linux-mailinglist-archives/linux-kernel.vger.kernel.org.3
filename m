@@ -2,91 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A065D584B36
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA07584B38
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234556AbiG2FbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 01:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S234372AbiG2FdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 01:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234539AbiG2Fap (ORCPT
+        with ESMTP id S234471AbiG2FdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 01:30:45 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF46B2252B;
-        Thu, 28 Jul 2022 22:30:43 -0700 (PDT)
-Received: from [192.168.1.107] ([37.4.248.80]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MVdUQ-1nrtva20Yu-00RZCZ; Fri, 29 Jul 2022 07:30:26 +0200
-Message-ID: <2217188c-7009-f142-3e7e-b3e61d2c1324@i2se.com>
-Date:   Fri, 29 Jul 2022 07:30:25 +0200
+        Fri, 29 Jul 2022 01:33:15 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF17E33A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 22:33:06 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id w205so3721248pfc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 22:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KElw61eLlKwxj7+Xj4c/fe2WkAnEdD75KF1vS/H3hCw=;
+        b=V+dUhOUkEkwox3z7VTXI8K0jleX0N2fBr7eNQe0krpSetMQsJCmnCW/k5i7xFzo8oS
+         zoRM1HsdBLAarjNWuxbe/Jn+jmiXSJvdA2kAL/dR0E8tcNlhKbNQ/fUe74i0u2KxNE4D
+         WmR8QnCF493w/FK8xBFY2wNtqeN5fl9wB9dxk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KElw61eLlKwxj7+Xj4c/fe2WkAnEdD75KF1vS/H3hCw=;
+        b=SvU/8FPNKnsqZ7GNgwM0qu7bJ1G9FJNrj2bTOPW5MmuDPCgEZWmPSbHql+GwLc8NCE
+         D+pgzc4tbIOJTWiETy41LQfqoW80sMg+tJ1+jCB/OyDl9L5gNqIRIrKWJRvA8t5f36Na
+         yY8ilu3prOkxGkSLuOnUoVB25QqFc++Q/tFxuDKfR/htacCf3lOX/87NKIBY0OBDbqzX
+         IGjuYofP9dC3GXMiQ4iIp/PATAxp2aGj27PV7wPjSNfO3MLthZMYXitzUipSRRotWZT1
+         9kvDjwN3a+jqddT2aBrQMlRkfi4+zrLwMHYMupT2+LolnLAuqlcaqXENpNNotHgKIHvx
+         QQvQ==
+X-Gm-Message-State: AJIora/YgxEtKv1H5Kao3dmhjqZ2HqnrAgefwilE3ipnwvgl4SL/9xKi
+        /5Fwfbtq5Yy1aHq1b2kIlrxi9A==
+X-Google-Smtp-Source: AGRyM1thc/3FPJPxHBIe27C3oCbWb/CZ7bNvT/uFSgYftyyhmkTsNKx/WtR4DEu6RRDtx0dKyPB6TQ==
+X-Received: by 2002:a63:2102:0:b0:41a:8139:2cb3 with SMTP id h2-20020a632102000000b0041a81392cb3mr1701228pgh.314.1659072780573;
+        Thu, 28 Jul 2022 22:33:00 -0700 (PDT)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:df93:db78:d658:2b3b])
+        by smtp.gmail.com with ESMTPSA id h27-20020a63211b000000b0040d48cf046csm1820690pgh.55.2022.07.28.22.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 22:32:59 -0700 (PDT)
+From:   Pin-yen Lin <treapking@chromium.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Evan Benn <evanbenn@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH v5] arm64: dts: mt8173-elm: Switch to SMC watchdog
+Date:   Fri, 29 Jul 2022 13:32:54 +0800
+Message-Id: <20220729053254.220585-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
- Raspberry Pi
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev
-References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
- <20220728100055.efbvaudwp3ofolpi@quack3>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220728100055.efbvaudwp3ofolpi@quack3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:FNwSToRwLJFsGPwaWndrCkF2afnJZmdTz8/LvCWfTqfzb+Wj0fG
- C+5a+Gl7+RwsgqdTkryfEOtAq+3TwLsOpYzpdKf64zVjv61poSLT4WLcW5Ff5BAPCD+lr8r
- +0nFRCM81tCMEuPI8T9N+xJprm01eip07MWJN0p42DGtBJsepV9s259mNUD2kmLohkDDrZP
- mNUCZf6Q2mpB4m1+6NlCA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:db/sxB+DMa0=:AkfFhuXq5Uq+wEnTYFMCIM
- zP1mAxYsVg2LrNKjrrYZLTDnv1LdlGNjRCC9eCOEQqy6wEJ+rVcu4lVXZG4zIucRlvfG2PhsI
- rAwinCwvyTy7NJ4I0RY3iFzByfvKdnrvgoy36RLz0URMQVx0x+K+9aZCBnxINdTrTvzsJo6np
- gOlhm+GPqTUQvvDQZRqyEQPggQPSbTmOpfLHFfEpEVgOfiPv/241LgGcGjZSj6fSHYoFhgGww
- z7j0ivYQJZS68lkAncx0O3+zgR+LMuUEuPtCZfKq2CQJdjyv8YFjUvP6Psw8XrjtUnlMHOp/R
- P3IasBIXTKbF3ekElozrNitOX2ThVPdG53NyyWF/UrSTZUyIenwTEiVAFongYwYymHQhmiGGb
- cjnhXJE4psItTLZXeaRfyuLwLhH6ZRir4vnX298tUbbcfYgHav7GzEYoQNwFj5atnXCShSkEW
- IWSEmg1GU0/8xTaBWou/j8fBTdup4JXp41sl05TtLuDXjQOk6cT6d3GK+97ydU5gwvvsUbIEU
- npuQ5dTusXruuBpVCKMcjiIT2trV5LozA8O6QZTLNmGAUG8Z+FZ00bv4PZEUsVo3oowDMN+IT
- wzeOe0M5kje23ToytOQrqAFUQpUpXke5cJ3IGX2312KD9H4eJ2FkZSbMQvMQ/WyBMt9OjWN5q
- eoVRL4J645bG0Q5u1ZG3m2di1dimrtR2JLkUmuDzXx1hupc1e9gtXr8DmhY4OfvoY91pRHpcA
- A7s7xQNY9ykSSb28ZwEBa+QqVQ1H1P8aGCh2OnAb56Fd+5m6xFXFTMfFUgY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan,
+Switch to SMC watchdog because we need direct control of HW watchdog
+registers from kernel. The corresponding firmware was uploaded in
+https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405.
 
-Am 28.07.22 um 12:00 schrieb Jan Kara:
-> Hello!
-> Can you run "iostat -x 1" while the download is running so that we can see
-> roughly how the IO pattern looks?
->
-> Also can get filesystem metadata image of your card like:
->    e2image -r <fs-device> - | gzip >/tmp/ext4-image.gz
->
-> and put it somewhere for download? The image will contain only fs metadata,
-> not data so it should be relatively small and we won't have access to your
-> secrets ;). With the image we'd be able to see how the free space looks
-> like and whether it perhaps does not trigger some pathological behavior.
->
-> My current suspicion is that because the new allocator strategy spreads
-> allocations over more block groups, we end up with more open erase blocks
-> on the SD card which forces the firmware to do more garbage collection and
-> RMW of erase blocks and write performance tanks...
->
-> Thanks.
-thanks for your feedback. Unfortunately i'm busy the next days, so it 
-will take some time to provide this.
-> 								Honza
->
+Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+---
+
+Changes in v5:
+- Remove redundant new line.
+
+Changes in v4:
+- Rename the watchdog node (smc_watchdog -> watchdog)
+- Correct the patch summary (mt8173-oak -> mt8173-elm)
+
+Changes in v3:
+- Remove /delete-node/ and create a new node for SMC watchdog.
+
+Changes in v2:
+- Move the modifications to mt8173-elm.dtsi and add some comments.
+
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+index e21feb85d822..abe3140cfcc6 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+@@ -161,6 +161,18 @@ hdmi_connector_in: endpoint {
+ 			};
+ 		};
+ 	};
++
++	watchdog {
++		compatible = "arm,smc-wdt";
++	};
++};
++
++/*
++ * Disable the original MMIO watch dog and switch to the SMC watchdog, which
++ * operates on the same MMIO.
++ */
++&watchdog {
++	status = "disabled";
+ };
+ 
+ &mfg_async {
+-- 
+2.37.1.455.g008518b4e5-goog
+

@@ -2,188 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0015849F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B519E5849FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiG2CzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
+        id S233911AbiG2C4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiG2CzV (ORCPT
+        with ESMTP id S233802AbiG2C4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:55:21 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2ACDF56
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:55:19 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LvBsd0nvlzmVNx;
-        Fri, 29 Jul 2022 10:53:25 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Jul 2022 10:55:15 +0800
-Subject: Re: [RFC PATCH v4 6/8] hugetlb: add vma based lock for pmd sharing
- synchronization
-To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220706202347.95150-1-mike.kravetz@oracle.com>
- <20220706202347.95150-7-mike.kravetz@oracle.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5b8c6b49-e17a-2c0b-4440-ccf3c5493cb2@huawei.com>
-Date:   Fri, 29 Jul 2022 10:55:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 28 Jul 2022 22:56:32 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 754582982E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:56:31 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxOeBXTONiStZAAA--.27204S3;
+        Fri, 29 Jul 2022 10:56:24 +0800 (CST)
+Subject: Re: [PATCH 1/3] LoongArch: Add guess unwinder support
+To:     Jinyang He <hejinyang@loongson.cn>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <20220728140519.5420-1-zhangqing@loongson.cn>
+ <1288a80b-4038-126f-aec0-74f18cf2fea2@loongson.cn>
+ <b49c5d32-81fb-0c56-16cc-8fe6cafa3957@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <67911739-b8f3-578f-4d10-7aabb193ddf1@loongson.cn>
+Date:   Fri, 29 Jul 2022 10:56:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <20220706202347.95150-7-mike.kravetz@oracle.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+In-Reply-To: <b49c5d32-81fb-0c56-16cc-8fe6cafa3957@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf9AxOeBXTONiStZAAA--.27204S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7XF1kWF43Jw43Gw18Kr48JFb_yoWxurX_Za
+        10gasrCr9IqF1vvF15JrWak3y7Ww47XFyDuw4Yq34xJw1ftF4DZrZ29r12va1rWr42yr47
+        W34UZwsavw12vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbVxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfU55rcDUUUU
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/7 4:23, Mike Kravetz wrote:
-> Allocate a rw semaphore and hang off vm_private_data for
-> synchronization use by vmas that could be involved in pmd sharing.  Only
-> add infrastructure for the new lock here.  Actual use will be added in
-> subsequent patch.
-> 
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-> ---
->  include/linux/hugetlb.h |  36 +++++++++-
->  kernel/fork.c           |   6 +-
->  mm/hugetlb.c            | 150 ++++++++++++++++++++++++++++++++++++----
->  mm/rmap.c               |   8 ++-
->  4 files changed, 178 insertions(+), 22 deletions(-)
-> 
+Hi, Jinyang
 
-<snip>
+On 07/29/2022 10:28 AM, Jinyang He wrote:
+> Hi, Youling,
+>
+> [...]
+>>> +unsigned long unwind_get_return_address(struct unwind_state *state)
+>>> +{
+>>> +    if (unwind_done(state))
+>>> +        return 0;
+>> This judgment can be removed, because unwind_done() has been judged
+>> before entering this function, and unwind_get_return_address will not
+>> be called if it is true.
+> These unwinder functions are exported by "EXPORT_SYMBOL_GPL".
+> What's more, new ways to use them will be added in the future possible.
+> Assuming has judged unwind_done is not reliable.
+In this case, most of the code will be checked twice by unwind_done(),
+which feels a bit redundant.
 
->  
->  /* Forward declaration */
->  static int hugetlb_acct_memory(struct hstate *h, long delta);
-> +static bool vma_pmd_shareable(struct vm_area_struct *vma);
->  
->  static inline bool subpool_is_free(struct hugepage_subpool *spool)
->  {
-> @@ -904,6 +905,89 @@ resv_map_set_hugetlb_cgroup_uncharge_info(struct resv_map *resv_map,
->  #endif
->  }
->  
-> +static bool __vma_shareable_flags_pmd(struct vm_area_struct *vma)
-> +{
-> +	return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
+Thanks,
+Youling
 
-Should me make __vma_aligned_range_pmd_shareable check (VM_MAYSHARE | VM_SHARED) like above
-instead of VM_MAYSHARE to make code more consistent?
-
-> +		vma->vm_private_data;
-> +}
-> +
-> +void hugetlb_vma_lock_read(struct vm_area_struct *vma)
-> +{
-> +	if (__vma_shareable_flags_pmd(vma))
-> +		down_read((struct rw_semaphore *)vma->vm_private_data);
-> +}
-> +
-> +void hugetlb_vma_unlock_read(struct vm_area_struct *vma)
-> +{
-> +	if (__vma_shareable_flags_pmd(vma))
-> +		up_read((struct rw_semaphore *)vma->vm_private_data);
-> +}
-> +
-> +void hugetlb_vma_lock_write(struct vm_area_struct *vma)
-> +{
-> +	if (__vma_shareable_flags_pmd(vma))
-> +		down_write((struct rw_semaphore *)vma->vm_private_data);
-> +}
-> +
-> +void hugetlb_vma_unlock_write(struct vm_area_struct *vma)
-> +{
-> +	if (__vma_shareable_flags_pmd(vma))
-> +		up_write((struct rw_semaphore *)vma->vm_private_data);
-> +}
-> +
-> +int hugetlb_vma_trylock_write(struct vm_area_struct *vma)
-> +{
-> +	if (!__vma_shareable_flags_pmd(vma))
-> +		return 1;
-> +
-> +	return down_write_trylock((struct rw_semaphore *)vma->vm_private_data);
-> +}
-> +
-> +void hugetlb_vma_assert_locked(struct vm_area_struct *vma)
-> +{
-> +	if (__vma_shareable_flags_pmd(vma))
-> +		lockdep_assert_held((struct rw_semaphore *)
-> +				vma->vm_private_data);
-> +}
-> +
-> +static void hugetlb_free_vma_lock(struct vm_area_struct *vma)
-> +{
-> +	/* Only present in sharable vmas */
-> +	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
-> +		return;
-> +
-> +	if (vma->vm_private_data) {
-> +		kfree(vma->vm_private_data);
-> +		vma->vm_private_data = NULL;
-> +	}
-> +}
-> +
-> +static void hugetlb_alloc_vma_lock(struct vm_area_struct *vma)
-> +{
-> +	struct rw_semaphore *vma_sema;
-> +
-> +	/* Only establish in (flags) sharable vmas */
-> +	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
-> +		return;
-> +> +	if (!vma_pmd_shareable(vma)) {
-> +		vma->vm_private_data = NULL;
-> +		return;
-> +	}
-> +
-> +	vma_sema = kmalloc(sizeof(*vma_sema), GFP_KERNEL);
-> +	if (!vma_sema) {
-> +		/*
-> +		 * If we can not allocate semaphore, then vma can not
-> +		 * participate in pmd sharing.
-> +		 */
-> +		vma->vm_private_data = NULL;
-> +	} else {
-> +		init_rwsem(vma_sema);
-> +		vma->vm_private_data = vma_sema;
-> +	}
-
-This code is really subtle. If it's called from hugetlb_vm_op_open during fork after
-hugetlb_dup_vma_private is done, there should already be a kmalloc-ed vma_sema for this
-vma (because hugetlb_alloc_vma_lock is also called by hugetlb_dup_vma_private). So we
-can't simply change the value of vm_private_data here or vma_sema will be leaked ? But
-when hugetlb_alloc_vma_lock is called from hugetlb_reserve_pages, it should work fine.
-Or am I miss something?
-
-Thanks.

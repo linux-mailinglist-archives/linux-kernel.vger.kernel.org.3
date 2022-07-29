@@ -2,142 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9CD584F98
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3637F584FA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236167AbiG2LZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 07:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S235402AbiG2LdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 07:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236086AbiG2LZM (ORCPT
+        with ESMTP id S233298AbiG2LdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 07:25:12 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A20ED77
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:25:10 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31f661b3f89so47616367b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:25:10 -0700 (PDT)
+        Fri, 29 Jul 2022 07:33:07 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDB046DB9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:33:05 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id y11so6896614lfs.6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=T3lyyxd0KP2STslbGMoYEWzFv8XZ5XnehzpgSY0LnyI=;
+        b=P+CKl8Vclb7nppRLsuEQ4KbidbQV2Ruu443ArQM94iKZAkxacw3raTwYOEI0bzdcEA
+         A9f7HiLkW4aSpW9eFi/C7uIOFaP3VViEKS0EVnkM2vvgeZp3oODP1pEwCYpsZtoO06gd
+         OAmTY482BkwlvshK8K9khx5/OkUSSWEMwENv5IBoPZgwN/Td/ceiM+FcTx9g8/yFR7DJ
+         RNwaN9vhx3888pB6AJyE7avLmiQT5NeldP5auJRl0+YVjl1kDVn6esYy1D+pRAGY7+j+
+         7W+M8RuHHhz6iL27tvQnY0+GWGNlzt1n5Ul7XmIz9/Gsa6vQGwBzp6L0362zrqBKm2Wi
+         WRyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/+Xle1HhYZA4u0BpE2NkhWcW76kE9EOZDKtebTajiOs=;
-        b=YqDKC1LJ8obrUBAHVtCKP1Ti7IQdF4dDyDOze3YncGCUVtr/bhbRmvw1cFb9pV2fb0
-         W/x9ahW7e9DESOkTZtefKbXMf5Mz9nQwFLCJwMYBz+mpKcb7sASZrgCK2pcY8oT7DxMU
-         j37ZZSrS/4u3LDCgyZAQZXVFCazQm/pzND+FSfq11oKnw0lrb4GQV5N5jvgtWHK+SpYN
-         OPoGRXd+YyqputV1G3mwVYzkZHbrWrv1BPOSUOxqjNj3+AGWbYXbktoKDbb22jv9cTRJ
-         ehMhxiLsIPep01YuP7XecIFupjEYKx0NQLbBh01eNTC8w94JNyS3Iw4Ey+vgyPAMuCwk
-         mimA==
-X-Gm-Message-State: ACgBeo20QRXn+1H8Ig/Oiu4oeQvOLXkt47L9h6wvN7JPPJbCSkWtL31+
-        gcP0od+AkFLJsZI6PFA9tmpPlwIvVTcfiFBvfcg=
-X-Google-Smtp-Source: AA6agR4vyF0x47Jgt80gnEl94cVYa+Ot/cwsvfn8nZQ1pVGqtBnuuInF9zUL3vVRiAm9LfYeN3e4a0I/onBCnkpLX2A=
-X-Received: by 2002:a0d:e682:0:b0:322:b5e1:5ed4 with SMTP id
- p124-20020a0de682000000b00322b5e15ed4mr2611471ywe.220.1659093909158; Fri, 29
- Jul 2022 04:25:09 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T3lyyxd0KP2STslbGMoYEWzFv8XZ5XnehzpgSY0LnyI=;
+        b=sBDDt/UFBLh8g1qG4mW2QaU1/YOUvw2xPBShsfcWx/OSz9runv7J5UGUQg6F06Q3SK
+         ZraNo+NJd8YtvsG6M1Vj95FShfVhidR2rc67+rC4TOryc9ee2RjaIM8qMQ6zFNlSSDbF
+         OQRYt8FiYF7KTvQScsWz2dUB4soWB1FY0TT53JZiXF4q4wpHHvmcf0OKugryj3A48iYN
+         t5d0rOvNgU4QwEc6PgKitA9ifdUx7quPPFqC6T/jfWNeehUKD6FLZ5ZY8EvEsJmorIBO
+         1ASyh4j/JSKric+Qq6/aQO1gV5lN5/bV8xC9DIdCsO8KTpiwazRo0k7dq2ooCccNRuC4
+         k3iw==
+X-Gm-Message-State: ACgBeo2PSEwWf4xJeN1+ya080PKoUdJs8oJwBko3mlN/2BN1pQ+CXvK9
+        thpvp+escfH6l6o5PEk3a49aXA==
+X-Google-Smtp-Source: AA6agR6JOOke7r3XaAOM3ixhkIu9pO6CxBd+pt5kplHnHvvUAtmQNHvEfUPP/0ZIFYZt4+gi5HzCaA==
+X-Received: by 2002:a05:6512:3b3:b0:48a:e4d5:e77a with SMTP id v19-20020a05651203b300b0048ae4d5e77amr371426lfp.247.1659094383912;
+        Fri, 29 Jul 2022 04:33:03 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id q19-20020a05651c055300b0025e15fe421bsm620540ljp.17.2022.07.29.04.33.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Jul 2022 04:33:03 -0700 (PDT)
+Message-ID: <f932415d-3bee-0948-a016-a2e837dd7256@linaro.org>
+Date:   Fri, 29 Jul 2022 14:33:02 +0300
 MIME-Version: 1.0
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr> <20220723151521.51451-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220723151521.51451-1-mailhol.vincent@wanadoo.fr>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 29 Jul 2022 20:24:58 +0900
-Message-ID: <CAMZ6Rq+KohWoRurA3cKog18D=NuXNj_k4+ZmPRiakZd7ZPS1OQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH v4 0/2] x86/asm/bitops: optimize ff{s,z} functions
- for constant expressions
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/3] ARM: dts: qcom: msm8960: add reference to sleep_clk
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Shinjo Park <peremen@gmail.com>
+Cc:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220728111603.30503-1-peremen@gmail.com>
+ <66e15d42-96fd-5b02-b7c8-a284d3f8d21f@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <66e15d42-96fd-5b02-b7c8-a284d3f8d21f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 24 Jul. 2022 at 00:15, Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
-> The compilers provide some builtin expression equivalent to the ffs(),
-> __ffs() and ffz() function of the kernel. The kernel uses optimized
-> assembly which produces better code than the builtin
-> functions. However, such assembly code can not be optimized when used
-> on constant expression.
->
-> This series relies on __builtin_constant_p to select the optimal solution:
->
->   * use kernel assembly for non constant expressions
->
->   * use compiler's __builtin function for constant expressions.
->
->
-> ** Statistics **
->
-> Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
-> of __ffs() and ffz() calls (details of the calculation in each patch).
->
->
-> ** Changelog **
->
-> v3 -> v4:
->
->   * (no changes on code, only commit comment was modified)
->
->   * Remove note and link to Nick's message in patch 1/2, c.f.:
->   https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
->
->   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 2/2.
->
->
-> v2 -> v3:
->
->   * Redacted out the instructions after ret and before next function
->     in the assembly output.
->
->   * Added a note and a link to Nick's message on the constant
->     propagation missed-optimization in clang:
->     https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
->
->   * Fix copy/paste typo in statistics of patch 1/2. Number of
->     occurences before patches are 1081 and not 3607 (percentage
->     reduction of 26.7% remains correct)
->
->   * Rename the functions as follow:
->     - __varible_ffs() -> variable___ffs()
->     - __variable_ffz() -> variable_ffz()
->
->   * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> in tag in patch 1/2.
->
-> Vincent Mailhol (2):
->   x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
->     expressions
->   x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
->     expressions
->
->  arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
->  1 file changed, 38 insertions(+), 26 deletions(-)
-
-Hi Thomas, Ingo, Borislav, Dave and Peter,
-
-This patch series [1] has been waiting for more than two months
-already. So far, I have not heard back from any of the x86 mainteners.
-Do you see anything wrong with this series? If not, any chances to
-have someone of you to pick it up?
-
-[1] https://lore.kernel.org/all/20220625072645.251828-1-mailhol.vincent@wanadoo.fr/#t
-
-Thank you,
+On 28/07/2022 14:51, Krzysztof Kozlowski wrote:
+> On 28/07/2022 13:16, Shinjo Park wrote:
+>> Change the reference of sleep_clk to the same as qcom-apq8064.dtsi.
+> 
+> You add label, not change something.
+> 
+>>
+>> Signed-off-by: Shinjo Park <peremen@gmail.com>
+>> Reviewed-by: David Heidelberg <david@ixit.cz>
+>> ---
+>>   arch/arm/boot/dts/qcom-msm8960.dtsi | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+>> index e8cd1c9c0..991eb1948 100644
+>> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
+>> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+>> @@ -71,7 +71,7 @@ pxo_board: pxo_board {
+>>   			clock-output-names = "pxo_board";
+>>   		};
+>>   
+>> -		sleep_clk {
+>> +		sleep_clk: sleep_clk {
+> 
+> Since you touch the line, make the device node sleep-clk (device node
+> names should not have underscores) and mention this in commit msg.
 
 
-Yours sincerely,
-Vincent Mailhol
+Then we are back to the compat issues, since the gcc expects the 
+'sleep_clk' clock.
+
+
+-- 
+With best wishes
+Dmitry

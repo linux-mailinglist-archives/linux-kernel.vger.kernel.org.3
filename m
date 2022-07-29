@@ -2,279 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FB55856B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199A95856BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239485AbiG2WAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S239482AbiG2WCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 18:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238807AbiG2WAn (ORCPT
+        with ESMTP id S229579AbiG2WCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:00:43 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CA41AF35
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:00:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso270914pjl.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M6h4ohZ2Xp6R3ogVvEX4OuhDaK3xwr7fdihhnTifVFE=;
-        b=Hh3udcBgOmHDHFs4xZ2AYfapyxGTL4aNTTwsw1jabkNYhQWntuDiiyBltZO3ocuI7l
-         jrjikwlBeMC5AycuKMDP7YSkUBVNwQLcxvYcBUeVkRnslx85bVunbpbRuy2yO2fvdKMH
-         v4QnNcNTz6k17yfOndGCQuw8grdwHjt0OoY+WkcJ1aMz39Zx1i+Df8nAM246eWV0CVGu
-         p03qAcs2lL8MD8jaiJhbYb/77yj6XQRfFSMigLUY4LiEoWFhoTGEoJwWvW0B38EFu32K
-         k3if07ulbtee9ALhWPvmywvPN5THinApcIn4BNTryBMfWF3uJyVestLteJjc9TLnN4e7
-         /iYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M6h4ohZ2Xp6R3ogVvEX4OuhDaK3xwr7fdihhnTifVFE=;
-        b=D4ETlpTYVoacljL8He2A3E6vx0SAn/7cBIPnEZVlDGimae7wV/o3WpT+v/7ZzHeFcF
-         GYjrXvsue44JD+UeEUlGW0EGFEfqIiARQwktA1kMjpeWE0SmS8LMSt4FSOL4sPcL7jay
-         QZ+n3I6XD9MuRUpuJUXLh1foES7nZggI0P3f5Z9cK9b7LfpO9FIL1Cz7ZxbPcaF6JhWE
-         IWnUTq5m0ThARfh+WrwyFv7f4TteocbV7EzAtArrfeM5QM6THRc9RjuC2C4F90BRmQfO
-         XYtYn7BsCCO+wyYjJ1ilpRa9MPBFzgi9s0/jCyjEMAprJiTU6fKRE6cmAbZS9VqCJSIi
-         X/UQ==
-X-Gm-Message-State: ACgBeo2TEHrk92yepTwuRDI8LgiwA5tUw4o6fKD1nrcZl3h9x1ZV5G+H
-        P6erX5BjYq/Sqg6XKzCSjcrG/xlwlbWCHfwhVQ1SzQ==
-X-Google-Smtp-Source: AA6agR4uf8A0oZw69pkPAzRO4OYeL0SdNIJXKU9sGKb8X7Pmvg1arDvaoy1Sp/zSjHB+xpVg1xbkPADDnhGUC95lQGM=
-X-Received: by 2002:a17:903:228d:b0:16d:4549:1078 with SMTP id
- b13-20020a170903228d00b0016d45491078mr5703844plh.78.1659132041958; Fri, 29
- Jul 2022 15:00:41 -0700 (PDT)
+        Fri, 29 Jul 2022 18:02:46 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694CA8BA9A;
+        Fri, 29 Jul 2022 15:02:45 -0700 (PDT)
+Received: from zn.tnic (p57969665.dip0.t-ipconnect.de [87.150.150.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 853D51EC0138;
+        Sat, 30 Jul 2022 00:02:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1659132159;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wrKILRxKPGwT6wk7Ajnr1TkkdTUDvWFahFhfVMdrEgo=;
+        b=pF1+1BfCwH1/XXlJBgjJaV3EOTk7Sb+S85dpADswCkM4pOFd9M1e5rnX5mLTii8V7XMaZM
+        tlVZsJmBjozOkuVowGtAo+7tV7vNoCfN3CZRuy90COxQzqHWmY3c79eWu9xL6gM+npY3pG
+        Xta7lO/9dqvyipNeTNUNOfck0CH2Df0=
+Date:   Sat, 30 Jul 2022 00:02:34 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Message-ID: <YuRY+rKaocoV8ECn@zn.tnic>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <YuJ6TQpSTIeXLNfB@zn.tnic>
+ <20220729022851.mdj3wuevkztspodh@desk>
+ <YuPpKa6OsG9e9nTj@zn.tnic>
+ <20220729173609.45o7lllpvsgjttqt@desk>
+ <YuRDbuQPYiYBZghm@zn.tnic>
+ <20220729214627.wowu5sny226c5pe4@desk>
 MIME-Version: 1.0
-References: <6f71a4f3-8f8e-926b-883c-1df630cfc1a0@linuxfoundation.org> <20220729061504.744140-1-jeffxu@google.com>
-In-Reply-To: <20220729061504.744140-1-jeffxu@google.com>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Fri, 29 Jul 2022 15:00:05 -0700
-Message-ID: <CALmYWFt0Y9OZw3ezx0PjoHm+KuXVXkhM3u28s0TXxcncrt9SSA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] selftests/memfd: add tests for F_SEAL_EXEC
-To:     skhan@linuxfoundation.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mnissler@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220729214627.wowu5sny226c5pe4@desk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shuah Khan
+On Fri, Jul 29, 2022 at 02:46:27PM -0700, Pawan Gupta wrote:
+> Let me see if there is a way to distinguish between 4. and 5. below:
+> 
+>    CPU category				  X86_BUG_MMIO_STALE_DATA	X86_BUG_MMIO_UNKNOWN
+> -----------------------------------------------------------------------------------------------
+> 1. Known affected (in cpu list)			1				0
+> 2. CPUs with HW immunity (MMIO_NO=1)		0				0
+> 3. Other vendors				0				0
+> 4. Older Intel CPUs				0				1
+> 5. Not affected current CPUs (but MMIO_NO=0)	0				?
 
-I will continue Daniel Verkamp's work on this patch.
+Not affected current CPUs should be arch_cap_mmio_immune() == true, no?
 
-Could you please take a look at the new patch set I sent to see if all
-your comments are addressed ?
+-- 
+Regards/Gruss,
+    Boris.
 
-Much appreciated.
-
-Best Regards,
-Jeff.
-
-
-On Thu, Jul 28, 2022 at 11:15 PM Jeff Xu <jeffxu@google.com> wrote:
->
-> From: Daniel Verkamp <dverkamp@chromium.org>
->
-> Basic tests to ensure that user/group/other execute bits cannot be
-> changed after applying F_SEAL_EXEC to a memfd.
->
-> Co-developed-by: Jeff Xu <jeffxu@google.com>
-> Signed-off-by: Jeff Xu <jeffxu@google.com>
-> Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
-> ---
->  tools/testing/selftests/memfd/memfd_test.c | 129 ++++++++++++++++++++-
->  1 file changed, 128 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-> index 94df2692e6e4..1d7e7b36bbdd 100644
-> --- a/tools/testing/selftests/memfd/memfd_test.c
-> +++ b/tools/testing/selftests/memfd/memfd_test.c
-> @@ -28,12 +28,44 @@
->  #define MFD_DEF_SIZE 8192
->  #define STACK_SIZE 65536
->
-> +#ifndef F_SEAL_EXEC
-> +#define F_SEAL_EXEC    0x0020
-> +#endif
-> +
-> +#ifndef MAX_PATH
-> +#define MAX_PATH 256
-> +#endif
-> +
->  /*
->   * Default is not to test hugetlbfs
->   */
->  static size_t mfd_def_size = MFD_DEF_SIZE;
->  static const char *memfd_str = MEMFD_STR;
->
-> +static ssize_t fd2name(int fd, char *buf, size_t bufsize)
-> +{
-> +       char buf1[MAX_PATH];
-> +       int size;
-> +       ssize_t nbytes;
-> +
-> +       size = snprintf(buf1, MAX_PATH, "/proc/self/fd/%d", fd);
-> +       if (size < 0) {
-> +               printf("snprintf(%d) failed on %m\n", fd);
-> +               abort();
-> +       }
-> +
-> +       /*
-> +        * reserver one byte for string termination.
-> +        */
-> +       nbytes = readlink(buf1, buf, bufsize-1);
-> +       if (nbytes == -1) {
-> +               printf("readlink(%s) failed %m\n", buf1);
-> +               abort();
-> +       }
-> +       buf[nbytes] = '\0';
-> +       return nbytes;
-> +}
-> +
->  static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
->  {
->         int r, fd;
-> @@ -98,11 +130,14 @@ static unsigned int mfd_assert_get_seals(int fd)
->
->  static void mfd_assert_has_seals(int fd, unsigned int seals)
->  {
-> +       char buf[MAX_PATH];
-> +       int nbytes;
->         unsigned int s;
-> +       fd2name(fd, buf, MAX_PATH);
->
->         s = mfd_assert_get_seals(fd);
->         if (s != seals) {
-> -               printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
-> +               printf("%u != %u = GET_SEALS(%s)\n", seals, s, buf);
->                 abort();
->         }
->  }
-> @@ -594,6 +629,64 @@ static void mfd_fail_grow_write(int fd)
->         }
->  }
->
-> +static void mfd_assert_mode(int fd, int mode)
-> +{
-> +       struct stat st;
-> +       char buf[MAX_PATH];
-> +       int nbytes;
-> +
-> +       fd2name(fd, buf, MAX_PATH);
-> +
-> +       if (fstat(fd, &st) < 0) {
-> +               printf("fstat(%s) failed: %m\n", buf);
-> +               abort();
-> +       }
-> +
-> +       if ((st.st_mode & 07777) != mode) {
-> +               printf("fstat(%s) wrong file mode 0%04o, but expected 0%04o\n",
-> +                      buf, (int)st.st_mode & 07777, mode);
-> +               abort();
-> +       }
-> +}
-> +
-> +static void mfd_assert_chmod(int fd, int mode)
-> +{
-> +       char buf[MAX_PATH];
-> +       int nbytes;
-> +
-> +       fd2name(fd, buf, MAX_PATH);
-> +
-> +       if (fchmod(fd, mode) < 0) {
-> +               printf("fchmod(%s, 0%04o) failed: %m\n", buf, mode);
-> +               abort();
-> +       }
-> +
-> +       mfd_assert_mode(fd, mode);
-> +}
-> +
-> +static void mfd_fail_chmod(int fd, int mode)
-> +{
-> +       struct stat st;
-> +       char buf[MAX_PATH];
-> +       int nbytes;
-> +
-> +       fd2name(fd, buf, MAX_PATH);
-> +
-> +       if (fstat(fd, &st) < 0) {
-> +               printf("fstat(%s) failed: %m\n", buf);
-> +               abort();
-> +       }
-> +
-> +       if (fchmod(fd, mode) == 0) {
-> +               printf("fchmod(%s, 0%04o) didn't fail as expected\n",
-> +                      buf, mode);
-> +               abort();
-> +       }
-> +
-> +       /* verify that file mode bits did not change */
-> +       mfd_assert_mode(fd, st.st_mode & 07777);
-> +}
-> +
->  static int idle_thread_fn(void *arg)
->  {
->         sigset_t set;
-> @@ -880,6 +973,39 @@ static void test_seal_resize(void)
->         close(fd);
->  }
->
-> +/*
-> + * Test SEAL_EXEC
-> + * Test that chmod() cannot change x bits after sealing
-> + */
-> +static void test_seal_exec(void)
-> +{
-> +       int fd;
-> +
-> +       printf("%s SEAL-EXEC\n", memfd_str);
-> +
-> +       fd = mfd_assert_new("kern_memfd_seal_exec",
-> +                           mfd_def_size,
-> +                           MFD_CLOEXEC | MFD_ALLOW_SEALING);
-> +
-> +       mfd_assert_mode(fd, 0777);
-> +
-> +       mfd_assert_chmod(fd, 0644);
-> +
-> +       mfd_assert_has_seals(fd, 0);
-> +       mfd_assert_add_seals(fd, F_SEAL_EXEC);
-> +       mfd_assert_has_seals(fd, F_SEAL_EXEC);
-> +
-> +       mfd_assert_chmod(fd, 0600);
-> +       mfd_fail_chmod(fd, 0777);
-> +       mfd_fail_chmod(fd, 0670);
-> +       mfd_fail_chmod(fd, 0605);
-> +       mfd_fail_chmod(fd, 0700);
-> +       mfd_fail_chmod(fd, 0100);
-> +       mfd_assert_chmod(fd, 0666);
-> +
-> +       close(fd);
-> +}
-> +
->  /*
->   * Test sharing via dup()
->   * Test that seals are shared between dupped FDs and they're all equal.
-> @@ -1059,6 +1185,7 @@ int main(int argc, char **argv)
->         test_seal_shrink();
->         test_seal_grow();
->         test_seal_resize();
-> +       test_seal_exec();
->
->         test_share_dup("SHARE-DUP", "");
->         test_share_mmap("SHARE-MMAP", "");
-> --
-> 2.37.1.455.g008518b4e5-goog
->
+https://people.kernel.org/tglx/notes-about-netiquette

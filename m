@@ -2,102 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D6A5855FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C34585600
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239169AbiG2UQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 16:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S239167AbiG2URd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 16:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiG2UQi (ORCPT
+        with ESMTP id S230499AbiG2UR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 16:16:38 -0400
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D1E8AEE5;
-        Fri, 29 Jul 2022 13:16:38 -0700 (PDT)
-Received: by mail-pg1-f171.google.com with SMTP id q16so4817954pgq.6;
-        Fri, 29 Jul 2022 13:16:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Oy4qUGZWXPlIDUNNbQ5N/E9k+z0m3V8PivYub989Lys=;
-        b=JSdT8wi7ilCWtyaOOm8uTzx3ilzxbn36g/RYLT8Yi9gk6Xi70b9rrVhjx1mZU+Wcjd
-         jXQUBsh9ftsG2UCXN5U2TWMZLaZ1KmPKyPAqsxDwBDGfj/4MO8ZBcMTvkgHRryR6I0Xi
-         i5Z5zuj5DxLRV6uPSIfW8ytK7nWqFwg+CLw5E/k9tnm5H6llzC0PF79LtNmKjHdSblEx
-         bpA15jpr2UsuEkMQ0Tc/m+q+1qUUNuqg9yWiKAAo50yciM7TyUCTzNaL+ZB3IZ59AoCH
-         GbdzzhOsggLVLUVCoRww4S+7R2u0Z5VpTM2ml8xCLtDtDvN2rlJNzIaD//VqGbDgnSuD
-         viyg==
-X-Gm-Message-State: AJIora88Oes+8e18riuPgweHYMJHsnL4dpH0dvJbbFXeOZWcOqYKtz71
-        OXaToXIwlgEdWMmPoYbMldI=
-X-Google-Smtp-Source: AA6agR4mbh+EQVGMYnvNnyGvVsz7e222331FYdJ8cC8pW/VthJQGeTEn0YHbT4C/BMwDUQFgfYyNIQ==
-X-Received: by 2002:a05:6a00:1812:b0:52a:c171:7cc5 with SMTP id y18-20020a056a00181200b0052ac1717cc5mr5037264pfa.81.1659125797322;
-        Fri, 29 Jul 2022 13:16:37 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:f090:7a49:3465:6a5? ([2620:15c:211:201:f090:7a49:3465:6a5])
-        by smtp.gmail.com with ESMTPSA id ij21-20020a170902ab5500b0016c0c82e85csm4066461plb.75.2022.07.29.13.16.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 13:16:36 -0700 (PDT)
-Message-ID: <360e6b66-30f6-5c54-c03f-b5d267f6703a@acm.org>
-Date:   Fri, 29 Jul 2022 13:16:33 -0700
+        Fri, 29 Jul 2022 16:17:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408EE8AEEC
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 13:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659125848; x=1690661848;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zHXzzmsjuJv9AN/O6EtjvRoPXkwz0wGDEtmwwZMap3k=;
+  b=oHN4iIRqtP884kTuGUOLzSnJ9WDsBDZtb4U3Nrr/I81+5gsnn3Empp6b
+   rvZJIBuvXyMBwhBrtgsrq2xJ6LeSxlZxykDTUJQ/HtYX7Oc+GuXumHwZp
+   GFxXUpMbChMwPN0mIFqRwd4Eei7bPdKJ0ajF7QScvgLq/14D5ysN/53b0
+   5Nz2qR7fhZMjG2HsXQHEbKJhA+LkMUr9OUS38K27AGOXES6sKz1fDtbKj
+   Tg5+N8WRXWzrZoCeZMp1lIdu8Rses+0TfPbzDNpucYlgfHpLBuDDIx00D
+   /UbTsXM0HRP6FQ4TMAcaKIHltpeTsMkmBYrcmgw9XVHWLP3B+5IxpieF3
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="314648568"
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="314648568"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 13:17:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="598355595"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 29 Jul 2022 13:17:21 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHWQC-000C3x-2S;
+        Fri, 29 Jul 2022 20:17:20 +0000
+Date:   Sat, 30 Jul 2022 04:16:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 33/35] drm/connector: Remove TV modes property
+Message-ID: <202207300454.3rIc8wpM-lkp@intel.com>
+References: <20220728-rpi-analog-tv-properties-v1-33-3d53ae722097@cerno.tech>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 1/6] scsi: ufs: wb: Change wb_enabled condition test
-Content-Language: en-US
-To:     j-young.choi@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p8>
- <CGME20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p7>
- <20220729045252epcms2p7fee5c1cdca5e4bef02a833e40f80649b@epcms2p7>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220729045252epcms2p7fee5c1cdca5e4bef02a833e40f80649b@epcms2p7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728-rpi-analog-tv-properties-v1-33-3d53ae722097@cerno.tech>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 21:52, Jinyoung CHOI wrote:
-> Changed to improve readability.
-> As implemented in ufshcd_wb_togle_flush(), the conditional test is
-> modified in the same way.
-> 
-> Reviewed-by: Avri Altman <avri.altman@wdc.com>
-> Reviewed-by: Bean Huo <beanhuo@micron.com>
-> Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
-> ---
->   drivers/ufs/core/ufshcd.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 8f11f118c30e..bbf12aa6a5ae 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -5730,10 +5730,8 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
->   {
->   	int ret;
->   
-> -	if (!ufshcd_is_wb_allowed(hba))
-> -		return 0;
-> -
-> -	if (!(enable ^ hba->dev_info.wb_enabled))
-> +	if (!ufshcd_is_wb_allowed(hba) ||
-> +	    hba->dev_info.wb_enabled == enable)
->   		return 0;
->   
->   	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
+Hi Maxime,
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on 37b355fdaf31ee18bda9a93c2a438dc1cbf57ec9]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-Analog-TV-Improvements/20220730-004859
+base:   37b355fdaf31ee18bda9a93c2a438dc1cbf57ec9
+config: riscv-randconfig-r042-20220729 (https://download.01.org/0day-ci/archive/20220730/202207300454.3rIc8wpM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/83327cd72054a9c8d02b6f632453a8bdc90d3797
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Maxime-Ripard/drm-Analog-TV-Improvements/20220730-004859
+        git checkout 83327cd72054a9c8d02b6f632453a8bdc90d3797
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/nouveau/dispnv04/tvnv17.c:656:51: error: too many arguments to function call, expected 2, have 3
+           drm_mode_create_tv_properties(dev, num_tv_norms, nv17_tv_norm_names);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                    ^~~~~~~~~~~~~~~~~~
+   include/drm/drm_connector.h:1807:5: note: 'drm_mode_create_tv_properties' declared here
+   int drm_mode_create_tv_properties(struct drm_device *dev,
+       ^
+   1 error generated.
+
+
+vim +656 drivers/gpu/drm/nouveau/dispnv04/tvnv17.c
+
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  633  
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  634  static int nv17_tv_create_resources(struct drm_encoder *encoder,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  635  				    struct drm_connector *connector)
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  636  {
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  637  	struct drm_device *dev = encoder->dev;
+77145f1cbdf8d2 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2012-07-31  638  	struct nouveau_drm *drm = nouveau_drm(dev);
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  639  	struct drm_mode_config *conf = &dev->mode_config;
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  640  	struct nv17_tv_encoder *tv_enc = to_tv_enc(encoder);
+cb75d97e9c7774 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2012-07-11  641  	struct dcb_output *dcb = nouveau_encoder(encoder)->dcb;
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  642  	int num_tv_norms = dcb->tvconf.has_component_output ? NUM_TV_NORMS :
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  643  							NUM_LD_TV_NORMS;
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  644  	int i;
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  645  
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  646  	if (nouveau_tv_norm) {
+2574c809d7c0f0 drivers/gpu/drm/nouveau/dispnv04/tvnv17.c YueHaibing 2019-12-30  647  		i = match_string(nv17_tv_norm_names, num_tv_norms,
+2574c809d7c0f0 drivers/gpu/drm/nouveau/dispnv04/tvnv17.c YueHaibing 2019-12-30  648  				 nouveau_tv_norm);
+2574c809d7c0f0 drivers/gpu/drm/nouveau/dispnv04/tvnv17.c YueHaibing 2019-12-30  649  		if (i < 0)
+77145f1cbdf8d2 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2012-07-31  650  			NV_WARN(drm, "Invalid TV norm setting \"%s\"\n",
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  651  				nouveau_tv_norm);
+2574c809d7c0f0 drivers/gpu/drm/nouveau/dispnv04/tvnv17.c YueHaibing 2019-12-30  652  		else
+2574c809d7c0f0 drivers/gpu/drm/nouveau/dispnv04/tvnv17.c YueHaibing 2019-12-30  653  			tv_enc->tv_norm = i;
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  654  	}
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  655  
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11 @656  	drm_mode_create_tv_properties(dev, num_tv_norms, nv17_tv_norm_names);
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  657  
+2db83827dc7679 drivers/gpu/drm/nouveau/nv17_tv.c         Rob Clark  2012-10-11  658  	drm_object_attach_property(&connector->base,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  659  					conf->tv_select_subconnector_property,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  660  					tv_enc->select_subconnector);
+2db83827dc7679 drivers/gpu/drm/nouveau/nv17_tv.c         Rob Clark  2012-10-11  661  	drm_object_attach_property(&connector->base,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  662  					conf->tv_subconnector_property,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  663  					tv_enc->subconnector);
+2db83827dc7679 drivers/gpu/drm/nouveau/nv17_tv.c         Rob Clark  2012-10-11  664  	drm_object_attach_property(&connector->base,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  665  					conf->tv_mode_property,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  666  					tv_enc->tv_norm);
+2db83827dc7679 drivers/gpu/drm/nouveau/nv17_tv.c         Rob Clark  2012-10-11  667  	drm_object_attach_property(&connector->base,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  668  					conf->tv_flicker_reduction_property,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  669  					tv_enc->flicker);
+2db83827dc7679 drivers/gpu/drm/nouveau/nv17_tv.c         Rob Clark  2012-10-11  670  	drm_object_attach_property(&connector->base,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  671  					conf->tv_saturation_property,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  672  					tv_enc->saturation);
+2db83827dc7679 drivers/gpu/drm/nouveau/nv17_tv.c         Rob Clark  2012-10-11  673  	drm_object_attach_property(&connector->base,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  674  					conf->tv_hue_property,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  675  					tv_enc->hue);
+2db83827dc7679 drivers/gpu/drm/nouveau/nv17_tv.c         Rob Clark  2012-10-11  676  	drm_object_attach_property(&connector->base,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  677  					conf->tv_overscan_property,
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  678  					tv_enc->overscan);
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  679  
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  680  	return 0;
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  681  }
+6ee738610f41b5 drivers/gpu/drm/nouveau/nv17_tv.c         Ben Skeggs 2009-12-11  682  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

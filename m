@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DA0584B26
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A433584B23
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234475AbiG2Fae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 01:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S234554AbiG2Fas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 01:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbiG2FaX (ORCPT
+        with ESMTP id S234367AbiG2Fa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 01:30:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0E8E005;
-        Thu, 28 Jul 2022 22:30:21 -0700 (PDT)
+        Fri, 29 Jul 2022 01:30:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A317313DF3;
+        Thu, 28 Jul 2022 22:30:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98D2D61EA1;
-        Fri, 29 Jul 2022 05:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2A7BC43142;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CC92B826F2;
+        Fri, 29 Jul 2022 05:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF3C5C433B5;
         Fri, 29 Jul 2022 05:30:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659072620;
-        bh=cM+83w7omFok1JKgNk2iTdsAGrjvqD6AtFMVjC7evZM=;
+        s=k20201202; t=1659072619;
+        bh=/5oj8sE7l+/hfD4swIIxbDOHMIBGNGjoHEyU1b/Z9SU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Nu63a1zpd2LE1LyiT/kaSTlw0BECNT0Whs2Vr6xMWKFgCt5HECoGp5/q6soRzLMS7
-         j2kcAn0sF2mMtN7ajy5rlK/fpvqOKWG+1AJkXBvCFnjIT2Y3k7tmVac3/Px3TnjU1Q
-         /Ba2e3MDcTrXPGKca7TzoBthcgc0wFQ6HcJ/sBs6GN3XGcvSpwTLyOg6DfsBcJ5E70
-         P+Dj+qwkJOSQx22hSmJb7hpPzCFR4Ig74vkrMKffqUHPQ2ey/H1260eNEqyZkDnQVL
-         gqkkUOyKcCkc91prbDPq5slDIplMzP6G3GqUE5WdyvwpxQ7gw9Cy1WsL4+PIlrJ5Aw
-         MC9ayJGoJB7sg==
+        b=nLbQfOO7XR/lNfXoWLCebbMfJgp0zZT+FkN+n+hOEdiGDNp1fZ4umWWKYxRXFIYho
+         Diev7K1eSAVG/aE9OK/7JyM57W56nDNUUn+5nuEqwatAQuQm26RzFmJWSAZ8pJSWAo
+         9j6IduarF1iMOTD9U03jke7wzDcqUHuT2EXvCMmNIOJjX4bV4eXBk7u0NpQFlaje6G
+         2px4UNcrLObW7EMOdg4B9l744T48xqL33N1PoVbKDmUncxc8TrWZTKA0pyE3ccRnPN
+         WdHQdNAzM+69c6VAUvfSyoC09FuV+OGO5sQ1EKG68+K+uN8c9kO+xmZEbyQ/S3TQAk
+         AGImiO6kEl0rw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D861EC43145;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5E38C43143;
         Fri, 29 Jul 2022 05:30:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] amt: fix typo in comment
+Subject: Re: [PATCH net-next v1] selftests: net: dsa: Add a Makefile which
+ installs the selftests
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165907261988.17632.9332710772893492418.git-patchwork-notify@kernel.org>
+Message-Id: <165907261980.17632.18402519783746215352.git-patchwork-notify@kernel.org>
 Date:   Fri, 29 Jul 2022 05:30:19 +0000
-References: <20220728032854.151180-1-RuffaloLavoisier@gmail.com>
-In-Reply-To: <20220728032854.151180-1-RuffaloLavoisier@gmail.com>
-To:     RuffaloLavoisier <ruffalolavoisier@gmail.com>
-Cc:     ap420073@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, RuffaloLavoisier@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220727191642.480279-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20220727191642.480279-1-martin.blumenstingl@googlemail.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        vladimir.oltean@nxp.com, linux-kernel@vger.kernel.org,
+        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, shuah@kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,18 +65,19 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 28 Jul 2022 12:28:54 +0900 you wrote:
-> Correct spelling on 'non-existent' in comment
+On Wed, 27 Jul 2022 21:16:42 +0200 you wrote:
+> Add a Makefile which takes care of installing the selftests in
+> tools/testing/selftests/drivers/net/dsa. This can be used to install all
+> DSA specific selftests and forwarding.config using the same approach as
+> for the selftests in tools/testing/selftests/net/forwarding.
 > 
-> Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
-> ---
-> I wrote about the commit message in detail and modified the name.
->  drivers/net/amt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> 
+> [...]
 
 Here is the summary with links:
-  - [v2] amt: fix typo in comment
-    https://git.kernel.org/netdev/net-next/c/39befe3a43a5
+  - [net-next,v1] selftests: net: dsa: Add a Makefile which installs the selftests
+    https://git.kernel.org/netdev/net-next/c/6ecf206d602f
 
 You are awesome, thank you!
 -- 

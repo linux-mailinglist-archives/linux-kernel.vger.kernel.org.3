@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C16585551
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250E9585547
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbiG2TDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S238318AbiG2TDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238542AbiG2TCt (ORCPT
+        with ESMTP id S238588AbiG2TCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:02:49 -0400
+        Fri, 29 Jul 2022 15:02:54 -0400
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86FC88CED;
-        Fri, 29 Jul 2022 12:02:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC9488E24;
+        Fri, 29 Jul 2022 12:02:49 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id A09ED318B57;
-        Fri, 29 Jul 2022 15:02:47 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 9DB8F318B5E;
+        Fri, 29 Jul 2022 15:02:48 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ehFCq0xdU8uH; Fri, 29 Jul 2022 15:02:47 -0400 (EDT)
+        with ESMTP id y4PqTlgBnJHS; Fri, 29 Jul 2022 15:02:48 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 975F931900F;
+        by mail.efficios.com (Postfix) with ESMTP id C4461319089;
         Fri, 29 Jul 2022 15:02:44 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 975F931900F
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C4461319089
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
         s=default; t=1659121364;
-        bh=8X0HKRr4vzicIb3vy2m1DCC4ns3X3lY0CyPw6s0VI/k=;
+        bh=wX+6cXKANeTzmsi6b1Rv2x8YVliOIgrKgheBkN7FLYs=;
         h=From:To:Date:Message-Id;
-        b=agBVs/r8a9Dextj6marfS4RLkIYIzjXzu7uTHbH9zvjmfPIXwWnRos+LaSZ8UEMEI
-         E1pagUe9zljyh08AzrsGimRS5oGMIYNhu2ckwOX8Zm0aG0i1XrcbBtme3CAaUQ1GHu
-         xZQZSJB65WBeQKPuzqGK/kW8A+NVuNirOQLIbKOyP8BTPV+0wuNBzJndwo/QbxirOj
-         L5FRnfAj5O/79DmdN5uv1ojLgSfD3wwtQl1Nazo/mIL39GnlUVuKyYAgTwoupLudfj
-         9QEq3NCBw+NW9L+1fzLXN37avennCeHTmpjKAEciIMFaXwGxHK9fWlejWGlbpVtG0r
-         thkppT1RRf7Xg==
+        b=kRucnBt9zeu06kROqMnvMcC1bVK0f06QFXBmnLTF4HaUNlwLqMqNHFr7p9CLVzN0j
+         OelIf3hawqxn0HNh9pXY6Hn/a5wbG6FHZXD/mCqS8g1w9Zi62PhaR6C4N8RA+sAEV7
+         p160MWsNY9sYuWUqu9XFSytU95Cq6oyPkktedVbElcqPcrXTBsvvZ8D+DLv2YlCWBZ
+         IO9GeM8FixRvrXTM1Y3wJdkVP5Fon6PKTxB3dIf+hrlHSGf/PYDaZhiXrDT4Oj6TM2
+         0INjMlcLUWM20IVNBV9CBHsuh7YfNtxrHLIDGHmJbKUrytQ3rLJzqVGGHHE0h9dv4P
+         QDu6wJBLzQg0Q==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id h6mpaK2qQ_Jr; Fri, 29 Jul 2022 15:02:44 -0400 (EDT)
+        with ESMTP id 9IxLtaW2HgUY; Fri, 29 Jul 2022 15:02:44 -0400 (EDT)
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id CA6E9318E8E;
-        Fri, 29 Jul 2022 15:02:42 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTPSA id 2906C318A6B;
+        Fri, 29 Jul 2022 15:02:43 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
@@ -53,9 +53,9 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
         carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH v3 07/23] lib: implement find_{first,next}_{zero,one}_and_zero_bit
-Date:   Fri, 29 Jul 2022 15:02:09 -0400
-Message-Id: <20220729190225.12726-8-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v3 08/23] cpumask: implement cpumask_{first,next}_{zero,one}_and_zero
+Date:   Fri, 29 Jul 2022 15:02:10 -0400
+Message-Id: <20220729190225.12726-9-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220729190225.12726-1-mathieu.desnoyers@efficios.com>
 References: <20220729190225.12726-1-mathieu.desnoyers@efficios.com>
@@ -68,7 +68,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow finding the first or next bit within two input bitmasks which is
+Allow finding the first or next bit within two input cpumasks which is
 either:
 
 - both zero and zero,
@@ -76,137 +76,127 @@ either:
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- include/linux/find.h | 110 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 110 insertions(+)
+ include/linux/cpumask.h | 86 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
-diff --git a/include/linux/find.h b/include/linux/find.h
-index 41941cb9cad7..ad446f248b36 100644
---- a/include/linux/find.h
-+++ b/include/linux/find.h
-@@ -76,6 +76,66 @@ unsigned long find_next_and_bit(const unsigned long *addr1,
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index fe29ac7cc469..0f5c3e47423f 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -134,6 +134,18 @@ static inline unsigned int cpumask_first_and(const struct cpumask *srcp1,
+ 	return 0;
  }
- #endif
  
-+#ifndef find_next_one_and_zero_bit
-+/**
-+ * find_next_one_and_zero_bit - find the next bit which is one in addr1 and zero in addr2 memory region
-+ * @addr1: The first address to base the search on
-+ * @addr2: The second address to base the search on
-+ * @offset: The bitnumber to start searching at
-+ * @size: The bitmap size in bits
-+ *
-+ * Returns the bit number for the next bit set in addr1 and cleared in addr2
-+ * If no corresponding bits meet this criterion, returns @size.
-+ */
-+static inline
-+unsigned long find_next_one_and_zero_bit(const unsigned long *addr1,
-+		const unsigned long *addr2, unsigned long size,
-+		unsigned long offset)
++static inline unsigned int cpumask_first_one_and_zero(const struct cpumask *srcp1,
++					     const struct cpumask *srcp2)
 +{
-+	if (small_const_nbits(size)) {
-+		unsigned long val;
-+
-+		if (unlikely(offset >= size))
-+			return size;
-+
-+		val = *addr1 & ~*addr2 & GENMASK(size - 1, offset);
-+		return val ? __ffs(val) : size;
-+	}
-+
-+	return _find_next_bit(addr1, addr2, size, offset, 0UL, ~0UL, 0);
++	return 0;
 +}
-+#endif
 +
-+#ifndef find_next_zero_and_zero_bit
-+/**
-+ * find_next_zero_and_zero_bit - find the next bit which is zero in addr1 and addr2 memory regions
-+ * @addr1: The first address to base the search on
-+ * @addr2: The second address to base the search on
-+ * @offset: The bitnumber to start searching at
-+ * @size: The bitmap size in bits
-+ *
-+ * Returns the bit number for the next bit cleared in addr1 and addr2
-+ * If no corresponding bits meet this criterion, returns @size.
-+ */
-+static inline
-+unsigned long find_next_zero_and_zero_bit(const unsigned long *addr1,
-+		const unsigned long *addr2, unsigned long size,
-+		unsigned long offset)
++static inline unsigned int cpumask_first_zero_and_zero(const struct cpumask *srcp1,
++					     const struct cpumask *srcp2)
 +{
-+	if (small_const_nbits(size)) {
-+		unsigned long val;
-+
-+		if (unlikely(offset >= size))
-+			return size;
-+
-+		val = ~*addr1 & ~*addr2 & GENMASK(size - 1, offset);
-+		return val ? __ffs(val) : size;
-+	}
-+
-+	return _find_next_bit(addr1, addr2, size, offset, ~0UL, ~0UL, 0);
++	return 0;
 +}
-+#endif
 +
- #ifndef find_next_zero_bit
- /**
-  * find_next_zero_bit - find the next cleared bit in a memory region
-@@ -173,6 +233,56 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+ static inline unsigned int cpumask_last(const struct cpumask *srcp)
+ {
+ 	return 0;
+@@ -157,6 +169,20 @@ static inline unsigned int cpumask_next_and(int n,
+ 	return n+1;
  }
- #endif
  
-+#ifndef find_first_one_and_zero_bit
++static inline unsigned int cpumask_next_one_and_zero(int n,
++					     const struct cpumask *srcp1,
++					     const struct cpumask *srcp2)
++{
++	return n+1;
++}
++
++static inline unsigned int cpumask_next_zero_and_zero(int n,
++					     const struct cpumask *srcp1,
++					     const struct cpumask *srcp2)
++{
++	return n+1;
++}
++
+ static inline unsigned int cpumask_next_wrap(int n, const struct cpumask *mask,
+ 					     int start, bool wrap)
+ {
+@@ -230,6 +256,32 @@ unsigned int cpumask_first_and(const struct cpumask *srcp1, const struct cpumask
+ 	return find_first_and_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cpumask_bits);
+ }
+ 
 +/**
-+ * find_first_one_and_zero_bit - find the first bit which is one in addr1 and zero in addr2 memory region
-+ * @addr1: The first address to base the search on
-+ * @addr2: The second address to base the search on
-+ * @size: The bitmap size in bits
++ * cpumask_first_one_and_zero - return the first cpu from *srcp1 & ~*srcp2
++ * @src1p: the first input
++ * @src2p: the second input
 + *
-+ * Returns the bit number for the first bit set in addr1 and cleared in addr2
-+ * If no corresponding bits meet this criterion, returns @size.
++ * Returns >= nr_cpu_ids if no cpus match in both.
 + */
 +static inline
-+unsigned long find_first_one_and_zero_bit(const unsigned long *addr1,
-+				 const unsigned long *addr2,
-+				 unsigned long size)
++unsigned int cpumask_first_one_and_zero(const struct cpumask *srcp1, const struct cpumask *srcp2)
 +{
-+	if (small_const_nbits(size)) {
-+		unsigned long val = *addr1 & ~*addr2 & GENMASK(size - 1, 0);
-+
-+		return val ? __ffs(val) : size;
-+	}
-+
-+	return _find_next_bit(addr1, addr2, size, 0, 0UL, ~0UL, 0);
++	return find_first_one_and_zero_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cpumask_bits);
 +}
-+#endif
 +
-+#ifndef find_first_zero_and_zero_bit
 +/**
-+ * find_first_zero_and_zero_bit - find the first bit which is zero in addr1 and addr2 memory regions
-+ * @addr1: The first address to base the search on
-+ * @addr2: The second address to base the search on
-+ * @size: The bitmap size in bits
++ * cpumask_first_zero_and_zero - return the first cpu from ~*srcp1 & ~*srcp2
++ * @src1p: the first input
++ * @src2p: the second input
 + *
-+ * Returns the bit number for the first bit cleared in addr1 and addr2
-+ * If no corresponding bits meet this criterion, returns @size.
++ * Returns >= nr_cpu_ids if no cpus match in both.
 + */
 +static inline
-+unsigned long find_first_zero_and_zero_bit(const unsigned long *addr1,
-+				 const unsigned long *addr2,
-+				 unsigned long size)
++unsigned int cpumask_first_zero_and_zero(const struct cpumask *srcp1, const struct cpumask *srcp2)
 +{
-+	if (small_const_nbits(size)) {
-+		unsigned long val = ~*addr1 & ~*addr2 & GENMASK(size - 1, 0);
-+
-+		return val ? __ffs(val) : size;
-+	}
-+
-+	return _find_next_bit(addr1, addr2, size, 0, ~0UL, ~0UL, 0);
++	return find_first_zero_and_zero_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cpumask_bits);
 +}
-+#endif
 +
- #ifndef find_last_bit
  /**
-  * find_last_bit - find the last set bit in a memory region
+  * cpumask_last - get the last CPU in a cpumask
+  * @srcp:	- the cpumask pointer
+@@ -258,6 +310,40 @@ static inline unsigned int cpumask_next_zero(int n, const struct cpumask *srcp)
+ 	return find_next_zero_bit(cpumask_bits(srcp), nr_cpumask_bits, n+1);
+ }
+ 
++/**
++ * cpumask_next_one_and_zero - return the next cpu from *srcp1 & ~*srcp2
++ * @n: the cpu prior to the place to search (ie. return will be > @n)
++ * @src1p: the first input
++ * @src2p: the second input
++ *
++ * Returns >= nr_cpu_ids if no cpus match in both.
++ */
++static inline
++unsigned int cpumask_next_one_and_zero(int n, const struct cpumask *srcp1, const struct cpumask *srcp2)
++{
++	/* -1 is a legal arg here. */
++	if (n != -1)
++		cpumask_check(n);
++	return find_next_one_and_zero_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cpumask_bits, n+1);
++}
++
++/**
++ * cpumask_next_zero_and_zero - return the next cpu from ~*srcp1 & ~*srcp2
++ * @n: the cpu prior to the place to search (ie. return will be > @n)
++ * @src1p: the first input
++ * @src2p: the second input
++ *
++ * Returns >= nr_cpu_ids if no cpus match in both.
++ */
++static inline
++unsigned int cpumask_next_zero_and_zero(int n, const struct cpumask *srcp1, const struct cpumask *srcp2)
++{
++	/* -1 is a legal arg here. */
++	if (n != -1)
++		cpumask_check(n);
++	return find_next_zero_and_zero_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cpumask_bits, n+1);
++}
++
+ int __pure cpumask_next_and(int n, const struct cpumask *, const struct cpumask *);
+ int __pure cpumask_any_but(const struct cpumask *mask, unsigned int cpu);
+ unsigned int cpumask_local_spread(unsigned int i, int node);
 -- 
 2.17.1
 

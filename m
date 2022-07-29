@@ -2,181 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6715849FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0015849F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiG2C4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S233688AbiG2CzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiG2C4P (ORCPT
+        with ESMTP id S229559AbiG2CzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:56:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F752982E;
-        Thu, 28 Jul 2022 19:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659063374; x=1690599374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E/Uyyb+h/AV7J/aT5ZRju9JhnFkYi1/BQWx3o8jvrNM=;
-  b=CHy+eMlBZ2HLixmxZxTNQre6NLs4+n7NdhvTzuPTgHDxpt8YuchK6st7
-   NDhAimrU6rvws5LlsxUrvizEvif2iwjnlA714zTJD1jF0w2/Bh+OHJ5S6
-   JziKmHyk8SWvQvxiEax+7F2KLC9OxASTi2tUPNoXGWuL+bUO1qD1B6bEs
-   GFdkdh1APLRqe9I7ewaiuVVb7BpHxxstgtLHxaKUYWMKxDkDOP4e1Wf4B
-   YZ9t3ShNo6IhkDbWHgRQmEDwXDpLPROTnAH9ho0e5pHH2N2IR9nEXvKiA
-   GAd14ytAdJ3YkIpROUIcbgxG6o119I7HdkWi+brQ0Q7e915HT4ltPuoEZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="268440538"
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="268440538"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:56:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
-   d="scan'208";a="928578998"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jul 2022 19:56:11 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHGAd-000Ay1-05;
-        Fri, 29 Jul 2022 02:56:11 +0000
-Date:   Fri, 29 Jul 2022 10:55:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeremy Linton <jeremy.linton@arm.com>, linux-pm@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, rafael@kernel.org, lenb@kernel.org,
-        viresh.kumar@linaro.org, robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeremy Linton <jeremy.linton@arm.com>
-Subject: Re: [PATCH] ACPI: CPPC: Disable FIE if registers in PCC regions
-Message-ID: <202207291003.Wk3c06eH-lkp@intel.com>
-References: <20220726145948.2194684-1-jeremy.linton@arm.com>
+        Thu, 28 Jul 2022 22:55:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2ACDF56
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:55:19 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LvBsd0nvlzmVNx;
+        Fri, 29 Jul 2022 10:53:25 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Jul 2022 10:55:15 +0800
+Subject: Re: [RFC PATCH v4 6/8] hugetlb: add vma based lock for pmd sharing
+ synchronization
+To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220706202347.95150-1-mike.kravetz@oracle.com>
+ <20220706202347.95150-7-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5b8c6b49-e17a-2c0b-4440-ccf3c5493cb2@huawei.com>
+Date:   Fri, 29 Jul 2022 10:55:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726145948.2194684-1-jeremy.linton@arm.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220706202347.95150-7-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeremy,
+On 2022/7/7 4:23, Mike Kravetz wrote:
+> Allocate a rw semaphore and hang off vm_private_data for
+> synchronization use by vmas that could be involved in pmd sharing.  Only
+> add infrastructure for the new lock here.  Actual use will be added in
+> subsequent patch.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  include/linux/hugetlb.h |  36 +++++++++-
+>  kernel/fork.c           |   6 +-
+>  mm/hugetlb.c            | 150 ++++++++++++++++++++++++++++++++++++----
+>  mm/rmap.c               |   8 ++-
+>  4 files changed, 178 insertions(+), 22 deletions(-)
+> 
 
-Thank you for the patch! Yet something to improve:
+<snip>
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>  
+>  /* Forward declaration */
+>  static int hugetlb_acct_memory(struct hstate *h, long delta);
+> +static bool vma_pmd_shareable(struct vm_area_struct *vma);
+>  
+>  static inline bool subpool_is_free(struct hugepage_subpool *spool)
+>  {
+> @@ -904,6 +905,89 @@ resv_map_set_hugetlb_cgroup_uncharge_info(struct resv_map *resv_map,
+>  #endif
+>  }
+>  
+> +static bool __vma_shareable_flags_pmd(struct vm_area_struct *vma)
+> +{
+> +	return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Linton/ACPI-CPPC-Disable-FIE-if-registers-in-PCC-regions/20220726-230217
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220729/202207291003.Wk3c06eH-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/a4dd80cfc857eef429f60e999bdc9479179d495e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jeremy-Linton/ACPI-CPPC-Disable-FIE-if-registers-in-PCC-regions/20220726-230217
-        git checkout a4dd80cfc857eef429f60e999bdc9479179d495e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Should me make __vma_aligned_range_pmd_shareable check (VM_MAYSHARE | VM_SHARED) like above
+instead of VM_MAYSHARE to make code more consistent?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> +		vma->vm_private_data;
+> +}
+> +
+> +void hugetlb_vma_lock_read(struct vm_area_struct *vma)
+> +{
+> +	if (__vma_shareable_flags_pmd(vma))
+> +		down_read((struct rw_semaphore *)vma->vm_private_data);
+> +}
+> +
+> +void hugetlb_vma_unlock_read(struct vm_area_struct *vma)
+> +{
+> +	if (__vma_shareable_flags_pmd(vma))
+> +		up_read((struct rw_semaphore *)vma->vm_private_data);
+> +}
+> +
+> +void hugetlb_vma_lock_write(struct vm_area_struct *vma)
+> +{
+> +	if (__vma_shareable_flags_pmd(vma))
+> +		down_write((struct rw_semaphore *)vma->vm_private_data);
+> +}
+> +
+> +void hugetlb_vma_unlock_write(struct vm_area_struct *vma)
+> +{
+> +	if (__vma_shareable_flags_pmd(vma))
+> +		up_write((struct rw_semaphore *)vma->vm_private_data);
+> +}
+> +
+> +int hugetlb_vma_trylock_write(struct vm_area_struct *vma)
+> +{
+> +	if (!__vma_shareable_flags_pmd(vma))
+> +		return 1;
+> +
+> +	return down_write_trylock((struct rw_semaphore *)vma->vm_private_data);
+> +}
+> +
+> +void hugetlb_vma_assert_locked(struct vm_area_struct *vma)
+> +{
+> +	if (__vma_shareable_flags_pmd(vma))
+> +		lockdep_assert_held((struct rw_semaphore *)
+> +				vma->vm_private_data);
+> +}
+> +
+> +static void hugetlb_free_vma_lock(struct vm_area_struct *vma)
+> +{
+> +	/* Only present in sharable vmas */
+> +	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
+> +		return;
+> +
+> +	if (vma->vm_private_data) {
+> +		kfree(vma->vm_private_data);
+> +		vma->vm_private_data = NULL;
+> +	}
+> +}
+> +
+> +static void hugetlb_alloc_vma_lock(struct vm_area_struct *vma)
+> +{
+> +	struct rw_semaphore *vma_sema;
+> +
+> +	/* Only establish in (flags) sharable vmas */
+> +	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
+> +		return;
+> +> +	if (!vma_pmd_shareable(vma)) {
+> +		vma->vm_private_data = NULL;
+> +		return;
+> +	}
+> +
+> +	vma_sema = kmalloc(sizeof(*vma_sema), GFP_KERNEL);
+> +	if (!vma_sema) {
+> +		/*
+> +		 * If we can not allocate semaphore, then vma can not
+> +		 * participate in pmd sharing.
+> +		 */
+> +		vma->vm_private_data = NULL;
+> +	} else {
+> +		init_rwsem(vma_sema);
+> +		vma->vm_private_data = vma_sema;
+> +	}
 
-All error/warnings (new ones prefixed by >>):
+This code is really subtle. If it's called from hugetlb_vm_op_open during fork after
+hugetlb_dup_vma_private is done, there should already be a kmalloc-ed vma_sema for this
+vma (because hugetlb_alloc_vma_lock is also called by hugetlb_dup_vma_private). So we
+can't simply change the value of vm_private_data here or vma_sema will be leaked ? But
+when hugetlb_alloc_vma_lock is called from hugetlb_reserve_pages, it should work fine.
+Or am I miss something?
 
-   In file included from drivers/cpufreq/acpi-cpufreq.c:29:
->> include/acpi/cppc_acpi.h:177:12: warning: no previous prototype for 'cppc_perf_ctrs_in_pcc' [-Wmissing-prototypes]
-     177 | extern int cppc_perf_ctrs_in_pcc(void)
-         |            ^~~~~~~~~~~~~~~~~~~~~
---
-   ld: drivers/cpufreq/intel_pstate.o: in function `cppc_perf_ctrs_in_pcc':
->> include/acpi/cppc_acpi.h:178: multiple definition of `cppc_perf_ctrs_in_pcc'; drivers/cpufreq/acpi-cpufreq.o:include/acpi/cppc_acpi.h:178: first defined here
-
-
-vim +178 include/acpi/cppc_acpi.h
-
-   135	
-   136	#ifdef CONFIG_ACPI_CPPC_LIB
-   137	extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
-   138	extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
-   139	extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
-   140	extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
-   141	extern int cppc_set_enable(int cpu, bool enable);
-   142	extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-   143	extern int cppc_perf_ctrs_in_pcc(void);
-   144	extern bool acpi_cpc_valid(void);
-   145	extern bool cppc_allow_fast_switch(void);
-   146	extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
-   147	extern unsigned int cppc_get_transition_latency(int cpu);
-   148	extern bool cpc_ffh_supported(void);
-   149	extern bool cpc_supported_by_cpu(void);
-   150	extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
-   151	extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
-   152	#else /* !CONFIG_ACPI_CPPC_LIB */
-   153	static inline int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
-   154	{
-   155		return -ENOTSUPP;
-   156	}
-   157	static inline int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
-   158	{
-   159		return -ENOTSUPP;
-   160	}
-   161	static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
-   162	{
-   163		return -ENOTSUPP;
-   164	}
-   165	static inline int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
-   166	{
-   167		return -ENOTSUPP;
-   168	}
-   169	static inline int cppc_set_enable(int cpu, bool enable)
-   170	{
-   171		return -ENOTSUPP;
-   172	}
-   173	static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
-   174	{
-   175		return -ENOTSUPP;
-   176	}
- > 177	extern int cppc_perf_ctrs_in_pcc(void)
- > 178	{
-   179		return false;
-   180	}
-   181	static inline bool acpi_cpc_valid(void)
-   182	{
-   183		return false;
-   184	}
-   185	static inline bool cppc_allow_fast_switch(void)
-   186	{
-   187		return false;
-   188	}
-   189	static inline unsigned int cppc_get_transition_latency(int cpu)
-   190	{
-   191		return CPUFREQ_ETERNAL;
-   192	}
-   193	static inline bool cpc_ffh_supported(void)
-   194	{
-   195		return false;
-   196	}
-   197	static inline int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val)
-   198	{
-   199		return -ENOTSUPP;
-   200	}
-   201	static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
-   202	{
-   203		return -ENOTSUPP;
-   204	}
-   205	#endif /* !CONFIG_ACPI_CPPC_LIB */
-   206	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks.

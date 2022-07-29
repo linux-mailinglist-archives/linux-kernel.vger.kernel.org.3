@@ -2,180 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A563D584983
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4949C584984
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbiG2CB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S233838AbiG2CBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbiG2CBY (ORCPT
+        with ESMTP id S233785AbiG2CBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:01:24 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF3778DF3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:01:23 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id k8so2159700wrd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fKo8b4je0iqGq0uiZqH7zNlb83Vh1FNB/a+r4AK80T8=;
-        b=qh/wY2GLSdmFq98iuNUcPy+KISCMDt6bBos/1GYLClu9zYRT/nXaP5i+OJ8hXmfVO6
-         UXskbmrAJp4z/3BdcnKPVmml7oVvCQ7bXKvfMOYp9kt2psTEm3gGWndKuoWJzn4nq/Xr
-         RO77QEI12dSndxUphWJJYr6AR2gmPIa4wKvB286Z92abF3FDI/bREF0n1EK7gZ20GbXk
-         j+C1LiRus03zDSAWa5zspECdBRh0egOKxK4KH0/Y9Jsl5mnGCa8EOl1u2pYUJf3Tcwtt
-         zzhJVyewPd6rv6b9xZvVXMMAGskp7iBeqCnx2dmhiyMaX/9z7WZyyfn9xEDHdsKfyzVu
-         mURw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fKo8b4je0iqGq0uiZqH7zNlb83Vh1FNB/a+r4AK80T8=;
-        b=Q7RZxZ8UvjWml/CnvywcP7YUUcFsqU/nDe+b19VllX+YlB5IvhR5A42O6x6RPzSx1L
-         E3vKOrE3VMmaugWLW+nloeOtiQd+AlFNSGn3jgvEJZXaNLG/SKDA73antAdyDTRjIVI6
-         h1SUXGFV4NlLIEL/syzjs1/8klyfCvNm2xoBxcIu9kGv5vKlXI7+S0dWxytIDB/CbCMx
-         2j8Cofb9DY5DPFmDtu/4VxLrYolGC6WSPxie+mIgutpGOUFxnK6rlm4NvjKdXr7zAszr
-         cMAbInfaVmOez6TBu/ZCO9pukKQIqTRolM/09PKTGYzOuygGKOb+Py5mDNrMufvXcPNZ
-         TWhw==
-X-Gm-Message-State: ACgBeo0P/o6pxVcyg1/Iiu3NONVPZM+TJGsMq97o05rNz0cFquLqKXHr
-        URvqbA46xgeJGKJB3gzyLTDE7LsaZW6tD4gS7L6FBQ==
-X-Google-Smtp-Source: AA6agR5cPNsIfML6yyQKPbDjRDBRwyuxiIL3O1NzD4HMAqamz2pbk6MDyllQ67IBlyD/TQOOtay5gTHQrQvjOVSig1Y=
-X-Received: by 2002:a5d:6d4e:0:b0:21e:660e:55bf with SMTP id
- k14-20020a5d6d4e000000b0021e660e55bfmr824800wri.343.1659060081456; Thu, 28
- Jul 2022 19:01:21 -0700 (PDT)
+        Thu, 28 Jul 2022 22:01:49 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EF097969C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:01:48 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9CBP+NiTsFAAA--.27427S3;
+        Fri, 29 Jul 2022 10:01:38 +0800 (CST)
+Subject: Re: [PATCH 1/3] LoongArch: Add guess unwinder support
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <20220728140519.5420-1-zhangqing@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, hejinyang@loongson.cn
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <1288a80b-4038-126f-aec0-74f18cf2fea2@loongson.cn>
+Date:   Fri, 29 Jul 2022 10:01:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <20220614143353.1559597-1-irogers@google.com> <CAP-5=fVwWDyD5R7mkdGEqP1dchDOsdmrAPbaZFE7bUjYM3pYFA@mail.gmail.com>
-In-Reply-To: <CAP-5=fVwWDyD5R7mkdGEqP1dchDOsdmrAPbaZFE7bUjYM3pYFA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 28 Jul 2022 19:01:09 -0700
-Message-ID: <CAP-5=fVyyj4nwam3grTAw94w8Ad+qZP6LDxYZv17vP2ph6pXwA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] Corrections to cpu map event encoding
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        German Gomez <german.gomez@arm.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220728140519.5420-1-zhangqing@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxj9CBP+NiTsFAAA--.27427S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xw4rGF18GFW7Zry8uw1xZrb_yoWfCrWDpF
+        yDC3Z3GrW7K340gr9rXr1UZF98Grs2kw12gF9rtFyrCFnFqFyxWrnaka4DZF4DJ3ykGa1I
+        qF95Kws8KanFqaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
+        zVAYIcxG8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUbpwZ7UUUUU==
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 10:01 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Tue, Jun 14, 2022 at 7:33 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > A mask encoding of a cpu map is laid out as:
-> >   u16 nr
-> >   u16 long_size
-> >   unsigned long mask[];
-> > However, the mask may be 8-byte aligned meaning there is a 4-byte pad
-> > after long_size. This means 32-bit and 64-bit builds see the mask as
-> > being at different offsets. On top of this the structure is in the byte
-> > data[] encoded as:
-> >   u16 type
-> >   char data[]
-> > This means the mask's struct isn't the required 4 or 8 byte aligned, but
-> > is offset by 2. Consequently the long reads and writes are causing
-> > undefined behavior as the alignment is broken.
-> >
-> > These changes do minor clean up with const, visibility of functions
-> > and using the constant time max function. It then adds 32 and 64-bit
-> > mask encoding variants, packed to match current alignment. Taking the
-> > address of a packed struct leads to unaligned data, so function
-> > arguments are altered to be passed the packed struct. To compact the
-> > mask encoding further and drop the padding, the 4-byte variant is
-> > preferred. Finally a new range encoding is added, that reduces the
-> > size of the common case of a range of CPUs to a single u64.
-> >
-> > On a 72 CPU (hyperthread) machine the original encoding of all CPUs is:
-> > 0x9a98 [0x28]: event: 74
-> > .
-> > . ... raw event: size 40 bytes
-> > .  0000:  4a 00 00 00 00 00 28 00 01 00 02 00 08 00 00 00  J.....(.........
-> > .  0010:  00 00 ff ff ff ff ff ff ff ff ff 00 00 00 00 00  ................
-> > .  0020:  00 00 00 00 00 00 00 00                          ........
-> >
-> > 0 0 0x9a98 [0x28]: PERF_RECORD_CPU_MAP
-> >
-> > Using the 4-byte encoding it is:
-> > 0x9a98@pipe [0x20]: event: 74
-> > .
-> > . ... raw event: size 32 bytes
-> > .  0000:  4a 00 00 00 00 00 20 00 01 00 03 00 04 00 ff ff  J..... .........
-> > .  0010:  ff ff ff ff ff ff ff 00 00 00 00 00 00 00 00 00  ................
-> >
-> > 0 0 0x9a98 [0x20]: PERF_RECORD_CPU_MAP
-> >
-> > Finally, with the range encoding it is:
-> > 0x9ab8@pipe [0x10]: event: 74
-> > .
-> > . ... raw event: size 16 bytes
-> > .  0000:  4a 00 00 00 00 00 10 00 02 00 00 00 00 00 47 00  J.............G.
-> >
-> > 0 0 0x9ab8 [0x10]: PERF_RECORD_CPU_MAP
-> >
-> > v2. Fixes a bug in the size computation of the update header
-> >     introduced by the last patch (Add range data encoding) and caught
-> >     by address sanitizer.
-> >
-> > Ian Rogers (6):
-> >   perf cpumap: Const map for max
-> >   perf cpumap: Synthetic events and const/static
-> >   perf cpumap: Compute mask size in constant time
-> >   perf cpumap: Fix alignment for masks in event encoding
-> >   perf events: Prefer union over variable length array
-> >   perf cpumap: Add range data encoding
->
-> Ping. There was some feedback on this change but nothing to create a
-> v3. Feedback/acked-by/reviewed-by appreciated.
+Hi, Qing
 
-Ping. Feedback appreciated.
+On 07/28/2022 10:05 PM, Qing Zhang wrote:
+> Name "guess unwinder" comes from x86, It scans the stack and reports
+> every kernel text address it finds.
+>
+> Three stages when we do unwind,
+>   (1)unwind_start(), the prapare of unwinding, fill unwind_state.
+>   (2)unwind_done(), judge whether the unwind process is finished or not.
+>   (3)unwind_next_frame(), unwind the next frame.
+>
+> Make the dump_stack process go through unwind process.
+> Add get_stack_info() to get stack info. At present we have irq stack and
+> task stack. Maybe add another type in future. The next_sp means the key
+> info between this type stack and next type stack.
+>
+> Dividing unwinder helps to add new unwinders in the future.
+>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>
+> diff --git a/arch/loongarch/Kconfig.debug b/arch/loongarch/Kconfig.debug
+> index e69de29bb2d1..68634d4fa27b 100644
+> --- a/arch/loongarch/Kconfig.debug
+> +++ b/arch/loongarch/Kconfig.debug
+> @@ -0,0 +1,9 @@
+> +config UNWINDER_GUESS
+> +	bool "Guess unwinder"
+> +	help
+> +	  This option enables the "guess" unwinder for unwinding kernel stack
+> +	  traces.  It scans the stack and reports every kernel text address it
+> +	  finds.  Some of the addresses it reports may be incorrect.
+> +
+> +	  While this option often produces false positives, it can still be
+> +	  useful in many cases.
+> diff --git a/arch/loongarch/include/asm/stacktrace.h b/arch/loongarch/include/asm/stacktrace.h
+> index 26483e396ad1..33077010356d 100644
+> --- a/arch/loongarch/include/asm/stacktrace.h
+> +++ b/arch/loongarch/include/asm/stacktrace.h
+> @@ -10,6 +10,23 @@
+>  #include <asm/loongarch.h>
+>  #include <linux/stringify.h>
+>
+> +enum stack_type {
+> +	STACK_TYPE_UNKNOWN,
+> +	STACK_TYPE_TASK,
+> +	STACK_TYPE_IRQ,
+> +};
+> +
+> +struct stack_info {
+> +	enum stack_type type;
+> +	unsigned long begin, end, next_sp;
+> +};
+> +
+> +bool in_task_stack(unsigned long stack, struct task_struct *task,
+> +			struct stack_info *info);
+> +bool in_irq_stack(unsigned long stack, struct stack_info *info);
+> +int get_stack_info(unsigned long stack, struct task_struct *task,
+> +			struct stack_info *info);
+> +
+>  #define STR_LONG_L    __stringify(LONG_L)
+>  #define STR_LONG_S    __stringify(LONG_S)
+>  #define STR_LONGSIZE  __stringify(LONGSIZE)
+> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
+> new file mode 100644
+> index 000000000000..243330b39d0d
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/unwind.h
+> @@ -0,0 +1,37 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Most of this ideas comes from x86.
+> + *
+> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> + */
+> +#ifndef _ASM_UNWIND_H
+> +#define _ASM_UNWIND_H
+> +
+> +#include <linux/sched.h>
+> +
+> +#include <asm/stacktrace.h>
+> +
+> +struct unwind_state {
+> +	struct stack_info stack_info;
+> +	struct task_struct *task;
+> +	unsigned long sp, pc;
+> +	bool first;
+> +	bool error;
+> +};
+> +
+> +void unwind_start(struct unwind_state *state, struct task_struct *task,
+> +		      struct pt_regs *regs);
+> +bool unwind_next_frame(struct unwind_state *state);
+> +unsigned long unwind_get_return_address(struct unwind_state *state);
+> +
+> +static inline bool unwind_done(struct unwind_state *state)
+> +{
+> +	return state->stack_info.type == STACK_TYPE_UNKNOWN;
+> +}
+> +
+> +static inline bool unwind_error(struct unwind_state *state)
+> +{
+> +	return state->error;
+> +}
+> +
+> +#endif /* _ASM_UNWIND_H */
+> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> index 940de9173542..c5fa4adb23b6 100644
+> --- a/arch/loongarch/kernel/Makefile
+> +++ b/arch/loongarch/kernel/Makefile
+> @@ -22,4 +22,6 @@ obj-$(CONFIG_SMP)		+= smp.o
+>
+>  obj-$(CONFIG_NUMA)		+= numa.o
+>
+> +obj-$(CONFIG_UNWINDER_GUESS)	+= unwind_guess.o
+> +
+>  CPPFLAGS_vmlinux.lds		:= $(KBUILD_CFLAGS)
+> diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
+> index bfa0dfe8b7d7..709b7a1664f8 100644
+> --- a/arch/loongarch/kernel/process.c
+> +++ b/arch/loongarch/kernel/process.c
+> @@ -44,6 +44,7 @@
+>  #include <asm/pgtable.h>
+>  #include <asm/processor.h>
+>  #include <asm/reg.h>
+> +#include <asm/unwind.h>
+>  #include <asm/vdso.h>
+>
+>  /*
+> @@ -183,6 +184,66 @@ unsigned long __get_wchan(struct task_struct *task)
+>  	return 0;
+>  }
+>
+> +bool in_task_stack(unsigned long stack, struct task_struct *task,
+> +			struct stack_info *info)
+> +{
+> +	unsigned long begin = (unsigned long)task_stack_page(task);
+> +	unsigned long end = begin + THREAD_SIZE - 32;
+> +
+> +	if (stack < begin || stack >= end)
+> +		return false;
+> +
+> +	info->type = STACK_TYPE_TASK;
+> +	info->begin = begin;
+> +	info->end = end;
+> +	info->next_sp = 0;
+> +
+> +	return true;
+> +}
+> +
+> +bool in_irq_stack(unsigned long stack, struct stack_info *info)
+> +{
+> +	unsigned long nextsp;
+> +	unsigned long begin = (unsigned long)this_cpu_read(irq_stack);
+> +	unsigned long end = begin + IRQ_STACK_START;
+> +
+> +	if (stack < begin || stack >= end)
+> +		return false;
+> +
+> +	nextsp = *(unsigned long *)end;
+> +	if (nextsp & (SZREG - 1))
+> +		return false;
+> +
+> +	info->type = STACK_TYPE_IRQ;
+> +	info->begin = begin;
+> +	info->end = end;
+> +	info->next_sp = nextsp;
+> +
+> +	return true;
+> +}
+> +
+> +int get_stack_info(unsigned long stack, struct task_struct *task,
+> +		   struct stack_info *info)
+> +{
+> +	task = task ? : current;
+> +
+> +	if (!stack || stack & (SZREG - 1))
+> +		goto unknown;
+> +
+> +	if (in_task_stack(stack, task, info))
+> +		return 0;
+> +
+> +	if (task != current)
+> +		goto unknown;
+> +
+> +	if (in_irq_stack(stack, info))
+> +		return 0;
+> +
+> +unknown:
+> +	info->type = STACK_TYPE_UNKNOWN;
+> +	return -EINVAL;
+> +}
+> +
+>  unsigned long stack_top(void)
+>  {
+>  	unsigned long top = TASK_SIZE & PAGE_MASK;
+> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+> index 1bf58c65e2bf..ef2c3aeb1dab 100644
+> --- a/arch/loongarch/kernel/traps.c
+> +++ b/arch/loongarch/kernel/traps.c
+> @@ -43,6 +43,7 @@
+>  #include <asm/stacktrace.h>
+>  #include <asm/tlb.h>
+>  #include <asm/types.h>
+> +#include <asm/unwind.h>
+>
+>  #include "access-helper.h"
+>
+> @@ -64,19 +65,18 @@ static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
+>  			   const char *loglvl, bool user)
+>  {
+>  	unsigned long addr;
+> -	unsigned long *sp = (unsigned long *)(regs->regs[3] & ~3);
+> +	struct unwind_state state;
+> +	struct pt_regs *pregs = (struct pt_regs *)regs;
+> +
+> +	if (!task)
+> +		task = current;
+> +
+> +	unwind_start(&state, task, pregs);
+>
+>  	printk("%sCall Trace:", loglvl);
+> -#ifdef CONFIG_KALLSYMS
+> -	printk("%s\n", loglvl);
+> -#endif
+> -	while (!kstack_end(sp)) {
+> -		if (__get_addr(&addr, sp++, user)) {
+> -			printk("%s (Bad stack address)", loglvl);
+> -			break;
+> -		}
+> -		if (__kernel_text_address(addr))
+> -			print_ip_sym(loglvl, addr);
+> +	for (; !unwind_done(&state); unwind_next_frame(&state)) {
+> +		addr = unwind_get_return_address(&state);
+> +		print_ip_sym(loglvl, addr);
+>  	}
+>  	printk("%s\n", loglvl);
+>  }
+> diff --git a/arch/loongarch/kernel/unwind_guess.c b/arch/loongarch/kernel/unwind_guess.c
+> new file mode 100644
+> index 000000000000..7eeb3e1a989d
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/unwind_guess.c
+> @@ -0,0 +1,65 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> + */
+> +#include <linux/kernel.h>
+> +
+> +#include <asm/unwind.h>
+> +
+> +unsigned long unwind_get_return_address(struct unwind_state *state)
+> +{
+> +	if (unwind_done(state))
+> +		return 0;
+This judgment can be removed, because unwind_done() has been judged
+before entering this function, and unwind_get_return_address will not
+be called if it is true.
+
+> +	else if (state->first)
+> +		return state->pc;
+> +
+> +	return *(unsigned long *)(state->sp);
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_get_return_address);
+> +
+> +bool unwind_next_frame(struct unwind_state *state)
+> +{
+> +	struct stack_info *info = &state->stack_info;
+> +	unsigned long addr;
+> +
+> +	if (unwind_done(state))
+> +		return false;
+> +
+Can be removed as above.
 
 Thanks,
-Ian
-
-> Thanks,
-> Ian
+Youling
+> +	if (state->first)
+> +		state->first = false;
+> +
+> +	do {
+> +		for (state->sp += sizeof(unsigned long);
+> +		     state->sp < info->end;
+> +		     state->sp += sizeof(unsigned long)) {
+> +			addr = *(unsigned long *)(state->sp);
+> +
+> +			if (__kernel_text_address(addr))
+> +				return true;
+> +		}
+> +
+> +		state->sp = info->next_sp;
+> +
+> +	} while (!get_stack_info(state->sp, state->task, info));
+> +
+> +	return false;
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_next_frame);
+> +
+> +void unwind_start(struct unwind_state *state, struct task_struct *task,
+> +		    struct pt_regs *regs)
+> +{
+> +	memset(state, 0, sizeof(*state));
+> +
+> +	state->task = task;
+> +
+> +	state->sp = regs->regs[3];
+> +	state->pc = regs->csr_era;
+> +	state->first = true;
+> +
+> +	get_stack_info(state->sp, state->task, &state->stack_info);
+> +
+> +	if (!unwind_done(state) && !__kernel_text_address(state->pc))
+> +		unwind_next_frame(state);
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_start);
 >
-> >  tools/lib/perf/cpumap.c              |   2 +-
-> >  tools/lib/perf/include/perf/cpumap.h |   2 +-
-> >  tools/lib/perf/include/perf/event.h  |  61 ++++++++-
-> >  tools/perf/tests/cpumap.c            |  71 ++++++++---
-> >  tools/perf/tests/event_update.c      |  14 +--
-> >  tools/perf/util/cpumap.c             | 111 +++++++++++++---
-> >  tools/perf/util/cpumap.h             |   4 +-
-> >  tools/perf/util/event.h              |   4 -
-> >  tools/perf/util/header.c             |  24 ++--
-> >  tools/perf/util/session.c            |  35 +++---
-> >  tools/perf/util/synthetic-events.c   | 182 +++++++++++++--------------
-> >  tools/perf/util/synthetic-events.h   |   2 +-
-> >  12 files changed, 327 insertions(+), 185 deletions(-)
-> >
-> > --
-> > 2.36.1.476.g0c4daa206d-goog
-> >
+

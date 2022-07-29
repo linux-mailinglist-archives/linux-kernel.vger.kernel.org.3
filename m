@@ -2,172 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AAC584C79
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5700584C2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234539AbiG2HT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 03:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S234675AbiG2GxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234630AbiG2HT1 (ORCPT
+        with ESMTP id S234603AbiG2Gw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 03:19:27 -0400
-X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Jul 2022 00:19:25 PDT
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0432380F47;
-        Fri, 29 Jul 2022 00:19:24 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4LvHtg4Xrrz6PjSJ;
-        Fri, 29 Jul 2022 14:39:39 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgD3_9PlgONidnlHBQ--.46322S4;
-        Fri, 29 Jul 2022 14:40:52 +0800 (CST)
-From:   Zhang Wensheng <zhangwensheng@huaweicloud.com>
-To:     stable@vger.kernel.org
-Cc:     axboe@kernel.dk, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhangwensheng5@huawei.com, yukuai3@huawei.com
-Subject: [PATCH 5.10] block: fix null-deref in percpu_ref_put
-Date:   Fri, 29 Jul 2022 14:52:43 +0800
-Message-Id: <20220729065243.1786222-1-zhangwensheng@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 29 Jul 2022 02:52:58 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4F580508
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:52:56 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id a9so2717981qtw.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B9NJPMCqsZZzif8NOi6LqBERuaw3Qi0GLNSjXaKH72E=;
+        b=ouhZLlcvdbHtvTf8YiOPEo07AwaL3uSKyKjAL/0/JobC+hqJYFj2hPitySQnXMVmXr
+         jX6Vj8FadMnkc9GRr+1qhzOjhORahTchrfixJIj93dV669SrEQNR/NYkeBnpX9XCDKrD
+         EjuCOGzLj3ynVi0ctabQWqVkPDbPd2Ig6ob8oT4bMqPeiiV0pQaRf8KZSEl9n6KNLinf
+         3GuoC/3SaicfSNEPRZpHzpFr/uSBf4MFNIdKJWjH3Wa3b6Ln/wBd32CagEzMmi8daPFs
+         xu4o2NbjuLbjWvnAuwsi4guqdXJXAAkf1Ot94cP4ACDhDg5aBIDVeqPoEMatRMlmFHI1
+         qiXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B9NJPMCqsZZzif8NOi6LqBERuaw3Qi0GLNSjXaKH72E=;
+        b=IRVpW5n190SjFe4l84RY63ETPs0rItjmtPSgutNXGGgrUNFICKE9AqSlPAK2r5G1fY
+         hYs4+pSG8Jwo0wRvwFmvE5i0uqwvfE+yAxqwxB0MauM/n0EoMP4clJxyv1qEIcqz8Don
+         jAQIrrPGR+c4daejHqleYrxnrwgvw9R+WKIthyi1sbXkyGt/9152upLjn8BmeiGLAxOw
+         r8JUy74n+uJ8Z/pVXC6rTXjnr/MP+9ZHg+UF24Hl5Baf6kZhms1MhGONRHB4WQK3cG7N
+         4CHylhqeJoBIwRDK2kEHoi6STSMxvwvyEOux1/NwU4gOe8FR52LDEJtwUeCMPRCWhiev
+         HMkw==
+X-Gm-Message-State: AJIora/CE3mpFhTFzM3b1lmK/cuws/7E8W/+LGmJw9lji37yVbY5t3S3
+        ns4UgdmgWjaXoS1OW6jwiWSop1HxOK7UyxYl+dYXVw==
+X-Google-Smtp-Source: AGRyM1ulXYs5LWVIFJXKUv4+yuTHZrksYcFCAawy5yUnHHithMuDKkcC43SQczJ+AibEVdQ6zRlR2WiS6vf9kyrleIc=
+X-Received: by 2002:ac8:5942:0:b0:31f:39f6:aba7 with SMTP id
+ 2-20020ac85942000000b0031f39f6aba7mr2122937qtz.295.1659077575797; Thu, 28 Jul
+ 2022 23:52:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgD3_9PlgONidnlHBQ--.46322S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxur18Ar1fWF1xKr4kAr48Xrb_yoWrAry3pF
-        WDKF4Ikw10gr4UWrW8Jw47ZasFgw4qkFyxCa93KrWYyFnFgF1vvr1kCrs8Xr48Cr4kArWU
-        ZrWDWrsIkryUWFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: x2kd0wpzhq2xhhqjqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220727100615.638072-1-dmitry.baryshkov@linaro.org>
+ <CAL_JsqJjLn8ypBo+bBoO+CE-si7gemP02fi8EWk97QRPPpNoVg@mail.gmail.com> <CAK7LNARXbXZFpxiHuLhzjJ4YahfV6z3dNPAdkkmeOXONBx8u3w@mail.gmail.com>
+In-Reply-To: <CAK7LNARXbXZFpxiHuLhzjJ4YahfV6z3dNPAdkkmeOXONBx8u3w@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 29 Jul 2022 09:52:44 +0300
+Message-ID: <CAA8EJprM4WAgfVTJ15azFtSH6POL5uuseHO=zVxRd44RmqKZjw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: take into account DT_SCHEMA_FILES changes while
+ checking dtbs
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Wensheng <zhangwensheng5@huawei.com>
+On Fri, 29 Jul 2022 at 08:55, Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Thu, Jul 28, 2022 at 2:36 AM Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Wed, Jul 27, 2022 at 4:06 AM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > It is useful to be able to recheck dtbs files against a limited set of
+> > > DT schema files. This can be accomplished by using differnt
+> > > DT_SCHEMA_FILES argument values while rerunning make dtbs_check. However
+> > > for some reason if_changed_rule doesn't pick up the rule_dtc changes
+> > > (and doesn't retrigger the build).
+> > >
+> > > Fix this by changing if_changed_rule to if_changed_dep and squashing DTC
+> > > and dt-validate into a single new command. Then if_changed_dep triggers
+> > > on DT_SCHEMA_FILES changes and reruns the build/check.
+> > >
+> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > ---
+> > >  scripts/Makefile.lib | 14 ++++++--------
+> > >  1 file changed, 6 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> > > index c88b98b5dc44..3df470289382 100644
+> > > --- a/scripts/Makefile.lib
+> > > +++ b/scripts/Makefile.lib
+> > > @@ -383,17 +383,15 @@ DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
+> > >  DT_BINDING_DIR := Documentation/devicetree/bindings
+> > >  DT_TMP_SCHEMA := $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
+> > >
+> > > -quiet_cmd_dtb_check =  CHECK   $@
+> > > -      cmd_dtb_check =  $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
+> > > +quiet_cmd_dtb =        DTC/CHECK   $@
+> >
+> > This is supposed to be 7 chars or less. DTCCHK or DTC_CHK perhaps. Or
+> > always do just 'DTC'. I can fixup when applying.
+> >
+> > I'll give it a few days for other comments.
+>
+>
+>
+> When you change DT_SCHEMA_FILES, re-running dt-validate should be enough.
+> You do not need to re-run dtc.
+>
+> I guess the strangeness comes from the fact that you are trying to do the
+>  two different things in a single rule.
 
-In the use of q_usage_counter of request_queue, blk_cleanup_queue using
-"wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter))"
-to wait q_usage_counter becoming zero. however, if the q_usage_counter
-becoming zero quickly, and percpu_ref_exit will execute and ref->data
-will be freed, maybe another process will cause a null-defef problem
-like below:
+The issue is that with the current rules the dt-validate isn't
+re-executed on DT_SCHEMA_FILES changes. Thus comes my proposal.
 
-	CPU0                             CPU1
-blk_cleanup_queue
- blk_freeze_queue
-  blk_mq_freeze_queue_wait
-				scsi_end_request
-				 percpu_ref_get
-				 ...
-				 percpu_ref_put
-				  atomic_long_sub_and_test
-  percpu_ref_exit
-   ref->data -> NULL
-   				   ref->data->release(ref) -> null-deref
-
-Fix it by setting flag(QUEUE_FLAG_USAGE_COUNT_SYNC) to add synchronization
-mechanism, when ref->data->release is called, the flag will be setted,
-and the "wait_event" in blk_mq_freeze_queue_wait must wait flag becoming
-true as well, which will limit percpu_ref_exit to execute ahead of time.
-
-Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
----
- block/blk-core.c       | 4 +++-
- block/blk-mq.c         | 7 +++++++
- include/linux/blk-mq.h | 1 +
- include/linux/blkdev.h | 2 ++
- 4 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 26664f2a139e..238d0f3cd279 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -385,7 +385,8 @@ void blk_cleanup_queue(struct request_queue *q)
- 	 * prevent that blk_mq_run_hw_queues() accesses the hardware queues
- 	 * after draining finished.
- 	 */
--	blk_freeze_queue(q);
-+	blk_freeze_queue_start(q);
-+	blk_mq_freeze_queue_wait_sync(q);
- 
- 	rq_qos_exit(q);
- 
-@@ -500,6 +501,7 @@ static void blk_queue_usage_counter_release(struct percpu_ref *ref)
- 	struct request_queue *q =
- 		container_of(ref, struct request_queue, q_usage_counter);
- 
-+	blk_queue_flag_set(QUEUE_FLAG_USAGE_COUNT_SYNC, q);
- 	wake_up_all(&q->mq_freeze_wq);
- }
- 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index c5d82b21a1cc..15c4e4530c87 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -134,6 +134,7 @@ void blk_freeze_queue_start(struct request_queue *q)
- {
- 	mutex_lock(&q->mq_freeze_lock);
- 	if (++q->mq_freeze_depth == 1) {
-+		blk_queue_flag_clear(QUEUE_FLAG_USAGE_COUNT_SYNC, q);
- 		percpu_ref_kill(&q->q_usage_counter);
- 		mutex_unlock(&q->mq_freeze_lock);
- 		if (queue_is_mq(q))
-@@ -144,6 +145,12 @@ void blk_freeze_queue_start(struct request_queue *q)
- }
- EXPORT_SYMBOL_GPL(blk_freeze_queue_start);
- 
-+void blk_mq_freeze_queue_wait_sync(struct request_queue *q)
-+{
-+	wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter) &&
-+			test_bit(QUEUE_FLAG_USAGE_COUNT_SYNC, &q->queue_flags));
-+}
-+
- void blk_mq_freeze_queue_wait(struct request_queue *q)
- {
- 	wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter));
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index f8ea27423d1d..95b2c904375f 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -522,6 +522,7 @@ void blk_mq_freeze_queue(struct request_queue *q);
- void blk_mq_unfreeze_queue(struct request_queue *q);
- void blk_freeze_queue_start(struct request_queue *q);
- void blk_mq_freeze_queue_wait(struct request_queue *q);
-+void blk_mq_freeze_queue_wait_sync(struct request_queue *q);
- int blk_mq_freeze_queue_wait_timeout(struct request_queue *q,
- 				     unsigned long timeout);
- 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 98fdf5a31fd6..b61461e3a734 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -629,6 +629,8 @@ struct request_queue {
- #define QUEUE_FLAG_RQ_ALLOC_TIME 27	/* record rq->alloc_time_ns */
- #define QUEUE_FLAG_HCTX_ACTIVE	28	/* at least one blk-mq hctx is active */
- #define QUEUE_FLAG_NOWAIT       29	/* device supports NOWAIT */
-+/* sync for q_usage_counter */
-+#define QUEUE_FLAG_USAGE_COUNT_SYNC    30
- 
- #define QUEUE_FLAG_MQ_DEFAULT	((1 << QUEUE_FLAG_IO_STAT) |		\
- 				 (1 << QUEUE_FLAG_SAME_COMP) |		\
 -- 
-2.31.1
-
+With best wishes
+Dmitry

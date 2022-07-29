@@ -2,127 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31845849F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6715849FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233538AbiG2CyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S233772AbiG2C4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbiG2CyX (ORCPT
+        with ESMTP id S229559AbiG2C4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:54:23 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7718E7393A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:54:22 -0700 (PDT)
-Received: from fsav314.sakura.ne.jp (fsav314.sakura.ne.jp [153.120.85.145])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26T2s20D085518;
-        Fri, 29 Jul 2022 11:54:02 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav314.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp);
- Fri, 29 Jul 2022 11:54:02 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26T2s2nj085515
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 29 Jul 2022 11:54:02 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <0a85696a-b0b9-0f4a-7c00-cd89edc9304c@I-love.SAKURA.ne.jp>
-Date:   Fri, 29 Jul 2022 11:54:02 +0900
+        Thu, 28 Jul 2022 22:56:15 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F752982E;
+        Thu, 28 Jul 2022 19:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659063374; x=1690599374;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E/Uyyb+h/AV7J/aT5ZRju9JhnFkYi1/BQWx3o8jvrNM=;
+  b=CHy+eMlBZ2HLixmxZxTNQre6NLs4+n7NdhvTzuPTgHDxpt8YuchK6st7
+   NDhAimrU6rvws5LlsxUrvizEvif2iwjnlA714zTJD1jF0w2/Bh+OHJ5S6
+   JziKmHyk8SWvQvxiEax+7F2KLC9OxASTi2tUPNoXGWuL+bUO1qD1B6bEs
+   GFdkdh1APLRqe9I7ewaiuVVb7BpHxxstgtLHxaKUYWMKxDkDOP4e1Wf4B
+   YZ9t3ShNo6IhkDbWHgRQmEDwXDpLPROTnAH9ho0e5pHH2N2IR9nEXvKiA
+   GAd14ytAdJ3YkIpROUIcbgxG6o119I7HdkWi+brQ0Q7e915HT4ltPuoEZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="268440538"
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="268440538"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:56:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="928578998"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jul 2022 19:56:11 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHGAd-000Ay1-05;
+        Fri, 29 Jul 2022 02:56:11 +0000
+Date:   Fri, 29 Jul 2022 10:55:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>, linux-pm@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, rafael@kernel.org, lenb@kernel.org,
+        viresh.kumar@linaro.org, robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeremy Linton <jeremy.linton@arm.com>
+Subject: Re: [PATCH] ACPI: CPPC: Disable FIE if registers in PCC regions
+Message-ID: <202207291003.Wk3c06eH-lkp@intel.com>
+References: <20220726145948.2194684-1-jeremy.linton@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [PATCH v2] workqueue: don't skip lockdep work dependency in
- cancel_work_sync()
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Johannes Berg <johannes.berg@intel.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
- <YuK78Jiy12BJG/Tp@slm.duckdns.org>
- <0ad532b2-df5f-331a-ae7f-21460fc62fe2@I-love.SAKURA.ne.jp>
- <97cbf8a9-d5e1-376f-6a49-3474871ea6b4@I-love.SAKURA.ne.jp>
- <afa1ac2c-a023-a91e-e596-60931b38247e@I-love.SAKURA.ne.jp>
- <7d034f7b-af42-4dbc-0887-60f4bdb3dcca@I-love.SAKURA.ne.jp>
-In-Reply-To: <7d034f7b-af42-4dbc-0887-60f4bdb3dcca@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726145948.2194684-1-jeremy.linton@arm.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like Hillf Danton mentioned
+Hi Jeremy,
 
-  syzbot should have been able to catch cancel_work_sync() in work context
-  by checking lockdep_map in __flush_work() for both flush and cancel.
+Thank you for the patch! Yet something to improve:
 
-in [1], being unable to report an obvious deadlock scenario shown below is
-broken. From locking dependency perspective, sync version of cancel request
-should behave as if flush request, for it waits for completion of work if
-that work has already started execution.
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master v5.19-rc8 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  ----------
-  #include <linux/module.h>
-  #include <linux/sched.h>
-  static DEFINE_MUTEX(mutex);
-  static void work_fn(struct work_struct *work)
-  {
-    schedule_timeout_uninterruptible(HZ / 5);
-    mutex_lock(&mutex);
-    mutex_unlock(&mutex);
-  }
-  static DECLARE_WORK(work, work_fn);
-  static int __init test_init(void)
-  {
-    schedule_work(&work);
-    schedule_timeout_uninterruptible(HZ / 10);
-    mutex_lock(&mutex);
-    cancel_work_sync(&work);
-    mutex_unlock(&mutex);
-    return -EINVAL;
-  }
-  module_init(test_init);
-  MODULE_LICENSE("GPL");
-  ----------
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Linton/ACPI-CPPC-Disable-FIE-if-registers-in-PCC-regions/20220726-230217
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220729/202207291003.Wk3c06eH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/a4dd80cfc857eef429f60e999bdc9479179d495e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jeremy-Linton/ACPI-CPPC-Disable-FIE-if-registers-in-PCC-regions/20220726-230217
+        git checkout a4dd80cfc857eef429f60e999bdc9479179d495e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Link: https://lkml.kernel.org/r/20220504044800.4966-1-hdanton@sina.com [1]
-Reported-by: Hillf Danton <hdanton@sina.com>
-Fixes: 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for flushing")
-Cc: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-Changes in v2:
-  Check work's dependency and do not check workqueue's dependency.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
- kernel/workqueue.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+All error/warnings (new ones prefixed by >>):
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 1ea50f6be843..01c5abf7fc61 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -3066,10 +3066,8 @@ static bool __flush_work(struct work_struct *work, bool from_cancel)
- 	if (WARN_ON(!work->func))
- 		return false;
- 
--	if (!from_cancel) {
--		lock_map_acquire(&work->lockdep_map);
--		lock_map_release(&work->lockdep_map);
--	}
-+	lock_map_acquire(&work->lockdep_map);
-+	lock_map_release(&work->lockdep_map);
- 
- 	if (start_flush_work(work, &barr, from_cancel)) {
- 		wait_for_completion(&barr.done);
+   In file included from drivers/cpufreq/acpi-cpufreq.c:29:
+>> include/acpi/cppc_acpi.h:177:12: warning: no previous prototype for 'cppc_perf_ctrs_in_pcc' [-Wmissing-prototypes]
+     177 | extern int cppc_perf_ctrs_in_pcc(void)
+         |            ^~~~~~~~~~~~~~~~~~~~~
+--
+   ld: drivers/cpufreq/intel_pstate.o: in function `cppc_perf_ctrs_in_pcc':
+>> include/acpi/cppc_acpi.h:178: multiple definition of `cppc_perf_ctrs_in_pcc'; drivers/cpufreq/acpi-cpufreq.o:include/acpi/cppc_acpi.h:178: first defined here
+
+
+vim +178 include/acpi/cppc_acpi.h
+
+   135	
+   136	#ifdef CONFIG_ACPI_CPPC_LIB
+   137	extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
+   138	extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
+   139	extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+   140	extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+   141	extern int cppc_set_enable(int cpu, bool enable);
+   142	extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+   143	extern int cppc_perf_ctrs_in_pcc(void);
+   144	extern bool acpi_cpc_valid(void);
+   145	extern bool cppc_allow_fast_switch(void);
+   146	extern int acpi_get_psd_map(unsigned int cpu, struct cppc_cpudata *cpu_data);
+   147	extern unsigned int cppc_get_transition_latency(int cpu);
+   148	extern bool cpc_ffh_supported(void);
+   149	extern bool cpc_supported_by_cpu(void);
+   150	extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+   151	extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
+   152	#else /* !CONFIG_ACPI_CPPC_LIB */
+   153	static inline int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
+   154	{
+   155		return -ENOTSUPP;
+   156	}
+   157	static inline int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+   158	{
+   159		return -ENOTSUPP;
+   160	}
+   161	static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+   162	{
+   163		return -ENOTSUPP;
+   164	}
+   165	static inline int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+   166	{
+   167		return -ENOTSUPP;
+   168	}
+   169	static inline int cppc_set_enable(int cpu, bool enable)
+   170	{
+   171		return -ENOTSUPP;
+   172	}
+   173	static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+   174	{
+   175		return -ENOTSUPP;
+   176	}
+ > 177	extern int cppc_perf_ctrs_in_pcc(void)
+ > 178	{
+   179		return false;
+   180	}
+   181	static inline bool acpi_cpc_valid(void)
+   182	{
+   183		return false;
+   184	}
+   185	static inline bool cppc_allow_fast_switch(void)
+   186	{
+   187		return false;
+   188	}
+   189	static inline unsigned int cppc_get_transition_latency(int cpu)
+   190	{
+   191		return CPUFREQ_ETERNAL;
+   192	}
+   193	static inline bool cpc_ffh_supported(void)
+   194	{
+   195		return false;
+   196	}
+   197	static inline int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val)
+   198	{
+   199		return -ENOTSUPP;
+   200	}
+   201	static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
+   202	{
+   203		return -ENOTSUPP;
+   204	}
+   205	#endif /* !CONFIG_ACPI_CPPC_LIB */
+   206	
+
 -- 
-2.18.4
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

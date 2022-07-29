@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EE8584B4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BE6584B4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 07:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbiG2FtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 01:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S234471AbiG2FuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 01:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiG2FtQ (ORCPT
+        with ESMTP id S229445AbiG2FuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 01:49:16 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 390C620BEA;
-        Thu, 28 Jul 2022 22:49:14 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id E42631E80D77;
-        Fri, 29 Jul 2022 13:49:06 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TcvvCQeC8H69; Fri, 29 Jul 2022 13:49:04 +0800 (CST)
-Received: from [172.30.18.178] (unknown [180.167.10.98])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id A59E21E80CF9;
-        Fri, 29 Jul 2022 13:49:03 +0800 (CST)
-Subject: Re: [PATCH] dn_route: use time_is_before_jiffies(a) to replace
- "jiffies - a > 0"
-To:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-decnet-user@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        liqiong@nfschina.com
-References: <20220727024600.18413-1-yuzhe@nfschina.com>
- <e63e6fc511d9d515fcb8501f48f218192f36afd3.camel@redhat.com>
-From:   Yu Zhe <yuzhe@nfschina.com>
-Message-ID: <98b5da7e-74d2-0350-e0fc-a98ca3cb944c@nfschina.com>
-Date:   Fri, 29 Jul 2022 13:49:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        Fri, 29 Jul 2022 01:50:06 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBFB20BEA;
+        Thu, 28 Jul 2022 22:50:05 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s206so3246356pgs.3;
+        Thu, 28 Jul 2022 22:50:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=/j5fdDJlgBil0TLny5OkHt3tc5e9J0A1rlxb5AXkN8M=;
+        b=jeg2ixUalqJ4OrQZJepDKPqnVDS74axJfggAu6NxWI4DGdaqomUxvgRvbK+i26YWfq
+         PegEsMenQiYPraDkKtiWRYe7FO4HsbxLkh+Ca2U9AMt/H5MfYamAX4U17m1d4TsOd8Is
+         8dDZMaRdCOkbyuPs6gX7vYbGM96sH9WM3XO1EEucTwY2Puw+rVwnZlRzW7dUJSs59p2Y
+         ahYGZB5LCfyr2GMGWe6Cpmr7bKZqmj6cN96uS6ih76YTls5NGgPM10sWXqhLFS1JDOwU
+         p3I5ExUC6MRJbEqVsTGZeG0TU/MymYm/Z5xG+o93ZMyeD1lnD7nlObnkHDzlR4QDWU22
+         ak6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=/j5fdDJlgBil0TLny5OkHt3tc5e9J0A1rlxb5AXkN8M=;
+        b=0ww20UV8Bb4zNaE81DJGMrTuRq37D4BPx26/IMdvqCKTc8dfFPTNAlkcnqzESlbSYt
+         TgLxuNKz4AXp3pVkxMv5LDpMRxPxEuSEhC11zOtkQhUIINjB4aao/jSA6pacXEE5//au
+         Wd87aMm77cIqUaD+jZI/VaRma9qQmrAzZsBaSWtsTA/XU8Jsq/QcMXd31E0xTSQG83Ul
+         5KGFol3P8lIhF1CAo9vMoIY3VrUPEQqE4XbjVrPZltC45d8SDsG+0h5+MTRB38lrnglh
+         e0mufTvvtZLNo8rrC0Hcu3AFy8rO9CAHdpW21zn+ugQxT9gveQNwrsJL57UtHL5cf/Gf
+         Wacg==
+X-Gm-Message-State: AJIora9Zn/3jk0b0IGQciZ8P44iWUBY9jpft69bLvApdNINc49+I3NJJ
+        bmPayoTw3G1RCE7rK7xk7xA=
+X-Google-Smtp-Source: AGRyM1s/U0o/e/oaJOjx1Lu7OIcYkxNUWrNivAWAVZrc489nn9ktxD9tgUHlh5SbMjCmFd8mP02s4w==
+X-Received: by 2002:a63:314a:0:b0:412:b42c:693d with SMTP id x71-20020a63314a000000b00412b42c693dmr1706365pgx.20.1659073805333;
+        Thu, 28 Jul 2022 22:50:05 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id t2-20020a625f02000000b0052ab764fa78sm1776430pfb.185.2022.07.28.22.50.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 22:50:05 -0700 (PDT)
+From:   Zeng Jingxiang <zengjx95@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeng Jingxiang <linuszeng@tencent.com>
+Subject: [PATCH] bpf/verifier: fix control flow issues in __reg64_bound_u32()
+Date:   Fri, 29 Jul 2022 13:49:58 +0800
+Message-Id: <20220729054958.2151520-1-zengjx95@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <e63e6fc511d9d515fcb8501f48f218192f36afd3.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022年07月28日 21:11, Paolo Abeni 写道:
+From: Zeng Jingxiang <linuszeng@tencent.com>
 
-> On Wed, 2022-07-27 at 10:46 +0800, Yu Zhe wrote:
->> time_is_before_jiffies deals with timer wrapping correctly.
->>
->> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
->> ---
->>   net/decnet/dn_route.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/net/decnet/dn_route.c b/net/decnet/dn_route.c
->> index 552a53f1d5d0..0a4bed0bc2e3 100644
->> --- a/net/decnet/dn_route.c
->> +++ b/net/decnet/dn_route.c
->> @@ -201,7 +201,7 @@ static void dn_dst_check_expire(struct timer_list *unused)
->>   		}
->>   		spin_unlock(&dn_rt_hash_table[i].lock);
->>   
->> -		if ((jiffies - now) > 0)
->> +		if (time_is_before_jiffies(now))
-> Uhmm... it looks like the wrap-around condition can happen only in
-> theory: 'now' is initialized just before entering this loop, and we
-> will break as soon as jiffies increment. The wrap-around could happen
-> only if a single iteration of the loop takes more than LONG_MAX
-> jiffies.
->
-> If that happens, we have a completely different kind of much more
-> serious problem, I think ;)
->
-> So this change is mostly for core readability's sake. I personally find
-> more readable:
->
-> 		if (jiffies != now)
+This greater-than-or-equal-to-zero comparison of an unsigned value
+is always true. "a >= U32_MIN".
+1632	return a >= U32_MIN && a <= U32_MAX;
 
-I agree and I will send a v2 patch later.
+Fixes: b9979db83401 ("bpf: Fix propagation of bounds from 64-bit min/max into 32-bit and var_off.")
+Signed-off-by: Zeng Jingxiang <linuszeng@tencent.com>
+---
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Cheers,
->
-> Paolo
->
-> p.s. given the above I guess this is for the net-next tree, right?
->
-yes
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0efbac0fd126..dd67108fb1d7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1629,7 +1629,7 @@ static bool __reg64_bound_s32(s64 a)
+ 
+ static bool __reg64_bound_u32(u64 a)
+ {
+-	return a >= U32_MIN && a <= U32_MAX;
++	return a <= U32_MAX;
+ }
+ 
+ static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
+-- 
+2.27.0
 
->

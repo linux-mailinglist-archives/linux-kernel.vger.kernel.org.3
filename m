@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9031585469
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F4158546A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237752AbiG2RXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S238418AbiG2RX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiG2RXn (ORCPT
+        with ESMTP id S236366AbiG2RXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Jul 2022 13:23:43 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD2482106;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD7A82F84;
         Fri, 29 Jul 2022 10:23:40 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 415E45FD02;
+        by mail.sberdevices.ru (Postfix) with ESMTP id 4D7AD5FD04;
         Fri, 29 Jul 2022 20:23:38 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
         s=mail; t=1659115418;
-        bh=yX14yo464XH8BoP6NdYU3WfzYqSAMbCRrtyabNvLzUQ=;
+        bh=GtXHsLQ6ogBma9gmqvBjy7eEPphOp16VWCwaSJGGTnU=;
         h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=X822dA8EA3PCCwWO5uvtOfRVYPh3v0ajO0HhMfVyZqnzrUgVVXglW5ZHo3/e58/Za
-         FjAfmcqLQI/sey+PbgI9tJKtA7n59gVxebxktTAm957OqFt/tqhkZAdfPaoY5S0cjN
-         fdO/wCZ5wg4KvihcA6tqWPgg16ePDFzTedQcN2STcK6hMcpFuf++9kZaR7o4vosVLC
-         ss+oXiYdZfbyoY583Wq5qZ8AmjaMl0okQZiSr1f0gxi5SKr6fUj16rE+qoC9JwHuRc
-         MIGZInD5LBUWR5IG05o6aENIMqEYqzNpzb8BCoZxhMGNOyx+ITloQsUz/JRD4GTkzQ
-         TKLZ0bKs2KQoQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        b=Y2FEP8yNDt2CjJ+ZMkTstl4/4hszIAmsV5QkUY8v9t9YRwj6xJyFWuqKCSFr99BHl
+         Rfgu6OOMscXMkJ1OGMQreqlTUxB1UWxsHyYXRcYZUf+1SD9JRRms4EBhUO+7OpOElN
+         YpxqbSGpbK9sqlybLSVkIl4EvzEBBvrYsE1DdcgQbb86GfhvujjSQcnSDLVCFNK41T
+         nZYbtA4IYegg/iOpSLgarLjstVPVZ6y9CCreEUv9Z9IpgU92FiHkdIDYMO1QNzR+o0
+         kh2+9Zj8q+aAGYe/KbWrw8FJ+36tDkxqEK6RnynI1QV5eeUvl4cCp9lzngXy+brm03
+         umQAXvAeNG9QA==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
         by mail.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 29 Jul 2022 20:23:36 +0300 (MSK)
+        Fri, 29 Jul 2022 20:23:37 +0300 (MSK)
 From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
 To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "andriy.shevchenko@linux.intel.com" 
@@ -46,11 +46,13 @@ CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         kernel <kernel@sberdevices.ru>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v2 0/3] units: complement the set of Hz units
-Thread-Topic: [PATCH v2 0/3] units: complement the set of Hz units
-Thread-Index: AQHYo2/dJ8g6n21zP0mor5gcCy0AWA==
-Date:   Fri, 29 Jul 2022 17:23:06 +0000
-Message-ID: <20220729172332.19118-1-ddrokosov@sberdevices.ru>
+Subject: [PATCH v2 1/3] units: complement the set of Hz units
+Thread-Topic: [PATCH v2 1/3] units: complement the set of Hz units
+Thread-Index: AQHYo2/exMPEjcXGek6GXlZKNuELJw==
+Date:   Fri, 29 Jul 2022 17:23:07 +0000
+Message-ID: <20220729172332.19118-2-ddrokosov@sberdevices.ru>
+References: <20220729172332.19118-1-ddrokosov@sberdevices.ru>
+In-Reply-To: <20220729172332.19118-1-ddrokosov@sberdevices.ru>
 Accept-Language: ru-RU, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -75,32 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During msa311 accel IIO driver development
+Currently, Hz units do not have milli, micro and nano Hz coefficients.
+Some drivers (IIO especially) use their analogues to calculate
+appropriate Hz values. This patch includes them to units.h definitions,
+so they can be used from different kernel places.
 
-https://lore.kernel.org/linux-iio/20220616104211.9257-1-ddrokosov@sberdevic=
-es.ru/
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+ include/linux/units.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Andy requested to use proper units in the hz->ms calculation. Current
-units.h header doesn't have milli, micro and nano HZ coefficients, so
-some drivers (in the IIO subsystem) implement their own copies for that.
-
-The current patchset resolves such a problem and intoduces general
-MILLIHZ_PER_HZ, UHZ_PER_HZ and NHZ_PER_HZ definitions in the units.h, and
-fixes all drivers which duplicate these units.
-
-Changes v1->v2:
-    - changed MHZ_PER_HZ to a different name as Andy suggested
-      (suppose MILLIHZ_PER_HZ is good enough)
-
-Dmitry Rokosov (3):
-  units: complement the set of Hz units
-  iio: accel: adxl345: use HZ macro from units.h
-  iio: common: scmi_sensors: use HZ macro from units.h
-
- drivers/iio/accel/adxl345_core.c           | 2 +-
- drivers/iio/common/scmi_sensors/scmi_iio.c | 2 +-
- include/linux/units.h                      | 3 +++
- 3 files changed, 5 insertions(+), 2 deletions(-)
-
+diff --git a/include/linux/units.h b/include/linux/units.h
+index 681fc652e3d7..8bb83c6ea97d 100644
+--- a/include/linux/units.h
++++ b/include/linux/units.h
+@@ -20,6 +20,9 @@
+ #define PICO	1000000000000ULL
+ #define FEMTO	1000000000000000ULL
+=20
++#define NHZ_PER_HZ		1000000000UL
++#define UHZ_PER_HZ		1000000UL
++#define MILLIHZ_PER_HZ		1000UL
+ #define HZ_PER_KHZ		1000UL
+ #define KHZ_PER_MHZ		1000UL
+ #define HZ_PER_MHZ		1000000UL
 --=20
 2.36.0

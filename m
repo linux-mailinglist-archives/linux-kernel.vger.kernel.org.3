@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6330584DF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE95A584E04
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbiG2JQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 05:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S235203AbiG2JZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 05:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiG2JQG (ORCPT
+        with ESMTP id S234937AbiG2JZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 05:16:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD7F66ADD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 02:16:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47D8C61D3A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 09:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4281C433C1;
-        Fri, 29 Jul 2022 09:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659086164;
-        bh=FvjchVb1a62ysId8AI3Wh3k06CFUyn06kg/iS2JkxPQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kVjbgbUYKONtR5odkSYpoZGE/vS/9UY6/B0hYI1ZSdup43YZxKlOQXJiXNYxHL6e8
-         uEJZM3Yz96rMHEPn5dE8Ny7CJ3NDIhAm4g2iQZ8GDAUBFmPu5HZvhLyrpcWnoOH2DP
-         X4gsVrslK4z4oGvIus7Sfm0ayBxnaPD8usdxHvMUrFcJa1eaFUkqkLPlSB5LWniSS5
-         kUK6seLpRal766bRkC5u8FPs/FlihV5Kr0W2uOos6J71hpOUXNEys+iW5mgQ/p9JwS
-         WEuYmDH0Jqt0mX71BrIMDjtAHtluEayK6Wy2NWa5CQFyfMWyHI6gpT9PB7QIRZSmNV
-         AIakT4Gp+NF0Q==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oHM6E-00AqXE-Ez;
-        Fri, 29 Jul 2022 10:16:02 +0100
+        Fri, 29 Jul 2022 05:25:15 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6015F51;
+        Fri, 29 Jul 2022 02:25:12 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26T6qABj032226;
+        Fri, 29 Jul 2022 02:25:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=MUsZPYus2r48GMLBKtxWVkUeqxyL4L3SV3qJsWq6K28=;
+ b=Gg1GpR7lfhmVLKpw/AyujD0ZGHwUYB+Ck/Rl/4iJfFddl46HxWSsiF1rFSLToKtRZ/Hr
+ btv+9rTA9Kl7vl3/h1yC3va/u9zBcTbK+rxHSTypAr92JN+Ev6XedOIMI0IQ1uPxig8g
+ zQpQdyAv1oFyrK5fjbFLzEypvSAYwFybS+NDgpL9rvyZL9UPmsoS6+NF/xaEsFmcj5LF
+ EXgBb38D1kWgScbu3yDj/tkvy7/HJ/hmeGlNldvRy4Qyq4kaMBU2pL1I+d185xnYYe0S
+ 9ABnSRbmYfXZ6C0KKkp3ZPF4LV5yE+g5E2wKzkPeHIev6x7931M/gjIahMkCcgr7181H KA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3hjyn8snkc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 29 Jul 2022 02:25:05 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 29 Jul
+ 2022 02:25:03 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Fri, 29 Jul 2022 02:25:03 -0700
+Received: from #hyd1583.marvell.com (unknown [10.29.37.44])
+        by maili.marvell.com (Postfix) with ESMTP id 8FCD43F706A;
+        Fri, 29 Jul 2022 02:25:00 -0700 (PDT)
+From:   Naveen Mamindlapalli <naveenm@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sgoutham@marvell.com>
+CC:     Subbaraya Sundeep <sbhatta@marvell.com>,
+        Naveen Mamindlapalli <naveenm@marvell.com>
+Subject: [net PATCH v2] octeontx2-pf: Reduce minimum mtu size to 60
+Date:   Fri, 29 Jul 2022 14:54:57 +0530
+Message-ID: <20220729092457.3850-1-naveenm@marvell.com>
+X-Mailer: git-send-email 2.16.5
 MIME-Version: 1.0
-Date:   Fri, 29 Jul 2022 10:16:02 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irqdomain: do not shadow nr_irqs global definition
-In-Reply-To: <20220729090307.57905-1-mailhol.vincent@wanadoo.fr>
-References: <20220729090307.57905-1-mailhol.vincent@wanadoo.fr>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <2e3ef1724d1d9acdbbf1a80487891a7f@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: mailhol.vincent@wanadoo.fr, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: EiYM7sgwECUVfi05LDXqw9v0qu9g1aBS
+X-Proofpoint-GUID: EiYM7sgwECUVfi05LDXqw9v0qu9g1aBS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-28_06,2022-07-28_02,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,77 +66,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-29 10:03, Vincent Mailhol wrote:
-> include/linux/irqnr.h declares a global variable named `nr_irqs'.
-> 
-> The inline function irq_domain_alloc_irqs() from
-> include/linux/irqdomain.h also uses the same name and thus shadow the
-> global declaration. Rename the function argument from `nr_irqs' to
-> `nbr_irqs'.
-> 
-> This patch silences below -Wshadow warning:
-> 
-> | In file included from ./arch/x86/include/asm/irqdomain.h:5,
-> |                  from ./arch/x86/include/asm/msi.h:5,
-> |                  from ./include/linux/msi.h:23,
-> |                  from ./include/linux/kvm_host.h:19,
-> |                  from arch/x86/kernel/../kvm/vmx/vmx.h:5,
-> |                  from arch/x86/kernel/asm-offsets.c:22:
-> | ./include/linux/irqdomain.h: In function 'irq_domain_alloc_irqs':
-> | ./include/linux/irqdomain.h:514:38: warning: declaration of
-> 'nr_irqs' shadows a global declaration [-Wshadow]
-> |   514 |                         unsigned int nr_irqs, int node, void 
-> *arg)
-> |       |                         ~~~~~~~~~~~~~^~~~~~~
-> | In file included from ./include/linux/interrupt.h:10,
-> |                  from ./include/linux/kernel_stat.h:9,
-> |                  from ./include/linux/cgroup.h:26,
-> |                  from ./include/linux/memcontrol.h:13,
-> |                  from ./include/linux/swap.h:9,
-> |                  from ./include/linux/suspend.h:5,
-> |                  from arch/x86/kernel/asm-offsets.c:13:
-> | ./include/linux/irqnr.h:8:12: note: shadowed declaration is here
-> |     8 | extern int nr_irqs;
-> |       |            ^~~~~~~
-> 
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  include/linux/irqdomain.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
-> index 00d577f90883..76949bb029b0 100644
-> --- a/include/linux/irqdomain.h
-> +++ b/include/linux/irqdomain.h
-> @@ -511,9 +511,9 @@ extern int irq_domain_activate_irq(struct irq_data
-> *irq_data, bool early);
->  extern void irq_domain_deactivate_irq(struct irq_data *irq_data);
-> 
->  static inline int irq_domain_alloc_irqs(struct irq_domain *domain,
-> -			unsigned int nr_irqs, int node, void *arg)
-> +					unsigned int nbr_irqs, int node, void *arg)
->  {
-> -	return __irq_domain_alloc_irqs(domain, -1, nr_irqs, node, arg, false,
-> +	return __irq_domain_alloc_irqs(domain, -1, nbr_irqs, node, arg, 
-> false,
->  				       NULL);
->  }
+From: Subbaraya Sundeep <sbhatta@marvell.com>
 
-I really don't think this is worth it. A function has its
-own namespace, and this warning is on the long list of
-"this is completely silly". Case in point:
+PTP messages like SYNC, FOLLOW_UP, DELAY_REQ are of size 58 bytes.
+Using a minimum packet length as 64 makes NIX to pad 6 bytes of
+zeroes while transmission. This is causing latest ptp4l application to
+emit errors since length in PTP header and received packet are not same.
+Padding upto 3 bytes is fine but more than that makes ptp4l to assume
+the pad bytes as a TLV. Hence reduce the size to 60 from 64.
 
-$ git grep 'unsigned int nr_irqs'| wc -l
-207
+Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
+Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
+Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+---
 
-Is anything broken? Not as far as I can tell.
+v2:
+   no code changes, added PTP maintainer also.
 
-If there was anything to fix, it is the top-level definition
-that should be more indicative of its global status. But again,
-there is nothing broken so far.
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-
-         M.
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
+index c88e8a436029..fbe62bbfb789 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
+@@ -21,7 +21,7 @@
+ #define OTX2_HEAD_ROOM		OTX2_ALIGN
+ 
+ #define	OTX2_ETH_HLEN		(VLAN_ETH_HLEN + VLAN_HLEN)
+-#define	OTX2_MIN_MTU		64
++#define	OTX2_MIN_MTU		60
+ 
+ #define OTX2_MAX_GSO_SEGS	255
+ #define OTX2_MAX_FRAGS_IN_SQE	9
 -- 
-Jazz is not dead. It just smells funny...
+2.16.5
+

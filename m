@@ -2,246 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB7258556B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7549585572
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238383AbiG2TEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S238515AbiG2TH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238824AbiG2TDp (ORCPT
+        with ESMTP id S238666AbiG2THo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:03:45 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BF68AB37;
-        Fri, 29 Jul 2022 12:03:05 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 897C33190A9;
-        Fri, 29 Jul 2022 15:03:02 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id FjSsyCqPWGBL; Fri, 29 Jul 2022 15:03:02 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id AC257318E28;
-        Fri, 29 Jul 2022 15:02:52 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com AC257318E28
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1659121372;
-        bh=GI5TUw70TsFggMy26+Gy48ykoT2fvjxXI2AaoplVknA=;
-        h=From:To:Date:Message-Id;
-        b=p99RvNp7adxUrvSbURY7tSPn34Iw1skMde3C1BfzXR8dlN6ewpUPzEvHIlXuhYgi3
-         2wHdtazZG/+0JcwO7SikdE64FfOJ9TWYJBD7xvt+nq0CnkN7DyMyBF/+klaMBGBPQm
-         tIQ7rc/DA9NsjtYcdRhbLPBThGPslXhE7m+FKgoMP/A3/XFTKTkzIZsONlwIobVvel
-         +PlqCSjVKPsY8BV7hDIHn7hOnvlZFNz7YFzoOsLRMb3O3a41zSuwy5/QhygMsPcIor
-         DRp7OPmY62vg6JNIuniG1BUvc30emx9JmYNtM6KQoUuoAu0cCRMqwBfDWVISG071zT
-         +gUyOBft4B3Qw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dSlcnOIRj8i1; Fri, 29 Jul 2022 15:02:52 -0400 (EDT)
-Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id D7471318C7C;
-        Fri, 29 Jul 2022 15:02:48 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH v3 23/23] selftests/rseq: Implement numa node id vs vm_vcpu_id invariant test
-Date:   Fri, 29 Jul 2022 15:02:25 -0400
-Message-Id: <20220729190225.12726-24-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220729190225.12726-1-mathieu.desnoyers@efficios.com>
-References: <20220729190225.12726-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Jul 2022 15:07:44 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFC18AB3F;
+        Fri, 29 Jul 2022 12:06:28 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y141so5401462pfb.7;
+        Fri, 29 Jul 2022 12:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc;
+        bh=uLQq543zzaP6K6uM2P4doohHRVa2+DxlHja/0GeLtJM=;
+        b=a1pa96GKeVk8nUGVWzvitE5LFMPojG7MJ/BBtGXKp2C+WlFDMudd7HhhUKYxId7XYd
+         DIkHccq5lh2HOp4ViiS9OvRAtw6BlcOdnwP1RKU4pEm8h4O5nsv7Yysc4xwSyOgn60Il
+         RcUHSz0FvQCn31sY6Bs4GDilUdSZAEr66+mpOx582AjFdxbGge1r3L08/bt8O7143QFQ
+         fsZzKvI5v4l8qFZ3EYEjUabhzkKI48c094BRBv1RJUXzhPP07Ir5N2QjmG9Zmvq8myoE
+         8Pz12bJeNHX+WWJBdiPrJvhRbLiM4dNYxbJcl8/CBQdwaQmIaqWPUSCjZ5gHakTfLQ8Q
+         eiZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc;
+        bh=uLQq543zzaP6K6uM2P4doohHRVa2+DxlHja/0GeLtJM=;
+        b=QvLZoHM5/1DJZUVGAaKQPszm2B/gfFm8eDlFQS61foF2UxTsm8mVPf5xQgRwvP2rN0
+         d28sMW1TW5q8+Dvi2moZi9anDthZ/munHY3D8tsbYOq29o/SWy3auQAT+Kkq5rSby1Q+
+         778Hb6n+pOkmyWvlSDByi/4RP80c2gLHlg2TfATWnVn9IMeskuB3nYqMDe9h9EZjXtRU
+         1na1xuAAlK85nkCt6/k48ZKaqGDchjMLRhTqcFOYDW1TYpUzNF4TRtbhz07UckwMZA21
+         Fn0s/XJqM2te+2Q1bGvhDN3xYb8yHSFIKh8BHRgab8WzMQWfACRJccC7PNeCDl3VxL+g
+         o1LQ==
+X-Gm-Message-State: AJIora/XtMJYW1wWH1iBUTS/PcO8rK+euixGRynOS7mgkIQh24YFEdoQ
+        S8AFOLkKXsPQvw2IoajkP53gKX0dJ9I=
+X-Google-Smtp-Source: AGRyM1vJPZifYAAesQi6iHBXj0elaShPjxKqT1uaup506flc6MzaCg5XhFxjvxAy6yzSldQWXs6z4Q==
+X-Received: by 2002:a05:6a00:2495:b0:52b:7a9:9c72 with SMTP id c21-20020a056a00249500b0052b07a99c72mr5110530pfv.46.1659121586652;
+        Fri, 29 Jul 2022 12:06:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:df80])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b0016d88f68dbfsm4050738plg.63.2022.07.29.12.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 12:05:51 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 29 Jul 2022 09:05:20 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     cgroups@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Namhyung Kim <namhyung@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH cgroup/for-5.20] cgroup: Replace cgroup->ancestor_ids[] with
+ ->ancestors[]
+Message-ID: <YuQvcCrcgNWbtndU@slm.duckdns.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On all architectures except Power, the NUMA topology is never
-reconfigured after a CPU has been associated with a NUMA node in the
-system lifetime.
+Every cgroup knows all its ancestors through its ->ancestor_ids[]. While all
+the existing users only need the IDs, there's no advantage to remembering
+the IDs instead of the pointers directly. Let's replace
+cgroup->ancestor_ids[] with ->ancestors[] so that it's easy to access non-ID
+ancestor fields.
 
-Even on Power, we can assume that NUMA topology reconfiguration happens
-rarely, and therefore we do not expect it to happen while the NUMA test
-is running.
+This patch shouldn't cause any behavior differences.
 
-This test validates that the mapping between a vm_vcpu_id and a numa
-node id remains valid for the process lifetime. In other words, it
-validates that if any thread within the process running on behalf of a
-vm_vcpu_id N observes a NUMA node id M, all threads within this process
-will always observe the same NUMA node id value when running on behalf
-of that same vm_vcpu_id.
-
-This characteristic is important for NUMA locality.
-
-This test is skipped on architectures that do not implement
-rseq_load_u32_u32.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
 ---
- tools/testing/selftests/rseq/.gitignore       |   1 +
- tools/testing/selftests/rseq/Makefile         |   2 +-
- .../testing/selftests/rseq/basic_numa_test.c  | 117 ++++++++++++++++++
- 3 files changed, 119 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rseq/basic_numa_test.c
+Namhyung, I think the change in bperf_cgroup is correct but couldn't figure
+out how to test it (normal perf build wouldn't compile it). Can you please
+see whether it's correct?
 
-diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
-index db5c1a124c6c..9231abed69cc 100644
---- a/tools/testing/selftests/rseq/.gitignore
-+++ b/tools/testing/selftests/rseq/.gitignore
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+basic_numa_test
- basic_percpu_ops_test
- basic_percpu_ops_vm_vcpu_id_test
- basic_test
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index 3eec8e166385..4bf5b7202254 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -12,7 +12,7 @@ LDLIBS += -lpthread -ldl
- # still track changes to header files and depend on shared object.
- OVERRIDE_TARGETS = 1
- 
--TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_vm_vcpu_id_test param_test \
-+TEST_GEN_PROGS = basic_test basic_numa_test basic_percpu_ops_test basic_percpu_ops_vm_vcpu_id_test param_test \
- 		param_test_benchmark param_test_compare_twice param_test_vm_vcpu_id \
- 		param_test_vm_vcpu_id_benchmark param_test_vm_vcpu_id_compare_twice
- 
-diff --git a/tools/testing/selftests/rseq/basic_numa_test.c b/tools/testing/selftests/rseq/basic_numa_test.c
-new file mode 100644
-index 000000000000..45cb714b135c
---- /dev/null
-+++ b/tools/testing/selftests/rseq/basic_numa_test.c
-@@ -0,0 +1,117 @@
-+// SPDX-License-Identifier: LGPL-2.1
-+/*
-+ * Basic rseq NUMA test. Validate that (vm_vcpu_id, numa_node_id) pairs are
-+ * invariant. The only known scenario where this is untrue is on Power which
-+ * can reconfigure the NUMA topology on CPU hotunplug/hotplug sequence.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <sys/time.h>
-+
-+#include "rseq.h"
-+
-+#define NR_LOOPS	100000000
-+#define NR_THREADS	16
-+
-+#ifdef RSEQ_ARCH_HAS_LOAD_U32_U32
-+
-+static
-+int cpu_numa_id[CPU_SETSIZE];
-+
-+static
-+void numa_id_init(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < CPU_SETSIZE; i++)
-+		cpu_numa_id[i] = -1;
-+}
-+
-+static
-+void *test_thread(void *arg)
-+{
-+	int i;
-+
-+	if (rseq_register_current_thread()) {
-+		fprintf(stderr, "Error: rseq_register_current_thread(...) failed(%d): %s\n",
-+			errno, strerror(errno));
-+		abort();
-+	}
-+
-+	for (i = 0; i < NR_LOOPS; i++) {
-+		uint32_t vm_vcpu_id, node;
-+		int cached_node_id;
-+
-+		while (rseq_load_u32_u32(RSEQ_MO_RELAXED, &vm_vcpu_id, &rseq_get_abi()->vm_vcpu_id,
-+					 &node, &rseq_get_abi()->node_id) != 0) {
-+			/* Retry. */
-+		}
-+		cached_node_id = RSEQ_READ_ONCE(cpu_numa_id[vm_vcpu_id]);
-+		if (cached_node_id == -1) {
-+			RSEQ_WRITE_ONCE(cpu_numa_id[vm_vcpu_id], node);
-+		} else {
-+			if (node != cached_node_id) {
-+				fprintf(stderr, "Error: NUMA node id discrepancy: vm_vcpu_id %u cached node id %d node id %u.\n",
-+					vm_vcpu_id, cached_node_id, node);
-+				fprintf(stderr, "This is likely a kernel bug, or caused by a concurrent NUMA topology reconfiguration.\n");
-+				abort();
-+			}
-+		}
-+	}
-+
-+	if (rseq_unregister_current_thread()) {
-+		fprintf(stderr, "Error: rseq_unregister_current_thread(...) failed(%d): %s\n",
-+			errno, strerror(errno));
-+		abort();
-+	}
-+	return NULL;
-+}
-+
-+static
-+int test_numa(void)
-+{
-+        pthread_t tid[NR_THREADS];
-+        int err, i;
-+        void *tret;
-+
-+	numa_id_init();
-+
-+	printf("testing rseq (vm_vcpu_id, numa_node_id) invariant, single thread\n");
-+
-+	(void) test_thread(NULL);
-+
-+	printf("testing rseq (vm_vcpu_id, numa_node_id) invariant, multi-threaded\n");
-+
-+        for (i = 0; i < NR_THREADS; i++) {
-+                err = pthread_create(&tid[i], NULL, test_thread, NULL);
-+                if (err != 0)
-+                        abort();
-+        }
-+
-+        for (i = 0; i < NR_THREADS; i++) {
-+                err = pthread_join(tid[i], &tret);
-+                if (err != 0)
-+                        abort();
-+        }
-+
-+	return 0;
-+}
-+#else
-+static
-+int test_numa(void)
-+{
-+	fprintf(stderr, "rseq_load_u32_u32 is not implemented on this architecture. "
-+			"Skipping numa test.\n");
-+	return 0;
-+}
-+#endif
-+
-+int main(int argc, char **argv)
-+{
-+	return test_numa();
-+}
--- 
-2.17.1
+Thanks.
 
+ include/linux/cgroup-defs.h                 |   10 +++++-----
+ include/linux/cgroup.h                      |    2 +-
+ kernel/cgroup/cgroup.c                      |    7 +++----
+ net/netfilter/nft_socket.c                  |    5 +++--
+ tools/perf/util/bpf_skel/bperf_cgroup.bpf.c |    2 +-
+ 5 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 63bf43c7ca3b..51fa744c2e9d 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -379,7 +379,7 @@ struct cgroup {
+ 	/*
+ 	 * The depth this cgroup is at.  The root is at depth zero and each
+ 	 * step down the hierarchy increments the level.  This along with
+-	 * ancestor_ids[] can determine whether a given cgroup is a
++	 * ancestors[] can determine whether a given cgroup is a
+ 	 * descendant of another without traversing the hierarchy.
+ 	 */
+ 	int level;
+@@ -499,8 +499,8 @@ struct cgroup {
+ 	/* Used to store internal freezer state */
+ 	struct cgroup_freezer_state freezer;
+ 
+-	/* ids of the ancestors at each level including self */
+-	u64 ancestor_ids[];
++	/* All ancestors including self */
++	struct cgroup *ancestors[];
+ };
+ 
+ /*
+@@ -520,8 +520,8 @@ struct cgroup_root {
+ 	/* The root cgroup.  Root is destroyed on its release. */
+ 	struct cgroup cgrp;
+ 
+-	/* for cgrp->ancestor_ids[0] */
+-	u64 cgrp_ancestor_id_storage;
++	/* for cgrp->ancestors[0] */
++	u64 cgrp_ancestor_storage;
+ 
+ 	/* Number of cgroups in the hierarchy, used only for /proc/cgroups */
+ 	atomic_t nr_cgrps;
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index ed53bfe7c46c..5334b6134399 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -574,7 +574,7 @@ static inline bool cgroup_is_descendant(struct cgroup *cgrp,
+ {
+ 	if (cgrp->root != ancestor->root || cgrp->level < ancestor->level)
+ 		return false;
+-	return cgrp->ancestor_ids[ancestor->level] == cgroup_id(ancestor);
++	return cgrp->ancestors[ancestor->level] == ancestor;
+ }
+ 
+ /**
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 85fa4c8587a8..ce587fe43dab 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2047,7 +2047,7 @@ int cgroup_setup_root(struct cgroup_root *root, u16 ss_mask)
+ 	}
+ 	root_cgrp->kn = kernfs_root_to_node(root->kf_root);
+ 	WARN_ON_ONCE(cgroup_ino(root_cgrp) != 1);
+-	root_cgrp->ancestor_ids[0] = cgroup_id(root_cgrp);
++	root_cgrp->ancestors[0] = root_cgrp;
+ 
+ 	ret = css_populate_dir(&root_cgrp->self);
+ 	if (ret)
+@@ -5391,8 +5391,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
+ 	int ret;
+ 
+ 	/* allocate the cgroup and its ID, 0 is reserved for the root */
+-	cgrp = kzalloc(struct_size(cgrp, ancestor_ids, (level + 1)),
+-		       GFP_KERNEL);
++	cgrp = kzalloc(struct_size(cgrp, ancestors, (level + 1)), GFP_KERNEL);
+ 	if (!cgrp)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -5444,7 +5443,7 @@ static struct cgroup *cgroup_create(struct cgroup *parent, const char *name,
+ 
+ 	spin_lock_irq(&css_set_lock);
+ 	for (tcgrp = cgrp; tcgrp; tcgrp = cgroup_parent(tcgrp)) {
+-		cgrp->ancestor_ids[tcgrp->level] = cgroup_id(tcgrp);
++		cgrp->ancestors[tcgrp->level] = tcgrp;
+ 
+ 		if (tcgrp != cgrp) {
+ 			tcgrp->nr_descendants++;
+diff --git a/net/netfilter/nft_socket.c b/net/netfilter/nft_socket.c
+index 05ae5a338b6f..d64784d4bd02 100644
+--- a/net/netfilter/nft_socket.c
++++ b/net/netfilter/nft_socket.c
+@@ -40,6 +40,7 @@ static noinline bool
+ nft_sock_get_eval_cgroupv2(u32 *dest, struct sock *sk, const struct nft_pktinfo *pkt, u32 level)
+ {
+ 	struct cgroup *cgrp;
++	u64 cgid;
+ 
+ 	if (!sk_fullsock(sk))
+ 		return false;
+@@ -48,8 +49,8 @@ nft_sock_get_eval_cgroupv2(u32 *dest, struct sock *sk, const struct nft_pktinfo
+ 	if (level > cgrp->level)
+ 		return false;
+ 
+-	memcpy(dest, &cgrp->ancestor_ids[level], sizeof(u64));
+-
++	cgid = cgroup_id(cgrp->ancestors[level]);
++	memcpy(dest, &cgid, sizeof(u64));
+ 	return true;
+ }
+ #endif
+diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+index 292c430768b5..bd6a420acc8f 100644
+--- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
++++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
+@@ -68,7 +68,7 @@ static inline int get_cgroup_v1_idx(__u32 *cgrps, int size)
+ 			break;
+ 
+ 		// convert cgroup-id to a map index
+-		cgrp_id = BPF_CORE_READ(cgrp, ancestor_ids[i]);
++		cgrp_id = BPF_CORE_READ(cgrp, ancestors[i], kn, id);
+ 		elem = bpf_map_lookup_elem(&cgrp_idx, &cgrp_id);
+ 		if (!elem)
+ 			continue;

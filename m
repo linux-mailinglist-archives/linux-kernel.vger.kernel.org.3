@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97224584FD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 14:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49448584FD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 14:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236039AbiG2MAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 08:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S235924AbiG2MBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 08:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbiG2MAM (ORCPT
+        with ESMTP id S235606AbiG2MBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 08:00:12 -0400
+        Fri, 29 Jul 2022 08:01:04 -0400
 Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10222653
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 05:00:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F315028E27;
+        Fri, 29 Jul 2022 05:01:03 -0700 (PDT)
 Received: from [192.168.1.101] (abxi232.neoplus.adsl.tpnet.pl [83.9.2.232])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id CEE251F9C3;
-        Fri, 29 Jul 2022 14:00:04 +0200 (CEST)
-Message-ID: <a8fa9e22-8c3f-60b2-a0db-01cfd5c37765@somainline.org>
-Date:   Fri, 29 Jul 2022 14:00:02 +0200
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id B34871F927;
+        Fri, 29 Jul 2022 14:01:01 +0200 (CEST)
+Message-ID: <f0a4790d-7739-3bc5-b877-2dacbdb5158b@somainline.org>
+Date:   Fri, 29 Jul 2022 14:01:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 7/7] arm64: dts: mediatek: Add support for MT6795 Sony
- Xperia M5 smartphone
+Subject: Re: [PATCH 1/3] ARM: dts: qcom: msm8960: add reference to sleep_clk
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        chaotian.jing@mediatek.com, ulf.hansson@linaro.org,
-        matthias.bgg@gmail.com, hsinyi@chromium.org,
-        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
-        fparent@baylibre.com, sam.shih@mediatek.com,
-        sean.wang@mediatek.com, long.cheng@mediatek.com,
-        wenbin.mei@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20220729104441.39177-1-angelogioacchino.delregno@collabora.com>
- <20220729104441.39177-8-angelogioacchino.delregno@collabora.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Shinjo Park <peremen@gmail.com>
+Cc:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220728111603.30503-1-peremen@gmail.com>
+ <66e15d42-96fd-5b02-b7c8-a284d3f8d21f@linaro.org>
+ <f932415d-3bee-0948-a016-a2e837dd7256@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220729104441.39177-8-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <f932415d-3bee-0948-a016-a2e837dd7256@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,142 +55,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 29.07.2022 12:44, AngeloGioacchino Del Regno wrote:
-> Add a basic support for the Sony Xperia M5 (codename "Holly")
-> smartphone, powered by a MediaTek Helio X10 SoC.
+On 29.07.2022 13:33, Dmitry Baryshkov wrote:
+> On 28/07/2022 14:51, Krzysztof Kozlowski wrote:
+>> On 28/07/2022 13:16, Shinjo Park wrote:
+>>> Change the reference of sleep_clk to the same as qcom-apq8064.dtsi.
+>>
+>> You add label, not change something.
+>>
+>>>
+>>> Signed-off-by: Shinjo Park <peremen@gmail.com>
+>>> Reviewed-by: David Heidelberg <david@ixit.cz>
+>>> ---
+>>>   arch/arm/boot/dts/qcom-msm8960.dtsi | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+>>> index e8cd1c9c0..991eb1948 100644
+>>> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
+>>> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+>>> @@ -71,7 +71,7 @@ pxo_board: pxo_board {
+>>>               clock-output-names = "pxo_board";
+>>>           };
+>>>   -        sleep_clk {
+>>> +        sleep_clk: sleep_clk {
+>>
+>> Since you touch the line, make the device node sleep-clk (device node
+>> names should not have underscores) and mention this in commit msg.
 > 
-> This achieves a console boot.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  arch/arm64/boot/dts/mediatek/Makefile         |  1 +
->  .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 90 +++++++++++++++++++
->  2 files changed, 91 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index af362a085a02..72fd683c9264 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -3,6 +3,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt2712-evb.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt6755-evb.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt6779-evb.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt6795-evb.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt6795-sony-xperia-m5.dtb
--holly.dtb?
-
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-> new file mode 100644
-> index 000000000000..94d011c4126c
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-> @@ -0,0 +1,90 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022, Collabora Ltd
-> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> + */
-> +
-> +/dts-v1/;
-> +#include "mt6795.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-Looks unused.
-
-> +
-> +/ {
-> +	model = "Sony Xperia M5";
-> +	compatible = "sony,xperia-m5", "mediatek,mt6795";
-sony,holly?
-
-> +	chassis-type = "handset";
-> +
-> +	aliases {
-> +		mmc0 = &mmc0;
-> +		mmc1 = &mmc1;
-> +		serial0 = &uart0;
-> +		serial1 = &uart1;
-> +	};
-> +
-> +	memory@40000000 {
-> +		device_type = "memory";
-> +		reg = <0 0x40000000 0 0x1E800000>;
-Lowercase hex in size. Also, doesn't the bootloader fill it in?
-
-> +	};
-> +
-> +	reserved_memory: reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		/* 128 KiB reserved for ARM Trusted Firmware (BL31) */
-Is that true for all devices with this SoC, or..? If so, it may be worth
-moving this into mt6795.dtsi.
-
-> +		bl31_secmon_reserved: secmon@43000000 {
-memory@, everywhere. Use labels to name the nodes.
-
-> +			no-map;
-reg goes first.
-> +			reg = <0 0x43000000 0 0x30000>;
-> +		};
-> +
-> +		/* preloader and bootloader regions cannot be touched */
-> +		preloader-region@44800000 {
-> +			no-map;
-> +			reg = <0 0x44800000 0 0x100000>;
-> +		};
-> +
-> +		bootloader-region@46000000 {
-> +			no-map;
-> +			reg = <0 0x46000000 0 0x400000>;
-> +		};
-> +	};
-> +};
-> +
-> +&pio {
-> +	uart0_pins: uart0-pins {
-> +		pins-rx {
-> +			pinmux = <PINMUX_GPIO113__FUNC_URXD0>;
-> +			bias-pull-up;
-> +			input-enable;
-> +		};
-> +		pins-tx {
-> +			pinmux = <PINMUX_GPIO114__FUNC_UTXD0>;
-> +			output-high;
-> +		};
-> +	};
-> +
-> +	uart2_pins: uart2-pins {
-> +		pins-rx {
-> +			pinmux = <PINMUX_GPIO31__FUNC_URXD2>;
-> +			bias-pull-up;
-> +			input-enable;
-> +		};
-> +		pins-tx {
-> +			pinmux = <PINMUX_GPIO32__FUNC_UTXD2>;
-> +		};
-> +	};
-> +};
-> +
-> +&uart0 {
-> +	status = "okay";
-Status last here and below, please.
+> Then we are back to the compat issues, since the gcc expects the 'sleep_clk' clock.
+clock-output-names = "sleep_clk";
 
 Konrad
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_pins>;
-> +};
-> +
-> +&uart2 {
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart2_pins>;
-> +};
+> 
 > 

@@ -2,84 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D18C584EF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9558584EFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbiG2KiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S235617AbiG2KkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235761AbiG2KiQ (ORCPT
+        with ESMTP id S232892AbiG2KkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:38:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7C082FBA
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:38:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8563DB82749
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:38:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A5AC433C1;
-        Fri, 29 Jul 2022 10:38:10 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="F/Y6zFs/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659091089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/mTDH8o5XBJ6BCjVRop//5kfjjl5UXmaKSwAH4IORuY=;
-        b=F/Y6zFs/897ixOfgILO03wLa0pFjwE44ip+3ima7viVBs3hoMa0iKVOmqqnXPo8NqxthF2
-        THSEHdO+LUHZj1L9leK2O529W62dyJhS4pPqUR8lB9RCvlkuhU7NS7uGdPPjwXnCJVHMIt
-        TwnPVW9RjSuxNnoeUmDD1qvQoD5LEcs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 50beb96d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 29 Jul 2022 10:38:09 +0000 (UTC)
-Date:   Fri, 29 Jul 2022 12:38:06 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] random: Initialize vsprintf's pointer hash once the
- random core is ready.
-Message-ID: <YuO4jj8rg9hjHErN@zx2c4.com>
-References: <YuOf6qu453dOkR+S@linutronix.de>
- <YuOyeJu8PPAVnXiN@zx2c4.com>
- <YuO0p8lMhVmQj/K2@linutronix.de>
+        Fri, 29 Jul 2022 06:40:04 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AF08212B;
+        Fri, 29 Jul 2022 03:40:03 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1oHNPJ-005ohf-IE; Fri, 29 Jul 2022 20:39:51 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 29 Jul 2022 18:39:49 +0800
+Date:   Fri, 29 Jul 2022 18:39:49 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Yang Shen <shenyang39@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2] crypto: hisilicon/zip: Use the bitmap API to allocate
+ bitmaps
+Message-ID: <YuO49YudyXyK2o5x@gondor.apana.org.au>
+References: <456a8b00720d603221c8329c19e38b9f4d96d15a.1658437112.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuO0p8lMhVmQj/K2@linutronix.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <456a8b00720d603221c8329c19e38b9f4d96d15a.1658437112.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+On Thu, Jul 21, 2022 at 10:58:53PM +0200, Christophe JAILLET wrote:
+> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+> It is less verbose and it improves the semantic.
+> 
+> While at it, add an explicit include <linux/bitmap.h>.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> v1 -> v2
+> - add the missing include <linux/bitmap.h>
+> ---
+>  drivers/crypto/hisilicon/zip/zip_crypto.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-On Fri, Jul 29, 2022 at 12:21:27PM +0200, Sebastian Andrzej Siewior wrote:
-> So launching a worker to obtain the random data? That would mean that
-> the first %p print won't have nothing, right? I could do it as part of
-
-"First" isn't very meaningful here. If the rng isn't initialized by
-add_bootloader_randomness() or similar, then it'll almost miss some
-amount of %p anyway.
-
-But anyway, it sounds like you only need to hoist into a worker IF
-you're `IS_ENABLED(CONFIG_PREEMPT_RT) && in_hardirq()`, right? So just
-conditionalize it on that, and this should have pretty minimal impact.
-
-I don't think this patch will require touching random.c.
-
-Jason
+Patch applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

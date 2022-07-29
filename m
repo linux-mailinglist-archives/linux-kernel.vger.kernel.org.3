@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D1E5852AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7765852B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237535AbiG2Pcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S237641AbiG2PeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiG2Pcl (ORCPT
+        with ESMTP id S232488AbiG2PeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:32:41 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C696FA0C
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:32:40 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id fy29so9101451ejc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=jmBIRMRQS/VgtMcMzm0Oe80Xtab0xlTKGKq4qVMd4kY=;
-        b=ZlQLOFKuTG5vgUQiyuXFtBbf6p1VnWLpTKhhUn8bD9oI97N5UwWofWf/jVXh+6FEI3
-         PsrYm8DSkIGvjUy6Fu+MYXsgMbiqP9ECFlJ1NYDkty/Tt9xK6EtUkaWcc/lIPnnnBJrT
-         SSwomT5XTaslGcRyymoPuanPAzQDSWB+Xonos7q4IqLOs7TX3pG/ewNHud2BZwCUFcXB
-         PvYO8+1rd3Ivlb1cCgo3FkA03JRCQ1XJVBS1uAU0EuUMh7/kFWcjMwulMFcpri8FXQzv
-         Sm+i3mWxDcq0FNDUiUq2Zkuixu5Jrsl3/+fyCQgTYHOdRPH/EEEDGgDNiXaGhCMpdfNx
-         gJEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=jmBIRMRQS/VgtMcMzm0Oe80Xtab0xlTKGKq4qVMd4kY=;
-        b=209EBJxwq/nban5H1w2kUkJX/k6g6/ifuYTCDAo+x67uK3/WNc821FIkaarF25nONj
-         Rb62+8gETHKnOCIW5iBTrf9KbbyhW5jvVr4TfGHOqcAICYBRw8oys5QUgc5NVi0m5J0K
-         pYDm17gwHDv1M+ngET1Hm+ZqPeH0B6v75vAkVGwV7zSnGM3qrLCSGdaAHVU2JZoDm19a
-         7Oi4xj+nNRFkoVhbnn+h31c7nQmIhrcHzVK/Bh0YrM4hMnI16SvYX6pddWaQr2dyyuGu
-         uO3obyHUjIO8O7qnLLwTFeAWB01EV0tklfHbsPGXYz5NrYtggHmkNbxcMFwTz64hIlOO
-         2rDg==
-X-Gm-Message-State: AJIora9hARR6b3sLcytGXQKYtQmyJLBYq6oXzchxSE/5NvodQvE3xMs8
-        9H9YxUSJiY03fmoz474iuYNkwmvlO/r3KmguZQ0=
-X-Google-Smtp-Source: AGRyM1vNISp+OeLGZrYIy7SfAY+GquNrF6kbAQH50eNQJ5t6bF8PfYsV9OfaunP6KrxX7eG9G6dp9UZnVijPuCqsW6I=
-X-Received: by 2002:a17:907:9706:b0:72b:4b0d:86a2 with SMTP id
- jg6-20020a170907970600b0072b4b0d86a2mr3227461ejc.242.1659108759194; Fri, 29
- Jul 2022 08:32:39 -0700 (PDT)
+        Fri, 29 Jul 2022 11:34:06 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B096FA0C;
+        Fri, 29 Jul 2022 08:34:04 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id AF00A240003;
+        Fri, 29 Jul 2022 15:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1659108843;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=W8HzVP3f12jtZr7ZSlHrA7jmUrW5KGei/Y00G5BNdF8=;
+        b=XJNp0Bp7SVJ5kKDdoYriSdiGFucOCO3WcPhxRjgoKwueodrAXjaQdmiYUIyrHWVTA2doRw
+        SMxVb5m1+8euBAqcJZ2ixXoHSunv6cmESz0UdjsMDJ+vMDA8NgB9OmrYodmpEfDO0ZXfFX
+        hh/xaSgKo+iJt9SCwtrO1rLQMZXrxo8k3iZZeXZQY13TSjfwb6bLsu8+dX136wtAs9flFB
+        AkiL/ta7MtTj7uzHJ7kPCPU+hKHzq0ze0NEheEvhczkzafiHXc8hmFI15HSDq21wQ7FUAd
+        PCw6hng81Ffl28F4VFaWLUtesFgkEYqyFqJOALZsJYj1sMT7WcEAQJL3Clrg9Q==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Richard Cochran <richardcochran@gmail.com>,
+        Horatiu.Vultur@microchip.com, Allan.Nielsen@microchip.com,
+        UNGLinuxDriver@microchip.com
+Subject: [PATCH net-next v3 0/4] net: Introduce QUSGMII phy mode
+Date:   Fri, 29 Jul 2022 17:33:52 +0200
+Message-Id: <20220729153356.581444-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
- <Yt6u34sigPEkeZ0Y@FVFF77S0Q05N.cambridge.arm.com> <Yt605xj898VSAsA3@casper.infradead.org>
- <YuPwLq+D8k53GZa3@smile.fi.intel.com> <YuP6Evijb2oZqD3D@localhost.localdomain>
-In-Reply-To: <YuP6Evijb2oZqD3D@localhost.localdomain>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 29 Jul 2022 17:32:01 +0200
-Message-ID: <CAHp75VcgRxFLY6ckgRxPxQtShTssgu__FyCER5yg5nASwmzmZw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to kstrtobool()
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, ying.huang@intel.com,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Petr Mladek <pmladek@suse.com>, Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 5:21 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> On Fri, Jul 29, 2022 at 05:35:26PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jul 25, 2022 at 04:21:11PM +0100, Matthew Wilcox wrote:
-> > > On Mon, Jul 25, 2022 at 03:55:27PM +0100, Mark Rutland wrote:
+Hello everyone,
 
-...
+This is the V3 of a previous series [1] initially aimed at introducing
+inband extensions, with modes like QUSGMII. This mode allows passing
+info in the ethernet preamble between the MAC and the PHY, such s
+timestamps.
 
-> > > Well, that's going to break people who've started using the new option.
-> > > As a quick fix, how about only allowing either "f\0" or "fa"?
-> >
-> > I think we need to be more strict in kstrtobool(), i.e. 'f\0' ('t\0') and 'fal'
-> > ('tru') perhaps?
->
-> lol what?
->
-> the only way to be strict is to accept "0" and "1" with optional
-> newline and delete all the rubbish entirely.
+This series has now become a preliminary series, that simply introduces
+the new interface mode, without support for inband extensions, that will
+come later.
 
-You have an anti-user mindset. Be more constructive, please.
+The reasonning is that work will need to be done in the networking
+subsystem, but also in the generic phy driver subsystem to allow serdes
+configuration for qusgmii.
+
+This series add the mode, the relevant binding changes, adds support for
+it in the lan966x driver, and also introduces a small helper to get the
+number of links a given phy mode can carry (think 1 for SGMII and 4 for
+QSGMII). This allows for better readability and will prove useful
+when (if) we support PSGMII (5 links on 1 interface) and OUSGMII (8
+links on one interface).
+
+V3 includes small fixups on the ports-per-interface assignment and some
+missing documentation, thanks Andrew and Florian for the review !
+
+Best regards,
+
+Maxime
+
+[1] : https://lore.kernel.org/netdev/20220519135647.465653-1-maxime.chevallier@bootlin.com/
+
+Maxime Chevallier (4):
+  net: phy: Introduce QUSGMII PHY mode
+  dt-bindings: net: ethernet-controller: add QUSGMII mode
+  net: phy: Add helper to derive the number of ports from a phy mode
+  net: lan966x: Add QUSGMII support for lan966x
+
+ .../bindings/net/ethernet-controller.yaml     |  1 +
+ Documentation/networking/phy.rst              |  9 ++++
+ .../ethernet/microchip/lan966x/lan966x_main.c |  2 +
+ .../microchip/lan966x/lan966x_phylink.c       |  3 +-
+ .../ethernet/microchip/lan966x/lan966x_port.c | 22 +++++---
+ .../ethernet/microchip/lan966x/lan966x_regs.h |  6 +++
+ drivers/net/phy/phy-core.c                    | 52 +++++++++++++++++++
+ drivers/net/phy/phylink.c                     |  3 ++
+ include/linux/phy.h                           |  6 +++
+ 9 files changed, 97 insertions(+), 7 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.1
+

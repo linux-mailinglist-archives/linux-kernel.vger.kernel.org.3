@@ -2,52 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC99585145
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9476C58514C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236882AbiG2OGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S236691AbiG2OIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236168AbiG2OGd (ORCPT
+        with ESMTP id S234055AbiG2OH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:06:33 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB4132D9A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=5IjEeQk2j+nPMiWSIvtN9x/RruJpf321jwMLwDJFZTc=; b=BGfR3cb2FkJJ4m916YBe2HiiBQ
-        62mu5kNYyrk4NGLFM08pxuAXb9/zWj8tKfK38OktLZj8XdsbNPAv+cILtLtTZUGyrHQPr1o9q1xML
-        +vxdZwO0PZtgvFxZ4anj7rIypQ2108Z9sQKBkFrKf2kLZT2Dc3wnRIieDQjTuagFAOAOsqzljeRhx
-        EKoWONKa/nQ4MWxO/v4z2h3gyMlkruW3+n7gIYR7rmUo0uA3tWsXWt8LhzXOQKT6vSyijwO7LMfCR
-        uvJTJpK4l/iikzxm3SSXV9s0m6gzfnGppAsz2DU2MlV2dooFJia25MKxg+gUMaQjm+QeXYJCGfLlw
-        DUJerLOQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oHQdD-005OII-KS; Fri, 29 Jul 2022 14:06:23 +0000
-Message-ID: <607e46e9-1b4d-c8be-899f-185afdc83f42@infradead.org>
-Date:   Fri, 29 Jul 2022 07:06:21 -0700
+        Fri, 29 Jul 2022 10:07:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE0E2B2;
+        Fri, 29 Jul 2022 07:07:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E56E4CE29C6;
+        Fri, 29 Jul 2022 14:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988F6C433D6;
+        Fri, 29 Jul 2022 14:07:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659103675;
+        bh=cUXcZAT76ZabW6lC7i4r3goD7kw1XreIuadvSWS0sng=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bVItfyvIGROdWste07gaHkciQVKLZj2Wnu4y2OrU7JpKC/VY4NM65LXlENon0y+9+
+         RGnVxxrrcwNQMrwI5xl/j1q2tiB0m56dyTwrE2P+jjrAuMHgaNH0EDFq0cjGAvZ9nN
+         udvbxRL/YFB5otA8VdvffsLqO1xEHdLSY5pg3EBAaT/zcK1jNCxIWo23TI2PxrxjOr
+         IE4mVZg3HQgNqgiiXXAza+Tu/8mkt1QFvnLbSi4d9/OoLob39WGZ4FMIisHvaV2LMo
+         fDxc2Jzm2Xonnzh17zMdLEbNPyENcw+EQ0oaySgIGV3AmugxQSKqDnHmd1V7VokRYD
+         tLoClKUIJZ+Jw==
+Date:   Fri, 29 Jul 2022 15:07:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Andy Gross <agross@kernel.org>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v16 0/3] eDP/DP Phy vdda realted function
+Message-ID: <YuPps+cvVAMugWmy@sirena.org.uk>
+References: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
+ <YtkrDcjTGhpaU1e0@hovoldconsulting.com>
+ <CAA8EJprQnnWjDZJy9+zUBsVQCi3jtc0Ngtzzk9MXpwOvuAS68g@mail.gmail.com>
+ <CAD=FV=W0m-x9JC=5hQ3urSNmUp8sY-u8YkNd66yrKfRNAH4rcg@mail.gmail.com>
+ <YuPiJWQ1/wQbkvD8@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: drivers/mux/mmio.c:76:20: error: variable has incomplete type
- 'struct reg_field'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Aswath Govindraju <a-govindraju@ti.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-References: <202207292122.eOyFc13E-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202207292122.eOyFc13E-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lMMlcIGCjceHAIpO"
+Content-Disposition: inline
+In-Reply-To: <YuPiJWQ1/wQbkvD8@hovoldconsulting.com>
+X-Cookie: Dime is money.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,37 +79,72 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--lMMlcIGCjceHAIpO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 7/29/22 06:58, kernel test robot wrote:
-> Hi Aswath,
-> 
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   6e2c0490769ef8a95b61304389116ccc85c53e12
-> commit: e4d4371253029528c02bfb43a46c252e1c3d035f phy: phy-can-transceiver: Add support for setting mux
-> date:   4 months ago
-> config: s390-randconfig-r022-20220729 (https://download.01.org/0day-ci/archive/20220729/202207292122.eOyFc13E-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install s390 cross compiling tool for clang build
->         # apt-get install binutils-s390x-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e4d4371253029528c02bfb43a46c252e1c3d035f
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e4d4371253029528c02bfb43a46c252e1c3d035f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/mux/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+On Fri, Jul 29, 2022 at 03:35:33PM +0200, Johan Hovold wrote:
 
-Fix is here:
-https://lore.kernel.org/lkml/20220728000550.10495-1-rdunlap@infradead.org/
+> I guess we just need to drop all those regulator-allow-set-load
+> properties for now even if using DT for power-management configuration
+> this way does seem to run against the whole DT-as-hardware-description
+> idea (e.g. we may want to add them back when/if active- and idle loads
+> are specified by the corresponding Linux drivers).
 
+Well, there's also a question of if the hardware can usefully make use
+of the facility - is there any non-suspend state where the regulator
+needs to be on but is drawing so little current that it's worth trying
+to select a lower power mode?
 
--- 
-~Randy
+> But that doesn't address the problem that was trying to highlight here,
+> and that you had noticed years ago, namely that using set_load only
+> works reliably if *all* consumers use it.
+
+> Shouldn't an enabled regulator from a consumer that didn't specify a
+> load somehow result in HPM always being selected (e.g. count as INT_MAX
+> load as Doug suggested some years ago)?
+
+Possibly, but note that as well as the consumers with software drivers
+you also have to consider any passive consumers on the board which may
+not have any representation in DT so the actual numbers may well be off
+even if every consumer is trying to keep things up to date.  You also
+come back to the "let's just shove a random number in here" problem.
+
+For ultimate saftey we probably want a command line option to gate the
+feature which people can set to say they've audited their full
+software/hardware integration stack.
+
+> At some point in the discussion I thought Mark suggested removing
+> set_load from drivers that don't actually manage active and idle loads.
+> That would also work, at least until the day one of the drivers adds
+> support for idle loads.
+
+Yes, if the driver isn't actively managing loads it's probably not doing
+anything useful.
+
+The difficulties with this sort of system integration question is an
+unfortunate consequence of DT, having to describe what's safe for an
+unknown software stack is fundamentally hard.  I do question how much
+effort it's worth putting into enabling this, especially in cases where
+the regulator is shared - how much power is actually saved in the grand
+scheme of things given that this is only taking effect when the system
+is out of suspend and we tend to be talking about some percentage of the
+power being drawn on something which is presumably already consuming
+very little power for this to be at all relevant?
+
+--lMMlcIGCjceHAIpO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLj6bIACgkQJNaLcl1U
+h9BSSQf/eAdvLr6Oa23fgbGkvVf3vFVUAXordLXh1s2WpGE7ULmzOAETnrSqD+y2
+ZBiHcceuxWistf4AYnco7OZYGMeethjT0JUSU0gv6+C6H8oLuMZbI9/krqP8zwN2
+Ld5PvOB/fc2KGy/0Ox31e+pnsj8hK0WBQUVwVtalxkM0ltx0n92rwvsJCYK97OP8
+JNEt1aa4QEpnmocrB5KcsU1n1uJE4jrq7aZxxi1C+XlOwi8x4I+a6d9F7fnv+8Sc
+C6wRxlVsmSTwE7G47dBrk2/jhQZTenfpXwRktn8lrHDvFFHKyx4Yx3N2dGO27nC1
+zE9ytCAAJyTBkIPr+OniWH5PKcnfWA==
+=tOZj
+-----END PGP SIGNATURE-----
+
+--lMMlcIGCjceHAIpO--

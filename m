@@ -2,166 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDD4585500
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB296585507
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 20:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238529AbiG2SbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 14:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
+        id S238255AbiG2Sfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 14:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238012AbiG2SbJ (ORCPT
+        with ESMTP id S237460AbiG2Sfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 14:31:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD6562A428
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 11:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659119467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aWKVK6OoM1bKr67knlvEgc7AaGfjBxkEmDKqD2fNc5c=;
-        b=FvSs/QFXfug/OSrscBmjFpVaM/o/U5QVY2xoPBBwccKmnTImOQt1GL3TM//HO8/Dix4ypb
-        SxfPbLYfJyU9vB2oc2uPQXmO9N622Cd3HTvIS6ZFT0aglPg5kiLn5f58kjHuxTJGxVol47
-        EpyUgwKH32x31nfIARvRQPU+oHusF1I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-HEfqHrfIM6a6xvhRHbdgkQ-1; Fri, 29 Jul 2022 14:31:03 -0400
-X-MC-Unique: HEfqHrfIM6a6xvhRHbdgkQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 29 Jul 2022 14:35:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1FF5F112;
+        Fri, 29 Jul 2022 11:35:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D87AC185A7A4;
-        Fri, 29 Jul 2022 18:31:02 +0000 (UTC)
-Received: from [10.22.34.17] (unknown [10.22.34.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AF117404D883;
-        Fri, 29 Jul 2022 18:31:01 +0000 (UTC)
-Message-ID: <c9d82d78-b47d-0f4a-f1ca-81df78e1baa6@redhat.com>
-Date:   Fri, 29 Jul 2022 14:31:00 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] cgroup/cpuset: Keep current cpus list if cpus
- affinity was explicitly set
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
-References: <20220728005815.1715522-1-longman@redhat.com>
- <YuLF+xXaCzwWi2BR@slm.duckdns.org>
- <1ae1cc6c-dca9-4958-6b22-24a5777c5e8d@redhat.com>
- <YuLdX7BYGvo57LNU@slm.duckdns.org>
- <606ed69e-8ad0-45d5-9de7-48739df7f48d@redhat.com>
- <YuL1NijxSEv2xadk@slm.duckdns.org>
- <c470d3f7-f0f8-b8e6-4a95-7b334f0a824b@redhat.com>
- <YuMCB86fH2K3NcqM@slm.duckdns.org> <xhsmhy1wcc8dq.mognet@vschneid.remote.csb>
- <92f68392-12d2-f64a-9bb9-1a3a15f99d02@redhat.com>
-In-Reply-To: <92f68392-12d2-f64a-9bb9-1a3a15f99d02@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC32061F55;
+        Fri, 29 Jul 2022 18:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2956FC433C1;
+        Fri, 29 Jul 2022 18:35:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659119740;
+        bh=yA6eELQe9LySuMbNqUxzS9omzLv9nJ8AQDz/+alZjrU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=FZsS0+eXWPm7DNe9qoVPMl3ldZ6n+aEbgWdlm97T3/CNUOinmpyjUbFdWWeFsSz6S
+         HOwFzgc52mAc0+CGp4/rvx5DAGn06LN99sMtL1ECRa2NpZKLMUS6tYb5EC0Mr2qKYe
+         1aymAVN3bUdw/oo3uvhfF42y5RQ48vLOjfffzVA9r5SFKCfJxh3OpRARsXVHZZQzwj
+         yYjy+4VIZEb4ZHOrJ5AI1vAnwZm6p3zvLfpjM0tYyQxw+2mmdA/oTJJrznmLVGRlM+
+         dBnuMZdwz2bWS9dKBh/N9O1rytffv8Iox2pgaci6Q2RJeCKXcU4fCs7R38S3xxxiOh
+         UOgAkOPN+D3vQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0EEAFC43142;
+        Fri, 29 Jul 2022 18:35:40 +0000 (UTC)
+Subject: Re: [GIT PULL] Last-minute power management fix for v5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0gRQ=DmY-nOO6ZEMF6hX_cSVVL=QX_0Kvo9wtVjwtQh2g@mail.gmail.com>
+References: <CAJZ5v0gRQ=DmY-nOO6ZEMF6hX_cSVVL=QX_0Kvo9wtVjwtQh2g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0gRQ=DmY-nOO6ZEMF6hX_cSVVL=QX_0Kvo9wtVjwtQh2g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.19-rc9
+X-PR-Tracked-Commit-Id: d295ad34f236c3518634fb6403d4c0160456e470
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 506e6dfb0f1131f104df66ccae1197bdf8f1b6b0
+Message-Id: <165911974005.994.4631931989931203523.pr-tracker-bot@kernel.org>
+Date:   Fri, 29 Jul 2022 18:35:40 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 10:50, Waiman Long wrote:
-> On 7/29/22 10:15, Valentin Schneider wrote:
->> On 28/07/22 11:39, Tejun Heo wrote:
->>> Hello, Waiman.
->>>
->>> On Thu, Jul 28, 2022 at 05:04:19PM -0400, Waiman Long wrote:
->>>>> So, the patch you proposed is making the code remember one special 
->>>>> aspect of
->>>>> user requested configuration - whether it configured it or not, 
->>>>> and trying
->>>>> to preserve that particular state as cpuset state changes. It 
->>>>> addresses the
->>>>> immediate problem but it is a very partial approach. Let's say a 
->>>>> task wanna
->>>>> be affined to one logical thread of each core and set its mask to 
->>>>> 0x5555.
->>>>> Now, let's say cpuset got enabled and enforced 0xff and affined 
->>>>> the task to
->>>>> 0xff. After a while, the cgroup got more cpus allocated and its 
->>>>> cpuset now
->>>>> has 0xfff. Ideally, what should happen is the task now having the 
->>>>> effective
->>>>> mask of 0x555. In practice, tho, it either would get 0xf55 or 0x55 
->>>>> depending
->>>>> on which way we decide to misbehave.
->>>> OK, I see what you want to accomplish. To fully address this issue, 
->>>> we will
->>>> need to have a new cpumask variable in the the task structure which 
->>>> will be
->>>> allocated if sched_setaffinity() is ever called. I can rework my 
->>>> patch to
->>>> use this approach.
->>> Yeah, we'd need to track what user requested separately from the 
->>> currently
->>> effective cpumask. Let's make sure that the scheduler folks are on 
->>> board
->>> before committing to the idea tho. Peter, Ingo, what do you guys think?
->>>
->> FWIW on a runtime overhead side of things I think it'll be OK as that
->> should be just an extra mask copy  in sched_setaffinity() and a subset
->> check / cpumask_and() in set_cpus_allowed_ptr(). The policy side is a 
->> bit
->> less clear (when, if ever, do we clear the user-defined mask? Will it 
->> keep
->> haunting us even after moving a task to a disjoint cpuset partition?).
->
-> The runtime overhead should be minimal. It is the behavioral side that 
-> we should be careful about. It is a change in existing behavior and we 
-> don't want to cause surprise to the users. Currently, a task that set 
-> its cpu affinity explicitly will have its affinity reset whenever 
-> there is any change to the cpuset it belongs to or a hotplug event 
-> touch any cpu in the current cpuset. The new behavior we are proposing 
-> here is that it will try its best to keep the cpu affinity that the 
-> user requested within the constraint of the current cpuset as well as 
-> the cpu hotplug state.
->
->
->>
->> There's also if/how that new mask should be exposed, because attaching a
->> task to a cpuset will now yield a not-necessarily-obvious affinity -
->> e.g. in the thread affinity example above, if the initial affinity 
->> setting
->> was done ages ago by some system tool, IMO the user needs a way to be 
->> able
->> to expect/understand the result of 0x555 rather than 0xfff.
->
-> Users can use sched_getaffinity(2) to retrieve the current cpu 
-> affinity. It is up to users to set another one if they don't like the 
-> current one. I don't think we need to return what the previous 
-> requested cpu affinity is. They are suppose to know that or they can 
-> set their own if they don't like it. \
+The pull request you sent on Fri, 29 Jul 2022 17:14:14 +0200:
 
-Looking at Will's series that introduced user_cpus_ptr, I think we can 
-overlay our proposal on top of that. So calling sched_setaffinity() will 
-also update user_cpus_ptr. We may still need a flag to indicate whether 
-user_cpus_ptr is set up because of sched_setaffinity() or due to a call 
-to force_compatible_cpus_allowed_ptr() from arm64 arch code. That will 
-make our work easier as some of the infrastructure is already there. I 
-am looking forward for your feedback.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.19-rc9
 
-Thanks,
-Longman
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/506e6dfb0f1131f104df66ccae1197bdf8f1b6b0
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

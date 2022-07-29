@@ -2,110 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4719658509F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD7E58509E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236515AbiG2NNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 09:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
+        id S236412AbiG2NNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 09:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236728AbiG2NM7 (ORCPT
+        with ESMTP id S236732AbiG2NNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 09:12:59 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E41357234;
-        Fri, 29 Jul 2022 06:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=1V1EPIx5SWj6VhkkBaKrSzdQ8VeFraOV5vkmO7pp+ZI=; b=cml+Ja7pPUqiLDpd+4o90bg8hR
-        kt2rrlGhY32N0WuXoh6rEfMdftCIe9WJM+2BFwShQKVr+s/cZSmVP1U+h5hzeuF5DSiKsjpUhe6hu
-        jlxfc9OymUbOCQuYV2lgWbZuoD/03bbe5bcFknsqNDAmU35falGqQKC3OHzYbNm4FooI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oHPmk-00Bv3L-FD; Fri, 29 Jul 2022 15:12:10 +0200
-Date:   Fri, 29 Jul 2022 15:12:10 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v1 1/1] net: dsa: microchip: don't try do read Gbit
- registers on non Gbit chips
-Message-ID: <YuPcqscMzyURL3V/@lunn.ch>
-References: <20220728131725.40492-1-o.rempel@pengutronix.de>
- <YuKOTzS89D2+O8Ye@lunn.ch>
- <20220729090513.GA10850@pengutronix.de>
+        Fri, 29 Jul 2022 09:13:18 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D381B56BB6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 06:12:52 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 8D88868AA6; Fri, 29 Jul 2022 15:12:48 +0200 (CEST)
+Date:   Fri, 29 Jul 2022 15:12:48 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     nouveau@lists.freedesktop.org, Christoph Hellwig <hch@lst.de>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" 
+        <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] drm/nouveau/ttm: Stop calling into swiotlb
+Message-ID: <20220729131248.GA27137@lst.de>
+References: <20220728220545.163763-1-lyude@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729090513.GA10850@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220728220545.163763-1-lyude@redhat.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 11:05:13AM +0200, Oleksij Rempel wrote:
-> On Thu, Jul 28, 2022 at 03:25:35PM +0200, Andrew Lunn wrote:
-> > On Thu, Jul 28, 2022 at 03:17:25PM +0200, Oleksij Rempel wrote:
-> > > Do not try to read not existing or wrong register on chips without
-> > > GBIT_SUPPORT.
-> > > 
-> > > Fixes: c2e866911e25 ("net: dsa: microchip: break KSZ9477 DSA driver into two files")
-> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > > ---
-> > >  drivers/net/dsa/microchip/ksz9477.c | 8 +++++++-
-> > >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> > > index c73bb6d383ad..f6bbd9646c85 100644
-> > > --- a/drivers/net/dsa/microchip/ksz9477.c
-> > > +++ b/drivers/net/dsa/microchip/ksz9477.c
-> > > @@ -316,7 +316,13 @@ void ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
-> > >  			break;
-> > >  		}
-> > >  	} else {
-> > > -		ksz_pread16(dev, addr, 0x100 + (reg << 1), &val);
-> > > +		/* No gigabit support.  Do not read wrong registers. */
-> > > +		if (!(dev->features & GBIT_SUPPORT) &&
-> > > +		    (reg == MII_CTRL1000 || reg == MII_ESTATUS ||
-> > > +		     reg == MII_STAT1000))
-> > 
-> > Does this actually happen?
-> > 
-> > If i remember this code correctly, it tries to make the oddly looking
-> > PHY look like a normal PHY. phylib is then used to drive the PHY?
-> > 
-> > If i have that correct, why is phylib trying to read these registers?
-> > It should know there is no 1G support, and should skip them.
-> 
-> It looks like currently undocumented silicon errata. According to the
-> data sheet, the BMSR_ESTATEN should not be set BMSR_ERCAP, but this bits
-> are set.
-> 
-> The question is what is the proper place to implement it. There is same
-> PHYid for most KSZ switch PHYs, it is no possible to detect it by PHYid.
-> I have following options:
-> - add chips specific quirk in the ksz9477_r_phy(), just remove
->   BMSR_ESTATEN and BMSR_ERCAP.
-> - notify about errata over get_phy_flags and implement get_caps quirk in
->   the PHY driver.
+Hi Lyude, and thanks for taking a look.
 
-I would do the first. The DSA driver is already doing some emulation
-of a normal PHY, so it seems odd to push a workaround into the PHY
-driver when it can be part of the emulation.
+> -#if IS_ENABLED(CONFIG_SWIOTLB) && IS_ENABLED(CONFIG_X86)
+> -	need_swiotlb = is_swiotlb_active(dev->dev);
+> -#endif
+> -
+>  	ret = ttm_device_init(&drm->ttm.bdev, &nouveau_bo_driver, drm->dev->dev,
+> -				  dev->anon_inode->i_mapping,
+> -				  dev->vma_offset_manager, need_swiotlb,
+> -				  drm->client.mmu.dmabits <= 32);
+> +			      dev->anon_inode->i_mapping,
+> +			      dev->vma_offset_manager,
+> +			      nouveau_drm_use_coherent_gpu_mapping(drm),
+> +			      drm->client.mmu.dmabits <= 32);
 
-    Andrew
+This will break setups for two reasons:
+
+ - swiotlb is not only used to do device addressing limitations, so
+   this will not catch the case of interconnect addressing limitations
+   or forced bounce buffering which used used e.g. in secure VMs.
+ - we might need bouncing for any DMA address below the physical
+   address limit of the CPU
+
+But more fundamentally the use_dma32 argument to ttm_device_init
+is rather broken, as the onlyway to get a memory allocation that
+fits the DMA addressing needs of a device is to use the proper
+DMA mapping helpers. i.e. ttm_pool_alloc_page really needs to use
+dma_alloc_pages instead of alloc_pages as a first step.  That way
+all users of the TTM pool will always get dma addressable pages
+and there is no need to guess the addressing limitations.
+
+The use_dma_alloc is then only needed for users that require coherent
+memory and are willing to deal with the limitations that this entails
+(e.g. no way to get at the page struct).
+
+>  	if (ret) {
+>  		NV_ERROR(drm, "error initialising bo driver, %d\n", ret);
+>  		return ret;
+> -- 
+> 2.35.3
+---end quoted text---

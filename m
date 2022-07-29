@@ -2,191 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86391585677
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 23:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B7258567A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 23:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239313AbiG2VWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 17:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        id S239320AbiG2V2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 17:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239318AbiG2VWj (ORCPT
+        with ESMTP id S229977AbiG2V2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 17:22:39 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AC08BAAE
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 14:22:37 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so4703592wme.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 14:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VP1TFn4cwwlj9BdZS1E/aMX4RjtsTrqqclStcGSTbI8=;
-        b=hCYpG7Q3yfGV2ediqENaecFLSxVExYXRliiGYnCBAkw+vs2/S/fUKRWV0h78XESZMJ
-         wtO7qQE8KBd62LMKTL16iAd1/O2lAebBF0XgzboUHIHuPBteM04vCLil6QY/Y3N9MnVl
-         5V3yqM1vEsy26DqRvHSwtmpjAiH/v+Owop29ln5j6RV9A2n+FiyUa3nY1bYVKosbrFQx
-         ZSCvb82exohNwnyKBNuGtwQHj/jNo+9kz7pH3hO5S/tn3od7VKHSiH1FAGysNtsKjocF
-         HsSeqEBMN9UlKPxZgYgVkPFpZnU7Bac8B3wHOIEcEFrpiyYGpKPqyGF03+tg6a7l4El1
-         Y3VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VP1TFn4cwwlj9BdZS1E/aMX4RjtsTrqqclStcGSTbI8=;
-        b=Cj2doTMezpFOtAFfIE7O3D0Sf6sqjPj5kHmEf7imx7Pm5XswIVoltRIgq/AEsk+NaC
-         jb8NRwrDk33rlSNQLHm483uBMlePY9nOu81zQP6ea7ETC1Ygpcq/MaiDpxSoV2+XJEy2
-         AEP7si5AOj1lKQTsw17+BxSaCr3IM0FgBTmaX6PGG1onRAvJF6D6aRwvGyq/KLCaVZoG
-         iq9zzzwMn9DXRMk+hTov9e1Yrc+mD1nPvZtp1IuINc+59o3OSDdIPPi51HkcTgWnlj2z
-         lssDJCUk62yr1y9u42M8xpzDbxNEE4IuJO7AVgpg5JiRcf2eS3VIkWN+lIWUTZ69luIW
-         B6qQ==
-X-Gm-Message-State: AJIora+5gyFafczlMu1L6l81nZ6qC65ubsneStnyVGo9kcfbpk323VfU
-        WVFwPeMwFeamPh05/9F774+u815nfNsgHx0r9yOw
-X-Google-Smtp-Source: AGRyM1sPMv7E6kpTFNndHLAAPSnoNRtu9GiEzuztQyDcYjPpdPdWbZkzmhdqMRRcKppTmEXbhZEdxBGr0TL6i3HW/OA=
-X-Received: by 2002:a05:600c:3b07:b0:3a3:1433:10b5 with SMTP id
- m7-20020a05600c3b0700b003a3143310b5mr3732146wms.129.1659129755972; Fri, 29
- Jul 2022 14:22:35 -0700 (PDT)
+        Fri, 29 Jul 2022 17:28:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC5B8AEC4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 14:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659130106; x=1690666106;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0/y1fR/f4oWwAdcJ5GdMgM4eKAEqgTbVggLZ/wY8Bhs=;
+  b=WSyX6Ky2Kw6BBdBc4+9to37svjqTBE1CHu3kgFn3vRgODJwDTvSvOi01
+   +A760UEnaScsQry9ID1qP8wze9KBkwJGpwi12vEBm/uSPUJasjRm19G1u
+   KtANy2LI8DxOLhtcowxIrB3hkpl6KsOd3BuSndVpdAu5a1PsPhsajF8xw
+   LDZspT0ze6KvbQGifbWn4JlPVV1k6j8o1e5iYV2lXvfpz0ULHPJsnwMi8
+   LNxdMdKZ+VY+yt2RHwp1UF5n1UW3qhNrDORmF+T99dsHsydjxYtNP7Oha
+   RDTOX18UQmZ6OaH+56fpOYZwviPd6uwwMj1W1uHHG6RIxocSV12zopL5v
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="290054072"
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="290054072"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 14:28:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="629522403"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 29 Jul 2022 14:28:24 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHXWx-000C6r-2n;
+        Fri, 29 Jul 2022 21:28:23 +0000
+Date:   Sat, 30 Jul 2022 05:27:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dma-buf: Add ioctl to query mmap info
+Message-ID: <202207300546.hB4U217w-lkp@intel.com>
+References: <20220729170744.1301044-2-robdclark@gmail.com>
 MIME-Version: 1.0
-References: <a896e176f0f0b819f8ec5ab8935355d01a642506.1659126514.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <a896e176f0f0b819f8ec5ab8935355d01a642506.1659126514.git.christophe.jaillet@wanadoo.fr>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 29 Jul 2022 14:22:23 -0700
-Message-ID: <CANDhNCrFtv+jdGTFGH5NSV_W591Z-Ut-3rt94zzCRtVbUoye9g@mail.gmail.com>
-Subject: Re: [PATCH v2] timers: Optimize usleep_range()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220729170744.1301044-2-robdclark@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 1:29 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Most of the time the 'min' and 'max' parameters of usleep_range() are
-> constant. We can take advantage of it to pre-compute at compile time
-> some values otherwise computer at run-time in usleep_range_state().
->
-> Replace usleep_range_state() by a new __nsleep_range_delta_state() function
-> that takes as parameters the pre-computed values.
->
-> The main benefit is to save a few instructions, especially 2
-> multiplications (x1000 when converting us to ns).
->
->
-> Some hand simplified diff of the generated asm are given below. They were
-> produced on a Intel(R) Core(TM) i7-3770, with gcc 11.2.0.
->
-> drivers/clk/clk-si514.c (taken as an example)
-> -----------------------
-> In this driver we have:
->    usleep_range(10000, 12000);
->
-> --- clk_before.asm      2022-07-29 21:49:05.702289425 +0200
-> +++ clk_after.asm       2022-07-29 21:50:23.801548963 +0200
-> @@ -972,8 +972,8 @@
->   ea0:  45 85 e4                test   %r12d,%r12d
->   ea3:  0f 88 f6 fc ff ff       js     b9f <si514_set_rate+0x9f>
->   ea9:  e8 00 00 00 00          call   eae <si514_set_rate+0x3ae>
-> - eae:  be e0 2e 00 00          mov    $0x2ee0,%esi             ;     12.000
-> - eb3:  bf 10 27 00 00          mov    $0x2710,%edi             ;     10.000
-> + eae:  be 80 84 1e 00          mov    $0x1e8480,%esi           ;  2.000.000
-> + eb3:  bf 80 96 98 00          mov    $0x989680,%edi           ; 10.000.000
->   eb8:  ba 02 00 00 00          mov    $0x2,%edx
->   ebd:  e8 00 00 00 00          call   ec2 <si514_set_rate+0x3c2>
->   ec2:  44 8b 74 24 30          mov    0x30(%rsp),%r14d
->
-> The asm produced in the caller is mostly the same. Only constant values
-> passed to usleep_range_state() or __nsleep_range_delta_state() are
-> different. No other instructions or whatever is different.
->
->
-> kernel/time/timer.c
-> -------------------
-> -0000000000000000 <usleep_range_state>:
-> +0000000000000000 <__nsleep_range_delta_state>:
->   f3 0f 1e fa           endbr64
->   e8 00 00 00 00        call   ...
->   48 b8 00 00 00 00 00  movabs $0xdffffc0000000000,%rax
-> @@ -10692,16 +10692,14 @@
->   41 56                 push   %r14
->   49 c7 c6 00 00 00 00  mov    $0x0,%r14
->   41 55                 push   %r13
-> - 41 89 d5              mov    %edx,%r13d
-> + 49 89 f5              mov    %rsi,%r13
->   41 54                 push   %r12
-> - 49 89 f4              mov    %rsi,%r12
-> + 41 89 d4              mov    %edx,%r12d
->   55                    push   %rbp
-> - 44 89 ed              mov    %r13d,%ebp
-> + 44 89 e5              mov    %r12d,%ebp
->   53                    push   %rbx
->   48 89 fb              mov    %rdi,%rbx
->   81 e5 cc 00 00 00     and    $0xcc,%ebp
-> - 49 29 dc              sub    %rbx,%r12              ; (max - min)
-> - 4d 69 e4 e8 03 00 00  imul   $0x3e8,%r12,%r12       ; us --> ns (x 1000)
->   48 83 ec 68           sub    $0x68,%rsp
->   48 c7 44 24 08 b3 8a  movq   $0x41b58ab3,0x8(%rsp)
->   b5 41
-> @@ -10721,18 +10719,16 @@
->   31 c0                 xor    %eax,%eax
->   e8 00 00 00 00        call   ...
->   e8 00 00 00 00        call   ...
-> - 49 89 c0              mov    %rax,%r8
-> - 48 69 c3 e8 03 00 00  imul   $0x3e8,%rbx,%rax       ; us --> ns (x 1000)
-> + 48 01 d8              add    %rbx,%rax
-> + 48 89 44 24 28        mov    %rax,0x28(%rsp)
->   65 48 8b 1c 25 00 00  mov    %gs:0x0,%rbx
->   00 00
-> - 4c 01 c0              add    %r8,%rax
-> - 48 89 44 24 28        mov    %rax,0x28(%rsp)
->   e8 00 00 00 00        call   ...
->   31 ff                 xor    %edi,%edi
->   89 ee                 mov    %ebp,%esi
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> v1 -> v2
->   - Simplify and avoid use of __buildint_constant_p() [John Stultz <jstultz@google.com>]
->   - Also update usleep_idle_range()
->   - Axe usleep_range_state()  [John Stultz <jstultz@google.com>]
->   - Fix kerneldoc  [John Stultz <jstultz@google.com>]
->   - Update log message accordingly
-> https://lore.kernel.org/all/d7fc85736adee02ce52ee88a54fa7477fbd18ed2.1653236802.git.christophe.jaillet@wanadoo.fr/
-> ---
+Hi Rob,
 
-Thanks for taking the time to rework this! It looks much better to me!
+I love your patch! Perhaps something to improve:
 
-The only nit I have is you still have a few checkpatch issues to resolve:
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19-rc8]
+[cannot apply to drm-misc/drm-misc-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-tip/drm-tip next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-WARNING: 'convertion' may be misspelled - perhaps 'conversion'?
-#154: FILE: include/linux/delay.h:68:
-+        * convertion to ns will be optimized-out at compile time.
-           ^^^^^^^^^^
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/dma-buf-map-info-support/20220730-010844
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 6e2c0490769ef8a95b61304389116ccc85c53e12
+config: arc-randconfig-r043-20220729 (https://download.01.org/0day-ci/archive/20220730/202207300546.hB4U217w-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/203f14a73a179d6c5fbfa4813e45fde2a9ae9860
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rob-Clark/dma-buf-map-info-support/20220730-010844
+        git checkout 203f14a73a179d6c5fbfa4813e45fde2a9ae9860
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/dma-buf/
 
-ERROR: code indent should use tabs where possible
-#198: FILE: kernel/time/timer.c:2124:
-+^I^I^I^I        unsigned int state)$
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-CHECK: Alignment should match open parenthesis
-#198: FILE: kernel/time/timer.c:2124:
-+void __sched __nsleep_range_delta_state(u64 min, u64 delta,
-+                                       unsigned int state)
+All warnings (new ones prefixed by >>):
+
+   drivers/dma-buf/dma-buf.c: In function 'dma_buf_info':
+>> drivers/dma-buf/dma-buf.c:346:26: warning: passing argument 1 of 'copy_to_user' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     346 |         if (copy_to_user(uarg, &arg, sizeof(arg)))
+         |                          ^~~~
+   In file included from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from drivers/dma-buf/dma-buf.c:14:
+   include/linux/uaccess.h:157:27: note: expected 'void *' but argument is of type 'const void *'
+     157 | copy_to_user(void __user *to, const void *from, unsigned long n)
+         |              ~~~~~~~~~~~~~^~
 
 
-(also the path lines in the commit message is confusing checkpatch a bit)
+vim +346 drivers/dma-buf/dma-buf.c
 
-With those resolved, when you resubmit, you can add my:
-  Acked-by: John Stultz <jstultz@google.com>
+   328	
+   329	static long dma_buf_info(struct dma_buf *dmabuf, const void __user *uarg)
+   330	{
+   331		struct dma_buf_info arg;
+   332	
+   333		if (copy_from_user(&arg, uarg, sizeof(arg)))
+   334			return -EFAULT;
+   335	
+   336		switch (arg.param) {
+   337		case DMA_BUF_INFO_VM_PROT:
+   338			if (!dmabuf->ops->mmap_info)
+   339				return -ENOSYS;
+   340			arg.value = dmabuf->ops->mmap_info(dmabuf);
+   341			break;
+   342		default:
+   343			return -EINVAL;
+   344		}
+   345	
+ > 346		if (copy_to_user(uarg, &arg, sizeof(arg)))
+   347			return -EFAULT;
+   348	
+   349		return 0;
+   350	}
+   351	
 
-thanks
--john
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,77 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACCB585094
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B1358506F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbiG2NLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 09:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S236341AbiG2NEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 09:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236501AbiG2NKr (ORCPT
+        with ESMTP id S236191AbiG2NEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 09:10:47 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB5565AF;
-        Fri, 29 Jul 2022 06:10:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LvSYs5qW8z4x1d;
-        Fri, 29 Jul 2022 23:10:41 +1000 (AEST)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        linux-kernel@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-In-Reply-To: <20220728033332.27836-1-bagasdotme@gmail.com>
-References: <20220727220050.549db613@canb.auug.org.au> <20220728033332.27836-1-bagasdotme@gmail.com>
-Subject: Re: [PATCH 0/3] Documentation: powerpc: documentation fixes for Documentation/powerpc/elf_hwcaps.rst
-Message-Id: <165909979455.253830.7633506902686535863.b4-ty@ellerman.id.au>
-Date:   Fri, 29 Jul 2022 23:03:14 +1000
+        Fri, 29 Jul 2022 09:04:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D79C459B9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 06:04:06 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oHPeh-0006nO-9g; Fri, 29 Jul 2022 15:03:51 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oHPef-000VuW-9S; Fri, 29 Jul 2022 15:03:49 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oHPed-00CQXY-Dz; Fri, 29 Jul 2022 15:03:47 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v1 00/10] net: dsa: microchip: add error handling and register access validation
+Date:   Fri, 29 Jul 2022 15:03:36 +0200
+Message-Id: <20220729130346.2961889-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 10:33:30 +0700, Bagas Sanjaya wrote:
-> After merging powerpc tree for linux-next integration testing, Stephen
-> Rothwell reported htmldocs warnings at [1]. Fix these with self-explanatory
-> fixes in the shortlog below.
-> 
-> [1]: https://lore.kernel.org/linuxppc-dev/20220727220050.549db613@canb.auug.org.au/
-> 
-> Bagas Sanjaya (3):
->   Documentation: powerpc: fix indentation warnings
->   Documentation: use different label names for each arch's
->     elf_hwcaps.rst
->   Documentation: powerpc: add elf_hwcaps to table of contents
-> 
-> [...]
+This patch series adds error handling for the PHY read/write path and optional
+register access validation.
+After adding regmap_ranges for KSZ8563 some bugs was detected, so
+critical bug fixes are sorted before ragmap_range patch.
 
-Applied to powerpc/next.
+Potentially this bug fixes can be ported to stable kernels, but need to be
+reworked.
 
-[1/3] Documentation: powerpc: fix indentation warnings
-      https://git.kernel.org/powerpc/c/4515862b66d3bdaf681cade1c72f047c93d94d01
-[2/3] Documentation: use different label names for each arch's elf_hwcaps.rst
-      https://git.kernel.org/powerpc/c/0595a216920cb035030c73cec3ab9fe413ef1d77
-[3/3] Documentation: powerpc: add elf_hwcaps to table of contents
-      https://git.kernel.org/powerpc/c/a05aae92f84ba6d2705f6dac206ef5dcf097ea96
+Oleksij Rempel (10):
+  net: dsa: microchip: don't announce extended register support on non
+    Gbit chips
+  net: dsa: microchip: allow to pass return values for PHY read/write
+    accesses
+  net: dsa: microchip: forward error value on all ksz_pread/ksz_pwrite
+    functions
+  net: dsa: microchip: ksz9477: add error handling to ksz9477_r/w_phy
+  net: dsa: microchip: ksz8795: add error handling to ksz8_r/w_phy
+  net: dsa: microchip: KSZ9893: do not write to not supported Output
+    Clock Control Register
+  net: dsa: microchip: warn about not supported synclko properties on
+    KSZ9893 chips
+  net: dsa: microchip: add support for regmap_access_tables
+  net: dsa: microchip: add regmap_range for KSZ8563 chip
+  net: dsa: microchip: ksz9477: remove MII_CTRL1000 check from
+    ksz9477_w_phy()
 
-cheers
+ drivers/net/dsa/microchip/ksz8.h         |   4 +-
+ drivers/net/dsa/microchip/ksz8795.c      | 111 +++++++++++++----
+ drivers/net/dsa/microchip/ksz9477.c      |  41 +++++--
+ drivers/net/dsa/microchip/ksz9477.h      |   4 +-
+ drivers/net/dsa/microchip/ksz_common.c   | 148 ++++++++++++++++++++++-
+ drivers/net/dsa/microchip/ksz_common.h   |  76 +++++++++---
+ drivers/net/dsa/microchip/ksz_spi.c      |   3 +
+ drivers/net/dsa/microchip/lan937x.h      |   4 +-
+ drivers/net/dsa/microchip/lan937x_main.c |   8 +-
+ 9 files changed, 337 insertions(+), 62 deletions(-)
+
+-- 
+2.30.2
+

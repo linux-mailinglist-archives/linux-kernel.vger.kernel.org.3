@@ -2,76 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97412585756
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36183585757
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbiG2X3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 19:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S239701AbiG2X3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 19:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiG2X3J (ORCPT
+        with ESMTP id S239668AbiG2X3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 19:29:09 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEB448CA5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 16:29:08 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id 125so4687294iou.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 16:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csp-edu.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=qWNh7vOk9tCkYV94WwXKMJ4uEd3sFIr85O9CxOfUKiQ=;
-        b=wQRaueezeuI5pT4oYhFHZhZMItthSUgguL7GFYaB68jVps//cv0JYxK90b/gVoI05n
-         h8dk3+3t6WieMLwz6z1FkKimPbVmxBxmwHfZ2H2GauMe/JDVDscps2uZS6q2n5ehoxyw
-         K54ymHUibx6A+RwjmsE+sATpqcBcstkpP+aMgjfMXtSD1T7G06Bm/3FjtmkNfhzv8Yxq
-         zj3bPFJ9BbBbJ5lQtFHs3M4iw3Y8yxFUXHwDZvz4iUR1t+dFmIS535MsNySc4XOqDTJN
-         AzfiIGVwL8pvMskr8ehS/xgY2ZzFjfGB0VG+4x4NwHQxpcKiTtHsv6uQyoYdrTZlQsBx
-         13sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=qWNh7vOk9tCkYV94WwXKMJ4uEd3sFIr85O9CxOfUKiQ=;
-        b=d309yK/1ZwSPjkoxR0KIPHRWHO9cua6s5q7UCxSe6FMAc9Vrn2TIWvvdPz5tK5X05t
-         CZxRbCvTIikE3d//pvVN9ewhDddcFQOun4kgy4K0YJeh8y2VDX8N0Pyji83xTs8zK32w
-         ZJp9Z+Ow81n0VMwXGBJoTILkMPhSbNjpi8d8HmtE9/CgZEFEWZ3PzYSGY3MbYlO9Fql2
-         4MhOGonFnu6M3s/g+Tp4DdZDZIz7AhIz+V6OPZxgkNP/EJMKYtxVIZs9mEX9YTkrnCgv
-         +Hoq589FZou3Xw8mTFXIEkNQLqfDftU2BdpXTZO5VrpYH9CGOy7m4J2WQkGLte/wYr0D
-         dp7g==
-X-Gm-Message-State: AJIora8Fkid+fWSgrCl+lWnDIoyig1Oc15aFcQIBOzk7on+2Lkbzjm7k
-        TB4RhqRdm0SOtpGhYVX+eqMblg==
-X-Google-Smtp-Source: AGRyM1uRQjDAUWSoc11u2QbNyEFqJJaHT/kHhRAen2+cI88tCY46m5+6iYzrx08XaKia2PfQSYlqDA==
-X-Received: by 2002:a05:6638:12d4:b0:33f:aaab:8d84 with SMTP id v20-20020a05663812d400b0033faaab8d84mr2274213jas.67.1659137348018;
-        Fri, 29 Jul 2022 16:29:08 -0700 (PDT)
-Received: from kernel-dev-1 (75-168-113-69.mpls.qwest.net. [75.168.113.69])
-        by smtp.gmail.com with ESMTPSA id y14-20020a5e870e000000b0067bd7f5f964sm2244967ioj.7.2022.07.29.16.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 16:29:07 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 18:29:07 -0500
-From:   Coleman Dietsch <dietschc@csp.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     kvm@vger.kernel.org, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] KVM: x86/xen: Fix bug in kvm_xen_vcpu_set_attr()
-Message-ID: <YuRtQ/GHc3poAmHG@kernel-dev-1>
-References: <20220728194736.383727-1-dietschc@csp.edu>
- <YuOPDpy+RqD09n3j@kroah.com>
+        Fri, 29 Jul 2022 19:29:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6F85721D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 16:29:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5902B6069A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 23:29:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7753BC433C1;
+        Fri, 29 Jul 2022 23:29:17 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DFb4EEdm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1659137355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ulXLGvor213yABCbMOZKZFQuoe8+LTI1cfvL7hSAb8M=;
+        b=DFb4EEdmnWRveIjLDusFGYOugAfO90LBva8GyMJQ2auUGY/CcSaElQ7hbgsJDZoTzCRWzU
+        7t6VARwxu/72tdr2syoIjuMU80ILmM+nm/zO2QCGpm9vK9d7imLh4h54Oss2Kkp/EkQFNb
+        QdLOdfFqQX5LO2L9RRJcc3lLLZUUuf0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0d95e382 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 29 Jul 2022 23:29:15 +0000 (UTC)
+Date:   Sat, 30 Jul 2022 01:29:12 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 2/2 v2] lib/vsprintf: Initialize vsprintf's pointer hash
+ once the random core is ready.
+Message-ID: <YuRtSGCfe2qxHrqT@zx2c4.com>
+References: <20220729154716.429964-1-bigeasy@linutronix.de>
+ <20220729154716.429964-3-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YuOPDpy+RqD09n3j@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20220729154716.429964-3-bigeasy@linutronix.de>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,26 +66,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 09:41:02AM +0200, Greg KH wrote:
-> On Thu, Jul 28, 2022 at 02:47:37PM -0500, Coleman Dietsch wrote:
-> > This crash appears to be happening when vcpu->arch.xen.timer is already set and kvm_xen_init_timer(vcpu) is called.
-> 
-> What does "this crash" refer to ?
-> 
-> > 
-> > During testing with the syzbot reproducer code it seemed apparent that the else if statement in the KVM_XEN_VCPU_ATTR_TYPE_TIMER switch case was not being reached, which is where the kvm_xen_stop_timer(vcpu) call is located.
-> 
-> Please properly wrap your kernel changelog at 72 columns.
-> 
-> Didn't checkpatch.pl complain about this?
-> 
+On Fri, Jul 29, 2022 at 05:47:16PM +0200, Sebastian Andrzej Siewior wrote:
+> +static void fill_ptr_key_workfn(struct work_struct *work)
+> +{
+> +	int ret;
+> +
+> +	ret = get_random_bytes_wait(&ptr_key, sizeof(ptr_key));
 
-I believe I made the mistake of editing the patch file directly so it was
-on me for forgetting to run checkpatch.pl manually.
+> +static int vsprintf_init_hashval(void)
+> +{
+> +	static DECLARE_WORK(fill_ptr_key_work, fill_ptr_key_workfn);
+> +
+> +	queue_work(system_unbound_wq, &fill_ptr_key_work);
+> +	return 0;
+> +}
+> +subsys_initcall(vsprintf_init_hashval)
 
-> thanks,
-> 
-> greg k-h
+I'm unsure how good of an idea this is; it'll wind up setting off the
+jitter entropy thing very early in init. It's probably a better idea to
+just schedule the worker the first time that the RNG is already
+initialized by some other means. Check `in_hardirq()` or something if
+you're worried about missing the first message.
 
-Thanks for the feedback Greg, I believe I have (at least these) issues
-resolved in the next version of the patch.
+Jason

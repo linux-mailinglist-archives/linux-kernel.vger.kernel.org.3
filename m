@@ -2,79 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA2D584DAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6039A584DB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbiG2IwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 04:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
+        id S233873AbiG2IxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 04:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiG2IwU (ORCPT
+        with ESMTP id S235418AbiG2IxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 04:52:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 999D882F99;
-        Fri, 29 Jul 2022 01:52:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE4C31063;
-        Fri, 29 Jul 2022 01:52:19 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 287103F73B;
-        Fri, 29 Jul 2022 01:52:17 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 09:52:14 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Message-ID: <20220729085214.bh2cak5g2hcqun4i@bogus>
-References: <d1bc99bb-82ce-aa6e-7fad-e9309fa1c19b@gmail.com>
- <7284953b-52bb-37ac-fbe1-1fa845c44ff9@linaro.org>
- <3d752603-365d-3a33-e13e-ca241cee9a11@gmail.com>
- <20220727132437.pjob3z2nyxsuxgam@bogus>
- <CAC_iWj+Pn+h8k=fuDHzYwqD0g4m6jGRt8sCzcz+5+rYqvz9q4w@mail.gmail.com>
- <fd922f0f-99fd-55a3-a0b5-b62ad2dbfb45@gmail.com>
- <CAC_iWjLWBJLth26ifFfHvimProHZu_w5SjQNWSH_D2Fs_JXjbA@mail.gmail.com>
- <b703f678-b2c5-cdeb-ac40-9646e043d1c3@gmail.com>
- <CAC_iWjLrntWuJUzVuRi0ZOtG6JXNwz7SbS2mrqpuTgU5TV6rQA@mail.gmail.com>
- <d5a19e17-08eb-8bd6-ea18-5da638d13622@gmail.com>
+        Fri, 29 Jul 2022 04:53:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C009C8320A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 01:53:02 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 10:52:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659084780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=7Y+4CzlXeDZUd8rbWP+Eg66SJDHJEP/kxXso2o/zUu0=;
+        b=tUFytNMfXiYfa2axNdctwvlhyfCB+x2lbKVncd4+pbVJ9NAv8jExwYPK+qYAtfu31Zj1IH
+        CHCMHA8tta7AeE0ZK1UprvBp6Xd40N6129Dbf85jfXipC1RCw2a61tDZyvUUCKSs76P49K
+        vylhIYOtptUFl1bFabBPFrUwRcyZgrxbLqjbl6cmcdtoXLCobXjsJkzaGkZymXlPLlqhh5
+        3mQrUCMRGHitMeiwf0gKztHdjIvZjKY2AyYKKMVmC8rrmY6MMxCzH9XeshHz6ac0Yinzzl
+        7ygGmDWOVGpdNvl/J6Iwgn/lqrMfEjxsTWwGizPPaJzPUR4TP8RqsJ7wPv2uzg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659084780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=7Y+4CzlXeDZUd8rbWP+Eg66SJDHJEP/kxXso2o/zUu0=;
+        b=0XSLoC3VnSr2HywrXt0D1vtnckX47A+c/qPKhqIyh9grNaehGesc/IWP4ZleeJ9U2VNygM
+        /+ShyNLLh0WuqBBQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] random: Initialize vsprintf's pointer hash once the random
+ core is ready.
+Message-ID: <YuOf6qu453dOkR+S@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d5a19e17-08eb-8bd6-ea18-5da638d13622@gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 07:27:19PM +0200, Maximilian Luz wrote:
+The printk code invokes vnsprintf in order to compute the complete
+string before adding it into its buffer. This happens in an IRQ-off
+region which leads to a warning on PREEMPT_RT in the random code if the
+format strings contains a %p for pointer printing. This happens because
+the random core acquires locks which become sleeping locks on PREEMPT_RT
+which must not be acquired with disabled interrupts and or preemption.
+By default the pointers are hashed which requires a random value on the
+first invocation (either by printk or another user which comes first.
 
-[...]
+One could argue that there is no need for printk to disable interrupts
+during the vsprintf() invocation which would fix the just mentioned
+problem. However printk itself can be invoked in a context with
+disabled interrupts which would lead to the very same problem.
 
-> My current suggestion (already sent to Sudeep earlier) is (roughly)
-> this: Add one compatible for the TrEE / TrustZone interface.
+This late init via printk can be avoided by explicitly initializing
+vsprintf's random value once the random-core has been initialized.
 
-Still I don't understand why you need extra compatible if you know
-this laptop(with a unique compatible to identify it) always runs this
-TrEE interface.
+Remove the on demand init from __ptr_to_hashval() and keep the -EAGAIN if
+the init has not yet been performed. Move the actual init bits to
+vsprintf_init_hash_pointer() which are invoked from random-core once it
+has been initialized and get_random_bytes() is available.
 
---
-Regards,
-Sudeep
+Reported-by: Mike Galbraith <efault@gmx.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ drivers/char/random.c  |  8 +++++++-
+ include/linux/random.h |  2 ++
+ lib/vsprintf.c         | 36 +++++++++++++++---------------------
+ 3 files changed, 24 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index a1af90bacc9f8..98f99026d1fba 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -202,6 +202,7 @@ static void extract_entropy(void *buf, size_t len);
+ /* This extracts a new crng key from the input pool. */
+ static void crng_reseed(void)
+ {
++	bool init_hash_pointer = false;
+ 	unsigned long flags;
+ 	unsigned long next_gen;
+ 	u8 key[CHACHA_KEY_SIZE];
+@@ -221,10 +222,15 @@ static void crng_reseed(void)
+ 		++next_gen;
+ 	WRITE_ONCE(base_crng.generation, next_gen);
+ 	WRITE_ONCE(base_crng.birth, jiffies);
+-	if (!static_branch_likely(&crng_is_ready))
++	if (!static_branch_likely(&crng_is_ready)) {
+ 		crng_init = CRNG_READY;
++		init_hash_pointer = true;
++	}
+ 	spin_unlock_irqrestore(&base_crng.lock, flags);
+ 	memzero_explicit(key, sizeof(key));
++
++	if (init_hash_pointer)
++		vsprintf_init_hash_pointer();
+ }
+ 
+ /*
+diff --git a/include/linux/random.h b/include/linux/random.h
+index 20e389a14e5c7..229743ba5b4de 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -144,4 +144,6 @@ int random_online_cpu(unsigned int cpu);
+ extern const struct file_operations random_fops, urandom_fops;
+ #endif
+ 
++void vsprintf_init_hash_pointer(void);
++
+ #endif /* _LINUX_RANDOM_H */
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 3c1853a9d1c09..6fa2ebb9f9b9e 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -751,36 +751,30 @@ static int __init debug_boot_weak_hash_enable(char *str)
+ early_param("debug_boot_weak_hash", debug_boot_weak_hash_enable);
+ 
+ static DEFINE_STATIC_KEY_FALSE(filled_random_ptr_key);
++static siphash_key_t ptr_key __read_mostly;
+ 
+-static void enable_ptr_key_workfn(struct work_struct *work)
++void vsprintf_init_hash_pointer(void)
+ {
+-	static_branch_enable(&filled_random_ptr_key);
++	static DEFINE_SPINLOCK(filling);
++	unsigned long flags;
++	static bool filled;
++
++	spin_lock_irqsave(&filling, flags);
++	if (!filled) {
++		get_random_bytes(&ptr_key, sizeof(ptr_key));
++		filled = true;
++		static_branch_enable(&filled_random_ptr_key);
++	}
++	spin_unlock_irqrestore(&filling, flags);
+ }
+ 
+ /* Maps a pointer to a 32 bit unique identifier. */
+ static inline int __ptr_to_hashval(const void *ptr, unsigned long *hashval_out)
+ {
+-	static siphash_key_t ptr_key __read_mostly;
+ 	unsigned long hashval;
+ 
+-	if (!static_branch_likely(&filled_random_ptr_key)) {
+-		static bool filled = false;
+-		static DEFINE_SPINLOCK(filling);
+-		static DECLARE_WORK(enable_ptr_key_work, enable_ptr_key_workfn);
+-		unsigned long flags;
+-
+-		if (!system_unbound_wq || !rng_is_initialized() ||
+-		    !spin_trylock_irqsave(&filling, flags))
+-			return -EAGAIN;
+-
+-		if (!filled) {
+-			get_random_bytes(&ptr_key, sizeof(ptr_key));
+-			queue_work(system_unbound_wq, &enable_ptr_key_work);
+-			filled = true;
+-		}
+-		spin_unlock_irqrestore(&filling, flags);
+-	}
+-
++	if (!static_branch_likely(&filled_random_ptr_key))
++		return -EAGAIN;
+ 
+ #ifdef CONFIG_64BIT
+ 	hashval = (unsigned long)siphash_1u64((u64)ptr, &ptr_key);
+-- 
+2.36.1
+

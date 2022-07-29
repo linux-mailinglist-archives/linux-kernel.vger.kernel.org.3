@@ -2,84 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37AB585719
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF36358572A
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239649AbiG2XF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 19:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
+        id S239577AbiG2XHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 19:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239638AbiG2XFw (ORCPT
+        with ESMTP id S231536AbiG2XHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 19:05:52 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44588683C2;
-        Fri, 29 Jul 2022 16:05:52 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id c185so4655703iof.7;
-        Fri, 29 Jul 2022 16:05:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=hjKDBui3XbMvdfBvZRSNvz4Y50HGiS8SdRV7n9Sisvk=;
-        b=fpGqANHZE3Dxk/jahYXXp5haq9MtXc2HiXKGHYMtCUp7mxyElW+0uEyn8OPDgUk25s
-         q9xcpTFHrtZkbP7r57M8imf+ls89+futBiN+U08nmTEPTagmDMxpbfHUs+0C5Ot7GlnM
-         8uWjY89B31VYLhk/ejq5R/EG4ykrLvKnwait/gnUjpndEYGyWYepPjACmvbyy6mnSpF4
-         4wxWVjYYyf72cdNkAV6Y+MmMMIv2Pf7C0NDviMCmakHavS/DOncWN9MJCX9uuXxF/c8e
-         yF1xdODC1dQnlyoIf+VhIColtqsv5FdVOkhe5P3WUSSnINuriDnI80nfvCRIfMx6yzkx
-         rzCw==
-X-Gm-Message-State: AJIora+/pbuG5tpHPJHWHLePMDU+BMRhHE1nshs8htHRb8m6X6UG2pSV
-        RD2WcbpjU41VaVEQWoQo0Q==
-X-Google-Smtp-Source: AGRyM1t9O8iQe6oGeaMvWKzV15vZwYX2sfVSpSzsAO1ojnDOjg2jhLPWpDG1bIaXNx1V4sYolB/0Gg==
-X-Received: by 2002:a6b:4019:0:b0:669:3314:ebcb with SMTP id k25-20020a6b4019000000b006693314ebcbmr1870454ioa.197.1659135951515;
-        Fri, 29 Jul 2022 16:05:51 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id bs19-20020a056638451300b0033ec45fb044sm2227216jab.47.2022.07.29.16.05.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 16:05:50 -0700 (PDT)
-Received: (nullmailer pid 105414 invoked by uid 1000);
-        Fri, 29 Jul 2022 23:05:46 -0000
-Date:   Fri, 29 Jul 2022 17:05:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     long.cheng@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        nfraprado@collabora.com, ~postmarketos/upstreaming@lists.sr.ht,
-        hsinyi@chromium.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        fparent@baylibre.com, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        vkoul@kernel.org, sam.shih@mediatek.com,
-        allen-kh.cheng@mediatek.com, dmaengine@vger.kernel.org,
-        ulf.hansson@linaro.org, wenbin.mei@mediatek.com,
-        sean.wang@mediatek.com, krzysztof.kozlowski+dt@linaro.org,
-        chaotian.jing@mediatek.com
-Subject: Re: [PATCH 7/8] dt-bindings: arm: mediatek: Add compatible for
- MT6795 Sony Xperia M5
-Message-ID: <20220729230546.GA105364-robh@kernel.org>
-References: <20220729104441.39177-1-angelogioacchino.delregno@collabora.com>
- <20220729104441.39177-9-angelogioacchino.delregno@collabora.com>
+        Fri, 29 Jul 2022 19:07:40 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0BD89E9F;
+        Fri, 29 Jul 2022 16:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659136059; x=1690672059;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hGwXsBPfLbniIEZXPfhnODd25ALV2jQacZ1UuFVjN/A=;
+  b=UJphJ9gURVgIECgKYoGf5W92RhRSxtEZx7zFIHBjpKFq8GOJu10wZOik
+   bA8DJH9GigHP00EZIX5QPs6boA8zjbBCoJJ4FsblVlSjsaHjUmMlqLuvS
+   FO7eiOQ/Qcvfd4DhIr0YiSLBiuYSmRWUhmV/3OpTxpVD5tUy3mXn28Krh
+   EbDE1Z6L++Ms7SUeh+gl7RRL/st/qdB6zM1o6Awnu7qRmLgQc8/J5t9dS
+   i9e4sVfuqheu1Q97iK7StWyOnWXuulR5Lqpex1GlM9HeP7UEMevx4NkQE
+   mF/I9hez7i+09BR1SOowx8afSGzfSPXtSBD7XpAfyqWK4YdrkD3R7I5+Z
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="269247449"
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="269247449"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 16:07:38 -0700
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="629549660"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 16:07:38 -0700
+Date:   Fri, 29 Jul 2022 16:07:36 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Message-ID: <YuRoOCUxGUJ/8QVH@agluck-desk3.sc.intel.com>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <YuJ6TQpSTIeXLNfB@zn.tnic>
+ <20220729022851.mdj3wuevkztspodh@desk>
+ <YuPpKa6OsG9e9nTj@zn.tnic>
+ <20220729173609.45o7lllpvsgjttqt@desk>
+ <YuRDbuQPYiYBZghm@zn.tnic>
+ <20220729214627.wowu5sny226c5pe4@desk>
+ <1bcf0b54-6ddf-b343-87c5-f7fd7538759c@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729104441.39177-9-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1bcf0b54-6ddf-b343-87c5-f7fd7538759c@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Jul 2022 12:44:40 +0200, AngeloGioacchino Del Regno wrote:
-> Add a compatible for the Sony Xperia M5 smartphone.
+On Fri, Jul 29, 2022 at 03:54:58PM -0700, Dave Hansen wrote:
+> On 7/29/22 14:46, Pawan Gupta wrote:
+> > Let me see if there is a way to distinguish between 4. and 5. below:
+> > 
+> >    CPU category				  X86_BUG_MMIO_STALE_DATA	X86_BUG_MMIO_UNKNOWN
+> > -----------------------------------------------------------------------------------------------
+> > 1. Known affected (in cpu list)			1				0
+> > 2. CPUs with HW immunity (MMIO_NO=1)		0				0
+> > 3. Other vendors				0				0
+> > 4. Older Intel CPUs				0				1
+> > 5. Not affected current CPUs (but MMIO_NO=0)	0				?
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/arm/mediatek.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> This seems like something we would need to go back to our colleagues to
+> figure out.  Basically, at the time of publishing the
+> X86_BUG_MMIO_STALE_DATA papers, what was considered "older"?
 > 
+> In other words, we need the folks at Intel that did this good work to
+> _show_ their work (at least part of it).
 
-Acked-by: Rob Herring <robh@kernel.org>
+https://www.intel.com/content/www/us/en/developer/topic-technology/software-security-guidance/processors-affected-consolidated-product-cpu-model.html
+
+Click to the 2022 tab. The MMIO affected/not-affected status is there
+(you'll need to use the horizontal scroll to shift over to see those
+columns).
+
+This table lists all the CPUs that were not "older".
+
+Any CPU not on that list is out of servicing period.
+
+-Tony
